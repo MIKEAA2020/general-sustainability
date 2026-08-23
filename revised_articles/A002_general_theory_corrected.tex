@@ -1,0 +1,2441 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsfonts,amsthm,booktabs,tabularx,array,geometry,hyperref,enumitem}
+\geometry{margin=2.6cm}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{conditionaltheorem}{Conditional theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{remark}{Remark}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{hypothesis}{Empirical hypothesis}
+\newtheorem{programme}{Research programme}
+
+\newcommand{\R}{\mathbb R}
+\newcommand{\Rp}{\mathbb R_+}
+\newcommand{\Viab}{\operatorname{Viab}}
+\newcommand{\Pre}{\operatorname{Pre}}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\status}[1]{\par\smallskip\noindent\textbf{Status: #1.}\quad}
+
+\title{A Typed Flux--Observation--Governance Theory of Sustainability:\\
+Canonical Architecture, Formal Results, and Open Conjectures}
+\author{Anonymous}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We present a formal candidate architecture for sustainability analysis in which typed physical fluxes, functional states, services, observations, governance channels, disturbances, and safe-and-just constraints remain distinct but compatible modules. The central trajectory question is robust viability under causal observation-based policies. Within this architecture, the statements we prove, or conditionally prove under the hypotheses displayed at the relevant result, fall into four groups. The first comprises domain-qualified non-compensation, typed conservation across flows and jumps, non-negative invariance, a bounded-input bounded-state criterion, a Farkas certificate for linear substitution infeasibility, and an exact observation-fibre criterion. The second develops review-time and inter-sample-safe kernels for compact full-state systems, finite-clopen endpoint and tube knowledge kernels, a compact Lipschitz-history RFDE specialization, a review-synchronised hybrid RFDE with a continuous phase-space reset, and a bounded-jump hybrid ODE result under Hausdorff-continuous exact tubes; a counterexample shows why outer semicontinuity alone does not close the latter predecessor. A separate theorem treats a compact exact information process. The finite-clopen results construct exact filters in their restricted settings, whereas the abstract information-state theorem is conditional on an already specified compact exact information process and continuous exact tube/update maps. The third group establishes a finite-horizon sample-and-hold comparison and a projectability criterion for exact reductions. The fourth gives a support-saturated logistic stock limit, exact and bounded coarse-graining statements, a local-horizon bracket, and a delay-independent stability certificate. Diagnostic and threshold types, capture and policy-relative irreversibility, and an intergenerational recursive safety criterion complete the formal framework. General delayed non-Zeno hybrid viability under partial observation, periodic-orbit-fold persistence under typed coupling, and separation of ecological and institutional delays remain conjectures or research programmes; model-specific numerical and empirical results do not establish architectural generality.
+\end{abstract}
+
+\section*{Canonical interface and application discipline}
+This article is the restricted theorem spine beneath the flagship architecture, not a rival sustainability primitive. At the programme interface, the frozen specification is $\Omega$, the architecture is $\mathfrak A_q$, the state or history domain is $\mathsf Z_q$, the typed constraint registry is $\mathscr C_\Omega$, and the generated safe set is $\mathsf K_{q,\Omega}$. Local symbols in the proofs below are retained to avoid obscuring their hypotheses; every transfer to another source requires an explicit notation map.
+
+Four levels of policy existence are kept separate throughout:
+\begin{enumerate}[label=(\roman*)]
+\item non-emptiness of a pointwise saving-action correspondence;
+\item existence of a measurable selector under a stated measurable-selection theorem;
+\item existence of a continuous selector only under stronger topological and convexity hypotheses;
+\item closed-loop existence, solution semantics, and institutional/computational implementability.
+\end{enumerate}
+An arbitrary-selector theorem proves only level (i) unless further hypotheses are supplied. Measurability alone does not establish well-posed ordinary or retarded functional dynamics. Sample-and-hold is the default implementable semantics; Filippov, Krasovskii, relaxed, viscosity, or nonanticipative-game semantics must be named explicitly when used.
+
+Every application of an exact-filter, exact-tube, compactness, or Hausdorff-continuity theorem must record: the exact object assumed by the theorem; the object constructed or approximated in the application; the approximation or outer-bound error; and the safety erosion used to transfer the conclusion. These assumptions are never inferred merely from outer semicontinuity or from a jump budget.
+
+Literal kernel inclusions require a common state space, safe set, horizon, information pattern, and aligned policy and disturbance classes. RFDE kernels live in history spaces. Belief-space kernels are compared through a common prior, a refinement map, or a declared physical projection rather than bare inclusion.
+
+
+\section{Introduction}
+
+Sustainability analysis connects physical balances, service constraints, observation, governance, and trajectory safety. These objects have different state spaces and proof obligations, so conclusions about one object transfer to another only through an explicit theorem or model map. The architecture developed below specifies their interfaces and then derives restricted results for the subclasses in which the required compactness, continuity, and information assumptions can be verified.
+
+Table~\ref{tab:status} distinguishes the evidentiary and mathematical status of each statement. A status is not transferred automatically to extensions, reductions, or applications.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Claim-status hierarchy used in this article.}
+\label{tab:status}
+\begin{tabularx}{\textwidth}{p{3.1cm}X}
+\toprule
+Status & Admission rule\\
+\midrule
+Axiom/definition & Declares an object, domain, type, or convention; does not assert empirical truth.\\
+Identity & Follows by construction or direct algebra.\\
+Theorem & Complete proof under explicit mathematical assumptions.\\
+Conditional theorem & Complete implication whose hypotheses are not established for every intended application.\\
+Conjecture & Precise unproved statement with a declared proof gap and disproof route.\\
+Numerical proposition & Reproducible statement tied to a model version, parameter file, algorithm, tolerances, and archived output.\\
+Empirical hypothesis & Population, observables, estimator, uncertainty, and falsification rule are specified or explicitly requested.\\
+Research programme & Proposed extension or connection; no assertion of completion, identifiability, or universality.\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The results established here are analytical; model-specific numerical propositions are reported separately. The empirical statements below are hypotheses rather than validations. ``Canonical'' means that the architecture supplies slots and compatibility rules; it does not mean that every slot is active in every restricted model.
+
+The exposition proceeds from the canonical objects to restricted results for accounting, substitution, observation, viability, governance, reduction, aggregation, diagnostics, and stability. Conjectures, empirical hypotheses, and research programmes follow the proved results, after which a scope table summarizes the established and unresolved statements.
+
+\subsection{Relation to established theory}
+
+The analysis uses established results on stoichiometric subspaces and conservation laws in reaction-network theory \cite{feinberg2019}, convex separation \cite{rockafellar1970}, viability kernels and their approximation \cite{aubin1991,saintpierre1994}, approximate discrete-time analysis of sampled-data systems \cite{nesic2004}, exact lumpability and projectability \cite{li1989,horstmeyer2016}, Halanay inequalities \cite{halanay1966}, and spatial moment equations and closure problems \cite{bolker1997,murrell2004}. The sustainability formulation builds on noncompensatory composite-indicator analysis \cite{munda2009}, strong sustainability and critical natural capital \cite{neumayer2013,ekins2003}, safe-and-just constraint frameworks \cite{oneill2018,rockstrom2023}, social--ecological-systems analysis \cite{ostrom2009}, and exergy-based resource accounting \cite{dewulf2008}. The contribution is their integration within a typed flux--observation--governance architecture with explicit module interfaces, causal-policy and disturbance quantifiers, compatibility tests among accounting, observation, substitution, governance, and reduction claims, explicit claim-status classification, and sustainability-specific consequences under stated assumptions. The component results retain their established provenance, and their integration does not establish universality.
+
+\section{Canonical sustainability system}
+
+This section declares the objects and interfaces from which model instances are built. It is architectural rather than dynamical: conservation, positivity, substitution feasibility, observability, and trajectory safety require the separate hypotheses introduced in later sections.
+
+\subsection{Types, states, and primitive fluxes}
+
+\begin{definition}[Type system and physical state]
+A type records at least a conserved moiety, compartment, location or boundary, physical unit, and---when invoked---life stage and jurisdiction. Let
+\[
+x=(x_1,\ldots,x_m)\in\mathcal X_{\rm phys}\subseteq\Rp^m
+\]
+be typed physical amounts. Addition across components is permitted in a physical balance only through a declared conversion or moiety map.
+\end{definition}
+
+Let $y\in\mathcal Y_{\rm fun}$ contain non-conserved functional states: information, assessment memory, prices, institutional modes, capital, or ecological indices that are not amounts of the conserved moieties. Let $c$ be a command, $p$ realised pressure, and $q$ any deployment queue. The augmented state is
+\[
+z=(x,y,c,p,q)\in\mathcal Z.
+\]
+For a finite-dimensional model, $z$ is the current augmented state. For a delayed model, the Markov state is the current history $z_t$ in a declared phase space and norm; for a sampled model, $z$ includes enough queue and memory coordinates to make the review-to-review transition Markovian.
+
+Primitive physical fluxes are non-negative:
+\[
+v(z,d)\in\Rp^r.
+\]
+Their typed incidence/stoichiometric matrix is $S\in\R^{m\times r}$. This uses the standard stoichiometric-subspace and conservation-law bookkeeping of reaction-network theory as an example \cite{feinberg2019}; it neither assumes mass-action kinetics nor makes that source a foundation for every physical module. Declared boundary rates are $\varphi\in\R^s$ with incidence matrix $B\in\R^{m\times s}$. Let $\mathcal V$ denote the declared class of admissible constitutive pairs $(v,\varphi)$, including their domains, regularity, signs, units, and dependence on state, history, control, and disturbance. In a continuous mode,
+\begin{align}
+\dot x&=Sv(z,d)+B\varphi(z,d), \label{eq:physical-flow}\\
+\dot y&=f_y(z,d), \label{eq:functional-flow}
+\end{align}
+where $d$ is an admissible disturbance. Each active application must also declare the flow laws for $c,p,q$ (possibly zero under sample-and-hold) and thereby define the full augmented flow; Eqs.~\eqref{eq:physical-flow}--\eqref{eq:functional-flow} alone do not determine every coordinate of $z$. Damage and waste are not hidden in a scalar welfare term: if they move a conserved moiety, they are fluxes in Eq.~\eqref{eq:physical-flow}; otherwise they enter functional states, services, or safe-set constraints with explicit units.
+
+At an event, a physical reset has the form
+\begin{equation}
+x^+-x^-=S^J\nu+B^J\beta,
+\label{eq:physical-jump}
+\end{equation}
+where $S^J\nu$ is internal reallocation and $B^J\beta$ is a declared boundary impulse. Functional states, commands, realised pressure, and queues require a declared reset map when they jump. A hybrid execution is called \emph{locally finite} when it has only finitely many jumps on every compact time interval. Local finiteness is not implied by the canonical tuple and is stated explicitly in results that sum over, or induct across, all jumps.
+
+\begin{definition}[Hybrid specialization data]
+A hybrid specialization must additionally declare a finite or otherwise typed mode set; a Markov phase space for each mode; mode-dependent flow laws; a jump set and branch rule; a reset whose codomain is the applicable phase space; admissible hybrid time domains; an execution rule such as review synchronisation, minimum dwell, or a per-interval jump budget; and an observation map specifying which information about the current state and mode is available.  Equation~\eqref{eq:physical-jump} constrains only the current physical coordinate.  It does not by itself supply the remaining reset coordinates, a delayed-history restart, a solution concept, or local finiteness.
+\end{definition}
+
+\begin{definition}[Canonical system]
+A canonical sustainability system is the tuple
+\begin{equation}
+\mathfrak S=
+(\mathcal T,\mathcal Z,S,B,\mathcal V,\Gamma,
+\mathcal O,\mathcal A,\mathcal C,\mathcal R,
+\mathcal D,K,\mathbb P),
+\label{eq:canonical-tuple}
+\end{equation}
+where $\mathcal T$ is the type system; $S,B,\mathcal V$ define admissible physical fluxes and boundaries; $\Gamma$ is a service/technology possibility correspondence; $\mathcal O$ and $\mathcal A$ are observation and assessment operators; $\mathcal C$ and $\mathcal R$ are command and deployment/reset architectures; $\mathcal D$ is a disturbance class with a declared signal space and admissibility rule; $K$ is a safe-and-just set; and $\mathbb P$ is a class of causal observation-based policies. The tuple is not complete as a dynamical system until active modules, domains, flow/reset laws, phase spaces, and solution concepts have been specified.
+\end{definition}
+
+\status{Axiom/definition} Equation~\eqref{eq:canonical-tuple} is an architecture, not an empirical model and not a claim that its modules are identifiable from one data stream.
+
+\begin{definition}[Four uncertainty levels]
+An application must distinguish: (i) parameter uncertainty within a fixed constitutive model; (ii) observation and assessment uncertainty; (iii) process disturbances and boundary forcing; and (iv) structural uncertainty over a declared model class $\mathbb M$. Robustness over $\mathbb M$ places the model index inside the adverse quantifier or a set-valued transition; it is not represented by a parameter covariance matrix unless equivalence is proved.
+\end{definition}
+
+\status{Axiom/definition} This classification specifies quantifiers and evidence channels. It does not assert that robustness over an unrestricted model class is possible or useful.
+
+\subsection{Observation, assessment, command, and deployment}
+
+At observation or review times $t_k$,
+\begin{align}
+o_k&=\mathcal O_k(z_{[0,t_k]})+\varepsilon_k,\\
+\widehat z_k&=\mathcal A_k(o_{0:k},M_k),\\
+c_{k+1}&=\mathcal C_k(o_{0:k},\widehat z_{0:k},c_{0:k}),\\
+p(t)&=\mathcal R(c_{0:k},q(t),\text{capacity},\text{compliance}),
+\qquad t\in[t_k,t_{k+1}).
+\end{align}
+Here $M_k\in\mathbb M_{\rm assess}$ is a declared assessment-model or configuration object, including any calibration state or registered structural alternative used by $\mathcal A_k$; it is not an undeclared disturbance variable.
+A policy is causal if the command at $t_k$ uses no future observation or disturbance. State-feedback policies are a special case justified only when the required state is observed or estimated under declared assumptions.
+
+For a decline signal, two controller signs must remain distinct:
+\begin{align*}
+\text{protective channel:}&\quad \text{larger perceived decline tends to reduce realised extraction},\\
+\text{extractive channel:}&\quad \text{larger perceived decline tends to increase realised extraction}.
+\end{align*}
+Review interval, observation interval, assessment delay, decision delay, deployment delay, ecological response time, and memory relaxation are separate typed temporal objects.
+
+\subsection{Services, substitution, and the safe-and-just set}
+
+Let
+\[
+\Gamma(x,y)\subseteq\Rp^n
+\]
+be the service possibility correspondence. Current service adequacy means that some $s\in\Gamma(x,y)$ satisfies a declared entitlement or requirement vector $s_{\rm req}$. It does not imply future feasibility. Consistent with strong-sustainability and critical-natural-capital arguments \cite{neumayer2013,ekins2003}, critical component constraints are not presumed substitutable; admissible pathways must be represented in $\Gamma$.
+
+A safe-and-just set can be written schematically as
+\begin{equation}
+K=\{z:x\ge0,\ g_{\rm phys}(z)\ge0,\
+ g_{\rm service}(z)\ge0,\ g_{\rm harm}(z)\le0,\
+ g_{\rm justice}(z)\ge0\}.
+\label{eq:safe-set}
+\end{equation}
+The component functions, thresholds, spatial support, and affected groups are application-specific. Whenever closedness or compactness of the schematic set in Eq.~\eqref{eq:safe-set} is used, it is a separate hypothesis; for example, the displayed weak inequalities define a closed set on a closed ambient domain when the component functions are continuous. The construction is oriented by empirical safe-and-just-space and Earth-system-boundary programmes \cite{oneill2018,rockstrom2023}, but it does not borrow their thresholds without an application-specific declaration. Aggregate service can be adequate while a group-specific constraint fails; justice is therefore a constraint module, not automatically a weight in one scalar objective. The trajectory formulation below follows the viability tradition \cite{aubin1991}, extended here only where a theorem is explicitly proved.
+
+\begin{definition}[Diagnostic types]
+A diagnostic claim must declare which of the following it measures:
+\begin{enumerate}[label=(\roman*),nosep]
+\item \emph{throughput excess}, a comparison of typed inflow, extraction, consumption, or waste rates;
+\item \emph{stock drawdown}, a negative stock derivative or integrated typed loss;
+\item \emph{threshold proximity}, a signed margin or distance to a declared boundary;
+\item \emph{resilience loss}, a decline in return rate, viable-control margin, capture basin, or another specified recovery property; or
+\item \emph{service or welfare shortfall}, failure of a group-specific service or entitlement constraint.
+\end{enumerate}
+None of these names may be transferred to another type without a proved implication on the declared model class.
+\end{definition}
+
+\begin{definition}[Threshold and intergenerational types]
+A threshold is typed as a hard physical boundary, ecological functional boundary, service/basic-needs floor, harm/rights ceiling, precautionary policy trigger, or statistical detection threshold. Its units, spatial support, affected group, authority, uncertainty, and horizon are part of the declaration. A trigger or detection threshold is not thereby a physical tipping point.
+
+For generation intervals $I_g$ and group-indexed constraint sets $K_g$, an intergenerational recursive safety criterion requires (i) $z(t)\in K_g$ throughout $I_g$ and (ii) the terminal state to lie in a declared continuation set $C_{g+1}$ from which the next generation's constraints are viable under its policy and disturbance classes. A terminal aggregate stock alone is not this criterion.
+\end{definition}
+
+\status{Axiom/definition} The taxonomies prevent one measurement from being renamed as another. The intergenerational criterion does not select entitlements or prove that any continuation set is nonempty.
+
+Noncompensatory composite-indicator analysis supplies the immediate indicator-theory context for the following domain-qualified result \cite{munda2009}.
+
+\begin{proposition}[Domain-qualified non-compensation]
+\label{prop:noncompensation}
+Let $n\ge2$ and $w\in\R_{++}^n$. On the unrestricted balance space, $w^\top \Delta\ge0$ does not imply $\Delta\ge0$: for every component $k$ and every $L>0$, there is a balance vector with $\Delta_k=-L$ and $w^\top \Delta>0$. On a restricted feasible domain $\mathcal B$, the scalar is a component-safety certificate if and only if
+\begin{equation}
+\mathcal B\cap\{\Delta:w^\top \Delta\ge0\}\subseteq\Rp^n.
+\label{eq:domain-certificate}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Because $n\ge2$, choose $j\ne k$. Strict positivity of $w$ gives $w_j>0$, so the vector
+\[
+\Delta_k=-L,
+\qquad \Delta_j=\frac{w_kL+1}{w_j},
+\qquad \Delta_i=0\quad(i\notin\{j,k\})
+\]
+is well defined. Its weighted aggregate is
+\[
+w^\top \Delta=w_k(-L)+w_j\frac{w_kL+1}{w_j}=-w_kL+w_kL+1=1>0,
+\]
+while its $k$th component equals $-L<0$. Since $k$ and $L$ were arbitrary, the unrestricted scalar condition permits an arbitrarily large declared component deficit.
+
+On a restricted domain $\mathcal B$, suppose first that $w^\top \Delta\ge0$ is a component-safety certificate. If
+\[
+\Delta\in\mathcal B\cap\{\Delta:w^\top \Delta\ge0\},
+\]
+the certificate implication gives $\Delta\in\Rp^n$, proving Eq.~\eqref{eq:domain-certificate}. Conversely, suppose Eq.~\eqref{eq:domain-certificate} holds. For any $\Delta\in\mathcal B$ satisfying $w^\top \Delta\ge0$, membership in the left-hand side of that inclusion implies $\Delta\in\Rp^n$. This is exactly the component-safety implication. The set inclusion is therefore both necessary and sufficient.
+\end{proof}
+
+\status{Theorem} The proposition rejects unrestricted compensation, not every scalar summary. A restricted technology or ecological domain may support a scalar certificate, but the implication must be proved on that domain.
+
+\section{Typed conservation and physical admissibility}
+
+The canonical tuple specifies where physical accounting enters, but it does not by itself establish conservation, non-negativity, or boundedness. Conservation follows from the left kernel of the declared internal-flow matrices; state admissibility and bounded-input response require additional boundary and dissipativity conditions.
+
+\begin{theorem}[Typed hybrid conservation]
+\label{thm:conservation}
+Let $L\in\R^{m\times k}$ collect $k$ moiety-accounting vectors. Consider a locally finite hybrid execution on its interval of existence and suppose
+\[
+L^\top S=0,\qquad L^\top S^J=0.
+\]
+Along every classical flow and admissible jump of that execution,
+\begin{equation}
+L^\top x(t)-L^\top x(0)
+=\int_0^t L^\top B\varphi(s)\,ds
++\sum_{t_j\le t}L^\top B^J\beta_j.
+\label{eq:hybrid-balance}
+\end{equation}
+In particular, if all boundary rates and impulses vanish, each component of $L^\top x$ is constant.
+\end{theorem}
+
+\begin{proof}
+Let $0<t_1<\cdots<t_N\le t$ be the admissible jump times up to $t$; when no jump occurs, set $N=0$ and interpret the jump sum as empty. On every open flow segment, Eqs.~\eqref{eq:physical-flow} and $L^\top S=0$ give
+\[
+\frac{d}{ds}\bigl(L^\top x(s)\bigr)
+=L^\top Sv(z(s),d(s))+L^\top B\varphi(z(s),d(s))
+=L^\top B\varphi(z(s),d(s)).
+\]
+Integrating this identity on each flow segment gives its boundary-flow contribution. At jump time $t_j$, Eq.~\eqref{eq:physical-jump} and $L^\top S^J=0$ give
+\begin{align*}
+L^\top x(t_j^+)-L^\top x(t_j^-)
+&=L^\top S^J\nu(z^-,d)+L^\top B^J\beta_j\\
+&=L^\top B^J\beta_j.
+\end{align*}
+Summing the integrated flow identities and these jump increments makes every intermediate endpoint cancel. The resulting telescoping identity is
+\[
+L^\top x(t)-L^\top x(0)
+=\int_0^tL^\top Bb(s)\,ds
+ +\sum_{t_j\le t}L^\top B^J\beta_j,
+\]
+which is Eq.~\eqref{eq:hybrid-balance}. If the boundary rates and impulses vanish, the right-hand side is zero, so every component of $L^\top x$ is constant.
+\end{proof}
+
+\begin{remark}
+The theorem gives one balance per declared moiety. It does not authorize addition of biomass, money, biodiversity indices, and exergy into a conserved scalar.
+\end{remark}
+
+\begin{corollary}[Closed positive-moiety bound]
+Consider a locally finite execution of a closed physical network with zero continuous and impulsive boundary transfer. If it has a strictly positive conservation vector $\ell\in\R_{++}^m$ satisfying $\ell^\top S=0$ and $\ell^\top S^J=0$ for every active flow and jump mode, then every non-negative trajectory of that execution satisfies
+\[
+0\le x_i(t)\le\frac{\ell^\top x(0)}{\ell_i}.
+\]
+\end{corollary}
+
+\begin{proof}
+The no-boundary-transfer assumptions and the two null-space conditions give conservation of the positive moiety by Theorem~\ref{thm:conservation}:
+\[
+\ell^\top x(t)=\ell^\top x(0).
+\]
+For a non-negative trajectory and any component $i$,
+\[
+0\le \ell_i x_i(t)
+\le\sum_{j=1}^m\ell_jx_j(t)
+=\ell^\top x(0).
+\]
+Because $\ell_i>0$, division by $\ell_i$ yields
+\[
+0\le x_i(t)\le\frac{\ell^\top x(0)}{\ell_i}.
+\]
+\end{proof}
+
+\status{Theorem and corollary, accounting only} The balance and the closed-moiety component bound require local finiteness of the hybrid execution. They do not rule out a finite-time Zeno accumulation in an application; completeness through such an accumulation requires a separate solution concept and continuation result.
+
+\begin{theorem}[Non-negative invariance for ordinary, hybrid, and RFDE modes]
+\label{thm:invariance}
+For each retarded mode, fix a delay $\tau\ge0$ and use the standard phase
+space $\mathcal C_\tau=C([ -\tau,0],\mathbb R^m)$ with the uniform norm; its
+non-negative histories form
+$\mathcal C_{\tau,+}=C([ -\tau,0],\mathbb R_+^m)$. Assume that the physical
+right-hand side is continuous and locally Lipschitz in the current state for
+an ordinary mode, or in the history under the uniform norm for a retarded
+mode, so that a unique local flow exists. For every admissible disturbance
+and every admissible non-negative current state or history, suppose the
+current physical value $x$ satisfies
+\begin{equation}
+ x_i=0\quad\Longrightarrow\quad
+ [Sv(z,d)+B\varphi(z,d)]_i\ge0
+\label{eq:tangent-condition}
+\end{equation}
+for every physical component $i$; in a retarded mode $x=\phi(0)$ for
+$\phi\in\mathcal C_{\tau,+}$. Suppose the execution is locally finite, every
+ordinary-mode reset maps $\mathbb R_+^m$ into $\mathbb R_+^m$, and every reset
+followed by a retarded mode supplies a post-event history in
+$\mathcal C_{\tau,+}$. Then the non-negative physical cone is forward
+invariant along the execution's interval of existence.
+\end{theorem}
+
+\begin{proof}
+For an ordinary mode, the tangent cone of the non-negative orthant at
+$x\in\mathbb R_+^m$ is
+\[
+T_{\mathbb R_+^m}(x)=\{r\in\mathbb R^m:r_i\ge0\text{ whenever }x_i=0\}.
+\]
+Equation~\eqref{eq:tangent-condition} places the ordinary vector field in
+this cone, so the standard tangent-cone invariance theorem applies under the
+stated local existence and uniqueness assumptions \cite{blanchini1999}.
+
+For a retarded mode on $\mathcal C_\tau$ with the uniform norm,
+Eq.~\eqref{eq:tangent-condition} is the standard quasipositivity condition:
+for every $\phi\in\mathcal C_{\tau,+}$ whose current $i$th component is zero,
+the $i$th derivative is non-negative. The positive-invariance theorem for
+retarded functional differential equations on this continuous-history
+phase space therefore keeps the solution segment in $\mathbb R_+^m$ for as
+long as that mode's solution exists \cite{hale1993}. This invocation is
+limited to $C([ -\tau,0],\mathbb R^m)$ with its uniform norm and does not
+assert an invariance criterion on an arbitrary history space.
+
+At an event, the applicable reset hypothesis preserves the non-negative
+state or supplies a non-negative post-event history. Restarting the
+appropriate ordinary or RFDE flow argument from that state or history, and
+repeating it over the finitely many events in each compact interval, proves
+forward invariance along the locally finite execution's interval of
+existence. For ordinary hybrid modes, this flow--reset concatenation uses the
+standard hybrid-execution framework \cite{goebel2012}; no general
+delayed-hybrid existence or non-Zeno theorem is asserted here.
+\end{proof}
+
+\begin{corollary}[Donor limitation is sufficient]
+Under the regularity and reset assumptions of Theorem~\ref{thm:invariance}, if every primitive outflow from compartment $i$ vanishes when $x_i=0$, all internal inflows are non-negative, and every negative boundary flow is donor limited, then Eq.~\eqref{eq:tangent-condition} holds.
+\end{corollary}
+
+\begin{proof}
+Fix a component $i$ and a state with $x_i=0$. Separate the $i$th balance into internal inflows, primitive outflows from compartment $i$, positive boundary inflows, and negative boundary outflows. Every primitive outflow from $i$ vanishes by the donor assumption. Every negative boundary flow also vanishes because it is donor limited at $x_i=0$. The remaining internal and boundary inflows are non-negative. Their sum is therefore non-negative, so
+\[
+[Sv(z,d)+B\varphi(z,d)]_i\ge0.
+\]
+Because the argument applies to every component on its zero face and to every admissible non-negative history and disturbance, Eq.~\eqref{eq:tangent-condition} holds.
+\end{proof}
+
+\status{Theorem and corollary, positivity only} The invariance and donor statements require flow regularity, local finiteness, tangency, and reset preservation to be checked model by model. Algebraic cancellation alone does not establish invariance, and invariance does not establish completeness beyond finite escape or Zeno accumulation.
+
+\begin{conditionaltheorem}[Bounded-input bounded-state criterion]
+\label{thm:bibs}
+Let $\mathcal Z_{\rm ad}$ be a declared current-state or history phase space with norm $\|\cdot\|_{\mathcal Z}$, and let $V:\mathcal Z_{\rm ad}\to\Rp_+$ be continuous and coercive in that norm. Suppose every maximal execution under consideration is complete and locally finite, $V$ is locally absolutely continuous along its flow intervals, and, for all inputs and disturbances bounded by a declared magnitude $U$, the upper-right Dini derivative satisfies
+\begin{equation}
+D^+V(z_t)\le-\alpha V(z_t)+\beta(U),
+\qquad \alpha>0,
+\label{eq:dissipative-bound}
+\end{equation}
+while every reset is non-expansive in $V$. Then
+\begin{equation}
+V(z_t)\le e^{-\alpha t}V(z_0)
++\frac{\beta(U)}{\alpha}\left(1-e^{-\alpha t}\right),
+\label{eq:bibs-bound}
+\end{equation}
+so every such trajectory is uniformly bounded in the declared phase-space norm.
+\end{conditionaltheorem}
+
+\begin{proof}
+Write $c=\beta(U)$ and let $w$ solve
+\[
+\dot w=-\alpha w+c,
+\qquad w(0)=V(z_0).
+\]
+Direct integration gives
+\[
+w(t)=e^{-\alpha t}V(z_0)
+ +\frac{c}{\alpha}\bigl(1-e^{-\alpha t}\bigr).
+\]
+On the first flow interval, the differential inequality for $V$ and scalar comparison imply $V(z_t)\le w(t)$. If a reset occurs at time $t_j$, non-expansiveness gives
+\[
+V(z_{t_j^+})\le V(z_{t_j^-})\le w(t_j).
+\]
+Using this inequality as the initial comparison at the next flow segment preserves $V(z_t)\le w(t)$. Local finiteness gives only finitely many reset times on each interval $[0,t]$, so induction over those resets proves Eq.~\eqref{eq:bibs-bound} at every finite $t$ along the complete trajectory.
+
+The right-hand side of Eq.~\eqref{eq:bibs-bound} is at most
+\[
+\max\left\{V(z_0),\frac{\beta(U)}{\alpha}\right\}.
+\]
+Thus the trajectory remains in one bounded $V$-sublevel set. Coercivity of $V$ in the declared current-state or history norm makes every such sublevel set bounded, which proves uniform boundedness of the state.
+\end{proof}
+
+\status{Conditional theorem} This is a sufficient BIBS criterion, not a consequence of the canonical tuple. Completeness, compact-time jump local finiteness, coercive dissipation, and non-expansive resets are substantive assumptions. Their role cannot be replaced by bounded forcing and donor admissibility alone: $\dot x=u$ with constant $u>0$ has a bounded donor-admissible input but an unbounded state.
+
+\section{Substitution as pathway feasibility}
+
+Accounting consistency and bounded state response do not establish that required services can be supplied by admissible pathways. Substitution is therefore posed as a feasibility question over declared activities, stocks, capacities, and service requirements, rather than inferred from an aggregate indicator or local elasticity. A substitution claim must specify activities and constraints. In a finite linear approximation, let $a\in\Rp^p$ be activity levels, $R\in\Rp^{m\times p}$ typed resource requirements, $Q\in\Rp^{n\times p}$ service outputs, and $E\in\Rp^{h\times p}$ capacity or exergy requirements. Given stocks $x$, capacities $e$, and service requirements $s^{\rm req}$, the claim is feasible when
+\begin{equation}
+Ra\le x,\qquad Ea\le e,\qquad Qa\ge s^{\rm req},
+\qquad a\ge0.
+\label{eq:linear-substitution}
+\end{equation}
+
+\begin{definition}[Support provenance and directional support gap]
+Partition pathway requirements by declared provenance---for example renewable flow, recovered/recycled material, imports, and non-renewable drawdown---without adding unlike physical units. Let $\Gamma_{\rm all}(z)$ be the service set using all admissible pathways and $\Gamma_{\rm reg}(z)\subseteq\Gamma_{\rm all}(z)$ the set after imposing the declared regenerative, boundary, quality, and exergy restrictions. For a nonzero service direction $\bar s\ge0$, define
+\[
+\alpha_{\rm reg}(\bar s;z)
+=\sup\{\alpha\in[0,1]:\alpha\bar s\in\Gamma_{\rm reg}(z)\}.
+\]
+The vector $(1-\alpha_{\rm reg})\bar s$ is the \emph{directional support gap}. A realised service $s\in\Gamma_{\rm all}\setminus\Gamma_{\rm reg}$ is support-dependent under that declaration even when current service demand is met.
+\end{definition}
+
+This definition captures the possibility of maintained output during net support drawdown without asserting a dimensionally invalid identity between service units and raw material fluxes. Substitution or service maintenance is sustainability-preserving only if a timed pathway remains within $K$ through deployment and includes its upstream, downstream, cross-boundary, residual, quality, and exergy consequences. Omitting those consequences can shift pressure across unrepresented boundaries or categories.
+
+The finite-dimensional theorem of alternatives used below is the standard Farkas separation result \cite{rockafellar1970}.
+
+\begin{theorem}[Linear substitution alternative]
+\label{thm:farkas}
+Exactly one of the following statements holds:
+
+\begin{enumerate}[label=(\roman*)]
+\item there exists $a\ge0$ satisfying Eq.~\eqref{eq:linear-substitution};
+\item there exist multipliers $\alpha\ge0$, $\beta\ge0$, and $\gamma\ge0$ such that
+\begin{align}
+\alpha^\top R+\beta^\top E-\gamma^\top Q&\ge0
+\quad\text{componentwise}, \label{eq:dual-tech}\\
+\gamma^\top s^{\rm req}&>\alpha^\top x+\beta^\top e. \label{eq:dual-shortfall}
+\end{align}
+\end{enumerate}
+The second statement is a certificate that the declared substitution pathways cannot meet demand within the typed resource and capacity bounds.
+\end{theorem}
+
+\begin{proof}
+Write all constraints in Eq.~\eqref{eq:linear-substitution} as
+\[
+Aa\le \rho,
+\qquad
+A=\begin{pmatrix}R\\E\\-Q\\-I\end{pmatrix},
+\qquad
+\rho=\begin{pmatrix}x\\e\\-s^{\rm req}\\0\end{pmatrix}.
+\]
+The standard Farkas alternative cited above says that exactly one of the following holds: there is an $a$ satisfying $Aa\le \rho$, or there is a non-negative multiplier $\lambda$ such that $\lambda^\top A=0$ and $\lambda^\top\rho<0$. Partition such a multiplier as $\lambda=(\alpha,\beta,\gamma,\delta)\ge0$. Its two conditions are
+\begin{align*}
+\alpha^\top R+\beta^\top E-\gamma^\top Q-\delta^\top&=0,\\
+\alpha^\top x+\beta^\top e-\gamma^\top s^{\rm req}&<0.
+\end{align*}
+The first equality is equivalent to
+\[
+\alpha^\top R+\beta^\top E-\gamma^\top Q
+=\delta^\top\ge0
+\]
+componentwise, which is Eq.~\eqref{eq:dual-tech}; the second inequality is Eq.~\eqref{eq:dual-shortfall}. Conversely, multipliers satisfying Eqs.~\eqref{eq:dual-tech}--\eqref{eq:dual-shortfall} define
+\[
+\delta^\top=\alpha^\top R+\beta^\top E-\gamma^\top Q\ge0
+\]
+and hence a Farkas multiplier for the stacked system. Thus the cited alternative is mapped in both directions to statements (i) and (ii).
+
+For completeness, their mutual exclusivity is also immediate from the displayed constraints. If $a$ were feasible and the certificate existed, then non-negativity of $a$ and Eq.~\eqref{eq:dual-tech} would give
+\[
+0\le(\alpha^\top R+\beta^\top E-\gamma^\top Q)a.
+\]
+Feasibility and non-negativity of the multipliers would also give
+\begin{align*}
+(\alpha^\top R+\beta^\top E-\gamma^\top Q)a
+&\le\alpha^\top x+\beta^\top e-\gamma^\top s^{\rm req}\\
+&<0,
+\end{align*}
+a contradiction. Exactly one statement therefore holds.
+\end{proof}
+
+\status{Theorem, finite linear model} The alternative is exact for the declared finite-dimensional linear constraints. It does not establish nonlinear or universal substitutability.
+
+\begin{remark}
+The multipliers are a separation certificate, not universal exchange rates. Nonlinear, nonconvex, path-dependent, spatial, or irreversible technologies require their own feasibility analysis. An elasticity fitted near one operating point cannot establish global substitutability.
+\end{remark}
+
+\section{Observation limits}
+
+Even when physical and service constraints are fully specified, a policy can certify them only through the information available to it. The following criterion isolates this observability question from the underlying safety definition.
+
+\begin{definition}[Exact safety certifier]
+For an admissible domain $Z$ and safe set $K\subseteq Z$, an exact certifier based on an observation map $O:Z\to \mathcal Y_{\rm obs}$ is a function $C:\mathcal Y_{\rm obs}\to\{0,1\}$ such that
+\[
+C(O(z))=1\quad\Longleftrightarrow\quad z\in K
+\qquad\text{for every }z\in Z.
+\]
+\end{definition}
+
+\begin{theorem}[Observation-fibre criterion]
+\label{thm:observation}
+An exact safety certifier exists if and only if membership in $K$ is constant on every observation fibre:
+\begin{equation}
+O(z_1)=O(z_2)
+\quad\Longrightarrow\quad
+[z_1\in K\Longleftrightarrow z_2\in K].
+\label{eq:fibre-condition}
+\end{equation}
+Equivalently, $K=O^{-1}(O(K))$ on the admissible domain.
+\end{theorem}
+
+\begin{proof}
+Suppose first that an exact certifier $C$ exists and that $O(z_1)=O(z_2)$. Then
+\[
+\mathbf 1_K(z_1)=C(O(z_1))=C(O(z_2))=\mathbf 1_K(z_2),
+\]
+so membership in $K$ is constant on the fibre and Eq.~\eqref{eq:fibre-condition} follows.
+
+The fibre condition is equivalent to the saturation identity. The inclusion
+\[
+K\subseteq O^{-1}(O(K))
+\]
+always holds on $Z$. If Eq.~\eqref{eq:fibre-condition} holds and $z\in O^{-1}(O(K))$, there is a $k\in K$ with $O(z)=O(k)$; constancy on that fibre gives $z\in K$, proving the reverse inclusion. Conversely, if $K=O^{-1}(O(K))$ and $O(z_1)=O(z_2)$, then $z_1\in K$ implies $O(z_2)\in O(K)$ and hence $z_2\in K$. Interchanging the indices proves the reverse implication, so membership is constant.
+
+Finally, assume the fibre condition and define on all of $\mathcal Y_{\rm obs}$
+\[
+C(y)=\begin{cases}
+1,&y\in O(K),\\
+0,&y\notin O(K).
+\end{cases}
+\]
+If $z\in K$, then $O(z)\in O(K)$ and $C(O(z))=1$. If $C(O(z))=1$, then $z\in O^{-1}(O(K))=K$. Therefore $C(O(z))=1$ if and only if $z\in K$, so $C$ is an exact certifier.
+\end{proof}
+
+\status{Theorem, deterministic exact observation} The criterion concerns exact set membership on a declared admissible domain; it is not an identifiability or statistical-consistency theorem.
+
+\begin{corollary}[Safety-crossing fibres]
+If two admissible states have the same observation and lie on opposite sides of a component safety constraint, no exact observation-only certificate exists. The largest set of observations that can soundly be labelled safe without completeness is
+\[
+\mathcal Y_{\rm certainly\ safe}=\{y\in O(Z):O^{-1}(y)\subseteq K\}.
+\]
+\end{corollary}
+
+\begin{proof}
+If two admissible states have the same observation but lie on opposite sides of a component constraint defining safety, one belongs to $K$ and the other does not. Membership is therefore not constant on that observation fibre. Theorem~\ref{thm:observation} then rules out an exact observation-only certificate.
+
+Set
+\[
+\mathcal Y_c=\{y\in O(Z):O^{-1}(y)\subseteq K\}.
+\]
+Labelling every $y\in \mathcal Y_c$ safe is sound by definition, because every admissible state producing such an observation lies in $K$. Conversely, let $S\subseteq O(Z)$ be any set of observations that can be soundly labelled safe. Soundness requires $O^{-1}(y)\subseteq K$ for each $y\in S$, so $y\in \mathcal Y_c$ and hence $S\subseteq \mathcal Y_c$. Thus $\mathcal Y_c$ is the largest sound safe-labelled set, and it is the displayed set $\mathcal Y_{\rm certainly\ safe}$.
+\end{proof}
+
+\status{Theorem, corollary} Safety-crossing fibres obstruct exact observation-only certification; the largest certainly-safe observation set need not be complete or easy to compute.
+
+The theorem is deterministic and exact. With noise, finite records, or model discrepancy, one needs probabilistic or set-valued fibres. More data can shrink a fibre; aggregation cannot be assumed harmless.
+
+\section{Sustainability as robust viability}
+
+Accounting, pathway feasibility, and observation determine what is physically admissible, service-feasible, and knowable. Viability adds a distinct trajectory-control question: whether one causal policy can maintain every declared constraint against the full disturbance class. The policy and disturbance quantifiers must therefore be fixed before constructing a kernel.
+
+\begin{definition}[Three policy questions]
+Let $z^{\pi,d}(t;z_0)$ be the trajectory under a causal policy $\pi$ and disturbance signal $d\in\mathcal D$, where $\mathcal D$ includes the declared signal space, regularity, bounds, and nonanticipation convention.
+
+\begin{enumerate}
+\item Actual-policy safety asks whether a specified $\pi_0,d_0$ keeps the trajectory in $K$.
+\item Viability asks whether some $\pi\in\mathbb P$ keeps the trajectory in $K$.
+\item Robust viability asks whether one admissible causal policy works for every disturbance in $\mathcal D$:
+\begin{equation}
+\Viab_{\mathbb P,\mathcal D}(K)
+=\{z_0\in K:\exists\pi\in\mathbb P\ \forall d\in\mathcal D,
+\ z^{\pi,d}(t;z_0)\in K\ \forall t\ge0\}.
+\label{eq:robust-viability}
+\end{equation}
+\end{enumerate}
+\end{definition}
+
+The quantifier order in Eq.~\eqref{eq:robust-viability} does not require an open-loop command sequence: $\pi$ may react causally to observations. It requires the same policy rule, not foreknowledge of the disturbance.
+
+\begin{definition}[Capture basin, recoverability, and relative irreversibility]
+For a constraint set $D$, target $C\subseteq D$, horizon $H\in(0,\infty]$, policy class $\mathbb P$, and disturbance class $\mathcal D$, define
+\begin{multline}
+\operatorname{Capt}^{H}_{\mathbb P,\mathcal D}(C;D)
+=\{z_0\in D:\exists\pi\in\mathbb P\ \forall d\in\mathcal D\ 
+\exists t_C(d)\le H:\\
+ z^{\pi,d}(t;z_0)\in D\ \text{for }0\le t\le t_C(d),
+\quad z^{\pi,d}(t_C(d);z_0)\in C\}.
+\label{eq:capture-basin}
+\end{multline}
+A state is \emph{robustly recoverable to $C$} precisely when it belongs to this set. It is \emph{irreversible relative to $(C,D,H,\mathbb P,\mathcal D)$} when it does not. Irreversibility under this definition is therefore indexed by the target, horizon, constraint set, policy class, and disturbance class.
+\end{definition}
+
+The target may be a viable core, a service-restored set, or a quality grade, but its meaning must be fixed before computation. Changing the horizon, information available to policy, technology set, disturbance quantifier, or allowed temporary constraint violation changes recoverability. In particular, $z_0\notin\Viab(K)$ means that indefinite safety cannot be guaranteed from $z_0$ under the declared classes; it does not by itself prove that no constrained recovery to another target is possible.
+
+\status{Axiom/definition} Capture and irreversibility are explicit target-, horizon-, constraint-, policy-, and disturbance-relative objects. Policy-relative irreversibility is not thermodynamic irreversibility, and no empirical capture basin is computed in this article.
+
+Equations~\eqref{eq:robust-viability}--\eqref{eq:capture-basin} define continuous-time, potentially observation-based objects. No theorem below identifies those general objects with a sampled full-state kernel. For the full delayed hybrid architecture, viability may live in a history or information-state space and requires separate compactness, closure, nonanticipation, selection, and non-Zeno arguments. No general existence theorem is claimed here. The constructive results that follow separate a compact full-state sampled system, an exact finite-clopen endpoint filter, its fixed-period inter-sample-safe extension, a compact single-delay Lipschitz-history specialization, a review-clock hybrid RFDE with a declared phase-space reset, a bounded-jump hybrid ODE model with continuous exact reachable sets, and a distinct compact exact-tube information-state model.
+
+\subsection{Constructive sampled robust viability}
+
+The predecessor construction below is a sustainability-specific use of an established viability-kernel approximation lineage \cite{saintpierre1994}. A sampled or periodically reviewed system can be written on an augmented state as
+\begin{equation}
+z_{k+1}=F(z_k,u_k,w_k),
+\label{eq:sampled-transition}
+\end{equation}
+where deployment queues, memory, and held commands are included in $z_k$. Let the compact action and per-step disturbance-symbol sets be $U$ and $W$. The symbols in $W$ encode exactly the sampled process and registered model uncertainty quantified in this transition; they are not automatically the continuous-time disturbance class $\mathcal D$. Connecting the two requires a declared restriction, segment encoding, or transition construction.
+
+For $A\subseteq K$, define
+\begin{equation}
+\Pre(A)=\{z\in K:\exists u\in U\ \forall w\in W,
+\ F(z,u,w)\in A\}.
+\label{eq:predecessor}
+\end{equation}
+Set $K_0=K$ and $K_{n+1}=\Pre(K_n)$.
+
+\begin{theorem}[Sampled robust-viability kernel]
+\label{thm:sampled-viability}
+Assume $K$, $U$, and $W$ are non-empty compact metric spaces, $F$ is continuous, the augmented state is available at each decision, and the policy class contains arbitrary state-feedback selectors. Then:
+
+\begin{enumerate}
+\item every $K_n$ is compact and $K_{n+1}\subseteq K_n$;
+\item $K_n$ is exactly the set of states from which a causal policy can keep Eq.~\eqref{eq:sampled-transition} in $K$ for at least $n$ transitions against every disturbance sequence;
+\item the intersection
+\[
+K_\infty=\bigcap_{n=0}^{\infty}K_n
+\]
+is the largest robust controlled-invariant subset of $K$ and equals the robust viability kernel of the sampled system.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Let $A\subseteq K$ be compact and define
+\[
+G_A=\{(z,u)\in K\times U:F(z,u,w)\in A\text{ for every }w\in W\}.
+\]
+For each fixed $w$, continuity makes the inverse image of the closed set $A$ closed. Hence
+\[
+G_A=\bigcap_{w\in W}\{(z,u):F(z,u,w)\in A\}
+\]
+is closed in the compact space $K\times U$, and is therefore compact. Its projection on the $z$ coordinate is exactly $\Pre(A)$, so $\Pre(A)$ is compact. Starting from compact $K_0=K$, induction proves compactness of every $K_n$.
+
+The predecessor is monotone: $A\subseteq B$ implies $\Pre(A)\subseteq\Pre(B)$. Also $K_1\subseteq K=K_0$ because the definition of $\Pre$ restricts its current state to $K$. If $K_n\subseteq K_{n-1}$, monotonicity gives
+\[
+K_{n+1}=\Pre(K_n)\subseteq\Pre(K_{n-1})=K_n.
+\]
+Thus the sequence is nested, proving part 1.
+
+For part 2, the assertion is immediate at $n=0$. Assume it holds for $n$. If $z\in K_{n+1}$, the predecessor definition supplies a current action $u$ for which every disturbance $w$ produces a next state in $K_n$. After that next augmented state is observed, the induction hypothesis supplies a state-feedback continuation that is safe for $n$ further transitions. The assumed policy class permits these state-dependent choices, so a causal policy is safe for $n+1$ transitions. Conversely, if a causal policy is safe for $n+1$ transitions from $z$, its first action must send every possible disturbance realization to a state from which its continuation is safe for $n$ transitions. The induction hypothesis places every such next state in $K_n$, so $z\in\Pre(K_n)=K_{n+1}$. This proves the finite-horizon characterization in both directions.
+
+For part 3, fix $z\in K_\infty$ and, for $n\ge0$, set
+\[
+U_n(z)=\{u\in U:F(z,u,w)\in K_n\text{ for every }w\in W\}.
+\]
+Because $z\in K_{n+1}$, each $U_n(z)$ is non-empty. Each is closed in compact $U$ by continuity of $F$ and closedness of $K_n$, and the nesting of the $K_n$ makes the $U_n(z)$ nested. Compactness and the finite-intersection property give
+\[
+\bigcap_{n=0}^{\infty}U_n(z)\ne\varnothing.
+\]
+Choose an action in this intersection. For every $w$, its next state belongs to every $K_n$, hence to $K_\infty$. Choosing such an action at each visited state, as allowed by the arbitrary state-feedback-selector hypothesis, makes $K_\infty$ robustly controlled invariant.
+
+It follows that every state in $K_\infty$ is robustly viable. Conversely, a state from which one policy maintains safety indefinitely can be maintained for every finite number $n$ of transitions. Part 2 then places it in every $K_n$, and hence in $K_\infty$. Therefore $K_\infty$ equals the robust viability kernel. The same argument shows that every robust controlled-invariant subset of $K$ lies in all $K_n$, so $K_\infty$ is the largest such subset.
+\end{proof}
+
+\status{Theorem, restricted architecture} The result computes the exact kernel for the declared discrete transition with full augmented state available to the policy. If admissible policies must be measurable, continuous, or otherwise regular, a selector with that regularity must additionally be proved. Under partial observation the relevant state is a belief or information set, not the latent $z$ unless an estimator theorem justifies that replacement.
+
+\begin{corollary}[Monotonicity under policy-set expansion]
+For fixed $F$, $K$, and $W$, if $U_1\subseteq U_2$, then the sampled robust viability kernels satisfy
+\[
+K_\infty(U_1)\subseteq K_\infty(U_2).
+\]
+\end{corollary}
+
+\begin{proof}
+Let $K_n^{(j)}$ be the predecessor sequence generated with action set $U_j$, for $j=1,2$. The initial sets agree: $K_0^{(1)}=K_0^{(2)}=K$. Suppose $K_n^{(1)}\subseteq K_n^{(2)}$ and take $z\in K_{n+1}^{(1)}$. There is a $u\in U_1$ such that
+\[
+F(z,u,w)\in K_n^{(1)}\quad\text{for every }w\in W.
+\]
+Because $U_1\subseteq U_2$ and $K_n^{(1)}\subseteq K_n^{(2)}$, the same action witnesses $z\in K_{n+1}^{(2)}$. Induction therefore gives $K_n^{(1)}\subseteq K_n^{(2)}$ for every $n$. Taking intersections preserves inclusion:
+\[
+K_\infty(U_1)=\bigcap_nK_n^{(1)}
+\subseteq\bigcap_nK_n^{(2)}=K_\infty(U_2).
+\]
+\end{proof}
+
+This monotonicity does not apply when adding a technology also changes realised dynamics, compulsory behaviour, demand, disturbance exposure, or $K$ through rebound or exported harm. Calling those changes an ``expanded action set'' would suppress the mechanism that can reverse the comparison.
+
+\status{Theorem, corollary} Policy-set expansion is monotone only when the transition, safe set, disturbance set, and information structure are fixed.
+
+\subsection{Finite-alphabet sampled observation feedback}
+
+A concrete endpoint-only observation kernel can be constructed when the observation update is an exact finite clopen partition. This is a sampled safety game on prediction sets immediately before the current symbol is observed. It is distinct both from the full-state kernel above and from the exact inter-sample tube models below.
+
+Let $\mathsf X$, $U$, and $W$ be non-empty compact metric spaces, let $K\subseteq \mathsf X$ be a non-empty compact safe set, and let
+\[
+F:K\times U\times W\longrightarrow \mathsf X
+\]
+be continuous. Let $\Sigma$ be finite with the discrete topology and let $O:\mathsf X\to \Sigma$ have closed fibres
+\[
+C_y=O^{-1}(y),\qquad y\in \Sigma.
+\]
+Because the fibres form a finite closed partition of $\mathsf X$, each $C_y$ is also open. Write $\mathcal H(K)$ for the non-empty compact subsets of $K$ with the Hausdorff metric. For a prediction set $\Omega\in\mathcal H(K)$, a consistent symbol $y$ has $\Omega_y:=\Omega\cap C_y\ne\varnothing$, and the exact one-step prediction after command $u$ is
+\[
+\mathscr R(\Omega,y,u)
+ =\{F(z,u,w):z\in\Omega_y,\ w\in W\}\in\mathcal H(\mathsf X).
+\]
+Thus $\Omega$ is available before observation, $y$ restricts it to $\Omega_y$, the command may depend on $(\Omega,y)$, and $\mathscr R(\Omega,y,u)$ is the next pre-observation prediction set. The policy class $\mathbb P_{\rm obs}^{\rm fin}$ contains arbitrary causal rules that at review $k$ may use the review index and the recursively generated pair $(\Omega_k,y_k)$, equivalently the finite observation--action history through this exact sufficient statistic. No future symbol or disturbance may be used, and no regularity of the selectors is asserted.
+
+For a family $\mathcal A\subseteq\mathcal H(K)$ define
+\begin{equation}
+\Pre_{\mathcal O}(\mathcal A)
+=\left\{\Omega\in\mathcal H(K):
+\begin{array}{l}
+\text{for every }y\in \Sigma\text{ with }\Omega_y\ne\varnothing,\text{ there is }u\in U\\[-1mm]
+\text{such that }\mathscr R(\Omega,y,u)\in\mathcal A
+\end{array}\right\}.
+\label{eq:finite-observation-predecessor}
+\end{equation}
+Set $\mathcal L_0=\mathcal H(K)$ and $\mathcal L_{n+1}=\Pre_{\mathcal O}(\mathcal L_n)$.
+
+\begin{theorem}[Finite-clopen observation knowledge kernel]
+\label{thm:finite-observation-viability}
+Under the preceding hypotheses:
+\begin{enumerate}
+\item every $\mathcal L_n$ is compact and $\mathcal L_{n+1}\subseteq\mathcal L_n$;
+\item $\Omega\in\mathcal L_n$ exactly when a policy in $\mathbb P_{\rm obs}^{\rm fin}$ keeps every latent trajectory with initial state in $\Omega$ inside $K$ for the next $n$ transitions, for every disturbance sequence and every symbol sequence induced by those latent trajectories;
+\item if every $\mathcal L_n$ is non-empty, then
+\begin{equation}
+\mathcal L_\infty=\bigcap_{n=0}^{\infty}\mathcal L_n
+\label{eq:finite-observation-kernel}
+\end{equation}
+is non-empty and is the largest robustly controlled-invariant family of pre-observation prediction sets under $\mathbb P_{\rm obs}^{\rm fin}$; and
+\item if $O$ is injective on $K$, then, for the full-state iterates $K_n$ of Theorem~\ref{thm:sampled-viability},
+\[
+\Omega\in\mathcal L_n\quad\Longleftrightarrow\quad \Omega\subseteq K_n.
+\]
+Consequently $\{z\}\in\mathcal L_\infty$ if and only if $z\in K_\infty$.
+\end{enumerate}
+For a declared prior $\Omega_0\in\mathcal H(K)$, robust sampled safety for every latent initial state in that prior is therefore equivalent to $\Omega_0\in\mathcal L_\infty$.
+\end{theorem}
+
+\begin{proof}
+We first record the compactness and continuity facts used by the predecessor. The hyperspace $\mathcal H(K)$ is compact. Indeed, associate to $A\in\mathcal H(K)$ the distance function $d_A(x)=d(x,A)$ on $K$. These functions are uniformly bounded and $1$-Lipschitz. From any sequence, Arzel\`a--Ascoli gives a uniformly convergent subsequence with limit $f$. The minimum of $f$ is zero. If $A=\{x:f(x)=0\}$, then $A$ is non-empty and compact. The $1$-Lipschitz property gives $f(x)\le d(x,A)$. Conversely, choose nearest points in the approximating compact sets and pass to convergent subsequences in $K$; their limits lie in $A$ and give $d(x,A)\le f(x)$. Hence $f=d_A$. Uniform convergence of distance functions is Hausdorff convergence, proving sequential compactness and therefore compactness of $\mathcal H(K)$. The same argument applies to $\mathcal H(\mathsf X)$, and $\mathcal H(K)$ is closed in $\mathcal H(\mathsf X)$ because $K$ is closed.
+
+Next suppose $\Omega_j\to\Omega$ in $\mathcal H(K)$. For a fixed $y$, closedness of $C_y$ implies that every limit point of $\Omega_j\cap C_y$ lies in $\Omega\cap C_y$. Conversely, if $z\in\Omega\cap C_y$, Hausdorff convergence supplies $z_j\in\Omega_j$ with $z_j\to z$, and openness of $C_y$ puts $z_j$ in $C_y$ eventually. Thus, whenever $\Omega\cap C_y$ is non-empty, the intersections are eventually non-empty and converge to it in Hausdorff distance. If the limiting intersection is empty, compactness and the clopen separation imply that the approximating intersections are eventually empty. This proves the required continuity of finite-clopen conditioning, including stability of branch consistency.
+
+Uniform continuity of $F$ on compact $K\times U\times W$ now shows that
+\[
+(A,u)\longmapsto\{F(z,u,w):z\in A,\ w\in W\}
+\]
+is Hausdorff-continuous from $\mathcal H(K)\times U$ into $\mathcal H(\mathsf X)$. Combining this fact with finite-clopen conditioning makes $\mathscr R$ continuous on every consistent branch.
+
+Let $\mathcal A$ be closed in $\mathcal H(K)$ and take $\Omega_j\in\Pre_{\mathcal O}(\mathcal A)$ with $\Omega_j\to\Omega$. Fix a symbol $y$ consistent with $\Omega$. It is consistent with $\Omega_j$ for all sufficiently large $j$, so there are $u_j\in U$ with
+\[
+\mathscr R(\Omega_j,y,u_j)\in\mathcal A.
+\]
+After passage to a subsequence, compactness of $U$ gives $u_j\to u$. The preceding continuity gives
+\[
+\mathscr R(\Omega_j,y,u_j)\longrightarrow\mathscr R(\Omega,y,u).
+\]
+Because $\mathcal A$ is closed in $\mathcal H(K)$, the limit belongs to $\mathcal A$. Repeating this argument for every consistent symbol proves $\Omega\in\Pre_{\mathcal O}(\mathcal A)$. Hence the predecessor of a compact family is closed in compact $\mathcal H(K)$ and is compact.
+
+The predecessor is monotone with respect to inclusion of families. Also $\mathcal L_1\subseteq\mathcal L_0$ because membership of every exact next prediction in $\mathcal H(K)$ enforces review-time safety. If $\mathcal L_n\subseteq\mathcal L_{n-1}$, monotonicity gives $\mathcal L_{n+1}\subseteq\mathcal L_n$. Induction proves part 1.
+
+For part 2, the zero-horizon assertion is exactly $\Omega\subseteq K$. Suppose the characterization holds for $n$. If $\Omega\in\mathcal L_{n+1}$, then after each consistent current symbol the predecessor supplies a command whose exact next prediction belongs to $\mathcal L_n$. Every true next state lies in that prediction set, and the induction hypothesis supplies a causal continuation for $n$ further transitions. Conversely, the first command of any policy safe for $n+1$ transitions must, for each consistent symbol, keep every disturbance outcome in $K$. Its exact next prediction must admit the policy's safe $n$-transition continuation, so the induction hypothesis places that prediction in $\mathcal L_n$. Equation~\eqref{eq:finite-observation-predecessor} then gives $\Omega\in\mathcal L_{n+1}$.
+
+If all finite-horizon families are non-empty, their compactness and nesting give non-empty $\mathcal L_\infty$. Fix $\Omega\in\mathcal L_\infty$ and a consistent $y$. For $n\ge0$ define
+\[
+V_n(\Omega,y)=\{u\in U:\mathscr R(\Omega,y,u)\in\mathcal L_n\}.
+\]
+Each $V_n(\Omega,y)$ is non-empty because $\Omega\in\mathcal L_{n+1}$, is closed in compact $U$, and decreases with $n$. The finite-intersection property supplies a common $u$ for which the next prediction lies in $\mathcal L_\infty$. Selecting such a command for every $(\Omega,y)$, as allowed by the arbitrary-selector hypothesis, makes $\mathcal L_\infty$ robustly controlled invariant. Conversely, if a family $\mathcal C\subseteq\mathcal H(K)$ is robustly controlled invariant under these exact filter dynamics, induction gives $\mathcal C\subseteq\mathcal L_n$ for every $n$, and hence $\mathcal C\subseteq\mathcal L_\infty$. If one causal policy is safe indefinitely from a fixed prior, it is safe for every finite horizon, so part 2 places that prior in every $\mathcal L_n$; the invariant selector just constructed proves the converse. This proves part 3 and the fixed-prior assertion.
+
+Finally suppose $O$ is injective on $K$. We prove by induction that $\Omega\in\mathcal L_n$ exactly when $\Omega\subseteq K_n$. The assertion is immediate for $n=0$. Under injectivity, each non-empty $\Omega\cap C_y$ is a singleton $\{z\}$. Using the induction hypothesis, the condition
+\[
+\mathscr R(\Omega,y,u)\in\mathcal L_n
+\]
+is equivalent to $F(z,u,w)\in K_n$ for every $w\in W$. Requiring such a command for every $z\in\Omega$ is exactly $\Omega\subseteq\Pre(K_n)=K_{n+1}$. This proves part 4 and completes the proof.
+\end{proof}
+
+\status{Theorem, finite-clopen sampled observation model} This result constructs an exact endpoint knowledge kernel for a deterministic finite observation partition and an arbitrary-selector policy class. Finite clopen conditioning is a sufficient concrete architecture, not a necessary condition for every observation-based theorem: Theorem~\ref{thm:information-viability} instead assumes a compact exact information process and continuous tube/update maps directly. The present theorem proves neither inter-sample safety nor equality with Eq.~\eqref{eq:robust-viability}, and it does not cover continuous observation alphabets, overlapping noisy observation correspondences, unbounded disturbances, regular selectors, delays, or hybrid event timing.
+
+The static and dynamic uses of observation fibres are different. Theorem~\ref{thm:observation} concerns a fibre in an admissible ambient domain and fails to give an exact static safety label when that fibre meets both $K$ and its complement. Here a declared prediction $\Omega\subseteq K$ may intersect only the safe part of the same fibre and may still admit a safe command. Such provisional, prior-relative dynamical safety does not turn the symbol into a model-free static certificate.
+
+\paragraph{Memoryless observation feedback.}
+A tempting latent-state iteration is
+\[
+\Pre_{\rm ml}(A)=\{z\in A:\exists u\in U\ \forall z'\in A\cap C_{O(z)}\ \forall w\in W,\ F(z',u,w)\in A\}.
+\]
+It does not in general compute a largest memoryless invariant set, because this operator is not monotone. For a finite counterexample, take $\mathsf X=\{a,b,\partial\}$ with the discrete topology, $K=\{a,b\}$, one disturbance, $O(a)=O(b)$, and actions $L,R$ satisfying
+\[
+F(a,L)=a,\quad F(a,R)=\partial,\qquad
+F(b,L)=\partial,\quad F(b,R)=b.
+\]
+Then $\{a\}$ is invariant under the memoryless choice $L$ and $\{b\}$ is invariant under the memoryless choice $R$, but no single action protects the fibre $\{a,b\}$. Thus $a\in\Pre_{\rm ml}(\{a\})$ while $a\notin\Pre_{\rm ml}(K)$; neither monotonicity nor a greatest memoryless invariant subset exists. For a fixed memoryless map $\mu:\Sigma\to U$, the ordinary predecessor
+\[
+\Pre_\mu(A)=\{z\in A:F(z,\mu(O(z)),w)\in A\ \forall w\in W\}
+\]
+does compute the largest invariant subset for that fixed $\mu$. Kernels for different maps need not have an invariant union. Therefore no strictly coarser ``memoryless kernel'' is asserted without first fixing the policy map or an alternative comparison criterion.
+
+\subsection{Inter-sample-safe held-control kernels}
+
+The review-time predecessor in Eq.~\eqref{eq:predecessor} constrains only the states $z_k$. It does not prevent a held trajectory from leaving $K$ and returning before the next review. The next construction adds that missing tube condition. It concerns a fixed review period and full augmented state at review times; it is not the unrestricted continuous-time, observation-based object in Eq.~\eqref{eq:robust-viability}.
+
+\begin{definition}[Held-control tube predecessor]
+Fix $h>0$. Let $\mathsf X$ be a metric state space, let $K\subseteq \mathsf X$, $U$, and $W_h$ be non-empty compact metric spaces, and let
+\[
+\Phi:[0,h]\times K\times U\times W_h\to \mathsf X
+\]
+be continuous with $\Phi(0,z,u,w)=z$. The element $w\in W_h$ encodes an admissible disturbance segment and any registered model branch over one held interval, while $u$ is held fixed. For compact $A\subseteq K$, define
+\begin{equation}
+\Pre_h^{\rm tube}(A)=
+\left\{z\in K:\begin{array}{l}
+\exists u\in U\ \forall w\in W_h,\\[-1mm]
+\Phi(t,z,u,w)\in K\quad\forall t\in[0,h],\\[-1mm]
+\Phi(h,z,u,w)\in A
+\end{array}\right\}.
+\label{eq:tube-predecessor}
+\end{equation}
+A connection to the continuous disturbance class $\mathcal D$ is exact only when $W_h$ is declared to encode every admissible restriction $d|_{[kh,(k+1)h]}$ and $\Phi$ is the corresponding held-control solution map.
+\end{definition}
+
+\begin{theorem}[Inter-sample-safe sampled kernel]
+\label{thm:tube-viability}
+Under the hypotheses of the preceding definition, suppose the augmented state is available at each review and arbitrary state-feedback selection is allowed. Set
+\[
+K^{\rm tube}_0=K,
+\qquad
+K^{\rm tube}_{n+1}=\Pre_h^{\rm tube}(K^{\rm tube}_n).
+\]
+Then every $K^{\rm tube}_n$ is compact, the sequence is decreasing, and $K^{\rm tube}_n$ is exactly the set of initial states from which a causal fixed-period held-control policy keeps every point of the first $n$ arcs in $K$. Moreover,
+\begin{equation}
+K^{\rm tube}_\infty=\bigcap_{n=0}^{\infty}K^{\rm tube}_n
+\label{eq:tube-kernel}
+\end{equation}
+is the largest subset $C\subseteq K$ such that, for every $z\in C$, one held action keeps the entire next arc in $K$ for every $w\in W_h$ and places every endpoint in $C$. Concatenating the resulting review-time selections therefore guarantees inter-sample safety for all times in the fixed-period held-control model.
+\end{theorem}
+
+\begin{proof}
+Let $A\subseteq K$ be compact and define the admissible state--action relation
+\[
+H_A=\left\{(z,u)\in K\times U:\begin{array}{l}
+\Phi(t,z,u,w)\in K\quad\text{for all }(t,w)\in[0,h]\times W_h,\\
+\Phi(h,z,u,w)\in A\quad\text{for all }w\in W_h
+\end{array}\right\}.
+\]
+For each fixed $(t,w)$, continuity of $\Phi$ and closedness of $K$ make
+\[
+\{(z,u):\Phi(t,z,u,w)\in K\}
+\]
+closed in $K\times U$. For each fixed $w$, the analogous terminal inverse image of the closed set $A$ is closed. Thus $H_A$, an intersection of these closed sets, is closed in compact $K\times U$ and hence compact. Its projection onto $K$ is $\Pre_h^{\rm tube}(A)$, so the predecessor of a compact set is compact.
+
+The operator is monotone: $A\subseteq B$ implies $\Pre_h^{\rm tube}(A)\subseteq\Pre_h^{\rm tube}(B)$. Since the current state in Eq.~\eqref{eq:tube-predecessor} is restricted to $K$, $K^{\rm tube}_1\subseteq K^{\rm tube}_0$. Monotonicity then gives
+\[
+K^{\rm tube}_{n+1}\subseteq K^{\rm tube}_n
+\]
+inductively, and the preceding compactness argument gives compactness of every iterate.
+
+The finite-horizon characterization is proved by induction. It is immediate for zero intervals. If $z\in K^{\rm tube}_{n+1}$, the defining action keeps the first complete arc in $K$ and puts every endpoint in $K^{\rm tube}_n$; after the endpoint is observed, the induction hypothesis supplies a causal continuation for $n$ more arcs. Conversely, the first action of any policy safe for $n+1$ complete arcs must keep the first arc in $K$ and put every possible endpoint in the $n$-arc set, which is $K^{\rm tube}_n$ by induction. Hence $z\in K^{\rm tube}_{n+1}$.
+
+Fix $z\in K^{\rm tube}_\infty$ and define
+\[
+U_n^{\rm tube}(z)=\left\{u\in U:\begin{array}{l}
+\Phi(t,z,u,w)\in K\quad\forall(t,w)\in[0,h]\times W_h,\\
+\Phi(h,z,u,w)\in K^{\rm tube}_n\quad\forall w\in W_h
+\end{array}\right\}.
+\]
+Because $z\in K^{\rm tube}_{n+1}$, these sets are non-empty. They are closed in compact $U$ by the same inverse-image argument used for $H_A$, and they decrease with $n$. Their intersection is therefore non-empty. Any action in that intersection keeps the whole arc in $K$ and sends every endpoint into every $K^{\rm tube}_n$, hence into $K^{\rm tube}_\infty$. Selecting one such action at each visited review-time state and concatenating the held arcs proves robust inter-sample safety.
+
+Finally, if $C\subseteq K$ has the stated tube-invariance property, induction gives $C\subseteq K^{\rm tube}_n$ for every $n$: the base case is $C\subseteq K$, and the invariant action places every endpoint in $C\subseteq K^{\rm tube}_n$ while keeping the whole arc safe, so $C\subseteq K^{\rm tube}_{n+1}$. Thus $C\subseteq K^{\rm tube}_\infty$, proving maximality.
+\end{proof}
+
+\status{Theorem, restricted fixed-period full-state model} This kernel enforces safety throughout each held interval as well as at its endpoint. It does not allow arbitrary continuous-time feedback between reviews, and it equals Eq.~\eqref{eq:robust-viability} only after the policy class, disturbance-segment encoding, solution map, and state-information assumptions have been matched.
+
+\subsection{Finite-clopen observation with inter-sample safety}
+
+The preceding full-state tube construction and the endpoint knowledge construction answer different questions.  They can be combined for a fixed-period held plant, but the next prediction must aggregate every disturbance that remains unobserved.  Let $\mathsf X,U,W$ be compact metric spaces, let $K\subseteq \mathsf X$ be a non-empty
+compact safe set, and let $\Sigma$ be finite.  Let $O_K:K\to \Sigma$ have fibres
+$C_y=O_K^{-1}(y)$ that are clopen relative to $K$.  Use the
+observation-before-action timing and arbitrary-selector policy class
+$\mathbb P_{\rm obs}^{\rm fin}$ from the finite-clopen endpoint model.  Fix $h>0$ and assume that
+\[
+\Phi:[0,h]\times K\times U\times W\longrightarrow \mathsf X
+\]
+is continuous and $\Phi(0,z,u,w)=z$.  Set
+$F(z,u,w)=\Phi(h,z,u,w)$.  The command and disturbance are held over one
+interval, and no observation arrives before its endpoint.
+
+For $\Omega\in\mathcal H(K)$, a consistent symbol $y$, and $u\in U$, define the exact disturbance-aggregated physical tube and next pre-observation prediction by
+\begin{align*}
+\mathscr T_h(\Omega,y,u)
+&=\{\Phi(t,z,u,w):z\in\Omega\cap C_y,\ w\in W,\ t\in[0,h]\},\\
+\mathscr R_h(\Omega,y,u)
+&=\{\Phi(h,z,u,w):z\in\Omega\cap C_y,\ w\in W\}.
+\end{align*}
+Both sets are non-empty and compact.  The union over $W$ is essential: $w$ is not observed, so separate endpoint sets indexed by $w$ are not separately available knowledge states.
+
+For a family $\mathcal A\subseteq\mathcal H(K)$, set
+\begin{equation}
+\Pre_{\mathcal O,h}^{\rm tube}(\mathcal A)
+=\left\{\Omega\in\mathcal H(K):
+\begin{array}{l}
+\text{for every }y\in \Sigma\text{ with }\Omega\cap C_y\ne\varnothing,
+\text{ there is }u\in U\text{ such that}\\[-1mm]
+\mathscr T_h(\Omega,y,u)\subseteq K
+\quad\text{and}\quad
+\mathscr R_h(\Omega,y,u)\in\mathcal A
+\end{array}\right\}.
+\label{eq:finite-observation-tube-predecessor}
+\end{equation}
+Set $\mathcal M_0=\mathcal H(K)$ and
+$\mathcal M_{n+1}=\Pre_{\mathcal O,h}^{\rm tube}(\mathcal M_n)$.
+
+\begin{theorem}[Finite-clopen inter-sample-safe knowledge kernel]
+\label{thm:finite-observation-tube-viability}
+The preceding construction has the following properties:
+\begin{enumerate}
+\item every $\mathcal M_n$ is compact and
+$\mathcal M_{n+1}\subseteq\mathcal M_n$;
+\item $\Omega\in\mathcal M_n$ exactly when one policy in
+$\mathbb P_{\rm obs}^{\rm fin}$ keeps every physical trajectory with initial
+state in $\Omega$ inside $K$ at every instant of the next $n$ held intervals,
+under each admissible disturbance sequence and its resulting observation
+record;
+\item
+\begin{equation}
+\mathcal M_\infty=\bigcap_{n=0}^{\infty}\mathcal M_n
+\label{eq:finite-observation-tube-kernel}
+\end{equation}
+is the largest robustly tube-invariant family of pre-observation prediction
+sets.  It is non-empty whenever every $\mathcal M_n$ is non-empty; and
+\item if $O_K$ is injective, then, for the full-state tube iterates
+$K_n^{\rm tube}$ generated by the same $\Phi$ and $U$, with $W_h=W$,
+\[
+\Omega\in\mathcal M_n
+\quad\Longleftrightarrow\quad
+\Omega\subseteq K_n^{\rm tube}.
+\]
+Consequently $\{z\}\in\mathcal M_\infty$ if and only if
+$z\in K_\infty^{\rm tube}$.
+\end{enumerate}
+For a declared pre-observation prior $\Omega_0$, one common causal policy is
+inter-sample safe for every latent initial state in $\Omega_0$ if and only if
+$\Omega_0\in\mathcal M_\infty$.  If, in addition, $\Phi(h,K,U,W)\subseteq K$ and $O_K$ is the restriction of
+the ambient clopen observation map in the endpoint model, then deleting the
+tube condition in Eq.~\eqref{eq:finite-observation-tube-predecessor} makes
+the operator and all its iterates reduce to
+Eq.~\eqref{eq:finite-observation-predecessor} and the families
+$\mathcal L_n$.
+\end{theorem}
+
+\begin{proof}
+For a non-empty compact $A\subseteq K$, continuity of $\Phi$ on the compact
+domain implies that
+\begin{align*}
+(A,u)&\longmapsto
+\{\Phi(t,z,u,w):z\in A,\ w\in W,\ t\in[0,h]\},\\
+(A,u)&\longmapsto
+\{\Phi(h,z,u,w):z\in A,\ w\in W\}
+\end{align*}
+are Hausdorff-continuous into $\mathcal H(\mathsf X)$.  To see this directly, take
+$A_j\to A$ and $u_j\to u$.  Every point in an image of $A_j$ has parameters
+$(z_j,w_j,t_j)$ in a compact product.  Convergent subsequences and continuity
+place all limit points in the corresponding image of $A$.  Conversely, a
+point generated by $(z,w,t)$ is approximated by points generated by
+$z_j\in A_j$ with $z_j\to z$, using the same $w$ and $t$.  These two
+inclusions give Hausdorff convergence.  The endpoint case is obtained by
+fixing $t=h$.
+
+The finite-clopen conditioning result proved for
+Theorem~\ref{thm:finite-observation-viability} shows that, on every consistent
+branch, $\Omega\mapsto\Omega\cap C_y$ is Hausdorff-continuous and that branch
+consistency is stable.  Combining the two facts makes
+$\mathscr T_h$ and $\mathscr R_h$ continuous on every consistent branch.
+
+Let $\mathcal A$ be closed in $\mathcal H(K)$ and suppose
+$\Omega_j\in\Pre_{\mathcal O,h}^{\rm tube}(\mathcal A)$ with
+$\Omega_j\to\Omega$.  Fix a symbol $y$ consistent with $\Omega$.  It is
+consistent with $\Omega_j$ eventually.  Choose corresponding witnessing
+actions $u_j$.  Compactness of $U$ supplies a subsequence, not relabelled,
+with $u_j\to u$.  Hausdorff continuity gives
+\[
+\mathscr T_h(\Omega_j,y,u_j)\to\mathscr T_h(\Omega,y,u),
+\qquad
+\mathscr R_h(\Omega_j,y,u_j)\to\mathscr R_h(\Omega,y,u).
+\]
+Every first set on the left is contained in closed $K$, so its limit is
+contained in $K$.  The subspace $\mathcal H(K)$ is closed in
+$\mathcal H(\mathsf X)$, and $\mathcal A$ is closed in $\mathcal H(K)$; hence
+$\mathcal A$ is also closed in $\mathcal H(\mathsf X)$.  Every second set belongs to
+$\mathcal A$, so its limit belongs to $\mathcal A$.  Repeating the construction for each
+consistent $y$ proves that the predecessor is closed in compact
+$\mathcal H(K)$ and hence compact.
+
+The predecessor is monotone in $\mathcal A$.  It always returns a subfamily
+of $\mathcal H(K)$, so $\mathcal M_1\subseteq\mathcal M_0$; monotonicity then
+gives $\mathcal M_{n+1}\subseteq\mathcal M_n$ inductively.  This proves
+part 1.
+
+For part 2, the assertion at horizon zero is exactly that the declared prior
+is a non-empty compact subset of $K$.  Suppose the assertion holds for $n$.
+If $\Omega\in\mathcal M_{n+1}$, every consistent current symbol admits one
+command for which the exact aggregate tube lies in $K$ and the exact
+aggregate endpoint prediction lies in $\mathcal M_n$.  The same command
+therefore protects every latent state and every unobserved disturbance in
+the first interval.  At the next review the recursively known aggregate
+prediction is conditioned by the new symbol, and the induction hypothesis
+supplies a stage-dependent causal continuation for $n$ further intervals.
+These choices form one policy rule for all initial states and disturbances.
+
+Conversely, take one policy that is safe for $n+1$ intervals from $\Omega$.
+After any consistent initial symbol, its first command must protect every
+physical arc generated by every state in the restricted fibre and every
+$w\in W$.  Since $w$ is not observed, the policy's next pre-observation
+knowledge state is their aggregate endpoint prediction $\mathscr R_h$.
+The policy continuation is safe from that entire prediction for $n$ more
+intervals, so the induction hypothesis places it in $\mathcal M_n$.
+Equation~\eqref{eq:finite-observation-tube-predecessor} follows, proving the
+finite-horizon equivalence.
+
+Fix $\Omega\in\mathcal M_\infty$ and a consistent $y$.  For $n\ge0$ define
+\[
+V_n^h(\Omega,y)=\{u\in U:
+\mathscr T_h(\Omega,y,u)\subseteq K,
+\ \mathscr R_h(\Omega,y,u)\in\mathcal M_n\}.
+\]
+Membership of $\Omega$ in $\mathcal M_{n+1}$ makes every $V_n^h$ non-empty.
+Continuity and closedness make it closed in compact $U$, and nesting of the
+$\mathcal M_n$ makes the action sets decrease.  Their intersection is
+non-empty.  Any action in the intersection keeps the complete aggregate
+tube in $K$ and sends the aggregate endpoint prediction into every
+$\mathcal M_n$, hence into $\mathcal M_\infty$.  Arbitrary-selector
+admissibility permits one such choice at every available pair $(\Omega,y)$;
+no measurable or continuous selector is asserted.  Iterating these choices
+proves robust tube invariance.  If a family $\mathcal C\subseteq\mathcal H(K)$
+has the same tube-invariance property, induction gives
+$\mathcal C\subseteq\mathcal M_n$ for every $n$, and hence
+$\mathcal C\subseteq\mathcal M_\infty$.  Part 2 also proves the fixed-prior
+statement.  Nested compactness gives non-emptiness of the intersection when
+all finite-horizon families are non-empty.  This proves part 3.
+
+If $O_K$ is injective, each non-empty restricted fibre of a prediction
+set is a singleton $\{z\}$.  We prove part 4 by induction.  It is immediate
+at $n=0$.  Assuming
+$\Gamma\in\mathcal M_n$ exactly when
+$\Gamma\subseteq K_n^{\rm tube}$, the predecessor condition for the branch
+$\{z\}$ says that one action keeps
+$\Phi(t,z,u,w)$ in $K$ for all $(t,w)$ and places all endpoints in
+$K_n^{\rm tube}$.  This is precisely
+$z\in\Pre_h^{\rm tube}(K_n^{\rm tube})$.  Requiring it for every
+$z\in\Omega$ gives
+$\Omega\subseteq K_{n+1}^{\rm tube}$.  The reverse implication uses the
+same branchwise actions.  Finally, under the additional endpoint-closure and ambient-observation
+hypotheses, $F$ and the fibres have exactly the types assumed in the endpoint
+model.  Deleting the tube condition then leaves the aggregate endpoint map
+used in
+Eq.~\eqref{eq:finite-observation-predecessor}.  The claimed reductions
+follow.
+\end{proof}
+
+\status{Theorem, finite-clopen fixed-period held model} This result is an
+inter-sample-safe knowledge kernel only for the declared observation-before-
+action timing, exact disturbance-aggregated filter, fixed review period,
+held commands, and arbitrary information selectors.  Because $\Sigma$ is finite, the injective-observation reduction applies only to
+the correspondingly finite (and therefore highly restricted) safe set.
+The kernel depends on $h$; no monotonicity or kernel limit as $h\to0$ is
+asserted.  It is not an unrestricted continuous-feedback kernel and does not cover continuous or
+noisy observations, unencoded disturbance paths, delays, resets, event
+timing, or Zeno behaviour.
+
+\subsection{A compact Lipschitz-history RFDE specialization}
+
+A single fixed discrete delay admits a further restricted construction when
+the admissible histories are confined to a compact equi-Lipschitz class.
+This is an explicit RFDE phase-space result, not the delayed-hybrid
+conjecture below.  Fix $\tau\ge0$ and $h>0$, let $K\subset\mathbb R^m$ be non-empty and
+compact, and let $N\subset\mathbb R^m$ be a compact neighbourhood of $K$.
+Let $U$ and $W$ be non-empty compact metric spaces.  For $L>0$ define
+\[
+\mathscr C_K^L=\{\phi\in C([ -\tau,0],K):\operatorname{Lip}(\phi)\le L\},
+\qquad
+\mathscr C_N^L=\{\phi\in C([ -\tau,0],N):\operatorname{Lip}(\phi)\le L\}.
+\]
+
+Let $\mathcal N\subset\mathbb R^m$ be open with $N\subset\mathcal N$, and let
+$f:\mathcal N\times\mathcal N\times U\times W\to\mathbb R^m$ be jointly
+continuous and uniformly Lipschitz in its first two arguments.  Assume
+\[
+\lvert f(x,x_\tau,u,w)\rvert\le L
+\qquad
+\text{on }N\times N\times U\times W.
+\]
+For every $(\phi,u,w)\in\mathscr C_K^L\times U\times W$, assume that the held
+retarded problem
+\begin{equation}
+\dot x(t)=f(x(t),x(t-\tau),u,w),
+\qquad x_0=\phi,
+\label{eq:held-rfde}
+\end{equation}
+has a unique solution on $[0,h]$, with all current and delayed arguments in
+$N$.  Write $x^{\phi,u,w}(t)$ for its current value and define its translated
+history by
+\[
+T_t(\phi,u,w)(\theta)=
+\begin{cases}
+\phi(t+\theta),&t+\theta\le0,\\
+x^{\phi,u,w}(t+\theta),&t+\theta>0.
+\end{cases}
+\]
+The standard continuous-dependence theorem for retarded equations under
+these uniform Lipschitz hypotheses gives joint continuity of
+$(t,\phi,u,w)\mapsto T_t(\phi,u,w)$ in the uniform history norm
+\cite{hale1993}.  The common enclosure makes this a total map into
+$\mathscr C_N^L$ rather than a map defined only until an unsafe exit.
+
+Let $\Sigma$ be finite and let $O:K\to \Sigma$ have fibres $D_y=O^{-1}(y)$ that are
+clopen relative to $K$.  Since evaluation at zero is continuous, the
+history fibres
+\[
+E_y=\{\phi\in\mathscr C_K^L:O(\phi(0))=y\}
+\]
+are clopen in $\mathscr C_K^L$.  A pre-observation knowledge state is
+$\Omega\in\mathcal H(\mathscr C_K^L)$.  At a review, a policy may use the stage number and
+the recursively generated pair $(\Omega,y)$ and may make arbitrary
+pointwise choices; they do not observe $w$ or the latent history.
+
+For a consistent $y$, define
+\begin{align*}
+\mathscr T_{\tau,h}(\Omega,y,u)
+&=\{x^{\phi,u,w}(t):
+\phi\in\Omega\cap E_y,\ w\in W,\ t\in[0,h]\},\\
+\mathscr R_{\tau,h}(\Omega,y,u)
+&=\{T_h(\phi,u,w):
+\phi\in\Omega\cap E_y,\ w\in W\}.
+\end{align*}
+The first is a compact subset of $N$ and the second a compact subset of
+$\mathscr C_N^L$.  For
+$\mathcal A\subseteq\mathcal H(\mathscr C_K^L)$, define
+\begin{equation}
+\Pre_{\tau,h}^{\rm obs}(\mathcal A)
+=\left\{\Omega\in\mathcal H(\mathscr C_K^L):
+\begin{array}{l}
+\text{for every }y\text{ with }\Omega\cap E_y\ne\varnothing,
+\text{ there is }u\in U\text{ such that}\\[-1mm]
+\mathscr T_{\tau,h}(\Omega,y,u)\subseteq K,\\[-1mm]
+\mathscr R_{\tau,h}(\Omega,y,u)\in
+\mathcal H(\mathscr C_K^L),\quad\text{and}\\[-1mm]
+\mathscr R_{\tau,h}(\Omega,y,u)\in\mathcal A
+\end{array}\right\}.
+\label{eq:rfde-observation-predecessor}
+\end{equation}
+Set $\mathcal Q_0=\mathcal H(\mathscr C_K^L)$ and
+$\mathcal Q_{n+1}=\Pre_{\tau,h}^{\rm obs}(\mathcal Q_n)$.
+
+\begin{theorem}[Sampled RFDE finite-clopen knowledge kernel]
+\label{thm:rfde-observation-viability}
+This RFDE construction satisfies:
+\begin{enumerate}
+\item every $\mathcal Q_n$ is compact and
+$\mathcal Q_{n+1}\subseteq\mathcal Q_n$;
+\item $\Omega\in\mathcal Q_n$ exactly when one causal, stage-dependent
+observation policy keeps the current value of every RFDE trajectory with
+initial history in $\Omega$ inside $K$ at every instant of the next $n$
+held intervals, for every piecewise-constant disturbance sequence and every
+symbol sequence induced by those trajectories; and
+\item
+\begin{equation}
+\mathcal Q_\infty=\bigcap_{n=0}^{\infty}\mathcal Q_n
+\label{eq:rfde-observation-kernel}
+\end{equation}
+is the largest robustly tube-invariant family of compact history prediction
+sets.  It is non-empty whenever every $\mathcal Q_n$ is non-empty, and a
+declared prior $\Omega_0$ admits one indefinitely safe policy for all of its
+histories exactly when $\Omega_0\in\mathcal Q_\infty$.
+\end{enumerate}
+When $\tau=0$, the canonical identification of a history with its current
+value reduces this construction to
+Theorem~\ref{thm:finite-observation-tube-viability} for the held map generated
+by Eq.~\eqref{eq:held-rfde}.
+\end{theorem}
+
+\begin{proof}
+The family $\mathscr C_K^L$ is uniformly bounded because its values lie in
+compact $K$, and it is equicontinuous because every member is
+$L$-Lipschitz.  It is also closed in the uniform norm: a uniform limit still
+takes values in closed $K$, and passing to the limit in
+$|\phi_j(\theta)-\phi_j(\eta)|\le L|\theta-\eta|$ preserves the Lipschitz
+bound.  Arzel\`a--Ascoli therefore makes $\mathscr C_K^L$ compact.  The same
+argument makes $\mathscr C_N^L$ compact.  Consequently
+$\mathcal H(\mathscr C_K^L)$ is compact.
+
+Evaluation at zero is continuous, so every $E_y$ is clopen.  The
+finite-clopen conditioning argument of
+Theorem~\ref{thm:finite-observation-viability} therefore applies on
+$\mathscr C_K^L$: consistent intersections vary continuously in the
+Hausdorff metric and inconsistency is stable.
+
+Joint continuity of the solution-history map on the compact product implies
+uniform continuity.  The compact-image argument used in the proof of
+Theorem~\ref{thm:finite-observation-tube-viability}, now with histories in
+place of points, shows that
+\[
+(\Gamma,u)\longmapsto
+\{x^{\phi,u,w}(t):\phi\in\Gamma,\ w\in W,\ t\in[0,h]\}
+\]
+is Hausdorff-continuous into $\mathcal H(N)$, and that
+\[
+(\Gamma,u)\longmapsto
+\{T_h(\phi,u,w):\phi\in\Gamma,\ w\in W\}
+\]
+is Hausdorff-continuous into $\mathcal H(\mathscr C_N^L)$.  Combining these
+maps with clopen conditioning proves continuity of
+$\mathscr T_{\tau,h}$ and $\mathscr R_{\tau,h}$ on every consistent branch.
+
+Before invoking recursive family membership, we verify that safe tubes make the restriction to
+$\mathscr C_K^L$ dynamically consistent.  If
+$\mathscr T_{\tau,h}(\Omega,y,u)\subseteq K$, then every generated current
+value lies in $K$.  The old part of each translated history already lies in
+$K$, so every $T_h(\phi,u,w)$ takes values in $K$.  The old history segment
+is $L$-Lipschitz, the new trajectory has speed at most $L$, and the two
+segments meet at the common value $\phi(0)$.  If two time arguments lie on
+opposite sides of the joining time, inserting that common value and using
+the two Lipschitz bounds gives the same bound across the join.  Hence the
+concatenated history is $L$-Lipschitz and belongs to $\mathscr C_K^L$.
+
+Let $\mathcal A$ be closed in
+$\mathcal H(\mathscr C_K^L)$ and let
+$\Omega_j\in\Pre_{\tau,h}^{\rm obs}(\mathcal A)$ converge to $\Omega$.
+Fix a symbol $y$ consistent with $\Omega$.  It is eventually consistent with
+$\Omega_j$.  Choose witnessing actions $u_j$ and pass to a convergent
+subsequence $u_j\to u$.  The two Hausdorff-continuity statements show that
+the aggregate tubes and aggregate successor-history sets converge.  Since
+$K$ is closed, the limiting tube is contained in $K$.  The dynamic-consistency
+argument above places each safe successor in
+$\mathcal H(\mathscr C_K^L)$.  Moreover,
+$\mathcal H(\mathscr C_K^L)$ is closed in
+$\mathcal H(\mathscr C_N^L)$, so the explicit ambient-to-safe-history guard
+is preserved under the limit; $\mathcal A$, being closed in the former, is
+closed in the latter.  The limiting successor therefore belongs to
+$\mathcal A$.  This construction
+for every consistent $y$ proves that the predecessor is closed and hence
+compact.
+
+The predecessor is monotone and returns a subfamily of
+$\mathcal H(\mathscr C_K^L)$.  Thus $\mathcal Q_1\subseteq\mathcal Q_0$, and
+monotonicity proves $\mathcal Q_{n+1}\subseteq\mathcal Q_n$ by induction.
+This establishes part 1.
+
+For part 2, the zero-horizon assertion is the definition of the admissible
+prior space.  Assume the assertion for $n$.  Membership in
+$\mathcal Q_{n+1}$ supplies, after every consistent current symbol, one
+command whose aggregate physical tube is safe and whose aggregate next
+history prediction lies in $\mathcal Q_n$.  The true history and disturbance
+are among those aggregated, and the induction hypothesis supplies a causal
+continuation after the next observation.  Conversely, the first command of
+one policy safe for $n+1$ intervals must protect all histories in the
+current restricted fibre and all disturbances.  Because the disturbance is
+not observed, its exact next pre-observation knowledge state is the
+aggregate set $\mathscr R_{\tau,h}$.  The policy continuation is safe from
+that entire set for $n$ intervals, placing it in $\mathcal Q_n$ by the
+induction hypothesis.  This proves both directions with one common policy
+for the declared prior.
+
+For $\Omega\in\mathcal Q_\infty$ and a consistent $y$, define
+\[
+V_n^{\tau,h}(\Omega,y)=\{u\in U:
+\mathscr T_{\tau,h}(\Omega,y,u)\subseteq K,
+\ \mathscr R_{\tau,h}(\Omega,y,u)\in\mathcal H(\mathscr C_K^L),
+\ \mathscr R_{\tau,h}(\Omega,y,u)\in\mathcal Q_n\}.
+\]
+Every set is non-empty because $\Omega\in\mathcal Q_{n+1}$, is closed by the
+continuity already proved, and is contained in compact $U$.  The sets
+decrease with $n$, so their intersection is non-empty.  An action in that
+intersection keeps the entire aggregate physical tube in $K$ and sends the
+aggregate history prediction into $\mathcal Q_\infty$.  Selecting one such
+action for every available $(\Omega,y)$ yields an indefinitely safe
+information policy.  Conversely, any robustly tube-invariant family is
+contained in $\mathcal Q_n$ for every $n$ by induction on the predecessor,
+and is therefore contained in $\mathcal Q_\infty$.  The finite-horizon
+characterization gives the fixed-prior equivalence, while nested compactness
+gives non-emptiness when every finite-horizon family is non-empty.  This
+proves part 3.
+
+If $\tau=0$, evaluation at zero identifies $\mathscr C_K^L$ with $K$, the
+translated-history successor with the held endpoint, and the history fibre
+$E_y$ with $C_y$.  The physical tube and aggregate endpoint set are then
+exactly those in
+Eq.~\eqref{eq:finite-observation-tube-predecessor}, proving the stated
+reduction.
+\end{proof}
+
+\status{Conditional theorem, compact single-delay history model} The phase
+space restriction $\mathscr C_K^L$, total jointly continuous held solution
+map, compact per-interval disturbance encoding, fixed $\tau$ and $h$, finite
+clopen current-value observation, and arbitrary information selectors are
+hypotheses.  Observing $O(\phi(0))$ does not reveal the history $\phi$;
+full-history feedback is a separate full-state information pattern.  The
+result covers neither state-dependent or multiple delays, arbitrary
+$L^\infty$ disturbance paths, continuous or noisy observation alphabets,
+pointwise resets, hybrid modes, variable event timing, nor Zeno execution.
+It is a kernel on compact sets of histories, not on the current value alone,
+and no monotonicity in $\tau$, $h$, or $L$ is asserted.
+
+A finite observation of finitely many fixed history evaluations fits the
+same construction when its joint fibres are clopen.  By contrast, a
+pointwise current-state reset generally produces a discontinuous history
+and leaves $C([ -\tau,0],\mathbb R^m)$; a hybrid RFDE requires a declared
+reset on an appropriate phase space.  A finite-dimensional Erlang or
+linear-chain realisation is an augmented ODE and falls under the
+finite-dimensional held-flow results once its compact enclosure, safe set,
+and observation map have been verified; it is not a history-state instance
+of this theorem.
+
+\subsection{Two restricted hybrid specializations}
+
+The preceding RFDE result identifies the obstruction to adding pointwise
+jumps without further data.  If a current-value jump is inserted while the
+old tail is retained, the post-jump segment is discontinuous at the present
+endpoint and is not an element of $C([ -\tau,0],\mathbb R^m)$.  Equation
+\eqref{eq:physical-jump} constrains a current physical increment; it does
+not define a reset of an RFDE phase state.  The first construction below
+therefore assumes a continuous reset of the entire abstract memory state at
+the review clock.  Such a reset is appropriate only when the history
+coordinate represents resettable memory.  It is not a claim that an
+application can overwrite its physical past.
+
+\subsubsection{Review-synchronised history-reset RFDE}
+
+Let $\mathsf Q$ be a non-empty finite mode set and put
+\[
+\Xi=\mathscr C_K^L\times\mathsf Q,
+\qquad
+\Xi_N=\mathscr C_N^L\times\mathsf Q,
+\]
+with the discrete metric on $\mathsf Q$.  Let $W_F$ and $W_J$ be non-empty
+compact metric spaces.  Replace the held vector field above by a
+mode-dependent map
+\[
+f_H:\mathcal N\times\mathcal N\times\mathsf Q\times U\times W_F
+\longrightarrow\mathbb R^m
+\]
+that is jointly continuous, uniformly Lipschitz in its two state arguments,
+and bounded in norm by $L$ on
+$N\times N\times\mathsf Q\times U\times W_F$.  For every
+$(\phi,q,u,w_F)\in\Xi\times U\times W_F$, assume a unique held solution on
+$[0,h]$ whose current and delayed values remain in $N$.  Denote its current
+value at time $t$ by $x^{\phi,q,u,w_F}(t)$, and assume the resulting
+translated-history map
+\[
+(t,\phi,q,u,w_F)\longmapsto T_t^q(\phi,u,w_F)
+\]
+is total and jointly continuous into $\mathscr C_N^L$.
+
+A phase-space reset is an additional constitutive datum.  Assume a
+continuous map
+\[
+\mathfrak R:\Xi\times U\times W_J\longrightarrow\Xi
+\]
+and a clopen review-jump set $\mathcal J_{\rm rev}\subseteq\Xi$.  Define the
+review branch map
+\[
+\mathfrak B(\xi,u,w_J)=
+\begin{cases}
+\mathfrak R(\xi,u,w_J),&\xi\in\mathcal J_{\rm rev},\\
+\xi,&\xi\notin\mathcal J_{\rm rev}.
+\end{cases}
+\]
+Because the two branch domains are clopen, $\mathfrak B$ is continuous.  A
+reset is applied only at a review instant and before the next held flow.
+If an application permits both reset and no-reset at the same review state,
+that branch choice must be included in $W_J$ through a separately declared
+continuous compact branch map; it is not observable merely because it
+exists.  A constant-memory reset or a blended-memory reset is admissible
+only if it really maps into $\mathscr C_K^L$; in particular, any blend must
+satisfy the displayed Lipschitz bound.  Replacing only $\phi(0)$ while
+retaining the old tail is not such a map.
+
+Let $\Sigma_H$ be finite and let
+$O_H:K\times\mathsf Q\to\Sigma_H$ have clopen fibres.  Their pullbacks
+\[
+E_a^H=\{(\phi,q)\in\Xi:O_H(\phi(0),q)=a\}
+\]
+are clopen in $\Xi$.  A policy observes the stage, the current
+pre-observation prediction $\Omega\in\mathcal H(\Xi)$, and the symbol $a$;
+it does not observe $w_J$, $w_F$, or the latent history.
+
+For a consistent $a$ and command $u$, write
+$\mathfrak B((\phi,q),u,w_J)=(\phi^+,q^+)$ and define
+\begin{align*}
+\mathscr T_h^H(\Omega,a,u)
+&=\{x^{\phi^+,q^+,u,w_F}(t):
+(\phi,q)\in\Omega\cap E_a^H,\ w_J\in W_J,\ w_F\in W_F,\
+ t\in[0,h]\},\\
+\mathscr R_h^H(\Omega,a,u)
+&=\{(T_h^{q^+}(\phi^+,u,w_F),q^+):
+(\phi,q)\in\Omega\cap E_a^H,\ w_J\in W_J,\ w_F\in W_F\}.
+\end{align*}
+The unions include every unobserved reset and flow parameter.  If one
+observation fibre meets both $\mathcal J_{\rm rev}$ and its complement, the
+two latent branches are automatically aggregated.  If the jump set is a
+union of observation fibres, the symbol determines the branch.
+
+For $\mathcal A\subseteq\mathcal H(\Xi)$, set
+\begin{equation}
+\Pre_{H,h}(\mathcal A)=
+\left\{\Omega\in\mathcal H(\Xi):
+\begin{array}{l}
+\text{for every consistent }a\in\Sigma_H\text{ there is }u\in U
+\text{ such that}\\[-1mm]
+\mathscr T_h^H(\Omega,a,u)\subseteq K,\\[-1mm]
+\mathscr R_h^H(\Omega,a,u)\in\mathcal H(\Xi),\quad\text{and}\\[-1mm]
+\mathscr R_h^H(\Omega,a,u)\in\mathcal A
+\end{array}\right\}.
+\label{eq:review-hybrid-predecessor}
+\end{equation}
+The membership in $\mathcal H(\Xi)$ is checked before recursive membership;
+this is the phase-space counterpart of the ambient-to-safe guard in
+Eq.~\eqref{eq:rfde-observation-predecessor}.  Put
+$\mathcal H_0^H=\mathcal H(\Xi)$ and
+$\mathcal H_{n+1}^H=\Pre_{H,h}(\mathcal H_n^H)$.
+
+\begin{conditionaltheorem}[Review-synchronised hybrid RFDE knowledge kernel]
+\label{thm:review-hybrid-rfde-kernel}
+Under the preceding compactness, total-solution, speed, continuous
+phase-reset, clopen review-branch, finite-clopen observation, and
+arbitrary-selector hypotheses:
+\begin{enumerate}
+\item every $\mathcal H_n^H$ is compact and
+$\mathcal H_{n+1}^H\subseteq\mathcal H_n^H$;
+\item $\Omega\in\mathcal H_n^H$ exactly when one causal observation policy
+keeps every current value in $K$ throughout the next $n$ review intervals,
+including every pre-reset and post-reset review state, against every
+admissible reset- and flow-parameter sequence; and
+\item $\mathcal H_\infty^H=\bigcap_n\mathcal H_n^H$ is the largest robustly
+tube-invariant family of compact hybrid-history predictions.  A declared
+prior $\Omega_0$ admits one indefinitely safe policy exactly when
+$\Omega_0\in\mathcal H_\infty^H$.
+\end{enumerate}
+If $\mathsf Q$ is a singleton, $\mathcal J_{\rm rev}$ is empty, and the
+reset branch is the identity, the construction is
+Theorem~\ref{thm:rfde-observation-viability}.  When $\tau=0$, it becomes a
+finite-clopen fixed-review tube construction on $K\times\mathsf Q$ with a
+continuous review reset; it reduces to
+Theorem~\ref{thm:finite-observation-tube-viability} only after the mode and
+reset coordinates are also removed.
+\end{conditionaltheorem}
+
+\begin{proof}
+The RFDE proof already shows that $\mathscr C_K^L$ and
+$\mathscr C_N^L$ are compact.  A product with finite $\mathsf Q$ is compact,
+so $\Xi$, $\Xi_N$, and $\mathcal H(\Xi)$ are compact.  Evaluation at zero
+and $O_H$ are continuous, hence each $E_a^H$ is clopen.  The
+finite-clopen conditioning map
+$\Omega\mapsto\Omega\cap E_a^H$ is therefore Hausdorff-continuous on a
+consistent branch, and inconsistency is stable.
+
+The branch map $\mathfrak B$ is continuous on the union of two disjoint
+clopen domains.  Composing it with the jointly continuous held solution and
+translated-history maps gives continuous maps of
+\[
+(\phi,q,u,w_J,w_F,t)
+\]
+into $N$ for the physical tube and into $\Xi_N$ for the endpoint history.
+Uniform continuity on the compact parameter product implies that taking the
+image of a Hausdorff-varying non-empty compact initial set and all compact
+parameters preserves Hausdorff convergence: approximate each initial point
+by a point in the nearby compact set for one inclusion, and interchange the
+sets for the other.  Consequently $\mathscr T_h^H$ and
+$\mathscr R_h^H$ are Hausdorff-continuous on every consistent observation
+branch.
+
+We next verify the safe-history type before using recursive membership.  A
+reset branch starts from $\phi^+\in\mathscr C_K^L$ by the codomain of
+$\mathfrak R$; the identity branch has the same property.  If
+$\mathscr T_h^H(\Omega,a,u)\subseteq K$, every flowed current value lies in
+$K$.  The old portion of a translated history is $L$-Lipschitz, the new arc
+has speed at most $L$, and they meet at $\phi^+(0)$.  Splitting an increment
+at that joining point proves the same Lipschitz bound across the join.
+Thus every endpoint history belongs to $\mathscr C_K^L$, its mode belongs
+to $\mathsf Q$, and
+$\mathscr R_h^H(\Omega,a,u)\in\mathcal H(\Xi)$.
+
+Let $\mathcal A$ be closed in $\mathcal H(\Xi)$ and let
+$\Omega_j\to\Omega$ with
+$\Omega_j\in\Pre_{H,h}(\mathcal A)$.  For a symbol $a$ consistent with
+$\Omega$, clopenness makes it consistent with $\Omega_j$ eventually.
+Choose witnesses $u_j$ and pass to a subsequence converging to $u\in U$.
+Hausdorff continuity, closedness of $K$, the safe-history argument, and
+closedness of $\mathcal A$ show that the limiting tube is safe and the
+limiting successor belongs first to $\mathcal H(\Xi)$ and then to
+$\mathcal A$.  Repeating this finite-alphabet argument for every consistent
+$a$ proves that the predecessor of a closed family is closed, hence compact.
+It is monotone and has current domain $\mathcal H(\Xi)$; therefore
+$\mathcal H_1^H\subseteq\mathcal H_0^H$, and monotonicity gives nesting and
+compactness of all iterates.
+
+For the finite-horizon assertion, the zero-horizon case is the definition
+of the prior space.  If $\Omega\in\mathcal H_{n+1}^H$, after each possible
+current symbol the witnessing command protects every reset branch, every
+flow disturbance, and every point of the first interval, while its exact
+aggregate endpoint prediction lies in $\mathcal H_n^H$.  The induction
+hypothesis supplies a causal continuation from that prediction.  Conversely,
+the first command of any policy safe for $n+1$ intervals must protect every
+latent branch and must leave the exact unobserved aggregate endpoint set in
+the $n$-interval family.  This is precisely
+Eq.~\eqref{eq:review-hybrid-predecessor}.
+
+For $\Omega\in\mathcal H_\infty^H$ and consistent $a$, define
+\[
+V_n^H(\Omega,a)=\{u\in U:
+\mathscr T_h^H(\Omega,a,u)\subseteq K,\
+\mathscr R_h^H(\Omega,a,u)\in\mathcal H(\Xi),\
+\mathscr R_h^H(\Omega,a,u)\in\mathcal H_n^H\}.
+\]
+These sets are non-empty, closed in compact $U$, and nested.  Their
+intersection contains a command that keeps the next tube safe and places
+the exact successor in every iterate, hence in $\mathcal H_\infty^H$.
+Selecting such a command at every available information pair proves
+invariance.  Any other robustly tube-invariant family is contained in every
+$\mathcal H_n^H$ by induction and therefore in their intersection, proving
+maximality and the fixed-prior equivalence.
+
+Finally, the review set $\{kh:k\in\mathbb N_0\}$ is locally finite.  The
+construction permits at most one reset operation at each review instant, so
+it excludes Zeno execution by its clock restriction.  This conclusion comes
+from the review-synchronisation hypothesis, not from the canonical tuple.
+The two reductions follow directly by deleting the stated coordinates and
+maps.
+\end{proof}
+
+\status{Conditional theorem, review-clock hybrid RFDE} The phase-space reset
+is an application-supplied memory-reset module, not a consequence of
+Eq.~\eqref{eq:physical-jump}.  The result does not cover interior event
+hits, pointwise physical jumps with an unchanged delay tail, mode-dependent
+delays, noisy observations, or a general delayed-hybrid solution concept.
+Its local finiteness follows only from the imposed review clock.
+
+\subsubsection{Bounded-jump hybrid ODE tubes}
+
+Interior jumps can be represented without a delay history, but a jump bound
+does not by itself provide the continuity needed by the compact predecessor
+proof.  Let $\mathsf Z_H=\mathsf X_H\times\mathsf Q_H$ be a compact metric
+ambient hybrid state space, with $\mathsf Q_H$ finite, and let
+$K_H\subseteq\mathsf Z_H$ be compact.  An application may specify a closed
+jump set $\mathcal J_H$, continuous mode flows and reset maps, a held command,
+and compact disturbance parameters.  Every admissible arc over ordinary
+time $[0,h]$ must be complete and must have at most $N_h$ jumps.  A uniform
+minimum dwell $\delta>0$ implies the bound
+$N_h\le\lfloor h/\delta\rfloor+1$; a bare per-interval cardinality bound is
+not conversely a uniform dwell condition.
+
+For each $(z,u)\in\mathsf Z_H\times U$, suppose the declared hybrid
+execution rule gives non-empty compact exact sets
+\[
+\mathscr T_h^M(z,u)\in\mathcal H(\mathsf Z_H),
+\qquad
+G_h^M(z,u)\in\mathcal H(\mathsf Z_H),
+\]
+where the first is the union of all states on every admissible complete
+$h$-arc and the second is the set of all ordinary-time-$h$ endpoints.  Both
+sets aggregate all unobserved disturbances, admissible interior jump times,
+and reset branches.  Hybrid basic conditions and a jump budget can support
+compactness and outer semicontinuity in a suitable hybrid-arc topology
+\cite{goebel2012}; they do not in general give lower or Hausdorff
+continuity at grazing events.
+
+\begin{proposition}[Outer semicontinuity does not close universal tube constraints]
+\label{prop:osc-insufficient}
+Compact-valued outer semicontinuity of $\mathscr T_h^M$ and $G_h^M$ is not
+sufficient to make the universal-safety predecessor closed.
+\end{proposition}
+
+\begin{proof}
+Let the compact state space be $[0,1]$, let $K_H=[0,1/2]$, and let the action
+space be a singleton.  Define
+\[
+\mathscr T(z)=
+\begin{cases}
+\{0,z\},&z>0,\\
+\{0,1\},&z=0,
+\end{cases}
+\qquad
+G(z)=\{0\}.
+\]
+Both maps have non-empty compact values.  The graph of $\mathscr T$ is
+closed: any limit of points selected from $\{0,z_j\}$ with $z_j\to0$ is
+$0$, which belongs to $\mathscr T(0)$, while sequences based at positive
+limits are immediate.  Thus $\mathscr T$ is outer semicontinuous; $G$ is
+continuous.  For every $z_j=1/j\le1/2$, the whole tube is contained in
+$K_H$ and the endpoint lies in $K_H$.  At the limit $z=0$, however,
+$1\in\mathscr T(0)$, so the tube is unsafe.  The predecessor is
+$(0,1/2]$, which is not closed.
+
+Equivalently, outer semicontinuity gives
+$\operatorname{Limsup}_j\mathscr T(z_j)\subseteq\mathscr T(z)$, whereas
+closedness of this universal-containment predecessor would require every
+point of $\mathscr T(z)$ to be approximable from nearby values.  That reverse
+approximation property is supplied by lower semicontinuity.  A reset branch
+appearing exactly on a grazing guard has the same set-valued geometry.
+\end{proof}
+
+A compact-kernel theorem therefore needs inner stability of the exact
+reachable sets.  The following statement uses the clean sufficient
+hypothesis of Hausdorff continuity; lower semicontinuity is enough for the
+full-state containment argument alone, but not for the stated exact
+knowledge-set recursion without further structure.
+
+For compact $A\subseteq K_H$, define
+\begin{equation}
+\Pre_{M,h}(A)=\{z\in K_H:\exists u\in U,
+\ \mathscr T_h^M(z,u)\subseteq K_H,
+\ G_h^M(z,u)\subseteq A\}.
+\label{eq:bounded-jump-predecessor}
+\end{equation}
+Let $K_0^M=K_H$ and $K_{n+1}^M=\Pre_{M,h}(K_n^M)$.
+
+For the partial-observation version, let $\Sigma_M$ be finite and
+$O_M:K_H\to\Sigma_M$ have clopen fibres $C_a^M$.  For
+$\Omega\in\mathcal H(K_H)$ and a consistent $a$, set
+\begin{align*}
+\widehat{\mathscr T}_h^M(\Omega,a,u)
+&=\bigcup_{z\in\Omega\cap C_a^M}\mathscr T_h^M(z,u),\\
+\widehat G_h^M(\Omega,a,u)
+&=\bigcup_{z\in\Omega\cap C_a^M}G_h^M(z,u).
+\end{align*}
+These are the exact aggregate tube and endpoint prediction when interior
+jumps are not separately observed.  For
+$\mathcal A\subseteq\mathcal H(K_H)$ define
+\[
+\widehat\Pre_{M,h}(\mathcal A)=
+\left\{\Omega\in\mathcal H(K_H):
+\begin{array}{l}
+\text{for every consistent }a\in\Sigma_M\text{ there is }u\in U
+\text{ such that}\\[-1mm]
+\widehat{\mathscr T}_h^M(\Omega,a,u)\subseteq K_H,\\[-1mm]
+\widehat G_h^M(\Omega,a,u)\in\mathcal H(K_H),\quad\text{and}\\[-1mm]
+\widehat G_h^M(\Omega,a,u)\in\mathcal A
+\end{array}\right\}.
+\]
+Thus endpoint typing is checked before recursive family membership.  Put
+$\mathcal Q_0^M=\mathcal H(K_H)$ and
+$\mathcal Q_{n+1}^M=\widehat\Pre_{M,h}(\mathcal Q_n^M)$.
+
+\begin{conditionaltheorem}[Bounded-jump hybrid ODE kernel with continuous exact tubes]
+\label{thm:bounded-jump-hybrid-ode-kernel}
+Assume $U$ is compact; every admissible hybrid arc is ordinary-time complete
+on $[0,h]$ and obeys the declared finite jump budget; and
+$\mathscr T_h^M,G_h^M:\mathsf Z_H\times U\to
+\mathcal H(\mathsf Z_H)$ are the exact non-empty compact reachable-tube and
+endpoint maps and are Hausdorff-continuous.  Under arbitrary review-time
+state-feedback selectors, every $K_n^M$ is compact, the sequence is nested,
+and $K_n^M$ is exactly the set of states from which one held-command policy
+keeps every admissible hybrid arc in $K_H$ for $n$ review intervals.  The
+intersection
+\[
+K_\infty^M=\bigcap_nK_n^M
+\]
+is the largest robustly tube-invariant set for this fixed-review hybrid
+game.
+
+If $O_M$ is finite clopen and arbitrary information selectors are allowed,
+every $\mathcal Q_n^M$ is compact, the sequence is nested, and its
+intersection is the largest robustly tube-invariant family of compact
+pre-observation predictions.  The iterates have the same exact
+finite-horizon policy semantics, and each update uses one aggregate endpoint
+knowledge state over all unobserved interior jumps.
+\end{conditionaltheorem}
+
+\begin{proof}
+Let $A\subseteq K_H$ be compact and consider
+\[
+H_A^M=\{(z,u)\in K_H\times U:
+\mathscr T_h^M(z,u)\subseteq K_H,\ G_h^M(z,u)\subseteq A\}.
+\]
+Suppose $(z_j,u_j)\to(z,u)$ through $H_A^M$.  Hausdorff continuity implies
+convergence of both compact set values.  For any
+$p\in\mathscr T_h^M(z,u)$ there are
+$p_j\in\mathscr T_h^M(z_j,u_j)$ with $p_j\to p$; closedness of $K_H$ gives
+$p\in K_H$.  The same argument with $G_h^M$ and closed $A$ gives
+$G_h^M(z,u)\subseteq A$.  Thus $H_A^M$ is closed in compact
+$K_H\times U$, and its projection $\Pre_{M,h}(A)$ is compact.
+
+The predecessor is monotone and $K_1^M\subseteq K_0^M$, so induction gives
+compact nested iterates.  The finite-horizon characterization follows in
+both directions.  A predecessor witness protects every point of every
+first-interval hybrid arc and sends every possible endpoint into the
+$n$-interval set, where state observation permits a causal continuation.
+Conversely, the first command of any policy safe for $n+1$ intervals must
+have exactly those two properties.
+
+For $z\in K_\infty^M$, the sets
+\[
+U_n^M(z)=\{u\in U:\mathscr T_h^M(z,u)\subseteq K_H,
+\ G_h^M(z,u)\subseteq K_n^M\}
+\]
+are non-empty, closed, and nested in compact $U$.  A command in their
+intersection keeps the next tube safe and every endpoint in
+$K_\infty^M$.  Selecting such commands at successive observed review
+states proves invariance.  If $C\subseteq K_H$ has that property, induction
+places $C$ in every $K_n^M$, proving maximality.
+
+For the finite-clopen version, $\mathcal H(K_H)$ is compact and conditioning
+by $C_a^M$ is Hausdorff-continuous on every consistent branch.  If
+$F:\mathsf Z_H\times U\to\mathcal H(\mathsf Z_H)$ is Hausdorff-continuous,
+then
+\[
+(\Gamma,u)\longmapsto\bigcup_{z\in\Gamma}F(z,u)
+\]
+is Hausdorff-continuous on $\mathcal H(K_H)\times U$: uniform continuity on
+the compact domain and Hausdorff-close choices of base points give each of
+the two set inclusions.  Applying this fact to $\mathscr T_h^M$ and $G_h^M$
+shows that both aggregate maps are continuous.  Every exact endpoint belongs
+to its exact tube, so tube containment types the aggregate endpoint set in
+$\mathcal H(K_H)$ before recursion.  A convergent sequence of knowledge
+predecessors therefore admits convergent action witnesses; the limit tube
+remains in closed $K_H$, and the exact aggregate endpoint set converges into
+the closed target family.  Hence the knowledge predecessor preserves compactness.  It is monotone and
+returns a subfamily of $\mathcal H(K_H)$, so
+$\mathcal Q_1^M\subseteq\mathcal Q_0^M$ and induction gives nested compact
+iterates.
+
+For the finite-horizon statement, the zero-horizon case is the declared
+prior space.  If $\Omega\in\mathcal Q_{n+1}^M$, then after every consistent
+symbol the witnessing command protects every point of every compatible
+hybrid arc and sends the exact aggregate endpoint prediction into
+$\mathcal Q_n^M$; the induction hypothesis supplies a causal continuation.
+Conversely, the first command of a policy that is safe for $n+1$ intervals
+must protect that entire aggregate tube.  Because neither the interior jump
+nor the disturbance is observed separately, its recursively available next
+prediction is the single aggregate set $\widehat G_h^M$, which must admit the
+$n$-interval continuation and therefore belongs to $\mathcal Q_n^M$.
+
+For $\Omega$ in every iterate and a consistent symbol $a$, let
+\[
+W_n^M(\Omega,a)=\{u\in U:
+\widehat{\mathscr T}_h^M(\Omega,a,u)\subseteq K_H,\
+\widehat G_h^M(\Omega,a,u)\in\mathcal H(K_H),\
+\widehat G_h^M(\Omega,a,u)\in\mathcal Q_n^M\}.
+\]
+These sets are non-empty, closed, nested subsets of compact $U$, so their
+intersection contains a command whose successor lies in every iterate.
+Selecting one such command at each available information pair gives an
+invariant limiting policy.  Finally, induction places any robustly
+tube-invariant family in every $\mathcal Q_n^M$, and hence in their
+intersection, proving maximality.
+\end{proof}
+
+\status{Conditional theorem, continuous exact hybrid tubes} Minimum dwell or
+a finite jump budget is an execution hypothesis, not a consequence of the
+canonical tuple.  Hausdorff continuity is also a separate hypothesis and
+can fail at grazing; outer semicontinuity alone is insufficient by
+Proposition~\ref{prop:osc-insufficient}.  The theorem licenses no numerical
+inner approximation, continuous-time feedback identification, delayed
+restart, or equality with Eq.~\eqref{eq:robust-viability}.  A timer that
+enforces dwell can be added as an explicit state coordinate, but that is a
+larger declared specialization.  Undetected interior jumps are aggregated.
+An unobserved interior jump and a jump-aware controller define different
+update maps and knowledge kernels.
+
+\begin{remark}[Accounting and boundedness on the restricted hybrids]
+Review synchronisation makes the history-reset specialization locally
+finite, while the jump budget makes the bounded-jump ODE specialization
+locally finite on every finite union of review intervals.  The typed
+conservation theorem can therefore be applied along their executions when
+each current physical reset satisfies Eq.~\eqref{eq:physical-jump} and its
+null-space assumptions; an abstract RFDE memory tail is not itself a
+conserved moiety.  Applying the BIBS theorem additionally requires a
+coercive storage functional on $\Xi$ for the history-reset model or a
+coercive storage function on $\mathsf Z_H$ for the bounded-jump model, the
+flow Dini inequality, and reset non-expansiveness.  None of those conditions follows from a history reset,
+a jump budget, or the canonical tuple.
+\end{remark}
+
+\subsection{A restricted sampled information-state kernel}
+
+Partial observation can be handled constructively in a narrower setting when the information process itself is compact and Markovian and its latent-state tubes are known exactly. Let $\mathcal K_c(\mathsf X)$ denote the non-empty compact subsets of a compact metric latent-state space $\mathsf X$, equipped with the Hausdorff metric.
+
+\begin{definition}[Compact sampled information model]
+Fix $h>0$. Let $I,U,W_I$ be non-empty compact metric spaces, let $K\subseteq \mathsf X$ be compact, and let
+\[
+\mathsf B:I\to\mathcal K_c(\mathsf X),
+\qquad
+\mathsf T:[0,h]\times I\times U\times W_I\to\mathcal K_c(\mathsf X),
+\qquad
+G:I\times U\times W_I\to I
+\]
+be continuous, where set-valued continuity is in the Hausdorff metric and
+\[
+\mathsf T(0,i,u,w)=\mathsf B(i),
+\qquad
+\mathsf T(h,i,u,w)\subseteq\mathsf B(G(i,u,w)).
+\]
+The information state $i_k$ is assumed computable from the available observation--action history. The compact parameter space $W_I$ parametrises the admissible process, registered-model, and next-observation branches exactly: every $w\in W_I$ represents a non-empty admissible branch, $\mathsf T(t,i,u,w)$ is the exact set of latent states reachable at time $t$ among branches represented by $w$, and $G(i,u,w)$ is their recursively available next information state. Thus every actual branch is represented and no unreachable latent states are inserted into a tube. Define
+\[
+I_K=\{i\in I:\mathsf B(i)\subseteq K\}
+\]
+and, for compact $A\subseteq I_K$,
+\begin{equation}
+\Pre_I^{\rm tube}(A)=
+\left\{i\in I_K:\begin{array}{l}
+\exists u\in U\ \forall w\in W_I,\\[-1mm]
+\mathsf T(t,i,u,w)\subseteq K\quad\forall t\in[0,h],\\[-1mm]
+G(i,u,w)\in A
+\end{array}\right\}.
+\label{eq:information-predecessor}
+\end{equation}
+\end{definition}
+
+\begin{theorem}[Restricted sampled information-state tube kernel]
+\label{thm:information-viability}
+Under the preceding definition, assume arbitrary selectors on the available information state are admissible. Set
+\[
+I_0=I_K,
+\qquad
+I_{n+1}=\Pre_I^{\rm tube}(I_n).
+\]
+Then $I_K$ and every $I_n$ are compact, $I_{n+1}\subseteq I_n$, and $I_n$ is exactly the set of information states from which one causal information-state policy guarantees latent-state safety throughout the next $n$ held intervals. The intersection
+\begin{equation}
+I_\infty=\bigcap_{n=0}^{\infty}I_n
+\label{eq:information-kernel}
+\end{equation}
+is the largest robust tube-invariant subset of $I_K$. Any selector that keeps the next information state in $I_\infty$ guarantees $x(t)\in K$ for every actual branch represented by the model and for all inter-sample times.
+\end{theorem}
+
+\begin{proof}
+First, $I_K$ is closed in $I$. Indeed, if $i_j\to i$ and $\mathsf B(i_j)\subseteq K$, Hausdorff continuity implies that every $x\in\mathsf B(i)$ is the limit of points $x_j\in\mathsf B(i_j)$. Closedness of compact $K$ gives $x\in K$. Thus $\mathsf B(i)\subseteq K$, so $i\in I_K$. Compactness of $I$ therefore makes $I_K$ compact.
+
+Let $A\subseteq I_K$ be compact and define
+\[
+Q_A=\left\{(i,u)\in I_K\times U:\begin{array}{l}
+\mathsf T(t,i,u,w)\subseteq K\quad\forall(t,w)\in[0,h]\times W_I,\\
+G(i,u,w)\in A\quad\forall w\in W_I
+\end{array}\right\}.
+\]
+For fixed $(t,w)$, Hausdorff continuity and the same limit argument show that the containment condition $\mathsf T(t,i,u,w)\subseteq K$ defines a closed set of $(i,u)$. For fixed $w$, continuity of $G$ makes the inverse image of closed $A$ closed. Hence $Q_A$ is closed in compact $I_K\times U$ and is compact. Its projection is $\Pre_I^{\rm tube}(A)$, proving that the predecessor preserves compactness.
+
+The information predecessor is monotone. Since its current information state is restricted to $I_K$, $I_1\subseteq I_0$; monotonicity then proves $I_{n+1}\subseteq I_n$, and induction gives compactness of every iterate. The finite-horizon characterization follows by the same two-sided induction directly from Eq.~\eqref{eq:information-predecessor}: a witnessing first action makes every latent tube safe and every next information state an $n$-interval state, while the first action of any safe $(n+1)$-interval policy must have those properties. Because $i_k$ is available from observation history, these state-dependent continuations are causal information-state policies rather than latent-state feedback.
+
+For $i\in I_\infty$, let
+\[
+U_n^I(i)=\left\{u\in U:\begin{array}{l}
+\mathsf T(t,i,u,w)\subseteq K\quad\forall(t,w)\in[0,h]\times W_I,\\
+G(i,u,w)\in I_n\quad\forall w\in W_I
+\end{array}\right\}.
+\]
+Each set is non-empty because $i\in I_{n+1}$, each is closed in compact $U$, and the sequence decreases. Compactness gives a common action in $\bigcap_nU_n^I(i)$. That action keeps every possible latent tube in $K$ and every next information state in $I_\infty$. Selecting such an action at each available information state and iterating proves tube invariance. The declared consistency of $\mathsf T$ and $G$ then transfers set containment to every represented actual trajectory.
+
+If $C\subseteq I_K$ has the same robust tube-invariance property, induction gives $C\subseteq I_n$ for every $n$: its invariant action is a witness for the next predecessor whenever $C\subseteq I_n$. Hence $C\subseteq I_\infty$, proving maximality.
+\end{proof}
+
+\status{Theorem, restricted compact information model} This result is observation-based only because the compact information state, exact Hausdorff-continuous latent tubes, compact outcome parametrisation, and recursive observation-history update are assumed. It does not establish compactness, exact filtering, measurable selection, non-Zeno continuation, or a kernel theorem for the general delayed hybrid architecture.
+
+\section{A conditional sampled-to-continuous implementation comparison}
+
+The sampled kernels above do not equate held governance with continuously adjusted control. Approximate discrete-time models provide an established framework for nonlinear sampled-data analysis \cite{nesic2004}, while the theorem below states the narrower finite-horizon comparison actually proved here. That comparison is conditional on existence and a common compact enclosure; it does not supply either assumption. Consider the continuous controller
+\begin{equation}
+\dot x=f(x,u),\qquad \dot u=g(x,u),
+\label{eq:continuous-controller}
+\end{equation}
+and the sampled implementation with step $h$:
+\begin{align}
+\dot x_h(t)&=f(x_h(t),u_k),\quad t\in[kh,(k+1)h),\\
+u_{k+1}&=u_k+h g(x_k,u_k),
+\label{eq:sampled-controller}
+\end{align}
+where $x_k=x_h(kh)$.
+
+\begin{conditionaltheorem}[Finite-time sample-and-hold convergence]
+\label{thm:sampled-limit}
+Fix $T<\infty$. Suppose there are $h_0>0$ and a compact set $N$ such that, for every $0<h\le h_0$, the exact trajectory, the sampled trajectory, and the one-step exact and frozen-input comparison arcs initiated at sampled review states all exist on the required portions of $[0,T]$ and remain in $N$. Suppose $f$ and $g$ are continuously differentiable on a neighbourhood of $N$ with bounded derivatives there, deployment is immediate, assessment is exact and contemporaneous, and no command projection or event trigger activates. With common initial conditions, the piecewise-held sampled system converges uniformly on $[0,T]$ to Eq.~\eqref{eq:continuous-controller} as $h\to0$; the global error is $O(h)$.
+\end{conditionaltheorem}
+
+\begin{proof}
+Write $z=(x,u)$ and
+\[
+H(z)=(f(x,u),g(x,u)).
+\]
+Let $\phi_h$ be the time-$h$ flow of the continuous system and $\Psi_h$ one sampled step. All bounds below are uniform on the compact neighbourhood in the hypotheses.
+
+For an initial value $(x,u)$, let $x_u(s)$ solve the $x$ equation with $u$ frozen. Its integral equation is
+\[
+x_u(h)=x+\int_0^h f(x_u(s),u)\,ds.
+\]
+If $M$ bounds $f$ and $L_f$ bounds its derivative there, then $\|x_u(s)-x\|\le Ms$ and
+\begin{align*}
+\|x_u(h)-x-hf(x,u)\|
+&\le\int_0^hL_f\|x_u(s)-x\|\,ds\\
+&\le\frac{L_fM}{2}h^2.
+\end{align*}
+The sampled command update is exactly $u+hg(x,u)$. Hence, for some $C_1$,
+\[
+\|\Psi_h(z)-z-hH(z)\|\le C_1h^2.
+\]
+The exact flow obeys
+\[
+\phi_h(z)=z+\int_0^hH(\phi_s(z))\,ds,
+\]
+and the same bounded-derivative argument gives
+\[
+\|\phi_h(z)-z-hH(z)\|\le C_2h^2.
+\]
+Consequently the uniform one-step local defect satisfies
+\[
+\|\Psi_h(z)-\phi_h(z)\|\le Ch^2,
+\qquad C=C_1+C_2.
+\]
+
+Let $z_k$ be the sampled state at $t_k=kh$, let $z(t)$ be the continuous solution, and put $e_k=\|z_k-z(t_k)\|$. If $L$ bounds $DH$, continuous dependence gives
+\[
+\|\phi_h(v)-\phi_h(w)\|\le e^{Lh}\|v-w\|.
+\]
+For sufficiently small $h$, choose $L_1$ with $e^{Lh}\le1+L_1h$. The local-defect bound at $z_k$ then gives
+\[
+e_{k+1}
+\le Ch^2+(1+L_1h)e_k,
+\qquad e_0=0.
+\]
+If $L_1>0$, iteration and summation of the geometric series yield, for $kh\le T$,
+\begin{align*}
+e_k
+&\le Ch^2\sum_{j=0}^{k-1}(1+L_1h)^j\\
+&=\frac{C}{L_1}h\bigl((1+L_1h)^k-1\bigr)\\
+&\le\frac{C}{L_1}\bigl(e^{L_1T}-1\bigr)h.
+\end{align*}
+When $L_1=0$, the recurrence gives $e_k\le Ckh^2\le CTh$. Thus the review-time error is $O(h)$.
+
+For $t\in[kh,(k+1)h)$, bounded sampled and continuous vector fields give
+\[
+\|z_h(t)-z_k\|\le M_sh,
+\qquad
+\|z(t)-z(kh)\|\le M_ch;
+\]
+the sampled command is held, so only its physical state contributes to the first within-step increment. Therefore
+\[
+\|z_h(t)-z(t)\|
+\le e_k+(M_s+M_c)h=O(h)
+\]
+uniformly for $0\le t\le T$. This proves the stated finite-time convergence and global error order.
+\end{proof}
+
+\status{Conditional theorem, finite-horizon consistency} Existence and the common compact enclosure are hypotheses, not consequences of the error estimate. The theorem neither identifies a finite review interval with a discrete DDE delay nor covers active projections, delayed deployment, asynchronous observations, stochastic assessments, inter-sample safety constraints, or infinite-horizon stability.
+
+\section{Exact reductions require projectability}
+
+A sampled-to-continuous implementation limit does not by itself connect models with different state spaces or constitutive laws. Such cross-model claims require an explicit model map. Exact lumping and projectability have an established mathematical lineage \cite{li1989,horstmeyer2016}; the theorem below states and proves the criterion used in this architecture. Terms such as ``special case,'' ``projection,'' ``approximation,'' and ``singular limit'' are not interchangeable.
+
+\begin{definition}[Four model maps]
+A \emph{specialisation} fixes parameters or restricts to an invariant subset. An \emph{exact projection} semiconjugates full and reduced flows. An \emph{approximation} has a declared residual or error bound. A \emph{singular reduction} supplies a small parameter, a limiting invariant object, and convergence on a stated time domain.
+\end{definition}
+
+\begin{theorem}[Projectability criterion]
+\label{thm:projectability}
+Let $\dot z=F(z)$ have unique solutions on a domain $Z$, and let $p:Z\to R$ be continuously differentiable. There exists a reduced vector field $G$ satisfying
+\begin{equation}
+p(\Phi_t(z))=\Psi_t(p(z))
+\label{eq:semiconjugacy}
+\end{equation}
+for the full and reduced flows only if
+\begin{equation}
+Dp(z)F(z)=G(p(z)).
+\label{eq:projectability}
+\end{equation}
+Conversely, if Eq.~\eqref{eq:projectability} holds and the reduced system has unique solutions, then Eq.~\eqref{eq:semiconjugacy} holds while both solutions exist.
+\end{theorem}
+
+\begin{proof}
+Assume first that Eq.~\eqref{eq:semiconjugacy} holds. For any $z\in Z$, differentiate both sides at $t=0$. The chain rule and the definitions of the two vector fields give
+\[
+\left.\frac{d}{dt}p(\Phi_t(z))\right|_{t=0}=Dp(z)F(z),
+\qquad
+\left.\frac{d}{dt}\Psi_t(p(z))\right|_{t=0}=G(p(z)).
+\]
+Equality of the derivatives proves the necessary condition Eq.~\eqref{eq:projectability}.
+
+Conversely, suppose Eq.~\eqref{eq:projectability} holds and fix a full solution $z(t)=\Phi_t(z)$. Its projection $r(t)=p(z(t))$ satisfies
+\[
+\dot r(t)=Dp(z(t))\dot z(t)
+=Dp(z(t))F(z(t))
+=G(p(z(t)))=G(r(t)),
+\]
+with $r(0)=p(z)$. Thus $r(t)$ and $\Psi_t(p(z))$ solve the same reduced initial-value problem. Uniqueness of reduced solutions implies
+\[
+p(\Phi_t(z))=r(t)=\Psi_t(p(z))
+\]
+for every time at which both solutions exist.
+\end{proof}
+
+\begin{corollary}[Fibre obstruction]
+If there exist $z_1,z_2$ with $p(z_1)=p(z_2)$ but
+\[
+Dp(z_1)F(z_1)\ne Dp(z_2)F(z_2),
+\]
+then no exact autonomous reduced model on that projection exists.
+\end{corollary}
+
+\begin{proof}
+Suppose, to the contrary, that an exact autonomous reduced vector field $G$ exists on the projection. The necessary part of Theorem~\ref{thm:projectability} then gives
+\[
+Dp(z_1)F(z_1)=G(p(z_1)),
+\qquad
+Dp(z_2)F(z_2)=G(p(z_2)).
+\]
+Since $p(z_1)=p(z_2)$, the right-hand sides are equal, forcing
+\[
+Dp(z_1)F(z_1)=Dp(z_2)F(z_2),
+\]
+contrary to the hypothesis. No such exact autonomous reduced model exists.
+\end{proof}
+
+\status{Theorem and corollary, exact autonomous reduction} The result characterises exact projectability under uniqueness. It does not reject approximate, memory-bearing, or singular reductions.
+
+Hidden active-pool, detritus, memory, or deployment states commonly create this obstruction. The theorem does not exclude an approximate closure, a larger reduced state containing memory, or a singular limit; it excludes only the unsupported exact Markovian projection.
+
+\section{A restricted ecological reduction}
+
+The projectability criterion supplies a general obstruction to unsupported exact reductions. The following positive result is narrower: it controls one stock equation in a support-saturated limit. Consider
+\begin{equation}
+\dot X_\kappa
+=\mu X_\kappa\frac{A_\kappa}{\kappa+A_\kappa}
+-\delta X_\kappa-cX_\kappa^2-qE(t)X_\kappa.
+\label{eq:support-stock}
+\end{equation}
+
+\begin{theorem}[Support-saturated logistic stock limit]
+\label{thm:logistic}
+Fix $T<\infty$ and non-negative parameters $\mu,\delta,c,q$. For $\kappa>0$, assume $A_\kappa$ is measurable, $A_\kappa(t)\ge a_0>0$, $0\le X_\kappa(t)\le X_{\max}$, and the common effort $E\in L^\infty([0,T])$. Assume the corresponding absolutely continuous solutions exist on $[0,T]$, and let $X_0$ solve
+\begin{equation}
+\dot X_0=(\mu-\delta)X_0-cX_0^2-qE(t)X_0
+\label{eq:logistic-limit}
+\end{equation}
+with the same initial value. Then the vector-field defect is bounded by
+\[
+\left|\mu X_\kappa\frac{A_\kappa}{\kappa+A_\kappa}-\mu X_\kappa\right|
+\le\frac{\mu X_{\max}}{a_0}\kappa,
+\]
+and $\sup_{t\le T}|X_\kappa(t)-X_0(t)|=O(\kappa)$. If $\mu>\delta$ and $c>0$, Eq.~\eqref{eq:logistic-limit} has the logistic form
+\[
+\dot X_0=rX_0\left(1-\frac{X_0}{K_{\log}}\right)-qE(t)X_0,
+\quad r=\mu-\delta,
+\quad K_{\log}=\frac{\mu-\delta}{c}.
+\]
+\end{theorem}
+
+\begin{proof}
+For every $t\in[0,T]$,
+\begin{align*}
+\left|\mu X_\kappa\frac{A_\kappa}{\kappa+A_\kappa}-\mu X_\kappa\right|
+&=\mu X_\kappa\left|\frac{A_\kappa}{\kappa+A_\kappa}-1\right|\\
+&=\mu X_\kappa\frac{\kappa}{\kappa+A_\kappa}\\
+&\le\mu X_{\max}\frac{\kappa}{a_0},
+\end{align*}
+which proves the displayed vector-field defect.
+
+Define the limiting right-hand side
+\[
+f_0(t,x)=(\mu-\delta)x-cx^2-qE(t)x.
+\]
+On a bounded interval containing both $X_\kappa(t)$ and $X_0(t)$ for $0\le t\le T$, this function is Lipschitz in $x$ with some constant $L$. Equation~\eqref{eq:support-stock} can be written
+\[
+\dot X_\kappa=f_0(t,X_\kappa)+\rho_\kappa(t),
+\qquad
+|\rho_\kappa(t)|\le C_0\kappa,
+\qquad
+C_0=\frac{\mu X_{\max}}{a_0}.
+\]
+Because the two solutions have the same initial value, integration gives
+\[
+|X_\kappa(t)-X_0(t)|
+\le\int_0^tL|X_\kappa(s)-X_0(s)|\,ds+C_0\kappa t.
+\]
+Gronwall's inequality therefore yields
+\[
+|X_\kappa(t)-X_0(t)|
+\le
+\begin{cases}
+\displaystyle \frac{C_0\kappa}{L}(e^{Lt}-1),&L>0,\\[2mm]
+C_0\kappa t,&L=0.
+\end{cases}
+\]
+Taking the supremum for $t\le T$ proves the $O(\kappa)$ assertion.
+
+If $\mu>\delta$ and $c>0$, set $r=\mu-\delta>0$ and $K_{\log}=(\mu-\delta)/c>0$. Then $r/K_{\log}=c$, and direct expansion gives
+\[
+rX_0\left(1-\frac{X_0}{K_{\log}}\right)-qE(t)X_0
+=(\mu-\delta)X_0-cX_0^2-qE(t)X_0,
+\]
+which is Eq.~\eqref{eq:logistic-limit} in the stated logistic form.
+\end{proof}
+
+\status{Theorem, partial reduction} The $O(\kappa)$ constant is uniform on the fixed horizon under the stated support, stock, effort, and existence bounds. This is a stock-equation result; it does not reduce detritus, observation, memory, effort, governance, or bifurcation structure.
+
+\section{Exact coarse-graining statements}
+
+Reduction of local support kinetics is distinct from spatial aggregation. Even when the local stock law is logistic, averaging introduces variance and effort--stock covariance terms.
+
+\begin{theorem}[Logistic variance correction and curvature bound]
+\label{thm:coarse-graining}
+Fix $r,q\ge0$ and a logistic carrying capacity $K_{\log}>0$. Let $X$ be a square-integrable spatial stock field on a probability-normalised domain, with mean $\bar X$, and let $E_s$ be a square-integrable effort field with mean $\bar E$. Then
+\begin{align}
+\mathbb E\!\left[rX\left(1-\frac{X}{K_{\log}}\right)-qE_sX\right]
+&=r\bar X\left(1-\frac{\bar X}{K_{\log}}\right)
+-\frac{r}{K_{\log}}\operatorname{Var}(X) \nonumber\\
+&\quad-q\bar E\bar X-q\operatorname{Cov}(E_s,X).
+\label{eq:logistic-coarse}
+\end{align}
+More generally, if $X$ is supported in an interval $I$, $f\in C^2(I)$, and $M=\sup_{u\in I}|f''(u)|<\infty$, then
+\begin{equation}
+\left|\mathbb E[f(X)]-f(\mathbb E[X])\right|
+\le\frac{M}{2}\operatorname{Var}(X).
+\label{eq:curvature-bound}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Square integrability makes all second moments below finite. Expanding the mean local rate gives
+\begin{align*}
+\mathbb E\!\left[rX\left(1-\frac{X}{K_{\log}}\right)-qE_sX\right]
+&=r\mathbb E[X]-\frac{r}{K_{\log}}\mathbb E[X^2]-q\mathbb E[E_sX].
+\end{align*}
+By the definitions of variance and covariance,
+\[
+\mathbb E[X^2]=\bar X^2+\operatorname{Var}(X),
+\qquad
+\mathbb E[E_sX]=\bar E\bar X+\operatorname{Cov}(E_s,X).
+\]
+Substituting and regrouping gives
+\begin{align*}
+r\bar X-\frac{r}{K_{\log}}\bar X^2
+-\frac{r}{K_{\log}}\operatorname{Var}(X)
+-q\bar E\bar X-q\operatorname{Cov}(E_s,X)
+&=r\bar X\left(1-\frac{\bar X}{K_{\log}}\right)
+-\frac{r}{K_{\log}}\operatorname{Var}(X)\\
+&\quad-q\bar E\bar X-q\operatorname{Cov}(E_s,X),
+\end{align*}
+which is Eq.~\eqref{eq:logistic-coarse}.
+
+For the general bound, put $\mu_X=\mathbb E[X]$. Because $I$ is an interval containing the support of $X$, it also contains $\mu_X$. Taylor's theorem applied between $X$ and $\mu_X$ gives, pointwise,
+\[
+f(X)=f(\mu_X)+f'(\mu_X)(X-\mu_X)+R(X),
+\qquad
+|R(X)|\le\frac M2(X-\mu_X)^2.
+\]
+Taking expectations and using $\mathbb E[X-\mu_X]=0$ yields
+\[
+\mathbb E[f(X)]-f(\mu_X)=\mathbb E[R(X)].
+\]
+Therefore
+\[
+|\mathbb E[f(X)]-f(\mathbb E[X])|
+\le\mathbb E|R(X)|
+\le\frac M2\mathbb E[(X-\mu_X)^2]
+=\frac M2\operatorname{Var}(X),
+\]
+which proves Eq.~\eqref{eq:curvature-bound}.
+\end{proof}
+
+\status{Theorem, static spatial aggregation} Equation~\eqref{eq:logistic-coarse} is an exact identity and Eq.~\eqref{eq:curvature-bound} is an error bound under the stated assumptions. Spatial moment methods make the associated closure problem explicit \cite{bolker1997,murrell2004}; neither result here supplies closed dynamics for the variance or covariance, proves that a moment closure is realizable, or includes spatial transport and trade.
+
+\section{Diagnostics with controlled interpretation}
+
+Neither a reduced stock equation nor a coarse-grained balance determines how a local stock-to-rate ratio relates to a future threshold time. That relation needs its own rate-variation assumptions. Let $A(0)>A_{\min}$ and define $y(t)=A(t)-A_{\min}$. If the current net depletion rate is $v_0=-\dot A(0)>0$, the local ratio is $H_{\rm loc}=y(0)/v_0$.
+
+\begin{conditionaltheorem}[Local-horizon bracket]
+\label{thm:horizon}
+Suppose $0\le\epsilon<1$ and $y$ is continuously differentiable on $[0,H_*]$ for some
+\[
+H_*\ge\frac{H_{\rm loc}}{1-\epsilon},
+\]
+and suppose throughout that interval that
+\begin{equation}
+(1-\epsilon)v_0\le-\dot A(t)\le(1+\epsilon)v_0.
+\label{eq:slow-rate}
+\end{equation}
+Then a first hitting time $T_A\in[0,H_*]$ exists and satisfies
+\begin{equation}
+\frac{H_{\rm loc}}{1+\epsilon}
+\le T_A\le
+\frac{H_{\rm loc}}{1-\epsilon}.
+\label{eq:horizon-bound}
+\end{equation}
+\end{conditionaltheorem}
+
+\begin{proof}
+Since $y(t)=A(t)-A_{\min}$, one has $\dot y(t)=\dot A(t)$. On $[0,H_*]$, Eq.~\eqref{eq:slow-rate} is equivalent to
+\[
+-(1+\epsilon)v_0\le\dot y(t)\le-(1-\epsilon)v_0.
+\]
+Integration from $0$ to any $t\in[0,H_*]$ gives
+\[
+y(0)-(1+\epsilon)v_0t
+\le y(t)
+\le y(0)-(1-\epsilon)v_0t.
+\]
+Define
+\[
+t_- =\frac{y(0)}{(1+\epsilon)v_0},
+\qquad
+t_+ =\frac{y(0)}{(1-\epsilon)v_0}.
+\]
+For every $t<t_-$, the lower bound is strictly positive, so a first zero cannot occur before $t_-$. The hypothesis on $H_*$ ensures $t_+\le H_*$, and the upper bound gives
+\[
+y(t_+)\le y(0)-(1-\epsilon)v_0t_+=0.
+\]
+Because $y(0)>0$ and $y$ is continuous, the intermediate value theorem supplies at least one zero in $[0,t_+]$. The strict bound $\dot y(t)\le-(1-\epsilon)v_0<0$ makes $y$ strictly decreasing, so that zero is unique and is therefore the first hitting time. Hence $t_-\le T_A\le t_+$. Since $H_{\rm loc}=y(0)/v_0$, these two bounds are exactly Eq.~\eqref{eq:horizon-bound}.
+\end{proof}
+
+\status{Conditional theorem, local diagnostic} The theorem assumes rate control on an a priori interval long enough to prove crossing; it does not assume that the first zero already exists. It explains the exact assumption under which a local stock-to-rate ratio approximates a scenario hitting time. Near rate reversal, support feedback, or policy switching, Eq.~\eqref{eq:slow-rate} can fail and the ratio loses that interpretation.
+
+\section{A delay-independent sufficient stability condition}
+
+Threshold-time interpretation and dynamical stability are separate questions. For the linear retarded system, using the standard Halanay-inequality tool \cite{halanay1966},
+\begin{equation}
+\dot\xi(t)=A_0\xi(t)+A_1\xi(t-\tau),
+\qquad \tau\ge0,
+\label{eq:linear-delay}
+\end{equation}
+let $\mu_*(A_0)$ be the logarithmic norm associated with a chosen vector norm and $\|A_1\|_*$ its induced matrix norm.
+
+\begin{conditionaltheorem}[Small-gain delay-independent stability]
+\label{thm:small-gain}
+If, for some $\alpha_0>\beta_0\ge0$,
+\[
+\mu_*(A_0)\le-\alpha_0,
+\qquad
+\|A_1\|_*\le \beta_0,
+\]
+then the zero solution of Eq.~\eqref{eq:linear-delay} is exponentially stable for every fixed $\tau\ge0$. A valid decay rate is the unique $\eta>0$ satisfying
+\begin{equation}
+\eta=\alpha_0-\beta_0e^{\eta\tau}.
+\label{eq:halanay-rate}
+\end{equation}
+\end{conditionaltheorem}
+
+\begin{proof}
+Let $v(t)=\|\xi(t)\|_*$. The defining logarithmic-norm estimate and the induced matrix norm give
+\begin{align*}
+D^+v(t)
+&\le\mu_*(A_0)\|\xi(t)\|_*+\|A_1\xi(t-\tau)\|_*\\
+&\le-\alpha_0 v(t)+\beta_0\|\xi(t-\tau)\|_*\\
+&\le-\alpha_0 v(t)+\beta_0\sup_{t-\tau\le s\le t}v(s).
+\end{align*}
+Halanay's inequality, cited above, then gives exponential decay for $\alpha_0>\beta_0$ with a rate $\eta>0$ satisfying Eq.~\eqref{eq:halanay-rate}; in particular,
+\[
+v(t)\le\left(\sup_{-\tau\le s\le0}v(s)\right)e^{-\eta t}.
+\]
+This proves exponential stability for each fixed $\tau\ge0$.
+
+It remains to verify the asserted rate. Define
+\[
+h(\eta)=\eta-\alpha_0+\beta_0e^{\eta\tau}.
+\]
+Then $h(0)=\beta_0-\alpha_0<0$, while $h(\eta)\to\infty$ as $\eta\to\infty$. Moreover,
+\[
+h'(\eta)=1+\beta_0\tau e^{\eta\tau}>0.
+\]
+The intermediate value theorem and strict monotonicity therefore give exactly one positive zero. The equation $h(\eta)=0$ is equivalent to $\eta=\alpha_0-\beta_0e^{\eta\tau}$, as required.
+\end{proof}
+
+\status{Conditional theorem, sufficient certificate} The condition is sufficient, not necessary. Failure of $\alpha_0>\beta_0$ does not prove instability or a Hopf bifurcation; it only removes this certificate. In nonlinear applications the theorem is local after a declared linearisation unless a global incremental bound is proved.
+
+\section{Conjecture programme}
+
+The finite-clopen endpoint and held-tube theorems, the compact single-delay Lipschitz-history theorem, the review-synchronised history-reset theorem, the continuous-exact-tube hybrid ODE theorem, and the abstract compact exact-tube information theorem do not establish a kernel result for general delayed, continuous-observation, variable-timing hybrid systems.  The review-synchronised theorem avoids an interior delayed jump by resetting an abstract memory state only at reviews.  The bounded-jump theorem has no delay and requires Hausdorff-continuous exact reachable sets; Proposition~\ref{prop:osc-insufficient} shows why generic outer semicontinuity is not enough for its universal tube predecessor.  Delayed vector-coupling and lag-identification claims also remain conjectural.
+
+\begin{conjecture}[Periodic-orbit-fold persistence under typed coupling]
+A transverse fold of periodic orbits in a registered retarded subsystem persists under sufficiently small typed vector coupling and compatible additional fixed delays when the periodic orbit has the required spectral gap and the infinite-dimensional Poincar\'e map is sufficiently smooth.
+\end{conjecture}
+
+\noindent\textbf{Missing proof.} One must establish the baseline fold by periodic-branch continuation, formulate the coupled system on a common phase space, and verify transversality, spectral separation, and regularity. Finite-dimensional slow-manifold citations do not establish these points.  
+\textbf{Disproof route.} Exhibit arbitrarily small admissible coupling that destroys the fold through resonance, boundary contact, loss of regularity, or a competing centre direction.
+
+\begin{conjecture}[Variable-time delayed-hybrid information kernel]
+There is a nontrivial class of variable-event delayed hybrids with a declared compact piecewise-history phase space, a uniform finite break and jump budget, phase-space resets, and bounded-error partial observations for which an exact compact information process and lower-stable reachable tube/update maps can be constructed, so that robust predecessor iteration yields a closed information-state tube kernel under nonanticipative policies.
+\end{conjecture}
+
+\noindent\textbf{Missing proof.} Two independent gaps remain.  First, a nonzero current-value jump with the old tail retained is not a continuous history.  In the uniform norm, moving jumps of non-vanishing size need not converge; in an $L^p$ topology they may converge, but delayed point evaluation and current-value observation are not continuous.  A piecewise-history topology must retain compactness under the declared break budget and render delayed evaluation and the variable jump-time solution/reset correspondence at least outer semicontinuous.  Outer semicontinuity alone does not close universal tube-containment constraints: the lower stability or Hausdorff continuity needed by the predecessor must also be established.  Second, bounded-error observation fibres are generally not clopen, so conditioning need not be Hausdorff-continuous.  One must construct a compact exact filter or impose another condition that closes the information predecessor.  Measurable nonanticipative selection and ordinary-time continuation through all permitted events must then be proved.  These gaps lie outside the assumptions of the two restricted hybrid theorems.  Mode-dependent delays likewise require a declared common phase space and new solution-map verification; they are not a corollary of the review-synchronised theorem.
+
+The piecewise-history delayed hybrid with a compact break budget belongs to a separate analytic setting and is treated here only as a conjecture.  Identification with either the continuous-history RFDE specialization or the bounded-jump hybrid ODE specialization would require a bridging theorem between their phase spaces, event-time maps, and information processes.  
+\textbf{Disproof route.} Exhibit shifted jump histories for which no proposed compact topology makes delayed evaluation and the variable jump-time solution/reset correspondence outer semicontinuous with the additional lower stability required for predecessor closure, or a bounded-error observation model whose exact conditioned information sets destroy predecessor closedness.  Either counterexample refutes the conjecture for the proposed class without affecting either restricted theorem.
+
+\begin{conjecture}[Restricted delay-separation principle]
+If ecological observation, assessment, decision, and deployment modules are independently identified and enter a locally linear loop as a product of stable transfer operators, their phase contributions can be separated from sufficiently rich input--output data up to declared structural symmetries.
+\end{conjecture}
+
+\noindent\textbf{Missing proof.} Structural identifiability of factored transfer functions and persistence under feedback must be shown.  
+\textbf{Disproof route.} Produce two non-equivalent lag factorizations with identical admissible closed-loop observations.
+
+\section{Empirical hypotheses and numerical discipline}
+
+The conjectures above concern unresolved mathematical extensions. The hypotheses below instead state prospective empirical consequences of the established distinctions among observation, governance, and pathway feasibility; they require application-specific tests rather than further deduction from the architecture.
+
+\begin{hypothesis}[Observation aggregation]
+In systems where independent component measurements reveal safety-crossing fibres for the operational aggregate indicator, aggregate-only certification will produce nonzero component-safety misclassification under prospective validation.
+\end{hypothesis}
+
+A test must freeze the aggregate, component thresholds, candidate population, observation model, and error metric before validation. Finding no safety-crossing fibre in the declared domain would count against the hypothesis for that application.
+
+\begin{hypothesis}[Governance phase ordering]
+After controlling declared ecological and market confounders, extractive and protective controllers will exhibit opposite signed phase relations between assessed decline and realised extraction; measured deployment delay will shift that relation in the direction predicted by the registered controller.
+\end{hypothesis}
+
+Contradictory causal ordering or absence of the preregistered phase relation at adequate power would reject the mechanism for that population. Where records are too short to resolve a predicted endogenous period, the test should estimate gain and phase over resolvable frequencies from exogenous excitation, a dated intervention, or a justified closed-loop identification design. A stock--effort cross-spectrum alone does not identify the open-loop transfer operator or separate ecological, assessment, decision, and deployment lags.
+
+\begin{hypothesis}[Substitution certificate]
+For a frozen linear technology approximation, dual infeasibility certificates from Theorem~\ref{thm:farkas} will predict service shortfalls under held-out resource/capacity scenarios more reliably than an unconstrained aggregate elasticity.
+\end{hypothesis}
+
+A fair test must compare out-of-sample scenarios and record pathway changes that invalidate the frozen technology matrix.
+
+\paragraph{Numerical-proposition rule.}
+A future statement such as ``a robust kernel loses a connected component at review interval $T_r^*$'' may be labelled a numerical proposition only with a model hash, discretisation, state/action/disturbance grids, predecessor tolerance, convergence/refinement study, and archived machine-readable kernel. A figure alone is insufficient.
+
+\section{Research programmes}
+
+The empirical hypotheses target specific architecture-level distinctions. The remaining extensions require additional mathematical objects, closure results, and identifiability conditions; simultaneous inclusion of all canonical modules does not supply those results.
+
+\begin{programme}[Spatial, stage, and polycentric-agent closure]
+Extend $S$ to a compartment--location--stage incidence operator, add conservative transport, spatial service kernels, trade, and leakage, and derive realizable moment or distributional closures. Theorem~\ref{thm:coarse-graining} supplies the exact mean correction for one quadratic law and an error bound for a static projection; a variance state must still remain non-negative by construction and its dynamics are not closed by that theorem. For shared-resource governance, motivated by social--ecological-systems and polycentric-governance analysis \cite{ostrom2009}, introduce agent-specific observation maps, command and deployment constraints, controller signs, objectives, and delay kernels on an explicit interaction network. Determine stability as a function of network and delay distributions; delay heterogeneity is not assumed to be stabilizing outside a proved network class. Compare point delays with distributed kernels and finite-dimensional Erlang cascades using the generalized linear-chain lineage \cite{hurtado2019}, without treating informational queue states as conserved material compartments.
+\end{programme}
+
+\begin{programme}[Exergy, quality grades, and nonsmooth transformation feasibility]
+Type material stocks by moiety, location, accessibility, and quality grade. Distinguish down-cycling, grade-preserving recovery, and upgrading fluxes; require upgrading and separation to declare yield, residues, exergy input, capacity, and donor boundaries. Represent useful-energy or exergy requirements, oriented by exergy-based environmental resource accounting \cite{dewulf2008}, as constraints in $\Gamma$ and deployment, and, for applications with a defensible thermodynamic potential, impose flux--force or entropy-production restrictions at the primitive-process level. Determine when exergy scarcity suppresses extractive mobilisation or disables protective action. Replace smooth minimum surrogates by complementarity, piecewise-smooth, or differential-inclusion formulations when exact binding constraints matter, and establish well-posedness and switching conditions. A fixed binding component can simplify the equations but does not generally produce an exact scalar reduction while other physical, memory, or governance states evolve. No universal scalar exergy gate, universal thermodynamic potential for social processes, or quality-preserving generic recycling map is assumed.
+\end{programme}
+
+\begin{programme}[Justice and multiscale viability]
+Place group- and location-specific minimum services and maximum harms inside $K$, distinguish positive predictions from normative entitlement choices, and instantiate the recursive intergenerational criterion. Study when local kernels compose into a global kernel under cross-boundary transfers, and when aggregate feasibility masks an empty kernel or capture basin for one group.
+\end{programme}
+
+\begin{programme}[Model selection, minimality, and limit lattice]
+For each empirical claim, compare the smallest model that represents its causal ordering with richer stage, spatial, exergy, and governance alternatives. Register every specialization, exact projection, approximation, and singular limit as an explicit map between model objects. For each proposed square of limit operations, prove commutation with a common error bound or exhibit a path-dependent counterexample; relative timescale estimates alone do not prove non-commutation. In resource applications, compare frozen-support, fast-support, and slow endogenous-support formulations. Slow passage through a moving bifurcation under endogenous depletion is distinct from rate-induced tipping under an externally ramped parameter, and both must be distinguished from a boundary-equilibrium event in a nonsmooth model. Complexity is added only when a preregistered discrepancy requires it.
+\end{programme}
+
+\begin{programme}[Structural uncertainty, robustness, and quantitative detection risk]
+Construct information-state predecessor operators whose adverse quantifier ranges over a finite or compact registered model class as well as process disturbances. Compare worst-case, distributionally robust, and model-averaged criteria without relabelling one as another; replace one-at-a-time sensitivity with global uncertainty propagation when interactions matter. Extend the exact observation-fibre result from binary certifiability to quantitative loss: for a declared distribution over deficit states, or a declared minimax class, indicator weights, thresholds, and componentwise loss, bound misclassification probability and the magnitude of undetected violation. Such a bound is not determined by dimension alone; it depends on the feasible deficit geometry and observation operator.
+\end{programme}
+
+\section{Scope of the established results}
+
+Table~\ref{tab:scope} consolidates the article's principal scope boundaries. Its right column records conclusions that require additional assumptions, bridging theorems, or empirical analysis; it does not negate the restricted results in the left column.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Established results and unresolved extensions.}
+\label{tab:scope}
+\begin{tabularx}{\textwidth}{X X}
+\toprule
+Established here & Not established here\\
+\midrule
+Domain-qualified rejection of unrestricted scalar compensation & Universal scalar certification without a feasible-domain proof\\
+Typed flow/jump balance under null-space conditions & A conserved scalar combining heterogeneous capitals\\
+Non-negative invariance under explicit tangency/reset assumptions & Invariance without model-specific boundary checks\\
+Bounded-input bounded-state result under a coercive dissipation inequality & Uniform boundedness from bounded inputs alone\\
+Linear substitution feasibility or a dual certificate & Universal or nonlinear substitutability\\
+Exact observation-fibre criterion & Identifiability from a particular noisy data set\\
+Capture/recoverability/irreversibility definitions with explicit quantifiers & A computed empirical capture basin or absolute irreversibility\\
+Review-time robust kernel for a compact continuous full-state transition & Inter-sample safety or a continuous-time/partial-observation identification from that result alone\\
+Endpoint knowledge kernel for an exact finite clopen observation partition & Continuous/noisy observations, regular policy selection, or inter-sample safety from that result alone\\
+Inter-sample-safe full-state tube kernel for a compact fixed-period held-control model & Unrestricted continuous-feedback or partial-observation viability\\
+Finite-clopen inter-sample-safe knowledge kernel with aggregate hidden-disturbance successors & Disturbance-specific recursion, regular policy selection, continuous observation, or delayed-hybrid viability\\
+Conditional compact Lipschitz-history RFDE knowledge kernel & Full-history observation, state-dependent delay, point resets, general disturbance paths, or hybrid continuation from that theorem\\
+Conditional review-synchronised hybrid RFDE kernel with a declared continuous phase-space reset & An interior delayed point jump, a reset derived from Eq.~\eqref{eq:physical-jump}, or general variable-event delayed-hybrid viability\\
+Outer-semicontinuity counterexample and conditional bounded-jump hybrid ODE kernels with Hausdorff-continuous exact tubes & Predecessor closedness from outer semicontinuity alone, delayed restart, numerical inner approximation, or non-Zeno derived from the tuple\\
+Inter-sample-safe information kernel for the declared compact exact-tube model & A general filtering, variable-timing, or Zeno-capable kernel theorem\\
+
+Conditional finite-time sample-and-hold consistency & Equivalence of finite review, continuous feedback, and delay\\
+Exact projectability obstruction & A full singular reduction of the associated model families\\
+Support-saturated stock-equation limit & Transfer of memory, effort, Hopf, or fold structure\\
+Exact quadratic spatial correction and general $C^2$ curvature bound & Closed or realizable spatial moment dynamics\\
+Local-horizon bracket under slow rate variation & A forecast from an unrestricted local ratio\\
+Diagnostic, threshold, and intergenerational type definitions & Empirical thresholds, chosen entitlements, or a nonempty continuation kernel\\
+Small-gain stability certificate & Necessary stability boundary or global bifurcation\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The architecture-level theorems depend on their stated assumptions and proofs. Empirical observations and model-specific numerical calculations may test applications, but they are not premises of these results.
+
+\section{Conclusion}
+
+This article formulates sustainability analysis as a typed modular system rather than as one universal differential equation. Physical fluxes, functional states, services, observations, governance channels, disturbances, constraints, and causal policies are linked by declared interfaces. Robust viability supplies the central trajectory question, while accounting, pathway feasibility, observability, diagnostics, reduction, and stability answer supporting but non-equivalent questions.
+
+The formal results provide exact tests within restricted classes: a donor-boundary check can refute invariance, a dual vector can certify substitution infeasibility, an observation fibre can refute exact certification, and a projectability fibre can refute an exact autonomous reduction. The viability results separately treat review-time full-state safety, finite-clopen endpoint information, fixed-period inter-sample safety, compact Lipschitz RFDE histories, review-synchronised hybrid RFDE resets, bounded-jump hybrid ODEs with Hausdorff-continuous exact tubes, and an abstract compact exact-tube information process. The outer-semicontinuity counterexample identifies a specific obstruction at grazing guards. None of these constructions identifies its phase space or knowledge kernel with unrestricted continuous-time or general variable-event delayed-hybrid partial-observation viability. Delayed, variable-timing, spatial, distributionally constrained, and exergy-constrained extensions therefore remain research programmes under the scope boundaries stated above.
+
+\section*{Data and code availability}
+No data were generated or analysed for this analytical article. The definitions, equations, and proofs needed to assess its results are contained in the text. Computational implementations of future numerical propositions should report model versions, parameter files, algorithms, tolerances, refinement studies, and machine-readable outputs; empirical tests should declare populations, observables, estimators, uncertainty procedures, and falsification criteria.
+
+\begin{thebibliography}{21}
+\bibitem{aubin1991} Aubin, J.-P. (1991). \textit{Viability Theory}. Birkh\"auser.
+\bibitem{blanchini1999} Blanchini, F. (1999). Set invariance in control. \textit{Automatica}, 35(11), 1747--1767.
+\bibitem{goebel2012} Goebel, R., Sanfelice, R. G., \& Teel, A. R. (2012). \textit{Hybrid Dynamical Systems: Modeling, Stability, and Robustness}. Princeton University Press.
+\bibitem{halanay1966} Halanay, A. (1966). \textit{Differential Equations: Stability, Oscillations, Time Lags}. Academic Press.
+\bibitem{hale1993} Hale, J. K., \& Verduyn Lunel, S. M. (1993). \textit{Introduction to Functional Differential Equations}. Springer.
+\bibitem{rockafellar1970} Rockafellar, R. T. (1970). \textit{Convex Analysis}. Princeton University Press.
+
+\bibitem{munda2009} Munda, G., \& Nardo, M. (2009). Noncompensatory/nonlinear composite indicators for ranking countries: A defensible setting. \textit{Applied Economics}, 41, 1513--1523. \url{https://doi.org/10.1080/00036840601019364}
+
+\bibitem{neumayer2013} Neumayer, E. (2013). \textit{Weak versus Strong Sustainability: Exploring the Limits of Two Opposing Paradigms} (4th ed.). Edward Elgar. \url{https://doi.org/10.4337/9781781007082}
+
+\bibitem{ekins2003} Ekins, P., Simon, S., Deutsch, L., Folke, C., \& De Groot, R. (2003). A framework for the practical application of the concepts of critical natural capital and strong sustainability. \textit{Ecological Economics}, 44, 165--185. \url{https://doi.org/10.1016/S0921-8009(02)00272-0}
+
+\bibitem{feinberg2019} Feinberg, M. (2019). \textit{Foundations of Chemical Reaction Network Theory}. Springer. \url{https://doi.org/10.1007/978-3-030-03858-8}
+
+\bibitem{nesic2004} Ne\v{s}i\'c, D., \& Teel, A.~R. (2004). A framework for stabilization of nonlinear sampled-data systems based on their approximate discrete-time models. \textit{IEEE Transactions on Automatic Control}, 49, 1103--1122. \url{https://doi.org/10.1109/TAC.2004.831175}
+
+\bibitem{oneill2018} O'Neill, D.~W., Fanning, A.~L., Lamb, W.~F., \& Steinberger, J.~K. (2018). A good life for all within planetary boundaries. \textit{Nature Sustainability}, 1, 88--95. \url{https://doi.org/10.1038/s41893-018-0021-4}
+
+\bibitem{rockstrom2023} Rockstr\"om, J. et al. (2023). Safe and just Earth system boundaries. \textit{Nature}, 619, 102--111. \url{https://doi.org/10.1038/s41586-023-06083-8}
+
+\bibitem{bolker1997} Bolker, B.~M., \& Pacala, S.~W. (1997). Using moment equations to understand stochastically driven spatial pattern formation in ecological systems. \textit{Theoretical Population Biology}, 52, 179--197. \url{https://doi.org/10.1006/tpbi.1997.1331}
+
+\bibitem{murrell2004} Murrell, D.~J., Dieckmann, U., \& Law, R. (2004). On moment closures for population dynamics in continuous space. \textit{Journal of Theoretical Biology}, 229, 421--432. \url{https://doi.org/10.1016/j.jtbi.2004.04.013}
+
+\bibitem{ostrom2009} Ostrom, E. (2009). A general framework for analyzing sustainability of social-ecological systems. \textit{Science}, 325, 419--422. \url{https://doi.org/10.1126/science.1172133}
+
+\bibitem{dewulf2008} Dewulf, J. et al. (2008). Exergy: Its potential and limitations in environmental science and technology. \textit{Environmental Science \& Technology}, 42, 2221--2232. \url{https://doi.org/10.1021/es071719a}
+
+\bibitem{saintpierre1994} Saint-Pierre, P. (1994). Approximation of the viability kernel. \textit{Applied Mathematics and Optimization}, 29, 187--209. \url{https://doi.org/10.1007/BF01204182}
+
+\bibitem{li1989} Li, G., \& Rabitz, H. (1989). A general analysis of exact lumping in chemical kinetics. \textit{Chemical Engineering Science}, 44, 1413--1430. \url{https://doi.org/10.1016/0009-2509(89)85014-6}
+
+\bibitem{horstmeyer2016} Horstmeyer, L., \& Atay, F.~M. (2016). Characterization of exact lumpability for vector fields on smooth manifolds. \textit{Differential Geometry and its Applications}, 48, 46--60. \url{https://doi.org/10.1016/j.difgeo.2016.06.001}
+
+\bibitem{hurtado2019} Hurtado, P.~J., \& Kirosingh, A.~S. (2019). Generalizations of the ``linear chain trick'': Incorporating more flexible dwell time distributions into mean field ODE models. \textit{Journal of Mathematical Biology}, 79, 1831--1883. \url{https://doi.org/10.1007/s00285-019-01412-w}
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,586 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsfonts,amsthm,booktabs,tabularx,array,geometry,hyperref}
+\geometry{margin=2.7cm}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{remark}{Remark}
+\newcommand{\R}{\mathbb R}
+\newcommand{\spx}{\operatorname{softplus}}
+
+\title{Delay-Amplified Extractive Mobilisation Under Stock Decline:\\
+A Registered Family of Renewable-Resource Models}
+\author{Anonymous}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We study a family of delay differential equations in which extraction effort responds to a delayed, filtered signal of resource-stock decline. The mechanism is decline-triggered extractive mobilisation under institutional failure, not a stock-level scarcity sensor, governance in general, or a protective regulatory response. The primary three-state model combines logistic renewal, donor-limited harvest, a leaky memory, and a boundary-exact effort law. For this registered vector field, standard retarded-functional-differential-equation machinery yields non-negative/box invariance; model-specific algebra gives the interior equilibrium, characteristic quasi-polynomial, and a real cubic that exhausts the local Hopf-frequency search. Computation for registered parameterisations identifies variant-specific Hopf crossings, periodic branches, basin-dependent bistability, and sensitivity to the effort boundary law and active-pool turnover. For the boundary-exact three-state Candidate A, the local crossings occur near $3.67$ and $150.36$ yr; finite-domain continuation and Floquet calculations locate distinct periodic-orbit folds near $5.574$--$5.575$ and $5.587$ yr rather than a single saddle-node collision. The corresponding upper persistence boundary is near $148.3$ yr, although its precise bifurcation classification remains open. We register an ungated three-state model, the boundary-exact model, a two-channel depletion-pressure extension, a four-state active-pool extension, and a typed primitive-flux core, and assign every numerical value to its model and parameter set. In the primitive-flux core, the support-saturated ecological stock equation is logistic with $r=\mu-d$ and $K=(\mu-d)/c$; its memory, effort, detritus, and boundary structures do not thereby reduce to the three-state model. The contribution is an applied, registered family with a model-specific algebraic completeness result and explicitly scoped numerical evidence, not a new general bifurcation theorem or a proved reduction from a general sustainability theory.
+\end{abstract}
+
+\section{Question, mechanism, and evidentiary policy}
+
+Delayed ecological and economic feedback can destabilise harvested-resource equilibria \cite{hassard1981,gao2022,khiyar2026}. Here the delayed signal does not represent all governance. It represents a particular failure mode: observed stock decline is filtered, acted on after a delay, and used to mobilise \emph{more extractive effort}. Protective monitoring and regulation would normally decrease extraction in response to decline and therefore have the opposite sign. This mechanism is adjacent to rarity-value feedbacks in which scarcity raises price or desirability and intensifies exploitation, often termed an anthropogenic Allee effect \cite{courchamp2006}. It is not the same claim: the present controller is a specified delayed institutional effort law, and no universal price--rarity relation is assumed.
+
+The paper asks three bounded questions.
+
+\begin{enumerate}
+    \item For a specified stock-decline-feedback DDE with an extractive mobilisation response, what can be established analytically about admissibility, equilibria, and local Hopf crossings?
+    \item Which global bifurcation statements are numerical rather than proved?
+    \item Which related models are genuinely connected by an identity or limit, and which are merely members of the same qualitative family?
+\end{enumerate}
+
+We use four evidentiary statuses. An \textbf{identity/theorem} is algebraic or proved. A \textbf{numerical result} is a computed output tied to a registered equation, parameter set, history class, numerical method, tolerance or refinement study, and finite integration or continuation domain. An \textbf{inferred numerical classification} adds an interpretation, such as Hopf criticality inferred from branch scaling, that has not been established by the corresponding normal-form calculation. A \textbf{conjecture} concerns unproved branch connectivity, persistence, or transfer to a different model. Local stability, global attraction, safe-set membership, and empirical relevance remain separate properties.
+
+The article is positioned as an applied nonlinear-dynamics and model-registration study. Forward invariance uses standard RFDE tangent-cone machinery, and the equilibrium calculation is direct model algebra; neither is offered as a new general theorem. The narrower analytical contribution is the characteristic factorisation and exhaustive cubic enumeration of candidate Hopf-frequency families for the registered three-state linearisation. The global branch statements remain numerical and model-specific.
+
+\section{Primary model: boundary-exact three-state core}
+
+\subsection{Equations}
+
+Let $N(t)$ be a renewable stock, $Z(t)$ a filtered decline signal, and $E(t)$ extractive effort. Define
+\[
+S(N)=rN\left(1-\frac{N}{K}\right),
+\qquad
+\spx_k(s)=\frac{1}{k}\log(1+e^{ks}),
+\]
+and the shifted, non-negative signal map
+\begin{equation}
+\Phi_k(s)=\max\left\{0,\spx_k(s)-\frac{\log2}{k}+\delta\right\}.
+\label{eq:phi}
+\end{equation}
+The boundary-exact core is
+\begin{align}
+\dot N &= S(N)-qEN, \label{eq:N}\\
+\dot Z &= \frac{\Phi_k(qEN-S(N))-Z}{\tau_m}, \label{eq:Z}\\
+\dot E &= \left(1-\frac{E}{E_{\max}}\right)
+\left[
+\eta E\left(\frac{Z(t-\tau)}{\Delta_{\rm ref}}-\frac{E}{E_{\max}}\right)
++\delta_0\frac{Z(t-\tau)}{Z_{\rm ref}+Z(t-\tau)}
+\right]. \label{eq:E}
+\end{align}
+All parameters shown in denominators are positive; $r,K,q,\eta,\delta_0,\delta,\tau_m>0$ and $\tau\ge0$. The stock $N$ has material or biomass units. Effort $E$ is an intensity in a declared effort unit, not a conserved material or energy stock; hence $q$ has units $(\text{effort}\,\text{time})^{-1}$. The signal $Z$, its references $\Delta_{\rm ref}$ and $Z_{\rm ref}$, and the offset $\delta$ have stock-per-time units; $k$ has the reciprocal units. The coefficient $\delta_0$ has effort-per-time units and $\eta$ has time$^{-1}$ units. These assignments make each equation dimensionally homogeneous without treating effort as physical mass.
+
+Equation~\eqref{eq:N} uses one physical harvest flux, $qEN$. The associated depletion-pressure classification is diagnostic:
+\begin{equation}
+\Lambda(t)=\max\{0,qE(t)N(t)-S(N(t))\}=\max\{0,-\dot N(t)\}.
+\label{eq:identity}
+\end{equation}
+Thus the memory input is a smoothed version of the stock-decline rate. It is not a direct measure of scarcity level, unmet consumption, or an independently observed service deficit. In particular, for the bounded-effort core, $qEN-S(N)=O(N)$ as $N\to0$. If a trajectory approaches extinction, the raw decline input therefore tends to zero and the leaky signal relaxes to its baseline $Z=\delta$. The \emph{incremental} decline amplification disappears, but the effort command need not: the positive baseline source in Eq.~\eqref{eq:E} can sustain positive attempted effort. A controller intended to respond to low stock irrespective of its current rate of change would require a separately registered level-dependent channel.
+
+The delay $\tau$ is a discrete action/deployment delay. The filter timescale $\tau_m$ is an ordinary state relaxation time, not a second discrete delay.
+
+\subsection{Admissible region}
+
+For a history $\varphi\in C([ -\tau,0],\R^3)$, define
+\[
+\mathcal D=\{0\le N\le K,\ Z\ge0,\ 0\le E\le E_{\max}\}.
+\]
+
+\begin{theorem}[Forward invariance]
+If the initial history lies in $\mathcal D$, then every classical solution of Eqs.~\eqref{eq:N}--\eqref{eq:E} remains in $\mathcal D$ for as long as it exists.
+\end{theorem}
+
+\begin{proof}
+First suppose $\tau>0$. On the initial interval $0\le t\le\tau$, the delayed value $Z(t-\tau)$ is supplied by the admissible history and is therefore non-negative. The boundary directions are then as follows. At $N=0$, both renewal and harvest vanish, so $\dot N=0$; at $N=K$, renewal vanishes and $\dot N=-qEK\le0$. At $Z=0$,
+\[
+\dot Z=\frac{\Phi_k(qEN-S(N))}{\tau_m}\ge0.
+\]
+At $E=0$, writing $Z_\tau=Z(t-\tau)\ge0$ gives
+\[
+\dot E=\delta_0\frac{Z_\tau}{Z_{\rm ref}+Z_\tau}\ge0,
+\]
+whereas at $E=E_{\max}$ the multiplicative gate makes $\dot E=0$. Thus, with the delayed history fixed on this interval, the vector field belongs to the tangent cone of $\mathcal D$ on every boundary face. The standard invariance theorem for locally Lipschitz retarded functional differential equations therefore keeps the solution in $\mathcal D$ on $[0,\tau]$ \cite{hale1993}.
+
+Assume inductively that the solution has remained in $\mathcal D$ through time $n\tau$. For $t\in[n\tau,(n+1)\tau]$, the argument $t-\tau$ lies in the already constructed interval $[(n-1)\tau,n\tau]$, so again $Z(t-\tau)\ge0$. The same five boundary calculations apply without change and give invariance on the next interval. Induction proves the assertion on every interval on which the solution exists. When $\tau=0$, the delayed value is the present non-negative value, and the same tangent-cone calculation applies directly to the resulting ordinary differential equation.
+\end{proof}
+
+\begin{corollary}[Boundedness and global continuation]
+For a continuous initial history in $\mathcal D$, let
+\[
+\overline Z=\max\left\{\sup_{s\in[-\tau,0]}Z(s),\,\Phi_k(qE_{\max}K)\right\}.
+\]
+Then $0\le Z(t)\le\overline Z$ for all $t\ge0$. In particular, all three state variables remain bounded and the classical solution continues globally.
+\end{corollary}
+
+\begin{proof}
+On the invariant box, $0\le N\le K$ and $0\le E\le E_{\max}$. Since $S(N)\ge0$ there,
+\[
+qEN-S(N)\le qE_{\max}K.
+\]
+The map $\Phi_k$ is non-negative and non-decreasing, so, with
+\[
+B=\Phi_k(qE_{\max}K),
+\qquad
+\nu(t)=\Phi_k(qE(t)N(t)-S(N(t))),
+\]
+one has $0\le\nu(t)\le B$. Variation of constants in Eq.~\eqref{eq:Z} gives
+\[
+Z(t)=e^{-t/\tau_m}Z(0)
+ +\frac{1}{\tau_m}\int_0^t e^{-(t-s)/\tau_m}\nu(s)\,ds.
+\]
+Both terms are non-negative. Using $\nu(s)\le B$ in the integral yields
+\begin{align*}
+Z(t)
+&\le e^{-t/\tau_m}Z(0)
+ +B\bigl(1-e^{-t/\tau_m}\bigr)\\
+&\le \max\{Z(0),B\}
+\le \overline Z.
+\end{align*}
+Thus $N$, $Z$, and $E$ remain in the bounded set $[0,K]\times[0,\overline Z]\times[0,E_{\max}]$.
+
+The right-hand side of the retarded system is continuous and locally Lipschitz in its present and delayed arguments on a neighbourhood of that set. If the maximal existence time were finite, the bounded solution segments would remain in a region on which the standard continuation theorem applies, contradicting maximality. Hence the solution continues for all $t\ge0$.
+\end{proof}
+
+On the invariant extinction face $N=0$, the memory input is $\Phi_k(0)=\delta$, so $Z$ relaxes to $\delta$ and the extinction equilibrium has the same admissible positive effort root as the interior branch. The baseline term can therefore sustain positive commanded effort even though realised harvest $qEN$ is zero. This is not a mass-conservation violation because $E$ is an institutional deployment intensity, but it does presuppose external organisational or energetic support. A materially closed application must add and donor-limit that support explicitly; the present core makes no closed-effort-energetics claim.
+
+The multiplicative gate is load-bearing. The ungated law
+\[
+\dot E=\eta E\left(Z_\tau/\Delta_{\rm ref}-E/E_{\max}\right)
++\delta_0Z_\tau/(Z_{\rm ref}+Z_\tau)
+\]
+does not enforce $E\le E_{\max}$; $E_{\max}$ is only a self-limitation scale in that variant.
+
+\section{Equilibrium and local bifurcation algebra}
+
+\subsection{Interior equilibrium}
+
+At an interior equilibrium, $qE^*N^*=S(N^*)$. Therefore the raw decline signal is zero and
+\begin{equation}
+Z^*=\Phi_k(0)=\delta.
+\end{equation}
+Because $E^*<E_{\max}$, the bracket in Eq.~\eqref{eq:E} must vanish:
+\begin{equation}
+-\frac{\eta}{E_{\max}}(E^*)^2
++\eta\frac{\delta}{\Delta_{\rm ref}}E^*
++\delta_0\frac{\delta}{Z_{\rm ref}+\delta}=0.
+\label{eq:Equad}
+\end{equation}
+The constant term is positive and the quadratic coefficient negative, so Eq.~\eqref{eq:Equad} has exactly one positive root. An admissible interior equilibrium requires that root to satisfy
+\[
+0<E^*<\min\{E_{\max},r/q\},
+\]
+and then
+\begin{equation}
+N^*=K\left(1-\frac{qE^*}{r}\right).
+\label{eq:Nstar}
+\end{equation}
+The equilibrium is independent of the delay $\tau$ and smoothing sharpness $k$. This does not make its stability delay-independent.
+
+At $N=0$, the same zero raw signal gives $Z=\delta$. The gated effort equation has both the interior-effort extinction equilibrium $(N,Z,E)=(0,\delta,E^*)$, when the interior root is admissible, and the boundary equilibrium $(0,\delta,E_{\max})$ created by the multiplicative gate. The stock-direction eigenvalue at either branch is $r-qE$. The interior positive-stock branch exchanges stock-direction stability with the interior-effort extinction branch at $r=qE^*$; the $E=E_{\max}$ boundary branch must be classified separately and is not part of that exchange.
+
+\subsection{Characteristic quasi-polynomial}
+
+Write $x=N-N^*$, $z=Z-Z^*$, and $e=E-E^*$. Since $\spx_k'(0)=1/2$ and the floor in Eq.~\eqref{eq:phi} is inactive at $\delta>0$, the linearisation is
+\begin{align}
+\dot x &= A_Nx+A_Ee,\\
+\dot z &= B_Nx+B_Ee-\frac{1}{\tau_m}z,\\
+\dot e &= C_Ee+C_Zz(t-\tau),
+\end{align}
+where
+\begin{align}
+A_N&=r\left(1-\frac{2N^*}{K}\right)-qE^*,
+& A_E&=-qN^*,\\
+B_N&=\frac{qE^*-S'(N^*)}{2\tau_m},
+& B_E&=\frac{qN^*}{2\tau_m},\\
+C_E&=\left(1-\frac{E^*}{E_{\max}}\right)
+\eta\left(\frac{\delta}{\Delta_{\rm ref}}-\frac{2E^*}{E_{\max}}\right),\\
+C_Z&=\left(1-\frac{E^*}{E_{\max}}\right)
+\left[
+\frac{\eta E^*}{\Delta_{\rm ref}}+
+\frac{\delta_0Z_{\rm ref}}{(Z_{\rm ref}+\delta)^2}
+\right].
+\end{align}
+The factors $(1-E^*/E_{\max})$ distinguish this model from the ungated variant.
+
+\begin{proposition}[Characteristic equation]
+The characteristic roots satisfy
+\begin{equation}
+P(\lambda)-C_ZL(\lambda)e^{-\lambda\tau}=0,
+\label{eq:char}
+\end{equation}
+where, with $d_m=1/\tau_m$,
+\begin{align}
+P(\lambda)&=(\lambda-A_N)(\lambda+d_m)(\lambda-C_E),\\
+L(\lambda)&=B_E(\lambda-A_N)+A_EB_N.
+\end{align}
+\end{proposition}
+
+\begin{proof}
+Substitution of $(\xi,z,e)=(\xi_0,z_0,e_0)e^{\lambda t}$ into the linearised system gives
+\[
+\begin{pmatrix}
+\lambda-A_N&0&-A_E\\
+-B_N&\lambda+d_m&-B_E\\
+0&-C_Ze^{-\lambda\tau}&\lambda-C_E
+\end{pmatrix}
+\begin{pmatrix}\xi_0\\z_0\\e_0\end{pmatrix}=0.
+\]
+A non-zero modal vector exists exactly when the determinant vanishes. Expanding along the first row gives
+\begin{align*}
+0
+&=(\lambda-A_N)
+ \det\begin{pmatrix}
+ \lambda+d_m&-B_E\\
+ -C_Ze^{-\lambda\tau}&\lambda-C_E
+ \end{pmatrix}
+ -A_E
+ \det\begin{pmatrix}
+ -B_N&\lambda+d_m\\
+ 0&-C_Ze^{-\lambda\tau}
+ \end{pmatrix}\\
+&=(\lambda-A_N)
+ \left[(\lambda+d_m)(\lambda-C_E)-B_EC_Ze^{-\lambda\tau}\right]
+ -A_EB_NC_Ze^{-\lambda\tau}\\
+&=(\lambda-A_N)(\lambda+d_m)(\lambda-C_E)
+ -C_Z\left[B_E(\lambda-A_N)+A_EB_N\right]e^{-\lambda\tau}\\
+&=P(\lambda)-C_ZL(\lambda)e^{-\lambda\tau}.
+\end{align*}
+This is Eq.~\eqref{eq:char}.
+\end{proof}
+
+\subsection{Complete local Hopf-frequency search}
+
+\begin{theorem}[Cubic modulus condition]
+Every local Hopf root $\lambda=i\omega$, $\omega>0$, of Eq.~\eqref{eq:char} produces a positive root $x=\omega^2$ of
+\begin{equation}
+H(x)=(x+A_N^2)(x+d_m^2)(x+C_E^2)
+-C_Z^2\left[B_E^2x+(A_EB_N-A_NB_E)^2\right]=0.
+\label{eq:cubic}
+\end{equation}
+Conversely, each positive root of Eq.~\eqref{eq:cubic} gives candidate Hopf-delay branches
+\begin{equation}
+\tau_k=\frac{-\arg\{P(i\omega)/[C_ZL(i\omega)]\}+2\pi k}{\omega},
+\qquad k\in\mathbb Z,
+\label{eq:phase}
+\end{equation}
+retaining positive values and separately checking simplicity and transversality.
+\end{theorem}
+
+\begin{proof}
+Let $\lambda=i\omega$ with $\omega>0$ satisfy Eq.~\eqref{eq:char}, and put $x=\omega^2$. Then
+\[
+P(i\omega)=C_ZL(i\omega)e^{-i\omega\tau}.
+\]
+Taking squared moduli and using $|e^{-i\omega\tau}|=1$ gives
+\[
+|P(i\omega)|^2=C_Z^2|L(i\omega)|^2.
+\]
+The three factors of $P$ yield
+\begin{align*}
+|P(i\omega)|^2
+&=|i\omega-A_N|^2|i\omega+d_m|^2|i\omega-C_E|^2\\
+&=(x+A_N^2)(x+d_m^2)(x+C_E^2).
+\end{align*}
+Moreover,
+\[
+L(i\omega)=iB_E\omega+(A_EB_N-A_NB_E),
+\]
+so
+\[
+|L(i\omega)|^2=B_E^2x+(A_EB_N-A_NB_E)^2.
+\]
+Substitution gives $H(x)=0$, proving the necessary modulus condition.
+
+Conversely, let $x>0$ satisfy $H(x)=0$ and set $\omega=\sqrt{x}$. Because $P(i\omega)\ne0$, the modulus equality implies that $C_ZL(i\omega)\ne0$ and that
+\[
+R=\frac{P(i\omega)}{C_ZL(i\omega)}
+\]
+has unit modulus. Write $\arg R$ for any fixed representative of its argument. For every integer $k$ for which
+\[
+\tau_k=\frac{-\arg R+2\pi k}{\omega}>0,
+\]
+one has $e^{-i\omega\tau_k}=R$. Hence
+\[
+P(i\omega)-C_ZL(i\omega)e^{-i\omega\tau_k}=0,
+\]
+so $i\omega$ is a characteristic root at that delay. These modulus-and-phase solutions are candidate Hopf points; they qualify as Hopf crossings only after simplicity and transversality have been verified separately.
+\end{proof}
+
+Equation~\eqref{eq:cubic} is a cubic in $x$. It therefore bounds the number of distinct positive Hopf-frequency families by three. It does not determine the first Lyapunov coefficient, the criticality of a crossing, the existence of a large periodic orbit, or a fold of periodic orbits.
+
+\section{Model registry and computational methods}
+
+No threshold may be cited without a model identifier. Table~\ref{tab:registry} is the model registry for this paper.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Registered non-equivalent model variants. Numerical thresholds are reported only with the corresponding identifier and parameterisation.}
+\label{tab:registry}
+\begin{tabularx}{\textwidth}{p{1.15cm}p{2.6cm}Xp{3.25cm}}
+\toprule
+ID & Ecological/stage structure & Signal, memory, and effort & Admissible boundary and status\\
+\midrule
+M3-U & One logistic stock with donor-limited harvest & Positive decline passed through $\Phi_k$ and a leaky memory; ungated effort law & Non-negative states, but $E_{\max}$ is a self-limitation scale rather than a hard upper boundary.\\
+M3-B & The same one-stock ecology as M3-U & The same $\Phi_k$ and memory; effort law Eq.~\eqref{eq:E} with a multiplicative boundary gate & Primary boundary-exact DDE on $0\le N\le K$, $Z\ge0$, $0\le E\le E_{\max}$.\\
+M3-LC & One displayed stock with phenomenological standing-stock and recruitment-suppression channels; no closed stage ledger & M3-U $\Phi_k$, memory, and ungated effort in the reported instance & Non-negative stock through a separate recruitment floor; local equality with M3-U does not imply excursion equality.\\
+M4-A & Stock plus a dynamic active-support pool with donor-limited gross draw and open relaxation & Three-state decline memory; effort gate declared separately as M4-A-U or M4-A-B & Separate state space and active-pool boundary; no proved singular reduction from a closed vector ledger.\\
+MPF & Living biomass and detritus with residual active material $A=\mathcal M-X-U$ & Signed memory of $-\dot X$ and the distinct bounded effort law Eq.~\eqref{eq:MPF-E}; no $\Phi_k$ floor & Distinct support-pool boundary and equilibrium conditions; no transfer of the M3-B box theorem.\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+These rows form a family, not a derivation hierarchy. Changing the effort gate changes the vector field and linear gain; M3-LC changes the nonlinear stock law without introducing the stages needed for a closed demographic ledger; M4-A adds a support state and an open relaxation; and MPF changes the ecological states, signal baseline, memory, effort law, and support boundary. No invariant set, equilibrium formula, local threshold, periodic branch, or admissibility result transfers between rows without a separate argument.
+
+The exact-reduction obligation can be stated independently of any timescale narrative. For a smooth full ODE $\dot y=f(y)$ and proposed reduced state $x=\pi(y)$, an autonomous reduced vector field $\dot x=F(x)$ can represent every projected trajectory only if
+\begin{equation}
+D\pi(y)f(y)=F(\pi(y)),
+\label{eq:projectability-obligation}
+\end{equation}
+Indeed, $x(t)=\pi(y(t))$ gives $\dot x=D\pi(y)f(y)$ by the chain rule, whereas an exact autonomous reduced law gives $\dot x=F(\pi(y))$. Hence $D\pi f$ must be constant on each projection fibre $\pi^{-1}(x)$. Two full states with the same projected state but different projected velocities therefore rule out that exact autonomous reduction. For a delayed system the corresponding condition must be posed on its history phase space, not only on current values. An approximate reduction instead requires a declared parameter family, matched initial or history data, a norm, a time horizon, and an error statement such as
+\[
+\sup_{0\le t\le T}\|\pi(y_\varepsilon(t))-x(t)\|
+\le C_T\varepsilon^p.
+\]
+Neither Eq.~\eqref{eq:projectability-obligation} nor such an estimate has been established among the registered rows; qualitative slowness or reuse of a parameter vector is not a substitute.
+
+\subsection{Three-state parameterisations}
+
+Table~\ref{tab:m3-parameters} gives the complete three-state parameter vectors for Candidates A and B. The two candidates differ only in $\eta$ and $E_{\max}$. Each vector can parameterise either M3-U or M3-B, but vector reuse does not identify the models: changing the effort equation changes the linear coefficients and thresholds. The numerical coverage is stated separately below; both local crossing pairs are reported for M3-U and M3-B, whereas Candidate-B global periodic-fold locations are not. The values are mathematical parameterisations and sensitivity anchors, not a joint calibration to a named resource or institution. In particular, the effort scale is normalized, $k$ is a regularisation constant, and the institutional coefficients have not been independently identified from a field system.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Complete normalized three-state candidate vectors. Reusing a numerical vector in M3-U and M3-B does not equate their dynamics because their effort equations differ.}
+\label{tab:m3-parameters}
+\begin{tabularx}{\textwidth}{p{1.7cm}XXp{3.2cm}}
+\toprule
+Parameter & Candidate A & Candidate B & Units and role\\
+\midrule
+$r$ & $0.02$ & $0.02$ & yr$^{-1}$; stock renewal\\
+$K$ & $100$ & $100$ & stock units; normalization\\
+$q$ & $0.001$ & $0.001$ & (effort $\cdot$ yr)$^{-1}$\\
+$\eta$ & $0.914$ & $2.756$ & yr$^{-1}$; response coefficient\\
+$E_{\max}$ & $30$ & $26$ & effort units; saturation scale or boundary\\
+$\Delta_{\rm ref}$ & $1.0$ & $1.0$ & stock yr$^{-1}$; signal scale\\
+$\delta_0$ & $0.01$ & $0.01$ & effort yr$^{-1}$; baseline source\\
+$\tau_m$ & $5$ & $5$ & yr; filter relaxation time\\
+$Z_{\rm ref}$ & $1.0$ & $1.0$ & stock yr$^{-1}$; signal scale\\
+$\delta$ & $\log(2)/10$ & $\log(2)/10$ & stock yr$^{-1}$; signal offset\\
+$k$ & $10$ & $10$ & (stock yr$^{-1}$)$^{-1}$; regularisation\\
+$\tau$ & varied & varied & yr; action/deployment delay\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The reported M3-U, M3-B, M3-LC, and M4-A computations retain the Table~\ref{tab:m3-parameters} signal pair $k=10$ and $\delta=\log(2)/10=\log(2)/k$. Consequently,
+\[
+\Phi_k(s)=\max\{0,\spx_k(s)\}=\spx_k(s)>0
+\]
+for every finite $s$. The outer floor is therefore inactive on every reported periodic orbit using Eq.~\eqref{eq:phi}, not merely near equilibrium. Smooth shooting and Floquet calculations for those orbits do not encounter that switching surface. This identity is parameter-specific: for a vector with $\delta\ne\log(2)/k$, floor contact must be checked orbit by orbit or handled with an appropriate piecewise-smooth or declared smooth-approximation variational problem. MPF uses a different signed memory and does not contain Eq.~\eqref{eq:phi}.
+
+The local characteristic-root calculations do not require an initial history. Nonlinear computations distinguish three history classes: continuous histories near the equilibrium, independently selected far-from-equilibrium histories, and continuation-seeded periodic history segments. Basin statements are restricted to the histories actually tested. Exact history functions or arrays must be supplied in the machine-readable numerical supplement. Parameter additions for M3-LC, M4-A, and MPF are stated with each result below and must likewise be registered there.
+
+\subsection{Local spectra and nonlinear integration}
+
+Local crossings were computed first from the complete positive-root search in Eq.~\eqref{eq:cubic} and the phase branches in Eq.~\eqref{eq:phase}, and independently checked by direct root tracking of the characteristic quasi-polynomial. Candidate imaginary roots were substituted back into the complex equation; crossing direction was evaluated separately. This pipeline exhausts local frequency families for the three-state characteristic equation, but it does not classify nonlinear branches.
+
+Continuation, collocation, and Floquet analysis of periodic DDE solutions belong to an established numerical-bifurcation problem class \cite{engelborghs2002}; the implementation used here is the registered custom pipeline described below rather than an unreported software default. Nonlinear DDE calculations used fixed-step fourth-order Runge--Kutta integration with a circular delay buffer and step-size refinement. Representative nonlinear convergence checks used $dt=0.01,0.02,0.04$ yr; Floquet refinements included $dt=0.05,0.025,0.0125$ yr. Representative periodic trajectories were independently replicated with an adaptive method-of-steps RK45 calculation at relative tolerance $10^{-9}$. First-pass integrations used horizons of approximately $6\times10^3$--$2\times10^4$ yr. Near persistence boundaries, continuation-seeded tests used approximately $1.5\times10^6$--$5\times10^6$ yr because decay or growth rates can be extremely small. A terminal history segment, rather than a single terminal state, was carried between continuation points. Persistence and collapse were also checked from at least one independently selected far-from-equilibrium history.
+
+Periodic-orbit calculations combined Fourier spectral collocation, Newton or Levenberg--Marquardt correction, and shooting-based Floquet analysis. Representative collocation and shooting residuals were of order $10^{-7}$ and at most $10^{-10}$, respectively; reported multipliers and periodicity diagnostics were checked under step refinement. Poincar\'e sections and spectra were used to distinguish period-one cycles from unresolved modulation. The parameter identity following Table~\ref{tab:m3-parameters} verifies that the outer $\Phi_k$ floor is inactive for every reported orbit to which smooth shooting or Floquet analysis is applied. These procedures establish finite-domain numerical propositions and tested branch stability; they do not prove global attraction, complete basin boundaries, or periodic-orbit-fold nondegeneracy.
+
+Integration horizon and locator accuracy have different roles. Multi-million-year trajectories test exceptionally slow growth or decay but do not, by duration alone, justify decimal-scale threshold precision. Reported digits follow the method-specific continuation, bisection, collocation, residual, and refinement evidence. Where two legitimate locators disagree, the coarser discrepancy governs the interpretation.
+
+\section{Variant-specific analytical and numerical results}
+
+\subsection{M3-U: ungated three-state core}
+
+M3-U uses Eqs.~\eqref{eq:N}--\eqref{eq:Z} and removes the outer factor $(1-E/E_{\max})$ from Eq.~\eqref{eq:E}. Its equilibrium is the same as M3-B, but its linear coefficients $C_E,C_Z$ omit the gate factor. The exact cubic construction still applies with those coefficients.
+
+For Candidate A in Table~\ref{tab:m3-parameters}, the cubic has exactly two positive roots and yields local crossings at
+\[
+\tau_-=6.8814\ \text{yr},\qquad \tau_+=132.3749\ \text{yr}.
+\]
+The independent characteristic-root calculation and nonlinear simulations give the same stability changes. For Candidate B in Table~\ref{tab:m3-parameters}, the corresponding roots yield $\tau_-=6.2136$ and $\tau_+=76.2906$ yr. Higher-delay crossings recur within the same two frequency families; they are not additional frequencies.
+
+Continuation-seeded integration and persistence bisection for Candidate A locate global periodic-orbit persistence boundaries near $7.355$ and $131.24$ yr. The resulting attractor sequence comprises a large-cycle regime below $\tau_-$, a lower bistable window of width approximately $0.47$ yr, a broad interval in which only the equilibrium was reached by the tested histories, an upper bistable window of width approximately $1.1$ yr, and a large-cycle regime above $\tau_+$. At $\tau=131.8$ yr, near-equilibrium histories remain at the equilibrium while large-stock/low-effort histories converge to a large cycle, demonstrating basin-dependent capture for that parameterisation. Poincar\'e, spectral, adaptive-integrator, and shooting calculations identify the upper-window attractor as a stable period-one cycle; all non-trivial computed Floquet multipliers lie inside the unit circle. A small orbit near the lower Hopf has a dominant multiplier greater than one and is therefore unstable. These computations establish the attractors and stability properties at the tested points, but they do not by themselves establish that either persistence boundary is a saddle-node collision of those two branches. The SNPO classification remains conjectural unless branch collision and nondegeneracy are demonstrated at each boundary.
+
+The local-frequency result is robust within the declared sweep, but not universal. With other Candidate-A parameters fixed, a sweep over $\eta\in[0.5,3.0]$ found either zero or two positive cubic roots. The two-crossing window in $r$ is bounded: at $\eta=0.914$ it is approximately $r\in(0.008,0.022)$ yr$^{-1}$ and extends only to approximately $0.061$--$0.062$ yr$^{-1}$ at $\eta=3$. These are sensitivity results for M3-U, not empirical calibration of a resource class.
+
+\subsection{M3-B: boundary-exact three-state core}
+
+Adding the boundary gate leaves the Candidate-A equilibrium from Table~\ref{tab:m3-parameters} unchanged but changes the delayed loop gain. The cubic and characteristic-root calculations give
+\[
+\tau_-=3.67\ \text{yr},\qquad \tau_+=150.36\ \text{yr}.
+\]
+For Candidate B, the same model-specific characteristic pipeline gives $\tau_-=5.5128$ and $\tau_+=80.4245$ yr. These are local M3-B crossings; Candidate-B periodic branches and fold locations have not been registered here.
+
+Near the lower Candidate-A crossing, the direction and instability of the continued small periodic branch, together with nonlinear growth tests, are consistent with a subcritical Hopf. A peak-to-peak amplitude fit gives exponent $0.47$ and a positive surrogate cubic coefficient of approximately $3.9\times10^{-6}$ in that empirical amplitude convention. This is an inferred numerical classification, not a first Lyapunov coefficient from a Hassard--Faria centre-manifold calculation. The upper crossing shows the same inferred subcritical dynamical signature but markedly stronger critical slowing down.
+
+The lower global boundary is not one SNPO. The stable large-cycle branch folds near $\tau=5.574$--$5.575$ yr, whereas the small unstable branch folds separately near $\tau=5.587$ yr. On the latter branch the real Floquet multiplier changes from $1.0514$ at $\tau=5.584$ to $0.998983$ at $\tau=5.587$. The two events belong to distinct periodic-orbit families, so a single square-root collision law is inapplicable. At the upper boundary, persistence bisection gives $\tau\in[148.125,148.438]$ yr, summarized as $148.3$ yr; the exact fold type and branch connection have not been determined.
+
+Multiple far-from-equilibrium seeds failed to reach a large cycle throughout the tested Candidate-A interior range $5.57<\tau<148.3$ yr, while cycles coexist with the equilibrium in the two flanking windows. Upper-window trajectories at $\tau=148.4$, $150$, and $152$ yr have dt-convergent period-one signatures. These finite searches support, but cannot prove globally for all admissible histories, monostability of the interior range. The calculations also show why numerical thresholds cannot be transported between variants: for Candidate A, enforcing the effort boundary moves the lower local threshold by approximately $47\%$ and the upper threshold by approximately $14\%$ without changing the equilibrium. For Candidate B the gate gives a different relocation, from the M3-U pair $(6.2136,76.2906)$ yr to the M3-B pair $(5.5128,80.4245)$ yr. No Candidate-B global branch or fold result follows from these local crossings.
+
+The smoothing parameter $k$ does not affect the equilibrium or linearisation because $\spx_k'(0)=1/2$, but it can change large excursions, persistence boundaries, basin geometry, and potentially the qualitative global bifurcation topology. Independence from $k$ is therefore a local statement only: every global result above belongs to the declared finite-$k$ model, and no $k$-uniform topology or nonsmooth-limit theorem is claimed. For the reported parameter pair $\delta=\log(2)/k$, the outer floor cancels algebraically and does not create a switching contact on any finite orbit. Other parameter pairs retain a genuine piecewise-smooth floor and require the orbit-specific check described above.
+
+\subsection{M3-LC: two-channel depletion-pressure extension}
+
+The reported M3-LC instance retains the M3-U memory and ungated effort equations while replacing its stock equation by the two-channel law below. To distinguish removal of standing stock from suppression of recruitment, write the net logistic renewal as a gross birth--mortality decomposition
+\[
+B(N)=S(N)+\kappa rN,
+\qquad
+M(N)=\kappa rN,
+\qquad \kappa\ge0,
+\]
+and split the pressure $qEN$ by $\psi\in[0,1]$:
+\[
+C_{\rm stock}=\psi qEN,
+\qquad
+C_{\rm recruit}=(1-\psi)qEN.
+\]
+The stock equation becomes
+\begin{equation}
+\dot N=\max\{0,B(N)-C_{\rm recruit}\}-M(N)-C_{\rm stock}.
+\label{eq:two-channel}
+\end{equation}
+Here $C_{\rm stock}$ is a realised removal of standing stock, whereas $C_{\rm recruit}$ is a demographic suppression term; the latter is not a material transfer out of the adult-stock compartment. Thus Eq.~\eqref{eq:two-channel} is a phenomenological stock equation, not a closed mass ledger. A physically closed stage model must represent juveniles, adults, prevented maturation or recruitment, harvest, mortality, and receiving compartments as distinct primitive fluxes.
+
+At $N=0$ every term vanishes, so the non-negative stock boundary is invariant. Whenever the recruitment floor is inactive, Eq.~\eqref{eq:two-channel} reduces exactly to $\dot N=S(N)-qEN$. The floor is inactive at the positive equilibrium; consequently, the equilibrium and local characteristic equation are independent of $\psi$ and $\kappa$. The two channels can nevertheless diverge along large excursions where recruitment is truncated at zero.
+
+For Candidate A with $\kappa=0.5$, the common numerical locator places the upper persistence boundary at about $132.0$ yr for $\psi=1$ and $132.5$ yr for $\psi=0$ (raw outputs $131.998$ and $132.499$ yr). Their raw separation is $0.501$ yr. Because the $\psi=1$ equations are exactly identical to the M3-U Candidate-A core while an independent locator returned about $131.2$ yr (raw output $131.24$ yr), the approximately $0.8$-yr inter-locator discrepancy is itself a measure of boundary-localisation uncertainty. The defensible conclusion is that recruitment suppression shifts the upper persistence boundary only slightly, at the order-of-one-year resolution of these calculations; the data do not support an exact percentage shift.
+
+At $\tau=115$ yr and $\kappa=0.5$, far-from-equilibrium histories produce a long-lived transient of order $10^4$--$10^5$ yr before returning to equilibrium. Its minimum is approximately $N=33$ under pure stock culling ($\psi=1$) and $N=10$ under pure recruitment suppression ($\psi=0$). In a separate fixed-demand experiment, $qEN$ in the two-channel definitions is replaced by a constant pressure $D$, so that $C_{\rm stock}=\psi D$ and $C_{\rm recruit}=(1-\psi)D$. Stock culling is stopped at its first hitting time of $N=0$ (equivalently, it may be implemented with an explicit donor limiter); the unconstrained vector field is not continued into negative stock. With $D=0.7>S_{\max}=0.5$ and $N(0)=50$, the submitted hitting-time calculation places pure stock culling at zero near time 158, whereas pure recruitment suppression approaches zero asymptotically and reaches $N<1$ near time 430. These are model-specific numerical propositions. They show that local equivalence does not imply excursion equivalence; assigning $\psi$ to a field system requires age-, stage-, or replenishment-specific evidence.
+
+\subsection{M4-A: active-pool extension}
+
+An active-pool family member replaces logistic renewal by
+\begin{align}
+R(N,A)&=rN\left(1-\frac{N}{K}\right)\frac{A}{A+A_0},\\
+\dot N&=R(N,A)-qEN,\\
+\dot A&=-B(N,A)+\omega_A(A^{\rm eq}-A),
+\end{align}
+with a fully declared donor-limited gross draw $B$. The relaxation term makes this a reduced open-pool model unless its donor/receiver reservoir is included explicitly. It is not a closed material ledger and is not a proved Tikhonov reduction of the typed primitive-flux model.
+
+For the ungated Candidate-A instance, the donor-limited equilibrium is
+\[
+(N^*,A^*,E^*)=(89.5256,397.8665,2.0896),
+\]
+and the local crossings are $\tau_-=6.982022$ and $\tau_+=132.272044$ yr. Continuation and persistence tests place the lower and upper periodic-orbit boundaries near $7.374$ and $130.77$ yr; the latter is bracketed by $[130.770,130.771]$ yr. For the gated counterpart, the equilibrium is unchanged, the crossings move to approximately $3.7849$ and $150.12$ yr, and sustained large cycles have periods of approximately $360$--$380$ yr in the lower regime and $150$--$160$ yr in the upper regime. These results belong respectively to M4-A-U and M4-A-B.
+
+The active-pool turnover rate introduces an additional stability boundary. For M4-A-U at $\tau=0$, bisection over the physical equilibrium branch gives $\omega_A\approx0.001316298$; a 1798-point equilibrium sweep finds a single stability change over $\omega_A\in[0,0.5]$. Sixty direct simulations below the boundary, spanning ten $\omega_A$ values and six delays in $[0,300]$ yr, all converge to the equilibrium. Above the boundary, sixty continuation points over $\omega_A\in[0.0014,0.5]$ produce a continuous Hopf pair. With the gate included, the threshold is approximately $0.001330$. These finite sweeps support delay-independent stability over the tested sub-threshold region; they are not a theorem for all parameter values.
+
+The slow relaxation of $A$ at the baseline ($\omega_A=10^{-3}$ yr$^{-1}$) also shows why freezing it is not a justified fast-variable elimination for this parameterisation. This finding does not prove that M4-A is the unique reduction of any larger model or that all other compartments are fast.
+
+\subsection{MPF: primitive-flux core and support-saturated logistic limit}
+
+Let $X$ be living biomass, $U$ detritus, $A=\mathcal M-X-U$ active material, and
+\[
+g(X,A)=\mu X\frac{A}{K_A+A},
+\qquad
+m(X)=dX+cX^2,
+\qquad
+h(X,E)=qEX.
+\]
+The ecological subsystem is
+\begin{align}
+\dot X&=g(X,A)-m(X)-qEX,\\
+\dot U&=m(X)-\gamma_UU.
+\end{align}
+On the boundary $X+U=\mathcal M$, the active pool is $A=0$ and $g(X,0)=0$. Therefore
+\[
+\frac{d}{dt}(X+U)=-qEX-\gamma_UU\le0.
+\]
+Together with $g(0,A)=0$, $m(0)=0$, and the donor-limited flux assumptions, this proves forward invariance of the MPF simplex $\{X\ge0,\ U\ge0,\ X+U\le\mathcal M\}$ for the ecological subsystem under admissible effort. This boundary theorem is independent of the numerical regime classifications.
+A signed diagnostic is $\ell=-\dot X$, a possible memory law is $\dot Z=(\ell-Z)/\tau_m$, and one possible bounded autocatalytic effort law is
+\begin{equation}
+\dot E=\left(1-\frac{E}{E_{\max}}\right)
+\left[
+\eta E\frac{Z(t-\tau)}{\Delta_{\rm ref}}
++\delta_0-\eta\frac{E^2}{E_{\max}}
+\right].
+\label{eq:MPF-E}
+\end{equation}
+This is MPF, not M3-B: it has a signed zero-equilibrium memory, a constant baseline source, detritus, and a different effort equilibrium.
+
+\paragraph{Support-saturated stock-equation identity.}
+For each fixed $A>0$, $A/(K_A+A)\to1$ as $K_A\to0$. Direct substitution therefore gives
+\begin{equation}
+\dot X=(\mu-d)X-cX^2-qEX
+=rX\left(1-\frac{X}{K}\right)-qEX,
+\label{eq:loglimit}
+\end{equation}
+with
+\[
+r=\mu-d,
+\qquad
+K=\frac{\mu-d}{c},
+\]
+provided $\mu>d$ and $c>0$. This elementary identity is pointwise on the interior support region and is not uniform through the boundary $A=0$: for every $K_A>0$, $A/(K_A+A)=0$ at $A=0$, so support saturation does not justify replacing that factor by one on or uniformly near the depleted-pool boundary.
+
+Under the stated interior support-saturation assumptions, the primitive-flux stock equation therefore has a logistic limit. The scope of the identity is restricted: it does not eliminate $U$, make $A$ constant near its boundary, transform $\dot Z=(\ell-Z)/\tau_m$ into Eq.~\eqref{eq:Z}, or transform Eq.~\eqref{eq:MPF-E} into Eq.~\eqref{eq:E}. It is an ecological stock-equation identity, not a full-core reduction or a transfer principle for Hopf or global-fold thresholds.
+
+\subsection{MPF numerical regimes}
+
+For the displayed MPF effort law, the illustrative baseline
+\[
+(\mathcal M,\mu,K_A,d,c,\gamma_U,q,E_{\max},\eta,\delta_0,
+\Delta_{\rm ref},\tau_m)
+=(100,0.340,24.5,0.072,0.00995,0.388,0.0384,35.8,
+2.23,0.0118,2.29,5.13)
+\]
+has $(X^*,U^*,E^*)\approx(16.68,10.23,0.435)$. Characteristic-root and argument-principle calculations detect no local Hopf crossing for $0\le\tau\le500$, and small perturbations decay at all directly tested delays. Far-from-equilibrium histories nevertheless show long large-amplitude responses. Persistence tests reclassify the apparent onset near $\tau=33.4$--$33.6$ as a long-lived decaying transient: throughout the tested $33.4$--$34.8$ interval, trajectories return to the locally stable equilibrium within approximately $2\times10^4$ time units. For $\tau\gtrsim35$, a slow-fast oscillation persists for some tested memory histories but not others. The baseline therefore supports basin-selective global dynamics, not a local Hopf or a classified periodic-orbit fold.
+
+The absence of a baseline Hopf is parametric. Holding the other parameters fixed, local Hopf roots first appear at $\eta_{\rm crit}\approx2.337$. Over the in-range sweep $\eta\in(2.337,3]$, two distinct Hopf pairs appear and interleave: at $\eta=2.5$ the crossings are approximately $0.6$, $54.2$, $92.9$, and $113.1$ yr, while at $\eta=3.0$ one pair spans approximately $4.5$--$41.2$ yr. At the illustrative out-of-range value $\eta=10$, the crossings are $17.568$ and $18.362$ yr. The lower crossing has continuous, dt-convergent amplitude onset with fitted exponent $0.59$, consistent with a supercritical Hopf. Above the upper crossing, simulations show recurrent slow-fast intermittency rather than a sharply located second global fold. These computations demonstrate that the MPF regime is neither the M3-B regime nor a transfer of its threshold values.
+
+A separate sigmoid-gated effort variant of the same typed ecological core was screened across more than 300 parameterisations without finding a genuine delay-induced Hopf; candidate roots were eliminated by joint residual minimisation and nonlinear simulation. This is a numerical negative result over the sampled domain, not a structural impossibility theorem.
+
+\section{Shared feedback architecture across non-equivalent models}
+
+A broad class of the registered models has an ecological perturbation $\xi$, memory $z$, and effort $e$ of the form
+\begin{align}
+\dot\xi&=J\xi+b_Ee,\\
+\dot z&=\frac{g\,c^\top\dot\xi-z}{\tau_m},\\
+\dot e&=C_Ee+C_Zz(t-\tau).
+\end{align}
+Eliminating $\xi$ and $z$ for an exponential mode gives a loop equation involving
+\[
+\frac{i\omega\,c^\top(i\omega I-J)^{-1}b_E}{1+i\omega\tau_m}
+\]
+and the delay phase $e^{-i\omega\tau}$. This decomposition is useful: ecological dynamics set gain and intrinsic phase, the memory attenuates and shifts the signal, and the delay supplies additional phase. It explains why the effect of increasing $\tau$ need not be monotone.
+
+Sharing this algebra does not make two nonlinear models reductions of one another. Their state spaces, nonlinearities, admissible boundaries, and equilibrium conditions can differ even when their local loop equations have the same form.
+
+The effort scale also creates a structural identifiability boundary in the standard sense of parameter uniqueness under idealized input--output information \cite{bellman1970,villaverde2016}. If effort is latent and only $(N,Z)$ are observed, then for any $a>0$ the transformation
+\[
+E'=aE,\qquad E'_{\max}=aE_{\max},\qquad q'=q/a,
+\qquad \delta'_0=a\delta_0
+\]
+with correspondingly scaled effort histories leaves the $(N,Z)$ trajectory unchanged. Thus $q$, $E_{\max}$, $\delta_0$, and the latent effort scale cannot all be identified separately from stock and signal data alone. Direct effort observations in a calibrated unit, a scale normalization, or additional deployment measurements are required before those parameters can be given separate empirical interpretations.
+
+\section{Numerical and empirical limits}
+
+\subsection{Open analytical and empirical questions}
+
+The following statements remain outside the theorem set.
+
+\begin{enumerate}
+    \item The computed periodic orbits and multipliers establish branch stability at the tested points, but the branch collisions and nondegeneracy conditions needed to classify all upper persistence boundaries as saddle-nodes of periodic orbits have not been established.
+    \item The inferred Hopf criticalities have not been replaced by first Lyapunov coefficients from a DDE centre-manifold and normal-form calculation \cite{hassard1981}. Such coefficients would strengthen the local classification but are not required to report the present branch-direction and stability evidence at numerical status.
+    \item Persistence of a three-state periodic branch under four-state, vector, spatial, or thermodynamic coupling is unproved.
+    \item A formal large-$A$ statement is not a complete Tikhonov reduction. Such a proof would require an explicit small-parameter family, a normally hyperbolic attracting critical manifold for the actual fast variables, compatible delayed histories, and an error estimate on a declared time interval.
+    \item Calendar-year thresholds are not portable theory constants. The ratios $r\tau$, $r\tau_m$, $qE^*/r$, and $N^*/K$ are useful comparison coordinates, but they are not a complete nondimensionalisation. A full reformulation must declare stock, effort, and decline-signal scales and transform $k$, $\delta$, $\delta_0$, $Z_{\rm ref}$, and $\Delta_{\rm ref}$ consistently before claiming a minimal set of dimensionless groups.
+    \item Equation~\eqref{eq:E} is a registered phenomenological response law. A derivation from adaptive expectations, profit maximisation, capital inertia, or another information structure is a prospective microfoundation rather than a result of this article.
+    \item Literature on ecological and governance response lags provides context for timescale plausibility, not calibration of the action delay $\tau$. The heterogeneous range of roughly $2$--$13$ years synthesized by Hocherman et al.\ \cite{hocherman2025} does not constitute a distribution of independently measured assessment-to-implementation delays, and that review reserves implementation lags for future work.
+    \item No fisheries threshold follows directly from these equations. Fisheries applications require a demographic stock definition, stage structure where relevant, and parameter estimation rather than relabelling spawning biomass as an abiotic support pool.
+\end{enumerate}
+
+\subsection{Interpretive boundary}
+
+The model predicts consequences of an \emph{extractive} response to decline. It does not imply that faster protective governance is harmful. A protective channel could be represented by a command that decreases $E$ after an observed decline; its stability properties must be analysed from its own signed equations. Similarly, a sampled review interval is not identical to the continuous action delay $\tau$. A protective-sign counterpart and a separately registered sampled-data counterpart are prospective extensions, not conclusions about the present DDE.
+
+\section{Conclusion}
+
+The registered model family yields a bounded dynamical contribution. A boundary-exact delayed derivative-feedback model has an invariant physical domain, a closed-form equilibrium, an exact characteristic quasi-polynomial, and a complete cubic search for local Hopf frequencies. Its sensor responds to decline rate rather than low stock: decline amplification relaxes to baseline near extinction, while the baseline source can still sustain commanded effort and the extinction and interior equilibria exchange stock-direction stability at $r=qE^*$. The analysis supports neither a model-invariant threshold nor a derivation of the DDE from a general vector sustainability theory.
+
+The primitive-flux stock equation does possess an exact support-saturated logistic limit with $r=\mu-d$ and $K=(\mu-d)/c$. That identity is valuable precisely because it is narrow: the memories, effort laws, state dimensions, and bifurcations remain model-specific. The resulting contribution is a registered model family connected by selected identities and a shared feedback architecture. Its numerical propositions are substantive but model-specific, and its unproved branch-persistence statements remain conjectures.
+
+\section*{Data and code availability}
+The computational supplement provides the DDE solvers, parameter and history files, continuation and shooting routines, tolerances, refinement settings, Floquet calculations, sensitivity sweeps, and machine-readable threshold brackets underlying the numerical results. Public source datasets used for contextual parameter ranges are identified in the cited references.
+
+\input{../shared/references.tex}
+
+\end{document}

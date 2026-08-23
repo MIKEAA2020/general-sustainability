@@ -1,0 +1,29 @@
+# Evaluation of the Submitted Paper-I–VIII Roadmap
+
+## Source
+
+- `uploads/PROGRAM_ROADMAP.md`
+- SHA-256: `52f2b43540996be259e854e030bba8b83f2563f2d406b0a0722c0f8eae962bd8`
+
+## Valid content
+
+The reading order is a useful dependency order. Its transfer rule is correct: results do not move among model closures, institutional topologies, delay/review operators, spatial topologies, or evidence statuses without an explicit bridge. The status vocabulary is also appropriate.
+
+## Publication correction
+
+The labels “Paper I” through “Paper VIII” do not establish eight publication identities. Under the standing rule to choose the optimal number and lean minimum when uncertain, these are modules of one applied programme:
+
+- central ledger and named cores;
+- finite-donor correction;
+- protective channel;
+- conditional Liebig bridge;
+- stage extension;
+- spatial extension;
+- first-passage diagnostic interpretation;
+- validation protocol.
+
+## Superseded packet-level architecture
+
+The earlier one-applied-article-plus-supplement recommendation was limited to the A018–A025 packet and is no longer the programme-level publication plan. After reassessing A001–A025, the master corpus, manuscript length, independent theorem/evidence standards, and the non-loss requirement, the corrected architecture has five assured papers, a near-ready conditional A021 paper, and a conditional stage/spatial paper.
+
+See `research_program/revised_optimal_publication_architecture_A001_A025.md`, `research_program/external_reviews/joint_audit_publication_strategy_ER039_ER043.md`, and `research_program/A018_ledger_to_dynamics_interface_contract.md`. The A018 seam is closed as an exact diagnostic specialization plus an explicit non-reduction boundary: the primitive closed ledger does not dynamically reduce to the working C4 field. Remaining gates are Paper 1's independent result, Paper 2's theorem map/length, Minimal Working Realizations, and artifact readiness. The sequence is five now; Paper 6 on internal A021 proof closure; Paper 7+ only on independent later gates.

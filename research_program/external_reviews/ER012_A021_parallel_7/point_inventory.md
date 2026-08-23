@@ -1,0 +1,52 @@
+# ER012 Point Inventory — A021 Parallel Proof Response 7
+
+## Status
+
+Complete after receipt of the remainder. Await expanded joint adjudication with internal proof and ER006–ER011. No recommendation is implemented from ER012 alone.
+
+## Strong contributions
+
+1. Conservative Route-F hierarchy.
+2. Correct finite-time theorem with initial mismatch.
+3. Strong slack-neighborhood theorem using locally Lipschitz derivative/quadratic remainder assumptions.
+4. Correct distinction between order-one and order-epsilon initial slack errors.
+5. Explicit refusal to define an invalid graph transform.
+6. Useful compact equi-Lipschitz history lemma with positive-invariance conditions.
+7. Useful equilibrium and hyperbolic periodic-orbit special cases.
+8. Direct full-RFDE characteristic/Hopf proof independent of the graph.
+9. Detailed explanation of why Routes A–E remain unavailable.
+10. Strong verification checklist and conservative publication hierarchy.
+
+## Issues for joint adjudication
+
+1. The claim that noncompactness follows whenever `K_x` is non-singleton is false. Finite or totally disconnected compact targets can force continuous histories to be constant; use a path-containing-domain qualification.
+2. The claim that `C([−tau,0],K_x)` cannot be a `C1` mapping-space submanifold whenever `K_x` is positive-codimension is too broad; mapping spaces into smooth manifolds can themselves carry Banach-manifold structures under suitable hypotheses. This does not rescue the original compact NHIM claim, but the diagnosis should be narrowed.
+3. Blanket complete continuity of RFDE time maps requires bounded-solution localization, which the later well-posedness audit mostly supplies.
+4. The `C1 O(epsilon)` variational estimate is valid only because this response separately assumes first derivatives are Lipschitz on the working region; that assumption must remain explicit.
+5. The graph conjecture permits an unstable bundle while simultaneously assigning every binding-transverse direction to the stable bundle; the splitting must be made consistent.
+6. The simplified `beta>r alpha` must be replaced or supplemented by the exact inverse-tangent/conorm bunching required by the selected theorem.
+7. The cited Bates–Lu–Zeng bibliographic entry appears incorrect. The authoritative compact-semiflow memoir is Memoirs AMS 135 (1998), no. 645; exact theorem matching remains necessary.
+8. The direct Hopf theorem is stated under `r>=1`, but a nonlinear periodic branch and criticality require the smoothness/nondegeneracy assumptions of the exact RFDE Hopf theorem, typically stronger than `C1` and including a nonzero Lyapunov coefficient where genericity/criticality is claimed.
+9. The yield-parity wording sometimes says every small-epsilon argument fails. More precisely, the yield-gap no longer guarantees smallness; `C_gap` or another parameter might still be independently small.
+10. The publication-ready conjecture contains a notation error `beta:=min(beta_x,beta)>r alpha`; the slack rate needs a distinct symbol such as `beta_y`.
+11. The publication status sentence still states the history cube is noncompact without the degenerate-target qualification.
+12. The equilibrium/periodic special cases are valuable but do not prove a graph over a region, which the response correctly acknowledges.
+13. In Lemma C7, the equilibrium derivative blocks equal `-Delta_x(0)` and `-Delta_y(0)` under the response’s characteristic-matrix convention, not the matrices themselves. This sign does not affect invertibility.
+14. “Continuous dependence of compact characteristic spectra” is imprecise; characteristic roots should be localized in a right half-plane and continued with an exact RFDE spectral result.
+15. Corollary C7.1’s Poincaré proof is incomplete: a fixed time map does not generally preserve the section. Define and control the return time/return map, including RFDE smoothing and transversality, or cite an exact periodic-orbit theorem.
+16. The direct Hopf spectral-exclusion argument needs theorem-matched uniform root localization; compact-contour Rouché language alone does not exclude every additional crossing.
+17. If delay is the parameter, place the varying-delay family on a fixed phase space, normally by rescaling, before claiming smooth parameter dependence.
+18. Checklist item 12 must localize eventual/complete continuity to bounded solution families with uniform vector-field bounds and use the exact theorem’s smoothing-time threshold.
+
+## Comparative assessment
+
+ER012 is the most technically developed Route-F response. For the final joint implementation, likely retain:
+
+- its finite-time theorem;
+- its slack tube with explicit `C1,1`/Lipschitz-derivative assumption;
+- its equi-Lipschitz compactness lemma;
+- its equilibrium special case;
+- its direct characteristic-crossing proof, after Hopf smoothness/nondegeneracy correction;
+- its conservative graph conjecture, after bunching/splitting/citation corrections.
+
+Do not adopt its compactness and mapping-space statements, BLZ citation, or nonlinear Hopf wording verbatim.

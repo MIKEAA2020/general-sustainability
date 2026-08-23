@@ -1,0 +1,93 @@
+Following the evidence discipline and claim-status constraints, here is the resolution for the moderately feasible mathematical errors in Option A (A1, A3, A6, A7, A9, A10). These corrections repair quantifier orders and missing regularity assumptions without requiring a full architectural redesign.
+
+---
+
+### 1. Issue A1: Robust tangency versus strong invariance (Article 001)
+
+**1. Issue ID:** A1 – Robust tangency versus strong invariance  
+**2. Verdict:** Partly correct / Proof incomplete. The source proof uses the standard viability theorem (which guarantees *weak* invariance—the existence of at least one solution staying in $K$) to claim *robust* (strong) invariance against all disturbances.  
+**3. Corrected statement:** Let $K \subseteq \mathcal{V}$ be closed. If for every $x \in K$, there exists a control $u \in U(x)$ such that for *all* $d \in D(x)$, $f(x,u,d) \in T_K(x)$, and if the resulting safe-control correspondence admits a locally Lipschitz feedback selection $k(x)$ (making the closed-loop system $\dot x = f(x, k(x), d(t))$ uniquely integrable for any measurable $d(\cdot)$), then $K$ is strongly robustly invariant under $k(x)$. Alternatively, using discriminating kernel theory, $K$ is robustly viable if it satisfies the Isaacs condition $\forall x \in K, \exists u \in U(x), \forall d \in D(x), f(x,u,d) \in T_K(x)$, and the game is played in non-anticipative strategies $\pi$.  
+**4. Minimal assumptions:** $X$ is a finite-dimensional vector space; $f$ is continuous, Lipschitz in $x$ uniformly over $U \times D$; $U(x)$ and $D(x)$ are compact; $f(x, U(x), d)$ is convex for each $d$. The quantifier order is strictly $\forall x \in K, \exists u \in U(x), \forall d \in D(x)$.  
+**5. Proof sketch:** Under the non-anticipative strategy framework (Cardaliaguet 1996), the condition $\min_{d \in D(x)} \max_{u \in U(x)} \langle p, f(x,u,d) \rangle \le 0$ for all outward normals $p$ to $K$ guarantees that the controller can continuously react to state evolution to offset any disturbance. If we restrict to a state-feedback selector $k(x)$, unique integrability ensures the single (unique) Carathéodory solution for any $d(\cdot)$ cannot branch into an exiting trajectory, converting weak viability of the closed-loop differential inclusion into strong invariance.  
+**6. Counterexample if assumptions are weakened:** If the closed-loop field $f(x, k(x), d)$ lacks uniqueness (e.g., $f(x) \propto \sqrt{|x|}$ at a boundary $x=0$), a trajectory can split. One solution stays on the boundary, another exits, meaning the feedback fails to guarantee *robust* safety despite the vector field pointing along the boundary.  
+**7. Recommended source status:** Theorem.  
+**8. Downstream consequences:** Strengthens Operator I. It forces the architecture to explicitly distinguish between playing a causal policy against a disturbance string versus applying a fixed state-feedback law.  
+**9. Relevant literature:** Cardaliaguet (1996), *Numerical approximation of differential games*; Aubin (1991), *Viability Theory* (distinguishing weak/strong invariance).  
+**10. Confidence level:** High. 
+
+---
+
+### 2. Issue A3: Pollution-feedback comparison sign (Article 001)
+
+**1. Issue ID:** A3 – Pollution-feedback comparison sign  
+**2. Verdict:** Not an error but needs clarification. The sign in the source is actually correct, but the logic connecting it to the theorem requires an explicit comparison lemma.  
+**3. Corrected statement:** Let $\dot S = g(S, K) - H$ where $\frac{\partial g}{\partial K} \le 0$. Because $K(t) \le K_{\max}$ on any viable path, $g(S, K) \ge g(S, K_{\max})$. Therefore, the "frozen" worst-case dynamics $\dot S_{\text{frozen}} = g(S, K_{\max}) - H$ strictly lower-bound the true stock dynamics. The rectangle $[S_\circ(K_{\max}), \infty) \times [0, K_{\max}]$ computed under the frozen law is contained within the true viability kernel.  
+**4. Minimal assumptions:** $g(S,K)$ is locally Lipschitz and strictly decreasing in $K$.  
+**5. Proof sketch:** Define $\dot S_1 = g(S_1, K(t)) - H$ and $\dot S_2 = g(S_2, K_{\max}) - H$. Since $K(t) \le K_{\max}$, the vector field for $S_1$ dominates the vector field for $S_2$. By Kamke's comparison theorem, if $S_1(0) = S_2(0)$, then $S_1(t) \ge S_2(t)$ for all $t$. If $S_2(t)$ remains $\ge S_{\min}$ (i.e., is viable under the frozen law), then $S_1(t)$ also remains $\ge S_{\min}$.  
+**6. Counterexample if assumptions are weakened:** If pollution *stimulated* growth ($\frac{\partial g}{\partial K} > 0$), freezing at $K_{\max}$ would overestimate growth, meaning trajectories viable under the frozen law would crash under the true lower $K(t)$.  
+**7. Recommended source status:** Theorem.  
+**8. Downstream consequences:** Confirms the inner-bound rectangle is mathematically sound.  
+**9. Relevant literature:** Hirsch and Smith (2005), *Monotone Dynamical Systems*.  
+**10. Confidence level:** High. 
+
+---
+
+### 3. Issue A6: Rosen uniqueness (Article 001)
+
+**1. Issue ID:** A6 – Rosen uniqueness (Tragedy of the Commons)  
+**2. Verdict:** Correct diagnosis. The source proof improperly factors out a common $d_i''(H) = \gamma$, which is invalid if the damage functions $d_i$ are heterogeneous.  
+**3. Corrected statement:** Let payoff be $U_i = \pi_i(h_i) - d_i(H)$. If the damage functions are homogeneous ($d_i(H) = d(H)$ for all $i$), or if the pseudo-gradient Jacobian $J$ defined by $J_{ij} = \delta_{ij}\pi_i''(h_i) - d_i''(H)$ has a negative-definite symmetric part everywhere on the action domain, the game has a unique Nash equilibrium.  
+**4. Minimal assumptions:** $\pi_i$ strictly concave ($\pi_i'' < 0$), $d_i$ convex ($d_i'' \ge 0$). To guarantee uniqueness without adding matrix bounds, assume $d_i(H) \equiv d(H)$ (a purely public/common bad).  
+**5. Proof sketch:** For Rosen's diagonal strict concavity (using equal weights $r_i=1$), the symmetric part of the Jacobian $M = \frac{1}{2}(J + J^\top)$ must be negative definite. $M_{ii} = \pi_i''(h_i) - d_i''(H)$ and $M_{ij} = -\frac{1}{2}(d_i''(H) + d_j''(H))$. If $d_i = d$ for all $i$, $v^\top M v = \sum \pi_i'' v_i^2 - d'' (\sum v_i)^2 < 0$ for $v \neq 0$, guaranteeing uniqueness.  
+**6. Counterexample if assumptions are weakened:** If $d_1''(H)$ is enormous and $d_2''(H)$ is near zero, and $\pi_i''$ are small, $M$ can possess a positive eigenvalue, causing diagonal strict concavity to fail, potentially admitting multiple equilibria or boundary cycles.  
+**7. Recommended source status:** Conditional Theorem.  
+**8. Downstream consequences:** The Tragedy of the Commons theorem (12.1) needs to specify homogeneous damages or the strict Jacobian bound, avoiding an unsupported claim about arbitrary heterogeneous damage functions.  
+**9. Relevant literature:** Rosen (1965), *Existence and uniqueness of equilibrium points for concave N-person games*.  
+**10. Confidence level:** High. 
+
+---
+
+### 4. Issue A7: Commons obstruction (Article 001)
+
+**1. Issue ID:** A7 – Commons obstruction  
+**2. Verdict:** Correct diagnosis. The source condition $H^{\mathrm{Nash}}(S) > H_{\mathrm{safe}}(S)$ uses an undefined $H_{\mathrm{safe}}$.  
+**3. Corrected statement:** Let $\mathcal{V}_{\mathrm{RS}} = [S_{\min}, \infty)$. If there exists a boundary strip $\mathcal{S}_a = [S_{\min}, S_{\min} + a]$ and a margin $\varepsilon > 0$ such that the aggregate Nash harvest satisfies $H^{\mathrm{Nash}}(S) \ge g(S) + \varepsilon$ for all $S \in \mathcal{S}_a$, then $\operatorname{Viab}(\mathcal{V}_{\mathrm{RS}}) = \varnothing$ under non-cooperative play.  
+**4. Minimal assumptions:** $g$ is continuous; $H^{\mathrm{Nash}}(S)$ is a well-defined state-dependent aggregate outcome of the continuous stage game.  
+**5. Proof sketch:** On the strip $\mathcal{S}_a$, the state dynamics are $\dot S = g(S) - H^{\mathrm{Nash}}(S) \le -\varepsilon$. By the finite-time obstruction certificate (Theorem 5.2), any trajectory entering or starting in $\mathcal{S}_a$ reaches $S_{\min}$ in time $T \le a/\varepsilon$. Since $H^{\mathrm{Nash}}(S)$ exceeds the ecological replacement rate near the boundary, no trajectory can remain in the safe set indefinitely.  
+**6. Counterexample if assumptions are weakened:** If $H^{\mathrm{Nash}}(S) > g(S)$ is only true far away from the boundary, but $H^{\mathrm{Nash}}(S_{\min}) = g(S_{\min})$, the system might asymptotically approach $S_{\min}$ without crossing it, remaining mathematically viable (though severely depleted). The uniform $\varepsilon$-margin on the strip prevents this asymptotic evasion.  
+**7. Recommended source status:** Theorem.  
+**8. Downstream consequences:** Grounds the commons obstruction directly in the finite-time exit theorem (Theorem 5.2).  
+**9. Relevant literature:** Standard Dini-derivative exit-time bounds (e.g., Aubin 1991).  
+**10. Confidence level:** High.
+
+---
+
+### 5. Issue A9: Sanction sufficiency (Article 001)
+
+**1. Issue ID:** A9 – Sanction sufficiency  
+**2. Verdict:** Correct diagnosis. The source proof uses sanctions $\gamma > \pi_i'(q_i)$ to block *upward* deviation (over-extraction) but neglects to show that agents will not deviate *downward* (under-extraction) from their quotas.  
+**3. Corrected statement:** Let quotas $q_i$ sum to $H_{\mathrm{target}} \in [H_{\min}, H_*]$. If sanctions satisfy $\gamma > \max_i \pi_i'(q_i)$, and if the quota allocation additionally satisfies the interiority condition $\pi_i'(q_i) > d_i'(H_{\mathrm{target}})$ for all $i$, then $h_i = q_i$ is the unique Nash best response.  
+**4. Minimal assumptions:** $\pi_i$ strictly concave, $d_i$ convex, $q_i > 0$.  
+**5. Proof sketch:** For $h_i > q_i$, the marginal payoff is $\pi_i'(h_i) - d_i'(H) - \gamma \le \pi_i'(q_i) - \gamma < 0$, so upward deviation is unprofitable. For $h_i < q_i$, the sanction is zero, so the marginal payoff is $\pi_i'(h_i) - d_i'(H)$. Because $\pi_i$ is strictly concave and $d_i$ is convex, $\pi_i'(h_i) - d_i'(H) \ge \pi_i'(q_i) - d_i'(H_{\mathrm{target}}) > 0$ by the interiority hypothesis. Thus, downward deviation is strictly unprofitable. The unique maximum is exactly $h_i = q_i$.  
+**6. Counterexample if assumptions are weakened:** If $\pi_i'(q_i) < d_i'(H_{\mathrm{target}})$, agent $i$'s marginal damage from their own extraction exceeds their marginal benefit. Even without sanctions, they prefer to extract *less* than $q_i$. If this drops the aggregate harvest below $H_{\min}$, the social/provisioning constraints fail, and the quota rescue collapses.  
+**7. Recommended source status:** Theorem.  
+**8. Downstream consequences:** Requires the institutional design to ensure quotas are economically rational at the lower bound, not just capped at the upper bound.  
+**9. Relevant literature:** Mechanism design for common-pool resources.  
+**10. Confidence level:** High.
+
+---
+
+### 6. Issue A10: Ostrom sufficiency/necessity (Article 001)
+
+**1. Issue ID:** A10 – Ostrom sufficiency/necessity  
+**2. Verdict:** Correct diagnosis. Theorem 13.6 proves that violating one principle *can* destroy viability, not that violating one principle *always* destroys viability for every system. The source title claims "each principle can be necessary," but the surrounding text risks being read as universal necessity.  
+**3. Corrected statement:** **Theorem 13.6 (Ostrom Non-Redundancy).** No individual Ostrom mechanism (as formalized in $\mathcal{T}(1)-\mathcal{T}(8)$) is logically implied by the conjunction of the other seven. For each $k \in \{1, \dots, 8\}$, there exists a valid tuple $(X,U,F,\mathcal{V})$ satisfying mechanisms $j \neq k$ and the physical viability conditions of Theorem 6.2, which possesses an empty robust viability kernel because mechanism $k$ is absent.  
+**4. Minimal assumptions:** The space of possible socio-ecological specifications admits the specific obstruction geometries constructed in the proof (e.g., external predation, biased observation, external control restriction).  
+**5. Proof sketch:** (As in the source). For $k=4$ (monitoring), construct a system with an observation bias forcing certainty-equivalence exit. For $k=7$ (rights), construct an external authority that sets $U(x) = \varnothing$ near the safe boundary. Each construction provides a specific, mathematically valid system that is perfectly viable under perfect principles but fails catastrophically when principle $k$ is removed. This proves independence of the axioms.  
+**6. Counterexample if assumptions are weakened:** If we claimed *universal* necessity (i.e., every viable system must have all 8), a simple isolated single-user resource (where principle 6, conflict resolution, is completely irrelevant and its absence causes no failure) would disprove the theorem.  
+**7. Recommended source status:** Theorem.  
+**8. Downstream consequences:** Calibrates the claim perfectly. The principles form an independent spanning set of constructors to block known failure modes, not a mystical set of universal laws.  
+**9. Relevant literature:** Ostrom (1990) design principles; literature on axiomatic independence.  
+**10. Confidence level:** High. 
+
+

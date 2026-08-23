@@ -1,0 +1,438 @@
+# Priority 5: End-to-End Composition Test — Phosphorus
+
+## 1. Domain choice: phosphorus over groundwater
+
+**Recommendation: phosphorus.**
+
+| Criterion | Phosphorus | Groundwater |
+|---|---|---|
+| Moiety accounting | One conserved material; exact conservation proved (Article 013 Thm) | Anomaly-based; no absolute stock; no clean moiety |
+| Module decomposition | Six compartments with explicit donor-limited fluxes | Multiple basins; recharge mechanisms uncharacterized |
+| Barrier conditions | Donor-limited tangency gives clean barrier margins | Requires hydraulic conductivity, storage geometry |
+| Cross-scale structure | Geological → active → living → product → sink | Basin → aquifer → well; trade/catchment structure present but less typed |
+| Data grounding | Reserve-life ratio (~309 yr); USGS reserves | G3P anomaly trends; partial empirical grounding |
+| Composition exercise | Natural 3–5 module decomposition with directed coupling | Better suited for epistemic/institutional layers (second test) |
+
+Phosphorus exercises the **typed accounting, conservation, invariance, and composition** layers of the architecture. Groundwater is better reserved for a second test that exercises the **epistemic, partial-observation, and governance-delay** layers.
+
+---
+
+## 2. Module decomposition
+
+Decompose the six-compartment phosphorus ledger (Article 013, §2.2) into three coupled modules:
+
+| Module | Compartments | Role |
+|---|---|---|
+| **E** (Ecological) | $(X, U)$ | Living biomass and detritus/recoverable residual |
+| **S** (Support) | $(A, G)$ | Active abiotic pool and geological/slow source |
+| **P** (Product–Sink) | $(P, W)$ | In-use product stock and absorbing sink |
+
+The coupling structure is:
+
+```
+Module S ──g(X,A)──▶ Module E       (assimilation: support feeds ecology)
+Module E ──(1-α)h──▶ Module P       (harvest: ecology feeds products)
+Module S ──c_G────▶ Module P       (mining: geology feeds products)
+Module E ──d_U(U)──▶ Module S       (decomposition: detritus returns to active pool)
+Module P ──(1-ρ)r_P──▶ Module W    (retirement losses: products feed sink)
+Module P ──ρ r_P──▶ Module E       (recycling: products return to detritus)
+```
+
+The key coupling that the composition theorem must handle is the **support coupling** $g(X,A)$ between Module S and Module E, and the **aggregate sink burden** on $W$.
+
+---
+
+## 3. Local module analysis
+
+### 3.1 Module E: Ecological subsystem $(X, U)$
+
+**Dynamics** (treating $A$ as an exogenous input $z_E = A$):
+$$
+\dot X = g(X, A) - m(X) - h(X, E)
+$$
+$$
+\dot U = m(X) + \alpha h(X, E) + \rho r_P(P) - d_U(U)
+$$
+
+**Local safe set:**
+$$
+Q_E = \{(X, U) : X \geq X_{\min},\ U \geq 0\}
+$$
+
+**Barrier function:** $b_E(X, U) = X - X_{\min}$.
+
+**Local barrier margin** (at $X = X_{\min}$, $U$ arbitrary, with $A$ treated as input):
+$$
+\eta_E(A) = \inf_{U \geq 0} \sup_{E \in [0, E_{\max}]} \left[ g(X_{\min}, A) - m(X_{\min}) - h(X_{\min}, E) \right]
+$$
+
+Under donor limitation ($h(0, E) = 0$, $g(0, A) = 0$), and with $h$ bounded by $h_{\max}(X)$:
+$$
+\eta_E(A) = g(X_{\min}, A) - m(X_{\min}) - h_{\min}
+$$
+
+This is positive when:
+$$
+g(X_{\min}, A) > m(X_{\min}) + h_{\min}
+$$
+
+**Interface sensitivity:** The barrier derivative depends on $A$ through $g(X, A)$. The sensitivity is:
+$$
+L_E = \sup_{X \in [X_{\min}, X_{\max}]} \left| \frac{\partial g}{\partial A}(X, A) \right|
+$$
+
+For Michaelis-Menten assimilation $g(X, A) = \mu X \frac{A}{K_A + A}$:
+$$
+\frac{\partial g}{\partial A} = \mu X \frac{K_A}{(K_A + A)^2}
+$$
+
+So $L_E = \mu X_{\max} \frac{K_A}{(K_A + A_{\min})^2}$ (worst case at $A = A_{\min}$, $X = X_{\max}$).
+
+**Output of Module E:** The harvest flux $y_E = (1-\alpha) h(X, E)$ enters Module P. The decomposition flux $y_E' = d_U(U)$ enters Module S.
+
+---
+
+### 3.2 Module S: Support subsystem $(A, G)$
+
+**Dynamics** (treating $X, U$ as exogenous inputs from Module E):
+$$
+\dot A = -g(X, A) + d_U(U) + e_{GA}(G, A) - e_{AG}(A, G)
+$$
+$$
+\dot G = -e_{GA}(G, A) + e_{AG}(A, G) - c_G(G, E_G)
+$$
+
+**Local safe set:**
+$$
+Q_S = \{(A, G) : A \geq A_{\min},\ G \geq G_{\min}\}
+$$
+
+**Barrier functions:** $b_A(A) = A - A_{\min}$, $b_G(G) = G - G_{\min}$.
+
+**Local barrier margin for $A$** (at $A = A_{\min}$, treating $X, U, G$ as inputs):
+$$
+\eta_A(X, U, G) = -g(X, A_{\min}) + d_U(U) + e_{GA}(G, A_{\min}) - e_{AG}(A_{\min}, G)
+$$
+
+This is positive when decomposition and geological input exceed assimilation and active-to-geological transfer.
+
+**Local barrier margin for $G$** (at $G = G_{\min}$, treating $A$ as input):
+$$
+\eta_G(A) = -e_{GA}(G_{\min}, A) + e_{AG}(A, G_{\min}) - c_G(G_{\min}, E_G)
+$$
+
+Under donor limitation ($e_{GA}(0, A) = 0$, $c_G(0, E_G) = 0$), this is non-negative when $e_{AG}(A, G_{\min}) \geq c_G(G_{\min}, E_G)$.
+
+**Interface sensitivity of $A$:**
+$$
+L_A = \sup_{X \in Q_E} \left| \frac{\partial g}{\partial X}(X, A_{\min}) \right| + \sup_{U \in Q_E} |d_U'(U)|
+$$
+
+**Output of Module S:** The assimilation support $y_S = g(X, A)$ is the key output that Module E depends on.
+
+---
+
+### 3.3 Module P: Product–Sink subsystem $(P, W)$
+
+**Dynamics** (treating $X, G$ as exogenous inputs):
+$$
+\dot P = (1-\alpha) h(X, E) + c_G(G, E_G) - r_P(P)
+$$
+$$
+\dot W = (1-\rho) r_P(P)
+$$
+
+**Local safe set:**
+$$
+Q_P = \{(P, W) : P \geq 0,\ W \leq W_{\max}\}
+$$
+
+**Barrier function for $W$:** $b_W(W) = W_{\max} - W$.
+
+**Local barrier margin for $W$** (at $W = W_{\max}$):
+$$
+\eta_W(P) = -(1-\rho) r_P(P)
+$$
+
+This is always $\leq 0$ when $r_P(P) > 0$ and $\rho < 1$. The sink $W$ is absorbing: it can only grow. The barrier margin is negative unless $\rho = 1$ (perfect recycling) or $r_P(P) = 0$ (no retirement).
+
+**This is the critical obstruction:** the sink module has no natural inward barrier. The only way to maintain $W \leq W_{\max}$ is to bound the aggregate retirement losses $(1-\rho) r_P(P)$ so that $W$ never reaches $W_{\max}$. This is a **commons-type constraint** on the product module.
+
+**Output of Module P:** The recycling flux $\rho r_P(P)$ returns to Module E (detritus). The retirement loss $(1-\rho) r_P(P)$ accumulates in $W$.
+
+---
+
+## 4. Interface identification and coupling gains
+
+The directed coupling graph has the following edges:
+
+| Edge | Source | Target | Flux | Gain bound |
+|---|---|---|---|---|
+| $S \to E$ | Module S | Module E | $g(X, A)$ (assimilation support) | $\|G_{ES}\| = L_E$ |
+| $E \to S$ | Module E | Module S | $d_U(U)$ (decomposition return) | $\|G_{SE}\| = L_A^{(U)}$ |
+| $E \to S$ | Module E | Module S | $-g(X, A)$ (assimilation drawdown) | $\|G_{SE}\| = L_A^{(X)}$ |
+| $E \to P$ | Module E | Module P | $(1-\alpha) h(X, E)$ (harvest) | $\|G_{PE}\| = (1-\alpha) h_{\max}$ |
+| $S \to P$ | Module S | Module P | $c_G(G, E_G)$ (mining) | $\|G_{PS}\| = c_{G,\max}$ |
+| $P \to E$ | Module P | Module E | $\rho r_P(P)$ (recycling) | $\|G_{EP}\| = \rho r_{P,\max}$ |
+| $P \to W$ | Module P | Sink $W$ | $(1-\rho) r_P(P)$ (retirement loss) | $\|G_{WP}\| = (1-\rho) r_{P,\max}$ |
+
+---
+
+## 5. Small-gain condition check
+
+The normalized gain matrix $M$ for the three-module system (E, S, P) is:
+
+$$
+M = \begin{pmatrix}
+0 & M_{ES} & M_{EP} \\
+M_{SE} & 0 & 0 \\
+M_{PE} & M_{PS} & 0
+\end{pmatrix}
+$$
+
+where:
+- $M_{ES} = \frac{L_E \cdot Y_S}{\eta_E}$: fraction of Module E's margin consumed by Module S's output variation
+- $M_{SE} = \frac{L_A \cdot Y_E}{\eta_A}$: fraction of Module S's margin consumed by Module E's output variation
+- $M_{PE} = \frac{L_P^{(E)} \cdot Y_E}{\eta_P}$: fraction of Module P's margin consumed by Module E's harvest
+- $M_{PS} = \frac{L_P^{(S)} \cdot Y_S}{\eta_P}$: fraction of Module P's margin consumed by Module S's mining
+- $M_{EP} = \frac{L_E^{(P)} \cdot Y_P}{\eta_E}$: fraction of Module E's margin consumed by Module P's recycling
+
+**Row-sum small-gain condition (SG):**
+
+For Module E:
+$$
+M_{ES} + M_{EP} < 1
+$$
+i.e., the support coupling and recycling coupling together must not overwhelm the ecological barrier margin.
+
+For Module S:
+$$
+M_{SE} < 1
+$$
+i.e., the ecological drawdown (assimilation) must not overwhelm the support barrier margin.
+
+For Module P:
+$$
+M_{PE} + M_{PS} < 1
+$$
+i.e., the harvest and mining inputs must not overwhelm the product module's capacity to manage retirement without exceeding the sink bound.
+
+**Explicit check for the support coupling (the critical edge):**
+
+The support coupling $S \to E$ has gain:
+$$
+M_{ES} = \frac{L_E \cdot Y_S}{\eta_E}
+= \frac{\mu X_{\max} \frac{K_A}{(K_A + A_{\min})^2} \cdot g_{\max}}{g(X_{\min}, A_{\min}) - m(X_{\min}) - h_{\min}}
+$$
+
+where $Y_S = g_{\max} = \sup_{X, A} g(X, A)$ is the maximum assimilation rate.
+
+The condition $M_{ES} < 1$ requires:
+$$
+\mu X_{\max} \frac{K_A}{(K_A + A_{\min})^2} \cdot g_{\max} < g(X_{\min}, A_{\min}) - m(X_{\min}) - h_{\min}
+$$
+
+This is satisfied when:
+- The ecological barrier margin $\eta_E$ is large (high assimilation at $X_{\min}$, low mortality, low harvest floor).
+- The support sensitivity $L_E$ is small (large $K_A$ relative to $A_{\min}$, or small $\mu X_{\max}$).
+- The output bound $Y_S$ is small.
+
+**In the support-saturated limit** ($K_A \to 0$), $L_E \to 0$ because $\frac{K_A}{(K_A + A)^2} \to 0$ for $A > 0$. The coupling gain $M_{ES} \to 0$, and the composition condition is trivially satisfied. This is consistent with Article 012's support-saturated logistic limit, where the ecological module decouples from the support module.
+
+**In the support-limited regime** ($K_A$ large, $A$ small), $L_E$ is large, and the composition condition may fail. This is the regime where the active pool is the bottleneck.
+
+---
+
+## 6. Commons condition check (sink $W$)
+
+The sink $W$ is a **shared sink** fed by the product module's retirement losses. The aggregate load is:
+$$
+L_W = (1-\rho) r_P(P)
+$$
+
+The capacity is $W_{\max}$ (or equivalently, the remaining capacity $W_{\max} - W(0)$).
+
+**Commons condition (C1): aggregate load feasibility.**
+
+Over the product module's invariant set $Q_P$, the maximum retirement loss is:
+$$
+\sup_{P \in Q_P} (1-\rho) r_P(P) = (1-\rho) r_P(P_{\max})
+$$
+
+For the sink to remain bounded, we need:
+$$
+\int_0^T (1-\rho) r_P(P(t)) \, dt \leq W_{\max} - W(0)
+$$
+
+for the assessment horizon $T$. If $r_P(P) = \lambda_P P$ (linear retirement), this becomes:
+$$
+(1-\rho) \lambda_P \int_0^T P(t) \, dt \leq W_{\max} - W(0)
+$$
+
+**Commons condition (C2): sink barrier margin.**
+
+The sink has no inward barrier (it's absorbing). The only way to maintain $W \leq W_{\max}$ is to ensure that the cumulative retirement losses never exceed the remaining capacity. This is a **finite-horizon** constraint, not an infinite-horizon invariance condition (unless $\rho = 1$).
+
+**Commons condition (C3): feedback from sink to modules.**
+
+In the basic six-compartment model, $W$ is absorbing and does not feed back. If an application adds sink-mass feedback (e.g., $g(X, A, W)$ or $m(X, W)$), then the sink becomes a commons with feedback, and the small-gain condition must include the $W \to E$ or $W \to S$ coupling.
+
+For the basic model, the commons condition reduces to:
+$$
+(1-\rho) \lambda_P P_{\max} \cdot T \leq W_{\max} - W(0)
+$$
+
+This is a **finite-horizon commons feasibility** condition. It is violated when:
+- The product stock $P$ is large.
+- The recycling fraction $\rho$ is low.
+- The retirement rate $\lambda_P$ is high.
+- The horizon $T$ is long.
+- The initial sink $W(0)$ is already near $W_{\max}$.
+
+---
+
+## 7. Destruction example: geological depletion cascade
+
+**Setup:** Module S (support) is coupled to Module E (ecological) through assimilation $g(X, A)$. Module S is also coupled to Module P (product) through mining $c_G(G, E_G)$.
+
+**Scenario:** Mining rate $c_G(G, E_G)$ is set high enough to deplete the geological pool $G$ below $G_{\min}$. This reduces the geological-to-active transfer $e_{GA}(G, A)$, which reduces the active pool $A$. Reduced $A$ reduces assimilation $g(X, A)$, which reduces the living biomass $X$.
+
+**Mechanism in small-gain terms:**
+
+When $G$ drops below $G_{\min}$, the barrier margin $\eta_G$ becomes negative. The geological module exits its safe set. This propagates through the coupling:
+- $\eta_G < 0$ → $G$ declines → $e_{GA}(G, A)$ drops → $A$ declines
+- $A$ declines → $g(X, A)$ drops → $\eta_E(A)$ drops
+- If $\eta_E(A) < 0$, Module E exits its safe set → $X$ declines below $X_{\min}$
+
+The row-sum condition $M_{SE} < 1$ is violated because the ecological drawdown on $A$ (through assimilation) overwhelms the support barrier margin when geological input is cut off.
+
+**Analogy to Article 001 Counterexample 10.1 (MSY):** At high mining rates, the support module is driven to its boundary, and the ecological module cannot maintain viability even though it would be viable in isolation (with sufficient $A$). The coupling destroys viability that the factors individually enjoyed.
+
+**Quantitative condition for destruction:**
+
+The cascade occurs when:
+$$
+c_G(G, E_G) > e_{AG}(A, G) + \text{geological regeneration}
+$$
+
+i.e., mining exceeds the natural geological-to-active replenishment. In this regime, $G$ is being mined faster than it can be replenished, and the support module's barrier margin $\eta_G$ becomes negative.
+
+---
+
+## 8. Rescue example: decomposition compensates for low geological input
+
+**Setup:** Same three-module system. Geological input $e_{GA}(G, A)$ is low (e.g., $G$ is nearly depleted or $e_{GA}$ is small).
+
+**Scenario:** Decomposition $d_U(U)$ from Module E is high enough to compensate for the low geological input, maintaining the active pool $A$ above $A_{\min}$.
+
+**Mechanism in small-gain terms:**
+
+The support module's barrier margin is:
+$$
+\eta_A = -g(X, A_{\min}) + d_U(U) + e_{GA}(G, A_{\min}) - e_{AG}(A_{\min}, G)
+$$
+
+When $e_{GA}(G, A_{\min})$ is small (low geological input), the margin is:
+$$
+\eta_A \approx -g(X, A_{\min}) + d_U(U) - e_{AG}(A_{\min}, G)
+$$
+
+If $d_U(U)$ is large enough (high detritus decomposition), then $\eta_A > 0$ even without geological input. The support module remains viable, and the ecological module receives sufficient assimilation support.
+
+**This is a coupling-rescue:** Module E (through decomposition) rescues Module S (the support module) from depletion, which in turn maintains Module E's viability. The mutual dependence creates viability that neither module would have in isolation (if geological input were the only support source).
+
+**Analogy to Article 001 Example 10.1:** The coupled system has a nonempty kernel even though one module (support, without decomposition) would not be viable in isolation.
+
+**Quantitative condition for rescue:**
+
+The rescue occurs when:
+$$
+d_U(U) > g(X, A_{\min}) + e_{AG}(A_{\min}, G) - e_{GA}(G, A_{\min})
+$$
+
+i.e., decomposition exceeds the net drawdown on the active pool. This is possible when the detritus stock $U$ is large and the decomposition rate is high.
+
+---
+
+## 9. Verification status and data requirements
+
+| Component | Status | Source |
+|---|---|---|
+| Six-compartment conservation | **Theorem** | Article 013, Thm (Mass conservation) |
+| Forward invariance of $\mathbb{R}_+^6$ | **Theorem** | Article 013, Thm (Forward invariance) |
+| Donor-limited tangency conditions | **Theorem** | Article 013, boundary assumptions |
+| Module decomposition (E, S, P) | **Definition** | This instantiation |
+| Local barrier margins $\eta_E, \eta_A, \eta_G$ | **Conditional** | Requires parameter values for $g, m, h, d_U, e_{GA}, e_{AG}, c_G$ |
+| Interface sensitivity $L_E, L_A$ | **Conditional** | Requires $K_A, \mu, X_{\max}, A_{\min}$ |
+| Small-gain condition (SG) | **Conditional** | Requires numerical evaluation of $M_{ES}, M_{SE}, M_{PE}, M_{PS}, M_{EP}$ |
+| Commons condition for $W$ | **Conditional** | Requires $W_{\max}, W(0), \rho, \lambda_P, T$ |
+| Destruction example | **Conditional theorem** | Requires $c_G > e_{AG} + \text{regen}$ |
+| Rescue example | **Conditional theorem** | Requires $d_U(U) > g(X, A_{\min}) + e_{AG} - e_{GA}$ |
+| Support-saturated limit ($K_A \to 0$) | **Identity** | Article 012, MPF logistic limit |
+| Reserve-life ratio (~309 yr) | **Numerical proposition** | Article 013, USGS data |
+
+**Data required for full numerical verification:**
+- Michaelis-Menten parameters: $\mu, K_A$
+- Mortality and harvest parameters: $m(X), h(X, E), h_{\min}, E_{\max}$
+- Decomposition rate: $d_U(U)$
+- Geological exchange rates: $e_{GA}(G, A), e_{AG}(A, G)$
+- Mining rate: $c_G(G, E_G)$
+- Retirement rate: $r_P(P)$, recycling fraction $\rho$
+- Thresholds: $X_{\min}, A_{\min}, G_{\min}, W_{\max}$
+- Initial conditions: $X(0), U(0), A(0), G(0), P(0), W(0)$
+
+---
+
+## 10. Downstream consequences
+
+**For the master manuscript:**
+- This instantiation discharges Priority 5 (first end-to-end domain test) for the phosphorus domain.
+- It exercises the typed accounting (Article 013), composition (Priority 4 theorem), and commons modules.
+- It does not exercise the epistemic/institutional layers (reserved for groundwater).
+
+**For Article 013:**
+- The six-compartment ledger is confirmed as the natural module decomposition for phosphorus.
+- The donor-limited tangency conditions provide the local barrier margins needed for composition.
+- The reserve-life ratio provides a numerical anchor for the geological module.
+
+**For Article 012:**
+- The support-saturated logistic limit ($K_A \to 0$) is the regime where the composition condition is trivially satisfied (decoupling).
+- The MPF primitive-flux core provides the ecological module dynamics.
+
+**For the composition theorem (Priority 4):**
+- This instantiation validates the theorem's structure on a real domain.
+- The destruction example (geological depletion cascade) and rescue example (decomposition compensation) are the required counterexample and coupling-rescue.
+- The commons condition for $W$ exercises the shared-sink extension.
+
+**For publication:**
+- This belongs in the flagship or a technical supplement, not a separate paper.
+- It provides the first worked example of the composition theorem on a typed domain.
+- A companion paper would be justified only if extended to include: (a) numerical computation of the small-gain margins for a specific phosphorus system, (b) the groundwater epistemic/institutional test, or (c) a strategic/game-theoretic composition module.
+
+---
+
+## 11. Recommended next steps
+
+1. **Numerical instantiation:** Choose a specific phosphorus system (e.g., a catchment or national phosphorus budget) and compute the small-gain margins numerically. This requires data on $\mu, K_A, m, h, d_U, e_{GA}, e_{AG}, c_G, r_P, \rho$.
+
+2. **Groundwater epistemic test:** Use the G3P anomaly data and the governance-delay framework from Article 011 to exercise the epistemic/institutional layers. This would be the second end-to-end test, complementary to phosphorus.
+
+3. **Strategic composition module:** Extend the composition theorem to include strategic modules (e.g., mining companies choosing $c_G$ non-cooperatively). This would exercise the strategic contract modality from the master manuscript.
+
+4. **Commons governance module:** Instantiate the commons-allocation template (Appendix F of the master manuscript) for the phosphorus sink $W$. This would require an allocation rule for retirement losses across product categories.
+
+---
+
+## 12. Summary
+
+| Item | Result |
+|---|---|
+| Domain choice | Phosphorus (cleaner moiety accounting, natural module decomposition) |
+| Module decomposition | E (ecological), S (support), P (product–sink) |
+| Local barriers | $X \geq X_{\min}$, $A \geq A_{\min}$, $G \geq G_{\min}$, $W \leq W_{\max}$ |
+| Small-gain condition | Row-sum condition on normalized gain matrix $M$ |
+| Commons condition | Finite-horizon bound on cumulative retirement losses $(1-\rho) r_P(P)$ |
+| Destruction example | Geological depletion cascade: $c_G$ too high → $G$ depleted → $A$ drops → $X$ drops |
+| Rescue example | Decomposition compensation: $d_U(U)$ high → $A$ maintained → $X$ viable |
+| Status | Conditional theorem (requires numerical parameter values) |
+| Publication placement | Flagship or technical supplement |

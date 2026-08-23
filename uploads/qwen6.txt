@@ -1,0 +1,1604 @@
+Below I answer the remaining packet items in **feasibility order**: first items that can be fixed immediately, then moderate theorem repairs, then larger architectural/redesign questions. I treat the following as already discharged in prior turns:
+
+- Abstract Predecessor Schema / canonical formal spine: partly discharged.
+- Priority 3 / §8.3 Operator II restricted transformation theorem: discharged.
+- Priority 4 / §8.4 restricted composition theorem: discharged.
+- Priority 5 / §8.5 first end-to-end domain test: phosphorus recommended and instantiated.
+
+For each issue I use the packet’s issue-status vocabulary, and also state the diagnosis verdict where useful.
+
+---
+
+# Tier 1 — Immediately feasible corrections
+
+## Issue 013-1 — Rename service readout to avoid collision with observation
+
+**Diagnosis verdict:** correct.  
+**Source status:** `NOT_AN_ERROR_BUT_NEEDS_CLARIFICATION`.
+
+**Corrected statement.**  
+In Article 013, the map currently called a service observation/readout should not use the same symbol as the general observation operator. Reserve:
+
+\[
+\mathcal O
+\]
+
+for observation in the general theory. Rename the Article 013 service readout to, for example,
+
+\[
+\mathsf Y_{\mathrm{svc}}(z,u,\theta)
+\]
+
+or
+
+\[
+\mathsf S(z,u,\theta),
+\]
+
+with explicit units and delivery boundary.
+
+**Minimal assumptions.** None beyond existing Article 013 assumptions.
+
+**Recommended source status.** Keep Article 013 unchanged except notation.
+
+**Downstream consequences.** Prevents type collision between physical observation and service generation. No theorem changes.
+
+**Confidence.** High.
+
+---
+
+## Issue 013-2 — Closedness/attainment qualification for directional support fraction
+
+**Diagnosis verdict:** correct.  
+**Source status:** `NOT_AN_ERROR_BUT_NEEDS_CLARIFICATION`.
+
+**Corrected statement.**  
+For
+
+\[
+\alpha_{\mathrm{reg}}(\bar s;z,t)
+=
+\sup\{\alpha\in[0,1]: \alpha \bar s\in \Gamma_{\mathrm{reg}}(z,t)\},
+\]
+
+add the qualification:
+
+- If \(\Gamma_{\mathrm{reg}}\) is closed along the ray \(\{\alpha\bar s:\alpha\in[0,1]\}\), then the supremum is attained and \(\alpha_{\mathrm{reg}}\bar s\in\Gamma_{\mathrm{reg}}\).
+- If \(\Gamma_{\mathrm{reg}}\) is not closed, \(\alpha_{\mathrm{reg}}\) is only an upper bound; \(\alpha_{\mathrm{reg}}\bar s\) may lie on the boundary but outside \(\Gamma_{\mathrm{reg}}\). In that case report \(\alpha_{\mathrm{reg}}-\varepsilon\) feasible support or state closure explicitly.
+
+**Minimal assumptions.** Closedness or explicit closure of the feasible service set along the direction.
+
+**Recommended source status.** The existing directional support fraction remains valid as a definition, but claims using attainment need the closedness qualification.
+
+**Downstream consequences.** Avoids treating a support gap as exactly feasible when only approachable.
+
+**Confidence.** High.
+
+---
+
+## Issue 012-1 — Add \(E=E_{\max}\) extinction-face equilibrium
+
+**Diagnosis verdict:** correct.  
+**Source status:** `MODEL_INCOMPLETE`.
+
+**Corrected statement.**  
+For the boundary-exact three-state model M3-B, include the extinction-face equilibrium:
+
+\[
+N=0,
+\qquad
+Z=\delta,
+\qquad
+E=E_{\max},
+\]
+
+whenever the multiplicative gate enforces \(\dot E=0\) at \(E=E_{\max}\). More generally, if the effort gate permits other boundary equilibria on \(N=0\), list them in the model registry.
+
+**Minimal assumptions.** Boundary gate as in Article 012.
+
+**Proof sketch.** At \(N=0\), the raw decline signal is zero, so \(Z=\delta\). The gate factor \(1-E/E_{\max}\) makes \(\dot E=0\) at \(E=E_{\max}\).
+
+**Counterexample if weakened.** If the gate is removed (M3-U), \(E_{\max}\) is not a hard boundary and the corresponding equilibrium need not exist.
+
+**Recommended source status.** Minor model correction. Does not alter the central analytical or numerical conclusions, but the equilibrium list should be complete.
+
+**Downstream consequences.** Affects interpretation of extinction face and effort persistence near extinction. Does not change local Hopf cubic for interior equilibrium.
+
+**Confidence.** High.
+
+---
+
+## Issue 012-2 — Donor-limit or stop fixed-demand stock culling at zero
+
+**Diagnosis verdict:** correct.  
+**Source status:** `MODEL_INCOMPLETE`.
+
+**Corrected statement.**  
+In fixed-demand culling experiments, replace a constant pressure \(D\) with a donor-limited pressure, e.g.
+
+\[
+D(S)=\min\{D,\; qS\},
+\]
+
+or explicitly stop removals when \(S=0\). Do not allow stock to become negative.
+
+**Minimal assumptions.** Non-negative stock state and donor limitation.
+
+**Counterexample if weakened.** A fixed demand independent of stock can drive \(S<0\) mathematically, which is physically inadmissible.
+
+**Recommended source status.** Correct the numerical experiment. The correction changes finite-time extinction details but not the main analytical results.
+
+**Downstream consequences.** The qualitative comparison between stock culling and recruitment suppression remains, but times and trajectories should be recomputed under donor limitation.
+
+**Confidence.** High.
+
+---
+
+## Issue 012-3 — Resolve \(\omega_A\) versus \(\kappa_A\)
+
+**Diagnosis verdict:** correct.  
+**Source status:** `TYPE_OR_DOMAIN_ERROR`.
+
+**Corrected statement.**  
+Use one notation consistently:
+
+- \(\kappa_A\): active-pool turnover or relaxation rate in M4-A;
+- or \(\omega_A\): open relaxation rate, if that is the intended meaning.
+
+Do not use both for the same parameter unless a conversion is declared.
+
+**Recommended source status.** Notational correction.
+
+**Downstream consequences.** No substantive change if the numerical value is unchanged.
+
+**Confidence.** High.
+
+---
+
+## Issue 012-4 — Verify invariance of \(X+U\le \mathcal M\) in MPF
+
+**Diagnosis verdict:** correct.  
+**Source status:** `PROOF_INCOMPLETE` until verified.
+
+**Corrected statement.**  
+For MPF with
+
+\[
+A=\mathcal M-X-U,
+\]
+
+the set
+
+\[
+X\ge0,\quad U\ge0,\quad X+U\le \mathcal M
+\]
+
+is forward invariant if, at \(A=0\), assimilation satisfies \(g(X,0)=0\) and all loss terms are non-negative.
+
+**Proof sketch.** Compute
+
+\[
+\frac{d}{dt}(X+U)
+=
+g(X,A)-qEX-\gamma_U U.
+\]
+
+On \(X+U=\mathcal M\), \(A=0\), so \(g(X,0)=0\). Hence
+
+\[
+\frac{d}{dt}(X+U)
+=
+-qEX-\gamma_UU
+\le0.
+\]
+
+Thus the trajectory cannot leave \(X+U\le\mathcal M\).
+
+**Recommended source status.** Add as a proposition in Article 012 or supplement.
+
+**Downstream consequences.** Strengthens MPF consistency. Does not change Hopf or fold statements.
+
+**Confidence.** High, assuming donor-limited assimilation.
+
+---
+
+## Issue 012-5 — Preserve exact source status for open fold/SNPO classifications
+
+**Diagnosis verdict:** correct.  
+**Source status:** `NOT_AN_ERROR_BUT_NEEDS_CLARIFICATION`.
+
+**Corrected statement.**  
+Retain the source-stated distinction:
+
+- computed periodic orbits and multipliers: numerical propositions at tested points;
+- fold/SNPO classification of persistence boundaries: numerical/inferred classification unless branch collision and nondegeneracy are proved.
+
+**Recommended source status.** Do not upgrade open fold classifications to theorems.
+
+**Confidence.** High.
+
+---
+
+## Issue B1 — Canonical notation and operator hierarchy
+
+**Diagnosis verdict:** correct.  
+**Source status:** `TYPE_OR_DOMAIN_ERROR`.
+
+**Recommended canonical notation.**
+
+| Object | Avoid | Recommended notation |
+|---|---:|---|
+| Typed constraint registry | \(C\), \(K\) | \(\mathscr C\) |
+| Safe/typed target set | \(K\) | \(\mathcal V^*\) or \(\mathcal V_P\cap\mathcal V_F\cap\mathcal V_N\cap\mathcal V_R\) |
+| Viability kernel | \(K_\infty\) when \(K\) is also safe set | \(\operatorname{Viab}(\mathcal V)\), \(\operatorname{RViab}(\mathcal V)\) |
+| Sink burden stock | \(K\) | \(\mathsf B\) |
+| Sink ceiling | \(K_{\max}\) | \(\bar{\mathsf B}\) |
+| Carrying capacity | \(C\) if \(C\) is constraint | \(\mathsf C_{\mathrm{cap}}\) |
+| Architecture | \(\mathcal A\) if assessment also uses \(\mathcal A\) | \(\mathfrak A_q\) |
+| Assessment operator | \(\mathcal A\) | \(\mathsf{Assess}_k\) or \(\mathcal A^{\mathrm{obs}}_k\) |
+| Action correspondence | \(U\) as set and map | \(\mathcal U_q(z)\) |
+| Policy class | \(P\) | \(\mathbb P_q\) |
+| Disturbance strategy class | \(D\) if also damage | \(\Delta_q\) |
+| Constitutive/model class | \(\mathcal V\) if safe set uses \(\mathcal V\) | \(\mathbb M\) |
+| Belief/information state | \(B\) if also burden | \(\mathsf b\) or \(i\) |
+
+**Recommended source status.** Adopt as official notation in the master manuscript and technical supplement.
+
+**Downstream consequences.** All theorem statements should be re-rendered using this notation. This does not change mathematical content but is essential for canonicalization.
+
+**Confidence.** High.
+
+---
+
+## Issue E1 — Hold/interpolation mismatch in Article 011
+
+**Diagnosis verdict:** partly correct.  
+**Source status:** `MODEL_INCOMPLETE`.
+
+**Corrected statement.**  
+The forward-invariance proposition can be stated more generally:
+
+If every inter-review implemented effort satisfies
+
+\[
+E(t)\in[0,E_{\max}]
+\]
+
+for all \(t\), whether by zero-order hold, convex interpolation, or another measurable deployment rule, then non-negativity and effort bounds are preserved.
+
+If the proposition is intended to follow from the command update alone, then it should be restricted to zero-order hold or to convex interpolation between projected commands.
+
+**Minimal assumptions.** Command projection \(E_n\in[0,E_{\max}]\), and implementation staying inside \([0,E_{\max}]\).
+
+**Proof sketch.** The stock equation is
+
+\[
+\dot N=N[r(1-N/K)-qE(t)].
+\]
+
+If \(N=0\), \(\dot N=0\). If \(N>0\), the solution remains positive. The memory equation has non-negative forcing. The effort bound follows by assumption or projection.
+
+**Counterexample if weakened.** If deployment overshoots \([0,E_{\max}]\), the effort bound can fail even if commands are projected.
+
+**Recommended source status.** Conditional theorem/proposition with explicit implementation assumption.
+
+**Downstream consequences.** Makes Article 011 compatible with both hold and more general deployment rules.
+
+**Confidence.** High.
+
+---
+
+## Issue D2 — Duplicated institutional mode in Article 007
+
+**Diagnosis verdict:** correct.  
+**Source status:** `TYPE_OR_DOMAIN_ERROR`.
+
+**Corrected statement.**  
+Do not include the institutional mode once inside belief histories and again as a separate coordinate. Use one of the following clean forms.
+
+If the institutional mode \(q\) is observed:
+
+\[
+\text{information state} = (q, \mathsf b),
+\]
+
+where \(\mathsf b\) is a belief over continuous physical histories.
+
+If the institutional mode is unobserved:
+
+\[
+\text{belief } \mathsf b \subseteq \mathcal H_x\times Q,
+\]
+
+where \(\mathcal H_x\) is the continuous history space and \(Q\) is the finite institutional-mode set.
+
+**Recommended source status.** Supersede the duplicated definition. Keep Article 007’s taxonomy and admission standard, but replace its information-state definition.
+
+**Downstream consequences.** Prevents type duplication in epistemic and institutional kernels.
+
+**Confidence.** High.
+
+---
+
+# Tier 2 — Moderate theorem repairs
+
+## Issue A1 — Robust tangency versus strong invariance
+
+**Diagnosis verdict:** partly correct.  
+**Source status:** `PROOF_INCOMPLETE`.
+
+**Corrected statement.**  
+Let \(K\) be closed. Define the robust regulation map
+
+\[
+\mathcal R_K(x)
+=
+\{u\in\mathcal U(x): f(x,u,d)\in T_K(x)\ \forall d\in\Delta(x)\}.
+\]
+
+If \(\mathcal R_K(x)\neq\varnothing\) for every \(x\in K\), and a measurable feedback selection exists with well-posed closed loop, then \(K\) is robustly controlled invariant:
+
+\[
+K\subseteq \operatorname{RViab}(K).
+\]
+
+Under standard Marchaud/semicontinuity/convexity assumptions, the robust viability kernel is the largest closed subset of the constraint set satisfying this robust tangency condition.
+
+**Minimal assumptions.**
+
+- \(K\) closed;
+- \(f\) continuous or upper semicontinuous with compact values;
+- \(\mathcal U(x)\), \(\Delta(x)\) compact;
+- tangent cone \(T_K(x)\) well-defined;
+- measurable selection available;
+- solution concept well-posed.
+
+**Proof sketch.** Choose measurable \(k(x)\in\mathcal R_K(x)\). Then for every disturbance,
+
+\[
+f(x,k(x),d)\in T_K(x).
+\]
+
+By Nagumo/viability theorem for differential inclusions, trajectories remain in \(K\).
+
+**Counterexample if quantifiers are weakened.** Let \(K=[0,\infty)\), \(x=0\), \(d\in\{1,-1\}\), and
+
+\[
+f(x,u,d)
+=
+\begin{cases}
+u, & d=1,\\
+-u-1, & d=-1.
+\end{cases}
+\]
+
+For each \(d\) separately there is a safe action: if \(d=1\), choose \(u=0\); if \(d=-1\), choose \(u=-1\). But there is no single \(u\) satisfying both:
+
+\[
+u\ge0
+\quad\text{and}\quad
+-u-1\ge0
+\]
+
+cannot hold simultaneously. Thus \(\forall d\,\exists u_d\) is not strong invariance.
+
+**Recommended source status.** Conditional theorem / robust discriminating-kernel formulation.
+
+**Downstream consequences.** This should replace any proof that applies ordinary Nagumo to a disturbance inclusion without checking the \(\exists u\,\forall d\) quantifier.
+
+**Literature.** Aubin, *Viability Theory*; Blanchini, “Set invariance in control,” *Automatica*, 1999.
+
+**Confidence.** High.
+
+---
+
+## Issue A2 — Order-minimal proof wording
+
+**Diagnosis verdict:** correct if source says all paths remain viable.  
+**Source status:** `FALSE_AS_STATED` for that wording.
+
+**Corrected statement.**  
+For an order-upper safe set and dynamics monotone in the order induced by lower harvest, the correct statement is existential:
+
+\[
+x_0\in\operatorname{Viab}(\mathcal V)
+\]
+
+if and only if the trajectory under the pointwise minimum admissible harvest remains in \(\mathcal V\).
+
+It does **not** imply that every admissible harvest path remains viable.
+
+**Minimal assumptions.**
+
+- lower harvest weakly increases stock and weakly decreases sink burden;
+- constraint set is upward in stock and downward in sink;
+- comparison theorem applies.
+
+**Proof sketch.** Lower harvest dominates higher harvest in the order. If the least-damaging path fails, all worse paths fail. If it succeeds, it is a viable policy.
+
+**Counterexample if overclaimed.** Minimum harvest may be viable while a larger harvest violates the sink ceiling. Thus not all paths are viable.
+
+**Recommended source status.** Theorem, corrected wording.
+
+**Downstream consequences.** Cleans the order-minimal principle used in scalar kernels.
+
+**Confidence.** High.
+
+---
+
+## Issue A3 — Pollution-feedback comparison sign
+
+**Diagnosis verdict:** mistaken if the sign is being challenged.  
+**Source status:** `NOT_AN_ERROR_BUT_NEEDS_CLARIFICATION`.
+
+**Corrected statement.**  
+If
+
+\[
+\frac{\partial g}{\partial K}\le0,
+\]
+
+then for every \(K\le K_{\max}\),
+
+\[
+g(S,K)\ge g(S,K_{\max}).
+\]
+
+Thus the frozen system at \(K=K_{\max}\) gives a worst-case growth law. If a rectangle is viable under \(g(\cdot,K_{\max})\), it is viable under the true pollution-suppressed growth for all \(K\le K_{\max}\).
+
+**Minimal assumptions.** \(g\) nonincreasing in \(K\).
+
+**Proof sketch.** Direct monotonicity.
+
+**Counterexample if weakened.** If \(g_K>0\), the inequality reverses and the worst case may be \(K=0\), not \(K=K_{\max}\).
+
+**Recommended source status.** Clarify the inner-bound argument.
+
+**Downstream consequences.** Supports the pollution-suppressed growth theorem.
+
+**Confidence.** High.
+
+---
+
+## Issue A4 — Capital-consumption kernel
+
+**Diagnosis verdict:** correct if the source claims larger consumption preserves the kernel.  
+**Source status:** `FALSE_AS_STATED` for that stronger claim.
+
+**Corrected statement.**  
+For
+
+\[
+\dot A=\Phi(A)-c,
+\qquad c\ge c_{\min},
+\]
+
+the existential viability kernel is
+
+\[
+[A_-(c_{\min}),\infty),
+\]
+
+where
+
+\[
+A_-(c_{\min})
+=
+\inf\{A\ge0:\Phi(A)\ge c_{\min}\},
+\]
+
+provided
+
+\[
+\sup_A \Phi(A)\ge c_{\min}.
+\]
+
+The proof uses the policy \(c\equiv c_{\min}\). Larger consumption may destroy viability.
+
+**Minimal assumptions.** \(\Phi\) continuous and concave, or at least such that the superlevel set \(\{\Phi\ge c_{\min}\}\) yields an invariant lower interval.
+
+**Proof sketch.** Choose \(c=c_{\min}\). At the boundary \(A=A_-\), \(\dot A\ge0\). For larger \(A\), the trajectory cannot be forced below \(A_-\) under \(c_{\min}\). Higher \(c\) reduces \(\dot A\).
+
+**Counterexample if overclaimed.** If \(c>c_{\min}\), then \(\Phi(A)-c<0\) may hold even where \(\Phi(A)\ge c_{\min}\), causing exit.
+
+**Recommended source status.** Theorem, corrected to existential minimum-consumption policy.
+
+**Downstream consequences.** Corrects joint resource-capital-consumption kernel statements.
+
+**Confidence.** High.
+
+---
+
+## Issue A5 — Generic non-polyhedrality
+
+**Diagnosis verdict:** correct; proof incomplete as written.  
+**Source status:** `PROOF_INCOMPLETE`.
+
+**Corrected statement.**  
+For a two-patch logistic system where:
+
+- the corner Nagumo condition fails;
+- an equilibrium exists in the constraint set;
+- the viability frontier is a regular orbit of the minimal-harvest vector field;
+- the frontier denominator does not vanish on the segment considered;
+
+the frontier graph \(\Gamma\) satisfies
+
+\[
+\frac{d\Gamma}{dS}
+=
+\frac{\phi_2(\Gamma)+d(S-\Gamma)}
+{\phi_1(S)+d(\Gamma-S)}.
+\]
+
+Affineness of \(\Gamma\) on an open interval imposes a finite system of polynomial equations on the parameters. The parameter set satisfying those equations is a proper algebraic subvariety under a nondegeneracy/resultant condition. Therefore, for an open dense set of parameters satisfying transversality, the frontier has nonzero curvature and is not polyhedral.
+
+**Minimal assumptions.**
+
+- logistic \(\phi_i\) quadratic;
+- regular frontier;
+- nonzero denominator;
+- nondegeneracy/resultant condition verified.
+
+**Proof sketch.** Substitute \(\Gamma(S)=mS+c\) into the frontier ODE. Clear denominators. Equating coefficients gives polynomial constraints. Elimination/resultant shows these constraints define a proper algebraic set unless degenerate.
+
+**Counterexample if assumptions weakened.** If the denominator vanishes or the frontier is vertical/horizontal over a segment, the curvature calculation fails; affine frontier cannot be excluded by this argument.
+
+**Recommended source status.** Either:
+
+1. repair with an explicit resultant/curvature calculation and state as conditional theorem; or
+2. demote to conjecture until the algebraic nondegeneracy is checked.
+
+**Downstream consequences.** Affects claims that viability barriers are generically curved rather than polyhedral.
+
+**Confidence.** Moderate. The route is sound, but a published proof should include the explicit elimination or curvature formula.
+
+---
+
+## Issue A6 — Rosen uniqueness
+
+**Diagnosis verdict:** partly correct.  
+**Source status:** `PROOF_INCOMPLETE`.
+
+**Corrected statement.**  
+For the commons game
+
+\[
+U_i(h_i,H)
+=
+\pi_i(h_i)-d_i(H),
+\qquad
+H=\sum_j h_j,
+\]
+
+with \(\pi_i\) strictly concave \(C^2\) and \(d_i\) convex \(C^2\), Rosen diagonal strict concavity can be verified using positive weights \(r_i>0\). The weighted payoff is
+
+\[
+\Psi(h)=\sum_i r_i U_i(h_i,H).
+\]
+
+Its Hessian has the form
+
+\[
+\nabla^2\Psi(h)
+=
+\operatorname{diag}\left(r_i\pi_i''(h_i)\right)
+-
+\left(\sum_i r_i d_i''(H)\right)\mathbf 1\mathbf 1^\top.
+\]
+
+For any nonzero \(v\),
+
+\[
+v^\top\nabla^2\Psi v
+=
+\sum_i r_i\pi_i''(h_i)v_i^2
+-
+\left(\sum_i r_i d_i''(H)\right)
+\left(\sum_i v_i\right)^2.
+\]
+
+If \(\pi_i''<0\) and \(d_i''\ge0\), this is strictly negative. Hence \(\Psi\) is diagonally strictly concave and the Nash equilibrium is unique.
+
+**Minimal assumptions.**
+
+- compact convex action intervals;
+- \(\pi_i\) strictly concave;
+- \(d_i\) convex;
+- positive weights \(r_i\).
+
+**Counterexample if weakened.** If damage functions are sufficiently concave, \(d_i''<0\), the Hessian can fail negative definiteness and uniqueness may fail.
+
+**Recommended source status.** Theorem, repaired proof.
+
+**Downstream consequences.** Supports uniqueness of Nash in commons obstruction and quota results.
+
+**Literature.** Rosen, 1965, “Existence and uniqueness of equilibrium points for concave N-person games.”
+
+**Confidence.** High.
+
+---
+
+## Issue A7 — Commons obstruction and undefined safe harvest
+
+**Diagnosis verdict:** correct.  
+**Source status:** `MODEL_INCOMPLETE`.
+
+**Corrected statement.**  
+Define a safe-harvest correspondence or boundary-strip condition rather than an undefined scalar \(H_{\mathrm{safe}}\). For example, let
+
+\[
+H_{\mathrm{safe}}(S)
+=
+\{H: g(S)-H\ge0 \text{ on the relevant boundary strip and sink constraints remain satisfied}\}.
+\]
+
+A precise obstruction theorem is:
+
+If under non-cooperative play the realized aggregate harvest \(H^{\mathrm{Nash}}(S)\) satisfies, for some \(a,\varepsilon>0\),
+
+\[
+g(S)-H^{\mathrm{Nash}}(S)\le-\varepsilon
+\qquad
+\forall S\in[S_{\min},S_{\min}+a],
+\]
+
+then every trajectory starting in that strip exits below \(S_{\min}\) within time at most \(a/\varepsilon\). If this condition holds whenever the state is in the viability set, the kernel is empty under non-cooperative play.
+
+**Minimal assumptions.**
+
+- continuous stock dynamics;
+- Nash harvest as a state-dependent realized aggregate;
+- uniform negative drift on a boundary strip.
+
+**Proof sketch.** Apply the finite-time obstruction certificate/Theorem 5.2.
+
+**Counterexample if weakened.** If \(g(S)-H^{\mathrm{Nash}}(S)<0\) pointwise but not uniformly bounded away from zero near the boundary, exit may be asymptotic rather than finite-time.
+
+**Recommended source status.** Conditional theorem after defining safe harvest or drift condition.
+
+**Downstream consequences.** Makes tragedy-of-commons obstruction rigorous.
+
+**Confidence.** High.
+
+---
+
+## Issue A8 — Quota rescue with wrong inequality
+
+**Diagnosis verdict:** correct.  
+**Source status:** `FALSE_AS_STATED`.
+
+**Corrected statement.**  
+If the model requires a harvest floor
+
+\[
+H\ge H_{\min},
+\]
+
+then quotas satisfying
+
+\[
+\sum_i q_i \le H_{\min}
+\]
+
+are not sufficient. The correct quota theorem should require
+
+\[
+\sum_i q_i \in [H_{\min}, H_{\mathrm{safe}}],
+\]
+
+or, for a constant-harvest viability theorem, simply
+
+\[
+\sum_i q_i = H_{\min},
+\]
+
+provided \(H_{\min}\le H_*\) and the other viability conditions hold.
+
+**Minimal assumptions.** Enforced quotas; sanctions sufficient to make quota the best response; aggregate quota within the admissible viability interval.
+
+**Proof sketch.** Sanctions implement \(h_i=q_i\). Aggregate harvest equals \(\sum_iq_i\). The scalar viability theorem then applies.
+
+**Counterexample if not corrected.** If \(\sum_iq_i<H_{\min}\), the output floor is violated even if the ecological stock is safe.
+
+**Recommended source status.** Theorem, corrected.
+
+**Downstream consequences.** Fixes institutional rescue result.
+
+**Confidence.** High.
+
+---
+
+## Issue A9 — Sanction sufficiency and unique best response
+
+**Diagnosis verdict:** correct.  
+**Source status:** `PROOF_INCOMPLETE`.
+
+**Corrected statement.**  
+Sanctions with marginal cost \(\gamma\) above quota can block upward deviations. To make quota the unique best response, add one of the following:
+
+1. payoff is strictly increasing up to quota:
+
+\[
+\pi_i'(h)>0
+\qquad
+\forall h\in[0,q_i],
+\]
+
+and
+
+\[
+\gamma>\pi_i'(q_i);
+\]
+
+or
+
+2. the unconstrained best response is at least \(q_i\), so without sanctions the agent would weakly prefer to exceed quota.
+
+Then quota is the unique best response.
+
+A weaker correct result is:
+
+- sanctions make all \(h_i>q_i\) strictly dominated;
+- quota is the unique best response among actions \(h_i\ge q_i\);
+- full uniqueness requires monotonicity or satiation assumptions below quota.
+
+**Counterexample if weakened.** If quota is above the agent’s satiation point, the best response may be below quota despite sanctions.
+
+**Recommended source status.** Conditional theorem or weakened theorem.
+
+**Downstream consequences.** Repairs quota enforcement theorem.
+
+**Confidence.** High.
+
+---
+
+## Issue A10 — Ostrom sufficiency/necessity
+
+**Diagnosis verdict:** partly correct.  
+**Source status:** `NOT_AN_ERROR_BUT_NEEDS_CLARIFICATION`.
+
+**Corrected statement.**  
+The formal sufficiency theorem can stand:
+
+If the eight Ostrom translations hold and the physical viability conditions hold, then the institutional viability kernel is nonempty.
+
+The necessity theorem should be stated as:
+
+For each principle \(k\), there exists a configuration satisfying all other translations and physical conditions in which violating principle \(k\) empties the kernel.
+
+This proves each principle **can be necessary in some constructed class**, not that each is universally necessary.
+
+**Recommended source status.** Keep sufficiency theorem. Reword necessity as “constructed can-be-necessary examples.”
+
+**Downstream consequences.** Prevents overclaiming universal necessity of Ostrom principles.
+
+**Confidence.** High.
+
+---
+
+## Issue A11 — Implementation lattice downward closure
+
+**Diagnosis verdict:** correct.  
+**Source status:** `FALSE_AS_STATED`.
+
+**Corrected statement.**  
+Let
+
+\[
+\operatorname{Inst}
+=
+\{\mathcal U'\subseteq\mathcal U_{\mathrm{phys}}:
+\operatorname{Viab}(\mathcal V;\mathcal U')\neq\varnothing\}.
+\]
+
+This is **upward closed**, not downward closed: if \(\mathcal U'\) contains a viable selection, any superset also contains that selection.
+
+By contrast, a universal-invariance class
+
+\[
+\operatorname{InvLat}
+=
+\{\mathcal U':\text{some nonempty subset of }\mathcal V
+\text{ is invariant under every }\mathcal U'\text{-selection}\}
+\]
+
+is downward closed: removing selections cannot create a new violating selection.
+
+Thus:
+
+- existential viability correspondences are upward closed;
+- universal invariant correspondences are downward closed;
+- arbitrary contraction of an existentially viable control set can destroy viability by removing the viable selection.
+
+**Counterexample.** Let \(\mathcal U'=\{u_{\mathrm{safe}},u_{\mathrm{bad}}\}\). The system is viable because \(u_{\mathrm{safe}}\) exists. The subset \(\{u_{\mathrm{bad}}\}\) may be nonviable.
+
+**Recommended source status.** Replace false downward-closure statement with the correct order structure.
+
+**Downstream consequences.** Important for institutional implementation and governance restriction claims.
+
+**Confidence.** High.
+
+---
+
+## Issue C1 — Fixed-point operator mismatch in Article 006
+
+**Diagnosis verdict:** correct.  
+**Source status:** `TYPE_OR_DOMAIN_ERROR`.
+
+**Corrected statement.**  
+The official Tarski operator should be
+
+\[
+\Phi_1(Q)=S_{\mathrm{safe}}\cap\operatorname{Pre}(Q),
+\]
+
+with initial iterate
+
+\[
+Q_0=S_{\mathrm{safe}}
+\]
+
+or the full admissible belief space.
+
+The target is the greatest fixed point, equivalently the greatest post-fixed point:
+
+\[
+Q\subseteq S_{\mathrm{safe}},
+\qquad
+Q\subseteq\operatorname{Pre}(Q).
+\]
+
+The contracting recursion
+
+\[
+Q_{n+1}=Q_n\cap\operatorname{Pre}(Q_n)
+\]
+
+is acceptable as an implementation recursion if started at \(Q_0=S_{\mathrm{safe}}\) and if \(\operatorname{Pre}\) is monotone. Under monotonicity and decreasing iteration, it coincides with the \(\Phi_1\) iterates. But conceptually \(\Phi_1\) is cleaner because it makes the safe base explicit.
+
+**Countable descent conditions.** Countable descent reaches the greatest fixed point when:
+
+- the belief lattice is closed under countable intersections;
+- \(\operatorname{Pre}\) is monotone;
+- \(\operatorname{Pre}\) preserves decreasing intersections, e.g. via compactness and closed predecessor graphs.
+
+**Transfinite iteration.** If \(\operatorname{Pre}\) does not preserve countable intersections, use transfinite ordinal iteration:
+
+\[
+Q_{\alpha+1}=\Phi_1(Q_\alpha),
+\qquad
+Q_\lambda=\bigcap_{\alpha<\lambda}Q_\alpha
+\]
+
+for limit ordinals, until stabilization. In a complete lattice this yields the greatest fixed point.
+
+**Policy selection in the limit.** For compact nested witness sets, finite-intersection gives nonempty limiting action sets. For measurable policies, one needs measurable selection at each finite stage and a measurable limiting selection.
+
+**Recommended source status.** Replace Article 006 recursion with \(\Phi_1\) as official; keep \(Q\cap\operatorname{Pre}(Q)\) only as a derived implementation recursion under stated conditions.
+
+**Downstream consequences.** Fixes the core epistemic fixed-point construction.
+
+**Confidence.** High.
+
+---
+
+## Issue C2 — Common safe prescription with latent-state implementation
+
+**Diagnosis verdict:** correct.  
+**Source status:** `MODEL_INCOMPLETE`.
+
+**Corrected statement.**  
+If implementation can depend on latent state, raw-action intersection
+
+\[
+\bigcap_{x\in B} \mathcal U(x)
+\]
+
+may be too strong. The correct object is a prescription-level safety condition.
+
+Let \(p\) be a prescription and let
+
+\[
+\mathcal E(p,x)
+\]
+
+be the set of realized actions induced by \(p\) when the latent state is \(x\). A prescription \(p\) is safe for belief \(B\) and target set \(Q\) if
+
+\[
+f(x,\tilde u,d)\in T_Q(x)
+\]
+
+for every \(x\in B\cap Q\), every \(\tilde u\in\mathcal E(p,x)\), and every disturbance \(d\).
+
+The epistemic obstruction is then:
+
+\[
+\nexists p
+\quad\text{s.t.}\quad
+\forall x\in B,\ \forall \tilde u\in\mathcal E(p,x),\ \forall d,\ 
+f(x,\tilde u,d)\in T_Q(x).
+\]
+
+The common-action conflict is the special case \(\mathcal E(p,x)=\{p\}\).
+
+**Recommended source status.** Conditional theorem / formal definition.
+
+**Downstream consequences.** Repairs institutional epistemic viability and avoids excessive raw-action intersection.
+
+**Confidence.** High.
+
+---
+
+## Issue C3 — Information-refinement inclusion across belief spaces
+
+**Diagnosis verdict:** correct.  
+**Source status:** `TYPE_OR_DOMAIN_ERROR`.
+
+**Corrected statement.**  
+Do not write literal inclusion between kernels living in different belief spaces unless a common physical projection or Blackwell/order map is declared.
+
+Define the physical projection of an epistemic kernel by
+
+\[
+\operatorname{EViab}_{\mathcal I}^{\mathrm{phys}}
+=
+\{x_0:
+B_{\mathcal I}(x_0)\in\operatorname{EViab}_{\mathcal I}\},
+\]
+
+where \(B_{\mathcal I}(x_0)\) is the initial information state generated by \(x_0\) under \(\mathcal I\).
+
+If \(\mathcal I_1\) is finer than \(\mathcal I_2\) in the Blackwell sense, i.e. \(\mathcal I_2\) is a garbling of \(\mathcal I_1\), then after physical projection:
+
+\[
+\operatorname{EViab}_{\mathcal I_2}^{\mathrm{phys}}
+\subseteq
+\operatorname{EViab}_{\mathcal I_1}^{\mathrm{phys}}.
+\]
+
+**Minimal assumptions.**
+
+- common physical state space;
+- well-defined initial information-state maps;
+- refinement/garbling relation between information structures.
+
+**Recommended source status.** Clarify before stating refinement monotonicity.
+
+**Downstream consequences.** Makes information-value and epistemic hierarchy statements rigorous.
+
+**Confidence.** High.
+
+---
+
+## Issue D1 — Hybrid phase space in Article 007
+
+**Diagnosis verdict:** correct.  
+**Source status:** `TYPE_OR_DOMAIN_ERROR`.
+
+**Corrected statement.**  
+A discrete institutional mode should not be embedded directly in a continuous history space \(C([-\tau,0],\mathbb R^n)\). Use a hybrid phase space such as
+
+\[
+(x_t,q)\in C([-\tau,0],\mathbb R^n)\times Q,
+\]
+
+where \(Q\) is finite and discrete.
+
+If institutional memory \(m\) is needed, use
+
+\[
+(x_t,q,m),
+\]
+
+with \(m\) in a finite or otherwise declared discrete memory space.
+
+If jumps occur, declare:
+
+- jump set;
+- reset map for \(q\) and \(m\);
+- reset map for continuous variables;
+- execution rule, e.g. review synchronization or minimum dwell;
+- local finiteness/non-Zeno condition.
+
+For càdlàg histories, one may use a Skorokhod space, but delayed evaluation and predecessor closedness become harder. The cleanest restricted route is review-synchronized hybrid reset as in Article 002.
+
+**Recommended source status.** Supersede Article 007 phase space. Keep its failure taxonomy.
+
+**Downstream consequences.** Necessary before any delayed hybrid institutional kernel.
+
+**Confidence.** High.
+
+---
+
+## Issue B3 — Exact information and hybrid tube assumptions
+
+**Diagnosis verdict:** correct.  
+**Source status:** `NOT_AN_ERROR_BUT_NEEDS_CLARIFICATION`.
+
+**Corrected statement.**  
+Each theorem should explicitly label whether an object is assumed or constructed.
+
+| Object | Assumed in theorem? | Constructed by theorem? |
+|---|---:|---:|
+| finite-clopen endpoint filter | partition assumed | exact conditioning constructed |
+| finite-clopen tube filter | partition and held map assumed | exact aggregate tube constructed |
+| compact information-state process | assumed | not constructed |
+| Hausdorff-continuous hybrid tubes | assumed | not constructed |
+| outer-semicontinuous hybrid reachable sets | insufficient | predecessor may fail |
+
+**Recommended source status.** Add an assumptions-versus-constructions table to Article 002 and the master supplement.
+
+**Downstream consequences.** Prevents treating conditional assumptions as discharged application properties.
+
+**Confidence.** High.
+
+---
+
+# Tier 3 — Larger architectural and redesign questions
+
+## Issue B2 — Selector regularity
+
+**Diagnosis verdict:** correct.  
+**Source status:** `MODEL_INCOMPLETE`.
+
+**Corrected statement.**  
+Article 002’s kernels are valid as choice-theoretic existence results under arbitrary state-feedback selectors. For implementable policies, add measurable-selection corollaries.
+
+**Minimal measurable-selection hypotheses.**
+
+- state, action, disturbance spaces are compact metric;
+- transition/tube maps are continuous or Borel measurable;
+- predecessor witness correspondence
+
+\[
+\Gamma(z)
+=
+\{u\in U: \text{successor/tube conditions hold}\}
+\]
+
+has nonempty closed values;
+- \(\Gamma\) is measurable, e.g. closed graph in compact metric spaces.
+
+Then a measurable selector exists by standard measurable selection theorems, e.g. Kuratowski–Ryll-Nardzewski.
+
+**Continuous selectors.** Continuous selectors are not guaranteed. They require stronger conditions, such as lower semicontinuity and convex values, or approximation results. Do not claim continuous implementability without proof.
+
+**Which results remain choice-theoretic?**
+
+- kernel nonemptiness and maximality;
+- finite-horizon characterization;
+- greatest-fixed-point existence.
+
+**Which results become implementable?**
+
+- measurable policy corollaries;
+- finite-horizon recursive measurable policies;
+- stationary measurable policies if the limiting witness correspondence is measurable.
+
+**Counterexample if weakened.** A closed-valued correspondence may have measurable selectors but no continuous selector. Thus continuous implementation is a separate theorem.
+
+**Recommended source status.** Main theorems remain conditional choice-theoretic theorems. Add measurable implementation corollaries.
+
+**Downstream consequences.** Essential for epistemic viability being policy-implementable rather than merely existential.
+
+**Confidence.** High for measurable selection; moderate for infinite-horizon stationary measurable selection without additional structure.
+
+---
+
+## Priority 2 / §8.1 — Operator I hierarchy
+
+**Recommended minimal coherent hierarchy.**
+
+Use the following notation.
+
+### 1. Controlled existential viability
+
+\[
+\operatorname{Viab}^{\mathrm{ctrl}}_{\mathbb P}(\mathcal V,T)
+=
+\{z_0\in\mathcal V:
+\exists\pi\in\mathbb P
+\text{ such that } z^{\pi}(t)\in\mathcal V\ \forall t\in T\}.
+\]
+
+This is for a nominal disturbance or no adversarial disturbance.
+
+### 2. Robust/discriminating viability
+
+\[
+\operatorname{RViab}_{\mathbb P,\Delta}(\mathcal V,T)
+=
+\{z_0\in\mathcal V:
+\exists\pi\in\mathbb P\ \forall\delta\in\Delta,
+\ z^{\pi,\delta}(t)\in\mathcal V\ \forall t\in T\}.
+\]
+
+This is the core Operator I object.
+
+### 3. Epistemic viability
+
+On information states \(i\in I\):
+
+\[
+\operatorname{EViab}_{\mathcal I,\mathbb P}(\mathcal V,T)
+=
+\{i_0:
+\exists\pi(i_{0:k})\ 
+\forall\text{ compatible latent trajectories/disturbances},
+\ z(t)\in\mathcal V\}.
+\]
+
+Physical projection:
+
+\[
+\operatorname{EViab}_{\mathcal I}^{\mathrm{phys}}
+=
+\{z_0:B_{\mathcal I}(z_0)\in\operatorname{EViab}_{\mathcal I}\}.
+\]
+
+### 4. Institutional viability
+
+For institution
+
+\[
+\mathfrak I=(\mathcal I,\Gamma,\mathcal E,\mathcal A),
+\]
+
+define
+
+\[
+\operatorname{IViab}_{\mathfrak I}(\mathcal V,T)
+\]
+
+as the set of belief/physical states from which there exists an institutionally implementable prescription policy whose realized actions preserve \(\mathcal V\) for all latent states and disturbances compatible with the belief.
+
+### 5. Finite-horizon chance viability
+
+\[
+\operatorname{ChViab}_{T,p}(\mathcal V)
+=
+\{z_0:
+\exists\pi,\ 
+\Pr[z^{\pi}(t)\in\mathcal V\ \forall t\in[0,T]]\ge p\}.
+\]
+
+### 6. Capture/recoverability
+
+\[
+\operatorname{Capt}^{H}_{\mathbb P,\Delta}(\mathcal K;\mathcal E)
+=
+\{z_0\in\mathcal E:
+\exists\pi\in\mathbb P\ \forall\delta\in\Delta\ 
+\exists t_C\le H:
+z(t)\in\mathcal E\ \forall t\le t_C,
+\ z(t_C)\in\mathcal K\}.
+\]
+
+### 7. Fixed-policy safety
+
+\[
+\operatorname{Safe}_{\pi,\Delta}(\mathcal V,T)
+=
+\{z_0:
+\forall\delta\in\Delta,
+\ z^{\pi,\delta}(t)\in\mathcal V\ \forall t\in T\}.
+\]
+
+**Literal inclusions.**
+
+Under common state space, disturbance class, horizon, and policy nesting:
+
+\[
+\operatorname{RViab}\subseteq\operatorname{Viab}^{\mathrm{ctrl}}.
+\]
+
+If epistemic policies are restrictions of full-information policies:
+
+\[
+\operatorname{EViab}^{\mathrm{phys}}
+\subseteq
+\operatorname{RViab}.
+\]
+
+If institutional implementation further restricts epistemic policies:
+
+\[
+\operatorname{IViab}^{\mathrm{phys}}
+\subseteq
+\operatorname{EViab}^{\mathrm{phys}}.
+\]
+
+Capture basins are not generally subsets of viability kernels. With envelope \(\mathcal E=\mathcal K\),
+
+\[
+\operatorname{Capt}_{\mathcal K}(\mathcal K)=\mathcal K.
+\]
+
+With \(\mathcal E\supset\mathcal K\), the capture basin can include states outside \(\mathcal K\).
+
+**Recommended source status.** Adopt as the official Operator I hierarchy.
+
+**Confidence.** High.
+
+---
+
+## §8.2 — Fixed-point construction, explicit answer
+
+**Official operator.**
+
+\[
+\Phi_1(Q)=S_{\mathrm{safe}}\cap\operatorname{Pre}(Q).
+\]
+
+**Initial iterate.**
+
+\[
+Q_0=S_{\mathrm{safe}}.
+\]
+
+**Target.** Greatest fixed point of \(\Phi_1\), equivalently greatest post-fixed point \(Q\subseteq S_{\mathrm{safe}}\) with \(Q\subseteq\operatorname{Pre}(Q)\).
+
+**Alternative operator.**
+
+\[
+\Phi_2(Q)=Q\cap\operatorname{Pre}(Q)
+\]
+
+has the same fixed points inside \(S_{\mathrm{safe}}\) if started at \(S_{\mathrm{safe}}\) and if \(\operatorname{Pre}\) is monotone, but \(\Phi_1\) is conceptually cleaner.
+
+**Countable descent.** Sufficient under compactness, closed predecessor graph, and preservation of decreasing intersections.
+
+**Transfinite iteration.** Required if countable intersection is not preserved.
+
+**Policy preservation.** Nested compact witness sets give limiting selectors by finite-intersection; measurable versions require measurable selection.
+
+**Recommended source status.** Official construction.
+
+**Confidence.** High.
+
+---
+
+## Rejected formulation 7.1 — Institutional measurement
+
+**Question.** Which of the following should be measured first?
+
+1. multidimensional vector of institutional margins;
+2. dynamics-aware margin \(M_\tau=T_{\mathrm{exit}}-T_{\mathrm{response}}\);
+3. epistemic-institutional viability kernel/capture basin.
+
+**Recommendation.** Start with option 1.
+
+### Why the vector first?
+
+A multidimensional vector avoids creating another arbitrary scalar index. Example dimensions:
+
+\[
+(\text{observation latency},
+\text{assessment uncertainty},
+\text{authority},
+\text{enforcement capacity},
+\text{compliance},
+\text{mandate load},
+\text{learning rate},
+\text{budget margin}).
+\]
+
+Each dimension should have:
+
+- units;
+- threshold;
+- provenance;
+- uncertainty;
+- missing-data declaration.
+
+Do not weight or aggregate unless a normative rule is declared.
+
+### Dynamics-aware margin
+
+\[
+M_\tau=T_{\mathrm{exit}}-T_{\mathrm{response}}
+\]
+
+is useful but model-dependent. It requires estimating:
+
+- time to constraint violation under status quo;
+- detection time;
+- decision time;
+- deployment time;
+- ecological effect time.
+
+Use as a second-stage diagnostic after the vector.
+
+### Epistemic-institutional kernel
+
+This is the theoretically correct long-run object, but it requires:
+
+- information process;
+- implementation correspondence;
+- enforcement map;
+- belief-state dynamics;
+- selector regularity.
+
+It should be treated as a research programme, not the first measurement.
+
+**Recommended staged design.**
+
+1. Register multidimensional institutional margin vector.
+2. Estimate \(M_\tau\) for selected cases with declared uncertainty.
+3. Develop epistemic-institutional kernels for simple models.
+
+**Recommended source status.** Redesign. Do not revive rejected scalar index.
+
+**Confidence.** High for staging; moderate for empirical feasibility of specific dimensions.
+
+---
+
+## Rejected formulation 7.2 — Distributive measurement
+
+**Diagnosis verdict:** original construction invalid as written.  
+**Recommended source status:** reject and redesign.
+
+### Valid design principles
+
+#### 1. Dimensionless normalized margins
+
+For each group \(g\) and dimension \(j\), define lower-bound margin
+
+\[
+m_{gj}^{-}
+=
+\frac{x_{gj}-\ell_{gj}}{s_{gj}},
+\]
+
+where \(\ell_{gj}\) is the floor and \(s_{gj}>0\) is a declared scale.
+
+For upper-bound burdens,
+
+\[
+m_{gj}^{+}
+=
+\frac{u_{gj}-x_{gj}}{s_{gj}}.
+\]
+
+All margins are dimensionless.
+
+#### 2. Exact nonsmooth conjunction
+
+The exact distributive safety condition is
+
+\[
+\min_{g,j} m_{gj}\ge0.
+\]
+
+This is exact and non-compensatory.
+
+#### 3. Conservative smooth inner certificate
+
+A smooth conservative certificate can use
+
+\[
+m_\tau
+=
+-\tau\log\left(\sum_{g,j}e^{-m_{gj}/\tau}\right).
+\]
+
+Then
+
+\[
+m_\tau\le \min_{g,j}m_{gj}.
+\]
+
+Thus \(m_\tau\ge0\) is sufficient but not necessary. Do not claim finite-\(\tau\) equivalence to the exact minimum.
+
+#### 4. Bottom-group quantiles
+
+Use group-specific quantiles or essential infimum:
+
+\[
+Q_{\alpha}(m_j)
+=
+\inf\{m: F_j(m)\ge\alpha\}.
+\]
+
+Do not average regional deciles. If pooling is required, form the correct mixture distribution
+
+\[
+F=\sum_g w_g F_g
+\]
+
+with declared weights, then compute quantiles from \(F\), and report group-specific quantiles separately.
+
+#### 5. Intergenerational transition matrices
+
+If generations or groups transition across states, use a stochastic matrix
+
+\[
+P_{ab}=\Pr(\text{next state }b\mid\text{current state }a).
+\]
+
+Intergenerational safety requires that the induced distribution over next-generation states lies in a declared continuation set with sufficient probability or satisfies recursive viability constraints.
+
+#### 6. Dynamic viability/CBF condition
+
+For distributional constraints
+
+\[
+h_g(z)\ge0,
+\]
+
+a robust dynamic condition is
+
+\[
+\exists u\ \forall d:
+D^+h_g(z;f(z,u,d))\ge \alpha_g(h_g(z))
+\]
+
+for each protected group constraint. If using a smooth aggregate certificate, its derivative condition should be conservative relative to the exact minimum.
+
+**Recommended source status.** Redesign as above. Do not repair the original LogSumExp equivalence or pooled decile construction.
+
+**Confidence.** High for design principles; empirical implementation remains open.
+
+---
+
+# Remaining canonical decision questions
+
+## §8.3 — Transformation theorem target
+
+Already discharged above with the restricted Operator II transformation theorem. The smallest nontrivial class is:
+
+- finite architecture graph;
+- finite decision horizon;
+- compact admissible transition regions;
+- continuous reset/translation maps;
+- full hybrid state at review;
+- arbitrary or measurable state-feedback meta-policies;
+- destination target given by Operator I kernels.
+
+---
+
+## §8.4 — Composition theorem target
+
+Already discharged above with the restricted barrier small-gain composition theorem. The nontrivial restricted class is:
+
+- local barrier margins;
+- bounded interface outputs;
+- linear/Lipschitz coupling gains;
+- row-sum small-gain condition;
+- commons extension with aggregate load feasibility.
+
+---
+
+## §8.5 — Empirical anchor
+
+Already discharged: phosphorus is the better first complete domain test because it has cleaner moiety accounting, exact conservation, donor-limited tangency, and a natural module decomposition. Groundwater is better reserved for a second test exercising epistemic/institutional delay and partial observation.
+
+---
+
+# Requested final synthesis
+
+## Top five priorities in order
+
+### 1. Canonical formal spine
+
+Adopt official notation, fixed-point construction, and type discipline. This includes:
+
+- B1 notation;
+- C1 fixed point;
+- D1/D2 hybrid/information typing;
+- 013/012 minor corrections.
+
+This is highest priority because nearly every later theorem depends on it.
+
+### 2. Repair Article 001 core theorem docket
+
+Correct A1–A11. These results form the broad viability, coupling, commons, and institutional corpus. The repairs are mostly feasible and high-value.
+
+### 3. Establish Operator I hierarchy and selector regularity
+
+Adopt the viability hierarchy and address B2/B3/C2/C3. This converts the formal spine into implementable epistemic/institutional objects.
+
+### 4. Integrate Operator II and restricted composition with phosphorus test
+
+Use the already drafted:
+
+- Operator II restricted transformation theorem;
+- restricted composition theorem;
+- phosphorus instantiation.
+
+This gives the architecture its first nontrivial end-to-end test.
+
+### 5. Build prospective empirical identification for governance
+
+Use Article 011’s prospective designs:
+
+- governance-event panels;
+- quasi-experimental timing;
+- out-of-sample mechanism comparison;
+- human-in-the-loop experiments;
+- closed-loop MSE.
+
+This is essential if the theory is to make empirical claims about institutional delays and review intervals.
+
+---
+
+## Recommended minimum-paper architecture
+
+### Paper 1: Flagship architectural manuscript
+
+Content:
+
+- typed sustainability specification \(\Omega\);
+- constraint registry;
+- typed judgment vector;
+- Operator I hierarchy;
+- Operator II transformation;
+- composition language and restricted theorem;
+- phosphorus instantiation sketch;
+- claim-status discipline;
+- limitations and open conjectures.
+
+This should be the master manuscript.
+
+### Paper 2: Technical supplement or companion formal paper
+
+Content:
+
+- full proofs from Article 002;
+- corrected Article 001 theorems;
+- fixed-point and selector regularity;
+- hybrid/information-state kernels;
+- composition proof and counterexamples.
+
+This can be a supplement if length is manageable; otherwise a formal companion.
+
+### Paper 3: Empirical/dynamics companion, later
+
+Content:
+
+- Article 012 delayed dynamics;
+- Article 011 governance identification;
+- Article 013 accounting application;
+- phosphorus end-to-end if data are developed.
+
+This should not be merged with the flagship because it uses a different evidentiary method.
+
+### Do not separate
+
+- Article 004/005 domain templates should remain modules or appendices until one end-to-end case is completed.
+- Articles 006/007/010 should be superseded but their useful taxonomies preserved in appendices.
+- Articles 008/009 should remain rejected unless redesigned according to the institutional/distributive guidance above.
+
+---
+
+## Major mathematical issue absent from the packet
+
+The packet misses one major issue:
+
+> There is no bridge theorem connecting sampled information-state kernels, continuous-time robust viability, and institutional implementation under partial observation and variable delays.
+
+More concretely, the current corpus has:
+
+- sampled full-state kernels;
+- finite-clopen observation kernels;
+- compact information-state kernels;
+- bounded-jump hybrid kernels;
+- continuous-time robust tangency.
+
+But it lacks a theorem stating under what conditions an information-state kernel computed in sampled review time certifies continuous-time robust viability with partial observation, delayed deployment, and institutional implementation. This bridge requires:
+
+- exact or bounded information process;
+- inter-sample tube safety;
+- selector regularity;
+- delay composition;
+- non-Zeno execution;
+- implementation/enforcement maps.
+
+A second absent issue is:
+
+> There is no nontrivial theorem combining strategic compliance, commons allocation, and small-gain composition.
+
+The current composition theorem handles deterministic/robust coupling. The master manuscript needs a strategic-commons composition theorem showing when local contracts, aggregate sink budgets, and enforcement mechanisms jointly imply global viability.
+
+Both should be added to the open proof-obligation register.

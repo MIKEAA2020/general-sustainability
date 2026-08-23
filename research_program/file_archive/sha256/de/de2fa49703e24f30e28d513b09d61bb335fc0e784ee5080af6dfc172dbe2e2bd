@@ -1,0 +1,139 @@
+# Dependency-Aware Obstacle Closure Plan
+
+## Ordering rule
+
+Work is selected lexicographically:
+
+1. prerequisite depth and number of downstream tasks unblocked;
+2. scientific validity and interface risk;
+3. feasibility with currently available sources/artifacts;
+4. publication and general-theory value;
+5. effort, with lower effort preferred only after the preceding criteria.
+
+No downstream manuscript drafting substitutes for an unresolved interface or proof gate.
+
+## Dependency graph
+
+```text
+TCS-1.0 canonical schema [complete]
+  ├─> 25-source/407-item concordance coverage [complete]
+  │     ├─> row-level theorem/status verification [next]
+  │     │     ├─> Paper 2 theorem map and length budget
+  │     │     ├─> Paper 1 independent-result selection
+  │     │     └─> global theorem-status audit
+  │     └─> proof/counterexample publication allocation
+  ├─> notation/variant registry [global layer complete; active local conflicts remain]
+  │     ├─> A018 model/version separation
+  │     ├─> A022/A023 stage-version reconciliation
+  │     └─> artifact/version manifests
+  ├─> interface contracts
+  │     ├─> A018 ledger→dynamics seam [complete]
+  │     ├─> observation→assessment→implementation
+  │     ├─> viability→empirical diagnostics
+  │     └─> domain-module admission mappings
+  └─> canonical theorem interfaces
+        ├─> Operator I hierarchy
+        ├─> Paper 1 Operator II result
+        └─> restricted composition theorem
+
+Canonical core + interface contracts
+  ├─> one end-to-end empirical case
+  │     └─> institutional/distributive operationalization
+  ├─> global novelty/literature map
+  └─> reproducibility compendium manifests
+
+Independent A021 branch:
+abstract persistence theorem [complete]
+  └─> continuum orbit/Floquet/projection/bunching + concrete coupling [open]
+        └─> Paper 6
+
+Stage/spatial branch:
+version reconciliation + independent theorem/artifact [open]
+  └─> Paper 7+
+
+All applicable paper gates
+  └─> readiness-triggered drafting and submission
+        └─> definitive monograph
+```
+
+## Completed wave 1 — foundation and decisive seam
+
+| Task | Outcome | Evidence |
+|---|---|---|
+| Freeze canonical system/theorem schema | `TCS-1.0` frozen in prose and JSON | `canonical_system_schema_v1_0.md`, `.json` |
+| Enumerate source content | 407 stable rows, all A001–A025 inventories represented | `canonical_concordance_A001_A025.csv` |
+| Preserve conservative status | 334 rows explicitly require row review; no automated promotion | coverage report |
+| Resolve global notation | 22 conflict/variant rows; global choices fixed, local conflicts blocked | notation/variant registry |
+| Decide A018 seam | Exact diagnostic specialization; false closed-ledger→working-C4 reduction rejected | A018 interface contract |
+
+## Active wave 2 — theorem-interface closure
+
+### Batch 2A: Paper 1/Paper 2 load-bearing rows — classification subwave complete
+
+Completed:
+
+1. `A001_A002_theorem_interface_map.csv` classifies all 152 inventoried rows into 15 theorem families, records correction/verification dependencies, and assigns publication roles without promoting any row.
+2. `operator_I_hierarchy_v1_0.md` fixes aligned quantifiers, valid implications, information/implementation mappings, and non-implications.
+3. `paper1_finite_architecture_transformation_theorem.md` supplies a complete restricted Operator II proof candidate. Proof availability is closed; novelty and nonduplication remain open.
+4. `paper2_theorem_atlas_content_budget.md` measures the gross 40,582-word/152-item intake and defines a coherent 2A/2B split trigger if post-deduplication length fails.
+
+Completed in the source-closure subwave:
+
+1. `A001_A002_source_proof_locator.csv` now covers all 149 formal source objects plus three nonformal A002 remarks, giving 152/152 inventory coverage with source hashes and exact statement/proof lines.
+2. The six A001 objects without separately labelled proofs were manually resolved: five are immediate/embedded derivations; the common-action theorem requires an explicit one-step publication proof.
+3. `A001_A002_source_selection_and_deduplication.md` selects canonical sources and eliminates duplicate proof presentation without deleting delegated content.
+4. `paper2_retained_row_budget.csv` routes 63 main, 7 bounded-appendix, 63 delegated, and 19 docket rows. The preliminary retained equivalent is about 27,197 words before references/figures.
+5. `A002_mature_foundation_proof_audit.md` mathematically accepts nine foundational results with exact scope and one notation correction; the BIBS and Farkas verification gates are closed.
+
+Still active:
+
+1. A002 projectability, reduction, aggregation, local-horizon, and Halanay proofs are now audited and accepted with exact scope in `A002_reduction_diagnostic_stability_proof_audit.md`.
+2. Verify the selected A001 Operator I proofs that do not depend on the composition repair.
+3. Check actual target-venue policy; the current 27.2k estimate creates a strong but not yet venue-adjudicated 2A/2B split trigger.
+4. **Paused difficult gate:** A001 composition theorem repair. The self-contained specialist prompt is `prompts/A001_restricted_composition_theorem_repair_prompt.md`; the internal provisional answer is `internal_provisional_A001_composition_theorem_answer.md`. It finds the source theorem repairable but invalid as proved and supplies a joint-feasibility repair. No implementation is authorized before future audits are jointly adjudicated.
+5. **Paused difficult gate:** Paper 1 Operator II novelty. The self-contained prompt is `prompts/Paper1_operatorII_novelty_and_independent_contribution_prompt.md`; the internal provisional answer is `internal_provisional_Paper1_operatorII_novelty_answer.md`. It finds the backward recursion mathematically standard and keeps Paper 1's independent-result gate open pending future audits and a typed false-positive/rescue instantiation.
+
+**Unblocks:** final Paper 1 article status, Paper 2 one-versus-two decision, composition development, global novelty audit, and drafting.
+
+### Batch 2B: active version conflicts
+
+1. Assign A018 C3/C4/QSS/working result rows to exact model IDs.
+2. Reconcile A022/A023 stage equilibrium and coefficient versions.
+3. Prohibit stale `C_E` transfer until derivation closes.
+4. Audit `SRC-A018-V18` before canonical substitution.
+
+**Unblocks:** reliable theorem/artifact mapping, Paper 4, conditional Paper 7, A021 coupling source selection.
+
+### Batch 2C: remaining interface contracts
+
+1. Observation/filter → prescription → implementation.
+2. Viability constraint → empirical diagnostic/falsifier.
+3. Domain module → canonical admission and projectability.
+4. Restricted composition contract with shared controls and nonblocking events.
+
+**Unblocks:** end-to-end case, institutional operationalization, general-theory coherence.
+
+## Wave 3 — highest-value empirical closure
+
+Run a readiness comparison for groundwater versus phosphorus using actual data availability, observation model, governance/instrument records, calibration feasibility, held-out design, and code provenance. Select one case only. Groundwater remains preferred unless the readiness matrix fails; no calibration is invented.
+
+**Unblocks:** credible general-theory empirical claim, Paper 5 core finding, institutional/distributive operationalization.
+
+## Parallel branch — A021
+
+Continue only tasks that close a concrete gate: continuum periodic orbit, continuum monodromy/projection, product bunching, localization, and declared/source-derived coupling. Do not spend time on additional abstract proof prose. This branch does not block Papers 1–5 and therefore remains parallel rather than first in the main queue.
+
+## Wave 4 — audit and artifact closure
+
+1. Global novelty map after theorem identities stabilize.
+2. Per-paper artifact manifests and environment locks.
+3. Persistent repository identifiers only after stable releases exist.
+4. Paper-specific length and overlap budgets.
+
+## Wave 5 — drafting
+
+Draft only from closed concordance rows. Every manuscript must pass autonomous-question, independent-result, citation-closure, artifact, overlap, audience, and length tests. The monograph follows principal-paper scrutiny.
+
+## Immediate next executable task
+
+Perform Batch 2A on A001/A002 first because it has the greatest downstream degree and the required sources are present. Within that batch, verify mature exact definitions and proved restricted theorems before conditional or conjectural rows.

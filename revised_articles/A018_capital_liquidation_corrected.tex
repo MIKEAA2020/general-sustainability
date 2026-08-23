@@ -1,0 +1,1668 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsfonts,amsthm,graphicx,booktabs,array,hyperref,tabularx,setspace}
+\graphicspath{{figures/}}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{microtype}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{hypothesis}{Hypothesis}
+\newtheorem{numresult}{Numerical result}
+\newtheorem{conjecture}{Conjecture}
+\title{Scarcity-Driven Capital Liquidation and Delay-Amplified Instability:\\
+A Vector-Valued Flow-Balance Framework for Sustainability}
+\author{Your Name\\{\small Affiliation} \and Co-Author\\{\small Affiliation}}
+\date{\today}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Three objects must be kept distinct: harvest overshoot $C>R$, net stock decline $-\dot N>0$, and dynamic nonviability (the state is not in the viable set of Appendix~\ref{app:viability}). In the single-stock specialisation with no waste damage and no product return they coincide; in the full ledger they do not. Scalar indices of that condition --- Earth Overshoot Day, weighted biocapacity balances, compensatory multi-capital scores --- cannot certify componentwise safety. We prove this as an algebraic fact: for every positive weight vector, an arbitrarily severe single-component deficit is compatible with an arbitrarily positive aggregate (Proposition~\ref{prop:no-scalar}).
+
+We replace compensatory aggregation with a mass-conserved vector ledger. Natural capital, product stocks, waste, detritus, a finite bioavailable abiotic pool, and a geological reservoir are tracked as distinct compartments; one-way transfers are donor-limited and routed; net regeneration $R$ is the difference of two nonnegative primitives (assimilation minus turnover) and can be negative for $N>K$. Conservation is derived from the ledger, not assumed. Logistic growth is recovered as the constitutive saturation limit of the active pool; that limit makes the pool slow, not static. In that specialisation, liquidation is extraction in excess of net regeneration, diagnosed from the single flow $qEN$, which vanishes at $N=0$. The working four-state equilibrium is a frozen-donor quasi-equilibrium: it is sustained by geological support that is not itself a closed-system rest point.
+
+We analyse a named model, not a derived limit: the effort-saturation-corrected (gated) three-state DDE $(N,Z,E)$ of a single binding resource, with the specialisation (single stock, $S=R$, $\chi=1$, $\mu=\nu=\rho=0$, frozen-$A$) stated as a modelling choice (Section~\ref{sec:reduction-theorems}). For this vector field we prove: a closed-form equilibrium with $Z^*=\delta$ independent of $\tau_m$ and $k$; a complete Hopf cubic enumerating every local frequency; interval-certified crossings $\tau_-\in[3.6661490,3.6661491]$~yr and $\tau_+\in[150.3584773,150.3584774]$~yr; subcriticality at both crossings ($l_1>0$); and a two-family lower boundary supported numerically by a large-cycle termination near $5.57$~yr and a continuation-supported small-branch turning region near $5.587$~yr --- flanking a wide monostable interval, together with the sample-and-hold monodromy that locates the periodic-review stability window. The undelayed mobilisation law is already ODE-unstable ($\operatorname{Re}\,\lambda>0$ at $\tau=0$): institutional delay acts as a phase filter that opens the phase-stabilised window $(\tau_-,\tau_+)$ and closes it again at $\tau_+$; the title's ``delay-amplified'' refers to that upper crossing and to the bistable windows, not to the delay creating the short-delay instability. Restoring the active abiotic pool as a fourth state --- a verified extension, not a limit --- leaves the Hopf pair within a few percent but relocates the upper global fold from $\approx 148$~yr to $\approx 64$~yr: the linearised loop is shared; the nonlinear bifurcation diagram is not.
+
+Componentwise Abiotic Depletion Horizons, computed on GRACE/G3P groundwater, USGS phosphate, and RAM fisheries, replace scalar Overshoot Day. Delay-induced instability occupies a bounded regeneration-rate window. Under the periodic-review governance real institutions implement, the mechanism is testable in review-interval space. On the logistic Candidate~A core, annual review is already unstable and the sampled equilibrium restabilises only at $T_r^{\mathrm{NS}}=47.54$~yr. On the stage-structured review map appropriate to fisheries, annual review is stable, consistent with the spectral null among 42 annual-managed RAM stocks, and responsive $T_r\approx 3$--$4$~yr is predicted to restore multi-year cycles in fast-maturing small pelagics. Institutional pacing is therefore a primary control on ecological stability: for continuously adjusting slow-stock institutions the continuous delay is the operator, and a delay of roughly a decade sits in the settling regime of the inner problem; for institutions that review periodically the control is the review interval, not the continuous delay --- on the Candidate~A hold map a decade-scale review is inside the unstable set and the sampled equilibrium restabilises only near $T_r\approx 47.5$--$79$~yr.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:introduction}
+
+A hen produces a sustainable flow of eggs $S(N)$ each year. If consumption $D$ does not exceed $S(N)$, the system is sustainable. If $D>S(N)$, the shortfall is not conjured: the farmer slaughters the hen. That is \textbf{capital liquidation} --- destruction of the asset to cover present demand. Not every shortfall works the same way. Killing the hen removes a reproducing adult at once. Eating fertilised eggs suppresses next year's recruits without touching a living adult. Eating an apple often leaves the seed unharmed. Section~\ref{sec:two-channel} treats the first two channels as a mixture $\psi\in[0,1]$: they share the equilibrium and the local Hopf pair, not the large-amplitude troughs. The hen channel is a positive feedback:
+\[
+\text{deficit}\uparrow \;\Rightarrow\; \text{liquidation}\uparrow \;\Rightarrow\; \text{stock}\downarrow \;\Rightarrow\; S(N)\downarrow \;\Rightarrow\; \text{deficit}\uparrow\uparrow.
+\]
+Delayed supply responses generate production cycles: the cobweb theorem \cite{ezekiel1938}, spruce-budworm outbreaks \cite{ludwig1978}, and the delayed bioeconomic models of harvested equilibria \cite{gao2022,khiyar2026}. The survival condition is sharp. If effort-driven extraction persistently exceeds sustainable yield, no positive equilibrium exists and the stock converges to zero. If a positive equilibrium exists, then outside the monostable delay interval of the inner problem persistent overshoot sustains a large-amplitude cycle rather than monotone collapse.
+
+The biosphere is not one hen. It is a vector of stocks --- biomass, zinc, groundwater, pollinators --- each producing its own flow. A farmer may eat every egg while draining the pond and mining the soil. Aggregate biomass looks stable; supporting capital is being liquidated. This is the \textbf{productivity illusion}, in two distinct senses. Compensatory: a positively weighted aggregate can mask a component-level deficit (Proposition~\ref{prop:no-scalar}). Yield-inflation: a measured yield can exceed true sustainable yield by drawing down the supporting pool. The first is an algebraic obstruction to scalar certification. The second is a dynamical channel the Abiotic Depletion Horizons of Section~\ref{sec:diagnostics} are built to detect.
+
+Weak and strong sustainability \cite{daly1990} are not competing philosophies. They are regimes of the same system, indexed by whether substitution keeps pace with depletion, component by component. Substitution is admissible only where an identified physical pathway exists. No substitute is assumed because an aggregate production function permits it. The aggregate question ``can we maintain total capital?'' is ill-posed for the reason Proposition~\ref{prop:no-scalar} makes precise.
+
+The ledger of Sections~\ref{sec:accounting}--\ref{sec:layers}, Proposition~1, and the Abiotic Depletion Horizons of Section~\ref{sec:depletion-horizon} frame the problem and provide the diagnostics. The dynamical claims of this paper are made on the named core DDEs of Sections~\ref{sec:core}--\ref{sec:four-state}, which are not a reduced form of the ledger but a separate modelling choice. Physical conservation fixes where liquidated capital goes. Vector observability (Proposition~\ref{prop:no-scalar}) forbids compensatory certification of that ledger and does not use a coupling hypothesis. Yield-inflation inside one resource --- mining the supporting pool to hold a measured yield --- is the two-pool, ADH channel. Conjecture~\ref{thm:tikhonov} and Theorems~\ref{thm:working-proj}--\ref{thm:hopf-persist} deliver the institutional-failure dynamics of a \emph{single} specialised resource as a five-state DDE. The single-resource core is the Liebig-limit dynamics of a binding constraint (Theorem~\ref{thm:weak-coupling}); compensatory substitution without a yield gap remains on the unreduced vector ledger. The general feedback equation (Section~\ref{sec:general-feedback}) is the linearisation of the single-resource loop.
+
+\paragraph{Results.} (i)~A mass-conserved, donor-limited vector ledger with a two-compartment abiotic reservoir and a detritus pool, from which logistic growth is recovered as a constitutive limit. (ii)~A proof that no positive linear weighting of a deficit vector certifies componentwise sustainability. (iii)~A reduction theorem: under institutional failure the ecological--institutional block is an exact triangular projection (Theorem~\ref{thm:triangle}); Tikhonov is needed only if macroeconomic feedback remains (Conjecture~\ref{thm:tikhonov}). The working four-state core is the large-reservoir dynamic-target projection (Theorem~\ref{thm:working-proj}); the three-state core is the frozen-$A$ inner problem; local Hopfs persist (Theorem~\ref{thm:hopf-persist}). (iv)~The effort-bounded working model: $\tau_-\approx 3.78$~yr, $\tau_+\approx 150.1$~yr. The bistable-window topology is established for the inner three-state DDE and the ungated four-state DDE; for the gated working four-state core the Hopf pair is characteristic-pinned (Numerical Result~\ref{thm:four-hopf}) and the global folds are located at $\approx 5.63$~yr (lower) and $\approx 64.4$~yr (upper) (Numerical Result~\ref{thm:four-folds}), their saddle-node classification remaining open. $\tau_-$ shifts by $3.2\%$ under restoration of $A$ at the baseline, within the $O(A_0/A_{\min})$ bound of Theorem~\ref{thm:frozenA}. (v)~Componentwise depletion horizons on public groundwater, phosphate, and fisheries data. (vi)~A two-channel liquidation decomposition: Hopf locations are channel-invariant; large-amplitude troughs are not. (vii)~A stoichiometric core whose primitive-flux ledger is immune to double-compensation (the detritus steady state $d_U(U^*)=m(X^*)$ cancels identically with no auxiliary compensation constant, Section~\ref{sec:unified-core}), together with a general feedback characteristic equation that unifies both cores at the level of their linearisations. (viii)~A bounded regeneration-rate window; annual review is stable on the stage-structured fisheries map (and unstable for the slow-stock Candidate~A hold map); a prospective review-interval test for fast-maturing stocks under $T_r\in[3,12]$~yr.
+
+\section{Why compensatory scalars fail}
+\label{sec:why-frameworks-fail}
+
+Scalar aggregation underlies Earth Overshoot Day \cite{lin2018,wackernagel2019,blomqvist2013}, the systems-dynamics overshoot models \cite{meadows1972}, and the communication indices derived from planetary boundaries \cite{rockstrom2009,steffen2015,richardson2023}. Three failure modes are fatal.
+
+\begin{enumerate}
+\item \textbf{Dimensional collapse.} Aggregating incommensurable services destroys the information needed to detect component-specific collapse.
+\item \textbf{Flow-only blindness.} A scalar consumption--regeneration comparison cannot detect regeneration maintained by mining non-renewable stocks.
+\item \textbf{Compensatory concealment.} A positive aggregate is compatible with an arbitrarily deep deficit in any single component.
+\end{enumerate}
+
+The third is not a qualitative risk. It is an identity.
+
+\begin{proposition}[No scalar weighting certifies componentwise sustainability]
+\label{prop:no-scalar}
+Let $n\ge 2$ and let $\mathbf b=(b_1,\dots,b_n)\in\mathbb R^n$ be a service-component balance, $b_i>0$ surplus and $b_i<0$ deficit. Fix any $\mathbf w\in\mathbb R^n_{>0}$ and set $\sigma(\mathbf b)=\mathbf w^\top\mathbf b$. Then for every index $k$ and every $M>0$ there exist $\mathbf b,\mathbf b'$ such that
+\begin{equation}
+b_k\le -M\quad\text{and}\quad\sigma(\mathbf b)>0,
+\qquad
+b_k'\ge M\quad\text{and}\quad\sigma(\mathbf b')<0.
+\end{equation}
+Hence no threshold on $\mathbf w^\top\mathbf b$ certifies $\mathbf b\in\mathbb R^n_+$. Equivalently, no positive linear functional certifies the positive cone. By contrast $\min_i b_i\ge 0$ if and only if $\mathbf b\in\mathbb R^n_+$, and $\|[-\mathbf b]_+\|_2=\operatorname{dist}_2(\mathbf b,\mathbb R^n_+)=0$ if and only if $\mathbf b\in\mathbb R^n_+$. For $n\ge 2$ no linear half-space $\{\mathbf b:\mathbf w^\top\mathbf b\ge c\}$ equals the positive orthant. The construction uses an unbounded balance set; on a bounded admissible set a conservative scalar threshold can give one-sided safety, but still cannot identify which component fails. The novelty is the use of this elementary obstruction to design a mass-conserved dynamic architecture, not the geometry itself.
+\end{proposition}
+
+\begin{proof}
+Write $\sigma(\mathbf b)=\sum_{i=1}^n w_i b_i$ with $w_i>0$ and $n\ge 2$. Fix an index $k$ and a number $M>0$, and choose $j\neq k$. Define $\mathbf b\in\mathbb R^n$ by $b_k=-M$, $b_j=(w_k M+1)/w_j$, and $b_i=0$ for $i\notin\{k,j\}$. Then
+\[
+\sigma(\mathbf b)=w_k(-M)+w_j\cdot\frac{w_k M+1}{w_j}=-w_k M+w_k M+1=1>0,
+\]
+while $b_k=-M$ is arbitrarily negative. For a surplus at component $k$ compatible with an arbitrarily negative aggregate, replace $(b_k,b_j)$ by $(M,-(w_k M+1)/w_j)$. Neither construction uses any special property of $\mathbf w$ beyond positivity, nor any bound on $M$.
+\end{proof}
+
+For the bounded sets on which the indices under critique actually operate (e.g., the finite biocapacity aggregates behind Earth Overshoot Day), the relevant reading is the proposition's own bounded-set caveat: a conservative scalar threshold can exclude the most extreme single-component deficits, but it still cannot certify which component, if any, is failing --- the certification failure is generic, not an artefact of unboundedness.
+
+A computational stress test over randomised weights, dimensions $n\in\{2,\dots,8\}$, and thresholds up to $M=10^{12}$ (exact rational arithmetic) confirms both directions. The result is specific to \emph{compensatory linear} aggregation. Non-compensatory scalars --- the minimum margin $\min_i b_i$, the Euclidean violation magnitude $\|[-\mathbf b]_+\|_2$, the Euclidean distance to the positive cone --- do certify componentwise non-negativity, precisely because they forbid offsetting. The diagnostics of this paper are the component-resolved form of those certificates: they retain \emph{which} component fails.
+
+Vector accounting itself is not new. SEEA \cite{seea2014}, integrated reporting \cite{iirc2013}, comprehensive wealth \cite{cwon2021,dasgupta2021}, environmentally extended input--output analysis \cite{leontief1970}, life-cycle assessment \cite{iso14040}, and economy-wide material-flow accounting \cite{eurostat2001,hoekstra2002} already track parallel balances. The analysis combines (i)~a closed, donor-limited flux ledger from which conservation is derived, (ii)~non-compensatory componentwise certification, and (iii)~a delayed institutional layer whose bifurcations are computed exactly and are therefore falsifiable.
+
+Three claims must be kept separate: \emph{empirical degradation} (the record below), \emph{model-defined overshoot} (the framework's own deficit, which these data support qualitatively but do not compute), and \emph{committed collapse} (irreversible loss), which neither the data nor the model establish for the systems listed. The empirical record is already multi-component: six of nine planetary boundaries transgressed \cite{richardson2023}; atmospheric $\mathrm{CO}_2$ above the Holocene range \cite{ipcc2021}; grain Zn/Fe density down $20$--$33\%$ from breeding dilution \cite{fan2008,debnath2023} with a further $\mathrm{CO}_2$-driven reduction on top \cite{myers2014}; groundwater extraction exceeding recharge by an order of magnitude in major basins \cite{famiglietti2014,rodell2018}; soil erosion $10$--$100\times$ formation under conventional tillage \cite{montgomery2007}. These are the pattern the vector deficit is built to measure.
+
+\section{The accounting core}
+\label{sec:accounting}
+
+Ecological variables are measured in native physical units; economic variables in monetary or index units; prices are exchange rates. Several symbols are deliberately reused with different meanings in different layers; Appendix~\ref{app:params} (Table~\ref{tab:symbols}) tabulates every such reuse, and readers are advised to consult it before reading further. Within one resource system the mass compartments $N,P,W,I,U,A^{\mathrm{act}},A^{\mathrm{geo}}$ are expressed in a single conserved elemental unit, so that the ledger additions below are dimensionally homogeneous. Vector $\min$, $\max$, and the positive part $[\cdot]_+$ are componentwise. For each resource system $i=1,\dots,n$ the state comprises a natural-capital vector $\mathbf N_i$, a service (sustainable-yield) vector $\mathbf S_i$, a demand vector $\mathbf D_i$, an economic product stock $\mathbf P_i$, waste $\mathbf W_j$, an inert sink $\mathbf I_j$, a detritus vector $\mathbf U_i$, an active abiotic pool $\mathbf A^{\mathrm{act}}_i$, and a geological reservoir $\mathbf A^{\mathrm{geo}}_i$, together with the macroeconomic scalars $K,L,A_{\mathrm{TFP}},Q,T$ and the price vector $\mathbf p_i$.
+
+\subsection{Two abiotic compartments}
+\label{sec:abiotic}
+
+A single abiotic reservoir cannot be simultaneously dynamically responsive (so that recovered mass affects regeneration) and effectively infinite (so that logistic growth is recovered as a constitutive limit). The \textbf{active pool} $\mathbf A^{\mathrm{act}}_i$ is finite and comparable in scale to $\mathbf N_i$: soil solution, mixed layer, shallow groundwater, atmospheric $\mathrm{CO}_2$. It supplies regeneration and receives technological recovery. The \textbf{geological reservoir} $\mathbf A^{\mathrm{geo}}_i$ is $10^2$--$10^4$ times larger on policy timescales: bedrock, deep aquifers, the deep ocean. It recharges the active pool and is the source of direct mining (fossil groundwater, phosphate rock).
+
+Net regeneration $\mathbf R_i$ vanishes at carrying capacity. A mature forest still draws continuously on nutrients and water. Gross abiotic uptake is therefore
+\begin{equation}
+\mathbf B_i(\mathbf N_i,\mathbf A^{\mathrm{act}}_i,\mathbf W)
+= \mathbf R_i + \boldsymbol\kappa_{A,i}\odot\mathbf N_i\odot\frac{\mathbf A^{\mathrm{act}}_i}{\mathbf A^{\mathrm{act}}_i+\mathbf A_{0,i}},
+\end{equation}
+so $\mathbf B_i>0$ whenever $\boldsymbol\kappa_{A,i},\mathbf N_i>0$. The form does not guarantee $\mathbf B_i\ge\mathbf 0$ when $\mathbf R_i<\mathbf 0$ (stock above carrying capacity); $\mathbf B_i$ remains positive in the parameter regime used here provided $\kappa_{A,i}N_i\ge|R_i|$, but a primitive-flux formulation separating assimilation from mortality would make the sign guaranteed by construction. Both terms of $\mathbf B_i$ are donor-limited and vanish as $\mathbf A^{\mathrm{act}}_i\to\mathbf 0^+$.
+
+One-way recharge from $\mathbf A^{\mathrm{geo}}_i$ is not a restoring force: $\partial R/\partial A^{\mathrm{act}}$ vanishes as $N\to K$, and the implied recovery time diverges exactly in the mature-stock regime the productivity illusion occupies. Bidirectional exchange is two donor-limited primitive fluxes. The target law is implemented by saturating recharge,
+\begin{equation}
+\mathbf e_{GA,i}
+=
+\boldsymbol\omega_{A,i}\odot[\mathbf A^{\mathrm{act,eq}}_i]_+
+\odot
+\frac{\mathbf A^{\mathrm{geo}}_i}{\mathbf A^{\mathrm{geo}}_i+\mathbf A_{g0,i}},
+\qquad
+\mathbf e_{AG,i}=\boldsymbol\omega_{A,i}\odot\mathbf A^{\mathrm{act}}_i,
+\label{eq:exchange-primitive}
+\end{equation}
+Write $\sigma_{\mathrm{geo}}=A^{\mathrm{geo}}/(A^{\mathrm{geo}}+A_{g0})$. Then $e_{GA}=0$ at $A^{\mathrm{geo}}=0$, and the ideal net $\omega_A(A^{\mathrm{eq}}-A)$ is recovered only as $\sigma_{\mathrm{geo}}\to 1$. The recharge uses $[A^{\mathrm{eq}}]_+$ so that a transiently negative derived target cannot reverse a donor-limited flux. The reduced cores used for bifurcation theorems are stated in the large-reservoir limit $\sigma_{\mathrm{geo}}=1$. For finite $A^{\mathrm{geo}}$ the vector field is perturbed by $O(1-\sigma_{\mathrm{geo}})$, and under the dynamic derived target $U$ feeds back through $\gamma_U U(1-\sigma_{\mathrm{geo}})$. Mining is donor-limited in the same way extraction is.
+\paragraph{Remark ($\mathbf A_{g0}>0$ assumed).} We assume $\mathbf A_{g0,i}>0$ throughout, so $\sigma_{\mathrm{geo}}=\mathbf A^{\mathrm{geo}}_i/(\mathbf A^{\mathrm{geo}}_i+\mathbf A_{g0,i})$ is a smooth, strictly increasing function of the donor level and the recharge varies continuously with $\mathbf A^{\mathrm{geo}}_i$. If any component of $\mathbf A_{g0}=0$, then $\sigma_{\mathrm{geo}}\equiv 1$ for every $\mathbf A^{\mathrm{geo}}_i>0$, i.e.~recharge is constant until a hard shutoff at $\mathbf A^{\mathrm{geo}}_i=0$ -- a discontinuous perturbation, not a slow donor decline. The $\mathbf A_{g0}=0$ limit is the discontinuous-perturbation corner, not the slow regular donor limit actually used in the paper; the companion never fixed $\mathbf A_{g0}$, the present paper fixes $\mathbf A_{g0}>0$ throughout.
+
+\begin{equation}
+\mathbf C^{A,\mathrm{lim}}_i(t)=\mathbf C^A_i(t)\odot\frac{\mathbf A^{\mathrm{geo}}_i}{\mathbf A^{\mathrm{geo}}_i+\mathbf A_{g0,i}}.
+\label{eq:mining-limited}
+\end{equation}
+\begin{equation}
+\frac{d\mathbf A^{\mathrm{act}}_i}{dt}
+= -\mathbf B_i + \mathbf e_{GA,i}-\mathbf e_{AG,i}
++ \boldsymbol\gamma_{U,i}\odot\mathbf U_i
++ \sum_j\boldsymbol\chi^{\mathrm{rec}}_{i,j}\bigl(\boldsymbol\rho_{i,j}(T)\odot\mathbf W_j\bigr),
+\label{eq:abiotic}
+\end{equation}
+\begin{equation}
+\frac{d\mathbf A^{\mathrm{geo}}_i}{dt}
+= -\mathbf e_{GA,i}+\mathbf e_{AG,i} - \mathbf C^{A,\mathrm{lim}}_i(t).
+\label{eq:abiotic-geo}
+\end{equation}
+When $\mathbf A^{\mathrm{geo}}_i$ is frozen, $\mathbf A^{\mathrm{act,eq,geo}}_i$ is a constant and \eqref{eq:abiotic} reduces to the previous net-exchange form. The exchange rate $\boldsymbol\omega_{A,i}$ still bounds the active-pool recovery time: $\mathcal T^{\mathrm{rec,act}}_{i,c}\le 1/\omega_{A,i,c}$ uniformly in $N$. At $\mathbf A^{\mathrm{act}}_i=\mathbf 0$, $\mathbf B_i=\mathbf e_{AG,i}=\mathbf 0$, so $\dot{\mathbf A}^{\mathrm{act}}_i\ge\mathbf 0$. At $\mathbf A^{\mathrm{geo}}_i=\mathbf 0$, $\mathbf e_{GA,i}=\mathbf C^{A,\mathrm{lim}}_i=\mathbf 0$, so $\dot{\mathbf A}^{\mathrm{geo}}_i=\mathbf e_{AG,i}\ge\mathbf 0$. Both orthants are forward invariant (Theorem~\ref{thm:nonneg}).
+
+Write $\mathbf D^{\mathrm{ret}}_i:=\boldsymbol\gamma_{U,i}\odot\mathbf U_i$ for the detrital return flux into the active pool. The geochemical target is derived, not independently specified,
+\begin{equation}
+\mathbf A^{\mathrm{act,eq}}_i
+:= \mathbf A^{\mathrm{act,eq,intrinsic}}_i + \bigl(\boldsymbol\kappa_{A,i}\odot\mathbf K_i - \mathbf D^{\mathrm{ret}}_i\bigr)/\boldsymbol\omega_{A,i},
+\label{eq:aeq-derived}
+\end{equation}
+Two closures of this formula are used below, and they are not interchangeable.
+\begin{enumerate}
+\item \emph{Dynamic derived target.} $\mathbf D^{\mathrm{ret}}_i=\boldsymbol\gamma_{U,i}\odot\mathbf U_i$ tracks the live return. In the ideal large-reservoir limit $\sigma_{\mathrm{geo}}=1$, $\omega_A(A^{\mathrm{eq}}-A)+\gamma_U U=\omega_A(A^{\mathrm{eq,intrinsic}}-A)+\kappa_A K$ identically and
+\[
+\dot A=-B+\omega_A\bigl(A^{\mathrm{eq,W}}-A\bigr),\qquad A^{\mathrm{eq,W}}=A^{\mathrm{eq,intrinsic}}+\kappa_A K/\omega_A.
+\]
+This is the working-core $A$-equation (Theorem~\ref{thm:working-proj}). For $\sigma_{\mathrm{geo}}<1$ the identity fails by $O(1-\sigma_{\mathrm{geo}})$ and $U$ re-enters $\dot A$.
+\item \emph{Fixed intrinsic target.} $A^{\mathrm{eq}}=A^{\mathrm{eq,intrinsic}}$ is held constant (the carrying-capacity calibration, not a live function of $U$). After slaving $U$, one obtains the QSS core of Theorem~\ref{thm:detritus}.
+\end{enumerate}
+If the detritus compartment is omitted outright, $D^{\mathrm{ret}}=0$ and closure~1 is used with $U$ absent.
+
+Natural turnover is routed to detritus, not to anthropogenic waste:
+\begin{equation}
+\frac{d\mathbf U_i}{dt}
+= \boldsymbol\kappa_{A,i}\odot\mathbf N_i\odot\frac{\mathbf A^{\mathrm{act}}_i}{\mathbf A^{\mathrm{act}}_i+\mathbf A_{0,i}}
+- \boldsymbol\gamma_{U,i}\odot\mathbf U_i.
+\label{eq:detritus}
+\end{equation}
+Decomposition $\boldsymbol\gamma_{U,i}\odot\mathbf U_i$ returns to $\mathbf A^{\mathrm{act}}_i$ independently of recovery technology $T$. The pre-industrial limit $\boldsymbol\rho_{i,j}=\mathbf 0$ therefore closes.
+
+Direct mining drains $\mathbf A^{\mathrm{geo}}_i$ only through the limited flow $\mathbf C^{A,\mathrm{lim}}_i$, which is routed into $\mathbf P_i$ and $\mathbf W_j$ by the same immediate-waste split $\boldsymbol\alpha_i$ used for biological extraction. Any sustained $\mathbf C^{A,\mathrm{lim}}_i>0$ is full geological liquidation on this model's horizon. The unlimited $C^A$ is a capacity, not a flux.
+
+Mining does not enter the specialised deficit. Institutional memory is driven by $qEN-R(N,A^{\mathrm{act}})$ (Lemma~\ref{lem:deficit-identity}), never by $C^{A,\mathrm{lim}}$. While recharge holds $A^{\mathrm{act}}\gg A_0$, regeneration stays near logistic, $Z^*=\delta$, and $E=E^*$ as $A^{\mathrm{geo}}$ declines. The institutional observer records no deficit. When $A^{\mathrm{geo}}\to 0$, $e_{GA}=C^{A,\mathrm{lim}}=0$, $A^{\mathrm{act}}$ decays on the $\omega_A$ clock, $R$ falls, and the delayed effort law sees a spike set by $\tau_m$ and $\tau$. That is the within-system productivity illusion in the specialised variables. The working-core thresholds $\tau_\pm$ are computed with $A^{\mathrm{geo}}$ frozen or omitted.
+
+\subsection{Extraction, liquidation, and the stock equation}
+
+Effort $\mathbf E_i(t)\in[\mathbf 0,\mathbf E_{\max,i}]$ acts on standing stock,
+\begin{equation}
+\mathbf C_i^{\mathrm{effort}}(t)=q\,\mathbf E_i(t)\odot\mathbf N_i(t).
+\end{equation}
+This is the sole extraction term in the institutional-failure regime. Because it is proportional to $\mathbf N_i$, it vanishes at the origin for every effort trajectory. The stock equation is
+\begin{equation}
+\frac{d\mathbf N_i}{dt}
+= \mathbf R_i(\mathbf N_i,\mathbf A^{\mathrm{act}}_i,\mathbf W)
+- \mathbf C_i^{\mathrm{effort}}
+- \mathbf N_i\odot\sum_j\boldsymbol\mu_{i,j}\mathbf W_j
++ \boldsymbol\nu_i\odot\mathbf P_i.
+\label{eq:nvec}
+\end{equation}
+Capital liquidation is a diagnostic split of that single flow against the service yield,
+\begin{equation}
+\bar{\mathbf C}_i=\min\bigl(\mathbf C_i^{\mathrm{effort}},\,\mathbf M_i^\top\mathbf S_i\bigr),\qquad
+\boldsymbol\Lambda_i=\max\bigl(\mathbf 0,\,\mathbf C_i^{\mathrm{effort}}-\mathbf M_i^\top\mathbf S_i\bigr),
+\label{eq:liquidation-general}
+\end{equation}
+not a second dynamical term. Here $\mathbf S_i$ is the Liebig service of Section~\ref{sec:structural-production}, which is not in general equal to the regeneration $\mathbf R_i$. A two-term formulation with an unbarriered liquidation top-up drives $N$ through zero in finite time; the single-flow law precludes that.
+
+Recovered waste is routed to $\mathbf A^{\mathrm{act}}_i$, not to living biomass. Routing recovery to $\mathbf N_i$ would synthesise standing stock from dispersed waste and bypass the abiotic bottleneck the two-pool architecture exists to track.
+
+\subsection{Mass conservation}
+
+Mass-conserved components (physical stocks of one material, within one resource system) are partitioned from functional states (abundance indices, $Z,E,K,L,A_{\mathrm{TFP}},T,\mathbf p,Q$). Conversion tensors satisfy unit-sum constraints in the direction of the flow they route:
+\begin{equation}
+\sum_i\boldsymbol\chi^{\mathrm{rec}}_{i,j}=\mathbf I_{m_j},\qquad
+\sum_j\boldsymbol\chi^{\mathrm{decay}}_{i,j}=\mathbf I_{m_i},\qquad
+\sum_j\boldsymbol\chi^{\mathrm{damage}}_{j,i}=\mathbf I_{m_i},\qquad
+\sum_j\boldsymbol\varepsilon_{i,j}=\mathbf I_{m_i}.
+\end{equation}
+Every outflow in the flux ledger (Table~\ref{tab:ledger}) is matched by an inflow of identical magnitude. Differentiating
+\begin{equation}
+M_{\mathrm{tot}}
+= \sum_i\mathbf 1^\top\bigl(\mathbf N_i^{\mathrm{mass}}+\mathbf P_i+\mathbf A^{\mathrm{act}}_i+\mathbf A^{\mathrm{geo}}_i+\mathbf U_i\bigr)
++ \sum_j\mathbf 1^\top(\mathbf W_j+\mathbf I_j)
+\end{equation}
+and substituting the ledger therefore yields
+\begin{equation}
+\boxed{\;dM_{\mathrm{tot}}/dt=0\;}\qquad\Rightarrow\qquad M_{\mathrm{tot}}(t)=M_{\mathrm{tot}}(0)\quad\forall t\ge 0.
+\label{eq:invariant}
+\end{equation}
+
+\begin{theorem}[Stoichiometric conservation of the full ledger]
+\label{thm:mass-conservation}
+Let $X=(N,P,W,I,U,A^{\mathrm{act}},A^{\mathrm{geo}})$ be the mass compartments of one resource system and $\mathcal I$ the incidence matrix of Table~\ref{tab:ledger}. One-way transfers are nonnegative and donor-limited; net regeneration is the difference of two such primitives and is signed when $N>K$. Under the unit-sum routing constraints and $0\le\alpha\le 1$,
+\[
+\dot X=\mathcal I F(X),\qquad \frac{d}{dt}\mathbf 1^\top X=0.
+\]
+Hence \eqref{eq:invariant}.
+\end{theorem}
+
+\begin{proof}
+The mass vector is $\mathbf m=(N,A^{\mathrm{act}},A^{\mathrm{geo}},U,P,W,I)$ (componentwise, for each resource). Its derivative is $\dot{\mathbf m}=\mathcal I F$, where $F$ is the vector of primitive fluxes in Table~\ref{tab:ledger} and $\mathcal I$ is the incidence matrix of that table. Every primitive is a transfer between two compartments, or a pair of opposite primitives implementing a two-way exchange: the corresponding column of $\mathcal I$ has entries $+1$ and $-1$ in the receiving and donating rows and zeros elsewhere, or a pair of such columns. Routing tensors $(\boldsymbol\chi^{\mathrm{rec}},\boldsymbol\varepsilon,\boldsymbol\alpha)$ are row-stochastic by construction, so each unit of a split flux still sums to one across destinations. Hence $\mathbf 1^\top\mathcal I=0$ and $\mathbf 1^\top\dot{\mathbf m}=\mathbf 1^\top\mathcal I F=0$. Integrating gives $\mathbf 1^\top\mathbf m(t)=\mathbf 1^\top\mathbf m(0)$.
+\end{proof}
+
+\begin{corollary}[Mass reconstruction from reduced cores]
+\label{cor:mass-recon}
+Under the dynamic-target closure with $U$ retained ($\dot U=T-\gamma_U U$) and $A^{\mathrm{geo}}$ reconstructed from $e_{GA}-e_{AG}+C^{A,\mathrm{lim}}$, the combined state satisfies Theorem~\ref{thm:mass-conservation}. The omitted-$U$ working core is an open projection: natural turnover $T$ must be routed to a diagnostic detritus or inert sink, and geological drawdown must be reconstructed from the imposed recharge. Without those diagnostic compartments the reduced $(N,A,Z,E)$ trajectory is not mass-closed. If $A^{\mathrm{geo}}$ is frozen, the mass error is $\int_0^t(e_{GA}-e_{AG}+C^{A,\mathrm{lim}})\,ds$, equal in the $\sigma_{\mathrm{geo}}=1$ limit to $\int_0^t[\omega_A(A^{\mathrm{eq,W}}-A^{\mathrm{act}}(s))+C^{A,\mathrm{lim}}(s)]\,ds$.
+\end{corollary}
+
+\begin{table}[t]
+\centering\small
+\caption{Flux ledger for the mass-conserved compartments of one resource system (scalar case). Every outflow is matched by an inflow of identical magnitude.}
+\label{tab:ledger}
+\begin{tabular}{llp{4.6cm}}
+\toprule
+\textbf{Compartment} & \textbf{Flux} & \textbf{Matches} \\
+\midrule
+$N$ & $+R$; $-C^{\mathrm{effort}}$; $-N\mu W$; $+\nu P$ & internal; $\to P,W$; $\to W$; $\leftarrow P$ \\
+$P$ & $+(1-\alpha)C^{\mathrm{effort}}$, $+(1-\alpha)C^{A,\mathrm{lim}}$; $-\lambda P$; $-\nu P$ & $\leftarrow N,A^{\mathrm{geo}}$; $\to W$; $\to N$ \\
+$W$ & $+\varepsilon\alpha C^{\mathrm{effort}}$, $+\varepsilon\alpha C^{A,\mathrm{lim}}$; $+\chi^{\mathrm{decay}}\lambda P$; $+\chi^{\mathrm{damage}}N\mu W$; $-\beta W,-\zeta W$; $-\rho W$ & $\leftarrow N,A^{\mathrm{geo}}$; $\leftarrow P$; $\leftarrow N$; $\to I$; $\to A^{\mathrm{act}}$ \\
+$I$ & $+\beta W,+\zeta W$ & $\leftarrow W$ \\
+$A^{\mathrm{act}}$ & $-B$; $+e_{GA}-e_{AG}$; $+\chi^{\mathrm{rec}}\rho W$; $+\gamma_U U$ & internal; $\leftrightarrow A^{\mathrm{geo}}$; $\leftarrow W$; $\leftarrow U$ \\
+$A^{\mathrm{geo}}$ & $-e_{GA}+e_{AG}$; $-C^{A,\mathrm{lim}}$ & $\leftrightarrow A^{\mathrm{act}}$; $\to P,W$ \\
+$U$ & $+\kappa_A N\,A^{\mathrm{act}}/(A^{\mathrm{act}}+A_0)$; $-\gamma_U U$ & $\leftarrow N$; $\to A^{\mathrm{act}}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Logistic growth as a constitutive limit.}
+The regeneration law $R(N,A^{\mathrm{act}})=rN(1-N/K)\cdot A^{\mathrm{act}}/(A^{\mathrm{act}}+A_0)$ recovers the logistic $rN(1-N/K)$ as $A^{\mathrm{act}}/A_0\to\infty$. That is a constitutive (level) limit: it requires the active pool to be large relative to the saturation constant $A_0$, not relative to $N$ or to $A^{\mathrm{geo}}$. The same limit sends
+\[
+\frac{\partial R}{\partial A^{\mathrm{act}}}=rN\Bigl(1-\frac NK\Bigr)\frac{A_0}{(A^{\mathrm{act}}+A_0)^2}\to 0,
+\]
+so the Jacobian restoring force on $A^{\mathrm{act}}$ through $R$ vanishes and the pool's linear recovery rate is $\omega_A$ alone. Near-logistic growth and a fast-equilibrating active pool are therefore mutually exclusive. Choosing $A^{\mathrm{act}}\gg A_0$ yields near-logistic $R$ while leaving $A^{\mathrm{act}}$ a slow donor-limited state: a decline of $A$ toward $A_0$ still binds regeneration, but not on the $N$-timescale. The geological reservoir may be treated as frozen on $10$--$100$~yr horizons; the active pool is slow, not static (Section~\ref{sec:four-state}, Theorem~\ref{thm:frozenA}).
+
+\subsection{Services and the vector deficit}
+
+A stock--service matrix $\mathbf M_i$ ($k_i\times m_i$) converts service demand into stock-space extraction in the rational-optimisation regime: $\mathbf C_i^{\mathrm{demand}}=\mathbf M_i^\top\mathbf D_i$. Service yields obey a smooth Liebig law: each component is a $C^\infty$ soft-minimum of saturated sub-yields, recovering the strict minimum as the sharpness $\rho_{i,c}\to\infty$, and is capped at $S_{i,c}^{\max}$. Spatial heterogeneity enters at leading order by Jensen's inequality. For logistic $S(N)=rN(1-N/K)$,
+\begin{equation}
+\mathbb E[S(N)]=S(\bar N)-\frac{r}{K}\,\mathrm{Var}(N)
+\end{equation}
+exactly. A mean-only observer overestimates regenerative capacity by $(r/K)\mathrm{Var}(N)$. Matter on this manuscript's horizon is largely closed; the planet is energetically open. The economy is an internal sub-network of those cycles, not an exogenous forcing. Institutions observe coarse aggregates, so the projection is enactive: it is the decision environment, not a passive summary. The equations below are that cockpit, not a spatially explicit field theory.
+
+The physical deficit is the diagnostic
+\begin{equation}
+\boldsymbol\Delta_i^{\mathrm{phys}}(t)=\mathbf C_i(t)-\mathbf M_i^\top\mathbf S_i(t),
+\label{eq:deficit-phys}
+\end{equation}
+with $\mathbf C_i$ the operative extraction law. It does not drive the physical ODEs, and it is not equal to $-\dot{\mathbf N}_i$ unless waste-product feedback vanishes and the service is identified with regeneration. Definition~\ref{def:specialisation} makes that identification: a single component, $\boldsymbol\mu=\boldsymbol\nu=\boldsymbol\rho=\mathbf 0$, and $S=R$. On that class, and only on that class, $\boldsymbol\Lambda=[qEN-R]_+=[-\dot N]_+$. In the reduced core the institutional memory is a shifted, floored softplus of that specialised deficit, so that $Z^*=\delta$ is independent of the numerical sharpness $k$.
+
+\subsection{Product, waste, and the inert sink}
+\label{sec:waste-loop}
+
+Durability is a material property of extracted matter, not a property of whether extraction exceeded sustainable yield. The diagnostic split $(\bar{\mathbf C}_i,\boldsymbol\Lambda_i)$ therefore never gates physical routing. The product stock receives the durable fraction of \emph{all} extraction, including direct mining:
+\begin{equation}
+\frac{d\mathbf P_i}{dt}
+= (1-\boldsymbol\alpha_i)\odot\bigl(\mathbf C_i^{\mathrm{effort}}+\mathbf C^{A,\mathrm{lim}}_i\bigr)
+- \boldsymbol\lambda_i\odot\mathbf P_i
+- \boldsymbol\nu_i\odot\mathbf P_i.
+\label{eq:product}
+\end{equation}
+Waste receives immediate extraction waste, product decay, and waste-damage conversion:
+\begin{align}
+\frac{d\mathbf W_j}{dt}
+&= \sum_i\boldsymbol\varepsilon_{i,j}\bigl(\boldsymbol\alpha_i\odot(\mathbf C_i^{\mathrm{effort}}+\mathbf C^{A,\mathrm{lim}}_i)\bigr)
++ \sum_i\boldsymbol\chi^{\mathrm{decay}}_{i,j}(\boldsymbol\lambda_i\odot\mathbf P_i)
+\nonumber\\
+&\quad + \sum_i\boldsymbol\chi^{\mathrm{damage}}_{j,i}\bigl(\mathbf N_i\odot\boldsymbol\mu_{i,j}\mathbf W_j\bigr)
+- \boldsymbol\beta_j(\mathbf N)\odot\mathbf W_j
+- \boldsymbol\zeta_j T\odot\mathbf W_j
+- \sum_i\boldsymbol\rho_{i,j}(T)\odot\mathbf W_j.
+\label{eq:wvec}
+\end{align}
+The inert reservoir captures the irreversible fraction,
+\begin{equation}
+\frac{d\mathbf I_j}{dt}=\boldsymbol\beta_j(\mathbf N)\odot\mathbf W_j+\boldsymbol\zeta_j T\odot\mathbf W_j,
+\label{eq:ivec}
+\end{equation}
+distinguishing stock pollutants (CO$_2$, persistent plastics) from dissipating flow pollutants. Non-negativity of $\mathbf N_i$ follows from $q\mathbf E_i\odot\mathbf N_i\to\mathbf 0$ at the origin.
+
+\subsection{Structural production: smooth vector Liebig}
+\label{sec:structural-production}
+
+Each service component is a $C^\infty$ soft-minimum of saturated sub-yields,
+\[
+S_{i,c}=S_{i,c}^{\max}\Biggl[-\frac1{\rho_{i,c}}\ln\Biggl(\sum_{m\in\mathcal M_{i,c}}w_{m,i,c}
+\exp\Bigl(-\rho_{i,c}\frac{\tilde Y_{m,i,c}}{S_{i,c}^{\max}}\Bigr)\Biggr)\Biggr],
+\]
+with $\sum_m w_{m,i,c}=1$. As $\rho_{i,c}\to\infty$ this is Liebig's law of the minimum. The softmax weights
+\[
+\pi_{j,i,c}=\frac{w_{j,i,c}\exp(-\rho_{i,c}\tilde Y_{j,i,c}/S_{i,c}^{\max})}{\sum_m w_{m,i,c}\exp(-\rho_{i,c}\tilde Y_{m,i,c}/S_{i,c}^{\max})}
+\]
+satisfy $\partial S_{i,c}/\partial\tilde Y_{j,i,c}=\pi_{j,i,c}$. Sub-yields include renewable provision $R_{i,c}=r_{i,c}N_{i,c}(1-N_{i,c}/K_{i,c})$ (with an Allee factor where required \cite{courchamp1999,kramer2009}) and critical-regulation sigmoids. The sharpness $\rho_{i,c}$ does not enter the reduced core ODE; it enters the reduction error of Theorem~\ref{thm:weak-coupling} as $e^{-\rho\Delta_y}$ under a yield gap.
+
+\section{Four-layer dynamics}
+\label{sec:layers}
+
+Four layers keep normative conditions from violating conservation.
+
+\paragraph{Layer 1} is the physical ledger of Section~\ref{sec:accounting}.
+
+\paragraph{Layer 2} computes diagnostics.
+\begin{definition}[Softplus and shifted floored filter]
+\label{def:phi}
+For $k>0$,
+\[
+\operatorname{sp}_k(x)=\frac1k\ln\bigl(1+e^{kx}\bigr),\qquad
+\Phi_{k,\delta}(x)=\max\Bigl\{0,\,\operatorname{sp}_k(x)-\tfrac{\ln 2}{k}+\delta\Bigr\}.
+\]
+Vectors are filtered componentwise. Then $\operatorname{sp}_k(0)=\ln 2/k$, $\operatorname{sp}_k'(0)=1/2$, and $\Phi_{k,\delta}(0)=\delta$. If $\delta>0$ the outer floor is inactive in a neighbourhood of zero. We write $\mathrm{softplus}_k\equiv\operatorname{sp}_k$. If the deficit is left dimensional, $k$ has inverse-deficit units; equivalently the argument may be scaled by $\Delta_{\mathrm{ref}}$ first. At the baseline $\Delta_{\mathrm{ref}}=1$ matches the deficit unit and $k=10$.
+\end{definition} The weights $w_i$ in the macroeconomic loss terms are nonnegative and sum to one; $\|\boldsymbol\Delta_i^{\mathrm{econ}}\|$ is the Euclidean norm (any fixed norm only rescales the $w_i$). The vector memory is the leaky integrator
+\[
+\dot{\boldsymbol\Delta}_i^{\mathrm{phys}}
+=\frac1{\tau_m}\Bigl[\max\Bigl(\mathbf 0,\;\mathrm{softplus}_k(\mathbf C_i-\mathbf M_i^\top\mathbf S_i)-\tfrac{\ln 2}{k}\mathbf 1+\boldsymbol\delta\Bigr)-\boldsymbol\Delta_i^{\mathrm{phys}}\Bigr].
+\]
+The economic deficit is price-weighted by the saturating transform $\tilde p_{i,c}=p_{i,c}/(p_{i,c}+p_{i,c,0})\in[0,1)$,
+\[
+\Delta_{i,c}^{\mathrm{econ}}=\tilde p_{i,c}\,\max\bigl(0,\;\mathrm{softplus}_k(D_{i,c}-S_{\mathrm{meas},i,c})-\tfrac{\ln 2}{k}+\delta\bigr).
+\]
+Raw price diverges as $S_{i,c}\to 0$; the saturating weight preserves order without sending capital, TFP, and technology loss rates to infinity.
+
+\paragraph{Layer 3.} Dimensionless inputs $\hat K=K/K_{\mathrm{ref}}$, $\hat L=L/L_{\mathrm{ref}}$. The service-weighted index
+\[
+\mathcal S_{\mathrm{agg}}=\Bigl(\sum_{i,c}\omega_{i,c}(S_{i,c}/S_{i,c}^{\mathrm{ref}})^\gamma\Bigr)^{1/\gamma}
+\]
+has substitution elasticity $\sigma_S=1/(1-\gamma)$. Output is the Cobb--Douglas
+\[
+Q=A_{\mathrm{TFP}}\,\hat K^\alpha\hat L^\beta\mathcal S_{\mathrm{agg}}^{\delta_S},\qquad\alpha+\beta+\delta_S=1,
+\]
+a nested CES indexed by elasticity $\sigma_Q>0$,
+\[
+Q=A_{\mathrm{TFP}}\Bigl[\theta(\hat K^\alpha\hat L^\beta)^{(\sigma_Q-1)/\sigma_Q}+(1-\theta)\mathcal S_{\mathrm{agg}}^{(\sigma_Q-1)/\sigma_Q}\Bigr]^{\sigma_Q/(\sigma_Q-1)}.
+\]
+The Cobb--Douglas form is the limit $\sigma_Q\to1$, not the literal substitution $\sigma_Q=1$ into the singular display. The Leontief/noncompensatory limit is $\sigma_Q\to0^+$. Finite positive $\sigma_Q$ remains a compensatory production specification and does not override componentwise safety constraints. The exponent $\delta_S$ is distinct from the baseline deficit $\delta$. Capital, labour, TFP, and technological reconfiguration obey
+\begin{align}
+\dot K &= \varsigma Q-\delta_K K-\theta K\sum_i w_i\|\boldsymbol\Delta_i^{\mathrm{econ}}\|/\Delta_{i,\mathrm{ref}},
+\label{eq:k-corrected}\\
+\dot L &= r_L L\bigl(1-L/L_{\max}(Q)\bigr),\qquad L_{\max}(Q)=\max\bigl(L_{\min},\,L_0(Q/Q_0)^\eta\bigr),
+\label{eq:l}\\
+\dot A_{\mathrm{TFP}} &= \eta_A A_{\mathrm{TFP}}(1-A_{\mathrm{TFP}}/A_{\max})-\nu A_{\mathrm{TFP}}\sum_i w_i\|\boldsymbol\Delta_i^{\mathrm{econ}}\|/\Delta_{i,\mathrm{ref}},
+\label{eq:a-corrected}\\
+\dot T &= \bigl[\eta_{T,0}+\eta_{T,1}T\sum_i w_i\|\boldsymbol\Delta_i^{\mathrm{econ}}\|/\Delta_{i,\mathrm{ref}}\bigr](1-T/T_{\max}).
+\label{eq:t-corrected}
+\end{align}
+
+\paragraph{Layer 4.} Service prices $p_{i,c}=p_{i,c,0}+\pi_{i,c}/(S_{i,c}/S_{i,c}^{\mathrm{ref}})$ diverge under scarcity. CES utility maximisation \cite{arrow1961} subject to $\sum_{i,c}p_{i,c}D_{i,c}=(1-\varsigma)Q$ yields $\mathbf D_i$. Perceived yields follow $\dot{\mathbf S}_{\mathrm{meas},i}=\tau_E^{-1}(\mathbf S_i-\mathbf S_{\mathrm{meas},i})$. The DDE history is a constant pre-industrial equilibrium on $[-\tau,0]$, or a $200$-year forward integration of a small perturbation of that equilibrium when a non-constant history is required.
+
+\subsection{Flux decomposition and the productivity gap}
+\label{sec:productivity-gap}
+
+Over $[t_0,t]$,
+\[
+\mathbf N_i(t)-\mathbf N_i(t_0)=\boldsymbol\Phi_R-\boldsymbol\Phi_E-\boldsymbol\Phi_D+\boldsymbol\Phi_P,
+\]
+with $\Phi_{E,\kappa}$ the integral of the full extraction flow. Recovery enters $\mathbf N_i$ only through $R_{i,\kappa}$. The componentwise sustainability ratio $\mathcal S_{i,\kappa}=(\Phi_{R,\kappa}+\Phi_{P,\kappa})/(\Phi_{E,\kappa}+\Phi_{D,\kappa})$ exceeds $1$ if and only if component $\kappa$ accumulates. The productivity gap $\mathbf G_i=\mathbf S_{\mathrm{meas},i}-\mathbf S_i$ obeys $\dot{\mathbf G}_i=-\tau_E^{-1}\mathbf G_i-\dot{\mathbf S}_i$. When $\tau_E$ is large and true services are declining, $\mathbf G_i$ remains positive in some components: the dynamical form of the productivity illusion.
+
+\section{Depletion horizons}
+\label{sec:depletion-horizon}
+\label{sec:diagnostics}
+
+Scalar Overshoot Day collapses every component onto one calendar date. We replace it with a vector of compartment-specific horizons.
+
+The dynamic horizon of compartment $\bullet\in\{\mathrm{act},\mathrm{geo}\}$ is the first hitting time
+\begin{equation}
+T^{\mathrm{dep}}_{i,c}=\inf\bigl\{t>0:A^\bullet_{i,c}(t)\le\epsilon_{i,c}A^\bullet_{i,c}(0)\bigr\}.
+\end{equation}
+Here $A^{\mathrm{act,min}}_{i,c}$ is an ecological or observational floor: in the groundwater table it is the observed 2002--2023 window minimum; in a model run it is a prescribed threshold. The instantaneous diagnostics are the gross and net horizons
+\begin{equation}
+\mathcal H^{\mathrm{act}}_{i,c}=\frac{A^{\mathrm{act}}_{i,c}-A^{\mathrm{act,min}}_{i,c}}{B_{i,c}},
+\qquad
+\mathcal H^{\mathrm{act,net}}_{i,c}=\frac{A^{\mathrm{act}}_{i,c}-A^{\mathrm{act,min}}_{i,c}}{\bigl[-\dot A^{\mathrm{act}}_{i,c}\bigr]_+},
+\end{equation}
+and the geological analogues with denominator $C^{A,\mathrm{lim}}_{i,c}$ (gross) or $[-\dot A^{\mathrm{geo}}_{i,c}]_+$ (net). The gross active horizon answers the productivity-illusion question: is this stock silently drawing on its support? It is $+\infty$ if $B_{i,c}=0$. The net horizon answers the exhaustion question and is $+\infty$ whenever the compartment is stationary or replenishing. The Depletion Stress Index
+\begin{equation}
+\Sigma^\bullet_{i,c}=\mathcal H^\bullet_{i,c}/\mathcal T^{\mathrm{rec},\bullet}_{i,c}
+\end{equation}
+compares horizon to recovery time. Geological recovery is $\gg 10^4$~yr, so any sustained mining gives $\Sigma^{\mathrm{geo}}\ll 1$: chronic structural overshoot, whether or not the horizon is sub-annual. A Service-Specific Overshoot Day is reported only for $\mathcal H^\bullet_{i,c}\le 1$~yr.
+
+\subsection{Application to public data}
+\label{sec:adh-results}
+
+We compute the diagnostics on G3P v1.12 groundwater storage anomalies (2002--2023) \cite{guentner2024}, USGS phosphate-rock reserves and production \cite{usgsmcs}, and RAM Legacy v4.66 stock assessments \cite{ricard2012}. No dynamical parameter of the reduced core is fitted. None of the reported numbers is a computed instance of the model's own first-hitting time $T^{\mathrm{dep}}$: the groundwater column is a trend-to-window-minimum extrapolation, the phosphate column a reserve-life ratio, and the fisheries column a pure-decay proxy with recruitment omitted (its caption states it is not an abiotic horizon). They are descriptive, component-resolved diagnostics in the framework's two-pool logic, not dynamical predictions of the reduced core.
+
+\begin{table}[t]
+\centering\small
+\caption{Groundwater storage anomalies (G3P v1.12). Trend-to-window-minimum horizon $H_{\mathrm{win}}=(A_{2023}-A_{\min})/|\mathrm{trend}|$ with $A_{\min}$ the observed 2002--2023 window minimum; already-at-min means $A_{2023}=A_{\min}$. This is not a first-passage time to a physical failure threshold.}
+\label{tab:adh-gw}
+\begin{tabular}{lccc}
+\toprule
+Basin & Trend (cm/yr) & 2023 anomaly (cm) & ADH to min (yr) \\
+\midrule
+Indo-Gangetic (N.\ India) & $-49.7$ & $-414$ & $\approx 2.7$ \\
+North China Plain & $-18.6$ & $-145$ & $\approx 7.9$ \\
+Central Valley (US) & $-16.1$ & $-84$ & $\approx 9.5$ \\
+La Mancha (Spain) & $-3.2$ & $-20$ & $\approx 21.4$ \\
+High Plains (US) & $-7.9$ & $-160$ & already at min \\
+global mean & $-0.4$ & $-14$ & $\approx 47.6$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The implied window minima are $A_{\min}=A_{2023}-\mathrm{ADH}\cdot|\mathrm{trend}|$ (Indo-Gangetic $\approx-548$~cm, North China Plain $\approx-292$, Central Valley $\approx-237$, La Mancha $\approx-88$, global mean $\approx-33$; High Plains $A_{\min}=A_{2023}$). The stress ranking Indo-Gangetic $>$ North China Plain $>$ Central Valley reproduces the documented severity order \cite{rodell2018,gleeson2012}. These ADHs are anomaly-relative: they measure persistence of decline within the GRACE window, which is the active-pool stress signal, not absolute geological exhaustion.
+
+\begin{table}[t]
+\centering\small
+\caption{Phosphate-rock reserve-life ratios and the world-resources horizon at $\varepsilon=0.10$ (USGS MCS 2025/2026).}
+\label{tab:adh-phos}
+\begin{tabular}{lcc}
+\toprule
+Country & Reserves (kt) & Horizon (yr) \\
+\midrule
+China & $3{,}400{,}000$ & $\approx 28$ \\
+United States & $1{,}000{,}000$ & $\approx 45$ \\
+Jordan & $820{,}000$ & $\approx 62$ \\
+Morocco & $50{,}000{,}000$ & $\approx 1{,}250$ \\
+Australia & $5{,}800{,}000$ & $\approx 2{,}088$ \\
+\midrule
+World (reserves) & $74{,}000{,}000$ & $\approx 309$ \\
+World (resources, $\varepsilon=0.10$) & $>300{,}000{,}000$ & $\approx 1{,}125$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Horizons are reserve-life ratios at country-specific current production; world production is $\approx 240{,}000$~kt~yr$^{-1}$ (USGS MCS 2025/2026). US reserves have remained near $1{,}000{,}000$~kt while cumulative production since 1996 is of order $600{,}000$~kt: reserves are an economic classification, not a fixed stock. The China $28$~yr and US $45$~yr figures are reserve-life ratios. The resource-based world horizon ($1{,}125$~yr at $\varepsilon=0.10$) is more than three times the reserve-based figure ($309$~yr). The two-compartment split is what prevents these from being collapsed into one number.
+
+An equal-weight inverse-horizon score (a ranking preference, not a sustainability certificate, and not an instance of the model ADH) of the four groundwater basins still above their window minimum and world phosphate reserves is
+\[
+\Sigma_{\mathrm{reserves}}\approx\frac15\Bigl(\frac1{2.7}+\frac1{7.9}+\frac1{9.5}+\frac1{21.4}+\frac1{309}\Bigr)\approx 0.130~\mathrm{yr}^{-1},
+\]
+dominated by the Indo-Gangetic term. This scalar is a ranking device, not a componentwise certificate (Proposition~\ref{prop:no-scalar}). Replacing the phosphate reserve term by the resource horizon leaves $\Sigma$ unchanged: near-term stress is carried by active-pool components. For living resources the analogous diagnostic uses spawning biomass as the biotic stock proxy (not the abiotic active pool of Section~\ref{sec:abiotic}) and fishing mortality as the depletion flow; RAM ADHs to $B_{\mathrm{lim}}=0.2\times\max(\mathrm{SSB})$ under current $F$ are reported in Table~\ref{tab:adh-fish}.
+
+\begin{table}[t]
+\centering\small
+\caption{Fisheries trend-to-reference horizon under pure exponential decay $\dot{\mathrm{SSB}}=-F\,\mathrm{SSB}$, RAM Legacy v4.66 \cite{ricard2012,hansen2018}: $H_F=F^{-1}\ln(\mathrm{SSB}_{\mathrm{now}}/(0.2\max\mathrm{SSB}))$, or $0$ if already at or below the reference. This omits recruitment and age structure and is not an abiotic horizon. Median across all $43$ assessed stocks with finite SSB and $F$ series, including zeros, $\approx 1.8$~yr (\texttt{fisheries\_adh.csv}); the spectral null of Section~\ref{sec:empirical} uses the $42$ annual-managed stocks within this set.}
+\label{tab:adh-fish}
+\begin{tabular}{lcc}
+\toprule
+Stock & $F$ (latest) & ADH (yr) \\
+\midrule
+N. Adriatic anchovy & $0.43$ & $0$ \\
+Adriatic anchovy 17--18 & $1.00$ & $0$ \\
+W. Baltic herring & $0.19$ & $0$ \\
+North Sea herring & $0.23$ & $3.5$ \\
+W. Scotland herring & $0.06$ & $13.2$ \\
+Argentine anchovy south & $0.011$ & $131.8$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{First-passage interpretation of the empirical proxies}
+\label{sec:first-passage-bridge}
+
+The empirical proxy tables are distinct from the model hitting time $T^{\rm dep}$. For groundwater, the observed linear-drift surrogate
+\[
+A(t)=A_0+\mu t+\sigma W_t,
+\qquad \mu<0,
+\]
+stopped at a fixed record-relative lower barrier a distance $d$ away has
+\[
+T_{\rm GW}\sim \operatorname{IG}
+\left(\frac d{|\mu|},\frac{d^2}{\sigma^2}\right).
+\]
+Its conditional mean equals the deterministic trend-to-barrier ratio; the barrier remains an observational minimum rather than a physical aquifer floor.
+
+For the It\^o geometric-Brownian fisheries surrogate
+\[
+dB_t=-hB_tdt+\sigma B_t dW_t,
+\]
+the log-distance to $B_{\min}$ has downward drift $h+\sigma^2/2$, so
+\[
+\mathbb E[T_{\rm fish}]
+=\frac{\log(B_0/B_{\min})}{h+\sigma^2/2}.
+\]
+For phosphate under constant production $P$, the reserve-classification passage time to threshold $R_{\min}$ is $(R_0-R_{\min})/P$. These externally verified surrogate results do not stochastically complete the physical ledger and do not identify physical failure thresholds.
+
+\section{Institutional interpolation and reduction}
+\label{sec:economic-layer}
+
+Extraction effort is a dynamical state. Market clearing determines the price that equates demand with physical supply $C=qEN$. Institutional memory is a leaky integrator of the shifted, floored softplus of the deficit (Appendix~\ref{app:memory}): a finite-window integral would introduce a second delay factor $(1-e^{-\lambda\tau_m})$ and destroy the closed-form $Z^*=\delta$.
+
+Effort interpolates between profit-driven investment and scarcity mobilisation via $\chi\in[0,1]$. The canonical law is uniformly bounded,
+\begin{equation}
+\dot E=
+\Bigl(1-\frac{E}{E_{\max}}\Bigr)
+\Biggl[
+(1-\chi)\,I_{\mathrm{profit}}(E,N)
++\chi\Biggl\{\eta E\Biggl(\frac{Z(t-\tau)}{\Delta_{\mathrm{ref}}}-\frac{E}{E_{\max}}\Biggr)
++\delta_0\frac{Z(t-\tau)}{Z_{\mathrm{ref}}+Z(t-\tau)}\Biggr\}
+\Biggr],
+\label{eq:effort-generalized}
+\end{equation}
+with bioeconomic rent \cite{gordon1954,clark1976}
+\begin{equation}
+I_{\mathrm{profit}}=\gamma_E\Biggl(\frac{p\,qNE-c_E E}{p_{\mathrm{ref}}\,q N_{\mathrm{ref}}E_{\mathrm{ref}}}\Biggr)_+.
+\label{eq:profit}
+\end{equation}
+The factor $(1-E/E_{\max})$ vanishes at $E=E_{\max}$, so that face is invariant and absorbing: once $E=E_{\max}$ exactly, effort never retires. At $E=0$ the factor equals $1$; nonnegativity of $E$ comes from $F\ge 0$ when $E=0$, not from a second tangent factor. Theorem~\ref{thm:nonneg} applies for every $\chi\in[0,1]$. At $\chi=1$ this is the specialised law
+\begin{equation}
+\dot E=\Bigl(1-\frac{E}{E_{\max}}\Bigr)\Biggl[\eta E\Biggl(\frac{Z(t-\tau)}{\Delta_{\mathrm{ref}}}-\frac{E}{E_{\max}}\Biggr)
++\delta_0\frac{Z(t-\tau)}{Z_{\mathrm{ref}}+Z(t-\tau)}\Biggr],
+\label{eq:effort-gated}
+\end{equation}
+which is~\eqref{eq:effort-core}. The \emph{ungated} comparison system drops the outer factor; it is used only in the table rows so labelled. The hybrid $\dot E=(\text{gated bracket})-\mu_E E$ regularises the face $E=E_{\max}$. Thresholds in Table~\ref{tab:thresholds} use $\chi=1$ and~\eqref{eq:effort-gated}. When $\chi<1$ a nonnegative bounded $I_{\mathrm{profit}}$ is an additive shift of the effort bracket: it changes $E^*$ through the same quadratic~\eqref{eq:Estar-quadratic} and therefore moves $\tau_\pm$ inside the identifiability chart of Theorem~\ref{thm:ident}, without introducing a second delay.
+
+\subsection{Opposite-signed protective channel}
+\label{sec:protective-bridge}
+
+The scarcity-mobilising effort law is not a generic model of governance. A protective quota-tracking channel uses
+\[
+\dot E=\left(1-\frac{E}{E_{\max}}\right)
+\eta_p\bigl(E_{\rm cap}(Z(t-\tau_p))-E\bigr),
+\qquad E_{\rm cap}'(Z)<0.
+\]
+Calibrating $E_{\rm cap}(\delta)=E^*$ preserves the same stock--memory equilibrium while reversing the delayed gain. For the externally verified Candidate-A protective coefficients, the Hopf modulus cubic has no positive root; with the undelayed system Hurwitz and the zero-root condition excluded, the protective equilibrium is exponentially stable for every fixed protective delay. This result is model- and gain-specific, not a claim that every protective controller is delay independent.
+
+With mobilising and protective channels together, the characteristic identity is
+\[
+P(\lambda)
+=L(\lambda)\left(C_m e^{-\lambda\tau_m}+C_p e^{-\lambda\tau_p}\right).
+\]
+The sufficient weighted small-gain condition
+\[
+\sup_{\omega>0}
+\frac{(|C_m|+|C_p|)|L(i\omega)|}{|P(i\omega)|}<1
+\]
+excludes imaginary roots for every delay pair. Thus pacing recommendations are channel-specific: shortening protective delay is not identified with strengthening scarcity mobilisation. Detailed derivation and sampled-review calculations are retained in the corrected protective-channel supplement.
+
+\section{Reduction theorems}
+\label{sec:reduction-theorems}
+
+The three- and four-state cores analysed in Sections~\ref{sec:core}--\ref{sec:four-state} are not limits of the general ledger; they are the Liebig-limiting dynamics of a single binding resource under a yield gap (Lemma~\ref{lem:liebig-gap}, Theorem~\ref{thm:weak-coupling}). The specialisation --- single stock, $S=R$, $\chi=1$, $\mu=\nu=\rho=0$, frozen-$A$ --- is a modelling choice, stated once here, not a derived limit. The theorems below characterise the finite-time decoupling error when macroeconomic feedback and waste--product feedback are small; they do not establish the cores as an asymptotic reduction of the full ledger, and the global folds of Section~\ref{sec:core} lie outside their hypotheses. The working four-state equilibrium of Section~\ref{sec:four-state} is a frozen-donor quasi-equilibrium --- not a rest point of the closed mass ledger --- and is reported as such.
+
+Throughout, write $\mathbf x_{\mathrm{slow}}=(N,A^{\mathrm{act}},U,Z,E)$ and $\mathbf y=(K,L,A_{\mathrm{TFP}},T)$, with $p$ algebraic. Histories live in the Banach space $\mathcal C=C([-\tau,0],\mathbb R^{n_{\mathrm{slow}}})$.
+
+\begin{definition}[Institutional-failure specialisation]
+\label{def:specialisation}
+The \emph{specialised system} is the general framework of Sections~\ref{sec:accounting}--\ref{sec:layers} restricted to a single resource system with a single stock--service component, $\chi=1$, the gated effort law~\eqref{eq:effort-gated}, $\mathbf C^A=\mathbf 0$, and vanishing waste-product feedback $\boldsymbol\mu=\boldsymbol\nu=\boldsymbol\rho=\mathbf 0$. Write assimilation $G(N,A)\ge 0$ and turnover $M(N,A)\ge 0$, with net increment $R:=G-M=rN(1-N/K)\,A/(A+A_0)$ (signed for $N>K$) and gross uptake $B=G=R+\kappa_A N\,A/(A+A_0)$ on $N\le K$. The single service is identified with that net increment: $S=R$ (and $S=rN(1-N/K)$ after frozen-$A$). This identification is a specialisation, not a general definition of sustainable yield. All rate coefficients of the mass ledger are nonnegative, and the immediate-waste fraction satisfies $\alpha\in[0,1]$.
+\end{definition}
+
+\begin{lemma}[Exact deficit identity]
+\label{lem:deficit-identity}
+On every trajectory of the specialised system, and of every reduced core below,
+\begin{equation}
+qEN-R(N,A)=-\dot N.
+\label{eq:identity-full}
+\end{equation}
+In the frozen-$A$ limit $A/(A+A_0)\to 1$ this is the deficit identity \eqref{eq:deficit-identity} of Section~\ref{sec:core}. Under Definition~\ref{def:specialisation} the service is identified with regeneration, so the general diagnostic \eqref{eq:liquidation-general} collapses to $\Lambda=[qEN-R]_+=[-\dot N]_+$. That collapse is a property of the specialisation, not a definition of liquidation on the unreduced ledger.
+\end{lemma}
+
+\begin{proof}
+Under the institutional-failure specialisation the stock equation is $\dot N=R(N,A)-qEN$. Rearrangement is $qEN-R(N,A)=-\dot N$. The same identity holds on every reduced core whose stock equation is of that form, including the frozen-$A$ three-state system with $R$ replaced by $S$.
+\end{proof}
+
+\begin{hypothesis}
+\label{hyp:scale}
+There is a scale parameter $\varepsilon\in(0,1]$ such that $r_L=\varepsilon^{-1}r_{L,0}$, $\eta_A=\varepsilon^{-1}\eta_{A,0}$, $\eta_{T,0}=\varepsilon^{-1}\eta_{T00}$, $\eta_{T,1}=\varepsilon^{-1}\eta_{T10}$, and capital is written in boundary-layer form $\varepsilon\dot K=\varsigma Q-\delta_K K-\theta K\,\widetilde\Delta$, with $\varsigma\in[0,1]$ unscaled. The quantities $r_{L,0},\eta_{A,0},\eta_{T00},\eta_{T10},\varsigma,\delta_K$ are $O(1)$ and independent of $\varepsilon$.
+\end{hypothesis}
+
+\begin{hypothesis}
+\label{hyp:hurwitz}
+On a compact subset $\mathcal K\subset\{N,A,U,Z,E\ge 0:\,E\le E_{\max},\,N\le 2K,\,A\le A^\sharp\}$ containing the relevant equilibria and periodic orbits, the macroeconomic algebraic system $\mathbf f_{\mathrm{ODE}}(\mathbf y,\mathbf x,0)=\mathbf 0$ together with market clearing $D(p)=qEN$ admits a unique root $\mathbf y=\mathbf h(\mathbf x)$, $p=p^*(\mathbf x)$, and the Jacobian $D_{\mathbf y}\mathbf f_{\mathrm{ODE}}$ at that root is Hurwitz, uniformly in $\mathbf x\in\mathcal K$. Demand is strictly decreasing in $p$.
+\end{hypothesis}
+
+Hypothesis~\ref{hyp:hurwitz} is the standard Tikhonov spectral condition; Conjecture~\ref{thm:tikhonov} is conditional on it. Uniqueness of $p^*$ is a theorem: CES demand is strictly decreasing in $p$. Uniqueness of $\mathbf h$ at frozen $(Q,\widetilde\Delta)$ follows by solving the four scalar QSS maps, which are monotone and saturate. Hurwitzness of $D_{\mathbf y}\mathbf f_{\mathrm{ODE}}$ is not a consequence of triangularity ($K,L,A_{\mathrm{TFP}}$ share $Q$) and is not proved on the whole domain. A finite-difference sweep on the literature-anchored class, $\widetilde\Delta\in[0,5]$, finds all real parts $\le-\gamma_{\mathbf y}<0$; that sweep supports the hypothesis on that class and does not replace it.
+
+\begin{hypothesis}
+\label{hyp:lipschitz}
+The specialised vector field is locally Lipschitz on $\mathcal K\times\mathbf h(\mathcal K)$ away from the measure-zero floor set of the softplus, and the floor is inactive in a neighbourhood of every interior equilibrium used below (because $Z^*=\delta>0$).
+\end{hypothesis}
+
+\begin{theorem}[Exact triangular projection]
+\label{thm:triangle}
+Under Definition~\ref{def:specialisation}, the macroeconomic block $(K,L,A_{\mathrm{TFP}},T)$, prices, and demand do not appear in $(\dot N,\dot A,\dot U,\dot Z,\dot E)$. The ecological--institutional subsystem is therefore an exact closed projection for every $\varepsilon>0$; no singular limit is required.
+\end{theorem}
+
+\begin{proof}
+Under Definition~\ref{def:specialisation} one has $C=qEN$, $\boldsymbol\mu=\boldsymbol\nu=\boldsymbol\rho=\mathbf 0$, and $\chi=1$. Then $\dot N$ depends on $(N,A,E)$ only; $\dot A$ depends on $(N,A,U)$ and the frozen or parametric $A^{\mathrm{geo}}$; $\dot U$ depends on $(N,A,U)$; $\dot Z$ depends on $(N,A,E,Z)$; and $\dot E$ depends on $(E,Z(t-\tau))$. None of these right-hand sides contains $(K,L,A_{\mathrm{TFP}},T)$, prices, or demand. The block $(N,A,U,Z,E)$ is therefore closed for every $\varepsilon>0$.
+\end{proof}
+
+\begin{conjecture}[Finite-time reduction to the five-state core when macroeconomic feedback remains]
+\label{thm:tikhonov}
+Assume the specialisation of Definition~\ref{def:specialisation} is relaxed so that a $C^1$ macroeconomic feedback of size $\varepsilon$ remains (price in effort, technology in recovery, or demand-driven extraction), and assume Hypotheses~\ref{hyp:scale}--\ref{hyp:lipschitz}. Under the strict specialisation, Theorem~\ref{thm:triangle} applies instead. Let $(\mathbf x^\varepsilon,\mathbf y^\varepsilon,p^\varepsilon)$ solve the specialised system with $\mathbf x^\varepsilon(0)$ in a compact interior subset of $\mathcal K$. Then for every finite $T>0$ there exist $\varepsilon_0,C>0$ such that for all $\varepsilon\in(0,\varepsilon_0)$,
+\begin{equation}
+\sup_{t\in[0,T]}\bigl\|\mathbf x^\varepsilon(t)-\mathbf x^0(t)\bigr\|
+\le C(\varepsilon+\omega_A T),
+\end{equation}
+and
+\begin{equation}
+\bigl\|\mathbf y^\varepsilon(t)-\mathbf h(\mathbf x^\varepsilon(t))\bigr\|
+\le C(\varepsilon+\omega_A T)+C\,e^{-\gamma_{\mathbf y}t/\varepsilon},
+\qquad 0\le t\le T.
+\end{equation}
+If $\mathbf y^\varepsilon(0)=\mathbf h(\mathbf x^\varepsilon(0))+O(\varepsilon)$, the exponential is absorbed into $O(\varepsilon)$ and both suprema on $[0,T]$ are $O(\varepsilon+\omega_A T)$. If $A^{\mathrm{geo}}$ is treated as exactly frozen, the $O(\omega_A T)$ term is absent. Here $\mathbf x^0$ solves the five-state core
+\begin{equation}
+\begin{aligned}
+\dot N&=R(N,A)-qEN,\\
+\dot A&=-B(N,A)+\omega_A(A^{\mathrm{eq}}-A)+\gamma_U U,\\
+\dot U&=\kappa_A N\tfrac{A}{A+A_0}-\gamma_U U,\\
+\dot Z&=\tau_m^{-1}\bigl[\max\bigl(0,\mathrm{softplus}_k(qEN-R)-\tfrac{\ln 2}{k}+\delta\bigr)-Z\bigr],\\
+\dot E&=\bigl(1-E/E_{\max}\bigr)\bigl[\eta E(Z(t-\tau)/\Delta_{\mathrm{ref}}-E/E_{\max})+\delta_0 Z(t-\tau)/(Z_{\mathrm{ref}}+Z(t-\tau))\bigr].
+\end{aligned}
+\label{eq:five-state}
+\end{equation}
+Here $A^{\mathrm{eq}}$ is one of the two closures of Section~\ref{sec:abiotic}. Under the dynamic derived target, $\omega_A(A^{\mathrm{eq}}-A)+\gamma_U U=\omega_A(A^{\mathrm{eq,intrinsic}}-A)+\kappa_A K$, so \eqref{eq:five-state} is the working four-state system plus the driven auxiliary $U$. Under the fixed intrinsic target it is the QSS five-state system. The delay $\tau$ enters only through the slow variable $Z$. The fast subsystem is an index-1 ODE--DAE with no delay.
+\end{conjecture}
+
+\paragraph{Formal argument and unresolved theorem gap.}
+Rewrite the specialised system as
+\[
+\varepsilon\dot{\mathbf y}=\mathbf f(\mathbf y,\mathbf x,\varepsilon),\qquad
+0=\mathbf g_{\mathrm{DAE}}(p,\mathbf x),\qquad
+\dot{\mathbf x}=\mathbf F(\mathbf x,\mathbf x_t,\mathbf y,p),
+\]
+where $\mathbf x_t(\theta)=\mathbf x(t+\theta)$, $\theta\in[-\tau,0]$. The algebraic equation has a unique solution $p=p^*(\mathbf x)$ by Hypothesis~\ref{hyp:hurwitz}. Substitute it. The fast vector field $\mathbf f(\cdot,\mathbf x,0)$ has a unique equilibrium $\mathbf y=\mathbf h(\mathbf x)$ that is uniformly asymptotically stable on $\mathcal K$, with decay rate $\gamma_{\mathbf y}>0$ independent of $\mathbf x\in\mathcal K$.
+
+On the fast clock $s=t/\varepsilon$ the slow state $\mathbf x(\varepsilon s)$ and the delayed history $\mathbf x(\varepsilon s-\tau)$ vary at rate $O(\varepsilon)$. The delay is $O(1)$ in slow time and therefore $O(\varepsilon^{-1})$ in fast time: it is a fixed, slowly drifting parameter of the fast ODE, not a delay in the fast variables. Tikhonov's theorem for index-1 DAEs \cite{tikhonov1952,hairer1996} therefore yields
+\[
+\mathbf y^\varepsilon(t)=\mathbf h(\mathbf x^\varepsilon(t))+O(\varepsilon)+O\bigl(e^{-\gamma_{\mathbf y}t/\varepsilon}\bigr)
+\]
+after a boundary layer of width $t_\varepsilon=O(\varepsilon|\log\varepsilon|)$. The exponential is $O(\varepsilon)$ on $[t_\varepsilon,T]$, and is not $O(\varepsilon)$ at $t=0$ unless the initial datum is already $O(\varepsilon)$-close to the slow manifold. The slow variable feels the layer through the integral of the exponential: $\int_0^T e^{-\gamma_{\mathbf y}t/\varepsilon}\,dt=O(\varepsilon)$, so the induced slow error is $O(\varepsilon)$, not $O(\varepsilon|\log\varepsilon|)$. Geological freezing is controlled by cumulative donor change $\varepsilon_G(T)=G_0^{-1}\int_0^T|e_{GA}-e_{AG}+C^{A,\mathrm{lim}}|\,dt$, not by $\omega_A T$ alone: under the derived target the transfer sustaining $A^*$ is $O(1)$ as $\omega_A\to 0$. The stated bound holds in the ideal large-reservoir limit when $\varepsilon_G(T)$ is absorbed into the $O(\varepsilon)$ budget or $A^{\mathrm{geo}}$ is treated as a fixed parameter. For finite $A^{\mathrm{geo}}$ add $O(1-\sigma_{\mathrm{geo}})$. This is the ODE geometric theory of Fenichel \cite{fenichel1979} only in the fast block; no normally hyperbolic delay centre manifold is invoked.
+
+The reduced slow vector field $\mathbf F(\mathbf x,\mathbf x_t,\mathbf h(\mathbf x),p^*(\mathbf x))$ is exactly the right-hand side of \eqref{eq:five-state}: $\boldsymbol\mu=\boldsymbol\nu=\boldsymbol\rho=\mathbf 0$ removes $W,P$ from $\dot N$ and $\dot A$, $I$ is driven by $W$ and does not feed back, and $A^{\mathrm{geo}}$ is frozen on $[0,T]$ up to an $O(\omega_A T)$ relative change that is absorbed into the $O(\varepsilon)$ budget upon shrinking $T$ or treating $A^{\mathrm{eq}}$ as a fixed parameter (Section~\ref{sec:abiotic}). Continuous dependence for retarded equations on $C([-\tau,0])$ \cite{hale1993} upgrades the $O(\varepsilon)$ vector-field perturbation to the stated $C^0([0,T])$ estimate on $\mathbf x$.
+
+
+The displayed estimate is not adopted as a theorem for the RFDE--ODE--DAE system until a matching singular-perturbation theorem, phase-space compactness/spectral hypotheses, initial-layer norm, and the cumulative donor error $\varepsilon_G(T)$ are verified. The term $O(\omega_A T)$ is not a substitute for $\varepsilon_G(T)$ under a derived target whose sustaining transfer can remain $O(1)$ as $\omega_A\to0$.
+
+\paragraph{Scope.} The argument treats the delay as a slowly drifting parameter of the fast ODE; the classical theorems \cite{tikhonov1952,fenichel1971,fenichel1979} are ODE statements, and the infinite-dimensional Fenichel-type theorems that cover slow-fast evolution systems \cite{hummelkuehn2022,kuehnsulzbach2024} apply only subject to a spectral gap and compactness of the memory kernel that are not verified here. The reduction is therefore a finite-time statement, reported as numerically verified rather than as a theorem for the delayed system; the $O(\omega_A T)$ term means the bound does not control the multi-century objects of Section~\ref{sec:four-state} on one period, a limitation also recorded in Theorem~\ref{thm:frozenA}.
+
+\begin{theorem}[Working-core projection]
+\label{thm:working-proj}
+In the ideal large-reservoir limit $\sigma_{\mathrm{geo}}=1$, on the specialised system with the dynamic derived target of~\eqref{eq:aeq-derived}, write $T=\kappa_A N A/(A+A_0)$. Then
+\[
+\omega_A(A^{\mathrm{eq}}-A)+\gamma_U U=\omega_A(A^{\mathrm{eq,intrinsic}}-A)+\kappa_A K
+\]
+identically, and $(N,A,Z,E)$ satisfies the working-core equations~\eqref{eq:four-state-working} (defined in Section~\ref{sec:four-state}) exactly. The detritus $U$ is a driven auxiliary ($\dot U=T-\gamma_U U$) and does not feed back into $(N,A,Z,E)$. For finite $A^{\mathrm{geo}}$,
+\[
+\dot A=-B+\omega_A(A^{\mathrm{eq,intrinsic}}-A)\sigma_{\mathrm{geo}}+\kappa_A K\sigma_{\mathrm{geo}}+\gamma_U U(1-\sigma_{\mathrm{geo}})+O\bigl([{-A^{\mathrm{eq}}}]_+\bigr),
+\]
+so the working-core vector field is perturbed by $O(1-\sigma_{\mathrm{geo}})$ and $U$ feeds back through $\gamma_U U(1-\sigma_{\mathrm{geo}})$. Reported $\tau_\pm$ are properties of the $\sigma_{\mathrm{geo}}=1$ core.
+\end{theorem}
+
+\begin{proof}
+On the specialised system with the live derived target, $\dot A=-R-T+\omega_A(A^{\mathrm{eq}}-A)+\gamma_U U$ in the ideal large-reservoir limit. Substitute
+\[
+A^{\mathrm{eq}}=A^{\mathrm{eq,intrinsic}}+\frac{\kappa_A K-\gamma_U U}{\omega_A}.
+\]
+Then
+\[
+\omega_A(A^{\mathrm{eq}}-A)+\gamma_U U
+=\omega_A(A^{\mathrm{eq,intrinsic}}-A)+\kappa_A K-\gamma_U U+\gamma_U U
+=\omega_A(A^{\mathrm{eq,intrinsic}}-A)+\kappa_A K,
+\]
+which is $\omega_A(A^{\mathrm{eq,W}}-A)$ with $A^{\mathrm{eq,W}}=A^{\mathrm{eq,intrinsic}}+\kappa_A K/\omega_A$. The $U$-equation remains $\dot U=T-\gamma_U U$ and does not appear in $(\dot N,\dot A,\dot Z,\dot E)$. For $\sigma_{\mathrm{geo}}<1$ the recharge is $\omega_A[A^{\mathrm{eq}}]_+\sigma_{\mathrm{geo}}$ and the exchange remainder is $O(1-\sigma_{\mathrm{geo}})$, with an additional feedback $\gamma_U U(1-\sigma_{\mathrm{geo}})$.
+\end{proof}
+
+\begin{theorem}[Detritus slaving under a fixed intrinsic target]
+\label{thm:detritus}
+Assume the hypotheses of Conjecture~\ref{thm:tikhonov}, and hold $A^{\mathrm{eq}}=A^{\mathrm{eq,intrinsic}}$ \emph{fixed} (closure~2; not the live $D^{\mathrm{ret}}=\gamma_U U$). Write $\gamma_U=\varepsilon_U^{-1}\gamma_{U,0}$ with $\gamma_{U,0}=O(1)$ and $\varepsilon_U\to 0$. Then after a transient of length $O(\varepsilon_U|\log\varepsilon_U|)$,
+\[
+U(t)=U^*(N(t),A(t))+O(\varepsilon_U),\qquad
+U^*(N,A)=\gamma_U^{-1}\kappa_A N\tfrac{A}{A+A_0},
+\]
+and $(N,A,Z,E)$ is $O(\varepsilon_U)$-close on compact time intervals to
+\begin{equation}
+\begin{aligned}
+\dot N&=R(N,A)-qEN,\\
+\dot A&=-R(N,A)+\omega_A(A^{\mathrm{eq,intrinsic}}-A),\\
+\dot Z&=\tau_m^{-1}\bigl[\max\bigl(0,\mathrm{softplus}_k(qEN-R)-\tfrac{\ln 2}{k}+\delta\bigr)-Z\bigr],\\
+\dot E&=\bigl(1-E/E_{\max}\bigr)\bigl[\eta E(Z_\tau/\Delta_{\mathrm{ref}}-E/E_{\max})+\delta_0 Z_\tau/(Z_{\mathrm{ref}}+Z_\tau)\bigr].
+\end{aligned}
+\label{eq:four-state-reduced}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+With $A^{\mathrm{eq}}$ fixed at $A^{\mathrm{eq,intrinsic}}$, $\dot A=-R-T+\omega_A(A^{\mathrm{eq,intrinsic}}-A)+\gamma_U U$. The $U$-equation is linear and attracting at rate $\gamma_U$. Variation of constants gives $U=U^*+O(\varepsilon_U)$ after the transient, and $\gamma_U U^*$ cancels $T$. Continuous dependence upgrades the remainder. An interior equilibrium of~\eqref{eq:four-state-reduced} solves $qE^*=r(1-N/K)A/(A+A_0)$ and $A=A^{\mathrm{eq,intrinsic}}-qE^*N/\omega_A$ jointly. At Candidate~A the system has a positive low-$A$ equilibrium $(N^*,A^*)\approx(23.85,0.159)$. The high-stock algebraic branch gives $A^*\approx-137$, which is inadmissible. There is no large-$A$, near-logistic exploited equilibrium compatible with $N^*/K\approx 0.90$.
+\end{proof}
+
+At the Table~\ref{tab:params} baseline, $\gamma_U/r=10$, so $\varepsilon_U$ is not small: Theorem~\ref{thm:detritus} is a finite-time $O(\varepsilon_U)$ estimate and does not control global periodic orbits. The quantitative object is the working core of Theorem~\ref{thm:working-proj} and Definition~\ref{def:working-four}.
+
+\begin{definition}[Detritus-QSS four-state core]
+\label{def:qss-four}
+Equation~\eqref{eq:four-state-reduced} is the QSS core under a \emph{fixed} intrinsic target. At Candidate~A it has a positive low-$A$ equilibrium $(N^*,A^*)\approx(23.85,0.159)$, outside the frozen-$A$ regime, and no high-$A$ near-logistic exploited equilibrium. It is a valid singular limit but is not dynamically connected to the high-$A$ working equilibrium used for reported $\tau_\pm$.
+\end{definition}
+
+\begin{definition}[Turnover-corrected four-state working core]
+\label{def:working-four}
+Equation~\eqref{eq:four-state-working} is the quantitative working core, obtained exactly by Theorem~\ref{thm:working-proj} (dynamic derived target) or by omitting $U$ with $D^{\mathrm{ret}}=0$. Here $B=R+\kappa_A N A/(A+A_0)$ and $A^{\mathrm{eq,W}}=A^{\mathrm{eq,intrinsic}}+\kappa_A K/\omega_A$ ($5050$ at baseline, $A^{\mathrm{act}*}\approx 397.87$). The four-state numerical thresholds refer to this system.
+\end{definition}
+
+\begin{theorem}[Frozen-active-pool approximation]
+\label{thm:frozenA}
+Let $(N,A,Z,E)$ solve either four-state core \eqref{eq:four-state-working} or \eqref{eq:four-state-reduced}, and suppose that on $[0,T]$,
+\[
+A(t)\ge A_{\min}>0,\qquad |\dot A(t)|\le V_A.
+\]
+Let $(N^{(3)},Z^{(3)},E^{(3)})$ solve the three-state core with $S(N)=rN(1-N/K)$. Then
+\[
+\sup_{t\in[0,T]}\bigl(|N-N^{(3)}|+|Z-Z^{(3)}|+|E-E^{(3)}|\bigr)
+\le C_T\Bigl(\frac{A_0}{A_{\min}}+V_A T\Bigr).
+\]
+The term $V_A T$ guarantees that an initial lower bound $A(0)\ge A_{\min}+V_A T$ keeps $A(t)\ge A_{\min}$ on $[0,T]$; once that bound is assumed, the vector-field gap is $O(A_0/A_{\min})$. If $A_0/A_{\min}+V_A T=O(\eta_A)$ with $\eta_A\ll 1$, the three-state core is an $O(\eta_A)$ inner approximation on $[0,T]$, not a Tikhonov reduction.
+\end{theorem}
+
+\begin{proof}
+Write $R(N,A)=rN(1-N/K)\,A/(A+A_0)$. Then
+\[
+R(N,A)-rN(1-N/K)=-rN(1-N/K)\frac{A_0}{A+A_0}.
+\]
+On $N\in[0,K]$ and $A\ge A_{\min}>0$ the right-hand side is bounded by $rK A_0/A_{\min}$. If $|\dot A|\le V_A$ on $[0,T]$, then $|A(t)-A(0)|\le V_A T$. The four-state field and the three-state field with $S(N)=rN(1-N/K)$ therefore differ, uniformly on the compact set $\mathcal K$, by a $C^0$ term of size $O(A_0/A_{\min}+V_A T)$, independently of the delay. Continuous dependence of RFDE solutions on the vector field in $C([0,T];C([-\tau,0]))$ \cite[Ch.~2]{hale1993} yields the $C^0([0,T])$ bound.
+\end{proof}
+
+At the baseline, $1/\omega_A\sim 10^3$~yr and the four-state oscillation period is $250$--$390$~yr, so $\omega_A T\not\ll 1$ on one period: Theorem~\ref{thm:frozenA} justifies the three-state core for local, near-equilibrium questions on institutional timescales of a few years (in particular the location of $\tau_-$), not for the large-amplitude cycle. That is why $\tau_-$ is essentially unchanged under restoration of $A$ (a $3.2\%$ shift, inside the approximation bound) and why the period is not.
+
+\begin{lemma}[Soft-minimum gap]
+\label{lem:liebig-gap}
+Fix a service component with the $C^\infty$ soft-minimum of Section~\ref{sec:structural-production} and $w_k\ge w_{\min}>0$. If the sub-yields satisfy $\tilde Y_k\le\tilde Y_j-\Delta_y S^{\max}$ for every $j\neq k$ (a uniform gap of size $\Delta_y>0$), then the softmax weights obey
+\[
+\pi_j\le w_{\min}^{-1}e^{-\rho\Delta_y}\qquad(j\neq k),
+\]
+and therefore $\partial S/\partial\tilde Y_j=O(e^{-\rho\Delta_y})$. If each $\tilde Y_j$ is $C^1$ and Lipschitz in its own stock, $\partial S/\partial N_j=O(e^{-\rho\Delta_y})$ uniformly on that set.
+\end{lemma}
+
+\begin{proof}
+Write $y_m=\tilde Y_m/S^{\max}$ and
+\[
+\pi_j=\frac{w_j e^{-\rho y_j}}{\sum_m w_m e^{-\rho y_m}}.
+\]
+Factor $e^{-\rho y_k}$ from numerator and denominator:
+\[
+\frac{\pi_j}{\pi_k}=\frac{w_j}{w_k}\exp\bigl(-\rho(y_j-y_k)\bigr).
+\]
+The gap hypothesis is $y_j-y_k\ge\Delta_y$ for $j\neq k$, and $w_k\ge w_{\min}$, $w_j\le 1$, so
+\[
+\pi_j=\pi_k\cdot\frac{w_j}{w_k}e^{-\rho(y_j-y_k)}\le w_{\min}^{-1}e^{-\rho\Delta_y},
+\]
+using $\pi_k\le 1$. Differentiating $S$ with respect to a stock that enters only $\tilde Y_j$ therefore produces a factor $\pi_j=O(e^{-\rho\Delta_y})$, uniformly on the gap set.
+\end{proof}
+
+\begin{theorem}[Decoupling at the Liebig limit]
+\label{thm:weak-coupling}
+Let $n$ specialised systems be coupled only through the Liebig service that enters the deficit, and optionally through a $C^1$ physical remainder of size $\varepsilon_{\mathrm{phys}}$ in regeneration or damage. Suppose that on a compact interval $[0,T]$ component $k$ maintains a uniform yield gap $\Delta_y>0$ in the sense of Lemma~\ref{lem:liebig-gap}. Set $\varepsilon_c=C e^{-\rho\Delta_y}+\varepsilon_{\mathrm{phys}}$. Then
+\[
+\|\mathbf X-\mathbf X^k\|_{C([0,T])}\le C_T\varepsilon_c,
+\]
+where $\mathbf X^k$ is the scalar four-state (respectively three-state) core of block $k$ driven by the other blocks as $O(\varepsilon_c)$ inputs. The same bound holds if the physical remainder is the only coupling and there is no gap, with $\varepsilon_c=\varepsilon_{\mathrm{phys}}$.
+\end{theorem}
+
+\begin{proof}
+Lemma~\ref{lem:liebig-gap} makes every off-limiting service derivative $O(e^{-\rho\Delta_y})$ on $[0,T]$. Together with the physical remainder this is a $C^1$ perturbation of size $\varepsilon_c$ of the product of $n$ independent cores, restricted to the $k$-th block. Hale's continuous-dependence theorem for DDEs \cite{hale1993} gives the estimate.
+\end{proof}
+
+This is the terminal Liebig-limit phase, not a physical-decoupling hypothesis, and it does not cover the compensatory phase near yield parity (where $\Delta_y\to 0$ and the cross-derivatives are not exponentially small). Layers~2--4 and Proposition~\ref{prop:no-scalar} are the compensatory phase: a positive aggregate can still mask a deep single-component deficit. Once substitutes are exhausted or the soft-minimum has collapsed onto one factor, $\partial S/\partial N_{j\neq k}\to 0$ and the reduced core is the dynamics of that constraint. Within one resource the substitute that delays $Z$ is $A^{\mathrm{geo}}$ (mining does not enter the specialised deficit). A farmer who holds crop yield by liquidating a \emph{different} system's water, \emph{without} a yield gap, remains on the unreduced vector ledger. In the absence of a yield gap the vector system remains unreduced.
+
+\begin{conjecture}[Local Hopf persistence under residual macroeconomic feedback]
+\label{thm:hopf-persist}
+Assume Conjecture~\ref{thm:tikhonov} and Theorem~\ref{thm:working-proj}, and assume the working four-state (respectively three-state) characteristic equation has a simple pair $\pm i\omega$ at $\tau=\tau_\star\in\{\tau_-,\tau_+\}$, with $\mathrm{d}\,\mathrm{Re}\,\lambda/\mathrm{d}\tau\neq 0$ and no other imaginary eigenvalues. Assume the fast Jacobian of Hypothesis~\ref{hyp:hurwitz} remains uniformly Hurwitz at the joint equilibrium, and that mass-accumulation compartments that do not feed back ($\mu=\nu=\rho=0$) stay outside the delay loop. Under the strict specialisation of Theorem~\ref{thm:triangle} the core spectrum is a literal factor of the full characteristic function, so the Hopf points persist exactly (the downstream block remaining Hurwitz). If a residual macroeconomic feedback of size $\varepsilon$ is restored, there exists $\varepsilon_0>0$ such that the specialised system in the ideal large-reservoir limit has a Hopf point $\tau_\star(\varepsilon)=\tau_\star+O(\varepsilon)$. For the saturated finite-reservoir ledger the shift is $\tau_\star(\varepsilon,\sigma_{\mathrm{geo}})=\tau_\star+O(\varepsilon)+O(1-\sigma_{\mathrm{geo}})$.
+\end{conjecture}
+
+\paragraph{Formal perturbation argument and remaining gap.}
+The joint equilibrium $(\mathbf x^*,\mathbf h(\mathbf x^*))$ of the specialised system exists for small $\varepsilon$ by the implicit function theorem: the slow equilibrium conditions are independent of $\mathbf y$ once $p=p^*(\mathbf x)$ and $\mathbf y=\mathbf h(\mathbf x)$ (the core equilibrium does not use $Q$), and $D_{\mathbf y}\mathbf f$ is invertible by Hypothesis~\ref{hyp:hurwitz}. The linearised specialised system at this equilibrium is a DDE in the slow variables coupled to a Hurwitz ODE in the fast variables, with delay only in $(Z,E)$. The characteristic function is
+\[
+\det\bigl(\lambda I-J_{\mathrm{slow}}(\lambda,\tau)-B_{\mathrm{sf}}(\lambda I-J_{\mathrm{fast}})^{-1}B_{\mathrm{fs}}\bigr)=0,
+\]
+where $J_{\mathrm{slow}}(\lambda,\tau)$ is the core quasi-polynomial symbol. The Schur complement is $O(\|B_{\mathrm{sf}}\|\,\|B_{\mathrm{fs}}\|/\mathrm{dist}(\lambda,\sigma(J_{\mathrm{fast}})))$. On a neighbourhood of $\pm i\omega$ the fast resolvent is $O(1)$, and the fast-slow blocks $B_{\mathrm{sf}},B_{\mathrm{fs}}$ are $O(\varepsilon)$ after the Tikhonov scaling (macro rates sit in $J_{\mathrm{fast}}$, not in the coupling once $\mathbf y$ is eliminated at leading order; residual coupling through $Q(\mathbf y)$ into $\widetilde\Delta$ is $O(\varepsilon)$ on the slow clock). Rouch\'e's theorem therefore perturbs the simple imaginary roots by $O(\varepsilon)$. Transversality $\mathrm{d}\,\mathrm{Re}\,\lambda/\mathrm{d}\tau\neq 0$ persists, so the crossing remains a Hopf bifurcation \cite{hale1993,diekmann1995,faria1995}.
+
+
+The argument becomes a proof only after Conjecture~\ref{thm:tikhonov} is replaced by a matched singular-perturbation theorem and the characteristic perturbation is controlled in the declared RFDE phase space.
+
+Conjectures~\ref{thm:tikhonov} and~\ref{thm:hopf-persist}, together with Theorem~\ref{thm:working-proj}, form the one-system claim, on finite time and conditional on Hypothesis~\ref{hyp:hurwitz}; the global events of Numerical Result~\ref{thm:two-folds} are outside their hypotheses. The object delivered by the general framework in the institutional-failure regime, for one resource, is the five-state core; the quantitative working model is the dynamic-target projection of Theorem~\ref{thm:working-proj}; the three-state core is the inner approximation of that working model on institutional timescales; the transfer of local Hopf points under residual feedback remains conjectural; the global events of Numerical Result~\ref{thm:two-folds} are properties of the named inner DDE.
+
+\begin{theorem}[Forward invariance of the mass orthant]
+\label{thm:nonneg}
+Assume the sign restrictions of Definition~\ref{def:specialisation} and the gated law~\eqref{eq:effort-gated}. On the specialised system and on the five-, four-, and three-state cores, the set
+\[
+\Omega=\bigl\{N,A^{\mathrm{act}},U,P,W,I,A^{\mathrm{geo}},Z\ge 0,\; 0\le E\le E_{\max}\bigr\}
+\]
+is forward invariant. In particular $A^{\mathrm{geo}}$ cannot become negative. The bound $E\le E_{\max}$ holds for~\eqref{eq:effort-generalized} and fails for the ungated comparison system (table rows so labelled). The stoichiometric core of Section~\ref{sec:unified-core} uses a signed memory and is outside the scope of the $Z\ge 0$ statement.
+\end{theorem}
+
+\begin{proof}
+At $N=0$, $R=B_{\mathrm{turn}}=qEN=0$, so $\dot N=0$. At $A^{\mathrm{act}}=0$, $B=e_{AG}=0$ and the remaining terms of \eqref{eq:abiotic} are nonnegative. At $A^{\mathrm{geo}}=0$, $e_{GA}=C^{A,\mathrm{lim}}=0$ and $\dot A^{\mathrm{geo}}=e_{AG}\ge 0$. The clamp $[A^{\mathrm{eq}}]_+$ keeps $e_{GA}\ge 0$ if the derived target is transiently negative. At $U=0$, $\dot U=\kappa_A N A/(A+A_0)\ge 0$. At $P=0$ and $W=0$ every source is a nonnegative routing of a nonnegative flux. At $Z=0$ the floored source is nonnegative, so $\dot Z\ge 0$. At $E=0$ the gated effort law gives $\dot E\ge 0$; at $E=E_{\max}$ the prefactor vanishes and $\dot E=0$ (weakly invariant). Nagumo's condition holds on each face.
+\end{proof}
+
+\begin{theorem}[Waste--product feedback as a regular perturbation]
+\label{thm:waste}
+Let $\mathbf x^0$ solve the five-state core, and let $\mathbf x^{\varepsilon_w}$ solve the specialised system with $\|\boldsymbol\mu\|,\|\boldsymbol\nu\|,\|\boldsymbol\rho\|\le\varepsilon_w$ (operator norms on $\mathcal K$). Then on every finite $[0,T]$,
+\[
+\|\mathbf x^{\varepsilon_w}-\mathbf x^0\|_{C([0,T])}\le C_T\varepsilon_w.
+\]
+If the feedback is not small, $W$ (respectively $P$) is an additional slow state and the reduced system is the five-state core plus that compartment. The coefficient $\nu$ routes durable product back to $N$; it is not a recovery technology. Recovery $\rho$ is routed to $A^{\mathrm{act}}$. Specialisation sets both to zero.
+\end{theorem}
+
+\begin{proof}
+The compartments $W$ and $P$ satisfy linear equations with $O(1)$ sources (routed extraction) and strictly negative diagonal decay. On any finite $[0,T]$ they remain bounded, uniformly in the driving five-state trajectory on the compact set $\mathcal K$. The feedback terms $-N\mu W$ in $\dot N$ and $\chi^{\mathrm{rec}}\rho W$ in $\dot A$ are therefore $C^1$ and of size $O(\varepsilon_w)$ on $\mathcal K\times[0,T]$. The resulting vector field is an $O(\varepsilon_w)$ $C^1$ perturbation of the five-state DDE. Continuous dependence \cite[Ch.~2]{hale1993} yields the $C^0([0,T])$ estimate. If $\varepsilon_w$ is not small, $W$ or $P$ is retained as an additional slow state by definition of the reduced system.
+\end{proof}
+When that extra slow state is retained the Hopf cubic of Theorem~\ref{thm:hopf-cubic-complete} is no longer a complete local spectrum: $W$ (or $P$) enlarges the quasi-polynomial. Reported $\tau_\pm$ are the $\varepsilon_w=0$ specialisation.
+
+\begin{theorem}[Sampled-data monodromy]
+\label{thm:sampled}
+Linearise the effort-bounded three-state core about the interior equilibrium and replace delayed feedback by sample-and-hold of period $T_r$: $E$ is constant on each $((k-1)T_r,kT_r]$ and is updated at $t_k=kT_r$ by one Euler step of the effort law,
+\[
+y(t_k^+)=y(t_k^-)+T_r\bigl(C_E y(t_k^-)+C_Z z(t_k^-)\bigr).
+\]
+Between reviews the variational system is the ODE
+\begin{equation}
+\frac{d}{dt}\begin{pmatrix}x\\z\\y\end{pmatrix}
+=
+\begin{pmatrix}A_N&0&A_E\\ B_N&-1/\tau_m&B_E\\ 0&0&0\end{pmatrix}
+\begin{pmatrix}x\\z\\y\end{pmatrix}
+=:A_{\mathrm{hold}}\,
+\begin{pmatrix}x\\z\\y\end{pmatrix}.
+\label{eq:hold}
+\end{equation}
+The monodromy of one review interval is
+\begin{equation}
+M(T_r)=
+\begin{pmatrix}1&0&0\\0&1&0\\0&T_r C_Z&1+T_r C_E\end{pmatrix}
+\exp(A_{\mathrm{hold}}T_r).
+\label{eq:monodromy}
+\end{equation}
+The sampled equilibrium is exponentially stable if and only if every eigenvalue of $M(T_r)$ satisfies $|\lambda|<1$. A Neimark--Sacker (sampled Hopf) crossing occurs at those $T_r$ for which $M(T_r)$ has a simple pair $e^{\pm i\theta}$, $\theta\notin\{0,\pi\}$, and the remaining spectrum inside the open disc. As $T_r\to 0$,
+\[
+\frac{M(T_r)-I}{T_r}\to
+\begin{pmatrix}A_N&0&A_E\\ B_N&-1/\tau_m&B_E\\ 0&C_Z&C_E\end{pmatrix},
+\]
+the Jacobian of the continuous $\tau=0$ core, so the sampled system recovers the continuous undelayed linearisation. The statement is about this sample-and-hold/Euler review scheme, not about the continuous-delay DDE.
+\end{theorem}
+
+\begin{proof}
+On each open interval $((k-1)T_r,kT_r]$ the effort perturbation $y$ is held constant, so the variational equation of \eqref{eq:stock-core}--\eqref{eq:Z-core} at frozen $E$ is $\dot\xi=A_{\mathrm{hold}}\xi$ with the displayed $A_{\mathrm{hold}}$. The solution operator over one hold interval is $\exp(A_{\mathrm{hold}}T_r)$. The review map is one explicit Euler step of the effort law, $y\mapsto y+T_r(C_E y+C_Z z)$, which in $(x,z,y)$ coordinates is left-multiplication by the shear matrix in~\eqref{eq:monodromy}. The monodromy of the periodic linear system is the composition $M(T_r)$. Exponential stability of the sampled equilibrium is equivalent to $\rho(M(T_r))<1$ \cite[Ch.~8]{hale1993}. For the singular limit,
+\[
+\exp(A_{\mathrm{hold}}T_r)=I+A_{\mathrm{hold}}T_r+O(T_r^2),
+\]
+and left-multiplication by $I+T_r E_{\mathrm{jump}}+O(T_r^2)$ produces
+\[
+\frac{M(T_r)-I}{T_r}\to
+\begin{pmatrix}A_N&0&A_E\\ B_N&-1/\tau_m&B_E\\ 0&C_Z&C_E\end{pmatrix},
+\]
+the Jacobian of the continuous undelayed core.
+\end{proof}
+
+Figure~\ref{fig:monodromy} is the spectral radius of this $M(T_r)$ for gated Candidate~A. Annual review is unstable on that core because the undelayed linearisation is already unstable. A Neimark--Sacker pair restabilises the sampled equilibrium at $T_r^{\mathrm{NS}}=47.536$~yr; a period-doubling multiplier $-1$ occurs at $T_r^{(-1)}=79.143$~yr. The $T_r\approx 3$--$4$~yr (anchovy) and $6$--$12$~yr (sprat) windows of Section~\ref{sec:empirical} are zeros of the stage-structured review map, a different operator. Both statements are $\det\bigl(M-e^{i\theta}I\bigr)=0$ on the map to which they refer, not a separate mechanism.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.92\textwidth]{fig_monodromy}
+\caption{Spectral radius of the sample-and-hold monodromy $M(T_r)$ of Theorem~\ref{thm:sampled} for the gated Candidate~A inner core. The undelayed equilibrium is already unstable, so $\rho(M)>1$ at small $T_r$. The shaded interval is the linearly stable review window between the Neimark--Sacker value $T_r^{\mathrm{NS}}=47.54$~yr and the period-doubling value $T_r^{(-1)}=79.14$~yr.}
+\label{fig:monodromy}
+\end{figure}
+
+\begin{theorem}[Dimensionless identifiability]
+\label{thm:ident}
+Effort $E$ is dimensionless, as is $E_{\max}$; $Z$, $\delta$, and $Z_{\mathrm{ref}}$ share the units of the filtered deficit, so $Z_{\mathrm{ref}}/\delta$ is dimensionless. Let $e=E/E_{\max}$, $n=N/K$, and
+\[
+\varrho=\frac{qE_{\max}}{r},\qquad
+a=\frac{\delta}{\Delta_{\mathrm{ref}}},\qquad
+b=\frac{\delta_0\delta}{\eta E_{\max}(Z_{\mathrm{ref}}+\delta)}.
+\]
+At an interior equilibrium of the three-state gated core,
+\[
+e^*=\frac{a+\sqrt{a^2+4b}}{2},\qquad
+\frac{N^*}{K}=1-\varrho e^*.
+\]
+Write $\lambda_F=rK/\Delta_{\mathrm{ref}}$ for the flow-scale group (Candidate~A has $\lambda_F=2$). After scaling time by $r^{-1}$, the local Hopf delays $r\tau_\pm$ depend on
+\[
+\varrho,\quad \lambda_F,\quad a,\quad b,\quad \frac{Z_{\mathrm{ref}}}{\delta},\quad \frac{\eta}{r},\quad r\tau_m
+\]
+and on $\operatorname{sp}_k'(0)=1/2$. The group $\lambda_F$ enters because the softplus argument is $qEN-S(N)$, not $(qEN-S(N))/\Delta_{\mathrm{ref}}$, unless one sets $\Delta_{\mathrm{ref}}=rK$. In particular the four combinations $(qE^*,E^*/E_{\max},\eta E^*/\Delta_{\mathrm{ref}},\delta_0/\eta)$ do \emph{not} determine $H$: $A_E=-qN^*$ still contains $q$ separately unless $E$ is scaled by $E_{\max}$ as here. Candidates~A and~B are two points in $(\eta/r,\varrho)$, not one class.
+\end{theorem}
+
+\begin{proof}
+At an interior rest $qE^*N^*=S(N^*)$, so the softplus argument vanishes and $Z^*=\delta$. The effort equilibrium~\eqref{eq:Estar-quadratic} divided by $\eta E_{\max}$ is
+\[
+-\,e^2+\frac{\delta}{\Delta_{\mathrm{ref}}}e+\frac{\delta_0\delta}{\eta E_{\max}(Z_{\mathrm{ref}}+\delta)}=0,
+\]
+i.e.\ $e^2-ae-b=0$ with the displayed $a,b$. The unique positive root is $e^*=\bigl(a+\sqrt{a^2+4b}\bigr)/2$. Then $N^*/K=1-qE^*/r=1-\varrho e^*$. After the time change $s=rt$, one has $A_N/r=1-2n^*-\varrho e^*$, $A_E$ scales into the coordinate $e$, $B_N$ and $B_E$ scale by $r\tau_m$ and the factor $\mathrm{sp}_k'(0)=1/2$, $C_E/r$ depends on $(\eta/r,e^*,a,b)$, and $C_Z/r$ depends on $(\eta/r,e^*,Z_{\mathrm{ref}}/\delta,b)$. The cubic $H$ is homogeneous of degree six in these entries, so its positive roots $\omega^2/r^2$ and the dimensionless delays $r\tau_{n,k}$ are functions of the listed groups only. The combination $(qE^*,e^*,\eta E^*/\Delta_{\mathrm{ref}},\delta_0/\eta)$ does not determine $A_E=-qN^*$ unless $E$ is scaled by $E_{\max}$.
+\end{proof}
+
+\begin{numresult}[Lower boundary of the inner three-state problem]
+\label{thm:two-folds}
+For the effort-bounded three-state core at Candidate~A the lower bistable boundary is the disappearance of the stable large cycle at a fold of periodic orbits in $\tau\in[5.574,5.576]$ (amplitude $25.0$ at $\tau=5.574$; adaptive-mesh collocation with variational Floquet tracking resolves the dominant multiplier as a single real eigenvalue --- imaginary part identically zero at every measured point --- rising monotonically from $0.240$ at $\tau=4.0$ to $0.964$ at $\tau=5.5815$ with orbit residual $\sim10^{-12}$; the signature of a real $+1$ crossing, i.e. a saddle-node of periodic orbits, not a complex pair). The small unstable branch born at the subcritical Hopf $\tau_-=3.666$ undergoes a continuation-supported fold at $\tau\approx 5.587$ (real multiplier $1.0514$ at $\tau=5.584$ to $0.99898$ at $\tau=5.587$; Fourier collocation succeeds through $\tau=5.58667$, residual $5\times 10^{-14}$, amplitude $21.80$, period $313.76$~yr, and fails at $\tau=5.590$). The two families do not meet (amplitudes $\approx 25$ and $\approx 21.7$; periods $\approx 322.9$ and $\approx 314.3$~yr). The $\sqrt{\tau-\tau_{\mathrm{SNPO}}}$ collision scaling of a single SNPO therefore does not apply (rigorous instances of saddle-node bifurcations of periodic orbits in DDEs exist for specific classes \cite{beretka2020}, but this boundary is not one). The upper-window attractor is a period-1 limit cycle. Fourier collocation pins two distinct families through the table value $\tau_{\mathrm{fold,R}}=148.3$ (Appendix~\ref{app:methods}, Figure~\ref{fig:upper-families}): the Hopf small branch, residual $\sim 10^{-13}$ on $\tau\in[130,150.30]$, amplitude $0.11$--$1.87$; and an interior large family, residual $\sim 10^{-13}$ on $\tau\in[147.5,160]$, amplitude $15.9$--$19.5$, $E_{\max}\le 26$. Those families remain distinct at $\tau=148.3$. A third family with $E\ge E_{\max}$ collocates down to $\tau\approx 144.5$. On that large cycle at $\tau=5.55$ the filter floor never binds, $E\le 9.2\ll E_{\max}$, and $N\ge 68.7$: the termination is not a gate singularity, not a graze of $N=0$, and not a homoclinic connection to the interior equilibrium (the period is $324$~yr and decreasing). The variational collocation resolves the dominant multiplier as real throughout (imaginary part zero), so the earlier complex-pair interpretation from shooting is superseded: the fold is a saddle-node of periodic orbits (real $+1$ crossing), not a Neimark--Sacker or torus. The orbit remains a converged fixed point of the collocation map through $\tau=5.5815$ (residual $\sim10^{-12}$), while long-horizon simulation shows the basin collapse between $\tau=5.574$ and $5.576$; the exact crossing point and the $0.002$~yr gap remain to be pinned. These are classifications of the inner three-state DDE, not of the gated four-state working model.
+\end{numresult}
+
+\begin{numresult}[Working four-state Hopf pair]
+\label{thm:four-hopf}
+The characteristic matrix $\Delta(\lambda)=\lambda I-A_0-A_\tau e^{-\lambda\tau}$ of the gated working core \eqref{eq:four-state-working} at the frozen-donor equilibrium $(N,A^{\mathrm{act}},Z,E)=(89.52562,397.8665,\ln 2/10,2.08962)$ has simple imaginary roots at
+\[
+\tau_-=3.78487~\mathrm{yr}\quad(\text{period }250.44~\mathrm{yr}),\qquad
+\tau_+=150.12175~\mathrm{yr}\quad(\text{period }159.13~\mathrm{yr}),
+\]
+with $|\det\Delta(i\omega,\tau)|<10^{-18}$. These are the pair of Table~\ref{tab:thresholds}. Fourier collocation produces a small periodic orbit of residual $\sim 10^{-13}$ immediately below $\tau_+$ (amplitude $0.090$ at $\tau=150.082$).
+\end{numresult}
+
+\begin{numresult}[Gated four-state working-core fold locations]
+\label{thm:four-folds}
+Carry continuation of the large-amplitude cycle of the gated working core \eqref{eq:four-state-working} (Candidate~A; converged orbit state and delay history carried between steps, $10^4$--$10^5$~yr per step) locates the two global folds at
+\[
+\tau_{\mathrm{term,L}}^{(4)}\approx 5.63~\mathrm{yr},\qquad
+\tau_{\mathrm{fold,R}}^{(4)}\approx 64.4~\mathrm{yr}.
+\]
+The lower fold brackets the disappearance of the large cycle (steady at $\tau=5.62$, peak-to-peak $N$-amplitude $\approx 23$; collapsed by $\tau=5.64$); the upper fold brackets its reappearance on the low-$\tau$ side (steady at $\tau=64.5$, amplitude $\approx 11$; collapsed by $\tau=64.25$). The resulting topology is a narrow lower bistable window $(3.78,5.63)$~yr, a wide monostable interval $(5.63,64.4)$~yr, and a wide upper bistable window $(64.4,150.1)$~yr in which the large cycle coexists with the stable equilibrium but, from generic far-from-equilibrium histories, is reached only for $\tau$ above roughly $75$--$100$~yr (depleted-stock histories only near $\tau\gtrsim135$). Cycle periods run from $\approx 371$~yr at $\tau=4.5$ to $\approx 320$~yr at the lower fold, and from $\approx 156$~yr near $\tau_+$ to $\approx 73$~yr at the upper fold. Whether either fold is a saddle-node of periodic orbits (versus a Neimark--Sacker or torus-mediated transition) is not established by these runs; the inner problem's lower boundary is a tight pair of folds rather than a single SNPO (Numerical Result~\ref{thm:two-folds}).
+\end{numresult}
+
+\paragraph{Status of the four-state folds.} Conjecture~1 of earlier drafts is resolved as follows: the fold \emph{locations} of the gated working core are now computed (Numerical Result~\ref{thm:four-folds}). The four-state upper fold ($\approx 64.4$~yr) differs from the three-state value ($\approx 148.3$~yr) by more than a factor of two: the linearised Hopf pair transfers within a few percent, but the upper global event does not --- the shared linearisation does not carry the nonlinear diagram. The qualitative five-regime topology matches the inner problem (wide monostable interval flanked by two bistable windows), but the windows are wider. The classification of the folds (fold of periodic orbits vs Neimark--Sacker/torus) and persistence in the full augmented system over infinite time remain open.
+
+The hybrid law $\dot E=\text{(gated bracket)}-\mu_E E$ renders the face $E=E_{\max}$ strictly inward and removes a monodromy degeneracy of the gated vector field. Thresholds in Table~\ref{tab:thresholds} use~\eqref{eq:effort-gated}.
+
+The first Lyapunov coefficient at a Hopf of \eqref{eq:char} is the Hassard--Faria--Magalhães cubic \cite{faria1995,hassard1981,guckenheimer1983}, evaluated from the exact second and third derivatives of \eqref{eq:stock-core}--\eqref{eq:effort-core} at equilibrium (Appendix~\ref{app:methods}). Under unit Hermitian normalisation of the right eigenvector and $q^*\Delta'(i\omega)p=1$,
+\[
+l_1(\tau_-)=+5.75\times 10^{-5},\qquad l_1(\tau_+)=+3.55\times 10^{-4}
+\]
+for gated Candidate~A: both crossings are subcritical. The small unstable orbit of Numerical Result~\ref{thm:two-folds} exists for $\tau>\tau_-$ and satisfies $\|N-N^*\|\sim C\sqrt{\tau-\tau_-}$. Ungated Candidate~B has $l_1(\tau_-)=-9.84\times 10^{-5}$ (supercritical; no lower fold) and $l_1(\tau_+)=+2.19\times 10^{-3}$, in agreement with Table~\ref{tab:thresholds}.
+
+
+\paragraph{Controlling status of global events.}
+All local Hopf interval certificates and computational claims are accepted as externally verified at their exact source-stated model/operator scope. The events near $5.574$--$5.576$, $5.587$, $64.4$, and $148.3$ are numerical continuation, multiplier, basin, or turning-region results. No Moore--Spence/Krawczyk/nondegeneracy certificate or continuous-DDE fold proof is claimed unless explicitly supplied. Terms such as ``fold location'' in tables are event labels for these numerical branches, not interval-certified periodic-fold theorems.
+
+\section{Reduced core and bifurcation structure}
+\label{sec:core}
+
+\subsection{Governing equations}
+For a dominant stock with logistic yield $S(N)=rN(1-N/K)$,
+\begin{align}
+\dot N &= S(N)-qEN, \label{eq:stock-core}\\
+\dot Z &= \frac{1}{\tau_m}\Bigl[\max\Bigl(0,\;\mathrm{softplus}_k(qEN-S(N))-\tfrac{\ln 2}{k}+\delta\Bigr)-Z\Bigr], \label{eq:Z-core}\\
+\dot E &= \Bigl(1-\frac{E}{E_{\max}}\Bigr)\Biggl[\eta E\Biggl(\frac{Z(t-\tau)}{\Delta_{\mathrm{ref}}}-\frac{E}{E_{\max}}\Biggr)+\delta_0\frac{Z(t-\tau)}{Z_{\mathrm{ref}}+Z(t-\tau)}\Biggr].
+\label{eq:effort-core}
+\end{align}
+The factor $(1-E/E_{\max})$ enforces $E\in[0,E_{\max}]$ by construction. Extraction $qEN\to 0$ as $N\to 0$, so $N\ge 0$ is forward invariant. The identity
+\begin{equation}
+qEN-S(N)=-\dot N
+\label{eq:deficit-identity}
+\end{equation}
+is exact on the specialised three-state core, where $S$ is the frozen-$A$ regeneration. Liquidation on that core is $\Lambda(t)=\max(0,-\dot N)$, which is \eqref{eq:liquidation-general} after the identification $S=R$. The delay $\tau$ is the time between observing that signal and mobilising effort. The filter time $\tau_m$ is an ordinary relaxation constant, not a second delay.
+
+\subsection{Closed-form equilibrium}
+
+At any interior equilibrium $qE^*N^*=S(N^*)$, the softplus argument vanishes, the floor is inactive, and
+\begin{equation}
+Z^*=\delta,
+\end{equation}
+independent of $\tau_m$, of $k$, and of $(N^*,E^*)$. Substituting into $\dot E=0$ (away from $E=E_{\max}$) produces the quadratic
+\begin{equation}
+-\frac{\eta}{E_{\max}}(E^*)^2+\eta\frac{Z^*}{\Delta_{\mathrm{ref}}}E^*+\delta_0\frac{Z^*}{Z_{\mathrm{ref}}+Z^*}=0,
+\label{eq:Estar-quadratic}
+\end{equation}
+with a unique positive root. The stock then follows
+\begin{equation}
+N^*=K\bigl(1-qE^*/r\bigr),
+\label{eq:Nstar}
+\end{equation}
+which is positive if and only if $qE^*<r$. Direct substitution of $(N^*,Z^*,E^*)$ into \eqref{eq:stock-core}--\eqref{eq:effort-core} gives residuals at machine precision. For Candidate~A ($\eta=0.914$, $E_{\max}=30$, $\delta_0=0.01$, $\Delta_{\mathrm{ref}}=1$, $\tau_m=5$~yr, $k=10$, $\delta=\ln 2/10$, $r=0.02$, $K=100$, $q=0.001$) one has
+\[
+N^*\approx 89.55,\qquad E^*\approx 2.090,\qquad Z^*\approx 0.0693.
+\]
+At $N=0$ the same algebra gives $Z\to\delta$ and $E\to E^*$: institutional memory sustains baseline effort against zero yield, but $qE^*\cdot 0=0$, so the extinction boundary does no physical harm. Linearisation in $N$ at that boundary is $\dot n=(r-qE^*)n$. The survival condition $r>qE^*$ is identical to $N^*>0$. Interior and extinction equilibria therefore exchange stability at a transcritical bifurcation $r=qE^*$ and cannot be simultaneously stable.
+
+\subsection{Characteristic equation and the Hopf cubic}
+
+Linearising about the interior equilibrium with $x=N-N^*$, $z=Z-Z^*$, $y=E-E^*$ gives
+\[
+\dot x=A_N x+A_E y,\qquad
+\dot z=B_N x+B_E y-\tau_m^{-1}z,\qquad
+\dot y=C_E y+C_Z z(t-\tau),
+\]
+with $A_N=r(1-2N^*/K)-qE^*$, $A_E=-qN^*$, $B_N=(qE^*-S'(N^*))/(2\tau_m)$, $B_E=qN^*/(2\tau_m)$, and $C_E,C_Z$ the effort-law coefficients at equilibrium (the gate $(1-E/E_{\max})$ contributes only to $C_E$). The characteristic quasi-polynomial is the single-delay cubic
+\begin{equation}
+\det\begin{pmatrix}\lambda-A_N&0&-A_E\\-B_N&\lambda+\tau_m^{-1}&-B_E\\0&-C_Z e^{-\lambda\tau}&\lambda-C_E\end{pmatrix}=0.
+\label{eq:char}
+\end{equation}
+Writing $d=1/\tau_m$, $P(\lambda)=(\lambda-A_N)(\lambda+d)(\lambda-C_E)$ and $L(\lambda)=B_E(\lambda-A_N)+A_E B_N$, this is the identity $P(\lambda)=C_Z L(\lambda)e^{-\lambda\tau}$. For a Hopf root $\lambda=i\omega$, $\omega>0$, the modulus condition is the real cubic in $x=\omega^2$
+\begin{equation}
+\boxed{\;H(x)=(x+A_N^2)(x+d^2)(x+C_E^2)-C_Z^2\bigl[B_E^2 x+(A_E B_N-A_N B_E)^2\bigr]=0.\;}
+\label{eq:hopf-cubic}
+\end{equation}
+\begin{theorem}[Complete local Hopf spectrum]
+\label{thm:hopf-cubic-complete}
+For the three-state gated core, $\lambda=i\omega$ with $\omega>0$ is a characteristic root if and only if $x=\omega^2$ is a positive root of $H$ and
+\[
+\tau=\bigl(-\arg(P(i\omega)/(C_Z L(i\omega)))+2\pi k\bigr)/\omega,
+\qquad k\in\mathbb Z,\;\tau>0.
+\]
+A cubic has at most three positive roots, so there are at most three Hopf-frequency families.
+\end{theorem}
+
+\begin{proof}
+The characteristic determinant expands to the identity $P(\lambda)=C_Z L(\lambda)e^{-\lambda\tau}$, with
+\[
+P(\lambda)=(\lambda-A_N)(\lambda+d)(\lambda-C_E),\qquad
+L(\lambda)=B_E(\lambda-A_N)+A_E B_N.
+\]
+Set $\lambda=i\omega$, $\omega>0$. Taking moduli and using $|e^{-i\omega\tau}|=1$ gives $|P(i\omega)|=|C_Z|\,|L(i\omega)|$. Squaring both sides,
+\[
+|i\omega-A_N|^2\,|i\omega+d|^2\,|i\omega-C_E|^2
+=C_Z^2\bigl(|B_E|^2\omega^2+(A_E B_N-A_N B_E)^2\bigr),
+\]
+which is $H(\omega^2)=0$ after the substitutions $|i\omega-A_N|^2=\omega^2+A_N^2$ and likewise for $d$ and $C_E$. Conversely, any positive root $x=\omega^2$ of $H$ yields a complex number $P(i\omega)/(C_Z L(i\omega))$ of modulus one, hence of the form $e^{-i\omega\tau}$ for
+\[
+\tau=\frac{-\arg\bigl(P(i\omega)/(C_Z L(i\omega))\bigr)+2\pi k}{\omega},\qquad k\in\mathbb Z,
+\]
+and the values with $\tau>0$ are Hopf delays. A real cubic has at most three positive roots, so there are at most three frequency families.
+\end{proof}
+
+For both Candidate~A and Candidate~B, $H$ has exactly two positive roots. Sweeping $\eta\in[0.5,3.0]$ yields zero or two positive roots throughout --- never one or three. The local Hopf spectrum is therefore complete: two frequency families, with higher branches at $\tau_{n,0}+2\pi k/\omega_n$.
+
+\paragraph{Why roots come in even pairs.} From the linearisation (Appendix~\ref{app:linear}), $B_N=-(1/2\tau_m)A_N$ and $B_E=-(1/2\tau_m)A_E$ (the deficit signal is $qEN-S(N)=-A_Nx-A_Ey$ and $\operatorname{sp}_k'(0)=1/2$), so the cross term vanishes identically, $A_EB_N-A_NB_E\equiv 0$, and the cubic reduces to $H(x)=(x+A_N^2)(x+d^2)(x+C_E^2)-C_Z^2B_E^2x$. Since $H(0)=A_N^2d^2C_E^2>0$ and $H(x)\to+\infty$, the positive roots occur in even number (zero or two), never one or three --- the algebraic reason the $\eta$-sweep finds no singleton.
+
+\begin{numresult}[Interval Newton on the Hopf cubic]
+\label{thm:interval-hopf}
+Write $H$ for the monic cubic~\eqref{eq:hopf-cubic} with coefficients from Appendix~\ref{app:linear}. Interval Newton starting at each floating-point positive root produces a unique simple enclosure ($0\in H(X)$, $0\notin H'(X)$) of width at most $4\times 10^{-17}$ in $x=\omega^2$. The argument formula of Theorem~\ref{thm:hopf-cubic-complete} then encloses the fundamental delays. Gated Candidate~A:
+\[
+\tau_-\in[3.6661490142739,\,3.6661490142743],\qquad
+\tau_+\in[150.3584773101408,\,150.3584773101421].
+\]
+Ungated Candidate~B:
+\[
+\tau_-\in[6.2135987340180,\,6.2135987340183],\qquad
+\tau_+\in[76.2906356879512,\,76.2906356879518].
+\]
+Gated Candidate~B is $\tau_-\in[5.5128407314433,\,5.5128407314436]$, $\tau_+\in[80.4245267142270,\,80.4245267142276]$. This certifies the local spectrum of~$H$. It is not an interval certificate of any global fold.
+\end{numresult}
+
+\subsection{Bifurcation diagram}
+
+A Hopf bifurcation is local: it cannot annihilate a pre-existing large-amplitude cycle. The global disappearance of that cycle is located by pseudo-arclength continuation of the orbit itself, integrated for $10^4$--$10^5$ periods per step, not by fixed-initial-condition bisection (which mislocates folds by $>20$~yr under the critical slowing down near each Hopf \cite{scheffer2009,carpenter2011}).
+
+\begin{table}[t]
+\centering\small
+\caption{Bifurcation thresholds (years). Reported $\tau_\pm$ are the effort-bounded four-state working model. $\tau_{\mathrm{term,L}}$ is the large-cycle termination (SNPO-consistent for the gated inner problem: real $+1$ multiplier, sharing the lower boundary with a separate small-branch fold; SNPO for ungated rows). $\tau_{\mathrm{fold,L}}^{\mathrm{small}}$ is the continuation-supported small-branch fold. $\tau_{\mathrm{fold,R}}$ locates the upper large-cycle termination of the named DDE; it is not a proven saddle-node collision. Collocation of the Hopf small branch and the interior large family shows that those two families remain distinct there (Figure~\ref{fig:upper-families}). Theorem~\ref{thm:frozenA} transfers local Hopfs, not these global events.}
+\label{tab:thresholds}
+\begin{tabular}{lccccc}
+\toprule
+System (Candidate A) & $\tau_-$ & $\tau_{\mathrm{term,L}}$ & $\tau_{\mathrm{fold,L}}^{\mathrm{small}}$ & $\tau_{\mathrm{fold,R}}$ & $\tau_+$ \\
+\midrule
+Four-state, effort-bounded (working) & $3.78$ & $5.63$ & --- & $64.4$ & $150.1$ \\
+Three-state, effort-bounded (inner) & $3.67$ & $5.57$ & $5.59$ & $148.3$ & $150.4$ \\
+Four-state, ungated & $6.98$ & $7.37$ & --- & $130.8$ & $132.3$ \\
+Three-state, ungated & $6.88$ & $7.36$ & --- & $131.2$ & $132.4$ \\
+\midrule
+Three-state, effort-bounded, Cand.\ B & $5.51$ & --- & --- & --- & $80.42$ \\
+Three-state, ungated, Cand.\ B & $6.21$ & --- & --- & $76.08$ & $76.29$ \\
+Four-state, ungated, Cand.\ B & $6.25$ & --- & --- & --- & $76.33$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The topology of the inner three-state DDE, and of the ungated four-state DDE, is the same five-regime sequence with the lower large-cycle event as in Table~\ref{tab:thresholds}. Those numbers are continuation-supported for the named DDE. They are not an approximation of the gated four-state working model. The gated inner large-cycle termination is a finite-period, finite-amplitude fold of the large-amplitude orbit whose dominant Floquet multiplier is real and approaches $+1$ (adaptive-mesh collocation with variational Floquet tracking: imaginary part identically zero, $0.240$ at $\tau=4.0$ to $0.964$ at $\tau=5.5815$; Numerical Result~\ref{thm:two-folds}) --- the signature of a saddle-node of periodic orbits, not a Neimark--Sacker or torus event. It is not a homoclinic connection and not a gate singularity. Because the small-amplitude unstable branch folds separately at $\tau\approx 5.587$, the lower boundary is a pair of nearby folds of two different periodic-orbit families, so the $\sqrt{\tau-\tau_{\mathrm{SNPO}}}$ collision scaling of a single saddle-node does not apply. (Appendix~\ref{app:methods}, Figures~\ref{fig:bifurcation}--\ref{fig:cycle}).
+
+\begin{enumerate}
+\item $0<\tau<\tau_-$ (Undelayed Panic Instability): equilibrium unstable; a single large-amplitude cycle is the attractor.
+\item $\tau_-<\tau<\tau_{\mathrm{term,L}}$: equilibrium a stable focus; the large cycle coexists (lower bistable window, $\approx 0.5$--$2$~yr wide).
+\item $\tau_{\mathrm{term,L}}<\tau<\tau_{\mathrm{fold,R}}$ (Phase-Stabilised Delay Window): monostable settling; the equilibrium is the sole attractor.
+\item $\tau_{\mathrm{fold,R}}<\tau<\tau_+$: the large cycle reappears beside the still-stable equilibrium (upper bistable window, $\approx 1$--$2$~yr wide).
+\item $\tau>\tau_+$ (Delay-Overshoot Instability): equilibrium unstable; the cycle is the sole attractor.
+\end{enumerate}
+
+The lower Hopf of the effort-bounded inner core at Candidate~A is subcritical ($l_1(\tau_-)=+5.75\times 10^{-5}$). The upper crossing is subcritical as well ($l_1(\tau_+)=+3.55\times 10^{-4}$), matching the large cycle immediately below $\tau_+$. The lower window is a large-cycle termination plus a continuation-supported small-branch fold (Numerical Result~\ref{thm:two-folds}), not a single SNPO. The upper-window attractor is a collocation-pinned period-1 cycle; $148.3$ is not a meeting of the Hopf small branch with that family (Figure~\ref{fig:upper-families}). Reported $\tau_\pm$ are the four-state gated values in Table~\ref{tab:thresholds}.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig_upper_families}
+\caption{Fourier-collocated upper-window families of the gated inner three-state core (residual $\sim 10^{-13}$). The Hopf small branch and the interior large family remain distinct through the table value $\tau_{\mathrm{fold,R}}=148.3$; no collision between the families is established there.}
+\label{fig:upper-families}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig_bifurcation}
+\caption{Attracting peak-to-peak amplitude of $N$ for the gated inner three-state core at Candidate~A, from fixed-step RK4 of the DDE. Far and near-equilibrium histories separate in the lower bistable window and again above $\tau_+$. Vertical lines are the continuation thresholds of Table~\ref{tab:thresholds} and the Hopf values of Appendix~\ref{app:methods}. The quiet interval is the monostable settling regime.}
+\label{fig:bifurcation}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig_cycle}
+\caption{Large-amplitude periodic attractor of the gated inner problem at $\tau=5$ (blue) and at $\tau=5.574$ just below termination (rust). Effort remains far below the absorbing face $E_{\max}=30$ (dotted). The orbit shrinks at finite period and does not approach the equilibrium (cross) as a homoclinic loop. Last $1800$~yr of a $3$--$4.5\times 10^4$~yr integration.}
+\label{fig:cycle}
+\end{figure}
+
+\paragraph{Basin capture.}
+Inside either bistable window \cite{scheffer2003}, histories sitting at a \emph{large} stock with low effort are captured by the cycle; near-collapse histories recover to the quiet equilibrium. Abundance plus slow (or, in the lower window, still-short) adjustment is the exposed trajectory, not scarcity.
+
+\paragraph{Robustness.}
+Within the parameter subregion where the Candidate~A two-Hopf pair exists, one-at-a-time variation across the reported ranges preserves that pair and the lower-boundary structure of Numerical Result~\ref{thm:two-folds}. Outside the bounded $r$-window the system becomes delay-independently stable or lacks a positive equilibrium. Candidate~B has a supercritical lower Hopf and no lower fold. The gated four-state folds are not reported. The pair $(\tau_-,\tau_+)$ exists only for $r$ in a bounded window: approximately $(0.008,0.022)$~yr$^{-1}$ at Candidate~A's effort response, extending to $\approx 0.061$~yr$^{-1}$ at $\eta=3$. The literature range $r\in[0.005,0.4]$ in Table~\ref{tab:params} is wider than this instability window; outside the window the cores are delay-independently stable or have no positive equilibrium. $\tau_-$ itself lies in $3.7$--$7$~yr across the two effort laws and both candidates, and in $4$--$25$~yr across the full $(r,\eta)$ rectangle --- inside the documented distribution of environmental-governance lags \cite{hocherman2025}. $\tau_+$ is primarily controlled by the biological time $1/r$, but also depends on the effort-response chart: Candidates~A and~B share $r=0.02$ and have $\tau_+\approx 150$ and $\tau_+\approx 76$~yr respectively.
+
+\subsection{Two liquidation channels}
+\label{sec:two-channel}
+
+The single-channel core treats all excess extraction as culling standing stock. Write $B_{\mathrm{birth}}(N)$ for births, not the abiotic uptake of Section~\ref{sec:abiotic}. Split net regeneration as $B_{\mathrm{birth}}(N)=S(N)+\kappa r N$, $M(N)=\kappa r N$, and split extraction by $\psi\in[0,1]$:
+\[
+C_{\mathrm{stock}}=\psi\,qEN,\qquad C_{\mathrm{recruit}}=(1-\psi)\,qEN.
+\]
+The extended stock equation
+\begin{equation}
+\dot N=\max\bigl(0,\,B_{\mathrm{birth}}(N)-C_{\mathrm{recruit}}\bigr)-M(N)-C_{\mathrm{stock}}
+\label{eq:two-channel-stock}
+\end{equation}
+is non-negativity-preserving for every $\psi$: at $N=0$ every term vanishes. Away from the recruitment floor, \eqref{eq:two-channel-stock} reduces identically to $\dot N=S(N)-qEN$. The floor never binds at the interior equilibrium (the binding condition reduces to $-\psi S(N)>\kappa r N$, which is impossible). Hence $(N^*,Z^*,E^*)$, the Jacobian, the characteristic equation, and both Hopf points are independent of $\psi$ and $\kappa$.
+
+The folds are global and feel the floor. Continuation gives $\tau_{\mathrm{fold,R}}(\psi{=}1)\approx 132.00$~yr and $\tau_{\mathrm{fold,R}}(\psi{=}0)\approx 132.50$~yr: a $0.4\%$ shift, within continuation tolerance of the single-channel value. All thresholds of Table~\ref{tab:thresholds} are computed at $\psi=1$; the channel mix leaves the Hopf points exactly unchanged and shifts the folds by $\lesssim0.5\%$, so the table is representative across the channel spectrum, while trough depths (below) are channel-dependent. Large-amplitude troughs differ substantially. At $\tau=115$~yr (Candidate~A, $\kappa=0.5$), a long-lived transient reaches $N\approx 33$ under pure culling and $N\approx 10$ under pure recruitment suppression. Stock-culling removes reproducing biomass and brakes decline immediately; recruitment suppression leaves the standing stock to background mortality. Under fixed excess demand $D=0.7>S_{\max}=0.5$, culling hits $N=0$ at $t\approx 158$; recruitment suppression approaches zero asymptotically ($t\approx 430$ to $N<1$).
+
+\begin{table}[t]
+\centering\small
+\caption{Illustrative $\psi$ by dominant physical mechanism, and the resulting large-amplitude trough range (Candidate~A, $\tau=115$~yr, $\kappa=0.5$). Higher $\psi$ is standing-stock culling. The assignments treat groundwater, soil zinc, and pollinator systems through the logistic two-channel proxy; only the $\psi=1$ stock-culling limit enters the manuscript's quantitative results.}
+\label{tab:psi-assignment}
+\begin{tabular}{lcc}
+\toprule
+Resource / dominant mechanism & $\psi$ & Cycle range \\
+\midrule
+Fishery, growth overfishing (adult-biased gear) & $0.75$ & $32.8$--$71.8$ \\
+Fishery, recruitment overfishing (juvenile bycatch) & $0.30$ & $23.9$--$63.2$ \\
+Forestry, clear-cut & $0.90$ & $33.1$--$72.1$ \\
+Forestry, selective harvest & $0.55$ & $29.1$--$68.4$ \\
+Groundwater, direct pumping & $0.90$ & $33.1$--$72.1$ \\
+Groundwater, impaired recharge & $0.20$ & $21.9$--$59.9$ \\
+Soil zinc, crop export & $0.85$ & $33.1$--$72.1$ \\
+Soil zinc, impaired mineralisation & $0.25$ & $23.0$--$61.8$ \\
+Pollinators, adult mortality & $0.70$ & $32.0$--$71.1$ \\
+Pollinators, brood failure & $0.20$ & $21.9$--$59.9$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+In each pair the higher-$\psi$ mechanism removes an existing unit; the lower-$\psi$ mechanism degrades replenishment. Literally harvesting fertilised eggs is pre-recruit harvest and should route mass to $P$ or $W$; habitat-induced failed recruitment is a prevented inflow and should not. The present $\psi$-split models the second; a stage-structured ledger (Appendix~\ref{app:scaffold}) is required for the first. Damage to carrying capacity itself (aquifer compaction, severe soil loss) is not a $\psi$-channel: it is a slow drift in $K$ or a transfer to $\mathbf I$, outside this extension. Across the table, trough depth varies by a factor of about $1.5$ from mechanism alone.
+
+The two-channel split is a decomposition of the core stock equation, not an extra Layer~1 flux. The ledger-compatible extraction is $C_{\mathrm{stock}}$: replace $\mathbf C^{\mathrm{effort}}$ by $C_{\mathrm{stock}}$ in \eqref{eq:product}--\eqref{eq:wvec} whenever $\psi$ is active. $C_{\mathrm{recruit}}$ is a prevented inflow and is not a ledger flux; routing it into $\mathbf P$ or $\mathbf W$ would create mass that was never in $\mathbf N$. When the floor binds, $-\dot N=M+C_{\mathrm{stock}}$ and the same replacement keeps \eqref{eq:invariant}. The floor never binds at the interior equilibrium, so the $\psi$-invariance of $\tau_\pm$ is ledger-compatible. Large-amplitude troughs that bind the floor are properties of \eqref{eq:two-channel-stock} under that replacement, not of the unmodified $C^{\mathrm{effort}}$ ledger.
+
+\subsection{Continuation of the global attractor}
+\label{sec:numerical-continuation}
+
+Hopf points are located by root-tracking of \eqref{eq:char} and independently by the cubic \eqref{eq:hopf-cubic}. Folds are located by Keller pseudo-arclength continuation of the periodic orbit, $1.5$--$5\times 10^6$~yr persistence tests per step, and far-from-equilibrium cross-checks. Fixed-initial-condition bisection mislocates folds by more than $20$~yr under critical slowing down (linear rates $10^{-4}$--$10^{-5}$~yr$^{-1}$ near each Hopf).
+
+Fourier spectral collocation \cite{engelborghs2002} locates an unstable periodic orbit of the effort-bounded core at $\tau=3.700$, just above $\tau_-=3.666$, residual $\sim 10^{-7}$. Forward simulation from that history escapes, by floating-point roundoff alone, onto the large cycle of amplitude $\approx 55.8$. Amplitude of the small orbit vanishes as $\sqrt{\tau-\tau_-}$ (slope $29.8$ in amplitude-squared, $R^2=0.994$): the subcritical-Hopf partner. Shooting Floquet multipliers: dominant radial multiplier $\to\exp(-2\sigma T)\approx 1.0016$, phase multiplier $\to 1$. The analogous ungated orbit at $\tau=7.1$ has dominant multiplier $\approx 1.018$.
+
+The large-amplitude attractor in both upper windows is a period-1 limit cycle. At $\tau=131.8$ (ungated) a $3\times 10^6$~yr warm-up gives Poincar\'e-section spread $<5\times 10^{-3}$, $N$-maxima envelope constant to $0.005\%$ over $2\times 10^6$~yr, and a spectrum of the fundamental ($P\approx 135.6$~yr) plus harmonics. Floquet multipliers all lie inside the unit circle (dominant nontrivial pair modulus $\approx 0.81$); a torus would require a second unit-circle multiplier. Independent method-of-steps RK45 (rel.\ tol.\ $10^{-9}$) reproduces the envelope. The effort-bounded core at $\tau=148.4,150,152$ is likewise period-1.
+
+The three-state ungated Candidate~B ($\eta=2.756$, $E_{\max}=26$) has a supercritical lower Hopf at $\tau_-=6.21$, no lower fold, and an upper SNPO at $76.075$ against $\tau_+=76.29$. The four-state ungated Candidate~B has the corresponding Hopfs at $6.25$ and $76.33$; its upper fold is not pinned (Table~\ref{tab:thresholds}). The five-regime sequence persists for Candidate~A and for variations that retain the subcritical lower Hopf and the large-cycle termination. Candidate~B is a supercritical chart: regime~2 is absent.
+
+\section{The four-state core}
+\label{sec:four-state}
+
+By Theorem~\ref{thm:working-proj}, the strict specialised system with the dynamic derived target projects exactly, in the large-reservoir limit $\sigma_{\mathrm{geo}}=1$, to the working four-state core. Transfer under residual macroeconomic feedback remains Conjecture~\ref{thm:tikhonov}. The QSS core of Theorem~\ref{thm:detritus} is the other closure and is not dynamically connected to the high-$A$ working equilibrium used for reported $\tau_\pm$. The constitutive logistic limit and a fast-recovering active pool are mutually exclusive: the same $A^{\mathrm{act}}/A_0\to\infty$ that produces logistic $R$ sends $\partial R/\partial A^{\mathrm{act}}\to 0$, leaving the pool's restoring rate equal to $\omega_A$ alone. The pool remains a state variable; it is not a static carrying-capacity parameter. At the Table~\ref{tab:params} baseline ($\omega_A=10^{-3}$~yr$^{-1}$, $\kappa_A=0.05$~yr$^{-1}$) the linearised relaxation time of $A^{\mathrm{act}}$ is $\approx 1000$~yr, versus $\approx 56$~yr for $N$. Deep-ocean ventilation ages of $900$--$2000$~yr \cite{skinner2017} and CENTURY passive-soil turnover of $400$--$2000$~yr \cite{parton1987,olson1963} place $\omega_A$ in an independently documented band. The active pool is a slow variable (Theorem~\ref{thm:frozenA}). Macroeconomic variables and prices eliminate by Conjecture~\ref{thm:tikhonov}; waste and product are decoupled by $\boldsymbol\mu=\boldsymbol\nu=\boldsymbol\rho=\mathbf 0$ in the specialisation. Under the dynamic target at $\sigma_{\mathrm{geo}}=1$, detritus is a driven auxiliary and does not feed back (Theorem~\ref{thm:working-proj}).
+
+The working four-state core is the $\sigma_{\mathrm{geo}}=1$ dynamic-target system (equivalently, $U$ omitted with $D^{\mathrm{ret}}=0$), so the derived target retains $A^{\mathrm{act,eq}}=A^{\mathrm{act,eq,intrinsic}}+\kappa_A K/\omega_A$ ($5050$ at the Table~\ref{tab:params} baseline):
+\begin{align}
+\dot N &= R(N,A^{\mathrm{act}})-qEN,\\
+\dot A^{\mathrm{act}} &= -B(N,A^{\mathrm{act}})+\omega_A\bigl(A^{\mathrm{act,eq}}-A^{\mathrm{act}}\bigr),
+\label{eq:four-state-working}
+\end{align}
+with \eqref{eq:Z-core}--\eqref{eq:effort-core} unchanged except that $S(N)$ is replaced by $R(N,A^{\mathrm{act}})$. Mining of $A^{\mathrm{geo}}$ does not appear in $Z$; holding $A^{\mathrm{act}}$ by recharge is exactly the deficit-masking mechanism of Section~\ref{sec:abiotic}. Because $qE^*N^*=R(N^*,A^{\mathrm{act}*})$ at any interior equilibrium, $Z^*=\delta$ and the quadratic for $E^*$ are identical to the three-state values. The coupled stock--pool point at Candidate~A is $N^*=89.526$, $A^{\mathrm{act}*}=397.87$, the unique positive root of $0=-B+\omega_A(A^{\mathrm{act,eq}}-A)$ at that $E^*$. This is consistent with the three-state $N^*\approx 89.55$: at $A^*/(A^*+A_0)\approx 0.9975$ the four-state regeneration $R(N^*,A^*)$ lies within $0.25\%$ of the frozen-$A$ logistic $S(N^*)$ used there; the equilibria are not refitted between sections. It is a frozen-donor quasi-equilibrium: geological support of order $\omega_A(A^{\mathrm{eq,W}}-A^*)\approx 4.652$ stock units per year is required and is not a rest point of a closed $A^{\mathrm{geo}}$ equation. It is incompatible with the formal QSS target $A^{\mathrm{eq,intrinsic}}=50$. Cumulative donor change at that constant flux is $\varepsilon_G(T)=4.652\,T/A^{\mathrm{geo}}$ (Table~\ref{tab:epsG}): on a century institutional horizon $\varepsilon_G$ is $1.2\%$ at the lower geological ratio $A^{\mathrm{geo}}/A^*=10^2$ and $0.12\%$ at $10^3$.
+
+The effort-bounded Hopf pair of this omitted-detritus system is the reported threshold (Table~\ref{tab:thresholds}: $\tau_-\approx 3.78$~yr, $\tau_+\approx 150.1$~yr). It differs from the three-state inner pair by $3.2\%$ in $\tau_-$ and $0.2\%$ in $\tau_+$, within the bound Theorem~\ref{thm:frozenA} provides for $\tau_-$ on institutional timescales. Oscillation periods under the gated law are $\approx 360$--$380$~yr in the short-delay regime and $\approx 150$--$160$~yr in the upper window. The Hopf pair of this system is characteristic-pinned (Numerical Result~\ref{thm:four-hopf}). The gated four-state fold locations are $\tau_{\mathrm{term,L}}^{(4)}\approx 5.63$~yr and $\tau_{\mathrm{fold,R}}^{(4)}\approx 64.4$~yr (Numerical Result~\ref{thm:four-folds}): a narrow lower bistable window $(3.78,5.63)$~yr and a wide upper bistable window $(64.4,150.1)$~yr in which the large cycle coexists with the stable equilibrium. $\tau_-$ is not an artefact of freezing the environment.
+
+A second bifurcation parameter appears that the three-state core cannot see. At $\tau=0$ the four-state equilibrium is unstable for $\kappa_A>\kappa_A^\star\approx 0.001316$ and delay-independently stable below it (sixty $(\kappa_A,\tau)$ pairs, three independent methods). Above $\kappa_A^\star$, on the \emph{ungated} four-state system, both Hopf points and both folds track smoothly in $\kappa_A$: $\tau_-$ falls from $\approx 17.5$ to $\approx 6.9$~yr and the monostable interval remains $\approx 120$--$260$~yr. Varying $\omega_A$, $A_0$, and $A^{\mathrm{act,eq,intrinsic}}$ across their full literature ranges keeps ungated $\tau_-\in[6.89,7.42]$. The gated $\tau_-\approx 3.78$ is the baseline $(\kappa_A,\omega_A)$ value, not a $\kappa_A$-uniform constant. Oscillation period throughout $\tau<\tau_-$ is $250$--$390$~yr, essentially independent of $\tau$. Frequency is pinned by $r$ and $\tau_m$, not by institutional delay. Uniformly raising $r$ toward fish-like values destroys the oscillatory regime rather than compressing the period into a decade.
+
+\section{Finite-donor correction to the working equilibrium}
+\label{sec:finite-donor-bridge}
+
+The high-$A$ working equilibrium is a frozen-donor/derived-target quasi-equilibrium, not an interior rest of the closed finite-donor primitive system. In the primitive completion,
+\begin{align}
+\dot N&=R-qEN,\\
+\dot A^{\rm act}&=-B+e_{GA}-e_{AG}+\gamma_UU,\\
+\dot A^{\rm geo}&=-e_{GA}+e_{AG},\\
+\dot U&=T-\gamma_UU,
+\end{align}
+with $B=R+T$ and every exchange donor limited. Direct addition gives
+\[
+\frac d{dt}(N+A^{\rm act}+A^{\rm geo}+U)=-qEN.
+\]
+At a rest, $\dot U=0$ gives $\gamma_UU=T$, while the two abiotic equations give $B=T$, hence $R=0$. Positive effort and positive stock then contradict the stock rest equation. Therefore no positive-effort interior rest exists for this closed primitive completion.
+
+The nonnegative finite mass budget also yields
+\[
+\int_0^\infty qE(t)N(t)\,dt
+\le N(0)+A^{\rm act}(0)+A^{\rm geo}(0)+U(0).
+\]
+A constant positive working extraction flux cannot persist indefinitely. The frozen-donor thresholds remain properties of their named completion; whether their periodic structures appear as slowly drifting finite-donor transients is an open slow-passage problem, not a consequence of the budget identity.
+
+\section{Stoichiometric core and the general feedback loop}
+\label{sec:unified-core}
+
+The vector ledger and the reduced cores share a linearised feedback identity, not one nonlinear system. Let $\mathbf x\in\mathbb R_+^n$ be physical amounts and $\mathbf y\in\mathbb R^p$ non-conserved functional states. Internal transfers obey
+\begin{equation}
+\dot{\mathbf x}=\mathcal S\,\mathbf v(\mathbf x,\mathbf y)+\mathbf B_{\mathrm{in}}\,\mathbf u(t),
+\label{eq:unified-stoich}
+\end{equation}
+with $\mathbf v\ge\mathbf 0$ primitive fluxes. If $\mathbf L^\top\mathcal S=\mathbf 0$, then $\frac{d}{dt}(\mathbf L^\top\mathbf x)=\mathbf L^\top\mathbf B_{\mathrm{in}}\mathbf u$. On a closed boundary every conserved moiety satisfies $\mathbf L^\top\mathbf x(t)=\mathbf L^\top\mathbf x(0)$ exactly. Equation~\eqref{eq:invariant} is the special case in which $\mathbf L$ selects physical-mass components. There is one conservation law per moiety; there is no universal scalar spanning incommensurable materials.
+
+Writing the ledger in primitive fluxes --- assimilation $g$, mortality $m$, decomposition $d_U$, harvest $h$, bidirectional exchange --- makes turnover and return separately defined. At any detritus steady state $d_U(U^*)=m(X^*)$ cancels identically in the active-pool balance, with no auxiliary compensation constant. The signed depletion signal
+\begin{equation}
+\ell=h-(g-m)=-\dot X
+\label{eq:unified-ell}
+\end{equation}
+is an identity. Liquidation is $[\ell]_+$.
+
+\begin{numresult}[Saturating effort-weakening gates: no Hopf on a searched domain]
+\label{thm:sigma-gate}
+Replace the autocatalytic factor $\eta E Z_\tau/\Delta_{\mathrm{ref}}$ by a saturating gate $\sigma(Z_\tau/Z_0)=1/(1+e^{-Z_\tau/Z_0})$ whose linearisation $\partial\dot E/\partial Z_\tau$ at equilibrium decreases in deployed effort and contains no factor $\eta E^*/\Delta_{\mathrm{ref}}$. On that class, a search of more than $300$ randomised parameterisations by Newton eigenvalue tracking, joint modulus minimisation, and nonlinear RK4--DDE found no genuine imaginary-axis root of~\eqref{eq:general-feedback}. This is a numerical nonexistence report on a compact searched set, not an analytic exclusion on the whole parameter space. The gated law~\eqref{eq:effort-gated} is \emph{not} of this class: its $C_Z$ contains both $(1-E^*/E_{\max})$ and the autocatalytic factor $\eta E^*/\Delta_{\mathrm{ref}}$, and it does admit the Hopf pair of Table~\ref{tab:thresholds}.
+\end{numresult}
+
+Autocatalytic coupling $\eta E^*/\Delta_{\mathrm{ref}}$, which grows with deployed effort, is the mechanism that produces the Hopf pair.
+
+The stoichiometric core retains primitive fluxes and restores that autocatalysis:
+\begin{equation}
+\begin{aligned}
+\dot X&=g(X,A)-m(X)-qEX,\\
+\dot U&=m(X)-\gamma_U U,\\
+\dot Z&=(\ell-Z)/\tau_m,\\
+\dot E&=\bigl(1-E/E_{\max}\bigr)\bigl[\eta E\,Z(t-\tau)/\Delta_{\mathrm{ref}}+\delta_0-\eta E^2/E_{\max}\bigr],
+\end{aligned}
+\label{eq:unified-core-v2}
+\end{equation}
+with $A=\mathcal M-X-U$, $g=\mu XA/(K_A+A)$, $m=dX+cX^2$. Because $Z^*=0$ at equilibrium, the baseline is a true constant $\delta_0$. The interior equilibrium is
+\begin{equation}
+E^*=\sqrt{\delta_0 E_{\max}/\eta},
+\label{eq:unified-Estar}
+\end{equation}
+existing for $0<\delta_0<\eta E_{\max}$. Delay-coupling strengthens with $E^*$ precisely when $E^*<E_{\max}/2$.
+
+The characteristic quasi-polynomial is exact:
+\begin{equation}
+\mathcal Q(\lambda)-\mathcal K\,\lambda(\lambda+\gamma_U)e^{-\lambda\tau}=0,
+\label{eq:unified-char-eq}
+\end{equation}
+where, at the interior equilibrium,
+\begin{align*}
+J_X&=\partial_X\bigl(g-m-qEX\bigr)_*,&
+J_U&=\partial_U\bigl(g-m-qEX\bigr)_*,\\
+m_*'&=m'(X^*),&
+C_E&=-\frac{2\eta E^*}{E_{\max}}\Bigl(1-\frac{E^*}{E_{\max}}\Bigr),
+\end{align*}
+the last because the effort bracket vanishes at $Z^*=0$. Then $\mathcal Q(\lambda)=[(\lambda-J_X)(\lambda+\gamma_U)-J_U m_*'](\lambda-C_E)(1+\tau_m\lambda)$ and $\mathcal K=qX^*(1-E^*/E_{\max})\eta E^*/\Delta_{\mathrm{ref}}>0$. A Hopf root requires $F(\omega):=|\mathcal Q(i\omega)|^2-\mathcal K^2\omega^2(\omega^2+\gamma_U^2)=0$.
+
+At an illustrative Table-consistent baseline ($\eta=2.23$, $E^*\approx 0.435$) $F(\omega)>0$ for all $\omega\in(0,100]$ and an argument-principle count (validated against Candidate~A) finds zero unstable roots on $\tau\in[0,500]$. Far-from-equilibrium histories produce a large-amplitude oscillation that persistence testing reclassifies as a ghost transient (collapse within $\approx 2\times 10^4$ time units for $\tau\in(33.4,34.8)$). The absence of a local Hopf is parametric: $\eta_{\mathrm{crit}}\approx 2.337$ (inside $\eta\in[0.5,3.0]$). Above it, two Hopf pairs exist. A large-delay pair is born at $\eta_{\mathrm{crit}}$ ($\tau_-\approx 71.2$, $\tau_+\approx 72.9$) and migrates downward ($\tau_-\approx 4.5$, $\tau_+\approx 41.2$ at $\eta=3.0$). A small-delay pair is born at $\eta\approx 2.454$. Their interleaving at $\eta=2.5$ produces at least four alternating delay bands. At the illustrative point $\eta=10$, $\tau_-\approx 17.568$ is supercritical (shared near- and far-amplitude, power-law exponent $\approx 0.59$); above $\tau_+\approx 18.362$ the attractor is homoclinic-like slow-fast intermittency (broad onset spectrum, thin Poincar\'e section, inter-excursion CV $1.58$, return-map $r=-0.47$), with large-amplitude time fraction rising monotonically from $0\%$ at $\tau=18.4$ to $100\%$ by $\tau\approx 22$.
+
+\subsection{The general feedback equation}
+\label{sec:general-feedback}
+
+Both cores instantiate one linearised loop: Eq.~\eqref{eq:general-feedback} is a linear lemma --- shared linearisation, not shared nonlinear dynamics. The three systems (three-state, four-state, stoichiometric) share this characteristic identity but differ in their nonlinear objects: the upper global fold moves from $\approx 148$~yr (three-state) to $\approx 64$~yr (four-state) while the Hopf pair stays within a few percent; the equilibrium memory differs ($Z^*=\delta>0$ vs $0$); and the stoichiometric core has no baseline Hopf ($\eta_{\mathrm{crit}}\approx 2.34$). Let $\boldsymbol\xi$ be the ecological perturbation, $\dot{\boldsymbol\xi}=\mathbf J\boldsymbol\xi+\mathbf b_E e$, and let memory be a gain-$g$ filter of $-\mathbf c^\top\dot{\boldsymbol\xi}$:
+\begin{equation}
+\boxed{\;\lambda-C_E-C_Z e^{-\lambda\tau}\frac{-g\lambda\,\mathbf c^\top(\lambda\mathbf I-\mathbf J)^{-1}\mathbf b_E}{1+\tau_m\lambda}=0.\;}
+\label{eq:general-feedback}
+\end{equation}
+The three-state core is the $1\times 1$ case $\mathbf J=A_N$, $\mathbf b_E=A_E$, $g=1/2$. The stoichiometric core is the $2\times 2$ stock--detritus block with $g=1$. Both reductions are symbolic identities. The three ingredients are an ecological resolvent supplying admissible frequencies, an institutional gain $C_Z g$ that must close the loop, and a delay supplying phase. The gain condition is $\tau$-independent; the phase condition rotates through match, past it, and back. Non-monotone delay-stability is the generic behaviour of this architecture.
+
+Equation~\eqref{eq:general-feedback} unifies the linearisations.
+
+\begin{theorem}[Loop-gain exclusion of delay-induced Hopf]
+\label{thm:loop-gain}
+Write \eqref{eq:general-feedback} as $\lambda-C_E-C_Z e^{-\lambda\tau}G(\lambda)=0$. If
+\begin{equation}
+\sup_{\omega\in\mathbb R}\frac{|C_Z|\,|G(i\omega)|}{|i\omega-C_E|}<1,
+\label{eq:loop-gain-bound}
+\end{equation}
+then there is no purely imaginary characteristic root for any $\tau\ge 0$, and therefore no delay-induced Hopf.
+\end{theorem}
+
+\begin{proof}
+Suppose $\lambda=i\omega$ with $\omega\in\mathbb R$ were a root. Then
+\[
+i\omega-C_E=C_Z e^{-i\omega\tau}G(i\omega).
+\]
+Taking moduli and using $|e^{-i\omega\tau}|=1$ gives $|i\omega-C_E|=|C_Z|\,|G(i\omega)|$, hence
+\[
+\frac{|C_Z|\,|G(i\omega)|}{|i\omega-C_E|}=1,
+\]
+which contradicts the hypothesis that the supremum of the left-hand side is strictly less than one. Thus no purely imaginary root exists for any $\tau\ge 0$.
+\end{proof}
+
+\begin{theorem}[Nyquist Hopf criterion]
+\label{thm:nyquist}
+Write $L(\lambda,\tau)=C_Z G(\lambda)e^{-\lambda\tau}/(\lambda-C_E)$. Assume $i\omega-C_E\neq 0$ for all $\omega>0$. A Hopf root exists if and only if $L(i\omega,\tau)=1$ for some $\omega>0$. If $\sup_{\omega>0}|L(i\omega,\tau)|<1$ for every $\tau\ge 0$, there is no delay-induced Hopf. Theorem~\ref{thm:loop-gain} is the $\tau$-uniform special case.
+\end{theorem}
+
+\begin{proof}
+$L(i\omega,\tau)=1$ is $\lambda-C_E-C_Z e^{-\lambda\tau}G(\lambda)=0$ at $\lambda=i\omega$. The small-gain bound is $|L|<1$.
+\end{proof}
+
+The search in Numerical Result~\ref{thm:sigma-gate} is consistent with~\eqref{eq:loop-gain-bound} for saturating gates without autocatalytic gain; the bound itself is not verified analytically on the full searched domain. The gated core~\eqref{eq:effort-gated} violates~\eqref{eq:loop-gain-bound} and admits the Hopf pair of Table~\ref{tab:thresholds}.
+
+The stock equations match in a definite limit:
+
+\begin{theorem}[Logistic identification]
+\label{thm:logistic-id}
+In \eqref{eq:unified-core-v2} take $A\gg K_A$ and set $\mu-d=r>0$, $c=r/K$. Then $g-m=rX(1-X/K)+O(K_A/A)$. Under the additional fixed-target exchange closure of Theorem~\ref{thm:detritus}, the stock component converges to the QSS four-state stock equation at saturated $A$. The full four-state $A$-equation is obtained only after imposing the exchange law of Section~\ref{sec:abiotic}. The linearisations still differ by the memory gain: the specialised core has $g=\mathrm{softplus}_k'(0)=1/2$, the stoichiometric core has $g=1$ because $\ell=-\dot X$ is unregularised. They instantiate the same feedback architecture at two numerical gains ($g=1/2$ vs $g=1$). The claim concerns the linearised feedback identity \eqref{eq:general-feedback}, not the nonlinear objects, which also differ in the equilibrium memory level ($Z^*=\delta>0$ vs $0$), the effort baseline, and the closed form of $E^*$.
+\end{theorem}
+
+\begin{proof}
+The stoichiometric uptake is $g=\mu X A/(K_A+A)=\mu X\bigl(1-K_A/(K_A+A)\bigr)$. With density-dependent mortality $m=dX+cX^2$ and $\mu-d=r$, $c=r/K$,
+\[
+g-m=rX-\frac{r}{K}X^2-\mu X\frac{K_A}{K_A+A}=rX\Bigl(1-\frac{X}{K}\Bigr)+O(K_A/A).
+\]
+Under the fixed-target closure of Theorem~\ref{thm:detritus}, $A$ saturates and the stock equation converges to the QSS four-state stock equation. At a zero-deficit interior rest the specialised memory linearises with $\mathrm{sp}_k'(0)=1/2$, whereas $\ell=-\dot X$ linearises with gain $1$. The two cores therefore realise the same feedback architecture at two numerical gains.
+\end{proof}
+
+$K_A\to 0$ without the mortality identification yields $g\to\mu X$, which is not logistic. The one-system theorems of Section~\ref{sec:reduction-theorems} concern the specialised framework and the five-/four-/three-state cores. Theorem~\ref{thm:logistic-id} is the only reduction link to \eqref{eq:unified-core-v2}.
+
+\section{Empirical domain}
+\label{sec:empirical}
+
+The claim that $\tau_-$ lies inside documented governance lags \cite{hocherman2025} is a distributional fact. The question is whether any individual system provides an unconfounded test. A search across more than thirty candidates --- fisheries, aquaculture, groundwater, surface water, rangeland, wildlife, forestry, produced-capital markets --- screened for continuous institutional feedback, a dateable response lag, absence of a major independent confound, and individual-resource data, produced none.
+
+Three groundwater cases that passed a first screen (Sheridan-6 LEMA, Bangkok, La Mancha Oriental) fail at station resolution: precipitation explains half the Sheridan-6 index-well variance and the instrument is a fixed five-year cap; Bangkok subsidence carries a documented rainfall-driven undulation \cite{ahmed2024}; La Mancha's 2019--2023 extraction upturn is attributed to woody-crop conversion and climate, layered on engineered transfers \cite{hoogesteger2025}. Icelandic cod under the 1995 harvest-control rule ($\tau\approx 0.2$--$0.3$~yr) fluctuates persistently (CV $0.387$), but the period is $10$--$15$~yr --- cohort resonance, $15$--$25\times$ shorter than the four-state prediction --- and haddock under the same rule has lower CV despite higher recruitment variability. Peruvian anchoveta meets every criterion except the confound gate: its only robust spectral peak is the $3.7$~yr El Ni\~no recurrence.
+
+Two structural reasons explain the null. First, the long records needed to test the claim exist primarily for visible crises, and visibility is correlated with a fast non-institutional driver. Second, at any $r$ inside the three- and four-state instability window the predicted period is centuries, longer than any institution has held a fixed response rule.
+
+That confinement is a property of the model class, not of one equation. Adding Droop nutrient/quota limitation leaves the $r$-window essentially unchanged (upper edge $\le 0.023$ at $\eta=0.914$; no crossings at $r\ge 0.2$): a growth-coupled pool cannot be slow at large $r$. Stage structure with a maturation delay $g$ is three-part. Late-maturing stocks ($g\ge 5$~yr) remain delay-independently stable at fish-like $r$; their decadal cycles are biological cohort resonance, already present at $\tau=0$. Slow $r$ with any $g\ge 1$~yr oscillates at zero institutional delay with $P\approx 250$--$360$~yr. Short maturation delays relocate the institutional window onto the locus $rg\approx 1.5$--$1.6$: sprat-class ($r\approx 0.8$, $g=2$) has a $\tau$-window $(2.6,7.8)$~yr and period $\approx 8$~yr; anchovy-class ($r\approx 1.6$, $g=1$) has $(1.6,3.5)$~yr and period $\approx 4$~yr.
+
+Real governance is periodic review, not continuous delay. The continuous DDE and the sample-and-hold map are the same loop under two delay operators: Theorem~\ref{thm:sampled} replaces $e^{-\lambda\tau}$ by the monodromy $M(T_r)$. Changing the operator can move, or delete, a crossing; that is the spectrum of the review map, not a demolition of the loop. Under sample-and-hold the located roots split by operator.
+
+\begin{itemize}
+\item On the logistic Candidate~A core of Theorem~\ref{thm:sampled}, $\rho(M(T_r))>1$ at annual review (the undelayed equilibrium is already unstable) and the sampled equilibrium restabilises by a Neimark--Sacker pair at $T_r^{\mathrm{NS}}=47.54$~yr (Figure~\ref{fig:monodromy}).
+\item On the stage-structured review map, annual review ($T_r=1$~yr) is stable at every $\eta$ tested, consistent with the spectral null among 42 annual-managed RAM stocks \cite{ricard2012}.
+\item On that same stage-structured map the anchovy-class window relocates to $T_r\approx 3$--$4$~yr (biomass period $\approx 4$~yr, effort period $\approx 12$~yr), robust to $30\%$ multiplicative assessment error; the sprat-class window relocates to $T_r\approx 6$--$12$~yr (biomass $\approx 8$~yr, effort $\approx 60$~yr).
+\item The continuous-delay \emph{cod} band (late-maturing, fish-like $r$) is absent from the stage-structured $M(T_r)$: stable on the searched grid $T_r\in[1,20]$. That deletion is class-specific. Fast pelagics retain a Neimark--Sacker pair on the stage-structured operator.
+\end{itemize}
+
+The institutional signal is carried by effort and quota utilisation ($80$--$240\%$ of $E^*$), not by biomass ($1$--$2\%$ of $N^*$). On decadal records the observable is the growth transient in effort after a review-cycle change. No real small-pelagic system currently operates a responsive $3$--$4$~yr review; the prediction is untested, not falsified. For slow-regenerating resources the corresponding qualitative test is whether a responsive multi-year plan, adjusted against measured change, produces large-amplitude extraction cycles that a frozen multi-year cap does not.
+
+The underlying bifurcation class --- a single parameter taking a structured delay system from a stable equilibrium to a sustained oscillation --- is laboratory fact: \emph{Tribolium} mortality experiments \cite{costantino1995}, Nicholson's blowflies \cite{gurney1980}, and commons-free fishery-management experiments in which subjects still overshoot by $\sim 60\%$ from stock-and-flow misperception \cite{moxnes1998,cronin2009}.
+
+\section{Policy}
+\label{sec:policy}
+
+For scarcity-mobilising extraction, shorter delay is not uniformly stabilising \cite{hocherman2025,mckibbin2014}. Protective regulation (quotas, closures, restoration) has the opposite feedback sign and is analysed separately. In the mobilising regime:
+
+\begin{enumerate}
+\item \textbf{Bound effort.} Hard quotas, decoupling of profit from immediate yield, and cooperative governance \cite{ostrom1990} restrict $E$ and therefore how far a well-stocked system can be driven into either bistable window.
+\item \textbf{Close the flow deficit.} The primary object is $E(t)\le S(t)/(qN(t))$ when $N>0$ (extraction not exceeding sustainable yield $S$), component by component, not a scalar balance.
+\item \textbf{Evaluate pacing against the operator that is actually used.} Continuously adjusting scarcity mobilisation on a slow stock is the Candidate~A DDE: responses faster than $\tau_-$ trap that class on the large cycle; a delay of roughly a decade sits in the monostable interval of the inner problem. Periodic-review fisheries are governed by the stage-structured $M(T_r)$: annual review is stable on that map; responsive $T_r\in[3,12]$~yr is the predicted instability for small pelagics. The Candidate~A logistic hold map is a different operator (Figure~\ref{fig:monodromy}): for a slow stock under periodic review it is the operator actually used, and there annual review is unstable, the sampled equilibrium restabilising only for $T_r\in[47.5,79.1]$~yr --- so the continuous-delay ``decade'' recommendation does not transfer to periodic review of a slow stock; the pacing target for that class is the review interval. Speed is not monotone in safety.
+\item \textbf{Price the open loop} (carbon, nutrient recovery) so that recovered mass re-enters $\mathbf A^{\mathrm{act}}$ rather than being stranded in $\mathbf W$ or $\mathbf I$.
+\item \textbf{Monitor the vector of horizons and stress indices.} Treat rapid recovery and unusually high abundance, not only depletion, as a signal under long delays: that is the basin the cycle captures.
+\item \textbf{Extinction-boundary effort.} Institutional memory that sustains $E^*$ after collapse requires an explicit intervention --- moratorium, independent authority --- because $Z^*=\delta$ does not decay with the stock. This point is specific to the untethered effort law used for every number in Table~\ref{tab:thresholds}: the thermodynamic tether of Appendix~\ref{app:tether} shows that once effort carries an energetic cost every tested trajectory converges to $(0,\delta,0,0)$ instead, and Table~\ref{tab:thresholds} is not recomputed with the tether.
+\end{enumerate}
+
+In viability language \cite{aubin1991,cury2005}: the levers available under institutional failure are the structural parameters $\boldsymbol\theta=(\tau,E_{\max},\delta_0)$, not a real-time harvest control. The safe parametric regime is the set of $\boldsymbol\theta$ whose attractor lies in the interior of the desirable set defined by the horizon and stress-index constraints. Monostability and geometric viability are independent conditions; both are required. Inside a bistable window, basin membership is a third, independent condition.
+
+\section{Testable claims}
+
+\begin{description}
+\item[Existing-data diagnostics.] For a resource with both an active and a geological component the two horizons $\mathcal H^{\mathrm{act}}$ and $\mathcal H^{\mathrm{geo}}$ are constructed to separate active-pool stress from reserve life, and $\Sigma^{\mathrm{geo}}$ registers chronic stress wherever mining is sustained. The productivity illusion appears as stable or rising aggregate output against a component $\Sigma$ in chronic stress; industrial cereal systems with declining soil organic matter or micronutrient density are the canonical test. Tables~\ref{tab:adh-gw}--\ref{tab:adh-fish} are this test on public series.
+\item[Existing-data review null.] Annual-managed stocks are predicted delay-stable. The spectral null among 42 annual-managed RAM stocks \cite{ricard2012} is consistent with the prediction and is not a unique or powerful test of the mechanism.
+\item[Prospective review-interval test.] A fast-maturing small pelagic (anchovy- or sprat-class) placed on a responsive review $T_r\in[3,12]$~yr is predicted to develop a sustained oscillation in effort/quota utilisation whose onset is dateable to the review change. A stock that remains quiet over several predicted effort periods falsifies that claim. No such regime is currently operated; the test is an intervention test, not a test on the present cross-section. Existing confounded analogues (Peruvian anchoveta, El Ni\~no) are not this test.
+\item[Basin capture.] Within a bistable window of the inner problem, large, well-stocked histories with slow adjustment are captured by the cycle; depleted histories are not. This is a statement about the DDE, checked by continuation, not a field claim.
+\item[Stoichiometric core.] At $\eta$ below $\eta_{\mathrm{crit}}\approx 2.34$, small perturbations decay at every delay and far-from-equilibrium large oscillations are ghost transients. Growing small-amplitude oscillations as delay increases would place the system in the local-Hopf regime instead.
+\end{description}
+
+\section{Parameters}
+\label{sec:parameter-audit}
+
+All reported thresholds use Table~\ref{tab:params}. Candidate~A places the lightly exploited interior equilibrium at $N^*/K\approx 0.8955$, $E^*\approx 2.090$; overshoot is a statement about dynamics \emph{away from} this point. Theorem~\ref{thm:ident} records the dimensionless groups $(\varrho,\lambda_F,a,b,Z_{\mathrm{ref}}/\delta,\eta/r,r\tau_m)$ that fix $N^*/K$ and $r\tau_\pm$ once effort is scaled by $E_{\max}$. At Candidate~A those groups are $\varrho=1.5$, $\lambda_F=2$, $a=\delta$, $b=2.36\times 10^{-5}$, $Z_{\mathrm{ref}}/\delta\approx 14.43$, $\eta/r=45.7$, $r\tau_m=0.1$. Candidate~B ($\eta=2.756$, $E_{\max}=26$) is a second point, not a rescaling of~A: $\varrho=1.3$, $\eta/r=137.8$, $N^*/K\approx 0.9097$, $E^*\approx 1.806$. Its gated inner Hopfs are the interval-certified pair of Numerical Result~\ref{thm:interval-hopf}; $l_1(\tau_-)<0$ and $l_1(\tau_+)>0$, so the lower crossing is supercritical and Table~\ref{tab:thresholds} has no lower fold for that class. The softplus sharpness $k$ has no empirical referent; with the shifted floor, Hopf points are invariant under $k\in\{5,10,20,40\}$ at fixed $\delta$. Two qualifications. (i)~At the baseline calibration $\delta=\ln 2/k$ the equilibrium memory $Z^*=\delta$ itself depends on $k$, so the invariance statement is at fixed $\delta$, not at fixed $\delta/k$. (ii)~Criticality is not $k$-invariant: the first Lyapunov coefficient contains $\operatorname{sp}_k''(0)=k/4$, so a sign change in $l_1$ under that sweep would rearrange the lower window; the reported $l_1(\tau_\pm)$ values are at $k=10$. Fold locations do depend on $k$. Macroeconomic rates do not enter the core.
+
+\section{Scope}
+
+The core is the institutional-failure regime. The opposite-signed protective channel is a different loop. Candidates~A and~B are two parameter points in the sense of Theorem~\ref{thm:ident}; their local Hopf spectra are interval-certified (Numerical Result~\ref{thm:interval-hopf}). Every mass compartment is forward invariant (Theorem~\ref{thm:nonneg}). Small waste--product feedback is an $O(\varepsilon_w)$ finite-time error (Theorem~\ref{thm:waste}). Local Hopfs persist by Theorem~\ref{thm:hopf-persist}. The reduction theorems are finite-time statements. Thresholds in Table~\ref{tab:thresholds} are computed from the untethered effort law and the three- and four-state cores, not from the tether or stage-structured appendices. Appendix~\ref{app:methods} records the local spectrum, the monodromy, and the orbit diagnostics for the inner termination. Related developments---a finite-donor primitive ledger, a protective institutional channel, a yield-gap Liebig centre manifold, stage-structured harvest, a spatial DDE--PDE, first-passage interpretations of the constructed horizons, and interval treatment of the inner small-branch fold---are given in companion papers.
+
+\section{Conclusion}
+
+Compensatory scalar sustainability indices cannot certify componentwise safety. Proposition~\ref{prop:no-scalar} records the obstruction. The analysis that follows uses a mass-conserved vector ledger, with conservation derived from a donor-limited flux table, and a delay-differential core for institutions that act on a filtered deficit.
+
+The dynamical claims of this paper are made on a named vector field: the effort-saturation-corrected (gated) three-state DDE $(N,Z,E)$ of a single binding resource, with the specialisation (single stock, $S=R$, $\chi=1$, $\mu=\nu=\rho=0$, frozen-$A$) stated as a modelling choice. For this DDE we prove: a closed-form equilibrium, a complete Hopf cubic, interval-certified $\tau_\pm$, subcriticality at both crossings ($l_1>0$), and a numerically supported two-family lower boundary (large-cycle termination near $5.57$~yr plus a small-branch turning region near $5.587$~yr). The undelayed mobilisation law is already ODE-unstable ($\operatorname{Re}\,\lambda>0$ at $\tau=0$): institutional delay opens the phase-stabilised window $(\tau_-,\tau_+)$ and closes it at $\tau_+$, producing a wide monostable interval around a decade-scale delay for the Candidate~A class. The three cores share one linearised loop (Eq.~\eqref{eq:general-feedback}); they do not share the nonlinear diagram: the four-state upper fold lies at $\approx 64$~yr, not $\approx 148$~yr. Hopf locations are invariant under the liquidation-channel mix; trough depth is not. The analysed mechanism is confined to a bounded regeneration-rate window; under periodic review it becomes a prediction about the review interval, not about a century-scale cycle. Componentwise depletion horizons computed on public data separate active-pool stress from geological reserve life within the framework's diagnostic layer.
+
+The operational implication is specific. For scarcity-mobilising institutions, hyper-reactive response is a destabiliser: the short-delay regime inherits the instability of the undelayed system, $\tau_-$ is a stabilising crossing, and the delay's role is to stabilise once it exceeds $\tau_-$ rather than to have amplified the short-delay instability. For the Candidate~A class a delay of roughly a decade is the settling regime of the inner problem; for fast-maturing stocks under periodic review the corresponding test is a review interval of $3$--$4$~yr. The durable intervention is to break the liquidation feedback itself.
+
+\section{Validation hierarchy for local and global bifurcation claims}
+\label{sec:validation-bridge}
+
+The inner three-state Hopf intervals are accepted as externally verified interval certificates for the named homogeneous gated model. The global turning events have different status. High-accuracy collocation and pseudo-arclength continuation support a small-branch turning region near $\tau\approx5.587$, but the source reports no converged Moore--Spence zero, interval Krawczyk inclusion, fold nondegeneracy enclosure, or continuous-DDE bordered radii-polynomial proof.
+
+Accordingly:
+\begin{itemize}
+\item local Hopf intervals may be called interval certified at the I-3S scope;
+\item branch locations and multipliers may be called verified numerical results;
+\item the periodic turning point is not called a certified fold;
+\item no inner result transfers to the working four-state, finite-donor, vector, stage, or spatial model without its own bridge.
+\end{itemize}
+
+The computational supplement fixes the discrete collocation map, phase convention, Moore--Spence system, interval nondegeneracy tests, and required continuous-DDE lift.
+
+\section*{Data and code}
+\label{sec:data-code}
+The verification suite re-derives every algebraic and numerical claim from the governing equations: \texttt{verify\_flux\_ledger.py}, \texttt{verify\_abiotic\_nonnegativity.py}, \texttt{verify\_proposition1\_scalar\_aggregation.py}, \texttt{verify\_exact\_cubic.py}, \texttt{verify\_general\_feedback.py}, \texttt{verify\_unified\_ledger.py}, \texttt{verify\_unified\_characteristic.py}, \texttt{verify\_unified\_eta10\_hopf.py}, \texttt{verify\_unified\_eta\_sweep.py}, \texttt{verify\_hopf\_nature.py}, \texttt{verify\_snpo\_unstable\_orbit.py}, \texttt{verify\_corrected\_core\_folds.py}, \texttt{verify\_branch\_structure.py}, \texttt{verify\_ungated\_floquet.py}, \texttt{verify\_fourstate\_pipeline.py}, \texttt{verify\_kappaA\_sweep.py}, \texttt{verify\_fourstate\_fold\_tracking.py}, \texttt{verify\_fourstate\_sensitivity.py}, \texttt{verify\_hybrid\_effort\_law.py}, \texttt{verify\_macro\_stability.py}. Continuation: \texttt{dde\_core.py}, \texttt{pseudo\_arclength.py}, \texttt{snpo\_piecewise\_collocation.py}, \texttt{dde\_biftool\_manuscript.m}. Empirical: \texttt{droop\_test.py}, \texttt{stage\_r\_window.py}, \texttt{sampled\_governance.py}, \texttt{noise\_robustness.py}, \texttt{ram\_crosssection.py}. Data: \texttt{ram\_target\_stocks.csv} \cite{ricard2012}, \texttt{g3p\_basin\_gwsa.csv} \cite{guentner2024}, \texttt{fisheries\_adh.csv}, USGS MCS \cite{usgsmcs}. Computation of the Hopf cubic, Hassard $l_1$, sample-and-hold spectrum, orbit diagnostics, and interval Newton on $H$: \texttt{compute\_core.py}, \texttt{simulate\_fast.py}, \texttt{make\_figures.py}, \texttt{collocate.py}, \texttt{robustness.py}. The accompanying verification suite is the reproducibility artefact.
+
+\section*{Competing interests}
+The authors declare no competing interests.
+
+\section*{Declaration of AI-assisted writing}
+AI-assisted tools were used for editorial and formatting assistance and for verification of numerical results. The scientific content, analysis, and conclusions are the authors' own. The authors take full responsibility for the content of this manuscript.
+
+\begin{thebibliography}{99}
+\bibitem{meadows1972} Meadows, D.H., et al.\ (1972). \textit{The Limits to Growth}. Universe Books.
+\bibitem{daly1990} Daly, H.E.\ (1990). \textit{Ecological Economics} 2, 1--6.
+\bibitem{rockstrom2009} Rockstr\"om, J., et al.\ (2009). \textit{Nature} 461, 472--475.
+\bibitem{steffen2015} Steffen, W., et al.\ (2015). \textit{Science} 347, 1259855.
+\bibitem{richardson2023} Richardson, K., et al.\ (2023). \textit{Sci.\ Adv.} 9, eadh2458.
+\bibitem{guckenheimer1983} Guckenheimer, J.\ \& Holmes, P.\ (1983). \textit{Nonlinear Oscillations, Dynamical Systems, and Bifurcations of Vector Fields}. Springer.
+\bibitem{hassard1981} Hassard, B.D., et al.\ (1981). \textit{Theory and Applications of Hopf Bifurcation}. CUP.
+\bibitem{diekmann1995} Diekmann, O., et al.\ (1995). \textit{Delay Equations}. Springer.
+\bibitem{faria1995} Faria, T.\ \& Magalh\~aes, L.T.\ (1995). \textit{J.\ Diff.\ Eq.} 122, 181--200.
+\bibitem{hale1993} Hale, J.K.\ \& Verduyn Lunel, S.M.\ (1993). \textit{Introduction to Functional Differential Equations}. Springer.
+\bibitem{tikhonov1952} Tikhonov, A.N.\ (1952). \textit{Mat.\ Sb.} 31, 575--586.
+\bibitem{fenichel1971} Fenichel, N.\ (1971). \textit{Indiana Univ.\ Math.\ J.} 21, 193--226.
+\bibitem{fenichel1979} Fenichel, N.\ (1979). \textit{J.\ Diff.\ Eq.} 31, 53--98.
+\bibitem{hummelkuehn2022} Hummel, F.\ \& Kuehn, C.\ (2022). \textit{Comment.\ Math.\ Helv.} 97, 61--132.
+\bibitem{kuehnsulzbach2024} Kuehn, C.\ \& Sulzbach, J.-E.\ (2024). arXiv:2301.09368.
+\bibitem{beretka2020} Beretka, S.\ \& Vas, G.\ (2020). \textit{J.\ Diff.\ Eq.} 269, 4215--4252.
+\bibitem{ipcc2021} IPCC (2021). \textit{AR6 WG1}. CUP.
+\bibitem{fan2008} Fan, M.S., et al.\ (2008). \textit{J.\ Trace Elem.\ Med.\ Biol.} 22, 315--324.
+\bibitem{debnath2023} Debnath, S., et al.\ (2023). \textit{Sci.\ Rep.} 13, 21164.
+\bibitem{myers2014} Myers, S.S., et al.\ (2014). \textit{Nature} 510, 139--142.
+\bibitem{famiglietti2014} Famiglietti, J.S.\ (2014). \textit{Nature Climate Change} 4, 945--948.
+\bibitem{rodell2018} Rodell, M., et al.\ (2018). \textit{Nature} 557, 651--659.
+\bibitem{montgomery2007} Montgomery, D.R.\ (2007). \textit{Proc.\ Natl.\ Acad.\ Sci.} 104, 13268--13272.
+\bibitem{olson1963} Olson, J.S.\ (1963). \textit{Ecology} 44, 322--331.
+\bibitem{hocherman2025} Hocherman, T., Trop, T.\ \& Ghermandi, A.\ (2025). \textit{Ambio} 54, 2042--2059.
+\bibitem{mckibbin2014} McKibbin, W.J., Morris, A.\ \& Wilcoxen, P.J.\ (2014). Brookings Institution.
+\bibitem{aubin1991} Aubin, J.-P.\ (1991). \textit{Viability Theory}. Birkh\"auser.
+\bibitem{cury2005} Cury, P., et al.\ (2005). \textit{ICES J.\ Mar.\ Sci.} 62, 577--584.
+\bibitem{parton1987} Parton, W.J., et al.\ (1987). \textit{Soil Sci.\ Soc.\ Am.\ J.} 51, 1173--1179.
+\bibitem{skinner2017} Skinner, L.C., et al.\ (2017). \textit{Nat.\ Commun.} 8, 16010.
+\bibitem{costantino1995} Costantino, R.F., et al.\ (1995). \textit{Nature} 375, 227--230.
+\bibitem{gurney1980} Gurney, W.S.C., Blythe, S.P.\ \& Nisbet, R.M.\ (1980). \textit{Nature} 287, 17--21.
+\bibitem{moxnes1998} Moxnes, E.\ (1998). \textit{Management Science} 44, 1234--1248.
+\bibitem{cronin2009} Cronin, M.A., Gonzalez, C.\ \& Sterman, J.D.\ (2009). \textit{Organ.\ Behav.\ Hum.\ Decis.\ Process.} 108, 116--130.
+\bibitem{seea2014} United Nations et al.\ (2014). \textit{SEEA 2012: Central Framework}.
+\bibitem{iirc2013} IIRC (2013). \textit{The International $<$IR$>$ Framework}.
+\bibitem{cwon2021} Lange, G.-M., Wodon, Q.\ \& Carey, K.\ (2021). \textit{The Changing Wealth of Nations 2021}. World Bank.
+\bibitem{dasgupta2021} Dasgupta, P.\ (2021). \textit{The Economics of Biodiversity}. HM Treasury.
+\bibitem{leontief1970} Leontief, W.\ (1970). \textit{Rev.\ Econ.\ Stat.} 52, 262--271.
+\bibitem{iso14040} ISO (2006). \textit{ISO 14040:2006}.
+\bibitem{eurostat2001} Eurostat (2001). \textit{Economy-wide material flow accounts}.
+\bibitem{hoekstra2002} Hoekstra, A.Y.\ \& Hung, P.Q.\ (2002). UNESCO-IHE Value of Water Report 11.
+\bibitem{lin2018} Lin, D., et al.\ (2018). \textit{Resources} 7, 58.
+\bibitem{wackernagel2019} Wackernagel, M.\ \& Beyers, B.\ (2019). \textit{Ecological Footprint}. New Society.
+\bibitem{blomqvist2013} Blomqvist, L., et al.\ (2013). \textit{PLoS Biology} 11, e1001700.
+\bibitem{scheffer2009} Scheffer, M., et al.\ (2009). \textit{Nature} 461, 53--59.
+\bibitem{ostrom1990} Ostrom, E.\ (1990). \textit{Governing the Commons}. CUP.
+\bibitem{ezekiel1938} Ezekiel, M.\ (1938). \textit{Q.\ J.\ Econ.} 52, 255--280.
+\bibitem{gordon1954} Gordon, H.S.\ (1954). \textit{J.\ Polit.\ Econ.} 62, 124--142.
+\bibitem{ludwig1978} Ludwig, D., Jones, D.D.\ \& Holling, C.S.\ (1978). \textit{J.\ Anim.\ Ecol.} 47, 315--332.
+\bibitem{gao2022} Gao, X.\ \& Zhang, Y.\ (2022). \textit{Math.\ Biosci.\ Eng.} 19, 8081--8106.
+\bibitem{khiyar2026} Khiyar, S., et al.\ (2026). \textit{Front.\ Appl.\ Math.\ Stat.} 12, 1795340.
+\bibitem{carpenter2011} Carpenter, S.R., et al.\ (2011). \textit{Science} 332, 1079--1082.
+\bibitem{gleeson2012} Gleeson, T., et al.\ (2012). \textit{Nature} 488, 197--200.
+\bibitem{guentner2024} Guentner, A., et al.\ (2024). G3P v1.12. GFZ Data Services. \url{https://doi.org/10.5880/G3P.2024.001}
+\bibitem{usgsmcs} U.S.\ Geological Survey (2026). Mineral commodity summaries 2026.
+\bibitem{ricard2012} Ricard, D., et al.\ (2012). \textit{Fish and Fisheries} 13, 380--398.
+\bibitem{ahmed2024} Ahmed, S., Hiraga, Y.\ \& Kazama, S.\ (2024). \textit{Sci.\ Total Environ.} 946, 174285.
+\bibitem{hoogesteger2025} Hoogesteger, J., et al.\ (2025). \textit{Environ.\ Res.\ Lett.} 20, 104065.
+\bibitem{hansen2018} Hansen, G.J.A., et al.\ (2018). \textit{Can.\ J.\ Fish.\ Aquat.\ Sci.} 75, 106--115.
+\bibitem{clark1976} Clark, C.W.\ (1976). \textit{Mathematical Bioeconomics}. Wiley.
+\bibitem{arrow1961} Arrow, K.J., Chenery, H.B., Minhas, B.S.\ \& Solow, R.M.\ (1961). \textit{Rev.\ Econ.\ Stat.} 43, 225--250.
+\bibitem{courchamp1999} Courchamp, F., Clutton-Brock, T.\ \& Grenfell, B.\ (1999). \textit{Trends Ecol.\ Evol.} 14, 405--410.
+\bibitem{kramer2009} Kramer, A.M., et al.\ (2009). \textit{Popul.\ Ecol.} 51, 341--354.
+\bibitem{hairer1996} Hairer, E.\ \& Wanner, G.\ (1996). \textit{Solving Ordinary Differential Equations II} (2nd ed.). Springer.
+\bibitem{engelborghs2002} Engelborghs, K., Luzyanina, T.\ \& Roose, D.\ (2002). \textit{ACM Trans.\ Math.\ Softw.} 28, 1--21.
+\bibitem{scheffer2003} Scheffer, M.\ \& Carpenter, S.R.\ (2003). \textit{Trends Ecol.\ Evol.} 18, 648--656.
+\end{thebibliography}
+
+\appendix
+\section{Deficit memory}
+\label{app:memory}
+
+A finite-window integral $Z(t)=\int_{t-\tau_m}^t\mathrm{softplus}_k(\cdot)\,ds$ introduces a second delay factor $(1-e^{-\lambda\tau_m})$ and an equilibrium that depends on $\tau_m$. The leaky integrator
+\begin{equation}
+\dot Z=\frac1{\tau_m}\Bigl[\max\Bigl(0,\;\mathrm{softplus}_k(qEN-S(N))-\tfrac{\ln 2}{k}+\delta\Bigr)-Z\Bigr]
+\label{eq:leaky-integrator-A}
+\end{equation}
+is a single-delay DDE. At $qEN=S(N)$ the shift cancels $\mathrm{softplus}_k(0)$, the floor is inactive, and $Z^*=\delta$ independently of $\tau_m$ and $k$. The outer floor is required: without it, the shift's own floor $\delta-\ln 2/k$ is negative whenever $\delta<\ln 2/k$, and a sustained surplus drives $Z$ and then $E$ negative.
+
+\section{Asymptotic reduction}
+\label{app:reduction}
+
+The QSS algebra and the Hurwitz check for Hypothesis~\ref{hyp:hurwitz} live here; the theorems are in Section~\ref{sec:reduction-theorems}. Market clearing $D(p)=qEN$ has a unique positive root by strict monotonicity of CES demand. The macroeconomic QSS $(K^*,L^*,A_{\mathrm{TFP}}^*,T^*)$ is the unique saturated root of \eqref{eq:k-corrected}--\eqref{eq:t-corrected} at frozen $(Q,\widetilde\Delta)$. A finite-difference Jacobian of that block at the root has spectrum in the open left half-plane across $\widetilde\Delta\in[0,5]$ on the literature-anchored parameter class (not by triangularity: $K,L,A_{\mathrm{TFP}}$ share $Q$). That computation is the evidence recorded under Hypothesis~\ref{hyp:hurwitz}, not a substitute for it.
+
+\section{Numerical methods}
+\label{app:methods}
+
+Local objects of the three-state core are algebraic and are obtained from the closed-form equilibrium, the linearisation of Appendix~\ref{app:linear}, and the cubic~$H$ of Theorem~\ref{thm:hopf-cubic-complete}. For gated Candidate~A the unique positive equilibrium is $(N^*,Z^*,E^*)=(89.55188,\,\ln 2/10,\,2.08962)$. The two positive roots of~$H$ give
+\[
+\tau_-=3.66615~\mathrm{yr}\quad(\text{period }249.42~\mathrm{yr}),\qquad
+\tau_+=150.3585~\mathrm{yr}\quad(\text{period }159.32~\mathrm{yr}),
+\]
+in agreement with Table~\ref{tab:thresholds}. The same computation recovers the ungated Candidate~A pair $(6.88141,132.3749)$ and the ungated Candidate~B pair $(6.21360,76.2906)$. At $\tau=0$ the gated Candidate~A Jacobian has a complex pair with positive real part $3.60\times 10^{-4}$: the undelayed equilibrium is already unstable, so the lower Hopf is stabilising ($\mathrm{Re}\,\lambda'(\tau_-)<0$).
+
+The first Lyapunov coefficient is the Hassard--Faria--Magalhães cubic~\cite{hassard1981,faria1995}. Write $\Delta(\lambda)=\lambda I-A_0-A_\tau e^{-\lambda\tau}$. The right eigenvector $p$ of $\Delta(i\omega)$ is scaled to unit Hermitian norm; the left eigenvector satisfies $q^*\Delta'(i\omega)p=1$. The multilinear forms are the exact second and third derivatives of~\eqref{eq:stock-core}--\eqref{eq:effort-core} at equilibrium: logistic curvature $\partial_{NN}\dot N=-2r/K$, $\partial_{NE}\dot N=-q$; softplus jet $\mathrm{softplus}_k''(0)=k/4$, $\mathrm{softplus}_k'''(0)=0$, composed with $\phi=qEN-S(N)$; and the full gated (respectively ungated) effort jet in $(E,Z_\tau)$. Under that normalisation,
+\begin{equation}
+\begin{aligned}
+l_1(\tau_-^{\mathrm{A,gated}})&=+5.75\times 10^{-5},&
+l_1(\tau_+^{\mathrm{A,gated}})&=+3.55\times 10^{-4},\\
+l_1(\tau_-^{\mathrm{B,ungated}})&=-9.84\times 10^{-5},&
+l_1(\tau_+^{\mathrm{B,ungated}})&=+2.19\times 10^{-3}.
+\end{aligned}
+\label{eq:l1-values}
+\end{equation}
+Both gated Candidate~A crossings are subcritical. Candidate~B's lower crossing is supercritical, matching the absence of a lower fold in Table~\ref{tab:thresholds}. Criticality is the sign of~$l_1$; the numerical value depends on the eigenvector scaling just stated.
+
+The sample-and-hold monodromy~$M(T_r)$ of Theorem~\ref{thm:sampled} is a $3\times 3$ matrix. Its spectral radius for gated Candidate~A is Figure~\ref{fig:monodromy}. A Neimark--Sacker pair sits on the unit circle at $T_r^{\mathrm{NS}}=47.536$~yr (argument $\theta=1.3804$, oscillation period $2\pi T_r/\theta=216.5$~yr). A real multiplier $-1$ occurs at $T_r^{(-1)}=79.143$~yr. Between those values $\rho(M)<1$. Annual review of this slow-stock core is unstable because it approximates the already-unstable $\tau=0$ linearisation ($\rho(M(1))=1.00055$). The $T_r\in[3,12]$~yr windows quoted in Section~\ref{sec:empirical} are roots of the stage-structured review map, a different operator.
+
+Global periodic orbits of Table~\ref{tab:thresholds} were located by Fourier spectral collocation with Newton correction~\cite{engelborghs2002} and by pseudo-arclength continuation of the orbit, integrated for $10^4$--$10^5$ periods per step, with shooting Floquet multipliers and, for the lower fold, by adaptive-mesh collocation with variational Floquet tracking (which resolves the dominant multiplier as a single real eigenvalue, imag=0, $0.240\to0.964$). Fixed-initial-condition bisection mislocates the same folds by more than $20$~yr under the critical slowing near each Hopf; it is not used for the table. Independent fixed-step RK4 integrations of the DDE (circular delay buffer, $\Delta t=0.02$~yr, horizons $2$--$4\times 10^4$~yr) recover the attracting large cycle of the lower window and the quiet monostable interval, and supply the orbit diagnostics of Numerical Result~\ref{thm:two-folds}: on the large cycle at $\tau=5.55$ one has peak-to-peak amplitude $25.4$, period $324$~yr, $N\in[68.7,94.2]$, $E\in[0.56,9.16]$, and the filter floor $\max(0,\cdot)$ in~\eqref{eq:Z-core} never binds. Those diagnostics exclude a homoclinic connection to the interior equilibrium, a graze of $E=E_{\max}$, a graze of $N=0$, and a filter-floor singularity. Consistently with the collocation result, the attracting large cycle is lost at finite period and finite amplitude at a fold whose dominant Floquet multiplier is real and approaches $+1$; it is not a Neimark--Sacker instability, not a torus, and not a gate singularity. The small-branch fold at $\tau\approx 5.587$ remains a continuation-supported $+1$ event of a different family.
+
+Upper-window periodic orbits are obtained by trigonometric collocation ($m=80$ nodes, spectral differentiation and spectral delay, Newton--LM residual $\sim 10^{-13}$) with a Hopf-normal-form predictor on the small branch and an RK4 periodic seed on the large branch. The Hopf small branch continues at least to $\tau=130$ (amplitude $1.87$). The interior large family continues at least through $[147.5,160]$. A family with $E\ge E_{\max}$ collocates down to $\tau\approx 144.5$; Table~\ref{tab:thresholds} reports only orbits that remain in $E\in[0,E_{\max})$. Four-state Hopf points are zeros of $\det\Delta(i\omega,\tau)=0$ at the frozen-donor equilibrium, refined to residual $10^{-18}$.
+
+Softplus evaluation uses the stable cutoff $\mathrm{softplus}_k(\phi)=\phi$ for $k\phi>40$ and the exponential tail for $k\phi<-40$. One-at-a-time robustness of local Hopfs across Table~\ref{tab:params} is obtained by tracking roots of~$H$. Interval Newton on the monic cubic~$H$ certifies each positive root as simple (Numerical Result~\ref{thm:interval-hopf}); the argument formula then encloses $\tau_\pm$ to width $<10^{-12}$~yr. Geological error $\varepsilon_G(T)$ at the working quasi-equilibrium is Table~\ref{tab:epsG}.
+
+\section{Linearisation coefficients}
+\label{app:linear}
+
+With $\mathrm{softplus}_k'(0)=1/2$,
+\begin{align*}
+A_N &= r(1-2N^*/K)-qE^*, & A_E &= -qN^*,\\
+B_N &= \tfrac12\tau_m^{-1}\bigl(qE^*-S'(N^*)\bigr), & B_E &= \tfrac12\tau_m^{-1}qN^*,\\
+C_E &= \eta\bigl(Z^*/\Delta_{\mathrm{ref}}-2E^*/E_{\max}\bigr)\cdot(1-E^*/E_{\max})
+-\bigl[\eta E^*(Z^*/\Delta_{\mathrm{ref}}-E^*/E_{\max})+\delta_0 Z^*/(Z_{\mathrm{ref}}+Z^*)\bigr]/E_{\max},\\
+C_Z &= (1-E^*/E_{\max})\bigl(\eta E^*/\Delta_{\mathrm{ref}}+\delta_0 Z_{\mathrm{ref}}/(Z_{\mathrm{ref}}+Z^*)^2\bigr).
+\end{align*}
+The ungated law drops the outer gate and the last term of $C_E$ (which vanishes identically at the equilibrium, since its bracket is the equilibrium condition \eqref{eq:Estar-quadratic}; it is displayed to show the full product-rule derivative before substitution). The factorisation $P(\lambda)-C_Z L(\lambda)e^{-\lambda\tau}=0$ is an identity with the $3\times 3$ determinant.
+
+\section{Baseline parameters}
+\label{app:params}
+
+\begin{table}[h]
+\centering\small
+\caption{Baseline (Candidate A) and literature-anchored ranges used for one-at-a-time robustness.}
+\label{tab:params}
+\begin{tabular}{llll}
+\toprule
+Symbol & Meaning & Baseline & Range \\
+\midrule
+$r$ & Intrinsic growth rate & $0.02$~yr$^{-1}$ & $[0.005,0.4]$ \\
+$K$ & Carrying capacity & $100$ & --- \\
+$q$ & Catchability & $0.001$ & --- \\
+$\eta$ & Effort adjustment & $0.914$~yr$^{-1}$ & $[0.5,3.0]$ \\
+$E_{\max}$ & Effort ceiling & $30$ & --- \\
+$\delta_0$ & Baseline panic rate & $0.01$~yr$^{-1}$ & --- \\
+$\tau_m$ & Memory time & $5$~yr & --- \\
+$\delta$ & Baseline deficit & $\ln 2/10$ & --- \\
+$\kappa_A$ & Abiotic turnover & $0.05$~yr$^{-1}$ & $[0,0.5]$ \\
+$\omega_A$ & Geochemical exchange & $10^{-3}$~yr$^{-1}$ & $[10^{-4},10^{-2}]$ \\
+$A_0$ & Active-pool half-saturation & $0.01K$ & --- \\
+$A_{g0}$ & Geological exchange half-sat.\ & $\ll A^{\mathrm{geo}}$ & reported: $A^{\mathrm{geo}}\gg A_{g0}$ \\
+$\Delta_{\mathrm{ref}}$ & Deficit reference & $1$ & --- \\
+$Z_{\mathrm{ref}}$ & Memory half-saturation & $1$ & --- \\
+$k$ & Softplus sharpness & $10$ & $\{5,10,20,40\}$ \\
+$A^{\mathrm{eq,intrinsic}}$ & Intrinsic sorption target & $0.5K$ & --- \\
+$A^{\mathrm{eq}}$ (working 4-state) & Derived target, $D^{\mathrm{ret}}=0$ & $5050$ & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Candidate B ($\eta=2.756$, $E_{\max}=26$, $\delta_0=0.01$, $\tau_m=5$) is the second identifiability point of Theorem~\ref{thm:ident}: gated inner $\tau_\pm$ are $5.51284$ and $80.42453$~yr; ungated $\tau_\pm$ are $6.21360$ and $76.29064$~yr (Numerical Result~\ref{thm:interval-hopf}). Macroeconomic baselines: $\varsigma=0.25$, $\delta_K=0.05$, $r_L=0.01$, $\eta_A=0.02$, $\sigma_S=1$, $\alpha=0.4$, $\tau_P=30$~yr, $\gamma_U=0.2$~yr$^{-1}$, $A^{\mathrm{act,eq,intrinsic}}=0.5K$, $\epsilon=0.05$. The reported thresholds assume $A^{\mathrm{geo}}\gg A_{g0}$.
+
+\begin{table}[h]
+\centering\small
+\caption{Deliberate symbol reuse. The reduced cores use the first meaning in each row unless a subscript is present.}
+\label{tab:symbols}
+\begin{tabular}{lp{10.2cm}}
+\toprule
+Symbol & Meanings \\
+\midrule
+$K$ & Carrying capacity (cores); physical capital in Layer~3 ($\hat K$ when dimensionless). \\
+$B$ & Gross abiotic uptake $B(N,A)$; births $B_{\mathrm{birth}}$ in Section~\ref{sec:two-channel}. \\
+$S$ & Service/yield; incidence is $\mathcal I$; unified stoichiometry is $\mathcal S$. \\
+$\rho,\sigma_Q$ & Liebig sharpness $\rho_{i,c}$; recovery $\rho_{i,j}(T)$; nested-production elasticity $\sigma_Q$ in Layer~3. \\
+$\eta$ & Effort adjustment (cores); labour exponent in $L_{\max}$; $\eta_A$, $\eta_T$ are distinct. \\
+$\delta$ & Baseline memory $Z^*=\delta$; $\delta_0$ panic rate; $\delta_K$ depreciation; yield gap is $\Delta_y$. \\
+$\theta$ & CES share; capital-damage coefficient in~\eqref{eq:k-corrected}. \\
+$T$ & Technology; time horizon; review interval is $T_r$. \\
+$g$ & Memory gain in~\eqref{eq:general-feedback}; assimilation in the stoichiometric core; maturation delay in Appendix~\ref{app:scaffold}. \\
+$\chi$ & Institutional interpolation (failure at $\chi=1$); recovery routing $\chi^{\mathrm{rec}}$. \\
+$\Lambda$ & Liquidation diagnostic $\max(0,C-R)$, not a second flux. \\
+$\mathcal H$ & Depletion horizon; $\Sigma$ is inverse-horizon stress. \\
+$\varepsilon$ & Routing tensor $\boldsymbol\varepsilon_{i,j}$ (unit-sum, Section~\ref{sec:waste-loop}); singular-perturbation scale (Hypothesis~\ref{hyp:scale}); resource-recovery fraction (Table~\ref{tab:adh-phos}). \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering\small
+\caption{Core symbols of the specialised three- and four-state systems. Layer~3 macroeconomic symbols are omitted from Table~\ref{tab:thresholds}.}
+\label{tab:glossary}
+\begin{tabular}{lll}
+\toprule
+Symbol & Meaning & Units \\
+\midrule
+$N$ & Standing stock & stock \\
+$A^{\mathrm{act}}$ & Active abiotic pool & stock \\
+$A^{\mathrm{geo}}$ & Geological donor & stock \\
+$U$ & Detritus & stock \\
+$Z$ & Filtered deficit memory & stock/yr \\
+$E$ & Extraction effort & dimensionless \\
+$S,R$ & Yield; net regeneration $G-M$ & stock/yr \\
+$q$ & Catchability & yr$^{-1}$ \\
+$r,K$ & Logistic rate; carrying capacity & yr$^{-1}$; stock \\
+$\tau,\tau_m$ & Institutional delay; memory time & yr \\
+$\eta,E_{\max},\delta_0$ & Effort gain; ceiling; panic rate & yr$^{-1}$; ---; yr$^{-1}$ \\
+$\kappa_A,\omega_A$ & Turnover; geochemical exchange & yr$^{-1}$ \\
+$\varepsilon_G(T)$ & Cumulative donor change on $[0,T]$ & dimensionless \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering\small
+\caption{Geological error $\varepsilon_G(T)=4.652\,T/A^{\mathrm{geo}}$ at the Candidate~A working quasi-equilibrium with $C^{A,\mathrm{lim}}=0$. The specialised cores treat $A^{\mathrm{geo}}$ as frozen when this quantity is absorbed into the reduction budget.}
+\label{tab:epsG}
+\begin{tabular}{lcccc}
+\toprule
+$A^{\mathrm{geo}}/A^*$ & $T=50$~yr & $T=100$~yr & $T=250$~yr & $T=1000$~yr \\
+\midrule
+$10^2$ & $0.00585$ & $0.0117$ & $0.0292$ & $0.117$ \\
+$10^3$ & $0.000585$ & $0.00117$ & $0.00292$ & $0.0117$ \\
+$10^4$ & $0.0000585$ & $0.000117$ & $0.000292$ & $0.00117$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Thermodynamic tether}
+\label{app:tether}
+
+If $E$ is physical effort with an energetic cost, the extinction equilibrium $(0,\delta,E^*)$ requires an unmodelled subsidy. Closing the gap without disturbing the interior Hopf analysis uses a capital state $K_{\mathrm{cap}}$ and a pole-free gate:
+\begin{align}
+\dot K_{\mathrm{cap}} &= qEN-K_{\mathrm{cap}}(\delta_K+c_E E),\\
+\dot E &= \bigl(1-E/E_{\max}\bigr)\bigl(1-e^{-K_{\mathrm{cap}}/K_0}\bigr)
+\bigl[\eta E(Z_\tau/\Delta_{\mathrm{ref}}-E/E_{\max})+\delta_0 Z_\tau/(Z_{\mathrm{ref}}+Z_\tau)\bigr]-\mu_E E.
+\end{align}
+At $K_{\mathrm{cap}}=0$, $\dot K_{\mathrm{cap}}=qEN\ge 0$ and $\dot E=-\mu_E E$. At $N=0$, $K_{\mathrm{cap}}\to 0$ and $E\to 0$: every tested trajectory from $(E_0,K_{\mathrm{cap},0})\in[0.5,29]\times[0.1,1000]$ converges to $(0,\delta,0,0)$. Write $\mathcal B(E)=\eta E(Z_\tau/\Delta_{\mathrm{ref}}-E/E_{\max})+\delta_0 Z_\tau/(Z_{\mathrm{ref}}+Z_\tau)$ for the effort bracket. The interior equilibrium survives as the transcendental root of $F(E^*)=(1-E^*/E_{\max})(1-e^{-K_{\mathrm{cap}}^*(E^*)/K_0})\mathcal B(E^*)-\mu_E E^*=0$. A necessary local condition for a positive root is $\mu_E<\alpha:=qK\delta_0\delta/(K_0\delta_K(Z_{\mathrm{ref}}+\delta))$; the true saddle-node is $\mu_E^{\mathrm{SN}}\approx 5.9\alpha$ at an illustrative parameterisation. Between $\alpha$ and $\mu_E^{\mathrm{SN}}$ the tether exhibits an institutional Allee effect: $E=0$ and a positive $E_2^*$ are both locally stable, separated by an unstable threshold $E_1^*$. Table~\ref{tab:thresholds} uses the untethered effort law.
+
+\section{Viability}
+\label{app:viability}
+
+Under institutional failure, effort is an endogenous DDE state, not a control. The available levers are $\boldsymbol\theta=(\tau,E_{\max},\delta_0)$. The desirable set is
+\[
+\mathcal V=\bigl\{\mathbf x:\mathcal H^\bullet_{i,c}(\mathbf x)\ge\mathcal H_{\mathrm{crit}},\;
+\Sigma^\bullet_{i,c}(\mathbf x)\ge\Sigma_{\mathrm{crit}}
+\text{ for all active }(i,c,\bullet)\bigr\}.
+\]
+The safe parametric regime is $\Theta_{\mathrm{safe}}=\{\boldsymbol\theta:\mathcal A_{\boldsymbol\theta}\subset\operatorname{int}(\mathcal V)\}$. Monostability ($\tau_{\mathrm{term,L}}<\tau<\tau_{\mathrm{fold,R}}$) and geometric viability ($\mathcal A_{\boldsymbol\theta}\subset\operatorname{int}(\mathcal V)$) are independent. Candidate~A's lightly exploited equilibrium $N^*/K\approx 0.90$ is interior to any reasonable $\mathcal V$. Inside a bistable window, safety additionally requires $\mathbf x_0\in\mathcal B(\mathcal A_{\boldsymbol\theta})$. Horizons and stress indices are component-resolved proxies for distance to $\partial\mathcal V$ \cite{aubin1991,cury2005}.
+
+\section{Stage-structured scaffold}
+\label{app:scaffold}
+
+A mass-consistent maturation delay replaces a bare lag $N(t-g)$, which would admit adult biomass at time $t$ without tracking the juvenile draw on $A$ during $[t-g,t]$. The scaffold has mass block $(\bar X_A,X_J,P,U,A,G)$, spatial variance $V_N$, memory $Z$, capital $K_C$, and effort $E$, with donor-limited Ricker birth, the exact second-order variance penalty $\Phi_{\mathrm{var}}=\tfrac12(P_0/N_c)e^{-\bar X_A/N_c}(\bar X_A/N_c-2)V_N$, and thermodynamic gating of effort. Mass $\bar X_A+X_J+P+U+A+G$ is identically conserved; $C_{\mathrm{recruit}}$ transfers no mass. The adult equilibrium is $\bar X_A^*=N_c\ln\bigl(P_0 A^{\mathrm{eq}}/(A^{\mathrm{eq}}+A_0)/\Theta(E^*)\bigr)$ with drag $\Theta(E)=d_A(1+gd_J)+qE(1+\psi g d_J)$. Delay-induced Hopf crossings exist; all verified crossings are stabilising. Anchored to life-history classes the scaffold is delay-independently stable at default economic parameters; a cod-class Hopf appears under elevated forcing ($\eta=5$, $\varsigma=0.8$) at $\tau^*\approx 43$, period $\approx 263$. Century-scale periods are consistent with Section~\ref{sec:empirical}.
+
+\end{document}

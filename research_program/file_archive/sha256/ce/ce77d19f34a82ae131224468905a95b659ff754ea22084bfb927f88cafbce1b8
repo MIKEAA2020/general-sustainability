@@ -1,0 +1,2015 @@
+# A Viability Theory of Constrained Sustainability under Uncertainty, Coupling, and Recoverability
+
+## Abstract
+
+We develop a mathematical theory of constrained sustainability for controlled dynamical systems subject to exogenous disturbances, partial observation, and coupling. The theory is organized around five objects: (1) a hierarchy of viability operators—controlled, robust, and epistemic—separating existential, disturbance-resistant, and information-constrained notions of sustainability; (2) recoverability through emergency envelopes, with an impossibility theorem showing that recovery into the viability kernel is trivial without temporary constraint relaxation; (3) barrier and obstruction certificates providing a unified calculus for viability and finite-time exit; (4) endogenous joint resource–capital viability, resolving the tradeoff between ecological preservation and consumption floors through optimization over ecologically feasible harvests; and (5) compositional coupling and institutional implementation, giving precise mathematical content to coupling safety and governance.
+
+Explicit kernels are computed for scalar unimodal, affine, and Allee resource–sink systems via an order-minimal control principle. A planar two-patch analysis yields a sharp MSY counterexample, an explicit coupling-rescue example, a generic non-polyhedrality result, and a quartic equilibrium decision procedure. CES substitution thresholds are stated in dimensionally correct form. A nilpotent-chain construction refutes spectral-radius cascade bounds. The tragedy of the commons is characterized as a Nash-over-extraction obstruction with institutional rescue via quotas. Under partial observation, the epistemic robust kernel is characterized as the greatest fixed point of a belief predecessor operator, yielding an informational hierarchy $\operatorname{IRViab}_{\mathfrak I} \subseteq K_{\mathcal I} \subseteq \operatorname{RViab} \subseteq \operatorname{Viab}$ and explicit informational obstructions (common-action conflict, hidden-mode ambiguity, delayed information) with a quantitative value-of-information measure. Several conjectures are stated with explicit falsification criteria.
+
+---
+
+## 1. Introduction
+
+### 1.1 Scope
+
+This paper develops a formal theory of sustainability for constrained resource systems: renewable and exhaustible resources with waste and capital accounts, network cascades, observation error, institutional control restrictions, distributional floors, and intergenerational constraint inheritance.
+
+The theory is not a theory of all ecological, economic, and social systems. It does not address justice as ethics, meaning, Earth-system science in full, or every development path. The precise scope exclusions are stated in Section 18.
+
+### 1.2 Foundational Constraints
+
+Any coherent model of a socio-ecological system should satisfy the following pre-axiomatic constraints. They are conditions on the act of modeling, not axioms of the theory.
+
+- **(F1) Boundary.** Every modeled system is distinguished from its environment by a boundary, a scale, and a level of resolution. All sustainability claims are boundary-relative and scale-relative.
+- **(F2) Non-contradiction.** For any variable $x$ under identical conditions, $\neg(x = a \wedge x \neq a)$.
+- **(F3) Accounting.** For any defined quantity $q$: $\Delta q_{\text{stock}} = q_{\text{in}} - q_{\text{out}} + q_{\text{produced}} - q_{\text{destroyed}}$. For conserved quantities, "produced" and "destroyed" denote conversion between explicitly represented forms.
+- **(F4) Finiteness.** All real stocks, flows, and capacities are bounded. No finite system supports unbounded growth in all variables simultaneously. This applies to natural stocks and sink burdens; produced capital may grow without bound within a model if the production function permits (cf. Section 8.3).
+- **(F5) Temporal horizon.** Sustainability claims require a specified time horizon $T > 0$ or an infinite-horizon criterion.
+- **(F6) Information.** Feedback-driven response requires a detectable difference; anticipatory/feedforward response requires an internal model of the future. In either case the response is limited by available information.
+- **(F7) Dependency.** Every process depends on enabling conditions: required inputs, available pathways, suitable conditions, and absence of blocking constraints.
+
+These are used implicitly throughout (e.g., F3 in Proposition 6.1, F4 in Theorem 8.1, F5 in Section 17, F6 in Sections 4 and 17).
+
+### 1.3 Five Mathematical Objects
+
+The theory is built around five objects:
+
+1. **Viability operators.** Controlled, robust, and epistemic viability kernels, separated by quantifier structure.
+2. **Recoverability.** Capture basins relative to emergency envelopes, with a normalized recovery speed.
+3. **Barrier and obstruction certificates.** A unified calculus for proving invariance and finite-time exit.
+4. **Endogenous joint viability.** The resource–capital–consumption tradeoff, resolved by optimization over ecologically feasible harvests.
+5. **Compositional coupling and institutional implementation.** Small-gain coupling theorems and institutions as operators on belief, admissibility, and enforcement.
+
+### 1.4 Relation to Viability Theory
+
+The mathematical foundation is viability theory in the sense of Aubin (1991) and Aubin, Bayen, and Saint-Pierre (2011). The central object is the viability kernel: the largest closed subset of a constraint set from which infinite-horizon viability is achievable. The present contribution is the structure theory of this operator for coupled resource–sink–institutional systems, with explicit computation for low-dimensional instances.
+
+### 1.5 Notational Conventions
+
+- $C$ denotes carrying capacity. $K$ denotes sink burden. $K_{\max}$ is the sink ceiling.
+- $\sigma$ is reserved for the CES elasticity of substitution.
+- $H$ denotes aggregate harvest rate. $h_i$ denotes individual extraction, with $H = \sum_i h_i$.
+- $H_{\mathrm{MSY}}$ denotes maximum sustainable yield. $H^{\mathrm{Nash}}$ denotes Nash equilibrium aggregate harvest. $h$ denotes a chosen constant harvest level.
+- Constraint sets are written with subscripts: $\mathcal V_{\mathrm{RS}}$, $\mathcal V_{\mathrm{str}}$, etc. The generic constraint set in definitions is $\mathcal V$.
+
+---
+
+## 2. Viability Operators
+
+Let the controlled system be
+
+$$
+\dot x(t) \in F(x(t), u(t), d(t)),
+\qquad
+u(t) \in U(x(t)),
+\qquad
+d(t) \in D(x(t)),
+$$
+
+where $u$ is a control, $d$ is an exogenous disturbance, and $X$ is a locally compact metric state space. Let $\mathcal V \subset X$ be a closed constraint set.
+
+### Definition 2.1: Controlled viability kernel
+
+$$
+\operatorname{Viab}(\mathcal V)
+=
+\left\{
+x_0 \in \mathcal V :
+\exists\, u(\cdot),\; \exists\, x(\cdot)
+\text{ with } x(t) \in \mathcal V \;\; \forall t \geq 0
+\right\}.
+$$
+
+This is existential: there exists some control that maintains viability. It is not robust to disturbances.
+
+### Definition 2.2: Robust viability kernel
+
+Let $\Delta$ denote the set of nonanticipating disturbance strategies $\delta: y_{[0,t]} \mapsto d(t)$. Define
+
+$$
+\operatorname{RViab}(\mathcal V)
+=
+\left\{
+x_0 \in \mathcal V :
+\exists\, \pi \;\; \forall\, \delta \in \Delta,\;\;
+x_{\pi,\delta}(t) \in \mathcal V \;\; \forall t \geq 0
+\right\},
+$$
+
+where $\pi$ is a causal control strategy mapping state histories to controls. Necessarily,
+
+$$
+\operatorname{RViab}(\mathcal V) \subseteq \operatorname{Viab}(\mathcal V).
+$$
+
+### Definition 2.3: Sustainability at an initial condition
+
+A system is sustainable from $x_0$ iff $x_0 \in \operatorname{Viab}(\mathcal V)$ (controlled semantics) or $x_0 \in \operatorname{RViab}(\mathcal V)$ (robust semantics). Nonemptiness of the kernel proves only that some sustainable initial state exists. It does not establish attainability from the actual state. Attainability is addressed in Section 3.
+
+### Definition 2.4: Constraint vocabulary
+
+All constraint sets are closed subsets of $X$. The following types are used:
+
+- **Strong sustainability:** $\mathcal V_{\mathrm{str}} = \prod_i [S_{\min,i}, \infty) \times \prod_j [0, K_{\max,j}]$.
+- **Consumption floor:** $\mathcal V_c = \{c \geq c_{\min}\}$.
+- **Distributional floors:** $\mathcal V_{\mathrm{dist}} = \{c_g \geq c_{\min,g} \;\; \forall g\}$.
+- **Institutional capacity:** $\mathcal V_{\mathrm{inst}} = \{L \geq L_{\min}\}$, where $L$ is a state coordinate with specified dynamics (or $\dot L = 0$ if static).
+
+A layered sustainability set is a finite intersection of closed sets of these types.
+
+### 2.5 Comparison theorems
+
+The following results hold for any system in the class and do not depend on the specific form of the dynamics. They are basic monotonicity properties of the viability operator.
+
+**Theorem 2.1 (Constraint monotonicity).** If $\mathcal V_1 \subseteq \mathcal V_2$ are closed, then
+
+$$
+\operatorname{Viab}(\mathcal V_1) \subseteq \operatorname{Viab}(\mathcal V_2).
+$$
+
+*Proof.* Let $x_0 \in \operatorname{Viab}(\mathcal V_1)$. There exists a path with $x(t) \in \mathcal V_1 \subseteq \mathcal V_2$ for all $t$. Hence $x_0 \in \operatorname{Viab}(\mathcal V_2)$. $\blacksquare$
+
+**Theorem 2.2 (Control-set monotonicity).** If $U_1(x) \subseteq U_2(x)$ for every $x$, then
+
+$$
+\operatorname{Viab}(\mathcal V; U_1) \subseteq \operatorname{Viab}(\mathcal V; U_2).
+$$
+
+*Proof.* Every $U_1$-admissible path is $U_2$-admissible. $\blacksquare$
+
+**Theorem 2.3 (Product structure).** If $\mathcal P = \prod_\ell \mathcal P_\ell$ is a product of uncoupled systems with constraint sets $\mathcal V_\ell$, then
+
+$$
+\operatorname{Viab}\!\left(\prod_\ell \mathcal V_\ell;\; \prod_\ell \mathcal P_\ell\right)
+=
+\prod_\ell \operatorname{Viab}(\mathcal V_\ell;\; \mathcal P_\ell).
+$$
+
+Under coupling, both inclusions can fail: coupling can destroy product viability (Counterexample 10.1) or create viability absent in isolation (Example 10.1).
+
+*Proof.* Uncoupled: a product path stays in $\prod_\ell \mathcal V_\ell$ iff each component stays in $\mathcal V_\ell$, and the controls are independent. Coupled: see Sections 10.3 and 10.4. $\blacksquare$
+
+**Theorem 2.4 (Face necessity is not kernel necessity).** Let $\mathcal V$ be a closed product of intervals and let $\Gamma$ be a face. The Nagumo condition $F(x, U(x)) \cap T_{\mathcal V}(x) \neq \varnothing$ is necessary for $\Gamma \subset \operatorname{Viab}(\mathcal V)$ but not necessary for $\operatorname{Viab}(\mathcal V) \neq \varnothing$.
+
+*Proof.* The first claim is Nagumo's theorem (Aubin, 1991, Theorem 4.1). For the second: take $g(S) = rS(1 - S/C)$, $H_{\min} > g(S_{\min})$, $H_{\min} < rC/4$. On the face $S = S_{\min}$: $\dot S = g(S_{\min}) - H \leq g(S_{\min}) - H_{\min} < 0$, so Nagumo fails. But by Theorem 6.2, the kernel is $[S_-, \infty) \times [0, K_{\max}]$ with $S_- > S_{\min}$, which is nonempty. $\blacksquare$
+
+### 2.6 Physical primacy
+
+**Theorem 2.5 (Physical primacy).** Let $U_{\mathrm{phys}}$ be the maximal correspondence compatible with the physical actuators, and let $U_{\mathrm{soc}}(x) \subseteq U_{\mathrm{phys}}(x)$ be any socially available restriction. Then
+
+$$
+\operatorname{Viab}(\mathcal V; U_{\mathrm{soc}}, \pi)
+\subseteq
+\operatorname{Viab}(\mathcal V; U_{\mathrm{phys}}, \pi_{\mathrm{perf}}).
+$$
+
+In particular, if the perfect-information physical kernel is empty, no institutional arrangement makes $\mathcal V$ viable.
+
+*Proof.* Let $x_0 \in \operatorname{Viab}(\mathcal V; U_{\mathrm{soc}}, \pi_{\mathrm{obs}})$. There exists an observation-based policy $\pi_{\mathrm{obs}}$ and a path $(x, u)$ with $x(t) \in \mathcal V$, $u(t) \in U_{\mathrm{soc}}(x(t))$, and $u = \pi_{\mathrm{obs}}(\mathcal I(x))$.
+
+Define $\tilde \pi: x(\cdot) \mapsto \pi_{\mathrm{obs}}(\mathcal I(x(\cdot)))$. This is causal: for each $t$, $\tilde \pi(x)(t)$ depends on $\mathcal I(x)(s)$ for $s \leq t$, hence on $x(s)$ for $s \leq t$. So $\tilde \pi \in \pi_{\mathrm{perf}}$.
+
+Since $U_{\mathrm{soc}}(x(t)) \subseteq U_{\mathrm{phys}}(x(t))$, the control $u(t) \in U_{\mathrm{phys}}(x(t))$. The path is admissible under $(U_{\mathrm{phys}}, \pi_{\mathrm{perf}})$. $\blacksquare$
+
+**Theorem 2.6 (Information contraction).** Let $\pi_{\mathrm{perf}}$ be perfect information and $\pi_{\mathrm{obs}}$ any causal observation-based class. Then
+
+$$
+\operatorname{Viab}(\mathcal V; U, \pi_{\mathrm{obs}})
+\subseteq
+\operatorname{Viab}(\mathcal V; U, \pi_{\mathrm{perf}}).
+$$
+
+*Proof.* Every observation-based policy composes with $\mathcal I$ to give a perfect-information policy. Admissibility follows because $u(t) \in U^{\mathrm{obs}}(y(t)) = \bigcap_{x' \in \mathcal I^{-1}(y(t))} U(x') \subseteq U(x(t))$. $\blacksquare$
+
+### 2.7 Governance versus technology
+
+Theorem 2.5 applies to a fixed physical system with fixed $U_{\mathrm{phys}}$. An institution, in the sense of Section 13, is a restriction $U_{\mathrm{inst}} \subseteq U_{\mathrm{phys}}$. If an action adds an actuator not previously in $U_{\mathrm{phys}}$, it changes the physical system $\mathcal P$ itself, producing a new system $\mathcal P'$ with $U'_{\mathrm{phys}} \supset U_{\mathrm{phys}}$. Theorem 2.5 then applies to $\mathcal P'$: no further institutional restriction of $U'_{\mathrm{phys}}$ can create viability beyond $\operatorname{Viab}(\mathcal V; U'_{\mathrm{phys}}, \pi_{\mathrm{perf}})$.
+
+The boundary is: **governance restricts; technology enlarges.** Theorem 2.5 governs the former; the latter is a change of system, not an application of governance.
+
+---
+
+## 3. Recoverability and Emergency Envelopes
+
+### 3.1 Impossibility of recovery into the viability kernel
+
+**Proposition 3.1.** Let $K = \operatorname{Viab}(\mathcal V)$. Then
+
+$$
+\operatorname{Capt}_{\mathcal V}(K) = K,
+$$
+
+where $\operatorname{Capt}_{\mathcal V}(K)$ is the set of states in $\mathcal V$ from which $K$ can be reached while remaining in $\mathcal V$.
+
+*Proof.* Clearly $K \subseteq \operatorname{Capt}_{\mathcal V}(K)$ by taking $T = 0$.
+
+Conversely, let $x_0 \in \operatorname{Capt}_{\mathcal V}(K)$. There exists a control $u_1$ and a trajectory $x_1$ with $x_1(0) = x_0$, $x_1(t) \in \mathcal V$ for all $t \in [0, T]$, and $x_1(T) \in K$. Since $x_1(T) \in K = \operatorname{Viab}(\mathcal V)$, there exists a control $u_2$ and a trajectory $x_2$ with $x_2(0) = x_1(T)$ and $x_2(t) \in \mathcal V$ for all $t \geq 0$.
+
+Concatenating: define $u(t) = u_1(t)$ for $t \in [0, T]$ and $u(t) = u_2(t - T)$ for $t > T$. The corresponding trajectory satisfies $x(t) \in \mathcal V$ for all $t \geq 0$. Hence $x_0 \in K$. $\blacksquare$
+
+**Corollary 3.1.** Every state in $\mathcal V \setminus K$ has infinite recovery time to $K$ if recovery is required to remain in $\mathcal V$. Any definition of "recovery resilience" based on reaching $K$ while staying in $\mathcal V$ is identically zero on $\partial K$.
+
+### 3.2 Capture basin relative to an emergency envelope
+
+**Definition 3.1.** Let $\mathcal E \supseteq \mathcal V$ be a closed emergency envelope. Define the capture basin
+
+$$
+\operatorname{Capt}_{\mathcal E}(K)
+=
+\left\{
+x_0 \in \mathcal E :
+\exists\, u,\; \exists\, T < \infty,\;\;
+x(t) \in \mathcal E \;\; \forall t \in [0, T],\;\;
+x(T) \in K
+\right\}.
+$$
+
+A complete sustainability statement has three parts:
+
+$$
+K \neq \varnothing,
+\qquad
+x_0 \in K,
+\qquad
+\text{or at least}
+\qquad
+x_0 \in \operatorname{Capt}_{\mathcal E}(K).
+$$
+
+### 3.3 Recovery speed
+
+**Definition 3.2.** For $x \in \operatorname{Capt}_{\mathcal E}(K)$, define the envelope-relative recovery time
+
+$$
+\tau_{\mathcal E}(x; K)
+=
+\inf
+\left\{
+T \geq 0 :
+\exists\, u,\;\;
+x(t) \in \mathcal E \;\; \forall t \in [0, T],\;\;
+x(T) \in K
+\right\}.
+$$
+
+A local recovery-speed measure is
+
+$$
+v_{\mathrm{rec}}(x, \nu)
+=
+\liminf_{\delta \downarrow 0}
+\frac{\delta}{\tau_{\mathcal E}(x + \delta\nu;\, K)},
+$$
+
+where $\nu$ is a direction pointing outside $K$ but inside $\mathcal E$. The ratio $\delta / \tau$ has units of state per unit time and remains finite when recovery time is proportional to displacement.
+
+### 3.4 Informational recovery
+
+Under partial observation, physical entry into the full-information kernel is insufficient for recovery: the controller must also know enough at the capture time to implement a viable continuation. Let $K_{\mathcal I}$ be the physical kernel induced by the information structure, and let $\mathcal E \supseteq \mathcal V$ be an emergency envelope.
+
+**Definition 3.3 (Robust informational capture basin).** An initial belief $B_0 \subseteq \mathcal E$ belongs to $\operatorname{ERCapt}_{\mathcal E}(K_{\mathcal I})$ if there exists an observation-based policy and a finite $T$ such that, for every compatible initial state, disturbance, and observation error:
+
+1. $x(t) \in \mathcal E$ for all $t \in [0, T]$;
+2. the information state at time $T$ belongs to the epistemic viability kernel, $B_T \in \operatorname{EViab}_{\mathcal I}(\mathcal V)$.
+
+Requiring only that the physical state enter the full-information kernel is insufficient: the belief $B_T$ must itself be epistemically viable.
+
+**Definition 3.4 (Worst-case informational recovery time).** For an initial belief $B_0$,
+
+$$
+\tau_{\mathcal E}^{\mathcal I}(B_0)
+=
+\inf_{\pi}
+\sup_{x_0, d, v}
+\inf
+\left\{
+T :
+x(t) \in \mathcal E \;\; \forall t \le T, \;\;
+B_T \in \operatorname{EViab}_{\mathcal I}(\mathcal V)
+\right\},
+$$
+
+with $\tau_{\mathcal E}^{\mathcal I}(B_0) = +\infty$ if no such policy exists.
+
+**Proposition 3.2 (Information monotonicity of recovery time).** If $\mathcal I_1 \succeq \mathcal I_2$, then $\tau_{\mathcal E}^{\mathcal I_1}(B) \le \tau_{\mathcal E}^{\mathcal I_2}(B)$ whenever both are compared from corresponding initial information states.
+
+*Proof.* Any policy implementable under the coarser structure $\mathcal I_2$ is implementable under the finer structure $\mathcal I_1$ by applying the garbling map (Theorem 4.1); hence the optimal worst-case recovery time under $\mathcal I_1$ is no larger. $\blacksquare$
+
+Better information weakly decreases the optimal worst-case recovery time.
+
+---
+
+## 4. Information and Epistemic Viability
+
+### 4.1 Belief states
+
+Let $y(t) = h(x(t))$ for memoryless observation, or more generally let $y_{[0,t]} = \mathcal I_t(x_{[0,t]})$ be a causal history map.
+
+**Definition 4.1: Information set.** Given an observation history $y_{[0,t]}$, define the compatible-state set
+
+$$
+B_t(y)
+=
+\left\{
+x(t) :
+x_{[0,t]} \text{ satisfies the dynamics and }
+\mathcal I_t(x_{[0,t]}) = y_{[0,t]}
+\right\}.
+$$
+
+The epistemic state is $B_t$, not the current observation $y(t)$.
+
+### 4.2 Robustly admissible controls
+
+**Definition 4.2.** A control selected from information state $B$ is robustly admissible if
+
+$$
+u \in U^B(B) := \bigcap_{x \in B} U(x).
+$$
+
+Two semantics are available:
+
+- **Realized-state admissibility:** $u(t) \in U(x(t))$.
+- **Robust implementability:** $u(t) \in \bigcap_{x \in B_t} U(x)$.
+
+The latter is appropriate when an institution must choose an action guaranteed to be legal and physically executable for every state consistent with its information. The manuscript uses robust implementability unless stated otherwise.
+
+### 4.3 Epistemic viability kernel
+
+**Definition 4.3.** Let $\mathfrak B$ be a suitable hyperspace of closed information sets. Define
+
+$$
+\operatorname{EViab}(\mathcal V)
+=
+\left\{
+B_0 :
+\exists\, \pi_B \;\; \forall\, x_0 \in B_0,\;\;
+x_{\pi_B}(t) \in \mathcal V \;\; \forall t \geq 0
+\right\},
+$$
+
+where $\pi_B$ is a causal map from belief histories to controls.
+
+### 4.4 Information refinement monotonicity
+
+**Theorem 4.1.** Suppose observation structure $\mathcal I_1$ is more informative than $\mathcal I_2$, meaning every $\mathcal I_2$-history is a causal function of the corresponding $\mathcal I_1$-history. Then
+
+$$
+\operatorname{EViab}_{\mathcal I_2}(\mathcal V)
+\subseteq
+\operatorname{EViab}_{\mathcal I_1}(\mathcal V),
+$$
+
+after identifying singleton initial beliefs with physical initial states.
+
+*Proof.* Let $B_0 \in \operatorname{EViab}_{\mathcal I_2}(\mathcal V)$. There exists a policy $\pi_2$ mapping $\mathcal I_2$-histories to controls such that for all $x_0 \in B_0$, the trajectory remains in $\mathcal V$.
+
+Since every $\mathcal I_2$-history is a causal function of the $\mathcal I_1$-history, define $\pi_1(y^{(1)}_{[0,t]}) := \pi_2(\phi(y^{(1)}_{[0,t]}))$, where $\phi$ is the causal map from $\mathcal I_1$-histories to $\mathcal I_2$-histories. Then $\pi_1$ is a valid $\mathcal I_1$-policy implementing the same control trajectory. Hence $B_0 \in \operatorname{EViab}_{\mathcal I_1}(\mathcal V)$. $\blacksquare$
+
+**Corollary 4.1.** If the observation history has a causal inverse, then epistemic and perfect-information kernels coincide, under either admissibility semantics.
+
+**Proposition 4.2 (Downward closure of the epistemic kernel).** If $B \in \operatorname{EViab}_{\mathcal I}(\mathcal V)$ and $C \subseteq B$ is a possible initial information set under the same observation model, then $C \in \operatorname{EViab}_{\mathcal I}(\mathcal V)$.
+
+*Proof.* The observation-based policy that keeps every state in $B$ safe also keeps every state in $C \subseteq B$ safe; since $C$ is known to be the initial information set, the same policy is implementable from $C$. $\blacksquare$
+
+Reducing initial uncertainty cannot destroy viability, provided the controller knows that the smaller set is the relevant initial information set.
+
+### 4.5 Observation can empty a nonempty physical kernel
+
+**Theorem 4.2.** There exist systems with $\operatorname{Viab}(\mathcal V; U, \pi_{\mathrm{perf}}) = \mathcal V \neq \varnothing$ and $\operatorname{EViab}_{\mathcal I}(\mathcal V) = \varnothing$ for a non-injective observation $\mathcal I$.
+
+*Proof.* Let the state be $S \in \mathbb R$, constraint $\mathcal V = [1, 2]$, dynamics $\dot S = u - r(S)$ with $r(S) = 1 + S^2 > 0$, and control correspondence $U(S) = \{0, r(S)\}$. Let the observation be the constant map $\mathcal I(S) = 0$ for all $S$.
+
+The belief state is $B_t = \mathbb R$ for all $t$. The robustly admissible control set is
+
+$$
+U^B(\mathbb R) = \bigcap_{S \in \mathbb R} U(S) = \{0\},
+$$
+
+since $r(S) = 1 + S^2$ varies with $S$ and $0$ is the only common element.
+
+Under perfect information, for any $S_0 \in [1, 2]$, choose $u(t) = r(S(t))$. Then $\dot S = 0$ and $S(t) \equiv S_0 \in \mathcal V$. So $\operatorname{Viab}(\mathcal V; U, \pi_{\mathrm{perf}}) = \mathcal V$.
+
+Under the constant observation, every policy must use $u(t) = 0$. Then $\dot S = -(1 + S^2) \leq -2$ on $[1, 2]$. Every trajectory starting in $[1, 2]$ exits below $1$ in finite time. Hence $\operatorname{EViab}_{\mathcal I}(\mathcal V) = \varnothing$. $\blacksquare$
+
+**Remark.** This example uses a finite nonconvex control correspondence. If Marchaud convexity is required, the same phenomenon can be represented using discrete control modes or restricted policy classes.
+
+**Remark 4.1 (The phenomenon is policy-class restriction, not information loss).** The emptying of a nonempty physical kernel in Theorem 4.2 relies on a *non-injective* observation (information genuinely lost). The same emptying can occur with a fully **injective** observation, provided the policy class is restricted to *certainty-equivalence controllers* — causal maps that apply a fixed state-feedback law directly to the observation without correcting a bias. Concretely, let $\dot S = u - g(S)$ with $u \in [0, \bar u]$, $g$ strictly increasing, $g(0) = 0$, and constraint $\mathcal V = [S_{\min}, S^*]$. Under perfect information one sets $u(t) = g(S(t))$, giving $\dot S = 0$; hence every $S_0 \in \mathcal V$ is viable and $\operatorname{Viab}(\mathcal V; U, \pi_{\mathrm{perf}}) = \mathcal V \neq \varnothing$. Take the injective, biased observation $\hat S = S + b$ with $b > 0$, and let the certainty-equivalence controller be $u = g(\hat S)$ (it applies the feedback to the measurement without inverting the bias). Then $\dot S = g(S + b) - g(S) > 0$ for all $S$, since $g$ is strictly increasing; $\dot S$ is bounded below by a positive constant on the compact interval $[S_{\min}, S^*]$, so $S$ strictly increases and exits above $S^*$ in finite time from every $S_0 \in \mathcal V$. Hence $\operatorname{Viab}(\mathcal V; U, \pi_{\mathrm{CE}}) = \varnothing$. Because $\hat S \mapsto S = \hat S - b$ is invertible, an observer who *inverts the bias* ($u = g(\hat S - b) = g(S)$) recovers the perfect-information kernel; such a policy is not certainty-equivalence. Thus the obstruction here is a restriction of the *admissible policy class*, not a loss of information — a distinction the non-injective example of Theorem 4.2 does not exhibit.
+
+**Theorem 4.3 (Delay margin in feedback).** For the scalar delayed controlled system $\dot x = -a x - B x(t-\tau)$ ($a > 0$, $B \ge 0$):
+
+- If $B \le a$: the zero equilibrium is stable for all $\tau \ge 0$.
+- If $B > a$: it is stable for $\tau < \tau_{\mathrm{crit}} = \arccos(-a/B) / \sqrt{B^2 - a^2}$, and unstable for $\tau \ge \tau_{\mathrm{crit}}$. There is **no restabilization** as $\tau$ grows.
+
+*Proof.* The characteristic equation is $s + a + B e^{-s\tau} = 0$. At $\tau = 0$: $s = -(a+B) < 0$. A stability boundary occurs at a purely imaginary root $s = i\omega$: $a + B\cos(\omega\tau) = 0$ and $\omega = B\sin(\omega\tau)$. These require $B > a$; then $\omega = \sqrt{B^2 - a^2}$ and $\omega\tau = \arccos(-a/B)$, giving $\tau_{\mathrm{crit}}$. The crossing is destabilizing ($\mathrm{Re}(ds/d\tau) > 0$ at $s = i\omega$, Hayes, 1950), so stability holds only below $\tau_{\mathrm{crit}}$ and never returns. $\blacksquare$
+
+*Numerical check.* For $a = 1$, $B = 2$: $\tau_{\mathrm{crit}} = \arccos(-1/2)/\sqrt{3} \approx 2.094/1.732 \approx 1.209$; verified stable at $\tau = 0.8\,\tau_{\mathrm{crit}}$ and unstable at $1.01\,\tau_{\mathrm{crit}}$ and beyond. For $B \le a$ (e.g. $B = 0.5$), stable at all $\tau$.
+
+This is the scalar mechanism by which observation/control *delay* can destroy viability that the undelayed feedback sustains: an otherwise viable feedback (Theorem 4.4) becomes destabilizing once the loop delay exceeds $\tau_{\mathrm{crit}}$. It complements the certainty-equivalence obstruction (Remark 4.1) and the observer-transfer theorem (Theorem 4.4) as a third way feedback structure affects the kernel.
+
+### 4.6 Observer-to-viability transfer
+
+The following theorem gives the correct role of a state observer in viability theory: it transfers an interior perfect-information kernel to an output-feedback kernel. It does not prove adaptive management or parameter learning.
+
+**Theorem 4.4 (Observer-to-viability transfer with safety buffer).** Consider the output-feedback system
+
+$$
+\dot x = f(x, u), \qquad y = h(x),
+$$
+
+where $h: X \to Y$ is a measurement map and $x$ is not fully observed. Suppose:
+
+1. $K_\varepsilon \subset \operatorname{int} K$ is a compact controlled-invariant subset of the perfect-information kernel $K = \operatorname{Viab}(\mathcal V)$;
+2. the perfect-information feedback $u = k(x)$ is Lipschitz with constant $L_k$;
+3. the output-feedback controller is $u = k(\hat x)$, where $\hat x$ is the observer estimate;
+4. the observer satisfies the exponential convergence bound
+   $$
+   \|\hat x(t) - x(t)\| \leq M e^{-\lambda t} \|\hat x(0) - x(0)\|
+   $$
+   for constants $M \geq 1$, $\lambda > 0$;
+5. **$K_*$-level safety margin:** there exists a compact invariant subset $K_*$ with $K_\varepsilon \subseteq K_* \subseteq K$ and a constant $\bar e > 0$ such that whenever $x \in K_*$ and $\|k(\hat x) - k(x)\| \leq \bar e$, the trajectory remains in $K_*$ (hence in $K$);
+6. the initial estimation error satisfies
+   $$
+   L_k M \|\hat x(0) - x(0)\| \leq \bar e.
+   $$
+
+Then $K_\varepsilon$ is viable under output feedback.
+
+*Proof.* By the observer convergence bound (assumption 4):
+
+$$
+\|\hat x(t) - x(t)\| \leq M e^{-\lambda t} \|\hat x(0) - x(0)\|.
+$$
+
+Since $k$ is Lipschitz with constant $L_k$:
+
+$$
+\|k(\hat x(t)) - k(x(t))\|
+\leq L_k \|\hat x(t) - x(t)\|
+\leq L_k M e^{-\lambda t} \|\hat x(0) - x(0)\|.
+$$
+
+By assumption 6, $L_k M \|\hat x(0) - x(0)\| \leq \bar e$, so
+
+$$
+\|k(\hat x(t)) - k(x(t))\| \leq \bar e \quad \forall t \geq 0.
+$$
+
+Since $x(0) \in K_\varepsilon \subseteq K_*$ and $K_*$ is invariant, $x(t) \in K_*$ for all $t$; the safety margin (assumption 5) applies at every $x(t) \in K_*$, so the trajectory remains in $K_* \subseteq K$. Hence $K_\varepsilon$ is viable under output feedback. $\blacksquare$
+
+*Remark.* The safety margin is asserted on a set $K_*$ that is itself invariant, with $K_\varepsilon \subseteq K_* \subseteq K$. A margin stated only on $K_\varepsilon$ cannot be reapplied once the trajectory leaves $K_\varepsilon$; the hypothesis that $K_*$ is invariant closes the inductive step.
+
+**Remark.** This theorem requires a genuine observer for an unmeasured state. For example, if $S$ is measured but effort $E$ or a parameter $\theta$ is not, an observer for $E$ or $\theta$ would be meaningful. The full-state error filter $\dot{\hat S} = g(\hat S) - H(\hat S, u) + \gamma(S - \hat S)$, which uses $S$ directly in the innovation, is not an observer in this sense: if $S$ is measured, the state feedback $u(S)$ is already available. Parameter learning under uncertainty requires an unknown parameter $\theta$, an estimator $\hat \theta$, identifiability, excitation, and a dual-control or robust fallback policy. That remains a separate open problem (Conjecture 17.3).
+
+### 4.7 Robust viability with disturbances ($\exists u \;\forall d$)
+
+Let the disturbance enter explicitly, $\dot x = f(x,u,d)$, $d \in D(x)$, under the conservative lower-game convention in which management selects an action before observing the current disturbance. The robust viability kernel $\operatorname{RViab}(\mathcal V)$ is the object of Definition 2.2; the inclusion $\operatorname{RViab}(\mathcal V) \subseteq \operatorname{Viab}(\mathcal V)$ is strict whenever the disturbance matters near the boundary. For a closed set $K$, let $T_K(x)$ denote its contingent cone, and define the **robust regulation map**
+
+$$
+\mathcal R_K(x)
+=
+\left\{
+u \in U(x) :
+f(x,u,d) \in T_K(x) \;\; \forall d \in D(x)
+\right\}.
+$$
+
+**Theorem 4.5 (Conditional robust strong-invariance certificate).** Let $K\subseteq\mathcal V$ be closed. Suppose a feedback selection $k$ is admissible and the closed-loop multifunction
+
+$$
+F_k(x)=\{f(x,k(x),d):d\in D(x)\}
+$$
+
+satisfies the regularity, existence, completeness, and solution assumptions of an applicable strong-invariance theorem. If
+
+$$
+F_k(x)\subseteq T_K^C(x)\qquad\forall x\in K,
+$$
+
+where $T_K^C$ is the tangent cone required by that theorem, then every closed-loop disturbance solution starting in $K$ remains in $K$. Hence $K\subseteq\operatorname{RViab}(\mathcal V)$ for the declared policy, disturbance, and solution classes.
+
+*Proof.* The conclusion is the selected strong-invariance theorem applied to the closed-loop disturbance inclusion. The subset condition is essential: the weaker condition $F_k(x)\cap T_K(x)\ne\varnothing$ gives only an existential viable inclusion trajectory and does not protect against every disturbance selection. $\blacksquare$
+
+No general converse or pointwise-tangency “if and only if” is asserted here. A converse requires an exact discriminating-kernel or game theorem with matching nonanticipative-strategy, regularity, and solution semantics.
+
+For smooth $K = \{b_j(x) \ge 0\}$ with an active-constraint qualification, membership $u \in \mathcal R_K(x)$ is equivalent to $\nabla b_j(x) \cdot f(x,u,d) \ge 0$ for every active $j$ and every $d$. The quantifiers cannot be swapped: $\forall d\,\exists u_d$ is weaker than $\exists u\,\forall d$; only the latter yields an implementable robust action when the disturbance is unknown at decision time. The common-regulation intersection $\bigcap_{x \in B} \mathcal R_{\mathcal V}(x)$ characterizes when a single action is robust over the belief (Section 4.9).
+
+### 4.8 Belief predecessor and the epistemic fixed point
+
+The epistemic robust kernel of Section 4.3 is characterized by an algorithmic fixed point over the belief space, mirroring the ordinary viability-kernel algorithm with the *belief itself* as the state variable. Fix sampling times $t_k = k\Delta$. For an information state $B$ and action $u$ define the prediction operator
+
+$$
+\operatorname{Pred}_\Delta(B,u)
+=
+\left\{ x(\Delta) : x(0) \in B,\; \dot x = f(x,u,d),\; d \text{ admissible} \right\},
+$$
+
+and, for an observation $y$, the updated belief
+
+$$
+\Psi_\Delta(B,u,y)
+=
+\operatorname{Pred}_\Delta(B,u) \cap C(y),
+\qquad
+C(y) = \{x : y = h(x,v)\text{ for some } v \in N(x)\}.
+$$
+
+An action is **tube-safe** at $B$, $u \in \mathcal A_\Delta(B)$, if it is robustly admissible and every trajectory from $B$ under every disturbance remains in $\mathcal V$ over $[0,\Delta]$ (checking only the endpoint is insufficient). Define the **belief predecessor**
+
+$$
+\operatorname{Pre}(B)
+=
+\left\{
+B :
+\exists\, u \in \mathcal A_\Delta(B)\;\; \forall\, y \in \operatorname{Obs}_\Delta(B,u),\;\;
+\Psi_\Delta(B,u,y) \in \mathfrak Q
+\right\},
+$$
+
+with the quantifier structure $\exists u \;\forall y$ (management chooses before learning the next observation).
+
+**Theorem 4.6 (Belief viability fixed point).** Let $\mathfrak S = \{B \neq \varnothing : B \subseteq \mathcal V\}$ and define $\mathfrak K_0 = \mathfrak S$, $\mathfrak K_{n+1} = \mathfrak K_n \cap \operatorname{Pre}(\mathfrak K_n)$. Then $B \in \mathfrak K_n$ iff an observation-based policy keeps every compatible physical trajectory in $\mathcal V$ for $n$ sampling periods; and under compactness and closed-graph hypotheses,
+
+$$
+\mathfrak K_\infty = \bigcap_{n \ge 0} \mathfrak K_n
+$$
+
+is the greatest fixed point of $\mathfrak Q \mapsto \mathfrak S \cap \operatorname{Pre}(\mathfrak Q)$, equal to $\operatorname{ERViab}_{\mathcal I,\Delta}(\mathcal V)$.
+
+*Proof.* We first prove the finite-horizon characterization by induction on $n$. For $n=0$, $\mathfrak K_0 = \mathfrak S$ is exactly the set of nonempty beliefs $B \subseteq \mathcal V$, and an empty-horizon policy (the requirement that $x(0) \in \mathcal V$) holds for every such $B$. Suppose the claim holds for $n$. By definition, $\mathfrak K_{n+1} = \mathfrak K_n \cap \operatorname{Pre}(\mathfrak K_n)$. A belief $B$ lies in $\operatorname{Pre}(\mathfrak K_n)$ precisely when there is a tube-safe action $u \in \mathcal A_\Delta(B)$ such that for every possible next observation $y \in \operatorname{Obs}_\Delta(B,u)$, the updated belief $\Psi_\Delta(B,u,y)$ lies in $\mathfrak K_n$. By the induction hypothesis, each such updated belief can be kept viable for the remaining $n$ periods; concatenating the tube-safe first step with these continuations yields a policy that keeps every compatible physical trajectory in $\mathcal V$ for $n+1$ periods. The converse is identical: the first-period action of any $(n+1)$-viable policy is tube-safe and, by the induction hypothesis, forces each $\Psi_\Delta(B,u,y) \in \mathfrak K_n$. This proves the finite-horizon claim.
+
+For the infinite horizon, note that $\mathfrak Q \mapsto \Phi(\mathfrak Q) := \mathfrak S \cap \operatorname{Pre}(\mathfrak Q)$ is monotone on the power set of belief collections under inclusion: if $\mathfrak Q_1 \subseteq \mathfrak Q_2$, then $\operatorname{Pre}(\mathfrak Q_1) \subseteq \operatorname{Pre}(\mathfrak Q_2)$ (any action witnessing membership in $\operatorname{Pre}(\mathfrak Q_1)$ has its successor beliefs in the smaller class $\mathfrak Q_1 \subseteq \mathfrak Q_2$), and intersecting with the fixed $\mathfrak S$ preserves the inclusion. The family $\mathfrak S$ is a complete lattice under inclusion, so by the Knaster–Tarski fixed-point theorem the monotone operator $\Phi$ has a greatest fixed point. The sequence $\mathfrak K_n = \Phi^n(\mathfrak S)$ is decreasing, and its intersection $\mathfrak K_\infty = \bigcap_n \mathfrak K_n$ is a fixed point by the closed-graph and compactness hypotheses (which ensure $\operatorname{Pre}$ is closed and $\mathfrak S$ is closed under decreasing intersections). Maximality follows because any other fixed point $\mathfrak Q$ satisfies $\mathfrak Q \subseteq \mathfrak S = \mathfrak K_0$ and, by monotonicity, $\mathfrak Q = \Phi^n(\mathfrak Q) \subseteq \Phi^n(\mathfrak S) = \mathfrak K_n$ for all $n$, hence $\mathfrak Q \subseteq \mathfrak K_\infty$. Thus $\mathfrak K_\infty$ is the greatest fixed point. An infinite-horizon viable policy is exactly one that is viable for every finite horizon, so $\mathfrak K_\infty = \operatorname{ERViab}_{\mathcal I,\Delta}(\mathcal V)$. $\blacksquare$
+
+The belief transition $B_{k+1} = \Psi_\Delta(B_k, u_k, y_{k+1})$ depends on the chosen action $u_k$, so a control has a dual role: it shapes the physical state and the future information. A control may be physically conservative but informationally uninformative, physically costly but uncertainty-reducing, or immediately safe but damaging to future distinguishability. The predecessor operator incorporates this dual effect; restricting to $u \in \bigcap_{x \in B} U(x)$ alone is insufficient because it ignores how the action changes future beliefs.
+
+**Definition 4.4 (Safely informative action).** An action $u \in \mathcal A_\Delta(B)$ is *safely informative* relative to a belief-size functional $r$ if
+
+$$
+\sup_{y \in \operatorname{Obs}_\Delta(B,u)} r\bigl(\Psi_\Delta(B,u,y)\bigr) < r(B).
+$$
+
+Safe learning is possible only if an action is both tube-safe and uncertainty-reducing.
+
+### 4.9 Informational obstructions: common action, hidden mode, and delay
+
+**Theorem 4.7 (Instantaneous common-action obstruction).** Suppose $B$ is a possible information set containing a state on $\partial \mathcal V$, and
+
+$$
+\mathcal R_{\mathcal V}^{B}(B) := \bigcap_{x \in B} \mathcal R_{\mathcal V}(x) = \varnothing,
+$$
+
+and no informative observation arrives before an action must be chosen. Then $B \notin \operatorname{ERViab}_{\mathcal I}(\mathcal V)$. Every compatible state may be individually robustly viable while the belief is nonviable, because the state-specific safe actions are incompatible.
+
+**Example 4.1 (Hidden-mode conflict).** Let an unobserved parameter satisfy $\theta \in \{-1,+1\}$, with $\dot z = \theta u$, $u \in \{-1,+1\}$, $z \ge 0$. At $z=0$: if $\theta=+1$ only $u=+1$ is safe; if $\theta=-1$ only $u=-1$ is safe. Both states are individually robustly viable, but $B = \{(0,+1),(0,-1)\}$ admits **no common safe action**, so $B \notin \operatorname{ERViab}$. This is a purely informational failure: no stochasticity or estimation quality is involved, and each state is individually robustly viable while the joint belief is not.
+
+**Theorem 4.8 (Delayed-information obstruction).** If every possible action at belief $B_0$ allows a disturbance and a compatible state to reach a locally nonviable boundary point before the next informative observation time $T_{\mathrm{obs}}$, then $B_0 \notin \operatorname{ERViab}$. A sufficient condition is the existence of $q$ and $\varepsilon > 0$ with $\inf_{x \in B_t} \inf_{d} D^+ q(x;f(x,u,d)) \le -\varepsilon$ throughout an uncertainty branch and $T_{\mathrm{obs}} > \frac{\inf_{x \in B_0} q(x)}{\varepsilon}$. Information may be accurate but arrive too late.
+
+*Proof.* Fix an admissible action $u(\cdot)$ and an uncertainty branch, i.e. a compatible pair of disturbance $d(\cdot)$ and initial state $x_0 \in B_0$. By hypothesis, along this branch the constraint function $q$ satisfies $D^+ q(x_t; f(x_t, u_t, d_t)) \le -\varepsilon$ for every $t \in [0, T_{\mathrm{obs}})$. Integrating the Dini inequality (Theorem 5.2) from the least favorable initial margin gives $q(x_t) \le \inf_{x \in B_0} q(x) - \varepsilon t$. At time $t^* = \frac{1}{\varepsilon}\inf_{x \in B_0} q(x)$, we have $q(x_{t^*}) \le 0$, so the trajectory violates the constraint $q \ge 0$ by time $t^* \le T_{\mathrm{obs}}$ (the strict inequality $t^* < T_{\mathrm{obs}}$ follows from $T_{\mathrm{obs}} > \inf q/\varepsilon$). Since the violation occurs before the next informative observation time, no observation can arrive in time to alter the control and prevent it. Because this holds for every admissible action and every uncertainty branch, there is no observation-based policy that keeps every compatible trajectory in $\mathcal V$; hence $B_0 \notin \operatorname{ERViab}$. $\blacksquare$
+
+### 4.10 Observer-based inner approximations and safety buffers
+
+A **set-valued observer** produces a guaranteed enclosure $x(t) \in \widehat B(t)$ for every disturbance and error. If $\widehat B(t) \subseteq Q$ and the chosen control is robustly safe for every state in $\widehat B(t)$, the actual state is safe.
+
+**Theorem 4.9 (Observer safety buffer).** Let $Q = \{x : b_j(x) \ge 0\}$ with each $b_j \in C^1$, and let a nominal feedback $k$ satisfy, on active boundaries,
+
+$$
+\inf_{d \in D(x)} \nabla b_j(x) \cdot f(x, k(x), d) \ge \eta_j
+$$
+
+for constants $\eta_j > 0$. Assume the control-perturbation sensitivity
+
+$$
+\left| \nabla b_j(x) \cdot \left[ f(x, k(\hat x), d) - f(x, k(x), d) \right] \right| \le L_j \| \hat x - x \|.
+$$
+
+If the observer guarantees $\| \hat x(t) - x(t) \| \le \bar e$ and $L_j \bar e \le \eta_j$ for all $j$, then the output-feedback law $u(t) = k(\hat x(t))$ preserves $Q$ robustly. If the observer is exponentially convergent, $\| \hat x(t) - x(t) \| \le M e^{-\lambda t}\|\hat x(0)-x(0)\|$, it suffices that $L_j M \|\hat x(0)-x(0)\| \le \eta_j$; otherwise an emergency controller must act until uncertainty falls below the threshold.
+
+*Proof.* We show that the output-feedback law $u(t) = k(\hat x(t))$ preserves $Q$ at every time. Let $x \in \partial Q$ with an active constraint $b_j(x) = 0$. The nominal feedback satisfies, by hypothesis,
+$$
+\inf_{d \in D(x)} \nabla b_j(x) \cdot f(x, k(x), d) \ge \eta_j > 0.
+$$
+The applied control is $k(\hat x)$ rather than $k(x)$. Using the control-perturbation sensitivity bound,
+$$
+\left| \nabla b_j(x) \cdot \left[ f(x, k(\hat x), d) - f(x, k(x), d) \right] \right| \le L_j \| \hat x - x \| \le L_j \bar e.
+$$
+Hence for every admissible disturbance $d$,
+$$
+\nabla b_j(x) \cdot f(x, k(\hat x), d)
+\ge \nabla b_j(x) \cdot f(x, k(x), d) - L_j \bar e
+\ge \eta_j - L_j \bar e.
+$$
+Since $L_j \bar e \le \eta_j$ by hypothesis, the right-hand side is nonnegative, so $\nabla b_j(x) \cdot f(x, k(\hat x), d) \ge 0$ for every active constraint $j$ and every disturbance $d$. By the smooth-constraint form of the robust tangency condition (Section 4.7), $f(x, k(\hat x), d) \in T_Q(x)$ for all $d$, so $Q$ is robustly controlled invariant under the output-feedback law. If the observer is exponentially convergent, $\|\hat x(t)-x(t)\| \le M e^{-\lambda t}\|\hat x(0)-x(0)\| \le M\|\hat x(0)-x(0)\|$, so the worst-case error over all time is bounded by $M\|\hat x(0)-x(0)\|$; the condition $L_j M\|\hat x(0)-x(0)\| \le \eta_j$ then applies the same argument. $\blacksquare$
+
+The condition $L_j \bar e \le \eta_j$ is the precise statement that the worst-case control error is absorbed by the strict barrier margin.
+
+For $\varepsilon > 0$, the **geometric erosion** of a set $K$ is
+
+$$
+K^{-\varepsilon}
+=
+\left\{
+x \in K :
+\operatorname{dist}(x, K^c) \ge \varepsilon
+\right\}.
+$$
+
+**Proposition 4.1 (Eroded kernels under output feedback).** Suppose: (i) $K$ is robustly invariant under full-state feedback; (ii) the feedback has a strict inward margin on $\partial K$; and (iii) estimation and implementation errors are bounded by $\varepsilon$ in a compatible norm. Then, for sufficiently small $\varepsilon$, an eroded set $K^{-c\varepsilon}$ is invariant under output feedback for some sensitivity constant $c > 0$.
+
+*Proof.* By the safety-buffer argument (Theorem 4.9), a strict barrier margin absorbs a bounded estimation error. Eroding $K$ by a margin proportional to the error bound guarantees that the nominal feedback remains within the strict-margin region, so invariance is preserved under output feedback. $\blacksquare$
+
+Partial observation thus preserves an interior portion of a full-information kernel even when it does not preserve the entire kernel.
+
+### 4.11 Value of information
+
+For $q(x) = \min_j q_j(x)$ and an initial belief $B$, define the finite-horizon safety value
+
+$$
+W_T^{\mathcal I}(B)
+=
+\sup_{\pi \in \Pi_{\mathcal I}}
+\inf_{\substack{x_0 \in B \\ d(\cdot), v(\cdot)}}
+\min_{0 \le t \le T} q(x_{\pi,d,v}(t)).
+$$
+
+Then $W_T^{\mathcal I}(B) \ge 0$ iff $B$ is epistemically robustly viable over $[0,T]$. Two monotonicity facts hold:
+
+- **Uncertainty monotonicity.** If $B_1 \subseteq B_2$ then $W_T^{\mathcal I}(B_1) \ge W_T^{\mathcal I}(B_2)$.
+- **Information monotonicity.** If $\mathcal I_1 \succeq \mathcal I_2$ then $W_T^{\mathcal I_1}(B) \ge W_T^{\mathcal I_2}(B)$.
+
+The **finite-horizon value of information** is
+
+$$
+\operatorname{VoI}_T(B; \mathcal I_1, \mathcal I_2) = W_T^{\mathcal I_1}(B) - W_T^{\mathcal I_2}(B) \ge 0
+$$
+
+under refinement — information measured in units of worst-case constraint margin rather than entropy or estimation error.
+
+### 4.12 The informational hierarchy
+
+After projecting belief kernels to physical state space, the theory distinguishes four levels:
+
+$$
+\operatorname{IRViab}_{\mathfrak I}(\mathcal V)
+\subseteq
+K_{\mathcal I}
+\subseteq
+\operatorname{RViab}(\mathcal V)
+\subseteq
+\operatorname{Viab}(\mathcal V).
+$$
+
+Each strict inclusion has a distinct cause: robust contraction from disturbances; epistemic contraction from indistinguishability; institutional contraction from restricted authority, enforcement, or allocation; and attainability handled separately by emergency-envelope capture. The hidden-mode system exhibits the epistemic case: $\operatorname{Viab} = \operatorname{RViab}$ but $K_{\mathcal I} = \varnothing$ under a constant observation, a purely epistemic contraction. The central sustainability condition is that at every reachable information state there exists a common action whose every admissible physical realization points into the tangent cone of a recursively viable set.
+
+---
+
+## 5. Barrier and Obstruction Calculus
+
+Let $\mathcal V = \{x : q_j(x) \geq 0,\; j = 1, \ldots, m\}$ with each $q_j$ locally Lipschitz.
+
+### 5.1 Safe-control correspondence
+
+**Definition 5.1.** For smooth $q_j$, define the safe-control correspondence
+
+$$
+\mathcal R_{\mathcal V}(x)
+=
+\left\{
+u \in U(x) :
+\nabla q_j(x) \cdot f(x, u, d) \geq 0
+\quad
+\forall d \in D(x),\;\;
+\forall j \in I(x)
+\right\},
+$$
+
+where $I(x) = \{j : q_j(x) = 0\}$ is the active constraint set. For nonsmooth constraints, replace the gradient condition by the contingent-cone condition $F(x, u, D(x)) \subseteq T_{\mathcal V}(x)$.
+
+### 5.2 Robust barrier sufficiency
+
+**Theorem 5.1.** If $\mathcal R_{\mathcal V}(x) \neq \varnothing$ for all $x \in \mathcal V$, and the correspondence admits a measurable feedback selection, then $\mathcal V$ is robustly controlled invariant: $\mathcal V \subseteq \operatorname{RViab}(\mathcal V)$.
+
+*Proof.* This is Nagumo's theorem (Aubin, 1991, Theorem 4.1) extended to the disturbance setting. The condition $\mathcal R_{\mathcal V}(x) \neq \varnothing$ for all $x \in \partial \mathcal V$ ensures that at every boundary point, there exists a control that prevents exit for all admissible disturbances. By measurable selection (Aubin, 1991, Chapter 1), a feedback $u(x) \in \mathcal R_{\mathcal V}(x)$ exists. The closed-loop trajectory remains in $\mathcal V$ by the viability theorem. $\blacksquare$
+
+### 5.3 Finite-time obstruction certificate
+
+**Theorem 5.2.** Suppose there is a constraint function $q$, constants $a, \varepsilon > 0$, and a strip $\mathcal S_a = \{x : 0 \leq q(x) \leq a\}$ such that
+
+$$
+\sup_{u \in U(x)}
+\inf_{d \in D(x)}
+D^+ q(x;\, f(x, u, d))
+\leq -\varepsilon
+\qquad
+\forall x \in \mathcal S_a,
+$$
+
+where $D^+ q$ is the upper right Dini derivative. Then every trajectory entering $\mathcal S_a$ exits $\{q \geq 0\}$ within time at most $a / \varepsilon$.
+
+*Proof.* Along every admissible controlled trajectory in $\mathcal S_a$, the disturbance can enforce $D^+ q(t) \leq -\varepsilon$. Hence $q(t) \leq q(t_0) - \varepsilon(t - t_0)$, and $q$ reaches zero within $q(t_0) / \varepsilon \leq a / \varepsilon$. $\blacksquare$
+
+**Remark.** The physical, epistemic, network, distributional, and institutional obstructions identified in later sections are applications of this theorem, not a separate taxonomy.
+
+### 5.4 Viability crisis
+
+**Definition 5.2 (Viability crisis).** A parameter path $\lambda \mapsto P(\lambda)$ undergoes a *viability crisis* at $\lambda^*$ if $\operatorname{Viab}(\mathcal V; P(\lambda)) \neq \varnothing$ for $\lambda < \lambda^*$ and $= \varnothing$ for $\lambda > \lambda^*$. The map $\lambda \mapsto \operatorname{Viab}(\mathcal V; P(\lambda))$ is then discontinuous at $\lambda^*$ in the sense of set-valued (kernel) convergence.
+
+The viability-operator is not continuous in parameters: nonempty kernels can vanish at a threshold, and the threshold is often computable. Two concrete instances already derived are:
+
+- *Coupling strength (Remark 10.1).* At MSY with $C_1 \neq C_2$, $\lambda = d$: the kernel is the nonempty product at $d = 0$ and empty for every $d > 0$, so $d = 0$ is a viability-crisis point.
+- *Harvest floor.* By Theorem 6.2 condition (i), the kernel is nonempty for $H_{\min} \le H_*$ and empty for $H_{\min} > H_*$; $H_{\min} = H_*$ is a viability-crisis point (the degenerate case of Theorem 6.2).
+
+A viability crisis is the parametric analogue of the finite-time obstruction certificate (Theorem 5.2): where that theorem guarantees exit at fixed parameters, the crisis locates the parameter value at which the kernel's nonemptiness switches.
+
+### 5.5 Early-warning diagnostic indicators
+
+The following are candidate diagnostics for *approaching* a viability crisis, each valid only under specific bifurcation assumptions:
+
+1. **Critical slowing down.** Lag-1 autocorrelation of $S$ rises near a fold bifurcation (Scheffer et al., 2009).
+2. **Rising variance.** Rolling variance of $S$ increases under additive noise near a bifurcation.
+3. **Epistemic divergence.** Growing $|\hat S - S|$ in the continuous observation track.
+4. **Policy inertia.** Physical stress increasing without corresponding control adjustment.
+
+These are **not** universal early-warning signals: they apply near fold bifurcations under additive noise with responsive control. They do not follow from the viability machinery of Section 5.3 alone; each is a separate, falsifiable empirical-statistical claim. They are recorded here because a viability crisis (Definition 5.2) is the dynamical event they are heuristically intended to forecast.
+
+### 5.6 Application: harvest-floor obstruction
+
+For the resource–sink system $\dot S = g(S) - H$ with $H \geq H_{\min}$, take $q(S) = S - S_{\min}$. On the strip $0 \leq S - S_{\min} \leq a$:
+
+$$
+D^+ q = \dot S = g(S) - H \leq g(S) - H_{\min}.
+$$
+
+If $g(S) - H_{\min} \leq -\varepsilon < 0$ on $[S_{\min}, S_{\min} + a]$, then Theorem 5.2 gives finite-time exit. This is the mechanism underlying Theorem 6.2 necessity conditions.
+
+---
+
+## 6. Order-Minimal Control and Scalar Kernels
+
+### 6.1 Order structure
+
+Consider the resource–sink system
+
+$$
+\dot S = g(S) - H,
+\qquad
+\dot K = w(H) - \delta(K),
+$$
+
+with $H \in [\underline H(S), \overline H(S)]$, $w$ nondecreasing, $\delta$ strictly increasing.
+
+Define the partial order
+
+$$
+(S_1, K_1) \succeq (S_2, K_2)
+\iff
+S_1 \geq S_2 \;\text{ and }\; K_1 \leq K_2.
+$$
+
+Under this order, lower harvest weakly improves both ecological coordinates: higher $S$ and lower $K$.
+
+**Proposition 6.2 (Quasi-positivity: orthant invariance).** Under $g(0) = 0$, $h_{\max}(0) = 0$, $w \ge 0$, and $\delta(0) = 0$, the nonnegative orthant $\mathbb R_+^2$ is invariant for the resource–sink system: no admissible trajectory exits $\{S \ge 0, K \ge 0\}$.
+
+*Proof.* At $S = 0$: $g(0) = 0$ and $h_{\max}(0) = 0$, so the only admissible harvest is $H = 0$ and $\dot S = 0$; $S$ cannot cross below $0$. At $K = 0$: $\dot K = w(H) - \delta(0) = w(H) \ge 0$; $K$ cannot cross below $0$. The faces are forward invariant. $\blacksquare$
+
+The same argument on the full four-stock system (Section 6.6) with nonnegative data preserves $\mathbb R_+^4$, so positivity holds coordinatewise.
+
+### 6.2 Order-minimal control principle
+
+**Theorem 6.1.** Suppose the pointwise minimum control $\underline H(S) := \min U(S)$ is measurable. If $H_1(t) \leq H_2(t)$ for all $t$ (where both are admissible), and both trajectories start from $(S_0, K_0)$, then
+
+$$
+(S_1(t), K_1(t)) \succeq (S_2(t), K_2(t))
+\qquad
+\forall t \geq 0.
+$$
+
+Consequently, if $\mathcal V = [S_{\min}, \infty) \times [0, K_{\max}]$ (an order-upper set), then
+
+$$
+x_0 \in \operatorname{Viab}(\mathcal V)
+\iff
+\text{the minimum-harvest trajectory from } x_0 \text{ remains in } \mathcal V.
+$$
+
+*Proof.* Let $(S_i, K_i)$ be the trajectory under $H_i$, $i = 1, 2$, with $H_1 \leq H_2$ and $(S_1(0), K_1(0)) = (S_2(0), K_2(0)) = (S_0, K_0)$.
+
+**Step 1: $S_1(t) \geq S_2(t)$.** Define $\Delta S = S_1 - S_2$. Then
+
+$$
+\dot{\Delta S}
+=
+g(S_1) - g(S_2) - (H_1 - H_2)
+=
+[g(S_1) - g(S_2)] + (H_2 - H_1).
+$$
+
+Since $H_2 - H_1 \geq 0$: $\dot{\Delta S} \geq g(S_1) - g(S_2)$. Since $g$ is locally Lipschitz with constant $L_g$, when $\Delta S < 0$: $g(S_1) - g(S_2) \geq -L_g |S_1 - S_2| = L_g \Delta S$. So $\dot{\Delta S} \geq L_g \Delta S$ when $\Delta S < 0$. Since $\Delta S(0) = 0$, Gronwall's inequality gives $\Delta S(t) \geq 0$ for all $t$.
+
+**Step 2: $K_1(t) \leq K_2(t)$.** Define $\Delta K = K_1 - K_2$. Then
+
+$$
+\dot{\Delta K}
+=
+w(H_1) - w(H_2) - [\delta(K_1) - \delta(K_2)].
+$$
+
+Since $w$ is nondecreasing and $H_1 \leq H_2$: $w(H_1) - w(H_2) \leq 0$. Since $\delta$ is strictly increasing: if $\Delta K > 0$, then $\delta(K_1) > \delta(K_2)$, so $\dot{\Delta K} < 0$. If $\Delta K = 0$: $\dot{\Delta K} = w(H_1) - w(H_2) \leq 0$. With $\Delta K(0) = 0$: $\Delta K(t) \leq 0$ for all $t$.
+
+**Step 3: Viability equivalence.** If the minimum-harvest trajectory remains in $\mathcal V$, that admissible control witnesses existential viability. If it exits, every other admissible harvest produces an order-worse trajectory by Steps 1–2, so the order-upper safe set cannot contain an alternative viable path. This proves the equivalence. It does not claim that higher-harvest trajectories are safe when the minimum-harvest trajectory is safe. $\blacksquare$
+
+### 6.3 Unimodal resource–sink kernel
+
+**Assumptions (U).** $g \in C(\mathbb R_+)$ is strictly unimodal of carrying type: $g(0) = 0$, $g > 0$ on $(0, C)$, $g(C) = 0$, $g < 0$ on $(C, \infty)$, strictly increasing on $(0, S_m)$, strictly decreasing on $(S_m, C)$, with $H_* := g(S_m)$. $w$ nondecreasing, $w(0) = 0$. $\delta$ strictly increasing, $\delta(0) = 0$. Harvest: $H \in [H_{\min}, h_{\max}(S)]$ if $h_{\max}(S) \geq H_{\min}$, else $U^\sharp(S) = \varnothing$. $h_{\max}$ continuous, nondecreasing, $h_{\max}(0) = 0$. Constraint: $\mathcal V_{\mathrm{RS}} = [S_{\min}, \infty) \times [0, K_{\max}]$.
+
+Define $S_\sharp := \inf\{S \geq 0 : h_{\max}(S) \geq H_{\min}\}$ and $K^\dagger$ by $\delta(K^\dagger) = w(H_{\min})$.
+
+**Theorem 6.2 (Unimodal resource–sink kernel).** Assume (U) and $H_{\min} > 0$. Then $\operatorname{Viab}(\mathcal V_{\mathrm{RS}}) = \varnothing$ unless:
+
+(i) $H_{\min} \leq H_*$;
+(ii) $K^\dagger \leq K_{\max}$;
+(iii) $S_\sharp \leq S_+$;
+(iv) $S_{\min} \leq S_+$,
+
+where $S_\pm$ are the two roots of $g(S) = H_{\min}$ with $S_- < S_m < S_+$.
+
+When (i)–(iv) hold:
+
+$$
+\operatorname{Viab}(\mathcal V_{\mathrm{RS}})
+=
+[S_\circ, \infty) \times [0, K_{\max}],
+\qquad
+S_\circ := \max(S_{\min}, S_\sharp, S_-),
+$$
+
+and $H \equiv H_{\min}$ is a viable feedback.
+
+If $H_{\min} = 0$ and shutdown is admissible: $\operatorname{Viab}(\mathcal V_{\mathrm{RS}}) = \mathcal V_{\mathrm{RS}}$ if $S_{\min} \leq C$, else $\varnothing$.
+
+**Degenerate case $H_{\min} = H_*$.** The two roots coincide: $S_- = S_+ = S_m$. The kernel is
+
+$$
+[\max(S_{\min}, S_\sharp, S_m), \infty) \times [0, K_{\max}],
+$$
+
+provided (ii)–(iv) hold with $S_+ = S_m$. The feedback $H \equiv H_*$ is viable on this set.
+
+*Proof.* By Theorem 6.1, viability is equivalent to the minimum-harvest trajectory ($H \equiv H_{\min}$) remaining in $\mathcal V_{\mathrm{RS}}$.
+
+*Necessity of (i).* If $H_{\min} > H_*$: $\dot S = g(S) - H_{\min} \leq H_* - H_{\min} < 0$ uniformly. $S$ crosses $S_{\min}$ in finite time.
+
+*Necessity of (ii).* Under $H \geq H_{\min}$: $\dot K \geq w(H_{\min}) - \delta(K)$. The comparison ODE $\dot z = w(H_{\min}) - \delta(z)$ has globally attractive equilibrium $K^\dagger$ (Hale, 2009, Theorem 3.1). If $K^\dagger > K_{\max}$: $K$ eventually exceeds $K_{\max}$.
+
+*Necessity of (iii).* If $S_\sharp > S_+$: since $S_+ > S_m$ and $g$ is strictly decreasing on $(S_m, C)$, for $S \geq S_\sharp > S_+$: $g(S) < g(S_+) = H_{\min}$. So $\dot S = g(S) - H \leq g(S) - H_{\min} < 0$ for all admissible $H \geq H_{\min}$. No output-feasible trajectory can remain viable.
+
+*Necessity of (iv).* Same argument with $S_{\min}$ in place of $S_\sharp$.
+
+*Sufficiency.* $S_\circ \geq S_\sharp$ ensures $H_{\min}$ is admissible on $[S_\circ, \infty)$. $S_\circ \geq S_-$ and the phase-line analysis of $\dot S = g(S) - H_{\min}$ give invariance of $[S_\circ, \infty)$. Sink invariance follows from $K^\dagger \leq K_{\max}$.
+
+*Maximality.* $S < S_{\min}$: not in $\mathcal V_{\mathrm{RS}}$. $S < S_\sharp$: no admissible control. $S < S_-$: $\dot S \leq g(S) - H_{\min} < 0$, finite-time exit. For Fox-type growth $g(S) = rS \ln(C/S)$, the exit still occurs in finite time since $g(S) - H_{\min} \to -H_{\min} < 0$ as $S \to 0$. $\blacksquare$
+
+**Corollary 6.1 (Constrained MSY).** Among constant-harvest equilibria in $\mathcal V_{\mathrm{RS}}$:
+
+$$
+H_{\mathrm{MSY}}^{\mathrm{viab}}
+=
+\max\{g(S) : S \geq S_{\min},\; w(g(S)) \leq \delta(K_{\max})\}.
+$$
+
+Since $w$ is nondecreasing, the sink constraint is equivalent to $g(S) \leq H_{\mathrm{sink}}$, where $w(H_{\mathrm{sink}}) = \delta(K_{\max})$. The supremum of $g$ over the stock constraint $S \geq S_{\min}$ is $H_*$ when the floor does not exceed the MSY stock, and $g(S_{\min})$ when it does (because $g$ is strictly decreasing on $(S_m, C)$ and negative beyond $C$). Hence, when achievable,
+
+$$
+H_{\mathrm{MSY}}^{\mathrm{viab}}
+=
+\min\!\Bigl(\; H_* \cdot \mathbf{1}\{S_{\min} \leq S_m\}
+\;+\;
+g(S_{\min}) \cdot \mathbf{1}\{S_{\min} > S_m\},\; H_{\mathrm{sink}} \Bigr).
+$$
+
+*Remark.* The simpler expression $\min(H_*, H_{\mathrm{sink}})$ is valid only when $S_{\min} \leq S_m$. When the conservation floor lies above the MSY stock ($S_{\min} > S_m$), the maximum sustainable constant harvest is bounded by $g(S_{\min}) < H_*$: a stock floor above the MSY level genuinely reduces sustainable yield, a possibility the reduced formula omits.
+
+*Remark (exact overstatement identity).* The overstatement identity
+$$
+\min(H_*, H_{\mathrm{sink}}) - \min(g(S_{\min}), H_{\mathrm{sink}}) = H_* - g(S_{\min})
+$$
+holds precisely when the sink cap does not bind at the MSY yield, $H_* \le H_{\mathrm{sink}}$, and does not bind at the reduced floor, $g(S_{\min}) < H_{\mathrm{sink}}$; in particular it holds whenever $H_* \le H_{\mathrm{sink}}$. For instance at $r=1$, $C=10$, $S_{\min}=8$: $g(8)=\tfrac85 < \tfrac{25}{10}=H_*$, so the overstatement is $\tfrac{25}{10}-\tfrac85 = \tfrac{9}{10}$.
+
+**Remark 6.1 (Sink obstructions independent of the stock).** The sink coordinate alone can force the kernel to be empty, regardless of the resource stock. From $\dot K = w(H) - \delta(K)$ with $H \geq H_{\min} > 0$:
+
+- *(No assimilation.)* If $\delta \equiv 0$, then $\dot K = w(H) \geq w(H_{\min}) > 0$, so $K$ grows without bound and exceeds any finite ceiling $K_{\max}$ in finite time: $\operatorname{Viab}(\mathcal V_{\mathrm{RS}}) = \varnothing$.
+- *(Assimilation too weak.)* More generally, if $\delta(K_{\max}) < w(H_{\min})$, then even at the minimum harvest the sink load at the ceiling is positive: $\dot K = w(H_{\min}) - \delta(K_{\max}) > 0$ at $K = K_{\max}$, so $K$ exits above $K_{\max}$ in finite time, and the kernel is empty. This is exactly the negation of condition (ii) of Theorem 6.2 ($K^\dagger \le K_{\max}$, where $\delta(K^\dagger) = w(H_{\min})$), made explicit in terms of the sink ceiling.
+
+In a *closed unrecycled ledger* (no external disposal: $w(H)$ enters $K$ irreversibly with $\delta = 0$) and any positive output floor $Y_{\min} > 0$, the same mechanism forces $\operatorname{Viab}(\mathcal V) = \varnothing$: any positive throughput accumulates in the sink forever.
+
+### 6.4 Affine recharge kernel
+
+**Theorem 6.3.** Let $g(S) = R - aS$, $R > 0$, $a \geq 0$. Then $\operatorname{Viab}(\mathcal V_{\mathrm{RS}}) = \varnothing$ unless: (i) $H_{\min} \leq R - aS_{\min}$; (ii) $K^\dagger \leq K_{\max}$; (iii)–(iv) $S_\sharp, S_{\min} \leq (R - H_{\min})/a$ if $a > 0$. When satisfied:
+
+$$
+\operatorname{Viab}(\mathcal V_{\mathrm{RS}})
+=
+[\max(S_{\min}, S_\sharp), \infty) \times [0, K_{\max}].
+$$
+
+*Proof.* By the order-minimal control principle (Theorem 6.1), viability is equivalent to the minimum-harvest trajectory, $H \equiv H_{\min}$, remaining in $\mathcal V_{\mathrm{RS}}$. Under this control, $\dot S = R - aS - H_{\min}$, a linear scalar ODE with unique equilibrium $S^* = (R - H_{\min})/a$.
+
+*Necessity.* (i) If $H_{\min} > R - aS_{\min}$, then at every $S \ge S_{\min}$ we have $R - aS - H_{\min} \le R - aS_{\min} - H_{\min} < 0$, so $S$ decreases monotonically and crosses $S_{\min}$ in finite time. (iii)–(iv) If $a > 0$ and $S_{\min} > S^*$, then $\dot S = a(S^* - S) < 0$ on $[S_{\min}, \infty)$, so $S$ declines below $S_{\min}$. If $S_\sharp > S^*$, no admissible control exists for $S \in [S_{\min}, S_\sharp)$. (ii) As in Theorem 6.2, if $K^\dagger > K_{\max}$ the sink exceeds its ceiling.
+
+*Sufficiency.* If $S_{\min}, S_\sharp \le S^*$ and $H_{\min} \le R - aS_{\min}$, then $S^* \ge S_{\min}$, the minimum-harvest control is admissible on $[\max(S_{\min}, S_\sharp), \infty)$, and $\dot S = a(S^* - S) > 0$ for $S < S^*$ while $\dot S < 0$ for $S > S^*$. Hence every trajectory from $S_0 \ge \max(S_{\min}, S_\sharp)$ approaches $S^*$ and never drops below $\max(S_{\min}, S_\sharp)$. The sink stays below $K_{\max}$ by (ii). Thus $\operatorname{Viab}(\mathcal V_{\mathrm{RS}}) = [\max(S_{\min}, S_\sharp), \infty) \times [0, K_{\max}]$. $\blacksquare$
+
+### 6.5 Allee effects
+
+**Assumptions (A).** $g(0) = 0$, $0 < A < C$, $g < 0$ on $(0, A)$, $g > 0$ on $(A, C)$, $g < 0$ on $(C, \infty)$, unique maximizer $S_m \in (A, C)$.
+
+**Theorem 6.4 (Allee shutdown kernel).** Under (A), $H_{\min} = 0$, shutdown admissible:
+
+$$
+\operatorname{Viab}(\mathcal V_{\mathrm{RS}})
+=
+\begin{cases}
+\varnothing, & S_{\min} > C, \\
+[A, \infty) \times [0, K_{\max}] \cap \mathcal V_{\mathrm{RS}}, & S_{\min} \leq A, \\
+\mathcal V_{\mathrm{RS}}, & A < S_{\min} \leq C.
+\end{cases}
+$$
+
+In particular, if $S_{\min} < A$, the constraint set $\mathcal V_{\mathrm{RS}}$ is not invariant under shutdown, but the viability kernel is nonempty.
+
+*Proof.* Under the shutdown control $H = 0$, the stock obeys $\dot S = g(S)$ and the sink obeys $\dot K = -\delta(K) \le 0$, so $K$ is nonincreasing and stays within $[0, K_{\max}]$ whenever $K(0) \le K_{\max}$. It remains to determine the set of stock levels from which $S$ stays in $\mathcal V_{\mathrm{RS}}$.
+
+On the interval $(0, A)$ the growth function is negative, $g(S) < 0$, so $\dot S < 0$: any trajectory entering $(0, A)$ declines and exits below $A$. In particular, no $S_0 \in [S_{\min}, A)$ with $S_{\min} < A$ is viable. On $[A, C]$, we have $g(S) \ge 0$ with $g > 0$ on $(A, C)$ and $g(C) = 0$, so $S$ is nondecreasing and converges to the carrying capacity $C$; every such trajectory remains $\ge A$. On $(C, \infty)$, $g(S) < 0$, so trajectories return to $C$. Combining these, the set of viable stock levels is $[A, \infty)$ intersected with the feasibility requirement $S \ge S_{\min}$.
+
+If $S_{\min} > C$, then every point of $\mathcal V_{\mathrm{RS}}$ has $S \ge S_{\min} > C$, where $\dot S < 0$; the stock declines and, since the decline continues on $(A, C)$ where $g > 0$ is eventually overcome only if the trajectory reaches $A$, it exits below $S_{\min}$ in finite time, so the kernel is empty. If $S_{\min} \le A$, the viable stock set is $[A, \infty) \cap [S_{\min}, \infty) = [A, \infty)$, giving the stated kernel. If $A < S_{\min} \le C$, every point of $\mathcal V_{\mathrm{RS}}$ lies in $[S_{\min}, \infty) \subseteq [A, \infty)$, which is invariant, so the kernel is $\mathcal V_{\mathrm{RS}}$. $\blacksquare$
+
+**Theorem 6.5 (Allee kernel with output floor).** Under (A), $0 < H_{\min} < H_*$: no point with $S \leq A$ is viable. The kernel is $[\max(S_{\min}, S_\sharp, S_-), \infty) \times [0, K_{\max}]$ where $S_\pm$ are the roots of $g = H_{\min}$ in $(A, C)$.
+
+*Proof.* On $[0, A]$ the growth function is nonpositive, $g(S) \le 0$, while the required harvest is $H_{\min} > 0$, so $\dot S = g(S) - H \le -H_{\min} < 0$ for every admissible $H \ge H_{\min}$. Thus no point with $S \le A$ is viable: the stock declines monotonically below any floor. On $(A, \infty)$, the stock dynamics $\dot S = g(S) - H$ with $H \ge H_{\min} > 0$ satisfy the hypotheses of Theorem 6.2 with the unimodal-type growth (A) on $(A, \infty)$, whose relevant roots of $g(S) = H_{\min}$ are the two solutions $S_- < S_m < S_+$ lying in $(A, C)$. By Theorem 6.2 the viable stock levels on this region are $[\max(S_{\min}, S_\sharp, S_-), \infty)$, and the sink constraint gives $[0, K_{\max}]$. $\blacksquare$
+
+### 6.6 Four-stock mass balance
+
+The two-stock resource–sink system (6.1) is an open subsystem. The closed four-stock system extends the state to $(S, K, N, P) \in \mathbb R^4_+$ with dynamics:
+
+$$
+\dot S = g(S, N) - H,
+\qquad
+\dot K = \theta_K H - \theta_\delta K,
+\qquad
+\dot N = -g(S, N) + \theta_\delta K + I_N,
+\qquad
+\dot P = (1 - \theta_K) H - Q_P,
+$$
+
+where $N$ is the nutrient stock, $P$ is the product stock, $\theta_K$ is the sink-generation fraction, $\theta_\delta$ is the assimilation rate, $I_N$ is external nutrient input, and $Q_P$ is product disposal. The two-stock system is obtained by taking $N \gg 0$ (nutrient-rich limit) and setting $P$ off the model boundary.
+
+**Proposition 6.1 (Mass balance).** In the four-stock system:
+
+$$
+\frac{d}{dt}(S + K + N + P) = I_N - Q_P.
+$$
+
+If $I_N = Q_P = 0$, total mass is conserved.
+
+*Proof.* Adding the four equations:
+
+$$
+\dot S + \dot K + \dot N + \dot P
+=
+[g(S,N) - H] + [\theta_K H - \theta_\delta K] + [-g(S,N) + \theta_\delta K + I_N] + [(1-\theta_K)H - Q_P]
+=
+I_N - Q_P.
+$$
+$\blacksquare$
+
+**Remark.** The notation $\theta_K$ and $\theta_\delta$ is used here to avoid collision with the CES share parameter $\alpha$ and the allocation parameter $\beta$ used elsewhere. In the two-stock system, $w(H) = \theta_K H$ and $\delta(K) = \theta_\delta K$.
+
+### 6.7 Growth–sink feedback (pollution-suppressed growth)
+
+Replace the uncoupled resource–sink system by
+$$
+\dot S = g(S, K) - H, \qquad \dot K = w(H) - \delta(K),
+$$
+with $g \in C^1$, $g(0, K) = 0$, $\partial g/\partial K \le 0$ (pollution suppresses growth), and, for each fixed $K \in [0, K_{\max}]$, the slice $S \mapsto g(S, K)$ is of type (U) with carrying capacity $C(K)$ and peak $H_*(K)$, both nonincreasing in $K$.
+
+**Theorem 6.6 (Pollution-suppressed growth).**
+(a) The constant control $H \equiv H_{\min}$ dominates: for any admissible $H(\cdot) \ge H_{\min}$ the solution satisfies $S_{\min}(t) \ge S(t)$ and $K_{\min}(t) \le K(t)$, where $(S_{\min}, K_{\min})$ is the $H_{\min}$-solution from the same initial condition.
+(b) If $K^\dagger \le K_{\max}$ and the frozen law $g(\cdot, K_{\max})$ satisfies the four conditions of Theorem 6.2 at floor $H_{\min}$, then the rectangle $[S_\circ(K_{\max}), \infty) \times [0, K_{\max}]$ is contained in the kernel.
+(c) If $K^\dagger > K_{\max}$, or if $H_{\min} > H_*(K^\dagger)$, the kernel is empty.
+(d) In general the kernel is neither the $K_{\max}$-frozen rectangle nor the $K^\dagger$-frozen rectangle: its lower frontier is a strictly increasing curve $S = \Gamma(K)$, obtained as a backward $H_{\min}$-orbit of the planar system wherever $\partial g/\partial K < 0$.
+
+*Proof.* (a) In the coordinates $(-S, K)$ the pair forms a cooperative system, since $\partial(-\dot S)/\partial K = -\partial g/\partial K \ge 0$ and $\partial \dot K/\partial (-S) = 0$. Increasing $H$ increases $-\dot S$ and weakly increases $\dot K$; the Kamke comparison theorem (Hirsch and Smith, 2005) applied in these coordinates gives the claimed dominance: the $H_{\min}$-solution has the largest $S$ and the smallest $K$ among all admissible solutions from the same initial condition.
+
+(b) The worst (largest-$K$) frozen law $g(\cdot, K_{\max})$ dominates the true dynamics in the $-S$ direction, so its rectangle is invariant: because $\partial g/\partial K\le0$ and $K\le K_{\max}$, $g(S,K)\ge g(S,K_{\max})$. The $K_{\max}$-frozen growth law is therefore pessimistic. A stock rectangle invariant under that lower-growth law is an inner viable set for the true system, provided the sink ceiling is itself invariant.
+
+(c) If $K^\dagger > K_{\max}$, the sink exits by the mechanism of Remark 6.1 regardless of $S$. If $H_{\min} > H_*(K^\dagger)$, then at the sink equilibrium $K = K^\dagger$ the slice $g(\cdot, K^\dagger)$ has peak $H_*(K^\dagger) < H_{\min}$, so $\dot S = g(S, K^\dagger) - H \le H_*(K^\dagger) - H_{\min} < 0$ for every admissible $H$; the stock declines and exits, so the kernel is empty.
+
+(d) Let $\Gamma$ denote the frontier of the kernel in the $S$-$K$ plane, i.e. the lower envelope of viable stock levels as a function of the sink burden. Consider the backward $H_{\min}$-orbit of the planar system (4.3). Wherever $\partial g/\partial K < 0$, the frozen law is strictly decreasing in $K$, so the minimum viable stock $\Gamma(K)$ is strictly increasing in $K$: a larger sink burden suppresses growth and therefore requires a higher stock floor to sustain the same harvest. Concretely, fixing $K_1 < K_2$ with $\partial g/\partial K < 0$ on $[K_1, K_2]$, the $H_{\min}$-trajectory from the boundary point $(\Gamma(K_2), K_2)$ has, by backward integration and the strict monotonicity of $g$ in $K$, its $S$-coordinate strictly larger than $\Gamma(K_1)$ when it reaches $K = K_1$; symmetrically, any stock below $\Gamma(K)$ exits in finite time. Hence the frontier is a strictly increasing curve $S = \Gamma(K)$ in $K$: as the sink burden grows, the required stock floor rises. In particular it is neither the $K_{\max}$-frozen rectangle (which has constant frontier $S_\circ(K_{\max})$) nor the $K^\dagger$-frozen rectangle, so (d) holds. $\blacksquare$
+
+*Example.* With $g(S,K) = S(1 - S/C(K))$, $C(K) = 10/(1+0.05K)$, $w(H)=0.5H$, $\delta(K)=0.3K$, the $H_{\min}$-solution dominates the $H=1.0$ solution coordinatewise; the rectangle $[S_\circ(K_{\max}), \infty)\times[0,K_{\max}]$ is invariant; and the threshold stock needed for viability is increasing in $K$ ($0.528, 0.531, 0.534$ at $K = 0, 2, 4$), so the frontier is a strictly increasing non-rectangular curve.
+
+**Remark 6.2.** The rectangle structure of Theorem 6.2 depends on the stock–sink *decoupling*. Once growth is suppressed by the sink ($g_K \le 0$), the kernel is a proper curve-bounded set, not a product; this is the leading-order correction to the "worst-frozen" inner bound of Theorem 6.6(b).
+
+---
+
+## 7. Joint Resource–Capital–Consumption Viability
+
+### 7.1 The joint system
+
+The two consumption models — the harvest floor and the consumption floor — are unified. Let
+
+$$
+\begin{aligned}
+\dot S &= g(S) - H, \\
+\dot K &= w(H) - \delta_K(K), \\
+\dot A &= F(A, \eta(H)) - \delta_A A - c,
+\end{aligned}
+$$
+
+with controls
+
+$$
+H \in [H_{\mathrm{liv}}, h_{\max}(S)],
+\qquad
+c \geq c_{\min},
+$$
+
+and constraints
+
+$$
+S \geq S_{\min},
+\qquad
+K \leq K_{\max},
+\qquad
+A \geq 0.
+$$
+
+Here $\eta(H)$ is the useful product fraction of harvest, $F$ is the production function, and $c$ is consumption. Harvest has competing effects: lower $H$ improves $S$ and $K$, but higher $H$ may increase the resource flow $\eta(H)$ available for production and consumption. Therefore $H = H_{\mathrm{liv}}$ is not automatically optimal. This is the substantive joint-sustainability problem.
+
+### 7.2 Constant-harvest inner kernels
+
+For each constant $h$, define the ecological kernel $\mathcal K_{\mathrm{eco}}(h)$ using Theorem 6.2 with $H \equiv h$. Define the net capital surplus
+
+$$
+\Phi_h(A) = F(A, \eta(h)) - \delta_A A
+$$
+
+and
+
+$$
+c_{\max}(h) = \sup_{A \geq 0} \Phi_h(A).
+$$
+
+If $\Phi_h$ is concave, define
+
+$$
+A_-(h, c_{\min}) = \inf\{A \geq 0 : \Phi_h(A) \geq c_{\min}\}.
+$$
+
+**Theorem 7.1 (Constant-harvest joint kernel).** If $\mathcal K_{\mathrm{eco}}(h) \neq \varnothing$ and $c_{\min} \leq c_{\max}(h)$, then
+
+$$
+\mathcal K_{\mathrm{eco}}(h) \times [A_-(h, c_{\min}), \infty)
+$$
+
+is a controlled-invariant subset of the full joint viability kernel under $H(t) \equiv h$, $c(t) \equiv c_{\min}$. Therefore
+
+$$
+\bigcup_{h \in \mathcal H_{\mathrm{eco}}}
+\left[
+\mathcal K_{\mathrm{eco}}(h) \times [A_-(h, c_{\min}), \infty)
+\right]
+\subseteq
+\operatorname{Viab}(\mathcal V_{\mathrm{joint}}),
+$$
+
+where $\mathcal H_{\mathrm{eco}} = \{h : \mathcal K_{\mathrm{eco}}(h) \neq \varnothing\}$.
+
+This union is an inner approximation, not generally the full kernel: time-varying harvest can use capital and ecological stocks as buffers.
+
+*Proof.* For fixed $h \in \mathcal H_{\mathrm{eco}}$: Theorem 6.2 gives $\mathcal K_{\mathrm{eco}}(h) \neq \varnothing$ and invariance under $H \equiv h$. For the capital coordinate: $\dot A = \Phi_h(A) - c$. Under $c \equiv c_{\min}$: $\dot A = \Phi_h(A) - c_{\min}$. By the scalar concave viability lemma (Lemma 7.1 below), the capital kernel is $[A_-(h, c_{\min}), \infty)$ when $c_{\min} \leq c_{\max}(h)$.
+
+Since the resource–sink and capital dynamics are decoupled under constant $h$, the product is invariant. The union over $h$ gives the inner approximation. $\blacksquare$
+
+**Lemma 7.1 (Scalar concave capital viability).** Let $\Phi: \mathbb R_+ \to \mathbb R$ be continuous and concave. The system $\dot A = \Phi(A) - c$ with $c \geq c_{\min}$ and $A \geq 0$ has viability kernel $[A_-, \infty)$ where $A_- = \inf\{A \geq 0 : \Phi(A) \geq c_{\min}\}$, provided $\sup_A \Phi(A) \geq c_{\min}$. Otherwise the kernel is empty.
+
+*Proof.* Let $\Psi(A) = \Phi(A) - c_{\min}$, so the capital dynamics under the minimum-consumption control are $\dot A = \Psi(A)$. Since $\Phi$ is concave, $\Psi$ is concave, and the superlevel set $\{A \ge 0 : \Psi(A) \ge 0\}$ is a (possibly empty) closed interval; let $a = \inf\{A \ge 0 : \Psi(A) \ge 0\}$.
+
+Suppose first that $\sup_A \Phi(A) \ge c_{\min}$, so the superlevel set is nonempty and $a$ is finite. Because $\Psi$ is concave, it is nonincreasing to the right of its maximizer and nondecreasing to its left; in particular $\Psi(A) \ge 0$ for $A \in [a, b]$ and $\Psi(A) < 0$ for $A > b$, where $b = \sup\{A : \Psi(A) \ge 0\}$. We claim $[a, \infty)$ is invariant under $\dot A = \Psi(A)$.
+
+- For $A \in [a, b]$: $\Psi(A) \ge 0$, so $A$ is nondecreasing; it cannot exit to the left of $a$ because $\dot A \ge 0$ there.
+- For $A > b$: $\Psi(A) < 0$ (strict, since $b$ is the upper endpoint of the superlevel set and $\Psi$ is continuous and concave), so $A$ decreases toward $b \ge a$ and hence stays $\ge a$.
+- At $A = a$: $\Psi(a) \ge 0$, so the vector field points inward or is tangent; $A$ does not cross below $a$.
+
+The boundary $A = a$ is thus forward invariant, and by Nagumo's theorem the closed set $[a, \infty)$ is invariant under $\dot A = \Psi(A)$. The admissible choice $c\equiv c_{\min}$ therefore witnesses viability of every $A_0\ge a$. Larger consumption is not guaranteed safe and is not needed for the existential kernel claim. Hence the capital viability kernel contains $[a,\infty)$.
+
+For maximality: any $A_0 < a$ lies below the superlevel set, where $\Psi(A_0) < 0$ and hence $\dot A = \Phi(A) - c \le \Psi(A) < 0$ for every admissible $c \ge c_{\min}$; $A$ declines monotonically toward $0$, exiting below any floor in finite time. Thus no $A_0 < a$ is viable, and the kernel is exactly $[a, \infty) = [A_-, \infty)$.
+
+If instead $\sup_A \Phi(A) < c_{\min}$, then $\Psi(A) < 0$ for all $A$, so $\dot A = \Phi(A) - c \le \Psi(A) < 0$ for every admissible $c \ge c_{\min}$; every trajectory decreases to $0$ and exits, so the kernel is empty. $\blacksquare$
+
+### 7.3 Stationary joint viability
+
+**Definition 7.1.** Define the maximal stationary sustainable consumption
+
+$$
+c_{\mathrm{stat}}^*
+=
+\sup_{h \in \mathcal H_{\mathrm{eq}}}
+\sup_{A \geq 0}
+\left[
+F(A, \eta(h)) - \delta_A A
+\right],
+$$
+
+where $\mathcal H_{\mathrm{eq}}$ consists of harvests for which there exists $S \geq S_{\min}$ satisfying $g(S) = h$, $h \leq h_{\max}(S)$, and $w(h) \leq \delta_K(K_{\max})$.
+
+**Theorem 7.2 (Stationary joint viability).** A stationary sustainable state with $c \geq c_{\min}$ exists if and only if there are $h, S, A, K$ such that
+
+$$
+g(S) = h,
+\quad
+\delta_K(K) = w(h),
+\quad
+F(A, \eta(h)) - \delta_A A \geq c_{\min},
+$$
+
+and all constraints hold. Equivalently:
+
+- If $c_{\min} < c_{\mathrm{stat}}^*$: a stationary sustainable state exists.
+- If $c_{\min} > c_{\mathrm{stat}}^*$: none exists.
+- At equality: existence requires attainment of the supremum.
+
+*Proof.* At a stationary state: $\dot S = 0$ requires $g(S) = H = h$. $\dot K = 0$ requires $\delta_K(K) = w(h)$. $\dot A = 0$ requires $F(A, \eta(h)) - \delta_A A = c$. The constraint $c \geq c_{\min}$ requires $F(A, \eta(h)) - \delta_A A \geq c_{\min}$. Optimizing over $h \in \mathcal H_{\mathrm{eq}}$ and $A \geq 0$ gives $c_{\mathrm{stat}}^*$. $\blacksquare$
+
+**Remark.** A CES threshold computed at a preselected $h$ is only conditional. The joint problem optimizes over ecologically feasible harvests. The abstract and conclusion state this explicitly.
+
+### 7.4 Distributional floors
+
+**Theorem 7.3 (Distributional feasibility and physical side effects).** Let $G$ be the set of groups with consumption floors $c_{\min,g}$, and let $C_{\min} = \sum_g c_{\min,g}$. Let $Y = (1 - \beta)H$ denote the output available for distribution, where $\beta \in [0, 1)$ is the fraction of harvest lost to non-consumption uses.
+
+The distributional constraint $\mathcal V_{\mathrm{dist}} = \{c_g \geq c_{\min,g} \;\; \forall g\}$ is instantaneously feasible if and only if
+
+$$
+Y \geq C_{\min}
+$$
+
+and the sharing correspondence $\Gamma(Y) = \{(c_g) : c_g \geq c_{\min,g},\; \sum_g c_g = Y\}$ is onto.
+
+Meeting all floors by raising the harvest floor changes the physical harvest constraint from $H_{\min}$ to
+
+$$
+H_{\min}^{\mathrm{dist}} = \frac{C_{\min}}{1 - \beta}.
+$$
+
+The physical kernel is then governed by Theorem 6.2 with $H_{\min}$ replaced by $H_{\min}^{\mathrm{dist}}$. If the raised floor violates any of conditions (i)–(iv) of Theorem 6.2, the kernel is empty by the necessity parts of that theorem. Aggregate feasibility $Y \geq C_{\min}$ is necessary but not sufficient.
+
+Restricted sharing can empty the kernel despite aggregate feasibility: if the sharing correspondence $\Gamma$ is restricted so that some feasible $Y \geq C_{\min}$ admits no allocation meeting all floors, then $\mathcal V_{\mathrm{dist}}$ is not satisfied even though output is sufficient. This is a control-set restriction: by Theorem 2.2, shrinking $U$ cannot enlarge the kernel and may empty it.
+
+*Proof.* The allocation $\{c_g \geq c_{\min,g},\; \sum_g c_g = Y\}$ is nonempty iff $Y \geq C_{\min}$. If the sharing correspondence is onto, every feasible $Y \geq C_{\min}$ admits an allocation meeting all floors.
+
+Meeting all floors requires $H \geq H_{\min}^{\mathrm{dist}} = C_{\min}/(1-\beta)$. This changes the physical harvest constraint. The kernel is then Theorem 6.2 with $H_{\min}$ replaced by $H_{\min}^{\mathrm{dist}}$. If $H_{\min}^{\mathrm{dist}} > H_*$ (condition (i) of Theorem 6.2 fails), or if the sink constraint $K^\dagger(H_{\min}^{\mathrm{dist}}) > K_{\max}$ (condition (ii) fails), or if the output-feasibility constraint $S_\sharp(H_{\min}^{\mathrm{dist}}) > S_+(H_{\min}^{\mathrm{dist}})$ (condition (iii) fails), then the kernel is empty.
+
+Restricted sharing corresponds to a smaller control correspondence. By Theorem 2.2, this cannot enlarge the kernel and may empty it. $\blacksquare$
+
+---
+
+## 8. CES Substitution with Correct Dimensions
+
+### 8.1 Dimensionally correct CES
+
+Introduce reference scales $A_0, R_0, Y_0 > 0$:
+
+$$
+F(A, R)
+=
+Y_0
+\left[
+\alpha \left(\frac{A}{A_0}\right)^\rho
++
+(1-\alpha) \left(\frac{R}{R_0}\right)^\rho
+\right]^{1/\rho},
+\qquad
+\rho = \frac{\sigma - 1}{\sigma}.
+$$
+
+Now $F$ has units of output per unit time. The asymptotic productivity rate is
+
+$$
+\mu_A
+:=
+\lim_{A \to \infty} \frac{F(A, R)}{A}
+=
+\frac{Y_0}{A_0} \alpha^{1/\rho}
+=
+\frac{Y_0}{A_0} \alpha^{\sigma/(\sigma-1)}
+$$
+
+for $\sigma > 1$. Both $\mu_A$ and $\delta_A$ have units of inverse time.
+
+### 8.2 Net-surplus classification
+
+**Theorem 8.1.** For fixed $R > 0$, let $c_{\max}(R) = \sup_{A \geq 0} [F(A, R) - \delta_A A]$. Then:
+
+1. If $\sigma < 1$: $F(A, R)$ converges to a finite ceiling and $c_{\max}(R) < \infty$.
+2. If $\sigma = 1$: $F(A, R)/A \to 0$, so $c_{\max}(R) < \infty$ for $\delta_A > 0$.
+3. If $\sigma > 1$ and $\mu_A < \delta_A$: $c_{\max}(R) < \infty$.
+4. If $\sigma > 1$ and $\mu_A > \delta_A$: $c_{\max}(R) = +\infty$.
+5. If $\sigma > 1$ and $\mu_A = \delta_A$: $c_{\max}(R) = +\infty$.
+
+Thus the threshold is
+
+$$
+\frac{Y_0}{A_0} \alpha^{\sigma/(\sigma-1)}
+\gtreqless
+\delta_A,
+$$
+
+a comparison of two rates (both with units of inverse time).
+
+*Proof.*
+
+**(1) $\sigma < 1$.** Then $\rho < 0$. As $A \to \infty$: $(A/A_0)^\rho \to 0$, so $F(A, R) \to Y_0 [(1-\alpha)(R/R_0)^\rho]^{1/\rho} = Y_0 (1-\alpha)^{\sigma/(\sigma-1)} (R/R_0) < \infty$. Since $\delta_A A \to \infty$: $c_{\max}(R) < \infty$.
+
+**(2) $\sigma = 1$.** Cobb-Douglas: $F(A, R) = Y_0 (A/A_0)^\alpha (R/R_0)^{1-\alpha}$. Then $F(A, R)/A = Y_0 A^{\alpha-1} A_0^{-\alpha} (R/R_0)^{1-\alpha} \to 0$ since $\alpha < 1$. So $\Phi(A) = F(A, R) - \delta_A A \to -\infty$, and $c_{\max}(R) < \infty$.
+
+**(3) $\sigma > 1$, $\mu_A < \delta_A$.** Then $F(A, R)/A \to \mu_A < \delta_A$, so $\Phi(A)/A \to \mu_A - \delta_A < 0$, giving $\Phi(A) \to -\infty$. By concavity of $F$ in $A$: $c_{\max}(R) < \infty$.
+
+**(4) $\sigma > 1$, $\mu_A > \delta_A$.** Then $\Phi(A) \sim (\mu_A - \delta_A) A \to +\infty$, so $c_{\max}(R) = +\infty$.
+
+**(5) $\sigma > 1$, $\mu_A = \delta_A$.** Write $X = \alpha(A/A_0)^\rho$ and $Y = (1-\alpha)(R/R_0)^\rho$. For large $A$, $X \gg Y$, so by convexity of $z \mapsto z^{1/\rho}$ for $\rho \in (0, 1)$:
+
+$$
+(X + Y)^{1/\rho}
+\geq
+X^{1/\rho} + \frac{1}{\rho} X^{1/\rho - 1} Y.
+$$
+
+The first term gives $\mu_A A = \delta_A A$. The second term is $C A^{1/\sigma}$ with $C > 0$ and $1 - \rho = 1/\sigma > 0$. So $\Phi(A) \geq C A^{1/\sigma} \to +\infty$, giving $c_{\max}(R) = +\infty$.
+
+**Concavity of $F$ in $A$.** For $\rho \neq 0$: $\partial^2 F / \partial A^2 < 0$ since $1 - \rho > 0$ and all other factors are positive. For $\sigma = 1$: Cobb-Douglas concavity is standard. $\blacksquare$
+
+**Corollary 8.1 (Essentiality and unbounded-substitution thresholds).** In the dimensionally correct CES specification, $\sigma = 1$ is the sharp threshold for two distinct properties:
+
+1. **Essentiality of the resource flow $R$.** For all $\sigma \leq 1$: $F(A, 0) = 0$ for every $A$ (the resource is essential — zero resource flow gives zero output at every capital level). For $\sigma > 1$: $F(A, 0) = Y_0 \alpha^{\sigma/(\sigma-1)} (A/A_0) > 0$ for $A > 0$ (the resource is non-essential).
+
+2. **Unbounded substitution.** For fixed $R^* > 0$: $F(A, R^*) \to +\infty$ as $A \to \infty$ if and only if $\sigma \geq 1$; for $\sigma < 1$ it converges to the finite output ceiling $Y_0 (1-\alpha)^{\sigma/(\sigma-1)} (R^*/R_0)$.
+
+*Proof.* (1) For $\sigma < 1$ ($\rho < 0$): $(1-\alpha)(0/R_0)^\rho = +\infty$, so the bracketed sum diverges and $F(A,0) = [\ldots]^{1/\rho} \to 0$ (since $1/\rho < 0$). For $\sigma = 1$: Cobb-Douglas gives $F(A,0) = Y_0 (A/A_0)^\alpha 0^{1-\alpha} = 0$. For $\sigma > 1$ ($\rho > 0$): $(0/R_0)^\rho = 0$, so $F(A,0) = Y_0 [\alpha (A/A_0)^\rho]^{1/\rho} = Y_0 \alpha^{1/\rho} A/A_0 = Y_0 \alpha^{\sigma/(\sigma-1)} A/A_0$. (2) follows from Theorem 8.1 cases 1 and 3–5. $\blacksquare$
+
+**Remark 8.1 (Critical natural capital).** The essentiality threshold $\sigma = 1$ is *not* the threshold for joint strong–weak sustainability. For $\sigma < 1$, $F$ has the finite output ceiling of Corollary 8.1(2), so $c_{\max}(R)$ is finite (Theorem 8.1 case 1), and joint strong–weak sustainability holds whenever the consumption floor satisfies $c_{\min} \le \Phi^*$, a finite positive threshold — not arbitrarily large. The sharp condition for *arbitrarily large* consumption floors is $\sigma > 1$ with $\alpha^{\sigma/(\sigma-1)} > (A_0/Y_0)\,\delta_A$ (i.e., $\mu_A > \delta_A$; Theorem 8.1 case 4), which makes $c_{\max}(R) = +\infty$. This distinguishes "some substitutability" (feasible below the finite ceiling even for $\sigma < 1$) from "unbounded substitutability" (needed only for unbounded floors). The essentiality threshold $\sigma = 1$ governs the former property; the unbounded-substitution threshold governs, only jointly with $\mu_A > \delta_A$, whether the floor can be raised without bound.
+
+**Remark 8.2 (Exhaustible resources and capital-only sustainability).** Corollary 8.1(1) has a direct consequence for exhaustible resources. If the resource is non-essential ($\sigma > 1$), then $F(A, 0) > 0$: capital alone yields positive output with zero resource flow. Hence when $\sigma > 1$ and $\mu_A > \delta_A$ (equivalently $\alpha^{\sigma/(\sigma-1)} > (A_0/Y_0)\,\delta_A$), an exhaustible resource does **not** preclude strong sustainability. Under the shutdown policy $H \equiv 0$ the stock is held permanently (so $S \ge S_{\min}$ is trivially preserved; cf. Theorem 9.1), and the capital dynamics $\dot A = F(A, 0) - \delta_A A - c$ sustain positive consumption $c$ from capital alone. By contrast, when the resource is essential ($\sigma \le 1$, so $F(A, 0) = 0$), shutdown yields zero output, and strong sustainability of an exhaustible stock requires active extraction constrained by the cumulative budget of Theorem 9.1 / Corollary 9.1 — which is incompatible with permanent consumption drawn from the resource. Thus the inessentiality threshold $\sigma = 1$ is also the threshold separating exhaustible-resource regimes in which strong sustainability is attainable without any in situ extraction at all. This is an inessentiality consequence, distinct from the Hartwick investment rule: at a renewable stationary point the holding investment is $\delta_A A$, not $I = F_R R$.
+
+Unbounded $A$ and consumption in this specification concern a value aggregate, not unrestricted physical throughput. The finiteness constraint applies to natural stocks $S$ and sink burdens $K$, not to the value aggregate $A$. This is a consequence of the CES specification and should not be read as a physical law.
+
+---
+
+## 9. Exhaustible Resources
+
+**Theorem 9.1.** For $\dot S = -H(t)$ with $H(t) \geq 0$ and $S(0) = S_0$:
+
+$$
+S(t) = S_0 - \int_0^t H(s)\, ds.
+$$
+
+The floor $S \geq S_{\min}$ is preserved if and only if
+
+$$
+\int_0^\infty H(s)\, ds \leq S_0 - S_{\min}.
+$$
+
+Finite-time violation occurs if and only if there exists $T < \infty$ such that
+
+$$
+\int_0^T H(s)\, ds > S_0 - S_{\min}.
+$$
+
+In particular, if $H(t) \geq \varepsilon > 0$ for all $t$, exit occurs by time $T \leq (S_0 - S_{\min}) / \varepsilon$. But $H(t) > 0$ pointwise does not imply depletion: $H(t) = \varepsilon e^{-t}$ has finite cumulative extraction $\varepsilon$.
+
+*Proof.* Direct integration. $\blacksquare$
+
+**Corollary 9.1.** Strong sustainability (permanent $S \geq S_{\min} > 0$) under an exhaustible resource requires $\int_0^\infty H(s)\, ds \leq S_0 - S_{\min}$. If $S_{\min} > 0$, this bounds total cumulative extraction. The Hartwick rule maintains weak sustainability (constant consumption) but not strong sustainability.
+
+---
+
+## 10. Coupling: Upper Sets, Equilibria, Rescue
+
+### 10.1 Upper-set structure
+
+Consider $n$ coupled patches with cooperative minimal-harvest field $f_{\min}$:
+
+$$
+\dot S_i = g_i(S_i) - H_{\min,i} + d_i(S_{-i}),
+$$
+
+where $d_i$ is nondecreasing in each $S_j$ for $j \neq i$ (cooperative coupling). Let $\Omega = \prod_i [a_i, \infty)$.
+
+**Theorem 10.1.** The viability kernel of $\Omega$ under the minimal-harvest field is an upper set:
+
+$$
+x \in K, \;\; y \geq x
+\quad\Longrightarrow\quad
+y \in K.
+$$
+
+Under standard compactness and continuous-dependence assumptions, $K$ is closed.
+
+*Proof.* Let $x_0 \in K$ and $y_0 \geq x_0$. By the Kamke comparison theorem for cooperative systems (Hirsch and Smith, 2005, Theorem 3.1.1), the trajectory from $y_0$ dominates the trajectory from $x_0$ coordinatewise. Since the trajectory from $x_0$ stays in $\Omega$ and $\Omega$ is an upper set, the trajectory from $y_0$ also stays in $\Omega$. Hence $y_0 \in K$. Closedness follows from continuous dependence on initial conditions. $\blacksquare$
+
+**Remark.** This extends to $n$ patches without any equilibrium characterization. The equilibrium characterization is planar.
+
+### 10.2 Planar equilibrium criterion
+
+For the two-patch logistic system, the equivalence $K \neq \varnothing \iff f_{\min}$ has an equilibrium in $\Omega$ depends on planar dynamics, boundedness, and exclusion of cycles. It is stated only for the two-dimensional model.
+
+**Theorem 10.2.** For the planar two-patch logistic system with $d > 0$:
+
+$$
+\operatorname{Viab}(\mathcal V) \neq \varnothing
+\iff
+f_{\min} \text{ has at least one equilibrium in } \Omega.
+$$
+
+*Proof.* $(\Leftarrow)$: Constant trajectory at the equilibrium. $(\Rightarrow)$: By Theorem 6.1, viability implies the $f_{\min}$-orbit stays in $\Omega$. Boundedness follows from the logistic quadratic bound. The $\omega$-limit set is nonempty, compact, connected, in $\Omega$. For $d > 0$, $f_{\min}$ is strongly cooperative; strongly monotone planar flows have no nonconstant periodic orbits (Hirsch, 1988; Smith, 1995, Theorem 2.3.1). By Poincaré-Bendixson (Perko, 2001, §3.3), the $\omega$-limit set contains an equilibrium in $\Omega$. $\blacksquare$
+
+**Necessary condition.** If $e \in \Omega$ is an equilibrium, then adding the two equilibrium equations gives $g_1(e_1) + g_2(e_2) = H_{\min,1} + H_{\min,2}$. Since $e_i \geq a_i$: $H_{\min,1} + H_{\min,2} \leq g_1^*(a_1) + g_2^*(a_2)$, where $g_i^*(a_i) = \sup_{s \geq a_i} g_i(s)$.
+
+**Remark 10.2 (Super-equilibrium criterion).** For cooperative minimal-harvest fields the equilibrium condition of Theorem 10.2 can be relaxed to a *super-equilibrium*: the kernel is nonempty if and only if there exists $x \in \Omega$ with $f_{\min}(x) \ge 0$ coordinatewise. This holds because for a cooperative field, the trajectory from a point where the vector field points weakly into $\Omega$ cannot leave the upper set (Theorem 10.1), and any viable orbit has an $\omega$-limit point in $\Omega$ at which $f_{\min} \ge 0$. Unlike the equilibrium test, the super-equilibrium test is checkable directly (e.g. by grid search or by monotone root finding) without solving the algebraic equilibrium system of Theorem 10.3. In the identical-patch system the super-equilibrium $(a, s^*)$ exists; in the asymmetric MSY counterexample none does, consistent with its empty kernel.
+
+### 10.3 MSY counterexample
+
+**Counterexample 10.1 (Emptiness despite factorwise viability at MSY).** Take $d > 0$, $C_1 \neq C_2$, $H_{\min,i} = r_i C_i / 4$ (MSY level). Each isolated system has kernel $[C_i/2, \infty) \times [0, K_{\max,i}]$.
+
+At MSY: $\phi_i(S_i) = -\frac{r_i}{C_i}(S_i - C_i/2)^2 \leq 0$ with equality only at $S_i = C_i/2$. Adding the equilibrium equations requires $\phi_1 + \phi_2 = 0$, so both must vanish: $S_i = C_i/2$. Substituting into the first equation: $d(C_2/2 - C_1/2) = 0$, requiring $C_1 = C_2$. For $C_1 \neq C_2$: no equilibrium, empty kernel.
+
+This counterexample is specific to the MSY parameter choice. For $H_{\min,i} < r_i C_i / 4$, equilibria may exist.
+
+**Remark 10.1 (Jump discontinuity in the coupling strength).** The failure is sharp at the MSY point in the coupling parameter $d$. At $d = 0$ the patches decouple, and by the product structure (Theorem 2.3) $\operatorname{Viab}(\mathcal V; d=0) = \prod_i \bigl([C_i/2,\infty) \times [0,K_{\max,i}]\bigr)$, which is nonempty. For every $d > 0$, Counterexample 10.1 shows $\operatorname{Viab}(\mathcal V; d) = \varnothing$. Hence the map $d \mapsto \operatorname{Viab}(\mathcal V; d)$ has a jump discontinuity at $d = 0$ whenever $C_1 \neq C_2$ at the MSY harvest levels. This is a concrete instance of the non-continuity of the viability operator in the coupling strength: an arbitrarily small cooperative coupling destroys coupled viability that the uncoupled factors individually enjoy.
+
+### 10.4 Coupling-rescue example
+
+**Example 10.1 (Coupling creates viability absent in a factor).** Take $g_i(s) = s(1-s)$, $d = 0.2$. Choose $(S_1^*, S_2^*) = (0.5, 0.8)$. Define harvest floors by the equilibrium equations:
+
+$$
+H_{\min,1} = g_1(0.5) + 0.2(0.8 - 0.5) = 0.25 + 0.06 = 0.31,
+$$
+
+$$
+H_{\min,2} = g_2(0.8) + 0.2(0.5 - 0.8) = 0.16 - 0.06 = 0.10.
+$$
+
+Patch 1 in isolation: $\max_s g_1(s) = 0.25 < H_{\min,1} = 0.31$. So patch 1 is not viable in isolation.
+
+Yet the coupled system has the equilibrium $(S_1^*, S_2^*) = (0.5, 0.8)$, so its kernel is nonempty, provided sink and harvest-capacity constraints hold. This supplies an explicit example showing that coupling can create viability absent in a factor.
+
+### 10.5 Generic barrier structure
+
+When the corner Nagumo condition fails and an equilibrium exists in $\Omega$, the $S$-kernel is a proper closed unbounded upper set. Its frontier is a union of $f_{\min}$-orbits through tangency points on $\partial \Omega$.
+
+**Conjecture 10.1 (Generic non-polyhedrality).** For an appropriately specified open dense parameter class satisfying regularity, transversality, and nondegeneracy conditions, the interior viability barrier is expected to have nonzero curvature and hence to be non-polyhedral. The earlier algebraic argument did not eliminate the existential slope and intercept variables and therefore did not prove this generic statement.
+
+**Proposition 10.1 (Local curvature certificate).** If a regular frontier is locally represented by a $C^2$ graph $S_2=\Gamma(S_1)$ and $\Gamma''(S_1^0)\ne0$, then a neighborhood of that frontier point is not contained in a finite union of affine line segments and is locally non-polyhedral.
+
+*Proof.* A polyhedral planar frontier is piecewise affine and has zero second derivative on the interior of each regular segment. Nonzero curvature at a regular point excludes such a local representation. $\blacksquare$
+
+A stronger parametric genericity theorem requires a complete curvature or transversality proof and remains open.
+
+**Example 10.2 (Identical-patch orbital barrier; explicit).** Take two identical Schaefer patches $g(s) = s(1-s)$ (so $r = C = 1$), harvest floor $H_{\min} = 0.15 < H_* = 0.25$, floor level $a = 0.1$, and diffusion $d = 0.2$. The roots of $g(S) = H_{\min}$ are $S_- = \tfrac12(1 - \sqrt{0.4}) \approx 0.1838$ and $S_+ = \tfrac12(1 + \sqrt{0.4}) \approx 0.8162$. The corner Nagumo condition (Theorem 10.4) fails, since $\varphi(a) = a(1-a) - H_{\min} = -0.06 < 0$. The tangency height on the face $\{S_1 = a\}$ is $s^* = a - \varphi(a)/d = 0.1 + 0.3 = 0.4$, giving the two tangency points $(0.1, 0.4)$ and $(0.4, 0.1)$; at $(0.1, 0.4)$ the field is $f = \bigl(0,\; \varphi(0.4) + d(0.1 - 0.4)\bigr) = (0, 0.03)$, vertical and upward. The diagonal equilibrium $(S_+, S_+) \in \Omega$ exists, so by Theorem 10.2 the kernel is nonempty. It is the proper unbounded upper set
+$$
+\operatorname{Viab}_S = \{S_2 \ge \Gamma(S_1)\} \cap \{S_1 \ge \Gamma(S_2)\},
+$$
+where the orbital frontier $\Gamma$ satisfies the Cauchy problem
+$$
+\frac{d\Gamma}{dS_1}
+=
+\frac{\varphi(\Gamma) + d(S_1 - \Gamma)}{\varphi(S_1) + d(\Gamma - S_1)},
+\qquad
+\Gamma(0.1^+) = 0.4,\quad \Gamma'(0.1^+) = +\infty,
+$$
+and the second barrier is the reflection of $\Gamma$ across the diagonal. By symmetry the two frontiers descend from the tangencies to meet the diagonal at the equilibrium $(S_-, S_-)$, and $[S_-, \infty)^2 \subseteq \operatorname{Viab}_S$ is invariant. The frontier is non-polyhedral: numerically it decreases steeply from $(0.1, 0.4)$, with $\Gamma(0.12) \in (0.25, 0.38)$ (e.g. a sample field at $(0.12, 0.25)$ is pointing toward egress, while $(0.12, 0.38)$ and $(0.20, 0.35)$ enter the interior toward $(S_+, S_+)$). This numerical example is consistent with a curved orbital barrier, but it does not prove the generic conjecture or establish nonzero curvature without a derivative calculation.
+
+**Remark.** For identical patches the nonemptiness criterion is insensitive to $d$: $[S_-, \infty)^2$ is invariant for every $d \ge 0$, so coupling neither creates nor destroys viability here — in contrast to the asymmetric MSY counterexample (Counterexample 10.1, which specifically requires $C_1 \neq C_2$). Diffusion subsidises only the strip $a < S_-$, precisely where the corner Nagumo condition fails.
+
+### 10.6 Algebraic equilibrium criterion
+
+**Theorem 10.3.** For $d > 0$ and logistic growth, define $b_i = r_i / C_i$ and $Q_i(s) = b_i s^2 + (d - r_i)s + H_{\min,i}$. Then $S = (S_1, S_2) \in \Omega$ is an equilibrium of $f_{\min}$ iff $S_2 = Q_1(S_1)/d$ and $S_1$ is a real root of the quartic
+
+$$
+P(S_1) = b_2 Q_1(S_1)^2 + d(d - r_2) Q_1(S_1) + H_{\min,2} d^2 - d^3 S_1.
+$$
+
+The equilibrium lies in $\Omega$ iff $S_1 \geq a_1$ and $Q_1(S_1)/d \geq a_2$. By Sturm's theorem (Basu, Pollack, and Roy, 2006), this is decidable by a finite algebraic procedure.
+
+*Proof.* The equilibrium equations are $\phi_i(S_i) + d(S_j - S_i) = 0$. The first gives $dS_2 = Q_1(S_1)$. Substituting into the second and multiplying by $d^2$ gives the quartic. $\blacksquare$
+
+### 10.7 Corner Nagumo condition
+
+**Theorem 10.4.** $\Omega$ is invariant under $f_{\min}$ iff the corner Nagumo condition holds:
+
+$$
+\phi_1(a_1) + d(a_2 - a_1) \geq 0,
+\qquad
+\phi_2(a_2) + d(a_1 - a_2) \geq 0.
+$$
+
+When this holds: $\operatorname{Viab}(\mathcal V) = \Omega \times [0, K_{\max,1}] \times [0, K_{\max,2}]$.
+
+*Proof.* On $S_1 = a_1$: $f_1(a_1, S_2) = \phi_1(a_1) + d(S_2 - a_1)$ is nondecreasing in $S_2$ (since $d \geq 0$), so nonnegativity on the whole face iff nonnegativity at the corner $(a_1, a_2)$. Nagumo's theorem (Aubin, 1991) gives invariance. $\blacksquare$
+
+---
+
+## 11. Cascade Networks
+
+### 11.1 Definitions
+
+A finite threshold cascade network is a directed graph $(V, E)$ with node set $V$, $|V| < \infty$. For each node $i$: input neighborhood $\mathrm{In}(i) = \{j : (j, i) \in E\}$, edge weights $a_{ji} \geq 0$, threshold $\theta_i > 0$. Load: $L_i(F) = \sum_{j \in F \cap \mathrm{In}(i)} a_{ji}$. Node $i \notin F$ fails when $L_i(F) > \theta_i$. Reset: $R(F) = F \cup \{i \notin F : L_i(F) > \theta_i\}$. Cascade: $F_{t+1} = R(F_t)$, $F_\infty = \bigcup_t F_t$.
+
+Node $i$ is $k$-redundant if $\sum_{j \in A} a_{ji} \leq \theta_i$ for every $A \subseteq \mathrm{In}(i)$ with $|A| \leq k$.
+
+### 11.2 Finite termination
+
+**Theorem 11.1.** For finite $V$, monotone loads, irreversible failures: the cascade terminates in at most $|V| - |F_0|$ strict rounds.
+
+*Proof.* $F_t \subseteq F_{t+1}$; at most $|V| - |F_0|$ nodes can be added. $\blacksquare$
+
+### 11.3 Containment theorems
+
+**Theorem 11.2 ($k$-redundancy).** If every node is $k$-redundant and $|F_0| \leq k$: $F_\infty = F_0$.
+
+*Proof.* Induction. For $i \notin F_0$: $|F_0 \cap \mathrm{In}(i)| \leq k$, so $L_i(F_0) \leq \theta_i$. No new failures. $\blacksquare$
+
+**Theorem 11.3 (Row-sum containment).** If $\|M\|_\infty < 1$ with $M_{ij} = a_{ji}/\theta_i$: $F_\infty = F_0$ for every seed.
+
+*Proof.* $\|M\|_\infty < 1$ means $\sum_j a_{ji} < \theta_i$ for all $i$. By monotonicity: $L_i(F) \leq L_i(V) = \sum_j a_{ji} < \theta_i$. No non-seed node fails. $\blacksquare$
+
+### 11.4 Spectral radius negative result
+
+**Theorem 11.4.** There is no finite uniform bound on $|F_\infty \setminus F_0|$ in terms of $\rho(M) < 1$ alone.
+
+*Proof.* Fix $N \geq 1$. Construct a directed chain $0 \to 1 \to \cdots \to N$ with $F_0 = \{0\}$, $\theta_i = 1$, $a_{i,i-1} = 2$. The normalized matrix $M$ is strictly lower triangular, hence nilpotent, so $\rho(M) = 0 < 1$. But since $2 > 1$, the cascade propagates through every node: $F_\infty = \{0, 1, \ldots, N\}$, giving $|F_\infty \setminus F_0| = N$. Since $N$ is arbitrary, no finite bound exists. $\blacksquare$
+
+### 11.5 Dynamic cascade loads
+
+The cascade theorems above assume static loads $L_i(F)$ depending only on the failure set $F$. In coupled socio-ecological systems, loads may depend on continuous states: $L_i(x_c, F)$, where $x_c$ is the physical state.
+
+**Theorem 11.5 (Dynamic cascade safety).** Suppose dynamic loads have the form $L_i(x_c, F)$, where $x_c$ is the continuous state. Assume:
+
+1. failures are irreversible;
+2. $L_i(x_c, F)$ is monotone nondecreasing in $F$;
+3. the physical state remains in a protection set $P$;
+4. for all $x_c \in P$ and the initial failure set $F_0$,
+   $$
+   L_i(x_c, F_0) \leq \theta_i
+   \qquad
+   \forall i \notin F_0.
+   $$
+
+Then no cascade jump occurs at any time, and $F(t) = F_0$ for all $t \geq 0$.
+
+*Proof.* At any time $t$, if $F(t) = F_0$ and $x_c(t) \in P$, assumption 4 gives $L_i(x_c(t), F_0) \leq \theta_i$ for all $i \notin F_0$. Hence the guard set is empty. No jump occurs. Since no jump occurs, $F(t)$ remains $F_0$, and the condition persists. $\blacksquare$
+
+**Remark.** Theorem 11.1 (finite termination) remains a valid counting statement under irreversible failures even with dynamic loads: at most $|V| - |F_0|$ nodes can fail. However, the timing and triggering of failures depend on the continuous-state trajectory. Containment results (Theorems 11.2, 11.3) require the stronger condition of Theorem 11.5 when loads are dynamic. The viability kernel of the fully coupled hybrid system outside the protection set of Theorem 11.5 is not computed; this is Open Problem 18.1.
+
+---
+
+## 12. Commons Games and Over-Extraction
+
+### 12.1 The continuous commons game
+
+**Definition 12.1.** $n$ agents choose $h_i \in [0, h_i^{\max}]$, $H = \sum_i h_i$, with payoff
+
+$$
+U_i = \pi_i(h_i) - d_i(H),
+$$
+
+where $\pi_i$ is strictly increasing, strictly concave, $C^2$, and $d_i$ is nondecreasing, convex, $C^2$.
+
+**Lemma 12.1 (Conditional uniqueness).** If the weighted pseudo-gradient of the game satisfies Rosen's diagonal strict concavity condition on the compact convex action domain, the Nash equilibrium is unique.
+
+For the special common-damage subclass $d_i=d$ for all $i$, strictly concave private returns and convex common damage give a direct sufficient condition with equal positive weights: the symmetric pseudo-Jacobian has quadratic form
+
+$$
+\sum_i \pi_i''(h_i)v_i^2-d''(H)\left(\sum_i v_i\right)^2<0
+$$
+
+for every nonzero $v$. Thus DSC holds in that subclass. For heterogeneous $d_i$, convexity $d_i''\ge0$ alone does not establish DSC; the exact weighted symmetric pseudo-Jacobian must be verified or uniqueness must be proved directly for a more restricted aggregative class.
+
+*Proof.* The first statement is Rosen's theorem. The displayed quadratic form proves negative definiteness in the common-damage subclass. No heterogeneous shortcut is used. $\blacksquare$
+
+### 12.2 The tragedy of the commons
+
+**Theorem 12.1 (Over-extraction).** Let $H^{\mathrm{Nash}}$ denote the Nash equilibrium aggregate harvest and $H^{\mathrm{soc}}$ the social optimum. Then
+
+$$
+H^{\mathrm{Nash}} \;\geq\; H^{\mathrm{soc}}.
+$$
+
+The inequality is strict, $H^{\mathrm{Nash}} > H^{\mathrm{soc}}$, provided that for every agent $i$ there exists some $j \neq i$ with $d_j'(H^{\mathrm{Nash}}) > 0$ — i.e., each agent's extraction imposes a genuine marginal damage on at least one other agent. If instead $d_j' \equiv 0$ for all $j$ (no payoff depends on aggregate extraction), the game decouples and $H^{\mathrm{Nash}} = H^{\mathrm{soc}}$; strict inequality is then false.
+
+If $\pi_i'(h_i^{\max}) > d_i'(\sum_j h_j^{\max})$ for all $i$: the Nash equilibrium is the corner $h_i^* = h_i^{\max}$.
+
+*Proof.* The Nash first-order condition for agent $i$ is
+
+$$
+\pi_i'(h_i^{\mathrm{Nash}}) = d_i'(H^{\mathrm{Nash}}).
+$$
+
+The social optimum maximizes $\sum_i [\pi_i(h_i) - d_i(H)]$; its first-order condition is
+
+$$
+\pi_i'(h_i^{\mathrm{soc}}) = \sum_j d_j'(H^{\mathrm{soc}}).
+$$
+
+Since each $d_j' \geq 0$ (convexity), $h_i^{\mathrm{soc}}$ is interior and satisfies the above. Suppose, toward a contradiction, that $H^{\mathrm{soc}} > H^{\mathrm{Nash}}$. Because each $d_j$ is convex, each $d_j'$ is nondecreasing, so $\sum_j d_j'(H^{\mathrm{soc}}) \geq \sum_j d_j'(H^{\mathrm{Nash}}) \geq d_i'(H^{\mathrm{Nash}})$. Therefore for every $i$,
+
+$$
+\pi_i'(h_i^{\mathrm{soc}}) = \sum_j d_j'(H^{\mathrm{soc}}) \geq d_i'(H^{\mathrm{Nash}}) = \pi_i'(h_i^{\mathrm{Nash}}).
+$$
+
+Since $\pi_i'$ is strictly decreasing, this forces $h_i^{\mathrm{soc}} \leq h_i^{\mathrm{Nash}}$ for every $i$, hence $H^{\mathrm{soc}} \leq H^{\mathrm{Nash}}$, contradicting $H^{\mathrm{soc}} > H^{\mathrm{Nash}}$. Thus $H^{\mathrm{soc}} \leq H^{\mathrm{Nash}}$.
+
+For strictness: if for each $i$ there is $j \neq i$ with $d_j'(H^{\mathrm{Nash}}) > 0$, then $\sum_j d_j'(H^{\mathrm{Nash}}) > d_i'(H^{\mathrm{Nash}})$, so the marginal comparison is strict at the Nash allocation, yielding $h_i^{\mathrm{soc}} < h_i^{\mathrm{Nash}}$ for every $i$ and hence $H^{\mathrm{soc}} < H^{\mathrm{Nash}}$.
+
+For the corner result: if $\pi_i'(h_i^{\max}) > d_i'(\sum_j h_j^{\max})$ for all $i$, then the marginal payoff is positive at $h_i^{\max}$ for every agent, so the best response is the boundary. $\blacksquare$
+
+**Remark.** The weak inequality $H^{\mathrm{Nash}} \geq H^{\mathrm{soc}}$ holds unconditionally for this payoff structure. The strong form $H^{\mathrm{Nash}} > H^{\mathrm{soc}}$ — tragedy-of-the-commons over-extraction — requires a genuine cross-agent damage externality: when every $d_j'$ vanishes (decoupled extraction), the aggregate harvests coincide.
+
+**Remark 12.1 (Clark under-extraction: rent dissipation and the golden rule).** A second, complementary obstruction arises when extraction is set by a *private owner or by open access* rather than by a planner, in a Schaefer-style model $\dot S = g(S) - H$, $g$ strictly unimodal. Let $H$ be a control with cost $c$ per unit effort and price $p$ per unit harvest, so private profit per unit effort is $p q S - c$ at stock $S$ with catchability $q$.
+
+- *(Open access / rent dissipation.)* The open-access (biologically over-exploited) equilibrium is the rent-dissipation stock $S_{\mathrm{OA}} = c/(pq)$, where per-unit-effort profit vanishes. If the conservation floor lies above it, $S_{\min} > S_{\mathrm{OA}}$, then any open-access equilibrium is infeasible: the system is driven to a stock strictly below $S_{\min}$, so $\mathcal V_{\mathrm{str}}$ is exited.
+- *(Private / golden rule.)* The rent-maximizing steady state satisfies the modified golden rule $g'(S_\rho) = \rho$ for discount rate $\rho \ge 0$. As $\rho$ rises, $S_\rho$ falls toward the MSY-over-exploitation side; a floor $S_{\min} > S_\rho$ is again violated by the private optimum.
+- *(Instrument correction.)* An instrument that raises the effective stock toward $S_{\min}$ must move the *equilibrium* stock. A per-unit harvest tax $t$ shifts the open-access stock to $S_{\mathrm{OA}}(t) = c/((p - t)q)$, which is increasing in $t$. Hence a harvest tax raises the open-access stock, restoring it above any floor $S_{\min} < S_{\mathrm{OA}}(t)$ for $t$ large enough. It is the open-access stock, not a fixed floor, that the tax shifts.
+
+This supplies a pure extractor-side obstruction (under-extraction / over-depletion toward $S_{\mathrm{OA}}$) that complements the game-theoretic over-extraction of Theorem 12.1 and the institutional quota rescue of Section 12.4.
+
+### 12.3 Commons obstruction
+
+**Definition 12.2 (Safe aggregate-harvest capacity).** At a stock boundary or on a declared safe strip, define $H_{\rm safe}(S)$ through the tangent requirement $g(S)-H\ge0$, or state the equivalent drift condition directly.
+
+**Theorem 12.2 (Finite-time commons obstruction).** Suppose that under the implemented Nash feedback there are $a>0$ and $\varepsilon>0$ such that
+
+$$
+g(S)-H^{\rm Nash}(S)\le-\varepsilon
+$$
+
+for every $S\in[S_{\min},S_{\min}+a]$, and every relevant trajectory is either initially in this strip or is proved to reach it. Then each such trajectory exits below $S_{\min}$ within at most $a/\varepsilon$ after entering the strip.
+
+*Proof.* While in the strip, $\dot S\le-\varepsilon$. Integration gives $S(t)\le S(t_0)-\varepsilon(t-t_0)$, so the lower floor is reached within the stated time. $\blacksquare$
+
+Strictly negative drift without a uniform margin does not by itself imply finite-time exit.
+
+### 12.4 Institutional rescue
+
+**Corollary 12.1 (Quota rescue, conditional).** Let the mandatory aggregate floor and safe capacity define a nonempty corridor
+
+$$
+H_{\min}\le H_Q(S)\le H_{\rm safe}(S).
+$$
+
+If the quota institution makes every realized aggregate harvest remain in this corridor and the remaining hypotheses of the resource–sink viability theorem hold, the quota policy supplies a viable witness. A nominal quota below the mandatory floor is inadmissible; equality is required when the floor binds. The enforcement premise must be supplied by a corrected sanction or implementation theorem.
+
+---
+
+## 13. Institutions as Implementation Operators
+
+### 13.1 Institutional representation
+
+An institution is represented by
+
+$$
+\mathfrak I = (\mathcal I, \Gamma, \mathcal E, \mathcal A),
+$$
+
+where $\mathcal I$ is the information structure, $\Gamma(B)$ is the set of controls institutionally implementable at belief $B$, $\mathcal E$ is an enforcement correspondence mapping prescribed controls to realized controls, and $\mathcal A$ is the allocation correspondence. The effective control set is
+
+$$
+U_{\mathrm{eff}}(B)
+=
+\left\{
+u_{\mathrm{real}} :
+\exists\, u_{\mathrm{pres}} \in \Gamma(B),\;\;
+u_{\mathrm{real}} \in \mathcal E(B, u_{\mathrm{pres}})
+\right\}.
+$$
+
+### 13.2 Institutional equivalence
+
+**Theorem 13.1.** If two institutions induce the same belief dynamics, effective control correspondence, allocation correspondence, and physical actuator map, then they have the same viability kernel.
+
+*Proof.* The viability kernel depends only on the state space, dynamics, constraint set, and admissible control correspondence. If two institutions induce the same effective control correspondence $U_{\mathrm{eff}}(B)$ for every reachable belief $B$, the same allocation correspondence, and the same physical dynamics, then the set of admissible trajectories is identical, and the viability kernel is the same. Labels and design-principle classifications do not affect the kernel except through these induced objects. $\blacksquare$
+
+### 13.3 Robust institutional implementation
+
+**Definition 13.3 (Institutionally robust safe prescription).** A prescribed action $u \in \Gamma(B)$ is institutionally robustly safe for $Q$ if
+
+$$
+f(x, \tilde u, d) \in T_Q(x)
+$$
+
+for every $x \in B \cap Q$, every realized action $\tilde u \in \mathcal E(B, u)$, and every disturbance $d \in D(x)$.
+
+**Theorem 13.2.** Let $Q \subseteq \mathcal V$ be closed. For every reachable information set $B$ intersecting $Q$, suppose
+
+$$
+U_{\mathrm{eff}}(B)
+\cap
+\bigcap_{x \in B \cap Q}
+\left\{
+u :
+F(x, u, D(x)) \subseteq T_Q(x)
+\right\}
+\neq \varnothing.
+$$
+
+Then $Q$ is robustly viable under the institution.
+
+*Proof.* The condition states that for every belief state $B$ that could arise while the system is in $Q$, there exists a control that is (a) institutionally implementable and (b) keeps the trajectory in $Q$ for every state in $B \cap Q$ and every admissible disturbance. By the measurable selection theorem and Nagumo's theorem applied to the belief-state dynamics, $Q$ is robustly controlled invariant. $\blacksquare$
+
+### 13.4 Graduated sanctions
+
+**Theorem 13.3 (Sanction conditions).** Let $q_i$ be a quota. A sanction condition making payoff strictly decrease for $h_i>q_i$ proves only that no upward deviation is profitable. To make $q_i$ a Nash best response, payoff must also be nondecreasing up to $q_i$; to make it the unique best response, it must be strictly increasing below and strictly decreasing above the quota. A dominant-strategy claim additionally requires these signs uniformly over opponents' actions.
+
+A sufficient global condition for blocking upward deviations is
+
+$$
+U_i(h_i,h_{-i})-C_i(h_i) < U_i(q_i,h_{-i})-C_i(q_i)
+\quad\forall h_i>q_i,
+$$
+
+for every admissible $h_{-i}$. A marginal inequality at $q_i$ alone is insufficient unless concavity and global derivative bounds extend it to the full interval.
+
+*Proof.* The conclusions follow directly from the definition of best response and the stated one-sided payoff monotonicity. $\blacksquare$
+
+### 13.5 Ostrom principles as mechanisms
+
+The eight design principles of Ostrom (1990) are interpreted as mechanisms affecting the institutional implementation operator:
+
+- **Boundaries** reduce the uncertainty set $B$.
+- **Monitoring** refines $B$.
+- **Collective choice** enlarges $\Gamma(B)$.
+- **Sanctions** contract the realized-action correspondence $\mathcal E$ around prescribed controls.
+- **Conflict resolution** enlarges feasible allocations $\mathcal A$.
+- **Recognition of rights** prevents external contraction of $\Gamma$.
+- **Nesting** changes the coupled system and requires a separate coupling-safety check (Theorem 10.4 or Theorem 16.1).
+
+These principles are neither mathematically necessary nor sufficient without the induced-correspondence hypotheses of Theorem 13.2. They are mechanisms that can affect the objects through which institutions influence viability.
+
+The following table records one model-specific mechanism mapping. It is not a universal mathematical translation of Ostrom (1990):
+
+| Principle | CSECS operation |
+|---|---|
+| 1. Defined boundaries | Specify $(X, \mathrm{Dom}(U), \mathcal A)$; define $H^{\mathrm{pred}}$ |
+| 2. Congruence with local conditions | $H_{\min}^{\mathrm{inst}} \le H_*$ and $K^\dagger \le K_{\max}$ |
+| 3. Collective-choice arrangements | Policy class $\pi_{\mathrm{coop}}$: agents jointly select $H$ to maximize joint welfare subject to viability |
+| 4. Monitoring | $|\hat S - S| \le \varepsilon_{\mathrm{ep}}$ |
+| 5. Graduated sanctions | Global no-profitable-upward-deviation condition, plus below-quota conditions if uniqueness is claimed |
+| 6. Conflict-resolution mechanisms | Sharing rule $\Gamma(Y)$ onto the feasible set |
+| 7. Minimal recognition of rights | No external restriction $U_{\mathrm{ext}} \subset U_{\mathrm{inst}}$ |
+| 8. Nested enterprises | Multi-scale decomposition into sub-systems with coupling maps |
+
+**Theorem 13.5 (Institutional-mechanism sufficiency, conditional).** Suppose the institution-induced information process, prescription set, implementation correspondence, enforcement mechanism, allocation rule, and cross-scale interfaces admit one causal policy whose every compatible realized action remains inside the corrected resource–sink safe corridor and satisfies the declared distributional and interface constraints. Then that policy witnesses institutional viability.
+
+*Proof.* The hypotheses directly place a causal implementable policy inside the robust saving-action correspondence at every reachable information state. Applying the corrected robust/epistemic viability theorem gives the result. $\blacksquare$
+
+Ostrom's design principles may be used as empirically informed mechanism labels for boundaries, monitoring, participation, sanctions, conflict resolution, rights, and nesting. They are not substitutes for the theorem's mathematical hypotheses.
+
+**Construction programme 13.6 (Each mechanism can matter).** It is legitimate to construct, for each named mechanism, a model in which removing that mechanism destroys an otherwise viable policy. Such examples establish only existential mechanism-specific necessity—each mechanism can be necessary somewhere. They do not establish universal necessity for every sustainable commons. Each construction must independently verify the physical viability conditions and may not rely on the uncorrected commons or sanction claims.
+
+### 13.6 Constructors and the implementation lattice
+
+We make the "institutions as operators" picture fully explicit. Fix the constraint $\mathcal V$, the dynamics $F$, and the maximal physical correspondence $U_{\mathrm{phys}}$.
+
+**Definition 13.1 (Constructors).** A *constructor* is a map on the data $(X, U, F, \mathcal I, \pi)$ that changes exactly one named component and introduces no new state space. The following are the primitive constructors:
+
+- **Cap$(Q)$**: $U \leftarrow U \cap [0, Q]$ (an upper harvest bound; a total allowable catch is Cap).
+- **Floor$(H_{\min})$**: $U \leftarrow U \cap [H_{\min}, \infty)$ (an output floor).
+- **Tax$(\tau)$**: modify an entry/price in the effort law (a landing tax or subsidy is $\pm$Tax).
+- **Excl**: set $H_{\mathrm{pred}} = 0$ (exclusion of a competing predator).
+- **Leak$(h)$**: add $h$ to realized harvest (unreported / illegal harvest).
+- **Obs$(\mathcal I, \Psi)$**: replace the observation map and the feedback law used on it (a harvest control rule is an Obs).
+- **Rest$(\cdot)$**: any other restriction of the control correspondence.
+
+**Definition 13.2 (Implementation lattices).**
+$$
+\operatorname{Inst} := \{U' \subseteq U_{\mathrm{phys}} : \operatorname{Viab}(\mathcal V; U', F) \neq \varnothing\},
+\qquad
+\operatorname{InvLat} := \{U' \subseteq U_{\mathrm{phys}} : \text{some nonempty subset of } \mathcal V \text{ is invariant under all } U'\text{-selections}\}.
+$$
+
+**Proposition 13.1 (Action-set monotonicity).** For existential viability,
+
+$$
+U_1(x)\subseteq U_2(x)\ \forall x
+\quad\Longrightarrow\quad
+\operatorname{Viab}(\mathcal V;U_1,F)
+\subseteq
+\operatorname{Viab}(\mathcal V;U_2,F).
+$$
+
+Thus the class of action correspondences with a nonempty existential viability kernel is upward closed and is closed under joins/unions, not generally under meets/intersections. A smaller correspondence remains viable only when it retains a viable selector; that is an additional fact, not downward lattice monotonicity. Universal-action invariance has the opposite monotonic tendency and must be named separately.
+
+*Proof.* Every policy admissible under $U_1$ is also admissible under $U_2$. The intersection of two viable action sets can remove the distinct selectors that witness each kernel, so meet closure does not follow. $\blacksquare$
+
+Observation is not an element of either lattice: it thins the policy class $\pi$ (Theorem 2.6, information contraction) rather than the correspondence $U$. This separation of axes — restriction of $U$ versus restriction of $\pi$ — is the content of "governance restricts" in Section 2.7.
+
+**Theorem 13.4 (Invariance under irrelevant structure).** Let a proposed additional structure induce no change in $X$, $U$, $F$, $\mathcal V$, $\mathcal I$, or $\pi$. Then it does not change $\operatorname{Viab}(\mathcal V)$.
+
+*Proof.* By Definition 2.1, viability quantifies over hybrid paths of the denoted system; a structure inducing no change in the tuple denotes the same system, hence the same kernel. $\blacksquare$
+
+**Corollary 13.1 (Management vocabularies are rewrites, not theorems).** The following common instruments are each a word in the constructor algebra and introduce no new mathematical content beyond the constructor they reduce to: a total allowable catch is Cap; a harvest control rule is Obs; a landing subsidy is Tax$(-\sigma)$; unreported harvest is Leak; a closed season is a periodic Cap$(\cdot)$; an open-access rent dynamic is a restriction of the effort law entering $F$.
+
+*Proof.* Each instrument is realized as a constructor of Section 13.6 applied to the tuple $(X, U, F, \mathcal I, \pi)$: Cap$(Q)$ sets $U \leftarrow U \cap [0,Q]$; Obs replaces $\mathcal I$ and the feedback law; Tax$(-\sigma)$ modifies the effort-law price in $F$; Leak adds a term to realized harvest; a closed season is a periodic Cap; an open-access rule restricts the effort law. Each changes exactly one component and introduces no new state space, so by Theorem 13.4 (invariance under irrelevant structure) it changes the viability kernel only through that component. Hence none of these instruments, per se, changes the class of problems: new content requires a new constructor, a new physical type, or the resolution of a residual (Conjectures 17.1–17.3, 18.1–18.3). This is the formal completion rule of the theory. $\blacksquare$
+
+**Remark 13.1 (Raw correspondence has no invariance kernel).** The distinction between $\operatorname{Inst}$ and $\operatorname{InvLat}$ matters because the *raw* physical correspondence $U^\sharp$ generically has empty invariance kernel. Concretely, if $h_{\max}(S_{\min}) > g(S_{\min})$, then the selection $H(t) = h_{\max}(S(t))$ drives $S$ below $S_{\min}$ in finite time, so no nonempty subset of $\mathcal V_{\mathrm{RS}}$ is invariant under every $U^\sharp$-selection. Viability in this class is therefore always the existence of a *restriction* of the physical correspondence (i.e., membership in $\operatorname{Inst}$), never a property of the raw correspondence alone. This is also why physical primacy (Theorem 2.5) is a genuine constraint rather than a triviality.
+
+---
+
+## 14. Intergenerational Structure
+
+### 14.1 Generation structure and basic equivalence
+
+**Definition 14.1.** A generation structure is a sequence $0 = t_0 < t_1 < \cdots \to \infty$ with closed sets $\mathcal V^{(k)}$. Intergenerational viability: $x(t) \in \mathcal V^{(k)}$ for $t \in [t_k, t_{k+1})$.
+
+**Theorem 14.1.** If $\mathcal V^{(k)} = \mathcal V$ for all $k$: intergenerational viability equals ordinary viability.
+
+### 14.2 Nested constraints and impossibility
+
+**Theorem 14.2.** Assume the trajectory $x(\cdot)$ is confined to a compact set $\mathcal K$ (verified per instance via dissipativity). If $\mathcal V^{(k+1)} \subseteq \mathcal V^{(k)}$ and $\bigcap_k \mathcal V^{(k)} = \varnothing$: no intergenerationally viable path exists.
+
+*Proof.* Since $x(t_k) \in \mathcal K$ for all $k$ and $\mathcal K$ is compact, there is a convergent subsequence $x(t_{k_j}) \to \bar x \in \mathcal K$. For any fixed $m$: $x(t_k) \in \mathcal V^{(k)} \subseteq \mathcal V^{(m)}$ for all $k \geq m$. Since $\mathcal V^{(m)}$ is closed: $\bar x \in \mathcal V^{(m)}$. This holds for every $m$, so $\bar x \in \bigcap_m \mathcal V^{(m)} = \varnothing$. Contradiction. $\blacksquare$
+
+**Remark.** The compactness hypothesis is essential. Without dissipativity, mass can escape to infinity and the nested-empty-intersection argument fails.
+
+### 14.3 Discounting and viability
+
+**Theorem 14.3 (Discounting can prefer an exiting pulse over a positive viable path).** Let $x^{\mathrm{stay}}$ be a viable path with constant positive consumption $c_v > 0$. Suppose there exists an admissible exiting pulse yielding constant consumption $C > c_v$ over a duration $T > 0$, after which the trajectory exits the constraint set. With linear welfare and discount rate $\rho > 0$, the discounted welfare of the exiting path exceeds that of the viable path whenever
+
+$$
+\rho > -\frac{1}{T} \ln\left(1 - \frac{c_v}{C}\right).
+$$
+
+*Proof.* The viable path yields
+
+$$
+W_{\mathrm{stay}} = \int_0^\infty e^{-\rho t} c_v\, dt = \frac{c_v}{\rho}.
+$$
+
+The exiting path yields at least
+
+$$
+W_{\mathrm{exit}} = \int_0^T e^{-\rho t} C\, dt = \frac{C(1 - e^{-\rho T})}{\rho}.
+$$
+
+The exiting path is preferred iff $C(1 - e^{-\rho T}) > c_v$. Equivalently, $e^{-\rho T} < 1 - c_v/C$, which gives the stated lower bound on $\rho$. $\blacksquare$
+
+**Remark.** The stay path has strictly positive consumption $c_v > 0$; the comparison is with a positive viable path, not a zero-consumption shutdown.
+
+---
+
+## 15. Quantitative Sustainability Margins
+
+### 15.1 Finite-horizon viability value
+
+Let $\mathcal V = \{x : q_j(x) \geq 0,\; j = 1, \ldots, m\}$.
+
+**Definition 15.1.** Define
+
+$$
+V_T(x)
+=
+\sup_{\pi}
+\inf_{d}
+\inf_{0 \leq t \leq T}
+\min_j q_j(x_{\pi,d}(t)).
+$$
+
+Then $V_T(x) \geq 0 \iff x \in \operatorname{RViab}_T(\mathcal V)$. The infinite-horizon value is $V_\infty(x) = \inf_{T > 0} V_T(x)$, and under compactness and regularity, $V_\infty(x) \geq 0 \iff x \in \operatorname{RViab}(\mathcal V)$.
+
+Unlike Euclidean distance to the kernel boundary, $V_T$ is dynamics-aware, control-aware, disturbance-aware, and sensitive to the direction and rate of constraint approach.
+
+### 15.2 Intervention cost
+
+**Definition 15.2.** Given running intervention cost $\ell(x, u)$, define
+
+$$
+J_{\mathcal E}(x)
+=
+\inf_{u, T}
+\left\{
+\int_0^T \ell(x(t), u(t))\, dt :
+x(t) \in \mathcal E,\;\; x(T) \in K
+\right\}.
+$$
+
+This distinguishes: physically impossible transitions ($J_{\mathcal E} = +\infty$), possible but expensive transitions, and states already sustainable ($J_{\mathcal E} = 0$).
+
+---
+
+## 16. Compositional Viability
+
+Let subsystems satisfy $\dot x_i = f_i(x_i, u_i, z_i)$ with $z_i = C_i(x_{-i})$, and let $Q_i = \{x_i : b_i(x_i) \geq 0\}$.
+
+**Theorem 16.1 (Compositional viability).** Suppose each subsystem has an input tolerance $\bar z_i$ such that $\|z_i\| \leq \bar z_i$ implies $\exists\, u_i : D^+ b_i(x_i) \geq 0$ on $\partial Q_i$. If
+
+$$
+\sup_{x \in \prod_j Q_j} \|C_i(x_{-i})\| \leq \bar z_i
+\qquad
+\forall i,
+$$
+
+then $\prod_i Q_i$ is controlled invariant.
+
+*Proof.* For each subsystem $i$: when $x_i \in \partial Q_i$ and $\|z_i\| \leq \bar z_i$, there exists $u_i$ keeping $x_i$ in $Q_i$. The coupling constraint $\|C_i(x_{-i})\| \leq \bar z_i$ holds for all $x \in \prod_j Q_j$ by hypothesis. Therefore each subsystem can be kept in $Q_i$ simultaneously, and the product is invariant. $\blacksquare$
+
+**Remark.** This gives a genuine mathematical meaning to "coupling safety" and scales beyond two patches. A less conservative version can use gain functions $\|z_i\| \leq \sum_{j \neq i} \gamma_{ij}(m_j)$ with a small-gain condition on the gain matrix.
+
+---
+
+## 17. Stochastic Sustainability
+
+For $dX_t = f(X_t, u_t)\, dt + \Sigma(X_t, u_t)\, dW_t$, almost-sure infinite-horizon invariance is often impossible under nondegenerate diffusion in a bounded domain. A stochastic theory must specify the probability level and horizon.
+
+**Definition 17.1: $p$-viability kernel.**
+
+$$
+\operatorname{Viab}_{T,p}(\mathcal V)
+=
+\left\{
+x :
+\sup_\pi
+\mathbb P_x^\pi
+\bigl(X_t \in \mathcal V \;\; \forall t \in [0, T]\bigr)
+\geq p
+\right\}.
+$$
+
+**Definition 17.2: Expected-lifetime value.** Let $\tau_{\mathcal V} = \inf\{t \geq 0 : X_t \notin \mathcal V\}$. Define $L(x) = \sup_\pi \mathbb E_x^\pi[\tau_{\mathcal V}]$.
+
+**Theorem 17.1 (Finite-horizon small-noise viability).** Consider the deterministic system $\dot x = f(x)$ under a viable feedback, and the stochastic perturbation $dX_t^\varepsilon = f(X_t^\varepsilon)\, dt + \varepsilon \Sigma(X_t^\varepsilon)\, dW_t$. Let $K_0$ be a compact subset of the kernel interior, and suppose deterministic trajectories from $K_0$ remain at distance at least $2\delta$ from $\partial \mathcal V$ on $[0, T]$. Assume $f$ is Lipschitz and $\Sigma$ is bounded on a neighborhood of these trajectories.
+
+Then
+
+$$
+\inf_{x_0 \in K_0}
+\mathbb P_{x_0}
+\left(
+X_t^\varepsilon \in \mathcal V \;\; \forall t \in [0, T]
+\right)
+\to 1
+\qquad
+\text{as } \varepsilon \to 0.
+$$
+
+*Proof.* Define the stopping time $\tau_R = \inf\{t : |X_t^\varepsilon| > R\}$, where $R$ is chosen so that the Lipschitz and boundedness assumptions hold on $\{|x| \leq R\}$. Work up to $\tau_R \wedge T$.
+
+By the standard stochastic estimate (Ethier and Kurtz, 1986; Kloeden and Platen, 1992):
+
+$$
+\mathbb E\left[\sup_{0 \leq t \leq \tau_R \wedge T} |X_t^\varepsilon - X_t^0|^2\right]
+\leq C_T \varepsilon^2.
+$$
+
+By Markov's inequality:
+
+$$
+\mathbb P\left(\sup_{0 \leq t \leq T} |X_t^\varepsilon - X_t^0| \geq \delta\right)
+\leq \frac{C_T \varepsilon^2}{\delta^2} + \mathbb P(\tau_R \leq T).
+$$
+
+For $R$ large enough, $\mathbb P(\tau_R \leq T) \to 0$ as $R \to \infty$ uniformly in $\varepsilon$. If $\sup |X_t^\varepsilon - X_t^0| < \delta$ and the deterministic trajectory is at distance $\geq 2\delta$ from $\partial \mathcal V$, then $X_t^\varepsilon \in \mathcal V$. Hence the probability of remaining in $\mathcal V$ tends to $1$. $\blacksquare$
+
+**Conjecture 17.1 (Competitive OLG).** In a standard OLG economy whose resource block satisfies Theorem 6.2, competitive equilibrium without a harvest floor leaves $\mathcal V_{\mathrm{str}}$ whenever $S_{\mathrm{bio}} < S_{\min}$.
+
+*Falsification criterion.* An OLG equilibrium staying in $\mathcal V_{\mathrm{str}}$ without a binding floor.
+
+**Remark 17.2 (Myopic common-property OLG).** A special case of Conjecture 17.1 is the *myopic common-property* OLG. If each period's young agents extract under an open-access / common-property rule, the per-period harvest equals the maximum admissible $H = h_{\max}(S)$ (rent is fully dissipated on the margin, as in Remark 12.1). Then the stock obeys $\dot S = g(S) - h_{\max}(S) \le g(S) - H_{\min}$, and whenever $h_{\max}$ dominates regeneration down to the floor, the resource block exits $\mathcal V_{\mathrm{str}}$ in finite time (Theorem 5.2 mechanism). Capital plays no role in the extraction decision under common property, so the exit is independent of the capital account. A harvest cap restoring the realized aggregate to the corridor $H_{\min}\le H\le H_{\rm safe}$—with equality when the floor binds—can provide the policy witness required by Corollary 12.1. This is the discrete-generations analogue of "over-extraction empties the kernel" (Theorem 12.2) and supports Conjecture 17.1. The full bequest OLG (with a traded in situ asset and forward-looking saving) remains open.
+
+**Remark 17.1 (Stochastic viability splits on the horizon).** The infinite-horizon statement is not a strengthening of Theorem 17.1; it is a different (and, for nondegenerate noise, degenerate) regime. The correct pair of statements is:
+
+- *(Finite horizon — theorem.)* For compact interior initial data $K_0$ and fixed finite $T$, the probability of remaining in $\mathcal V$ up to time $T$ tends to one as the noise vanishes: this is exactly Theorem 17.1.
+- *(Infinite horizon.)* For nondegenerate diffusion in a bounded constraint domain, the infinite-horizon survival probability $\mathbb P_x(\tau_{\mathcal V} = \infty)$ is zero: from any interior point the exit time is almost surely finite, no matter how small the noise (Feller's absorption phenomenon for one-dimensional diffusions and its multidimensional analogues). No interiority or Lyapunov condition can make the *infinite-horizon* survival probability tend to one.
+
+Accordingly, Conjecture 17.2 below is demoted: its claimed infinite-horizon "$ \to 1$" is false, and only the finite-horizon part stands (as Theorem 17.1).
+
+**Conjecture 17.2 (Stochastic survival: finite horizon only).** For small-noise resource–sink systems, the probability of remaining in a *shrunken* constraint set is governed entirely by the horizon: it tends to one over any finite $T$ from compact interior data (Theorem 17.1), and tends to zero as $T \to \infty$ for any fixed positive noise, by absorption. There is no infinite-horizon analogue with positive survival probability under nondegenerate noise.
+
+*Falsification criterion.* For the finite-horizon claim: exit probabilities bounded away from zero as $\varepsilon \to 0$ from interior data. For the infinite-horizon claim: a bounded-domain nondegenerate diffusion whose infinite-horizon survival probability is positive. The former is disproved by Theorem 17.1; the latter is excluded by Feller absorption.
+
+**Conjecture 17.3 (Adaptive management beyond high gain).** Under persistent excitation and possibly non-globally-Lipschitz dynamics, an adaptive observer can recover unknown parameters sufficiently to implement the Theorem 6.2 feedback after finite time.
+
+*Falsification criterion.* Observer error persisting through the drain window of Theorem 5.2 under the specified excitation conditions.
+
+---
+
+## 18. Scope and Limitations
+
+The following are outside the theory:
+
+1. Age-structured, spatial-PDE, and food-web dynamics.
+2. Value, meaning, legitimacy as politics, constitutional design.
+3. Earth-system science in full.
+4. Ethics of discounting, rights of future persons, non-anthropocentric value.
+5. Deep uncertainty and model error beyond the robust viability framework.
+6. Strategic sensor capture beyond the belief-state formulation.
+7. The hybrid kernel off the protection set.
+8. Demographic endogeneity, migration, trade, telecoupling.
+9. The claim that any specific model represents all instances of a resource type.
+10. Physical interpretation of unbounded CES capital as a physical stock.
+
+**Open Problem 18.1.** The viability kernel of the fully coupled hybrid system outside the protection set of Theorem 11.5 is not computed.
+
+**Open Problem 18.2.** Conditions under which the binary-sensor observation model is a threshold discretization of the continuous observation model.
+
+**Conjecture 18.1 ($n$-patch super-equilibrium equivalence).** For $n$ coupled patches with *cooperative* diffusion, the kernel is nonempty iff the minimal-harvest field has a super-equilibrium $f_{\min}(x) \ge 0$ in $\Omega$, which in turn is equivalent (for type-(U) patches with product controls) to the existence of an equilibrium in $\Omega$. The equivalence holds for cooperative transport; it fails in general for competitive or predator–prey couplings, where super-equilibria need not exist and equilibrium-in-$\Omega$ is not a viability certificate (an unstable focus can sit in $\Omega$ with a cycle that leaves it).
+
+*Falsification criterion.* For the cooperative claim: a cooperative system with a super-equilibrium in $\Omega$ but empty kernel, or with nonempty kernel but no super-equilibrium in $\Omega$. (Two-patch instances are verified in Remark 10.2.) For the scope claim: a competitive coupling with an equilibrium in $\Omega$ yet empty kernel, or vice versa.
+
+**Conjecture 18.2 (Multi-resource Hartwick).** For $m$ resources with pairwise CES elasticities, strong plus weak sustainability is jointly achievable iff the effective elasticity satisfies an appropriate threshold condition.
+
+*Falsification criterion.* The effective elasticity condition holding while joint achievability fails, or failing while joint achievability holds.
+
+**Research programme 18.3 (Mechanism-specific necessity).** The design principles are not universally necessary conditions. The open task is to construct and verify restricted model classes in which a specified information, authority, enforcement, allocation, or nesting mechanism is individually necessary, while preserving counterexamples in which viable institutions use different mechanisms.
+
+*Falsification criterion.* A system violating exactly one mechanism, satisfying all others and Theorem 6.2 conditions, with nonempty kernel.
+
+---
+
+## 19. Conclusion
+
+The theory establishes the following hierarchy:
+
+$$
+\operatorname{Viab}(\mathcal V)
+\supseteq
+\operatorname{RViab}(\mathcal V)
+\supseteq
+\operatorname{EViab}(\mathcal V),
+$$
+
+together with
+
+$$
+\text{attainability} = \operatorname{Capt}_{\mathcal E}(K),
+\qquad
+\text{recovery} = \tau_{\mathcal E}(\cdot;\, K),
+$$
+
+and
+
+$$
+\text{institutional sustainability}
+=
+\text{safe controls implementable over every compatible belief state}.
+$$
+
+The scalar resource–sink theorem is an exact order-theoretic instance. The two-patch model is the planar coupling instance. The CES model is an endogenous resource–capital tradeoff. Networks and institutions enter through compositional barrier and implementation theorems. The tragedy of the commons is a Nash-over-extraction obstruction with institutional rescue via quotas.
+
+Under disturbances and partial observation the central hierarchy is informational as well as physical:
+
+$$
+\operatorname{IRViab}_{\mathfrak I}(\mathcal V)
+\subseteq
+K_{\mathcal I}
+\subseteq
+\operatorname{RViab}(\mathcal V)
+\subseteq
+\operatorname{Viab}(\mathcal V),
+$$
+
+each contraction caused by a distinct phenomenon (disturbances, indistinguishability, restricted authority/enforcement/allocation, and separately-managed attainability). The epistemic kernel is computable as the greatest fixed point of the belief predecessor operator, and informational failures (common-action conflict, hidden-mode ambiguity, delay, sensing-control conflicts) are characterized by explicit obstructions with finite-time bounds. The value of information is measured in worst-case constraint margin, not entropy.
+
+Explicit results include: scalar unimodal, affine, and Allee kernels; a planar two-patch analysis with MSY counterexample, coupling-rescue example, and quartic decision procedure; dimensionally correct CES thresholds; a nilpotent-chain refutation of spectral cascade bounds; a finite-horizon small-noise viability theorem with stopping-time localization; a distributional floor theorem with explicit physical side effects; and the robust/epistemic/institutional hierarchy with belief-predecessor fixed point, common-action and hidden-mode obstructions, observer safety buffers, and value-of-information monotonicity.
+
+---
+
+Aubin, J.-P. (1991). *Viability Theory*. Birkhäuser.
+
+Aubin, J.-P., Bayen, A., and Saint-Pierre, P. (2011). *Viability Theory: New Directions*. Springer.
+
+Basu, S., Pollack, R., and Roy, M.-F. (2006). *Algorithms in Real Algebraic Geometry*. 2nd ed. Springer.
+
+Dasgupta, P. and Heal, G. (1979). *Economic Theory and Exhaustible Resources*. Cambridge University Press.
+
+Ethier, S. N. and Kurtz, T. G. (1986). *Markov Processes: Characterization and Convergence*. Wiley.
+
+Hale, J. K. (2009). *Ordinary Differential Equations*. 2nd ed. Dover.
+
+Hartwick, J. M. (1977). Intergenerational equity and the investing of rents from exhaustible resources. *American Economic Review*, 67(5), 972–974.
+
+Hayes, N. D. (1950). Roots of the transcendental equation associated with a certain difference–differential equation. *Journal of the London Mathematical Society*, 25, 226–232.
+
+Hirsch, M. W. (1988). Systems of differential equations which are competitive or cooperative, III: Competing species. *Nonlinearity*, 1(1), 51–71.
+
+Hirsch, M. W. and Smith, H. L. (2005). Monotone dynamical systems. In *Handbook of Differential Equations: Ordinary Differential Equations*, Vol. 2, 239–357. Elsevier.
+
+Kloeden, P. E. and Platen, E. (1992). *Numerical Solution of Stochastic Differential Equations*. Springer.
+
+Ostrom, E. (1990). *Governing the Commons: The Evolution of Institutions for Collective Action*. Cambridge University Press.
+
+Perko, L. (2001). *Differential Equations and Dynamical Systems*. 3rd ed. Springer.
+
+Rosen, J. B. (1965). Existence and uniqueness of equilibrium points for concave N-person games. *Econometrica*, 33(3), 520–534.
+
+Scheffer, M., Bascompte, J., Brock, W. A., Brovkin, V., Carpenter, S. R., Dakos, V., Held, H., van Nes, E. H., Rietkerk, M., and Sugihara, G. (2009). Early-warning signals for critical transitions. *Nature*, 461, 53–59.
+
+Smith, H. L. (1995). *Monotone Dynamical Systems: An Introduction to the Theory of Competitive and Cooperative Systems*. AMS Mathematical Surveys and Monographs, Vol. 41.
+
+Solow, R. M. (1974). Intergenerational equity and exhaustible resources. *Review of Economic Studies*, 41(Symposium), 29–45.

@@ -1,0 +1,96 @@
+Following your instruction, I will now resolve the conceptual and hybrid architectural errors in **Option B** (B1, B2, B3, D1, D2, E1). These address how we correctly type state spaces, selectors, and hybrid histories so that the rigorous mathematics accurately supports the stated definitions.
+
+---
+
+### 1. Issue B1: Canonical notation and operator hierarchy (Article 002)
+
+**1. Issue ID:** B1 – Canonical notation  
+**2. Verdict:** Correct diagnosis. The draft uses overlapping symbols (e.g., $K$ for sink stock, $K_q$ for robust kernel, $\mathcal{K}$ for compact sets, $C$ for capacity, $\mathscr{C}$ for constraint registry, $\mathcal{A}$ for architecture, $\mathcal{A}$ for assessment).  
+**3. Corrected statement:** The flagship architecture must enforce the following namespace separation:
+   - **System Architecture:** $\mathfrak{A}_q$ (Fraktur A) to separate from $\mathcal{A}$ (assessment operator).
+   - **Constraint Registry:** $\mathscr{C}$ (Script C).
+   - **Ecological/Sink States:** Use $x = (S, W)$ where $S$ is resource Stock and $W$ is Waste/Sink burden (replacing $K$, freeing $K$ for kernels).
+   - **Capacities:** Use $C_i(x)$ for process capacities, keeping $C$ out of the state vector.
+   - **Safe/Constraint Sets:** $\mathcal{V}$ for the primitive protected set.
+   - **Kernels:** 
+     - $\operatorname{Viab}(\mathcal{V})$ for existential control.
+     - $\operatorname{RViab}(\mathcal{V})$ for robust viability ($\exists \pi \forall \delta$).
+     - $\operatorname{EViab}(\mathcal{V})$ for epistemic (belief-state) viability.
+   - **Observation/Assessment:** $\mathcal{O}$ for raw observation map, $\mathcal{A}$ for assessment estimator.  
+**4. Minimal assumptions:** N/A (Definitional).  
+**5. Proof/Sketch:** N/A.  
+**6. Counterexample:** N/A.  
+**7. Recommended source status:** Template / Architectural Postulate.  
+**8. Downstream consequences:** Eliminates symbolic collisions across the integrated flagship, allowing the accounting, delay-dynamics, and viability papers to share one exact ontology.  
+**10. Confidence level:** High.
+
+---
+
+### 2. Issue B2: Selector regularity (Article 002)
+
+**1. Issue ID:** B2 – Selector regularity  
+**2. Verdict:** Correct diagnosis. The knowledge-kernel theorems (like Theorem 4.6 in A001 and Theorem 4 in A002) construct optimal control strategies by invoking the Axiom of Choice (or arbitrary pointwise selection) over compact sets. To call these "implementable policies," we need measurable selection.  
+**3. Corrected statement:** The geometric existence of a safe action at every belief state $B$ establishes *theoretical* epistemic viability $\operatorname{EViab}(\mathcal{V})$. To establish *implementable* epistemic viability $\operatorname{EViab}(\mathcal{V}; \mathbb{P}^{\mathrm{impl}})$, the safe-action correspondence $\Gamma_{\mathrm{safe}}(B) := \{u \in U_{\mathrm{impl}}(B) : \Psi(B,u,y) \in \operatorname{Pre}(K) \;\forall y\}$ must admit a selector $\pi(B)$ belonging to the declared regularity class (e.g., Borel measurable or upper-semicontinuous). If the physical dynamics $f$ are continuous, the constraint sets closed, and $U$ compact, Kuratowski–Ryll-Nardzewski measurable selection applies, guaranteeing a measurable policy exists.  
+**4. Minimal assumptions:** State space $X$ is a Polish space; $f$ is Carathéodory; $U(x)$ is compact-valued and measurable.  
+**5. Proof sketch:** The belief predecessor algorithm identifies the largest set of beliefs for which $\Gamma_{\mathrm{safe}}(B) \neq \varnothing$. Because the dynamics and observation update are continuous and the domains are compact, $\Gamma_{\mathrm{safe}}$ has a measurable graph. Standard measurable selection theorems guarantee the existence of a universally measurable map $B \mapsto u$. This map constitutes the implementable causal policy.  
+**6. Counterexample if assumptions are weakened:** If the observation map or constraints are highly discontinuous (e.g., nowhere Borel), $\Gamma_{\mathrm{safe}}$ may lack a measurable graph. A safe action exists at every point, but combining them into a policy $\pi(B)$ creates a non-measurable function, making the ODE/differential inclusion ill-posed and the policy un-implementable.  
+**7. Recommended source status:** Theorem.  
+**8. Downstream consequences:** Formally separates Operator I's purely geometric/set-theoretic bounds from its actual policy witness, fulfilling the mandate that $\mathbb{P}^{\mathrm{impl}}$ is distinct from $U^{\mathrm{impl}}$.  
+**10. Confidence level:** High.
+
+---
+
+### 3. Issue B3: Exact information and hybrid tube assumptions (Article 002)
+
+**1. Issue ID:** B3 – Exact information and hybrid tube assumptions  
+**2. Verdict:** Correct diagnosis. The paper risks presenting the *hypotheses* of compact exact tubes and Hausdorff-continuous information updates as properties that are automatically true for all sustainability applications.  
+**3. Corrected statement:** The fixed-point knowledge kernels are proved conditionally upon the existence of a compact, Hausdorff-continuous exact tube mapping and an exact information process. These are **strict hypotheses**. For general nonlinear delayed or hybrid systems, exact reachable sets are rarely compact or lower-semicontinuous (as proved by the grazing counterexample in A002, Prop 1). In applications, one must replace the *exact* predecessor with a *conservative outer approximation* (a verified tube enclosure) or a robust barrier certificate.  
+**4. Minimal assumptions:** N/A (Clarification of scope).  
+**5. Proof sketch:** (See Article 002, Proposition 1, which correctly proves that outer semicontinuity alone fails to close the universal tube constraint).  
+**6. Counterexample if assumptions are weakened:** (Article 002, Prop 1).  
+**7. Recommended source status:** Conditional Theorem / Proof Obligation.  
+**8. Downstream consequences:** Positions the exact knowledge-kernel theorems as the structural ideal, while explicitly assigning the *computation* of conservative over-approximations to the domain-specific "Composition Obligation" (Box 11 in Master).  
+**10. Confidence level:** High.
+
+---
+
+### 4. Issue D1: Hybrid phase space (Article 007)
+
+**1. Issue ID:** D1 – Hybrid phase space  
+**2. Verdict:** Correct diagnosis. Mixing continuous RFDE (Retarded Functional Differential Equation) delay histories with point-wise discrete institutional jumps creates a discontinuous history function, violating the $C([-\tau, 0], \mathbb{R}^n)$ phase space required for standard RFDE theory.  
+**3. Corrected statement:** A hybrid delayed system must be formulated using a piecewise-continuous history space, such as the Skorokhod space $D([-\tau, 0], \mathbb{R}^n)$ of càdlàg (continue à droite, limite à gauche) functions, equipped with the Skorokhod metric. Alternatively, if the delays only affect the continuous physical variables, and the discrete institutional jumps only affect auxiliary memory/mode states, the phase space can be cleanly factored as $\mathcal{Z} = C([-\tau, 0], \mathbb{R}_{\mathrm{phys}}^n) \times \mathbb{R}_{\mathrm{inst}}^m$, with resets restricted entirely to the $\mathbb{R}^m$ factor.  
+**4. Minimal assumptions:** Resets either do not apply to delayed physical variables, or the phase space is explicitly upgraded to $D([-\tau, 0], \mathbb{R}^n)$.  
+**5. Proof sketch:** Standard RFDE existence and invariance theorems (Hale 1993) rely on the supremum norm on $C([-\tau, 0])$. A jump in a state variable creates a discontinuity in the history tail, immediately exiting $C([-\tau, 0])$. By factoring the space (as successfully done in the "review-synchronized history-reset" theorem of Article 002), the physical history remains continuous, and the discrete jump acts only on the current institutional coordinate.  
+**6. Counterexample if assumptions are weakened:** If an institutional policy instantly jumps a physical stock (e.g., instantaneously removing harvest equipment) and that stock has a delay $\tau$, the history function snaps. The supremum norm distance between the pre-jump and post-jump histories does not vanish as $t \to t^+$, destroying the continuity of the translation map.  
+**7. Recommended source status:** Definition / Well-formedness rule.  
+**8. Downstream consequences:** Vindicates the careful restricted RFDE theorems in Article 002 and requires any future hybrid-delay models to explicitly declare their phase space.  
+**10. Confidence level:** High.
+
+---
+
+### 5. Issue D2: Duplicated institutional mode (Article 007)
+
+**1. Issue ID:** D2 – Duplicated institutional mode  
+**2. Verdict:** Correct diagnosis. The belief histories incorrectly included the institutional mode $h$, and then $h$ was concatenated again to the state.  
+**3. Corrected statement:** The epistemic-hybrid state is cleanly partitioned as $\Sigma = \mathfrak{B}(X) \times \mathcal{M}$, where $\mathfrak{B}(X)$ is the hyperspace of beliefs over the physical state $X$, and $\mathcal{M}$ is the finite set of known institutional modes. The institution always perfectly knows its own current mode $m \in \mathcal{M}$ and its applied control history. Therefore, beliefs only need to track the physical/disturbance uncertainty.  
+**4. Minimal assumptions:** The institutional controller has perfect recall of its own past actions and current mode.  
+**5. Proof sketch:** By definition, the information state $B_t$ is the set of all physical states compatible with the observation history. Because the mode $m_t$ is generated by the institution's own deterministic (or known-stochastic) update logic, there is no ambiguity about $m_t$. The augmented state $\Sigma = \mathfrak{B}(X) \times \mathcal{M}$ is minimally sufficient for a Markovian decision process.  
+**6. Counterexample if assumptions are weakened:** If the institution is decentralized and agents hide their modes from one another, then $\mathcal{M}$ must be moved inside the belief set $\mathfrak{B}(X \times \mathcal{M})$, representing a game of imperfect information.  
+**7. Recommended source status:** Definition.  
+**8. Downstream consequences:** Cleans up the information-state geometry for Operator I, making the belief-predecessor equations algebraically tractable.  
+**10. Confidence level:** High.
+
+---
+
+### 6. Issue E1: Hold/interpolation mismatch (Article 011)
+
+**1. Issue ID:** E1 – Hold/interpolation mismatch  
+**2. Verdict:** Correct diagnosis. The sampled-data invariance proof allows convex interpolation between commands, but the model (SD-E-B3) explicitly defines a zero-order hold (ZOH) controller where effort is held constant $E_n$ on $[t_n, t_{n+1})$.  
+**3. Corrected statement:** The sampled-data process invariance (Proposition 1, Article 011) holds strictly for the declared zero-order hold controller: $E(t) = E_n \in [0, E_{\max}]$ for all $t \in [t_n, t_{n+1})$. If a specific domain implementation requires gradual transition (e.g., phased quota adoption), a measurable convex interpolation $E(t) = (1-\theta(t))E_n + \theta(t)E_{n+1}$ also preserves invariance, because the projected control space $[0, E_{\max}]$ is convex. The flagship will explicitly specify ZOH as the default for the periodic-review models unless otherwise stated.  
+**4. Minimal assumptions:** The target control space is convex; the interpolation parameter $\theta(t) \in [0,1]$ is measurable.  
+**5. Proof sketch:** For ZOH, $E_n \in [0, E_{\max}]$ implies the vector field evaluated at $E_n$ points inward at the boundaries, maintaining invariance. For interpolation, since $E_n, E_{n+1} \in [0, E_{\max}]$ and the interval is convex, $E(t) \in [0, E_{\max}]$ for all $t$. The instantaneous vector field therefore still points inward at the physical boundaries for every $t$, preserving invariance.  
+**6. Counterexample if assumptions are weakened:** If the control space was non-convex (e.g., $E \in \{0\} \cup [10, 20]$—either shutdown or minimum operating capacity), a convex interpolation between $E_n = 0$ and $E_{n+1} = 10$ would pass through $E=5$, which is inadmissible and could violate a downstream constraint (like profitability/viability).  
+**7. Recommended source status:** Theorem.  
+**8. Downstream consequences:** Validates the sampled-data models in A011 and grounds them in a rigorous, convexity-dependent argument.  
+**10. Confidence level:** High.
+

@@ -1,0 +1,25 @@
+# Article 013 Formal-Result Inventory
+
+**Source:** `uploads/paper1_accounting.txt`
+
+| Type | Result | Status |
+|---|---|---|
+| Logical observation | Positive weighted scalar does not certify componentwise nonnegativity on unrestricted balance space | Verified |
+| Definition | State-dependent feasible balance domain | Valid |
+| Definition | Directional regenerative-support fraction/gap | Valid; attainment requires closedness |
+| Identity | Six-compartment incidence matrix has zero column sums | Verified |
+| Theorem | Total represented material is conserved | Verified |
+| Theorem | Nonnegative cone is forward invariant | Verified |
+| Definition | Gross turnover/dependency intensity | Valid |
+| Definition | Local net-depletion ratio | Valid |
+| Definition | Scenario-conditioned hitting time | Valid |
+| Application | G3P anomaly-persistence indices | Accepted as verified by user instruction; submission supplement pending |
+| Application | Phosphate reserve-life ratio | Arithmetic and source quantity accepted as verified; source vintage to be supplied at submission |
+| Application | Fisheries removals-only threshold time | Formula verified |
+
+## Canonical preservation targets
+
+- Six-compartment worked ledger
+- Service-readout example
+- Gross/local/scenario diagnostic taxonomy
+- Groundwater/phosphate/fisheries classification examples

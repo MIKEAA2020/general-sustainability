@@ -1,0 +1,614 @@
+# External Review Packet
+## Correcting the Mathematics and Prioritizing Development of a General Theory of Sustainability
+
+## 1. Purpose
+
+We are developing a general theory of sustainability intended to apply, through typed domain specializations, to ecological, economic, social, informational, and institutional systems. We request independent advice on:
+
+1. correcting the live mathematical errors listed below;
+2. selecting the strongest canonical theorem formulations among overlapping drafts;
+3. developing the highest-priority open mathematics;
+4. deciding which results belong in one unified flagship, a technical supplement, or a genuinely merited companion paper;
+5. identifying important errors, counterexamples, or literature that the internal review has missed.
+
+Please treat this packet as self-contained. Do not assume that an internal classification is correct merely because it is stated here.
+
+
+### Scope of self-containedness
+
+This packet is self-contained for the listed correction, architecture, priority, and publication questions: it defines the official objects, reproduces the disputed mathematical forms, states the diagnosed defect, and supplies the source status needed for advice. It is **not** a substitute for a line-by-line audit of every source proof. If a requested verdict requires omitted hypotheses or proof text, mark the issue `INSUFFICIENT INFORMATION`, name the exact missing item, and give only a conditional recommendation. Do not invent missing source content.
+
+### Independent-review rule
+
+Treat every internal diagnosis, “verified” label, source hierarchy, and publication recommendation as contestable. In particular:
+
+- independently check whether the diagnosed error is real;
+- distinguish a false theorem from an incomplete proof, notation defect, model-admissibility failure, empirical gap, or merely conservative assumption;
+- do not infer truth from reviewer agreement;
+- do not downgrade a result solely because code or data are absent when the packet states that verification has been attested; instead distinguish truth status from reproducibility status;
+- preserve source-stated distinctions among theorem, numerical result, inferred numerical classification, and conjecture.
+
+### Evidence discipline
+
+For each mathematical correction:
+
+1. state the exact quantifier order;
+2. define all sets and maps and their domains/codomains;
+3. state regularity, compactness, convexity, measurability, information, and horizon assumptions;
+4. indicate whether the conclusion is weak viability, strong invariance, robust/discriminating viability, or stochastic/chance safety;
+5. provide a proof sketch sufficient to expose the decisive step;
+6. provide a minimal counterexample when an assumption is removed;
+7. identify whether the correction changes downstream results.
+
+For literature, give precise references—preferably DOI, theorem number, or book chapter. If uncertain, say so rather than fabricating a citation.
+
+---
+
+## 2. Standing constraints on your advice
+
+### Minimum-paper principle
+
+Recommend the minimum number of papers intellectually and practically merited. Do not suggest separate papers merely because material can be separated. Prefer bridges, appendices, and supplements when they preserve coherence.
+
+### Non-loss principle
+
+Do not solve integration problems by discarding legitimate definitions, results, counterexamples, examples, or limitations. If material does not fit the flagship, recommend a traceable appendix, supplement, companion, or deferred module.
+
+### Claim-status discipline
+
+Distinguish:
+
+- definition;
+- identity;
+- theorem;
+- conditional theorem;
+- conjecture;
+- numerical proposition;
+- empirical hypothesis;
+- normative postulate;
+- research programme.
+
+Do not upgrade a result because it sounds plausible or because several reviewers agree.
+
+### Typed failure semantics
+
+Physical impossibility, functional nonviability, normative inadmissibility, relational externalization, and epistemic non-implementability are not the same failure.
+
+
+### Publication-merit criterion
+
+Recommend a separate paper only if the material has at least one of:
+
+- an independent research question and conclusion;
+- a substantial independent theorem/proof architecture;
+- a distinct specialist audience or incompatible evidentiary method;
+- a complete independent empirical/computational study;
+- length or technical detail that cannot be responsibly handled by the flagship plus appendices/supplement.
+
+Otherwise recommend integration or a supplement. State explicitly which legitimate content goes where.
+
+---
+
+## 3. Current architectural spine
+
+A sustainability assessment is indexed by a frozen specification
+
+\[
+\Omega=
+(S,z_0,I^H,I^L,\mathcal V,B,\mathscr C,
+\mathcal I,W,\Delta,T,\mathcal N,\mathcal R_A),
+\]
+
+where:
+
+- \(S\): focal system;
+- \(z_0\): actual initial state or initial uncertainty set;
+- \(I^H\): protected higher-order identity;
+- \(I^L\): lower-level identity allowed to change under declared rules;
+- \(\mathcal V\): protected functions and values;
+- \(B\): model boundary;
+- \(\mathscr C\): typed constraint registry;
+- \(\mathcal I\): information structure;
+- \(W,\Delta\): disturbance signature and admissible disturbance strategies;
+- \(T\): horizon;
+- \(\mathcal N\): normative authority/procedure;
+- \(\mathcal R_A\): architecture-change and specification-revision rules.
+
+An architecture is
+
+\[
+\mathcal A_q=
+(Z_q,F_q,U_q^{impl},\mathcal I_q,
+\mathbb P_q^{impl},\Delta_q,B_q,I_q,\mathscr C_q,\partial_q).
+\]
+
+Instantaneous actions and causal policies are distinct:
+
+\[
+U_q^{impl}(z)
+\quad\text{versus}\quad
+\pi\in\mathbb P_q^{impl}.
+\]
+
+The typed verdict is
+
+\[
+\mathbf J_\Omega=(P,F,N,R,E),
+\]
+
+for physical, functional, normative, relational, and epistemic/implementability status.
+
+### Operator I: within-architecture robust viability
+
+\[
+\operatorname{RViab}_{\mathcal A_q}(K_q,T)
+=
+\left\{
+z_0\in K_q:
+\exists\pi\in\mathbb P_q^{impl}
+\ \forall\delta\in\Delta_q,
+\ z^{\pi,\delta}(t)\in K_q
+\ \forall t\in T
+\right\}.
+\]
+
+### Operator II: transformation between architectures
+
+Architectures form a graph. A transformation uses a meta-policy and reset/translation maps
+
+\[
+(q,z)\longrightarrow(q',R_{qq'}(z))
+\]
+
+to reach the robust viability kernel of another architecture while satisfying forbidden-state, identity-continuity, cumulative-harm, transition-relaxation, and irreversibility constraints.
+
+### Official system-level statuses
+
+- currently viable;
+- recoverable within current architecture through an emergency envelope;
+- transformationally viable;
+- infeasible within known architectures;
+- indeterminate.
+
+### Composition
+
+Subsystems use typed deterministic, robust, probabilistic, strategic, or scenario contracts. The general compositional theorem remains open, though restricted sufficient theorems and counterexamples exist.
+
+
+### Formal conventions used in this packet
+
+- State spaces are metric spaces unless a stronger structure is stated.
+- Constraint/safe sets are closed when viability or tangency results require closedness.
+- \(T_K(x)\) denotes the contingent/Bouligand tangent cone.
+- An instantaneous action correspondence is \(U(x)\); a causal policy belongs to \(\mathbb P\) and maps available histories to actions.
+- Disturbance signals or nonanticipating strategies belong to \(\Delta\).
+- “Robust invariance” means one causal policy keeps every admissible disturbance realization in the set; it is stronger than existence of one viable trajectory of a set-valued inclusion unless strong-invariance hypotheses are supplied.
+- Information states may be sets/beliefs in a hyperspace. Literal inclusion between kernels under different information structures requires a common physical projection or a declared order/map.
+- A capture basin is indexed by target, envelope, horizon, policy class, and disturbance class.
+- Numerical verification and publication reproducibility are tracked separately.
+
+---
+
+## 4. Current source hierarchy
+
+### Source scale and current role
+
+| Source | Approx. words | Current role |
+|---|---:|---|
+| Master manuscript | 14,000 | Candidate architectural flagship spine |
+| Article 001 | 23,174 | Broad mathematical viability/economic/coupling/institutional corpus |
+| Article 002 | 23,977 | Typed architecture and restricted constructive theorem corpus |
+| Article 003 | 1,286 | Institutional-feedback framing/conjecture note |
+| Article 004 | 1,150 | Phosphorus domain-module template |
+| Article 005 | 1,205 | Groundwater domain-module template |
+| Article 006 | 2,290 | Institutional information-state formulation; flawed fixed point |
+| Article 007 | 1,734 | Early hybrid architecture; taxonomy/admission standard |
+| Article 008 | 3,227 | Rejected institutional scalar index; redesign only |
+| Article 009 | 963 | Rejected distributive formulation; redesign only |
+| Article 010 | 6,701 | Perspective and ten-state negative model audit |
+| Article 011 V2 | 5,294 | Sampled governance, retrospective evidence, prospective identification/MSE |
+| Article 012 | 7,482 | Registered analytical/numerical delay-dynamics paper |
+| Article 013 | 4,909 | Verified componentwise accounting and applications |
+
+### General/formal sources
+
+- **Article 002:** strongest typed architecture and restricted sampled, observation, RFDE, hybrid, reduction, and accounting theorems.
+- **Article 001:** broad viability, recovery, explicit resource/economic kernels, coupling, cascade, commons, institution, intergenerational, and stochastic results.
+- **Current master:** highest-level typed specification, transformation, commons, and synthesis.
+
+### Applied dynamics and empirical sources
+
+- **Article 012:** registered delayed extractive-mobilisation model family; analytical and source-stated numerical core accepted as verified; minor model corrections and publication archive remain.
+- **Article 011 V2:** periodic-review models, spectral screen, power analysis, case search, prospective identification, and MSE; retrospective computational/empirical artifacts remain to be fully registered.
+
+### Accounting/domain sources
+
+- **Article 013:** analytical accounting and reported application values accepted as verified.
+- **Articles 004–005:** phosphorus and groundwater templates, partially grounded by Articles 011 and 013.
+
+### Superseded fragments
+
+- **Article 006:** unique institutional information-state formulation; fixed-point theorem flawed; most theorems superseded by Articles 001–002.
+- **Article 007:** useful failure taxonomy and module-admission standard; phase-space architecture flawed; otherwise superseded.
+- **Article 010:** useful ten-state negative model audit; architecture/theorems largely superseded by Article 002.
+- **Article 003:** useful conceptual nonlinear-transition framing; developed later by Articles 011–012.
+
+### Rejected current formulations
+
+- **Article 008:** monetary/exergy institutional solvency index invalid as written.
+- **Article 009:** distributive KS/CBF and empirical construction invalid as written.
+
+Do not spend priority effort repairing Articles 008–009 unless recommending a principled redesign.
+
+---
+
+# 5. Recommended attachment bundle
+
+The packet is designed to stand alone for triage and correction proposals. For definitive theorem and source-selection advice, provide the following files in this order.
+
+## Essential core bundle
+
+1. **Current master manuscript** — `revised_sustainability_manuscript.md`  
+   Supplies the official specification, typed judgments, Operators I–II, transformation, composition, and publication-wide architecture.
+
+2. **Article 002** — `uploads/general_theory.txt`  
+   The most important attachment. It contains the strongest typed flux–observation–governance architecture and the restricted sampled, knowledge, RFDE, hybrid, reduction, and accounting theorems.
+
+3. **Article 001** — `uploads/topdown.txt`  
+   Contains the broad viability, recoverability, epistemic, resource/economic, coupling, cascade, commons, institutional, intergenerational, and stochastic theorem families. It is essential for correcting the A001 error docket and choosing canonical results.
+
+## Essential applied/generalization bundle
+
+4. **Article 012** — `uploads/paper2_dynamics.txt`  
+   The strongest registered applied nonlinear-dynamics source. It tests how the general architecture specializes and contains the verified analytical/numerical delay-model family.
+
+5. **Article 011 V2** — `uploads/paper3_empirical.txt`  
+   Supplies periodic-review governance, empirical/spectral evidence, prospective identification, human-in-the-loop design, and MSE. It is essential for advice on empirical grounding and publication architecture.
+
+6. **Article 013** — `uploads/paper1_accounting.txt`  
+   Supplies the verified accounting core, worked ledger, depletion diagnostics, and grounded examples. Include it when reviewers are asked about the flagship’s accounting foundation or first domain application.
+
+## Targeted attachments only when the corresponding question is assigned
+
+- **Article 006** — `uploads/Paper_II_Robust_Epistemic_Viability_V2.txt`  
+  Include for a direct audit of the fixed-point mismatch, common-prescription obstruction, or institutional information state.
+
+- **Article 007** — `uploads/Paper_I_Hybrid_Sustainability_Architecture_V4.txt`  
+  Include for the hybrid phase-space error, failure taxonomy, or domain-module admission standard.
+
+- **Article 010** — `uploads/paper4_perspective.txt`  
+  Include for the ten-state admissibility audit, negative model-closure lessons, or reconstruction of historical numerical targets.
+
+- **Articles 004 and 005** — phosphorus and groundwater module files  
+  Include only when asking reviewers to choose or design the first end-to-end domain case.
+
+- **Articles 008 and 009**  
+  Include only for explicit redesign of the rejected institutional-solvency or distributive-barrier formulations. They are not needed for the canonical mathematical review.
+
+## Minimal recommended submission to one external reviewer
+
+If attachment limits are strict, send:
+
+1. this review packet;
+2. the current master manuscript;
+3. Article 002;
+4. Article 001.
+
+For a second specialist review focused on application and publication strategy, add Articles 012, 011 V2, and 013.
+
+# 6. Highest-priority programme questions
+
+## Priority 1 — Canonicalize the formal spine
+
+We need one official notation, viability hierarchy, policy/disturbance semantics, and theorem-source registry. Please advise:
+
+1. Which notation and operator hierarchy is clearest?
+2. Which Article 001/002 theorem formulations should be canonical?
+3. How should belief/information states and institutional modes be represented without type duplication?
+4. Which results require state-space projection before set inclusion is meaningful?
+
+## Priority 2 — Establish the Operator I hierarchy
+
+We seek a hierarchy encompassing:
+
+- controlled viability;
+- robust/discriminating viability;
+- epistemic viability under partial observation;
+- institutional viability under authority and implementation correspondences;
+- emergency-envelope recovery;
+- quantitative safety values and information value.
+
+Please propose a minimal coherent set of definitions and sufficient regularity assumptions.
+
+## Priority 3 — Develop Operator II
+
+We need a restricted but nontrivial transformation theorem. Please advise how to formalize:
+
+- a disjoint union or category of architecture-indexed state spaces;
+- admissible architecture transitions;
+- translation of stocks, liabilities, identities, beliefs, and obligations;
+- non-relaxable and temporarily relaxable constraints;
+- meta-policies and disturbance strategies across modes;
+- reach–avoid–maintain viability in the destination architecture;
+- impossibility within a registered architecture class.
+
+## Priority 4 — Restricted compositional sustainability
+
+We need a theorem that is stronger than “if every assumption and guarantee holds, then the composition is safe.” Please suggest a mathematically nontrivial restricted class, perhaps using:
+
+- robust invariant sets;
+- small-gain conditions;
+- assume–guarantee contracts;
+- shared-control feasibility;
+- interface confidence propagation;
+- event synchronization/nonblocking;
+- commons source/sink constraints.
+
+We also want one destruction counterexample and one coupling-rescue example.
+
+## Priority 5 — One end-to-end domain case
+
+Groundwater has partial empirical grounding and strong epistemic/institutional relevance. Phosphorus has cleaner moiety accounting and cross-scale trade/catchment structure. Which is the better first complete application, given the objective of testing the general architecture rather than merely illustrating it?
+
+---
+
+# 7. Live mathematical error docket
+
+### Required issue-status vocabulary
+
+Use exactly one primary verdict for each item:
+
+- `FALSE_AS_STATED`
+- `PROOF_INCOMPLETE`
+- `TYPE_OR_DOMAIN_ERROR`
+- `MODEL_INCOMPLETE`
+- `NOT_AN_ERROR_BUT_NEEDS_CLARIFICATION`
+- `DIAGNOSIS_MISTAKEN`
+- `INSUFFICIENT_INFORMATION`
+
+Then state whether the source should be corrected, restricted, demoted, superseded, or left unchanged.
+
+## 6.1 Article 001
+
+### Error A1 — robust tangency versus strong invariance
+
+A proof uses a Nagumo/viability argument for the disturbance inclusion to claim one feedback works for every disturbance. Please specify sufficient assumptions for strong invariance and whether a discriminating-kernel formulation is preferable.
+
+### Error A2 — order-minimal proof wording
+
+Lower harvest produces an order-better trajectory. The source says viability of the minimum-harvest path implies all paths remain viable. The intended result is existential. Please provide the clean corrected theorem/proof statement.
+
+### Error A3 — pollution-feedback comparison sign
+
+For \(g_K\le0\), \(K\le K_{max}\) implies
+
+\[
+g(S,K)\ge g(S,K_{max}).
+\]
+
+Please verify the corrected inner-bound argument.
+
+### Error A4 — capital-consumption kernel
+
+The proof needs only \(c=c_{min}\) but claims larger consumption also preserves the capital kernel. Please provide the correct existential kernel theorem.
+
+### Error A5 — generic non-polyhedrality
+
+The open-dense proof uses an incomplete algebraic-hypersurface argument. Should this be repaired by transversality/elimination, an explicit curvature calculation, or demoted to conjecture?
+
+### Error A6 — Rosen uniqueness
+
+The proof permits heterogeneous damages but substitutes one common second derivative. Please state valid sufficient conditions for diagonal strict concavity or recommend a restricted theorem.
+
+### Error A7 — commons obstruction
+
+The safe-harvest function is underdefined. Please propose a precise boundary-strip or drift condition.
+
+### Error A8 — quota rescue
+
+The quota total is stated \(\le H_{min}\) while the model requires \(H\ge H_{min}\). Please formulate a correct quota theorem using equality or a safe interval.
+
+### Error A9 — sanction sufficiency
+
+The proof blocks upward deviation but does not establish quota as the unique best response. Please provide minimal additional assumptions or a weaker correct result.
+
+### Error A10 — Ostrom sufficiency/necessity
+
+Please distinguish constructed “can be necessary” examples from universal necessity and propose a sound formal sufficiency theorem.
+
+### Error A11 — implementation lattice
+
+Arbitrary contraction of a viable control set can destroy viability. Please replace the false downward-closure statement with the correct order structure.
+
+## 6.2 Article 002
+
+### Error B1 — canonical notation and operator hierarchy
+
+Please propose a notation that avoids collisions among constraint sets, sink stock \(K\), carrying capacity \(C\), architecture \(\mathcal A\), assessment operator, and constitutive class.
+
+### Error B2 — selector regularity
+
+The knowledge-kernel theorems allow arbitrary pointwise selectors. What minimal measurable-selection hypotheses are needed for implementable policies, and which results should remain choice-theoretic only?
+
+### Error B3 — exact information and hybrid tube assumptions
+
+How should the paper distinguish theorem assumptions—exact filters, compact tubes, Hausdorff continuity—from properties actually constructed in applications?
+
+## 6.3 Article 006
+
+### Error C1 — fixed-point operator mismatch
+
+The recursion is
+
+\[
+K_{n+1}=K_n\cap Pre(K_n),
+\]
+
+but the Tarski operator is
+
+\[
+T(Q)=S\cap Pre(Q).
+\]
+
+Please recommend the correct formulation:
+
+- safe-base operator \(S_{safe}\cap Pre(Q)\); or
+- contracting operator \(Q\cap Pre(Q)\).
+
+Specify conditions under which countable descent reaches the greatest fixed point and when transfinite iteration is required.
+
+### Error C2 — common safe prescription
+
+If implementation can depend on latent state, raw-action intersection may be too strong. Please formalize the correct prescription-level obstruction.
+
+### Error C3 — information-refinement inclusion
+
+Kernels may inhabit different belief spaces. Please specify a common physical projection or order relation making refinement monotonicity rigorous.
+
+## 6.4 Article 007
+
+### Error D1 — hybrid phase space
+
+A discrete jumping institutional mode was included in a continuous history. Please recommend a clean \((x_t,h)\) hybrid state or a suitable piecewise/càdlàg history space.
+
+### Error D2 — duplicated institutional mode
+
+Belief histories included \(h\), then \(h\) was added separately. Please recommend the cleanest information-state definition.
+
+## 6.5 Article 011
+
+### Error E1 — hold/interpolation mismatch
+
+Should the invariance proposition be restricted to zero-order hold or generalized to measurable convex interpolation?
+
+### Error E2 — sampled-data empirical identification
+
+Please review the prospective event-panel, quasi-experimental, held-out model-comparison, human-in-the-loop, and MSE designs. What is the minimal defensible identification sequence?
+
+## 6.6 Article 012
+
+The analytical and source-stated numerical claims are accepted as verified. Remaining corrections:
+
+1. add the \(E=E_{max}\) extinction-face equilibrium;
+2. donor-limit or stop fixed-demand stock culling at zero;
+3. resolve \(\omega_A\) versus \(\kappa_A\);
+4. verify invariance of \(X+U\le\mathcal M\) in MPF;
+5. preserve exact source status for open fold/SNPO classifications.
+
+Please advise whether any of these alter the central analytical or numerical conclusions.
+
+## 6.7 Article 013
+
+1. rename service readout to avoid conflict with observation;
+2. add closedness/attainment qualification to the directional support fraction.
+
+Please confirm these are sufficient.
+
+---
+
+# 8. Rejected formulations — redesign advice requested
+
+## 7.1 Institutional measurement
+
+The rejected index used monetary expenditure as “exergy,” made unit/arithmetic errors, and confused necessity and sufficiency. We still need a valid institutional operationalization.
+
+Please compare three alternatives:
+
+1. a multidimensional vector of observation, latency, authority, enforcement, compliance, mandate load, learning, and budget margins;
+2. a dynamics-aware margin
+   \[
+   M_\tau=T_{exit}-T_{response};
+   \]
+3. an epistemic-institutional viability kernel or capture basin.
+
+Which can be measured first without creating another arbitrary index?
+
+## 7.2 Distributive measurement
+
+The rejected construction mixed dimensions inside LogSumExp, asserted a false finite-smoothing equivalence, and pooled regional deciles incorrectly.
+
+Please advise on a valid design using:
+
+- dimensionless normalized margins;
+- exact nonsmooth conjunction versus conservative smooth inner certificate;
+- bottom-group quantiles or essential infimum;
+- correct pooled mixture distributions;
+- intergenerational transition matrices;
+- a genuine dynamic viability/CBF condition.
+
+---
+
+# 9. Canonical decision questions that must be answered explicitly
+
+## 8.1 Viability hierarchy
+
+Recommend one notation for the following distinct objects:
+
+1. controlled existential viability;
+2. robust/discriminating viability under \(\exists\pi\forall\delta\);
+3. epistemic viability on belief/information states;
+4. institutional viability under authority and implementation correspondences;
+5. finite-horizon chance viability;
+6. capture/recoverability;
+7. institution-specific safety under a fixed policy.
+
+State which inclusions are literal and which require projection or aligned classes.
+
+## 8.2 Fixed-point construction
+
+For an information predecessor \(Pre\), compare rigorously:
+
+\[
+\Phi_1(Q)=S_{safe}\cap Pre(Q)
+\]
+
+and
+
+\[
+\Phi_2(Q)=Q\cap Pre(Q).
+\]
+
+State:
+
+- which operator computes the greatest robust invariant information family;
+- the correct initial iterate;
+- whether the target is a fixed point or greatest post-fixed point;
+- conditions for countable descent;
+- when transfinite iteration is needed;
+- how policy selection is preserved in the limit.
+
+## 8.3 Transformation theorem target
+
+Propose the smallest nontrivial class for which a theorem can be proved. An acceptable answer should define architecture-indexed spaces, transitions, safe sets, reset maps, policies, disturbances, and identity/obligation translation. Avoid merely restating reach–avoid definitions.
+
+## 8.4 Composition theorem target
+
+Propose one restricted theorem with checkable conditions and a conclusion not already assumed. Candidate classes include monotone systems, linear systems with invariant polytopes, barrier-certified modules with bounded interface gains, or sampled finite-state contracts.
+
+## 8.5 Empirical anchor
+
+Choose groundwater or phosphorus as the first complete domain test. Give a reason based on falsifiability, available measurements, model-identification feasibility, and ability to exercise multiple architectural layers.
+
+---
+
+# 10. Requested response format
+
+For each issue you address, please use:
+
+1. **Issue ID**
+2. **Verdict:** correct diagnosis / partly correct / mistaken
+3. **Corrected statement**
+4. **Minimal assumptions**
+5. **Proof or proof sketch**
+6. **Counterexample if assumptions are weakened**
+7. **Recommended source status:** theorem / conditional theorem / conjecture / template / reject
+8. **Downstream consequences** for the master architecture and publication plan
+9. **Relevant literature** with precise citations where known
+10. **Confidence level** and unresolved questions
+
+Then provide:
+
+- your top five priorities in order;
+- your recommended canonical notation;
+- your recommended minimum-paper architecture;
+- any major mathematical issue absent from this packet.

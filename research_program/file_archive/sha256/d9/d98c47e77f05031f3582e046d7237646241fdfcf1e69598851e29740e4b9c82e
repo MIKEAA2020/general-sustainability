@@ -1,0 +1,166 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,booktabs,hyperref}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{microtype}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\theoremstyle{definition}
+\newtheorem{numresult}{Numerical result}
+\title{Interval Hopf Enclosures and Numerical Evidence for\\the Inner Small-Branch Turning Point}
+\author{Your Name}
+\date{\today}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Interval Newton applied to an interval-enclosed Hopf cubic certifies the simple positive frequency roots and, after branch-safe interval evaluation of the phase relation, the corresponding fundamental delays for the named inner three-state models. Fourier collocation follows one periodic-orbit branch of the gated inner three-state DDE from the lower subcritical Hopf to $\tau=5.58667$, with residual of order $10^{-14}$ for the $m=64$ discretized map. The fixed-$\tau$ Jacobian becomes strongly ill-conditioned, and the same solver fails at $\tau=5.590$ under the stated settings. Together with the real Floquet-multiplier evidence reported in the companion paper, these computations support---but do not interval-certify---a small-branch turning point near $\tau\approx5.587$. A Moore--Spence or pseudo-arclength bordered validation of the fold is not constructed here. The fold statements concern the inner three-state DDE only, not the working four-state, finite-donor, vector, spatial, or stage-structured models.
+\end{abstract}
+
+\paragraph{Verification status.} The Hopf interval certificates and all other computational claims are accepted as externally verified at their exact source-stated scope by explicit user attestation. The turning-point result remains numerical continuation evidence, not a fold certificate. Publication artifacts remain to be archived.
+
+\section{Scope and local Hopfs}
+
+This note has two different evidentiary levels. The local Hopf calculation can be certified once the coefficient construction and phase evaluation are enclosed. The periodic-orbit calculation below is a high-accuracy collocation computation, not a validated enclosure of a continuous DDE fold.
+
+For the gated inner three-state DDE of~\cite{paperI}, write the Hopf modulus polynomial as the monic cubic $H(x)$ in $x=\omega^2$. Its coefficients depend on the equilibrium and the linearisation coefficients of the named model. Interval Newton is applied to $H(x)=0$; the corresponding delay is then obtained from the phase relation
+\begin{equation}
+\tau(\omega)=
+\frac{-\arg\!\left(P(i\omega)/(C_ZL(i\omega))\right)+2\pi k}{\omega},
+\qquad \omega=\sqrt{x}.
+\label{eq:phase}
+\end{equation}
+Thus the delay is not a root of the argument formula. It is the interval evaluation of~\eqref{eq:phase} at a certified positive root of $H$.
+
+For completeness, with
+\[
+P(\lambda)=(\lambda-A_N)(\lambda+d)(\lambda-C_E),
+\qquad
+L(\lambda)=B_E(\lambda-A_N)+A_EB_N,
+\]
+the modulus condition gives the explicit cubic
+\begin{equation}
+H(x)=(x+A_N^2)(x+d^2)(x+C_E^2)
+-C_Z^2\left[B_E^2x+(A_EB_N-A_NB_E)^2\right].
+\label{eq:hopf-cubic}
+\end{equation}
+At the interior equilibrium of the gated inner core, the filter identity
+$A_EB_N-A_NB_E=0$ reduces this to
+\[
+H(x)=(x+A_N^2)(x+d^2)(x+C_E^2)-C_Z^2B_E^2x.
+\]
+
+\begin{numresult}[Hopf enclosures]
+\label{num:H}
+For gated Candidate~A, interval Newton applied to the interval-enclosed coefficient representation of $H$ certifies simple positive roots in $x=\omega^2$. Branch-safe interval evaluation of~\eqref{eq:phase} then gives the fundamental delays
+\[
+\tau_-\in[3.6661490142739,\,3.6661490142743],
+\]
+\[
+\tau_+\in[150.3584773101408,\,150.3584773101421].
+\]
+The displayed upper interval has width of order $10^{-12}$~yr. Candidate~B intervals are not reproduced here; they are the corresponding certified values reported in~\cite{paperI}. The certificate is conditional on the stated interval coefficient and phase-evaluation pipeline, including correct handling of the argument branch.
+\end{numresult}
+
+A full reproducibility record for an independent certificate must state the interval library, working precision, rounding mode, parameter enclosures, equilibrium enclosure, coefficient intervals, and branch-safe implementation of $\arg$ (or `atan2'). Those implementation details are part of an interval certificate, not merely numerical-method metadata. The present workspace records the reported enclosures but does not yet contain an independently reproduced outward-rounded coefficient-and-phase pipeline; the certificate claim is therefore conditional on that pipeline being supplied or independently verified.
+
+\section{Collocation formulation and small-branch computation}
+
+Let $m=64$ be the number of Fourier nodes. Let $Y\in\mathbb R^{192}$ contain the Fourier or nodal coefficients of the three state variables and let $T>0$ be the unknown period. After adding one explicit phase condition, the fixed-$\tau$ collocation map has the dimensions
+\begin{equation}
+F:\mathbb R^{192}\times\mathbb R\longrightarrow\mathbb R^{193},
+\qquad F(Y,T;\tau)=0.
+\label{eq:collocation-map}
+\end{equation}
+Thus $D_{(Y,T)}F$ is a $193\times193$ matrix. The phase condition must be included among the $193$ equations; for example, one may use an integral phase condition
+\[
+\psi_{\mathrm{ph}}(Y)=
+\langle Y-Y_{\mathrm{ref}},\partial_\theta Y_{\mathrm{ref}}\rangle=0,
+\]
+with the chosen inner product and normalization stated explicitly. The present implementation instead fixes the first sine coefficient of the $N$ component, so that phase convention is the one associated with the reported residuals. In either case, the phase equation is part of $F$ and removes the time-translation degeneracy.
+
+Writing $Y$ for the $192$ Fourier or nodal coefficients, the discretized map has the schematic form
+\[
+F(Y,T;\tau)=
+\begin{pmatrix}
+\mathcal D_TY-f\bigl(Y,\mathcal D_{\tau/T}Y\bigr)\\
+\psi_{\mathrm{ph}}(Y)
+\end{pmatrix},
+\]
+where $\mathcal D_T$ is the spectral time derivative and $\mathcal D_{\tau/T}$ is the spectral delay operator. This is a finite-dimensional collocation map; no continuous-DDE truncation bound is implied by its residual.
+
+\begin{numresult}[Numerical small-branch continuation]
+\label{num:branch}
+A Newton--LM solver, initialized from a Hopf normal-form predictor at $\tau=\tau_-+0.05$ and continued using a $\sqrt{\tau-\tau_-}$ predictor, finds one approximate periodic-orbit solution of~\eqref{eq:collocation-map} at each sampled $\tau\in[3.716,5.58667]$. The discretized residual satisfies
+\[
+\|F\|_2\le6\times10^{-14}
+\]
+on the reported sample set. The peak-to-peak amplitude of $N$ increases from $1.10$ to $21.80$, and the period increases from $250.0$ to $313.76$~yr. The solver does not converge to the requested tolerance at $\tau=5.590$ under the stated LM budget; the reported residual after that budget is $\|F\|_2=2.8\times10^{-6}$. This is a solver-success/failure bracket, not a nonexistence result.
+\end{numresult}
+
+\begin{numresult}[Last successful collocation point]
+\label{num:zero}
+At $\tau=5.586666666666667$, the computed collocation orbit satisfies
+\[
+\|F\|_2=5.43\times10^{-14},
+\qquad
+\|J^{-1}F\|_2=5.69\times10^{-12},
+\]
+where $J=D_{(Y,T)}F$ has
+\[
+\sigma_{\min}(J)=4.54\times10^{-7},
+\qquad
+\operatorname{cond}_2(J)=1.25\times10^7.
+\]
+Effort remains below $E=7.93\ll E_{\max}$ and $N\ge72.2$, so the effort gate and the filter floor are inactive on this orbit. The quantity $\|J^{-1}F\|_2$ is the norm of a linearized Newton correction for the finite-dimensional collocation map; it is not a rigorous error bound for the continuous DDE or for the fold location.
+\end{numresult}
+
+The numerical data support continuation of one small-branch family through $\tau=5.58667$. They do not establish uniqueness of the collocation zero at each $\tau$, and solver failure at $5.590$ does not exclude another zero or another periodic-orbit family there.
+
+Independent shooting/Floquet calculations reported in~\cite{paperI} give a real nontrivial multiplier changing from approximately $1.0514$ at $\tau=5.584$ to $0.99898$ at $\tau=5.587$ on the corresponding small branch. This is consistent with a candidate simple turning point of that branch. It is not an interval certificate, and the present note does not independently recompute or enclose those multipliers.
+
+The values at $\tau=5.58667$ and the approximate values quoted for the fold near $\tau=5.587$ are not evaluations at exactly the same parameter. Differences in rounded amplitude and period should therefore not be interpreted as an inconsistency without a common-parameter recomputation. The present point has amplitude $21.80$ and period $313.76$~yr.
+
+\section{What would certify the fold}
+
+Let
+\[
+J(Y,T;\tau)=D_{(Y,T)}F(Y,T;\tau).
+\]
+A practical validated fold computation should use a Moore--Spence system rather than $\det J=0$. Introduce a right nullvector $v\in\mathbb R^{193}$ and a fixed normalization vector $\ell$. The candidate fold solves
+\begin{equation}
+\mathcal M(Y,T,\tau,v)=
+\begin{pmatrix}
+F(Y,T;\tau)\\
+J(Y,T;\tau)v\\
+\ell^\top v-1
+\end{pmatrix}=0.
+\label{eq:moore-spence}
+\end{equation}
+The system has $387$ unknowns and equations. A validated Krawczyk or interval-Newton inclusion for~\eqref{eq:moore-spence} would establish a unique fold of the $m=64$ collocation equations inside the resulting box.
+
+For a simple fold, one should additionally enclose a left nullvector $w$ and verify the nondegeneracy conditions
+\begin{equation}
+w^\top F_\tau\not\ni0,
+\qquad
+w^\top D^2_{(Y,T)}F[v,v]\not\ni0,
+\label{eq:nondeg}
+\end{equation}
+with the phase condition regular. A pseudo-arclength system is an alternative for continuing through the turn, but it does not by itself certify fold nondegeneracy.
+
+The present paper does not construct~\eqref{eq:moore-spence} or an interval enclosure of~\eqref{eq:nondeg}. In particular, a preliminary fixed-$\tau$ Krawczyk construction based on an inverse of $J$ does not provide a contracting free-$\tau$ enclosure near the ill-conditioned turning region. This is a limitation of that formulation, not an exclusion of the fold. The fold statement is therefore numerical evidence, not a validated fold theorem.
+
+\section{Relation to the broader program}
+
+All fold and branch statements in this note concern the gated inner three-state DDE and its $m=64$ collocation discretization. They do not establish the corresponding event in the turnover-corrected working four-state core, the finite-donor primitive system of Paper~II, the vector Liebig system of Paper~IV, the stage-structured fisheries models of Paper~V, or the spatial DDE--PDE of Paper~VI. In particular, the separate lower termination of the attracting large-cycle family and the upper-window periodic families are not analyzed here.
+
+\section{Conclusion}
+
+The Hopf calculation can provide a genuine interval certificate only when the coefficient construction, equilibrium, and phase relation are enclosed with interval or exact arithmetic and the argument branch is handled safely. Under that qualification, the positive roots of $H$ and the displayed Candidate~A delays are certified for the named inner three-state model.
+
+Fourier collocation follows one small-branch family to $\tau=5.58667$ with a residual of order $10^{-14}$ for the finite-dimensional map. The fixed-$\tau$ Jacobian becomes strongly ill-conditioned, and the specified solver fails at $\tau=5.590$. Together with the Floquet evidence reported in Paper~I, this supports a candidate small-branch turning point near $\tau\approx5.587$, but does not enclose it. A validated Moore--Spence or pseudo-arclength fold computation, followed by a Fourier-tail or function-space error bound, would be required to certify a fold of the continuous DDE.
+
+\begin{thebibliography}{9}
+\bibitem{paperI} Y.~Name, ``Scarcity-driven capital liquidation\ldots,'' companion manuscript, 2026.
+\end{thebibliography}
+\end{document}

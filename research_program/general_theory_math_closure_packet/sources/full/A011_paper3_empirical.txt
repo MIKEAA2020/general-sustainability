@@ -1,0 +1,296 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsfonts,amsthm,booktabs,tabularx,array,geometry,hyperref}
+\geometry{margin=2.7cm}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{remark}{Remark}
+\newcommand{\PiE}{\Pi_{[0,E_{\max}]}}
+
+\title{Periodic Review and Resource Governance:\\
+Sampled-Data Models, Spectral Screens, and Case Evidence}
+\author{Anonymous}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We distinguish a continuous action delay, a periodic review interval with sample-and-hold control, and a time-varying policy parameter. The declared three-state sampled system is a projected explicit-step specialization of the extractive M3-B mobilisation law, not a general harvest-control rule, and its non-negative state space is forward invariant. Its rapid-review relation to the continuous no-delay system is the standard finite-horizon consistency of an approximate sampled-data model; it establishes neither stability at any positive review interval nor the reported response regions. Separate delayed-recruitment calculations, classified from long-horizon trajectories rather than Poincar\'e-map multipliers, suggest oscillatory responses near review intervals of $3$--$4$ yr for an anchovy-class parameterization and $6$--$12$ yr for a sprat-class parameterization, while no persistent oscillation was detected for the cod-class grid over $[1,20]$ yr. We retain these as exploratory model-output regions pending complete stage-model registration, not as analytical stability boundaries or results for protective management. A multiplicity-controlled Lomb--Scargle screen of 42 stocks selected for annual review detected no robust peak in the declared biomass or effort bands. RAM supplies assessment series but does not identify controller sign or rule architecture, and simulated-signal power is low across much of the target space; the null therefore concerns spectral concentration in this selected cohort, not whether annual review stabilizes extractive or protective control. A structured search across more than 30 resource and produced-capital systems found no unconfounded case matching the feedback law, an independently dateable lag, and the predicted outcome, but its stringent eligibility criteria prevent that zero count from serving as independent disconfirmation. We consequently specify a prospective programme comprising governance-event panels, quasi-experimental policy-timing designs, out-of-sample mechanism comparison, a randomized human-in-the-loop experiment, and closed-loop management strategy evaluation (MSE). These are preregistration targets, not completed causal results. Crossing a fixed review-interval boundary is a sampled-data parameter bifurcation only when a multiplier crossing is established; it is not rate-induced tipping unless the interval or another parameter is ramped through time.
+\end{abstract}
+
+\section{Purpose and scope}
+
+A continuous delay differential equation assumes that a delayed signal enters a continuously evolving control law. Many real institutions instead observe or assess a resource at discrete times, choose a rule-based action, and hold that action until the next review. Replacing one architecture by the other can change stability boundaries and even remove an apparent instability band. It is therefore necessary to test the governance architecture, not merely reinterpret a delay parameter.
+
+This paper has five aims:
+
+\begin{enumerate}
+    \item define a transparent sampled-data family related to, but distinct from, the continuous-delay models;
+    \item state what limit connects rapid review to a continuous no-delay control under explicit assumptions;
+    \item report the sampled-review simulations, cross-sectional spectral screen, power analysis, and structured field-case search;
+    \item specify prospective governance-event, quasi-experimental, mechanism-comparison, and controlled-experiment designs; and
+    \item define a closed-loop management strategy evaluation (MSE) capable of separating process, observation, parameter, structural, decision, and implementation uncertainty.
+\end{enumerate}
+
+No extant fishery or aquifer in the case search isolates and validates the mechanism. Absence of a spectral peak is not interpreted as proof of equilibrium stability.
+
+\section{Governance-time ontology}
+
+Let
+
+\begin{center}
+\begin{tabularx}{\textwidth}{p{3.5cm}X}
+\toprule
+Object & Definition\\
+\midrule
+Observation interval $T_{\rm obs}$ & Time between raw measurements.\\
+Assessment interval $T_{\rm assess}$ & Time between formal state estimates.\\
+Review interval $T_r$ & Time between opportunities to change the command.\\
+Decision lag $\tau_{\rm dec}$ & Assessment completion to formal decision.\\
+Deployment lag $\tau_{\rm dep}$ & Decision to implemented change in extraction pressure.\\
+Ecological response lag $\tau_{\rm eco}$ & Implementation to detectable ecological response.\\
+Memory timescale $\tau_m$ & Relaxation time of a filtered institutional signal; not a discrete delay.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+These quantities should not be collapsed into one ``governance lag'' unless the empirical record cannot resolve them and the aggregation rule is declared. In particular, reviews can be annual while deployment is delayed, or observations can be frequent while decisions are legally fixed for several years. This conceptual separation is not itself an identifiability result. Stock and realised-effort series alone may identify only a combined closed-loop phase shift; separate estimation of assessment, decision, and deployment delays requires dated observation releases, assessment products, commands, and implementation records or a proved structural-identifiability argument for the declared observation model.
+
+The review opportunity is not the same as response sign. This paper studies an \emph{extractive} command that raises effort in response to a perceived decline. A protective controller that lowers effort is a different model and should be included as a comparator in MSE.
+
+\section{A sampled-data model family}
+
+\subsection{Process and observation equations}
+
+Let review times be $t_n=nT_r$. Between reviews, extractive effort is held at $E_n$:
+\begin{align}
+\dot N(t)&=rN(t)\left(1-\frac{N(t)}{K}\right)-qE_nN(t),
+\qquad t\in[t_n,t_{n+1}), \label{eq:sample-N}\\
+\dot Z(t)&=\frac{\Phi(qE_nN(t)-S(N(t)))-Z(t)}{\tau_m}, \label{eq:sample-Z}
+\end{align}
+where $S(N)=rN(1-N/K)$ and $\Phi$ is a non-negative signal map. The assessment available at review $n$ is
+\begin{equation}
+\widehat Z_n=\mathcal A_n\!\left(\{Y_j:t_j\le t_n-\tau_{\rm dec}\}\right),
+\qquad
+Y_j=\mathcal O(N(t_j))+\varepsilon_j.
+\label{eq:assessment}
+\end{equation}
+This separates the latent process $N$, observations $Y$, and assessments $\widehat Z$. Measurement and assessment errors need not be independent or Gaussian.
+
+\subsection{Decision and deployment maps}
+
+For the displayed member, the review map is the projected explicit step
+\begin{equation}
+E_{n+1}^{\rm cmd}
+=\PiE\left\{E_n+T_rF_B(E_n,\widehat Z_n)\right\},
+\label{eq:update}
+\end{equation}
+where
+\begin{equation}
+F_B(E,Z)=\left(1-\frac{E}{E_{\max}}\right)
+\left[
+\eta E\left(\frac{Z}{\Delta_{\rm ref}}-\frac{E}{E_{\max}}\right)
++\delta_0\frac{Z}{Z_{\rm ref}+Z}
+\right].
+\label{eq:FB}
+\end{equation}
+Together with the shifted, floored softplus
+\[
+\Phi_k(s)=\max\left\{0,\frac{1}{k}\log(1+e^{ks})-\frac{\log 2}{k}+\delta\right\},
+\]
+this is the sample-and-hold counterpart of Paper~2's boundary-exact M3-B extractive mobilisation law. We call it \textbf{SD-E-B3}. It is an explicit controller discretisation, not a generic harvest-control rule and not a model of protective quota reduction.
+
+The indexing fixes a one-step flow-then-update convention: $E_n$ is held on $[t_n,t_{n+1})$, and the assessment indexed by $n$ defines the next command. The deterministic calculations use contemporaneous assessment, no separate decision or deployment queue, and no added decision or deployment lag, so $\tau_{\rm dec}=\tau_{\rm dep}=0$ in addition to the one-step convention itself. The command changes at the next review boundary; multiplicative assessment error appears only in the separate robustness experiment. A positive $\tau_{\rm dep}$ would require an explicitly registered hold or interpolation rule.
+
+Alternative controllers must receive distinct IDs:
+\begin{itemize}
+    \item \textbf{SD-E-B3}: the extractive update in Eq.~\eqref{eq:update};
+    \item \textbf{SD-P}: a protective update, with the response to decline entering with the opposite sign;
+    \item \textbf{SD-F}: a fixed multi-year plan with no state-responsive update between scheduled resets;
+    \item \textbf{SD-H}: a hybrid controller with limits on annual change, emergency triggers, or legal overrides.
+\end{itemize}
+Only extractive-sign delayed-recruitment trajectory calculations are reported below. They are separated from SD-E-B3 in the computational-results section. SD-P, SD-F, and SD-H are comparators for the prospective MSE, not completed numerical experiments in this article. A fixed plan and a state-responsive plan with the same nominal review period are not the same intervention.
+
+\begin{proposition}[Forward invariance of the sampled process]
+Suppose $N(0)\ge0$, $Z(0)\ge0$, $E_0\in[0,E_{\max}]$, and $\Phi$ is non-negative. Let every effort command be projected by $\Pi_{[0,E_{\max}]}$, and let any between-review deployment interpolation remain in the convex interval joining consecutive commands. Then $N(t)\ge0$, $Z(t)\ge0$, and $E(t)\in[0,E_{\max}]$ for every time at which the sampled solution exists.
+\end{proposition}
+
+\begin{proof}
+Proceed by induction over review intervals. Suppose at a review time $t_n$ that $N(t_n)\ge0$, $Z(t_n)\ge0$, and the command to be held or interpolated lies in $[0,E_{\max}]$. Projection places the next command in the same closed interval. A hold retains an endpoint of that interval, while any convex interpolation has the form
+\[
+E(t)=(1-\theta(t))E_n+\theta(t)E_{n+1},
+\qquad 0\le\theta(t)\le1,
+\]
+and hence also remains in $[0,E_{\max}]$.
+
+On $[t_n,t_{n+1}]$, Eq.~\eqref{eq:sample-N} can be written
+\[
+\dot N=N\left[r\left(1-\frac{N}{K}\right)-qE(t)\right].
+\]
+For a positive initial value, its solution satisfies
+\[
+N(t)=N(t_n)\exp\left\{
+\int_{t_n}^{t}\left[r\left(1-\frac{N(s)}{K}\right)-qE(s)\right]ds
+\right\}>0;
+\]
+if $N(t_n)=0$, uniqueness gives the identically zero solution on the interval. Thus $N$ cannot become negative. Next set
+\[
+\nu(t)=\Phi(qE(t)N(t)-S(N(t)))\ge0.
+\]
+Variation of constants in Eq.~\eqref{eq:sample-Z} gives
+\[
+Z(t)=e^{-(t-t_n)/\tau_m}Z(t_n)
+ +\frac{1}{\tau_m}\int_{t_n}^{t}
+ e^{-(t-s)/\tau_m}\nu(s)\,ds\ge0.
+\]
+Therefore all three inequalities hold through $t_{n+1}$. They hold at $t_0=0$ by hypothesis, so induction proves them on every review interval for which the sampled solution exists.
+\end{proof}
+
+\subsection{Rapid-review limit}
+
+Define $u=(N,Z,E)$ and the corresponding continuous no-delay system
+\begin{equation}
+\dot u=G(u)=
+\begin{pmatrix}
+S(N)-qEN\\
+[\Phi(qEN-S(N))-Z]/\tau_m\\
+F_B(E,Z)
+\end{pmatrix}.
+\label{eq:continuous-limit}
+\end{equation}
+
+\begin{remark}[Finite-horizon rapid-review consistency]
+Approximate discrete-time models of nonlinear sampled-data systems have standard finite-horizon consistency results \cite{nesic2004}. In the present setting, suppose that $G$ is continuously differentiable with bounded derivative on a compact neighbourhood containing the compared trajectories on $[0,T]$, assessments equal the contemporaneous state, no additional decision or deployment queue is present, projection is inactive, and the sampled and continuous systems have the same initial state. The frozen-effort flow followed by the explicit effort step then has a one-step defect of order $O(T_r^2)$ relative to the exact flow of Eq.~\eqref{eq:continuous-limit}. The usual discrete Gronwall estimate yields an $O(T_r)$ review-time error and uniform convergence on every fixed finite horizon as $T_r\to0$.
+\end{remark}
+
+This cited consistency statement is a numerical-approximation property, not a finite-review stability theorem. It gives no uniform-in-time estimate, does not preserve stability automatically, and does not control any trajectory-classified response region reported below. It also excludes active projection, delayed or erroneous assessment, a deployment queue, and stochastic updates. In particular, it neither identifies a finite $T_r$ with a continuous discrete delay nor implies that sufficiently small positive $T_r$ is stable when the continuous target is unstable.
+
+\section{Stability and terminology}
+
+For a deterministic sampled system, combine the inter-review flow and review update to obtain a Poincar\'e map
+\[
+X_{n+1}=\mathcal P_{T_r}(X_n),
+\]
+where $X_n$ includes the ecological state, memory, held command, and any explicitly modelled queue. A fixed point is locally asymptotically stable if every eigenvalue of $D\mathcal P_{T_r}(X^*)$ lies inside the unit disk. A verified crossing through the unit circle as the fixed parameter $T_r$ changes is a \textbf{sampled-data parameter bifurcation}. It is not rate-induced tipping in the strict sense \cite{ashwin2012}: rate-induced tipping requires a nonautonomous parameter path, such as $\dot\mu=\epsilon$, and a loss of tracking as the ramp speed changes.
+
+The calculations reported here did not evaluate $D\mathcal P_{T_r}$, a monodromy matrix, or Floquet multipliers. They used long-horizon trajectories, tail amplitudes, multiple histories, and integration-step refinement. Their reported bands are therefore finite-grid, trajectory-classified response regions; no Neimark--Sacker, flip, or other multiplier-crossing classification is claimed. Direct multiplier continuation would be a valuable extension, particularly near weak responses and long transients, but it is not silently attributed to the present calculations. Matrix-exponential formulas can simplify a smooth finite-dimensional linearized inter-review flow; a delayed-recruitment model instead requires the appropriate delay-system variational operator and cannot in general be reduced to that finite matrix formula.
+
+A future boundary calculation should report the exact flow/update ordering and information pattern, all observation and deployment lags, the derivative construction for $\mathcal P_{T_r}$, multiplier trajectories and crossing directions, nonlinear trajectories on both sides, and numerical refinement. These requirements distinguish a located bifurcation boundary from the trajectory summaries retained here.
+
+\section{Computational and empirical results}
+
+\subsection{Declared sampled-review experiments}
+
+The fully printed three-state model is SD-E-B3: Eqs.~\eqref{eq:sample-N}--\eqref{eq:update} with $\Phi=\Phi_k$. Its complete normalized Candidate-A and Candidate-B vectors are the M3-B vectors in the companion model registry. The anchovy-, sprat-, cod-, and slow-stock calculations instead use delayed-recruitment variants, provisionally labelled SD-E-DR-AN, SD-E-DR-SP, SD-E-DR-CO, and SD-E-DR-SL, respectively. These labels separate the four output records from SD-E-B3; a life-history class name and label do not by themselves complete a model registration. Reproduction requires a companion registration that states the complete delayed-recruitment equations and state dimension, each class-specific parameter vector, the effort gate, $\Phi$, the initial history, the flow/update order, and the numerical and tail-classification conventions. Because that complete stage registration is not present in the main-text model record, the values below are retained as exploratory computational summaries and are not attributed to SD-E-B3.
+
+All deterministic sampled summaries use the one-step flow-then-update convention, contemporaneous exact assessment, $\tau_{\rm dec}=\tau_{\rm dep}=0$, and no decision or deployment queue. Multiplicative assessment error is introduced only in the designated robustness experiment. Classification uses long-horizon trajectories, tail amplitudes, multiple histories, and integration-step refinement at representative points; it does not use Poincar\'e-map eigenanalysis.
+
+For the fast-maturing SD-E-DR-AN and SD-E-DR-SP records, the delayed-recruitment summary uses maturation delay $g$ and regeneration rate $r$. The continuous-delay calculations locate response regions near $rg\approx1.5$--$1.6$: for $g=2$ yr, $r\in(0.77,0.81)$ yr$^{-1}$ at $\eta=0.914$ with a delay interval of approximately $2.6$--$7.8$ yr; for $g=1$ yr, the corresponding high-$r$ interval is approximately $1.565$--$1.585$ yr$^{-1}$ with a delay interval of $1.6$--$3.5$ yr. These are finite-grid trajectory summaries, not closed analytical stability regions.
+
+\subsection{Sampled-review response regions}
+
+The retained output summary is as follows. Annual-review trajectories converge over the tested horizons for every tested effort-response value in the SD-E-DR-AN and SD-E-DR-SP grids. Persistent tail oscillation is reported for SD-E-DR-AN at $T_r\approx3$--$4$ yr, with a weak response at $T_r=2$ yr, and for SD-E-DR-SP at $T_r\approx6$--$12$ yr. In SD-E-DR-CO, trajectories converge to equilibrium for every tested $T_r\in[1,20]$ yr, although the corresponding continuous-delay calculation has an oscillatory interval. These statements describe tested trajectories and grids; they do not establish local asymptotic stability for every history or locate multiplier crossings.
+
+The archived diagnostics indicate percent-scale biomass excursions and order-one effort excursions relative to equilibrium. The exact percentages are not used as effect-size estimates here because the available convention does not distinguish peak-to-peak range from half-range and the approach to the large effort response contains a long transient. Likewise, spectral peaks near 4 yr in anchovy-class biomass and 12 yr in effort, and near 8 yr in sprat-class biomass and 60 yr in effort, are retained only as observable-specific dominant peaks over the analysed windows. Components of one stationary periodic orbit cannot have different fundamental periods; the diagnostics may instead reflect harmonics, subharmonics, modulation, or transient spectral content. No decomposition has established whether the baseline $\delta_0$ term, signal regularisation, or another controller component dominates these responses.
+
+Multiplicative assessment-error experiments retain the anchovy-class trajectory region through $30\%$ error and produce no noise-induced persistent tail oscillation at annual review in the tested ensemble. These are robustness summaries for the declared perturbation, not guarantees under arbitrary observation error.
+
+For SD-E-DR-SL with $r\in(0.01,0.05)$ yr$^{-1}$, trajectories oscillate over part of the tested grid below approximately $20$--$30$ yr and converge at longer review intervals, with transition brackets between approximately $30$ and $50$ yr depending on $r$. This one-sided pattern does not contradict rapid-review consistency: the continuous no-delay M3-B target is itself unstable over part of the slow-$r$ regime, and the delayed-recruitment calculations can oscillate even with zero institutional delay. Small-$T_r$ trajectories may therefore approximate an unstable continuous target on finite horizons. The result is conditional on the delayed-recruitment variant and must not be interpreted as a general claim that slower review stabilizes resource governance. The reported dominant timescales are centuries, beyond the length needed to resolve multiple cycles in most institutional records.
+
+\subsection{Cross-sectional RAM spectral screen}
+
+The cross-sectional screen uses RAM Legacy Stock Assessment Database v4.66 series for a frozen 42-stock cohort selected by a separate annual-review eligibility screen \cite{ram2024}; the earlier database article documents the broader database architecture and history \cite{ricard2012}. The release records stock and assessment metadata and series such as biomass, fishing mortality or exploitation rate, total allowable catch, catch advice, and effort. It does not encode controller sign, the decision rule, or dated decision and deployment queues. The annual-review designation is therefore an analysis-side cohort criterion, not a RAM classification of a stock as SD-E or SD-P.
+
+For each eligible biomass and exploitation/effort proxy series, the analysis detrends according to a declared rule, computes a Lomb--Scargle periodogram \cite{vanderplas2018}, integrates power in the predeclared bands, and compares it with a per-series AR(1) red-noise null. Familywise interpretation accounts for stocks, observables, and bands. A peak is classified as robust only if it survives the null comparison, multiplicity adjustment, and sensitivity to detrending and endpoint choices.
+
+No stock has a peak in the $4$--$8$ yr biomass or $12$--$60$ yr effort band that meets all robustness criteria. Baltic sprat, for example, has biomass coefficient of variation $0.40$, but its variation is low-frequency and regime-dominated rather than a robust target-band peak. This is a multiplicity-controlled spectral null for the selected annual-review cohort. It is not a test of SD-E against SD-P, evidence that annual review causes stability, or evidence that all annual management shares one controller sign.
+
+\subsection{Power and detectability}
+
+Power experiments inject the model-generated effort signal into AR(1)-type noise and apply the same band-power statistic. On 100--200 yr synthetic records, the sprat-class signal has estimated power $1.0$ at noise scale $\sigma=0.1$ and approximately $0.24$--$0.58$ at $\sigma=0.3$. The anchovy-class effort signal has power approximately $0.02$--$0.14$ over the tested horizons and noise levels. The longer effort peak and slow amplitude growth can offset its larger relative excursion.
+
+These conditional simulations do not provide a minimum-power guarantee for each empirical stock, and their 100--200 yr horizons exceed many eligible series. The anchovy-class null is consequently expected to be weakly informative under the declared test, while the sprat-class result is informative only in favourable noise and record-length regimes. The empirical screen is best regarded as a selected-cohort consistency check and baseline for a prospective design, not as a general test of the extractive mechanism.
+
+\subsection{Structured field-case search}
+
+The case search considered more than 30 systems spanning fisheries, aquaculture, groundwater, surface water, rangeland, wildlife harvest, forestry, and produced-capital markets. Four criteria were applied: (i) a responsive institutional feedback rather than a one-time cap or ban; (ii) an independently dateable response or implementation lag; (iii) no major environmental, biological, or structural driver capable of generating the same outcome; and (iv) individual-resource or individual-station data rather than an aggregate series. No candidate satisfied all four criteria after primary-source and station-level review.
+
+Four cases received detailed analysis. Unless a value is stated as reported by a source, the coefficients, correlations, periods, and lag estimates in this case comparison are author calculations from the registered input series and conventions. Sheridan-6 groundwater records show a decline--recovery--decline pattern and precipitation explains approximately half of the variance in the index-well series ($R^2\approx0.47$); the official programme record instead establishes a 55 acre-inch block allocation over the five-year first period, rather than the modelled continuously adjusted feedback \cite{kwosheridan6}. Bangkok pumping declines after 1999, but subsidence and recovery contain spatially heterogeneous consolidation and rainfall effects \cite{bremard2022,ahmed2024}. La Mancha Oriental extraction increased again in 2019--2023 to an author-calculated average of approximately $312\,\mathrm{hm}^3\,\mathrm{yr}^{-1}$, with crop composition, evapotranspiration, and surface-water substitution complicating attribution \cite{hoogesteger2025}. The historical Icelandic cod rule adopted in 1995 set annual total allowable catch at 25\% of fishable biomass, subject to a minimum catch provision \cite{danielsson1997}. In the registered RAM Legacy v4.66 post-rule series \cite{ram2024}, Icelandic cod has an author-calculated coefficient of variation $0.387$ and a 10--15 yr fluctuation, but the estimated implementation lag is approximately $0.2$--$0.3$ yr and cohort resonance supplies an alternative mechanism. That lag is not a review interval and is not inserted into the sampled model as $T_r$. Icelandic haddock under a related rule has an author-calculated post-implementation coefficient of variation of $0.143$.
+
+Peruvian anchoveta provides a further discriminator. The 1950--2019 catch input is the Sea Around Us Peru anchoveta extract \cite{pauly2020,zeller2016}; the period and correlation reported here are author calculations, not values reported by those sources. The series has a robust period near $3.7$ yr, consistent with ENSO recurrence, and cross-correlation gives $|r|\approx0.31$ with ENSO leading catch. Because the present provenance record does not identify the exact ENSO product release, that coefficient is retained as exploratory rather than as a source-level reproducible estimate. The subannual review regime lies below the review-interval region in which SD-E-DR-AN displayed a persistent response, but controller nonclassification prevents this comparison from testing the mechanism. Across the wider search, visible long records were repeatedly associated with climate variability, cohort effects, infrastructure changes, or emergency interventions. This pattern is consistent with a selection mechanism in which systems receive intensive monitoring after complex crises, but the retrospective search does not causally identify selection bias.
+
+The case search therefore yields a zero eligible-case count: none of the examined cases constitutes an unconfounded test of the model's institutional-delay mechanism. Bangkok and La Mancha are the closest cases on the stabilizing side but do not isolate the mechanism. The unconfounded delay oscillators identified in produced-capital systems, including livestock and electricity-capacity cycles, do not contain the distinct autonomously regenerating stock assumed by the resource model \cite{rosen1994}. Because the eligibility criteria deliberately exclude any major competing driver, the zero count is not an independent statistical test against the mechanism and should not be generalized beyond the searched candidate set.
+
+\subsection{Evidentiary interpretation}
+
+The fully declared SD-E-B3 equations, the stage-model output summaries, and the RAM screen have different evidentiary statuses. The stage-dependent regions, noise experiments, and power estimates do not establish population-wide frequencies or policy effects and cannot be transferred to SD-E-B3 or to protective control. The 42-stock result is a cross-sectional spectral null under its specified AR(1) and multiplicity procedure, not proof of absence, a controller-sign comparison, or causal evidence for annual review. A prospective test should define the candidate universe, controller eligibility, primary endpoint, spectral band, null model, multiplicity control, and minimum power before outcomes are examined.
+
+A complementary design should estimate resolvable gain and phase rather than wait for several complete endogenous cycles. For a locally linear registered model, the empirical target is the frequency response from an independently timed assessment or command perturbation to realised effort and stock response over the annual-to-decadal band supported by the data. Identification requires exogenous excitation, an intervention design, or a justified closed-loop method; an ordinary cross-spectrum of stock and effort does not by itself recover the open-loop transfer function or causal ordering \cite{forssell1999}. The analysis should report phase margin and uncertainty, compare alternative ecological and controller factorizations, and reject the mechanism when no admissible factorization reproduces the preregistered gain--phase curve. This design can test feedback architecture even when century-scale periods are unobservable, but it cannot separately identify lag components without the records specified above.
+
+\section{Prospective identification designs}
+
+The retrospective results motivate four prospective designs. None has been executed in this article, and each should be preregistered before outcome inspection.
+
+\paragraph{Governance-event panels.}
+For each resource--jurisdiction unit, construct a source-linked event record containing the raw-observation date, public or scientific recognition date, assessment completion, scheduled review, formal decision, legal adoption, physical deployment, compliance, realised-pressure change, and subsequent ecological-response dates. Date uncertainty, interval censoring, revisions, missing stages, and overlapping interventions should be retained rather than collapsed to one lag. Such a panel can estimate component-specific delay distributions only for stages actually observed; otherwise the estimand is a combined interval or closed-loop phase, not separate $\tau_{\rm dec}$ and $\tau_{\rm dep}$ values.
+
+\paragraph{Quasi-experimental timing.}
+Candidate interventions include staggered adoption, discontinuities in review schedules, rule changes, jurisdictional borders, phased quota systems, and administrative reforms whose timing is plausibly independent of the outcome innovation. An event study, difference-in-differences design, synthetic control, interrupted time series, or state-space intervention model should be chosen according to its assumptions, not merely data availability. The protocol must predeclare the intervention, controller sign, treatment and comparison units, estimand, event window, anticipation and pretrend tests, spillovers, concurrent ecological or market shocks, and exclusion rules. A change in implementation lag is not coded as a change in $T_r$, and a nominal schedule change is not a treatment unless it changes a responsive decision opportunity.
+
+\paragraph{Out-of-sample mechanism comparison.}
+For each candidate system, compare at least an environmental-forcing model, a cohort- or demographic-resonance model, an institutional-delay model with registered controller sign, a combined model, and a null time-series model. Models should make predictions before the held-out block is scored using declared predictive and calibration criteria. Model weights or posterior probabilities require an explicit likelihood and prior; predictive ranking alone does not identify a causal mechanism. A delay explanation is weakened when it cannot reproduce the preregistered phase ordering or when a competing mechanism predicts the held-out observations better.
+
+\paragraph{Controlled and randomized experiments.}
+A minimum human-in-the-loop design places participants in the same simulated renewable-resource environment and randomizes review cadence and the timing or sign of decision feedback, with ecological shocks held common across arms where appropriate. Primary endpoints should include realised pressure, threshold crossings, recovery time, variability, and the gain--phase relation between assessments, commands, and actions. Treatment rules, stopping and safety criteria, sample size, exclusions, and analysis must be preregistered. Agent-based institutional experiments, digital-twin exercises, and carefully governed field pilots can complement this design, but extrapolation from a laboratory or simulated resource to a field institution remains a separate external-validity claim.
+
+\section{Closed-loop management strategy evaluation}
+
+Because the retrospective evidence does not identify the institutional mechanism, policy comparison must be conducted in a closed loop that keeps process, observation and assessment, parameter, structural-model, decision, and implementation uncertainty distinct, following the established management-strategy-evaluation problem class \cite{punt2016}. Each simulation replicate contains:
+
+\begin{enumerate}
+    \item \textbf{Operating model}: age/stage-structured or other resource dynamics, environmental forcing, density dependence, and structural alternatives;
+    \item \textbf{Observation model}: survey/catch observations, missingness, bias, and autocorrelated error;
+    \item \textbf{Assessment model}: estimator, update frequency, retrospective bias, and uncertainty;
+    \item \textbf{Decision rule}: SD-E, SD-P, SD-F, or SD-H, including caps on change and emergency clauses;
+    \item \textbf{Implementation model}: compliance, deployment lag, effort creep, and realized versus commanded pressure;
+    \item \textbf{Performance metrics}: threshold risk, yield/service delivery, variability, closure frequency, effort cost, recovery time, and distributional impacts.
+\end{enumerate}
+
+The core experimental design crosses
+\[
+T_r\times\tau_{\rm dec}\times\tau_{\rm dep}
+\times\text{controller sign}
+\times\text{observation/assessment error}
+\times\text{parameter draw}
+\times\text{operating-model class}
+\times\text{process-noise regime}.
+\]
+At minimum compare responsive extractive, responsive protective, and fixed-plan controllers. A conclusion that only compares two review intervals inside SD-E cannot be generalized to governance as a whole.
+
+For each cell, use enough stochastic replicates to estimate tail risk with confidence intervals, predeclare common random numbers where useful, and report failures of the assessment or optimizer. Parameter uncertainty varies quantities within a declared operating model; process uncertainty governs stochastic state evolution; observation and assessment uncertainty governs the information supplied to the rule; and structural uncertainty varies the operating-model class itself. Structural uncertainty should therefore be represented by multiple operating models rather than one parameter covariance matrix around the fitted model. Model-class worst-case, distributionally robust, and model-averaged performance answer different questions and should be reported separately rather than treated as interchangeable robustness criteria.
+
+\section{Falsification criteria}
+
+The model family gains empirical content by specifying outcomes that count against its mechanism and parameterisation.
+
+\begin{enumerate}
+    \item If independently measured implementation/deployment lags do not covary with the instability bands predicted under fitted resource parameters, the quantitative delay claim is weakened.
+    \item If an observed oscillation remains after climate, cohort, and regime forcing are modelled but its phase relation between decline signal, effort, and biomass contradicts the controller's causal ordering, the mechanism is rejected for that case.
+    \item If sampled-data analysis removes a continuous-delay band under realistic review rules, the continuous model cannot be used for that institution.
+    \item If a protective controller dominates SD-E across uncertainty without inducing the claimed volatility, no anti-regulation conclusion may be retained.
+    \item If realistic record lengths have low power for the predicted signal, field spectral nulls cannot adjudicate the mechanism; prospective or experimental evidence is required.
+\end{enumerate}
+
+Controlled population and resource-management experiments show that delay- and parameter-driven transitions can be empirically studied \cite{costantino1995,moxnes1998}. They provide mechanism-class precedent, not direct validation of the institutional equations here.
+
+\section{Conclusion}
+
+Periodic review is a distinct sampled-data governance mechanism, and the extractive SD-E-B3 update is not a general model of fishery regulation. In separate delayed-recruitment trajectory calculations, annual-review runs converge over the tested small-pelagic grids, persistent responses occur near $T_r=3$--$4$ yr for the anchovy class and $6$--$12$ yr for the sprat class, and no persistent cod-class response is detected over $T_r\in[1,20]$ yr. These are exploratory, finite-grid output summaries pending complete stage registration and multiplier analysis, not universal stability results. The multiplicity-controlled 42-stock result is a spectral null in a selected annual-review cohort; limited power and the absence of controller-sign fields in RAM prevent it from testing SD-E, SD-P, or a stabilizing effect of annual review. The field-case search likewise identifies no unconfounded matching case but does not independently disconfirm the mechanism. The next empirical step is a preregistered, powered programme built from source-linked governance-event panels, quasi-experimental timing of genuinely responsive rule changes, out-of-sample mechanism comparison, controlled or randomized human-in-the-loop experiments, and closed-loop MSE across controller sign, review and deployment timing, process, observation, parameter, and structural uncertainty. These prospective designs do not convert the retrospective findings into causal evidence. A fixed-$T_r$ multiplier crossing would be a sampled-data parameter bifurcation; rate-induced tipping instead requires an explicitly ramped parameter.
+
+\section*{Data and code availability}
+To support reproduction, the computational supplement must register the complete delayed-recruitment equations, class-specific vectors, effort gating and signal map, initial histories, sampled-data solver, parameter grids, amplitude convention, assessment-error experiments, RAM extraction and annual-review eligibility table, processed time series, spectral and power-analysis routines, case-screening table, query log, and machine-readable outputs. The prospective programme additionally requires a governance-event-panel schema with source-linked dates, preregistered quasi-experimental and randomized protocols, held-out mechanism-comparison specifications, and an MSE registry of parameter distributions, process-noise regimes, operating-model classes, controller rules, and robustness criteria. Until the computational record is complete, the stage-output values have the exploratory status defined above rather than the status of reproducible numerical propositions. RAM source data are available through the cited release; case-level primary sources are identified in the screening table.
+
+\input{../shared/references.tex}
+
+\end{document}

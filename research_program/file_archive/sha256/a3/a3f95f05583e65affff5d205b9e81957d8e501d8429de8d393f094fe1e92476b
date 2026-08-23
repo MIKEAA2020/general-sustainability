@@ -1,0 +1,232 @@
+# External Review ER004 — Six-Part Qwen Package Inventory
+
+**Adjudication status:** pending joint review; no recommendation implemented.
+
+## Package files
+
+| Part | Source | Bytes | Lines | SHA-256 | Apparent focus |
+|---:|---|---:|---:|---|---|
+| 1 | `uploads/qwen.txt` | 16719 | 133 | `396d5dfe02019c7796fba52bcd15b428459dd95b3c452527b48b11eee06e8f2a` | Cross-read, unifying spine, internal connections, generalization and publication architecture |
+| 2 | `uploads/qwen2.txt` | 8410 | 83 | `ecb277c408aa39af20fc6956b98dc6b5f1490d25318a8353bc329c8b06872b69` | Abstract Predecessor Schema for viability kernels |
+| 3 | `uploads/qwen3.txt` | 30068 | 1102 | `4a0d8e0cae668e63a9006d9dd8d48fc5d44bff89a4a9e44afa8449707da77522` | Restricted Operator II transformation theorem draft |
+| 4 | `uploads/qwen4.txt` | 18707 | 336 | `af7e3160cec4f6ab715889f3700080ccc24202e69ab058458bbe545f776301d1` | Restricted composition theorem draft |
+| 5 | `uploads/qwen5.txt` | 20018 | 438 | `0a459e6593b1c4676b0861c1d728a143c46f39e11520ef275efc9ec51775154a` | Phosphorus end-to-end domain test recommendation |
+| 6 | `uploads/qwen6.txt` | 48414 | 1604 | `51a50749a0884ae633fbd7f477fa1d4591ff7d36d0e064482ec692c60447bc48` | Remaining packet items answered in feasibility order; correction and redesign docket |
+
+## Heading inventories
+
+### Part 1: `qwen.txt`
+
+| Line | Level | Heading |
+|---:|---:|---|
+| 1 | 1 | Cross-Read: Internal Connections and Generalization Paths |
+| 7 | 2 | 1. The unifying spine (three recurring commitments) |
+| 25 | 2 | 2. Internal connections, grouped by theme |
+| 27 | 3 | 2.1 The viability kernel and its quantifier ladder |
+| 31 | 3 | 2.2 Observation fibres and epistemic contraction |
+| 38 | 3 | 2.3 Physical admissibility: conservation ≠ positivity ≠ boundedness ≠ feasibility |
+| 42 | 3 | 2.4 Endogenizing the controller |
+| 46 | 3 | 2.5 Continuous delay vs sampled review |
+| 50 | 3 | 2.6 Substitution: three faces of one feasibility question |
+| 56 | 3 | 2.7 Reduction, coarse-graining, projectability |
+| 60 | 3 | 2.8 Coupling and composition |
+| 64 | 3 | 2.9 Commons and institutions as operations on `U` |
+| 68 | 3 | 2.10 Diagnostics, thresholds, depletion times |
+| 72 | 3 | 2.11 Uncertainty, stochastic, intergenerational |
+| 78 | 2 | 3. How it could be generalized |
+| 82 | 3 | G1 — Axiomatize the predecessor schema (a universal kernel constructor) |
+| 87 | 3 | G2 — Closed-loop viability with endogenous delayed/sampled controllers |
+| 92 | 3 | G3 — A typed temporal algebra of governance lags |
+| 97 | 3 | G4 — Unified service-possibility/provenance feasibility |
+| 102 | 3 | G5 — A sound restricted composition theorem |
+| 107 | 3 | G6 — Operator II as hybrid reach–avoid–maintain across architectures |
+| 112 | 3 | G7 — A machine-checkable claim-status/provenance graph |
+| 119 | 2 | 4. Cautions that should govern any generalization |
+
+### Part 2: `qwen2.txt`
+
+| Line | Level | Heading |
+|---:|---:|---|
+| 1 | 1 | Option (a): The Abstract Predecessor Schema (APS) |
+| 7 | 2 | 1. The Abstract Predecessor Signature |
+| 24 | 2 | 2. The Universal Predecessor Operator |
+| 40 | 2 | 3. Instantiation Matrix (Unifying 001 and 002) |
+| 58 | 2 | 4. Discharging the Error Docket |
+| 62 | 3 | Error B2: Selector Regularity (Implementability) |
+| 66 | 3 | Error B3: Exact Filters vs. Constructed Properties |
+| 70 | 3 | Error C1: Fixed-Point Operator Mismatch (Article 006) |
+| 76 | 2 | 5. Next Step |
+
+### Part 3: `qwen3.txt`
+
+| Line | Level | Heading |
+|---:|---:|---|
+| 7 | 1 | Operator II: Restricted Transformation Theorem |
+| 9 | 2 | 1. Purpose |
+| 27 | 2 | 2. Canonical notation for Operator II |
+| 56 | 2 | 3. Architecture graph and hybrid transformation state |
+| 98 | 2 | 4. Admissible transition region, forbidden states, and constraints |
+| 145 | 2 | 5. Within-architecture dynamics |
+| 174 | 2 | 6. Architecture transitions |
+| 241 | 2 | 7. Destination target set from Operator I |
+| 282 | 2 | 8. Meta-policies and disturbance strategies |
+| 330 | 2 | 9. Finite-horizon transformability |
+| 344 | 3 | 9.1 Already at target |
+| 350 | 3 | 9.2 Within-architecture progress |
+| 360 | 3 | 9.3 Architecture-transition progress |
+| 404 | 1 | 10. Restricted Operator II Transformation Theorem |
+| 406 | 2 | Theorem: finite-horizon robust architecture transformation |
+| 436 | 3 | 10.1 Compactness |
+| 450 | 3 | 10.2 Finite-horizon characterization |
+| 454 | 3 | 10.3 Reach–avoid–maintain |
+| 481 | 3 | 10.4 Complete registered basin under bounded depth |
+| 495 | 1 | 11. Proof sketch |
+| 497 | 2 | 11.1 Compactness preservation |
+| 501 | 3 | Within-architecture predecessor |
+| 528 | 3 | Transition predecessor |
+| 555 | 3 | Union |
+| 575 | 2 | 11.2 Monotonicity |
+| 597 | 2 | 11.3 Finite-horizon policy equivalence |
+| 601 | 3 | Base case |
+| 611 | 3 | Induction step |
+| 637 | 2 | 11.4 Destination maintenance |
+| 652 | 1 | 12. Recommended status |
+| 673 | 1 | 13. Counterexamples if assumptions are weakened |
+| 675 | 2 | 13.1 Discontinuous reset destroys closedness |
+| 699 | 2 | 13.2 Outer semicontinuity is not enough |
+| 709 | 2 | 13.3 Swapping quantifiers breaks robustness |
+| 733 | 2 | 13.4 Omitting cumulative harm permits burden accumulation |
+| 749 | 2 | 13.5 Omitting identity continuity permits false transformation |
+| 767 | 2 | 13.6 Unbounded transitions or Zeno executions |
+| 781 | 1 | 14. Relation to the master manuscript |
+| 811 | 2 | 15. Official status map with Operator II |
+| 873 | 1 | 16. Selector regularity |
+| 879 | 2 | Corollary: measurable implementation |
+| 914 | 1 | 17. Extension paths |
+| 916 | 2 | 17.1 Partial observation |
+| 931 | 2 | 17.2 Continuous-time hybrid transformation |
+| 957 | 2 | 17.3 Cyclic architecture graphs |
+| 983 | 2 | 17.4 Strategic and probabilistic transformation |
+| 1009 | 1 | 18. What this theorem deliberately does not do |
+| 1027 | 1 | 19. Publication/architecture consequence |
+| 1031 | 2 | Master manuscript |
+| 1043 | 2 | Technical supplement or Article 002 extension |
+| 1049 | 2 | Companion paper |
+| 1063 | 1 | 20. Draft canonical statement for insertion |
+
+### Part 4: `qwen4.txt`
+
+| Line | Level | Heading |
+|---:|---:|---|
+| 1 | 1 | Restricted Composition Theorem (Priority 4) |
+| 7 | 2 | 1. What "stronger than tautological" means here |
+| 20 | 2 | 2. Setup and canonical notation |
+| 56 | 2 | 3. Local hypotheses (module-by-module, checkable) |
+| 101 | 2 | 4. The restricted composition theorem |
+| 116 | 3 | Theorem 4.1 (Restricted compositional viability via barrier small-gain) |
+| 161 | 3 | Proof sketch |
+| 192 | 3 | Remark 4.1 (row-sum, not spectral radius) |
+| 198 | 2 | 5. Commons extension (shared source/sink) |
+| 212 | 3 | Corollary 5.1 (Commons-aware composition) |
+| 246 | 3 | Proof sketch |
+| 254 | 2 | 6. The required destruction counterexample |
+| 258 | 3 | Counterexample 6.1 (Coupling destroys factorwise viability) |
+| 270 | 2 | 7. The required coupling-rescue example |
+| 274 | 3 | Example 7.1 (Coupling creates viability) |
+| 290 | 2 | 8. What the theorem does not claim |
+| 311 | 2 | 9. Downstream consequences |
+| 325 | 2 | 10. Confidence and unresolved questions |
+
+### Part 5: `qwen5.txt`
+
+| Line | Level | Heading |
+|---:|---:|---|
+| 1 | 1 | Priority 5: End-to-End Composition Test — Phosphorus |
+| 3 | 2 | 1. Domain choice: phosphorus over groundwater |
+| 20 | 2 | 2. Module decomposition |
+| 45 | 2 | 3. Local module analysis |
+| 47 | 3 | 3.1 Module E: Ecological subsystem $(X, U)$ |
+| 95 | 3 | 3.2 Module S: Support subsystem $(A, G)$ |
+| 135 | 3 | 3.3 Module P: Product–Sink subsystem $(P, W)$ |
+| 165 | 2 | 4. Interface identification and coupling gains |
+| 181 | 2 | 5. Small-gain condition check |
+| 246 | 2 | 6. Commons condition check (sink $W$) |
+| 294 | 2 | 7. Destruction example: geological depletion cascade |
+| 322 | 2 | 8. Rescue example: decomposition compensates for low geological input |
+| 357 | 2 | 9. Verification status and data requirements |
+| 386 | 2 | 10. Downstream consequences |
+| 414 | 2 | 11. Recommended next steps |
+| 426 | 2 | 12. Summary |
+
+### Part 6: `qwen6.txt`
+
+| Line | Level | Heading |
+|---:|---:|---|
+| 12 | 1 | Tier 1 — Immediately feasible corrections |
+| 14 | 2 | Issue 013-1 — Rename service readout to avoid collision with observation |
+| 50 | 2 | Issue 013-2 — Closedness/attainment qualification for directional support fraction |
+| 79 | 2 | Issue 012-1 — Add \(E=E_{\max}\) extinction-face equilibrium |
+| 111 | 2 | Issue 012-2 — Donor-limit or stop fixed-demand stock culling at zero |
+| 137 | 2 | Issue 012-3 — Resolve \(\omega_A\) versus \(\kappa_A\) |
+| 158 | 2 | Issue 012-4 — Verify invariance of \(X+U\le \mathcal M\) in MPF |
+| 205 | 2 | Issue 012-5 — Preserve exact source status for open fold/SNPO classifications |
+| 222 | 2 | Issue B1 — Canonical notation and operator hierarchy |
+| 253 | 2 | Issue E1 — Hold/interpolation mismatch in Article 011 |
+| 291 | 2 | Issue D2 — Duplicated institutional mode in Article 007 |
+| 323 | 1 | Tier 2 — Moderate theorem repairs |
+| 325 | 2 | Issue A1 — Robust tangency versus strong invariance |
+| 395 | 2 | Issue A2 — Order-minimal proof wording |
+| 429 | 2 | Issue A3 — Pollution-feedback comparison sign |
+| 463 | 2 | Issue A4 — Capital-consumption kernel |
+| 512 | 2 | Issue A5 — Generic non-polyhedrality |
+| 558 | 2 | Issue A6 — Rosen uniqueness |
+| 622 | 2 | Issue A7 — Commons obstruction and undefined safe harvest |
+| 666 | 2 | Issue A8 — Quota rescue with wrong inequality |
+| 712 | 2 | Issue A9 — Sanction sufficiency and unique best response |
+| 756 | 2 | Issue A10 — Ostrom sufficiency/necessity |
+| 780 | 2 | Issue A11 — Implementation lattice downward closure |
+| 824 | 2 | Issue C1 — Fixed-point operator mismatch in Article 006 |
+| 886 | 2 | Issue C2 — Common safe prescription with latent-state implementation |
+| 933 | 2 | Issue C3 — Information-refinement inclusion across belief spaces |
+| 974 | 2 | Issue D1 — Hybrid phase space in Article 007 |
+| 1014 | 2 | Issue B3 — Exact information and hybrid tube assumptions |
+| 1038 | 1 | Tier 3 — Larger architectural and redesign questions |
+| 1040 | 2 | Issue B2 — Selector regularity |
+| 1089 | 2 | Priority 2 / §8.1 — Operator I hierarchy |
+| 1095 | 3 | 1. Controlled existential viability |
+| 1107 | 3 | 2. Robust/discriminating viability |
+| 1119 | 3 | 3. Epistemic viability |
+| 1140 | 3 | 4. Institutional viability |
+| 1156 | 3 | 5. Finite-horizon chance viability |
+| 1166 | 3 | 6. Capture/recoverability |
+| 1178 | 3 | 7. Fixed-policy safety |
+| 1226 | 2 | §8.2 — Fixed-point construction, explicit answer |
+| 1262 | 2 | Rejected formulation 7.1 — Institutional measurement |
+| 1272 | 3 | Why the vector first? |
+| 1297 | 3 | Dynamics-aware margin |
+| 1313 | 3 | Epistemic-institutional kernel |
+| 1337 | 2 | Rejected formulation 7.2 — Distributive measurement |
+| 1342 | 3 | Valid design principles |
+| 1344 | 4 | 1. Dimensionless normalized margins |
+| 1366 | 4 | 2. Exact nonsmooth conjunction |
+| 1376 | 4 | 3. Conservative smooth inner certificate |
+| 1394 | 4 | 4. Bottom-group quantiles |
+| 1412 | 4 | 5. Intergenerational transition matrices |
+| 1422 | 4 | 6. Dynamic viability/CBF condition |
+| 1445 | 1 | Remaining canonical decision questions |
+| 1447 | 2 | §8.3 — Transformation theorem target |
+| 1461 | 2 | §8.4 — Composition theorem target |
+| 1473 | 2 | §8.5 — Empirical anchor |
+| 1479 | 1 | Requested final synthesis |
+| 1481 | 2 | Top five priorities in order |
+| 1483 | 3 | 1. Canonical formal spine |
+| 1494 | 3 | 2. Repair Article 001 core theorem docket |
+| 1498 | 3 | 3. Establish Operator I hierarchy and selector regularity |
+| 1502 | 3 | 4. Integrate Operator II and restricted composition with phosphorus test |
+| 1512 | 3 | 5. Build prospective empirical identification for governance |
+| 1526 | 2 | Recommended minimum-paper architecture |
+| 1528 | 3 | Paper 1: Flagship architectural manuscript |
+| 1544 | 3 | Paper 2: Technical supplement or companion formal paper |
+| 1556 | 3 | Paper 3: Empirical/dynamics companion, later |
+| 1567 | 3 | Do not separate |
+| 1575 | 2 | Major mathematical issue absent from the packet |

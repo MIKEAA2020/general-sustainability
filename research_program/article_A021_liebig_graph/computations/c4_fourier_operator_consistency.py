@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+"""Low-mode transfer comparisons across phase-fixed Fourier Jacobians."""
+import json
+from pathlib import Path
+import numpy as np
+root=Path(__file__).parent
+
+def interp(nout,nin):
+ I=np.eye(nin);C=np.fft.fft(I,axis=0)/nin;kin=np.fft.fftfreq(nin,d=1/nin).astype(int);theta=np.arange(nout)/nout
+ return np.real(np.exp(2j*np.pi*np.outer(theta,kin))@C)
+def compare(Kc,Kf):
+ zc=np.load(root/f'c4_fourier_K{Kc}_operator.npz');zf=np.load(root/f'c4_fourier_K{Kf}_operator.npz');Jc=zc['J'];Jf=zf['J'];nc=2*Kc+1;nf=2*Kf+1
+ Et=interp(nf,nc);Rt=interp(nc,nf);E=np.zeros((4*nf+1,4*nc+1));R=np.zeros((4*nc+1,4*nf+1));E[:4*nf,:4*nc]=np.kron(Et,np.eye(4));E[-1,-1]=1;R[:4*nc,:4*nf]=np.kron(Rt,np.eye(4));R[-1,-1]=1
+ D=Jc-R@Jf@E;pre=np.linalg.solve(Jc,D)
+ return {'K_coarse':Kc,'K_fine':Kf,'state_prolongation_inf_norm':float(np.linalg.norm(E,np.inf)),'residual_restriction_inf_norm':float(np.linalg.norm(R,np.inf)),'raw_J_consistency_inf':float(np.linalg.norm(D,np.inf)),'preconditioned_consistency_inf':float(np.linalg.norm(pre,np.inf)),'period_difference':float(abs(float(zf['period'])-float(zc['period'])))}
+out=[compare(a,b) for a,b in [(40,60),(60,80),(80,100),(100,120),(120,160),(160,200),(200,240)]]
+(root/'c4_fourier_operator_consistency_convergence.json').write_text(json.dumps({'levels':out,'status':'finite low-mode transfer comparisons; not continuum delta_L'},indent=2));print(json.dumps(out,indent=2))

@@ -1,0 +1,113 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import csv,re,hashlib
+ROOT=Path(__file__).resolve().parent
+UP=ROOT.parent/'uploads'
+MAP={r['source_label'].strip():r for r in csv.DictReader((ROOT/'A001_A002_theorem_interface_map.csv').open(encoding='utf-8')) if r['source_id']=='A001'}
+FIELDS=['locator_id','source_id','source_sha256','source_label','source_title','statement_start_line','statement_end_line','proof_start_line','proof_end_line','statement_words','proof_words','proof_presence','substantive_correction_dependencies','documentation_dependencies','verification_status','source_file']
+
+def words(lines,a,b):
+    if not a or not b:return 0
+    return len(re.findall(r"\b[\w'-]+\b",'\n'.join(lines[a-1:b])))
+
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+rows=[]
+# A001 markdown formal objects
+p=UP/'topdown.txt'; lines=p.read_text(encoding='utf-8').splitlines()
+pat=re.compile(r'^\*\*(Theorem|Proposition|Lemma|Corollary|Definition|Counterexample|Example|Conjecture|Open Problem)\s+([^*]+?)\*\*')
+starts=[]
+for i,l in enumerate(lines,1):
+    m=pat.match(l.strip())
+    if m: starts.append((i,f'{m.group(1)} {m.group(2).rstrip(". ")}.',m.group(1),m.group(2).rstrip('. ')))
+# inventory labels sometimes headings definitions; include only map labels matching formal inventory
+for idx,(st,label,kind,title) in enumerate(starts):
+    # normalize match
+    mr=None
+    for k,v in MAP.items():
+        if re.sub(r'\s+',' ',k).rstrip('.')==re.sub(r'\s+',' ',label).rstrip('.'):
+            mr=v;break
+    if not mr: continue
+    nxt=starts[idx+1][0]-1 if idx+1<len(starts) else len(lines)
+    proof=next((j for j in range(st+1,nxt+1) if re.match(r'^\*Proof\.\*',lines[j-1].strip())),None)
+    statement_end=(proof-1 if proof else nxt)
+    proof_end=nxt if proof else None
+    deps=[x for x in mr['verification_dependencies'].split(';') if x]
+    substantive=[x for x in deps if x not in {'V-A001-13','V-A001-14'}]
+    docs=[x for x in deps if x in {'V-A001-13','V-A001-14'}]
+    rows.append({'locator_id':mr['map_id'],'source_id':'A001','source_sha256':sha(p),'source_label':mr['source_label'],'source_title':mr['opening_or_title'],
+      'statement_start_line':st,'statement_end_line':statement_end,'proof_start_line':proof or '', 'proof_end_line':proof_end or '',
+      'statement_words':words(lines,st,statement_end),'proof_words':words(lines,proof,proof_end) if proof else 0,
+      'proof_presence':'not_required_definition_or_example' if kind in {'Definition','Example','Counterexample','Conjecture','Open Problem'} else ('located' if proof else 'missing_or_not_mechanically_linked'),
+      'substantive_correction_dependencies':';'.join(substantive),'documentation_dependencies':';'.join(docs),
+      'verification_status':'source_proof_located_not_reverified' if proof else ('definition_or_nonproof_item' if kind in {'Definition','Example','Counterexample','Conjecture','Open Problem'} else 'manual_proof_location_required'),
+      'source_file':'uploads/topdown.txt'})
+
+# A002 LaTeX environments
+p=UP/'general_theory.txt'; lines=p.read_text(encoding='utf-8').splitlines(); digest=sha(p)
+envs='definition|theorem|conditionaltheorem|proposition|lemma|corollary|conjecture|hypothesis|programme'
+startpat=re.compile(r'^\\begin\{('+envs+r')\}(?:\[([^]]*)\])?')
+objects=[]
+for i,l in enumerate(lines,1):
+ m=startpat.match(l.strip())
+ if m:
+  env,title=m.group(1),m.group(2) or ''
+  end=next((j for j in range(i,len(lines)+1) if lines[j-1].strip()==f'\\end{{{env}}}'),i)
+  objects.append((i,end,env,title))
+# map A002 rows by title+type, preserve sequence to handle untitled remarks not present as env
+mrows=[r for r in csv.DictReader((ROOT/'A001_A002_theorem_interface_map.csv').open(encoding='utf-8')) if r['source_id']=='A002']
+used=set()
+for st,en,env,title in objects:
+ cand=None
+ for ix,r in enumerate(mrows):
+  if ix in used:continue
+  if title and r['opening_or_title'].strip()==title.strip():cand=(ix,r);break
+ if not cand:
+  continue
+ ix,mr=cand;used.add(ix)
+ proof=None;proof_end=None
+ if env not in {'definition','conjecture','hypothesis','programme'}:
+  # proof must begin after object and before next formal object
+  nextst=next((a for a,_,_,_ in objects if a>st),len(lines)+1)
+  proof=next((j for j in range(en+1,nextst) if lines[j-1].strip()=='\\begin{proof}'),None)
+  if proof:proof_end=next((j for j in range(proof,len(lines)+1) if lines[j-1].strip()=='\\end{proof}'),proof)
+ deps=[x for x in mr['verification_dependencies'].split(';') if x]
+ docs=[x for x in deps if x in {'V-A002-01','V-A002-18'}]
+ substantive=[x for x in deps if x not in docs]
+ rows.append({'locator_id':mr['map_id'],'source_id':'A002','source_sha256':digest,'source_label':mr['source_label'],'source_title':title,
+  'statement_start_line':st,'statement_end_line':en,'proof_start_line':proof or '', 'proof_end_line':proof_end or '',
+  'statement_words':words(lines,st,en),'proof_words':words(lines,proof,proof_end) if proof else 0,
+  'proof_presence':'not_required_definition_or_programme' if env in {'definition','conjecture','hypothesis','programme'} else ('located' if proof else 'missing_or_not_mechanically_linked'),
+  'substantive_correction_dependencies':';'.join(substantive),'documentation_dependencies':';'.join(docs),
+  'verification_status':'source_proof_located_not_reverified' if proof else ('definition_or_nonproof_item' if env in {'definition','conjecture','hypothesis','programme'} else 'manual_proof_location_required'),
+  'source_file':'uploads/general_theory.txt'})
+# Manual adjudication of source items whose proof is immediate or embedded rather than separately labelled.
+overrides={
+ 'Corollary 3.1.':('immediate_from_preceding_proposition','source_derivation_identified_manual_rewrite_optional'),
+ 'Corollary 4.1.':('immediate_from_information_equivalence','source_derivation_identified_manual_rewrite_optional'),
+ 'Theorem 4.7 (Instantaneous common-action obstruction).':('proof_omitted_add_explicit_one_step_proof','publication_proof_rewrite_required'),
+ 'Corollary 6.1 (Constrained MSY).':('derivation_embedded_in_statement','source_derivation_identified_manual_rewrite_required'),
+ 'Corollary 9.1.':('immediate_from_direct_integration','source_derivation_identified_manual_rewrite_optional'),
+ 'Theorem 14.1.':('immediate_from_definition','source_derivation_identified_manual_rewrite_optional')}
+for r in rows:
+ if r['source_label'] in overrides:
+  r['proof_presence'],r['verification_status']=overrides[r['source_label']]
+audited_a002={'Domain-qualified non-compensation','Typed hybrid conservation','Closed positive-moiety bound','Non-negative invariance for ordinary, hybrid, and RFDE modes','Donor limitation is sufficient','Bounded-input bounded-state criterion','Linear substitution alternative','Observation-fibre criterion','Safety-crossing fibres','Sampled robust-viability kernel','Monotonicity under policy-set expansion','Finite-clopen observation knowledge kernel','Inter-sample-safe sampled kernel','Finite-clopen inter-sample-safe knowledge kernel','Sampled RFDE finite-clopen knowledge kernel','Review-synchronised hybrid RFDE knowledge kernel','Outer semicontinuity does not close universal tube constraints','Bounded-jump hybrid ODE kernel with continuous exact tubes','Restricted sampled information-state tube kernel','Finite-time sample-and-hold convergence'}
+for r in rows:
+ if r['source_id']=='A002' and r['source_title'] in audited_a002:
+  r['verification_status']='mathematically_audited_accept_with_recorded_scope'
+rows.sort(key=lambda r:(r['source_id'],int(r['statement_start_line'])))
+out=ROOT/'A001_A002_source_proof_locator.csv'
+with out.open('w',newline='',encoding='utf-8') as f:
+ w=csv.DictWriter(f,fieldnames=FIELDS);w.writeheader();w.writerows(rows)
+from collections import Counter
+c=Counter((r['source_id'],r['proof_presence']) for r in rows)
+with (ROOT/'A001_A002_source_proof_locator_report.md').open('w',encoding='utf-8') as f:
+ f.write('# A001/A002 Source-Proof Locator Report\n\n')
+ f.write(f'- Located formal source objects: **{len(rows)}**\n- Nonformal A002 remark rows tracked in the interface map: **3**\n- Total inventory coverage: **{len(rows)+3}/152**\n- Immutable-source hashes recorded on every formal row.\n\n')
+ f.write('| Source | Proof status | Rows |\n|---|---|---:|\n')
+ for (s,pres),n in sorted(c.items()):f.write(f'| {s} | `{pres}` | {n} |\n')
+ missing=[r for r in rows if r['proof_presence']=='missing_or_not_mechanically_linked']
+ f.write(f'\n- Proof-bearing rows requiring manual proof-location review: **{len(missing)}**.\n')
+ f.write('- `located` means a source proof block was mechanically paired; it does **not** mean the proof has passed mathematical re-verification.\n')
+ f.write('- Substantive correction dependencies are separated from numbering/citation/status-documentation dependencies.\n')
+print('rows',len(rows),'counts',dict(c),'unmatched A002 map rows',len(mrows)-len(used))
