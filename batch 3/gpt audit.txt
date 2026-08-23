@@ -1,0 +1,1784 @@
+# Mathematical closure audit
+
+## Overall verdict
+
+The programme has a promising architecture—typed states, explicit quantifiers, exact tubes, viability kernels, observation filters, implementation correspondences, noncompensatory constraints, and mapping-status discipline. However, the supplied documents do **not** yet mathematically close T1–T9.
+
+Several records contain repairable statement errors, but a smaller number contain decisive proof failures:
+
+- **R01:** the witness can be repaired, but the control information pattern and the claimed endpoint-soundness characterization are wrong.
+- **R02:** the principal induction theorem is basically sound after retyping, but the conservative-filter counterexample is false, computability is overstated, and Corollary 6 is not established.
+- **R03:** the “trichotomy” is not exhaustive, and the finite-to-infinite horizon lemma uses insufficient semicontinuity.
+- **R04:** the claimed necessary-and-sufficient admission theorem is only a strong sufficient isomorphism theorem; its necessity proof contains a false example.
+- **R05:** the restricted invariance theorem is plausible, but the linear fixed-point corollary contains a monotonicity error and the interface assumptions need set-valued reformulation.
+- **R06:** the finite-augmentation theorem is vacuous or internally inconsistent; the coarse-graining identity is wrong for heterogeneous growth; the erosion transfer omits essential safety-map assumptions.
+- **R07:** the finite recursion is repairable, but the reset converse uses the wrong branch quantifier and infinite-generation existence is not established by R03 as cited.
+- **R08:** largely repairable, subject to exact judgment definitions and minor witness corrections.
+- **R09:** cannot be called an “exact universal list”; its completeness argument is invalid, and two independence witnesses are incomplete or inadmissible.
+
+Accordingly, the global statements
+
+> “every target received a proved full record,”  
+> “the minimum closure set justifying general theory is proved,”
+
+and
+
+> “TCS-1.0 is structurally sound”
+
+must be withdrawn or downgraded to **conditional research-programme claims**.
+
+---
+
+# 1. Cross-cutting structural problems
+
+## 1.1 “Proved,” “assembled,” and “clause-level match” are being conflated
+
+A theorem is not proved merely because its ingredients resemble earlier theorems. A valid assembly requires a substitution table showing that every hypothesis of the source theorem is satisfied by the target objects.
+
+This is especially problematic in:
+
+- R02.Cor6;
+- R03.Thm1 and Cor5;
+- R04.Cor2;
+- R06.Cor4;
+- R07.Thm5;
+- R09 Part U.
+
+A useful status vocabulary would be:
+
+1. **proved here**;
+2. **proved by exact theorem instantiation**, with a hypothesis map;
+3. **conditional corollary**, pending verification of named assumptions;
+4. **conjectural bridge**;
+5. **counterexample only**.
+
+“Clause-level assembly” should not be a proof status unless the clause mapping is displayed.
+
+## 1.2 The theory repeatedly shifts between policy classes
+
+The documents alternate among:
+
+- held open-loop commands;
+- time-dependent open-loop controls;
+- causal state feedback;
+- observation-history policies;
+- disturbance-observing policies;
+- arbitrary set-theoretic selectors.
+
+These classes are not interchangeable. In particular, “the control cannot depend on the unmeasured disturbance” does **not** imply that the same control signal is used on two disturbance branches if the controller observes the state continuously. Disturbances can be inferred through the state.
+
+Every result needs an explicit filtration:
+
+\[
+u(t)=\pi_t(\mathcal I_t),
+\]
+
+with \(\mathcal I_t\) declared. For sampled governance, the natural canonical restriction is
+
+\[
+u(t)=u_k,\qquad t\in[t_k,t_{k+1}),
+\]
+
+where \(u_k\) is chosen from review-time information only.
+
+## 1.3 Safety, viability, invariance, and finite-time survival are blurred
+
+The records sometimes confuse:
+
+- staying safe for some positive interval;
+- finite-horizon viability;
+- infinite-horizon viability;
+- strong invariance under all solutions;
+- controlled invariance;
+- robust invariance.
+
+For example, an empty infinite-horizon kernel does not mean that no interior state remains safe for any positive time. Every theorem should carry a judgment tag such as
+
+\[
+\operatorname{RViab}_T,\quad
+\operatorname{RViab}_\infty,\quad
+\operatorname{Inv},\quad
+\operatorname{StrongInv}.
+\]
+
+## 1.4 Counterexamples prove non-universality, not exhaustive classification
+
+Several records infer a universal classification from two examples. Counterexamples can establish:
+
+\[
+\text{assumptions do not imply claim},
+\]
+
+but cannot establish:
+
+\[
+\text{every valid certificate must have one of these two forms}.
+\]
+
+This invalidates the exhaustive language in R03 and the “exact universal list” language in R09.
+
+## 1.5 Approximation-to-safety bridges are underspecified
+
+A trajectory error bound in reduced coordinates does not automatically imply full-state safety. A transfer theorem needs at least one of:
+
+- a full-state reconstruction bound;
+- a \(P\)-saturated safe set;
+- a quantitative implication from aggregate margin to full-state margin;
+- a simulation relation preserving safety;
+- an explicit output-safe specification.
+
+This missing bridge affects R04.Cor2 and R06.Cor4.
+
+---
+
+# 2. R01 — Endpoint and aggregate false positives
+
+## Verdict
+
+**Core counterexamples repairable; current theorem record not proved as written.**
+
+## 2.1 Direct contradiction in the theorem statement
+
+R01.Thm1 states that there are data with:
+
+> “a nonempty exact-tube kernel \(W_0\), such that \(W_0=\varnothing\).”
+
+Delete “nonempty.”
+
+## 2.2 The stage-1 computation is wrong
+
+The proof chooses
+
+\[
+u\equiv -x
+\]
+
+with \(u\in[-1,1]\) and concludes that \(W_1=\mathbb R\). This command is inadmissible when \(|x|>1\).
+
+For a unit interval, let
+
+\[
+v=\int_0^1u(s)\,ds\in[-1,1].
+\]
+
+The two endpoints are
+
+\[
+x+v\pm1.
+\]
+
+Both belong to \([-1,1]\) iff
+
+\[
+x+v=0,
+\]
+
+which is feasible iff \(|x|\le1\). Hence
+
+\[
+W_1=[-1,1],
+\]
+
+not \(\mathbb R\).
+
+The intended conclusion still follows. For every \(x\in S_0=[-1/4,1/4]\), choose \(u\equiv-x\). Then both stage-0 endpoints are \(\pm1\in W_1\), so
+
+\[
+W_0^e=S_0,
+\]
+
+while the exact tube kernel is empty under the correct held/open-loop information pattern.
+
+## 2.3 The branch-divergence proof assumes open-loop controls
+
+The identity
+
+\[
+x^+(t)-x^-(t)=2t
+\]
+
+holds only when the same control signal \(u(t)\) is applied to both branches. It does not generally hold for a causal state-feedback rule, because then
+
+\[
+u^+(t)=\pi_t(x^+_{[0,t]}),\qquad
+u^-(t)=\pi_t(x^-_{[0,t]})
+\]
+
+may differ.
+
+The record says both:
+
+- “any causal within-interval rule”; and
+- “the rule cannot depend on the unmeasured \(d\).”
+
+That is insufficient. State observation can reveal disturbance information indirectly.
+
+### Repair
+
+Restrict the meta-action to a review-time-selected open-loop signal:
+
+\[
+u_k\in L^\infty(I_k,U),
+\]
+
+measurable in time but fixed before the interval and not updated from within-interval observations. The simplest option is a held command.
+
+Alternatively, Prop3 must assume policy-independent branch separation explicitly:
+
+\[
+\langle e,x^{d_1,\pi}(t)-x^{d_2,\pi}(t)\rangle\ge\beta t
+\quad\forall\pi.
+\]
+
+## 2.4 The endpoint-soundness characterization has the wrong quantifier
+
+The document says soundness is equivalent to:
+
+> “for every accepted state and every accepted action, the tube lies in \(S_k\).”
+
+Endpoint recursion accepts a state existentially:
+
+\[
+\exists a:\operatorname{Succ}(x,a)\subset W.
+\]
+
+Soundness requires:
+
+\[
+\forall x\in \operatorname{RPre}^e(W),\quad
+\exists a
+\]
+
+such that both endpoint and tube conditions hold. It does **not** require every endpoint-admissible action to be tube-safe.
+
+A valid equivalence is:
+
+\[
+\operatorname{RPre}^e_k(W)
+=
+\operatorname{RPre}_k(W).
+\]
+
+“Tube safety is automatic for every endpoint-admissible action” is a stronger sufficient condition, not an equivalent one.
+
+## 2.5 The convex-set remark is false for general dynamics
+
+The assertion
+
+> singleton disturbance + held constant control + convex safe set makes endpoints sufficient because the trajectory is the chord
+
+is false for a nonlinear ODE. A trajectory under constant control need not lie on the line segment joining its endpoints.
+
+Endpoint sufficiency requires an additional property such as
+
+\[
+x([t_k,t_{k+1}])
+\subset
+\operatorname{co}\{x(t_k),x(t_{k+1})\},
+\]
+
+or monotone scalar dynamics, affine interpolation, or a separately proved flow-convexity condition.
+
+## 2.6 Thm2 overstates immediate nonviability
+
+The theorem says:
+
+> “no admissible policy keeps the state in \(S\) for any positive time.”
+
+That is false for interior states. They remain in \(S\) for a sufficiently short positive interval.
+
+The proof establishes:
+
+\[
+\operatorname{Viab}_\infty(S)=\varnothing,
+\]
+
+and, for a sufficiently long fixed horizon, an empty finite-horizon kernel. Replace “for any positive time” with “for all forward time.”
+
+## 2.7 Prop3 uses the wrong notion of width
+
+The width must be the global projected width:
+
+\[
+w_e(S)
+=
+\sup_{y\in S}\langle e,y\rangle
+-
+\inf_{y\in S}\langle e,y\rangle.
+\]
+
+The stated width of one affine slice does not bound two branch states lying on different perpendicular slices.
+
+---
+
+# 3. R02 — Closed-loop observation-to-implementation bridge
+
+## Verdict
+
+**The central induction is repairable. Prop3 is false; Cor6 is unproved; computability is overstated.**
+
+## 3.1 The observation object is ill-typed
+
+The record declares a set-valued map
+
+\[
+O:X\rightrightarrows\mathcal Y
+\]
+
+but then writes
+
+\[
+Y_k=O(x(t_k)),
+\]
+
+as if \(O(x)\) were an observation value, and uses \(O^{-1}(Y')\) ambiguously.
+
+Choose one of two models.
+
+### Deterministic observation
+
+\[
+y_k=h(x(t_k)),
+\qquad
+h:X\to Y,
+\]
+
+with fibre
+
+\[
+h^{-1}(y_k).
+\]
+
+### Set-valued observation relation
+
+\[
+y_k\in O(x(t_k)),
+\]
+
+with compatibility fibre
+
+\[
+O^{-}(y_k)
+=
+\{x:y_k\in O(x)\}.
+\]
+
+The quantifier over observation realizations must then be restricted to values compatible with the true state.
+
+## 3.2 Stage dependence is missing
+
+The interval lengths, observation maps, implementation correspondences, and certificate sets may vary with \(k\). The theorem currently uses one \(\Phi\), one \(O\), and one \(\mathcal V\).
+
+For a finite-horizon theorem, write:
+
+\[
+\Phi_k,\quad O_k,\quad \mathcal I_k,\quad \operatorname{Dep}_k,\quad \mathcal V_k,
+\]
+
+with terminal condition \(\mathcal V_N\). Otherwise the theorem is really a stationary invariant-set theorem, stronger than advertised.
+
+## 3.3 “Computable” is not proved
+
+The theorem concludes that the policy is:
+
+> “computable from \((C_k,c_k)\) alone.”
+
+The proof uses an arbitrary selector of the witness correspondence. That establishes, at most, a set-theoretic Markov selector:
+
+\[
+\pi_k=\sigma_k(C_k,c_k).
+\]
+
+It does not establish:
+
+- measurability;
+- continuity;
+- Borel regularity;
+- algorithmic computability.
+
+Field 12 acknowledges this, contradicting the theorem statement. Replace “computable” by “depends only on,” unless a selection theorem and representation model are supplied.
+
+## 3.4 The deployment variable is not causally connected to plant action
+
+The variable \(c\) is called the “deployed/held command,” but the actual plant input is selected independently as
+
+\[
+u_k^{\rm real}\in\mathcal I(u_k^{\rm cmd},c_k,C_k).
+\]
+
+The next deployed command \(c_{k+1}\) affects the next interval only indirectly through \(\mathcal I\). As written, \(\operatorname{Dep}\) can be a bookkeeping label rather than an actuator state.
+
+A clearer architecture is:
+
+\[
+c_{k+1}\in \operatorname{Dep}(u_k^{\rm cmd},c_k),
+\]
+
+\[
+u_k^{\rm real}\in \mathcal I(c_k,\eta_k),
+\]
+
+so the currently deployed state determines the current physical input. If commands can affect implementation immediately, split current and queued commands explicitly.
+
+## 3.5 Prop3 does not compare exact and conservative filters on the same data
+
+The proposition claims:
+
+> “same plant, safe set, observation map, prior, and two filters.”
+
+The proof instead uses two different observation maps:
+
+\[
+O^{ex}(z,\theta)=(z,\theta),
+\qquad
+O^{co}(z,\theta)=z.
+\]
+
+That is a comparison of two information structures, not exact versus conservative processing of the same observation stream.
+
+## 3.6 The conservative branch in Prop3 is actually viable
+
+Even under the \(z\)-only observation, the first command \(u=+1\) produces at \(t_1\):
+
+\[
+z=3\quad\text{if }\theta=+1,
+\qquad
+z=1\quad\text{if }\theta=-1.
+\]
+
+Thus observing \(z(t_1)\) reveals \(\theta\). A \(z\)-history policy can then apply the matched command forever. The claim that every \(z\)-only policy fails by \(t=3\) is false.
+
+The sum identity
+
+\[
+z^+_{k+1}+z^-_{k+1}
+=
+z^+_k+z^-_k-2
+\]
+
+assumes the same later command is used on both branches, but after the observations diverge an observation-based policy may choose different commands.
+
+### Repair options
+
+1. Use the **same observation map** and let the conservative filter deliberately retain a spurious mode that the exact filter eliminates from the observation history.
+2. Construct a genuinely observation-indistinguishable hidden-mode system where the safe-control conflict persists.
+3. State a weaker result: coarse observations can destroy epistemic viability. Do not call it conservative-filter incompleteness.
+
+## 3.7 Lem2 does not by itself prove “never certifies unsafe systems”
+
+The inclusion
+
+\[
+B_k\subseteq C_k
+\]
+
+is filter soundness. Safety certification additionally requires:
+
+- REG to hold for all states in \(C_k\);
+- the true state to remain represented;
+- all implementation branches to be included;
+- the declared disturbance class to be exhaustive.
+
+Thus “never certifies unsafe systems” is a property of the entire theorem, not of Lem2 alone.
+
+## 3.8 Prop4 has an unnecessary boundary hypothesis
+
+If
+
+\[
+\bigcap_{x\in C}U_{\rm safe}(x)=\varnothing,
+\]
+
+then no common held command works, regardless of whether \(C\) contains a boundary state. The boundary hypothesis may motivate local examples but is not needed for the proposition.
+
+## 3.9 Cor6 is not a valid corollary as written
+
+Problems include:
+
+1. REG uses held actions and exact tubes, while the erosion lemma concerns a closed-loop differential inclusion or vector-field envelope.
+2. \(L_\kappa\), observation error, and implementation error are not defined in Thm1.
+3. An observation error becomes a velocity perturbation only through a regular feedback map.
+4. Replacing \(K\) by \(K_{-r}\) requires initial and successor compatible sets to lie in \(K_{-r}\), not merely checking a boundary inequality.
+5. Strong invariance of \(K_{-r}\) does not automatically imply the stagewise successor condition for \(\mathcal V\).
+6. Convexification may certify an envelope not realizable by the nonconvex implementation correspondence.
+
+Cor6 should be removed and replaced by a separate composition theorem with explicit assumptions:
+
+\[
+C_0\subset K_{-r},
+\]
+
+\[
+F_{\rm real}(x)
+\subset
+F_{\rm nominal}(x)+\Delta B,
+\]
+
+\[
+L_G r+\Delta\le\alpha,
+\]
+
+and a successor-certificate construction on \(K_{-r}\).
+
+---
+
+# 4. R03 — Viability–diagnostic bridge
+
+## Verdict
+
+**The examples are useful. The trichotomy is false as an exhaustive theorem, and Lem4 needs stronger continuity.**
+
+## 4.1 The “certificate trichotomy” is not exhaustive
+
+The assertion
+
+> if a diagnostic has neither the adversarial-exit form nor the erosion-margin form, it implies neither viability nor nonviability
+
+is false.
+
+Other valid certificate classes include:
+
+- exact dynamic-programming value functions;
+- control barrier functions;
+- Nagumo tangent-cone certificates without tubular erosion;
+- Lyapunov–barrier functions;
+- Hamilton–Jacobi subsolutions;
+- occupation-measure certificates;
+- reachability over- and under-approximations;
+- monotone-system comparison principles;
+- exact one-dimensional phase-line arguments.
+
+The supplied counterexamples only prove that certain stock-to-rate and aggregate diagnostics are not generally certificates.
+
+### Repair
+
+Replace “trichotomy” by a **partial taxonomy**:
+
+1. adversarial exit certificates;
+2. robust invariant inner certificates;
+3. diagnostics lacking either type of verified implication.
+
+Then state explicitly that this is not exhaustive.
+
+## 4.2 \(M\) is not connected to the adversarial exit condition
+
+Thm1(1) says:
+
+> if \(M\) is an adversarial-exit certificate … then \(M(x)<0\) certifies nonviability.
+
+But no formula links \(M(x)\) to \(q\), \(D^+q\), the strip, or the sign convention.
+
+A certificate should be defined directly, for example:
+
+\[
+M_{\rm exit}(x)
+=
+q(x)-a,
+\]
+
+or as a tuple
+
+\[
+\mathfrak C_{\rm exit}=(q,a,\varepsilon,\gamma).
+\]
+
+The sign of an arbitrary diagnostic has no meaning.
+
+## 4.3 “Outer” and “inner” need set definitions
+
+If \(N\) is a certified nonviable set,
+
+\[
+N\subseteq K\setminus\operatorname{RViab}(K),
+\]
+
+then \(N\) is an inner approximation of the nonviable region, equivalently an outer exclusion from the viable set. Calling it simply an “outer certificate” is ambiguous.
+
+Use explicit set inclusions rather than labels.
+
+## 4.4 Thm2 does not prove necessity of the specific rate-band hypothesis
+
+The example correctly establishes:
+
+\[
+\sup_a\frac{T_{\rm diag}(a)}{T^*(a)}=\infty.
+\]
+
+It proves there is no universal constant-factor guarantee without additional assumptions. It does not prove that the packet’s particular rate-persistence band is logically necessary; other assumptions could suffice, such as:
+
+- a bound on \(\dot r/r\);
+- monotonicity plus integral bounds;
+- convexity/concavity conditions;
+- direct upper envelopes for future rates.
+
+Change “the hypothesis is necessary” to:
+
+> some control of future rate evolution is necessary for a uniform guarantee; the stated band is one sufficient form.
+
+## 4.5 Thm3 proves only one failure direction
+
+The example proves:
+
+\[
+M_{\rm agg}(x)>0
+\centernot\implies
+x\in\operatorname{Viab}(S).
+\]
+
+It does not prove that aggregate margins fail “in either direction.” To prove both directions one would also need a viable state with zero or negative aggregate diagnostic according to the proposed sign convention.
+
+## 4.6 Lem4 uses insufficient set-valued continuity
+
+The key passage is invalid under upper semicontinuity alone. From
+
+\[
+\operatorname{Succ}(x,u_n,d)\subset R_m,
+\qquad
+u_n\to u^*,
+\]
+
+upper hemicontinuity does not imply
+
+\[
+\operatorname{Succ}(x,u^*,d)\subset R_m.
+\]
+
+A correspondence may gain new values at the limit while remaining upper hemicontinuous. For example,
+
+\[
+F(0)=\{0,1\},
+\qquad
+F(u)=\{0\}\quad(u\ne0)
+\]
+
+is upper hemicontinuous at \(0\), but the limit correspondence gains \(1\).
+
+### Required repair
+
+Assume one of:
+
+- Hausdorff continuity in \(u\);
+- lower hemicontinuity plus compact values, sufficient to approximate every limiting successor;
+- directly, closedness of the safe-action sets
+  \[
+  A_W(x)
+  =
+  \{u:\operatorname{Succ}(x,u,d)\subset W\ \forall d\};
+  \]
+- a compact graph property for the robust transition operator strong enough to pass the universal inclusion to the limit.
+
+Uniformity in \(d\) also needs precise formulation.
+
+## 4.7 The predecessor recursion should be stated consistently
+
+The proof writes
+
+\[
+R_{n+1}=R_n\cap\operatorname{Pre}(R_n)
+=\operatorname{Pre}(R_n),
+\]
+
+but the definition only gives \(R_{n+1}=\operatorname{Pre}(R_n)\). The equality with the intersection follows only after proving inductively that
+
+\[
+\operatorname{Pre}(R_n)\subseteq R_n.
+\]
+
+State the recursion as
+
+\[
+R_{n+1}=R_n\cap\operatorname{Pre}(R_n)
+\]
+
+to avoid relying on a hidden time-homogeneity argument.
+
+## 4.8 Infinite-horizon policy admissibility remains unresolved
+
+An arbitrary pointwise selector may generate a set-theoretic policy, but not necessarily an admissible measurable policy. Thus Lem4 can establish a set-valued invariant relation before it establishes an admissible infinite-horizon controller.
+
+The conclusion should distinguish:
+
+- existence of a viable action at every state;
+- existence of a universally measurable selector;
+- existence of an admissible feedback policy.
+
+---
+
+# 5. R04 — Domain admission
+
+## Verdict
+
+**The five-map construction is a useful sufficient equivalence certificate. It is not necessary, and the approximate corollary is incomplete.**
+
+## 5.1 The theorem is tautological on the sufficient side
+
+“Exact admission” is defined by an injective phase-space map, exact solution correspondence, exact safe-set correspondence, and policy equivalence. Kernel equivalence then follows directly.
+
+That is valid, but it is essentially a theorem about isomorphic control systems. Its contribution is a checklist, not a deep admission criterion.
+
+## 5.2 The necessity claim is false
+
+Kernel or judgment equivalence does not require:
+
+- injective phase-space maps;
+- full solution-set equivalence;
+- equality of safe sets;
+- bidirectional policy equivalence.
+
+Examples:
+
+- a noninjective quotient can preserve a safety judgment;
+- different dynamics can have the same viability kernel;
+- two safe sets can differ outside the reachable region;
+- one-way policy simulation can preserve one direction of a judgment;
+- bisimulation is stronger than trace equivalence, which is stronger than kernel equality.
+
+The proof only shows that when a map is absent, one **can construct** examples where transfer fails. That does not show the map is necessary for a given pair of models.
+
+### Repair
+
+Split the theorem into:
+
+1. **Strong exact admission:** the five maps are sufficient for all-judgment equivalence.
+2. **Judgment-specific simulation:** weaker one-way maps give one-way kernel inclusion.
+3. **Counterexamples:** omitting each condition prevents any unconditional transfer theorem over the whole model class.
+
+Do not call the five-map certificate necessary and sufficient for kernel equality.
+
+## 5.3 The dynamics-mismatch witness is false
+
+Model B is
+
+\[
+\dot x=u+1,
+\qquad
+u\in[-1,1].
+\]
+
+Choosing \(u=-1\) gives \(\dot x=0\), so every state in \([0,1]\) can be held. Its kernel is not empty.
+
+Use
+
+\[
+\dot x=u+2
+\]
+
+instead, or restrict \(u\in[-1/2,1/2]\).
+
+## 5.4 The phase-space map needs differentiable conjugacy data
+
+Cor2 compares
+
+\[
+f_M
+\quad\text{with}\quad
+f_q\circ\phi.
+\]
+
+If \(\phi\) changes coordinates, the correct transformed vector field is
+
+\[
+D\phi(x)f_M(x,u,d).
+\]
+
+A valid approximate embedding requires at least:
+
+- \(\phi\) differentiable or absolutely continuous as needed;
+- injectivity on the domain;
+- a controlled inverse, usually bi-Lipschitz;
+- defect bound
+  \[
+  \|D\phi(x)f_M(x,u,d)-f_q(\phi(x),\tau_Uu,\tau_Dd)\|
+  \le\varepsilon.
+  \]
+
+For DAEs and RFDEs the map must preserve constraint manifolds or history spaces, not merely coordinate blocks.
+
+## 5.5 Cor2 does not establish policy-level kernel transfer
+
+A Grönwall trajectory estimate for matched controls does not automatically compare viability kernels. One must show that:
+
+- each source policy has a target policy using the same information;
+- policy perturbations do not violate admissibility;
+- disturbances are coupled consistently;
+- the comparison remains valid under feedback;
+- the target trajectory stays in the compact comparison domain.
+
+At best, the stated bound proves finite-horizon trajectory closeness for a fixed matched input pair.
+
+## 5.6 The erosion calculation is inconsistent
+
+If the trajectory error is
+
+\[
+\eta_T=\frac{\varepsilon}{L}(e^{LT}-1),
+\]
+
+then the geometric safety buffer must absorb \(\eta_T\), not merely \(c\varepsilon\) under an unrelated boundary-vector-field inequality.
+
+Two distinct approaches are being mixed:
+
+### Trajectory-closeness transfer
+
+\[
+\operatorname{dist}(\phi(x_q(t)),K^c)>\eta_T.
+\]
+
+### Invariant-set perturbation transfer
+
+\[
+L_G r+\Delta\le\alpha.
+\]
+
+These require different hypotheses and should be separate corollaries.
+
+## 5.7 The domain classification table is not “proved”
+
+Rows with unresolved jump balances, routing, topology, positivity, and implementation maps are at most:
+
+- structurally assessed;
+- conditionally admissible;
+- pending verification.
+
+The status should not say “proved classification at declared status” unless all cited source facts and map conditions are checked in the record itself.
+
+---
+
+# 6. R05 — Assume–guarantee composition
+
+## Verdict
+
+**The main tubular invariance idea is viable after formal repair. Cor3 is misstated, and the set-valued interface assumptions are not rigorous enough.**
+
+## 6.1 Interface sensitivity is ill-defined for set-valued maps
+
+The expression
+
+\[
+\|F_i(x_i,z,d)-F_i(x_i,z',d)\|
+\le\Lambda_i\|z-z'\|
+\]
+
+is not defined when \(F_i\) is set-valued.
+
+Use either:
+
+\[
+d_H\!\left(
+F_i(x_i,z,d),
+F_i(x_i,z',d)
+\right)
+\le
+\Lambda_i\|z-z'\|,
+\]
+
+or the one-sided excess bound needed by the proof:
+
+\[
+F_i(x_i,z,d)
+\subset
+F_i(x_i,z',d)
++
+\Lambda_i\|z-z'\|B.
+\]
+
+The latter is enough for upper velocity estimates.
+
+## 6.2 Norm aggregation is hidden
+
+If \(z_i=(z_{ij})_{j\ne i}\), then
+
+\[
+\|z_i-\hat z_i\|
+\le
+\sum_{j\ne i}\delta_{ij}
+\]
+
+depends on the chosen product norm. State the norm and its induced constants. Otherwise \(\Lambda_i\) and \(\delta_{ij}\) do not have invariant numerical meaning.
+
+## 6.3 The strong-invariance theorem must match the normal cone used
+
+The proof invokes a proximal-normal criterion. For differential inclusions, the exact sufficient/necessary conditions depend on:
+
+- proximal versus Clarke normals;
+- upper semicontinuity or local Lipschitz continuity;
+- convexity of values;
+- whether strong or weak invariance is claimed.
+
+The source theorem must be quoted precisely. “Same lemma as corrected 02” is not enough when the joint envelope differs from the nominal module envelopes.
+
+## 6.4 Cor3’s monotone iteration claim is false without \(b\ge0\)
+
+The theorem says:
+
+\[
+r^{(k+1)}
+=
+D^{-1}(b+Mr^{(k)})
+\]
+
+converges monotonically upward from \(r^{(0)}=0\). This is false if some component of \(b\) is negative. Then
+
+\[
+r^{(1)}=D^{-1}b
+\]
+
+may be negative.
+
+The proof itself acknowledges this, contradicting the statement.
+
+### Correct statement
+
+If
+
+\[
+b\ge0,\qquad \rho(\Gamma)<1,
+\]
+
+then the iteration from \(0\) is monotone increasing and converges to
+
+\[
+r^*=A^{-1}b.
+\]
+
+For general \(b\), the affine iteration may converge in a suitable norm when \(\rho(\Gamma)<1\), but it need not stay in \(\mathbb R_+^N\) or be monotone.
+
+## 6.5 “Maximal feasible erosion” needs interpretive care
+
+The inequality is
+
+\[
+Ar\le b,
+\qquad r\ge0.
+\]
+
+Under \(A^{-1}\ge0\), every feasible \(r\) satisfies
+
+\[
+r\le A^{-1}b.
+\]
+
+Thus \(r^*=A^{-1}b\) is the greatest feasible vector when nonnegative. Mathematically correct—but “greater erosion” is not automatically better. It consumes own margin while tightening exported contracts. The optimisation interpretation should remain separate from the order-theoretic statement.
+
+## 6.6 Ex4 needs a cleaner parameter match
+
+The positive-system collapse result is essentially correct for an irreducible Metzler matrix with one positive Perron eigenvalue. But the identification of:
+
+\[
+\alpha_i,\quad L_i,\quad \delta_{ij},\quad \rho_i
+\]
+
+is only valid in a restricted parameter regime.
+
+For \(Q_i=[0,k_i]\) and nominal interface \(\hat z_{ij}=k_j/2\), inward margin must be checked at both boundaries. In the symmetric case \(c>a\), one also needs \(c<2a\) for the nominal upper-bound margin to remain positive.
+
+State a concrete parameter choice, for example:
+
+\[
+a=1,\qquad 1<c<2,
+\]
+
+then compute the exact minimum boundary margin.
+
+## 6.7 This is not yet a governance composition theorem
+
+R05 composes full-state differential inclusions, not the observation–assessment–implementation systems of R02. It therefore closes a physical modularity problem, not the broader institutional composition problem. The publication claims should reflect that boundary.
+
+---
+
+# 7. R06 — Aggregation and memory
+
+## Verdict
+
+**The first-\(K\)-moment nonclosure result is useful. The finite-augmentation theorem is invalid, the heterogeneous identity is wrong, and memory necessity is overstated.**
+
+## 7.1 Thm2’s fibre-richness hypothesis is self-defeating
+
+The theorem assumes that no continuous finite-dimensional augmentation \(A\) separates points with different projected derivatives. But under the smoothness assumptions, one can choose
+
+\[
+A(x)=dP_xF(x)\in\mathbb R^m.
+\]
+
+This directly separates points with different projected derivatives. Therefore the stated hypothesis generally cannot hold.
+
+More importantly, even adding \(dPF\) does not prove closure, because closure of
+
+\[
+q=(P,A)
+\]
+
+requires **all components**
+
+\[
+Dq(x)F(x)
+\]
+
+to be constant on \(q\)-fibres, including
+
+\[
+DA(x)F(x).
+\]
+
+The theorem checks only the \(P\)-component.
+
+### Repair
+
+Replace Thm2 with an iterative observability/closure hierarchy. Define
+
+\[
+h_0=P,
+\qquad
+h_{j+1}=Dh_j\,F.
+\]
+
+A finite Markov closure exists only if the differential algebra generated by these observables closes after finitely many steps. If for every finite \(K\) there are states with equal
+
+\[
+(h_0,\dots,h_K)
+\]
+
+but different \(h_{K+1}\), then no closure using those generated observables exists.
+
+A claim against **all** finite-dimensional continuous augmentations requires a much stronger topological or realization-theoretic theorem.
+
+## 7.2 The “cardinality exceeding separation capacity” argument is invalid
+
+A continuous real-valued function can separate infinitely or uncountably many derivative values. Cardinality alone does not limit a map into \(\mathbb R^k\) in the asserted way.
+
+Any finite-dimensional impossibility theorem needs:
+
+- topological dimension;
+- embedding dimension;
+- differential-algebraic rank;
+- observability codistribution;
+- realization theory;
+- or an explicit restriction on allowable augmentations.
+
+## 7.3 The heterogeneous coarse-graining identity is wrong
+
+For
+
+\[
+\partial_tX(\sigma)=X(\sigma)(\rho(\sigma)-X(\sigma)),
+\]
+
+the mean satisfies
+
+\[
+\dot m_1
+=
+\int \rho X\,d\mu
+-
+m_2.
+\]
+
+Writing \(\bar\rho=\int\rho\,d\mu\),
+
+\[
+\dot m_1
+=
+\bar\rho\,m_1
++
+\operatorname{Cov}(\rho,X)
+-
+m_1^2
+-
+\operatorname{Var}(X).
+\]
+
+The record omits
+
+\[
+\operatorname{Cov}(\rho,X).
+\]
+
+The simpler identity is valid only for constant \(\rho\) or zero covariance.
+
+## 7.4 Thm3 proves nonclosure only for consecutive raw moments
+
+The proof establishes that
+
+\[
+(m_1,\ldots,m_K)
+\]
+
+does not close. It does not establish the stronger wording:
+
+> “no finite family of moment functionals closes exactly.”
+
+A finite family could involve selected nonlinear moments, transforms, or sufficient statistics. For the unrestricted bounded-field class such closures may still fail, but a separate theorem is needed.
+
+State the proved result as:
+
+> No finite truncation of the raw moment hierarchy \((m_1,\dots,m_K)\) is an exact autonomous closure.
+
+## 7.5 Nonclosure does not imply that every exact reduction is memory-bearing
+
+The alternatives include:
+
+- a finite nonmoment state;
+- a parameterized invariant family of distributions;
+- a nonautonomous closure;
+- a stochastic closure;
+- a set-valued closure;
+- a history-dependent closure;
+- the full field.
+
+The result supports:
+
+> raw-moment closure requires approximation or additional structural assumptions.
+
+It does not prove universal necessity of memory.
+
+## 7.6 Cor4 cannot transfer full-state safety from aggregate error alone
+
+Suppose
+
+\[
+\|P(x(t))-p_r(t)\|\le\eta_T.
+\]
+
+This only controls output-space safety. It says nothing about fibre-internal violations, precisely the problem demonstrated by R01.Thm2 and R03.Thm3.
+
+A valid corollary requires one of:
+
+\[
+K=P^{-1}(K_P),
+\]
+
+or
+
+\[
+\operatorname{dist}(P(x),K_P^c)\ge r
+\Longrightarrow
+x\in K,
+\]
+
+or a reconstruction bound on \(x\).
+
+Without such an assumption, Cor4 contradicts the programme’s own aggregate-false-positive results.
+
+---
+
+# 8. R07 — Intergenerational continuation
+
+## Verdict
+
+**Finite fixed-epoch recursion is repairable. Reset sufficiency and infinite-generation existence are overstated.**
+
+## 8.1 Terminal indexing is ambiguous
+
+The record defines
+
+\[
+W_G=K_G
+\]
+
+while describing \(K_G\) as a “terminal generation maintenance condition.” If generation \(G\) has a nonzero interval, merely belonging to \(K_G\) at its start does not ensure maintenance through it.
+
+Specify whether:
+
+- generations are \(g=0,\ldots,G-1\), with \(W_G\) a terminal set at \(t_G\); or
+- generation \(G\) itself has an interval and requires another predecessor step.
+
+## 8.2 Set-valued reset semantics are ambiguous
+
+For a set-valued reset \(R_g\), robust all-branches semantics require
+
+\[
+R_g(x)\subseteq W_{g+1}.
+\]
+
+Existentially selectable reset semantics require
+
+\[
+R_g(x)\cap W_{g+1}\ne\varnothing.
+\]
+
+The record defines the preimage using “every translated branch,” but later claims that it is enough for the reset range merely to meet \(K_{g+1}\). These are inconsistent quantifiers.
+
+## 8.3 Thm4’s converse is not sufficient
+
+The condition
+
+\[
+R_g(x)\cap K_{g+1}\ne\varnothing
+\]
+
+only removes the immediate disjointness obstruction under existential reset selection. It does not prove:
+
+- that the reset branch is implementable;
+- that all reset branches are safe;
+- that the post-reset state lies in \(W_{g+1}\);
+- that later generations are viable.
+
+The correct conclusion is:
+
+> A typed reset can remove the continuity obstruction if its branch quantifier and image satisfy the next-generation continuation condition.
+
+## 8.4 “Only through typed transformation” is too broad
+
+For two closed disjoint consecutive safe sets and continuous state evolution at a common boundary time, a jump/reset or a relaxation of the specification is indeed necessary. But the phrase “specification change is possible only through typed transformation” is too broad because:
+
+- consecutive safe sets may overlap;
+- constraints may change over an open transition interval;
+- the state interpretation may change without a physical jump;
+- one specification may be mapped to another through a coordinate equivalence;
+- a temporary transition-safe set may bridge the regimes.
+
+The theorem should remain restricted to disjoint instantaneous switching.
+
+## 8.5 Thm5 does not follow directly from R03.Lem4
+
+The generation system is generally time-inhomogeneous:
+
+\[
+K_g,\quad \Omega_g,\quad R_g,\quad \operatorname{Pre}_g
+\]
+
+vary with \(g\). R03’s stationary fixed-point predecessor argument does not apply verbatim.
+
+Nonempty finite-horizon initial kernels plus compactness gives a nonempty intersection of initial-state sets. It does not automatically produce one policy consistent over all horizons. A sequence of horizon-dependent policies may fail to have a convergent causal limit.
+
+### Required repair
+
+Use one of:
+
+- a compact policy-tree argument;
+- Kőnig’s lemma for finite action/branch sets;
+- Tychonoff compactness plus closed graph conditions for policy trees;
+- strategic-measure compactness;
+- a nonstationary dynamic-programming theorem with measurable selection.
+
+## 8.6 The nested-safe-set assumptions are not used coherently
+
+The theorem assumes both:
+
+\[
+K_{g+1}\subseteq K_g,
+\qquad
+\bigcap_gK_g\ne\varnothing,
+\]
+
+and nonempty finite-horizon predecessor kernels. The latter is doing most of the control work. Nestedness of \(K_g\) alone does not imply viable transitions or common controls.
+
+State clearly which assumptions guarantee:
+
+- state-space compactness;
+- finite intersection;
+- action consistency;
+- disturbance robustness.
+
+---
+
+# 9. R08 — Judgment hierarchy
+
+## Verdict
+
+**Mostly repairable; useful as a typing and counterexample register.**
+
+## 9.1 Controlled viability must be defined explicitly
+
+Example (a) treats controlled viability as allowing a favorable disturbance branch:
+
+\[
+\exists\pi\,\exists d.
+\]
+
+That is not a universal convention. “Controlled viability” often means no disturbance or control against a fixed system, while “discriminating kernel” handles disturbances.
+
+The example is valid only relative to the packet’s precise definition. Reproduce that definition in the record.
+
+## 9.2 The exact-observation proposition requires update commutation
+
+Injectivity and singleton filters are not enough unless the information-state update commutes with physical evolution:
+
+\[
+\Lambda\!\left(
+\operatorname{Succ}_X(x,u,d)
+\right)
+=
+\operatorname{Succ}_{\mathcal B}
+\left(
+\Lambda(x),u,d
+\right).
+\]
+
+For history-dependent policies, the correspondence must hold on histories, not only instantaneous states.
+
+## 9.3 The hidden-mode witness contains a dynamics typo
+
+For the R02 plant
+
+\[
+\dot z=\theta u-1,
+\]
+
+at \(z=0\):
+
+- \(\theta=+1,u=+1\) gives \(\dot z=0\);
+- \(\theta=-1,u=-1\) gives \(\dot z=0\).
+
+R08 says \(\dot z=+1\) in one place. The viability conclusion remains correct after correction.
+
+## 9.4 “Physical kernel nonempty implies epistemic kernel nonempty” must be typed more carefully
+
+The example compares:
+
+- singleton physical states, each viable;
+- one nonsingleton information state, not epistemically viable.
+
+It does not imply that the entire epistemic kernel is empty; singleton information states may still be epistemically viable. The wording
+
+> “the physical kernel and the epistemic kernel are both nonempty and empty respectively”
+
+is contradictory.
+
+The valid conclusion is:
+
+\[
+x_1,x_2\in\operatorname{RViab}(K)
+\]
+
+does not imply
+
+\[
+\{x_1,x_2\}\in\operatorname{EViab}(K).
+\]
+
+## 9.5 Implementation enlargement is not information monotonicity
+
+Example (e) correctly shows that enlarging the set of possible implementation failures shrinks all-branches institutional viability. But this is an increase in implementation uncertainty, not “more implementation” in a beneficial-capability sense.
+
+R09 should not combine this with information refinement under one slogan without preserving the type distinction.
+
+---
+
+# 10. R09 — General-theory boundary theorem
+
+## Verdict
+
+**Useful scope manifesto, not a proved exact boundary theorem.**
+
+## 10.1 Completeness of the universal list is not proved
+
+The record claims:
+
+> “the exact list of universal consequences.”
+
+Assembling U1–U5 and refuting six candidate claims does not prove that no other theorem follows from the axioms. Logical completeness would require, for example:
+
+- a formal language of admissible claims;
+- a deductive system;
+- a completeness theorem;
+- or a complete classification of models of the axioms.
+
+The later caveat that completeness is “relative to the programme’s claim inventory” contradicts the stronger theorem statement.
+
+### Repair
+
+Rename it:
+
+> **Current scope theorem for the registered claim inventory.**
+
+State:
+
+\[
+\mathcal U_{\rm registered}
+=
+\{U1,\ldots,U5\},
+\]
+
+and
+
+\[
+\mathcal M_{\rm tested}
+=
+\{M1,\ldots,M6\}.
+\]
+
+This is an auditable registry, not a logically complete theory.
+
+## 10.2 U1–U5 are not consequences of the seven structural axioms alone
+
+The seven TCS axioms are mainly typing and status rules. U1 additionally requires:
+
+- a stoichiometric representation;
+- left-kernel conditions;
+- locally finite jumps.
+
+U5 requires:
+
+- compactness;
+- continuity;
+- exact tube or successor construction.
+
+Thus the proper statement is:
+
+> Every admitted instantiation satisfying the named model-class hypotheses inherits the corresponding conditional theorem.
+
+That is a theorem-library closure rule, not deduction from TCS axioms alone.
+
+## 10.3 M1’s global delay-instability claim is not proved
+
+The calculation shows a crossing at
+
+\[
+\tau=\pi/2
+\]
+
+with positive crossing direction, establishing instability for \(\tau\) just above \(\pi/2\). It does not by itself prove instability for every
+
+\[
+\tau>\pi/2.
+\]
+
+The text acknowledges only a local interval and then states the global result.
+
+To prove the global claim, add a characteristic-root count or established scalar-delay stability theorem. Otherwise weaken M1 to:
+
+> stable for \(0\le\tau<\pi/2\), unstable for \(\tau\) in some interval immediately above \(\pi/2\).
+
+Also, for complex \(\lambda\), \(e^{\lambda t}\) is a complex solution. A real growing solution is obtained from its real or imaginary part.
+
+## 10.4 M2 does not demonstrate substitution
+
+The two examples are:
+
+- enough resource to meet demand;
+- too little resource to meet demand.
+
+They do not involve replacement of one service-producing pathway by another. This establishes endowment-specific feasibility, not the nonexistence of a universal substitution law.
+
+A proper pair should include at least two technologies:
+
+\[
+Yv\ge d,\qquad Sv\le x,
+\]
+
+with one instance where technology 2 replaces unavailable technology 1 and another where stoichiometric or energetic constraints prevent replacement.
+
+## 10.5 M5’s fold witness violates forward completeness
+
+The system
+
+\[
+\dot x_1=\mu+x_1^2
+\]
+
+has finite-time blow-up for many initial conditions. Since the safe set places no constraint on \(x_1\), the claim
+
+\[
+\operatorname{Viab}(K)=K
+\quad\text{for all }\mu
+\]
+
+is incompatible with a viability judgment requiring existence for all forward time.
+
+### Repair
+
+Use a bounded vector field with the same local fold, for example
+
+\[
+\dot x_1
+=
+\frac{\mu+x_1^2}{1+x_1^2},
+\]
+
+near \((x_1,\mu)=(0,0)\), with a separate globally complete construction if exact saddle-node normal-form conditions are required. Keep
+
+\[
+\dot x_2=-x_2+\tfrac12,
+\qquad
+K=\{x_2\le1\}.
+\]
+
+Then the fold coordinate remains uncoupled from the safety coordinate and the system is forward complete.
+
+## 10.6 The reverse local-to-global independence is not properly formulated
+
+To show that local bifurcation and global kernel change are logically independent, establish both:
+
+1. a local bifurcation with no kernel change;
+2. a kernel change with no local bifurcation.
+
+The proposed \(\dot x=1\) example has an empty kernel but no parameterized “change.” Use a parameterized drift such as
+
+\[
+\dot x=\mu,
+\qquad
+K=[-1,1].
+\]
+
+At \(\mu=0\), the entire set is invariant; for \(\mu\ne0\), the infinite-horizon kernel is empty. This is a global viability change without a local equilibrium bifurcation in the usual isolated-equilibrium sense, although the degeneracy at \(\mu=0\) must be described carefully.
+
+## 10.7 M6 combines three different orders
+
+These are distinct:
+
+- information refinement;
+- delayed information;
+- enlargement of implementation uncertainty.
+
+A general theorem should state separate monotonicity results:
+
+\[
+\text{information refinement}
+\quad\text{under policy lifting};
+\]
+
+\[
+\text{earlier revelation}
+\quad\text{under aligned action timing};
+\]
+
+\[
+\mathcal I_1\subseteq\mathcal I_2
+\Longrightarrow
+\operatorname{IViab}_{\forall}(\mathcal I_2)
+\subseteq
+\operatorname{IViab}_{\forall}(\mathcal I_1).
+\]
+
+They should not be compressed into “more information/implementation is not always better.”
+
+---
+
+# 11. Necessary changes to the master closure review
+
+The PDF’s summary and verdict table should be revised as follows.
+
+| Record | Current status claimed | Defensible status |
+|---|---|---|
+| R01 | Proved | Repairable counterexamples; theorem statement and quantifiers require correction |
+| R02 | Proved | Main finite-horizon induction conditional; Prop3 false; Cor6 open |
+| R03 | Proved | Partial diagnostic taxonomy; examples proved; horizon lemma conditional on stronger continuity |
+| R04 | Proved N&S certificate | Strong sufficient equivalence certificate only; necessity and approximate transfer not proved |
+| R05 | Restricted theorems proved | Main invariance result plausible after set-valued repair; Cor3 requires correction |
+| R06 | New impossibility theorem proved | Raw-moment truncation nonclosure proved after correction; general finite-augmentation theorem invalid |
+| R07 | Proved | Finite recursion conditional; reset converse and infinite-horizon result open |
+| R08 | Proved | Mostly proved after typing and wording corrections |
+| R09 | Proved exact boundary theorem | Registered scope proposition only; global completeness not proved |
+
+The statement
+
+> “With items 1–5 proved, the phrase general theory is defensible”
+
+should become:
+
+> “These items define a plausible minimum closure agenda. Several remain open in their present formulation.”
+
+---
+
+# 12. Recommended theorem hierarchy
+
+The programme should distinguish four mathematical layers.
+
+## Layer A — Typed semantic foundation
+
+Define:
+
+1. model class and solution concept;
+2. state and history spaces;
+3. safe set;
+4. information filtration;
+5. policy class;
+6. disturbance class;
+7. implementation correspondence;
+8. horizon;
+9. branch quantifier;
+10. physical versus epistemic versus institutional judgment.
+
+No theorem should cross layers without a typed map.
+
+## Layer B — Exact model-class theorems
+
+Examples:
+
+- exact sampled robust predecessor recursion;
+- exact information-state recursion;
+- exact stoichiometric conservation;
+- exact projectability criterion;
+- exact generation recursion for fixed epochs;
+- exact product invariance under explicit interface bounds.
+
+These should be stated narrowly and proved independently.
+
+## Layer C — Approximation and simulation theorems
+
+Use explicit relations such as:
+
+### Approximate simulation
+
+\[
+\|D\phi\,f_M-f_Q\circ\phi\|\le\varepsilon.
+\]
+
+### Output safety preservation
+
+\[
+P^{-1}(K_Y)\subseteq K_X
+\]
+
+or a quantitative margin implication.
+
+### Error propagation
+
+\[
+\|P(x(t))-y(t)\|\le\eta_T.
+\]
+
+### Safety transfer
+
+\[
+\operatorname{dist}(y(t),K_Y^c)>\eta_T
+\Longrightarrow
+x(t)\in K_X.
+\]
+
+This layer should not reuse invariant-set erosion formulas unless their hypotheses genuinely apply.
+
+## Layer D — Obstruction and independence theorems
+
+Keep the strongest valid negative results:
+
+- endpoint snapshots do not imply tube safety;
+- aggregate safety does not imply componentwise viability;
+- common safe commands can fail under partial observation;
+- raw moment truncations do not close quadratic field dynamics;
+- local bifurcation need not alter an unrelated viability kernel;
+- delay effects are model-dependent.
+
+These establish honest limits but do not form an exhaustive list of all possible theorems.
+
+---
+
+# 13. Priority repair order
+
+## Priority 1 — Fix the status ledger
+
+Immediately demote:
+
+- R02.Prop3;
+- R02.Cor6;
+- R03.Thm1 as an exhaustive trichotomy;
+- R03.Lem4 under upper semicontinuity alone;
+- R04 necessity;
+- R06.Thm2;
+- R06.Cor4;
+- R07.Thm5;
+- R09’s completeness claim.
+
+This prevents downstream papers from citing invalid closure.
+
+## Priority 2 — Freeze one information pattern
+
+For sampled governance, use:
+
+\[
+u_k=\pi_k(y_0,\ldots,y_k,c_0,\ldots,c_k),
+\]
+
+\[
+u(t)=u_k
+\quad
+t\in[t_k,t_{k+1}),
+\]
+
+with hidden disturbance during the interval. Rebuild R01 and R02 under this pattern.
+
+## Priority 3 — Repair R01 completely
+
+A corrected theorem can be short and strong:
+
+\[
+W_1=[-1,1],\qquad
+W_0^e=S_0,\qquad
+W_0=\varnothing.
+\]
+
+Use held commands and global directional width. Replace the false equivalence with:
+
+\[
+\operatorname{RPre}^e(W)=\operatorname{RPre}(W)
+\]
+
+as the exact soundness condition.
+
+## Priority 4 — Replace R02.Prop3
+
+Construct a genuine same-data exact-versus-outer-filter example. The outer filter should retain spurious states after an observation that the exact Bayesian/set-membership update eliminates. Then show:
+
+\[
+B_k^{\rm exact}\subsetneq C_k^{\rm outer},
+\]
+
+with a common-action obstruction only for \(C_k^{\rm outer}\).
+
+## Priority 5 — Repair finite-to-infinite horizon closure
+
+State the predecessor theorem using closed safe-action correspondences or Hausdorff-continuous successors. Then prove a measurable-selector version separately.
+
+## Priority 6 — Downgrade R04 to a simulation hierarchy
+
+Develop:
+
+- isomorphism \(\Rightarrow\) judgment equivalence;
+- alternating simulation \(\Rightarrow\) robust-kernel inclusion;
+- approximate simulation \(\Rightarrow\) finite-horizon eroded inclusion;
+- counterexamples when no relation is available.
+
+This is mathematically stronger and less tautological than the current “necessary-and-sufficient” certificate.
+
+## Priority 7 — Replace R06.Thm2
+
+Retain the raw-moment hierarchy result. For more general finite-dimensional closure, use a differential-observable hierarchy or explicitly label the problem open.
+
+## Priority 8 — Prove nonstationary infinite-generation continuation
+
+Use compact policy trees or strategic measures rather than importing a stationary predecessor fixed-point theorem.
+
+## Priority 9 — Recast R09 as a maintained scope registry
+
+R09 should state:
+
+- currently established conditional laws;
+- currently established independence witnesses;
+- unresolved candidate general laws.
+
+It should not claim logical completeness.
+
+---
+
+# 14. What remains genuinely valuable
+
+After correction, the programme can still make a substantial mathematical contribution.
+
+The strongest defensible backbone is:
+
+1. **Exact tube safety is indispensable** in sampled transformations.
+2. **Componentwise safety cannot generally be certified by aggregates.**
+3. **Observation and implementation must enter the viability state.**
+4. **A common-action condition is necessary under partial information.**
+5. **Diagnostic quantities become certificates only through explicit implication theorems.**
+6. **Domain transfer requires typed simulation or equivalence relations.**
+7. **Composition requires joint feasibility and quantitative interface gains.**
+8. **Raw finite moment truncations generally fail for nonlinear field dynamics.**
+9. **Intergenerational sustainability with changing specifications is a nonstationary transformation problem.**
+10. **Delay, substitution, aggregation closure, and bifurcation effects are model-class mechanisms, not universal sustainability laws.**
+
+That is already a coherent general-theory direction. Its universality should be presented as a **typed calculus of judgments, mappings, certificates, and obstructions**, not as a completed list of all universal consequences.
+
+## Final assessment
+
+The documents show substantial progress toward a rigorous sustainability framework, but the closure review currently over-certifies its own results. The central issue is not lack of mathematical sophistication; it is insufficient separation among:
+
+- exact theorem;
+- sufficient certificate;
+- counterexample;
+- taxonomy;
+- approximation bridge;
+- and completeness claim.
+
+Once those statuses are repaired, R01, the core of R02, the raw-moment part of R06, much of R08, and a narrowed R05 can form a sound first theorem atlas. R03, R04, R07, and R09 then need reconstruction around that sound core rather than continued “assembly” from results whose hypotheses do not yet align.
