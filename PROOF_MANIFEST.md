@@ -196,3 +196,65 @@
 **Independent rerun status:** NONE for all artifacts. At least one independent rerun is required before submission.
 
 **Environment:** Python 3.12.13 (`/home/z/.venv/bin/python3`), numpy 2.1.3, scipy 1.14.1, mpmath 1.3.0. No containerization. No version pinning beyond the listed versions. The interval arithmetic library (`interval_lib.py`) uses `np.nextafter` for outward rounding — verified against exact rational arithmetic on test cases.
+
+---
+
+## Part VI — Wave E scored trees
+
+Committed on `main` in `4af53e4`. These are **single-run forecast-ladder artifacts**, not kernel certificates. They do **not** close any Wave E gate (Part III still applies: every support row is NOT CONFIRMED). Status vocabulary used here is only:
+
+- `SINGLE_RUN` — produced once from the committed scripts in this tree
+- `INDEPENDENT_RERUN_NONE` — no second agent or CI has rerun and matched hashes
+
+Nothing in this section is labeled certified or validated.
+
+Working directory for reproduction commands: repository root, then `cd` as written. Python 3 with `numpy`, `pandas`, `scipy`, `matplotlib`.
+
+### A. `wave_e_cod/` — Northern cod (\(\Omega_{2016}\), \(\Omega_{\mathrm{xte}}\))
+
+Primary \(z\): NCAM M-shift SSB (`data/ncam_2016_table_a2.csv`); xteNCAM Table 17 scored separately (`data/xtencam_table17_ssb.csv`). Not pooled.
+
+| Artifact | Path | SHA-256 | Reproduction command | Status |
+|---|---|---|---|---|
+| \(\Omega_{2016}\) run metadata | `wave_e_cod/results/meta.json` | `7ae9ba738b3b36665a77ca2ff5002a9e5f801b1d8c64efb1a968d1d867a52eb9` | `cd wave_e_cod && python3 src/run_ladder.py` | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| \(\Omega_{2016}\) rolling RMSE summary | `wave_e_cod/results/rolling_summary.csv` | `075b72cff057562a1c6dc1b33db0c5fb73efd12338e766992436ada778d8357d` | same | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| \(\Omega_{2016}\) fixed-window scores | `wave_e_cod/results/fixed_window_scores.csv` | `0af788ee59926c285526d539642b255b64f929731442900f9ca7ce7ea68aecf9` | same | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| \(\Omega_{2016}\) rolling forecast paths | `wave_e_cod/results/rolling_forecasts.csv` | `d36865d3a5a2a2cd01070ccf160b5d8e5b138ada17911ea0610a49c171b6f9b4` | same | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| \(\Omega_{\mathrm{xte}}\) run metadata | `wave_e_cod/results/xte_meta.json` | `7f3730059875007195813acd9041843d06a14332baa21e72cf73a6b473d83649` | `cd wave_e_cod && python3 src/run_xte.py` | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| \(\Omega_{\mathrm{xte}}\) rolling RMSE summary | `wave_e_cod/results/xte_rolling_summary.csv` | `b9d5ddbc0d456c27f74d72b50c2049b9ce26676183c808aa2b2c776790032298` | same | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| \(\Omega_{\mathrm{xte}}\) fixed-window scores | `wave_e_cod/results/xte_fixed_window_scores.csv` | `073e3f68f2c18625899827d0967478ecb56231819530f2dbefdf2d783bbb0ef8` | same | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| \(\Omega_{\mathrm{xte}}\) rolling forecast paths | `wave_e_cod/results/xte_rolling_forecasts.csv` | `080b7255e289cd0d7ed2636ec567e495f40bb0a2d1242459ad2a776c68a04f79` | same | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| Capelin-regime summary | `wave_e_cod/results/capelin_regime_summary.csv` | `b874797dc98a5d63e608b04bb264f08cf43f775b92e8f02eec30dcd7622356ae` | `cd wave_e_cod && python3 src/run_capelin_regime.py` | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| Capelin-index summary | `wave_e_cod/results/capelin_index_summary.csv` | `0323fc1ee5f9f0fdea0e428c66e11ad0090fbbf19687c8eebe4b9ab635aa7a4e` | `cd wave_e_cod && python3 src/run_capelin_index.py` | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| NCAM vs xte overlap audit | `wave_e_cod/results/ncam_vs_xtencam_overlap.csv` | `e8b459383bdc5589c7746cb8d8e6553485a10e48798eb7fe087ca815882f1c83` | derived by `src/run_xte.py` | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| Catch overlap audit | `wave_e_cod/results/catch_overlap_audit.csv` | `6759298db718e1cdfa8767f6beb90481c9e51d21f6e6cf6606e37a03f62b007c` | `cd wave_e_cod && python3 src/compare_catch.py` | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| Locked NCAM Table A2 | `wave_e_cod/data/ncam_2016_table_a2.csv` | `6645c8e5a4a94074c700a73bad6acc054e1f7b867dcce9ff2f4635fcf9b5dbf6` | input (not generated) | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| Locked xteNCAM Table 17 | `wave_e_cod/data/xtencam_table17_ssb.csv` | `c4f4a1ce473f30e9707cb422726c852b1311fac47c207c40d622cead306fd549` | input (not generated) | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| Locked Schijns catch | `wave_e_cod/data/catch_schijns_2021.csv` | `4dc174f9e7f6dd5090f9d02cb569165bd0bdbd5038d171026f75e47459fe6db0` | input (not generated) | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| Working manuscript | `wave_e_cod/manuscript/wave_E_cod_forecast_ladder.md` | `d8025bb8bcb7c9c18999447b4264bbd3e665cdca40bcca82ca3afc63c72b8f43` | prose; figures via `python3 src/make_figures.py` | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+
+A rerun may rewrite floating-point summaries; hash identity is not guaranteed across machines. The retention claim (persist beats M2–M4 on primary RMSE) is a score ranking, not a kernel transfer.
+
+### B. `wave_e_edwards/` — Edwards San Antonio Pool (\(\Omega_{\mathrm{SA}}\))
+
+Primary \(z\): J-17 calendar-year mean head. Locked daily series: `data/j17_twdb_6837203_raw.csv`. Annual panel used by the ladders: `data/annual_panel.csv`.
+
+| Artifact | Path | SHA-256 | Reproduction command | Status |
+|---|---|---|---|---|\n| Pass 1 run metadata | `wave_e_edwards/results/meta.json` | `0bec06323a66061ac4c1393084c0fb1e3255efe9486ba9e73ce908127bef03b2` | `cd wave_e_edwards && python3 src/run_ladder.py` (uses committed `data/annual_panel.csv`) | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| Pass 1 rolling RMSE | `wave_e_edwards/results/rolling_summary.csv` | `5e4b524cd2d0157b0bca5a2ab2ef9a174021c6aa4249a31a74cb71f58e396828` | same | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| Pass 1 fixed-window scores | `wave_e_edwards/results/fixed_window_scores.csv` | `bbebc398cd98cdc08412042c58c2e90fdb06006e3365c9d3eb3a6e7e96ad7beb` | same | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| Pass 1 rolling forecast paths | `wave_e_edwards/results/rolling_forecasts.csv` | `aa1706bbce24e4aee0df4e4ce16b972e3038c763735da79b6bb531f99b68203f` | same | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| Pass 2 metadata | `wave_e_edwards/results/pass2_meta.json` | `f302021f575d22259ee177f35ff268bda3838e89d919cd5326ef1ff1fed25b97` | `cd wave_e_edwards && python3 src/run_recharge.py` (uses committed `annual_panel.csv` climate columns) | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| Pass 2 H RMSE | `wave_e_edwards/results/pass2_H_summary.csv` | `088d8b22d8d1e80e3399e0613c49957f670e1935b995cdffb0daefed3d2accce` | same | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| Pass 2 R RMSE | `wave_e_edwards/results/pass2_R_summary.csv` | `8690a87128a8fffe34502b8d01bda5ffcc5ab45bfdd831506eb17f4242ef9b88` | same | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| Comal fibre summary (post-freeze) | `wave_e_edwards/results/fibre_comal_summary.csv` | `aff3037cfd14e8978d837051b7d3c08b132f0f1a4279c397fde8e0c0f51d102e` | produced by `src/run_ladder.py` fibre block | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| Frozen Pass 1 protocol | `wave_e_edwards/protocol.md` | `a9304da9b2b981177cddfcb3bf8f512d7a5c124badf644cd056f081807128ec5` | text | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| Frozen Pass 2 protocol | `wave_e_edwards/protocol_pass2.md` | `0573a0fa912942b07213ef8f8bfc3ae4ef8a4885c92429c0d62308602a1061f6` | text | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| R04.Cor2 forecast-map row | `wave_e_edwards/admission/R04_Cor2_edwards_H0.md` | `28c0880c16358ede0832274ca8280ceceb267690d43fac62cd94c960cef81449` | text; not a kernel certificate | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| Annual panel (H, R, P, climate columns) | `wave_e_edwards/data/annual_panel.csv` | `d6d725db57af5c820d3f62506aa2d5fcd862da3206824d0fa8beb06478706019` | H/R/P: `cd wave_e_edwards && python3 src/build_panel.py`. Climate columns: `build_climate.py` is `NOT_REPRODUCIBLE_FROM_COMMITTED_CODE` (nClimDiv raw omitted) | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| Locked J-17 daily series | `wave_e_edwards/data/j17_twdb_6837203_raw.csv` | `90208dd6fb30b04cea7cd3b6d85499bf073781bd757b8f2d73269231f9474c2d` | input (TWDB pull) | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+| Working manuscript | `wave_e_edwards/manuscript/wave_E_edwards_forecast_ladder.md` | `b72d03011fe825a69b5dce3cefa811e3d3e0ff20d6b67ce59b45a13e77b82638` | prose; figures via `python3 src/make_figures.py` | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+
+**Climate rebuild.** `src/build_climate.py` reads `data/climdiv-pcpndv-v1.0.0-20260806`, which is **not committed** (URL in `wave_e_edwards/data/SOURCES.md`). Rebuilding the climate columns from source is `NOT_REPRODUCIBLE_FROM_COMMITTED_CODE`. Scoring Pass 1/2 from the committed `annual_panel.csv` does not need that file.
+
+These scores are not E5 numbers, not A021 C4 artifacts, and not a transferred judgment.
