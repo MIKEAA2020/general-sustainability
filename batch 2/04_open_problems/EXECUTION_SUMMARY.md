@@ -1,5 +1,7 @@
 # A1→A3→B4→C-a Execution Summary
 
+> **Post-transfer-audit addendum:** see `/TRANSFER_AUDIT_RESPONSE.md` for the repair of the three later audit findings (proof expansion, E5 scope, schema control). The corrected statuses in this summary remain in force; the theorem files it references now contain full reconstructed proofs.
+
 > **STATUS CORRECTION:** The original summary used inflated statuses. The authoritative reclassification is in STATUS_CORRECTION.md. A1=COMPUTED_PARTIAL; A3=COMPUTED_PARTIAL (toy); B4=COMPUTED_PARTIAL (discrete); C-a=PROVEN at declared scope.
 
 ## Committed computational artifacts

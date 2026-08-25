@@ -1,5 +1,7 @@
 # E0 — Elevation Programme: Feasibility Ordering and Dependence Map
 
+> **Provenance:** reconstructed after the filesystem loss of the long-form original (worklog Task 3; expansion recorded in TRANSFER_AUDIT_RESPONSE Finding 1). The plan document itself records no theorems; the execution results it points to are the E1–E7 files, all expanded to full proof documents in the same repair wave.
+
 **Reference:** `JOINT_AUDIT_ASSESSMENT.md` §3 and grok 1's audit §3 (the elevation bar).
 
 ## Feasibility ranking

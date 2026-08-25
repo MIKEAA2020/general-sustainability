@@ -26,11 +26,11 @@
 
 ## Tier C — Programmatic extensions
 
-C-a: scoped decidability theorem PROVED; logical completeness OPEN. C-e: quadratic barriers PROVED. C-f: RFCE-aggregate memory PROVED. C-h: TCS-1.1 FROZEN. C-i: external audit NOT DONE. C-g: artifact manifests NOT DONE.
+C-a: scoped decidability theorem PROVED; logical completeness OPEN. C-e: quadratic barriers PROVED. C-f: RFCE-aggregate memory PROVED. C-h: TCS-1.1 diff FROZEN — **NOT controlling (TCS-1.0 controls every existing record; migration open; no TCS-1.1 compatibility claim available)**. C-i: external audit NOT DONE. C-g: artifact manifests NOT DONE.
 
 ## Tier D — Empirical
 
-G1: fisheries resource–sink DECIDED as primary case. Three preregistered protocols specified. A004/A005 blocking-list plan with ownership assigned.
+G1: fisheries resource–sink DECIDED as primary case — **two-track reading mandatory** (Track 1: linear-module method template READY with committed numbers; Track 2: real-system case against 2J3KL/J-17 scored models GATED on the R04 admission certificate / Cor2 approximate admission, neither constructed). Three preregistered protocols specified. A004/A005 blocking-list plan with ownership assigned.
 
 ## Honest bottom line
 

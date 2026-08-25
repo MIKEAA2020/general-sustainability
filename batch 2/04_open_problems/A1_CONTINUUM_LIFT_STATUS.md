@@ -1,5 +1,7 @@
 # A1 — The Continuum Lift: Status Record
 
+> **Provenance & status discipline:** reconstructed after the filesystem loss of the long-form original (worklog Task 6; expansion recorded in TRANSFER_AUDIT_RESPONSE Finding 1). This is a *status record*, not a theorem file: A1's Step 1–2 tail-envelope verifications are COMPUTED_PARTIAL (verified for the computed modes k=1..80 only; the k>80 extension is hypothesis H-tail); the K=1600 Newton run is numerical only. **Nothing in this file is PROVEN; the piecewise-Chebyshev campaign remains the specified, unexecuted route.**
+
 ## What was proved and computed
 
 ### A1.Thm1 (verified tail envelope — PROVED)

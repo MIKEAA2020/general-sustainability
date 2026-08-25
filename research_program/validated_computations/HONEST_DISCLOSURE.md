@@ -1,5 +1,7 @@
 # HONEST_DISCLOSURE — Certification Levels and Remaining Gaps
 
+> **Post-transfer-audit note:** see `/TRANSFER_AUDIT_RESPONSE.md` — three findings accepted and repaired (proof expansion, E5 toy-scope, TCS-1.0 controlling schema). The four-issue disclosure below remains current.
+
 **Purpose:** A reviewer-facing document that answers every question the audit raised, without inflation or deflection. This is the document Wave E should read before citing any artifact.
 
 ---

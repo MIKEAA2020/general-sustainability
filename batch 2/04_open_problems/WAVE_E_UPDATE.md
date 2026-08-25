@@ -39,7 +39,7 @@ The audit imposed a mandatory vocabulary and the rule "no gate is closed for Wav
 | Document | What needs updating |
 |---|---|
 | `D_TIER_EMPIRICAL_AGENDA.md` | The readiness matrix should note that the E5 admission is committed and reproducible (with SHA-256 hash), not just "complete." The three preregistered protocols should reference the E6 matching matrix for their external-literature obligations. |
-| `PUBLICATION_STRATEGY.md` | The G-item statuses are stale: G2 (coupling) is now DECLARED, not just open; G4 (selectors) has a proved measurable half; G6 (TCS-1.1) is FROZEN. The Paper 2 content description should include the new theorems (A4, B1, B9, B10). The Paper 3 description should include E7. |
+| `PUBLICATION_STRATEGY.md` | The G-item statuses are stale: G2 (coupling) is now DECLARED, not just open; G4 (selectors) has a proved measurable half; G6 (TCS-1.1) is FROZEN. The Paper 2 content description should include the new theorems (A4, B1, B9, B10). The Paper 3 description should include E7. **[Post-transfer-audit correction: G6 FROZEN means the DIFF is frozen — TCS-1.0 remains the controlling schema; migration open; see TRANSFER_AUDIT_RESPONSE.md Finding 3.]** |
 | `OPEN_PROBLEMS_REGISTER.md` | Already updated with the post-addressment statuses — but the rebuilt version (from the filesystem reset) is abbreviated and may have lost some detail. |
 
 ---
@@ -50,7 +50,7 @@ The audit imposed a mandatory vocabulary and the rule "no gate is closed for Wav
 
 1. **Paper 2 content**: add "nonlinear assume–guarantee composition (A4), sampled-data erosion (B1), stochastic viability layer (B9), Stackelberg equilibrium (B10), decidability (C-a)"
 2. **Paper 3 content**: add "conservation–viability coupling (E7) as the paper's bridge theorem"
-3. **G-item statuses**: G2 → DECLARED; G4 → measurable selection proved; G6 → FROZEN
+3. **G-item statuses**: G2 → DECLARED; G4 → measurable selection proved; G6 → FROZEN (**diff only — NOT controlling; TCS-1.0 controls; migration open**)
 4. **Wave 0 readiness**: add "independent rerun of all committed computational artifacts" as a prerequisite (it is the gating item per HONEST_DISCLOSURE.md)
 
 ### D_TIER_EMPIRICAL_AGENDA.md additions
@@ -72,7 +72,7 @@ Already has the post-addressment update. The rebuilt version is faithful.
 | Five-paper architecture | Unchanged — the session's theorems strengthen existing papers, they don't create new ones |
 | Fisheries as the G1 case | Unchanged — E5's admission makes it stronger, not different |
 | Consolidation decisions (Paper 6/7 folds) | Unchanged |
-| Release wave structure | Unchanged (Wave 0 still gates on G5/G6/manifests) |
+| Release wave structure | Unchanged (Wave 0 still gates on G5/G6-migration/manifests — G6's *migration*, not merely the freeze, is the gate) |
 | The monograph and compendium roles | Unchanged |
 
 ---
@@ -82,7 +82,7 @@ Already has the post-addressment update. The rebuilt version is faithful.
 **The Wave E design is structurally sound but needs three specific content updates:**
 
 1. **Add the new theorems to the paper descriptions** (A4, B1, B9, B10, C-a, E7)
-2. **Update the G-item statuses** (G2 DECLARED, G4 half-proved, G6 FROZEN)
+2. **Update the G-item statuses** (G2 DECLARED, G4 half-proved, G6 FROZEN-diff-only — TCS-1.0 controls until migration)
 3. **Add the independent-rerun prerequisite to Wave 0** (it is the single gating item)
 
 None of these changes the architecture or the sequencing. They make the existing design reflect what was actually proved and computed this session.

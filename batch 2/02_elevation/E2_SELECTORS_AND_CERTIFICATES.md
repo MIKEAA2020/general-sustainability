@@ -1,21 +1,110 @@
 # E2 — Selector Theorems and Certificate Production
 
+**Provenance:** reconstructed and expanded to a self-contained proof document after the filesystem loss of the long-form original (session worklog Task 3; expansion recorded in TRANSFER_AUDIT_RESPONSE Finding 1). Independent line-by-line re-verification remains an open obligation.
+
+---
+
+## Setting
+
+`X` compact metric (the physical or extended state space of E1), `U ⊆ ℝᵐ` compact (admissible actions), `D` compact metric (disturbances). The successor correspondence
+
+```
+Succ : X × U × D → 2^X,   Succ(x,u,d) = the declared one-step (or one-review) successor set,
+```
+
+has **nonempty compact values** and is **Hausdorff-continuous** in `(x,u)` for each `d` (and continuous in `d` uniformly on compacts); `W ⊆ X` is **closed** (a certified set). The safe-action correspondence at `x` is
+
+```
+A_W(x) = { u ∈ U : Succ(x,u,d) ⊆ W  for every d ∈ D }.
+```
+
+The (REG)-certificate families of R02 are families `𝔽 = {(C,c)}` of closed constraint/certificate pairs operated on by the certificate operator Γ (below); the ambient hyperspace is the compact Vietoris lattice `𝒦(X)` of closed subsets of `X` ordered by inclusion (meets = intersections, joins = closed unions), which is a complete lattice.
+
+---
+
 ## B2.Theorem (a) — Measurable selection — PROVEN
 
-Under Hausdorff-continuous successors with closed compact values and compact U, the safe-action correspondence `A_W(x) = {u : Succ(x,u,d) ⊆ W ∀d}` has closed graph and admits a measurable selector by Kuratowski–Ryll-Nardzewski.
+### Statement
+
+Under the setting above, `A_W` has **closed graph** and **closed compact values**; consequently `A_W` is weakly measurable, and if `A_W(x) ≠ ∅` on a measurable set `S ⊆ X`, there exists a **measurable selector** `u* : S → U` with `u*(x) ∈ A_W(x)` for all `x ∈ S` (Kuratowski–Ryll-Nardzewski).
+
+### Proof
+
+**Step 1 (closed values).** Fix `x`. Let `u_n ∈ A_W(x)`, `u_n → u ∈ U`; we show `u ∈ A_W(x)`. Pick `y ∈ Succ(x,u,d)`; we must show `y ∈ W`. By Hausdorff continuity of `Succ(x,·,d)` at `u` (compact values), `dist(y, Succ(x,u_n,d)) ≤ h(Succ(x,u,d), Succ(x,u_n,d)) → 0`, so there are `y_n ∈ Succ(x,u_n,d)` with `y_n → y`. Since `u_n ∈ A_W(x)`, every point of `Succ(x,u_n,d)` lies in the closed set `W`, so `y_n ∈ W`; closedness of `W` gives `y ∈ W`. Hence `Succ(x,u,d) ⊆ W` for every `d`, i.e. `u ∈ A_W(x) = ⋂_d {u : Succ(x,u,d) ⊆ W}`. Each set in the intersection is closed by the same argument, so `A_W(x)` is closed; it is compact as a closed subset of the compact `U`.
+
+**Step 2 (closed graph).** Let `x_n → x`, `u_n ∈ A_W(x_n)`, `u_n → u`. Pick `y ∈ Succ(x,u,d)`; by joint Hausdorff continuity in `(x,u)`, there are `y_n ∈ Succ(x_n,u_n,d)` with `y_n → y`; `y_n ∈ W` because `u_n ∈ A_W(x_n)`; `W` closed gives `y ∈ W`. Hence `u ∈ A_W(x)`. The graph `{(x,u) : u ∈ A_W(x)}` is closed.
+
+**Step 3 (weak measurability).** A compact-valued correspondence with closed graph is upper semicontinuous; for usc compact-valued correspondences into a metric space, the upper inverse `{x : A_W(x) ∩ F ≠ ∅}` of every **closed** `F` is closed: indeed, if `x_n → x` with `u_n ∈ A_W(x_n) ∩ F`, compactness of `U` gives a convergent subsequence `u_{n_k} → u ∈ F`, and the closed graph forces `u ∈ A_W(x)`. Closed sets are Borel, so `A_W` is weakly measurable in the KRN sense.
+
+**Step 4 (KRN).** `X` (hence `S`) is Polish, `U` is Polish, `A_W` is weakly measurable with nonempty closed values on `S`. The Kuratowski–Ryll-Nardzewski measurable selection theorem yields a Borel-measurable `u* : S → U` with `u*(x) ∈ A_W(x)`. ∎
+
+**Remark (why Hausdorff continuity is needed).** With mere closed graph of `Succ` in `u`, Step 1 fails: limit points of successor sets need not lie in `W`-contained successors. The R03.Lem4 adjudication in the joint audit established the analogous point for horizon limits: upper semicontinuity alone is insufficient, and a Hausdorff-type continuity is the correct hypothesis; the same lesson is load-bearing here.
+
+---
 
 ## B2.Theorem (b) — Continuous selection — CONDITIONAL
 
-Under the Michael hypotheses (convexity of `Succ` in u + lower semicontinuity of `A_W`), a continuous selector exists.
+### Statement
+
+If additionally (i) `Succ(x,·,d)` is **convex-valued in `u`** in the sense that `⋃_u Succ(x,u,d)` is convex and the safe-action values `A_W(x)` are convex, and (ii) `A_W` is **lower semicontinuous** on `X`, then `A_W` admits a **continuous selector** (Michael).
+
+### Status and proof obligation
+
+This is Michael's selection theorem applied verbatim (paracompact domain `X`, Banach codomain, nonempty closed convex values, lsc). The *conditional* status is honest: hypothesis (i) is a genuine convexity demand on the dynamics and constraint geometry (satisfied on E5's linear-box class — the B2 verification), and hypothesis (ii) is *not* implied by Hausdorff continuity of `Succ` (lsc of an intersection-over-`d` correspondence requires a uniformity in `d` that must be checked per instance). No general sufficient condition tracing (ii) back to `Succ` is claimed; producing one is an open obligation (registered in the master review).
+
+---
 
 ## B1.Theorem (a) — Maximal certificate family — PROVEN
 
-The (REG)-certificate operator Γ is monotone on the compact Vietoris lattice; by Knaster–Tarski, the greatest fixed point 𝒱* exists. R02.Thm1 applies to any subfamily containing (C₀,c₀).
+### Statement
 
-## B1.Theorem (b) — Backward construction = gfp — PROVEN
+Let `Γ : 𝒦(X) → 𝒦(X)` be the (REG)-certificate operator of R02: `Γ(C)` is the closure of the set of states admitting a one-review certificate against the constraint family with base set `C` (the exact definition is R02 Field 3's `(REG)` recursion; the only properties used here are (P1) `Γ` is **monotone** (`C ⊆ C′ ⇒ Γ(C) ⊆ Γ(C′)`) and (P2) `Γ` maps `𝒦(X)` to itself). Then `Γ` has a **greatest fixed point** `𝒱* = max{C ∈ 𝒦(X) : Γ(C) = C}`, and R02.Thm1 applies to every subfamily `(C,c)` with `C ⊆ 𝒱*`: the closed-loop robust-viability guarantee holds on any certificate family whose underlying sets sit inside `𝒱*`.
 
-The backward iteration from the top converges to 𝒱* (compactness extraction + closed Vietoris graph).
+### Proof
 
-## Not produced
+`𝒦(X)` (closed subsets of the compact `X`, ordered by inclusion) is a complete lattice: arbitrary meets are intersections, arbitrary joins are closures of unions; both are closed in compact `X`. (P1)–(P2) make `Γ` a monotone self-map of a complete lattice, so the **Knaster–Tarski theorem** applies: the fixed points of `Γ` form a nonempty complete lattice; in particular the greatest fixed point exists, with the explicit formula
 
-Algorithmic computation of 𝒱*; Lipschitz selectors; emptiness certificates beyond Prop4's common-action class.
+```
+𝒱* = ∨ { C ∈ 𝒦(X) : C ⊆ Γ(C) }   (join of all post-fixed points).
+```
+
+`C ⊆ Γ(C)` says every state of `C` admits a one-review certificate against `C` itself — the post-fixed points are exactly the (REG)-consistent families, so `𝒱*` is the maximal consistent certificate set. The final sentence is R02.Thm1's statement (its proof is in R02 Field 8) applied to any subfamily of the maximal one, which is consistent because consistency is inherited by subfamilies (monotonicity of the certificate conditions). ∎
+
+---
+
+## B1.Theorem (b) — Backward iteration = gfp — PROVEN
+
+### Statement
+
+Let `V₀ = X` (top of the lattice) and `V_{n+1} = Γ(V_n)`. Then `(V_n)` is decreasing, `V_∞ := ⋂_n V_n ∈ 𝒦(X)` exists, and if `Γ` has **closed Vietoris graph** (i.e. `C_n → C` in Vietoris with `Γ(C_n) → C′` implies `C′ = Γ(C)`), then `V_∞ = 𝒱*` — the backward iteration computes the greatest fixed point. Moreover every fixed point `C` satisfies `C ⊆ V_n` for all `n`, so `V_∞` is the largest fixed point.
+
+### Proof
+
+**Monotoneity of the sequence.** `V₁ = Γ(X) ⊆ X = V₀`; if `V_n ⊆ V_{n−1}` then monotonicity gives `V_{n+1} = Γ(V_n) ⊆ Γ(V_{n−1}) = V_n`. So `(V_n)` decreases and `V_∞ = ⋂ V_n` is closed, nonempty iff the iteration does not die (emptiness is the honest obstruction certificate — see "Not produced").
+
+**Every fixed point is below the iteration.** Let `C = Γ(C)`. Then `C = Γ(C) ⊆ Γ(X) = V₁` (monotonicity, `C ⊆ X`). Inductively, `C ⊆ V_n ⇒ C = Γ(C) ⊆ Γ(V_n) = V_{n+1}`. Hence `C ⊆ V_∞`.
+
+**The limit is a fixed point.** A decreasing sequence of nonempty compact sets converges in the Vietoris topology to its intersection: for closed `F`, eventually `V_n ∩ F ≠ ∅ ⟺ V_∞ ∩ F ≠ ∅`, and `V_n ⊆ B(V_∞, ε)` for `n` large (compactness: the decreasing intersection exhausts every `ε`-neighbourhood — otherwise a nested sequence of nonempty compacts `V_n \ B(V_∞,ε)` would have a point in `V_∞ \ B(V_∞,ε) = ∅`). Hence `V_n → V_∞` and likewise `V_{n+1} = Γ(V_n) → Γ(V_∞)` **if** `Γ` is Vietoris-continuous at `V_∞`; the closed-graph hypothesis suffices: `V_{n+1} → V_∞` (subsequence of a convergent sequence) and `Γ(V_n) = V_{n+1} → V_∞`, so closedness of the graph yields `Γ(V_∞) = V_∞`. Combined with the previous paragraph, `V_∞` is a fixed point containing every fixed point: `V_∞ = 𝒱*`. ∎
+
+**Hypothesis honesty.** The closed Vietoris graph of `Γ` is a genuine hypothesis on the certificate recursion (it holds whenever the one-review certificate condition is itself a Hausdorff-continuous function of the base set — the R02 setting with the repaired Hausdorff-continuity discipline of R03.Lem4). It is stated here as the correspondence-continuity hypothesis the session record always attached; verifying it per instantiation is part of the E2→module admission workflow.
+
+---
+
+## What is NOT produced (Field 16 honesty)
+
+1. **Algorithmic computation of `𝒱*`** beyond the abstract iteration: rates of Vietoris convergence, stopping criteria with certified error — the B3 grid-hierarchy scheme is SPECIFIED, not assembled.
+2. **Lipschitz selectors**: neither B2(a) nor B2(b) yields a Lipschitz `u*`; Lipschitz selection would need convexified velocity envelopes and is open.
+3. **Emptiness certificates** beyond Prop4's common-action class: the iteration dying (`V_n = ∅`) certifies emptiness of the *certificate* family, not of the kernel; the R03 adversarial-exit route is the only general emptiness certificate in the programme.
+
+---
+
+## Status
+
+- **B2(a): PROVEN** (full proof above; KRN cited as the standard selection theorem it is).
+- **B2(b): PROVEN_CONDITIONAL** (Michael's hypotheses must be verified per instance; verified on E5's class).
+- **B1(a): PROVEN** (Knaster–Tarski; full proof above).
+- **B1(b): PROVEN** (under the stated closed-Vietoris-graph hypothesis, which is the declared correspondence-continuity assumption).
+
+**Dependencies:** R02.Thm1/Lem2 (certificate recursion and closed-loop theorem), R03.Lem4's Hausdorff-continuity discipline (hypothesis pattern). **Consumers:** E4.Thm3 (per-generation gfps), A4.Thm1 (measurable selection in joint regulation), E5 (displayed certificate family), B10 (selection at best-response correspondences).
+
+**Record-format note:** internal theorem document; Fields 1–4, 6–9, 16–17 carried; Fields 5, 10–15 N/A (see E1's note).

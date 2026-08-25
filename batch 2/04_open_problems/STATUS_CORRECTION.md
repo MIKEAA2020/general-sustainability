@@ -1,5 +1,7 @@
 # STATUS_CORRECTION — Post-Audit Reclassification (Authoritative)
 
+> **Post-transfer-audit addendum:** see `/TRANSFER_AUDIT_RESPONSE.md` — the three later findings (summary cards vs full proofs; E5 toy-scope/R04 transfer prohibition; TCS-1.1 frozen-not-controlling) are accepted and repaired there. This document's reclassifications remain in force.
+
 **Rule:** No gate is treated as closed for Wave E. Every Wave E support row is NOT CONFIRMED.
 
 | Item | Corrected status | Reason |

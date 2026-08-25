@@ -2,9 +2,14 @@
 
 **Commit context:** This manifest accompanies the commit "Status corrections after audit: no closed gates for Wave E". It is the authoritative register of every theorem, computation, and artifact in the programme, with honest statuses.
 
+**Post-transfer-audit revision (see `TRANSFER_AUDIT_RESPONSE.md`):** all three external-audit findings accepted and repaired — (1) the session theorem files were short summary cards after the filesystem loss, and are now **expanded to full self-contained proof documents with provenance headers**; (2) the E5 module is re-scoped everywhere as the **linear A001 §§6–10 toy — no transfer to 2J3KL/J-17-class systems without the R04 certificate**; (3) **TCS-1.0 is the controlling schema** (TCS-1.1 is a frozen, unapplied diff — no record conforms to it).
+
+**Controlling-schema statement:** every theorem, record, and artifact below is a **TCS-1.0** object. The judgment language of E1/C-a is the TCS-1.0 §4 inventory. No compatibility claim "under TCS-1.1" is available to any entry. Migration is an open Wave-0 obligation (see `04_open_problems/TCS_1_1_FREEZE.md`).
+
 **Vocabulary (mandatory, no exceptions):**
 - `PROVEN` — formal proof, self-contained in the cited file
 - `PROVEN_CONDITIONAL` — formal proof under explicitly listed hypotheses
+- `PROVEN (reconstructed)` — full proof now self-contained in the cited file, but the proof is a same-agent reconstruction from the session record after the filesystem loss; **independent line-by-line re-verification is an open obligation before submission**
 - `COMPUTED_PARTIAL` — numerical computation with validated or unvalidated inputs; the result is evidence, not proof
 - `SPECIFIED` — method or route described but not executed
 - `OPEN` — no proof, no computation, no specification
@@ -60,42 +65,42 @@
 | R09.Thm1 Part U | Universal conditional laws | U1–U5: conservation, monotonicity, noncompensation, status discipline, kernel recursion | `batch 2/01_result_records/R09_*.md` | PROVEN (registered inventory; "exact list" withdrawn) | |
 | R09.Thm1 Part M | Six independence results | M1–M6: each refuted by axiom-consistent witness pairs | same | PROVEN (M1 global root-locus; M3 scope-locked; M5 forward-complete) | |
 
-### C. Elevation-wave theorems E1–E7 (session artifacts; see worklog)
+### C. Elevation-wave theorems E1–E7 (session artifacts; **full proofs now in the cited files — reconstructed; see TRANSFER_AUDIT_RESPONSE Finding 1**)
 
 | # | Theorem | Statement (abbreviated) | File | Status |
 |---|---|---|---|---|
-| E1.A1 | Representation theorem | Every judgment = typed viability statement on the product Z; block-necessity by counter-models | `batch 2/02_elevation/E1_*.md` | PROVEN |
-| E1.A2 | Relative completeness | Five inference rules sound; U1–U5 derivable; M1–M6 refuted; maintenance clause | same | PROVEN (relative to claim inventory) |
-| E2.B2(a) | Measurable selection | Closed graph + compact U ⟹ KRN measurable selector of safe-action map | `batch 2/02_elevation/E2_*.md` | PROVEN |
-| E2.B1(a) | Maximal certificate family | Γ monotone on compact lattice ⟹ greatest fixed point exists (Knaster–Tarski) | same | PROVEN |
-| E2.B1(b) | Backward iteration = gfp | Closed Vietoris graph + compactness ⟹ backward iteration converges to the gfp | same | PROVEN |
-| E3.C1 | Scalar-delay classification | Complete stability classification for ẋ = −αx(t) − βx(t−τ) | `batch 2/02_elevation/E3_*.md` | PROVEN |
-| E3.C4.1 | Separation ⟺ soundness | M sound ⟺ {M < 0} ∩ kernel = ∅ | same | PROVEN |
-| E3.C4.2 | Uniform-horizon theorem | Compact certified set ⟹ uniform finite exit horizon | same | PROVEN |
-| E3.C6.3 | Delayed-revelation lemma | Revelation inert iff obstruction unreached | same | PROVEN |
-| E4.Lem1 | Jump-margin transfer | Depth co-Lipschitz ⟹ eroded sets map into eroded sets | `batch 2/02_elevation/E4_*.md` | PROVEN |
-| E4.Thm2 | Eroded generation transfer | Within-generation + jump-margin + non-Zeno ⟹ eroded path invariant | same | PROVEN |
-| E7.Thm1 | Moiety-barrier production rules | Balanced-budget inner; obligatory-outflow emptying; best-case outer; sandwich | `batch 2/02_elevation/E7_*.md` | PROVEN |
-| E7.Thm2 | Multi-moiety noncompensatory | Product inclusion per moiety; no cross-moiety transfer | same | PROVEN |
+| E1.A1 | Representation theorem | Every judgment = typed viability statement on the product Z; block-necessity by counter-models | `batch 2/02_elevation/E1_*.md` | PROVEN (reconstructed) |
+| E1.A2 | Relative completeness | Five inference rules sound; U1–U5 derivable; M1–M6 refuted; maintenance clause | same | PROVEN (reconstructed; relative to claim inventory) |
+| E2.B2(a) | Measurable selection | Closed graph + compact U ⟹ KRN measurable selector of safe-action map | `batch 2/02_elevation/E2_*.md` | PROVEN (reconstructed) |
+| E2.B1(a) | Maximal certificate family | Γ monotone on compact lattice ⟹ greatest fixed point exists (Knaster–Tarski) | same | PROVEN (reconstructed) |
+| E2.B1(b) | Backward iteration = gfp | Closed Vietoris graph + compactness ⟹ backward iteration converges to the gfp | same | PROVEN (reconstructed) |
+| E3.C1 | Scalar-delay classification | Complete stability classification for ẋ = −αx(t) − βx(t−τ) | `batch 2/02_elevation/E3_*.md` | PROVEN (reconstructed) |
+| E3.C4.1 | Separation ⟺ soundness | M sound ⟺ {M < 0} ∩ kernel = ∅ | same | PROVEN (reconstructed) |
+| E3.C4.2 | Uniform-horizon theorem | Compact certified set ⟹ uniform finite exit horizon | same | PROVEN (reconstructed) |
+| E3.C6.3 | Delayed-revelation lemma | Revelation inert iff obstruction unreached | same | PROVEN (reconstructed) |
+| E4.Lem1 | Jump-margin transfer | Depth co-Lipschitz ⟹ eroded sets map into eroded sets; declared-data status refutation | `batch 2/02_elevation/E4_*.md` | PROVEN (reconstructed) |
+| E4.Thm2 | Eroded generation transfer | Within-generation + jump-margin + non-Zeno ⟹ eroded path invariant | same | PROVEN (reconstructed) |
+| E7.Thm1 | Moiety-barrier production rules | Balanced-budget inner; obligatory-outflow emptying; best-case outer; sandwich | `batch 2/02_elevation/E7_*.md` | PROVEN (reconstructed) |
+| E7.Thm2 | Multi-moiety noncompensatory | Product inclusion per moiety; no cross-moiety transfer | same | PROVEN (reconstructed) |
 
-### D. Open-problems-wave theorems (session artifacts; see worklog)
+### D. Open-problems-wave theorems (session artifacts; **full proofs now in the cited files — reconstructed; see TRANSFER_AUDIT_RESPONSE Finding 1**)
 
 | # | Theorem | Statement (abbreviated) | File | Status |
 |---|---|---|---|---|
-| A3.Thm1 | Interleaved-segment compactness | Budgeted piecewise-history space is τ_IS-compact; delayed evaluation continuous off break points | `batch 2/04_open_problems/A3_*.md` | PROVEN |
-| A3.Thm2 | Clopen-fibre kernel | Clopen observations ⟹ information predecessor closes; kernel = gfp | same | PROVEN |
-| A3.Thm3 | Conditional kernel theorem | Budgeted + transversal + clopen ⟹ variable-event kernel exists | same | PROVEN_CONDITIONAL (on the transversality declaration) |
-| A4.Thm1 | Nonlinear assume–guarantee | Monotone depth-feasibility operator; sub-solution ⟹ eroded product invariant with shared controls | `batch 2/04_open_problems/A4_*.md` | PROVEN |
-| A4.Thm2 | Sub-solution existence | Tarski greatest sub-solution; monotone iteration; linear case recovered | same | PROVEN |
-| B1.Thm1 | Sampled-data erosion | Envelope inclusion + inter-sample confinement + successor certificates ⟹ eroded safety | `batch 2/04_open_problems/B_TIER_*.md` | PROVEN |
-| B6.Thm1 | Nonlinear substitution classification | MFCQ local stability + Clarke global separation | same | PROVEN |
-| B7.Thm1 | Bifurcation classification | No bifurcation + continuous boundary ⟹ no kernel change; transversal contact ⟹ kernel change | same | PROVEN |
-| B9.Thm1 | Chance-kernel recursion | Support-aligned law + compact class ⟹ chance kernel = predecessor limit | same | PROVEN (restricted) |
-| B10.Thm1 | Stackelberg equilibrium existence | Compact commands + continuous utilities ⟹ equilibrium; reduction to R02 at equilibrium | same | PROVEN |
-| C-a.Thm2 | Full decidability | Every judgment sentence (incl. negations) decidable at fixed data, O(N·|grid|) | `batch 2/04_open_problems/CA_*.md` | PROVEN (at declared scope: finite class) |
-| C-a.Thm3 | Zero-one law sharpness | Monotone claims: law holds; non-monotone: per-instance decidable, model-class-dependent | same | PROVEN |
-| C-e.Thm1 | Quadratic-form moiety barriers | Quadratic moiety sandwich with L_G > 0 | `batch 2/04_open_problems/C_TIER_*.md` | PROVEN |
-| C-f.Thm1 | RFCE-aggregate memory | Projectability lifted to history space; memory-horizon characterization | same | PROVEN |
+| A3.Thm1 | Interleaved-segment compactness | Budgeted piecewise-history space is τ_IS-compact; delayed evaluation continuous off break points | `batch 2/04_open_problems/A3_*.md` | PROVEN (reconstructed) |
+| A3.Thm2 | Clopen-fibre kernel | Clopen observations ⟹ information predecessor closes; kernel = gfp | same | PROVEN (reconstructed) |
+| A3.Thm3 | Conditional kernel theorem | Budgeted + transversal + clopen ⟹ variable-event kernel exists | same | PROVEN_CONDITIONAL (reconstructed; on the transversality declaration) |
+| A4.Thm1 | Nonlinear assume–guarantee | Monotone depth-feasibility operator; sub-solution ⟹ eroded product invariant with shared controls | `batch 2/04_open_problems/A4_*.md` | PROVEN (reconstructed) |
+| A4.Thm2 | Sub-solution existence | Tarski greatest sub-solution; monotone iteration; linear case recovered | same | PROVEN (reconstructed) |
+| B1.Thm1 | Sampled-data erosion | Envelope inclusion + inter-sample confinement + successor certificates ⟹ eroded safety | `batch 2/04_open_problems/B_TIER_*.md` | PROVEN (reconstructed) |
+| B6.Thm1 | Nonlinear substitution classification | MFCQ local stability + Clarke global separation | same | PROVEN (reconstructed) |
+| B7.Thm1 | Bifurcation classification | No bifurcation + continuous boundary ⟹ no kernel change; transversal contact ⟹ kernel change | same | PROVEN (reconstructed) |
+| B9.Thm1 | Chance-kernel recursion | Support-aligned law + compact class ⟹ chance kernel = predecessor limit | same | PROVEN (restricted; reconstructed) |
+| B10.Thm1 | Stackelberg equilibrium existence | Compact commands + continuous utilities ⟹ equilibrium; reduction to R02 at equilibrium | same | PROVEN (reconstructed) |
+| C-a.Thm2 | Full decidability | Every judgment sentence (incl. negations) decidable at fixed data, O(N·|grid|) | `batch 2/04_open_problems/CA_*.md` | PROVEN (reconstructed; at declared scope: finite class, TCS-1.0 language) |
+| C-a.Thm3 | Zero-one law sharpness | Monotone claims: law holds; non-monotone: per-instance decidable, model-class-dependent | same | PROVEN (reconstructed) |
+| C-e.Thm1 | Quadratic-form moiety barriers | Quadratic moiety sandwich with L_G > 0 | `batch 2/04_open_problems/C_TIER_*.md` | PROVEN (reconstructed) |
+| C-f.Thm1 | RFCE-aggregate memory | Projectability lifted to history space; memory-horizon characterization | same | PROVEN (reconstructed) |
 
 ---
 
@@ -113,7 +118,7 @@
 | C4 off-grid continuum residual | Certified bounds: N≤7.2e-8, A≤7.8e-8, Z≤7.7e-7, E≤2.8e-6 | `a021_c4/c4_offgrid_residual_interval.json` | `27969c14...85a499` | `python3 a021_c4/c4_offgrid_interval.py` | same | **NONE** |
 | C4 monodromy/Floquet (dt=0.25) | Phase 1.00480 simple+neutral; dominant 0.68764+0.069<1; all nontrivial inside unit disc | `a021_c4/c4_monodromy_enclosure.json` | `01d8c253...dbaef76` | `python3 a021_c4/c4_monodromy.py` | same | **NONE** |
 | C4 monodromy data (dt=0.25) | Monodromy matrix + eigenvalues (npz) | `a021_c4/c4_monodromy_dt0p25.npz` | `f3dc5445...a7ca5f` | same | same | **NONE** |
-| E5 module admission | Five maps exact; margins/L/erosion triple interval-verified | `E5_NUMBERS.json` | `5670bcc8...236e72db` | `python3 e5_admission.py` | same | **NONE** |
+| E5 module admission | Five maps exact; margins/L/erosion triple interval-verified — **LINEAR A001 §§6–10 TOY ONLY; no transfer to 2J3KL/J-17 systems without the R04 certificate (not constructed)** | `E5_NUMBERS.json` | `5670bcc8...236e72db` | `python3 e5_admission.py` | same | **NONE** |
 | Interval library | Rigorous float64 interval arithmetic (outward rounding, mpmath bridge, dd products) | `interval_lib.py` | see git | — | same | **NONE** |
 
 **Not yet rebuilt (from the prior session, lost to filesystem reset):**
@@ -165,7 +170,7 @@
 | A4 composition theorem | "The nonlinear assume–guarantee theorem covers nonlinear contract amplitudes with shared controls" |
 | C-a decidability | "Every judgment-language sentence is decidable at fixed data on the finite class (theorem)" |
 | E7 conservation coupling | "Moiety barriers produce kernel bounds from flux data alone (theorem)" |
-| E5 module admission | "The resource–sink module is admitted with interval-verified numerical constants" |
+| E5 module admission | "The **linear A001 §§6–10 resource–sink module** is admitted with interval-verified numerical constants — a method demonstration; **no transfer to 2J3KL/J-17-class systems without the R04 certificate (forbidden by R04.Thm1's converse; certificate not constructed)**" |
 | B1 erosion theorem | "The three-hypothesis erosion theorem closes the sampled-data bridge" |
 
 ## Part V — What Wave E cannot yet cite
@@ -183,6 +188,8 @@
 ## Reproducibility status
 
 **Rebuilt and committed:** the interval library, A025 Hopf certificate, C4 orbit Krawczyk, C4 off-grid residual, C4 monodromy (dt=0.25), and E5 admission — all with committed code, committed artifacts, and SHA-256 hashes (Part II above).
+
+**Post-transfer-audit expansion (see TRANSFER_AUDIT_RESPONSE.md):** all session theorem documents (E1–E7, A3, A4, B-tier, C-tier, C-a) are expanded from summary cards to full self-contained proof documents with provenance headers; their statuses carry the `PROVEN (reconstructed)` qualifier — same-agent reconstructions from the session record, pending independent line-by-line re-verification. **TCS-1.0 is the controlling schema** (TCS-1.1 is a frozen, unapplied diff; migration open). The E5 artifact is scoped to the linear toy; real-system (2J3KL/J-17) claims are gated on the R04/Cor2 transfer certificate.
 
 **Not yet rebuilt:** the A025 fold pipeline (collocation → continuation → Moore–Spence → Krawczyk), the C4 monodromy at dt=0.1, and the A025 fold resolution cross-checks.
 
