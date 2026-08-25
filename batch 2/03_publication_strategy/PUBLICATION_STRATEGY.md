@@ -27,17 +27,21 @@
 
 The earlier shorthand "2J3KL/J-17-class systems" collapsed three different objects and is **retired**. The transfer prohibition (R04.Thm1's converse) applies to each of them separately:
 
-| Object | What it is | Programme locus | Kind | R04 five-map certificate | Cor2 approximate admission | Independent rerun |
+| Object | What it is | Programme locus | Kind | R04 five-map | Cor2 | Independent rerun |
 |---|---|---|---|---|---|---|
-| **NAFO 2J3KL** (northern cod) | The Northern Cod stock in NAFO divisions 2J3KL — the G1a fisheries case (RAM/DFO/ICES data; community side needs the CSD-to-2J3KL crosswalk) | A014 revised article; A016 crosswalk population; D-tier G1a | **Real system — fisheries** | **NOT constructed** | NOT constructed | **NONE** |
-| **Edwards well J-17** (Edwards Aquifer index well, San Antonio) | The index well whose water-level series triggers the Edwards Aquifer Authority's critical-period management — the groundwater-side real-system referent | Examined as a case candidate in the manuscript's case search and **REJECTED on the confound gate**; groundwater module A005 (G1b) is a generic typed template, not Edwards-calibrated | **Real system — groundwater** | **NOT constructed** | **Forecast-map only** — even if constructed, a Cor2 admission for a J-17-type system is a screening/forecast map with eroded kernels, not a certified admission licensing transfer | **NONE** |
-| **A021 C4 J-series** | The A021 joint-decision-docket items J01–J25 (J17 = the BLZ citation-matching disposition) — external-review bookkeeping; the C4 gated DDE is the programme model equation behind the validated computations (C1/C2/C3) | `research_program/external_reviews/A021_joint_decision_docket.csv` | **NOT a real system** — an audit docket; the C4 DDE is a model, not a claim about any fishery or aquifer | **NOT constructed** (from the toy; equally forbidden) | NOT constructed | **NONE** (C4 artifacts committed; rerun NONE) |
+| **NAFO 2J3KL** | Northern cod SSB. Scored \(\Omega_{2016}\), \(\Omega_{\mathrm{xte}}\) | [`wave_e_cod/`](../../wave_e_cod/) | Real system — fisheries | A001 admitted; A014 at corrected status. E5 toy does **not** transfer | not constructed for the surplus ladder | **NONE** |
+| **Edwards well J-17** | San Antonio Pool index well (TWDB 6837203). Scored \(\Omega_{\mathrm{SA}}\) | [`wave_e_edwards/`](../../wave_e_edwards/) | Real system — groundwater | two-pool **not** constructed | H0 forecast-map `APPROXIMATION` in `wave_e_edwards/admission/R04_Cor2_edwards_H0.md` — **not** a kernel certificate | **NONE** |
+| **A021 C4 J-series** | Docket J01–J25 (J17 = BLZ citation item). Not a basin | `research_program/external_reviews/A021_joint_decision_docket.csv` | Audit docket + programme DDE | not constructed from the E5 toy | not constructed | **NONE** (artifacts committed) |
+
+There is **no** manuscript in this repository that rejects Edwards on a “confound gate.” That phrase is withdrawn. Scored RMSE is not a transferred judgment.
+
+Reproduce: `wave_e_cod/` — `python3 src/run_ladder.py`. `wave_e_edwards/` — `python3 src/build_panel.py && python3 src/build_climate.py && python3 src/run_ladder.py && python3 src/run_recharge.py` (nClimDiv raw file omitted; URL in `wave_e_edwards/data/SOURCES.md`; `annual_panel.csv` already carries the derived columns).
 
 ## Gap-filling agenda (G1–G6, updated statuses)
 
 | Item | Original status | Updated status |
 |---|---|---|
-| G1: one closed empirical instantiation | Top priority | Top priority — the E5 **method template** is committed (linear module, numbers are the toy's); the real-system tracks (G1a: the 2J3KL cod fishery; G1b: an Edwards J-17-type aquifer system, for which Cor2 is forecast-map only) are **gated on the R04 admission of the corresponding scored model** (or Cor2 approximate admission), neither constructed + the data assembly is external; the A021 J-series is a docket, not a system (see the three-object table) |
+| G1: one closed empirical instantiation | Top priority | E5 method template committed (toy numbers). Scored forecast \(\Omega\) are in `wave_e_cod/` and `wave_e_edwards/` (persist / thin M1). Kernel transfer still gated. Independent rerun **NONE**. A021 J-series is a docket, not a system |
 | G2: A021 coupling class | Open (author decision) | **DECLARED** (LIEBIG-SANCTIONED-COUPLING-v1; discrete-level hypothesis verification; conditional on A1) |
 | G3: continuum lift | Open | **COMPUTED_PARTIAL** (piecewise-Chebyshev route specified, NOT EXECUTED) |
 | G4: selector regularity | Open | **Half-proved** (measurable selection PROVED; continuous selection conditional on Michael class) |

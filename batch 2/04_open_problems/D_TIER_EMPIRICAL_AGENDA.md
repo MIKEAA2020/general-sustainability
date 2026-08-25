@@ -17,10 +17,8 @@
 
 **Track 2 (real systems, GATED):** the empirical case against a real system requires, before any certified claim:
 
-- **G1a (fisheries):** real 2J3KL data against an R04-admitted scored model of *that fishery* —
-  1. **the R04 five-map admission certificate** for the scored model into the architecture (type/unit, phase-space, dynamics, safe-set, policy/information correspondences) — **NOT constructed**; or
-  2. **R04.Cor2 approximate admission** (dynamics defect ε → Grönwall deviation → kernel erosion) — likewise **NOT constructed**.
-- **G1b (groundwater):** an Edwards J-17-type aquifer system against the A005 module — same R04/Cor2 gate, with the additional restriction that **Cor2 for an Edwards-type system is forecast-map only** (a screening/forecast map with eroded kernels; not a certified admission, licenses no transfer claim). The Edwards Aquifer critical-period system was moreover **examined and rejected** as a case candidate on the confound gate in the manuscript's case search.
+- **G1a (fisheries):** scored in [`wave_e_cod/`](../../wave_e_cod/) (\(\Omega_{2016}\), \(\Omega_{\mathrm{xte}}\)). Persist wins; no M2–M4 retained. A001/A014 admission does **not** transfer E5 numbers onto NCAM SSB. Kernel certificate for the surplus ladder: **not constructed**.
+- **G1b (groundwater):** scored in [`wave_e_edwards/`](../../wave_e_edwards/) (\(\Omega_{\mathrm{SA}}\), J-17 annual mean). Persist / thin M1; causal stock-flow rejected. A005 two-pool blockers remain open. Cor2 exists **only** as `wave_e_edwards/admission/R04_Cor2_edwards_H0.md` (forecast map, not a kernel). The “confound-gate rejection” of Edwards is **withdrawn** — no such manuscript is in this repository.
 
 By R04.Thm1's converse, no judgment transfers without one of these; verbal analogy is excluded from transfer by the theorem itself. This is a **Wave-0 gating item** (see PUBLICATION_STRATEGY.md and TRANSFER_AUDIT_RESPONSE.md Finding 2).
 
@@ -28,13 +26,13 @@ By R04.Thm1's converse, no judgment transfers without one of these; verbal analo
 
 The earlier shorthand "2J3KL / J-17 scored models" collapsed three distinct objects and is **retired**:
 
-| Object | Kind | R04 certificate | Cor2 | Independent rerun |
+| Object | Kind | In-repo path | R04 / Cor2 | Independent rerun |
 |---|---|---|---|---|
-| NAFO **2J3KL** (northern cod; A014/A016) | Real system — fisheries (G1a) | NOT constructed | NOT constructed | **NONE** |
-| **Edwards well J-17** (Edwards Aquifer index well; case candidate examined and rejected on the confound gate; A005 is the generic G1b template) | Real system — groundwater (G1b) | NOT constructed | **Forecast-map only** | **NONE** |
-| **A021 C4 J-series** (docket items J01–J25; J17 = the BLZ citation-matching disposition; the C4 gated DDE is the object of the validated computations) | **NOT a real system** — audit docket + programme model | NOT constructed | NOT constructed | **NONE** (C4 artifacts committed; rerun NONE) |
+| NAFO **2J3KL** | fisheries \(\Omega_{2016}\), \(\Omega_{\mathrm{xte}}\) | `wave_e_cod/` | A001/A014 class admitted; E5 does not transfer; surplus-ladder Cor2 not constructed | **NONE** |
+| Edwards well **J-17** | groundwater \(\Omega_{\mathrm{SA}}\) | `wave_e_edwards/` | two-pool not constructed; H0 forecast-map Cor2 only | **NONE** |
+| A021 C4 **J-series** | docket + DDE, not a basin | `research_program/validated_computations/a021_c4/` | not a Wave E forecast \(\Omega\) | **NONE** |
 
-**No "scored (J-17-series) model" exists.** The A021 J-series is external-review bookkeeping; the validated C4 computations are computations on a programme model equation and support no claim about any fishery or aquifer.
+A021 J-series is external-review bookkeeping. It is not Edwards J-17 and not 2J3KL.
 
 "All mathematics is in place" refers to Track 1's method chain (admission template + E2 selection + E7 barriers + B1 erosion + C-a decidability). It does **not** mean the real-system transfer exists.
 

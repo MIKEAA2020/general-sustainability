@@ -79,6 +79,8 @@ Already has the post-addressment update. The rebuilt version is faithful.
 
 ## Bottom line
 
+**Scored trees now live on this repository:** `wave_e_cod/` and `wave_e_edwards/`. Strategy documents must cite those paths, not a “local-only” tree. Independent rerun of those scores is still **NONE**. Wave E is not closed.
+
 **The Wave E design is structurally sound but needs three specific content updates:**
 
 1. **Add the new theorems to the paper descriptions** (A4, B1, B9, B10, C-a, E7)
