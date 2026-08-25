@@ -8,9 +8,9 @@
 
 ## What changed and what it means for Wave E
 
-### 1. New theorems strengthen Papers 1–3 (not yet reflected)
+### 1. New theorems strengthen Papers 1–3 (not yet reflected) — **all statuses are `PROVEN (reconstructed)`**
 
-The following results were proved this session but are not referenced in the publication strategy or the Wave E documents:
+The following results are recorded in the session theorem files, but **every one of them is a same-agent reconstruction after the filesystem loss** (TRANSFER_AUDIT_RESPONSE Finding 1; PROOF_MANIFEST.md vocabulary): reconstructed ≠ closed atlas content. They may be added to the paper descriptions **only with that qualifier**, and Wave E does not close on them until the independent line-by-line re-verification (the Wave-0 gate) is done:
 
 | Theorem | Paper it strengthens | How |
 |---|---|---|
@@ -48,8 +48,8 @@ The audit imposed a mandatory vocabulary and the rule "no gate is closed for Wav
 
 ### PUBLICATION_STRATEGY.md additions
 
-1. **Paper 2 content**: add "nonlinear assume–guarantee composition (A4), sampled-data erosion (B1), stochastic viability layer (B9), Stackelberg equilibrium (B10), decidability (C-a)"
-2. **Paper 3 content**: add "conservation–viability coupling (E7) as the paper's bridge theorem"
+1. **Paper 2 content**: add "nonlinear assume–guarantee composition (A4), sampled-data erosion (B1), stochastic viability layer (B9), Stackelberg equilibrium (B10), decidability (C-a)" — **each cited as `PROVEN (reconstructed)` pending independent re-verification, not as closed atlas content**
+2. **Paper 3 content**: add "conservation–viability coupling (E7) as the paper's bridge theorem" — **same reconstruction qualifier**
 3. **G-item statuses**: G2 → DECLARED; G4 → measurable selection proved; G6 → FROZEN (**diff only — NOT controlling; TCS-1.0 controls; migration open**)
 4. **Wave 0 readiness**: add "independent rerun of all committed computational artifacts" as a prerequisite (it is the gating item per HONEST_DISCLOSURE.md)
 
@@ -71,7 +71,7 @@ Already has the post-addressment update. The rebuilt version is faithful.
 |---|---|
 | Five-paper architecture | Unchanged — the session's theorems strengthen existing papers, they don't create new ones |
 | Fisheries as the G1 case | Unchanged — E5's admission makes it stronger, not different |
-| Consolidation decisions (Paper 6/7 folds) | Unchanged |
+| Consolidation decisions (Paper 6/7 folds) | Unchanged **as proposals** — the folds are editorial defaults, not gates; final decisions wait for Wave-0 close (the Paper 4 capstone content they fold into is itself NOT CONFIRMED; see PUBLICATION_STRATEGY.md "Proposed consolidations") |
 | Release wave structure | Unchanged (Wave 0 still gates on G5/G6-migration/manifests — G6's *migration*, not merely the freeze, is the gate) |
 | The monograph and compendium roles | Unchanged |
 
@@ -85,4 +85,4 @@ Already has the post-addressment update. The rebuilt version is faithful.
 2. **Update the G-item statuses** (G2 DECLARED, G4 half-proved, G6 FROZEN-diff-only — TCS-1.0 controls until migration)
 3. **Add the independent-rerun prerequisite to Wave 0** (it is the single gating item)
 
-None of these changes the architecture or the sequencing. They make the existing design reflect what was actually proved and computed this session.
+None of these changes the architecture or the sequencing. They make the existing design reflect what was actually proved and computed this session. **Wave E is not closed:** the theorem files are reconstructions pending independent line-by-line re-verification, every artifact's independent-rerun status is NONE, no Wave E specification has been matched (every Part III row NOT CONFIRMED), and the Paper 6/7 folds remain proposals.

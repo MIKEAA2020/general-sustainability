@@ -7,7 +7,7 @@
 | Data availability | High (geological surveys) | Moderate (agricultural) | High (RAM legacy, ICES) |
 | Observation model | Direct (well levels) | Indirect (soil tests) | Model-based assessments |
 | Governance records | Available (permits, metering) | Moderate (subsidies, regulations) | Available (quotas, seasons) |
-| Calibration feasibility | Blocked (constitutive curves need lithology data) | Blocked (jump balance undefined) | **Ready — on the LINEAR module only (E5: linear, closed-form kernel). The real-system track (2J3KL / J-17 scored models) is NOT calibration-ready: it is gated on the R04 admission of the scored model (or Cor2 approximate admission), neither constructed** |
+| Calibration feasibility | Blocked (constitutive curves need lithology data) | Blocked (jump balance undefined) | **Ready — on the LINEAR module only (E5: linear, closed-form kernel). The real-system tracks (G1a: the 2J3KL cod fishery; G1b: an Edwards J-17-type aquifer system) are NOT calibration-ready: each is gated on the R04 admission of the corresponding scored model (or Cor2 approximate admission — for the Edwards-type system, forecast-map only), neither constructed** |
 | Code provenance | Moderate | Weak | **Complete (E5 script + JSON committed)** |
 | Admission status | Conditionally admissible (5 blocking items) | Conditionally admissible (5 blocking items) | **ADMITTED WITH NUMBERS — linear module only** (E5 committed, SHA-256: 5670bcc8...; toy scope; real-system transfer gated on R04/Cor2 — see the two-track decision below) |
 
@@ -15,12 +15,26 @@
 
 **Track 1 (method, READY):** the linear A001 §§6–10 resource–sink module is admitted with interval-verified numerical constants (`research_program/validated_computations/E5_NUMBERS.json`): margins α_S=0.4, α_K=0.2, Lipschitz L=0.2, erosion menu with exhibited triple L=0.2/r=0.05/Δ≤0.18, confinement [2,8]×[0,2], and a displayed (REG) certificate family on the infinite horizon. **These numbers are the linear toy's — they support no claim about the real fishery.** This track delivers the admission method, the screening template, and the worked example.
 
-**Track 2 (real system, GATED):** the empirical G1 case against real 2J3KL data and a scored (J-17-series) model requires, before any certified claim:
+**Track 2 (real systems, GATED):** the empirical case against a real system requires, before any certified claim:
 
-1. **the R04 five-map admission certificate** for the scored model into the architecture (type/unit, phase-space, dynamics, safe-set, policy/information correspondences) — **NOT constructed**; or
-2. **R04.Cor2 approximate admission** (dynamics defect ε → Grönwall deviation → kernel erosion) — likewise **NOT constructed**.
+- **G1a (fisheries):** real 2J3KL data against an R04-admitted scored model of *that fishery* —
+  1. **the R04 five-map admission certificate** for the scored model into the architecture (type/unit, phase-space, dynamics, safe-set, policy/information correspondences) — **NOT constructed**; or
+  2. **R04.Cor2 approximate admission** (dynamics defect ε → Grönwall deviation → kernel erosion) — likewise **NOT constructed**.
+- **G1b (groundwater):** an Edwards J-17-type aquifer system against the A005 module — same R04/Cor2 gate, with the additional restriction that **Cor2 for an Edwards-type system is forecast-map only** (a screening/forecast map with eroded kernels; not a certified admission, licenses no transfer claim). The Edwards Aquifer critical-period system was moreover **examined and rejected** as a case candidate on the confound gate in the manuscript's case search.
 
 By R04.Thm1's converse, no judgment transfers without one of these; verbal analogy is excluded from transfer by the theorem itself. This is a **Wave-0 gating item** (see PUBLICATION_STRATEGY.md and TRANSFER_AUDIT_RESPONSE.md Finding 2).
+
+### The three objects (mandatory disambiguation)
+
+The earlier shorthand "2J3KL / J-17 scored models" collapsed three distinct objects and is **retired**:
+
+| Object | Kind | R04 certificate | Cor2 | Independent rerun |
+|---|---|---|---|---|
+| NAFO **2J3KL** (northern cod; A014/A016) | Real system — fisheries (G1a) | NOT constructed | NOT constructed | **NONE** |
+| **Edwards well J-17** (Edwards Aquifer index well; case candidate examined and rejected on the confound gate; A005 is the generic G1b template) | Real system — groundwater (G1b) | NOT constructed | **Forecast-map only** | **NONE** |
+| **A021 C4 J-series** (docket items J01–J25; J17 = the BLZ citation-matching disposition; the C4 gated DDE is the object of the validated computations) | **NOT a real system** — audit docket + programme model | NOT constructed | NOT constructed | **NONE** (C4 artifacts committed; rerun NONE) |
+
+**No "scored (J-17-series) model" exists.** The A021 J-series is external-review bookkeeping; the validated C4 computations are computations on a programme model equation and support no claim about any fishery or aquifer.
 
 "All mathematics is in place" refers to Track 1's method chain (admission template + E2 selection + E7 barriers + B1 erosion + C-a decidability). It does **not** mean the real-system transfer exists.
 
@@ -47,7 +61,7 @@ By R04.Thm1's converse, no judgment transfers without one of these; verbal analo
 
 ## Sequencing
 
-Track 1 (G1a-method) proceeds now — the admission method is committed with numbers on the linear module. **Track 2 (G1a-real) activates only after the R04/Cor2 transfer certificate is constructed for the scored model** — that construction is the next programme-side action on the empirical track. The groundwater track (G1b) activates when the author-side declarations are made. The programme-side items (topology checks) are routine applications of the E2 machinery.
+Track 1 (G1a-method) proceeds now — the admission method is committed with numbers on the linear module. **Track 2 (real systems: G1a fisheries / G1b Edwards-type groundwater) activates only after the R04/Cor2 transfer certificate is constructed for the corresponding scored model (for an Edwards-type system, Cor2 is forecast-map only)** — that construction is the next programme-side action on the empirical track. The groundwater track (G1b) activates when the author-side declarations are made. The programme-side items (topology checks) are routine applications of the E2 machinery.
 
 ## Critical rule
 

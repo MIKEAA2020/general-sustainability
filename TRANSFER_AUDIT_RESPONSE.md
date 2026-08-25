@@ -100,3 +100,17 @@ Evidence:
 | 3 | TCS-1.1 freeze-only | ACCEPTED | Freeze card expanded with controlling-schema header; G6/C-h statuses corrected everywhere; manifest carries the controlling-schema statement |
 
 **Not changed by this repair (honest boundaries):** no theorem's mathematical status was upgraded; the independent-rerun obligation is unchanged (NONE for all artifacts); the A1 piecewise-Chebyshev campaign, A3 residue, B4 continuum transfer, and external audit execution remain open exactly as HONEST_DISCLOSURE.md records them.
+
+---
+
+## Postscript (follow-up audit): the "J-17" identification — three objects, not one track
+
+A follow-up audit finding, **verified and accepted**: Finding 2's evidence section *misidentified* "J-17". It wrote that the audit's "J-17 series" is "the scored delay-model series of the A021 joint docket (the J-series, including J17 — the BLZ exact-theorem citation item)". That identification is wrong in two ways, and the shorthand "2J3KL/J-17-class systems" / "the real-system track (2J3KL/J-17)" that propagated from it into E5, the strategy, the D-tier agenda, the register, A2, and the manifest collapsed **three distinct objects**:
+
+1. **NAFO 2J3KL** — the northern-cod fishery (A014/A016): a real system (the G1a fisheries case).
+2. **Edwards well J-17** — the Edwards Aquifer index well (San Antonio): a real system on the groundwater side (the G1b referent). The Edwards Aquifer critical-period management system was examined as a case candidate in the manuscript's case search and **rejected on the confound gate**; A005 is a generic typed template, not Edwards-calibrated. For an Edwards-type system, **Cor2 approximate admission is forecast-map only** (a screening/forecast map with eroded kernels — not a certified admission licensing transfer).
+3. **The A021 C4 J-series** — the joint-decision-docket items J01–J25 (J17 = the BLZ citation-matching disposition): **audit bookkeeping, not a real system**. The C4 gated DDE is a programme model equation; no "scored (J-17-series) model" exists, and the validated C4 computations support no claim about any fishery or aquifer.
+
+**Repairs applied (this commit):** three-object tables added to `PUBLICATION_STRATEGY.md` and `D_TIER_EMPIRICAL_AGENDA.md`; the collapsed phrasing retired in `E5_MODULE_ADMISSION_NUMERICAL.md` (scope section, Field 16), `PROOF_MANIFEST.md` (header, Part II row, Part IV citation form, closing note), `OPEN_PROBLEMS_REGISTER.md` (G1), and `A2_COUPLING_CLASS.md`; independent-rerun status remains **NONE** everywhere; the Paper 6/7 folds restated as **proposals, not gates** (the Paper 4 capstone they fold into is itself NOT CONFIRMED; the A025 fold pipeline is NOT REBUILT); `WAVE_E_UPDATE.md`'s "add B10/A4/E7" instruction qualified — reconstructed ≠ closed atlas content, **Wave E is not closed**.
+
+**Honest residual:** this postscript corrects the *referent* of the transfer prohibition; it does not weaken the prohibition itself — R04.Thm1's converse applies to each of the three objects separately, and no five-map certificate exists from the linear (S,K) toy to any of them.

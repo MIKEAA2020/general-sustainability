@@ -2,7 +2,7 @@
 
 **Commit context:** This manifest accompanies the commit "Status corrections after audit: no closed gates for Wave E". It is the authoritative register of every theorem, computation, and artifact in the programme, with honest statuses.
 
-**Post-transfer-audit revision (see `TRANSFER_AUDIT_RESPONSE.md`):** all three external-audit findings accepted and repaired — (1) the session theorem files were short summary cards after the filesystem loss, and are now **expanded to full self-contained proof documents with provenance headers**; (2) the E5 module is re-scoped everywhere as the **linear A001 §§6–10 toy — no transfer to 2J3KL/J-17-class systems without the R04 certificate**; (3) **TCS-1.0 is the controlling schema** (TCS-1.1 is a frozen, unapplied diff — no record conforms to it).
+**Post-transfer-audit revision (see `TRANSFER_AUDIT_RESPONSE.md`):** all three external-audit findings accepted and repaired — (1) the session theorem files were short summary cards after the filesystem loss, and are now **expanded to full self-contained proof documents with provenance headers**; (2) the E5 module is re-scoped everywhere as the **linear A001 §§6–10 toy — no transfer to either real system (the 2J3KL cod fishery or the Edwards J-17 aquifer system) or any other model without the R04 certificate**; (3) **TCS-1.0 is the controlling schema** (TCS-1.1 is a frozen, unapplied diff — no record conforms to it).
 
 **Controlling-schema statement:** every theorem, record, and artifact below is a **TCS-1.0** object. The judgment language of E1/C-a is the TCS-1.0 §4 inventory. No compatibility claim "under TCS-1.1" is available to any entry. Migration is an open Wave-0 obligation (see `04_open_problems/TCS_1_1_FREEZE.md`).
 
@@ -118,7 +118,7 @@
 | C4 off-grid continuum residual (v2, interval-certified) | Interval-certified bounds: N≤6.6e-8, A≤1.0e-9, Z≤8.3e-7, E≤2.8e-6 | `a021_c4/c4_offgrid_residual_interval.json` | `2a4a5e82...1c74a7f4` | `python3 a021_c4/c4_offgrid_interval_v2.py` | same | **NONE** |
 | C4 monodromy/Floquet (dt=0.25) | Phase 1.00480 simple+neutral; dominant 0.68764+0.069<1; all nontrivial inside unit disc | `a021_c4/c4_monodromy_enclosure.json` | `01d8c253...dbaef76` | `python3 a021_c4/c4_monodromy.py` | same | **NONE** |
 | C4 monodromy data (dt=0.25) | Monodromy matrix + eigenvalues (npz) | `a021_c4/c4_monodromy_dt0p25.npz` | `f3dc5445...a7ca5f` | same | same | **NONE** |
-| E5 module admission | Five maps exact; margins/L/erosion triple interval-verified — **LINEAR A001 §§6–10 TOY ONLY; no transfer to 2J3KL/J-17 systems without the R04 certificate (not constructed)** | `E5_NUMBERS.json` | `5670bcc8...236e72db` | `python3 e5_admission.py` | same | **NONE** |
+| E5 module admission | Five maps exact; margins/L/erosion triple interval-verified — **LINEAR A001 §§6–10 TOY ONLY; no transfer to either real system (2J3KL cod fishery; Edwards J-17 aquifer) or any other model without the R04 certificate (not constructed)** | `E5_NUMBERS.json` | `5670bcc8...236e72db` | `python3 e5_admission.py` | same | **NONE** |
 | Interval library | Rigorous float64 interval arithmetic (outward rounding, mpmath bridge, dd products) | `interval_lib.py` | see git | — | same | **NONE** |
 
 **Not yet rebuilt (from the prior session, lost to filesystem reset):**
@@ -170,7 +170,7 @@
 | A4 composition theorem | "The nonlinear assume–guarantee theorem covers nonlinear contract amplitudes with shared controls" |
 | C-a decidability | "Every judgment-language sentence is decidable at fixed data on the finite class (theorem)" |
 | E7 conservation coupling | "Moiety barriers produce kernel bounds from flux data alone (theorem)" |
-| E5 module admission | "The **linear A001 §§6–10 resource–sink module** is admitted with interval-verified numerical constants — a method demonstration; **no transfer to 2J3KL/J-17-class systems without the R04 certificate (forbidden by R04.Thm1's converse; certificate not constructed)**" |
+| E5 module admission | "The **linear A001 §§6–10 resource–sink module** is admitted with interval-verified numerical constants — a method demonstration; **no transfer to either real system (2J3KL cod fishery; Edwards J-17 aquifer) or any other model without the R04 certificate (forbidden by R04.Thm1's converse; certificate not constructed)**" |
 | B1 erosion theorem | "The three-hypothesis erosion theorem closes the sampled-data bridge" |
 
 ## Part V — What Wave E cannot yet cite
@@ -189,7 +189,7 @@
 
 **Rebuilt and committed:** the interval library, A025 Hopf certificate, C4 orbit Krawczyk, C4 off-grid residual, C4 monodromy (dt=0.25), and E5 admission — all with committed code, committed artifacts, and SHA-256 hashes (Part II above).
 
-**Post-transfer-audit expansion (see TRANSFER_AUDIT_RESPONSE.md):** all session theorem documents (E1–E7, A3, A4, B-tier, C-tier, C-a) are expanded from summary cards to full self-contained proof documents with provenance headers; their statuses carry the `PROVEN (reconstructed)` qualifier — same-agent reconstructions from the session record, pending independent line-by-line re-verification. **TCS-1.0 is the controlling schema** (TCS-1.1 is a frozen, unapplied diff; migration open). The E5 artifact is scoped to the linear toy; real-system (2J3KL/J-17) claims are gated on the R04/Cor2 transfer certificate.
+**Post-transfer-audit expansion (see TRANSFER_AUDIT_RESPONSE.md):** all session theorem documents (E1–E7, A3, A4, B-tier, C-tier, C-a) are expanded from summary cards to full self-contained proof documents with provenance headers; their statuses carry the `PROVEN (reconstructed)` qualifier — same-agent reconstructions from the session record, pending independent line-by-line re-verification. **TCS-1.0 is the controlling schema** (TCS-1.1 is a frozen, unapplied diff; migration open). The E5 artifact is scoped to the linear toy; real-system claims (G1a: 2J3KL cod fishery; G1b: Edwards J-17-type aquifer, Cor2 forecast-map only) are gated on the R04/Cor2 transfer certificate; the A021 J-series is an audit docket, not a real system.
 
 **Not yet rebuilt:** the A025 fold pipeline (collocation → continuation → Moore–Spence → Krawczyk), the C4 monodromy at dt=0.1, and the A025 fold resolution cross-checks.
 

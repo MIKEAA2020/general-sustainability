@@ -30,7 +30,7 @@ C-a: scoped decidability theorem PROVED; logical completeness OPEN. C-e: quadrat
 
 ## Tier D — Empirical
 
-G1: fisheries resource–sink DECIDED as primary case — **two-track reading mandatory** (Track 1: linear-module method template READY with committed numbers; Track 2: real-system case against 2J3KL/J-17 scored models GATED on the R04 admission certificate / Cor2 approximate admission, neither constructed). Three preregistered protocols specified. A004/A005 blocking-list plan with ownership assigned.
+G1: fisheries resource–sink DECIDED as primary case — **two-track reading mandatory** (Track 1: linear-module method template READY with committed numbers; Track 2: real-system case GATED on the R04 admission certificate / Cor2 approximate admission, neither constructed — the real systems are two distinct objects: G1a the 2J3KL cod fishery, G1b an Edwards J-17-type aquifer system (Cor2 forecast-map only); the A021 J-series is an audit docket, not a system). Three preregistered protocols specified. A004/A005 blocking-list plan with ownership assigned.
 
 ## Honest bottom line
 

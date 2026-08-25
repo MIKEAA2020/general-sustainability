@@ -1,6 +1,6 @@
 # A2 — The A021 Coupling Model Class: Declaration
 
-> **Provenance & status discipline:** reconstructed after the filesystem loss of the long-form original (worklog Task 6; expansion recorded in TRANSFER_AUDIT_RESPONSE Finding 1). This is a *declaration document* (a modelling decision with typed hypotheses), not a theorem file: the persistence-theorem hypotheses are VERIFIED at the discrete level against the validated artifacts; the coupling class is DECLARED; the module remains conditional on A1 (the continuum lift), which is COMPUTED_PARTIAL. No claim in this file transfers to the real 2J3KL/J-17 system without the R04 certificate.
+> **Provenance & status discipline:** reconstructed after the filesystem loss of the long-form original (worklog Task 6; expansion recorded in TRANSFER_AUDIT_RESPONSE Finding 1). This is a *declaration document* (a modelling decision with typed hypotheses), not a theorem file: the persistence-theorem hypotheses are VERIFIED at the discrete level against the validated artifacts; the coupling class is DECLARED; the module remains conditional on A1 (the continuum lift), which is COMPUTED_PARTIAL. No claim in this file transfers to either real system (the 2J3KL cod fishery or the Edwards J-17 aquifer system) without the R04 certificate.
 
 ## A2.Def1 (the declared class — LIEBIG-SANCTIONED-COUPLING-v1)
 

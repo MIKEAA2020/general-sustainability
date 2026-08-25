@@ -1,6 +1,6 @@
 # HONEST_DISCLOSURE — Certification Levels and Remaining Gaps
 
-> **Post-transfer-audit note:** see `/TRANSFER_AUDIT_RESPONSE.md` — three findings accepted and repaired (proof expansion, E5 toy-scope, TCS-1.0 controlling schema). The four-issue disclosure below remains current.
+> **Post-transfer-audit note:** see `/TRANSFER_AUDIT_RESPONSE.md` — three findings accepted and repaired (proof expansion, E5 toy-scope, TCS-1.0 controlling schema), plus the follow-up postscript (the "J-17" three-object split: the 2J3KL cod fishery and the Edwards well J-17 aquifer are the two real systems — for the Edwards type, Cor2 is forecast-map only; the A021 J-series is an audit docket, not a system). The four-issue disclosure below remains current.
 
 **Purpose:** A reviewer-facing document that answers every question the audit raised, without inflation or deflection. This is the document Wave E should read before citing any artifact.
 
