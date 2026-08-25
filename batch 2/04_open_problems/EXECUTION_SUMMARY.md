@@ -1,0 +1,24 @@
+# A1→A3→B4→C-a Execution Summary
+
+> **STATUS CORRECTION:** The original summary used inflated statuses. The authoritative reclassification is in STATUS_CORRECTION.md. A1=COMPUTED_PARTIAL; A3=COMPUTED_PARTIAL (toy); B4=COMPUTED_PARTIAL (discrete); C-a=PROVEN at declared scope.
+
+## Committed computational artifacts
+
+| Computation | Result | File (committed) |
+|---|---|---|
+| A025 Hopf certificates | τ± reproduced (interval, dps=50) | `a025_fold/a025_interval_hopf.json` |
+| C4 orbit Krawczyk | Unique orbit in 1e-8 box, margin 1186 | `a021_c4/c4_orbit_krawczyk_certificate.json` |
+| C4 off-grid residual | INTERVAL-CERTIFIED: N≤6.6e-8, Z≤8.3e-7, E≤2.8e-6 | `a021_c4/c4_offgrid_residual_interval.json` |
+| C4 monodromy (dt=0.25) | Phase simple+neutral; dominant 0.688+0.069<1 | `a021_c4/c4_monodromy_enclosure.json` |
+| E5 module admission | Five maps + interval-verified constants | `E5_NUMBERS.json` |
+
+## Wave E candidate support (all NOT CONFIRMED)
+
+| Need | Candidate | Status |
+|---|---|---|
+| Paper 4: certified computation | A1 (discrete K=80 PROVEN) | NOT CONFIRMED |
+| Paper 4: NAIM capstone | B4 + A2 | NOT CONFIRMED |
+| Paper 5: governance template | A3 | NOT CONFIRMED |
+| Paper 5: computability | C-a | NOT CONFIRMED |
+
+See HONEST_DISCLOSURE.md for the full certification-level breakdown.

@@ -1,0 +1,88 @@
+# Wave E Design Update — Findings from This Session
+
+**Question:** Does the Wave E design described in the repository require updating to meet findings from this session?
+
+**Answer: Yes — in three specific ways.** The core architecture (five papers, fisheries as the G1 case, the publication waves) is unchanged. But the session produced new theorems, new computational artifacts, and status corrections that the Wave E documents do not yet reflect.
+
+---
+
+## What changed and what it means for Wave E
+
+### 1. New theorems strengthen Papers 1–3 (not yet reflected)
+
+The following results were proved this session but are not referenced in the publication strategy or the Wave E documents:
+
+| Theorem | Paper it strengthens | How |
+|---|---|---|
+| **A4** Nonlinear assume–guarantee (monotone-operator theorem) | Paper 2 (atlas) + Paper 1 (composition lesson) | The composition gate now has FOUR theorems (not two): the restricted proximal-normal, the tubular A–G, the eroded generation transfer, and the nonlinear monotone-operator version. Paper 2's composition section is substantially richer. |
+| **B1** Sampled-data erosion theorem | Paper 5 (governance design) | R02.Cor6's bridge is now a theorem, not a conditional. Paper 5's governance-design section can cite it directly. |
+| **B9** Stochastic viability (chance-kernel, filter soundness, quantile erosion) | Paper 2 (atlas) + Paper 5 | The stochastic layer — previously a docket item (D3) — now has proved restricted results. |
+| **B10** Stackelberg equilibrium existence | Paper 1 (architecture) | The strategic-implementation docket (D5) has its foundational record. Paper 1's institutional section can acknowledge the reduction. |
+| **C-a** Decidability at fixed data | Paper 1 (scope) + Paper 5 (computability) | Every governance claim is decidable on the finite class. Paper 5's empirical falsification design is backed by a computability theorem. |
+| **E7** Conservation–viability coupling | Paper 3 (the "so what") | Moiety barriers produce kernel bounds from flux data alone. This is Paper 3's missing bridge between conservation and viability. |
+
+### 2. New computational artifacts upgrade Paper 4 (partially reflected)
+
+| Artifact | What it upgrades | Status |
+|---|---|---|
+| C4 orbit Krawczyk (margin 1186) | Paper 4's certified-computation section | Committed and PROVEN at K=80 |
+| C4 off-grid residual (interval-certified v2) | Paper 4's continuum-lift evidence | Committed and INTERVAL-CERTIFIED |
+| C4 monodromy/Floquet (dt=0.25) | Paper 4's cycle stability | Committed and VALIDATED |
+| A025 Hopf certificates (interval) | Paper 4's Hopf section reproducibility | Committed and PROVEN |
+| E5 module admission | Paper 3's worked example + Paper 5's template | Committed and PROVEN |
+| **A025 fold Moore–Spence Krawczyk** | Paper 4's fold certification | **NOT REBUILT** — the fold pipeline script is committed but the computation stalls |
+
+### 3. Status corrections the Wave E documents must respect
+
+The audit imposed a mandatory vocabulary and the rule "no gate is closed for Wave E." The Wave E documents (D_TIER_EMPIRICAL_AGENDA.md, PUBLICATION_STRATEGY.md) still use the original optimistic phrasing in places.
+
+| Document | What needs updating |
+|---|---|
+| `D_TIER_EMPIRICAL_AGENDA.md` | The readiness matrix should note that the E5 admission is committed and reproducible (with SHA-256 hash), not just "complete." The three preregistered protocols should reference the E6 matching matrix for their external-literature obligations. |
+| `PUBLICATION_STRATEGY.md` | The G-item statuses are stale: G2 (coupling) is now DECLARED, not just open; G4 (selectors) has a proved measurable half; G6 (TCS-1.1) is FROZEN. The Paper 2 content description should include the new theorems (A4, B1, B9, B10). The Paper 3 description should include E7. |
+| `OPEN_PROBLEMS_REGISTER.md` | Already updated with the post-addressment statuses — but the rebuilt version (from the filesystem reset) is abbreviated and may have lost some detail. |
+
+---
+
+## Concrete updates needed
+
+### PUBLICATION_STRATEGY.md additions
+
+1. **Paper 2 content**: add "nonlinear assume–guarantee composition (A4), sampled-data erosion (B1), stochastic viability layer (B9), Stackelberg equilibrium (B10), decidability (C-a)"
+2. **Paper 3 content**: add "conservation–viability coupling (E7) as the paper's bridge theorem"
+3. **G-item statuses**: G2 → DECLARED; G4 → measurable selection proved; G6 → FROZEN
+4. **Wave 0 readiness**: add "independent rerun of all committed computational artifacts" as a prerequisite (it is the gating item per HONEST_DISCLOSURE.md)
+
+### D_TIER_EMPIRICAL_AGENDA.md additions
+
+1. **E5 cross-reference**: note the committed artifact with hash
+2. **Protocol external obligations**: reference E6's matching matrix
+3. **G1 readiness note**: the fisheries resource–sink template is not just designed but committed with interval-verified numbers (E5_NUMBERS.json)
+
+### OPEN_PROBLEMS_REGISTER.md
+
+Already has the post-addressment update. The rebuilt version is faithful.
+
+---
+
+## What does NOT need updating
+
+| Item | Why |
+|---|---|
+| Five-paper architecture | Unchanged — the session's theorems strengthen existing papers, they don't create new ones |
+| Fisheries as the G1 case | Unchanged — E5's admission makes it stronger, not different |
+| Consolidation decisions (Paper 6/7 folds) | Unchanged |
+| Release wave structure | Unchanged (Wave 0 still gates on G5/G6/manifests) |
+| The monograph and compendium roles | Unchanged |
+
+---
+
+## Bottom line
+
+**The Wave E design is structurally sound but needs three specific content updates:**
+
+1. **Add the new theorems to the paper descriptions** (A4, B1, B9, B10, C-a, E7)
+2. **Update the G-item statuses** (G2 DECLARED, G4 half-proved, G6 FROZEN)
+3. **Add the independent-rerun prerequisite to Wave 0** (it is the single gating item)
+
+None of these changes the architecture or the sequencing. They make the existing design reflect what was actually proved and computed this session.
