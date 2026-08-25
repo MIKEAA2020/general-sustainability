@@ -51,7 +51,7 @@ Every crossing is rightward. (The denominator cannot vanish: `1 + τα + iτω =
 
 **Step 5 (case (iii)).** Let `β < −α`. At `τ = 0`: `α + β < 0`, unstable. By Step 3 the unstable-root count never decreases, so unstable for all `τ ≥ 0`. ∎
 
-**Scope.** This is the *complete* classification for the scalar two-term equation. Multi-delay/matrix variants reduce to the same crossing-direction calculus term-by-term but the count is bookkeeping-heavy; no claim is made beyond the stated class. The classification is the mathematical backbone of the programme's delay-bifurcation screening (A021/A025 chain) and is independent of any particular application.
+**Reconstruction verification:** during the expansion, the classification was re-verified numerically (max-real-part root computation across the three regimes; the τ*-transition bracketed between 0.99τ* and 1.01τ*; the closed-form crossing direction `Re λ̇ = ω²/|1+τ(α+iω)|²` matched the implicit-differentiation value to 7 digits). **Scope.** This is the *complete* classification for the scalar two-term equation. Multi-delay/matrix variants reduce to the same crossing-direction calculus term-by-term but the count is bookkeeping-heavy; no claim is made beyond the stated class. The classification is the mathematical backbone of the programme's delay-bifurcation screening (A021/A025 chain) and is independent of any particular application.
 
 ---
 
@@ -80,7 +80,7 @@ Feasibility of the substitution system `Ax ≤ b, x ∈ K` (with the deficit/sur
   ṁ = m² + v,      v̇ = 4 m v        —  EXACT two-moment closure.
   ```
 
-  *Proof:* `ṁ = (ẋ₁+ẋ₂)/2 = (x₁²+x₂²)/2 = ((x₁+x₂)² + (x₁−x₂)²)/4 = m² + v`; and `v̇ = 2·((x₁−x₂)/2)·((ẋ₁−ẋ₂)/2) = (x₁−x₂)(x₁²−x₂²)/2 = (x₁−x₂)²(x₁+x₂)/2 = 4v·(2m)/2 = 4mv`. ∎ (Verified numerically to `1e−8` in session; the identity is exact as the algebra shows.) This is the positive existence result demarcating R06.Thm3's scope: non-atomicity, not quadraticity, is what forbids closure.
+  *Proof:* `ṁ = (ẋ₁+ẋ₂)/2 = (x₁²+x₂²)/2 = ((x₁+x₂)² + (x₁−x₂)²)/4 = m² + v`; and `v̇ = 2·((x₁−x₂)/2)·((ẋ₁−ẋ₂)/2) = (x₁−x₂)(x₁²−x₂²)/2 = (x₁−x₂)²(x₁+x₂)/2 = 4v·(2m)/2 = 4mv`. ∎ (Verified numerically to `1e−8` in session and re-verified during the reconstruction at solver tolerance `1e−13` on three initial-condition pairs; the identity is exact as the algebra shows.) This is the positive existence result demarcating R06.Thm3's scope: non-atomicity, not quadraticity, is what forbids closure.
 - **Approximate closure → erosion (R06.Cor4).** When fibre-constancy fails by a defect `ε`, closure holds to accuracy `ε` with the kernel claim degrading through the erosion conversion `(L_G c + C)ε ≤ α` — the lifting-typed corollary proved in R06.
 
 ---

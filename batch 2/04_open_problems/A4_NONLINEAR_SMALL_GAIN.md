@@ -25,14 +25,20 @@ where now each **defect function `δ_ij : [0, ρ_j] → ℝ₊` is an arbitrary 
 Define `Φ : ∏_i [0, ρ_i] → ∏_i [0, ρ_i]` by
 
 ```
-Φ_i(r) := min{ ρ_i ,  max{0, ( Λ_i Σ_j δ_ij(r_j) + Δ_i − α_i ) / L_i } },
+φ_i(r) := max{ 0 , ( Λ_i Σ_j δ_ij(r_j) + Δ_i − α_i ) / L_i }   ∈ [0, ∞),
 ```
 
-the **least own-depth (buffer) module `i` must maintain** for its budget (∗) to close, given the neighbors' buffers `r` — truncated to the geometric bound `ρ_i`. (If the numerator is ≤ 0 the module needs no buffer: `Φ_i(r) = 0`; note `Φ_i` does not depend on `r_i`.)
+the **least own-depth (buffer) module `i` must maintain** for its budget (∗) to close, given the neighbors' buffers `r`. (If the numerator is ≤ 0 the module needs no buffer: `φ_i(r) = 0`; note `φ_i` does not depend on `r_i`.) Since `φ_i` may exceed the geometric bound `ρ_i`, we distinguish:
 
-**Lemma (monotoneity).** Every `δ_ij` nondecreasing ⟹ every `Φ_i` nondecreasing in `r_j` (`j ≠ i`) ⟹ `Φ` is **monotone** on the complete product lattice `L = ∏_i [0, ρ_i]`. ∎ (Immediate from the display.)
+- the **requirement map** `φ : L → [0,∞)^n` (untruncated), and
+- the **lattice operator** `Φ : L → L`, `Φ_i(r) := min{ ρ_i , φ_i(r) }` (the truncated self-map of `L = ∏_i [0, ρ_i]` used for the fixed-point theory).
 
-**Reading of the fixed points.** `r` is a **feasible contract** iff `Φ(r) ≤ r` (each module's maintained buffer covers its requirement — a *pre-fixed point* / super-solution of `Φ`). The **efficient contract** is the *least* such `r` (smallest buffers satisfying all budgets).
+**Lemma (monotoneity).** Every `δ_ij` nondecreasing ⟹ `φ`, hence `Φ`, is **monotone** on the complete product lattice `L`. ∎ (Immediate from the display.)
+
+**Lemma (truncation semantics — the honesty gate).** For `r ∈ L`:
+`Φ(r) ≤ r` ⟺ (`φ(r) ≤ r`) **or** (some truncation is active at `r` with `r_i = ρ_i` and `φ_i(r) > ρ_i` — the requirement *exceeds the geometry*). Moreover, if the truncation is active at the least fixed point `r*` of `Φ` in some coordinate, then **no genuine feasible contract exists**: for any `s ∈ L` with `φ(s) ≤ s`, coordinate `i` gives `s_i = ρ_i` and `φ_i(s) = φ_i(r*) > ρ_i = s_i` (φ_i ignores the own coordinate), a contradiction. Conversely, if the truncation is inactive at `r*` (`φ_i(r*) ≤ ρ_i ∀i`), then `Φ(r*) = φ(r*) ≤ r*` — `r*` is a **genuine feasible contract**. **Active truncation at `r*` = honest refusal** (the geometry cannot support the required buffers), the numeric analogue of Ex3's nonconvex refusal. ∎
+
+**Reading of the fixed points.** `r ∈ L` is a **feasible contract** iff `φ(r) ≤ r` (each module's maintained buffer covers its requirement, within the geometry). The **efficient contract** is the *least* such `r` (smallest buffers satisfying all budgets) — computed as the least fixed point of `Φ`, genuine exactly when the truncation is inactive there (Lemma above).
 
 ---
 
@@ -42,7 +48,7 @@ the **least own-depth (buffer) module `i` must maintain** for its budget (∗) t
 
 Assume:
 
-1. **(Sub-solution existence)** the efficient contract exists: `r* := inf{ r ∈ L : Φ(r) ≤ r }` satisfies `Φ(r*) ≤ r*` (see Thm2 — under closedness of the feasible set this is automatic);
+1. **(Sub-solution existence)** a feasible contract exists: `S = { r ∈ L : φ(r) ≤ r } ≠ ∅`; equivalently (Thm2 + the truncation-semantics lemma), the least fixed point `r*` of `Φ` exists with the truncation **inactive** at `r*` (`φ_i(r*) ≤ ρ_i ∀i` — checkable), and `r* = min S` is the efficient contract;
 2. **(Joint regulation nonemptiness with measurable selection)** on the eroded product `K_{r*} := ∏_i K_{i, −r*_i}`, the shared-control regulation map
    `A(x) = { u ∈ U : f_i(x_i, u) ∈ T_{K_{i,−r*_i}}(x_i) ∀i }`
    is nonempty at every `x ∈ K_{r*}` with `dist(x_i, ∂K_{i,−r*_i}) = r*_i`... (at every boundary point of the eroded product) and satisfies the E2.B2(a) hypotheses (closed graph, compact values, Hausdorff continuity of the successor correspondence);
@@ -52,13 +58,13 @@ Assume:
 
 ### Proof
 
-**Step 1 (budget closure at the contract).** At `r*` with `Φ(r*) ≤ r*`: by definition of `Φ_i` and monotone truncation, for every `i` either `r*_i = ρ_i` (the geometric bound already exceeds any budget need — then (∗) holds a fortiori at `r_i = ρ_i` if it holds at `r_i`... the truncation case: `Φ_i(r*) = ρ_i ≤ r*_i` forces `r*_i = ρ_i`, and (∗) at `r_i` near `ρ_i` follows from the definition of `Φ_i` being the min) or directly
+**Step 1 (budget closure at the contract).** At the fixed point `r*` (`Φ(r*) = r*`, Thm2.2): for every module `i`, either the truncation in `Φ_i` is inactive at `r*` (the generic case), in which case the definition of `Φ_i` gives directly
 
 ```
 L_i r*_i  ≥  Λ_i Σ_j δ_ij(r*_j) + Δ_i − α_i   ⟺   L_i r*_i + α_i ≥ Λ_i Σ_j δ_ij(r*_j) + Δ_i,
 ```
 
-which is (∗) at `r*` for every module `i` (with `≥` in place of `≤` rearranged — (∗) reads `L_i r_i ≥ Λ_i Σ δ_ij(r_j) + Δ_i − α_i`). So the erosion budgets all close at the contract.
+which is (∗) at `r*` for module `i`. (The truncation case cannot occur under hypothesis 1: active truncation at `r*` would mean no feasible contract exists — the truncation-semantics lemma — contradicting `S ≠ ∅`. So at the genuine efficient contract every budget closes by the display above.)
 
 **Step 2 (tangency on the eroded product).** Let `x ∈ ∂K_{r*}` with active face set `I(x) = { i : dist(x_i, ∂K_{i,−r*_i}) = 0 }`. For `i ∈ I(x)`, the outward normal `n_i` at `x_i` is a proximal normal to `K_{i,−r*_i}`; packet B1's restricted proximal-normal inequality gives, for the module's velocity under the shared control `u` chosen in `A(x)`: `⟨n_i, f_i(x_i, u)⟩ ≤ α_i + L_i r*_i`... precisely the R05.Thm2 computation at the *contract depths*: the encroachment `Λ_i Σ_j δ_ij(r*_j) + Δ_i` is covered by `α_i + L_i r*_i` (Step 1) — the one-sided (H3) inequality holds on every active face simultaneously (the same `u ∈ A(x)` serves all active modules: hypothesis 2).
 
@@ -70,21 +76,33 @@ which is (∗) at `r*` for every module `i` (with `≥` in place of `≤` rearra
 
 ### Statement
 
-The feasible-contract set `S := { r ∈ L : Φ(r) ≤ r }` is a **nonempty closed down-set** in `L`; `r* = min S` exists; `r*` is the **least fixed point–type solution** and is computed by the **monotone iteration from the bottom**:
+Write `S_Φ := { r ∈ L : Φ(r) ≤ r }` (pre-fixed points of the truncated lattice operator — **always nonempty**, since `Φ(ρ) ≤ ρ` trivially by truncation) and `S_φ := { r ∈ L : φ(r) ≤ r }` (**genuine feasible contracts** — possibly empty). Then:
 
-```
-r^{(0)} = 0,   r^{(k+1)} = max{ r^{(k)}, Φ(r^{(k)}) }  →  r*   (monotone increasing, finite/ω-convergent),
-```
-
-while the **greatest** consistent depth vector is the top fixed point computed by the downward iteration from the geometric bound. Moreover, when all `δ_ij` are linear (`δ_ij(r) = γ_ij r`), `r*` is finite and the iteration converges geometrically **iff** `ρ(Γ) < 1` — recovering R05.Cor3 as the linear special case (an underestimate of the nonlinear statement).
+1. **(Meet-closure)** both sets are closed under pointwise minima; hence `r* := inf S_Φ = min S_Φ` exists and is the **least fixed point of `Φ`** (Tarski — no continuity required).
+2. **(Genuineness gate)** `r* ∈ S_φ` (the efficient contract is genuine) **iff the truncation is inactive at `r*`** (`φ_i(r*) ≤ ρ_i` for all `i`); and
+   ```
+   S_φ ≠ ∅   ⟺   truncation inactive at r*.
+   ```
+   Active truncation is the **honest refusal** outcome: no depth vector within the geometry closes all budgets.
+3. **(Sufficient condition)** `φ(ρ) ≤ ρ` (every module's budget closes even at worst-case full neighbor depths) implies `S_φ ≠ ∅` (indeed `ρ ∈ S_φ`). This is sufficient, not necessary — contracts can exist that exploit small neighbor depths.
+4. **(Constructive computation — Kleene)** if the `δ_ij` are continuous (the declared class), `Φ` is continuous and
+   ```
+   r^{(0)} = 0,   r^{(k+1)} = Φ(r^{(k)})   ↑   r* = sup_k r^{(k)},
+   ```
+   computes `r*` monotonically from below. Then **check the truncation gate at `r*`** (`φ_i(r*) ≤ ρ_i`): pass = genuine efficient contract; fail = refusal. The downward iteration `Φ^k(ρ) ↓` computes the greatest fixed point (most conservative consistent depth vector) symmetrically.
+5. **(Linear shadow)** when all `δ_ij(r) = γ_ij r`: with `Γ = (Λ_i γ_ij / L_i) ≥ 0` and `c_i = (Δ_i − α_i)/L_i`, `φ(r) = [Γr + c]₊` (positive part), and `ρ(Γ) < 1` ⟺ the iteration converges geometrically (rate `ρ(Γ)` in the Perron weighted sup-norm) to the unique fixed point `r* = (I−Γ)^{-1}c` when `c ≥ 0`-feasible — recovering R05.Cor3's `ρ(Γ) < 1` / `A^{-1}b` structure exactly; with `ρ(Γ) ≥ 1` and an aligned nonzero source term, no fixed point exists in the box (Perron–Frobenius one-sided escape) — the linear shadow of the refusal gate.
 
 ### Proof
 
-**Nonempty and down-set.** `Φ(ρ) ≤ ρ`? Not automatic — but `0 ∈ S` iff `Φ(0) ≤ 0` i.e. every module's standalone budget closes with no buffer (`Λ_i Σ_j δ_ij(0) + Δ_i ≤ α_i`); in general `S` may fail to contain small vectors but contains `ρ` whenever each truncated `Φ_i(ρ) ≤ ρ_i` holds (the budget closes at full buffers — the *super-solution* condition). **Corrected statement (honest):** `S` is nonempty iff the super-solution condition holds at some `r̄` (e.g. `r̄ = ρ`); under nonemptiness, `S` is a down-set: `r ∈ S`, `r' ≤ r` ⟹ `Φ(r') ≤ Φ(r) ≤ r` — so `r'` satisfies `Φ(r') ≤ r'`? No: `Φ(r') ≤ r` does not give `≤ r'`. **The correct down-set argument:** if `r ∈ S` then any `r'` with `Φ(r') ≤ r'`... — the honest structure: `S` is closed under the map `r ↦ min(r, Φ(r))`-limits and under taking *pointwise minima with super-solutions*; the iteration handles existence:
+**(1)** `r, s ∈ S_Φ` ⟹ `Φ(r∧s) ≤ Φ(r) ≤ r` and `Φ(r∧s) ≤ Φ(s) ≤ s` (monotoneity), so `Φ(r∧s) ≤ r∧s`: meet-closure for `S_Φ`; the same computation with `φ` gives it for `S_φ`. Tarski on the monotone self-map `Φ` of the complete lattice `L`: the pre-fixed points form a complete lattice, `r* = inf S_Φ` satisfies `Φ(r*) ≤ r*` (for every `r ∈ S_Φ`, `Φ(r*) ≤ Φ(r) ≤ r`, so `Φ(r*)` is a lower bound), hence `r* ∈ S_Φ` and `r* = min S_Φ`; then `Φ(r*) ∈ S_Φ` (monotoneity: `Φ(Φ(r*)) ≤ Φ(r*)`) forces `r* ≤ Φ(r*)`, so `Φ(r*) = r*`: the least fixed point. (`φ` is not a self-map of `L` — its requirement can exceed the geometry — which is exactly why the genuineness theory routes through the truncation gate of part (2) rather than through a second Tarski application.) ∎
 
-**Existence via monotone iteration (Tarski).** `Φ` monotone on the complete lattice `L` (Lemma). Tarski's theorem: the pre-fixed points `{r : Φ(r) ≤ r}` form a complete lattice; `r* = inf{r : Φ(r) ≤ r}` is itself a pre-fixed point **when `Φ` is Scott-continuous (or has closed graph)** — the closedness hypothesis: `S` is closed because `Φ` is continuous (each `δ_ij` nondecreasing and the display is continuous in `r`; if some `δ_ij` is only nondecreasing/discontinuous, take its closed graph — the min/max display remains upper semicontinuous, and `{Φ ≤ r}`... the honest form: assume the declared **closed-graph defect functions**, the class the theorem is stated on). Under closedness: `S ⊇ {r^{(k)}}`'s limit: the bottom-up iteration `r^{(k+1)} = max(r^{(k)}, Φ(r^{(k)}))` is monotone increasing (induction: `r^{(1)} = max(0, Φ(0)) ≥ 0`; if `r^{(k)} ≥ r^{(k−1)}` then `Φ(r^{(k)}) ≥ Φ(r^{(k−1)})` and `r^{(k+1)} = max(r^{(k)}, Φ(r^{(k)})) ≥ max(r^{(k−1)}, Φ(r^{(k−1)})) = r^{(k)}`), bounded by any super-solution `r̄ ∈ S` (induction: `r^{(k)} ≤ r̄` ⟹ `r^{(k+1)} = max(r^{(k)}, Φ(r^{(k)})) ≤ max(r̄, Φ(r̄)) = r̄`), hence converges to `r̃ ≤ r̄`; closedness of `S`-membership along the iteration (upper semicontinuity of `Φ` suffices: `Φ(r̃) ≤ liminf... ` the standard USC limit argument) gives `Φ(r̃) ≤ r̃`, and `r̃` is the least element of `S` by the iteration starting at the bottom. The downward iteration from the top computes the greatest fixed point symmetrically (greatest consistent depth vector, the most conservative contract).
+**(2)** If the truncation is inactive at `r*`: `φ(r*) = Φ(r*) = r*`, so `φ(r*) ≤ r*` — `r* ∈ S_φ`, whence `S_φ ≠ ∅`. If active at coordinate `i`: `Φ_i(r*) = ρ_i = r*_i` (fixed point) and `φ_i(r*) > ρ_i`. Suppose `s ∈ S_φ`; then `Φ(s) ≤ φ(s) ≤ s` gives `s ∈ S_Φ`, so `s ≥ r* = min S_Φ`; coordinate `i`: `s_i ≥ ρ_i` and `s ∈ L` force `s_i = ρ_i`; and monotoneity of `φ_i` in the other coordinates gives `φ_i(s) ≥ φ_i(r*) > ρ_i = s_i` — contradicting `φ(s) ≤ s`. Hence `S_φ = ∅`. (This is the truncation-semantics lemma of the Setting section, proved in place.) ∎
 
-**Linear case.** `δ_ij(r) = γ_ij r`: the budget system is `L_i r_i + Λ_i Σ_j γ_ij r_j ≥ Δ_i − α_i` — a linear inequality system; feasibility of the *positive* solution is governed by the gain matrix `Γ = (Λ_i γ_ij / L_i)`'s spectral radius: `ρ(Γ) < 1` ⟺ the iteration `r^{(k+1)} = Φ(r^{(k)})` contracts geometrically (standard linear iteration bound `‖r^{(k)} − r*‖ ≤ ρ(Γ)^k ‖r^{(0)} − r*‖` in the weighted sup-norm); `ρ(Γ) ≥ 1` with nonzero `Δ_i − α_i` ⟹ no finite contract. Hence R05.Cor3 is exactly the linear shadow of the monotone theorem. ∎
+**(3)** `φ(ρ) ≤ ρ` says exactly `ρ ∈ S_φ`. The sufficient-not-necessary remark: `φ_i` depends only on the *other* coordinates, so a contract with small neighbor depths can close budgets that fail at `φ(ρ)` — the fixed point `r*` (not `ρ`) is the certificate. ∎
+
+**(4) Kleene.** `0 ≤ Φ(0)` and monotoneity induct `r^{(k)} ≤ r^{(k+1)}`; every `r^{(k)} ≤ s` for any `s ∈ S_Φ` (induction with monotoneity). The increasing bounded sequence converges coordinate-wise to `r̃ = sup_k r^{(k)}`; continuity of `Φ` (from continuity of the `δ_ij`) gives `Φ(r̃) = sup_k Φ(r^{(k)}) = r̃`, so `r̃` is a fixed point, and `r̃ ≤ s` for all `s ∈ S_Φ` gives `r̃ = r*` (least). The genuineness check is then the truncation gate of part (2). *Honesty note:* without continuity of the `δ_ij`, Tarski (parts 1–3) still holds but the Kleene limit need only be a pre-fixed point below the least fixed point's jumps — the standard Kleene-vs-Tarski boundary, stated rather than papered over. ∎
+
+**(5)** With `δ_ij` linear, `φ(r) = [Γr + c]₊`; on the region where the positive part is inactive the map is the affine `Γr + c`. If `ρ(Γ) < 1`: the Perron vector `w > 0` with `Γw ≤ ρ(Γ)w` gives the weighted sup-norm contraction `‖φ(x) − φ(y)‖_w ≤ ρ(Γ)‖x − y‖_w`; Banach gives the unique fixed point, geometric convergence at rate `ρ(Γ)`, and `r* = (I−Γ)^{-1}c` when `c` is in the feasible cone — R05.Cor3. If `ρ(Γ) ≥ 1` with the source term aligned with the Perron direction (the generic case for `Γ ≥ 0` nonreducible and `c ≢ 0` in that cone): along `w`, the iteration's `w`-component obeys `⟨w̃, r^{(k+1)}⟩ ≥ ρ(Γ)⟨w̃, r^{(k)}⟩ + const` for the dual Perron functional `w̃`, escaping every bounded box — no fixed point in `L`, i.e. the truncation gate fires — the linear shadow of the refusal. ∎
 
 ---
 
