@@ -1,8 +1,8 @@
 # Independent rerun — Edwards intervention-selection leg (2026-08-26)
 
-**Scope.** The intervention artifacts committed in the Task-33 session (`wave_e_edwards/src/run_intervention.py`, `results/intervention_results.json`, `results/intervention_boundaries.csv`) were **first-run** with independent-rerun status NONE. This record documents their independent rerun by a second agent session on a different toolchain.
+**Scope.** The intervention artifacts committed in the Task-33 session (`wave_e_edwards/src/run_intervention.py`, `results/intervention_results.json`, `results/intervention_boundaries.csv`) were **first-run** with independent-rerun status NONE. This record documents their rerun by a second agent session: a fresh execution of the committed runner on a clean process, verifying that the committed code deterministically reproduces the committed artifacts.
 
-**Environment.** Python 3.12.13 / numpy 2.1.3 / pandas 2.2.3, x86_64 Linux (`environment.txt`). The first run used a different session/toolchain (the Task-33 agent).
+**Environment.** Python 3.12.13 / numpy 2.1.3 / pandas 2.2.3, x86_64 Linux (`environment.txt`) — the SAME machine, interpreter, and library versions as the original Task-33 run. **Honest scope note:** this is a second-session rerun in the same environment, not a cross-toolchain rerun (the Task-29 standard for the Part II certificates used Python 3.13.14 / numpy 2.3.5 on a different toolchain). What it verifies: committed-code reproducibility, determinism, and freedom from uncommitted state. What it does not verify: numerical stability across library versions. Given the byte-identity result and the deterministic (no-randomness) runner, the artifact claim is reproduced; the cross-toolchain standard remains available to a future rerun if the owner wants it.
 
 **Procedure.**
 
@@ -10,7 +10,7 @@
 2. `cd wave_e_edwards && python3 src/run_intervention.py` executed fresh (`rerun_console.log`, exit 0, ~1.2 s, deterministic — no randomness anywhere in the runner).
 3. The regenerated artifacts compared byte-for-byte against the committed snapshot.
 
-**Result: BYTE-IDENTICAL (hash-identical) on both artifacts.**
+**Result: BYTE-IDENTICAL (hash-identical) on both artifacts** (same-environment second-session rerun; see the scope note above).
 
 | Artifact | SHA-256 (committed = rerun) |
 |---|---|
