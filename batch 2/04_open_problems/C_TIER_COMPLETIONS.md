@@ -8,23 +8,25 @@
 
 ### Statement
 
-Let the moiety ledger of E7 be closed by a **quadratic form**: `B(x) = xᵀ M x − c` with `M ≻ 0` symmetric, `c ∈ ℝ`, and suppose the declared flow bounds give, along every admissible trajectory on the constraint set's neighbourhood,
+Let the moiety ledger of E7 be closed by a **quadratic form**: `B(x) = c − xᵀ M x` with `M ≻ 0` symmetric, `c ∈ ℝ` (so the constraint set `K = {B ≥ 0} = {xᵀMx ≤ c}` is an ellipsoid — the convention of the geometry clauses (i)–(iii) below and of E7.Cor3; the recorded statement's opposite convention `xᵀMx − c` is reconciled herewith), and suppose the declared flow bounds give, along every admissible trajectory on the constraint set's neighbourhood,
 
 ```
 |dB| = |2 xᵀ M ẋ|  ≤  Φ⁺(t)      (declared quadratic flux bound),
 ```
 
-with the obligatory (worst-case-negative) part `dB ≥ −Φ⁻(t)` for the drain bound and `dB ≤ Φ⁺(t)` for the fill bound, integrated to cumulative budgets `Φ⁻_T, Φ⁺_T`. Then the E7 sandwich holds in the quadratic bookkeeping:
+with the obligatory (worst-case-negative) part `dB ≥ −Φ⁻(t)` for the drain bound and `dB ≤ Φ⁺(t)` for the fill bound, integrated to cumulative budgets `Φ⁻_T, Φ⁺_T`. Then the E7 sandwich holds in the quadratic bookkeeping (outer bound sharp per `batch 4/PROOF_ELEVATION.md` Finding 13):
 
 ```
-{ B ≥ Φ⁻_T }  ⊆  Viab_T({ B ≥ 0 })  ⊆  { B ≥ Φ⁺_T − Φ⁻_T },
+{ B ≥ Φ⁻_T }  ⊆  Viab_T({ B ≥ 0 })  ⊆  { B ≥ Φ⁻_T },
 ```
 
-and the barrier geometry is **non-affine with finite reach**: the erosion calculus applies within the tube `r < τ` (unlike the global affine geometry of E7.Cor3 repaired). Note the constant restatement per `batch 4/PROOF_ELEVATION.md` Finding 13: the recorded `L_G > 0` claimed the *packet's* envelope modulus is a barrier quantity — it is not (`L_G` is the Hausdorff–Lipschitz modulus of the velocity envelope; a quadratic barrier does not determine it). The barrier-geometry constants are the **reach** `τ` and the **normal-variation constant** `L_n`.
+the outer inclusion holding when the worst-case (pure-drain) realization is admitted — in general `Viab_T({B ≥ 0}) ⊆ {B ≥ D̃_T}` with `D̃_T` the maximal cumulative drain over the *admitted* realization class (`D̃_T = Φ⁻_T` exactly when pure-drain is admitted, and the sandwich then collapses to the equality `Viab_T = {B ≥ Φ⁻_T}`). The recorded outer bound `{B ≥ Φ⁺_T − Φ⁻_T}` repeated the F⁺-for-F⁻ substitution repaired in E7.Thm1(c)/Finding 16 and is **struck**.
+
+The barrier geometry is **non-affine with finite reach**: the erosion calculus applies within the tube `r < τ` (unlike the global affine geometry of E7.Cor3 repaired). Note the constant restatement per `batch 4/PROOF_ELEVATION.md` Finding 13: the recorded `L_G > 0` claimed the *packet's* envelope modulus is a barrier quantity — it is not (`L_G` is the Hausdorff–Lipschitz modulus of the velocity envelope; a quadratic barrier does not determine it). The barrier-geometry constants are the **reach** `τ` and the **normal-variation constant** `L_n`.
 
 ### Proof
 
-**Sandwich.** Identical to E7.Thm1(a)/(c) with the ledger `q_L` replaced by `B` (the only facts used there were the telescoping identity — here `B(x(t)) = B(x(0)) + ∫ 2xᵀMẋ ds`, valid for the `C¹` trajectories of the declared class — and the flow bounds, here the quadratic flux bounds). The inner rule: `B(x(t)) ≥ B(x(0)) − Φ⁻_T ≥ 0` when `B(x(0)) ≥ Φ⁻_T`. The outer rule: viability forces `B(x(0)) ≥ −(Φ⁺_T − Φ⁻_T)` against the adversarial drain. ∎
+**Sandwich.** Identical to E7.Thm1(a)/(c) with the ledger `q_L` replaced by `B` (the only facts used there were the telescoping identity — here `B(x(t)) = B(x(0)) + ∫ 2xᵀMẋ ds`, valid for the `C¹` trajectories of the declared class — and the flow bounds, here the quadratic flux bounds). The inner rule: `B(x(t)) ≥ B(x(0)) − Φ⁻_T ≥ 0` when `B(x(0)) ≥ Φ⁻_T`. The outer rule: viability forces `B(x(0)) ≥ Φ⁻_T` against the pure-drain realization (when admitted; in general `≥ D̃_T`, the admitted class's maximal cumulative drain) — the sharp bound of E7.Thm1(c) transplanted. The recorded `−(Φ⁺_T − Φ⁻_T)` form (and the recorded display's `Φ⁺_T − Φ⁻_T`) substituted the fill-side budget for the drain-side minimum — the F⁺-for-F⁻ substitution of Finding 16 — and is struck. ∎
 
 **Non-affine geometry: finite reach and normal variation (restated per `batch 4/PROOF_ELEVATION.md` Finding 13).** For `B(x) = c − xᵀMx` with `M ≻ 0` (an ellipsoid `K = {xᵀMx ≤ c}`, semi-axes `a_i = √(c/λ_i)`):
 
