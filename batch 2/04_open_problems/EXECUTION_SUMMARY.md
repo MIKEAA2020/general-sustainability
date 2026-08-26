@@ -12,6 +12,8 @@
 | C4 orbit Krawczyk | Unique orbit in 1e-8 box, margin 1186 | `a021_c4/c4_orbit_krawczyk_certificate.json` |
 | C4 off-grid residual | INTERVAL-CERTIFIED: N≤6.6e-8, Z≤8.3e-7, E≤2.8e-6 | `a021_c4/c4_offgrid_residual_interval.json` |
 | C4 monodromy (dt=0.25) | Phase simple+neutral; dominant 0.688+0.069<1 | `a021_c4/c4_monodromy_enclosure.json` |
+| C4 monodromy (dt=0.1) | Second mesh level: dominant 0.6869+0.066<1, mesh-stable | `a021_c4/c4_monodromy_dt0p1_enclosure.json` |
+| A025 fold (nominal, m=64/96/128) | tau_f = 5.5872361986… — all three inside the lost certificate interval | `a025_fold/a025_branch_continuation*.json` |
 | E5 module admission | Five maps + interval-verified constants | `E5_NUMBERS.json` |
 
 ## Wave E candidate support (all NOT CONFIRMED)

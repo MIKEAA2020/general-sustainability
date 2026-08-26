@@ -30,7 +30,7 @@ The following results are recorded in the session theorem files, but **every one
 | C4 monodromy/Floquet (dt=0.25) | Paper 4's cycle stability | Committed; validated computation (not a manifest vocabulary term — Part II row) |
 | A025 Hopf certificates (interval) | Paper 4's Hopf section reproducibility | Committed; interval computation with outward-rounded coefficients (Part II) |
 | E5 module admission | Paper 3's worked example + Paper 5's template | Committed; **interval-verified admission of the linear A001 §§6–10 toy** (Part II computation; toy scope, R04 transfer prohibition applies) |
-| **A025 fold Moore–Spence Krawczyk** | Paper 4's fold certification | **NOT REBUILT** — the fold pipeline script is committed but the computation stalls |
+| **A025 fold Moore–Spence** | Paper 4's fold certification | **REBUILT (NOMINAL, 2026-08-26)** — the pipeline's four defects are repaired and the nominal fold is reproduced at m=64/96/128, all three inside the lost certificate interval (agreeing to 2.7e-11); the interval Krawczyk certification stage is still not reimplemented |
 
 ### 3. Status corrections the Wave E documents must respect
 

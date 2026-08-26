@@ -133,9 +133,14 @@ for needle, label in [
 
 check("Part IV off-grid citation is 256-point, not 512",
       "256-point grid" in MAN and "≤ 3e-6 on a 512-point grid" not in MAN)
-check("Part IV monodromy citation is dt=0.25 only",
-      "certified error balls at dt=0.25" in MAN
-      or "one mesh level (dt=0.25" in MAN)
+check("Part IV monodromy citation covers the mesh levels honestly",
+      # 2026-08-26: the dt=0.1 second mesh level is computed, so the
+      # citation must say "two mesh levels" (and must NOT claim the
+      # continuum) — updated from the pre-dt0p1 form which required the
+      # "dt=0.25 only" limitation language.
+      ("two mesh levels" in MAN or "dt=0.25" in MAN)
+      and "certified error balls at two mesh levels (discrete)" in MAN
+      and "continuous DDE" not in MAN.split("two mesh levels")[1][:200])
 
 print("\n" + "=" * 72)
 if FAIL:
