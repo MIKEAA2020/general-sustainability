@@ -59,12 +59,12 @@ Every crossing is rightward. (The denominator cannot vanish: `1 + τα + iτω =
 
 ### Statement
 
-- **Linear domain.** Let the constraint system be `Ax ≤ b` on moiety blocks with the substitution question "does a feasible allocation exist that compensates component `i`'s deficit `d_i < 0` using component `j`'s surplus `s_j > 0` through the declared linear pathway matrix `P`?" Then the question is a finite linear feasibility problem, and by **Farkas' lemma** exactly one of the following holds: (a) the allocation exists; (b) there is a dual covector `y ≥ 0` with `y^⊤A ≤ 0` on the relevant cone and `y^⊤(b + correction) < 0` — an explicit *noncompensability certificate*. The classification is exact and decidable.
+- **Linear domain.** Let the constraint system be `Ax ≤ b` on moiety blocks with the substitution question "does a feasible allocation exist that compensates component `i`'s deficit `d_i < 0` using component `j`'s surplus `s_j > 0` through the declared linear pathway matrix `P`?" Then the question is a finite linear feasibility problem, and by **Farkas' lemma** (one alternative, stated consistently with the proof — per `batch 4/PROOF_ELEVATION.md` Finding 20 the `y^⊤A ≤ 0` and `y^⊤A = 0` forms are *different* alternatives; the one pairing with `Ax ≤ b` is the equality form) exactly one of the following holds: (a) the allocation exists; (b) there is a dual covector `y ≥ 0` with `y^⊤A = 0` and `y^⊤(b + correction) < 0` — an explicit *noncompensability certificate*. The classification is exact and decidable.
 - **Nonlinear domain.** With `C¹` constraints `g_k(x) ≤ 0`: **local** substitution stability holds under **MFCQ** at the contact points (the linearized feasibility persists under small perturbations), and **global** noncompensability admits a separating covector drawn from the **Clarke generalized Jacobian** of the active constraints (Farkas with `∂_C g` in place of `A`). Full proof: B6 in `04_open_problems/B_TIER_BRIDGES.md` (proved there this wave; the earlier card's "conjectural bridge" label was stale and is withdrawn).
 
 ### Proof (linear case, self-contained)
 
-Feasibility of the substitution system `Ax ≤ b, x ∈ K` (with the deficit/surflux structure folded into `A, b`) is decided exactly by Farkas: either `∃x` with `Ax ≤ b`, or `∃y ≥ 0` with `y^⊤A = 0` and `y^⊤b < 0`. The second alternative *is* the noncompensability certificate: it exhibits the direction along which no feasible compensation exists, i.e. the deficit is structural (the moiety cannot be substituted — the noncompensation axiom's analytic form, packet B6). ∎ (Nonlinear case: see B6's file.)
+Feasibility of the substitution system `Ax ≤ b, x ∈ K` (with the deficit/surplus structure folded into `A, b`) is decided exactly by Farkas: either `∃x` with `Ax ≤ b`, or `∃y ≥ 0` with `y^⊤A = 0` and `y^⊤b < 0`. The second alternative *is* the noncompensability certificate: it exhibits the direction along which no feasible compensation exists, i.e. the deficit is structural (the moiety cannot be substituted — the noncompensation axiom's analytic form, packet B6). ∎ (Nonlinear case: see B6's file.)
 
 ---
 
@@ -103,15 +103,27 @@ Feasibility of the substitution system `Ax ≤ b, x ∈ K` (with the deficit/sur
 
 ### C6.3 — Delayed-revelation lemma
 
-**Statement.** Let the observation reveal a hidden parameter/disturbance exactly at time `t_d` (before `t_d`, only a prior is observed; after, the full state). The delayed information is **inert** (the delayed-observation kernel equals the full-information kernel) **iff** the viability obstruction is unreachable before `t_d` — precisely: iff no trajectory starting in the kernel can hit the obstruction set `X ∖ K` before `t_d` under *any* policy admissible for the prior.
+**Statement (repaired per `batch 4/PROOF_ELEVATION.md` Finding 7).** Let the observation reveal a hidden parameter/disturbance exactly at time `t_d` (before `t_d`, only a prior is observed; after, the full state). Write `Viab_full` for the full-information viability kernel and `Viab_del` for the delayed-observation kernel. Then:
 
-**Proof.** (⟸) Assume the obstruction is unreached before `t_d` (the buffer condition: `dist(x(t), X ∖ K) > 0` on `[0, t_d)` along all prior-admissible kernel trajectories — equivalently the `t_d`-truncated kernel equals the full kernel on the truncation). Construct the delayed policy: run any safe prior-admissible policy on `[0, t_d)` (inert by hypothesis), then switch to the full-information optimal policy revealed at `t_d`. The concatenation is causal (it uses only available information on each interval) and achieves the full-information kernel; hence the delayed kernel ⊇ full kernel, and ⊇ is trivial. (⟹) If some prior-admissible trajectory reaches the obstruction before `t_d`, the uninformed policy must hedge against all revelations on `[0, t_d)`, and the R02.Prop3 construction (quantized observation with the buffer threshold `t = 3` in that witness) exhibits a strictly smaller delayed kernel. ∎
+**(i)** `Viab_del ⊆ Viab_full` always (the delayed policy class is a subclass — this is the *trivial* inclusion).
+
+**(ii) Exact characterisation.** Define the **truncated kernel**
+```
+T_del := { x₀ : ∃ a prior-admissible policy π with x(t) ∈ K on [0, t_d]  and  x(t_d) ∈ Viab_full }.
+```
+Then `Viab_del = T_del`, and consequently `Viab_del = Viab_full` **iff** `Viab_full ⊆ T_del` — every full-viable state admits a prior-admissible policy that stays safe until `t_d` **and lands in `Viab_full` there**.
+
+**(iii) Sufficient condition.** If `Viab_full` is invariant under prior-admissible policies up to `t_d`, then `Viab_del = Viab_full`.
+
+**Proof.** (i) Immediate. (ii) `⊇`: let `x₀ ∈ T_del` with witnessing policy `π₁`; at `t_d` the full state is revealed and `x(t_d) ∈ Viab_full`, so a full-information policy `π₂` keeps the trajectory in `K` thereafter; the concatenation uses only prior information on `[0,t_d)` and only revealed information after, so it is admissible for the delayed class and keeps the trajectory in `K` throughout. `⊆`: let `x₀ ∈ Viab_del` with witnessing delayed policy `π`; its restriction to `[0,t_d]` is prior-admissible and keeps the trajectory in `K`, and its continuation after `t_d` is a full-information policy keeping the trajectory in `K` from `x(t_d)`, so `x(t_d) ∈ Viab_full`. (iii) Under the hypothesis, each `x₀ ∈ Viab_full` has a prior-admissible policy staying inside `Viab_full ⊆ K` on `[0,t_d]` and landing in `Viab_full`, so `Viab_full ⊆ T_del`. ∎
+
+**Repair note.** The recorded statement was an "iff" between inertness and "no trajectory starting in the kernel can hit `X ∖ K` before `t_d` under *any* prior-admissible policy". That claim fails in both directions of its proof: the (⟸) concatenation needs `x(t_d) ∈ Viab_full`, not merely `x(t_d) ∈ K` (staying in `K` does not keep the state full-viable — the recorded "equivalently the `t_d`-truncated kernel equals the full kernel" hid exactly this content); and the (⟹) direction cited the R02.Prop3 *witness* as if it were a general argument. The recorded "any-policy" buffer is also the wrong quantifier: it is sufficient (any safe prior policy lands somewhere in `K`, and *together with the landing condition* gives (ii)) but strictly stronger than needed, and it constrains *unsafe* policies, which are irrelevant to viability; its negation does not imply unequal kernels. R02.Prop3 is now recorded as a **sharpness witness** (a system where `Viab_full ⊄ T_del` and the inclusion is strict — the hedging obstruction), not as a proof. The recorded proof's parenthetical "and ⊇ is trivial" also had the inclusions reversed: the trivial direction is `⊆`. Full development: `batch 4/E3_C63_REPAIRED.md`.
 
 ---
 
-## C5 — Bifurcation classification — PROVED (at B7's declared scope)
+## C5 — Bifurcation classification — PROVEN ((1),(2) at B7's declared scope; genericity conditional on versality)
 
-Both extremal witnesses and the transversality classification theorem are **proved in B7** (`04_open_problems/B_TIER_BRIDGES.md`): no-bifurcation + continuous boundary ⟹ no kernel change (Hausdorff-continuity of the kernel in the data); transversal contact ⟹ kernel change; genericity of the non-degenerate strata via jet-transversality. The card's "PARTIAL" label was the pre-B7 status and is withdrawn. The residual beyond B7's scope (kernels under *non-generic* simultaneous contact families) remains open and is registered.
+Both extremal witnesses and the transversality classification theorem are **proved in B7** (`04_open_problems/B_TIER_BRIDGES.md`): no-bifurcation + continuous boundary (with the uniform exhaustion radius now named as a hypothesis) ⟹ no kernel change (Hausdorff-continuity of the kernel in the data); transversal contact ⟹ kernel change; genericity of the non-degenerate strata **conditional on a versal unfolding** (per B7's repair — jet transversality is an unfolding-level statement; without versality the transversal-contact set can be empty). The card's "PARTIAL" label was the pre-B7 status and is withdrawn for the (1)/(2) content; the genericity half is now conditional on versality. The residual beyond B7's scope (kernels under *non-generic* simultaneous contact families) remains open and is registered.
 
 ---
 
@@ -130,7 +142,7 @@ Both extremal witnesses and the transversality classification theorem are **prov
 - **C3: PROVED** (fibre criterion packet-proved; non-atomic theorem in R06; two-atom closure proved above with exact algebra; approximate closure in R06.Cor4).
 - **C4.1, C4.2: PROVEN** (full proofs above). **C4.3 rate-vs-horizon:** separation proved, rate claims withdrawn (honest boundary).
 - **C5: PROVED at B7's declared scope** (cross-referenced; genericity strata residual open).
-- **C6: PROVED** (C6.1/C6.2 packet-level with typed-lift hypotheses; C6.3 full proof above).
+- **C6: PROVEN (repaired)** (C6.1/C6.2 packet-level with typed-lift hypotheses; C6.3 the truncated-kernel characterisation above — the recorded iff replaced by a provable equivalence).
 
 **Dependencies:** packet B5/B6/B7; R02.Prop3, R03 (trichotomy, Lem4), R06 (Lem1, Thm3, Cor4), B6, B7. **Consumers:** Paper 2 (theorem atlas), the delay-bifurcation screening in Paper 4's chain, C-a (the classification language feeds the decidability theorem's kernel-type enumeration).
 
