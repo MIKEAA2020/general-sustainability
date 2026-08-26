@@ -35,7 +35,7 @@ The earlier shorthand "2J3KL/J-17-class systems" collapsed three different objec
 
 There is **no** manuscript in this repository that rejects Edwards on a “confound gate.” That phrase is withdrawn. Scored RMSE is not a transferred judgment.
 
-Reproduce: `wave_e_cod/` — `python3 src/run_ladder.py`. `wave_e_edwards/` — `python3 src/run_ladder.py && python3 src/run_recharge.py` (uses the committed `data/annual_panel.csv`, which already carries all derived columns — the reproduction path verified end-to-end in `batch 4/WAVE_E_RERUN.md`). **Do not** run `build_panel.py` first: it silently overwrites the committed 20-column panel with a 15-column version (dropping the climate columns) and `build_climate.py` then exits 1 without the uncommitted nClimDiv raw file (URL in `wave_e_edwards/data/SOURCES.md`) — the rebuild path is recorded separately in `PROOF_MANIFEST.md` Part VI (WAVE_E_RERUN findings F4/C2).
+Reproduce: `wave_e_cod/` — `python3 src/run_ladder.py`. `wave_e_edwards/` — `python3 src/run_ladder.py && python3 src/run_recharge.py` (uses the committed `data/annual_panel.csv`, which already carries all derived columns — the reproduction path verified end-to-end in `batch 4/WAVE_E_RERUN.md`). `build_panel.py` was fixed (F4) to write H/R/P/Q to a scratch file and leave the committed 20-column panel in place when those columns already match, so the panel is no longer clobbered; `build_climate.py` still exits 1 without the uncommitted nClimDiv raw file (URL in `wave_e_edwards/data/SOURCES.md`) — the rebuild path is recorded separately in `PROOF_MANIFEST.md` Part VI (WAVE_E_RERUN findings F4/C2).
 
 ## Gap-filling agenda (G1–G6, updated statuses)
 

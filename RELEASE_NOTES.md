@@ -34,11 +34,15 @@ Removed from the release tree as working notes (all retrievable in git history a
 
 ## 3. Verification
 
-The reaudit suites were re-run on the release tree: the 13 numerical suites exit 0 with all assertions passing; `verify_consistency.py` shows exactly the documented post-repair reading; `verify_wave_e.py` passes with the pinned hashes matching (30/30 after the two manuscript pin updates). See `reaudit/README.md` for the layout note on `REPO`/`BASE` overrides.
+The reaudit suites were re-run on the release tree: the numerical suites (including the new `verify_validated_computations.py` and `verify_manuscript_sweep.py` added with the independent rerun) exit 0; `verify_consistency.py` shows exactly the documented post-repair reading; `verify_wave_e.py` (updated for the F1/F4 fixes) passes with the pinned hashes matching. See `reaudit/README.md` for the layout note on `REPO`/`BASE` overrides.
 
-## 4. Known limitations (unchanged by this release)
+## 4. Rebase onto the independent-rerun commits
 
-- Independent rerun: NONE for all computational artifacts (the single gating item before submission).
+This release series was rebased onto two commits pushed independently after Task 28: the **independent rerun** of the five Part II certificates on a second agent/toolchain (`batch 4/VALIDATED_COMPUTATIONS_RERUN.md`; Hopf/E5/monodromy hash-identical, Krawczyk and off-grid re-certified at a nearby Newton centre) with the scored-tree `INDEPENDENT_RERUN_NONE` statuses retired to `INDEPENDENT_RERUN`, and the **WAVE_E F1/F4 fixes** (retention-field semantics in the Edwards JSON; `build_panel.py` no longer clobbers the locked 20-column panel). The release framing (README, RELEASE_NOTES, the disclosure consolidation in `PROOF_MANIFEST.md`) was reconciled to that post-rerun state; the former "single gating item" for the five committed certificates is discharged. Wave E Part III remains NOT CONFIRMED.
+
+## 5. Known limitations
+
+- Independent rerun: done for the five committed Part II certificates and both scored trees; **not** done for the A025 fold pipeline (not rebuilt) or the C4 monodromy at dt=0.1.
 - Wave E specification matching: NOT CONFIRMED (no specification frozen).
 - Papers 6/7 gates unclosed (A021 NAIM theorem unproved; A022 stage modal theorem false as stated) — the "five assured papers" architecture stands.
 - The A025 fold pipeline is a committed script with the computation incomplete.

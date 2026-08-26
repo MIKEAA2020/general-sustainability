@@ -28,10 +28,10 @@ The publication architecture is **journal-first**: five planned journal papers (
 
 ## Status discipline (read before citing anything)
 
-- **No computation has been independently rerun.** Every artifact was computed by a single AI agent (Z.ai Code) on one machine; the independent rerun is the single gating item before any submission. See `PROOF_MANIFEST.md` → "Reproducibility status".
+- **Independent rerun:** the five committed Part II certificates (A025 Hopf, C4 orbit Krawczyk, C4 off-grid residual, C4 monodromy dt=0.25, E5 admission) and both Wave E scored trees were independently rerun on 2026-08-26 by a second agent on a different toolchain — Hopf, E5, and the monodromy hash-identical; Krawczyk and off-grid re-certified at a nearby Newton centre; scored trees 30/30 byte-identical (`batch 4/VALIDATED_COMPUTATIONS_RERUN.md`, `batch 4/WAVE_E_RERUN.md`). The A025 fold pipeline and the C4 monodromy at dt=0.1 remain NOT REBUILT. Original artifacts were computed by a single AI agent (Z.ai Code) on one machine. See `PROOF_MANIFEST.md` → "Reproducibility status".
 - Theorem statuses are honest: `PROVEN`, `PROVEN (reconstructed)` (same-agent reconstruction pending independent line-by-line re-verification), `COMPUTED_PARTIAL`, `NOT CONFIRMED`, withdrawn/false where applicable. The manifest is the authoritative status register.
-- The Wave E scored trees are **single-run forecast-ladder artifacts, not kernel certificates**; no real-system transfer claim is made (the R04 five-map certificate is not constructed).
-- The E5 interval-verified admission is a method demonstration on a linear toy module only.
+- The Wave E scored trees are **single-run forecast-ladder artifacts with an independent byte-identical rerun, not kernel certificates**; no real-system transfer claim is made (the R04 five-map certificate is not constructed).
+- The E5 interval-verified admission is a method demonstration on a linear toy module only; Wave E Part III support rows remain NOT CONFIRMED (no specification frozen, no matching performed).
 
 ## Curation
 

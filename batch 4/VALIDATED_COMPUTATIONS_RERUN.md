@@ -138,7 +138,7 @@ A021's *shooting* Floquet table (phase \(0.98688\) / dominant \(0.68775\) at \(\
 
 ## V1 — Independent rerun is no longer `NONE` for the five committed certificates
 
-This pass is a second agent, second machine, second CPython, second numpy/scipy. Three artifacts hash-match; two re-certify the same claim at a nearby Newton centre. That discharges `HONEST_DISCLOSURE.md` Issue 1 for these five rows. It does **not** discharge Wave E Part III (every support row remains `NOT CONFIRMED`), the A025 fold rebuild, or the dt=0.1 monodromy. The Wave E scored trees already have their own independent rerun (`WAVE_E_RERUN.md`); `INDEPENDENT_RERUN_NONE` is false for those trees.
+This pass is a second agent, second machine, second CPython, second numpy/scipy. Three artifacts hash-match; two re-certify the same claim at a nearby Newton centre. That discharges Issue 1 of the former `HONEST_DISCLOSURE.md` (removed from the public release in the v1.0 curation; its content is consolidated in `PROOF_MANIFEST.md` → "Reproducibility status") for these five rows. It does **not** discharge Wave E Part III (every support row remains `NOT CONFIRMED`), the A025 fold rebuild, or the dt=0.1 monodromy. The Wave E scored trees already have their own independent rerun (`WAVE_E_RERUN.md`); `INDEPENDENT_RERUN_NONE` is false for those trees.
 
 ## V2 — Krawczyk / off-grid hashes are not toolchain-stable (expected)
 
