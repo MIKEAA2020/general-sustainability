@@ -1,5 +1,7 @@
 # E2.B2(a) — Measurable Selection: REPAIRED
 
+> **ERRATUM (owner's challenge, adjudicated as Dispute 3 in `batch 4/PROOF_ELEVATION.md` §I.3; numerics in `reaudit/verify_e2b2a_selector.py`).** The disposition below — "Steps 1, 2 and **4 are correct as written**" — is **wrong about Step 4**, and with it the suggested register text "KRN gives a Borel selector … one line closes it and the conclusion is unchanged". The recorded Step 4 reads "`X` (hence `S`) is Polish": a general **measurable** `S ⊆ X` need not be Polish (a subspace of a Polish space is Polish iff `G_δ`; `ℚ ∩ X` is Borel and not Polish), and the clause is **unnecessary** — KRN's Polish hypothesis is on the **codomain**, the domain being an arbitrary measurable space. The one-line metric decomposition closes Step 3 (weak measurability) **only**: it produces a measurable *set*, not a selector; the existence half is A1's construction (`batch 4/agent 1 attempt/E2_B2a_measurable_selection.md` §7–§8: nested-vanishing-diameter Borel selector + Castaing representation, no external selection theorem), which is now applied to the source file and cited by the register. Steps 1, 2 and 3 of this file stand.
+
 **Target.** The `B2.Theorem (a)` section of `batch 2/02_elevation/E2_SELECTORS_AND_CERTIFICATES.md`, and the manifest row `E2.B2(a)` (line 74).
 
 **This file is a proposal. No repository file has been modified.**
