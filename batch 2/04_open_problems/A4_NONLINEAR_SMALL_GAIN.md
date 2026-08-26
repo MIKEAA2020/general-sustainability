@@ -36,7 +36,7 @@ the **least own-depth (buffer) module `i` must maintain** for its budget (∗) t
 **Lemma (monotoneity).** Every `δ_ij` nondecreasing ⟹ `φ`, hence `Φ`, is **monotone** on the complete product lattice `L`. ∎ (Immediate from the display.)
 
 **Lemma (truncation semantics — the honesty gate).** For `r ∈ L`:
-`Φ(r) ≤ r` ⟺ (`φ(r) ≤ r`) **or** (some truncation is active at `r` with `r_i = ρ_i` and `φ_i(r) > ρ_i` — the requirement *exceeds the geometry*). Moreover, if the truncation is active at the least fixed point `r*` of `Φ` in some coordinate, then **no genuine feasible contract exists**: for any `s ∈ L` with `φ(s) ≤ s`, coordinate `i` gives `s_i = ρ_i` and `φ_i(s) = φ_i(r*) > ρ_i = s_i` (φ_i ignores the own coordinate), a contradiction. Conversely, if the truncation is inactive at `r*` (`φ_i(r*) ≤ ρ_i ∀i`), then `Φ(r*) = φ(r*) ≤ r*` — `r*` is a **genuine feasible contract**. **Active truncation at `r*` = honest refusal** (the geometry cannot support the required buffers), the numeric analogue of Ex3's nonconvex refusal. ∎
+`Φ(r) ≤ r` ⟺ (`φ(r) ≤ r`) **or** (some truncation is active at `r` with `r_i = ρ_i` and `φ_i(r) > ρ_i` — the requirement *exceeds the geometry*). Moreover, if the truncation is active at the least fixed point `r*` of `Φ` in some coordinate, then **no genuine feasible contract exists**: for any `s ∈ L` with `φ(s) ≤ s`, coordinate `i` gives `s_i = ρ_i`, and monotoneity of `φ_i` in the other coordinates together with `s ≥ r*` gives `φ_i(s) ≥ φ_i(r*) > ρ_i = s_i` — a contradiction. (Corrected per `batch 4/PROOF_ELEVATION.md` Finding 20: the recorded `φ_i(s) = φ_i(r*)` should be `φ_i(s) ≥ φ_i(r*)`, as A4.Thm2's own proof of the same point already had.) Conversely, if the truncation is inactive at `r*` (`φ_i(r*) ≤ ρ_i ∀i`), then `Φ(r*) = φ(r*) ≤ r*` — `r*` is a **genuine feasible contract**. **Active truncation at `r*` = honest refusal** (the geometry cannot support the required buffers), the numeric analogue of Ex3's nonconvex refusal. ∎
 
 **Reading of the fixed points.** `r ∈ L` is a **feasible contract** iff `φ(r) ≤ r` (each module's maintained buffer covers its requirement, within the geometry). The **efficient contract** is the *least* such `r` (smallest buffers satisfying all budgets) — computed as the least fixed point of `Φ`, genuine exactly when the truncation is inactive there (Lemma above).
 
@@ -66,7 +66,15 @@ L_i r*_i  ≥  Λ_i Σ_j δ_ij(r*_j) + Δ_i − α_i   ⟺   L_i r*_i + α_i ≥
 
 which is (∗) at `r*` for module `i`. (The truncation case cannot occur under hypothesis 1: active truncation at `r*` would mean no feasible contract exists — the truncation-semantics lemma — contradicting `S ≠ ∅`. So at the genuine efficient contract every budget closes by the display above.)
 
-**Step 2 (tangency on the eroded product).** Let `x ∈ ∂K_{r*}` with active face set `I(x) = { i : dist(x_i, ∂K_{i,−r*_i}) = 0 }`. For `i ∈ I(x)`, the outward normal `n_i` at `x_i` is a proximal normal to `K_{i,−r*_i}`; packet B1's restricted proximal-normal inequality gives, for the module's velocity under the shared control `u` chosen in `A(x)`: `⟨n_i, f_i(x_i, u)⟩ ≤ α_i + L_i r*_i`... precisely the R05.Thm2 computation at the *contract depths*: the encroachment `Λ_i Σ_j δ_ij(r*_j) + Δ_i` is covered by `α_i + L_i r*_i` (Step 1) — the one-sided (H3) inequality holds on every active face simultaneously (the same `u ∈ A(x)` serves all active modules: hypothesis 2).
+**Step 2 (tangency on the eroded product — sign corrected per `batch 4/PROOF_ELEVATION.md` Finding 14).** Let `x ∈ ∂K_{r*}` with active face set `I(x) = { i : dist(x_i, ∂K_{i,−r*_i}) = 0 }`. For `i ∈ I(x)`, the outward normal `n_i` at `x_i` is a proximal normal to `K_{i,−r*_i}`, and (packet Lemma 2's normal correspondence) `n_i` is also the outward normal at a point `p_i` of the *uneroded* `∂K_i`. The packet's restricted proximal-normal inequality gives, for the module's velocity under the shared control `u` chosen in `A(x)`:
+
+```
+⟨n_i, f_i(x_i, u)⟩  ≤  −α_i + L_i r*_i + Λ_i Σ_j δ_ij(r*_j) + Δ_i  ≤  0,
+```
+
+the first inequality being the packet's chain (`α_i` the *inward margin* on `∂K_i`, entering **negatively**; `L_i r*_i` the envelope transport to the eroded boundary; `Λ_i Σ_j δ_ij(r*_j)` the interface encroachment; `Δ_i` the implementation/model error — all *spending* the margin), and the second inequality being **exactly `(∗)` of Step 1 at `r*`**. The one-sided (H3) inequality holds on every active face simultaneously (the same `u ∈ A(x)` serves all active modules: hypothesis 2).
+
+> **Repair note.** The recorded display wrote `⟨n_i, f_i⟩ ≤ α_i + L_i r*_i` with "the encroachment covered by `α_i + L_i r*_i`" — the packet inequality with the sign of `α` flipped and the encroachment on the wrong side. The error is **not cosmetic**: with `α = 0.4, L_G = 0.2, r = 0.05, Δ = 0.1`, the recorded bound `α + Lr = +0.41` admits the outward velocity `w = +0.205` (which satisfies it), and that velocity exits `K_{−r}` at the first integration step — while the packet bound `−α + L_G r + Δ = −0.29` correctly forbids it. In a paper, a bound with `α` entering positively reads as a licence for outward velocities. The conclusion of Thm1 is unchanged: Step 3 consumes only `⟨n, w⟩ ≤ 0` on `∂K_{r*}`, which the corrected chain delivers from `(∗)`.
 
 **Step 3 (strong invariance).** With the tangential condition holding on the boundary of the compact set `K_{r*}` for the convexified field `F` (Step 2 + hypothesis 3), and `A` nonempty-closed-graph-compact-valued (hypothesis 2), E2.B2(a) yields the measurable selector `u*(x) ∈ A(x)`, and packet B1's strong-invariance theorem applies to the closed loop: every trajectory of the selected policy starting in `K_{r*}` remains in `K_{r*}`. (Disturbances, if present, are carried in the `Δ_i`/defect terms per the R05 convention.) ∎
 
@@ -116,7 +124,7 @@ For `n = 2` with defect functions `δ_12, δ_21` (nondecreasing, `δ(0) = 0` w.l
 ∃ r > 0 :   δ_12( δ_21(r) )  ≤  r          (composite non-escalation),
 ```
 
-together with the standalone margins `α_i ≥ Δ_i` (each module balanced at zero buffer). The composite condition replaces `γ_12 γ_21 < 1`.
+together with the standalone margins `α_i ≥ Δ_i` (each module balanced at zero buffer). The composite condition replaces `γ_12 γ_21 < 1` — note it is **non-strict**: in the linear shadow (`δ_ij(r) = γ_ij·r`) it reads `γ_12 γ_21 ≤ 1`, and at equality the feasible contract set is a ray with **no least positive contract** (with `δ(0) = 0` and `α_i = Δ_i`, every point of the ray is feasible but the lattice least fixed point is `0`). R05.Cor3's strict `γ_12 γ_21 < 1` is what buys the unique interior contract and the geometric convergence; the explicit theorem's `∃ r > 0` remains correct at equality — uniqueness and the spectral gap do not. (Clause added per `batch 4/PROOF_ELEVATION.md` Finding 20.)
 
 ### Proof
 
