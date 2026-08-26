@@ -21,13 +21,17 @@ repository and writes nothing; every script exits 0 on success.
 | `verify_a3thm2_cathm3_repair.py` | 26 | `A3_THM2_REPAIRED.md`, `CA_THM3_REPAIRED.md` |
 | `verify_e3cfb7_repair.py` | 24 | `E3_C63_REPAIRED.md`, `CF_REPAIRED.md`, `B7_THM1_REPAIRED.md` |
 | `verify_joint_disputes.py` | 8 | **the joint-assessment adjudications** (`PROOF_ELEVATION.md` §I.3): (1) B9 split-completeness refuted by A1's y1/y2 witness — exhaustive split search; (2) B10 pessimistic non-attainment witness — ψ is lsc, not usc (also corrects the audit's own "continuous by Berge" parenthetical) |
+| `verify_e2b2a_selector.py` | 27 | **Dispute 3** (`PROOF_ELEVATION.md` §I.3, Finding 5 — the owner's challenge): the one-line `F_σ` decomposition closes Step 3 (weak measurability) ONLY — it produces a measurable *set*, not a selector; A1's nested-vanishing-diameter construction IS the existence half (membership, `diam ≤ 2^{1-n}`, uniform rate `|u*−g_n| ≤ 2^{-n}`, Borel pieces, Castaing density); the domain-Polish clause is false-and-unnecessary (the identical construction runs on a non-Polish measurable domain; KRN's Polish hypothesis is on the codomain); text discipline of the repaired files |
 
 Note on `verify_b9`/`verify_b10`-adjacent suites: the A2 attempt's own
 verification of its B9 clause (c) and B10 pessimistic existence passed
 because those claims are false only on models outside their test fixtures;
 `verify_joint_disputes.py` supplies the refuting fixtures. The errata at
-the head of the root `batch 4/B9_THM1_REPAIRED.md` and `B10_THM1_REPAIRED.md`
-record this.
+the head of the root `batch 4/B9_THM1_REPAIRED.md`, `B10_THM1_REPAIRED.md`
+and `E2_B2A_REPAIRED.md` record this — the third (E2) one is the owner's
+post-implementation challenge: the one-line `F_σ` decomposition repairs
+Step 3 only, and the "Steps 1, 2 and 4 are correct as written" disposition
+was wrong about Step 4's "`X` and `S` are Polish".
 
 **Reading the suites after the repairs landed (post-2026-08-26).** The
 audit documents describe the *pre-repair* state, so Section B of
@@ -51,4 +55,5 @@ for s in reaudit/verify_*.py; do python3 "$s" > "reaudit/$(basename "$s" .py)_ou
 
 Saved output: `joint_disputes_output.txt` (the adjudication run of
 2026-08-26). The A2 attempt's own saved outputs were not uploaded with the
-attempt; re-run the suites to regenerate them.
+attempt; re-run the suites to regenerate them. Dispute 3's adjudication run
+(`verify_e2b2a_selector.py`, 27 assertions, exit 0) is the same day.

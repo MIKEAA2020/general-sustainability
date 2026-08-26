@@ -90,9 +90,12 @@ for stem in ["general_theory_of_sustainability_manuscript", "revised_sustainabil
 
 refuted = ["A3.Thm1", "B6.Thm1", "E4.Thm2", "E4.Lem1"]
 # documents that legitimately discuss these rows (the repaired sources, the register,
-# and the repair notes that cite them by name in order to correct them)
+# and the repair notes that cite them by name in order to correct them; the root
+# worklog.md is the session record — committed 7ac3f44 — and quotes the refuted
+# names historically)
 own = ("A3_VARIABLE_EVENT_KERNEL", "B_TIER_BRIDGES", "E4_INTERGENERATIONAL",
-       "E7_CONSERVATION_VIABILITY_COUPLING", "C_TIER_COMPLETIONS", "PROOF_MANIFEST")
+       "E7_CONSERVATION_VIABILITY_COUPLING", "C_TIER_COMPLETIONS", "PROOF_MANIFEST",
+       "worklog.md")
 CORRECTIVE = re.compile(r"refut|repair|withdraw|false|incorrect|corrected|superseded|"
                         r"session record|not.*claim|\(2\)'s setting", re.I)
 leaks = [h for t in refuted for h in grep_all(re.escape(t))
