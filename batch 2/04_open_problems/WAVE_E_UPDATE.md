@@ -25,11 +25,11 @@ The following results are recorded in the session theorem files, but **every one
 
 | Artifact | What it upgrades | Status |
 |---|---|---|
-| C4 orbit Krawczyk (margin 1186) | Paper 4's certified-computation section | Committed and PROVEN at K=80 |
-| C4 off-grid residual (interval-certified v2) | Paper 4's continuum-lift evidence | Committed and INTERVAL-CERTIFIED |
-| C4 monodromy/Floquet (dt=0.25) | Paper 4's cycle stability | Committed and VALIDATED |
-| A025 Hopf certificates (interval) | Paper 4's Hopf section reproducibility | Committed and PROVEN |
-| E5 module admission | Paper 3's worked example + Paper 5's template | Committed and PROVEN |
+| C4 orbit Krawczyk (margin 1186) | Paper 4's certified-computation section | Committed; **interval computation certified with local uniqueness at the K=80 level (discrete)** — Part II validated computation, not a proof |
+| C4 off-grid residual (interval-certified v2) | Paper 4's continuum-lift evidence | Committed; interval-verified residual bounds (Part II computation; manifest vocabulary: COMPUTED_PARTIAL-adjacent, no `INTERVAL-CERTIFIED` status exists) |
+| C4 monodromy/Floquet (dt=0.25) | Paper 4's cycle stability | Committed; validated computation (not a manifest vocabulary term — Part II row) |
+| A025 Hopf certificates (interval) | Paper 4's Hopf section reproducibility | Committed; interval computation with outward-rounded coefficients (Part II) |
+| E5 module admission | Paper 3's worked example + Paper 5's template | Committed; **interval-verified admission of the linear A001 §§6–10 toy** (Part II computation; toy scope, R04 transfer prohibition applies) |
 | **A025 fold Moore–Spence Krawczyk** | Paper 4's fold certification | **NOT REBUILT** — the fold pipeline script is committed but the computation stalls |
 
 ### 3. Status corrections the Wave E documents must respect
@@ -70,7 +70,7 @@ Already has the post-addressment update. The rebuilt version is faithful.
 | Item | Why |
 |---|---|
 | Five-paper architecture | Unchanged — the session's theorems strengthen existing papers, they don't create new ones |
-| Fisheries as the G1 case | Unchanged — E5's admission makes it stronger, not different |
+| Fisheries as the G1 case | Unchanged as the **empirical** G1 case; E5's admission is the linear toy's — it strengthens the worked example, **not** any real-system claim (R04.Thm1's converse forbids transfer to 2J3KL without the five-map certificate, not constructed; repaired per `batch 4/CROSS_DOCUMENT_CONSISTENCY.md` C5) |
 | Consolidation decisions (Paper 6/7 folds) | Unchanged **as proposals** — the folds are editorial defaults, not gates; final decisions wait for Wave-0 close (the Paper 4 capstone content they fold into is itself NOT CONFIRMED; see PUBLICATION_STRATEGY.md "Proposed consolidations") |
 | Release wave structure | Unchanged (Wave 0 still gates on G5/G6-migration/manifests — G6's *migration*, not merely the freeze, is the gate) |
 | The monograph and compendium roles | Unchanged |
