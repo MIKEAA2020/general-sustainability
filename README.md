@@ -21,7 +21,7 @@ The publication architecture is **journal-first**: five planned journal papers (
 | `batch 2/` | The proof corpus: result records R01–R09, elevation documents E1–E7, open-problem registers, publication strategy |
 | `batch 4/` | The repaired theorem records, the proof-elevation adjudication, and the reaudit suites |
 | `reaudit/` | Verification suites (444+ assertions over the repaired corpus) |
-| `research_program/` | The compendium registers: canonical schema TCS-1.0, the 407-row concordance routing every source item to its publication destination, claim ledger, the two closure packets, external-review registry |
+| `research_program/` | The compendium registers: canonical schema TCS-1.0, the 409-row concordance routing every source item to its publication destination (machine row-verification executed; two intake collisions repaired), claim ledger, the two closure packets, external-review registry |
 | `research_program/validated_computations/` | The interval-certified computations (A025 Hopf, C4 orbit Krawczyk, off-grid residual, monodromy, E5 admission) with code and artifacts |
 | `wave_e_cod/`, `wave_e_edwards/` | The scored real-system forecast ladders (Northern cod; Edwards J-17 aquifer) — data, code, results, working manuscripts |
 | `uploads/` | The original source manuscripts of the programme (provenance layer; referenced by the claim ledger and article inventories) |

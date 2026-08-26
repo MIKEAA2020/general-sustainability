@@ -3952,7 +3952,7 @@ This is the human-readable view of `action_register.csv`. The CSV is the operati
 - **Priority:** critical
 - **Target:** source-to-canonical-to-publication traceability
 - **Dependencies:** D-CANONICAL-SCHEMA-V1-01
-- **Notes:** 407 inventoried items across 25/25 sources have stable rows; scientific row verification remains explicitly flagged.
+- **Notes:** 409 inventoried items across 25/25 sources have stable rows (407 at intake + 2 repair rows: the 2026-08-26 machine row-verification pass found and repaired two silent intake dedup collisions — A002 second untitled Remark, A025 Fold-certificate row); the machine verification layer is executed (reaudit/verify_concordance_rows.py, 11/11); scientific row verification of the 336+45 open states remains explicitly flagged.
 - **Evidence:** research_program/canonical_concordance_A001_A025.csv; research_program/canonical_concordance_A001_A025_coverage.md; research_program/build_canonical_concordance.py
 
 ### D-NOTATION-VARIANT-REGISTRY-V1-01 — Establish canonical notation and model-variant registry

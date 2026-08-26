@@ -16,7 +16,7 @@ No downstream manuscript drafting substitutes for an unresolved interface or pro
 
 ```text
 TCS-1.0 canonical schema [complete]
-  ├─> 25-source/407-item concordance coverage [complete]
+  ├─> 25-source/409-item concordance coverage [complete; machine row-verification executed 2026-08-26]
   │     ├─> row-level theorem/status verification [next]
   │     │     ├─> Paper 2 theorem map and length budget
   │     │     ├─> Paper 1 independent-result selection
@@ -61,7 +61,7 @@ All applicable paper gates
 | Task | Outcome | Evidence |
 |---|---|---|
 | Freeze canonical system/theorem schema | `TCS-1.0` frozen in prose and JSON | `canonical_system_schema_v1_0.md`, `.json` |
-| Enumerate source content | 407 stable rows, all A001–A025 inventories represented | `canonical_concordance_A001_A025.csv` |
+| Enumerate source content | 409 stable rows, all A001–A025 inventories represented (machine-verified at raw-entry level) | `canonical_concordance_A001_A025.csv` |
 | Preserve conservative status | 334 rows explicitly require row review; no automated promotion | coverage report |
 | Resolve global notation | 22 conflict/variant rows; global choices fixed, local conflicts blocked | notation/variant registry |
 | Decide A018 seam | Exact diagnostic specialization; false closed-ledger→working-C4 reduction rejected | A018 interface contract |
