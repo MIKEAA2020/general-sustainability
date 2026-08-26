@@ -23,4 +23,4 @@
 | Paper 5: governance template | A3 | NOT CONFIRMED |
 | Paper 5: computability | C-a | NOT CONFIRMED |
 
-See HONEST_DISCLOSURE.md for the full certification-level breakdown.
+See PROOF_MANIFEST.md “Reproducibility status” (disclosure consolidation) for the full certification-level breakdown.

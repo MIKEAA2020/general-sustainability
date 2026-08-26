@@ -199,8 +199,8 @@ These are certificates, not forecasts.
 spec matching and independent verification. This manuscript’s scores are
 a computational protocol on a locked \(\Omega\). They do not confirm
 unmatched session IDs (E5, E7, B10, interval Hopf, TCS-1.1-as-frozen).
-See `https://github.com/MIKEAA2020/general-sustainability` (`PROOF_MANIFEST.md`,
-`validated_computations/HONEST_DISCLOSURE.md`) and
+See `https://github.com/MIKEAA2020/general-sustainability` (`PROOF_MANIFEST.md`, “Reproducibility status” — the
+consolidated disclosure content) and
 `batch 2/04_open_problems/D_TIER_EMPIRICAL_AGENDA.md`.
 E5_NUMBERS.json is a linear \((S,K)\) template, not this SSB series.
 

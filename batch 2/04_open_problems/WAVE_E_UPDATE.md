@@ -51,7 +51,7 @@ The audit imposed a mandatory vocabulary and the rule "no gate is closed for Wav
 1. **Paper 2 content**: add "nonlinear assume–guarantee composition (A4), sampled-data erosion (B1), stochastic viability layer (B9), Stackelberg equilibrium (B10), decidability (C-a)" — **each cited as `PROVEN (reconstructed)` pending independent re-verification, not as closed atlas content**
 2. **Paper 3 content**: add "conservation–viability coupling (E7) as the paper's bridge theorem" — **same reconstruction qualifier**
 3. **G-item statuses**: G2 → DECLARED; G4 → measurable selection proved; G6 → FROZEN (**diff only — NOT controlling; TCS-1.0 controls; migration open**)
-4. **Wave 0 readiness**: add "independent rerun of all committed computational artifacts" as a prerequisite (it is the gating item per HONEST_DISCLOSURE.md)
+4. **Wave 0 readiness**: add "independent rerun of all committed computational artifacts" as a prerequisite (it is the gating item per PROOF_MANIFEST.md “Reproducibility status” (the consolidated disclosure content))
 
 ### D_TIER_EMPIRICAL_AGENDA.md additions
 

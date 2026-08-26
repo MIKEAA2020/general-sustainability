@@ -52,11 +52,11 @@ Reproduce: `wave_e_cod/` — `python3 src/run_ladder.py`. `wave_e_edwards/` — 
 
 | Wave | Content | Prerequisites |
 |---|---|---|
-| 0 | Closure: G6 diff frozen (migration **not** done — TCS-1.0 still controls), G5 (external audit), artifact manifests, **independent rerun of all committed computations**, **R04 admission certificate for the real-system tracks (G1 gating; see the three-object table)** | The independent rerun is the single gating item (see HONEST_DISCLOSURE.md); the G1 real-system transfer is the empirical gating item |
+| 0 | Closure: G6 diff frozen (migration **not** done — TCS-1.0 still controls), G5 (external audit), artifact manifests, **independent rerun of all committed computations**, **R04 admission certificate for the real-system tracks (G1 gating; see the three-object table)** | The independent rerun is the single gating item (see PROOF_MANIFEST.md "Reproducibility status" — the former HONEST_DISCLOSURE.md content, consolidated there in the v1.0 public-release curation); the G1 real-system transfer is the empirical gating item |
 | 1 | Papers 1+2 (the theory dyad) | Wave 0 complete |
 | 2 | Papers 4, 3, 5 (in readiness order) | Wave 1 complete; Paper 5 additionally gated on G1 |
 | 3 | The monograph | Papers 1–2 through external scrutiny |
 
 ## Critical rule
 
-**No gate is treated as closed for Wave E without spec matching and independent verification.** Every Wave E support row is NOT CONFIRMED until the frozen specification (S, Ω, y_t, T, scoring rule) is matched against the computation artifacts. See HONEST_DISCLOSURE.md and PROOF_MANIFEST.md Part III.
+**No gate is treated as closed for Wave E without spec matching and independent verification.** Every Wave E support row is NOT CONFIRMED until the frozen specification (S, Ω, y_t, T, scoring rule) is matched against the computation artifacts. See PROOF_MANIFEST.md Part III and its "Reproducibility status" section (which carries the consolidated disclosure content).

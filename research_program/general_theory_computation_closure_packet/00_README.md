@@ -18,3 +18,7 @@ Finish the programme's unresolved computational and computer-assisted proof obli
 Numerical convergence, finite interval arithmetic, source-attested truth, and a continuum proof are separate statuses. No theorem, fold, NAIM, or causal claim may be promoted until its exact gate closes.
 
 Start with `10_MASTER_COMPUTATION_PROMPT.md`, use `11_COMPUTATION_DOCKET.md`, and return results in `12_REQUIRED_OUTPUT_SCHEMA.md`.
+
+## v1.0 public-release curation note
+
+The packet's `prompts/` directory (four AI-commissioning prompts: the A018→A021 crosswalk pair and the A021 RFDE invariant-graph pair) was removed from the public release as working notes. The `13_PACKET_MANIFEST.csv` rows for those files document the packet as commissioned and remain unchanged; the originals are retrievable at commit `270f5f7`. See `/RELEASE_NOTES.md`.

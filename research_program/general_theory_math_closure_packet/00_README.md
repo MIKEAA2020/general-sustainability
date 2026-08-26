@@ -34,3 +34,7 @@ This packet supports rigorous external or internal work on the **major mathemati
 ## How to use
 
 Start with `10_MASTER_REVIEW_PROMPT.md`, then use `11_OPEN_THEOREM_DOCKET.md`. Every proposed theorem must be returned using `12_REQUIRED_OUTPUT_SCHEMA.md`. Source-level claims must cite the included source file and exact line/theorem label.
+
+## v1.0 public-release curation note
+
+The sibling research-programme prompt directory (`research_program/prompts/`) was removed from the public release as working notes; this packet's own `10_MASTER_REVIEW_PROMPT.md` is retained because it defines the review instrument itself (it is the packet's instruction document, not a commissioning working note). Originals of all removed files are retrievable at commit `270f5f7`. See `/RELEASE_NOTES.md`.

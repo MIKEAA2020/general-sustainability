@@ -51,7 +51,7 @@ For the module above:
 
 ### Field 16 — Remaining obligations and revocation triggers
 
-- **Independent rerun: NONE.** The artifact must be recomputed by a second party before any submission (HONEST_DISCLOSURE.md).
+- **Independent rerun: NONE.** The artifact must be recomputed by a second party before any submission (PROOF_MANIFEST.md, “Reproducibility status” — the consolidated disclosure content).
 - **Revocation triggers:** any change to the A001 §§6–10 source model (the `R, a, θ_K, θ_d, H_min, H_max, S_min, K_max` declarations), or discovery of an arithmetic error in `interval_lib.py`'s outward rounding.
 - **Transfer obligations (from the prohibition section):** any use of this module's numbers toward either real system (the 2J3KL cod fishery or an Edwards J-17-type aquifer system) — or toward any other model — requires first constructing the R04 five-map certificate or the Cor2 approximate admission (for an Edwards-type system, Cor2 is forecast-map only); neither exists; the attempt is a registered Wave-0/G1 gating item.
 

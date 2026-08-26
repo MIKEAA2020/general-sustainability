@@ -63,4 +63,4 @@ Track 1 (G1a-method) proceeds now — the admission method is committed with num
 
 ## Critical rule
 
-**No empirical claim is treated as certified without the independent rerun of the computational artifacts and the Wave E specification match.** See HONEST_DISCLOSURE.md.
+**No empirical claim is treated as certified without the independent rerun of the computational artifacts and the Wave E specification match.** See PROOF_MANIFEST.md “Reproducibility status” (disclosure consolidation).

@@ -239,7 +239,7 @@ spec matching and independent verification. \(\Omega_{\mathrm{SA}}\) is
 an R04.Cor2 `APPROXIMATION` of A005 H0. It does not confirm E5
 interval-verified admission, E7 sandwiches, Stackelberg, or a frozen
 TCS-1.1. See `https://github.com/MIKEAA2020/general-sustainability`
-(`PROOF_MANIFEST.md`, `HONEST_DISCLOSURE.md`) and
+(`PROOF_MANIFEST.md`, “Reproducibility status” — the consolidated disclosure content) and
 `batch 2/04_open_problems/D_TIER_EMPIRICAL_AGENDA.md`.
 E5 is not this \(\Omega\).
 
