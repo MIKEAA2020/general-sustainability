@@ -335,13 +335,21 @@ def dF_dtau(w, tau):
     return out
 
 
-def moore_spence(w_fold, tau_fold, tol=1e-10, maxit=40, verbose=False):
+def moore_spence(w_fold, tau_fold, tol=1e-10, maxit=120, verbose=False,
+                 z0=None, ell0=None):
     """Moore-Spence fold solve: F(w,tau)=0, J v=0, ell.v=1 (NOMINAL point
-    solve — no interval certification; see module docstring)."""
-    res, J193 = residual_jac(w_fold, tau_fold)
-    U, s, Vt = np.linalg.svd(J193)
-    v0 = Vt[-1].copy()
-    ell = v0 / (v0 @ v0)
+    solve — no interval certification; see module docstring).
+
+    z0/ell0: resume a previous solve from its saved (z, ell)."""
+    if z0 is None:
+        res, J193 = residual_jac(w_fold, tau_fold)
+        U, s, Vt = np.linalg.svd(J193)
+        v0 = Vt[-1].copy()
+        ell = v0 / (v0 @ v0)
+        z = np.r_[w_fold, tau_fold, v0]
+    else:
+        z = np.asarray(z0, float).copy()
+        ell = np.asarray(ell0, float).copy()
 
     def ms_residual_jac(z, ell, want_jac=True):
         w = z[:DIM]
@@ -370,8 +378,6 @@ def moore_spence(w_fold, tau_fold, tol=1e-10, maxit=40, verbose=False):
         Jms[2 * DIM, DIM + 1:] = ell
         return M, Jms
 
-    z0 = np.r_[w_fold, tau_fold, v0]
-    z = z0.copy()
     mn = np.inf
     for it in range(maxit):
         M, Jms = ms_residual_jac(z, ell)
@@ -400,6 +406,10 @@ def moore_spence(w_fold, tau_fold, tol=1e-10, maxit=40, verbose=False):
     return z, ell, float(np.linalg.norm(M_final, np.inf))
 
 
+def verbose_flag(argv):
+    return '--verbose' in argv
+
+
 def main():
     argv = [a for a in sys.argv[1:]]
     m = int(argv[0]) if argv and not argv[0].startswith('--') else 64
@@ -411,6 +421,43 @@ def main():
         dtau_min = float(argv[argv.index('--dtau-min') + 1])
     configure(m)
     t0 = time.time()
+    suffix = '' if m == 64 else f'_m{m}'
+    resume_ms = '--resume-ms' in argv
+    if resume_ms:
+        saved = np.load(ROOT / f'a025_moore_spence_fold{suffix}.npz')
+        z_prev, ell_prev = saved['z'], saved['ell']
+        print(f"A025 fold pipeline — m = {m} (resuming Moore-Spence from "
+              f"saved npz)")
+        print("Stage 3: Moore-Spence fold solve (nominal, resumed)")
+        z, ell, ms_res = moore_spence(None, None, verbose=verbose_flag(argv),
+                                      z0=z_prev, ell0=ell_prev)
+        tau_f = float(z[DIM])
+        T_f = float(z[DIM_Y])
+        Yf = z[:DIM_Y].reshape(N_NODES, 3)
+        Npk = float(np.ptp(Yf[:, 0]))
+        in_lost = LOST_CERT_INTERVAL[0] <= tau_f <= LOST_CERT_INTERVAL[1]
+        dist = min(abs(tau_f - LOST_CERT_INTERVAL[0]),
+                   abs(tau_f - LOST_CERT_INTERVAL[1]),
+                   abs(tau_f - 0.5 * (LOST_CERT_INTERVAL[0]
+                                      + LOST_CERT_INTERVAL[1])))
+        print(f"  FOLD (nominal): tau_f = {tau_f:.12f}, T_f = {T_f:.6f}, "
+              f"Npk = {Npk:.4f}, |M| = {ms_res:.3e}")
+        print(f"  lost certificate interval "
+              f"[{LOST_CERT_INTERVAL[0]:.12f}, {LOST_CERT_INTERVAL[1]:.12f}]: "
+              f"{'INSIDE' if in_lost else 'outside'} (distance {dist:.2e})")
+        np.savez(ROOT / f'a025_moore_spence_fold{suffix}.npz',
+                 z=z, ell=ell)
+        out = json.loads(
+            (ROOT / f'a025_branch_continuation{suffix}.json').read_text())
+        out.update(fold_tau=tau_f, fold_T=T_f, N_pk_pk=Npk,
+                   ms_residual=ms_res,
+                   tau_f_inside_lost_interval=bool(in_lost),
+                   tau_f_distance_to_lost_interval=float(dist))
+        (ROOT / f'a025_branch_continuation{suffix}.json').write_text(
+            json.dumps(out, indent=2))
+        print(f"updated a025_branch_continuation{suffix}.json "
+              f"({time.time()-t0:.0f}s)")
+        return z, ell
     print(f"A025 fold pipeline — collocation order m = {m}")
     print("Stage 1: branch switching from the Hopf point")
     tau_s, w0 = branch_switch()
