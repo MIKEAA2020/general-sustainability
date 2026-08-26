@@ -53,6 +53,16 @@ To run everything (from the repository root):
 for s in reaudit/verify_*.py; do python3 "$s" > "reaudit/$(basename "$s" .py)_output.txt" 2>&1 || echo "FAILED: $s"; done
 ```
 
+**Layout note.** `verify_wave_e.py` and `verify_consistency.py` default their
+`REPO` to `../repo` — the sibling layout they were authored in — and
+`verify_wave_e.py` additionally needs `BASE` (a snapshot of the pre-run
+results to compare against). In the in-repo layout run them as
+`REPO="$(pwd)" python3 reaudit/verify_consistency.py` and
+`REPO="$(pwd)" BASE=<results-snapshot> python3 reaudit/verify_wave_e.py`
+(the committed, pinned-hash-verified content can serve as the snapshot).
+The other thirteen suites resolve the repository relative to their own
+location and run without overrides.
+
 Saved output: `joint_disputes_output.txt` (the adjudication run of
 2026-08-26). The A2 attempt's own saved outputs were not uploaded with the
 attempt; re-run the suites to regenerate them. Dispute 3's adjudication run
