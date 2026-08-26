@@ -259,3 +259,26 @@ Primary \(z\): J-17 calendar-year mean head. Locked daily series: `data/j17_twdb
 **Climate rebuild.** `src/build_climate.py` reads `data/climdiv-pcpndv-v1.0.0-20260806`, which is **not committed** (URL in `wave_e_edwards/data/SOURCES.md`). Rebuilding the three `pcp_*` precipitation columns from source is `NOT_REPRODUCIBLE_FROM_COMMITTED_CODE`; the two Niño columns rebuild exactly from the committed PSL file (independent rerun reproduced them to machine precision — `batch 4/WAVE_E_RERUN.md` F3). Scoring Pass 1/2 from the committed `annual_panel.csv` does not need the nClimDiv file. Note: `python3 src/build_panel.py` **overwrites** the committed panel with a 15-column version (dropping all five climate columns, no error raised) — reproducing the pinned hash requires restoring the climate columns afterwards (`build_climate.py` with the nClimDiv file, or `git checkout`); see WAVE_E_RERUN F4.
 
 These scores are not E5 numbers, not A021 C4 artifacts, and not a transferred judgment.
+
+---
+
+## Part VII — Crosswalk: manuscript epistemic taxonomy ↔ register vocabulary (C7)
+
+`batch 4/CROSS_DOCUMENT_CONSISTENCY.md` C7 found two disjoint status systems: this register's six mandatory terms, and the manuscripts' nine-category epistemic taxonomy with `[P]/[E]/[N]/[L]` claim-type tags and seven box types — with no mapping between them, so a reviewer holding a manuscript cannot check its "Theorem" boxes against the register. This crosswalk closes that gap. It is a *documentation* mapping (no status is changed by it); where a manuscript category maps to more than one register term, the manuscript must name the row it cites.
+
+| Manuscript category | Claim-type tag | Register term(s) | Rule for mapping a manuscript item to a register row |
+|---|---|---|---|
+| Theorem (proved) | `[P]` | `PROVEN` | cite the register row; the proof must be self-contained in the cited file per Part I's discipline |
+| Conditional theorem / lemma | `[P]` | `PROVEN_CONDITIONAL` | the manuscript must reproduce the condition list of the register row (e.g. A3.Thm3's budgeted-transversal-clopen-finite class) |
+| Theorem (reconstructed proofs) | `[P]` | `PROVEN (reconstructed)` / `PROVEN (repaired …)` | the reconstructed/repaired qualifier is **not optional** in the manuscript — it is the open independent-verification obligation of TRANSFER_AUDIT_RESPONSE Finding 1 |
+| Conjecture | `[P]` | `OPEN` | the register row's "what is missing" column is the conjecture's obstruction; do not cite a conjecture as a theorem |
+| Numerical proposition (validated computation) | `[E]` | `COMPUTED_PARTIAL` (Part II) | the manuscript must cite the Part II row (artifact + hash + reproduction command), and cannot use the word "proved" for it (the C3 defect) |
+| Numerical proposition (interval-verified) | `[E]` | `COMPUTED_PARTIAL` (Part II; the register has no `INTERVAL-CERTIFIED` status — say "interval-verified computation" and cite the row) | |
+| Empirical hypothesis | `[E]` | Part III/VI rows with `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` | every empirical claim inherits the Part III support caveat (NOT CONFIRMED where flagged) |
+| Definition / architectural postulate | `[L]`/`[N]` | not register rows | definitional items carry no status; the register begins where proofs begin |
+| Normative postulate | `[N]` | not register rows | as above |
+| Research programme / roadmap item | `[L]` | `OPEN` or `SPECIFIED` | map via the open-problems register (OPEN_PROBLEMS_REGISTER.md), not via this manifest's theorem rows |
+
+**Box-type note.** The manuscripts' seven box types reduce to three register loci: *proof* boxes → Part I rows; *computation* boxes → Part II rows; *data/empirical* boxes → Part III/VI rows. A box citing no locus is a defect (the C8 finding for the 14–17 August traceability reports, which predate the register and map *concepts → locations* with no status at all; upgrading them is a recorded obligation, not a silent rewrite).
+
+**Greppable rule.** A manuscript sentence containing "proved", "proven", "theorem", or "certified" must carry a citation that resolves through this crosswalk to a register row with a matching status. `reaudit/verify_consistency.py` implements the tree-side grep (it caught C3); the manuscript-side sweep is the same check run over `revised_articles/` and is recommended before each paper is finalised.
