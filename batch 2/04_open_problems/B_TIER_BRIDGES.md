@@ -159,7 +159,7 @@ A Stackelberg governance instance: leader command `c ∈ C` (compact metric), fo
 
 ## B4 — Product Bunching — COMPUTED_PARTIAL (discrete only; gated on A1)
 
-Unchanged from STATUS_CORRECTION.md in status; **figure updated per `batch 4/CROSS_DOCUMENT_CONSISTENCY.md` C6**: the discrete stable-multiplier-only closure at `n = 15` periods (value 0.649) is superseded by the prefactor-aware product assessment — `research_program/article_A021_liebig_graph/product_prefactor_bunching_assessment.md` concludes the numerical `C1` product bunching inequality closes only marginally at 30 periods but **robly by 35 periods** (`NUMERICALLY_VERIFIED_DISCRETE_PRODUCT_BUNCHING_AT_35_PERIODS`; "the stable multiplier alone cannot establish bunching"; not a continuum operator bound). Float64 output; the continuum transfer remains open and gated on A1's piecewise-Chebyshev campaign. Not re-labeled (`COMPUTED_PARTIAL` stands — the assessment's own status agrees).
+Unchanged from STATUS_CORRECTION.md in status; **figure updated per `batch 4/CROSS_DOCUMENT_CONSISTENCY.md` C6**: the discrete stable-multiplier-only closure at `n = 15` periods (value 0.649) is superseded by the prefactor-aware product assessment — `research_program/article_A021_liebig_graph/product_prefactor_bunching_assessment.md` concludes the numerical `C1` product bunching inequality closes only marginally at 30 periods but **robustly by 35 periods** (`NUMERICALLY_VERIFIED_DISCRETE_PRODUCT_BUNCHING_AT_35_PERIODS`; "the stable multiplier alone cannot establish bunching"; not a continuum operator bound). Float64 output; the continuum transfer remains open and gated on A1's piecewise-Chebyshev campaign. Not re-labeled (`COMPUTED_PARTIAL` stands — the assessment's own status agrees).
 
 ---
 
