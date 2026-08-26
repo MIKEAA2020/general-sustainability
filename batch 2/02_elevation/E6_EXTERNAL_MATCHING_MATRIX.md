@@ -2,7 +2,7 @@
 
 **Provenance:** reconstructed and expanded after the filesystem loss of the long-form original (session worklog Task 3; expansion recorded in TRANSFER_AUDIT_RESPONSE Finding 1).
 
-**Mandatory status:** every entry below is **internal-best-effort** — the nearest-known-type identifications were made from the programme's internal knowledge of the six literatures, **not** from a systematic external audit. The external novelty audit (G5/F1) is **NOT DONE**; this matrix is its *agenda*, not its result. No novelty claim anywhere in the programme may rest on this file.
+**Mandatory status:** every entry below is **internal-best-effort** — the nearest-known-type identifications were made from the programme's internal knowledge of the six literatures, **not** from a systematic external audit. **[Update 2026-08-26: the audit has now been EXECUTED at the bounded-search level — see `E6_NOVELTY_AUDIT_EXECUTION.md` for the per-row verdicts (R05 and E2.B1 known-equivalent; A4/B1/E4/C3/B3 known-and-weaker with confirmed deltas; A3-budgeted-space/E7-moiety/A3-classification no-match-found-bounded). The full-text pass remains open and is assigned to the paper-drafting wave. Positive identifications are robust; absence claims are bounded by the performed searches. No theorem status changed.]** The matrix remains the agenda backbone; no novelty claim anywhere in the programme may rest on this file alone.
 
 ---
 

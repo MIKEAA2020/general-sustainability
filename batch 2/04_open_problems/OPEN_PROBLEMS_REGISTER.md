@@ -26,7 +26,7 @@
 
 ## Tier C — Programmatic extensions
 
-C-a: scoped decidability theorem PROVED; logical completeness OPEN. C-e: quadratic barriers PROVED (repaired: finite reach τ, L_n = 1/τ). C-f: RFDE-aggregate memory PROVED (repaired, scope-locked to window observables). C-h: TCS-1.1 diff FROZEN — **NOT controlling (TCS-1.0 controls every existing record; migration open; no TCS-1.1 compatibility claim available)**. C-i: external audit NOT DONE. C-g: artifact manifests NOT DONE.
+C-a: scoped decidability theorem PROVED; logical completeness OPEN. C-e: quadratic barriers PROVED (repaired: finite reach τ, L_n = 1/τ). C-f: RFDE-aggregate memory PROVED (repaired, scope-locked to window observables). C-h: TCS-1.1 diff FROZEN — **NOT controlling (TCS-1.0 controls every existing record; migration open; no TCS-1.1 compatibility claim available)**. C-i: external audit **EXECUTED (bounded-search level, 2026-08-26** — `E6_NOVELTY_AUDIT_EXECUTION.md`; R05/E2.B1 known-equivalent, the two feared re-instantiations confirmed; full-text pass open at paper-drafting time**)**. C-g: artifact manifests NOT DONE (next).
 
 ## Tier D — Empirical
 

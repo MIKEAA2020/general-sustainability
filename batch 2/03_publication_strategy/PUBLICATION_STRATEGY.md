@@ -45,7 +45,7 @@ Reproduce: `wave_e_cod/` — `python3 src/run_ladder.py`. `wave_e_edwards/` — 
 | G2: A021 coupling class | Open (author decision) | **DECLARED** (LIEBIG-SANCTIONED-COUPLING-v1; discrete-level hypothesis verification; conditional on A1) |
 | G3: continuum lift | Open | **COMPUTED_PARTIAL** (piecewise-Chebyshev route specified, NOT EXECUTED) |
 | G4: selector regularity | Open | **Half-proved** (measurable selection PROVED; continuous selection conditional on Michael class) |
-| G5: external novelty audit | Open | Matrix exists (E6); **execution NOT DONE** |
+| G5: external novelty audit | **EXECUTED (bounded-search level, 2026-08-26)** — `E6_NOVELTY_AUDIT_EXECUTION.md`: R05 + E2.B1 known-equivalent (must cite ISS small-gain / Aubin regulation selection as backbones); A4/B1/E4/C3/B3 known-and-weaker with confirmed deltas; A3-budgeted-space/E7-moiety no-match-found (bounded). Full-text pass assigned to the paper-drafting wave; no theorem status changed |
 | G6: TCS-1.1 freeze | Open | **FROZEN (diff only — NOT controlling)**: TCS-1.0 controls every existing record; the migration is an open Wave-0 obligation; no record is TCS-1.1-compatible |
 
 ## Release waves
