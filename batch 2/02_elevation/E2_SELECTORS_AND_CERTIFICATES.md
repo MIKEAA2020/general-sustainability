@@ -70,7 +70,7 @@ This is Michael's selection theorem applied verbatim (paracompact domain `X`, Ba
 
 ### Statement
 
-Let `Γ : 𝒦(X) → 𝒦(X)` be the (REG)-certificate operator of R02: `Γ(C)` is the closure of the set of states admitting a one-review certificate against the constraint family with base set `C` (the exact definition is R02 Field 3's `(REG)` recursion; the only properties used here are (P1) `Γ` is **monotone** (`C ⊆ C′ ⇒ Γ(C) ⊆ Γ(C′)`) and (P2) `Γ` maps `𝒦(X)` to itself). Then `Γ` has a **greatest fixed point** `𝒱* = max{C ∈ 𝒦(X) : Γ(C) = C}`, and R02.Thm1 applies to every subfamily `(C,c)` with `C ⊆ 𝒱*`: the closed-loop robust-viability guarantee holds on any certificate family whose underlying sets sit inside `𝒱*`.
+Let `Γ : 𝒦(X) → 𝒦(X)` be the (REG)-certificate operator of R02: `Γ(C)` is the closure of the set of states admitting a one-review certificate against the constraint family with base set `C` (the exact definition is R02 Field 3's `(REG)` recursion; the only properties used here are (P1) `Γ` is **monotone** (`C ⊆ C′ ⇒ Γ(C) ⊆ Γ(C′)`) and (P2) `Γ` maps `𝒦(X)` to itself). Then `Γ` has a **greatest fixed point** `𝒱* = max{C ∈ 𝒦(X) : Γ(C) = C}`, and R02.Thm1 applies **to the family `𝒱*` itself**; the closed-loop certificate recursion may be *started* from any `C ⊆ 𝒱*` provided the certificate states are **tracked in `𝒱*`**, not in `C` (subfamilies of a consistent family are **not** consistent in general — the corrected transfer is the proof's final paragraph; the recorded "applies to every subfamily" clause was the backwards-inheritance defect repaired per `batch 4/PROOF_ELEVATION.md` Finding 6).
 
 ### Proof
 
@@ -114,7 +114,7 @@ Let `V₀ = X` (top of the lattice) and `V_{n+1} = Γ(V_n)`. Then `(V_n)` is dec
 
 - **B2(a): PROVEN (repaired)** (Step 3 weak measurability via the metric `F_σ` decomposition; Step 4 selector **constructed** — nested-vanishing-diameter Borel construction — plus Castaing representation; the recorded '`X` (hence `S`) is Polish' clause struck as false for general measurable `S` and unnecessary; KRN restated with the codomain-Polish hypothesis only).
 - **B2(b): PROVEN_CONDITIONAL** (Michael's hypotheses must be verified per instance; verified on E5's class).
-- **B1(a): PROVEN** (Knaster–Tarski; full proof above).
+- **B1(a): PROVEN (repaired)** (Knaster–Tarski; the subfamily-inheritance sentence corrected — join-closure and `𝒱*`-tracking stated, with the downward-(REG)-transfer remark recording the inheritance the recorded sentence was reaching for; full proof above).
 - **B1(b): PROVEN** (under the stated closed-Vietoris-graph hypothesis, which is the declared correspondence-continuity assumption).
 
 **Dependencies:** R02.Thm1/Lem2 (certificate recursion and closed-loop theorem), R03.Lem4's Hausdorff-continuity discipline (hypothesis pattern). **Consumers:** E4.Thm3 (per-generation gfps), A4.Thm1 (measurable selection in joint regulation), E5 (displayed certificate family), B10 (selection at best-response correspondences); the Step-4 **Castaing family** is additionally available to Filippov-type approximation and convexified-envelope arguments.
