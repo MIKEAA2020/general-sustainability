@@ -1,9 +1,13 @@
 # Toward a General Theory of Sustainability
 ## An Architectural Kernel and Composition Language for Ecological, Economic, and Social Systems
 
-**Working manuscript**  
-**Date:** 17 August 2026  
+**Working preprint — version 1.0**  
+**Date:** 17 August 2026 (text); 26 August 2026 (v1.0 release)  
 **Author:** [Author name]
+
+> **Preprint status.** This document is released as a clearly labeled **working preprint**: a public, citable record of the programme's architectural kernel ahead of peer review. It is a candidate architectural kernel and composition language (Box 1); it does not claim a completed universal law, and it contains no mathematical results beyond the programme's proof corpus — every formal statement traces to the corrected articles (A001–A025) or to the registered proof records (`PROOF_MANIFEST.md`). The peer-reviewed mathematics will appear in the journal papers of the publication architecture (`batch 2/03_publication_strategy/PUBLICATION_STRATEGY.md`); if the definitive monograph is written after those papers pass external scrutiny, this preprint will be updated or superseded by it. Version history: v0.1 → v0.2 → working manuscript of 14 August 2026 → this version.
+>
+> **Suggested citation.** [Author name]. *Toward a General Theory of Sustainability: An Architectural Kernel and Composition Language for Ecological, Economic, and Social Systems.* Working preprint v1.0, August 2026. General-sustainability programme archive, companion register `PROOF_MANIFEST.md`.
 
 ---
 
