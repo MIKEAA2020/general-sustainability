@@ -43,6 +43,6 @@ This release series was rebased onto two commits pushed independently after Task
 ## 5. Known limitations
 
 - Independent rerun: done for the five committed Part II certificates and both scored trees; **not** done for the A025 fold pipeline (not rebuilt) or the C4 monodromy at dt=0.1.
-- Wave E specification matching: NOT CONFIRMED (no specification frozen).
+- Wave E specification matching: **EXECUTED for the two scored trees** (2026-08-26) — `batch 4/WAVE_E_SPEC_MATCH.md` + `reaudit/verify_wave_e_spec_match.py` (36 machine checks, exit 0; Edwards with a dated pre-score protocol, cod manuscript-declared with recorded caveats). The Part III paper-support rows remain NOT CONFIRMED; Wave E is not closed.
 - Papers 6/7 gates unclosed (A021 NAIM theorem unproved; A022 stage modal theorem false as stated) — the "five assured papers" architecture stands.
 - The A025 fold pipeline is a committed script with the computation incomplete.
