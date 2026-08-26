@@ -6,27 +6,27 @@
 |---|---|---|
 | A1 | Continuum lift (validated → certified-in-the-DDE) | COMPUTED_PARTIAL (piecewise-Chebyshev route specified, NOT EXECUTED) |
 | A2 | A021 coupling class G,f,g | DECLARED (modelling decision; discrete-level hypothesis verification) |
-| A3 | Variable-event delayed-hybrid kernel | Topology + compactness + conditional kernel theorem PROVED; residue OPEN |
+| A3 | Variable-event delayed-hybrid kernel | Topology + compactness (Thm1 repaired: common-modulus hypothesis, supplied free by dynamical closure) + conditional kernel theorem PROVED; residue OPEN |
 | A4 | Nonlinear small-gain with nonconvex implementation and shared controls | PROVED (monotone-operator theorem) |
 
 ## Tier B — Half-closed bridges
 
 | # | Bridge | Status |
 |---|---|---|
-| B1 | Sampled-data erosion theorem | PROVED |
+| B1 | Sampled-data erosion theorem | PROVED (repaired: two-depth form; invariance reading withdrawn) |
 | B2 | Continuous selectors | Michael class verified on E5's class |
 | B3 | Algorithmic certificate production | SPECIFIED |
 | B4 | Product bunching | COMPUTED_PARTIAL (discrete only; continuum transfer gated on A1) |
 | B5 | Observability-hierarchy implementation | SPECIFIED |
-| B6 | Nonlinear substitution (MFCQ) | PROVED |
-| B7 | Bifurcation classification | PROVED |
+| B6 | Nonlinear substitution (MFCQ) | PROVED (repaired: quantitative lsc + (BLK) with the sign corrected; ray lemma added) |
+| B7 | Bifurcation classification | PROVED ((3) conditional on versality) |
 | B8 | Event-surface calculus | CONDITIONAL (on A3's transversality) |
-| B9 | Stochastic viability layer | PROVED (restricted) |
-| B10 | Strategic-implementation docket | PROVED (foundational) |
+| B9 | Stochastic viability layer | PROVED (restricted; repaired — fixed-split equality withdrawn) |
+| B10 | Strategic-implementation docket | PROVED (repaired: pessimistic existence conditional; coincidence characterised) |
 
 ## Tier C — Programmatic extensions
 
-C-a: scoped decidability theorem PROVED; logical completeness OPEN. C-e: quadratic barriers PROVED. C-f: RFCE-aggregate memory PROVED. C-h: TCS-1.1 diff FROZEN — **NOT controlling (TCS-1.0 controls every existing record; migration open; no TCS-1.1 compatibility claim available)**. C-i: external audit NOT DONE. C-g: artifact manifests NOT DONE.
+C-a: scoped decidability theorem PROVED; logical completeness OPEN. C-e: quadratic barriers PROVED (repaired: finite reach τ, L_n = 1/τ). C-f: RFDE-aggregate memory PROVED (repaired, scope-locked to window observables). C-h: TCS-1.1 diff FROZEN — **NOT controlling (TCS-1.0 controls every existing record; migration open; no TCS-1.1 compatibility claim available)**. C-i: external audit NOT DONE. C-g: artifact manifests NOT DONE.
 
 ## Tier D — Empirical
 
