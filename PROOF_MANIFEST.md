@@ -43,7 +43,7 @@
 | R02.Thm1 | Closed-loop robust institutional viability | If (REG) holds on a downward-closed certificate family, a causal observation-based policy keeps all branches in K | `batch 2/01_result_records/R02_*.md` | PROVEN (with repairs: observation retyped; "computable" withdrawn) | |
 | R02.Lem2 | Conservative-filter soundness | Inclusion-monotone update ⟹ B_k ⊆ C_k | same | PROVEN | |
 | R02.Prop3 | Conservative incompleteness | Exact filter viable; non-separating coarsened filter nonviable | same | PROVEN (witness repaired: quantized observation) | Original witness was flawed |
-| R02.Cor6 | Eroded closed-loop safety | Erosion condition for the sampled system | same | PROVEN_CONDITIONAL (sampled-data erosion bridge open) | Demoted from "proved" |
+| R02.Cor6 | Eroded closed-loop safety | Erosion condition for the sampled system | same | PROVEN_CONDITIONAL (bridge **closed at the two-depth form**: `L_G R + Δ ≤ α`, `V_max T_s ≤ R − r` — B1.Thm1 repaired; residual conditions are model-level, and the empirical NOT CONFIRMED gate stands) | Demoted from "proved"; bridge bookkeeping per `batch 4/PROOF_ELEVATION.md` Finding 8 |
 | R03.Thm1 | Certificate trichotomy | Adversarial-exit ⟹ sound for nonviability; margin-with-budget ⟹ sound for viability; else descriptive | `batch 2/01_result_records/R03_*.md` | PROVEN (restated as partial taxonomy) | |
 | R03.Thm2 | Stock-to-rate margin failure | T_diag/T* → ∞ without rate persistence | same | PROVEN | |
 | R03.Thm3 | Aggregate margins not kernels | Positive aggregate margin while kernel empty | same | PROVEN | |
@@ -71,36 +71,36 @@
 |---|---|---|---|---|
 | E1.A1 | Representation theorem | Every judgment = typed viability statement on the product Z; block-necessity by counter-models | `batch 2/02_elevation/E1_*.md` | PROVEN (reconstructed) |
 | E1.A2 | Relative completeness | Five inference rules sound; U1–U5 derivable; M1–M6 refuted; maintenance clause | same | PROVEN (reconstructed; relative to claim inventory) |
-| E2.B2(a) | Measurable selection | Closed graph + compact U ⟹ KRN measurable selector of safe-action map | `batch 2/02_elevation/E2_*.md` | PROVEN (reconstructed) |
-| E2.B1(a) | Maximal certificate family | Γ monotone on compact lattice ⟹ greatest fixed point exists (Knaster–Tarski) | same | PROVEN (reconstructed) |
+| E2.B2(a) | Measurable selection | Closed graph + compact U ⟹ KRN measurable selector of safe-action map (weak measurability via the metric decomposition `O = ⋃ₙ{dist ≥ 1/n}`) | `batch 2/02_elevation/E2_*.md` | PROVEN (repaired: one-line measurability repair; conclusion unchanged) |
+| E2.B1(a) | Maximal certificate family | Γ monotone on compact lattice ⟹ greatest fixed point exists (Knaster–Tarski); post-fixed sets join-closed, NOT subset-closed; R02.Thm1 applies to 𝒱* itself with 𝒱*-tracking | same | PROVEN (repaired: subfamily-inheritance sentence was backwards — explicit counterexample) |
 | E2.B1(b) | Backward iteration = gfp | Closed Vietoris graph + compactness ⟹ backward iteration converges to the gfp | same | PROVEN (reconstructed) |
 | E3.C1 | Scalar-delay classification | Complete stability classification for ẋ = −αx(t) − βx(t−τ) | `batch 2/02_elevation/E3_*.md` | PROVEN (reconstructed) |
 | E3.C4.1 | Separation ⟺ soundness | M sound ⟺ {M < 0} ∩ kernel = ∅ | same | PROVEN (reconstructed) |
 | E3.C4.2 | Uniform-horizon theorem | Compact certified set ⟹ uniform finite exit horizon | same | PROVEN (reconstructed) |
-| E3.C6.3 | Delayed-revelation lemma | Revelation inert iff obstruction unreached | same | PROVEN (reconstructed) |
-| E4.Lem1 | Jump-margin transfer | Depth co-Lipschitz ⟹ eroded sets map into eroded sets; declared-data status refutation | `batch 2/02_elevation/E4_*.md` | PROVEN (reconstructed) |
-| E4.Thm2 | Eroded generation transfer | Within-generation + jump-margin + non-Zeno ⟹ eroded path invariant | same | PROVEN (reconstructed) |
-| E7.Thm1 | Moiety-barrier production rules | Balanced-budget inner; obligatory-outflow emptying; best-case outer; sandwich | `batch 2/02_elevation/E7_*.md` | PROVEN (reconstructed) |
-| E7.Thm2 | Multi-moiety noncompensatory | Product inclusion per moiety; no cross-moiety transfer | same | PROVEN (reconstructed) |
+| E3.C6.3 | Delayed-revelation lemma | `Viab_del = T_del` (truncated kernel) exactly; inertness ⟺ `Viab_full ⊆ T_del`; holds if `Viab_full` is prior-admissible-invariant to `t_d`; R02.Prop3 = sharpness witness | same | PROVEN (repaired: recorded iff replaced by the provable truncated-kernel characterisation — the one conjecture-demotion of the lost original is eliminated) |
+| E4.Lem1 | Jump-margin transfer | Non-vacuous depth co-Lipschitz margin (`b < ℓ·r̄_g`) ⟹ eroded sets map into eroded sets; declared-data refutation (inradius-extending witness, first failure at `g > 1/(ℓ−2b)`); co-Lipschitz + exterior-preserving companion `(κ, 0)` | `batch 2/02_elevation/E4_*.md` | PROVEN (repaired: non-vacuity added — the recorded definition admitted vacuous pairs; the recorded witness was not load-bearing) |
+| E4.Thm2 | Eroded generation transfer | Within-generation (with genuine lower bounds `ρ_g > 0`) + non-vacuous jump-margin + non-Zeno ⟹ eroded path invariant; budget threshold `(b/(ℓ−1))(1−ℓ^{−G})` (tight); sustainability at unbounded horizon iff `ℓ > 1` or (`ℓ = 1`, `b = 0`); required margin `u₀ ~ (ρ + b/(1−ℓ))ℓ^{−G}` | same | PROVEN (repaired: both recorded thresholds were wrong — the corrected negative is stronger: a contracting reset is unsustainable at ANY initial margin) |
+| E7.Thm1 | Moiety-barrier production rules | Balanced-budget inner; (b1) robust-kernel emptying / (b2) pathwise exit / (b3) sharp exit time; **sharp** outer `D⁻_T − F⁻_T`; corrected sandwich | `batch 2/02_elevation/E7_*.md` | PROVEN (repaired: (b) split; (c) sharpened with a sharpness proof; (d) sandwich corrected) |
+| E7.Thm2 | Multi-moiety noncompensatory | Product inclusion per moiety; sharp noncompensation at `D⁻_{i,T} − F⁻_{i,T}` with the ledger-identity certificate; transfer-invariance verified | same | PROVEN (repaired: committed-budget test refuted — deficit relative to an inner bound does not exclude kernel membership; Farkas invocation removed as unnecessary) |
 
 ### D. Open-problems-wave theorems (session artifacts; **full proofs now in the cited files — reconstructed; see TRANSFER_AUDIT_RESPONSE Finding 1**)
 
 | # | Theorem | Statement (abbreviated) | File | Status |
 |---|---|---|---|---|
-| A3.Thm1 | Interleaved-segment compactness | Budgeted piecewise-history space is τ_IS-compact; delayed evaluation continuous off break points | `batch 2/04_open_problems/A3_*.md` | PROVEN (reconstructed) |
-| A3.Thm2 | Clopen-fibre kernel | Clopen observations ⟹ information predecessor closes; kernel = gfp | same | PROVEN (reconstructed) |
-| A3.Thm3 | Conditional kernel theorem | Budgeted + transversal + clopen ⟹ variable-event kernel exists | same | PROVEN_CONDITIONAL (reconstructed; on the transversality declaration) |
-| A4.Thm1 | Nonlinear assume–guarantee | Monotone depth-feasibility operator; sub-solution ⟹ eroded product invariant with shared controls | `batch 2/04_open_problems/A4_*.md` | PROVEN (reconstructed) |
+| A3.Thm1 | Interleaved-segment compactness | Budgeted piecewise-history space (with the common segment modulus, derived from the velocity bound) is compact metrizable in the reparametrized interleaved-segment metric; delayed evaluation continuous off break epochs (both window edges) | `batch 2/04_open_problems/A3_*.md` | PROVEN (repaired: common-modulus hypothesis added; derived by dynamical closure; original FALSE_AS_STATED — two counterexamples incl. the bounded-TV witness) |
+| A3.Thm2 | Clopen-fibre kernel | Clopen observations + **finite information space** ⟹ information predecessor closes on the finite quotient; kernel = gfp; termination in at most |𝒜|·|ℬ| strict decreases (sharp) | same | PROVEN (repaired: ℬ finite; undefined bound corrected; vacuous clopen clause dropped) |
+| A3.Thm3 | Conditional kernel theorem | Budgeted (+ segment modulus, free by dynamical closure) + transversal + clopen + **finite information states** ⟹ variable-event kernel exists | same | PROVEN_CONDITIONAL (condition list extended; substance unchanged) |
+| A4.Thm1 | Nonlinear assume–guarantee | Monotone depth-feasibility operator; sub-solution ⟹ eroded product invariant with shared controls, via ⟨n_i, f_i⟩ ≤ −α_i + L_i r*_i + Λ_i Σ_j δ_ij(r*_j) + Δ_i ≤ 0 | `batch 2/04_open_problems/A4_*.md` | PROVEN (repaired: Step 2 sign corrected — the recorded display admitted outward velocities; conclusion unchanged) |
 | A4.Thm2 | Sub-solution existence | Tarski greatest sub-solution; monotone iteration; linear case recovered | same | PROVEN (reconstructed) |
-| B1.Thm1 | Sampled-data erosion | Envelope inclusion + inter-sample confinement + successor certificates ⟹ eroded safety | `batch 2/04_open_problems/B_TIER_*.md` | PROVEN (reconstructed) |
-| B6.Thm1 | Nonlinear substitution classification | MFCQ local stability + Clarke global separation | same | PROVEN (reconstructed) |
-| B7.Thm1 | Bifurcation classification | No bifurcation + continuous boundary ⟹ no kernel change; transversal contact ⟹ kernel change | same | PROVEN (reconstructed) |
-| B9.Thm1 | Chance-kernel recursion | Support-aligned law + compact class ⟹ chance kernel = predecessor limit | same | PROVEN (restricted; reconstructed) |
-| B10.Thm1 | Stackelberg equilibrium existence | Compact commands + continuous utilities ⟹ equilibrium; reduction to R02 at equilibrium | same | PROVEN (reconstructed) |
+| B1.Thm1 | Sampled-data erosion | **Two-depth theorem (R, r)**: envelope + confinement `V_max T_s ≤ R − r` (tight) + successor certificate at depth `R` ⟹ sample-time invariance at `R` and continuous-time safety at `r`; sample-period budget `T_s ≤ (R−r)/V_max` | `batch 2/04_open_problems/B_TIER_*.md` | PROVEN (repaired: two-depth form; the invariance reading of the original headline is refuted and withdrawn) |
+| B6.Thm1 | Nonlinear substitution classification | (1) quantitative lsc of the tangent cone with modulus (2L/γ)‖x−x̄‖‖d‖ + exact constancy for strictly feasible directions; (2) Clarke separation under (BLK) with explicit multipliers, reducing to Farkas in the affine case | same | PROVEN (repaired: the original iff is false and robust to MFCQ strengthenings; part (2)'s blocking-direction sign corrected from −d to d) |
+| B7.Thm1 | Bifurcation classification | (1) no bifurcation + continuous boundary + **uniform exhaustion radius** ⟹ no kernel change; (2) transversal contact ⟹ kernel change; (3) genericity **conditional on a versal unfolding** | same | PROVEN ((1),(2) with the uniform exhaustion named; (3) PROVEN_CONDITIONAL on versality — narrowed; no strengthening available) |
+| B9.Thm1 | Chance-kernel characterisation | `K_p = {x : V_N(x) ≥ p}` exactly (value iteration); the quantile-budget recursion is a sound lower bound at any fixed split; the exact quantile form is the residual-budget DP; `p = 1` reduces to the robust predecessor under support alignment | same | PROVEN (restricted; repaired: the recorded fixed-split equality is refuted by explicit witnesses, as is split-union completeness — see the adjudication in `batch 4/PROOF_ELEVATION.md` Finding 9) |
+| B10.Thm1 | Stackelberg strategic implementation | Optimistic value attained (unconditional); pessimistic value lsc — existence **conditional** on BR lsc / single-valuedness / fibre-constancy; `V_pes = V_opt` iff the leader is indifferent on `BR(c*_opt)`; existential safe-command set closed under Berge alone, universal needs lsc; reduction license split per target theorem | same | PROVEN (repaired: ψ-usc and coincidence claims false; pessimistic non-attainment witnessed; see the adjudication in `batch 4/PROOF_ELEVATION.md` Finding 10) |
 | C-a.Thm2 | Full decidability | Every judgment sentence (incl. negations) decidable at fixed data, O(N·|grid|) | `batch 2/04_open_problems/CA_*.md` | PROVEN (reconstructed; at declared scope: finite class, TCS-1.0 language) |
-| C-a.Thm3 | Zero-one law sharpness | Monotone claims: law holds; non-monotone: per-instance decidable, model-class-dependent | same | PROVEN (reconstructed) |
-| C-e.Thm1 | Quadratic-form moiety barriers | Quadratic moiety sandwich with L_G > 0 | `batch 2/04_open_problems/C_TIER_*.md` | PROVEN (reconstructed) |
-| C-f.Thm1 | RFCE-aggregate memory | Projectability lifted to history space; memory-horizon characterization | same | PROVEN (reconstructed) |
+| C-a.Thm3 | Zero-one law sharpness | Satisfying sets are exactly the definable Boolean algebra (kernel-membership atoms); models separated only up to kernel-equivalence; non-monotone definable sentences exist (no extremal shortcut); per-instance decidability unaffected | same | PROVEN (repaired: "arbitrary subsets" re-scoped to the definable algebra — the language does not separate table-distinct models) |
+| C-e.Thm1 | Quadratic-form moiety barriers | Quadratic moiety sandwich with **finite tubular radius** `τ = √c·√λ_min/λ_max` and **normal variation** `L_n = 1/τ`; sharp ledger outer bound `{B ≥ Φ⁻_T}` | `batch 2/04_open_problems/C_TIER_*.md` | PROVEN (repaired: reach/L_n constants replace the misidentified `L_G`, which is envelope data) |
+| C-f.Thm1 | RFDE-aggregate memory | For **window-restriction** observables: closed autonomous aggregate dynamics ⟺ `f` factors through the window projection; minimal such window = memory horizon; general-observable case OPEN (σ-algebra obstruction) | same | PROVEN (repaired, scope-aligned to window observables) |
 
 ---
 
@@ -135,7 +135,7 @@
 |---|---|---|---|
 | A1 "orbit ball" (5.544e-3) | Heuristic inference: β_K80 × off-grid residual | **COMPUTED_PARTIAL** | The identification of the discrete inverse with the continuum inverse is unjustified; the piecewise-Chebyshev campaign was NOT executed |
 | B4 bunching (n=15 periods) | Discrete stable-complement powers + slack decay | **COMPUTED_PARTIAL** | Float64 output (not interval); continuum transfer open |
-| A3 toy kernel | 1D system on the declared class | **COMPUTED_PARTIAL** | Toy instance; no Wave E relevance |
+| A3 toy kernel | 1D system on the declared class | **NOT IN TREE** (the cited `A3_KERNEL_CERTIFICATE.json` was lost with the filesystem reset and not rebuilt; register entry only, certifies nothing) | Toy instance; no Wave E relevance; see `batch 4/CROSS_DOCUMENT_CONSISTENCY.md` C1 |
 | K=1600 Newton (residual 5.6e-6) | Matrix-free GMRES with Fourier preconditioner | **COMPUTED_PARTIAL** | Numerical only; no validated output |
 | Tail envelope (Steps 1–2) | Per-state geometric coefficient envelopes verified for k=1..80 | **COMPUTED_PARTIAL** | Verified for computed modes only; extension to k>80 is hypothesis H-tail |
 
@@ -171,7 +171,7 @@
 | C-a decidability | "Every judgment-language sentence is decidable at fixed data on the finite class (theorem)" |
 | E7 conservation coupling | "Moiety barriers produce kernel bounds from flux data alone (theorem)" |
 | E5 module admission | "The **linear A001 §§6–10 resource–sink module** is admitted with interval-verified numerical constants — a method demonstration; **no transfer to either real system (2J3KL cod fishery; Edwards J-17 aquifer) or any other model without the R04 certificate (forbidden by R04.Thm1's converse; certificate not constructed)**" |
-| B1 erosion theorem | "The three-hypothesis erosion theorem closes the sampled-data bridge" |
+| B1 erosion theorem | "The **two-depth** erosion theorem converts a sample-time certificate at depth `R` into continuous-time safety at depth `r`, at the cost `V_max T_s ≤ R − r`; this closes the sampled-data bridge with explicit depth bookkeeping (repaired form; the invariance reading of the original headline is withdrawn)" |
 
 ## Part V — What Wave E cannot yet cite
 
