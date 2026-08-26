@@ -240,7 +240,8 @@ A rerun may rewrite floating-point summaries; hash identity is not guaranteed ac
 Primary \(z\): J-17 calendar-year mean head. Locked daily series: `data/j17_twdb_6837203_raw.csv`. Annual panel used by the ladders: `data/annual_panel.csv`.
 
 | Artifact | Path | SHA-256 | Reproduction command | Status |
-|---|---|---|---|---|\n| Pass 1 run metadata | `wave_e_edwards/results/meta.json` | `0bec06323a66061ac4c1393084c0fb1e3255efe9486ba9e73ce908127bef03b2` | `cd wave_e_edwards && python3 src/run_ladder.py` (uses committed `data/annual_panel.csv`) | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
+|---|---|---|---|---|
+| Pass 1 run metadata | `wave_e_edwards/results/meta.json` | `0bec06323a66061ac4c1393084c0fb1e3255efe9486ba9e73ce908127bef03b2` | `cd wave_e_edwards && python3 src/run_ladder.py` (uses committed `data/annual_panel.csv`) | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
 | Pass 1 rolling RMSE | `wave_e_edwards/results/rolling_summary.csv` | `5e4b524cd2d0157b0bca5a2ab2ef9a174021c6aa4249a31a74cb71f58e396828` | same | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
 | Pass 1 fixed-window scores | `wave_e_edwards/results/fixed_window_scores.csv` | `bbebc398cd98cdc08412042c58c2e90fdb06006e3365c9d3eb3a6e7e96ad7beb` | same | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
 | Pass 1 rolling forecast paths | `wave_e_edwards/results/rolling_forecasts.csv` | `aa1706bbce24e4aee0df4e4ce16b972e3038c763735da79b6bb531f99b68203f` | same | `SINGLE_RUN`; `INDEPENDENT_RERUN_NONE` |
