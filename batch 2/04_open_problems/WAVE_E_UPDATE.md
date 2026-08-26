@@ -97,14 +97,14 @@ None of these changes the architecture or the sequencing. They make the existing
 
 What it scores: governance operators (BAU / flat caps / Stage-I reactive / CPM cascade) by robust viability kernels under declared persistent recharge floors (UC-min/q05/q10), at both declared safe sets (618 ft physical, 660 ft institutional), with supply replays, the 1950s stress counterfactual, and a frozen retention rule mirroring the ladder's persistence benchmark.
 
-Verdicts (first run; independent rerun NONE):
+Verdicts (first run 2026-08-26; independent rerun 2026-08-26 BYTE-IDENTICAL — `reaudit/intervention_rerun/INTERVENTION_RERUN.md`):
 
 1. **S1 and cpm RETAINED** (nominal, drought-floor/physical reading): the reactive rules match the flat caps' robust invariance while supplying +3.3% (vs flat-90) to +50.6% (cpm vs flat-60) more water. The reactive architecture earns its complexity — the first *positive* selection result of the empirical programme.
 2. **BAU is not robustly viable beyond ~14 years** under the perpetual-1956 floor (kernel empty; a 7.2% mean pumping cut restores invariance of the 618 ft set).
 3. **Negative certificate at the institutional threshold**: every declared policy ≡ BAU there (the CPM triggers sit below every policy's robust boundary); even zero pumping empties by T≈6–11. The institutional set is protected by wet years, not demand management — the frequency-management rationale is outside the robust-kernel frame.
 4. **Certified kernels are defect-bound to T ≤ 3 years** (ε = 15.41 ft train max, r_∞ = 60.7 ft; the OOS audit exceeds ε at 21.81 ft). The binding constraint on certified intervention claims is the model defect, not the governance — the information-layer rent again.
 
-Status discipline: no forecast module promoted or demoted; the fibre and oracle stay excluded; no two-pool claim; K_inst not applied pre-2007; everything `APPROXIMATION`. Wave E is still not closed (Part III paper-support rows remain NOT CONFIRMED; the intervention artifacts are first-run).
+Status discipline: no forecast module promoted or demoted; the fibre and oracle stay excluded; no two-pool claim; K_inst not applied pre-2007; everything `APPROXIMATION`. Wave E is still not closed (Part III paper-support rows remain NOT CONFIRMED). **[Update 2026-08-26 (d): the intervention artifacts are now independently rerun — both artifacts byte-identical on a second session/toolchain (`reaudit/intervention_rerun/`); the first-run limitation is discharged.]**
 
 ---
 

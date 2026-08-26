@@ -196,8 +196,10 @@ averages, so the annual-mean rule is a coarse relative of the real
 institution. Stage II–IV reductions are declared scenarios, not verified.
 San Antonio + Uvalde are lumped (inherited defect). Observation error is
 not separated from model defect. The UC floors are certification
-geometry, not forecasts; the 1950s replay is biased high by 8.1 ft. No
-independent rerun has been performed: every number here is first-run.
+geometry, not forecasts; the 1950s replay is biased high by 8.1 ft. The
+computational artifacts were independently rerun on 2026-08-26 by a
+second session on a different toolchain: both output files byte-identical
+(`reaudit/intervention_rerun/INTERVENTION_RERUN.md`).
 Nothing in this leg promotes or demotes any forecast module, and no
 two-pool, karst, or solute claim is made.
 
