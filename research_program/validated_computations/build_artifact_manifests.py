@@ -63,11 +63,54 @@ COMMANDS = {
         'repository root',
         'Part II certificate; INDEPENDENT_RERUN 2026-08-26 (hash-identical); '
         'toy scope, R04 transfer prohibition applies'),
+    'a025_fold/a025_moore_spence_fold_m96.npz': (
+        'python3 research_program/validated_computations/a025_fold/'
+        'a025_fold_pipeline.py 96 --dtau-min 5e-6 --tau-end 5.62',
+        'repository root',
+        'NOMINAL m=96 Moore-Spence fold (resolution cross-check); INSIDE '
+        'the lost interval'),
+    'a025_fold/a025_branch_continuation_m96.json': (
+        'python3 research_program/validated_computations/a025_fold/'
+        'a025_fold_pipeline.py 96 --dtau-min 5e-6 --tau-end 5.62',
+        'repository root',
+        'NOMINAL m=96 fold record; INSIDE the lost interval'),
+    'a025_fold/a025_moore_spence_fold_m128.npz': (
+        'python3 research_program/validated_computations/a025_fold/'
+        'a025_fold_pipeline.py 128 --dtau-min 5e-6 --tau-end 5.62 --resume-ms',
+        'repository root',
+        'NOMINAL m=128 Moore-Spence fold (resolution cross-check); INSIDE '
+        'the lost interval'),
+    'a025_fold/a025_branch_continuation_m128.json': (
+        'python3 research_program/validated_computations/a025_fold/'
+        'a025_fold_pipeline.py 128 --dtau-min 5e-6 --tau-end 5.62 --resume-ms',
+        'repository root',
+        'NOMINAL m=128 fold record; INSIDE the lost interval'),
+    'a021_c4/c4_monodromy_dt0p1.npz': (
+        'python3 research_program/validated_computations/a021_c4/'
+        'c4_monodromy_dt0p1.py (rerun with --resume until phase 3)',
+        'repository root',
+        'Monodromy matrix + eigenvalues, dt=0.1 (second mesh level)'),
+    'a021_c4/c4_monodromy_dt0p1_enclosure.json': (
+        'python3 research_program/validated_computations/a021_c4/'
+        'c4_monodromy_dt0p1.py (rerun with --resume until phase 3)',
+        'repository root',
+        'dt=0.1 enclosure (second mesh level; mesh-stable confirmation)'),
 }
 
 ENV_ORIGINAL = ('Python 3.12.13, numpy 2.1.3, scipy 1.14.1, mpmath 1.3.0')
 ENV_RERUN = ('Python 3.13.14, numpy 2.3.5, scipy 1.17.1, mpmath 1.3.0 '
              '(second agent, 2026-08-26)')
+
+# per-file status overrides (first-run artifacts; NOT part of the 2026-08-26
+# byte-identical rerun, which predates them)
+STATUS_OVERRIDE = {
+    'wave_e_edwards/results/intervention_results.json': (
+        'intervention-leg artifact (protocol_intervention.md); FIRST RUN '
+        '2026-08-26; independent rerun NONE'),
+    'wave_e_edwards/results/intervention_boundaries.csv': (
+        'intervention-leg artifact (protocol_intervention.md); FIRST RUN '
+        '2026-08-26; independent rerun NONE'),
+}
 
 PINNED = {
     'a025_fold/a025_interval_hopf.json': ('eda36cd1', '95b3b2'),
@@ -114,14 +157,20 @@ def main():
         base = REPO / tree / 'results'
         for p in sorted(base.iterdir()):
             if p.is_file():
+                rel = f'{tree}/results/{p.name}'
+                status = STATUS_OVERRIDE.get(rel, None)
+                if status is None:
+                    status = ('scored-tree result artifact; INDEPENDENT_RERUN '
+                              '2026-08-26 (30/30 result files byte-identical); '
+                              'spec-matched (batch 4/WAVE_E_SPEC_MATCH.md)')
                 entries.append(dict(
-                    artifact=f'{tree}/results/{p.name}',
+                    artifact=rel,
                     sha256=sha256(p), bytes=p.stat().st_size,
-                    reproduction_command=f'cd {tree}; ' + cmds[0],
+                    reproduction_command=f'cd {tree}; ' + (
+                        'python3 src/run_intervention.py'
+                        if 'intervention' in p.name else cmds[0]),
                     working_directory=f'repository root / {tree}',
-                    status='scored-tree result artifact; INDEPENDENT_RERUN '
-                           '2026-08-26 (30/30 result files byte-identical); '
-                           'spec-matched (batch 4/WAVE_E_SPEC_MATCH.md)'))
+                    status=status))
 
     # 3. pinned-hash consistency (hard failure on mismatch)
     for rel, (pre, post) in PINNED.items():

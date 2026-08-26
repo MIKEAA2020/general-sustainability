@@ -18,7 +18,7 @@
 **Track 2 (real systems, GATED):** the empirical case against a real system requires, before any certified claim:
 
 - **G1a (fisheries):** scored in [`wave_e_cod/`](../../wave_e_cod/) (\(\Omega_{2016}\), \(\Omega_{\mathrm{xte}}\)). Persist wins; no M2–M4 retained. A001/A014 admission does **not** transfer E5 numbers onto NCAM SSB. Kernel certificate for the surplus ladder: **not constructed**.
-- **G1b (groundwater):** scored in [`wave_e_edwards/`](../../wave_e_edwards/) (\(\Omega_{\mathrm{SA}}\), J-17 annual mean). Persist / thin M1; causal stock-flow rejected. A005 two-pool blockers remain open. Cor2 exists **only** as `wave_e_edwards/admission/R04_Cor2_edwards_H0.md` (forecast map, not a kernel). The “confound-gate rejection” of Edwards is **withdrawn** — no such manuscript is in this repository.
+- **G1b (groundwater):** scored in [`wave_e_edwards/`](../../wave_e_edwards/) (\(\Omega_{\mathrm{SA}}\), J-17 annual mean). Persist / thin M1; causal stock-flow rejected. A005 two-pool blockers remain open. Cor2 exists as (i) the H0 forecast-map row `wave_e_edwards/admission/R04_Cor2_edwards_H0.md` and (ii) since 2026-08-26 the **kernel-level row** `wave_e_edwards/admission/R04_Cor2_edwards_kernel.md` — the governed one-pool object with the Cor2 triple computed and the R03.Cor5 erosion conversion invoked (`APPROXIMATION`, defect-bound to T ≤ 3 yr). The **intervention-selection leg** (§15) is now **executed** on this object (`wave_e_edwards/protocol_intervention.md`, `src/run_intervention.py`, `manuscript/wave_E_edwards_intervention.md`): S1/cpm retained at the drought-floor/physical reading, negative certificate at the institutional threshold, certified kernels defect-bound. First run; independent rerun **NONE**. The “confound-gate rejection” of Edwards is **withdrawn** — no such manuscript is in this repository.
 
 By R04.Thm1's converse, no judgment transfers without one of these; verbal analogy is excluded from transfer by the theorem itself. This is a **Wave-0 gating item** (see PUBLICATION_STRATEGY.md and TRANSFER_AUDIT_RESPONSE.md Finding 2).
 
@@ -29,7 +29,7 @@ The earlier shorthand "2J3KL / J-17 scored models" collapsed three distinct obje
 | Object | Kind | In-repo path | R04 / Cor2 | Independent rerun |
 |---|---|---|---|---|
 | NAFO **2J3KL** | fisheries \(\Omega_{2016}\), \(\Omega_{\mathrm{xte}}\) | `wave_e_cod/` | A001/A014 class admitted; E5 does not transfer; surplus-ladder Cor2 not constructed | **NONE** |
-| Edwards well **J-17** | groundwater \(\Omega_{\mathrm{SA}}\) | `wave_e_edwards/` | two-pool not constructed; H0 forecast-map Cor2 only | **NONE** |
+| Edwards well **J-17** | groundwater \(\Omega_{\mathrm{SA}}\) | `wave_e_edwards/` | two-pool not constructed; H0 forecast-map Cor2 + kernel-level Cor2 (2026-08-26, erosion invoked; intervention leg executed) | **NONE** |
 | A021 C4 **J-series** | docket + DDE, not a basin | `research_program/validated_computations/a021_c4/` | not a Wave E forecast \(\Omega\) | **NONE** |
 
 A021 J-series is external-review bookkeeping. It is not Edwards J-17 and not 2J3KL.
@@ -59,7 +59,7 @@ A021 J-series is external-review bookkeeping. It is not Edwards J-17 and not 2J3
 
 ## Sequencing
 
-Track 1 (G1a-method) proceeds now — the admission method is committed with numbers on the linear module. **Track 2 (real systems: G1a fisheries / G1b Edwards-type groundwater) activates only after the R04/Cor2 transfer certificate is constructed for the corresponding scored model (for an Edwards-type system, Cor2 is forecast-map only)** — that construction is the next programme-side action on the empirical track. The groundwater track (G1b) activates when the author-side declarations are made. The programme-side items (topology checks) are routine applications of the E2 machinery.
+Track 1 (G1a-method) proceeds now — the admission method is committed with numbers on the linear module. **Track 2 status (2026-08-26): the G1b Edwards transfer certificate is constructed at the Cor2 kernel level (forecast-map + governed-kernel rows, erosion conversion invoked), and the intervention-selection leg is executed on it** — the first real-system closed loop (measured z, calibrated map, governance operators, uncertainty classes, eroded kernels, held-out defect audit, frozen retention rule; S1/cpm retained at the physical/drought reading; institutional-threshold negative certificate; certified content defect-bound). Still open on Track 2: the two-pool exact specialization (A005 blockers), the cod-side Cor2 for the surplus ladder, the independent rerun of the intervention artifacts, and the author-side declarations. The programme-side items (topology checks) remain routine applications of the E2 machinery.
 
 ## Critical rule
 
