@@ -22,11 +22,11 @@ The (REG)-certificate families of R02 are families `𝔽 = {(C,c)}` of closed co
 
 ---
 
-## B2.Theorem (a) — Measurable selection — PROVEN
+## B2.Theorem (a) — Measurable selection — PROVEN (repaired: Step-3 measurability gap closed; Step-4 selector constructed, citation slip struck)
 
 ### Statement
 
-Under the setting above, `A_W` has **closed graph** and **closed compact values**; consequently `A_W` is weakly measurable, and if `A_W(x) ≠ ∅` on a measurable set `S ⊆ X`, there exists a **measurable selector** `u* : S → U` with `u*(x) ∈ A_W(x)` for all `x ∈ S` (Kuratowski–Ryll-Nardzewski).
+Under the setting above, `A_W` has **closed graph** and **closed compact values**; consequently `A_W` is weakly measurable, and if `A_W(x) ≠ ∅` on a measurable set `S ⊆ X`, there exists a **measurable selector** `u* : S → U` with `u*(x) ∈ A_W(x)` for all `x ∈ S`. The selector is **constructed** in Step 4 (a uniform limit of countably-valued Borel maps — no external selection theorem is invoked), together with a **Castaing representation** of `A_W` on `S`; the classical Kuratowski–Ryll-Nardzewski theorem, correctly stated (Polish **codomain**, arbitrary measurable domain), yields the same conclusion.
 
 ### Proof
 
@@ -36,7 +36,19 @@ Under the setting above, `A_W` has **closed graph** and **closed compact values*
 
 **Step 3 (weak measurability — repaired per `batch 4/PROOF_ELEVATION.md` Finding 5).** A compact-valued correspondence with closed graph is upper semicontinuous; for usc compact-valued correspondences into a metric space, the upper inverse `{x : A_W(x) ∩ F ≠ ∅}` of every **closed** `F` is closed: indeed, if `x_n → x` with `u_n ∈ A_W(x_n) ∩ F`, compactness of `U` gives a convergent subsequence `u_{n_k} → u ∈ F`, and the closed graph forces `u ∈ A_W(x)`. KRN weak measurability, however, is the statement about **open** `O`: `{x : A_W(x) ∩ O ≠ ∅}` must be measurable — and "closed sets are Borel" does not bridge the two. The bridge is the metric decomposition: for open `O ⊆ U`, write `O = ⋃_{n≥1} F_n` with `F_n := {y ∈ U : dist(y, U∖O) ≥ 1/n}` closed (`F_n ⊆ F_{n+1} ⊆ O`; each is a super-level set of the 1-Lipschitz map `y ↦ dist(y, U∖O)`). Then `{x : A_W(x) ∩ O ≠ ∅} = ⋃_{n≥1} {x : A_W(x) ∩ F_n ≠ ∅}`, a countable union of closed sets — `F_σ`, hence Borel. So `A_W` is weakly measurable in the KRN sense. (The **metric** hypothesis on `U` is exactly what is needed: in a general regular space an open set need not be a countable union of closed sets.)
 
-**Step 4 (KRN).** `X` (hence `S`) is Polish, `U` is Polish, `A_W` is weakly measurable with nonempty closed values on `S`. The Kuratowski–Ryll-Nardzewski measurable selection theorem yields a Borel-measurable `u* : S → U` with `u*(x) ∈ A_W(x)`. ∎
+**Step 4 (selector — constructed, not cited; repaired per `batch 4/PROOF_ELEVATION.md` Finding 5, adopting A1's construction).** The recorded Step 4 read "`X` (hence `S`) is Polish, `U` is Polish, … KRN yields a Borel-measurable `u*`". That sentence carries a slip which is hereby **struck**: `X` is Polish (compact metric), but a general **measurable** `S ⊆ X` need **not** be — a subspace of a Polish space is Polish in the relative topology iff it is `G_δ` (`ℚ ∩ X` is Borel and not Polish) — and the clause is **unnecessary**, because KRN's Polish hypothesis is on the **codomain**, the domain being an arbitrary measurable space. The existence half of B2(a) is therefore proved by construction:
+
+Fix a compatible metric `ρ` on `U` and a countable dense set `{q_i}` (compact metric ⇒ separable). Equip `S` with the trace σ-algebra and set `G_1 := A_W|_S` — compact-valued, nonempty, weakly measurable by Step 3. Two elementary facts, both from Step 3's machinery: (i) for **closed** `C ⊆ U` and `G` compact-valued weakly measurable, `{x : G(x) ∩ C ≠ ∅}` is measurable — with `C^{1/k}` the open `1/k`-neighbourhood, compactness gives `G(x) ∩ C ≠ ∅ ⇔ G(x) ∩ C^{1/k} ≠ ∅` for every `k`, so the set is `⋂_k G^-(C^{1/k})`; (ii) for closed `C` and open `O`, `{G ∩ C ∩ O ≠ ∅} = ⋃_m {G ∩ C_m ≠ ∅}` with `C_m = {y ∈ C : dist(y, U∖O) ≥ 1/m}` closed — the Step-3 decomposition applied inside the closed slice.
+
+Inductively, given `G_n` compact-valued, nonempty, weakly measurable, define
+
+`i_n(x) := min{ i : G_n(x) ∩ B(q_i, 2^{-n}) ≠ ∅ }`
+
+(dense `{q_i}`, nonempty values ⇒ well defined) and `G_{n+1}(x) := G_n(x) ∩ B̄(q_{i_n(x)}, 2^{-n})`. Measurability: `{i_n = i} = G_n^-(B(q_i, 2^{-n})) ∖ ⋃_{j<i} G_n^-(B(q_j, 2^{-n}))`, and for open `O`, `G_{n+1}^-(O) = ⋃_i ({i_n = i} ∩ {G_n ∩ B̄(q_i, 2^{-n}) ∩ O ≠ ∅})` — measurable by (i)–(ii). Each `G_{n+1}(x)` is nonempty (a compact meeting the open ball `B(q, 2^{-n})` also meets the closed ball `B̄(q, 2^{-n})`), compact, nested, with `diam G_{n+1}(x) ≤ 2^{1-n}`. Nested nonempty compacts with diameters → 0 intersect in a single point: `⋂_n G_n(x) = {u*(x)}` with `u*(x) ∈ G_1(x) = A_W(x)`. The countably-valued Borel maps `g_n(x) := q_{i_n(x)}` satisfy `ρ(u*(x), g_n(x)) ≤ 2^{-n}`, so `g_n → u*` **uniformly** on `S`; a uniform limit of Borel maps is Borel. ∎
+
+**Remark (KRN, correctly stated).** The classical Kuratowski–Ryll-Nardzewski theorem — measurable-space domain, **Polish codomain**, nonempty closed values, weak measurability — yields the same selector from Step 3 directly; the construction above is that theorem's classical proof made explicit, so B2(a) does not depend on the citation. The recorded clause "`X` (hence `S`) is Polish" is struck as false for general measurable `S` and unnecessary.
+
+**Castaing representation (for consumers).** Applying the same construction to `Γ_{jk}(x) := A_W(x) ∩ B̄(q_j, 2^{-k})` when that intersection is nonempty (else `A_W(x)` itself) yields Borel selectors `σ_{jk} : S → U` whose values `{σ_{jk}(x)}` are **dense in `A_W(x)`** for every `x`: given `u ∈ A_W(x)` and `ε > 0`, choose `j, k` with `ρ(q_j, u) < ε/2` and `2^{-k} < ε/2`; then `σ_{jk}(x) ∈ A_W(x) ∩ B̄(q_j, 2^{-k})` gives `ρ(σ_{jk}(x), u) ≤ 2^{-k} + ρ(q_j, u) < ε`. Filippov-type approximation and convexified-envelope arguments consume the *family*, not the single selector. **Honesty note:** B2(a) does **not** close R02 Field 12 (measurable selection of (REG)-witnesses on `𝒱` — a different correspondence); inflating B2(a) into a solution of D2 would be a false promotion.
 
 **Remark (why Hausdorff continuity is needed).** With mere closed graph of `Succ` in `u`, Step 1 fails: limit points of successor sets need not lie in `W`-contained successors. The R03.Lem4 adjudication in the joint audit established the analogous point for horizon limits: upper semicontinuity alone is insufficient, and a Hausdorff-type continuity is the correct hypothesis; the same lesson is load-bearing here.
 
@@ -100,11 +112,11 @@ Let `V₀ = X` (top of the lattice) and `V_{n+1} = Γ(V_n)`. Then `(V_n)` is dec
 
 ## Status
 
-- **B2(a): PROVEN** (full proof above; KRN cited as the standard selection theorem it is).
+- **B2(a): PROVEN (repaired)** (Step 3 weak measurability via the metric `F_σ` decomposition; Step 4 selector **constructed** — nested-vanishing-diameter Borel construction — plus Castaing representation; the recorded '`X` (hence `S`) is Polish' clause struck as false for general measurable `S` and unnecessary; KRN restated with the codomain-Polish hypothesis only).
 - **B2(b): PROVEN_CONDITIONAL** (Michael's hypotheses must be verified per instance; verified on E5's class).
 - **B1(a): PROVEN** (Knaster–Tarski; full proof above).
 - **B1(b): PROVEN** (under the stated closed-Vietoris-graph hypothesis, which is the declared correspondence-continuity assumption).
 
-**Dependencies:** R02.Thm1/Lem2 (certificate recursion and closed-loop theorem), R03.Lem4's Hausdorff-continuity discipline (hypothesis pattern). **Consumers:** E4.Thm3 (per-generation gfps), A4.Thm1 (measurable selection in joint regulation), E5 (displayed certificate family), B10 (selection at best-response correspondences).
+**Dependencies:** R02.Thm1/Lem2 (certificate recursion and closed-loop theorem), R03.Lem4's Hausdorff-continuity discipline (hypothesis pattern). **Consumers:** E4.Thm3 (per-generation gfps), A4.Thm1 (measurable selection in joint regulation), E5 (displayed certificate family), B10 (selection at best-response correspondences); the Step-4 **Castaing family** is additionally available to Filippov-type approximation and convexified-envelope arguments.
 
 **Record-format note:** internal theorem document; Fields 1–4, 6–9, 16–17 carried; Fields 5, 10–15 N/A (see E1's note).
