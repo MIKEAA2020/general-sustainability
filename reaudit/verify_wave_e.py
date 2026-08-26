@@ -66,14 +66,17 @@ check("no artifact drifted from its pinned hash (stronger than 'git clean')", no
 
 # --------------------------------------------------------------- 2. byte-identity
 print("\n[2] regenerated result files byte-identical to committed")
-for tree in ("wave_e_cod", "wave_e_edwards"):
-    res = REPO / tree / "results"
-    diff = [f.name for f in sorted(res.iterdir())
-            if f.read_bytes() != baseline_bytes(tree, f.name)]
-    n = len(list(res.iterdir()))
-    check(f"{tree}/results: {n} files byte-identical to the pre-run baseline",
-          not diff and n == len(list((BASE / _TREES[tree]).iterdir())),
-          diff or f"all {n} identical")
+if not BASE.exists():
+    print("  [SKIP] no BASE snapshot at", BASE, "(set BASE=... to enable)")
+else:
+    for tree in ("wave_e_cod", "wave_e_edwards"):
+        res = REPO / tree / "results"
+        diff = [f.name for f in sorted(res.iterdir())
+                if f.read_bytes() != baseline_bytes(tree, f.name)]
+        n = len(list(res.iterdir()))
+        check(f"{tree}/results: {n} files byte-identical to the pre-run baseline",
+              not diff and n == len(list((BASE / _TREES[tree]).iterdir())),
+              diff or f"all {n} identical")
 
 # --------------------------------------------------------------- 3. headline scores
 print("\n[3] cod headline scores (manuscript tables vs regenerated CSVs)")
@@ -194,14 +197,22 @@ m1 = json.loads((REPO / "wave_e_edwards/results/meta.json").read_text())
 m2 = json.loads((REPO / "wave_e_edwards/results/pass2_meta.json").read_text())
 ms = (REPO / "wave_e_edwards/manuscript/wave_E_edwards_forecast_ladder.md").read_text()
 rd = (REPO / "wave_e_edwards/README.md").read_text()
-check("F1: pass2_meta.json lists 3 retained structures", len(m2["retention"]["retained"]) == 3,
-      m2["retention"]["retained"])
-check("F1: manuscript nonetheless demotes them as inflation", "Promoting them is inflation" in ms)
+r1, r2 = m1["retention"], m2["retention"]
+check("F1: no misleading 'retained' key in pass2_meta.json", "retained" not in r2)
+check("F1: no misleading 'retained' key in meta.json", "retained" not in r1)
+check("F1: pass2 listed_by_point_rule is the three RMSE-listers",
+      r2.get("listed_by_point_rule") == ["M2_enso", "M2_precip", "M2_combo"],
+      r2.get("listed_by_point_rule"))
+check("F1: pass2 retained_as_structure is empty", r2.get("retained_as_structure") == [])
+check("F1: pass1 lists M1 and M2m by the point rule",
+      r1.get("listed_by_point_rule") == ["M1", "M2m"])
+check("F1: pass1 demotes M2m and keeps only M1 as structure",
+      r1.get("class_demoted") == ["M2m"] and r1.get("retained_as_structure") == ["M1"])
+check("F1: manuscript still records the class demotion", "not extra structure" in ms and "Promoting them is inflation" in ms)
 check("F1: README says Pass 2 not retained as structure", "not retained as structure" in rd)
-check("F1: meta.json lists M2m retained while manuscript calls it not extra structure",
-      "M2m" in m1["retention"]["retained"] and "not extra structure" in ms)
-check("F2: README Pass 1 line omits M2m",
-      "M2m" not in [l for l in rd.splitlines() if l.startswith("**Pass 1:**")][0])
+check("F2: README Pass 1 line names M2m and the class demotion",
+      "M2m" in [l for l in rd.splitlines() if l.startswith("**Pass 1:**")][0]
+      and "class grounds" in [l for l in rd.splitlines() if l.startswith("**Pass 1:**")][0])
 check("F2: M2m is the only model beating persist at BOTH horizons",
       ed("M2m", 1) < ed("naive_persist", 1) and ed("M2m", 5) < ed("naive_persist", 5)
       and not any(ed(m, 1) < ed("naive_persist", 1) and ed(m, 5) < ed("naive_persist", 5)
@@ -218,15 +229,31 @@ for col in ("nino34_son", "nino34_ann"):
 check("F3: pcp_* source is gitignored, not committed",
       not (REPO / "wave_e_edwards/data/climdiv-pcpndv-v1.0.0-20260806").exists())
 
-# annual_panel.csv is verified above to match its pinned SHA-256, so reading it
-# directly reads the committed content.
+# F4: running build_panel.py must not drop climate columns on a panel that has them.
 committed_panel = pd.read_csv(REPO / "wave_e_edwards/data/annual_panel.csv")
-check("F4: build_panel.py output has 15 cols vs committed 20 (5 climate cols dropped)",
+check("F4: committed annual_panel.csv still has 20 columns (5 climate)",
       len(committed_panel.columns) == 20
-      and set(committed_panel.columns) - {"nino34_son", "nino34_ann", "pcp_cd06", "pcp_cd07", "pcp_mean"}
-      == set(committed_panel.columns) - set(["nino34_son", "nino34_ann", "pcp_cd06", "pcp_cd07", "pcp_mean"]))
-check("F6: manifest Edwards table header contains a literal backslash-n",
-      "|---|---|---|---|---|\\n|" in (REPO / "PROOF_MANIFEST.md").read_text())
+      and {"nino34_son", "nino34_ann", "pcp_cd06", "pcp_cd07", "pcp_mean"} <= set(committed_panel.columns))
+pre_hash = sha(REPO / "wave_e_edwards/data/annual_panel.csv")
+proc = subprocess.run(
+    [sys.executable, str(REPO / "wave_e_edwards/src/build_panel.py")],
+    cwd=str(REPO / "wave_e_edwards"), capture_output=True, text=True,
+)
+check("F4: build_panel.py exits 0", proc.returncode == 0, (proc.stderr or proc.stdout)[-300:])
+post = pd.read_csv(REPO / "wave_e_edwards/data/annual_panel.csv")
+check("F4: after build_panel.py dest still has 20 columns",
+      len(post.columns) == 20
+      and {"nino34_son", "nino34_ann", "pcp_cd06", "pcp_cd07", "pcp_mean"} <= set(post.columns),
+      f"cols={list(post.columns)}")
+check("F4: dest SHA-256 unchanged when H/R/P already match",
+      sha(REPO / "wave_e_edwards/data/annual_panel.csv") == pre_hash)
+check("F4: HRP scratch written",
+      (REPO / "wave_e_edwards/data/annual_panel_hrp.csv").exists())
+scratch = REPO / "wave_e_edwards/data/annual_panel_hrp.csv"
+if scratch.exists():
+    scratch.unlink()
+check("F6: manifest Edwards table has no literal backslash-n in the header",
+      "|---|---|---|---|---|\\n|" not in (REPO / "PROOF_MANIFEST.md").read_text())
 
 print("\n" + "=" * 72)
 if FAIL:

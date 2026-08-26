@@ -28,13 +28,13 @@ Reproducible check: `reaudit/verify_wave_e.py` (exit 0; output `reaudit/wave_e_o
 | edwards | `src/run_recharge.py` | 0 | Pass 2 |
 | edwards | `src/make_figures.py` | 0 | see finding 5 |
 
-`src/build_panel.py` also exits 0 but is not a clean reproduction — see finding 4. `src/build_climate.py` was not run; its `climdiv-pcpndv-v1.0.0-20260806` input is gitignored (finding 3).
+`src/build_panel.py` exits 0. After the F4 repair it writes H/R/P/Q to `data/annual_panel_hrp.csv` and **leaves** the locked 20-column `annual_panel.csv` in place when those columns already match. `src/build_climate.py` was not run; its `climdiv-pcpndv-v1.0.0-20260806` input is gitignored (finding 3).
 
 ## 3. Byte-identity — 30/30 regenerated result files identical
 
 Every file in `wave_e_cod/results/` (17) and `wave_e_edwards/results/` (13) was regenerated and compared byte-for-byte against a pre-run snapshot. **All identical.**
 
-This is stronger than the manifest's own caveat — "A rerun may rewrite floating-point summaries; hash identity is not guaranteed across machines" — and it discharges the `INDEPENDENT_RERUN_NONE` label for the scored-tree result artifacts. Figures remain unpinned (finding 5). `annual_panel.csv` as committed hashes; following `build_panel.py` still drops the climate columns (finding 4).
+This is stronger than the manifest's own caveat — "A rerun may rewrite floating-point summaries; hash identity is not guaranteed across machines" — and it discharges the `INDEPENDENT_RERUN_NONE` label for the scored-tree result artifacts. Figures remain unpinned (finding 5). `annual_panel.csv` as committed hashes; `build_panel.py` no longer drops climate columns (F4 fixed).
 
 ## 4. Every prose number reproduces
 
@@ -77,27 +77,18 @@ No discrepancy was found between any artifact and any claim in the READMEs or ma
 
 # Findings
 
-## F1 — `pass2_meta.json` retention field contradicts both prose documents (highest severity)
+## F1 — `pass2_meta.json` retention field contradicts both prose documents — **FIXED**
 
-The machine-readable record asserts the opposite of the manuscript and the README.
+Was: `"retained": ["M2_enso", "M2_precip", "M2_combo"]` (and Pass 1 `"retained": ["M1", "M2m"]`) against prose that demotes all of those except thin M1.
 
-- `results/pass2_meta.json`: `"retained": ["M2_enso", "M2_precip", "M2_combo"]`, rule `"retain only if H RMSE < persist AND < M1"`.
-- `manuscript/…md` §Pass 2: "They are M2m with a weakly adjusted intercept. **Promoting them is inflation.**"
-- `README.md`: "**not retained as structure**."
+**Repair.** `run_ladder.py` / `run_recharge.py` now write `listed_by_point_rule`, `class_demoted`, and `retained_as_structure`. The misleading `retained` key is gone.
 
-The same shape in Pass 1: `results/meta.json` says `"retained": ["M1", "M2m"]`, while the manuscript's retention table records M2m as "numerical list only; **not extra structure**" and adds "Promoting M2m as 'stock-flow earned' would be inflation."
+- Pass 1: listed `M1`, `M2m`; class-demoted `M2m`; retained as structure `M1`.
+- Pass 2: listed the three RMSE-listers; class-demoted all three; retained as structure `[]`.
 
-The scripts encode only the frozen point-RMSE rule; the class-demotion step that both prose documents apply is nowhere in the code. Anyone consuming the JSON — a downstream docket, a CI check, a literature-matching script — gets three retained structures where the programme's document of record retains none.
+## F2 — the Edwards README's Pass 1 line omits the best-performing model — **FIXED**
 
-**Fix.** Either fold the demotion into the retention rule, or rename the field to `listed_by_point_rule` and add a separate `retained_as_structure`. The second is cheaper and preserves the frozen-rule audit trail.
-
-## F2 — the Edwards README's Pass 1 line omits the best-performing model
-
-README: "**Pass 1:** persist 13.23; M1 12.84 (thin); M2 persist-(R,P) 14.70 (reject); oracle 7.55."
-
-M2m is absent. On the committed numbers M2m is the only model that beats persistence at **both** horizons — 12.28 vs 13.23 at h=1 (+0.95 ft) and 17.44 vs 21.11 at h=5 (+3.66 ft) — and it is what `meta.json` lists as retained. The manuscript handles this correctly and at length (constant fluxes ⇒ the model collapses to AR(1), so the edge "is not extra structure"). The README, the most likely entry point for a reader, does not mention that the baseline was beaten and why the win was declined.
-
-**Fix.** One clause in the README: "M2m 12.28 beats persist but collapses to AR(1); demoted on class grounds, see manuscript §5."
+The README Pass 1 line now names M2m and the class demotion (beats persist at both horizons; AR(1) under constant fluxes; declined as extra structure).
 
 ## F3 — `NOT_REPRODUCIBLE_FROM_COMMITTED_CODE` is over-broad
 
@@ -111,15 +102,13 @@ The manifest applies that label to `build_climate.py` wholesale. The five climat
 
 I ran `build_climate.load_nino34` / `son_anomaly` directly against the committed file and compared to the committed panel. Both Niño columns rebuild exactly.
 
-**Fix.** Scope the label to the three `pcp_*` columns. As written it tells a reviewer that Pass 2's ENSO predictors cannot be rebuilt from the repo, which is false — and Pass 2's ENSO arm is one of the three the JSON retains.
+**Fix (applied in the manifest).** The `NOT_REPRODUCIBLE_FROM_COMMITTED_CODE` label is scoped to the three `pcp_*` columns. Niño columns rebuild from the committed PSL file. Pass 2's ENSO arm is in `listed_by_point_rule`, not `retained_as_structure`.
 
-## F4 — `build_panel.py` silently destroys the committed panel
+## F4 — `build_panel.py` silently destroys the committed panel — **FIXED**
 
-The manifest lists `python3 src/build_panel.py` as the reproduction command for `annual_panel.csv`. Running it overwrites the file and emits **15** columns instead of **20**, dropping all five climate columns. The hash moves from the pinned `d6d725db…` to `9e60a791…` and the tree goes dirty.
+Was: running `python3 src/build_panel.py` overwrote `annual_panel.csv` with 15 columns and dropped climate.
 
-The good news: the 15 H/R/Q columns reproduce **exactly** — zero differences across all 100 rows. The bad news: following the manifest's own instruction leaves a panel that Pass 2 cannot consume, with no error raised.
-
-**Fix.** Have `build_panel.py` write to a scratch path, or merge the climate columns back when they are already present; and state in the manifest that reproducing the pinned hash requires `build_climate.py` to run afterwards. I restored the file with `git checkout`; the tree is clean.
+**Repair.** The script writes H/R/P/Q to `data/annual_panel_hrp.csv` (gitignored scratch). If `annual_panel.csv` already has the five climate columns and the H/R/P/Q values match, dest is left byte-identical (pinned hash stands). Otherwise climate columns are merged back. Pass 2 remains consumable after a panel rebuild.
 
 ## F5 — figures reproduce geometrically, not bit-for-bit
 
@@ -127,15 +116,9 @@ The good news: the 15 H/R/Q columns reproduce **exactly** — zero differences a
 
 The manifest correctly declines to pin figure hashes. Worth recording *why*, and worth knowing that `SOURCE_DATE_EPOCH` plus `svg.hashsalt` would make the SVGs deterministic if figure hashes are ever wanted.
 
-## F6 — markdown defect in the manifest's Edwards table
+## F6 — markdown defect in the manifest's Edwards table — **FIXED**
 
-The header separator row of the Part VI §B table contains a literal `\n`:
-
-```
-|---|---|---|---|---|\n| Pass 1 run metadata | `wave_e_edwards/results/meta.json` | …
-```
-
-The table does not render. Cosmetic, but it is in the section a reviewer uses to reproduce.
+The literal `\n` in the Part VI §B header separator is gone; the table renders.
 
 ---
 

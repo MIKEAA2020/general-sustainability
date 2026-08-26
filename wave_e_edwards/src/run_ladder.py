@@ -306,18 +306,24 @@ def retention(summary: pd.DataFrame) -> dict:
         "M3": min(persist, float(h1["M2"])),
         "M4": min(persist, float(h1["M3"])),
     }
-    retained = []
+    listed = []
     for m in order:
         if float(h1[m]) < persist and float(h1[m]) < simpler[m]:
-            retained.append(m)
+            listed.append(m)
+    # Class demotion (protocol + manuscript §5): M2m with constant
+    # fluxes is affine AR(1), not extra stock-flow structure.
+    class_demoted = [m for m in listed if m == "M2m"]
+    retained_as_structure = [m for m in listed if m not in class_demoted]
     return {
         "primary": "rolling h=1 RMSE of annual-mean J-17 (ft)",
         "persist_h1": persist,
-        "retained": retained,
-        "rejected": [m for m in order if m not in retained],
+        "listed_by_point_rule": listed,
+        "class_demoted": class_demoted,
+        "retained_as_structure": retained_as_structure,
+        "rejected": [m for m in order if m not in listed],
         "oracle_excluded": True,
         "fibre_excluded": True,
-        "rule": "retain only if primary RMSE < persist AND < next-simpler causal model",
+        "rule": "list if primary RMSE < persist AND < next-simpler causal model; then demote constant-flux M2m (AR(1), not extra structure)",
     }
 
 

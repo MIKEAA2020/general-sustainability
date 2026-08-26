@@ -15,4 +15,4 @@ Do not pool this \(\Omega\) with Northern cod or with any phosphorus catchment.
 
 **Pass 1:** persist 13.23; M1 12.84 (thin); M2m 12.28 — **beats persistence at both horizons** (17.44 vs 21.11 at h=5) but collapses to AR(1) under constant fluxes, so the win is declined on class grounds (demoted: "not extra structure"; see manuscript §5); M2 persist-\((R,P)\) 14.70 (reject); oracle 7.55.
 
-**Pass 2:** causal \(R\) from SON Niño 3.4 / lagged CD rain / AR. Listed vs M1 by 0.02–0.13 ft; worse than persist at \(h=5\); not retained as structure. Rain oracle 10.56 (excluded).
+**Pass 2:** causal \(R\) from SON Niño 3.4 / lagged CD rain / AR. Listed vs M1 by 0.02–0.13 ft; worse than persist at \(h=5\); not retained as structure. Rain oracle 10.56 (excluded). Machine-readable record: `results/pass2_meta.json` `listed_by_point_rule` vs `retained_as_structure` (the latter is empty).

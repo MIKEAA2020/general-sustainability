@@ -292,14 +292,18 @@ def retention(h_sum):
     persist = float(h1["naive_persist"])
     m1 = float(h1["M1"])
     cands = ["M2_Rar", "M2_enso", "M2_precip", "M2_combo"]
-    retained = [m for m in cands if float(h1[m]) < persist and float(h1[m]) < m1]
+    listed = [m for m in cands if float(h1[m]) < persist and float(h1[m]) < m1]
+    # Class demotion (manuscript Pass 2): these are M2m with a weakly
+    # adjusted intercept. Listing them as structure is inflation.
     return {
         "persist_h1": persist,
         "M1_h1": m1,
-        "retained": retained,
-        "rejected": [m for m in cands if m not in retained],
+        "listed_by_point_rule": listed,
+        "class_demoted": list(listed),
+        "retained_as_structure": [],
+        "rejected": [m for m in cands if m not in listed],
         "oracle_excluded": True,
-        "rule": "retain only if H RMSE < persist AND < M1",
+        "rule": "list if H RMSE < persist AND < M1; then demote all causal-R modules (M2m + intercept; not extra structure)",
     }
 
 

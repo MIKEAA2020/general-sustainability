@@ -88,6 +88,9 @@ def load_comal() -> pd.DataFrame:
     return out.reset_index()
 
 
+CLIMATE_COLS = ("nino34_son", "nino34_ann", "pcp_cd06", "pcp_cd07", "pcp_mean")
+
+
 def main():
     j17 = load_j17()
     rec = load_recharge()
@@ -99,7 +102,52 @@ def main():
         .merge(comal, on="year", how="outer")
         .sort_values("year")
     )
-    panel.to_csv(DATA / "annual_panel.csv", index=False)
+    dest = DATA / "annual_panel.csv"
+    scratch = DATA / "annual_panel_hrp.csv"
+    panel.to_csv(scratch, index=False)
+
+    # F4: never clobber climate columns on the locked panel.
+    # If dest already has them and H/R/P/Q match, leave dest bytes alone
+    # so the pinned SHA-256 stays valid. Otherwise merge climate back.
+    if dest.exists():
+        existing = pd.read_csv(dest)
+        climate = [c for c in CLIMATE_COLS if c in existing.columns]
+        if climate:
+            old = existing.set_index("year")
+            new = panel.set_index("year")
+            hrp_cols = [c for c in new.columns]
+            match = True
+            common = old.index.intersection(new.index)
+            for c in hrp_cols:
+                if c not in old.columns:
+                    match = False
+                    break
+                a = pd.to_numeric(old.loc[common, c], errors="coerce")
+                b = pd.to_numeric(new.loc[common, c], errors="coerce")
+                if not np.allclose(a.fillna(0), b.fillna(0), rtol=0, atol=1e-9, equal_nan=True):
+                    # treat NaN==NaN
+                    if not ((a.isna() & b.isna()) | (a == b) | (a.sub(b).abs() < 1e-9)).all():
+                        match = False
+                        break
+            if match and set(old.index) == set(new.index):
+                print(
+                    "F4: H/R/P/Q match committed panel; "
+                    f"leaving {dest.name} in place ({len(climate)} climate columns preserved)"
+                )
+            else:
+                for c in hrp_cols:
+                    old[c] = new[c]
+                old.reset_index().to_csv(dest, index=False)
+                print(
+                    "F4: rewrote H/R/P/Q on dest and kept climate columns "
+                    f"{climate}; pinned hash may change"
+                )
+        else:
+            panel.to_csv(dest, index=False)
+            print("F4: dest had no climate columns; wrote H/R/P/Q only")
+    else:
+        panel.to_csv(dest, index=False)
+        print("F4: no dest; wrote H/R/P/Q only (Pass 2 needs climate merge)")
 
     complete = panel[
         panel["year"].between(1934, 2023)
