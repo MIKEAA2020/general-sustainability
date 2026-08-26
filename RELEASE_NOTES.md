@@ -42,7 +42,7 @@ This release series was rebased onto two commits pushed independently after Task
 
 ## 5. Known limitations
 
-- Independent rerun: done for the five committed Part II certificates and both scored trees; the A025 fold pipeline and C4 monodromy dt=0.1 are **rebuilt (2026-08-26 post-v1.0 session** — fold at the nominal level, three collocation orders all inside the lost certificate interval, interval Krawczyk stage still open; monodromy at the second mesh level, mesh-stable**) but not yet independently rerun**.
+- Independent rerun: done for the five committed Part II certificates and both scored trees; the A025 fold pipeline and C4 monodromy dt=0.1 are **rebuilt (2026-08-26 post-v1.0 session** — fold at the nominal level, three collocation orders all inside the lost certificate interval, interval Krawczyk stage still open; monodromy at the second mesh level, mesh-stable**) and rerun hash-identical on 2026-08-26 (same-env second session; `reaudit/postv10_rerun/` — the m=96/128 cross-checks remain first-run)**.
 - Wave E specification matching: **EXECUTED for the two scored trees** (2026-08-26) — `batch 4/WAVE_E_SPEC_MATCH.md` + `reaudit/verify_wave_e_spec_match.py` (36 machine checks, exit 0; Edwards with a dated pre-score protocol, cod manuscript-declared with recorded caveats). The Part III paper-support rows remain NOT CONFIRMED; Wave E is not closed.
 - Papers 6/7 gates unclosed (A021 NAIM theorem unproved; A022 stage modal theorem false as stated) — the "five assured papers" architecture stands.
 - The A025 fold pipeline is **REBUILT at the nominal level** (four defects repaired; m=64/96/128 Moore–Spence solves all inside the lost certificate interval; the interval Krawczyk stage remains unimplemented).

@@ -30,12 +30,14 @@ COMMANDS = {
         'python3 research_program/validated_computations/a025_fold/'
         'a025_fold_pipeline.py 64', 'repository root',
         'NOMINAL Moore-Spence fold solve (rebuilt pipeline); no interval '
-        'certification'),
+        'certification; RERUN 2026-08-26 hash-identical, same-env second '
+        'session (reaudit/postv10_rerun/POSTV10_RERUN.md)'),
     'a025_fold/a025_branch_continuation.json': (
         'python3 research_program/validated_computations/a025_fold/'
         'a025_fold_pipeline.py 64', 'repository root',
         'NOMINAL fold record (rebuilt pipeline); tau_f inside the lost '
-        'certificate interval'),
+        'certificate interval; RERUN 2026-08-26 hash-identical, same-env '
+        'second session (reaudit/postv10_rerun/POSTV10_RERUN.md)'),
     'a021_c4/c4_orbit_krawczyk_certificate.json': (
         'python3 research_program/validated_computations/a021_c4/'
         'c4_orbit_krawczyk.py', 'repository root',
@@ -89,27 +91,36 @@ COMMANDS = {
         'python3 research_program/validated_computations/a021_c4/'
         'c4_monodromy_dt0p1.py (rerun with --resume until phase 3)',
         'repository root',
-        'Monodromy matrix + eigenvalues, dt=0.1 (second mesh level)'),
+        'Monodromy matrix + eigenvalues, dt=0.1 (second mesh level); RERUN '
+        '2026-08-26 hash-identical, same-env second session '
+        '(reaudit/postv10_rerun/POSTV10_RERUN.md)'),
     'a021_c4/c4_monodromy_dt0p1_enclosure.json': (
         'python3 research_program/validated_computations/a021_c4/'
         'c4_monodromy_dt0p1.py (rerun with --resume until phase 3)',
         'repository root',
-        'dt=0.1 enclosure (second mesh level; mesh-stable confirmation)'),
+        'dt=0.1 enclosure (second mesh level; mesh-stable confirmation); '
+        'RERUN 2026-08-26 hash-identical, same-env second session '
+        '(reaudit/postv10_rerun/POSTV10_RERUN.md)'),
 }
 
 ENV_ORIGINAL = ('Python 3.12.13, numpy 2.1.3, scipy 1.14.1, mpmath 1.3.0')
 ENV_RERUN = ('Python 3.13.14, numpy 2.3.5, scipy 1.17.1, mpmath 1.3.0 '
              '(second agent, 2026-08-26)')
 
-# per-file status overrides (first-run artifacts; NOT part of the 2026-08-26
-# byte-identical rerun, which predates them)
+# per-file status overrides (first-run artifacts at manifest-build time; the
+# 2026-08-26 same-env second-session reruns postdate the builder and are
+# recorded in reaudit/intervention_rerun/ + reaudit/postv10_rerun/)
 STATUS_OVERRIDE = {
     'wave_e_edwards/results/intervention_results.json': (
-        'intervention-leg artifact (protocol_intervention.md); FIRST RUN '
-        '2026-08-26; independent rerun NONE'),
+        'intervention-leg artifact (protocol_intervention.md); first run '
+        '2026-08-26; rerun 2026-08-26 byte-identical on a fresh second-session '
+        'execution, same environment as the original run '
+        '(reaudit/intervention_rerun/INTERVENTION_RERUN.md)'),
     'wave_e_edwards/results/intervention_boundaries.csv': (
-        'intervention-leg artifact (protocol_intervention.md); FIRST RUN '
-        '2026-08-26; independent rerun NONE'),
+        'intervention-leg artifact (protocol_intervention.md); first run '
+        '2026-08-26; rerun 2026-08-26 byte-identical on a fresh second-session '
+        'execution, same environment as the original run '
+        '(reaudit/intervention_rerun/INTERVENTION_RERUN.md)'),
 }
 
 PINNED = {

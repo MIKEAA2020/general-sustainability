@@ -30,7 +30,7 @@ The earlier shorthand "2J3KL / J-17 scored models" collapsed three distinct obje
 |---|---|---|---|---|
 | NAFO **2J3KL** | fisheries \(\Omega_{2016}\), \(\Omega_{\mathrm{xte}}\) | `wave_e_cod/` | A001/A014 class admitted; E5 does not transfer; surplus-ladder Cor2 not constructed | scored trees **YES** (`batch 4/WAVE_E_RERUN.md`); Cor2 n/a (not constructed) |
 | Edwards well **J-17** | groundwater \(\Omega_{\mathrm{SA}}\) | `wave_e_edwards/` | two-pool not constructed; H0 forecast-map Cor2 + kernel-level Cor2 (2026-08-26, erosion invoked; intervention leg executed) | scored trees **YES** (`WAVE_E_RERUN.md`, cross-toolchain) + intervention leg **YES** (2026-08-26, byte-identical, same-env second session — `reaudit/intervention_rerun/`) |
-| A021 C4 **J-series** | docket + DDE, not a basin | `research_program/validated_computations/a021_c4/` | not a Wave E forecast \(\Omega\) | Part II certificates **YES** (`VALIDATED_COMPUTATIONS_RERUN.md`); dt=0.1 monodromy first-run |
+| A021 C4 **J-series** | docket + DDE, not a basin | `research_program/validated_computations/a021_c4/` | not a Wave E forecast \(\Omega\) | Part II certificates **YES** (`VALIDATED_COMPUTATIONS_RERUN.md`, cross-toolchain); dt=0.1 monodromy **YES** (2026-08-26, hash-identical, same-env second session — `reaudit/postv10_rerun/`) |
 
 A021 J-series is external-review bookkeeping. It is not Edwards J-17 and not 2J3KL.
 
