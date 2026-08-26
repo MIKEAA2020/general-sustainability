@@ -128,6 +128,7 @@
 |---|---|---|
 | A025 fold Moore–Spence (nominal) + resolution cross-checks | m=64/96/128 nominal tau_f = 5.587236198690 / 5.587236198663 / 5.587236198663 (\|M\| ≤ 7.4e-12) — ALL THREE INSIDE the lost certificate interval [5.587236197890, 5.587236199490] | **REBUILT (NOMINAL, 2026-08-26)** — `a025_fold/a025_branch_continuation*.json`, `a025_moore_spence_fold*.npz`; the lost artifact's interval Krawczyk certification is still not reimplemented; no certified status claimed |
 | C4 monodromy (dt=0.1) | Second mesh level; mesh-stable confirmation of the dt=0.25 enclosure | **COMPUTED (2026-08-26)** — see the Part II row above; rerun 2026-08-26 hash-identical (same-env second session; `reaudit/postv10_rerun/`) |
+| A1 piecewise-Chebyshev Stage 1 (substrate + local-gain diagnostic) | Local-gain premise measured on the validated orbit: sup rhs Lipschitz 7.17, P·lip = 2660; M\* = 2660/5320 for local gain ≤ 1/0.5; at M=8000 max gain 0.333; delay band 97 segments; orbit DDE defect 7.86e-9 | **COMPUTED (2026-08-26, diagnostic — not a certificate)** — `a021_c4/c4_piecewise_chebyshev_stage1.py` → `c4_piecewise_chebyshev_stage1.json` (sha `7c6d6125f9c0…`); first stage of the specified campaign; A1 remains COMPUTED_PARTIAL |
 
 ### Partial computations (COMPUTED_PARTIAL)
 

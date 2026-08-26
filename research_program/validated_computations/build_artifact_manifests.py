@@ -87,6 +87,12 @@ COMMANDS = {
         'a025_fold_pipeline.py 128 --dtau-min 5e-6 --tau-end 5.62 --resume-ms',
         'repository root',
         'NOMINAL m=128 fold record; INSIDE the lost interval'),
+    'a021_c4/c4_piecewise_chebyshev_stage1.json': (
+        'python3 research_program/validated_computations/a021_c4/'
+        'c4_piecewise_chebyshev_stage1.py',
+        'repository root',
+        'A1 piecewise-Chebyshev campaign Stage 1 (substrate + local-gain '
+        'diagnostic); NOT a certificate; A1 remains COMPUTED_PARTIAL'),
     'a021_c4/c4_monodromy_dt0p1.npz': (
         'python3 research_program/validated_computations/a021_c4/'
         'c4_monodromy_dt0p1.py (rerun with --resume until phase 3)',
