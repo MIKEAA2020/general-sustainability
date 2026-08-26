@@ -79,7 +79,7 @@ Already has the post-addressment update. The rebuilt version is faithful.
 
 ## Bottom line
 
-**Scored trees now live on this repository:** `wave_e_cod/` and `wave_e_edwards/`. Strategy documents must cite those paths, not a “local-only” tree. Independent rerun of those scores is still **NONE**. Wave E is not closed.
+**Scored trees now live on this repository:** `wave_e_cod/` and `wave_e_edwards/`. Strategy documents must cite those paths, not a “local-only” tree. Independent rerun of those scores is **done** (`batch 4/WAVE_E_RERUN.md`: 30/30 result files byte-identical) — `INDEPENDENT_RERUN_NONE` is false for the scored trees. Wave E is not closed.
 
 **The Wave E design is structurally sound but needs three specific content updates:**
 
@@ -87,4 +87,4 @@ Already has the post-addressment update. The rebuilt version is faithful.
 2. **Update the G-item statuses** (G2 DECLARED, G4 half-proved, G6 FROZEN-diff-only — TCS-1.0 controls until migration)
 3. **Add the independent-rerun prerequisite to Wave 0** (it is the single gating item)
 
-None of these changes the architecture or the sequencing. They make the existing design reflect what was actually proved and computed this session. **Wave E is not closed:** the theorem files are reconstructions pending independent line-by-line re-verification, every artifact's independent-rerun status is NONE, no Wave E specification has been matched (every Part III row NOT CONFIRMED), and the Paper 6/7 folds remain proposals.
+None of these changes the architecture or the sequencing. They make the existing design reflect what was actually proved and computed this session. **Wave E is not closed:** the theorem files are reconstructions pending independent line-by-line re-verification, no Wave E specification has been matched (every Part III row NOT CONFIRMED), and the Paper 6/7 folds remain proposals. The scored-tree artifacts and the five Part II discrete certificates now have independent reruns (`WAVE_E_RERUN.md`, `VALIDATED_COMPUTATIONS_RERUN.md`); that is a citation-gate discharge, not a Wave E close.

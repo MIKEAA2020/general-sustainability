@@ -29,7 +29,7 @@ Immutable submitted files remain under `uploads/`. This directory contains corre
 | A022 | `A022_stage_harvest_corrected.tex` | Birth-inclusive mass balance and searched-set status corrected |
 | A023 | `A023_spatial_corrected.tex` | Stage factor, malformed source, and uniform-modal assumptions corrected |
 | A024 | `A024_first_passage_corrected.tex` | Externally verified surrogate results retained and bridged |
-| A025 | `A025_interval_folds_corrected.tex` | Hopf certificates retained; turning-point/fold status controlled and bridged |
+| A025 | `A025_interval_folds_corrected.tex` | Hopf certificates independently reproduced (hash-identical); turning-point/fold status controlled and bridged |
 
 Applied supplement map: `APPLIED_LEDGER_DYNAMICS_SUPPLEMENT_INDEX.md`.
 

@@ -10,6 +10,8 @@ repository and writes nothing; every script exits 0 on success.
 | `verify_findings.py` | 34 | the original audit: A3/B6/E4 refutations |
 | `verify_wave_e.py` | 56 | Wave E reproduction (hashes, scores, retention) |
 | `verify_consistency.py` | 43 | cross-document consistency (incl. the manifest-vocabulary grep that catches C3-type defects) |
+| `verify_manuscript_sweep.py` | 14 | the same check run over `revised_articles/` (Part VII manuscript-side sweep) |
+| `verify_validated_computations.py` | 30 | Part II pinned hashes + certified numerical claims + independent-rerun register |
 | `verify_a3_repair.py` | 18 | `A3_THM1_REPAIRED.md` |
 | `verify_b6_repair.py` | 31 | `B6_THM1_REPAIRED.md` |
 | `verify_e4_repair.py` | 58 | `E4_REPAIRED.md` |
@@ -50,7 +52,16 @@ with the same bookkeeping).
 To run everything (from the repository root):
 
 ```bash
-for s in reaudit/verify_*.py; do python3 "$s" > "reaudit/$(basename "$s" .py)_output.txt" 2>&1 || echo "FAILED: $s"; done
+for s in reaudit/verify_*.py; do
+  case "$(basename "$s")" in
+    verify_consistency.py|verify_manuscript_sweep.py|verify_validated_computations.py)
+      REPO="$(pwd)" python3 "$s" > "reaudit/$(basename "$s" .py)_output.txt" 2>&1 || echo "FAILED: $s" ;;
+    verify_wave_e.py)
+      REPO="$(pwd)" BASE="$(pwd)" python3 "$s" > "reaudit/$(basename "$s" .py)_output.txt" 2>&1 || echo "FAILED: $s" ;;
+    *)
+      python3 "$s" > "reaudit/$(basename "$s" .py)_output.txt" 2>&1 || echo "FAILED: $s" ;;
+  esac
+done
 ```
 
 **Layout note.** `verify_wave_e.py` and `verify_consistency.py` default their
@@ -60,6 +71,8 @@ results to compare against). In the in-repo layout run them as
 `REPO="$(pwd)" python3 reaudit/verify_consistency.py` and
 `REPO="$(pwd)" BASE=<results-snapshot> python3 reaudit/verify_wave_e.py`
 (the committed, pinned-hash-verified content can serve as the snapshot).
+`verify_manuscript_sweep.py` and `verify_validated_computations.py` also
+honour `REPO` (default: repository root, inferred from the script location).
 The other thirteen suites resolve the repository relative to their own
 location and run without overrides.
 

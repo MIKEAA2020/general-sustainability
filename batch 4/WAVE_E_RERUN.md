@@ -34,7 +34,7 @@ Reproducible check: `reaudit/verify_wave_e.py` (exit 0; output `reaudit/wave_e_o
 
 Every file in `wave_e_cod/results/` (17) and `wave_e_edwards/results/` (13) was regenerated and compared byte-for-byte against a pre-run snapshot. **All identical.**
 
-This is stronger than the manifest's own caveat — "A rerun may rewrite floating-point summaries; hash identity is not guaranteed across machines" — and it discharges the `INDEPENDENT_RERUN_NONE` label for the results artifacts on this toolchain. The label remains correct for the figures (finding 5) and for `annual_panel.csv` (finding 4).
+This is stronger than the manifest's own caveat — "A rerun may rewrite floating-point summaries; hash identity is not guaranteed across machines" — and it discharges the `INDEPENDENT_RERUN_NONE` label for the scored-tree result artifacts. Figures remain unpinned (finding 5). `annual_panel.csv` as committed hashes; following `build_panel.py` still drops the climate columns (finding 4).
 
 ## 4. Every prose number reproduces
 
@@ -143,7 +143,7 @@ The table does not render. Cosmetic, but it is in the section a reviewer uses to
 
 Reproduction does not change the programme's honest negative. On the cod side, persistence wins RMSE outright at h=1 and h=5 against every causal rung. On the Edwards side, M1 survives the frozen point rule by 0.39 ft on n=75 — which the manuscript itself calls "not a theory confirmation … a slightly mean-reverting head" — M2m and all three Pass 2 structures are demoted on class grounds, and at h=5 the training mean beats persistence, M1, and every causal module.
 
-`PROOF_MANIFEST.md` Part III's "every Wave E support row is **NOT CONFIRMED**" and Part VI's `SINGLE_RUN` framing remain the correct labels. What *can* now be upgraded is the reproducibility qualifier: for the 30 result artifacts, `INDEPENDENT_RERUN_NONE` is no longer accurate — an independent rerun on a different toolchain matched every hash. Findings F1 and F4 should be fixed before that upgrade is written in, since both concern exactly the artifacts a rerun touches.
+`PROOF_MANIFEST.md` Part III's "every Wave E support row is **NOT CONFIRMED**" remains the correct *gate* label. The Part VI reproducibility qualifier has been upgraded: `INDEPENDENT_RERUN_NONE` is false for the scored trees — an independent rerun on a different toolchain matched every hash (`INDEPENDENT_RERUN`; see Part VI). Findings F1 and F4 remain open documentation defects; they do not make the rerun “none”.
 
 ---
 

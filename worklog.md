@@ -627,3 +627,29 @@ Stage Summary:
 - Answers: (1) yes at the 27-finding level; the beyond-the-findings sweep found 2 live statement/display defects and 7 adopted-but-unlanded items — all fixed, plus register/README bookkeeping; 5 cosmetic items declined with reasons. (2) No further losses — the recovery is verifiably complete. (3) No computational corrections — the suites, hashes, and artifacts are consistent with the corrected mathematics; the two defects found were text-level and are fixed.
 - Commit chain: fc04d3f (origin/main) → 66eaec6 → 92c5686 → 7c1ccfd → 8e2a6aa → 3b56608 → 7dffef0 → e41485f → 99e3b3d → f249710 → ec4eb90 → 7e3ab78 (+ this worklog commit).
 - Honesty: no status label was changed anywhere — every fix lands already-adjudicated content in the file where consumers read it, or reconciles a display to the form its own proof and register row already carry.
+
+---
+Task ID: 28
+Agent: Arena.ai Agent Mode (second agent / independent rerun)
+Task: Discharge the remaining citation gate on research_program/validated_computations/ — independent rerun of the committed Part II scripts; run reaudit/verify_consistency.py (tree-side); run the same check over revised_articles/; update the register so the five certificates can be cited.
+
+Work Log:
+- Cloned MIKEAA2020/general-sustainability@main (HEAD 270f5f7). Confirmed Part II Independent-rerun column still **NONE** for all eight rows; HONEST_DISCLOSURE Issue 1 still "NOT DONE".
+- Snapshotted the seven pinned artifacts; ran the five reproduction commands from Part II on a different toolchain (Python 3.13.14, numpy 2.3.5, scipy 1.17.1, mpmath 1.3.0 vs pinned 3.12.13 / 2.1.3 / 1.14.1 / 1.3.0):
+  * a025_interval_hopf.py — exit 0, <1 s, **hash-identical** (eda36cd1…95b3b2).
+  * e5_admission.py — exit 0, <1 s, **hash-identical** (5670bcc8…236e72db).
+  * c4_monodromy.py — exit 0, 84 s, **hash-identical** JSON+NPZ (01d8c253… / f3dc5445…); M and lam array-equal.
+  * c4_orbit_krawczyk.py — exit 0, 0.5 s, krawczyk_ok=True, margin 1271 vs committed 1186, |ΔP|=4.49e-12. New centre lies inside the committed 1e-8 box (max‖Δu‖=4.3e-11). Hashes differ (Newton/lstsq toolchain drift). Restored committed artifacts so pinned hashes stay valid; archived the new outputs.
+  * c4_offgrid_interval_v2.py — exit 0, 42 s. N/Z/E match to 4 digits; rerun A≤1.109e-9 vs committed 1.041e-9. Both support residual ≤3e-6. Restored committed JSON.
+- Did **not** run a025_fold_pipeline.py as a certified command (Part II: NOT REBUILT; Moore–Spence stage has a live want_jac signature bug).
+- Ran REPO="$(pwd)" python3 reaudit/verify_consistency.py: Section A 11/11 OK; Section B shows exactly the documented post-repair 10 defect-gone failures (C1×2, C2, C3, C4×3, C5, C6×2).
+- Wrote and ran reaudit/verify_manuscript_sweep.py (the same check over revised_articles/): 14/14 OK after the citation edits. No Part-V assertion, no E5 transfer, no TCS-1.1 controlling, no reserved PROVEN on a computation, no certified-fold claim.
+- Citation edits so the manuscripts can actually cite the rerun: A025 (verification-status + unreproduced-pipeline sentence retired), A018 (two "externally verified by attestation" sentences), A020 (interval-certified pair), A021 (new "Validated discrete-level certificates" paragraph — shooting Floquet table kept and distinguished from the validated enclosure), revised_articles/INDEX.md.
+- Register/honesty: PROOF_MANIFEST Part II Independent-rerun column upgraded from **NONE** to **INDEPENDENT_RERUN 2026-08-26** with hash-identical vs claim-reproduced distinguished; Part IV off-grid 512→256, monodromy "two mesh levels"→dt=0.25 only, fold row demoted to cannot-yet-cite (NOT REBUILT); HONEST_DISCLOSURE Issue 1 and summary table; WAVE_E_UPDATE bottom line split (Part II discharged ≠ Wave E closed).
+- New files: batch 4/VALIDATED_COMPUTATIONS_RERUN.md; reaudit/verify_manuscript_sweep.py; reaudit/verify_validated_computations.py (exit 0); reaudit/validated_computations_rerun/ (logs + new_artifacts + environment).
+- Honesty: no theorem status upgraded; no Wave E Part III row flipped; E5 still toy-only; continuum lift still open; fold still NOT REBUILT. Wave E scored-tree `INDEPENDENT_RERUN_NONE` was left standing in Task 28 and is corrected in Task 29 (the WAVE_E_RERUN already existed). Pinned Part II hashes unchanged (committed artifacts restored after the two non-identical rewrites).
+
+Stage Summary:
+- The five committed discrete-level certificates can now be cited with the Part IV wording: Hopf / E5 / monodromy dt=0.25 hash-identical on a second agent; Krawczyk and off-grid re-certify the same claims at a nearby Newton centre.
+- Tree-side grep: documented post-repair reading. Manuscript-side sweep: clean, and A025's citation blocker is gone.
+- Wave E is not closed. The fold pipeline is not rebuilt.

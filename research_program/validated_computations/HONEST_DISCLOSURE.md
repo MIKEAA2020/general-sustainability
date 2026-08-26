@@ -8,17 +8,17 @@
 
 ## Issue 1: Independent rerun (the gating item)
 
-**Status: NOT DONE. Every artifact remains computed by the same agent, same machine, same library.**
+**Status: DONE for the five committed Part II certificates (2026-08-26) and for the Wave E scored trees (`batch 4/WAVE_E_RERUN.md`). NOT DONE for the A025 fold pipeline or C4 monodromy at dt=0.1.**
 
 | Question | Answer |
 |---|---|
-| Who computed the artifacts? | One AI agent (Z.ai Code) on one machine |
-| Were they independently verified? | **No.** No second party has rerun any computation |
-| Is this acceptable for internal work? | Yes — the code is committed and reproducible |
-| Is this acceptable for final submission? | **No.** Before submission, someone or something else must rerun from committed code and match hashes or numerical outputs |
-| What is the concrete action? | A second party (human or automated CI) clones the repo, runs each reproduction command from PROOF_MANIFEST.md Part II, and compares outputs |
+| Who computed the artifacts? | Original: one AI agent (Z.ai Code) on one machine. Independent rerun: a second agent (Arena.ai Agent Mode) on a different machine and toolchain |
+| Were they independently verified? | **Yes, for the five committed certificates.** Report: `batch 4/VALIDATED_COMPUTATIONS_RERUN.md`. Hopf, E5, monodromy dt=0.25 are hash-identical; Krawczyk and off-grid re-certify the same claims at a nearby Newton centre |
+| Is this acceptable for internal work? | Yes |
+| Is this acceptable for citing the discrete-level certificates? | **Yes**, with the Part IV citation forms (discrete / interval-verified, not proved; no continuum lift; no fold certificate; E5 toy-only) |
+| Is this acceptable as closing Wave E? | **No.** Part III remains entirely NOT CONFIRMED |
 
-**This is the single gating item for treating any computation as externally certified.**
+**This was the single gating item for treating the five committed computations as externally citable at discrete level. It is now discharged for those five. It is not discharged for the unrebuilt fold / dt=0.1 monodromy, and it does not close any Wave E gate.**
 
 ---
 
@@ -80,12 +80,12 @@ The Wave E candidate support table in PROOF_MANIFEST.md Part III correctly marks
 
 | Computation | Certification level | Committed | Independent rerun |
 |---|---|---|---|
-| A025 Hopf certificates | INTERVAL-CERTIFIED (mpmath dps=50) | ✅ | ❌ NONE |
-| C4 orbit Krawczyk | INTERVAL-CERTIFIED (K=80, margin 1186) | ✅ | ❌ NONE |
-| C4 off-grid residual | INTERVAL-CERTIFIED (mpmath per-mode, v2) | ✅ | ❌ NONE |
-| C4 monodromy (dt=0.25) | VALIDATED (insertion bound + Bauer-Fike discs) | ✅ | ❌ NONE |
-| E5 module admission | INTERVAL-CERTIFIED (outward-rounded) | ✅ | ❌ NONE |
+| A025 Hopf certificates | INTERVAL-CERTIFIED (mpmath dps=50) | ✅ | ✅ 2026-08-26 hash-identical |
+| C4 orbit Krawczyk | INTERVAL-CERTIFIED (K=80, margin 1186) | ✅ | ✅ 2026-08-26 claim reproduced (hashes differ; \|ΔP\|=4.5e-12) |
+| C4 off-grid residual | INTERVAL-CERTIFIED (mpmath per-mode, v2) | ✅ | ✅ 2026-08-26 claim reproduced (A 6 % higher; residual ≤3e-6 holds) |
+| C4 monodromy (dt=0.25) | VALIDATED (insertion bound + Bauer-Fike discs) | ✅ | ✅ 2026-08-26 hash-identical |
+| E5 module admission | INTERVAL-CERTIFIED (outward-rounded) | ✅ | ✅ 2026-08-26 hash-identical |
 | A025 fold pipeline | **NOT COMPLETE** (script committed, computation partial) | script only | ❌ NONE |
 | C4 monodromy (dt=0.1) | **NOT REBUILT** | — | — |
 
-**Bottom line: five genuine interval-certified computations are committed and reproducible from code. The fold pipeline is a committed script awaiting more compute time. No computation has been independently rerun. No Wave E specification has been matched.**
+**Bottom line: five genuine interval-certified computations are committed, reproducible from code, and independently rerun (`batch 4/VALIDATED_COMPUTATIONS_RERUN.md`). The fold pipeline is a committed script awaiting more compute time. No Wave E specification has been matched.**
