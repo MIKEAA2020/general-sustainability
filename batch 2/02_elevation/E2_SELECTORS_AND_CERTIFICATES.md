@@ -125,4 +125,6 @@ Let `V₀ = X` (top of the lattice) and `V_{n+1} = Γ(V_n)`. Then `(V_n)` is dec
 
 **Dependencies:** R02.Thm1/Lem2 (certificate recursion and closed-loop theorem), R03.Lem4's Hausdorff-continuity discipline (hypothesis pattern). **Consumers:** E4.Thm3 (per-generation gfps), A4.Thm1 (measurable selection in joint regulation), E5 (displayed certificate family), B10 (selection at best-response correspondences); the Step-4 **Castaing family** is additionally available to Filippov-type approximation and convexified-envelope arguments.
 
+**Publication destination (direct):** Paper 2 (theorem atlas — the selection-and-certificate machinery chapter: measurable selection with Castaing representation (B2(a)), conditional continuous selection (B2(b)), and the Knaster–Tarski certificate recursion (B1(a)/(b))); downstream paper consumers are Paper 1's Stackelberg section (B10), Paper 2's generation (E4) and composition (A4) chapters, and Papers 3/5's certificate family (E5). Recorded in PUBLICATION_STRATEGY.md's Paper 2 session additions — previously E2's only destinations were consumer-mediated.
+
 **Record-format note:** internal theorem document; Fields 1–4, 6–9, 16–17 carried; Fields 5, 10–15 N/A (see E1's note).

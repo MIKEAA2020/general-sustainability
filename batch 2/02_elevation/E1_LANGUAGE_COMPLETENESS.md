@@ -99,6 +99,7 @@ Per family:
 
 - Logical completeness: **not claimed** (the maintenance clause is the honesty boundary).
 - Dependencies: packet B7 (Operator I props), B6 (conservation/Farkas), B3 (Operator II recursion), R02 (filter), R03.Lem4 (horizon limit), R04 (transfer), R09 (U/M inventory). Consumers: C-a (the decidability theorem decides the language this calculus governs).
+- **Publication destination (direct):** Paper 2 (theorem atlas — the language layer: inference-rule soundness and relative completeness of the registered-sentence inventory); Paper 1's scope statements (via C-a, which consumes this calculus). Recorded in PUBLICATION_STRATEGY.md's Paper 2 session additions.
 
 ---
 
