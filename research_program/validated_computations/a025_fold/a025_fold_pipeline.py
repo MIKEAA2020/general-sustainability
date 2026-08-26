@@ -401,7 +401,14 @@ def moore_spence(w_fold, tau_fold, tol=1e-10, maxit=40, verbose=False):
 
 
 def main():
-    m = int(sys.argv[1]) if len(sys.argv) > 1 else 64
+    argv = [a for a in sys.argv[1:]]
+    m = int(argv[0]) if argv and not argv[0].startswith('--') else 64
+    tau_end = 6.4
+    dtau_min = 1e-7
+    if '--tau-end' in argv:
+        tau_end = float(argv[argv.index('--tau-end') + 1])
+    if '--dtau-min' in argv:
+        dtau_min = float(argv[argv.index('--dtau-min') + 1])
     configure(m)
     t0 = time.time()
     print(f"A025 fold pipeline — collocation order m = {m}")
@@ -411,8 +418,8 @@ def main():
           f"Npk={peak_to_peak(w0):.4f} ({time.time()-t0:.0f}s)")
 
     print("Stage 2: tau continuation toward the fold")
-    pts, (tau_max, w_fold, rn_fold) = continue_to_fold(w0, tau_s,
-                                                       verbose=True)
+    pts, (tau_max, w_fold, rn_fold) = continue_to_fold(
+        w0, tau_s, tau_end=tau_end, dtau_min=dtau_min, verbose=True)
     print(f"  fold candidate: tau={tau_max:.9f}, "
           f"Npk={peak_to_peak(w_fold):.4f}, residual={rn_fold:.1e}")
 
