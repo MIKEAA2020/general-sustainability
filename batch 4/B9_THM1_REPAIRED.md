@@ -1,5 +1,7 @@
 # B9.Thm1 — Stochastic Viability Layer: REPAIRED
 
+> **ERRATUM (joint-assessment adjudication; see `batch 4/PROOF_ELEVATION.md` §I.3, Finding 9).** Clause **(c)** below — `K_p = ⋃ {∩_k W_k^{(p_k)} : ∏ p_k = p}`, "completeness in the existential form" — is **false in general** and is hereby struck. It is refuted by the `y₁/y₂` witness of attempt A1 (`batch 4/agent 1 attempt/CLASS_2_3_ELEVATIONS.md` §IV: `x → y₁` or `y₂` w.p. ½ each with conditional terminal-safety 0.2 / 0.8 gives `x ∈ K_{1/2}` lying in **no** split's `∩_k W_k`; exhaustive split search and the three-case analysis are reproduced in `reaudit/verify_joint_disputes.py`). The error in the proof of (c) is the same uniform-vs-average gap diagnosed in §1.1 for fixed splits: the constructed `p_k` are averages over the reachable state distribution, while the recursion demands uniform per-state conditional bounds. The verification suite's B5 check passed only because this file's own 4-state model is split-complete by accident (its good successor has conditional survival exactly 1.0). Clauses (a), (b), (d) and the rest of this file stand as written; the exact quantile-form characterisation that replaces (c) is A1's residual-budget DP, adopted in `batch 4/PROOF_ELEVATION.md` Finding 9(d).
+
 **Target.** The `B9` section of `batch 2/04_open_problems/B_TIER_BRIDGES.md`, and the manifest row `B9.Thm1` (line 98).
 
 **This file is a proposal. No repository file has been modified.**
