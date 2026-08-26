@@ -564,3 +564,20 @@ Stage Summary:
 - Consolidated register: 19 rows PROVEN (repaired …), B7(3) narrowed to versality-conditional (the single case where no strengthening exists), zero rows demoted to conjecture, zero claims softened; every false sentence replaced by a true one of equal or greater force.
 - Commit chain: c415c6f (origin/main) → 477a28f → e0cfb5a → a1193b9 → 43eba83 → 96a0ccc → 5989118 → 5db1090 → 410f324 → a25afe6 → 1875fb5 → 091597c → 355feda → 421f458 → 45c4e0c → 86edc9e → 5fb4dff → 0dbde4a (+ this worklog commit).
 - Security: no PAT used; remote URL clean; push pending the token.
+
+---
+Task ID: 25
+Agent: main (Z.ai Code)
+Task: Push the 18 recovered recovery commits to GitHub with the owner-provided PAT; verify the remote state; answer the owner's question on whether the lost attempt was fully recovered
+
+Work Log:
+- Owner provided a fresh PAT (used in-memory only in the push URL; NOT written to the remote config, NOT stored in any file; revoke/rotate after this session is recommended).
+- Pushed the full 18-commit recovery chain: `git push https://<PAT>@github.com/MIKEAA2020/general-sustainability.git main:main` -> `c415c6f..7ac3f44  main -> main` (fast-forward, no force, no conflicts).
+- Verified independently via `git ls-remote origin main` = `7ac3f44ea7f53b6d5fd6430c8b950f7f4cd11be5` = local HEAD; `git fetch` + `git log origin/main` confirms the head commits (7ac3f44, 0dbde4a, 5fb4dff, 86edc9e, 45c4e0c, ...).
+- Answered the owner's recovery question: the lost attempt M was fully recovered FROM THE WORKLOG BLUEPRINT (Task 23) and then STRENGTHENED by the joint process — its one overclaim (E3.C6.3 (⟸) graded PROVEN) was corrected, its only conjecture-demotion was eliminated (replaced by A1/A2's provable truncated-kernel characterisation), and 14 new findings (N1-N14) were folded in. The joint assessment of all three attempts (M, A1, A2) is Part I of `batch 4/PROOF_ELEVATION.md` (§I.1 inventory, §I.2 sixteen points of full agreement, §I.3 the two numerically adjudicated A1-vs-A2 disputes, §I.4 the new-findings table, §I.5 the consolidation rule).
+- Remote URL verified clean (no embedded token).
+
+Stage Summary:
+- **ALL recovery work is now ON GITHUB MAIN (7ac3f44).** Nothing exists only in the sandbox; the working tree is clean (0 untracked, 0 modified).
+- Pushed chain: c415c6f (old origin/main) -> 477a28f (PROOF_ELEVATION.md recreated with joint assessment) -> e0cfb5a (F6 redo) -> a1193b9 (A3 incl. both owner-flagged fixes) -> 43eba83 (B-tier) -> 96a0ccc (E2/E3) -> 5989118 (E4) -> 5db1090 (E7) -> 410f324 (A4) -> a25afe6 (CA/C-tier) -> 1875fb5 (E1) -> 091597c (manifest status register) -> 355feda (B9/B10 errata) -> 421f458 (bucket B: F2/F3/C2/C3/C5/C6) -> 45c4e0c (typo) -> 86edc9e (reaudit tooling) -> 5fb4dff (C7 crosswalk) -> 0dbde4a (C4 reconciliation) -> 7ac3f44 (worklog Tasks 1-24).
+- Security: PAT in-memory only; recommend revoking/rotating it now that the push is complete.
