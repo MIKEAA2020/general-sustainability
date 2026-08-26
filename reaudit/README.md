@@ -29,6 +29,20 @@ because those claims are false only on models outside their test fixtures;
 the head of the root `batch 4/B9_THM1_REPAIRED.md` and `B10_THM1_REPAIRED.md`
 record this.
 
+**Reading the suites after the repairs landed (post-2026-08-26).** The
+audit documents describe the *pre-repair* state, so Section B of
+`verify_consistency.py` asserts the *presence* of the defects it documents:
+after the repair commits, a `[FAIL]` on a defect check means the defect is
+**gone** (fixed), and `[OK]` means either the discipline still holds
+(Section A) or the defect remains. Expected post-repair failures: C1 (both),
+C2, C3, C4 (manifest + B_TIER + WAVE_E_UPDATE), C5, C6 (both) — exactly the
+bucket-B/C4 repairs. The two C4 `[OK]`s that remain (PUBLICATION_STRATEGY's
+"closes R02.Cor6's bridge" phrase-match, and WAVE_E_UPDATE's §1 row if the
+pattern is re-run) are phrase-level matches on text that now carries the
+two-depth bookkeeping qualifier — the four-way disagreement itself is
+resolved (all four documents now assert the closure at the two-depth form
+with the same bookkeeping).
+
 To run everything (from the repository root):
 
 ```bash

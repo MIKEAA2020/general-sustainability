@@ -15,7 +15,7 @@ The following results are recorded in the session theorem files, but **every one
 | Theorem | Paper it strengthens | How |
 |---|---|---|
 | **A4** Nonlinear assume–guarantee (monotone-operator theorem) | Paper 2 (atlas) + Paper 1 (composition lesson) | The composition gate now has FOUR theorems (not two): the restricted proximal-normal, the tubular A–G, the eroded generation transfer, and the nonlinear monotone-operator version. Paper 2's composition section is substantially richer. |
-| **B1** Sampled-data erosion theorem | Paper 5 (governance design) | R02.Cor6's bridge is now a theorem, not a conditional. Paper 5's governance-design section can cite it directly. |
+| **B1** Sampled-data erosion theorem | Paper 5 (governance design) | R02.Cor6's bridge is closed **at the two-depth form** (B1.Thm1 repaired: a sample-time certificate at depth `R` converts to continuous-time safety at depth `r` at the cost `V_max T_s ≤ R − r`; the invariance reading of the original headline is refuted and withdrawn). Paper 5's governance-design section can cite it with that depth bookkeeping. |
 | **B9** Stochastic viability (chance-kernel, filter soundness, quantile erosion) | Paper 2 (atlas) + Paper 5 | The stochastic layer — previously a docket item (D3) — now has proved restricted results. |
 | **B10** Stackelberg equilibrium existence | Paper 1 (architecture) | The strategic-implementation docket (D5) has its foundational record. Paper 1's institutional section can acknowledge the reduction. |
 | **C-a** Decidability at fixed data | Paper 1 (scope) + Paper 5 (computability) | Every governance claim is decidable on the finite class. Paper 5's empirical falsification design is backed by a computability theorem. |
