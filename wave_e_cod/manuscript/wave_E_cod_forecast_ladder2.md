@@ -43,7 +43,7 @@ Claim types in the specification tables follow the programme taxonomy: D, data; 
 
 Table A2 also reports $F$ and $M$. They are joint outputs with SSB and are not used as exogenous inputs.
 
-Regular et al. (2025) extend the assessment to 1954, revise the LRP to 276 kt (40% of $B_{\mathrm{MSY}}$), and estimate 2024 SSB at 342 kt. That is a second specification, $\Omega_{\mathrm{xte}}$ (Section 5.3). The two objects differ in four typed fields: the dynamics map (xteNCAM versus NCAM $M$-shift; start year 1954 versus 1983), the safe-set map (276 kt versus 884.6 kt), the treatment of catch, and the horizon. The two SSB columns are not mixed. If either the safe-set map or the dynamics map fails, R04 forbids judgment transfer. Both fail.
+Regular et al. (2025) extend the assessment to 1954, revise the LRP to 276 kt (95% interval 180--423 kt; 40% of $B_{\mathrm{MSY}}$), and estimate 2024 SSB at 342 kt. That is a second specification, $\Omega_{\mathrm{xte}}$ (Section 5.3). The two objects differ in four typed fields: the dynamics map (xteNCAM versus NCAM $M$-shift; start year 1954 versus 1983), the safe-set map (276 kt versus 884.6 kt), the treatment of catch, and the horizon. The two SSB columns are not mixed. If either the safe-set map or the dynamics map fails, R04 forbids judgment transfer. Both fail.
 
 ---
 
@@ -69,7 +69,7 @@ with $\mathfrak s=0$ unless an Allee term is active.
 | M3 | residual | M2 + AR(1) residual | $\phi$ persisted |
 | M4 | delay | M3 | forecast starts from $S_{t-1}$ |
 
-The coarse catch regime, taken from DFO (2016) prose, is $C_t=240$ for $t\le 1991$, $C_t=120$ for $t=1992$, and $C_t=5$ for $t\ge 1993$. Year-by-year landings (Schijns et al. 2021, Table 1) replace that regime in Section 5.2. Regular et al. (2025) Table 1 matches Schijns exactly on 1983--1993 (11 years, maximum absolute difference 0 t). A 1956 discrepancy between those sources (236,210 t versus 263,210 t) lies outside 1983--2015 and is unused.
+The coarse catch regime, taken from DFO (2016) prose, is $C_t=240$ for $t\le 1991$, $C_t=120$ for $t=1992$, and $C_t=5$ for $t\ge 1993$. Year-by-year landings (Schijns et al. 2021, Table 1) replace that regime in Section 5.2. Regular et al. (2025) Table 1 matches Schijns exactly on 1983--1993 (11 years, maximum absolute difference 0 t); STATLANT matches Schijns on 1983--1993, so the STATLANT-versus-Schijns sensitivity is closed for the collapse window (they are the same column there). A 1956 discrepancy between those sources (236,210 t versus 263,210 t) lies outside 1983--2015 and is unused.
 
 Parameters are estimated by one-step least squares on the training window only. Bounds: $r\in(0.001,2]$, $K$ above the training maximum.
 
@@ -167,7 +167,7 @@ Starting from $\hat q I_t$ instead of SSB: one-year RMSE 128 kt (still worse tha
 
 **Figure 4.** The two specifications. Overlap 1983--2015 RMSE $=126$ kt (2015: NCAM 299 kt, xteNCAM 273 kt). Different $K^*$. Not pooled.
 
-Checkpoints from Regular et al. (2025) Table 17: 2005 SSB $=26$ kt, 2017 $=451$ kt, 2024 $=342$ kt, 2024/LRP $=1.24$. The 2005 values (26 kt versus NCAM 25.18 kt) can agree on a low year without sharing an LRP.
+Checkpoints from Regular et al. (2025) Table 17: 2005 SSB $=26$ kt, 2017 $=451$ kt, 2021 $\approx 400$ kt (NCAM and xteNCAM said to agree), 2024 $=342$ kt, 2024/LRP $=1.24$. The 2005 values (26 kt versus NCAM 25.18 kt) can agree on a low year without sharing an LRP.
 
 **Table 6.** Rolling-origin RMSE on $\Omega_{\mathrm{xte}}$ (kt).
 
@@ -227,7 +227,7 @@ The 2016 LRP is the 1980s mean SSB. Slack to that bound is near zero by construc
 
 The moratorium is a change in implementable catch and is already in $C_t$. A separate delay switch does not add a degree of freedom beyond stock-flow. Whether the 1992 architecture has an empty viability kernel is a viability statement, not a one-year RMSE statement.
 
-One-dimensional surplus production is not NCAM: age structure, migration, and survey catchability are omitted. The test is whether this ladder earns retention, not whether the assessment is a good filter. M4 is a delay, not a Kalman filter. Recreational catch remains incompletely measured. Sample sizes are small ($n=33$ years on $\Omega_{2016}$; rolling $n=25$ at $h=1$). They suffice to rank models and do not suffice to certify a small skill difference.
+One-dimensional surplus production is not NCAM: age structure, migration, and survey catchability are omitted. The test is whether this ladder earns retention, not whether the assessment is a good filter. M4 is a delay, not a Kalman filter. Recreational catch remains incompletely measured. Sample sizes are small ($n=33$ years on $\Omega_{2016}$; rolling $n=25$ at $h=1$ and $n=21$ at $h=5$). They suffice to rank models and do not suffice to certify a small skill difference.
 
 The scores do not transfer an interval-verified linear toy, do not instantiate a closed-loop information filter, and do not mix the two assessment specifications.
 

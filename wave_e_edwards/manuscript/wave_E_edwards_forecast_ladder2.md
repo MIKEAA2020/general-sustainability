@@ -106,7 +106,7 @@ The scoring protocol is recorded in `protocol.md` and `protocol_pass2.md`. Windo
 
 ![Figure 1](fig1_series.png)
 
-**Figure 1.** J-17 annual mean and daily-high range. 1956 mean $623.2$ ft, daily minimum $612.51$ ft. 1992 mean $692.0$ ft, daily maximum $703.31$ ft. 2023 mean $635.7$ ft. Annual mean is below 660 ft in 31 of 90 years. Daily minimum is below 618 ft in one year (1956).
+**Figure 1.** J-17 annual mean and daily-high range. 1956 mean $623.15$ ft, daily minimum $612.51$ ft. 1992 mean $691.96$ ft, daily maximum $703.31$ ft. 2023 mean $635.68$ ft. Annual mean is below 660 ft in 31 of 90 years. Daily minimum is below 618 ft in one year (1956).
 
 ### 5.2 Fixed windows
 
