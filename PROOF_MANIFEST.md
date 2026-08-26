@@ -236,6 +236,12 @@ Primary \(z\): NCAM M-shift SSB (`data/ncam_2016_table_a2.csv`); xteNCAM Table 1
 | Locked xteNCAM Table 17 | `wave_e_cod/data/xtencam_table17_ssb.csv` | `c4f4a1ce473f30e9707cb422726c852b1311fac47c207c40d622cead306fd549` | input (not generated) | `INDEPENDENT_RERUN` (`batch 4/WAVE_E_RERUN.md`) |
 | Locked Schijns catch | `wave_e_cod/data/catch_schijns_2021.csv` | `4dc174f9e7f6dd5090f9d02cb569165bd0bdbd5038d171026f75e47459fe6db0` | input (not generated) | `INDEPENDENT_RERUN` (`batch 4/WAVE_E_RERUN.md`) |
 | Working manuscript (consolidated 2026-08-26) | `wave_e_cod/manuscript/wave_E_cod_forecast_ladder.md` | `fe4484e9319b0a57ff591edb4c2cddb4bbf37a1f2c2858d0533e3e73cd9c4a82` | prose; figures via `python3 src/make_figures.py`. Single consolidated file: supersedes the version-1 working manuscript and the version-2 rewrite; superset audited by `reaudit/verify_wave_e_consolidation.py` | `INDEPENDENT_RERUN` of scores (`batch 4/WAVE_E_RERUN.md`) |
+| Frozen cod intervention protocol | `wave_e_cod/protocol_intervention.md` | `09dd83f1aab875787e9592fec1bbbbb3a47ab3d291ead83ba08f1c570a80ec04` | text; frozen before scores | **NONE** (first run) |
+| Cod intervention runner | `wave_e_cod/src/run_intervention.py` | `4258a95b35318d8f6d8bd04cf0f7b9a7e835a9be2d40763698ffd90e04a42ff7` | deterministic; no randomness | **NONE** (first run) |
+| Cod intervention results | `wave_e_cod/results/intervention_results.json` | `76f31745a67120b959679190798b8115aa15e0117ea151b395dc64a8ac2be80f` | `cd wave_e_cod && python3 src/run_intervention.py` (uses the locked ladder series + Schijns catch only) | **NONE** (first run) |
+| Cod intervention boundary table | `wave_e_cod/results/intervention_boundaries.csv` | `cd8e97cbd967edf1398a5cf944caf306ed8cb25fc79a07d75e37126294c91d3d` | same | **NONE** (first run) |
+| R04.Cor2 cod kernel-level row | `wave_e_cod/admission/R04_Cor2_cod_kernel.md` | `5c53529c9182a2aa45cb4a885f91a027634a678d39c3ba6abd8807f5ea429165` | text; `APPROXIMATION` — governed surplus object, Cor2 triple computed with the EXPANSIVE erosion form (the contraction form is inapplicable at the LRP: F′ = 1.153 > 1); **not** an A001/A014 exact specialization; no E5 transfer | **NONE** (first run) |
+| Cod intervention manuscript | `wave_e_cod/manuscript/wave_E_cod_intervention.md` | `dc60a7d577d7a386b0bab2e79521b4f2e35bc6a2ca1a04ef408dc97c497740fc` | prose | **NONE** (first run) |
 
 An independent rerun on a different toolchain regenerated every result file byte-identically (`batch 4/WAVE_E_RERUN.md`). The retention claim (persist beats M2–M4 on primary RMSE) is a score ranking, not a kernel transfer.
 
@@ -269,6 +275,8 @@ Primary \(z\): J-17 calendar-year mean head. Locked daily series: `data/j17_twdb
 **Climate rebuild.** `src/build_climate.py` reads `data/climdiv-pcpndv-v1.0.0-20260806`, which is **not committed** (URL in `wave_e_edwards/data/SOURCES.md`). Rebuilding the three `pcp_*` precipitation columns from source is `NOT_REPRODUCIBLE_FROM_COMMITTED_CODE`; the two Niño columns rebuild exactly from the committed PSL file (independent rerun reproduced them to machine precision — `batch 4/WAVE_E_RERUN.md` F3). Scoring Pass 1/2 from the committed `annual_panel.csv` does not need the nClimDiv file. `python3 src/build_panel.py` writes H/R/P/Q to `data/annual_panel_hrp.csv` and **leaves** the locked 20-column `annual_panel.csv` in place when those columns already match (F4 fixed). Rebuilding `pcp_*` from source still needs the omitted nClimDiv file.
 
 These scores are not E5 numbers, not A021 C4 artifacts, and not a transferred judgment.
+
+**Latent defect disclosure (found while building the cod leg):** the Edwards intervention runner's `lt` helper treats an empty kernel as −∞ in the strict-improvement test while `le` treats it as +∞. The asymmetry is provably **inert** for the committed Edwards artifacts — an audit of `results/intervention_results.json` finds zero (module-empty, BAU-nonempty) boundary pairs, so both semantics give identical retention verdicts on the committed run. The cod runner implements the consistent semantics (empty = +inf everywhere) and records this note; the pinned Edwards code and artifacts are left untouched.
 
 ---
 

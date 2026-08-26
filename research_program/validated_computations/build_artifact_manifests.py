@@ -111,6 +111,14 @@ ENV_RERUN = ('Python 3.13.14, numpy 2.3.5, scipy 1.17.1, mpmath 1.3.0 '
 # 2026-08-26 same-env second-session reruns postdate the builder and are
 # recorded in reaudit/intervention_rerun/ + reaudit/postv10_rerun/)
 STATUS_OVERRIDE = {
+    'wave_e_cod/results/intervention_results.json': (
+        'cod intervention-leg artifact (protocol_intervention.md); FIRST RUN '
+        '2026-08-26; rerun NONE (the G1a kernel-level Cor2 leg: productivity '
+        'negative certificate, no retention, maximal robust flat catch 57.6 '
+        'kt at UC-q10, expansive-form erosion certified to T <= 5 yr)'),
+    'wave_e_cod/results/intervention_boundaries.csv': (
+        'cod intervention-leg artifact (protocol_intervention.md); FIRST RUN '
+        '2026-08-26; rerun NONE'),
     'wave_e_edwards/results/intervention_results.json': (
         'intervention-leg artifact (protocol_intervention.md); first run '
         '2026-08-26; rerun 2026-08-26 byte-identical on a fresh second-session '
