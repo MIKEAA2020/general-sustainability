@@ -1,5 +1,7 @@
 # Remaining Obstacles to a Coherent General Theory of Sustainability
 
+> **Status note (2026-08-26):** this document now carries three layers: the original twelve-obstacle map (pre-v1.0), the canonical-first closure update, and the **post-v1.0 closure update** with the five remaining obstacle groups (G-MATH / G-EMP / G-CERT / G-POS / G-SYN) and the revised priority order — read the bottom two sections for the current state after the compendium v1.0 release and the independent rerun.
+
 ## 1. Canonical formal object is not yet singular and stable
 
 The programme has a strong typed architecture, but not every module has been shown to instantiate one literal equation. The corpus spans:
@@ -143,7 +145,7 @@ The theory must specify what is universal versus model-class dependent:
 
 The final synthesis must be ambitious without presenting module-specific mechanisms as universal laws.
 
-## Priority order
+## Priority order (original, pre-v1.0)
 
 1. Freeze the typed canonical system/theorem schema.
 2. Build the complete source-to-canonical-to-publication concordance.
@@ -166,6 +168,47 @@ The first dependency wave is now complete at the infrastructure level:
 
 The theorem-interface and A002 source-closure waves are substantially complete: all 152 A001/A002 rows are family-mapped and source-located; the Operator I hierarchy is fixed; canonical-source de-duplication is recorded; and 27 A002 source objects—including conservation, substitution, observation, sampled/RFDE/hybrid kernels, projectability, reduction, aggregation, local horizons, and Halanay stability—have passed direct audit at exact scope. The retained Paper 2 estimate remains approximately 27,197 words before references/figures, so one-paper feasibility is doubtful and venue-dependent. The two hardest gates now have both self-contained prompts and internal provisional answers for future joint adjudication. The composition answer repairs the theorem through explicit joint feasibility and selector/strong-invariance hypotheses; the novelty answer finds the Operator II backward recursion standard and keeps Paper 1's journal gate open. Neither answer is implemented. Selected non-composition A001 proofs, active model-version rows, and the venue split decision remain next. Empirical execution, the A021 concrete theorem, full artifact assembly, and manuscript drafting remain downstream.
 
-## Bottom line
+## Bottom line (pre-v1.0)
 
 The programme already contains the components of a general theory. The canonical object and one decisive cross-module seam are now fixed. The remaining obstacle is to verify the 407 concordance rows in dependency batches, prove the still-open interfaces, and close one end-to-end empirical realization without weakening status discipline.
+
+---
+
+## Post-v1.0 closure update (2026-08-26, after the compendium release)
+
+The v1.0 public release landed what the original priority items 1–3 and 7 asked for, and the empirical programme took its first two scored steps. What remains is now sharper and narrower. Status against each original obstacle:
+
+### Closed or discharged by v1.0 and the rerun
+
+1. **Obstacle 1 (canonical object): CLOSED at the infrastructure level.** TCS-1.0 frozen and controlling; TCS-1.1 diff frozen but NOT controlling (migration open, deliberately).
+2. **Obstacle 2 (concordance): ROUTING CLOSED — all 407 rows carry publication destinations** (P2 127 / P5 55 / P4 55 / P3 54 / neg-counter 43 / P7-cond 20 / P1-or-monograph 18 / open-problem docket 12 / P4-appendix 12 / P6-cond 8 / P1-gate 3). Row-level content verification remains open.
+3. **Obstacle 3 (notation): registry established** (`canonical_notation_variant_registry_v1_0.csv`); active model-version conflicts are recorded, not all resolved (A2 coupling class awaits an author decision).
+4. **Obstacle 9 (reproducibility): substantially discharged.** Five Part II certificates + both Wave E scored trees independently rerun on a second agent/toolchain (`VALIDATED_COMPUTATIONS_RERUN.md`, `WAVE_E_RERUN.md`: 30/30 byte-identical); the versioned compendium is released with a register of record (PROOF_MANIFEST). Remaining: the A025 fold pipeline (NOT REBUILT), monodromy dt=0.1, C-g artifact manifests, persistent identifiers.
+5. **Obstacle 10 (content allocation): closed as architecture.** Five assured papers + near-ready A021 + conditional stage/spatial + monograph (working preprint v1.0) + versioned compendium; every row routed.
+
+### Still open — the five remaining obstacle groups
+
+**G-MATH (mathematics).** A1 continuum lift is the single highest-leverage item: every C4 certificate (orbit Krawczyk, off-grid residual, monodromy) is a discrete K=80 / dt≤0.25 fact; the piecewise-Chebyshev route to certified-in-the-DDE is specified, NOT EXECUTED. B4's continuum transfer is gated on A1. Paper 6 gate: A021 continuum periodic-NAIM unproved. Paper 7 gate: A022 stage/spatial theorem false as stated (absorbed by the five-paper architecture, but then the general theory explicitly does not cover stage/spatial or the Liebig-graph continuum module). A3 residue and the general typed composition/interface theorem remain open (restricted contracts + counterexamples exist; the two hardest gates have internal provisional answers, neither implemented, both awaiting joint adjudication).
+
+**G-EMP (empirical).** Both scored Wave E gates returned *negative certificates* — persistence wins on cod (Ω2016, Ωxte) and Edwards (Pass 1, Pass 2); the one structural win (Edwards M2m 12.28 ft) was correctly declined on class grounds. This is legitimate, publishable content, but it means the theory's empirical content is so far *regulative* ("complexity not earned"), not positive. Three specific gaps: (i) only the prediction leg of §15 has been tested — **intervention selection** (governance operator + viability kernel vs a baseline on a real system) has never been exercised, and it is the leg where the architecture should positively earn its complexity; (ii) no real-system admission certificate exists (E5 is the linear toy's; R04.Thm1's converse forbids transfer to 2J3KL or J-17 without the five-map certificate or Cor2 approximate admission — neither constructed; G1 Track 2 is gated on exactly this); (iii) no kernel/safe-set has ever been computed on a real system — no calibrated states + observation model + governance operator + held-out comparison + kernel in one closed loop. Pass 2's failure of lagged climate modules to forecast recharge sharpens the diagnosis: the oracle water-balance (7.55 ft vs 13.23) proves the stock-flow structure is real; the missing rent is the information layer — precisely where the observation-fibre machinery should have something to say.
+
+**G-CERT (certification).** Wave E Part III spec-matching NOT CONFIRMED (no frozen specification (S, Ω, y_t, T, scoring rule) matched against the artifacts); the 407-row content verification pending; C-g artifact manifests NOT DONE; the theorem files are reconstructions pending independent line-by-line re-verification (the standing Wave-0 gate).
+
+**G-POS (positioning).** G5/E6 external novelty audit: matrix exists, execution NOT DONE — now *more* load-bearing, because with negative empirical certificates the distinctiveness claim rests entirely on the typed noncompensatory kernel machinery, the admission/certificate discipline, and the negative-certificate semantics; without one global novelty map (viability theory, resilience, ecological economics, systems dynamics, control, hybrid systems, forecast-benchmarking) reviewers will read the programme as benchmarking with vocabulary. Paper 2 (~27,197 words) venue-split decision open; monograph sequencing rule (draft after principal papers receive external scrutiny) intact — no external scrutiny has occurred yet.
+
+**G-SYN (synthesis discipline).** Obstacle 12 obligation stands: the final synthesis must freeze what is universal (conservation-conditional-on-closure, noncompensatory, admission discipline) versus model-class-dependent (delay mechanisms, folds, local bifurcations). The institutional/distributive layer remains architecturally mature and empirically unimplemented.
+
+### Revised priority order (post-v1.0)
+
+1. **A1 continuum lift** (piecewise-Chebyshev execution) — unlocks the certified chain and B4; highest-leverage mathematics.
+2. **G1 Track 2 admission certificate for one real system** (Edwards is the natural first: measured z, independent R, dated U, declared K*), then the **intervention-selection leg**, not just prediction.
+3. **Wave-0 close**: freeze + match the Wave E specification (Part III), row-verify the 407 concordance, build C-g manifests.
+4. **E6 novelty audit execution** (G5) — decoupled from the above and cheaper than all of them.
+5. **Rebuild the A025 fold pipeline** (fix the Moore–Spence stage) and the dt=0.1 monodromy — retire the last cannot-yet-cite rows.
+6. **Adjudicate the two provisional answers** (composition, Operator II novelty) — both written, neither implemented.
+7. Draft Papers 1+2 from the concordance; venue decision for Paper 2.
+8. Monograph after external scrutiny (unchanged sequencing rule).
+
+## Bottom line (post-v1.0)
+
+The theory's skeleton — typed schema, restricted bridges, discrete certificates, admission discipline, two honest negative empirical certificates — is closed, released, and independently rerun. What remains for the "general theory" claim is: **one continuum-lifted certified theorem (A1), one admitted real system where the full loop including intervention/kernel computation runs end-to-end (G1 Track 2), the Wave-0 verification close (spec match + row verification + manifests), and a novelty audit (E6) that positions the negative-certificate methodology as the contribution rather than a limitation.** The general-theory claim is NOT blocked by any open item — but it is not yet *earned* on the empirical and continuum legs.
