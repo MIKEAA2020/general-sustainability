@@ -1,0 +1,86 @@
+{
+  "title": "A1 piecewise-Chebyshev campaign \u2014 Stage 2: outward-rounded interval evaluation of the local collocation defects and Jacobian blocks",
+  "status": "INTERVAL EVALUATION (machinery + measurement) \u2014 NOT a certificate: no Krawczyk operator, no radii polynomial, no patch-to-patch assembly; A1 remains COMPUTED_PARTIAL until Stage 4 closes",
+  "inputs": {
+    "orbit": "committed Krawczyk box midpoint (c4_orbit_krawczyk_box.npz)",
+    "period_P": 370.93117783942597,
+    "M_segments": 8000,
+    "cheb_degree": 8,
+    "nodes_convention": "exact algebraic node times t = (P/M)(j + (xi_i+1)/2); Stage 1's float64 node expression differs by <= 2e-13 in time (defect-level effect <= ~1e-11, far below the 7.9e-9 signal)",
+    "delay_tau": 4.5
+  },
+  "method": {
+    "phases": "exact decomposition: at the algebraic nodes the phase 2 pi k t/P is P-free (= 2 pi k j/M + pi k (xi_i+1)/M); patch phases = M-th roots of unity computed once in mpmath \u2014 the integer power z^k is again an M-th root of unity, taken by exact integer table permutation (width 1 ulp, no binary powering); node offsets = 729 mpmath evaluations; the delay folded per mode (At = A cos(phi) - B sin(phi), Bt = A sin(phi) + B cos(phi))",
+    "interval_arithmetic": "float64 with np.nextafter outward rounding everywhere; softplus (f) and sigmoid (J) per node in mpmath (dps=30); differentiation matrix and all P-dependent constants in mpmath (dps=40)",
+    "full_spectrum": "the full 161-mode wrapped-frequency interpolant via A_k = c_k.re + c_-k.re, B_k = c_-k.im - c_k.im (no conjugate-symmetry assumption \u2014 matches the Stage-1 evaluator)"
+  },
+  "measurements_delta0": {
+    "X_width_sup": 1.8189894035458565e-12,
+    "Zd_width_sup": 1.887379141862766e-14,
+    "dX_cheb_width_sup": 7.000240401233704e-09,
+    "dX_fourier_width_sup": 3.9745984281580604e-14
+  },
+  "inflation_ladder": [
+    {
+      "label": "delta=0 (on-substrate)",
+      "f_width_sup": 2.0736190542436361e-13,
+      "Y_cheb_abs_sup_upper": 8.326074441011856e-09,
+      "Y_cheb_width_sup": 7.0002812851965865e-09,
+      "Y_four_abs_sup_upper": 7.864395856760355e-09,
+      "Y_four_width_sup": 2.128575093979125e-13,
+      "gain_sup_lower": 0.33245909687599334,
+      "gain_sup_upper": 0.33245909687600916,
+      "J_width_sup": 3.8941072588727366e-14,
+      "Dv_width_sup": 3.3573144264664734e-13
+    },
+    {
+      "label": "delta=1e-08 (tube inflation)",
+      "f_width_sup": 1.4316702356964583e-07,
+      "Y_cheb_abs_sup_upper": 7.961067494122177e-08,
+      "Y_cheb_width_sup": 1.4406411863454596e-07,
+      "Y_four_abs_sup_upper": 7.915767546995413e-08,
+      "Y_four_width_sup": 1.4316704211037037e-07,
+      "gain_sup_lower": 0.33245909599814477,
+      "gain_sup_upper": 0.3324590977538577,
+      "J_width_sup": 1.9633316222789077e-08,
+      "Dv_width_sup": 1.8677313140536e-08
+    },
+    {
+      "label": "delta=1e-06 (tube inflation)",
+      "f_width_sup": 1.4316686009929747e-05,
+      "Y_cheb_abs_sup_upper": 7.162742585831162e-06,
+      "Y_cheb_width_sup": 1.4317575818267871e-05,
+      "Y_four_abs_sup_upper": 7.162291888240802e-06,
+      "Y_four_width_sup": 1.4316686028470473e-05,
+      "gain_sup_lower": 0.33245900909114257,
+      "gain_sup_upper": 0.33245918466086893,
+      "J_width_sup": 1.9633307279942613e-06,
+      "Dv_width_sup": 1.8677158134527971e-06
+    }
+  ],
+  "verification": {
+    "mpmath_crosscheck_X_contained_5_nodes": true,
+    "mpmath_crosscheck_Zd_contained_5_nodes": true,
+    "mpmath_crosscheck_max_width": 1.6832003038276611e-46,
+    "float_midpoint_agreement_max": 1.2505552149377763e-12,
+    "float_midpoint_agreement_ok": true,
+    "float_agreement_note": "the float64 evaluator agrees with the interval midpoints to <= 3e-12 (the float64 phase-rounding scale); the RIGOROUS containment is the mpmath cross-check",
+    "float_defect_contained_tol_1e-9": true,
+    "float_gain_sup_recomputed": 0.33245909687600106,
+    "stage1_gain_value": 0.3325,
+    "gain_interval_contains_float": true,
+    "gain_agrees_with_stage1_4digits": true,
+    "stage1_defect_value_M8000": 7.865e-09
+  },
+  "stage2_verdict": {
+    "Y_input": "the Stage-3 Y-input is rigorously enclosed: sup |Y_cheb| <= 8.326e-09 with interval width <= 7.000e-09",
+    "fourier_defect": "the orbit's own DDE defect (Fourier derivative) is enclosed: sup |Y_four| <= 7.864e-09 (width <= 2.129e-13) \u2014 to be compared with Stage 1's 7.865e-9 float reading",
+    "gain": "the rigorous local-gain interval at M=8000 is [0.33245909687599, 0.33245909687601] (width 1.6e-14); the recomputed float64 sup is 0.33245909687600 (Stage 1's committed reading: 0.3325, rounded to 4 decimals) \u2014 the O(1)-local-gain premise now holds in interval arithmetic, not just float",
+    "tube_machinery": "the inflation ladder runs end-to-end: at delta=1e-6 the gain sup upper is 0.3325 and the defect-interval width sup is 1.432e-05 \u2014 the Stage-3 tube evaluation machinery works and its width growth is measured",
+    "next_stages": [
+      "Stage 3: the local Krawczyk/radii-polynomial system on the patches with the finite-band delay coupling enclosed (consumes the interval Y-input and the tube-Jacobian machinery delivered here)",
+      "Stage 4: patch-to-patch contraction assembly and the continuum orbit certificate (the A1 gate)"
+    ],
+    "honesty": "this stage encloses and measures; it certifies nothing and upgrades no theorem status \u2014 the substrate is the float64 box-midpoint orbit, NOT an enclosure of the true DDE solution"
+  }
+}

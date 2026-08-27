@@ -4,7 +4,7 @@
 
 | # | Problem | Status |
 |---|---|---|
-| A1 | Continuum lift (validated → certified-in-the-DDE) | COMPUTED_PARTIAL (piecewise-Chebyshev route specified; **Stage 1 executed 2026-08-26** — substrate + local-gain diagnostic, premises confirmed, `c4_piecewise_chebyshev_stage1.json`; Stages 2–4 NOT EXECUTED) |
+| A1 | Continuum lift (validated → certified-in-the-DDE) | COMPUTED_PARTIAL (piecewise-Chebyshev route specified; **Stages 1–2 executed 2026-08-26** — Stage 1: substrate + local-gain diagnostic, premises confirmed (`c4_piecewise_chebyshev_stage1.json`); Stage 2: outward-rounded interval evaluation — the Stage-3 Y-input enclosed (sup \|Y_cheb\| ≤ 8.33e-9), the gain premise in interval arithmetic, the tube-inflation ladder delivered (`c4_piecewise_chebyshev_stage2.json`/`.npz`, deterministic); Stages 3–4 NOT EXECUTED) |
 | A2 | A021 coupling class G,f,g | DECLARED (modelling decision; discrete-level hypothesis verification) |
 | A3 | Variable-event delayed-hybrid kernel | Topology + compactness (Thm1 repaired: common-modulus hypothesis, supplied free by dynamical closure) + conditional kernel theorem PROVED; residue OPEN |
 | A4 | Nonlinear small-gain with nonconvex implementation and shared controls | PROVED (monotone-operator theorem) |

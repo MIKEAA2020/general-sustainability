@@ -93,6 +93,21 @@ COMMANDS = {
         'repository root',
         'A1 piecewise-Chebyshev campaign Stage 1 (substrate + local-gain '
         'diagnostic); NOT a certificate; A1 remains COMPUTED_PARTIAL'),
+    'a021_c4/c4_piecewise_chebyshev_stage2.json': (
+        'python3 research_program/validated_computations/a021_c4/'
+        'c4_piecewise_chebyshev_stage2.py',
+        'repository root',
+        'A1 piecewise-Chebyshev campaign Stage 2 (outward-rounded interval '
+        'evaluation of the collocation defects and Jacobian blocks + the '
+        'tube-inflation ladder); deterministic, byte-identical across '
+        'reruns; NOT a certificate; A1 remains COMPUTED_PARTIAL'),
+    'a021_c4/c4_piecewise_chebyshev_stage2.npz': (
+        'python3 research_program/validated_computations/a021_c4/'
+        'c4_piecewise_chebyshev_stage2.py',
+        'repository root',
+        'A1 Stage-2 companion arrays (the interval defect enclosures '
+        'Y_cheb/Y_four and the gain interval at every node, M=8000 x 9); '
+        'deterministic; NOT a certificate'),
     'a021_c4/c4_monodromy_dt0p1.npz': (
         'python3 research_program/validated_computations/a021_c4/'
         'c4_monodromy_dt0p1.py (rerun with --resume until phase 3)',
