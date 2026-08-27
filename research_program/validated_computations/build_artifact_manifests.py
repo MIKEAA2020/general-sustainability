@@ -216,6 +216,41 @@ COMMANDS = {
         'monodromy-enclosure widths at r = 0; sup 4.82e-3 dominated by '
         'the undamped phase coordinate, the certificate Z-term handles '
         'it through the bordered inverse); deterministic'),
+    'a021_c4/c4_piecewise_chebyshev_stage4c.json': (
+        'python3 research_program/validated_computations/a021_c4/'
+        'c4_piecewise_chebyshev_stage4c.py A  (resumable: rerun across '
+        'sessions until "Phase A done")  then  python3 '
+        'research_program/validated_computations/a021_c4/'
+        'c4_piecewise_chebyshev_stage4c.py final',
+        'repository root',
+        'A1 piecewise-Chebyshev campaign Stage 4c — THE CONTINUUM '
+        'ORBIT-TO-SOLUTION LIFT (EXECUTED; the certificate DOES NOT '
+        'CLOSE at the current gap-enclosure sharpness): Psi_true (the '
+        'true-DDE one-period march on the augmented state with the '
+        'ring-interpolated history reads) with the coupled (u, eta) '
+        'system; the consistency-gap machinery (the exact Peano '
+        'constants |w\'| and the truncated-power divided-difference '
+        'functionals; the read-kink ladder with the OWN-smoothness '
+        'bootstrap Y9 = 2.89e6; the Bell-DP derivative bootstrap; the '
+        'per-patch truncation forcing marched by the Stage-4b '
+        'block-wrapped affine noise-symbol machinery); the eta-lift '
+        '(eta_bound 1.18e-16, L_eta 5.65e3, eta_Y 6.7e-13). ALL EIGHT '
+        'machinery checks pass (monodromy 1.8e-12, operator-march '
+        'consistency, tight-width validity, gap-vs-measured enclosure '
+        'validity, forcing sanity, bootstrap sanity, eta-lift, and the '
+        'honest closure check). THE CLOSURE FAILS: Y = 3.547e-4 '
+        '(T_gap-dominated: the enclosed consistency gap sup 6.42e-4) '
+        'against the 1e-7..1e-6 ladder — Z = 0.78..2.10; the '
+        'measured-gap proxy is 2.68e-9, so the sound enclosure is '
+        '2.4e5 pessimistic, the obstruction diagnosed channel-by-channel '
+        '(the read-channel kink ladder: eps_read 4.16e-9 per read is '
+        'kink-dominated — the smooth part is ~9e-17 — with the '
+        'Dv3_sup^(m-1) compounding reaching 1.1e6, accumulated over the '
+        '~8000 per-patch reads under the independent-noise treatment); '
+        'the three refinement paths recorded in the artifact. The '
+        'Phase-A checkpoint + the six partial checkpoints are '
+        'regenerable (gitignored; ~25 min). A1 remains COMPUTED_PARTIAL '
+        '— the continuum-lift gate remains open; deterministic'),
     'a021_c4/c4_monodromy_dt0p1.npz': (
         'python3 research_program/validated_computations/a021_c4/'
         'c4_monodromy_dt0p1.py (rerun with --resume until phase 3)',
