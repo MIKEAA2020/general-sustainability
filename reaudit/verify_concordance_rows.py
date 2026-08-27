@@ -20,8 +20,9 @@ Checks, per the 2026-08-26 execution:
 
 The scientific row-closure states were originally requires_row_level_verification /
 mapped_requires_final_citation_check. The 2026-08-27 scientific passes
-(research_program/close_concordance_rows_A001.py, then _A002.py) closed the
-99 A001 rows and the 53 A002 rows to `row_verified`; this script's closure
+(research_program/close_concordance_rows_A001.py, then _A002.py, then
+_A011.py) closed the 99 A001 rows, the 53 A002 rows, and the 24 A011 rows to
+`row_verified`; this script's closure
 layer (check 6) machine-verifies the closed rows' record shape. The remaining
 open states are unchanged by this script.
 """
@@ -250,8 +251,8 @@ def main() -> None:
     print('NOTE: the machine layer verifies quotes, coverage, vocabulary, and the '
           'closure record shape. Scientific row-closure: '
           f'{rev.get("row_verified", 0)} rows closed '
-          f'(dated scientific passes; A001 and A002 executed 2026-08-27 via '
-          'research_program/close_concordance_rows_A001.py and _A002.py); '
+          f'(dated scientific passes; A001, A002, and A011 executed 2026-08-27 via '
+          'research_program/close_concordance_rows_A001.py, _A002.py, and _A011.py); '
           'still open: requires_row_level_verification: '
           f'{rev.get("requires_row_level_verification", 0)}; '
           'mapped_requires_final_citation_check: '
