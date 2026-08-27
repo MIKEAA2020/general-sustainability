@@ -151,6 +151,71 @@ COMMANDS = {
         'Faà di Bruno ninth-derivative bounds, the dichotomy norm profile, '
         'the monodromy spectrum, the tangent); deterministic; NOT a '
         'certificate'),
+    'a021_c4/c4_piecewise_chebyshev_stage4b.json': (
+        'python3 research_program/validated_computations/a021_c4/'
+        'c4_piecewise_chebyshev_stage4b.py A  then  '
+        'python3 research_program/validated_computations/a021_c4/'
+        'c4_piecewise_chebyshev_stage4b_certify.py eval / checks / '
+        'r:<radius> / final',
+        'repository root',
+        'A1 piecewise-Chebyshev campaign Stage 4b — THE BORDERED ASSEMBLY '
+        'CERTIFICATE (CLOSED at r = 3e-7): the correlation-tracking '
+        '(block-wrapped affine noise-symbol) march — the operator columns '
+        'propagate SIGNED (the dichotomy cancellation preserved) while the '
+        'interval evaluation widths and tube Jacobian widths inject as '
+        'fresh noise symbols, in-block magnitude-accumulated and '
+        'block-wrapped; the rigorous monodromy enclosure; the mpmath '
+        'mismatch center (sup 9.65e-9); and the Krawczyk bordered system '
+        'in (delta, p) with the marched dPsi/dp column and the tangent '
+        'phase pin: Y + Z(r)·r <= r CLOSES at r = 3e-7 (Y = 8.99e-8, '
+        'Z = 0.444) — the DISCRETE periodic collocation fixed point of '
+        'the one-period local-Newton map is certified to exist within '
+        '3e-7 (sup-norm, augmented state) of the substrate at a period '
+        'P + p* with |p*| <= 3e-7. Two implementation defects caught and '
+        'fixed during development (the p-column landing-PATCH indexing '
+        'bug — H_sub indexed by the ring slot instead of the landing '
+        'patch, corrupting the phase/A component, caught by the '
+        'finite-difference check at exactly one coordinate; the '
+        'injection-tube bound using the sum|Lw| proxy where the '
+        'landing-H tube requires sum|dLw/dsigma|·|H| — up to 15.6x '
+        'underestimate, replaced by the channel-explicit sound bound). '
+        'All 10 verification checks pass. The 123 MB Phase-A checkpoint '
+        'is regenerable (gitignored; ~83 s). The continuum '
+        'orbit-to-solution lift remains Stage 4c; deterministic, '
+        'byte-identical across reruns'),
+    'a021_c4/c4_piecewise_chebyshev_stage4b_results.json': (
+        'python3 research_program/validated_computations/a021_c4/'
+        'c4_piecewise_chebyshev_stage4b.py A  then  '
+        'python3 research_program/validated_computations/a021_c4/'
+        'c4_piecewise_chebyshev_stage4b_certify.py eval / checks / '
+        'r:<radius> / final',
+        'repository root',
+        'A1 Stage-4b Phase-B accumulation record: the eval-only march '
+        '(mon_gap 3.0e-16, ap_gap 4.7e-15, T_unc0_sup 4.82e-3 — '
+        'phase-direction-dominated exactly as designed), the 10 '
+        'verification checks (all pass; the p-column finite-difference '
+        'gap 1.14e-5 after the landing-patch fix), and the full r-ladder '
+        '(3e-5/1e-5/3e-6/1e-6 fail with the sound tube bound — the '
+        'near-miss at 1e-6 recorded honestly — 3e-7 CLOSES); '
+        'deterministic'),
+    'a021_c4/c4_piecewise_chebyshev_stage4b_phaseA.json': (
+        'python3 research_program/validated_computations/a021_c4/'
+        'c4_piecewise_chebyshev_stage4b.py A',
+        'repository root',
+        'A1 Stage-4b Phase-A summary: the float monodromy (top eigenvalues '
+        'matching the committed preview to 1.8e-12), the corrected '
+        'p-column (sup 0.665 — the phase direction, matching the '
+        'tangent), the bordered inverse (norm 254.2, q0 1.06e-13), the '
+        'mpmath mismatch center 9.65e-9, and the mismatch width '
+        'enclosure sup 1.93e-7; deterministic'),
+    'a021_c4/c4_stage4b_Tunc_eval.npy': (
+        'python3 research_program/validated_computations/a021_c4/'
+        'c4_piecewise_chebyshev_stage4b_certify.py eval',
+        'repository root',
+        'A1 Stage-4b eval-only operator extent vector (the additive '
+        'monodromy-enclosure widths at r = 0; sup 4.82e-3 dominated by '
+        'the undamped phase coordinate, the certificate Z-term handles '
+        'it through the bordered inverse); deterministic'),
     'a021_c4/c4_monodromy_dt0p1.npz': (
         'python3 research_program/validated_computations/a021_c4/'
         'c4_monodromy_dt0p1.py (rerun with --resume until phase 3)',
