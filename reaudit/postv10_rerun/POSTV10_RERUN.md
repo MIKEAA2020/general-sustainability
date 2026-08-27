@@ -26,3 +26,20 @@ This record documents their rerun by a second agent session.
 - NOT CLOSED: the fold's interval Krawczyk stage (the nominal Moore–Spence point is not an interval certificate); the m=96/128 resolution cross-checks remain first-run (not rerun here — they are resolution cross-checks of the m=64 point, which is the rerun-verified object); Wave E Part III paper-support rows; no theorem status changes.
 
 Files: `dt0p1/committed/` + `dt0p1/committed_hashes.txt` + `dt0p1/rerun_console_excerpt.log`; `fold_m64/committed/` + `fold_m64/committed_hashes.txt` + `fold_m64/rerun_console.log`.
+
+## Addendum 2026-08-26 (b): the m=96/128 fold cross-checks rerun hash-identical
+
+The remaining first-run limitation on the post-v1.0 computations is discharged:
+the A025 fold pipeline's m=96 and m=128 resolution cross-checks are rerun
+HASH-IDENTICAL on fresh same-environment executions of the committed code with
+the invocations recorded in the artifact-manifest builder
+(`fold_m96_m128/FOLD_M96_M128_RERUN.md` — all four artifacts byte-for-byte;
+tau_f = 5.587236198663 at both resolutions, INSIDE the lost certificate
+interval at ~2.7e-11; |M| = 3.31e-12 / 7.44e-12). An initial default-argument
+attempt reproduced the verdicts but not the bytes — the committed runs used
+non-default arguments (`--dtau-min 5e-6 --tau-end 5.62`, m=128 additionally
+via `--resume-ms` from the fresh step's output) — the record documents this
+and keeps both console logs. With this, EVERY post-v1.0 computation (the
+dt=0.1 monodromy, the fold m=64/96/128, both intervention legs) is
+rerun-verified. Still open: the fold's interval Krawczyk stage; the
+cross-toolchain standard.

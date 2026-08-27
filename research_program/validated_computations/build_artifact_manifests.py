@@ -108,6 +108,24 @@ COMMANDS = {
         'A1 Stage-2 companion arrays (the interval defect enclosures '
         'Y_cheb/Y_four and the gain interval at every node, M=8000 x 9); '
         'deterministic; NOT a certificate'),
+    'a021_c4/c4_piecewise_chebyshev_stage3.json': (
+        'python3 research_program/validated_computations/a021_c4/'
+        'c4_piecewise_chebyshev_stage3.py',
+        'repository root',
+        'A1 piecewise-Chebyshev campaign Stage 3 (the local '
+        'Krawczyk/radii-polynomial systems in the marching form with the '
+        'finite-band delay coupling enclosed; all M=8000 local systems '
+        'close; the assembly constants measured; the dichotomy premise '
+        'confirmed at the collocation level); deterministic, byte-identical '
+        'across reruns; NOT a certificate; A1 remains COMPUTED_PARTIAL'),
+    'a021_c4/c4_piecewise_chebyshev_stage3.npz': (
+        'python3 research_program/validated_computations/a021_c4/'
+        'c4_piecewise_chebyshev_stage3.py',
+        'repository root',
+        'A1 Stage-3 companion arrays (per-patch q_total, the rigorous '
+        'inverse-norm and sensitivity bounds, the Lagrange constants, the '
+        'Y-inputs and closing radii by combo, M=8000); deterministic; NOT a '
+        'certificate'),
     'a021_c4/c4_monodromy_dt0p1.npz': (
         'python3 research_program/validated_computations/a021_c4/'
         'c4_monodromy_dt0p1.py (rerun with --resume until phase 3)',
