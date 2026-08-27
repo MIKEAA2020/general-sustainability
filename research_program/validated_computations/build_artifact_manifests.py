@@ -216,6 +216,25 @@ COMMANDS = {
         'monodromy-enclosure widths at r = 0; sup 4.82e-3 dominated by '
         'the undamped phase coordinate, the certificate Z-term handles '
         'it through the bordered inverse); deterministic'),
+    'a021_c4/c4_piecewise_chebyshev_stage4d.json': (
+        'python3 research_program/validated_computations/a021_c4/'
+        'c4_piecewise_chebyshev_stage4d.py A / gap / jac / final '
+        '(resumable; consumes the committed 4b/4c checkpoints)',
+        'repository root',
+        'A1 piecewise-Chebyshev campaign Stage 4d — THE LOCALISED KINK '
+        'LADDER (the read-channel enclosure sharpening; THE CONTINUUM '
+        'LIFT CLOSED): the kink sources localised to the ~98 '
+        'ring-window boundaries; the per-patch lattice-image chains '
+        'with the local tube gains (eps_read 4.16e-9 uniform -> 2.07e-12 '
+        'worst); the ladder extended to m=40 with rigorous '
+        'Hermite-Genocchi/Lebesgue tail bounds; the per-radius '
+        'consistency-Jacobian (base + r*adv exactly); T_gap 6.42e-4 -> '
+        '3.29e-8 (12.3x above the measured proxy); Y = 1.492e-7, '
+        'Z(3e-7) = 0.469 — the closure Y + Z(r)*r <= r HOLDS at '
+        'r = 3e-7 (and 4e-7): a TRUE periodic solution of the C4 DDE '
+        'certified within 3e-7 of the substrate at a period within '
+        '3e-7 of P; all 13 checks pass; deterministic (the JSON '
+        'byte-identical across reruns)'),
     'a021_c4/c4_piecewise_chebyshev_stage4c.json': (
         'python3 research_program/validated_computations/a021_c4/'
         'c4_piecewise_chebyshev_stage4c.py A  (resumable: rerun across '
