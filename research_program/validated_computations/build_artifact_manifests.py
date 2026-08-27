@@ -126,6 +126,31 @@ COMMANDS = {
         'inverse-norm and sensitivity bounds, the Lagrange constants, the '
         'Y-inputs and closing radii by combo, M=8000); deterministic; NOT a '
         'certificate'),
+    'a021_c4/c4_piecewise_chebyshev_stage4a.json': (
+        'python3 research_program/validated_computations/a021_c4/'
+        'c4_piecewise_chebyshev_stage4a.py',
+        'repository root',
+        'A1 piecewise-Chebyshev campaign Stage 4a (the assembly '
+        'measurements: the independent monodromy reconstruction validated '
+        'against the Stage-3 preview, the dichotomy constant K_0 = 731.6, '
+        'the pinned/bordered inverse conditioning, the ~1.2e-8 float '
+        'mismatch march; the interval-march obstruction MEASURED '
+        '(width-growth 1.00264/step defeats the direct and windowed '
+        'interval marches — the Stage-4b correlation-tracking requirement '
+        'grounded in measured constants); and THE RIGOROUS BETWEEN-NODES '
+        'CONTINUUM DEFECT BOUND sup_t |p\' - rho f(p, p_delayed)| <= '
+        '2.5938e-8 uniform over the rho-family); deterministic, '
+        'byte-identical across reruns; NOT the assembly certificate; A1 '
+        'remains COMPUTED_PARTIAL'),
+    'a021_c4/c4_piecewise_chebyshev_stage4a.npz': (
+        'python3 research_program/validated_computations/a021_c4/'
+        'c4_piecewise_chebyshev_stage4a.py',
+        'repository root',
+        'A1 Stage-4a companion arrays (per-patch node-residual sups, the '
+        'Chebyshev-coefficient derivative bounds B_{v,j}, the per-sector '
+        'Faà di Bruno ninth-derivative bounds, the dichotomy norm profile, '
+        'the monodromy spectrum, the tangent); deterministic; NOT a '
+        'certificate'),
     'a021_c4/c4_monodromy_dt0p1.npz': (
         'python3 research_program/validated_computations/a021_c4/'
         'c4_monodromy_dt0p1.py (rerun with --resume until phase 3)',
