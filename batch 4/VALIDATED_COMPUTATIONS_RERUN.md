@@ -118,6 +118,8 @@ N, Z, E match to four significant figures. A is 6 % higher and slightly above th
 
 The ten `[FAIL]`s are *defect-gone* checks: the suite still asserts the *presence* of the pre-repair defects. After the bucket-B / C4 / C6 / C7 repairs those phrases are absent, so the checks fail. That is the expected reading, not a new inconsistency.
 
+**Update 2026-08-27 (C8 executed):** the three C8 checks have now also flipped to defect-gone — the recorded obligation to upgrade the 14/17 August traceability reports was executed **by dated addendum** (register cross-reference sections appended to `general_theory_of_sustainability_traceability.md` and `revised_manuscript_traceability.md`, both citing `PROOF_MANIFEST.md` rows at their registered statuses), so the suite's assertions that those reports "carry no status label" (two checks, one per file) and "reference no audit register" (one check) no longer reproduce. The expected reading is now **13 defect-gone failures** (the documented 10 + the three C8 checks); the `.docx` twins were regenerated from the amended `.md` sources.
+
 C7's “no crosswalk exists” check is still `[OK]` only because it greps for `crosswalk|mapping table` *on the same line as* `Numerical proposition`; Part VII's table puts those strings in different cells. The crosswalk is in the register; the check is stale. Not acted on here.
 
 ---

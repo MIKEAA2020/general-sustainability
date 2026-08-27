@@ -2,7 +2,7 @@
 
 **Wave E empirical paper — working manuscript — consolidated version (2026-08-26)**
 
-*Series lock:* NCAM $M$-shift SSB, DFO SAR 2016/026 Table A2 (1983–2015); second unpooled specification xteNCAM 1954–2024. *Status:* two scored specifications ($\Omega_{2016}$, $\Omega_{\mathrm{xte}}$); complexity is not earned on either. This single file supersedes and consolidates the version-1 working manuscript and the version-2 rewrite — every substantive fact, table row, and figure claim of both is retained here (machine-checked by `reaudit/verify_wave_e_consolidation.py`).
+*Series lock:* NCAM $M$-shift SSB, DFO SAR 2016/026 Table A2 (1983–2015); second unpooled specification xteNCAM 1954–2024. *Status:* two scored specifications ($\Omega_{2016}$, $\Omega_{\mathrm{xte}}$); complexity is not earned on either. This single file supersedes and consolidates the version-1 working manuscript and the version-2 rewrite — every substantive fact, table row, and figure claim of both is retained here (machine-checked by `reaudit/verify_wave_e_consolidation.py`). *Frozen specification sheet:* `wave_e_cod/SPECIFICATION.md` ($\Omega_{2016}$ + $\Omega_{\mathrm{xte}}$ + the intervention-leg object; the artifact-level specification match is machine-verified — `batch 4/WAVE_E_SPEC_MATCH.md`, 36 checks via `reaudit/verify_wave_e_spec_match.py`).
 
 ## Abstract
 
@@ -251,7 +251,7 @@ The paper reports a forecast comparison. It does not conclude that the stock is 
 
 ## Data and code availability
 
-Locked inputs, scoring scripts, and result files are in `wave_e_cod/` of <https://github.com/MIKEAA2020/general-sustainability>. Primary SSB: DFO (2016) Table A2. Alternative SSB and landings: Regular et al. (2025) Tables 17 and 1. Historical landings: Schijns et al. (2021). Capelin acoustic index: Zenodo 10.5281/zenodo.17515115 and Murphy et al. (2025). An independent execution of the scoring scripts reproduced the committed result files (`batch 4/WAVE_E_RERUN.md`). That reproduction does not close a Wave E specification-matching gate.
+Locked inputs, scoring scripts, and result files are in `wave_e_cod/` of <https://github.com/MIKEAA2020/general-sustainability>; the frozen specification sheet is `wave_e_cod/SPECIFICATION.md`. Primary SSB: DFO (2016) Table A2. Alternative SSB and landings: Regular et al. (2025) Tables 17 and 1. Historical landings: Schijns et al. (2021). Capelin acoustic index: Zenodo 10.5281/zenodo.17515115 and Murphy et al. (2025). An independent execution of the scoring scripts reproduced the committed result files (`batch 4/WAVE_E_RERUN.md`: 29/29 pinned hashes, 30/30 result files byte-identical), and the artifact-level specification match has since been executed and machine-verified (`batch 4/WAVE_E_SPEC_MATCH.md`: 36 checks — protocol locks, ladder composition, all scored rows recomputed from the per-observation files and the raw committed series, the two specifications confirmed unpooled). The Wave E paper-support gates (Part III of `PROOF_MANIFEST.md`) remain NOT CONFIRMED; they close against the finalized paper, not the trees.
 
 ```
 python3 src/run_ladder.py && python3 src/run_xte.py

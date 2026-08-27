@@ -16,7 +16,7 @@
 | B1 | Sampled-data erosion theorem | PROVED (repaired: two-depth form; invariance reading withdrawn) |
 | B2 | Continuous selectors | Michael class verified on E5's class |
 | B3 | Algorithmic certificate production | SPECIFIED |
-| B4 | Product bunching | COMPUTED_PARTIAL (discrete only; continuum transfer gated on A1) |
+| B4 | Product bunching | COMPUTED_PARTIAL (discrete only; A1's gate CLOSED 2026-08-27 so the transfer is unlocked — the continuum transfer is now **SPECIFIED** with measured feasibility margins: `research_program/article_A021_liebig_graph/b4_continuum_transfer_specification.md`, stages T1–T5, the slack channel identified as the risk concentrator; execution not started) |
 | B5 | Observability-hierarchy implementation | SPECIFIED |
 | B6 | Nonlinear substitution (MFCQ) | PROVED (repaired: quantitative lsc + (BLK) with the sign corrected; ray lemma added) |
 | B7 | Bifurcation classification | PROVED ((3) conditional on versality) |

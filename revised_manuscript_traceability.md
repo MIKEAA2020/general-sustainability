@@ -261,3 +261,24 @@ The rescan covered v0.1, the early general-theory manuscript, v0.2 comprehensive
 ## Verification conclusion
 
 The revised manuscript, formal supplement, corrected article sources, and backstage methodology records jointly retain all legitimate conceptual, mathematical, diagnostic, domain, methodological, and research-programme material identified across the complete recorded history. Content identified as internally inconsistent was not simply removed: controlled invariance was narrowed to Operator I; transformation received Operator II; causal closure became boundary-interface adequacy; flat contracts became typed relations; the fixed-point statement became a composition conjecture; broad axioms became typed principles and conditional lemmas; and the unfalsifiable universal conjecture was replaced by narrower preregistered conjectures.
+
+---
+
+## Addendum (27 August 2026): register cross-references — closing the C8 traceability gap
+
+This report predates the proof-status register (`PROOF_MANIFEST.md`, first assembled 25 August 2026) and maps concepts to revised-manuscript **locations** without status information. The batch-4 cross-document consistency audit recorded that gap as finding **C8**. The recorded obligation is to upgrade by **addendum, not by silent rewrite** — the original mapping above is preserved verbatim, and this section adds the status layer for the load-bearing concepts. Statuses are cited from `PROOF_MANIFEST.md` at their stated scopes; the vocabulary follows the register's six mandatory terms, related to the manuscript's taxonomy by the register's Part VII crosswalk.
+
+| Source concept (this report) | Register locus | Register status (2026-08-27) |
+|---|---|---|
+| Robust controlled invariance as Operator I (§7) | Part I row B1 + the A001 Operator I hierarchy | PROVEN (B1 at the two-depth erosion form; A001 rows at their stated scopes) |
+| Architecture graph and hybrid Operator II (§8) | Part I row B3 (finite-architecture exact-tube Operator II recursion) and the Paper 1 independent-result gate (`paper1_finite_architecture_transformation_theorem.md`) | B3 PROVEN; the Paper 1 gate closed at the restricted finite-architecture form |
+| Restricted composition (the composition conjecture replacement) | Part I row B2 (restricted proximal-normal composition) and the corrected A001 composition theorem (packet 03) | PROVEN (restricted contracts; the general typed composition/interface theorem remains open by design) |
+| Sampled/RFDE/hybrid kernel ladder (formal supplement) | Part I row B4 | PROVEN (restricted classes) |
+| One specification Ω (§4) | `research_program/canonical_system_schema_v1_0.md` + the two frozen Wave E specification sheets (`wave_e_cod/SPECIFICATION.md`, `wave_e_edwards/SPECIFICATION.md`) | Schema v1.0 frozen (definitional); the two scored Ω are spec-matched at the artifact level (36 machine checks) |
+| A013 groundwater, phosphate, fisheries diagnostics (§19A.1) | The Wave E scored trees instantiate the fisheries and groundwater legs; phosphorus remains conditional | INDEPENDENT_RERUN (artifact level); phosphorus NOT STARTED |
+| Formal supplement theorem families (A001/A002/A006/A010) | Part I rows at their repaired scopes (the batch-4 reaudit demotions and repairs are recorded per row) | PROVEN / PROVEN_CONDITIONAL / repaired as per-row annotated |
+| Ten-class typed failure taxonomy (§24.1) | Definitional layer — no theorem rows | Correctly unregistered |
+| Preregistered narrower conjectures (the falsification programme) | Part III Paper 5 rows | NOT CONFIRMED |
+| A014 scalar-autonomous cod status | Part I admission rows (R04 at corrected scalar-autonomous status) | PROVEN at the stated (corrected) scope |
+
+**How to use this addendum.** Read every theorem-shaped box of the revised manuscript through the Part VII crosswalk: proof boxes → Part I rows at the statuses above; computation boxes → Part II (all five committed certificates INDEPENDENT_RERUN; the A1 continuum campaign COMPUTED with its Stage-4d true-DDE certificate); data/empirical boxes → Part III/VI. The batch-4 reaudit found several originally-as-stated formulations false and repaired or demoted each; the per-row annotations in Part I are the authority on which form is citable. The greppable rule is implemented tree-side by `reaudit/verify_consistency.py` and manuscript-side by `reaudit/verify_manuscript_sweep.py`.

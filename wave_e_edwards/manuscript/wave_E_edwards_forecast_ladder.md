@@ -2,7 +2,7 @@
 
 **Wave E empirical paper — working manuscript — consolidated version (2026-08-26)**
 
-*Series lock:* J-17 annual-mean elevation, TWDB 6837203 / EAA AY-68-37-203, 1934–2023. *Status:* one scored specification $\Omega_{\mathrm{SA}}$; causal stock-flow is not earned, causal recharge forecasts are not earned, and oracle water-balance is a certificate, not a retain. This single file supersedes and consolidates the version-1 working manuscript and the version-2 rewrite — every substantive fact, table row, and figure claim of both is retained here (machine-checked by `reaudit/verify_wave_e_consolidation.py`).
+*Series lock:* J-17 annual-mean elevation, TWDB 6837203 / EAA AY-68-37-203, 1934–2023. *Status:* one scored specification $\Omega_{\mathrm{SA}}$; causal stock-flow is not earned, causal recharge forecasts are not earned, and oracle water-balance is a certificate, not a retain. This single file supersedes and consolidates the version-1 working manuscript and the version-2 rewrite — every substantive fact, table row, and figure claim of both is retained here (machine-checked by `reaudit/verify_wave_e_consolidation.py`). *Frozen specification sheet:* `wave_e_edwards/SPECIFICATION.md` ($\Omega_{\mathrm{SA}}$ Pass 1 + Pass 2 + the intervention-leg object; the artifact-level specification match is machine-verified — `batch 4/WAVE_E_SPEC_MATCH.md`, 36 checks via `reaudit/verify_wave_e_spec_match.py`).
 
 ## Abstract
 
@@ -248,7 +248,7 @@ The next article is not a second specification on this annual origin, not phosph
 
 ## Data and code availability
 
-Locked inputs, scoring scripts, and result files are in `wave_e_edwards/` of <https://github.com/MIKEAA2020/general-sustainability>. J-17 daily highs: Texas Water Development Board well 6837203. Recharge: Umphres and Choi (2025), DOI 10.5066/P1BI62NY. Pumpage: Edwards Aquifer Authority (2024/25), Table 1. Comal: USGS 08168710. Niño 3.4: NOAA PSL HadISST. Precipitation: NCEI nClimDiv `climdiv-pcpndv-v1.0.0-20260806`, committed under `wave_e_edwards/data/`. An independent execution of the scoring scripts reproduced the committed result files (`batch 4/WAVE_E_RERUN.md`). That reproduction does not close a Wave E specification-matching gate.
+Locked inputs, scoring scripts, and result files are in `wave_e_edwards/` of <https://github.com/MIKEAA2020/general-sustainability>; the frozen specification sheet is `wave_e_edwards/SPECIFICATION.md`. J-17 daily highs: Texas Water Development Board well 6837203. Recharge: Umphres and Choi (2025), DOI 10.5066/P1BI62NY. Pumpage: Edwards Aquifer Authority (2024/25), Table 1. Comal: USGS 08168710. Niño 3.4: NOAA PSL HadISST (committed raw file `data/psl_nino34_long.data`). Precipitation: NCEI nClimDiv `climdiv-pcpndv-v1.0.0-20260806` — **not committed** (provenance URL in `data/SOURCES.md`); the three `pcp_*` columns of the locked panel are therefore `NOT_REPRODUCIBLE_FROM_COMMITTED_CODE`, while the two Niño columns rebuild from the committed PSL file to machine precision. Scoring Pass 1/2 from the committed `data/annual_panel.csv` does not require the nClimDiv file. An independent execution of the scoring scripts reproduced the committed result files (`batch 4/WAVE_E_RERUN.md`), and the artifact-level specification match has since been executed and machine-verified (`batch 4/WAVE_E_SPEC_MATCH.md`: 36 checks). The Wave E paper-support gates (Part III of `PROOF_MANIFEST.md`) remain NOT CONFIRMED; they close against the finalized paper, not the trees.
 
 ```
 python3 src/build_panel.py && python3 src/build_climate.py
@@ -256,7 +256,7 @@ python3 src/run_ladder.py && python3 src/run_recharge.py
 python3 src/make_figures.py
 ```
 
-`build_panel.py` writes head, recharge, and pumpage to a scratch file and leaves the locked twenty-column panel in place when those columns already match. `build_climate.py` rebuilds Niño 3.4 and the three precipitation columns from the committed raw files and leaves the locked panel in place when those columns already match.
+`build_panel.py` writes head, recharge, and pumpage to a scratch file and leaves the locked twenty-column panel in place when those columns already match. `build_climate.py` rebuilds the two Niño 3.4 columns from the committed PSL raw file; rebuilding the three precipitation columns additionally requires the omitted nClimDiv file and leaves the locked panel in place when those columns already match.
 
 ---
 
