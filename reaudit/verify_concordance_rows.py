@@ -19,11 +19,11 @@ Checks, per the 2026-08-26 execution:
   5. Distribution: the destination distribution is reported (informational).
 
 The scientific row-closure states were originally requires_row_level_verification /
-mapped_requires_final_citation_check. The 2026-08-27 A001 scientific pass
-(research_program/close_concordance_rows_A001.py) closed the 99 A001 rows to
-`row_verified`; this script's closure layer (check 6) machine-verifies the
-closed rows' record shape. The remaining open states are unchanged by this
-script.
+mapped_requires_final_citation_check. The 2026-08-27 scientific passes
+(research_program/close_concordance_rows_A001.py, then _A002.py) closed the
+99 A001 rows and the 53 A002 rows to `row_verified`; this script's closure
+layer (check 6) machine-verifies the closed rows' record shape. The remaining
+open states are unchanged by this script.
 """
 from __future__ import annotations
 
@@ -250,7 +250,8 @@ def main() -> None:
     print('NOTE: the machine layer verifies quotes, coverage, vocabulary, and the '
           'closure record shape. Scientific row-closure: '
           f'{rev.get("row_verified", 0)} rows closed '
-          f'(A001 pass {CLOSURE_DATE}, research_program/close_concordance_rows_A001.py); '
+          f'(dated scientific passes; A001 and A002 executed 2026-08-27 via '
+          'research_program/close_concordance_rows_A001.py and _A002.py); '
           'still open: requires_row_level_verification: '
           f'{rev.get("requires_row_level_verification", 0)}; '
           'mapped_requires_final_citation_check: '
