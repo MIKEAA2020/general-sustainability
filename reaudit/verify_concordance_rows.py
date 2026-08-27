@@ -18,9 +18,12 @@ Checks, per the 2026-08-26 execution:
      mapping_status values come from the documented controlled sets.
   5. Distribution: the destination distribution is reported (informational).
 
-The scientific row-closure states (requires_row_level_verification /
-mapped_requires_final_citation_check) are NOT promoted by this script: the
-machine layer verifies quotes, coverage, and vocabulary only.
+The scientific row-closure states were originally requires_row_level_verification /
+mapped_requires_final_citation_check. The 2026-08-27 A001 scientific pass
+(research_program/close_concordance_rows_A001.py) closed the 99 A001 rows to
+`row_verified`; this script's closure layer (check 6) machine-verifies the
+closed rows' record shape. The remaining open states are unchanged by this
+script.
 """
 from __future__ import annotations
 
@@ -33,6 +36,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 CC = REPO / 'research_program' / 'canonical_concordance_A001_A025.csv'
 RP = REPO / 'research_program'
+CLOSURE_DATE = '2026-08-27'
 
 DESTINATIONS = {
     'Paper 1', 'Paper 2', 'Paper 3', 'Paper 4', 'Paper 5',
@@ -48,6 +52,7 @@ REVIEW_STATES = {
     'requires_row_level_verification',
     'mapped_requires_final_citation_check',
     'adjudicated_rejected_or_negative_only',
+    'row_verified',  # closed by a dated scientific pass (closure layer, check 6)
 }
 PRIMARY_MAPPINGS = {
     'UNRESOLVED', 'EXACT_SPECIALIZATION', 'COUNTEREXAMPLE_OR_LIMIT',
@@ -73,15 +78,33 @@ def norm(s: str) -> str:
     return re.sub(r'\s+', ' ', s).strip().lower()
 
 
+def _table_cells(s: str) -> list[str]:
+    """Split a markdown table row into cells, honouring escaped pipes.
+
+    The intake builder split naively on '|', which corrupted rows whose
+    descriptions contain LaTeX norm notation ($\\|V\\|$): the A001 rows for
+    Theorems 11.1-11.4 and 16.1 came out as pipe-fragments. Escaped pipes
+    (single backslash-pipe, and stray double backslash-pipe) are protected
+    before splitting and restored afterwards, so raw entries carry the true
+    label and description.
+    """
+    core = s.strip().strip('|')
+    protected = core.replace('\\\\|', '\x00').replace('\\|', '\x01')
+    return [c.strip().replace('\x00', '\\\\|').replace('\x01', '\\|')
+            for c in protected.split('|')]
+
+
 def raw_entries(path: Path):
     """The intake builder's extraction, WITHOUT its dedup step (so that
-    (type,title) collisions surface as coverage gaps)."""
+    (type,title) collisions surface as coverage gaps). Escaped pipes are
+    honoured (see _table_cells); counts are identical to the naive split on
+    the committed inventories (verified 2026-08-27 across all 25 files)."""
     lines = path.read_text(encoding='utf-8').splitlines()
     out = []
     for line in lines:
         s = line.strip()
         if s.startswith('|') and not re.match(r'^\|\s*:?-+', s):
-            cells = [c.strip() for c in s.strip('|').split('|')]
+            cells = _table_cells(s)
             if cells and cells[0].lower() not in {'section', 'type', 'id', 'item', 'result', 'claim'} and len(cells) >= 2:
                 title = cells[-1] or 'Untitled ' + cells[-2]
                 typ = cells[-2] if len(cells) >= 3 else 'inventory_item'
@@ -196,6 +219,26 @@ def main() -> None:
     rev = Counter(r['review_state'] for r in rows)
     print('review states:', dict(rev))
 
+    # --- 6. closure layer (scientific passes)
+    closed = [r for r in rows if r['review_state'] == 'row_verified']
+    closure_fails = []
+    for r in closed:
+        if f'Row-closed {CLOSURE_DATE}' not in r['notes']:
+            closure_fails.append(f"{r['concordance_id']}: missing dated closure note")
+        if r['canonical_module'] == 'unclassified_canonical_review':
+            closure_fails.append(f"{r['concordance_id']}: closed row still unclassified")
+        if r['primary_mapping'] == 'UNRESOLVED':
+            closure_fails.append(f"{r['concordance_id']}: closed row still UNRESOLVED")
+        if r['mapping_status'] != 'accepted_mapping':
+            closure_fails.append(
+                f"{r['concordance_id']}: closed row mapping_status {r['mapping_status']} != accepted_mapping")
+        if '§' not in r['notes']:
+            closure_fails.append(f"{r['concordance_id']}: closure note lacks the source-section anchor")
+    check(not closure_fails,
+          f'closure layer well-formed on all row_verified rows (fails: {closure_fails[:5]})')
+    # closed rows must still pass the quote check against their inventory —
+    # already enforced by check 2 above; the repaired A001 rows are covered.
+
     print()
     if fails:
         print(f'CONCORDANCE ROW VERIFICATION: {len(fails)} failure(s)')
@@ -204,12 +247,17 @@ def main() -> None:
         sys.exit(1)
     print('CONCORDANCE ROW VERIFICATION (machine layer): all checks passed '
           f'({len(rows)} rows, 25/25 sources, coverage complete at raw-entry level).')
-    print('NOTE: this is the machine layer only — quote/coverage/vocabulary. The '
-          'scientific row-closure states (requires_row_level_verification: '
+    print('NOTE: the machine layer verifies quotes, coverage, vocabulary, and the '
+          'closure record shape. Scientific row-closure: '
+          f'{rev.get("row_verified", 0)} rows closed '
+          f'(A001 pass {CLOSURE_DATE}, research_program/close_concordance_rows_A001.py); '
+          'still open: requires_row_level_verification: '
           f'{rev.get("requires_row_level_verification", 0)}; '
           'mapped_requires_final_citation_check: '
-          f'{rev.get("mapped_requires_final_citation_check", 0)}) are unchanged; '
-          'no theorem status is promoted by this script.')
+          f'{rev.get("mapped_requires_final_citation_check", 0)}. '
+          'No theorem status is promoted by closure — content-level mapping '
+          'acceptance only (TCS-1.0 §7); the §8 interface contract and Part III '
+          'paper-support gates are unchanged.')
 
 
 if __name__ == '__main__':

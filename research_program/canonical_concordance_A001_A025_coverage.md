@@ -40,8 +40,9 @@
 | State | Rows |
 |---|---:|
 | `adjudicated_rejected_or_negative_only` | 28 |
-| `mapped_requires_final_citation_check` | 45 |
-| `requires_row_level_verification` | 336 |
+| `row_verified` (A001 scientific pass, 2026-08-27) | 99 |
+| `mapped_requires_final_citation_check` | 27 |
+| `requires_row_level_verification` | 255 |
 
 ## Destination routing (Wave-0 completion pass, 2026-08-26)
 
@@ -50,8 +51,8 @@ All 409 rows now carry a `destination_paper` + `monograph_chapter` assignment. T
 | Destination | Rows |
 |---|---:|
 | Paper 2 | 128 |
-| Paper 5 | 55 |
-| Paper 4 | 55 |
+| Paper 5 | 56 |
+| Paper 4 | 54 |
 | Paper 3 | 54 |
 | negative/counterexample register or conditional redesign docket | 43 |
 | Paper 7 conditional | 20 |
@@ -76,6 +77,17 @@ Executed as `reaudit/verify_concordance_rows.py` (exit 0, 11/11 checks):
 
 Honest boundary: this is the **machine layer** (quotes, coverage, vocabulary). The scientific row-closure states are unchanged — 336 `requires_row_level_verification`, 45 `mapped_requires_final_citation_check` — and no theorem status is promoted. The pre-repair release snapshot (407 rows) remains the v1.0 record; historical references to 407 in frozen documents describe that snapshot correctly.
 
+## Scientific row-closure — first complete source (A001, 2026-08-27)
+
+Executed as `research_program/close_concordance_rows_A001.py` (decision table encoded in the script; full report `concordance_row_closure_A001.md`). The complete A001 source (`uploads/topdown.txt`) was read end to end; all 99 A001 rows — 81 `requires_row_level_verification` and 18 `mapped_requires_final_citation_check` — closed to `row_verified`: item existence + kind + proof presence verified in the source (the deferred line check); canonical module assigned or corrected; mapping type verified per TCS-1.0 §7; `mapping_status` → `accepted_mapping` **at the content level only** (no theorem status promoted; the §8 interface contract for cross-module transfer remains open in `interface_dependency`; the paper-time citation match rides the Part III paper-support discipline).
+
+Findings of the pass (all repaired and machine-verified):
+
+- **Five corrupted intake rows** (CC-A001-061..064, -088): the intake builder's naive pipe split turned the Theorems 11.1–11.4 and 16.1 rows into fragment garbage (`item_type='F_0\'`, `source_item='$ strict rounds.'`); the machine layer had passed them because the quote check compared corrupted row against identically-split inventory line. Repaired from the source; two inventory lines also restored to source-faithful norm notation; the suite's raw-entry extraction now honours escaped pipes, so this defect class is machine-caught for every future pass.
+- **Nine module corrections** (Thm 4.4, Def 4.4, Thm 4.8, Thm 4.9, Cor 12.1, Thm 13.5, Thm 13.6, Conj 17.3, Conj 18.3 — the observation/institution channel), **four mapping-type corrections** (Cor 3.1, Thm 4.2, Ex 4.1, Thm 14.2 → COUNTEREXAMPLE_OR_LIMIT), **three evidence kind-corrections** (two definitions mis-flagged empirical; Cor 13.1 carries its proof on the line), and **one destination correction** (Thm 4.8 → Paper 5: observation-interval timing, not RFDE dynamics — hence Paper 5 55→56, Paper 4 55→54).
+
+After this pass: 409 rows — 99 `row_verified`, 255 `requires_row_level_verification`, 27 `mapped_requires_final_citation_check`, 28 `adjudicated_rejected_or_negative_only`. The remaining open rows are the 21 non-A001 sources listed above.
+
 ## Interpretation
 
-The inventory-coverage gate is closed: every item present in the registered A001–A025 formal-content inventories has a stable concordance row. The destination-routing gate is now also closed: every row has a publication destination (paper, conditional docket, negative register, or compendium appendix). The scientific closure gate is not automatically closed. Rows conservatively preserve source status and remain blocked where exact assumptions, proof line, mapping proof, or artifact must be checked. `proposed_not_yet_interface_proved` is not an accepted theorem transfer. Rejected sources remain visible as negative/limit records.
+The inventory-coverage gate is closed: every item present in the registered A001–A025 formal-content inventories has a stable concordance row. The destination-routing gate is now also closed: every row has a publication destination (paper, conditional docket, negative register, or compendium appendix). The scientific closure gate is closing source by source: **A001 is the first complete source closure** (99 rows `row_verified`, 2026-08-27); the other 21 sources remain at their conservative intake states. Rows conservatively preserve source status and remain blocked where exact assumptions, proof line, mapping proof, or artifact must be checked. `accepted_mapping` after closure is a content-level acceptance, not an accepted theorem transfer — the §8 interface contract is still required. Rejected sources remain visible as negative/limit records.

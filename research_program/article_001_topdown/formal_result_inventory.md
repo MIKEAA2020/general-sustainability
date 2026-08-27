@@ -69,7 +69,7 @@ This inventory is mechanically extracted to prevent loss of numbered formal cont
 | 10. Coupling: Upper Sets, Equilibria, Rescue | Theorem 10.4. | $\Omega$ is invariant under $f_{\min}$ iff the corner Nagumo condition holds: |
 | 11. Cascade Networks | Theorem 11.1. | For finite $V$, monotone loads, irreversible failures: the cascade terminates in at most $\|V\| - \|F_0\|$ strict rounds. |
 | 11. Cascade Networks | Theorem 11.2 ($k$-redundancy). | If every node is $k$-redundant and $\|F_0\| \leq k$: $F_\infty = F_0$. |
-| 11. Cascade Networks | Theorem 11.3 (Row-sum containment). | If $\\|M\\|_\infty < 1$ with $M_{ij} = a_{ji}/\theta_i$: $F_\infty = F_0$ for every seed. |
+| 11. Cascade Networks | Theorem 11.3 (Row-sum containment). | If $\|M\|_\infty < 1$ with $M_{ij} = a_{ji}/\theta_i$: $F_\infty = F_0$ for every seed. |
 | 11. Cascade Networks | Theorem 11.4. | There is no finite uniform bound on $\|F_\infty \setminus F_0\|$ in terms of $\rho(M) < 1$ alone. |
 | 11. Cascade Networks | Theorem 11.5 (Dynamic cascade safety). | Suppose dynamic loads have the form $L_i(x_c, F)$, where $x_c$ is the continuous state. Assume: |
 | 12. Commons Games and Over-Extraction | Definition 12.1. | $n$ agents choose $h_i \in [0, h_i^{\max}]$, $H = \sum_i h_i$, with payoff |
@@ -94,7 +94,7 @@ This inventory is mechanically extracted to prevent loss of numbered formal cont
 | 14. Intergenerational Structure | Theorem 14.3 (Discounting can prefer an exiting pulse over a positive viable path). | Let $x^{\mathrm{stay}}$ be a viable path with constant positive consumption $c_v > 0$. Suppose there exists an admissible exiting pulse yielding constant consumption $C > c_v$ over a duration $T > 0$, after which the trajectory exits the constraint set. With linear welfare and discount rate $\rho > 0$, the discounted welfare of the exiting path exceeds that of the viable path whenever |
 | 15. Quantitative Sustainability Margins | Definition 15.1. | Define |
 | 15. Quantitative Sustainability Margins | Definition 15.2. | Given running intervention cost $\ell(x, u)$, define |
-| 16. Compositional Viability | Theorem 16.1 (Compositional viability). | Suppose each subsystem has an input tolerance $\bar z_i$ such that $\\|z_i\\| \leq \bar z_i$ implies $\exists\, u_i : D^+ b_i(x_i) \geq 0$ on $\partial Q_i$. If |
+| 16. Compositional Viability | Theorem 16.1 (Compositional viability). | Suppose each subsystem has an input tolerance $\bar z_i$ such that $\|z_i\| \leq \bar z_i$ implies $\exists\, u_i : D^+ b_i(x_i) \geq 0$ on $\partial Q_i$. If |
 | 17. Stochastic Sustainability | Definition 17.1: $p$-viability kernel. |  |
 | 17. Stochastic Sustainability | Definition 17.2: Expected-lifetime value. | Let $\tau_{\mathcal V} = \inf\{t \geq 0 : X_t \notin \mathcal V\}$. Define $L(x) = \sup_\pi \mathbb E_x^\pi[\tau_{\mathcal V}]$. |
 | 17. Stochastic Sustainability | Theorem 17.1 (Finite-horizon small-noise viability). | Consider the deterministic system $\dot x = f(x)$ under a viable feedback, and the stochastic perturbation $dX_t^\varepsilon = f(X_t^\varepsilon)\, dt + \varepsilon \Sigma(X_t^\varepsilon)\, dW_t$. Let $K_0$ be a compact subset of the kernel interior, and suppose deterministic trajectories from $K_0$ remain at distance at least $2\delta$ from $\partial \mathcal V$ on $[0, T]$. Assume $f$ is Lipschitz and $\Sigma$ is bounded on a neighborhood of these trajectories. |
