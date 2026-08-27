@@ -139,8 +139,13 @@ cd wave_e_cod && python3 src/run_intervention.py
 
 Deterministic (no randomness). Outputs: `results/intervention_results.json`,
 `results/intervention_boundaries.csv`. Frozen protocol:
-`protocol_intervention.md`. First run 2026-08-26; rerun NONE at publication of
-this manuscript.
+`protocol_intervention.md`. First run 2026-08-26; **rerun 2026-08-26
+byte-identical** on a fresh second-session execution of the committed runner,
+same environment as the original run
+(`reaudit/intervention_rerun_cod/INTERVENTION_RERUN_COD.md` — same-env
+second-session scope: committed-code reproducibility, determinism, and freedom
+from uncommitted state verified; the cross-toolchain standard of the Part II
+reruns remains available to a future rerun).
 
 ## References
 
