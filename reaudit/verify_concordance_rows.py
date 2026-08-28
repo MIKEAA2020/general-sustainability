@@ -21,7 +21,10 @@ Checks, per the 2026-08-26 execution:
 The scientific row-closure states were originally requires_row_level_verification /
 mapped_requires_final_citation_check. The 2026-08-27 scientific passes
 (research_program/close_concordance_rows_A001.py, then _A002.py, then
-_A011.py) closed the 99 A001 rows, the 53 A002 rows, and the 24 A011 rows to
+_A011.py) closed the 99 A001 rows, the 53 A002 rows, and the 24 A011 rows,
+and the 2026-08-28 passes (close_concordance_rows_A006.py, then _A012.py,
+then _A014.py, then _A018.py) closed the 16 A006 rows, the 14 A012 rows,
+the 15 A014 rows, and the 18 A018 rows, all to
 `row_verified`; this script's closure
 layer (check 6) machine-verifies the closed rows' record shape. The remaining
 open states are unchanged by this script.
@@ -37,7 +40,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 CC = REPO / 'research_program' / 'canonical_concordance_A001_A025.csv'
 RP = REPO / 'research_program'
-CLOSURE_DATE = '2026-08-27'
+CLOSURE_DATES = ('2026-08-27', '2026-08-28')
 
 DESTINATIONS = {
     'Paper 1', 'Paper 2', 'Paper 3', 'Paper 4', 'Paper 5',
@@ -224,7 +227,7 @@ def main() -> None:
     closed = [r for r in rows if r['review_state'] == 'row_verified']
     closure_fails = []
     for r in closed:
-        if f'Row-closed {CLOSURE_DATE}' not in r['notes']:
+        if not any(f'Row-closed {d}' in r['notes'] for d in CLOSURE_DATES):
             closure_fails.append(f"{r['concordance_id']}: missing dated closure note")
         if r['canonical_module'] == 'unclassified_canonical_review':
             closure_fails.append(f"{r['concordance_id']}: closed row still unclassified")
@@ -251,8 +254,11 @@ def main() -> None:
     print('NOTE: the machine layer verifies quotes, coverage, vocabulary, and the '
           'closure record shape. Scientific row-closure: '
           f'{rev.get("row_verified", 0)} rows closed '
-          f'(dated scientific passes; A001, A002, and A011 executed 2026-08-27 via '
-          'research_program/close_concordance_rows_A001.py, _A002.py, and _A011.py); '
+          '(dated scientific passes; A001, A002, and A011 executed 2026-08-27 via '
+          'research_program/close_concordance_rows_A001.py, _A002.py, and _A011.py; '
+          'A006, A012, A014, and A018 executed 2026-08-28 via '
+          'research_program/close_concordance_rows_A006.py, _A012.py, _A014.py, '
+          'and _A018.py); '
           'still open: requires_row_level_verification: '
           f'{rev.get("requires_row_level_verification", 0)}; '
           'mapped_requires_final_citation_check: '
