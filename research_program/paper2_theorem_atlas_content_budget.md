@@ -102,6 +102,14 @@ The first source-selection pass is complete in `paper2_retained_row_budget.csv`:
 
 This remains too large for many ordinary article formats and creates a strong split risk, but a venue-independent numerical threshold is not legitimate. Exact proof audit may remove duplicates or require expansion.
 
+## Row-ID realignment (2026-08-28)
+
+The selection pass numbered the A002 block against the **pre-repair** concordance (the collided untitled-remark numbering, before the 2026-08-26 machine repair restored the substitution remark as CC-A002-053). The A002 scientific closure pass (2026-08-27) verified all 53 rows in the **corrected** numbering. `realign_paper2_budget_rows.py` therefore realigns the budget (idempotent, committed): TM-A002-016 → CC-A002-053; TM-A002-017..053 → CC-A002-016..052; the original `map_id` column is preserved verbatim as the historical selection-pass ID and the authoritative current row is the new `concordance_id` column (38 rows realigned; no tier, family, or selection decision changed — the closure pass confirmed the family assignments against the corrected identities).
+
+## Manuscript draft (2026-08-28)
+
+The first complete draft of the Paper 2 manuscript is committed at `papers/paper2_theorem_atlas/manuscript.md`: all 63 main + 7 bounded-appendix rows stated with exact claim-status labels, provenance concordance IDs, per-row primary-destination annotations (atlas entries cross-referenced where another paper owns the full treatment), notation bridges to the canonical registry, the proof-omission obligation of CC-A001-026 registered rather than silently discharged, the complete 70-row status ledger, and the length-gate/split-trigger discipline restated. Proofs: reproduced in full where short; verified-present-with-summary otherwise (camera-ready reproduces every proof verbatim from the audited sources).
+
 ## Current conclusion
 
 The gross 40.6k-word/152-item intake has been reduced by substantive routing, not destructive condensation. A single Paper 2 remains provisional because the current retained estimate is about 27.2k words before references and figures. Continue exact proof verification and target-policy checking; if the verified venue budget fails, trigger the coherent 2A/2B split.
