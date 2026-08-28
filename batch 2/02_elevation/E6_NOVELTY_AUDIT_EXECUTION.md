@@ -96,7 +96,7 @@ Bokanowski–Zidani and collaborators (error estimates for HJB under state const
 
 - Full-text comparison for rows 4.1, 4.2, 6.2, 3.1 (the known-and-weaker verdicts' exact scopes).
 - The absence claims (rows 3.2, 4.3, 6.1, 1.2, 1.3) re-checked against full databases (MathSciNet/Zentralblatt/Google Scholar forward searches) — bounded-search evidence only.
-- G5's register row updated to **EXECUTED (bounded-search level)** — not "fully executed"; the full-text pass remains open and is assigned to the paper-drafting wave.
+- G5's register row updated to **EXECUTED (bounded-search level)** — not "fully executed"; the full-text pass remained open and was assigned to the paper-drafting wave. **Update 2026-08-28: executed for Paper 1's strengthened independent result at the search level (`research_program/paper1_full_text_novelty_pass.md`, 12 queries, raw results at `research_program/paper1_instantiation/novelty_searches/`) — the deeper database sweep remains available to external review.**
 
 ## Search record
 

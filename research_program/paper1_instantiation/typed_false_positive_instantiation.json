@@ -1,0 +1,204 @@
+{
+  "artifact": "paper1_instantiation/typed_false_positive_instantiation.py",
+  "companion_theorem": "research_program/paper1_typed_false_positive_theorem.md",
+  "executed": "2026-08-28",
+  "arithmetic": "exact integers, scale 40 (no floats, no tolerances, no randomness, no outer tube approximation)",
+  "datum": {
+    "Q": 2,
+    "architectures": [
+      "extraction q=0",
+      "regenerative q=1"
+    ],
+    "m": 1,
+    "dips_scaled": {
+      "benign": 60,
+      "adverse": 80
+    },
+    "floor_threshold_scaled": 80,
+    "reset_gain_scaled": 10,
+    "rescue_cost_scaled": 40,
+    "actions": [
+      "NO-SWITCH",
+      "FAST",
+      "SLOW",
+      "STAGED"
+    ]
+  },
+  "grid": {
+    "states": 29791,
+    "extent": "[0,3]^3 step 0.1 (x, s1, s2)",
+    "false_positive_states": 1900
+  },
+  "regions": {
+    "typed": "{x>=1} ∪ {s1>=2} ∪ {s2>=2}",
+    "aggregate_all_weights": "{x>=1} ∪ {s1+s2>=2}",
+    "endpoint_only": "all of X_0",
+    "false_positive_set": "FP = {x<1, s1<2, s2<2, s1+s2>=2}",
+    "rescue_set": "R = FP0 ∩ {x>=1} (typed-feasible via STAGED)",
+    "impossibility_region": "I = FP0 ∩ {x<1} (four exhibited violations)"
+  },
+  "witnesses": {
+    "fp_interior": {
+      "state": [
+        0.5,
+        1.2,
+        1.2
+      ],
+      "classification": "aggregate-feasible for every critical weight; typed-infeasible; endpoint-feasible"
+    },
+    "endpoint_only_blind": {
+      "state": [
+        0.5,
+        0.1,
+        0.1
+      ],
+      "classification": "endpoint-feasible; aggregate-infeasible at w=(1,1)"
+    },
+    "rescued": {
+      "state": [
+        1.5,
+        1.2,
+        1.2
+      ],
+      "classification": "typed-transformable via STAGED"
+    },
+    "impossibility": {
+      "state": [
+        0.5,
+        1.2,
+        1.2
+      ],
+      "classification": "certified impossibility: FAST violates s1-floor (adverse), SLOW violates s2-floor (adverse), STAGED drives x negative, NO-SWITCH misses G"
+    }
+  },
+  "checks": [
+    {
+      "name": "FAST breakpoint table exact (dip at t=1/2, recovery at t=1)",
+      "pass": true,
+      "detail": "(40, -40, 40)"
+    },
+    {
+      "name": "STAGED breakpoint table exact (linear spend/growth)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "per-coordinate exact ranges = breakpoint extremes (piecewise monotone)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "worst-case dip constants: benign 3/2, adverse 2, floor threshold 2",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "machine typed-feasibility == {x>=1} ∪ {s1>=2} ∪ {s2>=2} on every grid state",
+      "pass": true,
+      "detail": "0 mismatches"
+    },
+    {
+      "name": "machine all-weights admissibility == {x>=1} ∪ {s1+s2>=2} on every grid state",
+      "pass": true,
+      "detail": "0 mismatches"
+    },
+    {
+      "name": "FAST/SLOW per-weight safety biconditionals confirmed on every grid state (dense r-grid)",
+      "pass": true,
+      "detail": "0 mismatches"
+    },
+    {
+      "name": "boundary weights exact: FAST safe at r=rho_1, SLOW safe at r=rho_2 (witness state (1/2, 6/5, 6/5))",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "machine endpoint-only feasibility == all of X_0 on every grid state",
+      "pass": true,
+      "detail": "0 mismatches"
+    },
+    {
+      "name": "typed ⇒ all-weights-aggregate ⇒ endpoint-only (no violations on the grid)",
+      "pass": true,
+      "detail": "0 violations"
+    },
+    {
+      "name": "false-positive set nonempty on the grid",
+      "pass": true,
+      "detail": "1900 grid states"
+    },
+    {
+      "name": "interior witness (1/2, 6/5, 6/5): aggregate-feasible for every critical weight, typed-INfeasible, endpoint-feasible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "witness is an interior point (all ±0.1 neighbors remain in FP)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "endpoint-only witness (1/2, 1/10, 1/10): endpoint-feasible, aggregate-INfeasible (no action safe at w=(1,1))",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "aggregate-vs-typed strictness witness (the FP interior point above)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "r=1/2: SLOW-only (FAST unsafe, SLOW safe)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "r=1: both plans safe",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "r=2: FAST-only (SLOW unsafe, FAST safe)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "E_typ = ∩_w E_w = ∅ machine-verified (no action serves every critical weight)",
+      "pass": true,
+      "detail": "{'NO-SWITCH': False, 'FAST': False, 'SLOW': False, 'STAGED': False}"
+    },
+    {
+      "name": "R witness (3/2, 6/5, 6/5): typed-transformable via STAGED (bridging plan at physical cost c=1)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "I witness (1/2, 6/5, 6/5): all four actions rejected, each with its exhibited violated constraint (negative-certificate form)",
+      "pass": true,
+      "detail": "{'NO-SWITCH': 'destination architecture not reached (successor q=0 ∉ G)', 'FAST': 'protected-service floor s1 violated during transit (s1 dips to -0.3 < 0)', 'SLOW': 'liability-coverage floor s2 violated during transit (s2 dips to -0.3 < 0)', 'STAGED': 'physical stock violated during transit (x dips to -0.5 < 0)'}"
+    },
+    {
+      "name": "rescue split verified on the whole grid: FP0∩{x>=1} typed-feasible via STAGED; FP0∩{x<1} typed-infeasible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "stage-0 hierarchy holds and regions are preserved through two hold intervals (every grid state)",
+      "pass": true,
+      "detail": "0 violations"
+    },
+    {
+      "name": "FP strictness witness survives the holds at stage 0",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "endpoint-only strictness witness survives the holds at stage 0",
+      "pass": true,
+      "detail": ""
+    }
+  ],
+  "checks_passed": 25,
+  "checks_total": 25,
+  "elapsed_seconds": 36.379
+}
