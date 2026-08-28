@@ -701,7 +701,7 @@ Every retained row of this manuscript, with claim status, evidence status (post-
 
 ## 15 Provenance, reproducibility, and limits
 
-**Sources.** This manuscript's retained set derives from two fully row-closed sources: A001 (`uploads/topdown.txt`, 99 concordance rows, closure 2026-08-27) and A002 (`uploads/general_theory.txt`, 53 concordance rows, closure 2026-08-27). The retained-row selection (63 main + 7 bounded-appendix) is recorded in `research_program/paper2_retained_row_budget.csv`; the per-row verification record is `research_program/concordance_row_closure_seven_sources.md`; the row-level evidence is `research_program/canonical_concordance_A001_A025.csv` (409 rows; A001+A002 fully `row_verified`).
+**Sources.** This manuscript's retained set derives from two fully row-closed sources: A001 (`uploads/topdown.txt`, 99 concordance rows, closure 2026-08-27) and A002 (`uploads/general_theory.txt`, 53 concordance rows, closure 2026-08-27). The retained-row selection (63 main + 7 bounded-appendix) is recorded in `research_program/paper2_retained_row_budget.csv`; the per-row verification record is `research_program/concordance_row_closure_twenty_sources.md`; the row-level evidence is `research_program/canonical_concordance_A001_A025.csv` (409 rows; A001+A002 fully `row_verified`).
 
 **Proof handling.** Proofs marked *reproduced* are printed in full above from the source. Proofs marked *verified present; summary* exist in full in the source (the closure pass verified proof presence and read it); the summary given here is faithful to the source argument, and camera-ready reproduces each proof verbatim. One proof is omitted in the source (Theorem 6.4), and the obligation to supply an explicit one-step proof is registered rather than silently discharged.
 
@@ -721,6 +721,6 @@ The cited mathematical literature is that of the sources: Aubin (1991) *Viabilit
 - A002 source: `uploads/general_theory.txt` (*A Typed Flux–Observation–Governance Theory of Sustainability*), 53-row concordance block.
 - Canonical concordance: `research_program/canonical_concordance_A001_A025.csv` (409 rows).
 - Retained-row budget: `research_program/paper2_retained_row_budget.csv` (152 rows; 63 main + 7 bounded-appendix for this paper).
-- Closure report: `research_program/concordance_row_closure_seven_sources.md`.
+- Closure report: `research_program/concordance_row_closure_twenty_sources.md`.
 - Publication architecture: `research_program/revised_optimal_publication_architecture_A001_A025.md`.
 - Length budget and split trigger: `research_program/content_retention_and_length_budget_A001_A025.md`, `research_program/paper2_theorem_atlas_content_budget.md`.
