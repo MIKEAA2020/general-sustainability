@@ -66,7 +66,7 @@ No interpolation. Missing years: 1983–84, 1993–95, 1997–98, 2006, 2016, 20
 ## LRP used here
 
 **[N]** 2010/2016 PA LRP = mean 1980s SSB.  
-Computed from Table A2 years 1983–1989 (complete 1980s years in the table) = 884.29 kt.  
-SAR states 2015 SSB was 34% of LRP; 298.65 / 884.29 = 0.338. Consistent.
+Computed from Table A2 years 1983–1989 (complete 1980s years in the table) = 884.58 kt.  
+SAR states 2015 SSB was 34% of LRP; 298.65 / 884.58 = 0.338. Consistent.
 
 The 2023/24 LRP (40% BMSY under xteNCAM) is a **different specification** and is not used.

@@ -118,12 +118,14 @@ The scoring protocol is recorded in `protocol.md` and `protocol_pass2.md`. Windo
 
 **Table 3.** Fixed-window RMSE (ft).
 
-| Window | persist | M1 | M2 | M2m | oracle |
-|---|---:|---:|---:|---:|---:|
-| Drawdown 1951--56 | 23.75 | 30.94 | **18.11** | 27.44 | 19.69 |
-| Recovery 1957--61 | 43.62 | 56.24 | 55.32 | 37.74 | **12.26** |
-| Pre-permit wet 1991--95 | 30.13 | 20.02 | 16.67 | 23.47 | **7.18** |
-| Critical-period era 2015--23 | 27.41 | 15.62 | 23.37 | 14.79 | **8.70** |
+| Window | persist | mean | M1 | M2 | M2m | M3 | M4 | oracle |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Drawdown 1951--56 | 23.75 | 35.19 | 30.94 | **18.11** | 27.44 | 18.12 | 18.23 | 19.69 |
+| Recovery 1957--61 | 43.62 | 14.07 | 56.24 | 55.32 | 37.74 | 55.28 | 55.12 | **12.26** |
+| Pre-permit wet 1991--95 | 30.13 | 18.24 | 20.02 | 16.67 | 23.47 | 16.41 | 15.26 | **7.18** |
+| Critical-period era 2015--23 | 27.41 | 14.77 | 15.62 | 23.37 | 14.79 | 22.84 | 22.17 | **8.70** |
+
+Bold marks the best model of the window (on the drawdown window the best causal model, M2, also beats the oracle). The train-mean baseline is the best non-oracle forecast on the recovery window (14.07 ft) and on the critical-period era (14.77 ft), consistent with its rolling five-year win; the residual-persistence rungs M3/M4 track M2 on the drawdown (18.12/18.23 versus 18.11 ft), M4 is the best causal model on the pre-permit wet window (15.26 ft), and both fail with the causal family on the recovery and critical-period windows.
 
 The 1950s drawdown is a continuing low-recharge path. The last observed $R$ is already low, so causal M2 has lower RMSE than persistence (18 versus 24 ft) and also lower RMSE than the oracle. The linear map trained on 1934--1950 has the wrong sign on pumpage ($\gamma=+0.021$): pumping rose as the drought deepened, so the short window cannot identify a supply response.
 
@@ -166,7 +168,7 @@ M1 is retained by the point-RMSE rule. The margin is 0.39 ft on $n=75$. That is 
 
 At $h=5$, the training mean (16.80 ft) has lower RMSE than persistence (21.11 ft). Five-year forecasts on this basin are climatology, not last value and not persisted recharge.
 
-On post-2007 origins only ($n=16$, $h=1$): persist 13.09, M1 12.16, M2 13.31, oracle 8.03. The ranking is unchanged. The 660-ft Brier scores are 0.31 (persist), 0.25 (M1), and 0.19 (oracle). The annual-mean proxy is not the 10-day rule.
+On post-2007 origins only ($n=16$, $h=1$): persist 13.09, M1 12.16, M2 13.31, oracle 8.03. The ranking is unchanged. The 660-ft Brier scores are 0.31 (persist), 0.25 (M1), and 0.19 (oracle). At $h=5$ ($n=12$): persist 25.10, M1 17.16, M2m 17.64, mean 16.41, M2/M3/M4 34.9--35.0, oracle 8.69. The annual-mean proxy is not the 10-day rule.
 
 ### 5.4 Climate-informed recharge
 
@@ -202,6 +204,8 @@ M2\_Rar loses at $h=1$ (13.25 ft). Autoregression on nearly white recharge is no
 
 On the 1957--61 recovery, no causal climate-informed module has lower RMSE than persistence (persist 43.6 ft; best causal about 48.8 ft; precipitation oracle 33.7 ft). September--November 1956 is La Niña ($-0.92$) and does not announce $R_{1957}=1143$.
 
+The remaining fixed windows complete the same record. Drawdown 1951--56: persist 23.75, M1 30.94, M2\_Renso 24.30, M2\_Rprecip 28.67, M2\_combo 24.70, precipitation oracle 18.16 ft. Pre-permit wet 1991--95: persist 30.13, M1 20.02, M2\_Rprecip 22.03, M2\_Renso 23.03, M2\_Rar 23.94, M2\_combo 25.71, oracle 10.98 ft. Critical-period era 2015--23: persist 27.41, M1 15.62, M2\_Rprecip 14.52, M2\_Rar 14.67, M2\_Renso 16.01, M2\_combo 16.57, oracle 9.75 ft — on this one window the two climate-informed recharge modules edge past M1 by about one foot. On the recharge target itself the fixed-window scores are an order of magnitude coarser on every window (climate modules 199--937; precipitation oracle 80.7--487, against the 556 $\times 10^3$ acre-ft climatology scale of the rolling record), so the marginal head advantage is a window-specific result, not a recharge forecast.
+
 No climate-informed recharge module is retained. Closing the gap between persistence and the oracle would require next year's recharge, which is not available at the annual forecast origin.
 
 ### 5.5 Service series after freeze
@@ -210,7 +214,7 @@ No climate-informed recharge module is retained. Closing the gap between persist
 
 **Figure 5.** Comal annual mean versus J-17. Contemporaneous $r=0.986$. The fibre is a measured service, not an independent information source.
 
-The map $Q=c_0+c_1 H$ was fitted on 1934--1950 only ($c_0=-2876$, $c_1=4.77$) and applied to already-issued $\hat H$. One-year Comal RMSE: persist 71.9 cfs, M1 69.0, M2m 68.7, M2 74.8, oracle 45.3.
+The map $Q=c_0+c_1 H$ was fitted on 1934--1950 only ($c_0=-2876$, $c_1=4.77$) and applied to already-issued $\hat H$. One-year Comal RMSE: persist 71.9 cfs, M1 69.0, M2m 68.7, M2 74.8, M3 73.8, M4 73.4, train-mean 89.7, oracle 45.3.
 
 The service series does not change retention. It cannot: it is nearly a linear transform of $z$. Comal is an independent measurement (a USGS spring gauge, not used to construct J-17). It is not an independent information source. Gravimetric storage or the J-27 Uvalde index would be different objects, not a second fibre of this specification. Eastern-basin recharge was stored and not used.
 

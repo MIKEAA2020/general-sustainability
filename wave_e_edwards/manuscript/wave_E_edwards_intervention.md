@@ -29,7 +29,7 @@ Dynamics: the ladder's M2 stock-flow class, one pool, affine —
 \Delta H_t = \alpha + \beta R_t + \gamma P_t + \delta H_{t-1},
 \]
 
-fitted by OLS on 1934–1990 (57 transitions). OLS fit:
+fitted by OLS on 1934–1990 (56 transitions). OLS fit:
 \(\alpha = 163.49\), \(\beta = 0.0198\) ft per \(10^3\) acre-ft,
 \(\gamma = -0.02844\) ft per \(10^3\) acre-ft,
 \(\delta = -0.2539\), \(a = 1+\delta = 0.7461\) — a contraction with a
@@ -78,7 +78,10 @@ The worst-case (UC floor) attractor of the closed loop, by policy:
 | flat-90% | 618.88 | 628.47 | 629.45 |
 | flat-80% | 622.04 | 631.63 | 632.61 |
 | S1 (reactive 20% < 660) | 622.04 | 631.63 | 632.61 |
+| flat-70% | 625.20 | 634.79 | 635.77 |
 | cpm cascade | 628.36 | 636.37 | 637.35 |
+| flat-60% | 628.36 | 637.95 | 638.93 |
+| flat-50% | 631.52 | 641.11 | 642.09 |
 | flat-0 (zero pumping) | 647.32 | 656.91 | 657.90 |
 
 Under a perpetual 1956-recharge floor, BAU's attractor (615.72 ft) sits
@@ -132,9 +135,15 @@ Mean prescribed pumping (actual-head replay, 1934–1990):
 | BAU | 282.16 | 0% |
 | flat-90% | 253.94 | 100% |
 | flat-80% | 225.73 | 100% |
+| flat-70% | 197.51 | 100% |
 | **S1** | **262.36** | 35.1% |
 | **cpm** | **254.93** | 35.1% |
 | flat-60% | 169.29 | 100% |
+| flat-50% | 141.08 | 100% |
+
+Out-of-sample replay (1991--2023, audit only): S1 264.5 and cpm 260.6
+\(10^3\) acre-ft yr\(^{-1}\); every flat policy prescribes its cap
+throughout, so the training and out-of-sample supplies coincide.
 
 Retention rule (frozen): at least as protective as BAU everywhere, and
 more water than the most protective flat cap with matched protection.

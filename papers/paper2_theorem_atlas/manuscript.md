@@ -20,7 +20,7 @@ The programme's intake audit registered twenty-six source manuscripts (A001–A0
 
 ### 1.2 What enters this paper
 
-The retained set was selected by a substantive routing pass recorded in `research_program/paper2_retained_row_budget.csv` (63 main rows, 7 bounded-appendix rows) and then verified row by row by the scientific closure campaign over the two primary sources (A001, A002 — both sources read end to end; every inventoried item located; kind, module, mapping type, and evidence status verified per row). The selection rules, applied family by family:
+The retained set was selected by a substantive routing pass recorded in `research_program/paper2_retained_row_budget.csv` (63 main rows, 7 bounded-appendix rows) and then verified row by row by the scientific closure campaign over the two primary sources (A001, A002 — both sources read end to end; every inventoried item located; kind, module, mapping type, and evidence status verified per row). Nineteen further rows are carried at the direction of the closure campaign's destination passes and seam closures over seven further sources (A003, A005, A006, A007, A010, A013, A018 — all read end to end, 2026-08-28): the witness-construction and no-scalar rows behind the ledger paper's rejection argument, the response-sign H3 object and its groundwater restatement, the epistemic-institutional kernel pair, the output-feedback obstruction family, the model-audit restatements and algebra, and the multiscale-justice programme. The selection rules, applied family by family:
 
 1. the exact corrected statement and proof are verified;
 2. the result is canonical rather than model-specific;
@@ -162,6 +162,10 @@ where $D^+ q$ is the upper right Dini derivative. Then every trajectory entering
 
 This theorem is the obstruction engine of the whole atlas: every "kernel empty" result below either constructs this certificate or argues nonexistence directly.
 
+**Lemma 3.5 (Stability and safety are independent) [CC-A006-004 · lemma — mapping: counterexample/limit].** Local or asymptotic stability of an equilibrium does not imply that the equilibrium belongs to a declared safe set, and membership of a nominal equilibrium in a safe set does not imply robust safety under uncertainty.
+
+*Proof (verified present).* For the first statement take $\dot x=-(x+1)$ with safe set $[0,\infty)$: the equilibrium $x^*=-1$ is asymptotically stable and lies outside the safe set. For the second, take a nominally safe stable system and admit a disturbance class that drives the state outside the set. $\blacksquare$
+
 ---
 
 ## 4 Typed conservation and physical admissibility (family F01)
@@ -227,6 +231,10 @@ so every such trajectory is uniformly bounded in the declared phase-space norm.
 
 **Remark A.3 (one balance per moiety)** [CC-A002-009 · remark, bounded appendix]: the conservation theorem gives one balance per declared moiety; it does not authorize addition of biomass, money, biodiversity indices, and exergy into a conserved scalar. (Stated in Appendix A with the other scope remarks.)
 
+**Proposition 4.6 (Geological/support-pool noninvariance) [CC-A010-009 · boundary test — mapping: counterexample/limit].** The fixed-target geological exchange $\dot G=-\omega_A(A^{\rm eq}-A)$ is not donor limited: at $G=0$ with $A<A^{\rm eq}$ it gives $\dot G<0$, so the nonnegative geological orthant is not forward invariant. A physically admissible formulation must replace the fixed-target exchange by separate non-negative donor-limited fluxes $e_{GA}(G,A)$ and $e_{AG}(A,G)$ satisfying $e_{GA}(0,A)=0$ and $e_{AG}(0,G)=0$.
+
+*Status:* recorded at its audited verdict as a conservation-admissibility limit of the ten-state audit template; the donor-limited reformulation is a registered obligation, not a discharged construction.
+
 ---
 
 ## 5 Noncompensation and substitution feasibility (family F02)
@@ -275,6 +283,16 @@ The second statement is a certificate that the declared substitution pathways ca
 *Proof (verified present; summary).* Writing all constraints as $Aa\le\rho$, the alternative is exactly the Farkas lemma pair: primal feasibility or a dual separation certificate. $\blacksquare$
 
 *Scope:* the multipliers are a separation certificate, not universal exchange rates; nonlinear, nonconvex, path-dependent, spatial, or irreversible technologies require their own feasibility analysis (Remark A.4).
+
+**Lemma 5.6 (Compensatory reporting limit) [CC-A007-001 · lemma — mapping: counterexample/limit].** For unrestricted margins $b\in\mathbb R^n$ with $n\ge2$ and any $w\in\mathbb R^n_{++}$, $w^{\top}b>0$ does not imply $b\in\mathbb R^n_+$. The noncompensatory margin discipline follows: safety requires $m\in\mathbb R^{q+p}_+$, and a scalar certificate exists only in noncompensatory form ($\min_i m_i$, or a restricted-domain implication proved from the physical restrictions).
+
+*Proof (verified present).* The two-coordinate witness $b_k=-L$, $b_j=(w_kL+1)/w_j$, $b_i=0$ otherwise, gives $w^{\top}b=1>0$ with $b_k=-L<0$ for any severity $L$. $\blacksquare$
+
+**Proposition 5.7 (Witness construction on the unrestricted balance space) [CC-A013-001 · logical observation with explicit construction — mapping: counterexample/limit].** For any $n\ge2$, any component $k$, any deficit $L>0$, and any $j\ne k$, the witness vector of Lemma 5.6 lies in the positive half-space $\{b: w^{\top}b>0\}$ outside the nonnegative orthant. On a restricted feasible domain $\mathcal B(x,t)$ a scalar certificate requires the separately proved implication $b\in\mathcal B(x,t)$, $w^{\top}b\ge0\Rightarrow b\ge0$; the unrestricted construction decides nothing where the physical restrictions exclude all witnesses, and arbitrarily large compensating surpluses need not be physically attainable in a particular application.
+
+**Proposition 5.8 (No scalar weighting certifies componentwise sustainability) [CC-A018-001 · proposition].** Let $n\ge2$ and let $b\in\mathbb R^n$ be a service-component balance ($b_i>0$ surplus, $b_i<0$ deficit). For every $w\in\mathbb R^n_{>0}$, every index $k$, and every $M>0$ there exist $b, b'$ with $b_k\le-M$ and $w^{\top}b>0$, and with $b_k'\ge M$ and $w^{\top}b'<0$. Hence no threshold on $w^{\top}b$ certifies $b\in\mathbb R^n_+$: no positive linear functional certifies the positive cone, and for $n\ge2$ no linear half-space equals the positive orthant. By contrast $\min_i b_i\ge0$ if and only if $b\in\mathbb R^n_+$, and $\|[-b]_+\|_2=\operatorname{dist}_2(b,\mathbb R^n_+)=0$ if and only if $b\in\mathbb R^n_+$. On a bounded admissible set a conservative scalar threshold can give one-sided safety but still cannot identify which component fails.
+
+*Proof (verified present).* The witness construction of Lemma 5.6 with $L=M$; for $b'$ reverse the sign pattern, $b_k'=M$, $b_j'=-(w_kM+1)/w_j$. $\blacksquare$
 
 ---
 
@@ -337,6 +355,20 @@ $$
 $$
 
 *Proof (verified present; summary).* A safety-crossing fibre violates the fibre condition of Theorem 6.10; the certainly-safe set is the sound (but possibly incomplete) relaxation. $\blacksquare$
+
+**Proposition 6.12 (Common-action obstruction under output feedback) [CC-A006-008 · proposition — mapping: counterexample/limit; output-feedback form of Theorem 6.4's family].** Suppose no informative observation arrives before the next action must be selected. If the compatible common-action set $\mathcal U_{\rm com}(B)=\varnothing$ for the information state $B$, then $(B,h)$ is not robustly viable under output feedback, even if every compatible physical state is individually viable under full information.
+
+*Proof (verified present).* Output feedback must choose one prescription before the uncertainty within $B$ is resolved; no single action is robustly safe for all compatible states. $\blacksquare$
+
+**Proposition 6.13 (Conditional observer-to-safety transfer) [CC-A006-009 · proposition; conditional-margin form of Proposition 6.8's family].** Let a full-state feedback law have a uniform inward margin $\eta_i>0$ for the active safety constraint $b_i$. If the implementation error induced by an estimator obeys $|\nabla b_i(x)\,[f(x,k(\hat x),w)-f(x,k(x),w)]|\le L_i\|\hat x-x\|$, then the inward inequality is preserved whenever $L_i\|\hat x-x\|\le\eta_i$.
+
+*Proof (verified present).* Subtract the estimation-induced error bound from the full-state inward margin. $\blacksquare$ *Scope:* a local sufficient condition — it motivates eroded safe sets and does not supply an observer or establish estimator bounds.
+
+**Lemma 6.14 (Static diagnostic aliasing) [CC-A007-002 · lemma — mapping: counterexample/limit; static twin of Theorem 6.10].** If a safe and an unsafe point state have the same instantaneous observation, no memoryless deterministic classifier of that observation correctly classifies both.
+
+*Proof (verified present).* A deterministic memoryless classifier assigns one verdict to the shared observation value. $\blacksquare$ *Scope:* the lemma does not establish dynamic unobservability; observer, filter, and set-membership claims require dynamic observability, error, and structural-discrepancy conditions.
+
+**Template 6.15 (Safe learning) [CC-A006-014 · remark/template].** Compatible-state updates depend on action. An action is safely informative only if it is tube-safe and contracts a declared belief-size functional for every compatible observation branch. This is a domain-specific dual-control obligation; learning is not presumed harmless.
 
 ---
 
@@ -529,6 +561,12 @@ More generally, if $X$ is supported in an interval $I$, $f\in C^2(I)$, and $M=\s
 
 *Proof (verified present; summary).* The variance correction is an exact identity (expanding the square); the second bound is Taylor's theorem with the bounded second derivative. The variance identity is exact; the curvature bound is the error-bound half, which is why the family carries the approximation mapping. $\blacksquare$
 
+*Restatement record (model-audit source) [CC-A010-004, CC-A010-005 · identities].* The model-audit source states the logistic variance correction $\mathbb E[R(X)]=r\mu_X(1-\mu_X/K)-(r/K)\operatorname{Var}(X)$ and the general $C^2$ curvature bound $|\mathbb E[f(X)]-f(\mathbb E[X])|\le\tfrac12\|f''\|_{\infty,I}\operatorname{Var}(X)$ independently; both are the Theorem 9.5 family, recorded at their audited status with the source's own caveat that neither identity closes the dynamics of the variance — exact dynamic moment closure occurs only for special functional forms or distributions.
+
+**Conjecture 9.6 (Finite-time reduction to the five-state core under residual macroeconomic feedback) [CC-A018-006 · conjecture].** Assume the strict specialisation is relaxed so that a $C^1$ macroeconomic feedback of size $\varepsilon$ remains, and assume the scale, Hurwitz, and Lipschitz hypotheses of the source. Then for every finite $T>0$ there exist $\varepsilon_0,C>0$ such that for all $\varepsilon\in(0,\varepsilon_0)$ the specialised solution tracks the five-state core: $\sup_{t\in[0,T]}\|x^\varepsilon(t)-x^0(t)\|\le C(\varepsilon+\omega_A T)$ and $\|y^\varepsilon(t)-h(x^\varepsilon(t))\|\le C(\varepsilon+\omega_A T)+Ce^{-\gamma_y t/\varepsilon}$ on $[0,T]$; if $y^\varepsilon(0)=h(x^\varepsilon(0))+O(\varepsilon)$ the boundary layer is absorbed and both suprema are $O(\varepsilon+\omega_A T)$, the $\omega_A T$ term being absent when the geological pool is exactly frozen (add $O(1-\sigma_{\rm geo})$ for a finite reservoir).
+
+*Status:* conjecture (conditional on the source's Tikhonov spectral hypothesis, which a finite-difference sweep supports on the literature-anchored class but which is not proved on the whole domain). Under the strict specialisation the triangular-projection theorem applies instead and no conjecture is needed. The delay-dynamics paper (Paper 4) inherits exactly this statement as the hypothesis behind its Hopf-persistence theorem.
+
 ---
 
 ## 10 Diagnostics and delay certificates (family F07)
@@ -548,6 +586,10 @@ $$
 $$
 
 *Why conditional:* a sufficient certificate via the Halanay-type argument — the unique decay rate exists because the right side is a contraction in $\eta$; the small-gain constants are substantive hypotheses. The delay-dynamics paper (Paper 4) owns the family; the atlas records the certificate.
+
+**Proposition 10.3 (Effort sensitivity coefficients of the audit template) [CC-A010-013 · algebraic result, registered audit template].** At a regular interior equilibrium of the delayed-effort audit template with deployable-capital gate $g_0\in(0,1)$, the effort sensitivities are $C_Z=h_0g_0\eta E^*/\Delta_{\rm ref}$ and $C_K=\mu_EE^*(1-g_0)/(K_0g_0)$. $C_Z$ is the local sensitivity of effort growth to the delayed decline signal, multiplied by the gate; $C_K$ becomes a damping pathway only through its coupling to the separate capital dynamics, not by its sign alone. The factor $1/g_0$ cannot be extrapolated to $g_0=0$, where the assumed regular positive interior branch and the algebra behind the coefficients need not persist.
+
+**Proposition 10.4 (Interior effort upper bound of the audit template) [CC-A010-014 · algebraic result, registered audit template].** An interior equilibrium with $Z^*=0$ and $E^*>0$ must satisfy $h_0g_0(\delta_0-\eta(E^*)^2/E_{\max})=\mu_EE^*>0$, hence $E^*<\sqrt{\delta_0E_{\max}/\eta}\approx0.573$ at $\delta_0=0.3$, $E_{\max}=1$, $\eta=0.914$. This is an equilibrium consequence of placing the linear loss outside the multiplicative gate, not a failure of boundary invariance ($\dot E\ge0$ at $E=0$ and $\dot E<0$ at $E=E_{\max}$ both hold); moving the loss terms defines a different model and requires renewed analysis.
 
 ---
 
@@ -583,6 +625,14 @@ Then $Q$ is robustly viable under the institution.
 
 *Proof (verified present; summary).* The condition states that for every reachable belief there exists an institutionally implementable control keeping every compatible state in $Q$ against every admissible disturbance; measurable selection and the viability theorem for differential inclusions close the argument. $\blacksquare$
 
+**Hypothesis object 12.3 (The three response-sign hypotheses, H3 residual) [CC-A003-003 · defined source object].** The institutional-response taxonomy of the stress-test frame: H1, scarcity-amplifying extraction; H2, protective restraint or restoration; H3, inertia, capture, or state-dependent response. No result for one hypothesis is generalized to another, and a model-specific bifurcation threshold is not a universal policy threshold. H1 and H2 carry named instantiations in the delay-dynamics paper (Paper 4); H3 is the residual institutional-response hypothesis, the object against which the implementation operator of this section is read. Its groundwater-module restatement — the competing-institutional-hypothesis ladder of the domain template — is registered as a template obligation [CC-A005-006 · defined source object, registered template obligation]: the same three response structures declared as one identification object, with no constitutive content supplied until a named basin, data boundary, uncertainty model, and preregistration exist.
+
+**Definition 12.4 (Finite-horizon epistemic-institutional kernel) [CC-A006-005 · definition].** For the joint institutional information state $(B,h)$ — compatible physical histories and parameters together with an institutional mode, prescription authority $a\in\Gamma(B,h)$, and implementation correspondence $u\in\mathcal E(B,h,a)$, under the lower-game quantifier order — define $\operatorname{Pre}_{\mathfrak I}(\mathfrak Q)$ as the set of information states from which some prescription is tube-safe and lands in $\mathfrak Q$ for every compatible observation, covariate, and implementation outcome. The finite-horizon epistemic-institutional kernel is given by the safe-base recursion $\mathfrak K_0=\mathfrak S$, $\mathfrak K_{n+1}=\mathcal T(\mathfrak K_n):=\mathfrak S\cap\operatorname{Pre}_{\mathfrak I}(\mathfrak K_n)$. The deflationary implementation $\mathfrak K_n\cap\operatorname{Pre}_{\mathfrak I}(\mathfrak K_n)$ generates the same descending orbit from $\mathfrak S$ when $\operatorname{Pre}_{\mathfrak I}$ is monotone; the safe-base form is official because it remains safe under arbitrary initialization.
+
+**Conditional Theorem 12.5 (Sampled epistemic-institutional viability, safe-base form) [CC-A006-006 · conditional theorem].** Assume: (i) the compatible-state update is nonempty for every compatible branch; (ii) all transition and authority/implementation correspondences are defined on $\mathfrak S$; (iii) the required non-anticipative prescriptions exist whenever the predecessor condition holds; (iv) $\operatorname{Pre}_{\mathfrak I}$ is monotone. Then $\mathfrak K_n$ is exactly the set of information states from which safety can be guaranteed for $n$ decision intervals, and $\mathcal T$ has a greatest fixed point on the powerset lattice of $\mathfrak S$. If, in addition, $\mathcal T$ preserves decreasing countable intersections (an $\omega$-continuity-from-above condition) and the strategy-selection assumptions are closed under the infinite-horizon limit, then $\mathfrak K_\infty:=\bigcap_{n\ge0}\mathfrak K_n$ is that greatest fixed point; without the additional condition the greatest fixed point is obtained by transfinite descending iteration rather than necessarily by the countable intersection.
+
+*Proof (verified present; summary).* Induction on $n$: membership in $\mathfrak K_{n+1}$ supplies a current safe prescription and a successor in $\mathfrak K_n$ for every branch; monotonicity makes $\mathcal T$ monotone, so Tarski's theorem gives the greatest fixed point; the continuity and closure hypotheses identify the countable descending limit. $\blacksquare$ *Scope:* an abstract characterization — it does not claim that $B_t$ is tractable, that $\mathfrak K_\infty$ is nonempty, or that any particular ecological system meets the assumptions. The empirical-identification paper (Paper 5) reads its benchmark against exactly this object at exactly this conditional status.
+
 ---
 
 ## 13 Intergenerational and stochastic bounds (family F12, bounded appendix)
@@ -598,6 +648,8 @@ $$
 $$
 
 *Proof (verified present; summary).* With a $2\delta$ deterministic margin and bounded diffusion coefficient, the probability of a $\delta$-deviation over $[0,T]$ vanishes as $\varepsilon\to0$ (standard concentration for bounded-coefficient diffusions); on the complement event the trajectory never reaches $\partial\mathcal V$. $\blacksquare$
+
+**Programme 13.3 (Justice and multiscale viability) [CC-A002-050 · research programme, open].** Place group- and location-specific minimum services and maximum harms inside $K$ — the group-indexed safe-set construction $\{z: g_j(z)\ge0 \text{ for all } j\}$ with the recursive intergenerational criterion ($z(t)\in K_g$ throughout generation interval $I_g$, and the terminal state in a declared continuation set $C_{g+1}$ from which the next generation's constraints are viable under its policy and disturbance classes; a terminal aggregate stock alone is not this criterion). Distinguish positive predictions from normative entitlement choices; study when local kernels compose into a global kernel under cross-boundary transfers, and when aggregate feasibility masks an empty kernel or capture basin for one group.
 
 ---
 
@@ -617,7 +669,7 @@ $$
 
 ## 14 Status ledger
 
-Every retained row of this manuscript, with claim status, evidence status (post-closure), and primary destination. `P` = provenance concordance row in `research_program/canonical_concordance_A001_A025.csv`. Review state: all 70 rows `row_verified` (A001/A002 scientific closure passes, 2026-08-27) — content-level acceptance; no theorem status promoted; the §8 interface contract remains open per row.
+Every retained row of this manuscript, with claim status, evidence status (post-closure), and primary destination. `P` = provenance concordance row in `research_program/canonical_concordance_A001_A025.csv`. Review state: all 89 rows `row_verified` (A001/A002 scientific closure passes, 2026-08-27; A003/A005/A006/A007/A010/A013/A018 closure passes, 2026-08-28 — every source read end to end; kind, module, mapping type, and evidence status verified per row) — content-level acceptance; no theorem status promoted; the §8 interface contract remains open per row. Rows 1–70 are the budgeted selection (63 main + 7 bounded-appendix); rows 71–89 are the closure-campaign seam routings — rows the destination passes and seam closures of the 2026-08-28 campaign assign to this atlas from the seven further closed sources, stated here at exactly their verified statuses.
 
 | # | P | Statement | Manuscript | Claim status | Evidence | Primary destination |
 |---|---|---|---|---|---|---|
@@ -691,6 +743,25 @@ Every retained row of this manuscript, with claim status, evidence status (post-
 | 68 | CC-A002-009 | One balance per moiety | App A.3 | remark | scope note | Paper 2 |
 | 69 | CC-A002-053 | Farkas multipliers are separation certificates | App A.4 | remark | scope note | Paper 2 |
 | 70 | CC-A002-031 | Accounting/boundedness on hybrids | App A.5 | remark | scope note | Paper 2 |
+| 71 | CC-A006-004 | Stability and safety are independent | Lem 3.5 | lemma (counterexample/limit) | proof verified present | Paper 2 |
+| 72 | CC-A010-009 | Geological/support-pool noninvariance | Prop 4.6 | boundary test (counterexample/limit) | audited verdict, source-stated | Paper 2 |
+| 73 | CC-A007-001 | Compensatory reporting limit | Lem 5.6 | lemma (counterexample/limit) | proof verified present | Paper 2 |
+| 74 | CC-A013-001 | Witness construction on the unrestricted balance space | Prop 5.7 | logical observation + construction (counterexample/limit) | explicit construction | Paper 2 (seam: Paper 3 §9.1) |
+| 75 | CC-A018-001 | No scalar weighting certifies componentwise sustainability | Prop 5.8 | proposition (counterexample/limit) | proof verified present | Paper 2 (seam: Paper 3 §9.1) |
+| 76 | CC-A006-008 | Common-action obstruction under output feedback | Prop 6.12 | proposition (counterexample/limit) | proof verified present | Paper 2 |
+| 77 | CC-A006-009 | Conditional observer-to-safety transfer | Prop 6.13 | proposition (conditional margin) | proof verified present | Paper 2 |
+| 78 | CC-A007-002 | Static diagnostic aliasing | Lem 6.14 | lemma (counterexample/limit) | proof verified present | Paper 2 |
+| 79 | CC-A006-014 | Safe learning | Template 6.15 | remark/template | defined source object | Paper 2 |
+| 80 | CC-A010-004 | Logistic variance correction (model-audit restatement) | §9 restatement record | identity (exact specialization) | line-checked identity, Theorem 9.5 family | Paper 2 |
+| 81 | CC-A010-005 | General C² curvature bound (model-audit restatement) | §9 restatement record | bound (exact specialization) | line-checked bound, Theorem 9.5 family | Paper 2 |
+| 82 | CC-A018-006 | Finite-time reduction to the five-state core | Conj 9.6 | conjecture (demoted at correction) | conditional on source hypotheses; sweep-supported, unproved | Paper 2 (seam: Paper 4 §4.3) |
+| 83 | CC-A010-013 | Effort sensitivity coefficients of the audit template | Prop 10.3 | algebraic result (registered template) | source-verified algebra | Paper 2 |
+| 84 | CC-A010-014 | Interior effort upper bound of the audit template | Prop 10.4 | algebraic result (registered template) | source-verified algebra | Paper 2 |
+| 85 | CC-A003-003 | H3: inertia/capture/state-dependent response | Hypothesis object 12.3 | defined source object | defined source object | Paper 2 (seam: Paper 4 §8.1) |
+| 86 | CC-A005-006 | Competing-institutional-hypothesis ladder (groundwater restatement) | Hypothesis object 12.3 | defined source object (registered template obligation) | defined source object | Paper 2 |
+| 87 | CC-A006-005 | Finite-horizon epistemic-institutional kernel | Def 12.4 | definition | defined source object | Paper 2 (seam: Paper 5 §4.4) |
+| 88 | CC-A006-006 | Sampled epistemic-institutional viability (safe-base form) | Cond Thm 12.5 | conditional theorem | conditional (source-declared; repaired safe-base form) | Paper 2 (seam: Paper 5 §4.4) |
+| 89 | CC-A002-050 | Justice and multiscale viability | Programme 13.3 | research programme (open) | declared open programme | Paper 2 / monograph |
 
 **Ledger discipline.** The mapping-type column of the concordance (exact specialization / projectable reduction / approximation / counterexample-or-limit) is preserved per row; the atlas never re-types a result. Destination cross-references are annotations, not transfers: where the primary destination is another paper, that paper owns the full treatment and its seam contract, and this atlas states the canonical form exactly once.
 
@@ -698,7 +769,7 @@ Every retained row of this manuscript, with claim status, evidence status (post-
 
 ## 15 Provenance, reproducibility, and limits
 
-**Sources.** This manuscript's retained set derives from two fully row-closed sources: A001 (`uploads/topdown.txt`, 99 concordance rows, closure 2026-08-27) and A002 (`uploads/general_theory.txt`, 53 concordance rows, closure 2026-08-27). The retained-row selection (63 main + 7 bounded-appendix) is recorded in `research_program/paper2_retained_row_budget.csv`; the per-row verification record is `research_program/concordance_row_closure_twenty_sources.md`; the row-level evidence is `research_program/canonical_concordance_A001_A025.csv` (409 rows; A001+A002 fully `row_verified`).
+**Sources.** This manuscript's retained set derives from nine fully row-closed sources. The budgeted selection (rows 1–70: 63 main + 7 bounded-appendix) derives from A001 (`uploads/topdown.txt`, 99 concordance rows, closure 2026-08-27) and A002 (`uploads/general_theory.txt`, 53 concordance rows, closure 2026-08-27), recorded in `research_program/paper2_retained_row_budget.csv`. The closure-campaign seam rows (71–89) derive from A003 (`uploads/Paper_V_Institutional_Feedback_and_Nonlinear_Transitions.txt`), A005 (`uploads/Paper_III_Groundwater_Module.txt`), A006 (`uploads/Paper_II_Robust_Epistemic_Viability_V2.txt`), A007 (`uploads/Paper_I_Hybrid_Sustainability_Architecture_V4.txt`), A010 (`uploads/paper4_perspective.txt`), A013 (`uploads/paper1_accounting.txt`), and A018 (`uploads/manuscript.txt`) — each closed 2026-08-28 with the source read end to end. The per-row verification record is `research_program/concordance_row_closure_twenty_sources.md`; the row-level evidence is `research_program/canonical_concordance_A001_A025.csv` (409 rows; all nine sources fully `row_verified`).
 
 **Proof handling.** Proofs marked *reproduced* are printed in full above from the source. Proofs marked *verified present; summary* exist in full in the source (the closure pass verified proof presence and read it); the summary given here is faithful to the source argument, and camera-ready reproduces each proof verbatim. One proof is omitted in the source (Theorem 6.4), and the obligation to supply an explicit one-step proof is registered rather than silently discharged.
 

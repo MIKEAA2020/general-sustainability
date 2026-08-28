@@ -91,7 +91,7 @@ The primary score is RMSE of SSB (kt). Secondary scores are mean absolute error,
 
 A module is retained only if it reduces primary RMSE relative to the next-simpler model and relative to persistence. Retention is decided separately on each specification.
 
-On $\Omega_{\mathrm{xte}}$ the collapse window is train 1954--1989, test 1990--1995. Catch is Table 1 landings (2024 persisted from 2023). No row is taken from NCAM 2016.
+On $\Omega_{\mathrm{xte}}$ the collapse window is train 1954--1989, test 1990--1995, and the recovery-stall window is train 1995--2012, test 2013--2024. Catch is Table 1 landings (2024 persisted from 2023). No row is taken from NCAM 2016. The ladder's rolling origin on $\Omega_{\mathrm{xte}}$ uses a minimum of twelve training years ($n=59$ at $h=1$, $n=55$ at $h=5$); the naive baselines retain the eight-year minimum ($n=63$ and $n=59$).
 
 ---
 
@@ -161,7 +161,7 @@ Year-by-year landings for 2015 are 4.436 kt, matching DFO reported landings. Pre
 | M4 | 206 | 486 |
 | M2, survey start | 128 | 331 |
 
-Annual landings make M2 worse than the coarse regime on one-year RMSE (160 versus 144 kt). Collapse-window RMSE remains about 821 kt. Apparent net production $S_{t+1}-S_t+C_t$ is strongly negative in 1991--93 even after subtracting reconstructed catch. A more accurate $C_t$ cannot produce the crash in a constant-$r$ surplus model, because the observed $\Delta S$ is far larger than $C_t$.
+Annual landings make M2 worse than the coarse regime on one-year RMSE (160 versus 144 kt). Collapse-window RMSE remains about 821 kt. On the annual-catch recovery window (train 1995--2007, test 2008--2015) the ladder scores M1 264, M1b 78, M2 303, M3 609, and M4 586 kt, against a frozen-persistence error of 104 kt (forecast held at the 2007 level of 81 kt): annual landings do not repair the recovery-window fit, the residual-persistence models deteriorate severely (609 and 586 kt against 220 and 214 kt under the coarse regime), and M1b's 78 kt carries the same unidentified-Allee caveat as its regime-window fit. Apparent net production $S_{t+1}-S_t+C_t$ is strongly negative in 1991--93 even after subtracting reconstructed catch. A more accurate $C_t$ cannot produce the crash in a constant-$r$ surplus model, because the observed $\Delta S$ is far larger than $C_t$.
 
 Starting from $\hat q I_t$ instead of SSB: one-year RMSE 128 kt (still worse than persist 98); one-year log-RMSE 0.49 versus persist 0.52; five-year RMSE 331 versus persist 265. On the primary score the variant is not retained. The log-score difference is recorded and not used for selection. A set-valued conservative filter (R02) is not instantiated: there is no observation fibre outside NCAM.
 
@@ -187,6 +187,10 @@ Checkpoints from Regular et al. (2025) Table 17: 2005 SSB $=26$ kt (95% interval
 
 Collapse window (train 1954--89, test 1990--95): M1 RMSE 817 kt; M2 1898 kt. Official landings worsen the crash forecast. No module is retained. Persistence remains the lowest-RMSE forecast. That is the second independent negative certificate: same rule, different $\Omega$. The longer series and the revised LRP do not justify retaining the additional modules.
 
+Recovery-stall window (train 1995--2012, test 2013--2024; $n=12$): M1 254 kt, M1b 178 kt, M2 269 kt, M3 268 kt, M4 269 kt. The 2013--2024 test path rises from 167 to 462 kt, all above the 112 kt training-end value, so a persistence forecast frozen at that value errs by 262 kt -- more than M1 and M1b on this single origin. This fixed-origin comparison does not enter the retention rule, which is decided on rolling-origin primary RMSE (Table 6, where persistence is not beaten at either horizon). M1b's window fit carries the identification fragility familiar from its other window fits: a small fitted Allee parameter ($\mathfrak s = 5.3\times10^{-3}$) with a carrying capacity ($K=500$ kt) extrapolated far beyond the training range (maximum 117 kt).
+
+On the rolling Brier score for $\mathbf{1}\{\hat S<\mathrm{LRP}\}$ (the secondary score declared above): persistence 0.00 at both horizons, M1 0.04 ($h{=}1$) and 0.05 ($h{=}5$), M1b 0.00 and 0.05, M2 0.08 and 0.14, M3 0.08 and 0.10, M4 0.08 and 0.14. No model improves the Brier score over persistence either.
+
 Regular et al. assign the 1992--94 disappearance primarily to $M$ (peak $\approx 2.5$), informed by tagging and a capelin/cod predictor, and note that some of that $M$ could still be unreported $F$. That split is the same as the surplus residual after subtracting official $C_t$.
 
 ### 5.4 Prey-informed productivity
@@ -202,9 +206,9 @@ Murphy et al. (2025) report a 1991 acoustic collapse (1985--90 median 3704 kt ve
 | $\Omega_{\mathrm{xte}}$ | persist | **88** | **318** |
 | $\Omega_{\mathrm{xte}}$ | M\_cap | 147 | 894 |
 
-On post-break origins only ($\Omega_{\mathrm{xte}}$, $h=1$): M\_cap 107 versus persist 88. Not retained.
+On post-break origins only ($\Omega_{\mathrm{xte}}$, $h=1$; $n=33$): M\_cap 107 versus persistence 75 on the identical origin set (the 88 of Table 7 is the all-origins value). Not retained. On $\Omega_{2016}$ post-break origins ($n=24$) the corresponding M\_cap value is 149 kt.
 
-The year-by-year 3L spring acoustic biomass is tabulated in Zenodo 10.5281/zenodo.17515115, with 2023 $=331.3$ kt from Murphy et al. (2025). Surplus is scaled by $(I_{\mathrm{known}}/I_{\mathrm{ref}})^{b}$, where $I_{\mathrm{known}}(t)$ is the last observation at or before $t$.
+The year-by-year 3L spring acoustic biomass is tabulated in Zenodo 10.5281/zenodo.17515115, with 2023 $=331.3$ kt from Murphy et al. (2025). Surplus is scaled by $(I_{\mathrm{known}}/I_{\mathrm{ref}})^{b}$, where $I_{\mathrm{known}}(t)$ is the last observation at or before $t$. Survey years are unobserved in part of the record, so the index-forecast origins number $n=24$ ($h=1$) and $n=20$ ($h=5$) on $\Omega_{2016}$ and $n=36$ and $n=32$ on $\Omega_{\mathrm{xte}}$, against the SSB-based counts of Table 4.
 
 **Table 8.** Rolling RMSE, observed acoustic index.
 

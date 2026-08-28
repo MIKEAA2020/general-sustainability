@@ -32,7 +32,9 @@ same measured quantity in two roles.
 
 The governance family: BAU $C \equiv 5$ kt (moratorium-level inshore
 removals, the declared implementable use post-1992); flat caps
-$\rho\cdot 240$ kt; S1, the DFO-2009 critical-zone rule at a declared 60 kt
+$\rho\cdot 240$ kt with $\rho\in\{1.0, 0.75, 0.5, 0.25, 0.0\}$
+(240, 180, 120, 60, 0 kt; every member is scored); S1, the DFO-2009
+critical-zone rule at a declared 60 kt
 cap (60 above the LRP, 0 below); and a cascade (60/30/5/0 kt at
 LRP/0.75LRP/0.5LRP/below — sub-LRP stages declared [N]).
 
@@ -44,6 +46,7 @@ LRP/0.75LRP/0.5LRP/below — sub-LRP stages declared [N]).
 |---|---:|---:|---:|---:|
 | BAU (5 kt) | 1141.0 | 1016.5 | **884.6** | **884.6** |
 | flat 240 kt | 1351.1 | 1224.4 | 1043.8 | empty |
+| flat 180 kt | 1297.1 | 1171.0 | 991.2 | 2335.4 |
 | flat 120 kt | 1243.4 | 1117.8 | 938.8 | 1363.0 |
 | flat 60 kt / S1 / cpm | 1189.9 | 1064.9 | 886.7 | 900.3 |
 | flat 0 kt | 1136.6 | 1012.1 | **884.6** | **884.6** |
@@ -109,10 +112,14 @@ defect-bound to $T \le 3$ years.
 ### 2.5 Stress replay and classification
 
 Closed-loop replay from the observed 1990 SSB (861.9 kt — already below the
-LRP) with the **observed** 1991–1995 residuals: every policy falls below the
-LRP by 1992 (BAU to 611.5 kt in 1992 and 366.3 kt by 1994; zero catch only
-delays the exit to 1993 at best) — the crash is a productivity event, not a
-catch event, exactly as the prediction leg's catch-insufficiency certificate
+LRP) with the **observed** 1991–1995 residuals: under every flat cap of
+60 kt and deeper, and under the critical-period rule, the path is below the
+LRP already in 1991; zero catch and the small-removals policies hold 1991
+above the limit (906.5 kt) yet every policy falls below it by 1992 —
+zero catch exits in the same year as business-as-usual (622.3 versus
+611.5 kt in 1992; BAU reaches 366.3 kt by 1994) — the crash is a
+productivity event, not a catch event, exactly as the prediction leg's
+catch-insufficiency certificate
 found.
 
 T=5 classification: under UC-q10 only the 1980s peak years (1985, 1987,
