@@ -1,8 +1,6 @@
 # Does a one-pool water-balance model improve forecasts of Edwards Aquifer head? A scored test at J-17
 
-**Wave E empirical paper — working manuscript — consolidated version (2026-08-26)**
-
-*Series lock:* J-17 annual-mean elevation, TWDB 6837203 / EAA AY-68-37-203, 1934–2023. *Status:* one scored specification $\Omega_{\mathrm{SA}}$; causal stock-flow is not earned, causal recharge forecasts are not earned, and oracle water-balance is a certificate, not a retain. This single file supersedes and consolidates the version-1 working manuscript and the version-2 rewrite — every substantive fact, table row, and figure claim of both is retained here (machine-checked by `reaudit/verify_wave_e_consolidation.py`). *Frozen specification sheet:* `wave_e_edwards/SPECIFICATION.md` ($\Omega_{\mathrm{SA}}$ Pass 1 + Pass 2 + the intervention-leg object; the artifact-level specification match is machine-verified — `batch 4/WAVE_E_SPEC_MATCH.md`, 36 checks via `reaudit/verify_wave_e_spec_match.py`).
+*Series:* J-17 annual-mean elevation, TWDB 6837203 / EAA AY-68-37-203, 1934–2023. *Status:* one scored specification $\Omega_{\mathrm{SA}}$; causal stock-flow is not retained, causal recharge forecasts are not retained, and the oracle water-balance is a diagnostic certificate excluded from retention. *Specification sheet:* `wave_e_edwards/SPECIFICATION.md` ($\Omega_{\mathrm{SA}}$ Pass 1 + Pass 2 + the intervention-leg object); the artifact-level specification match is verified by 36 machine checks (`batch 4/WAVE_E_SPEC_MATCH.md`).
 
 ## Abstract
 
@@ -10,7 +8,7 @@ The general theory of sustainability admits additional model structure only when
 
 The predictand is the calendar-year mean of daily-high water elevation at the J-17 index well (TWDB 6837203), 1934--2023. Nested models issue fixed-window and rolling-origin forecasts. Recharge (USGS/Puente) and well pumpage (Edwards Aquifer Authority Table 1) enter as candidate drivers. Comal Springs discharge is scored only after model retention is frozen.
 
-One-year rolling root-mean-square error (RMSE) is 13.23 ft for last-value persistence and 12.84 ft for a univariate AR(1). The causal stock-flow specification, which persists the most recent recharge and pumpage, has RMSE 14.70 ft. Residual and delayed variants do not improve on persistence. Recharge has lag-1 correlation 0.17; using last year's recharge as next year's recharge therefore adds variation that is only weakly related to the increment being forecast. When the same map is given realized future recharge and pumpage, RMSE falls to 7.55 ft. Climate-informed recharge forecasts known at the origin---AR(1) on recharge, September--November Niño 3.4, lagged climate-division precipitation, and their combination---lie within 0.13 ft of AR(1) at the one-year horizon and have higher RMSE than persistence at the five-year horizon. Contemporaneous precipitation tracks recharge ($r=0.78$), but next year's precipitation is not known at the forecast origin. ENSO and last year's rain are not substitutes for it.
+One-year rolling root-mean-square error (RMSE) is 13.23 ft for last-value persistence and 12.84 ft for a univariate AR(1). The causal stock-flow specification, which persists the most recent recharge and pumpage, has RMSE 14.70 ft. Residual and delayed variants do not improve on persistence. Recharge has lag-1 correlation 0.17; using last year's recharge as next year's recharge therefore adds variation that is only weakly related to the increment being forecast. When the same map is given realized future recharge and pumpage, RMSE falls to 7.55 ft. Climate-informed recharge forecasts known at the origin---AR(1) on recharge, September--November Niño 3.4, lagged climate-division precipitation, and their combination---lie within 0.13 ft of AR(1) at the one-year horizon and have higher RMSE than persistence at the five-year horizon. Contemporaneous precipitation tracks recharge ($r=0.78$), but next year's precipitation is not known at the forecast origin. ENSO and last year's precipitation are not substitutes for it.
 
 No two-pool, solute, or institutional-kernel claim is made. The specification is an R04.Cor2 approximation of a one-pool head map. The two-pool A005 module remains conditionally admissible.
 
@@ -100,7 +98,7 @@ Rolling origin: minimum 15 training years; horizons $h=1$ and $h=5$; $n=75$ and 
 
 A causal module is retained only if its primary RMSE is strictly less than that of persistence and strictly less than that of the next-simpler causal model. Diagnostic oracles are excluded from retention. The Comal series is excluded from retention. Retention is decided on $z$ only; the service series is scored after that decision is frozen.
 
-The scoring protocol is recorded in `protocol.md` and `protocol_pass2.md`. Windows and scores were specified before the corresponding RMSE tables were computed. The protocol is computational, not a locked clinical preregistration.
+The scoring protocol is recorded in `protocol.md` and `protocol_pass2.md`. Windows and scores were specified before the corresponding RMSE tables were computed. The design is a fixed computational protocol rather than a prospective clinical-style registration.
 
 ---
 
@@ -158,13 +156,13 @@ Full-sample correlations: $\mathrm{corr}(H_t,H_{t-1})=0.64$ with AR(1) coefficie
 
 | Model | Versus persist | Distinct structure | Decision |
 |---|---|---|---|
-| M1 | $12.84<13.23$ | output only | thin retain (0.39 ft) |
+| M1 | $12.84<13.23$ | output only | retained (margin 0.39 ft) |
 | M2 | $14.70>13.23$ | causal fluxes | reject |
 | M2m | $12.28<13.23$ | no (affine AR(1)) | list only; not extra structure |
 | M3, M4 | worse than persist | yes | reject |
 | M2\_oracle | $7.55$ | uses future $R,P$ | excluded |
 
-M1 is retained by the point-RMSE rule. The margin is 0.39 ft on $n=75$. That is not a confirmation of stock-flow structure; it is a slightly mean-reverting head series. M2m is listed by the same rule and then demoted on class grounds that were already in the protocol (constant fluxes reduce it to AR(1)). Promoting M2m as "stock-flow earned" would be inflation. No stock-flow, residual, or delay module is retained.
+M1 is retained by the point-RMSE rule. The margin is 0.39 ft on $n=75$. That is not a confirmation of stock-flow structure; it is a slightly mean-reverting head series. M2m is listed by the same rule and then demoted on class grounds fixed in the protocol (constant fluxes reduce it to AR(1)); its numerical advantage does not constitute additional structure. No stock-flow, residual, or delay module is retained.
 
 At $h=5$, the training mean (16.80 ft) has lower RMSE than persistence (21.11 ft). Five-year forecasts on this basin are climatology, not last value and not persisted recharge.
 
@@ -198,7 +196,7 @@ Lagged precipitation and September--November Niño 3.4 have modest skill on $R$ 
 - the point-RMSE rule lists ENSO, lagged precipitation, and the combination (each less than persist and less than M1);
 - margins versus M1 are 0.02, 0.04, and 0.13 ft;
 - at $h=5$ all three have RMSE 3--6 ft higher than persistence;
-- they are M2m with a weakly adjusted intercept. Promoting them is inflation.
+- they are M2m with a weakly adjusted intercept and do not constitute additional forecast structure.
 
 M2\_Rar loses at $h=1$ (13.25 ft). Autoregression on nearly white recharge is not a recharge forecast.
 
@@ -228,11 +226,11 @@ The 1950s decline is not a Stage I event. The 660 ft line is a 2007 rule. 1956 i
 
 Two-pool exchange, solute, and barrier bookkeeping were not fitted and cannot be retained. In the A005 parameterization, $q_{\mathrm{rel}}$ is removed, leakage is not applicable, and no $B_k$ or $\chi$ term is fitted; the blocking list is not closed by this paper. Post-1997 pumpage no longer spikes with drought as in 1956 (321 kaf wells); that change is already in $P_t$. A separate critical-period switch does not add a degree of freedom beyond the pumpage series.
 
-Limitations follow the data and the map. The annual affine one-pool specification is not a karst model: conduits, the Uvalde--San Antonio divide, and unconfined recharge-zone storage remain in the residual. Total-area $R$ and $P$ mix the San Antonio and Uvalde pools; that is a declared APPROXIMATION defect, not a hidden one. Recharge is a Puente estimate; pumpage includes unreported domestic, livestock, and federal use. Neither series is $z$. M4 is a one-year information delay, not a set-valued conservative filter. The sample is 90 years with four short test windows; the 0.39 ft AR(1) margin is not a significance claim.
+Limitations follow the data and the map. The annual affine one-pool specification is not a karst model: conduits, the Uvalde--San Antonio divide, and unconfined recharge-zone storage remain in the residual. Total-area $R$ and $P$ mix the San Antonio and Uvalde pools; that is a declared approximation defect. Recharge is a Puente estimate; pumpage includes unreported domestic, livestock, and federal use. Neither series is $z$. M4 is a one-year information delay, not a set-valued conservative filter. The sample is 90 years with four short test windows; the 0.39 ft AR(1) margin is not a significance claim.
 
-The specification is an R04.Cor2 approximation of a one-pool head map. It does not transfer an interval-verified linear toy (E5 is not this specification), does not instantiate a closed-loop information filter, and does not close A005. Model selection used $z$ only. No gate is treated as closed for Wave E without specification matching and independent verification.
+The specification is an R04.Cor2 approximation of a one-pool head map. It does not transfer an interval-verified linear template (E5 is not this specification), does not instantiate a closed-loop information filter, and does not close A005. Model selection used $z$ only. No programme gate is treated as closed without specification matching and independent verification.
 
-The honest reading of "incorporate all the pieces for accurate forecasts" on this case: the pieces that are not identified, or that arrive too late to be causal, do not go in. Persistence (plus a thin AR(1)) is the present forecast; the water-balance map is a certificate about a year whose recharge is already known.
+On this evidence, modules that are not identified on the training data, or whose drivers arrive too late to be causal at the annual origin, do not reduce forecast error. The retained forecast is persistence with a small AR(1) correction; the water-balance map serves as a certificate for a year whose recharge is already known.
 
 ---
 
@@ -242,13 +240,13 @@ On locked J-17 annual-mean head, last-value persistence is more accurate than a 
 
 The paper reports a forecast comparison. It does not conclude that the aquifer is unsustainable, and it does not conclude that the general theory is empirically confirmed on this basin.
 
-The next article is not a second specification on this annual origin, not phosphorus, and not a longer climate kitchen-sink: reopening the climate module with more indices (PDO, AMO) on this origin is the same rejected structure, and a mid-year nowcast would be a new protocol, not a silent add-on.
+Reopening the climate module with additional indices (PDO, AMO) on this annual origin would re-instantiate the rejected structure; a mid-year nowcast would require a new evaluation protocol.
 
 ---
 
 ## Data and code availability
 
-Locked inputs, scoring scripts, and result files are in `wave_e_edwards/` of <https://github.com/MIKEAA2020/general-sustainability>; the frozen specification sheet is `wave_e_edwards/SPECIFICATION.md`. J-17 daily highs: Texas Water Development Board well 6837203. Recharge: Umphres and Choi (2025), DOI 10.5066/P1BI62NY. Pumpage: Edwards Aquifer Authority (2024/25), Table 1. Comal: USGS 08168710. Niño 3.4: NOAA PSL HadISST (committed raw file `data/psl_nino34_long.data`). Precipitation: NCEI nClimDiv `climdiv-pcpndv-v1.0.0-20260806` — **not committed** (provenance URL in `data/SOURCES.md`); the three `pcp_*` columns of the locked panel are therefore `NOT_REPRODUCIBLE_FROM_COMMITTED_CODE`, while the two Niño columns rebuild from the committed PSL file to machine precision. Scoring Pass 1/2 from the committed `data/annual_panel.csv` does not require the nClimDiv file. An independent execution of the scoring scripts reproduced the committed result files (`batch 4/WAVE_E_RERUN.md`), and the artifact-level specification match has since been executed and machine-verified (`batch 4/WAVE_E_SPEC_MATCH.md`: 36 checks). The Wave E paper-support gates (Part III of `PROOF_MANIFEST.md`) remain NOT CONFIRMED; they close against the finalized paper, not the trees.
+Input data, scoring scripts, and result files are in `wave_e_edwards/` at <https://github.com/MIKEAA2020/general-sustainability>; the specification sheet is `wave_e_edwards/SPECIFICATION.md`. J-17 daily highs: Texas Water Development Board well 6837203. Recharge: Umphres and Choi (2025), DOI 10.5066/P1BI62NY. Pumpage: Edwards Aquifer Authority (2024/25), Table 1. Comal: USGS 08168710. Niño 3.4: NOAA PSL HadISST (committed raw file `data/psl_nino34_long.data`). Precipitation: NCEI nClimDiv `climdiv-pcpndv-v1.0.0-20260806` — not distributed with the repository (provenance URL in `data/SOURCES.md`); the three `pcp_*` columns of the fixed panel are therefore not reproducible from the committed code alone, while the two Niño columns rebuild from the committed PSL file to machine precision. Scoring Pass 1/2 from the committed `data/annual_panel.csv` does not require the nClimDiv file. An independent execution of the scoring scripts reproduced the committed result files (`batch 4/WAVE_E_RERUN.md`), and the artifact-level specification match is verified by 36 machine checks (`batch 4/WAVE_E_SPEC_MATCH.md`).
 
 ```
 python3 src/build_panel.py && python3 src/build_climate.py
@@ -256,7 +254,7 @@ python3 src/run_ladder.py && python3 src/run_recharge.py
 python3 src/make_figures.py
 ```
 
-`build_panel.py` writes head, recharge, and pumpage to a scratch file and leaves the locked twenty-column panel in place when those columns already match. `build_climate.py` rebuilds the two Niño 3.4 columns from the committed PSL raw file; rebuilding the three precipitation columns additionally requires the omitted nClimDiv file and leaves the locked panel in place when those columns already match.
+`build_panel.py` writes head, recharge, and pumpage to a scratch file and leaves the fixed twenty-column panel in place when those columns already match. `build_climate.py` rebuilds the two Niño 3.4 columns from the committed PSL raw file; rebuilding the three precipitation columns additionally requires the omitted nClimDiv file and leaves the fixed panel in place when those columns already match.
 
 ---
 

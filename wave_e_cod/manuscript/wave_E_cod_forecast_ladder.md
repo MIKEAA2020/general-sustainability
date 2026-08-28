@@ -1,8 +1,6 @@
 # Does a surplus-production ladder improve forecasts of Northern cod? A scored test on NAFO 2J3KL
 
-**Wave E empirical paper — working manuscript — consolidated version (2026-08-26)**
-
-*Series lock:* NCAM $M$-shift SSB, DFO SAR 2016/026 Table A2 (1983–2015); second unpooled specification xteNCAM 1954–2024. *Status:* two scored specifications ($\Omega_{2016}$, $\Omega_{\mathrm{xte}}$); complexity is not earned on either. This single file supersedes and consolidates the version-1 working manuscript and the version-2 rewrite — every substantive fact, table row, and figure claim of both is retained here (machine-checked by `reaudit/verify_wave_e_consolidation.py`). *Frozen specification sheet:* `wave_e_cod/SPECIFICATION.md` ($\Omega_{2016}$ + $\Omega_{\mathrm{xte}}$ + the intervention-leg object; the artifact-level specification match is machine-verified — `batch 4/WAVE_E_SPEC_MATCH.md`, 36 checks via `reaudit/verify_wave_e_spec_match.py`).
+*Series:* NCAM $M$-shift SSB, DFO SAR 2016/026 Table A2 (1983–2015); second unpooled specification xteNCAM 1954–2024. *Status:* two scored specifications ($\Omega_{2016}$, $\Omega_{\mathrm{xte}}$); additional structure is not retained on either. *Specification sheet:* `wave_e_cod/SPECIFICATION.md` ($\Omega_{2016}$ + $\Omega_{\mathrm{xte}}$ + the intervention-leg object); the artifact-level specification match is verified by 36 machine checks (`batch 4/WAVE_E_SPEC_MATCH.md`).
 
 ## Abstract
 
@@ -12,7 +10,7 @@ The primary predictand is the NCAM $M$-shift spawning-stock biomass (SSB) series
 
 No structural model has lower primary RMSE than last-value persistence. One-year rolling RMSE is 98 kt for persistence and 115--206 kt for the surplus-production ladder. Year-by-year landings do not change the ranking (stock-flow RMSE 160 kt). Five-year RMSE is 265 kt versus 289--488 kt. The collapse window (train 1983--1990, test 1991--1995) is missed by every model (RMSE 694--819 kt): a constant-productivity surplus model with a 1992 catch drop cannot produce the observed crash. An AR residual and a one-year information delay do not reduce that error; the delay raises it. On the recovery window the autonomous Allee fit has the lowest structural RMSE (90 kt) but is unidentified ($s\to 0$, $K$ pinned).
 
-The theory therefore earns a negative certificate on this object, not a forecast gain: (i) the exact autonomous scalar class is incompatible with the observed path (A014); (ii) catch-regime stock-flow is not sufficient for collapse; (iii) extra modules that are not identified on the training window increase error. The same retention rule holds on a second, unpooled specification (xteNCAM, 1954--2024, LRP 276 kt): persist one-year RMSE 88 kt versus 120 kt for the autonomous Schaefer model. Capelin-informed productivity, using a 1991 regime break or the tabulated acoustic index without interpolation across 1991, is not retained on the primary score. The series are not mixed.
+The theory therefore yields a negative certificate on this object rather than a forecast gain: (i) the exact autonomous scalar class is incompatible with the observed path (A014); (ii) catch-regime stock-flow is not sufficient for collapse; (iii) extra modules that are not identified on the training window increase error. The same retention rule holds on a second, unpooled specification (xteNCAM, 1954--2024, LRP 276 kt): persist one-year RMSE 88 kt versus 120 kt for the autonomous Schaefer model. Capelin-informed productivity, using a 1991 regime break or the tabulated acoustic index without interpolation across 1991, is not retained on the primary score. The series are not mixed.
 
 **Keywords:** viability; forecast evaluation; Northern cod; surplus production; model ablation; persistence
 
@@ -20,7 +18,7 @@ The theory therefore earns a negative certificate on this object, not a forecast
 
 ## 1. Introduction
 
-Comparative model evaluation is required before additional structure is retained for prediction or control (general theory §15). The ladder is output-only, stock-and-flow, residual, then delay and observation. A module is kept only if it improves a preregistered score. Wave E of the closure review is that empirical gate.
+Comparative model evaluation is required before additional structure is retained for prediction or control (general theory §15). The ladder is output-only, stock-and-flow, residual, then delay and observation. A module is kept only if it improves a preregistered score. This paper is that empirical gate.
 
 Northern cod in 2J3KL is an R04-admitted fisheries object: R04 admits the A001 fisheries resource–sink module fully and admits A014 at corrected scalar-autonomous status. Groundwater (A005) and phosphorus (A004) remain conditionally admissible (blocking lists V-A005-04…, V-A004-03…) and are not used here; a groundwater evaluation on Edwards J-17 is reported separately, and the series are not pooled. Groundwater and phosphorus papers open only after the R04 blocking lists close and a basin series exists.
 
@@ -75,7 +73,7 @@ with $\mathfrak s=0$ unless an Allee term is active.
 | M3 | residual | M2 + AR(1) residual | $\phi$ persisted |
 | M4 | delay | M3 | forecast starts from $S_{t-1}$ |
 
-The coarse catch regime, taken from DFO (2016) prose, is $C_t=240$ for $t\le 1991$, $C_t=120$ for $t=1992$, and $C_t=5$ for $t\ge 1993$. Year-by-year landings (Schijns et al. 2021, Table 1) replace that regime in Section 5.2. Regular et al. (2025) Table 1 matches Schijns exactly on 1983--1993 (11 years, maximum absolute difference 0 t); STATLANT matches Schijns on 1983--1993, so the STATLANT-versus-Schijns sensitivity is closed for the collapse window (they are the same column there). A 1956 discrepancy between those sources (236,210 t versus 263,210 t) lies outside 1983--2015 and is unused. The coarseness of the regime series is a declared limitation, not a hidden degree of freedom.
+The coarse catch regime, taken from DFO (2016) prose, is $C_t=240$ for $t\le 1991$, $C_t=120$ for $t=1992$, and $C_t=5$ for $t\ge 1993$. Year-by-year landings (Schijns et al. 2021, Table 1) replace that regime in Section 5.2. Regular et al. (2025) Table 1 matches Schijns exactly on 1983--1993 (11 years, maximum absolute difference 0 t); STATLANT matches Schijns on 1983--1993, so the STATLANT-versus-Schijns sensitivity is closed for the collapse window (they are the same column there). A 1956 discrepancy between those sources (236,210 t versus 263,210 t) lies outside 1983--2015 and is unused. The coarseness of the regime series is a declared limitation.
 
 Parameters are estimated by one-step least squares on the training window only. Bounds: $r\in(0.001,2]$, $K$ above the training maximum.
 
@@ -143,7 +141,7 @@ On recovery, M1 and M2 coincide because $C_t\equiv 5$ on both train and test. M1
 | M4 | 196 | 82 | 0.76 | 488 |
 | mean | 424 | 375 | 2.35 | 507 |
 
-Log-RMSE for M1 and M1b is large because some origins produce trajectories that hit the numerical floor. M2 keeps the state off zero and stabilizes the log score, but loses on raw RMSE. M4, the only model that imposes a one-year assessment delay, is the worst structural model on raw RMSE. That is the information cost of a one-year delay, not a coding error.
+Log-RMSE for M1 and M1b is large because some origins produce trajectories that hit the numerical floor. M2 keeps the state off zero and stabilizes the log score, but loses on raw RMSE. M4, the only model that imposes a one-year assessment delay, is the worst structural model on raw RMSE. The difference measures the information cost of the one-year delay.
 
 No module M2--M4 is retained on $\Omega_{2016}$. Persistence is the lowest-RMSE forecast.
 
@@ -173,7 +171,7 @@ Starting from $\hat q I_t$ instead of SSB: one-year RMSE 128 kt (still worse tha
 
 **Figure 4.** The two specifications. Overlap 1983--2015 RMSE $=126$ kt (2015: NCAM 299 kt, xteNCAM 273 kt). Different $K^*$. Not pooled.
 
-Checkpoints from Regular et al. (2025) Table 17: 2005 SSB $=26$ kt (95% interval 22--31), 2017 $=451$ kt (381--534), 2021 $\approx 400$ kt (NCAM and xteNCAM said to agree), 2024 $=342$ kt (246--475), 2024/LRP $=1.24$. The 2005 values (26 kt versus NCAM 25.18 kt) can agree on a low year without sharing an LRP — that is not a licence to splice columns. The same late-period biomass is 34% of the old LRP and above the new one after 2016.
+Checkpoints from Regular et al. (2025) Table 17: 2005 SSB $=26$ kt (95% interval 22--31), 2017 $=451$ kt (381--534), 2021 $\approx 400$ kt (NCAM and xteNCAM said to agree), 2024 $=342$ kt (246--475), 2024/LRP $=1.24$. The 2005 values (26 kt versus NCAM 25.18 kt) can agree on a low year without the two series sharing a reference point; agreement on a low year does not warrant splicing the two columns. The same late-period biomass is 34% of the old LRP and above the new one after 2016.
 
 **Table 6.** Rolling-origin RMSE on $\Omega_{\mathrm{xte}}$ (kt).
 
@@ -225,7 +223,7 @@ On $\Omega_{2016}$, five-year RMSE is a near-tie (262 versus 265 kt). One-year R
 
 The observed path is non-monotone. An exact fixed autonomous scalar trajectory cannot reproduce it; M1's collapse failure is the finite-sample face of that obstruction (A014).
 
-Under both the coarse catch regime and official landings, lowering $C$ in 1992 cannot generate the crash. Collapse on these specifications is a productivity, unallocated-mortality, or observation event, not a surplus-production response to the declared catch drop. That is compatible with DFO's caution that NCAM $M$ can absorb unreported deaths (A014-L4): the crash remains such an event after the best public catch reconstruction we could lock, which tightens A014-L4 rather than relaxing it.
+Under both the coarse catch regime and official landings, lowering $C$ in 1992 cannot generate the crash. Collapse on these specifications is a productivity, unallocated-mortality, or observation event, not a surplus-production response to the declared catch drop. That is compatible with DFO's caution that NCAM $M$ can absorb unreported deaths (A014-L4): the crash remains such an event under the best available public catch reconstruction, which tightens A014-L4 rather than relaxing it.
 
 Unidentified extra structure increases error. Autoregressive residuals fitted on short, regime-changing windows persist the wrong sign. An Allee parameter goes to the boundary. A one-year delay removes information. These modules stay descriptive unless the certificate hypotheses hold (R03); M3--M4 are not inner certificates here.
 
@@ -233,11 +231,11 @@ The 2016 LRP is the 1980s mean SSB. Slack to that bound is near zero by construc
 
 The moratorium is a change in implementable catch and is already in $C_t$. A separate delay switch does not add a degree of freedom beyond stock-flow. Whether the 1992 architecture has an empty viability kernel (H8) is a viability statement, not a one-year RMSE statement.
 
-One-dimensional surplus production is not NCAM: age structure, migration, and survey catchability are omitted. The test is whether this ladder earns retention, not whether the assessment is a good filter. M4 is a delay, not a Kalman filter. Recreational catch remains incompletely measured. Sample sizes are small ($n=33$ years on $\Omega_{2016}$; rolling $n=25$ at $h=1$ and $n=21$ at $h=5$). They suffice to rank models and do not suffice to certify a small skill difference. Repeating the ladder under the 2023 40% $B_{\mathrm{MSY}}$ LRP requires the xteNCAM series and a new admission row. The pass was executed after the windows and scores were written into `run_ladder.py`; it is a computational protocol, not a locked clinical-style preregistration.
+One-dimensional surplus production is not NCAM: age structure, migration, and survey catchability are omitted. The test is whether this ladder is retained under the preregistered score, not whether the assessment is a good filter. M4 is a delay, not a Kalman filter. Recreational catch remains incompletely measured. Sample sizes are small ($n=33$ years on $\Omega_{2016}$; rolling $n=25$ at $h=1$ and $n=21$ at $h=5$). They suffice to rank models and do not suffice to certify a small skill difference. Repeating the ladder under the 2023 40% $B_{\mathrm{MSY}}$ LRP requires the xteNCAM series and a new admission row. The evaluation windows and scoring rules were fixed in the analysis scripts before execution; the design is a fixed computational protocol rather than a prospective clinical-style registration.
 
-The scores do not transfer an interval-verified linear toy (E5 is a linear $(S,K)$ template, not this SSB series), do not instantiate a closed-loop information filter (R02, listed as the next typed addition), and do not mix the two assessment specifications. In programme terms: A012's delay is instantiated here only as a one-year information delay, not as an RFDE; A016 community margins are not used (the CSD extract is unarchived). No gate is treated as closed for Wave E without specification matching and independent verification.
+The scores do not transfer an interval-verified linear template (E5 is a linear $(S,K)$ template, not this SSB series), do not instantiate a closed-loop information filter (R02, listed as the next typed addition), and do not mix the two assessment specifications. In programme terms: A012's delay is instantiated here only as a one-year information delay, not as an RFDE; A016 community margins are not used (the CSD extract is unarchived). No programme gate is treated as closed without specification matching and independent verification.
 
-The honest reading of "incorporate all the pieces for accurate forecasts" on this case: the pieces that are not identified do not go in. Persistence plus a typed impossibility certificate is the present forecast.
+On this evidence, modules that are not identified on the training data do not reduce forecast error. The retained forecast is persistence, together with the typed impossibility certificate for the autonomous scalar class.
 
 ---
 
@@ -251,7 +249,7 @@ The paper reports a forecast comparison. It does not conclude that the stock is 
 
 ## Data and code availability
 
-Locked inputs, scoring scripts, and result files are in `wave_e_cod/` of <https://github.com/MIKEAA2020/general-sustainability>; the frozen specification sheet is `wave_e_cod/SPECIFICATION.md`. Primary SSB: DFO (2016) Table A2. Alternative SSB and landings: Regular et al. (2025) Tables 17 and 1. Historical landings: Schijns et al. (2021). Capelin acoustic index: Zenodo 10.5281/zenodo.17515115 and Murphy et al. (2025). An independent execution of the scoring scripts reproduced the committed result files (`batch 4/WAVE_E_RERUN.md`: 29/29 pinned hashes, 30/30 result files byte-identical), and the artifact-level specification match has since been executed and machine-verified (`batch 4/WAVE_E_SPEC_MATCH.md`: 36 checks — protocol locks, ladder composition, all scored rows recomputed from the per-observation files and the raw committed series, the two specifications confirmed unpooled). The Wave E paper-support gates (Part III of `PROOF_MANIFEST.md`) remain NOT CONFIRMED; they close against the finalized paper, not the trees.
+Input data, scoring scripts, and result files are in `wave_e_cod/` at <https://github.com/MIKEAA2020/general-sustainability>; the specification sheet is `wave_e_cod/SPECIFICATION.md`. Primary SSB: DFO (2016) Table A2. Alternative SSB and landings: Regular et al. (2025) Tables 17 and 1. Historical landings: Schijns et al. (2021). Capelin acoustic index: Zenodo 10.5281/zenodo.17515115 and Murphy et al. (2025). An independent execution of the scoring scripts reproduced the committed result files (29/29 pinned hashes; 30/30 result files identical) (`batch 4/WAVE_E_RERUN.md`), and the artifact-level specification match is verified by 36 machine checks covering protocol locks, ladder composition, recomputation of all scored rows from the per-observation files and the committed series, and confirmation that the two specifications are not pooled (`batch 4/WAVE_E_SPEC_MATCH.md`).
 
 ```
 python3 src/run_ladder.py && python3 src/run_xte.py

@@ -1,9 +1,6 @@
 # The Formal Mathematical Foundations of Sustainability: A Typed Theorem Atlas
 
-**Manuscript:** P2-DRAFT-1 (Paper 2 of the adjudicated publication architecture)
-**Series:** general-sustainability programme, A001–A025
-**Draft date:** 2026-08-28
-**Status:** DRAFT — statements frozen against the row-closed concordance; proofs included in full where short, verified-present with summary otherwise (camera-ready reproduces every proof verbatim from the audited sources)
+**Paper 2 of the programme's five-paper publication architecture (general-sustainability, A001–A025).** Statements are frozen against the row-closed concordance; proofs are included in full where short and summarized with verified-present status otherwise (the camera-ready version reproduces every proof verbatim from the audited sources).
 
 ---
 
@@ -19,7 +16,7 @@ Sustainability analysis across economics, ecology, and governance produces claim
 
 **Which formal results about sustainability are rigorously established, under which exact assumptions, and how do they compose or fail?**
 
-The question is not rhetorical. The programme's intake audit registered twenty-six source manuscripts (A001–A025 plus a versioned master corpus) whose formal content decomposes into 409 inventoried rows — definitions, theorems, propositions, corollaries, conjectures, counterexamples, and research programmes. Left as a distributed corpus, this content cannot be cited, refereed, or reused: notation conflicts across sources, claim statuses are inconsistent, and duplicate statements mask genuine differences in assumptions. This article is the programme's theorem atlas: the canonical mathematical core, stated once, with every assumption explicit and every claim status declared.
+The programme's intake audit registered twenty-six source manuscripts (A001–A025 plus a versioned master corpus) whose formal content decomposes into 409 inventoried rows — definitions, theorems, propositions, corollaries, conjectures, counterexamples, and research programmes. Left as a distributed corpus, this content cannot be cited, refereed, or reused: notation conflicts across sources, claim statuses are inconsistent, and duplicate statements mask genuine differences in assumptions. This article is the programme's theorem atlas: the canonical mathematical core, stated once, with every assumption explicit and every claim status declared.
 
 ### 1.2 What enters this paper
 
@@ -51,7 +48,7 @@ Two rules govern this article. **No promotion:** a conditional theorem is never 
 
 ### 1.4 Provenance and auditability
 
-Every statement carries its concordance identifier (`CC-A00X-YYY`). The concordance row links the statement to its source location, canonical module, mapping type (exact specialization / projectable reduction / approximation / counterexample-or-limit), evidence status, and destination paper. As of this draft, the two primary sources of this paper (A001, A002) are completely row-closed at content level (152 rows `row_verified`, 2026-08-27): each row's existence, kind, proof presence, module, and mapping were verified against a full read of the source. Content-level acceptance is not theorem-status promotion, and the cross-module interface contract (the conditions under which a theorem transfers between modules) remains an open obligation recorded per row. The complete status ledger of this manuscript appears in §14.
+Every statement carries its concordance identifier (`CC-A00X-YYY`). The concordance row links the statement to its source location, canonical module, mapping type (exact specialization / projectable reduction / approximation / counterexample-or-limit), evidence status, and destination paper. The two primary sources of this paper (A001, A002) are completely row-closed at content level (152 rows `row_verified`, 2026-08-27): each row's existence, kind, proof presence, module, and mapping were verified against a full read of the source. Content-level acceptance is not theorem-status promotion, and the cross-module interface contract (the conditions under which a theorem transfers between modules) remains an open obligation recorded per row. The complete status ledger of this manuscript appears in §14.
 
 ### 1.5 Relationship to the programme
 

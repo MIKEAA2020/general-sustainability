@@ -1,14 +1,12 @@
 # Does catch governance protect the limit reference point? An intervention-selection test on Northern cod (Ω_2016)
 
-**Wave E empirical paper — intervention leg — working manuscript**
-
-*Companion to `wave_E_cod_forecast_ladder.md` (prediction leg; not re-litigated here) and the cod-side analogue of `wave_E_edwards_intervention.md`. Protocol: `protocol_intervention.md`, frozen 2026-08-26 before any kernel, boundary, replay, or retention score was computed. Admission row: `admission/R04_Cor2_cod_kernel.md` (`APPROXIMATION`).*
+*Companion to the prediction leg (`wave_E_cod_forecast_ladder.md`); the cod-side analogue of the Edwards intervention paper (`wave_E_edwards_intervention.md`). The intervention protocol (`protocol_intervention.md`) was fixed before any kernel, boundary, replay, or retention score was computed. Admission row: `admission/R04_Cor2_cod_kernel.md` (approximation).*
 
 ## Abstract
 
-The general theory's §15 requires intervention selection to be scored, not asserted: a governance module is kept only if it improves a preregistered protection-and-supply outcome. The prediction leg on this object ended in a negative certificate (persistence beats the surplus ladder). This paper runs the intervention leg on the same locked series: robust viability kernels of the 2016 limit reference point (LRP, 884.6 kt) for a declared catch-policy family under persistent productivity-shock floors, with the Cor2/Cor5 erosion conversion applied in the form the fitted map admits.
+The general theory's §15 requires intervention selection to be scored, not asserted: a governance module is kept only if it improves a preregistered protection-and-supply outcome. The prediction leg on this object ended in a negative certificate (persistence beats the surplus ladder). This paper runs the intervention leg on the same fixed series: robust viability kernels of the 2016 limit reference point (LRP, 884.6 kt) for a declared catch-policy family under persistent productivity-shock floors, with the Cor2/Cor5 erosion conversion applied in the form the fitted map admits.
 
-**Verdicts.** (1) *Productivity negative certificate:* under the perpetual-worst and 5th-percentile persistent shock classes, no catch policy — zero catch included — holds the LRP: the worst-case map has no positive fixed point for any catch level, and every infinite-horizon kernel is empty. The LRP is protected by good years, not by catch management. (2) *Negative selection:* no declared policy is retained under the frozen rule; the reactive rules (the critical-zone rule and a cascade) are strictly less protective than the moratorium at the boundary and improve on it at no reading — the mirror image of the Edwards Aquifer result, where the reactive architecture was retained. (3) *Constructive boundary:* the maximal robust flat catch is 57.6 kt (24% of the pre-1992 240 kt level) under the 10th-percentile class, and no positive catch is robust under the harsher classes. (4) *Certified layer:* the governed surplus map is expansive at the LRP (F′ = 1.153 > 1), so the contraction form of the erosion conversion is inapplicable; the expansive form empties every certified kernel beyond T = 5 years — the first object in this programme where the binding obstruction to certified intervention claims is the expansion rate itself.
+**Results.** (1) *Productivity negative certificate:* under the perpetual-worst and 5th-percentile persistent shock classes, no catch policy — zero catch included — holds the LRP: the worst-case map has no positive fixed point for any catch level, and every infinite-horizon kernel is empty. The LRP is protected by good years, not by catch management. (2) *Negative selection:* no declared policy is retained under the frozen rule; the reactive rules (the critical-zone rule and a cascade) are strictly less protective than the moratorium at the boundary and improve on it under no disturbance class — the mirror image of the Edwards Aquifer result, where the reactive architecture was retained. (3) *Constructive boundary:* the maximal robust flat catch is 57.6 kt (24% of the pre-1992 240 kt level) under the 10th-percentile class, and no positive catch is robust under the harsher classes. (4) *Certified layer:* the governed surplus map is expansive at the LRP (F′ = 1.153 > 1), so the contraction form of the erosion conversion is inapplicable; the expansive form empties every certified kernel beyond T = 5 years; on this object the binding obstruction to certified intervention claims is the expansion rate itself.
 
 ## 1. Object
 
@@ -19,17 +17,18 @@ $K = 5000$ (pinned at its optimization bound; the series never approaches
 carrying capacity — a declared defect; the LRP-boundary results depend
 chiefly on the identified $r$). Residual SD 135.0 kt; defect declaration
 $\varepsilon = 460.0$ kt yr$^{-1}$ (the 1992 collapse transition);
-out-of-sample audit 2008–2015: max 47.1 kt — **not exceeded**, unlike the
-Edwards object. Safe set: the single declared threshold $K^* = $ LRP
+out-of-sample audit 2008–2015: maximum 47.1 kt, which does not exceed the
+declared defect (the Edwards object, by contrast, exceeds its declared
+defect out of sample). Safe set: the single declared threshold $K^* = $ LRP
 $= 884.6$ kt. No Ω_xte row is produced; the 2023 LRP belongs to the other
 specification and is not pooled.
 
 The disturbance classes are persistent additive productivity floors from the
 fit-window residual distribution: UC-min $=-460.0$ (the perpetual worst
 observed one-step shock), UC-q05 $=-318.8$, UC-q10 $=-114.8$ kt yr$^{-1}$.
-Because this object has no independent input channel (unlike Edwards'
-recharge), the disturbance classes and the defect declaration are the same
-measured quantity in two roles — disclosed, not repaired.
+Because this object has no independent input channel (unlike the Edwards
+recharge series), the disturbance classes and the defect declaration are the
+same measured quantity in two roles.
 
 The governance family: BAU $C \equiv 5$ kt (moratorium-level inshore
 removals, the declared implementable use post-1992); flat caps
@@ -70,11 +69,12 @@ management.
 BAU everywhere; improves somewhere; more catch than every matched flat cap)
 **nothing is retained**. S1/cpm fail clause (a): their 60 kt cap removes
 catch exactly where the moratorium already sits at 5 kt, so their kernels are
-strictly smaller at the boundary; they improve on BAU at no reading. The
-Edwards leg retained its reactive rules at +3.3% to +50.6% water; this leg
-retains none. Which governance architecture earns its complexity is
-system-dependent — the theory's deliverable is the scored comparison, not a
-universal architecture verdict.
+strictly smaller at the boundary; they improve on BAU under no disturbance
+class. The Edwards evaluation retained its reactive rules at 3.3–50.6%
+higher permitted supply; this evaluation retains none. Which governance
+architecture justifies its additional structure is system-dependent — the
+theory's deliverable is the scored comparison, not a universal architecture
+verdict.
 
 ### 2.3 Constructive content
 
@@ -102,8 +102,9 @@ the nominal kernel of $K^*+r_T$ — is empty beyond **T = 5 years** for every
 policy. At $T=5$ the certified set is $[4005, 10^4]$ kt, above the entire
 observed range of the stock. On this object the binding obstruction to
 certified intervention claims is the expansion rate itself, not the defect
-magnitude — a qualitatively different failure mode from the Edwards leg
-(there: a contracting map, defect-bound to $T \le 3$ yr).
+magnitude — a failure mode qualitatively different from the Edwards object,
+where the governed map is contracting and the certified horizon is
+defect-bound to $T \le 3$ years.
 
 ### 2.5 Stress replay and classification
 
@@ -126,7 +127,7 @@ migration, or survey catchability (the ladder's [M] limitations carry over).
 $K$ is pinned at its optimization bound. The residual conflates productivity
 shock and model error (no observation-model separation). The persistent-shock
 classes are deliberately harsh (a perpetual floor, not an i.i.d. draw); the
-q10 reading is the mildest class with any content. Sub-LRP cascade stages are
+UC-q10 class is the mildest with non-vacuous content. Sub-LRP cascade stages are
 declared [N] scenarios, not verified institutions. The certified layer is
 vacuous at observed stock levels. Nothing here promotes or demotes any
 forecast module, transfers E5 numbers, or pools Ω_xte.
@@ -137,15 +138,12 @@ forecast module, transfers E5 numbers, or pools Ω_xte.
 cd wave_e_cod && python3 src/run_intervention.py
 ```
 
-Deterministic (no randomness). Outputs: `results/intervention_results.json`,
-`results/intervention_boundaries.csv`. Frozen protocol:
-`protocol_intervention.md`. First run 2026-08-26; **rerun 2026-08-26
-byte-identical** on a fresh second-session execution of the committed runner,
-same environment as the original run
-(`reaudit/intervention_rerun_cod/INTERVENTION_RERUN_COD.md` — same-env
-second-session scope: committed-code reproducibility, determinism, and freedom
-from uncommitted state verified; the cross-toolchain standard of the Part II
-reruns remains available to a future rerun).
+The runner is deterministic (no randomness). Outputs:
+`results/intervention_results.json`, `results/intervention_boundaries.csv`.
+Protocol: `protocol_intervention.md`. An independent second execution of the
+committed runner in a fresh session of the same environment reproduced both
+output files exactly
+(`reaudit/intervention_rerun_cod/INTERVENTION_RERUN_COD.md`).
 
 ## References
 
@@ -155,4 +153,4 @@ DFO. 2016. Stock Assessment of Northern cod (NAFO Divs. 2J3KL) in 2016. CSAS Sci
 
 Schijns, R., et al. 2021. Five centuries of cod catches in Eastern Canada. *ICES Journal of Marine Science* 78: 2675–.
 
-Programme documents cited by ID: general theory §15; R03; R04 (Thm1 converse); R04.Cor2/R03.Cor5 (erosion conversion); A014 (defect list); `wave_e_cod` prediction leg; `wave_e_edwards` intervention leg.
+Programme sources cited by identifier: general theory §15; R03; R04 (Theorem 1 converse); R04.Cor2/R03.Cor5 (erosion conversion); A014 (defect register); the companion prediction leg (`wave_E_cod_forecast_ladder.md`); the Edwards intervention paper (`wave_E_edwards_intervention.md`).

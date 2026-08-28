@@ -208,7 +208,7 @@ check("F1: pass1 lists M1 and M2m by the point rule",
       r1.get("listed_by_point_rule") == ["M1", "M2m"])
 check("F1: pass1 demotes M2m and keeps only M1 as structure",
       r1.get("class_demoted") == ["M2m"] and r1.get("retained_as_structure") == ["M1"])
-check("F1: manuscript still records the class demotion", "not extra structure" in ms and "Promoting them is inflation" in ms)
+check("F1: manuscript still records the class demotion", "not extra structure" in ms and "do not constitute additional forecast structure" in ms)
 check("F1: README says Pass 2 not retained as structure", "not retained as structure" in rd)
 check("F2: README Pass 1 line names M2m and the class demotion",
       "M2m" in [l for l in rd.splitlines() if l.startswith("**Pass 1:**")][0]
