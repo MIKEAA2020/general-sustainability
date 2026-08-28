@@ -184,7 +184,7 @@ For a deterministic sampled system, the inter-review flow and the review update 
 
 ### 3.4 The response-region records
 
-The delayed-recruitment records are labelled SD-E-DR-AN, SD-E-DR-SP, SD-E-DR-CO, and SD-E-DR-SL (anchovy-, sprat-, cod-, and slow-stock classes). The labels separate these records from SD-E-B3 and do not by themselves complete a model registration: reproduction requires the companion registration stating the complete delayed-recruitment equations and state dimension, each class-specific parameter vector, the effort-saturation factor, $\Phi$, the initial history, the flow/update order, and the numerical and tail-classification conventions [CC-A011-017, Paper 4 owner]; the SD-E-B3 Candidate-A/B vectors live in the companion model registry. Because that complete stage registration is absent from the model record, the values below are exploratory computational summaries, not attributed to SD-E-B3 and not reproducible numerical propositions.
+The delayed-recruitment records are labelled SD-E-DR-AN, SD-E-DR-SP, SD-E-DR-CO, and SD-E-DR-SL (anchovy-, sprat-, cod-, and slow-stock classes). The labels separate these records from SD-E-B3 and do not by themselves complete a model registration: reproduction requires the companion registration stating the complete delayed-recruitment equations and state dimension, each class-specific parameter vector, the effort gate, $\Phi$, the initial history, the flow/update order, and the numerical and tail-classification conventions [CC-A011-017, Paper 4 owner]; the SD-E-B3 Candidate-A/B vectors live in the companion model registry. Because that complete stage registration is absent from the model record, the values below are exploratory computational summaries, not attributed to SD-E-B3 and not reproducible numerical propositions.
 
 - **SD-E-DR-AN** [CC-A011-006]: persistent tail oscillation near $T_r\approx 3$–$4$ yr, with a weak response at $T_r=2$ yr; annual-review trajectories converge over the tested grids for every tested effort-response value.
 - **SD-E-DR-SP** [CC-A011-007]: persistent tail oscillation near $T_r\approx 6$–$12$ yr.
@@ -267,7 +267,7 @@ Where distributional statements are attached to such proxies, their uncertainty 
 
 ### 5.1 The dimensionless identifiability chart
 
-**Theorem (dimensionless identifiability) [CC-A018-012 · proof verified present].** In the three-state effort-bounded core, let $e=E/E_{\max}$, $n=N/K$, and
+**Theorem (dimensionless identifiability) [CC-A018-012 · proof verified present].** In the three-state gated core, let $e=E/E_{\max}$, $n=N/K$, and
 
 $$
 \varrho=\frac{qE_{\max}}{r},\qquad
