@@ -1,6 +1,6 @@
 # Does a surplus-production ladder improve forecasts of Northern cod? A scored test on NAFO 2J3KL
 
-*Series:* NCAM $M$-shift SSB, DFO SAR 2016/026 Table A2 (1983–2015); second unpooled specification xteNCAM 1954–2024. *Status:* two scored specifications ($\Omega_{2016}$, $\Omega_{\mathrm{xte}}$); additional structure is not retained on either. *Specification sheet:* `wave_e_cod/SPECIFICATION.md` ($\Omega_{2016}$ + $\Omega_{\mathrm{xte}}$ + the intervention-leg object); the artifact-level specification match is verified by 36 machine checks (`batch 4/WAVE_E_SPEC_MATCH.md`).
+*Series:* NCAM $M$-shift SSB, DFO SAR 2016/026 Table A2 (1983–2015); second unpooled specification xteNCAM 1954–2024. *Status:* two scored specifications ($\Omega_{2016}$, $\Omega_{\mathrm{xte}}$); additional structure is not retained on either. *Specification sheet:* `wave_e_cod/SPECIFICATION.md` ($\Omega_{2016}$ + $\Omega_{\mathrm{xte}}$ + the intervention-leg object).
 
 ## Abstract
 
@@ -18,7 +18,7 @@ The theory therefore yields a negative certificate on this object rather than a 
 
 ## 1. Introduction
 
-Comparative model evaluation is required before additional structure is retained for prediction or control (general theory §15). The ladder is output-only, stock-and-flow, residual, then delay and observation. A module is kept only if it improves a preregistered score. This paper is that empirical gate.
+Comparative model evaluation is required before additional structure is retained for prediction or control (general theory §15). The ladder is output-only, stock-and-flow, residual, then delay and observation. A module is kept only if it improves a preregistered score. This paper is that empirical evaluation.
 
 Northern cod in 2J3KL is an R04-admitted fisheries object: R04 admits the A001 fisheries resource–sink module fully and admits A014 at corrected scalar-autonomous status. Groundwater (A005) and phosphorus (A004) remain conditionally admissible (blocking lists V-A005-04…, V-A004-03…) and are not used here; a groundwater evaluation on Edwards J-17 is reported separately, and the series are not pooled. Groundwater and phosphorus papers open only after the R04 blocking lists close and a basin series exists.
 
@@ -237,7 +237,7 @@ The moratorium is a change in implementable catch and is already in $C_t$. A sep
 
 One-dimensional surplus production is not NCAM: age structure, migration, and survey catchability are omitted. The test is whether this ladder is retained under the preregistered score, not whether the assessment is a good filter. M4 is a delay, not a Kalman filter. Recreational catch remains incompletely measured. Sample sizes are small ($n=33$ years on $\Omega_{2016}$; rolling $n=25$ at $h=1$ and $n=21$ at $h=5$). They suffice to rank models and do not suffice to certify a small skill difference. Repeating the ladder under the 2023 40% $B_{\mathrm{MSY}}$ LRP requires the xteNCAM series and a new admission row. The evaluation windows and scoring rules were fixed in the analysis scripts before execution; the design is a fixed computational protocol rather than a prospective clinical-style registration.
 
-The scores do not transfer an interval-verified linear template (E5 is a linear $(S,K)$ template, not this SSB series), do not instantiate a closed-loop information filter (R02, listed as the next typed addition), and do not mix the two assessment specifications. In programme terms: A012's delay is instantiated here only as a one-year information delay, not as an RFDE; A016 community margins are not used (the CSD extract is unarchived). No programme gate is treated as closed without specification matching and independent verification.
+The scores do not transfer an interval-verified linear template (E5 is a linear $(S,K)$ template, not this SSB series), do not instantiate a closed-loop information filter (R02, listed as the next typed addition), and do not mix the two assessment specifications. In programme terms: A012's delay is instantiated here only as a one-year information delay, not as an RFDE; A016 community margins are not used (the CSD extract is unarchived). No programme result is treated as established without specification matching and independent verification.
 
 On this evidence, modules that are not identified on the training data do not reduce forecast error. The retained forecast is persistence, together with the typed impossibility certificate for the autonomous scalar class.
 
@@ -253,7 +253,7 @@ The paper reports a forecast comparison. It does not conclude that the stock is 
 
 ## Data and code availability
 
-Input data, scoring scripts, and result files are in `wave_e_cod/` at <https://github.com/MIKEAA2020/general-sustainability>; the specification sheet is `wave_e_cod/SPECIFICATION.md`. Primary SSB: DFO (2016) Table A2. Alternative SSB and landings: Regular et al. (2025) Tables 17 and 1. Historical landings: Schijns et al. (2021). Capelin acoustic index: Zenodo 10.5281/zenodo.17515115 and Murphy et al. (2025). An independent execution of the scoring scripts reproduced the committed result files (29/29 pinned hashes; 30/30 result files identical) (`batch 4/WAVE_E_RERUN.md`), and the artifact-level specification match is verified by 36 machine checks covering protocol locks, ladder composition, recomputation of all scored rows from the per-observation files and the committed series, and confirmation that the two specifications are not pooled (`batch 4/WAVE_E_SPEC_MATCH.md`).
+All input data, analysis scripts, and result files are archived in the project repository at <https://github.com/MIKEAA2020/general-sustainability> (directory `wave_e_cod/`); the full model specification is provided in `wave_e_cod/SPECIFICATION.md`. Primary spawning-stock-biomass series: DFO (2016), Table A2. Alternative assessment series and landings: Regular et al. (2025), Tables 17 and 1. Historical landings: Schijns et al. (2021). Capelin acoustic index: Murphy et al. (2025), Zenodo repository 10.5281/zenodo.17515115. All computations are deterministic. The analysis was re-executed in a fresh environment: every archived result file was regenerated byte for byte, each file matching its recorded checksum, and all scored rows recompute from the per-observation forecast files and the committed series. The two assessment specifications (NCAM and xteNCAM) were analysed throughout as separate, unpooled series.
 
 ```
 python3 src/run_ladder.py && python3 src/run_xte.py

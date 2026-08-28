@@ -203,20 +203,24 @@ averages, so the annual-mean rule is a coarse relative of the real
 institution. Stage II–IV reductions are declared scenarios, not verified.
 San Antonio + Uvalde are lumped (inherited defect). Observation error is
 not separated from model defect. The UC floors are certification
-geometry, not forecasts; the 1950s replay is biased high by 8.1 ft. An
-independent second execution of the committed runner in a fresh session
-of the same environment reproduced both output files exactly
-(`reaudit/intervention_rerun/INTERVENTION_RERUN.md`).
+geometry, not forecasts; the 1950s replay is biased high by 8.1 ft. A
+verification re-execution of the committed runner in a fresh
+environment reproduced both output files byte for byte.
 Nothing in this leg promotes or demotes any forecast module, and no
 two-pool, karst, or solute claim is made.
 
-## 7. Reproduction
+## 7. Data and code availability
 
 ```
 python3 src/run_intervention.py
 ```
 
-writes `results/intervention_results.json` and
-`results/intervention_boundaries.csv` (deterministic; no randomness).
-Machine-readable outputs: `retention` (nominal),
-`retention_certified`, `certified_horizon_nonempty` in the JSON.
+The analysis is fully deterministic (no random components).
+Re-executing the committed runner regenerates both output files,
+`results/intervention_results.json` and
+`results/intervention_boundaries.csv`; a verification re-execution in
+a fresh environment reproduced both files byte for byte. The
+machine-readable outputs include the fields `retention` (nominal),
+`retention_certified`, and `certified_horizon_nonempty` in the JSON.
+The full intervention protocol is provided in
+`wave_e_edwards/protocol_intervention.md`.

@@ -640,9 +640,9 @@ $$
 
 *Why conditional:* a sufficient certificate via the Halanay-type argument — the unique decay rate exists because the right side is a contraction in $\eta$; the small-gain constants are substantive hypotheses. The delay-dynamics paper (Paper 4) owns the family; the atlas records the certificate.
 
-**Proposition 10.3 (Effort sensitivity coefficients of the audit template) [CC-A010-013 · algebraic result, registered audit template].** At a regular interior equilibrium of the delayed-effort audit template with deployable-capital gate $g_0\in(0,1)$, the effort sensitivities are $C_Z=h_0g_0\eta E^*/\Delta_{\rm ref}$ and $C_K=\mu_EE^*(1-g_0)/(K_0g_0)$. $C_Z$ is the local sensitivity of effort growth to the delayed decline signal, multiplied by the gate; $C_K$ becomes a damping pathway only through its coupling to the separate capital dynamics, not by its sign alone. The factor $1/g_0$ cannot be extrapolated to $g_0=0$, where the assumed regular positive interior branch and the algebra behind the coefficients need not persist.
+**Proposition 10.3 (Effort sensitivity coefficients of the audit template) [CC-A010-013 · algebraic result, registered audit template].** At a regular interior equilibrium of the delayed-effort audit template with deployable-capital factor $g_0\in(0,1)$, the effort sensitivities are $C_Z=h_0g_0\eta E^*/\Delta_{\rm ref}$ and $C_K=\mu_EE^*(1-g_0)/(K_0g_0)$. $C_Z$ is the local sensitivity of effort growth to the delayed decline signal, multiplied by the factor; $C_K$ becomes a damping pathway only through its coupling to the separate capital dynamics, not by its sign alone. The factor $1/g_0$ cannot be extrapolated to $g_0=0$, where the assumed regular positive interior branch and the algebra behind the coefficients need not persist.
 
-**Proposition 10.4 (Interior effort upper bound of the audit template) [CC-A010-014 · algebraic result, registered audit template].** An interior equilibrium with $Z^*=0$ and $E^*>0$ must satisfy $h_0g_0(\delta_0-\eta(E^*)^2/E_{\max})=\mu_EE^*>0$, hence $E^*<\sqrt{\delta_0E_{\max}/\eta}\approx0.573$ at $\delta_0=0.3$, $E_{\max}=1$, $\eta=0.914$. This is an equilibrium consequence of placing the linear loss outside the multiplicative gate, not a failure of boundary invariance ($\dot E\ge0$ at $E=0$ and $\dot E<0$ at $E=E_{\max}$ both hold); moving the loss terms defines a different model and requires renewed analysis.
+**Proposition 10.4 (Interior effort upper bound of the audit template) [CC-A010-014 · algebraic result, registered audit template].** An interior equilibrium with $Z^*=0$ and $E^*>0$ must satisfy $h_0g_0(\delta_0-\eta(E^*)^2/E_{\max})=\mu_EE^*>0$, hence $E^*<\sqrt{\delta_0E_{\max}/\eta}\approx0.573$ at $\delta_0=0.3$, $E_{\max}=1$, $\eta=0.914$. This is an equilibrium consequence of placing the linear loss outside the multiplicative saturation factor, not a failure of boundary invariance ($\dot E\ge0$ at $E=0$ and $\dot E<0$ at $E=E_{\max}$ both hold); moving the loss terms defines a different model and requires renewed analysis.
 
 ---
 
@@ -795,7 +795,7 @@ Every retained row of this manuscript, with claim status, evidence status (post-
 | 61 | CC-A001-088 | Compositional viability | Thm 11.1 | theorem | proof reproduced | Paper 2 |
 | 62 | CC-A001-071 | Institutional equivalence | Thm 12.1 | theorem | proof verified present | Paper 2 |
 | 63 | CC-A001-073 | Institutional viability condition | Thm 12.2 | theorem | proof verified present | Paper 2 |
-| 64 | CC-A001-084 | Nested-constraint impossibility | Thm 13.1 | theorem (limit) | proof verified present | Paper 1 gate / Paper 2 |
+| 64 | CC-A001-084 | Nested-constraint impossibility | Thm 13.1 | theorem (limit) | proof verified present | Paper 1 (conditional) / Paper 2 |
 | 65 | CC-A001-091 | Finite-horizon small-noise viability | Thm 13.2 | theorem | proof verified present | Paper 2 |
 | 66 | CC-A001-055 | Emptiness despite factorwise viability | App A.1 | counterexample | explicit construction | Paper 2 |
 | 67 | CC-A001-056 | Coupling creates viability | App A.2 | example | explicit construction | Paper 1/monograph (atlas entry) |
@@ -847,15 +847,25 @@ Every retained row of this manuscript, with claim status, evidence status (post-
 
 **What this paper does not claim.** No result here is empirical; no conditional theorem is promoted; no result transfers across modules without the interface contract (open, recorded per row); the atlas does not close any open conjecture (the three A002 conjectures and the research programmes are docketed, not asserted). The general typed composition theorem, the variable-event delayed-hybrid kernel, and the delay-separation principle remain open.
 
-**Length gate.** The measured retained budget is ≈27.2k words at full proof expansion — above many journal main-text limits. The pre-authorized response is the coherent split by question (2A: typed viability under observation and implementation; 2B: projectability, noncompensation, substitution, and composition limits), never destructive condensation. The split decision is taken at venue-policy check, not now.
+**Length constraint.** The measured retained budget is ≈27.2k words at full proof expansion — above many journal main-text limits. The pre-authorized response is the coherent split by question (2A: typed viability under observation and implementation; 2B: projectability, noncompensation, substitution, and composition limits), never destructive condensation. The split decision is taken at venue-policy check, not now.
 
-**Data and code.** This paper is mathematical; it cites no computational artifact as evidence. The concordance, closure scripts, and verification suite (`reaudit/verify_concordance_rows.py`, 12/12 checks) are the audit trail and are committed to the programme repository.
+**Data and code.** This paper is mathematical; it cites no computational artifact as evidence. The source-to-publication concordance, the row-closure scripts, and their machine-verification suite are archived, with the full programme, in the project repository at <https://github.com/MIKEAA2020/general-sustainability>.
 
 ---
 
-## References (provenance-first)
+## References
 
-The cited mathematical literature is that of the sources: Aubin (1991) *Viability Theory* (Nagumo theorem, measurable selection, viability theorem for differential inclusions); Hale (2009) for comparison-ODE attractivity; Halanay-type arguments for delay-independent stability; Farkas' lemma for the substitution alternative. The programme-internal provenance documents:
+Aubin, J.-P. 1991. *Viability Theory*. Birkhäuser, Boston.
+
+Farkas, J. 1902. Theorie der einfachen Ungleichungen. *Journal für die Reine und Angewandte Mathematik* 124: 1–27.
+
+Halanay, A. 1966. *Differential Equations: Stability, Oscillations, Time Lags*. Academic Press, New York.
+
+Hale, J. K. 2009. *Ordinary Differential Equations*. Dover edition, Mineola, New York.
+
+### Programme sources
+
+The programme-internal provenance documents:
 
 - A001 source: `uploads/topdown.txt` (*Top-Down Sustainability Architecture*), 99-row concordance block.
 - A002 source: `uploads/general_theory.txt` (*A Typed Flux–Observation–Governance Theory of Sustainability*), 53-row concordance block.

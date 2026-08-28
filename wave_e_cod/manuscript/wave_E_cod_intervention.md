@@ -139,18 +139,13 @@ declared [N] scenarios, not verified institutions. The certified layer is
 vacuous at observed stock levels. Nothing here promotes or demotes any
 forecast module, transfers E5 numbers, or pools Ω_xte.
 
-## 4. Reproduction
+## 4. Data and code availability
 
 ```
 cd wave_e_cod && python3 src/run_intervention.py
 ```
 
-The runner is deterministic (no randomness). Outputs:
-`results/intervention_results.json`, `results/intervention_boundaries.csv`.
-Protocol: `protocol_intervention.md`. An independent second execution of the
-committed runner in a fresh session of the same environment reproduced both
-output files exactly
-(`reaudit/intervention_rerun_cod/INTERVENTION_RERUN_COD.md`).
+The analysis is fully deterministic (no random components). Re-executing the committed runner regenerates both output files, `results/intervention_results.json` and `results/intervention_boundaries.csv`; a verification re-execution in a fresh environment reproduced both files byte for byte. The full intervention protocol is provided in `wave_e_cod/protocol_intervention.md`.
 
 ## References
 

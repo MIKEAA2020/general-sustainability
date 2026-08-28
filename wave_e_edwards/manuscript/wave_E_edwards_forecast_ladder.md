@@ -1,6 +1,6 @@
 # Does a one-pool water-balance model improve forecasts of Edwards Aquifer head? A scored test at J-17
 
-*Series:* J-17 annual-mean elevation, TWDB 6837203 / EAA AY-68-37-203, 1934–2023. *Status:* one scored specification $\Omega_{\mathrm{SA}}$; causal stock-flow is not retained, causal recharge forecasts are not retained, and the oracle water-balance is a diagnostic certificate excluded from retention. *Specification sheet:* `wave_e_edwards/SPECIFICATION.md` ($\Omega_{\mathrm{SA}}$ Pass 1 + Pass 2 + the intervention-leg object); the artifact-level specification match is verified by 36 machine checks (`batch 4/WAVE_E_SPEC_MATCH.md`).
+*Series:* J-17 annual-mean elevation, TWDB 6837203 / EAA AY-68-37-203, 1934–2023. *Status:* one scored specification $\Omega_{\mathrm{SA}}$; causal stock-flow is not retained, causal recharge forecasts are not retained, and the oracle water-balance is a diagnostic certificate excluded from retention. *Specification sheet:* `wave_e_edwards/SPECIFICATION.md` ($\Omega_{\mathrm{SA}}$ Pass 1 + Pass 2 + the intervention-leg object).
 
 ## Abstract
 
@@ -232,7 +232,7 @@ Two-pool exchange, solute, and barrier bookkeeping were not fitted and cannot be
 
 Limitations follow the data and the map. The annual affine one-pool specification is not a karst model: conduits, the Uvalde--San Antonio divide, and unconfined recharge-zone storage remain in the residual. Total-area $R$ and $P$ mix the San Antonio and Uvalde pools; that is a declared approximation defect. Recharge is a Puente estimate; pumpage includes unreported domestic, livestock, and federal use. Neither series is $z$. M4 is a one-year information delay, not a set-valued conservative filter. The sample is 90 years with four short test windows; the 0.39 ft AR(1) margin is not a significance claim.
 
-The specification is an R04.Cor2 approximation of a one-pool head map. It does not transfer an interval-verified linear template (E5 is not this specification), does not instantiate a closed-loop information filter, and does not close A005. Model selection used $z$ only. No programme gate is treated as closed without specification matching and independent verification.
+The specification is an R04.Cor2 approximation of a one-pool head map. It does not transfer an interval-verified linear template (E5 is not this specification), does not instantiate a closed-loop information filter, and does not close A005. Model selection used $z$ only. No programme result is treated as established without specification matching and independent verification.
 
 On this evidence, modules that are not identified on the training data, or whose drivers arrive too late to be causal at the annual origin, do not reduce forecast error. The retained forecast is persistence with a small AR(1) correction; the water-balance map serves as a certificate for a year whose recharge is already known.
 
@@ -250,15 +250,14 @@ Reopening the climate module with additional indices (PDO, AMO) on this annual o
 
 ## Data and code availability
 
-Input data, scoring scripts, and result files are in `wave_e_edwards/` at <https://github.com/MIKEAA2020/general-sustainability>; the specification sheet is `wave_e_edwards/SPECIFICATION.md`. J-17 daily highs: Texas Water Development Board well 6837203. Recharge: Umphres and Choi (2025), DOI 10.5066/P1BI62NY. Pumpage: Edwards Aquifer Authority (2024/25), Table 1. Comal: USGS 08168710. Niño 3.4: NOAA PSL HadISST (committed raw file `data/psl_nino34_long.data`). Precipitation: NCEI nClimDiv `climdiv-pcpndv-v1.0.0-20260806` — not distributed with the repository (provenance URL in `data/SOURCES.md`); the three `pcp_*` columns of the fixed panel are therefore not reproducible from the committed code alone, while the two Niño columns rebuild from the committed PSL file to machine precision. Scoring Pass 1/2 from the committed `data/annual_panel.csv` does not require the nClimDiv file. An independent execution of the scoring scripts reproduced the committed result files (`batch 4/WAVE_E_RERUN.md`), and the artifact-level specification match is verified by 36 machine checks (`batch 4/WAVE_E_SPEC_MATCH.md`).
+All input data, analysis scripts, and result files are archived in the project repository at <https://github.com/MIKEAA2020/general-sustainability> (directory `wave_e_edwards/`); the full model specification is provided in `wave_e_edwards/SPECIFICATION.md`. J-17 daily highs: Texas Water Development Board well 6837203. Recharge: Umphres and Choi (2025), DOI 10.5066/P1BI62NY. Pumpage: Edwards Aquifer Authority (2024/25), Table 1. Comal Springs: USGS 08168710. Niño 3.4: NOAA PSL HadISST (raw file `data/psl_nino34_long.data`, committed with the repository). Precipitation: NCEI nClimDiv `climdiv-pcpndv-v1.0.0-20260806` — not distributed with the repository (provenance URL in `data/SOURCES.md`); the three `pcp_*` columns of the fixed panel are therefore not reproducible from the committed code alone, while the two Niño columns rebuild from the committed PSL file to machine precision. Scoring Pass 1/2 from the committed `data/annual_panel.csv` does not require the nClimDiv file. All computations are deterministic: re-executing the committed scripts in a fresh environment regenerated every archived result file byte for byte, and all scored rows recompute from the per-observation forecast files and the committed series.
 
 ```
-python3 src/build_panel.py && python3 src/build_climate.py
 python3 src/run_ladder.py && python3 src/run_recharge.py
 python3 src/make_figures.py
 ```
 
-`build_panel.py` writes head, recharge, and pumpage to a scratch file and leaves the fixed twenty-column panel in place when those columns already match. `build_climate.py` rebuilds the two Niño 3.4 columns from the committed PSL raw file; rebuilding the three precipitation columns additionally requires the omitted nClimDiv file and leaves the fixed panel in place when those columns already match.
+The committed twenty-column analysis panel (`data/annual_panel.csv`) is the dataset of record for all scored analyses. The panel-construction script re-derives the head, recharge, and pumpage columns from the primary sources and leaves the fixed twenty-column panel in place when the re-derived columns already match. `build_climate.py` rebuilds the two Niño 3.4 columns from the committed PSL raw file (`nino34.long.data`); rebuilding the three precipitation columns additionally requires the nClimDiv file (`climdiv-pcpndv-v1.0.0-20260806`), which is not distributed with the repository, and leaves the fixed panel in place when those columns already match.
 
 ---
 
