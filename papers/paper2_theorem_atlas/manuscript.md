@@ -115,6 +115,20 @@ The two primary sources name the same objects differently. The bridges below (fr
 
 The A001 viability hierarchy is: $\operatorname{Viab}(\mathcal V;U,\pi)$ — the kernel under control correspondence $U$ and information/policy class $\pi$; $\operatorname{RViab}$ — the robust kernel against a disturbance class; $\operatorname{EViab}_{\mathcal I}$ — the epistemic kernel under observation structure $\mathcal I$ (states of information, not physical states); $\operatorname{ERViab}$ — the epistemic robust kernel. Each is a different object; none embeds in another without a theorem.
 
+Projected to physical state space, the informational hierarchy of the observation family reads (A001, §4.12)
+
+$$
+\operatorname{IRViab}_{\mathfrak I}(\mathcal V)
+\subseteq
+K_{\mathcal I}
+\subseteq
+\operatorname{RViab}(\mathcal V)
+\subseteq
+\operatorname{Viab}(\mathcal V),
+$$
+
+with $K_{\mathcal I}$ the epistemic kernel projected to physical states and $\operatorname{IRViab}_{\mathfrak I}$ its institutionally restricted counterpart. Each strict inclusion has a distinct cause: robust contraction arises from disturbances; epistemic contraction from indistinguishability; institutional contraction from restricted authority, enforcement, and allocation; attainability is handled separately by emergency-envelope capture (Section 7). Under a constant observation the hidden-mode system exhibits the purely epistemic case: $\operatorname{Viab}=\operatorname{RViab}$ while $K_{\mathcal I}=\varnothing$ (A001, §4.12).
+
 ---
 
 ## 3 Core viability and obstruction calculus (family F13)
@@ -263,6 +277,8 @@ a comparison of two rates, both with units of inverse time.
 
 *Proofs (verified present).* The threshold analysis is a direct computation in the CES parameters; the corollary follows from the limiting forms of $F(A,0)$ and $F(A,R^*)$. Full proofs are reproduced from the source at camera-ready. $\blacksquare$
 
+**Remark 5.9 (Capital-only sustainability for exhaustible resources) (A001, Remark 8.2).** Corollary 5.3(1) has a direct consequence for exhaustible resources. If the resource is non-essential ($\sigma > 1$), then $F(A, 0) > 0$: capital alone yields positive output with zero resource flow. Hence when $\sigma > 1$ and $\mu_A > \delta_A$ (equivalently $\alpha^{\sigma/(\sigma-1)} > (A_0/Y_0)\,\delta_A$), an exhaustible resource does **not** by itself preclude strong sustainability: under the shutdown policy $H \equiv 0$ the stock is held permanently, so $S \geq S_{\min}$ is trivially preserved, and the capital dynamics $\dot A = F(A, 0) - \delta_A A - c$ sustain positive consumption $c$ from capital alone. By contrast, when the resource is essential ($\sigma \leq 1$, so $F(A, 0) = 0$), shutdown yields zero output, and strong sustainability of an exhaustible stock requires active extraction constrained by the cumulative budget $\int_0^\infty H(s)\,ds \leq S_0 - S_{\min}$ of the budget-bound extraction family — a bound incompatible with permanent consumption drawn from the resource. Thus the inessentiality threshold $\sigma = 1$ is also the threshold separating exhaustible-resource regimes in which strong sustainability is attainable without any in situ extraction at all. This is an inessentiality consequence, distinct from the Hartwick investment rule: at a renewable stationary point the holding investment is $\delta_A A$, not $I = F_R R$ (A001, Remark 8.2).
+
 **Definition 5.4 (Support provenance and directional support gap) [CC-A002-014 · definition].** Partition pathway requirements by declared provenance — for example renewable flow, recovered/recycled material, imports, and non-renewable drawdown — without adding unlike physical units. Let $\Gamma_{\rm all}(z)$ be the service set using all admissible pathways and $\Gamma_{\rm reg}(z)\subseteq\Gamma_{\rm all}(z)$ the set after imposing the declared regenerative, boundary, quality, and exergy restrictions. For a nonzero service direction $\bar s\ge0$, define
 
 $$
@@ -302,15 +318,29 @@ This family carries the paper's central negative results: information structure,
 
 **Theorem 6.1 (Epistemic emptiness) [CC-A001-020 · theorem — mapping: counterexample/limit].** There exist systems with $\operatorname{Viab}(\mathcal V; U, \pi_{\mathrm{perf}}) = \mathcal V \neq \varnothing$ and $\operatorname{EViab}_{\mathcal I}(\mathcal V) = \varnothing$ for a non-injective observation $\mathcal I$.
 
-*Proof (verified present; summary).* The source constructs $\dot S = u - r(S)$ on $\mathcal V=[1,2]$ with $U(S)=\{0,r(S)\}$ and the constant observation $\mathcal I(S)\equiv 0$: perfect information holds every point of $\mathcal V$; under the uninformative observation the belief is all of $\mathcal V$, no single action is safe for all compatible states, and the epistemic kernel is empty. $\blacksquare$
+*Proof (verified present; summary).* The source constructs $\dot S = u - r(S)$ on $\mathcal V=[1,2]$ with $U(S)=\{0,r(S)\}$ and the constant observation $\mathcal I(S)\equiv 0$: perfect information holds every point of $\mathcal V$; under the uninformative observation the belief is $B_t=\mathbb R$ (whence $U^B(\mathbb R)=\{0\}$), no single action is safe for all compatible states, and the epistemic kernel is empty. $\blacksquare$
 
 **Theorem 6.2 (Observer-to-viability transfer with safety buffer) [CC-A001-022 · theorem].** Consider the output-feedback system $\dot x = f(x,u)$, $y = h(x)$, with $x$ not fully observed. Suppose: (1) $K_\varepsilon \subset \operatorname{int} K$ is a compact controlled-invariant subset of the perfect-information kernel $K = \operatorname{Viab}(\mathcal V)$; (2) the perfect-information feedback $u = k(x)$ is Lipschitz with constant $L_k$; (3) the output-feedback controller is $u = k(\hat x)$ with observer estimate $\hat x$; (4) the observer satisfies the exponential convergence bound $\|\hat x(t) - x(t)\| \leq M e^{-\lambda t}\|\hat x(0) - x(0)\|$; (5) there exists a compact invariant subset $K_*$ with $K_\varepsilon \subseteq K_* \subseteq K$ and a constant $\bar e > 0$ such that whenever $x \in K_*$ and $\|k(\hat x) - k(x)\| \leq \bar e$, the trajectory remains in $K_*$; (6) the initial estimation error satisfies $L_k M \|\hat x(0) - x(0)\| \leq \bar e$. Then $K_\varepsilon$ is viable under output feedback.
 
 *Proof (verified present; summary).* Lipschitz feedback and exponential observation error give $\|k(\hat x)-k(x)\|\le L_kMe^{-\lambda t}\|\hat x(0)-x(0)\|\le\bar e$ for all $t\ge0$; the $K_*$-margin absorbs the resulting perturbation and the invariance of $K_*$ closes the loop. $\blacksquare$
 
-**Theorem 6.3 (Robust invariance / tangency) [CC-A001-023 · theorem].** If $K \subseteq \mathcal V$ is closed, $\mathcal R_K(x) \neq \varnothing$ for every $x \in K$, and $\mathcal R_K$ admits a measurable feedback selection $k(x)$ with well-posed closed-loop, then $K$ is robustly controlled invariant, $K \subseteq \operatorname{RViab}(\mathcal V)$. Under the usual regularity and convexity assumptions of discriminating-kernel theory the converse holds, so $\operatorname{RViab}(\mathcal V)$ is the largest closed subset of $\mathcal V$ satisfying the robust tangency condition.
+**Remark 6.16 (Certainty-equivalence obstruction) (A001, Remark 4.1).** The emptying of a nonempty physical kernel in Theorem 6.1 relies on a *non-injective* observation — information genuinely lost. The same emptying can occur with a fully **injective** observation, provided the policy class is restricted to *certainty-equivalence controllers*: causal maps that apply a fixed state-feedback law directly to the observation without correcting a bias. Concretely, let $\dot S = u - g(S)$ with $u \in [0, \bar u]$, $g$ strictly increasing, $g(0) = 0$, and constraint $\mathcal V = [S_{\min}, S^*]$. Under perfect information one sets $u(t) = g(S(t))$, giving $\dot S = 0$; hence every $S_0 \in \mathcal V$ is viable and $\operatorname{Viab}(\mathcal V; U, \pi_{\mathrm{perf}}) = \mathcal V \neq \varnothing$. Take the injective, biased observation $\hat S = S + b$ with $b > 0$, and let the certainty-equivalence controller be $u = g(\hat S)$, which applies the feedback to the measurement without inverting the bias. Then $\dot S = g(S + b) - g(S) > 0$ for all $S$, and $\dot S$ is bounded below by a positive constant on the compact interval $[S_{\min}, S^*]$, so $S$ strictly increases and exits above $S^*$ in finite time from every $S_0 \in \mathcal V$: $\operatorname{Viab}(\mathcal V; U, \pi_{\mathrm{CE}}) = \varnothing$. Because $\hat S \mapsto S = \hat S - b$ is invertible, an observer who inverts the bias, $u = g(\hat S - b) = g(S)$, recovers the perfect-information kernel — the role the observer plays in Theorem 6.2; such a policy is not certainty-equivalence. In this construction the kernel emptying is a restriction of the *admissible policy class*, not a loss of information per se — a distinction the non-injective construction of Theorem 6.1 does not exhibit. This is the mechanism behind the monitoring-construction reading of the institutional family (Section 12): an uncorrected observation bias empties the kernel, and monitoring enters institutional design as the mechanism that bounds observation error so that the state feedback can be applied (A001, Remark 4.1; §13).
 
-*Proof (verified present; summary).* Measurable selection gives $k$; the closed-loop field satisfies the Nagumo subtangential condition at every point of $K$ because $k(x)\in\mathcal R_K(x)$; the viability theorem for differential inclusions yields, for each initial condition, a trajectory remaining in $K$ simultaneously for every admissible disturbance realization. $\blacksquare$
+**Theorem 6.3 (Conditional robust strong-invariance certificate) [CC-A001-023 · theorem].** Let $K \subseteq \mathcal V$ be closed. Suppose a feedback selection $k$ is admissible and the closed-loop multifunction
+
+$$
+F_k(x)=\{f(x,k(x),d):d\in D(x)\}
+$$
+
+satisfies the regularity, existence, completeness, and solution assumptions of an applicable strong-invariance theorem. If
+
+$$
+F_k(x)\subseteq T_K^C(x)\qquad\forall x\in K,
+$$
+
+where $T_K^C$ is the tangent cone required by that theorem, then every closed-loop disturbance solution starting in $K$ remains in $K$. Hence $K \subseteq \operatorname{RViab}(\mathcal V)$ for the declared policy, disturbance, and solution classes. No general converse or pointwise-tangency "if and only if" is asserted: a converse requires an exact discriminating-kernel or game theorem with matching nonanticipative-strategy, regularity, and solution semantics.
+
+*Proof (verified present; summary).* The conclusion is the selected strong-invariance theorem applied to the closed-loop disturbance inclusion. The subset condition is essential: the weaker condition $F_k(x)\cap T_K(x)\ne\varnothing$ gives only an existential viable inclusion trajectory and does not protect against every disturbance selection. $\blacksquare$
 
 **Theorem 6.4 (Instantaneous common-action obstruction) [CC-A001-026 · theorem — mapping: counterexample/limit].** Suppose $B$ is a possible information set containing a state on $\partial \mathcal V$, and
 
@@ -439,6 +469,8 @@ A state is *robustly recoverable to $C$* precisely when it belongs to this set. 
 
 This is the largest family: the restricted closed theorem chain for systems under periodic review. The two RFDE results (Theorems 8.8 and 8.9) carry primary destination Paper 4 (the delay-dynamics paper owns the named RFDE families); they are stated here because the kernel construction is one object across its ODE and RFDE instantiations.
 
+Four levels of policy existence are kept separate throughout this family (A002, corrected front matter): (i) non-emptiness of the pointwise saving-action correspondence; (ii) existence of a measurable selector under a stated measurable-selection theorem; (iii) existence of a continuous selector, only under stronger topological and convexity hypotheses; and (iv) closed-loop existence, with solution semantics and institutional or computational implementability. An arbitrary-selector theorem establishes only level (i) unless further hypotheses are supplied; the hypotheses in this family that assume "arbitrary state-feedback selectors" are at that level, and measurability alone does not establish well-posed ordinary or retarded functional dynamics. Sample-and-hold is the default implementable semantics; Filippov, Krasovskii, relaxed, viscosity, or nonanticipative-game semantics must be named explicitly when used.
+
 **Definition 8.1 (Three policy questions) [CC-A002-019 · definition; primary destination Paper 1/monograph].** Let $z^{\pi,d}(t;z_0)$ be the trajectory under a causal policy $\pi$ and disturbance signal $d\in\mathcal D$, where $\mathcal D$ includes the declared signal space, regularity, bounds, and nonanticipation convention. (1) *Actual-policy safety* asks whether a specified $\pi_0,d_0$ keeps the trajectory in $K$. (2) *Viability* asks whether some $\pi\in\mathbb P$ keeps the trajectory in $K$. (3) *Robust viability* asks whether one admissible causal policy works for every disturbance in $\mathcal D$:
 
 $$
@@ -460,6 +492,27 @@ $$
 **Theorem 8.4 (Finite-clopen observation knowledge kernel) [CC-A002-023 · theorem, finite-clopen sampled observation model].** Under the preceding hypotheses (finite-clopen observation structure): (1) every $\mathcal L_n$ is compact and $\mathcal L_{n+1}\subseteq\mathcal L_n$; (2) $\Omega\in\mathcal L_n$ exactly when a policy in the finite-clopen observation policy class keeps every latent trajectory with initial state in $\Omega$ inside $K$ for the next $n$ transitions, for every disturbance sequence and every symbol sequence induced by those latent trajectories; (3) if every $\mathcal L_n$ is non-empty, then $\mathcal L_\infty=\bigcap_n\mathcal L_n$ is non-empty and is the largest robustly controlled-invariant family of pre-observation prediction sets; and (4) if $O$ is injective on $K$, then for the full-state iterates $K_n$ of Theorem 8.2, $\Omega\in\mathcal L_n \Longleftrightarrow \Omega\subseteq K_n$.
 
 *Proof (verified present; summary).* The hyperspace of compact subsets of $K$ is compact (distance-function embedding); the predecessor acts continuously on it; the finite-clopen filter construction makes the observation update exactly representable; injectivity collapses prediction sets to singletons and identifies the two kernel families. $\blacksquare$
+
+**Remark 8.15 (Memoryless observation feedback is not monotone) (A002, §6.2).** A tempting latent-state iteration is
+
+$$
+\Pre_{\rm ml}(A)=\{z\in A:\exists u\in U\ \forall z'\in A\cap C_{O(z)}\ \forall w\in W,\ F(z',u,w)\in A\},
+$$
+
+which feeds the observation back without the information state. It does not in general compute a largest memoryless invariant set, because this operator is not monotone. For a finite counterexample, take $\mathsf X=\{a,b,\partial\}$ with the discrete topology and $\partial$ absorbing, $K=\{a,b\}$, one disturbance, $O(a)=O(b)$, and actions $L,R$ satisfying
+
+$$
+F(a,L)=a,\quad F(a,R)=\partial,\qquad
+F(b,L)=\partial,\quad F(b,R)=b.
+$$
+
+Then $\{a\}$ is invariant under the memoryless choice $L$ and $\{b\}$ is invariant under the memoryless choice $R$, but no single action protects the fibre $\{a,b\}$: $a\in\Pre_{\rm ml}(\{a\})$ while $a\notin\Pre_{\rm ml}(K)$; neither monotonicity nor a greatest memoryless invariant subset exists in general. For a fixed memoryless map $\mu$ from observations to actions, the ordinary predecessor
+
+$$
+\Pre_\mu(A)=\{z\in A:\ F(z,\mu(O(z)),w)\in A\ \forall w\in W\}
+$$
+
+does compute the largest invariant subset of that fixed $\mu$; kernels for different maps need not admit an invariant union. No strictly coarser memoryless kernel is therefore asserted without first fixing the policy map or declaring an alternative comparison criterion (A002, §6.2).
 
 **Definition 8.5 (Held-control tube predecessor) [CC-A002-024 · definition].** Fix $h>0$. Let $\mathsf X$ be a metric state space, $K\subseteq\mathsf X$, $U$, $W_h$ non-empty compact metric spaces, and $\Phi:[0,h]\times K\times U\times W_h\to\mathsf X$ continuous with $\Phi(0,z,u,w)=z$. The element $w\in W_h$ encodes an admissible disturbance segment and any registered model branch over one held interval, while $u$ is held fixed. For compact $A\subseteq K$, define
 
@@ -629,9 +682,13 @@ Then $Q$ is robustly viable under the institution.
 
 **Definition 12.4 (Finite-horizon epistemic-institutional kernel) [CC-A006-005 · definition].** For the joint institutional information state $(B,h)$ — compatible physical histories and parameters together with an institutional mode, prescription authority $a\in\Gamma(B,h)$, and implementation correspondence $u\in\mathcal E(B,h,a)$, under the lower-game quantifier order — define $\operatorname{Pre}_{\mathfrak I}(\mathfrak Q)$ as the set of information states from which some prescription is tube-safe and lands in $\mathfrak Q$ for every compatible observation, covariate, and implementation outcome. The finite-horizon epistemic-institutional kernel is given by the safe-base recursion $\mathfrak K_0=\mathfrak S$, $\mathfrak K_{n+1}=\mathcal T(\mathfrak K_n):=\mathfrak S\cap\operatorname{Pre}_{\mathfrak I}(\mathfrak K_n)$. The deflationary implementation $\mathfrak K_n\cap\operatorname{Pre}_{\mathfrak I}(\mathfrak K_n)$ generates the same descending orbit from $\mathfrak S$ when $\operatorname{Pre}_{\mathfrak I}$ is monotone; the safe-base form is official because it remains safe under arbitrary initialization.
 
+*Quantifier discipline (A006, institutional game and quantifier convention; A007, quantifier convention).* The reverse order $\forall w\,\exists u_w$ is not an implementable robust claim unless the disturbance $w$ is observed before the action is chosen — read-disturbance versus full-information order; the lower-game order of Definition 12.4 is the implementable one when the disturbance is unknown at decision time.
+
 **Conditional Theorem 12.5 (Sampled epistemic-institutional viability, safe-base form) [CC-A006-006 · conditional theorem].** Assume: (i) the compatible-state update is nonempty for every compatible branch; (ii) all transition and authority/implementation correspondences are defined on $\mathfrak S$; (iii) the required non-anticipative prescriptions exist whenever the predecessor condition holds; (iv) $\operatorname{Pre}_{\mathfrak I}$ is monotone. Then $\mathfrak K_n$ is exactly the set of information states from which safety can be guaranteed for $n$ decision intervals, and $\mathcal T$ has a greatest fixed point on the powerset lattice of $\mathfrak S$. If, in addition, $\mathcal T$ preserves decreasing countable intersections (an $\omega$-continuity-from-above condition) and the strategy-selection assumptions are closed under the infinite-horizon limit, then $\mathfrak K_\infty:=\bigcap_{n\ge0}\mathfrak K_n$ is that greatest fixed point; without the additional condition the greatest fixed point is obtained by transfinite descending iteration rather than necessarily by the countable intersection.
 
 *Proof (verified present; summary).* Induction on $n$: membership in $\mathfrak K_{n+1}$ supplies a current safe prescription and a successor in $\mathfrak K_n$ for every branch; monotonicity makes $\mathcal T$ monotone, so Tarski's theorem gives the greatest fixed point; the continuity and closure hypotheses identify the countable descending limit. $\blacksquare$ *Scope:* an abstract characterization — it does not claim that $B_t$ is tractable, that $\mathfrak K_\infty$ is nonempty, or that any particular ecological system meets the assumptions. The empirical-identification paper (Paper 5) reads its benchmark against exactly this object at exactly this conditional status.
+
+**Remark 12.6 (The institutional-solvency index is a negative result) (A008/A017, negative register).** The proposed institutional-solvency index $\alpha=\Omega_c\cdot\tau_d$ — the claimed ratio $\Omega_c$ of governance exergy to system exergy throughput, times the characteristic disturbance-recurrence interval $\tau_d$, carrying units of time, with a heuristic solvency threshold $\alpha\geq 1$ yr — fails as a solvency measure. The arithmetic audit of its own seven-regime table produces a perverse ordering: the collapsed Northern-cod management regime receives the most favorable score, and the per-regime values recomputed from the displayed inputs span orders of magnitude, from $200$ down to $8\times10^{-4}$. The construct fails dimensionally (monetary budgets described as governance exergy without an energy conversion; $\alpha$ described both as dimensionless and as carrying units of time), arithmetically (reported products inconsistent with the displayed inputs by roughly three orders of magnitude), and on construct validity (a paradigmatic collapse scored most solvent). Correcting the multiplication does not validate the construct or its threshold: the $\alpha\geq 1$ yr threshold does not survive the construct's own audit, and the index is recorded as a negative result — institutional capacity is represented through typed profiles and dynamics-aware response margins rather than a master scalar (A008/A017, negative register).
 
 ---
 
@@ -648,6 +705,8 @@ $$
 $$
 
 *Proof (verified present; summary).* With a $2\delta$ deterministic margin and bounded diffusion coefficient, the probability of a $\delta$-deviation over $[0,T]$ vanishes as $\varepsilon\to0$ (standard concentration for bounded-coefficient diffusions); on the complement event the trajectory never reaches $\partial\mathcal V$. $\blacksquare$
+
+**Remark 13.4 (Stochastic viability splits on the horizon) (A001, Remark 17.1).** Theorem 13.2 is the finite-horizon half of the correct pair of statements; the infinite-horizon statement is not a strengthening of it but a different — and, for nondegenerate noise, degenerate — regime. For nondegenerate diffusion in a bounded constraint domain, the infinite-horizon survival probability $\mathbb P_x(\tau_{\mathcal V}=\infty)$ is zero: from any interior point the exit time is almost surely finite, no matter how small the noise (Feller's absorption phenomenon for one-dimensional diffusions and its multidimensional analogues). No interiority or Lyapunov condition can make the infinite-horizon survival probability tend to one. Accordingly, the source demotes its companion stochastic-survival conjecture: the claimed infinite-horizon "$\to 1$" is false, and only the finite-horizon part stands (as Theorem 13.2) (A001, Remark 17.1).
 
 **Programme 13.3 (Justice and multiscale viability) [CC-A002-050 · research programme, open].** Place group- and location-specific minimum services and maximum harms inside $K$ — the group-indexed safe-set construction $\{z: g_j(z)\ge0 \text{ for all } j\}$ with the recursive intergenerational criterion ($z(t)\in K_g$ throughout generation interval $I_g$, and the terminal state in a declared continuation set $C_{g+1}$ from which the next generation's constraints are viable under its policy and disturbance classes; a terminal aggregate stock alone is not this criterion). Distinguish positive predictions from normative entitlement choices; study when local kernels compose into a global kernel under cross-boundary transfers, and when aggregate feasibility masks an empty kernel or capture basin for one group.
 
@@ -695,7 +754,7 @@ Every retained row of this manuscript, with claim status, evidence status (post-
 | 20 | CC-A002-015 | Linear substitution alternative | Thm 5.5 | theorem (finite linear model) | proof verified present | Paper 2 |
 | 21 | CC-A001-020 | Epistemic emptiness | Thm 6.1 | theorem | proof verified present | Paper 2 |
 | 22 | CC-A001-022 | Observer-to-viability transfer | Thm 6.2 | theorem | proof verified present | Paper 2 |
-| 23 | CC-A001-023 | Robust invariance / tangency | Thm 6.3 | theorem | proof verified present | Paper 2 |
+| 23 | CC-A001-023 | Conditional robust strong-invariance certificate | Thm 6.3 | theorem | proof verified present | Paper 2 |
 | 24 | CC-A001-026 | Instantaneous common-action obstruction | Thm 6.4 | theorem | proof omitted in source; one-step proof obligation registered | Paper 2 |
 | 25 | CC-A001-027 | Hidden-mode conflict | Ex 6.5 | example | explicit construction | Paper 5 (atlas entry) |
 | 26 | CC-A001-028 | Delayed-information obstruction | Thm 6.6 | theorem | proof verified present | Paper 5 (atlas entry) |
@@ -765,11 +824,24 @@ Every retained row of this manuscript, with claim status, evidence status (post-
 
 **Ledger discipline.** The mapping-type column of the concordance (exact specialization / projectable reduction / approximation / counterexample-or-limit) is preserved per row; the atlas never re-types a result. Destination cross-references are annotations, not transfers: where the primary destination is another paper, that paper owns the full treatment and its seam contract, and this atlas states the canonical form exactly once.
 
+**Manuscript-native entries.** The atlas additionally states the manuscript-native entries below: source remarks, constructions, counterexamples, and discipline clauses that carry no concordance row. Each is stated at exactly its source-declared status, cites no `CC-` identifier, and adds no concordance row; every concordance-row statement of the atlas appears in the table above.
+
+| ID | Content | Status | Statement location | Source |
+|---|---|---|---|---|
+| MS-Native-1 | Informational hierarchy $\operatorname{IRViab}_{\mathfrak I}\subseteq K_{\mathcal I}\subseteq\operatorname{RViab}\subseteq\operatorname{Viab}$, distinct-cause attribution, hidden-mode instance ($\operatorname{Viab}=\operatorname{RViab}$, $K_{\mathcal I}=\varnothing$) | remark (hierarchy record) | §2.7 | A001, §4.12 |
+| MS-Native-2 | Capital-only sustainability for exhaustible resources ($\sigma>1$, $\mu_A>\delta_A$ shutdown regime; budget-bound extraction for $\sigma\le1$; distinct from the Hartwick rule) | remark | Remark 5.9 | A001, Remark 8.2 |
+| MS-Native-3 | Certainty-equivalence obstruction: injective biased observation empties a full physical kernel; policy-class restriction, not information loss | remark with explicit construction | Remark 6.16 | A001, Remark 4.1 |
+| MS-Native-4 | Four-level selector ladder of policy existence; an arbitrary-selector theorem establishes only level (i) | discipline clause | §8 introduction | A002, corrected front matter |
+| MS-Native-5 | Memoryless observation feedback $\operatorname{Pre}_{\rm ml}$ is not monotone; finite counterexample; no greatest memoryless invariant subset | counterexample (finite construction) | Remark 8.15 | A002, §6.2 |
+| MS-Native-6 | Quantifier order $\forall w\,\exists u_w$ not implementable unless the disturbance is observed before action (read-disturbance vs full-information order) | discipline clause | §12, after Definition 12.4 | A006; A007 |
+| MS-Native-7 | Institutional-solvency index $\alpha=\Omega_c\tau_d$: perverse ordering (collapsed cod regime most "solvent"), corrected values spanning $200$ to $8\times10^{-4}$; threshold fails its own audit | negative record (counterexample to the construct) | Remark 12.6 | A008/A017, negative register |
+| MS-Native-8 | Stochastic horizon split: finite-horizon theorem vs vanishing infinite-horizon survival under Feller absorption; companion conjecture demoted | remark (horizon-split record) | Remark 13.4 | A001, Remark 17.1 |
+
 ---
 
 ## 15 Provenance, reproducibility, and limits
 
-**Sources.** This manuscript's retained set derives from nine fully row-closed sources. The budgeted selection (rows 1–70: 63 main + 7 bounded-appendix) derives from A001 (`uploads/topdown.txt`, 99 concordance rows, closure 2026-08-27) and A002 (`uploads/general_theory.txt`, 53 concordance rows, closure 2026-08-27), recorded in `research_program/paper2_retained_row_budget.csv`. The closure-campaign seam rows (71–89) derive from A003 (`uploads/Paper_V_Institutional_Feedback_and_Nonlinear_Transitions.txt`), A005 (`uploads/Paper_III_Groundwater_Module.txt`), A006 (`uploads/Paper_II_Robust_Epistemic_Viability_V2.txt`), A007 (`uploads/Paper_I_Hybrid_Sustainability_Architecture_V4.txt`), A010 (`uploads/paper4_perspective.txt`), A013 (`uploads/paper1_accounting.txt`), and A018 (`uploads/manuscript.txt`) — each closed 2026-08-28 with the source read end to end. The per-row verification record is `research_program/concordance_row_closure_twenty_sources.md`; the row-level evidence is `research_program/canonical_concordance_A001_A025.csv` (409 rows; all nine sources fully `row_verified`).
+**Sources.** This manuscript's retained set derives from nine fully row-closed sources. The budgeted selection (rows 1–70: 63 main + 7 bounded-appendix) derives from A001 (`uploads/topdown.txt`, 99 concordance rows, closure 2026-08-27) and A002 (`uploads/general_theory.txt`, 53 concordance rows, closure 2026-08-27), recorded in `research_program/paper2_retained_row_budget.csv`. The closure-campaign seam rows (71–89) derive from A003 (`uploads/Paper_V_Institutional_Feedback_and_Nonlinear_Transitions.txt`), A005 (`uploads/Paper_III_Groundwater_Module.txt`), A006 (`uploads/Paper_II_Robust_Epistemic_Viability_V2.txt`), A007 (`uploads/Paper_I_Hybrid_Sustainability_Architecture_V4.txt`), A010 (`uploads/paper4_perspective.txt`), A013 (`uploads/paper1_accounting.txt`), and A018 (`uploads/manuscript.txt`) — each closed 2026-08-28 with the source read end to end. The manuscript-native entries (§14, MS-Native-1–8) are source remarks, constructions, counterexamples, and discipline clauses stated at their source-declared statuses (sources: A001, A002, A006, A007, A008, A017) and carry no concordance row. The per-row verification record is `research_program/concordance_row_closure_twenty_sources.md`; the row-level evidence is `research_program/canonical_concordance_A001_A025.csv` (409 rows; all nine sources fully `row_verified`).
 
 **Proof handling.** Proofs marked *reproduced* are printed in full above from the source. Proofs marked *verified present; summary* exist in full in the source (the closure pass verified proof presence and read it); the summary given here is faithful to the source argument, and camera-ready reproduces each proof verbatim. One proof is omitted in the source (Theorem 6.4), and the obligation to supply an explicit one-step proof is registered rather than silently discharged.
 
