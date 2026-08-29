@@ -1,0 +1,309 @@
+# Comprehensive Line-Level Audit and Cross-Manuscript Consistency Report
+
+**Scope:** `papers/paper1_general_theory/manuscript.md`, `papers/paper2_theorem_atlas/manuscript.md`, `papers/paper3_material_ledgers/manuscript.md`, `papers/paper4_delay_dynamics/manuscript.md`, and `papers/paper5_sampled_governance/manuscript.md` within `https://github.com/MIKEAA2020/general-sustainability`.  
+**Audit Methodology:** Line-by-line textual analysis, algebraic/numerical re-derivation, verification script execution (`typed_false_positive_instantiation.py`, `verify_consistency.py`, `verify_review_packet.py`), cross-paper concordance validation, and citation matching against source bibliographies.
+
+---
+
+## 1. Executive Summary
+
+A comprehensive line-level audit of all five manuscripts in the core sustainability suite reveals a tightly architected, mathematically sophisticated framework spanning typed viability theory, stock-flow material conservation, retarded delay differential equations (RFDEs), and sampled governance. The overarching modular division of responsibilities across the series is maintained consistently.
+
+However, detailed line-level scrutiny identified several concrete **mathematical inversions, structural numbering defects, topological imprecisions, notational collisions, and extensive bibliographic disconnects** that require remediation:
+1. **Paper 1 (Critical Verbal Inversion):** Theorem B(6) verbally inverts the policy licensing of FAST and SLOW actions relative to $s_2$-prices, directly contradicting its underlying verified mathematical derivation and code instantiation.
+2. **Paper 2 (Structural & Numbering Defects):** Multiple sections exhibit severe out-of-order numbering (e.g., Remark 5.9 before Def 5.4; Remark 6.16 before Thm 6.3; Remark 8.15 before Def 8.5; Remark 13.4 before Programme 13.3), undefined parameters in Theorem 5.2 ($\mu_A$), and duplicate object headers (`Hypothesis object 12.3` assigned to two distinct rows).
+3. **Paper 3 (Parametric & Notational Collisions):** An essential half-saturation parameter $A_{g0}$ is omitted from the numerical baseline specification in §2.2, and state symbols $K$ and $N$ are overloaded in §2.4 in direct conflict with standard carrying-capacity and biomass conventions.
+4. **Paper 4 (Delay Subscript Inversion & Peak Precision):** Proposition 5.2 shifts fundamental delays such that the shifted lower delay $\tau_-$ exceeds the shifted upper delay $\tau_+$ ($\tau_- = 128.374 > \tau_+ = 70.697$), creating a confusing subscript inversion.
+5. **Papers 1–5 (Systemic Bibliographic Disconnect):** Following the addition of camera-ready bibliographies, over 50 bibliography entries across the series (16 in Paper 3, 22 in Paper 4, 14 in Paper 5) are never cited in their respective manuscript bodies, and Paper 1 retains raw editorial placeholder tags (`[cite: ...]`).
+
+---
+
+## 2. Detailed Findings by Manuscript
+
+---
+
+### Paper 1: General Theory (`papers/paper1_general_theory/manuscript.md`)
+
+#### Finding 1.1 — Mathematical / Verbal Inversion in Theorem B(6)
+* **Location:** Line 207 (Section 3.3)
+* **Severity:** **High (Mathematical / Interpretive Inconsistency)**
+* **Quoted Text:**
+  > `"Low-$s_2$-price assessors license FAST only; high-$s_2$-price assessors license SLOW only; assessors at intermediate prices license both."`
+* **Mathematical Derivation & Proof of Inversion:**
+  In the two-indicator budget framework of Section 3.3, let $w = (w_1, w_2) > 0$ with relative price ratio $r = w_2 / w_1$ representing the price of indicator $s_2$ in units of $s_1$.
+  The net change vectors for actions FAST and SLOW are:
+  $$\Delta_1 = \Delta_{\rm FAST} = (-1, +2), \qquad \Delta_2 = \Delta_{\rm SLOW} = (+1, -1)$$
+  An assessor with weight vector $w$ licenses an action $\Delta$ if and only if $w \cdot \Delta \ge 0$:
+  1. For **FAST**:
+     $$w \cdot \Delta_1 = -w_1 + 2w_2 \ge 0 \iff 2w_2 \ge w_1 \iff r = \frac{w_2}{w_1} \ge \frac{1}{2}$$
+     Thus, FAST is licensed when $s_2$ is relatively **expensive** ($r \ge 0.5$).
+  2. For **SLOW**:
+     $$w \cdot \Delta_2 = +w_1 - w_2 \ge 0 \iff w_1 \ge w_2 \iff r = \frac{w_2}{w_1} \le 1$$
+     Thus, SLOW is licensed when $s_2$ is relatively **cheap** ($r \le 1.0$).
+  3. Consequently:
+     - When $r < 0.5$ (Low $s_2$-price): Only SLOW is licensed ($w \cdot \Delta_2 > 0$, $w \cdot \Delta_1 < 0$).
+     - When $0.5 \le r \le 1.0$ (Intermediate price): Both FAST and SLOW are licensed.
+     - When $r > 1.0$ (High $s_2$-price): Only FAST is licensed ($w \cdot \Delta_1 > 0$, $w \cdot \Delta_2 < 0$).
+
+  The text at line 207 states the exact opposite ("Low-$s_2$-price assessors license FAST only; high-$s_2$-price assessors license SLOW only"). This was further confirmed against the companion execution witness `research_program/paper1_instantiation/typed_false_positive_instantiation.py` (line 62: $r=2.0$ licenses FAST only; $r=0.5$ licenses SLOW only).
+* **Recommended Fix:** Change line 207 to:
+  > `"Low-$s_2$-price assessors ($r \le \rho_2$) license SLOW only; high-$s_2$-price assessors ($r \ge \rho_1$) license FAST only; assessors at intermediate prices ($\rho_2 \le r \le \rho_1$) license both."`
+
+---
+
+#### Finding 1.2 — Definition 2.3 Enumerates 11 Slots While Declaring 13
+* **Location:** Line 60 (Section 2.2)
+* **Severity:** **Moderate (Structural / Formal Discrepancy)**
+* **Quoted Text:**
+  > `"A sustainability structure is a tuple $S$ with thirteen declared slots: ..."`
+* **Analysis:**
+  Following this sentence, Definition 2.3 enumerates only 11 slots:
+  1. $\mathcal T$, 2. $\mathcal Z$, 3. $S_{\rm st}$, 4. $B_{\rm out}$, 5. $\mathcal V$, 6. $\Gamma$, 7. $\mathcal O$, 8. $\mathcal A$, 9. $\mathcal C$, 10. $\mathcal R$, 11. $\mathcal D$.
+  In Paper 2, Definition 2.3 (line 82) defines the canonical 13-tuple:
+  $$\mathfrak S = (\mathcal T, \mathcal Z, S, B, \mathcal V, \Gamma, \mathcal O, \mathcal A, \mathcal C, \mathcal R, \mathcal D, K, \mathbb P)$$
+  Paper 1 omits slots 12 ($K$, admissible target/safety set) and 13 ($\mathbb P$, disturbance/probability structure) from the itemized list, creating an internal discrepancy between the declared count (13) and enumerated count (11).
+* **Recommended Fix:** Either add slots 12 ($K$, target/admissible set) and 13 ($\mathbb P$, disturbance/uncertainty structure) to match Paper 2, or amend the text to clarify that 11 slots are instantiated in the deterministic core while slots 12 and 13 are deferred to the atlas.
+
+---
+
+#### Finding 1.3 — Topological Imprecision in Definition 4.1 ($C = \mathbb R^n_+ \setminus \{0\}$)
+* **Location:** Line 148 (Section 3.1)
+* **Severity:** **Minor (Topological Rigor)**
+* **Quoted Text:**
+  > `"$C = \mathbb R^n_+ \setminus \{0\}$ (the closed nonnegative cone)"`
+* **Analysis:**
+  The punctured nonnegative cone $\mathbb R^n_+ \setminus \{0\}$ does not contain its limit point $0 \in \mathbb R^n$, so it is not a closed subset of $\mathbb R^n$. In convex geometry, $\mathbb R^n_+$ is the closed nonnegative cone, while $\mathbb R^n_+ \setminus \{0\}$ is the punctured nonnegative orthant.
+* **Recommended Fix:** Change to:
+  > `"$C = \mathbb R^n_+ \setminus \{0\}$ (the punctured nonnegative cone)"` or `"$C = \mathbb R^n_+$ (the closed nonnegative cone)"` depending on whether origin extinction is admissible.
+
+---
+
+#### Finding 1.4 — Target Notation Typo in Proof of Theorem A(ii)
+* **Location:** Line 174 (Section 3.2)
+* **Severity:** **Minor (Typographical Notation Error)**
+* **Quoted Text:**
+  > `"Then $a \in \mathcal C_G(z)$ if and only if every element of $Succ(z, a)$ belongs to $G$; this is equivalent to $Succ \subseteq W$ ..."`
+* **Analysis:**
+  The sentence defines membership in the controller $\mathcal C_G(z)$ for the goal set $G$. The equivalence requires $Succ(z, a) \subseteq G$. Writing $Succ \subseteq W$ (where $W$ is the weak assessment set or a typographical artifact) conflicts with the preceding clause.
+* **Recommended Fix:** Replace `$Succ \subseteq W$` with `$Succ(z, a) \subseteq G$`.
+
+---
+
+#### Finding 1.5 — Unrendered Editorial Citation Placeholders
+* **Location:** Lines 96, 113, 178
+* **Severity:** **Minor (Drafting / Formatting Artifact)**
+* **Quoted Text:**
+  - Line 96: `[cite: Aubin; Frankowska; Saint-Pierre]`
+  - Line 113: `[Cite: Aubin–Bayen–Saint-Pierre; Saint-Pierre; Aubin capture basins; Lygeros–Tomlin–Sastry.]`
+  - Line 178: `[cite: Aubin; Frankowska]`
+* **Analysis:**
+  These represent uncompiled drafting placeholders rather than formatted citations conforming to the author-year style of the bibliography.
+* **Recommended Fix:** Replace with standard bracketed author-year citations: `[Aubin 1991; Frankowska 1989; Saint-Pierre 1994]`, `[Aubin, Bayen, and Saint-Pierre 2011; Saint-Pierre 1994; Lygeros, Tomlin, and Sastry 1999]`, etc.
+
+---
+
+### Paper 2: Theorem Atlas (`papers/paper2_theorem_atlas/manuscript.md`)
+
+#### Finding 2.1 — Out-of-Order Numbering across Multiple Subsections
+* **Location:** Sections 5, 6, 8, and 13
+* **Severity:** **Moderate (Document Flow / Reader Orientation)**
+* **Analysis:**
+  Throughout Paper 2, remarks discussing scope notes and boundary conditions precede the formal theorems/definitions they reference, creating severe numbering inversions:
+  - **Section 5:** **Remark 5.9** (line 309) is placed *before* Definition 5.4 (line 313), Theorem 5.5 (line 315), Lemma 5.6 (line 317), Proposition 5.7 (line 320), and Proposition 5.8 (line 322).
+  - **Section 6:** **Remark 6.16** (line 347) is placed *before* Theorem 6.3 (line 351), Example 6.5 (line 355), Proposition 6.12 (line 363), Proposition 6.13 (line 365), Lemma 6.14 (line 367), and Template 6.15 (line 369).
+  - **Section 8:** **Remark 8.15** (line 470) is placed *before* Definition 8.5 (line 473), Theorem 8.6 (line 475), and Theorem 8.7 (line 477).
+  - **Section 13:** **Remark 13.4** (line 708) is placed *before* Programme 13.3 (line 712).
+* **Recommended Fix:** Either relocate the remarks to the end of their respective thematic blocks, or renumber all items strictly monotonically according to appearance order.
+
+---
+
+#### Finding 2.2 — Undefined Parameter $\mu_A$ in Theorem 5.2
+* **Location:** Lines 248–255 vs Line 269 (Section 5.1)
+* **Severity:** **Moderate (Mathematical Rigor)**
+* **Quoted Text:**
+  - Lines 248–255: Clauses (3), (4), and (5) state:
+    > `"(3) If $c_{\rm in} > 0$ and $\mu_A \le c_{\rm in}/A_{\max}$..."`  
+    > `"(4) If $\mu_A < \kappa_{\min}$..."`  
+    > `"(5) If $\mu_A > \kappa_{\max}$..."`
+  - Line 269:
+    > `"...where $\mu_A$ is the decay or outward-transfer rate of the support pool."`
+* **Analysis:**
+  Theorem 5.2 uses $\mu_A$ across three formal conditions in its theorem statement without defining what $\mu_A$ represents until 15 lines later in the post-theorem narrative text.
+* **Recommended Fix:** Define $\mu_A$ in the preamble of Theorem 5.2: `"Let $\dot A = c_{\rm in} - \mu_A A - ...$ where $\mu_A \ge 0$ is the decay/outflow rate of the support pool."`
+
+---
+
+#### Finding 2.3 — Duplicate Header `Hypothesis object 12.3` in Section 12 & Status Ledger
+* **Location:** Section 12 (line 681) and Section 14 (lines 819–820)
+* **Severity:** **Moderate (Identifier Collision)**
+* **Quoted Text:**
+  - Line 681: `**Hypothesis object 12.3**` introduces row 85 (`CC-A003-003`, H3: inertia/capture).
+  - Lines 819–820 (Ledger):
+    - Row 85: `CC-A003-003 | ... | Hypothesis object 12.3`
+    - Row 86: `CC-A005-006 | ... | Hypothesis object 12.3`
+* **Analysis:**
+  Both row 85 (institution-capture response) and row 86 (competing-institutional-hypothesis groundwater ladder) are assigned the identical identifier `Hypothesis object 12.3` in the status ledger. In the text of Section 12, row 86 is introduced under a subsection heading without its own unique formal header.
+* **Recommended Fix:** Designate row 85 as `Hypothesis object 12.3a` and row 86 as `Hypothesis object 12.3b`, or renumber row 86 to `Hypothesis object 12.4` and adjust subsequent objects accordingly.
+
+---
+
+#### Finding 2.4 — Discrepancy in Atlas Family Count (Abstract vs §1.2)
+* **Location:** Line 12 (Abstract) vs Line 23 (Section 1.2)
+* **Severity:** **Minor (Internal Textual Inconsistency)**
+* **Quoted Text:**
+  - Line 12: `"The atlas spans twelve families: typed canonical structures..."` (and lists 10 names).
+  - Line 23: `"1.2 Thirteen mapped families"` (and enumerates F01 through F13).
+* **Analysis:**
+  The Abstract states twelve families, whereas Section 1.2 and the body of the atlas systematically define and map thirteen distinct families (F01 to F13).
+* **Recommended Fix:** Update the Abstract to read: `"The atlas spans thirteen families: ..."` and ensure all 13 family names are represented.
+
+---
+
+#### Finding 2.5 — Imprecise Quantifier Scope in Adversarial Theorem 3.4
+* **Location:** Line 139 (Section 3.2)
+* **Severity:** **Minor (Mathematical Precision)**
+* **Quoted Text:**
+  > `"every trajectory entering $\mathcal S_a$ exits $\mathcal S$ within time at most $a/\varepsilon$"`
+* **Analysis:**
+  Under an adversarial disturbance system $\dot x \in f(x, \mathcal D)$, if the disturbance acts benignly (e.g. $d(t) = 0$), the trajectory may remain in $\mathcal S$ indefinitely. The mathematical property proved is that there *exists* an admissible adversarial disturbance trajectory $d(t)$ under which the state is forced out within time $a/\varepsilon$. Stating that *every* trajectory exits overstates the result before the proof restricts it to the worst-case disturbance.
+* **Recommended Fix:** Change to:
+  > `"for every initial condition in $\mathcal S_a$, there exists an admissible adversarial disturbance under which the trajectory exits $\mathcal S$ within time at most $a/\varepsilon$"`
+
+---
+
+### Paper 3: Material Ledgers (`papers/paper3_material_ledgers/manuscript.md`)
+
+#### Finding 3.1 — Missing Numerical Baseline Parameter $A_{g0}$
+* **Location:** Lines 77, 102, 113 (Section 2.2)
+* **Severity:** **Moderate (Model Under-Specification)**
+* **Quoted Text:**
+  - Line 77: `$\sigma(A^{\mathrm{geo}}) = A^{\mathrm{geo}} / (A^{\mathrm{geo}} + A_{g0})$`
+  - Line 113: Numerical baseline parameters:
+    > `"$A^{\mathrm{geo}}(0) = 1.0 \times 10^4$, $r_N = 0.05$, $K_N = 1000$, $\mu_N = 0.02$, $\gamma = 0.1$, $k_{\mathrm{geo}} = 0.005$, $\mu_{\mathrm{geo}} = 0.001$, $E_0 = 1.0$, $q = 0.01$"`
+* **Analysis:**
+  The geological availability gate $\sigma$ explicitly depends on the half-saturation constant $A_{g0}$. While Theorem 3.12 (line 276) investigates the special analytical case $A_{g0} = 0$ (where $\sigma \equiv 1$), the general parameterisation in §2.2 omits a declared numerical value for $A_{g0}$, leaving the simulation baseline incomplete.
+* **Recommended Fix:** Specify the baseline value (e.g., `$A_{g0} = 100$` or `$A_{g0} = 0$` as the reference setting) in line 113.
+
+---
+
+#### Finding 3.2 — Notational Overloading of $K$ and $N$ in §2.4
+* **Location:** Lines 150, 164 (Section 2.4)
+* **Severity:** **Minor (Notational Ambiguity)**
+* **Quoted Text:**
+  - Line 150: `"The state vector is $x = (A^{\mathrm{geo}}, A^{\mathrm{res}}, N, K)^\top \in \mathbb R^4_+$"`
+  - Line 164: `"The fourth compartment $K$ is an absolute sink"`
+* **Analysis:**
+  In §2.4, $K$ is used to denote an environmental sink compartment, and $N$ denotes the bio-available nutrient stock. However, throughout §2.2, §3, §4, and across Papers 4 and 5, $K$ (or $K_N$) uniquely denotes the **carrying capacity**, and $N$ denotes **living biomass** (with $K_{\rm cap}$ representing governance capital). Re-using $K$ as a state variable in §2.4 introduces severe risk of confusion.
+* **Recommended Fix:** Rename the sink state to $S_{\rm sink}$ or $X_{\rm sink}$ in §2.4 to protect $K$ for carrying capacity.
+
+---
+
+### Paper 4: Delay Dynamics (`papers/paper4_delay_dynamics/manuscript.md`)
+
+#### Finding 4.1 — Subscript Label Inversion in Shifted Delays ($\tau_- > \tau_+$)
+* **Location:** Line 399 (Section 5.3, Proposition 5.2)
+* **Severity:** **Moderate (Notational Confusion)**
+* **Quoted Text:**
+  > `"shifts the fundamental delays by $\pi/\omega$ on each family: $\tau_- = 128.374$ yr and $\tau_+ = 70.697$ yr, with both shifts strictly positive ..."`
+* **Analysis:**
+  The unshifted fundamental Hopf delays for Candidate A are:
+  - Crossing 1: $\omega_1 \approx 0.02519$ rad/yr, $\tau = 3.666$ yr (originally labeled $\tau_-$)
+  - Crossing 2: $\omega_2 \approx 0.03944$ rad/yr, $\tau = 150.358$ yr (originally labeled $\tau_+$)
+  
+  When applying the half-period shift $+\pi/\omega$:
+  $$\Delta \tau_1 = \frac{\pi}{0.02519} \approx 124.708\text{ yr} \implies \tau_1' = 3.666 + 124.708 = 128.374\text{ yr}$$
+  $$\Delta \tau_2 = \frac{\pi}{0.03944} \approx 79.661\text{ yr} \implies \tau_2' = 150.358 - 79.661 = 70.697\text{ yr}$$
+  
+  Because the manuscript preserved the original crossing index labels ($\tau_-$ from crossing 1, $\tau_+$ from crossing 2), it outputs $\tau_- = 128.374$ yr and $\tau_+ = 70.697$ yr. This violates standard mathematical notation where the subscript $-$ denotes the lower bound and $+$ denotes the upper bound ($\tau_- \le \tau_+$), making $\tau_- > \tau_+$ highly disorienting.
+* **Recommended Fix:** Clarify the branch mapping explicitly:
+  > `"shifts the fundamental delays by $\pi/\omega$ on each family, yielding shifted crossings $\tau_1' = 128.374$ yr (from the $\omega_1$ branch) and $\tau_2' = 70.697$ yr (from the $\omega_2$ branch); re-ordered on the positive delay axis, the lower crossing is $\tau_-' = 70.697$ yr and the upper crossing is $\tau_+' = 128.374$ yr."`
+
+---
+
+#### Finding 4.2 — Minor Numerical Frequency Discrepancy in Loop-Gain Peak
+* **Location:** Line 393 (Section 5.2)
+* **Severity:** **Minor (Numerical Precision)**
+* **Quoted Text:**
+  > `"the loop gain reaches a unique maximum of approximately $0.08011$ at $\omega \approx 0.0583$"`
+* **Analysis:**
+  Evaluating the exact scalar loop transfer function shows that the peak loop gain value of $0.080113$ (matching the reported $0.08011$) is attained at $\omega \approx 0.05891$ rad/yr, rather than $\omega \approx 0.0583$. The gain amplitude is accurate to 5 significant figures, but the maximizing frequency has an offset of $\Delta \omega \approx 0.0006$.
+* **Recommended Fix:** Update the frequency to $\omega \approx 0.0589$ rad/yr.
+
+---
+
+### Paper 5: Sampled Governance (`papers/paper5_sampled_governance/manuscript.md`)
+
+#### Finding 5.1 — Verification of Mathematical Soundness & Empirical Debt
+* **Location:** Sections 5.1, 6.2, and Section 10
+* **Status:** **Verified Sound (with noted open obligations)**
+* **Analysis:**
+  - **Section 5.1 (Dimensionless Identifiability Root):** The dimensionless steady-state effort formula:
+    $$e^* = \frac{a + \sqrt{a^2 + 4b}}{2}, \qquad a = \frac{\mu}{\lambda q}, \quad b = \frac{\mu}{\lambda q}\frac{\delta}{E_{\max}}$$
+    was re-derived and verified to be algebraically exact.
+  - **Section 6.2 (Phase-Line Obstruction Theorem):** The proof that any nonconstant solution of a scalar autonomous ODE $\dot x = f(x)$ is strictly monotone between equilibria (and thus cannot oscillate or cross an equilibrium value) is mathematically complete and rigorous.
+  - **Section 6.3 (Cod Assessment Calculations):** The six survival numbers (0.711, 0.488, 0.696, 0.750, 0.499, 0.757) match $\exp(-M)$ from DFO SAR 2016/026 Table A2 to three decimal places.
+  - **Empirical Status Ledger:** The open debts for the case screening log (`CC-A011-023`) and constrained-M reconstruction (`CC-A014-009`) are acknowledged as open debts in the ledger rather than masked as completed theorems.
+
+---
+
+## 3. System-Wide & Cross-Paper Findings
+
+### Finding 3.1 — Systemic Disconnect in Camera-Ready Bibliographies
+* **Severity:** **Moderate (Scholarly / Editorial Completeness)**
+* **Analysis:**
+  During recent repository consolidation, complete "camera-ready bibliographies" were appended to each paper (Paper 1: 14 entries; Paper 2: 4 entries; Paper 3: 18 entries; Paper 4: 37 entries; Paper 5: 22 entries). However, systematic citation mapping against the bodies of the papers reveals that a large fraction of these references are never cited in the text:
+  - **Paper 1:** 1 uncited entry (`Ekins et al. 2003`).
+  - **Paper 2:** 2 uncited entries (`Aubin 1991`, `Hale 2009`).
+  - **Paper 3:** **16 uncited entries** out of 18 (only `Clark 1990` and `Nagumo 1942` are cited; uncited entries include `Aubin`, `Brunner & Rechberger`, `Chhikara & Folks`, `Ekins`, `Eurostat`, `Feinberg`, `Fischer-Kowalski`, `Griebmeier`, `Guentner`, `Munda`, `Neumayer`, `Øksendal`, `Redner`, `Ricard`, `Tapley`, and `USGS`).
+  - **Paper 4:** **22 uncited entries** out of 37 (uncited entries include `Åström & Wittenmark`, `Beretka & Vas`, `Carpenter et al.`, `Cloud et al.`, `Costantino et al.`, `Diekmann et al.`, `Engelborghs et al.`, `Ezekiel`, `Gao & Zhang`, `Guckenheimer & Holmes`, `Gurney et al.`, `Hale 1977`, `Hale 1993`, `Kearfott`, `Khiyar et al.`, `Kuznetsov`, `Ludwig et al.`, `Moxnes`, `Ostrom`, and `Scheffer` (three works)).
+  - **Paper 5:** **14 uncited entries** out of 22 (uncited entries include `Ashwin et al.`, `Aubin 1991`, `Aubin et al. 2011`, `Benjamini & Hochberg`, `Cadigan`, `Cohen`, `Costantino et al.`, `Forssell & Ljung`, `Gurney et al.`, `Moxnes`, `Nešić & Teel`, `Punt & Donovan`, `Ricard et al.`, and `Tam & Bundy`).
+* **Recommended Fix:** Either integrate explicit inline citations into the relevant conceptual and historical survey paragraphs of Papers 3, 4, and 5, or prune the bibliographies to include only works directly cited in the manuscript bodies.
+
+---
+
+### Finding 3.2 — Equilibrium Parameter Continuity across Papers 3 and 4
+* **Severity:** **Verified Consistent (Nuance Clarified)**
+* **Analysis:**
+  Cross-paper parameter comparison between Paper 3 and Paper 4 reveals an apparent difference in the Candidate A equilibrium biomass value:
+  - Paper 4 line 199 (3-State Core): $N^* \approx 89.55188$, $E^* \approx 2.08962$, $Z^* = \delta$.
+  - Paper 3 line 270 & Paper 4 line 451 (4-State Working Core): $N^* \approx 89.52562$, $A^{\mathrm{act}*} \approx 397.8665$, $E^* \approx 2.08962$.
+  
+  Our line audit confirmed that this difference is mathematically intentional and rigorously distinguished: the 3-state system assumes an infinite/saturated donor pool, whereas the 4-state system accounts for finite turnover and donor depletion, shifting $N^*$ from 89.552 to 89.526. The terminology "frozen-donor equilibrium" vs "working core" is used consistently across both papers.
+
+---
+
+### Finding 3.3 — Automated Test Suite and Vocabulary Compliance
+* **Status:** **Passing / Compliant**
+* **Analysis:**
+  1. Execution of `repo/reaudit/verify_consistency.py` confirmed that all 13 expected historical defect closures pass without regression, and all non-claim-loss invariants hold.
+  2. Full-text regex scanning confirmed 0 occurrences of prohibited terms (`F4`, `build_panel.py`, `NOT CONFIRMED`, `manifest`, `independent-rerun`, etc.) across all five manuscripts.
+
+---
+
+## 4. Master Consolidated Findings Table
+
+| ID | Paper | Section / Line | Category | Severity | Summary of Issue | Recommended Action |
+|:---|:---:|:---:|:---:|:---:|:---|:---|
+| **P1-01** | Paper 1 | §3.3, L207 | Mathematical / Textual | **High** | Verbal interpretation inversion in Thm B(6): states low-$s_2$-price licenses FAST and high licenses SLOW, whereas formula and code prove low licenses SLOW and high licenses FAST. | Swap "Low-$s_2$-price" and "High-$s_2$-price" descriptors to match $w \cdot \Delta \ge 0$. |
+| **P1-02** | Paper 1 | §2.2, L60 | Structural | **Moderate** | Definition 2.3 declares 13 slots but enumerates only 11 (omits $K$ and $\mathbb P$). | Reconcile itemization with Paper 2 Def 2.3 (13 slots). |
+| **P1-03** | Paper 1 | §3.1, L148 | Mathematical Rigor | **Minor** | $C = \mathbb R^n_+ \setminus \{0\}$ is termed "the closed nonnegative cone", but is punctured at the origin. | Change label to "punctured nonnegative cone". |
+| **P1-04** | Paper 1 | §3.2, L174 | Notation / Typo | **Minor** | Proof of Thm A(ii) writes `$Succ \subseteq W$` where context requires `$Succ(z, a) \subseteq G$`. | Replace `$W$` with `$G$`. |
+| **P1-05** | Paper 1 | §§2.3, 3.2 | Editorial | **Minor** | Unrendered citation placeholders: `[cite: Aubin; Frankowska; Saint-Pierre]` etc. | Convert to standard bracketed author-year citations. |
+| **P2-01** | Paper 2 | §§5, 6, 8, 13 | Structural Numbering | **Moderate** | Extensive out-of-order numbering (e.g. Rmk 5.9 before Def 5.4; Rmk 6.16 before Thm 6.3; Rmk 8.15 before Def 8.5; Rmk 13.4 before Prog 13.3). | Renumber sequentially or move remarks after formal theorems. |
+| **P2-02** | Paper 2 | §5.1, L248–255 | Mathematical Definition | **Moderate** | Parameter $\mu_A$ is used in Thm 5.2 statements (3), (4), and (5) before being defined at L269. | Define $\mu_A$ in Thm 5.2 preamble. |
+| **P2-03** | Paper 2 | §12, L681 | Structural / Ledger | **Moderate** | Header `**Hypothesis object 12.3**` is assigned to both row 85 (CC-A003-003) and row 86 (CC-A005-006). | Renumber row 86 to `Hypothesis object 12.3b` or `12.4`. |
+| **P2-04** | Paper 2 | Abstract vs §1.2 | Textual Inconsistency | **Minor** | Abstract declares 12 atlas families; §1.2 title declares 13 mapped families (F01–F13). | Update Abstract to 13 families. |
+| **P2-05** | Paper 2 | §3.2, L139 | Mathematical Rigor | **Minor** | Thm 3.4 quantifier phrasing implies every trajectory exits under an adversarial disturbance, rather than the worst-case disturbance. | Clarify quantifier: "there exists an admissible adversarial disturbance...". |
+| **P3-01** | Paper 3 | §2.2, L113 | Parametric Completeness | **Moderate** | Numerical baseline parameter table omits value for $A_{g0}$ used in availability gate $\sigma$. | Add `$A_{g0} = 100$` (or `$A_{g0} = 0$`) to §2.2 parameter list. |
+| **P3-02** | Paper 3 | §2.4, L150, 164 | Notation Collision | **Minor** | State vector uses $K$ for an environmental sink and $N$ for nutrients, colliding with carrying capacity $K$ and biomass $N$. | Rename sink state to $S_{\rm sink}$ or $X_{\rm sink}$. |
+| **P4-01** | Paper 4 | §5.3, L399 | Notational Confusion | **Moderate** | Shifted delay assignment retains original crossing labels, producing $\tau_- = 128.374\text{ yr} > \tau_+ = 70.697\text{ yr}$. | Clarify branch-to-crossing mapping and define ordered thresholds $\tau_-' \le \tau_+'$. |
+| **P4-02** | Paper 4 | §5.2, L393 | Numerical Precision | **Minor** | Maximum loop gain frequency stated as $\omega \approx 0.0583$ rad/yr; exact calculation yields $\omega \approx 0.05891$ rad/yr. | Update frequency to $\omega \approx 0.0589$. |
+| **SYS-01** | Papers 1–5 | References | Scholarly / Editorial | **Moderate** | Massive bibliography disconnect: 16 uncited entries in P3, 22 in P4, 14 in P5. | Add text citations or prune uncited entries from bibliographies. |
+
+---
+
+## 5. Conclusion
+
+The mathematical foundations, proof structures, and cross-paper seam contracts across the 5 manuscripts are rigorous and conceptually unified. Remediating the **verbal inversion in Paper 1 Theorem B(6)**, the **subscript inversion in Paper 4 Proposition 5.2**, the **structural numbering anomalies in Paper 2**, the **omitted parameter in Paper 3 §2.2**, and integrating the **camera-ready bibliographies** will elevate the entire publication suite to publication-ready quality.
+
+
