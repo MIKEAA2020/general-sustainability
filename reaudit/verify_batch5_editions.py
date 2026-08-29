@@ -111,6 +111,8 @@ NEW_FILES = {
     "reaudit/build_paper1_v3.py": None,
     "research_program/paper_types_and_venues_decision.md": None,
     "DEEP_SCAN_RESIDUAL_POINTS.md": None,
+    # publication-strategy joint-evaluation files (2026-08-29, fifth session)
+    "PUBLICATION_STRATEGY_JOINT_EVALUATION.md": None,
 }
 # Pin file: written by the first run of this script (or maintained alongside
 # it) — reaudit/batch5_edition_pins.json. If absent, it is created and the
@@ -789,6 +791,65 @@ def main():
           and "Implemented this session" in deep
           and "Declined or out of scope" in deep
           and "interval Krawczyk" in deep)
+
+    # ---- 10. Publication-strategy joint-evaluation pass -----------------
+    # (2026-08-29, fifth session; audit record:
+    #  PUBLICATION_STRATEGY_JOINT_EVALUATION.md — the two external
+    #  publication-strategy audits jointly evaluated and verified before
+    #  implementation; no paper edit survived verification as an immediate
+    #  item, so this section machine-checks the verification facts the
+    #  record's dispositions rest on)
+
+    pub = read("PUBLICATION_STRATEGY_JOINT_EVALUATION.md")
+
+    # 10a. the record exists with its required sections
+    check("publication-strategy joint evaluation record present",
+          "Publication-Strategy Joint Evaluation" in pub
+          and "## 2. Verification of the audits' factual claims" in pub
+          and "## 3. Adjudication by recommendation class" in pub
+          and "## 4. The venue and paper-type decisions re-examined" in pub
+          and "## 6. The extended venue-pass checklist" in pub)
+
+    # 10b. the E-papers' E5 mentions are negative-scope only (V6)
+    for _name, _txt in [("E1", cf), ("E2", ci), ("E3", ef), ("E4", ei)]:
+        _elines = [l for l in _txt.splitlines() if re.search(r"\bE5\b", l)]
+        check(f"{_name}: every E5 mention is negative-scope",
+              all(("do not transfer" in l or "does not transfer" in l
+                   or "transfers E5 numbers" in l or "is not this" in l)
+                  for l in _elines))
+
+    # 10c. "Wave E" absent from the four E-paper bodies (V2)
+    for _name, _txt in [("E1", cf), ("E2", ci), ("E3", ef), ("E4", ei)]:
+        check(f"{_name}: 'Wave E' absent from the body",
+              not re.search(r"(?i)wave[\s\-]+e\b", _txt))
+
+    # 10d. Paper 2's verified size and structure (V8: 11 families, ~15.9k
+    # words; the audits' "100-page list of 12 families" premise is false)
+    _fams = re.findall(r"^## \d+ .*\((family F\d+)", p2, re.M)
+    check("P2: eleven theorem-family sections",
+          len(_fams) == 11 and len(set(_fams)) == 11)
+    check("P2: main-text length in the 15k-17k band",
+          15000 <= len(p2.split()) <= 17000)
+
+    # 10e. the record's load-bearing dispositions present
+    check("pubeval: unfaithful-translation rejection recorded (V5)",
+          "Rejected — the proposed translation is unfaithful" in pub)
+    check("pubeval: Paper 2 factual correction recorded (V8)",
+          "11 family sections" in pub and "12 families" in pub)
+    check("pubeval: synthesis-vs-report divergence recorded (V14)",
+          "escalates beyond its source" in pub)
+    check("pubeval: venue table maintained with the E3/WRR enrichment",
+          "added as a third alternate" in pub
+          and pub.count("Maintained") >= 8)
+    check("pubeval: checklist items 10-13 registered",
+          "The one-sentence contribution statement" in pub
+          and "The skeptical-reviewer check" in pub
+          and "E5-identifier genericization" in pub
+          and "The journal-gloss layer, with the two-layer caveat" in pub)
+    check("pubeval: no-immediate-edit closure argument stated",
+          "No paper edits survive verification as immediate items" in pub)
+    check("pubeval: monograph working-title candidate registered",
+          "A Typed Theory of Sustainability" in pub)
 
     print("-" * 64)
     print(f"{N - FAIL}/{N} checks pass")
