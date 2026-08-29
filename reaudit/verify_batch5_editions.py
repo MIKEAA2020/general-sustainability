@@ -106,6 +106,11 @@ NEW_FILES = {
     "wave_e_cod/SPECIFICATION_v2.md": None,
     "build_revised_sustainability_manuscript_v1_1.py": None,
     "revised_sustainability_manuscript_v1.1.docx": None,
+    # journal-edition pass files (2026-08-29, fourth session)
+    "papers/paper1_general_theory/manuscript_v3.md": None,
+    "reaudit/build_paper1_v3.py": None,
+    "research_program/paper_types_and_venues_decision.md": None,
+    "DEEP_SCAN_RESIDUAL_POINTS.md": None,
 }
 # Pin file: written by the first run of this script (or maintained alongside
 # it) — reaudit/batch5_edition_pins.json. If absent, it is created and the
@@ -636,6 +641,154 @@ def main():
           "Final Editions Consolidation Scan" in scan)
     check("evaluation: consolidation-pass addendum present",
           "## 7. Final-editions consolidation pass (2026-08-29, third session)" in ev)
+
+    # ---- 9. Journal-edition pass (2026-08-29, fourth session) ----------
+    # (audit records: DEEP_SCAN_RESIDUAL_POINTS.md and
+    #  research_program/paper_types_and_venues_decision.md section 2; the
+    #  external style review's accepted findings, implemented as Paper 1's
+    #  third edition built by reaudit/build_paper1_v3.py)
+
+    v3 = read("papers/paper1_general_theory/manuscript_v3.md")
+
+    # 9a. structure
+    check("P1v3: journal-facing structure (repro + future + appendix)",
+          "## 10 Reproducibility and data availability" in v3
+          and "## 11 Future directions" in v3
+          and "## 12 Provenance and limits" in v3
+          and "## Appendix A. Statement inventory and verification summary" in v3)
+    check("P1v3: no status-ledger section in the body",
+          "## 11 Status ledger" not in v3
+          and "## 10 The research architecture" not in v3)
+
+    # 9b. repositioned abstract (external review, accepted finding 1)
+    check("P1v3: repositioned abstract opening",
+          "rest on different mathematical structures, require different forms "
+          "of evidence, and fail in different characteristic ways" in v3
+          and "formalizes these differences as explicit state spaces, proof "
+          "obligations, and failure modes" in v3)
+    check("P1v3: field-attribution opening absent",
+          "Sustainability claims travel badly" not in v3)
+    check("P1v3: concordance sentence is reproducibility infrastructure",
+          "concordance of 409 mappings, provided with the verification "
+          "artifacts to support independent re-execution" in v3)
+    check("P1v3: keywords line present", "**Keywords:**" in v3)
+
+    # 9c. repositioned introduction
+    check("P1v3: compensation principles phrasing",
+          "whose compensation principles are rarely stated as explicit "
+          "mathematics" in v3)
+    check("P1v3: formal vocabulary owns the framework claim",
+          "formalizing as distinct state spaces, proof obligations, and "
+          "failure modes" in v3)
+
+    # 9d. apparatus relocation
+    check("P1v3: no provenance tags in headings",
+          not re.search(r"^#{1,6} .*\[(CC-A0|MS-Native|manuscript-native"
+                        r"|programme infrastructure|artifact)", v3, re.M))
+    check("P1v3: 'row-verified' absent everywhere", "row-verified" not in v3)
+    check("P1v3: 'row_verified' absent from body",
+          "`row_verified`" not in v3.split("## 2 ")[0])
+    check("P1v3: all 21 concordance rows present in Appendix A",
+          all(f"CC-A0{src}-{row:03d}" in v3[v3.index("## Appendix A"):]
+              for src, row in [("02", 1), ("02", 3), ("02", 4), ("02", 5),
+                               ("02", 6), ("02", 19), ("02", 35), ("02", 49),
+                               ("01", 56), ("01", 69), ("01", 77), ("01", 81),
+                               ("01", 82), ("01", 83), ("01", 84), ("03", 6),
+                               ("06", 10), ("12", 9), ("16", 1), ("16", 10),
+                               ("18", 9)]))
+    check("P1v3: MS-Native keys present in Appendix A",
+          all(k in v3[v3.index("## Appendix A"):] for k in
+              ["MS-Native-1", "MS-Native-2", "MS-Native-3", "MS-Native-4",
+               "MS-Native-5", "MS-Native-6", "MS-Native-7", "MS-Native-8",
+               "Infra-1"]))
+    check("P1v3: two-table inventory with legend and disclaimer",
+          "Table A1." in v3 and "Table A2." in v3
+          and "carry no empirical truth-value" in v3
+          and "does not by itself imply applicability to an empirical system" in v3
+          and "provenance keys, not citations" in v3)
+
+    # 9e. research-architecture restructure
+    check("P1v3: concrete reproducibility statement",
+          "exact integer arithmetic at scale 40" in v3
+          and "all 25 checks pass, and re-execution reproduces the outputs "
+          "exactly" in v3
+          and "certification level of this verification is *exact*" in v3)
+    check("P1v3: motivated concordance accounting",
+          "354 have completed statement-level scientific verification across "
+          "nineteen sources" in v3
+          and "adjudicated negative-register entries (28)" in v3
+          and "open rows attached to conditional results (27" in v3)
+    check("P1v3: machine-verification-is-not-content-verification lesson kept",
+          "machine verification of the concordance (quotes, coverage, "
+          "vocabulary) is not content verification" in v3)
+    check("P1v3: non-loss rule stated",
+          "non-loss rule the concordance checks row by row" in v3)
+    check("P1v3: future directions condensed with all nine conjectures",
+          all(n in v3 for n in ["compositional sustainability",
+                                "transformability", "capacity-leading failure",
+                                "bottleneck–robustness",
+                                "boundary-expansion reversal",
+                                "distributional dynamics",
+                                "correlated-disturbance amplification",
+                                "maintenance suppression",
+                                "efficiency–scale interaction"])
+          and "None is executed here" in v3)
+    check("P1v3: preregistration restrictions kept",
+          "no conjecture is rescued by arbitrary post-hoc state augmentation" in v3
+          and "too elastic to falsify" in v3)
+
+    # 9f. publication roadmap and process vocabulary out of the body
+    check("P1v3: no publication roadmap",
+          "assured" not in v3 and "Wave E" not in v3
+          and "five-paper" not in v3)
+    check("P1v3: edition vocabulary confined to the header note",
+          "this edition" not in v3[v3.index("## Abstract"):]
+          and "in this edition" not in v3)
+    check("P1v3: 'flagship manuscript' renamed",
+          "flagship manuscript" not in v3)
+    check("P1v3: 'verified present' process markers reworded",
+          "verified present" not in v3)
+
+    # 9g. the science is preserved verbatim (spot contracts with v2)
+    for probe in [
+        "RPre_k(W) = {(q,x) ∈ S_k : ∃a ∈ A_k(q,x) ∀d ∈ D_k(q,x,a):",
+        "**(1)** `{P_typ} = {x ≥ 1} ∪ {s_1 ≥ 2} ∪ {s_2 ≥ 2}`",
+        "C = R^n_+ \\ {0}",
+        "ρ_1 = (2−s_1)/s_2`, `ρ_2 = s_1/(2−s_2)",
+        "29,791-state grid",
+        "(½, 1/10, 1/10)",
+        "on the cod series the persistence benchmark was not defeated; on "
+        "the aquifer it was beaten at the one-year horizon by the "
+        "univariate AR(1), retained at a 0.39 ft margin as output-only",
+    ]:
+        check(f"P1v3: verbatim preservation :: {probe[:44]}...",
+              probe in v3 and probe in p1)
+
+    # 9h. v2 untouched by the build (the v3 is an addition, not an edit)
+    check("P1v2: still carries its apparatus (untouched)",
+          "## 11 Status ledger" in p1
+          and "row-verified 2026-08-27" in p1)
+
+    # 9i. the decision documents
+    venues = read("research_program/paper_types_and_venues_decision.md")
+    check("venue decision memo present with the full routing table",
+          "## 4. Venue decisions" in venues
+          and "Environmental Modelling & Software" in venues
+          and "Set-Valued and Variational Analysis" in venues
+          and "ICES Journal of Marine Science" in venues
+          and "Journal of Water Resources Planning and Management" in venues
+          and "Communications in Nonlinear Science" in venues
+          and "Groundwater" in venues)
+    check("venue memo: paper-type decisions recorded",
+          "Theory/methods article" in venues
+          and "Mathematics article" in venues
+          and "two-layer edition architecture" in venues.lower())
+    deep = read("DEEP_SCAN_RESIDUAL_POINTS.md")
+    check("deep-scan record present with dispositions",
+          "Deep Scan of Residual Audit Points" in deep
+          and "Implemented this session" in deep
+          and "Declined or out of scope" in deep
+          and "interval Krawczyk" in deep)
 
     print("-" * 64)
     print(f"{N - FAIL}/{N} checks pass")
