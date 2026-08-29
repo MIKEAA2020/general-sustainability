@@ -101,6 +101,11 @@ NEW_FILES = {
     "wave_e_edwards/manuscript/fig5_fibre.png": None,
     "external_review_packet/README_v2.md": None,
     "BATCH5_JOINT_AUDIT_EVALUATION.md": None,
+    # residual-pass files (2026-08-29, second session)
+    "wave_e_edwards/SPECIFICATION_v2.md": None,
+    "wave_e_cod/SPECIFICATION_v2.md": None,
+    "build_revised_sustainability_manuscript_v1_1.py": None,
+    "revised_sustainability_manuscript_v1.1.docx": None,
 }
 # Pin file: written by the first run of this script (or maintained alongside
 # it) — reaudit/batch5_edition_pins.json. If absent, it is created and the
@@ -408,6 +413,86 @@ def main():
     ]:
         check(f"mathematical gate vocabulary retained: {f}",
               probe in read(f))
+
+    # ---- 7. Residual pass (2026-08-29, second session) -------------------
+    # 7a. Paper 1 v2 duplication removed
+    check("P1 v2: tuple sentence no longer duplicated",
+          p1.count("A *model* in this programme is a fully specified tuple;") == 1)
+
+    # 7b. G04(a): the normative-authority slot in the flagship Appendix A
+    for f in ["general_theory_of_sustainability_v0.1_corrected.md",
+              "general_theory_of_sustainability_v0.2_comprehensive_corrected.md",
+              "general_theory_of_sustainability_manuscript_corrected.md"]:
+        t = read(f)
+        check(f"G04(a): normative-authority slot in Appendix A: {f}",
+              "- Normative authority \\((\\mathcal N)\\) or procedure used to "
+              "choose social constraints:" in t)
+
+    # 7c. GT-04: the symbol-I overload declared + disambiguated
+    for f in ["general_theory_of_sustainability_v0.1_corrected.md",
+              "general_theory_of_sustainability_v0.2_comprehensive_corrected.md",
+              "general_theory_of_sustainability_manuscript_corrected.md"]:
+        t = read(f)
+        check(f"GT-04: I-overload declared in header: {f}",
+              "triple use of the symbol I" in t)
+        check(f"GT-04: inventory reading disambiguated on the line: {f}",
+              "Here \\(I\\) denotes the produced reserve-inventory stock" in t)
+
+    # 7d. GT-05/GT-06: supersession notes
+    for f in ["general_theory_of_sustainability_v0.1_corrected.md",
+              "general_theory_of_sustainability_v0.2_comprehensive_corrected.md",
+              "general_theory_of_sustainability_manuscript_corrected.md"]:
+        t = read(f)
+        check(f"GT-05/GT-06: registry-resolution supersession note: {f}",
+              "superseded by the successor manuscript's unified constraint "
+              "registry" in t)
+
+    # 7e. F7: the proof-obligations expansion acknowledged
+    mp4 = read("ms_part4_corrected.md")
+    check("F7: six-to-nine obligations expansion acknowledged",
+          "those six are retained" in mp4
+          and "restated here as the *boundary* obligation" in mp4
+          and "composition, transformation, and commons obligations are added" in mp4)
+
+    # 7f. F11: the Appendix B provenance alphabet completed
+    check("F11: provenance alphabet carries the definitional entry",
+          "[P/E/M/N/D/L]" in mp4 and "[P/E/M/N/L]" not in mp4)
+    check("F11: column-alphabet legend present",
+          "Column alphabets (distinct by design)" in mp4)
+
+    # 7g. SPECIFICATION second editions
+    es = read("wave_e_edwards/SPECIFICATION_v2.md")
+    check("Edwards SPEC v2: W03 echo corrected",
+          "T\\approx 13\\) yr" in es and "beyond ~14 yr" not in es
+          and "692.6" in es and "12.7" in es)
+    check("Edwards SPEC v2: edition note present",
+          "Second edition (2026-08-29)" in es)
+    cs = read("wave_e_cod/SPECIFICATION_v2.md")
+    check("cod SPEC v2: W09 echo split by catch pass",
+          "115–196 kt under the coarse catch regime" in cs
+          and "115–206 kt across both catch treatments" in cs)
+    check("cod SPEC v2: edition note present",
+          "Second edition (2026-08-29)" in cs)
+    # the first-edition sheets remain byte-identical (still pinned by the
+    # wave_e spec-match suite; here: unchanged on disk relative to their own
+    # committed content is implied by that suite)
+
+    # 7h. the monograph v1.1 docx
+    try:
+        from docx import Document
+        d11 = Document(str(ROOT / "revised_sustainability_manuscript_v1.1.docx"))
+        full11 = "\n".join(p.text for p in d11.paragraphs)
+        check("monograph v1.1 docx: repaired formula present",
+              "\\tau=(q_0,z_0)\\rightarrow(q_1,z_1)\\rightarrow\\cdots ." in full11)
+        check("monograph v1.1 docx: ten-indicator rationale present",
+              "recovery time indicates weakening restorative dynamics" in full11)
+    except ImportError:
+        check("monograph v1.1 docx: python-docx unavailable (skipped)", True)
+
+    # 7i. the addendum
+    ev = read("BATCH5_JOINT_AUDIT_EVALUATION.md")
+    check("evaluation: residual-pass addendum present",
+          "## 6. Residual pass (2026-08-29, second session)" in ev)
 
     print("-" * 64)
     print(f"{N - FAIL}/{N} checks pass")

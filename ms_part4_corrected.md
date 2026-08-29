@@ -1,7 +1,7 @@
 
 # Part VI. Assessment Outputs and Research Programme
 
-*Corrected edition (batch-5, 2026-08-29): the closing boxed formula's five row separators are doubled to valid LaTeX; the Appendix A specification template gains the typed constraint registry slot; the certification-hierarchy and principles-continuity sentences state the two redefinitions and two replacements exactly; the leading-indicator rationale is completed to all ten indicators; the Appendix G claim-ledger template separates Type from Status; the contract-signatures rule carries its citation. Adjudication record: `BATCH5_JOINT_AUDIT_EVALUATION.md`.*
+*Corrected edition (batch-5, 2026-08-29): the closing boxed formula's five row separators are doubled to valid LaTeX; the Appendix A specification template gains the typed constraint registry slot; the certification-hierarchy and principles-continuity sentences state the two redefinitions and two replacements exactly; the leading-indicator rationale is completed to all ten indicators; the Appendix G claim-ledger template separates Type from Status; the contract-signatures rule carries its citation. Completing the edition (batch-5 residual pass, 2026-08-29): the §26 proof-obligations preamble acknowledges the six-to-nine expansion relative to the earlier working manuscript; the Appendix B provenance alphabet is completed to the six-letter claim-support alphabet (the definitional D entry added) with the two column alphabets' distinct roles stated. Adjudication record: `BATCH5_JOINT_AUDIT_EVALUATION.md`.*
 
 ## 24. Output portfolio
 
@@ -82,7 +82,7 @@ Such a certificate is conditional on \(\Omega\), the architecture registry, mode
 
 ## 26. Proof obligations
 
-A rigorous assessment should discharge, to the declared maturity level:
+A rigorous assessment should discharge, to the declared maturity level, the following obligations. Relative to the earlier working manuscript's six obligations (semantic, accounting, dynamic, closure, robustness, legitimacy), those six are retained — the earlier *closure* obligation is restated here as the *boundary* obligation at the same maturity demand — and the composition, transformation, and commons obligations are added by this manuscript's contract, transformation-graph, and commons-allocation material:
 
 1. **Semantic obligation:** constructs and identities are operationally defined.
 2. **Accounting obligation:** stock, flow, burden, and allocation records are consistent.
@@ -454,7 +454,9 @@ World Commission on Environment and Development. (1987). *Our common future*. Ox
 
 | ID | Predicate | Type | Subject | Provenance | Substitutability | Reversibility/criticality | Group/system | Horizon |
 |---|---|---|---|---|---|---|---|---|
-| C1 | [Bound] | P/F/N/R/Epistemic | [State/capacity/etc.] | [P/E/M/N/L] | [Rule] | [Tag] | [Affected party] | [T] |
+| C1 | [Bound] | P/F/N/R/Epistemic | [State/capacity/etc.] | [P/E/M/N/D/L] | [Rule] | [Tag] | [Affected party] | [T] |
+
+Column alphabets (distinct by design): **Type** records the constraint's semantic type — physical (P), functional (F), normative (N), relational (R), or epistemic; **Provenance** records how the claim is supported — physical principle (P), empirical observation (E), model-based derivation (M), normative warrant (N), definitional convention (D), or legal instrument (L) — the same six-letter claim-support alphabet as the Appendix G ledger's Type column, the earlier five-letter provenance placeholder having omitted the definitional (D) entry.
 
 # Appendix C. Boundary-interface register
 

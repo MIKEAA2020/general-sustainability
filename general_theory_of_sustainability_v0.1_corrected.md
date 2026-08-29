@@ -1,6 +1,6 @@
 # Toward a General Theory of Sustainability
 
-*Corrected edition (batch-5, 2026-08-29): the robust-sustainability definition is anchored to the initial state (the committed form described an unanchored trajectory property); the assume–guarantee passage carries its citation. Adjudication record: `BATCH5_JOINT_AUDIT_EVALUATION.md`.*
+*Corrected edition (batch-5, 2026-08-29): the robust-sustainability definition is anchored to the initial state (the committed form described an unanchored trajectory property); the assume–guarantee passage carries its citation. Completing the edition (batch-5 residual pass, 2026-08-29): the specification template's Appendix A carries the normative-authority slot of the Ω tuple; the triple use of the symbol I — identity conditions in Ω (§4.2), material inflows in the stock–flow balances (§4.5), and the produced reserve-inventory stock of the economic module (§11.2, disambiguated on the line there) — is declared here rather than renamed, the overload being inherited from the source and removed by the successor manuscript's registry notation; the dual constraint decomposition K = K_P∩K_F∩K_N (§4.4) against K* = K_x∩K_c∩K_e∩K_d∩K_λ (§4.9), and the Ω tuple's K slot against the augmented K* operator of the viability analysis (§5.2–5.3), are superseded by the successor manuscript's unified constraint registry (ms_part1 §6.1), which resolves both decompositions verbatim and is the controlling form; this edition is archival lineage, not the controlling text. Adjudication record: `BATCH5_JOINT_AUDIT_EVALUATION.md`.*
 ## Robust Viability in Dependency-Closed Ecological, Economic, and Social Systems
 
 **Working manuscript, Version 0.1**  
@@ -571,6 +571,8 @@ Y=F(K,H,L_b),
 \dot I=Y-\sum_gC_g-J_E-J_K-J_G-A-\operatorname{loss}(I).
 \]
 
+Here \(I\) denotes the produced reserve-inventory stock of the economic module — not the identity conditions \(I=\{I_1,\ldots,I_m\}\) of the sustainability tuple (§4.2) and not the material inflows \(I_i\) of the stock–flow balances (§4.5); the symbol overload is inherited from the source, retained for lineage, and removed by the successor manuscript's registry notation.
+
 With distribution shares \(\theta_g\), \(C_g=\theta_gC\), \(\sum_g\theta_g=1\). Constraints include
 
 \[
@@ -886,6 +888,7 @@ World Commission on Environment and Development. (1987). *Our common future*. Ox
 - System:
 - Purpose of assessment:
 - Protected identity/functions:
+- Normative authority \((\mathcal N)\) or procedure used to choose social constraints:
 - Time horizon:
 - Spatial and organizational boundary:
 - Affected populations:
