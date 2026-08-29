@@ -1,1 +1,133 @@
+### 1. Arithmetic Inconsistency in the Concordance Audit (Papers 1, 3, and 5)
+In Section 10.2 of Paper 1 (and identically in the corresponding sections of Papers 3 and 5), the text states:
+> "The **409-row** canonical concordance... has closed **354 rows** across twenty sources... the **27 open rows** that remain are exactly the three conditional-paper sources."
 
+**The Flaw:** This is a blatant arithmetic contradiction.
+*   If there are 409 total rows and 354 are closed, then **55 rows** must remain open ($409 - 354 = 55$).
+*   If only 27 rows remain open, then **382 rows** must be closed ($409 - 27 = 382$).
+*   The sum of the stated figures ($354 + 27 = 381$) leaves exactly **28 rows** of the concordance entirely unaccounted for in the audit trail.
+
+### 2. Inverted Price-Assessor Logic (Paper 1, Section 4.5, Theorem B(6))
+In the analysis of the false-positive set and per-weight plan disagreement, the manuscript correctly derives the condition for the `FAST` action to be aggregate-safe:
+> "the FAST-certifying weights are exactly $\{r = w_2/w_1 \ge \rho_1\}$..."
+
+Here, $r = w_2/w_1$ represents the relative price of capital form $s_2$ to $s_1$. Mathematically, a *large* $r$ corresponds to a *high* relative price for $s_2$.
+
+**The Flaw:** The text immediately concludes:
+> "**Low-$s_2$-price** assessors license `FAST` only; **high-$s_2$-price** assessors license `SLOW` only."
+
+This statement is exactly backwards and directly contradicts the algebraic derivation in the same paragraph. A high $s_2$-price assessor (large $r$) satisfies $r \ge \rho_1$ and thus licenses `FAST` (which violates $s_1$ but keeps $s_2$ constant), whereas a low $s_2$-price assessor (small $r$) satisfies $r \le \rho_2$ and licenses `SLOW` (which violates $s_2$ but keeps $s_1$ constant).
+
+### 3. Missing Sources in the Intake Audit (Paper 1 vs. Paper 2)
+There is a discrepancy regarding the number of sources accounted for in the concordance:
+*   **Paper 2, Section 1.1** states: "The programme's intake audit registered **twenty-six** source manuscripts (A001–A025 plus a versioned...)."
+*   **Paper 1, Section 10.2** states: "has closed 354 rows across **twenty sources**... the 27 open rows that remain are exactly the **three** conditional-paper sources."
+
+**The Flaw:** The closure campaign accounts for only **23 sources** ($20 \text{ closed} + 3 \text{ open}$). This leaves 3 of the 26 registered source manuscripts entirely missing from the concordance row inventory without any declaration that they were excluded or devoid of propositions.
+
+***
+
+**Note on Internal Consistency:**
+Despite these administrative/arithmetic errors, the core mathematical proofs remain robust:
+*   **Paper 1:** The non-commutativity of quantifiers (Section 4.3) and the geometric proof of the false-positive set (Theorem B) are flawless.
+*   **Paper 4:** The interval-certified Hopf crossings (Section 1) and the explicit-Euler numerical instability (Section 7) are mathematically precise and correct.
+*   **Paper 3:** The conservation laws for the primitive-flux ledger (Section 2) and the donor-limited constraints are rigorously defined.
+*   **Paper 5:** The distinction between the rapid-review limit and the discrete sampled map (Section 1) is correctly identified as a finite-horizon consistency statement rather than a stability proof.
+
+The errors identified above are isolated to the "research architecture" metadata and a single instance of inverted verbal description of a correct algebraic result.
+
+### References
+-  (Paper 1, Section 10.2, "The concordance and its closure campaign")
+-  (Paper 1, Section 4.5, Theorem B(6))
+-  (Paper 2, Section 1.1, "The question this paper answers")
+
+---
+one **major conceptual flaw** in the erosion conversion logic of the Edwards intervention paper, alongside a **minor internal inconsistency** in the declared constants.
+
+### 1. Major Mathematical Flaw: Double-Counting of Defect in Certified Kernels
+**Location:** `wave_e_edwards/manuscript/wave_E_edwards_intervention.md`, Sections 3 and 4.3.
+
+The manuscript correctly defines the certified kernel at horizon $T$ as the "nominal kernel" of the elevated threshold $K^* + r_T$, where $r_T = \varepsilon(1-a^T)/(1-a)$ is the erosion bound. However, when calculating the specific numerical boundaries for the certified kernels (e.g., flat-0 at 662.2 ft, flat-80% at 697.8 ft, BAU at 706.7 ft for $T=3$), the author used the **worst-case map** to project the trajectory rather than the **nominal map**.
+
+*   **Mathematical Proof:** For flat-0 under UC-min, the worst-case map (which includes the defect $\varepsilon=15.41$) has an attractor of $647.32$ ft. The text reports the boundary at 662.2 ft. Solving the projection equation $H_3^{wc} = 647.32 + a^3(H_0 - 647.32) \ge 618 + r_3$ (where $r_3 = 35.49$) yields exactly $H_0 = 662.2$.
+*   **The Flaw:** By projecting the worst-case trajectory and requiring it to stay above $K^* + r_T$, the author effectively required the actual trajectory to stay above $K^* + 2r_T$. The "nominal map" (without $\varepsilon$) has an attractor of $708.01$ ft. Using the correct nominal map, any initial state $H_0 \ge K^* + r_3 = 653.49$ ft would remain viable, not $662.2$ ft.
+*   **Consequences:** This double-counting of the defect artificially inflates the certified boundaries. It leads to the false conclusion in Section 4.3 that "every policy in the family has an empty certified kernel beyond $T = 3$ years." In reality, the nominal attractor for flat-0 ($708.0$ ft) is strictly greater than the infinite-horizon eroded threshold ($K^* + r_\infty = 618 + 60.7 = 678.7$ ft). Therefore, the infinite-horizon certified kernel for flat-0 is non-empty ($[678.7, 710]$), which invalidates the restriction in Section 4.4 that reactive rules are only retained "over the $T \le 3$ horizons."
+
+### 2. Minor Internal Inconsistency: Declared BAU Pumping Mean
+**Location:** `wave_e_edwards/manuscript/wave_E_edwards_intervention.md`, Section 2 vs. Section 4.1/4.4.
+
+*   **The Error:** Section 2 explicitly defines the BAU policy as $P \equiv \bar P = 282.2$ (the training mean). However, the attractor calculations in Section 4.1 (e.g., BAU = 615.72 ft) and the supply table in Section 4.4 (BAU = 282.16) precisely match the use of $P = 282.16$.
+*   **Impact:** While mathematically trivial, the text contradicts its own declared constant by 0.04 units, creating a discrepancy between the declared protocol and the computational implementation.
+
+### 3. Verification of Rigor
+The mathematical proofs in the remaining sections were verified to be flawless:
+*   **Cod Expansion Proof:** The calculation in `cod_intervention.md` that the governed surplus map is expansive at the LRP because $F'(K^*) = 1 + r(1-2K^*/K) = 1.153 > 1$ is mathematically exact.
+*   **Cod Max Surplus:** The statement that $g_{max} = rK/4 = 296$ is below the persistent floor is geometrically correct and properly justifies the empty infinite-horizon kernels for the cod model.
+*   **Edwards Forecasting:** The identification of the "wrong sign on pumpage" ($\gamma = +0.021$) in the 1950s drawdown window is a correct identification of spurious correlation due to the short sample size.
+*   **Cod Attractors:** The calculation that $g(K^*) = 172.5$ minus the UC-q10 floor of $114.8$ results in a maximal robust catch of $57.6$ is numerically precise.
+---
+audit of the specified manuscripts (`general_theory_of_sustainability_v0.2_comprehensive.md`, `general_theory_of_sustainability_manuscript.md`, `general_theory_of_sustainability_v0.1.md`, and the four-part series `ms_part{1..4}.md`): the overarching architecture of robust viability, typed constraint registries, and operator-defined transformations is exceptionally rigorous. 
+
+several specific mathematical flaws, logical imprecisions, and internal inconsistencies between the earlier drafts (`v0.2_comprehensive`) and the refined architectural kernel (`ms_part{1..4}`) exist:
+
+### 1. Mathematical Flaw: Existential Quantification in Probabilistic Viability
+**Location:** `general_theory_of_sustainability_v0.2_comprehensive.md` (§5.3) and `ms_part1.md` (§7, Operator I).
+
+The manuscripts correctly define deterministic robust sustainability using a rigorous alternating quantifier structure:
+> "A system is robustly sustainable under $\Omega$ if $\exists \pi \in U \quad \forall w \in W: \quad z^{\pi,w}(t) \in K^* \quad \forall t \in T$."
+
+**The Flaw:** When defining the probabilistic analogue, the text weakens the criterion to:
+> "For probabilistic disturbances, a weaker criterion is $\Pr[z(t) \in K^* \ \forall t \in T] \ge 1 - \varepsilon$."
+
+This is formally incomplete and mathematically flawed. By dropping the existential quantifier ($\exists \pi \in U$) outside the probability measure, the statement fails to define a **viability kernel**. A probability bound on a trajectory is meaningless unless it asserts that *there exists a policy* capable of achieving that bound against the random disturbance $w$. The correct formulation must anchor the policy existence: $\exists \pi \in U : \Pr_w[z^{\pi,w}(t) \in K^* \ \forall t] \ge 1 - \varepsilon$. Without this, the definition describes a property of a specific unstated open-loop trajectory rather than the robust capacity of the control system.
+
+### 2. Definitional Error: "System Viability" vs. "Non-Empty Kernel"
+**Location:** `general_theory_of_sustainability_v0.2_comprehensive.md` (§5.3).
+
+**The Flaw:** The text states: 
+> "A system is robustly sustainable under $\Omega$ if $\exists \pi \in U \dots$"
+
+This definition conflates the **sustainability of the actual system** (which occupies a specific current state $z_0$) with the **non-emptiness of the sustainability kernel** (the set of *all* viable initial states). A system is only robustly sustainable if its *actual current state* $z_0$ belongs to the kernel. If the current state is in the forbidden set $F_{\text{forbid}}$ or outside the kernel, the system is not robustly sustainable, even if the kernel itself is non-empty. 
+
+*(Note: This flaw is explicitly corrected in `ms_part1.md`, which correctly defines the kernel first, and then states: "The focal system is viable within the architecture when $z_0 \in \operatorname{Viab}_{\mathcal{A}_q} \dots$").*
+
+### 3. Logical Contradiction: State-Dependent vs. Absolute Corridors
+**Location:** `general_theory_of_sustainability_v0.2_comprehensive.md` (§5.4) vs. `ms_part1.md` (§7.2).
+
+There is a fundamental contradiction in how the two versions handle local infeasibility within a sustainability corridor defined by lower requirements $a_{\min}(z)$ and upper capacities $a_{\max}(z)$.
+
+*   **v0.2_comprehensive (§5.4):** Asserts that if $a_{\min} > a_{max}$ (dropping the state dependence $(z)$ in the final clause), "no optimization inside the existing architecture can satisfy all constraints. Demand, distribution, efficiency... must change." This falsely concludes that local infeasibility strictly necessitates a structural change (Operator II).
+*   **ms_part1.md (§7.2):** Correctly treats $a_{\min}$ and $a_{\max}$ as functions of the state $z$. It states: "If the inequality fails at the current state, the state is locally infeasible. Architectural transformation is required **only if no admissible within-architecture trajectory** can reach a state with a nonempty corridor before entering a forbidden set." 
+
+**The Flaw:** The `v0.2_comprehensive` text treats constraint bounds as absolute constants, ignoring that within-architecture control (Operator I) can navigate the system from a locally infeasible state to a viable one without requiring architectural transformation.
+
+### 4. Notational Inconsistency: Trajectory Dependence
+**Location:** `general_theory_of_sustainability_v0.2_comprehensive.md` (§5.3).
+
+The deterministic definition explicitly uses the notation $z^{\pi,w}(t)$ to denote the dependence of the state trajectory on the chosen policy $\pi$ and the disturbance $w$. However, the probabilistic criterion immediately following drops the superscripts, writing simply $\Pr[z(t) \in K^* \dots]$. This obscures the functional dependence of the state trajectory on the chosen policy and the realization of the disturbance, creating a notational discontinuity in the formal core.
+
+### 5. Internal Inconsistency: The "Twelve-Step" Algorithm Truncation
+**Location:** `ms_part4.md` (Box 13).
+
+**The Flaw:** The box is titled **"Template — twelve-step diagnostic"**. However, the text lists exactly **nine** steps:
+1. Freeze the specification...
+2. Identify protected functions...
+3. Build the typed constraint...
+4. Identify essential stocks...
+5. Map typed dependencies...
+6. Construct relation-level typed...
+7. Restrict control...
+8. Stress-test...
+9. Estimate c... [cut off at "Estimate current-state viability and robustness margins."]
+
+The title claims twelve steps (mirroring §13.5 of `v0.2_comprehensive`), but the `ms_part4` draft truncates the list at nine steps, leaving an internal structural inconsistency in the diagnostic protocol.
+
+### 6. Traceability Gap: Hypotheses vs. Conjectures vs. Indicators
+**Location:** `general_theory_of_sustainability_v0.2_comprehensive.md` (§14) vs. `ms_part4.md` (§27) vs. The 5-Paper Programme (Paper 1 §10.4).
+
+There is a disjoint in the classification of empirical claims across the documents:
+*   **v0.2_comprehensive** lists 8 specific testable **hypotheses** (H1–H8), such as "Capacity indicators lead outcome failure" and "Kernel loss predicts transformation need."
+*   **ms_part4.md** lists 10 **candidate indicators** (e.g., "declining minimum slack," "contraction of the viability kernel") but does not explicitly state the hypotheses they test.
+*   **Paper 1 (§10.4)** of the broader programme classifies these exact same conceptual constructs as **nine architecture-level empirical conjectures** (e.g., "capacity-leading failure," "transformability").
+
+**The Flaw:** The theoretical manuscripts do not maintain a consistent terminology or mapping for these empirical constructs. A claim is referred to as a "hypothesis" in the general theory, an "indicator" in the assessment output, and a "conjecture" in the programme architecture, creating a traceability gap for falsification tests across the corpus.
