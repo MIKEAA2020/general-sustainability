@@ -184,7 +184,7 @@ def main():
           and "intergenerational and stochastic bounds" in p2
           and "F08, the scalar resource and sink kernels" in p2)
     check("P2: Theorem 6.4 proof supplied",
-          "supplied in this edition" in p2
+          "supplied in this manuscript" in p2
           and "will be supplied at camera-ready" not in p2)
     check("P2: Cond Thm 10.1 preamble restored",
           "y(t) = A(t) - A_{\\min}" in p2.replace("$", "")
@@ -493,6 +493,149 @@ def main():
     ev = read("BATCH5_JOINT_AUDIT_EVALUATION.md")
     check("evaluation: residual-pass addendum present",
           "## 6. Residual pass (2026-08-29, second session)" in ev)
+
+    # ---- 8. Consolidation pass (2026-08-29, third session) --------------
+    # (audit record: FINAL_EDITIONS_CONSOLIDATION_SCAN.md; adjudication:
+    #  BATCH5_JOINT_AUDIT_EVALUATION.md section 7)
+
+    # 8a. Paper 1: canonical-tuple glosses match the A002 source
+    check("P1: tuple letters unchanged",
+          "`S = (T, Z, S_st, B_out, V, Γ, O, A, C, R, D, K, P)`" in p1)
+    check("P1: V gloss = constitutive class (source mapping)",
+          "the class `V` of admissible constitutive laws" in p1
+          and "the service/technology possibility correspondence `Γ`" in p1
+          and "the disturbance class `D` with its declared signal space" in p1)
+    check("P1: shifted glosses absent",
+          "the observation map `Γ`" not in p1
+          and "the solution and horizon declaration `D`" not in p1
+          and "the service possibility correspondence `V`" not in p1)
+    check("P1: atlas cross-reference is the section (no phantom Def 2.3)",
+          "(the atlas's §2.3 states the same tuple)" in p1
+          and "Definition 2.3" not in p1)
+
+    # 8b. Paper 1: uncertainty levels and diagnostic types = source forms
+    check("P1: four uncertainty levels = source forms",
+          "parameter uncertainty within a fixed constitutive model; "
+          "observation and assessment uncertainty; process disturbances "
+          "and boundary forcing; and structural uncertainty over a declared "
+          "model class" in p1)
+    check("P1: diagnostic types = source forms",
+          "throughput excess (a comparison of typed inflow, extraction, "
+          "consumption, or waste rates)" in p1
+          and "service or welfare shortfall" in p1)
+    check("P1: unsourced diagnostic list absent",
+          "conservation check, positivity check, deficit diagnostic" not in p1)
+
+    # 8c. Paper 1: scored-forecast instantiation accurate per system
+    check("P1: per-system persistence record",
+          "on the cod series the persistence benchmark was not defeated; "
+          "on the aquifer it was beaten at the one-year horizon by the "
+          "univariate AR(1), retained at a 0.39 ft margin as output-only" in p1)
+    check("P1: false universal claim absent",
+          "benchmark persistence was not defeated on either system" not in p1)
+
+    # 8d. Paper 1: pointers and enumeration
+    check("P1: lattice fact points to A001 §13.6",
+          "not downward lattice monotonicity [A001 §13.6]" in p1
+          and "[A001 §13.2]" not in p1)
+    check("P1: closed-source enumeration excludes the negative register",
+          "A001–A007, A010–A014, A016–A020, A024, A025" in p1
+          and "A010–A020" not in p1)
+    check("P1: Infra-1 artifact path prefixed",
+          "research_program/paper1_finite_architecture_transformation_theorem.md" in p1)
+
+    # 8e. Paper 2: edition vocabulary out of the body
+    check("P2: body edition vocabulary absent",
+          "supplied in this edition" not in p2
+          and "supplied in the second edition" not in p2
+          and "discharged in this edition" not in p2)
+    check("P2: manuscript-relative forms present",
+          "*Proof (supplied in this manuscript; the source states the theorem "
+          "without proof and the row-closure pass registered the one-step "
+          "obligation, discharged here).*" in p2)
+
+    # 8f. Paper 2: row count and interface-contract name
+    check("P2: eighteen+one rows (no double count)",
+          "Eighteen further rows are carried" in p2
+          and "Nineteen further rows" not in p2)
+    check("P2: cross-module interface contract named",
+          "the cross-module interface contract remains open per row" in p2
+          and "the §8 interface contract" not in p2)
+
+    # 8g. Paper 2: within-paper redundancies condensed
+    check("P2: Remark A.3 main-text instance is a pointer",
+          "the no-summing scope remark is stated in Appendix A.3" in p2
+          and "it does not authorize addition of biomass, money, "
+          "biodiversity indices, and exergy into a conserved scalar. "
+          "(Stated in Appendix A" not in p2)
+    check("P2: Programme 13.3 references §2.6 (no verbatim restatement)",
+          "with the recursive intergenerational criterion of §2.6" in p2
+          and "throughout generation interval $I_g$, and the terminal state "
+          "in a declared continuation set" not in p2)
+    check("P2: Theorem 5.5 scope note condensed",
+          "the feasibility caveat for nonlinear, nonconvex, path-dependent, "
+          "spatial, or irreversible technologies is Remark A.4" in p2)
+
+    # 8h. Papers 3/5: the stale two-paper inventory corrected
+    check("P3: four scored Wave E manuscripts",
+          "the programme's four scored Wave E manuscripts are outside this "
+          "paper's scope" in p3
+          and "two scored-forecast papers exist" not in p3)
+    check("P5: four scored Wave E manuscripts + both anchors",
+          "The programme's four scored Wave E manuscripts are outside this "
+          "paper's scope; they enter as programme context at the cod case "
+          "(§6.3) and in the admission-standard discussion (§9)." in p5
+          and "referenced once" not in p5)
+
+    # 8i. Papers 3/4: identifier-column referent corrected
+    check("P3: table-wide code count",
+          "The table shows 54 concordance codes because two of them" in p3)
+    check("P4: table-wide code count",
+          "The table shows 70 concordance codes because two of them" in p4)
+
+    # 8j. Paper 3: Aubin anchored
+    check("P3: Aubin 1991 anchored at first kernel use",
+          "the viability kernel (Aubin 1991) of the constraint set" in p3)
+
+    # 8k. Paper 5: capitalization consistency
+    check("P5: lowercase northern cod in body",
+          "the test does not fit northern cod" in p5)
+
+    # 8l. E1: changelog vocabulary, spelling, reference order
+    check("E1: companion point, not correction",
+          "(the companion governance paper makes the same point)" in cf
+          and "states the same correction" not in cf)
+    check("E1: preregistered spelling uniform",
+          "pre-registered" not in cf)
+    check("E1: capelin reference in the DFO block",
+          "CSAS Science Advisory Report 2024/050.\n\nMurphy" in cf)
+
+    # 8m. E2: cpm introduced; print-process clause removed
+    check("E2: cpm cascade introduced at the family declaration",
+          "and a cpm cascade (60/30/5/0 kt at" in ci)
+    check("E2: print-process clause absent",
+          "printed at the exact operand values" not in ci)
+
+    # 8n. E4: CPM harmonized; §6/§7 duplication removed
+    check("E4: CPM defined at first use",
+          "a critical-period management (CPM) cascade" in ei)
+    check("E4: no lowercase cpm remains",
+          " cpm " not in ei and "| cpm" not in ei)
+    check("E4: limitations no longer duplicate the availability statement",
+          "A\nverification re-execution of the committed runner in a fresh\n"
+          "environment reproduced both output files byte for byte." not in ei
+          and "a verification re-execution in\na fresh environment "
+          "reproduced both files byte for byte" in ei)
+    check("E4: batch-5 CPM-trigger correction intact",
+          "first-stage CPM trigger" in ei
+          and "deepest CPM trigger" not in ei)
+
+    # 8o. the scan record and the evaluation addendum
+    scan = read("FINAL_EDITIONS_CONSOLIDATION_SCAN.md")
+    check("consolidation scan record present",
+          "Final Editions Consolidation Scan" in scan)
+    check("evaluation: consolidation-pass addendum present",
+          "## 7. Final-editions consolidation pass (2026-08-29, third session)" in ev)
 
     print("-" * 64)
     print(f"{N - FAIL}/{N} checks pass")

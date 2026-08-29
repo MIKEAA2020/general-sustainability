@@ -37,7 +37,7 @@ removals, the declared implementable use post-1992); flat caps
 $\rho\cdot 240$ kt with $\rho\in\{1.0, 0.75, 0.5, 0.25, 0.0\}$
 (240, 180, 120, 60, 0 kt; every member is scored); S1, the DFO-2009
 critical-zone rule (DFO 2009) at a declared 60 kt
-cap (60 above the LRP, 0 below); and a cascade (60/30/5/0 kt at
+cap (60 above the LRP, 0 below); and a cpm cascade (60/30/5/0 kt at
 LRP/0.75LRP/0.5LRP/below — sub-LRP stages declared [N]).
 
 ## 2. Results
@@ -85,7 +85,7 @@ verdict.
 
 The maximal robust flat catch — the largest constant catch whose worst-case
 low equilibrium stays at or below the LRP — is **57.6 kt** under UC-q10
-(24% of the pre-1992 240 kt level; $g(K^*) - |e_{q10}| = 172.47 - 114.85 = 57.62$, printed at the exact operand values).
+(24% of the pre-1992 240 kt level; $g(K^*) - |e_{q10}| = 172.47 - 114.85 = 57.62$).
 Under UC-q05/UC-min it is zero: no positive catch is robust. This is
 certification geometry at one declared shock class, not a harvest rule.
 

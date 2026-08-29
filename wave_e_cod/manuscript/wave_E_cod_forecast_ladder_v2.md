@@ -69,7 +69,7 @@ a(S_t)=
 \end{cases}
 \]
 
-The factor is a multiplicative depensation term, not a parameter switch: setting $\mathfrak s=0$ gives $a(S_t)=S_t/K$ (a cubic modification of the logistic surplus), not the Schaefer law — the Schaefer model is the separate member of the family in which the factor is replaced by $1$ (the companion governance paper states the same correction).
+The factor is a multiplicative depensation term, not a parameter switch: setting $\mathfrak s=0$ gives $a(S_t)=S_t/K$ (a cubic modification of the logistic surplus), not the Schaefer law — the Schaefer model is the separate member of the family in which the factor is replaced by $1$ (the companion governance paper makes the same point).
 
 **Table 2.** Model ladder.
 
@@ -245,7 +245,7 @@ The 2016 LRP is the 1980s mean SSB. Slack to that bound is near zero by construc
 
 The moratorium is a change in implementable catch and is already in $C_t$. A separate delay switch does not add a degree of freedom beyond stock-flow. Whether the 1992 architecture has an empty viability kernel (H8) is a viability statement, not a one-year RMSE statement.
 
-One-dimensional surplus production is not NCAM: age structure, migration, and survey catchability are omitted. The test is whether this ladder is retained under the preregistered score, not whether the assessment is a good filter. M4 is a delay, not a Kalman filter. Recreational catch remains incompletely measured. Sample sizes are small ($n=33$ years on $\Omega_{2016}$; rolling $n=25$ at $h=1$ and $n=21$ at $h=5$). They suffice to rank models and do not suffice to certify a small skill difference. Repeating the ladder under the 2023 40% $B_{\mathrm{MSY}}$ LRP requires the xteNCAM series and a new admission row. The evaluation windows and scoring rules were fixed in the analysis scripts before execution; the design is a fixed computational protocol rather than a prospective clinical-style registration. Unlike the Edwards side, whose protocol files are dated and locked before scoring, the cod side carries no dated pre-score protocol file: the passes evolved (primary, annual-landings, survey-start, capelin, $\Omega_{\mathrm{xte}}$) with each extension declared in the manuscript rather than pre-registered — the specification sheet's recorded freeze-discipline caveat, restated here so the two papers' evidentiary asymmetry is visible.
+One-dimensional surplus production is not NCAM: age structure, migration, and survey catchability are omitted. The test is whether this ladder is retained under the preregistered score, not whether the assessment is a good filter. M4 is a delay, not a Kalman filter. Recreational catch remains incompletely measured. Sample sizes are small ($n=33$ years on $\Omega_{2016}$; rolling $n=25$ at $h=1$ and $n=21$ at $h=5$). They suffice to rank models and do not suffice to certify a small skill difference. Repeating the ladder under the 2023 40% $B_{\mathrm{MSY}}$ LRP requires the xteNCAM series and a new admission row. The evaluation windows and scoring rules were fixed in the analysis scripts before execution; the design is a fixed computational protocol rather than a prospective clinical-style registration. Unlike the Edwards side, whose protocol files are dated and locked before scoring, the cod side carries no dated pre-score protocol file: the passes evolved (primary, annual-landings, survey-start, capelin, $\Omega_{\mathrm{xte}}$) with each extension declared in the manuscript rather than preregistered — the specification sheet's recorded freeze-discipline caveat, restated here so the two papers' evidentiary asymmetry is visible.
 
 The scores do not transfer an interval-verified linear template (E5 is a linear $(S,K)$ template, not this SSB series), do not instantiate a closed-loop information filter (R02, listed as the next typed addition), and do not mix the two assessment specifications. In programme terms: A012's delay is instantiated here only as a one-year information delay, not as an RFDE; A016 community margins are not used (the CSD extract is unarchived). No programme result is treated as established without specification matching and independent verification.
 
@@ -285,6 +285,8 @@ DFO. 2016. Stock Assessment of Northern cod (NAFO Divs. 2J3KL) in 2016. CSAS Sci
 
 DFO. 2024. NAFO Divisions 2J3KL Northern Cod stock assessment to 2024. CSAS Science Advisory Report 2024/049.
 
+DFO. 2024. Assessment of capelin in NAFO Divisions 2J3KL. CSAS Science Advisory Report 2024/050.
+
 Murphy, H. M., Adamack, A. T., Lewis, R. S., and Bourne, C. M. 2025. Assessment of capelin in NAFO Divisions 2J+3KL to 2023. CSAS Research Document 2025/022.
 
 Northwest Atlantic Fisheries Centre. 2025. 2J3KL cod and capelin biomass indices. Zenodo. <https://doi.org/10.5281/zenodo.17515115>
@@ -292,5 +294,3 @@ Northwest Atlantic Fisheries Centre. 2025. 2J3KL cod and capelin biomass indices
 Regular, P. M., et al. 2025. Assessment of the Northern Cod stock in NAFO Divisions 2J3KL in 2024. CSAS Research Document 2025/048.
 
 Schijns, R., et al. 2021. Five centuries of cod catches in Eastern Canada. *ICES Journal of Marine Science* 78: 2675–2683.
-
-DFO. 2024. Assessment of capelin in NAFO Divisions 2J3KL. CSAS Science Advisory Report 2024/050.

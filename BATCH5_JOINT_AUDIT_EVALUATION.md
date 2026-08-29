@@ -251,3 +251,70 @@ Four adjudication rows had claimed implementations that were absent from the cor
 
 - **G13 (orthography)** and the full archival symbol renames — venue-format pass (justification unchanged).
 - **The PROOF_MANIFEST Part VI re-pin** to the v2 editions — awaits the owner's acceptance of the second editions (unchanged gate). The pins of the edited corrected editions and the new files of this residual pass are updated in `reaudit/batch5_edition_pins.json`, and `verify_batch5_editions.py` carries the residual-pass checks.
+
+---
+
+## 7. Final-editions consolidation pass (2026-08-29, third session): remnant, redundancy, terminology, cross-paper-consistency, and overlap audit of the nine final papers
+
+Scope: the nine second editions (Papers 1–5 `manuscript_v2.md`; the four Wave E `*_v2.md`). Method: three independent full reads of all nine papers, scripted remnant-vocabulary scans, within-paper duplication scans, pairwise 12-gram overlap scans across all nine papers, and verification of every load-bearing finding against the source articles, the concordance rows, and the sibling papers before acceptance. The full audit record, including the rejected findings and the venue-pass register, is `FINAL_EDITIONS_CONSOLIDATION_SCAN.md`; this section is the adjudication record for the changes it produced.
+
+### 7.1 Findings accepted and implemented
+
+**Paper 1 (same-row and cross-paper consistency):**
+
+- **P1-C1 (§2.2, CC-A002-003).** The canonical-tuple glosses were shifted one slot against the A002 source and the atlas: `V` carried Γ's gloss (service possibility), `Γ` carried the observation gloss, `O` the assessment gloss, `A` the command gloss, `C` the deployment/reset gloss, `R` the disturbance gloss, and `D` a "solution and horizon declaration" found in no committed source. The batch-5 reconciliation (§2, P1-02/F08: "§2.2 replaced by the source's 13-tuple with slot names, matching Paper 2 Def 2.3") had been implemented at letter level only. Corrected to the source mapping: `V` the class of admissible constitutive laws (declared flux and boundary-rate pairs); `Γ` the service/technology possibility correspondence; `O` the observation operator; `A` the assessment operator; `C` the command architecture; `R` the deployment/reset architecture; `D` the disturbance class with its declared signal space. The cross-reference restated as the atlas's §2.3 (the atlas carries no statement numbered Definition 2.3), and the edition note's label corrected with it. No slot count, letter, status, or ledger row changed.
+- **P1-C2 (§2.3, CC-A002-004).** The four uncertainty levels now carry the source's levels (parameter uncertainty within a fixed constitutive model; observation and assessment uncertainty; process disturbances and boundary forcing; structural uncertainty over a declared model class) in place of the divergent compressed list; the quantifier-discipline commentary is unchanged.
+- **P1-C3 (§2.4, CC-A002-005).** The five diagnostic types now carry the source's types (throughput excess; stock drawdown; threshold proximity; resilience loss; service or welfare shortfall) — the previous list (conservation check, positivity check, deficit diagnostic, first-passage diagnostic, horizon diagnostic) appears in no committed source and contradicted the atlas's §2.5 rendering of the same row. The no-transfer commentary sentences are unchanged.
+- **P1-C4 (§9.1).** "Benchmark persistence was not defeated on either system" was false for the Edwards ladder — its own retention table retains the univariate AR(1) at 12.84 < 13.23 ft (margin 0.39 ft, output-only) and records four causal variants beating persistence at the one-year horizon, all declined on class grounds — and "the one numerical advantage for a causal module" undercounted those variants. The sentence now states each system's record exactly.
+- **P1-C5 (§6.1).** The viable-selector/lattice-monotonicity fact's source pointer corrected: A001 §13.2 → §13.6 (institutional equivalence → constructors and the implementation lattice, where the fact and its proof live).
+- **P1-C6 (§10.2).** The closed-sources enumeration "A010–A020" included A015, which the same sentence places in the negative register — twenty sources enumerated for the stated nineteen. Corrected to A010–A014, A016–A020 (19 = 7+5+5+2).
+- **P1-C7 (§10.3 ledger, Infra-1).** The artifact path now carries the `research_program/` prefix, as every other artifact path in the paper does.
+
+**Paper 2:**
+
+- **P2-C1–C3.** Three body instances of edition/changelog vocabulary — the Theorem 6.4 proof tag "supplied in this edition", ledger row 24's "supplied in the second edition", and §15's "discharged in this edition" — reworded to manuscript-relative forms ("supplied in this manuscript", "discharged here"). The header edition note remains the only edition-vocabulary carrier, as designed.
+- **P2-C4 (§1.2).** "Nineteen further rows … together with one further row from the already-closed primary source A002 (row 89)" double-counted (reads 19+1 = 20 against §14's rows 71–89 = 19). Corrected to "Eighteen further rows … together with one further row".
+- **P2-C5 (§14).** "the §8 interface contract" → "the cross-module interface contract" (in-paper §8 is the sampled-kernel family; "cross-module interface contract" is the name used by Papers 3 and 4 and the concordance rows).
+- **P2-C6–C8 (within-paper redundancy).** The main-text Remark A.3 instance reduced to a one-clause pointer (the remark is stated verbatim in Appendix A.3, and the main-text copy said so); Programme 13.3's parenthetical restatement of §2.6's intergenerational recursive criterion replaced by the §2.6 reference (the source's programme row itself carries only the short reference); Theorem 5.5's scope note no longer restates Appendix A.4's two sentences verbatim.
+
+**Paper 3:**
+
+- **P3-C1 (§1.5).** The stale count "two scored-forecast papers exist in the programme" corrected to the four scored Wave E manuscripts (the inventory corrected in Papers 1 and 5 by batch 5; this instance was missed).
+- **P3-C2 (§10).** "The table's identifier column shows 54 codes" — the two extra codes sit inside destination cells of other rows, not in the identifier column (which shows the 52 retained). Restated as "The table shows 54 concordance codes".
+- **P3-C3 (§2.4).** The Aubin (1991) entry now anchored at the viability kernel's first use (it was the one reference-list entry with no in-text hook).
+
+**Paper 4:**
+
+- **P4-C1 (§11).** The same identifier-column construction corrected: "The table shows 70 concordance codes" (the two cross-reference codes sit inside the seam-restatement records and the MS-Native evidence cells).
+
+**Paper 5:**
+
+- **P5-C1 (§1.5).** The stale two-paper count and the now-false "referenced once, … at the cod case (§6.3)" corrected: the four scored Wave E manuscripts, entering as programme context at §6.3 and in §9's admission-standard discussion.
+- **P5-C2 (§6.4).** The lone capitalized "Northern cod" lowercased to the paper's dominant form.
+
+**Wave E:**
+
+- **E1-C1 (§3).** "(the companion governance paper states the same correction)" — changelog vocabulary in scientific prose; now "makes the same point".
+- **E1-C2 (§6).** The single hyphenated "pre-registered" normalized to the papers' uniform "preregistered".
+- **E1-C3 (References).** The capelin entry (DFO 2024, CSAS SAR 2024/050) reordered into the DFO block; it had followed Schijns, breaking the alphabetical list.
+- **E2-C1 (§1).** The cascade policy introduced as "a cpm cascade" at its declaration — the results tables, the retention discussion, and the frozen protocol's policy table all use the cpm label, which previously entered the paper undefined.
+- **E2-C2 (§2.3).** The print-process clause "printed at the exact operand values" removed; the displayed arithmetic is self-explanatory.
+- **E4-C1.** CPM harmonized: defined at first use in the abstract ("a critical-period management (CPM) cascade") and the ten lowercase "cpm" instances capitalized — the paper's own prose, its SPECIFICATION, and the Authority's vocabulary all use CPM.
+- **E4-C2 (§6).** The duplicated re-execution sentence removed from Limitations; its home is §7's availability statement, which retains it.
+
+### 7.2 Findings rejected after verification
+
+- **"A001 §12.3, Definition 12.2 is a wrong pointer"** (deep-read finding): rejected. A001 §12.3 contains Definition 12.2 (Safe aggregate-harvest capacity) — exactly the tangent-requirement definition the sentence cites; the deep reader had asserted that only Theorem 12.2 exists in §12.3. The pointer stands.
+- **"cpm should be capitalized in the cod intervention paper"**: rejected as a defect class. `cpm` is the frozen cod protocol's own policy label (`wave_e_cod/protocol_intervention.md`, policy table), distinct from the Edwards CPM (Critical Period Management, the Authority's programme). Each paper is now internally consistent on its own system's label — cod: cpm; Edwards: CPM, defined at first use.
+
+### 7.3 Cross-paper overlap audit (the duplication / self-plagiarism question)
+
+Pairwise 12-gram overlap across the nine final papers runs 0.01–1.55% per pair and decomposes into five classes: (i) shared bibliography entries (legitimate); (ii) the designed companion-layer apparatus — the series header, the provenance paragraph, the claim-status preamble (~150–250 words per paper, identical by design as the claim-status discipline's carrier); (iii) bidirectionally attributed theorem restatements between the atlas and the application papers (canonical form in Paper 2 ↔ named instantiation in Papers 3/4, each carrying its CC identifier and both sides declaring ownership); (iv) the sibling Wave E pairs' shared protocol sentences (the E1↔E3 opening rationale and the E2↔E4 abstract architecture sentence), each attributed to the same frozen protocol and to the companion papers; (v) data/code availability boilerplate. No result, proof, discussion, or conclusion text is duplicated across papers without attribution. Verdict: **no self-plagiarism in the substantive sense**; classes (ii) and (iv) are registered for the venue pass (shared apparatus should cite the programme's canonical carrier or be varied; the E-pair shared sentences should cite the companions explicitly).
+
+### 7.4 Cross-citation audit (how the papers lend to each other)
+
+The citation fabric between the papers is already substantive and bidirectional: every application paper's §1.5 declares the ownership boundaries (Paper 1 the architecture; Paper 2 the atlas; Paper 3 the ledgers; Paper 4 the named systems; Paper 5 the identification layer); the atlas↔application restatements attribute in both directions; the atlas carries primary-destination notes for the rows whose consumers are the siblings; the Wave E papers declare their shared objects and companions. The Minimal-Working-Realization principle — no paper depends on a sibling for a locally load-bearing definition — is the architecture's designed discipline against decorative citation. The one genuine gap is registered rather than implemented: the Wave E papers cite the programme's sources by internal identifier (`general theory §15`, `R03`, `R04`, `A014`), which is the honest form while the sibling papers are unpublished; at publication those anchors must resolve to Paper 1 §9.2 (the admission discipline) and Paper 5 §9 (the scored-forecast methodology), and the E-pair shared sentences should cite the companion papers. Adding those citations now, to unpublished files, would be exactly the decorative citation the architecture forbids. The full dependency map is `FINAL_EDITIONS_CONSOLIDATION_SCAN.md` §5.
+
+### 7.5 What this pass did not change
+
+No theorem, proof, number, claim status, ledger row, CC-identifier set, scored verdict, retention decision, or first-edition file is changed by this pass. The full standing battery was re-run at the documented baseline after the edition pins were refreshed (`reaudit/batch5_edition_pins.json`), and `verify_batch5_editions.py` carries the consolidation-pass checks (§8a–8n).

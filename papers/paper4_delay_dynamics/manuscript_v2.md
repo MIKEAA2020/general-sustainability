@@ -674,7 +674,7 @@ $387$ unknowns and equations; a validated Krawczyk or interval-Newton inclusion 
 
 ## 11 Status ledger
 
-Every retained row of this manuscript, with claim status, evidence status, and location. All 68 concordance rows are `row_verified` (dated scientific closure passes, 2026-08-27/28) — content-level acceptance; no theorem status is promoted; the cross-module interface contract remains open per row. Manuscript-native rows are marked as restatements or local content. The identifier column shows 70 codes because two of them (CC-A018-004, CC-A019-004) appear only as cross-citation pointers inside the seam-restatement records of §9 — cross-references owned by Paper 3, not retained rows; the retained count is 68.
+Every retained row of this manuscript, with claim status, evidence status, and location. All 68 concordance rows are `row_verified` (dated scientific closure passes, 2026-08-27/28) — content-level acceptance; no theorem status is promoted; the cross-module interface contract remains open per row. Manuscript-native rows are marked as restatements or local content. The table shows 70 concordance codes because two of them (CC-A018-004, CC-A019-004) appear only as cross-citation pointers inside the seam-restatement records of §9 — cross-references owned by Paper 3, not retained rows; the retained count is 68.
 
 | ID | statement | status | evidence | location |
 |---|---|---|---|---|

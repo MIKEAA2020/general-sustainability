@@ -20,7 +20,7 @@ and retention number is unchanged except as listed.*
 
 ## Abstract
 
-The general theory's §15 requires intervention selection to be scored, not asserted: a governance module is kept only if it improves a preregistered protection-and-supply outcome. This paper runs that test on the San Antonio Pool of the Edwards Aquifer at the J-17 index well: robust viability kernels of declared safe sets for a declared pumping-policy family, under persistent drought-floor recharge classes, with an erosion conversion applied in the contraction form the fitted one-pool affine map admits. The affine map is fitted by ordinary least squares on 1934–1990 and audited out of sample on 1991–2023; the governance family comprises business-as-usual pumping, flat caps, a Stage-I reactive rule, and a critical-period cascade. **Results.** (1) *Physical threshold (618 ft, Comal cessation proximity):* under a perpetual drought-of-record floor, business-as-usual is not robustly viable (its nominal kernel empties beyond $T\approx13$ years), every flat cut of 10% or deeper — and the two reactive rules — makes the whole declared safe set robustly invariant, and the smallest flat cut securing the threshold is 7.2% of mean pumping. (2) *Institutional threshold (660 ft, post-2007 Stage I):* a negative certificate — every declared policy's robust kernel equals business-as-usual's at every horizon, because the viable region lies strictly above the first trigger level; the institutional threshold is protected by wet years, not by the declared pumping family. (3) *Certified layer:* with the training-defect erosion applied, every demand-management policy's certified kernel is empty beyond $T=3$ years (zero pumping retains one through $T=4$ under the drought-of-record floor and $T=5$ under the milder floors) — the binding constraint on certified intervention claims is the model defect, not the governance. (4) *Positive selection:* the reactive rules are retained — the Stage-I rule matches the flat caps' robust invariance at 3.3–16.2% more permitted supply, and the cascade matches the deepest cut's protection at 50.6% more. A 1950s open-loop replay records the map's drought bias (8.1 ft, high) without correction. The paper's deliverable is the scored comparison on one measured system; no two-pool, karst, or solute claim is made.
+The general theory's §15 requires intervention selection to be scored, not asserted: a governance module is kept only if it improves a preregistered protection-and-supply outcome. This paper runs that test on the San Antonio Pool of the Edwards Aquifer at the J-17 index well: robust viability kernels of declared safe sets for a declared pumping-policy family, under persistent drought-floor recharge classes, with an erosion conversion applied in the contraction form the fitted one-pool affine map admits. The affine map is fitted by ordinary least squares on 1934–1990 and audited out of sample on 1991–2023; the governance family comprises business-as-usual pumping, flat caps, a Stage-I reactive rule, and a critical-period management (CPM) cascade. **Results.** (1) *Physical threshold (618 ft, Comal cessation proximity):* under a perpetual drought-of-record floor, business-as-usual is not robustly viable (its nominal kernel empties beyond $T\approx13$ years), every flat cut of 10% or deeper — and the two reactive rules — makes the whole declared safe set robustly invariant, and the smallest flat cut securing the threshold is 7.2% of mean pumping. (2) *Institutional threshold (660 ft, post-2007 Stage I):* a negative certificate — every declared policy's robust kernel equals business-as-usual's at every horizon, because the viable region lies strictly above the first trigger level; the institutional threshold is protected by wet years, not by the declared pumping family. (3) *Certified layer:* with the training-defect erosion applied, every demand-management policy's certified kernel is empty beyond $T=3$ years (zero pumping retains one through $T=4$ under the drought-of-record floor and $T=5$ under the milder floors) — the binding constraint on certified intervention claims is the model defect, not the governance. (4) *Positive selection:* the reactive rules are retained — the Stage-I rule matches the flat caps' robust invariance at 3.3–16.2% more permitted supply, and the cascade matches the deepest cut's protection at 50.6% more. A 1950s open-loop replay records the map's drought bias (8.1 ft, high) without correction. The paper's deliverable is the scored comparison on one measured system; no two-pool, karst, or solute claim is made.
 
 ## 1. Question
 
@@ -97,7 +97,7 @@ The worst-case (UC floor) attractor of the closed loop, by policy:
 | flat-80% | 622.04 | 631.63 | 632.61 |
 | S1 (reactive 20% < 660) | 622.04 | 631.63 | 632.61 |
 | flat-70% | 625.20 | 634.79 | 635.77 |
-| cpm cascade | 628.36 | 636.37 | 637.35 |
+| CPM cascade | 628.36 | 636.37 | 637.35 |
 | flat-60% | 628.36 | 637.95 | 638.93 |
 | flat-50% | 631.52 | 641.11 | 642.09 |
 | flat-0 (zero pumping) | 647.32 | 656.91 | 657.90 |
@@ -115,7 +115,7 @@ beyond \(T \approx 13\) years — the \(T=12\) boundary is 692.6 ft and the
 \(T=13\) kernel is empty (the continuous crossover is 12.7 under the same
 convention used for the zero-pumping horizons below) — BAU is not robustly
 viable against a perpetual drought-of-record. Every cut policy in the family (a 10% flat
-cap, S1, cpm, and deeper) makes \([618, 710]\) **robustly invariant**:
+cap, S1, CPM, and deeper) makes \([618, 710]\) **robustly invariant**:
 the whole declared safe set is the kernel at every horizon, including the
 infinite horizon. Under UC-q05/q10 the safe set is already invariant at
 BAU (attractors 625.3 / 626.3 ft): governance differentiates the kernel
@@ -149,7 +149,7 @@ archived \(T=\infty\) emptiness is consistent with the analytic boundary
 exceeding the domain top at \(T=5\)) and through \(T = 5\) under
 UC-q05/q10 (physical threshold only). The certified
 boundaries at T=3 / UC-min / 618 ft: flat-0 662.2 < flat-80 697.8 <
-BAU = S1 = cpm 706.7. The binding constraint on certified intervention
+BAU = S1 = CPM 706.7. The binding constraint on certified intervention
 claims is the **model defect, not the governance** — the information-layer
 limitation identified by the prediction leg, here measured on the
 intervention leg.
@@ -165,11 +165,11 @@ Mean prescribed pumping (actual-head replay, 1934–1990):
 | flat-80% | 225.73 | 100% |
 | flat-70% | 197.51 | 100% |
 | **S1** | **262.36** | 35.1% |
-| **cpm** | **254.93** | 35.1% |
+| **CPM** | **254.93** | 35.1% |
 | flat-60% | 169.29 | 100% |
 | flat-50% | 141.08 | 100% |
 
-Out-of-sample replay (1991--2023, audit only): S1 264.5 and cpm 260.6
+Out-of-sample replay (1991--2023, audit only): S1 264.5 and CPM 260.6
 \(10^3\) acre-ft yr\(^{-1}\); every flat policy prescribes its cap
 throughout, so the training and out-of-sample supplies coincide.
 
@@ -182,11 +182,11 @@ more water than the most protective flat cap with matched protection.
   yr\(^{-1}\), +3.3%**) and flat-80%'s 225.7 (+36.6, +16.2%). The
   reactive architecture justifies its additional structure: the same
   protection at strictly more permitted supply.
-- **cpm: RETAINED (nominal, same threshold and class).** Attractor 628.4 (equal to
+- **CPM: RETAINED (nominal, same threshold and class).** Attractor 628.4 (equal to
   flat-60%'s) at supply 254.9 vs flat-60%'s 169.3 (+50.6%).
-- **Certified level:** S1 and cpm remain retained against their
+- **Certified level:** S1 and CPM remain retained against their
   dominating flat caps (S1 vs flat-80: +36.6 supply at every certified
-  horizon; cpm vs flat-60: +85.6), but only over the \(T \le 3\)
+  horizon; CPM vs flat-60: +85.6), but only over the \(T \le 3\)
   horizons where their certified kernels are nonempty.
 - **Under the institutional threshold: nothing retained** (all policies ≡ BAU).
 
@@ -194,7 +194,7 @@ more water than the most protective flat cap with matched protection.
 
 T=5 nominal kernel (UC-min, 618 ft): BAU excludes exactly one actual year
 from its viable set — **1956**, the drought-of-record year (623.15 ft
-annual mean). S1 and cpm exclude none: the entire 90-year actual record
+annual mean). S1 and CPM exclude none: the entire 90-year actual record
 is robustly 5-year viable under the cut rules. The T=5 **certified**
 kernels are empty, so no actual year is certified 5-year viable under any
 policy; this is the boundary of the certified analysis.
@@ -203,7 +203,7 @@ policy; this is the boundary of the certified analysis.
 1951–1956): the affine map under-predicts the drought decline — model
 659.5 → 631.3 vs actual 659.5 → 623.2, max error 8.1 ft, biased high.
 The 1950s model-based policy replays (from the observed 1950 head) keep
-all policies above 618 ft (BAU min 629.7, S1 634.9, cpm 637.1), but the
+all policies above 618 ft (BAU min 629.7, S1 634.9, CPM 637.1), but the
 open-loop bias means the true margins are smaller than the replay
 suggests; this is recorded, and no correction is applied.
 
@@ -231,9 +231,7 @@ averages, so the annual-mean rule is a coarse relative of the real
 institution. Stage II–IV reductions are declared scenarios, not verified.
 San Antonio + Uvalde are lumped (inherited defect). Observation error is
 not separated from model defect. The UC floors are certification
-geometry, not forecasts; the 1950s replay is biased high by 8.1 ft. A
-verification re-execution of the committed runner in a fresh
-environment reproduced both output files byte for byte.
+geometry, not forecasts; the 1950s replay is biased high by 8.1 ft.
 Nothing in this leg promotes or demotes any forecast module, and no
 two-pool, karst, or solute claim is made.
 
