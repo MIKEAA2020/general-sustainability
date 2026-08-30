@@ -1,0 +1,2084 @@
+# Overall assessment
+
+The manuscript has a valuable methodological premise: review cadence should be represented by the operator institutions actually implement, rather than automatically replaced by a continuous delay. It also shows commendable caution about causal interpretation, numerical bifurcation labels, controller sign, and retrospective spectral evidence.
+
+At present, however, the paper is not mathematically or empirically closed. Its central difficulties are deeper than missing computational appendices:
+
+1. **The review-event timing is internally inconsistent.**
+2. **The stage-structured map, continuous-delay comparator, parameter sets, and linearised review operators are not defined.**
+3. **The claimed architecture comparison changes ecology, state dimension, controller implementation, and parameterisation simultaneously, so it does not isolate “operator substitution.”**
+4. **The rapid-review claim is overstated: finite-horizon consistency alone proves no stability, but consistent sampled-data approximations of a hyperbolically stable continuous equilibrium generally are stable for sufficiently small sampling periods under additional hypotheses.**
+5. **The \(47.54\)-yr result is called a Neimark–Sacker threshold without the required spectral and nonlinear calculations, and may largely be an explicit-Euler controller artifact.**
+6. **The spectral analysis conflates FDR and familywise control, does not fully define its statistic or null calibration, and is not reproducible from the manuscript.**
+7. **The northern cod phase-line obstruction does not “apply directly” because the assessment series is not an exact scalar state trajectory and removals were not fixed.**
+8. **The “two-window split” is framed as a positive result, but one of the two formulations is explicitly unreproduced and neither formulation establishes the claimed non-recovery conclusion.**
+9. **Many reported numerical results are described as exploratory and unavailable, yet are still used to support substantive conclusions in the abstract, Results, Discussion, and title.**
+
+The paper can become strong, but it needs to be reorganised around a fully specified operator comparison and a more modest empirical claim.
+
+---
+
+# I. Critical internal inconsistencies
+
+## 1. The review timing is not well defined
+
+The model states:
+
+\[
+E_n \text{ is held on }[t_n,t_{n+1}),
+\]
+
+and
+
+\[
+E^{\rm cmd}_{n+1}
+=
+\Pi_{[0,E_{\max}]}
+\left\{
+E_n+T_rF_B(E_n,\widehat Z_n)
+\right\}.
+\tag{4}
+\]
+
+Section 2.2 then says:
+
+> “The deterministic record fixes a one-step flow-then-update convention: \(E_n\) is held on \([t_n,t_{n+1})\) and the assessment indexed by \(n\) defines the next command.”
+
+This creates at least three incompatible interpretations.
+
+### Interpretation A: assessment and update at \(t_n\)
+
+At \(t_n\), \(\widehat Z_n\) is available and equation (4) computes the command for the interval immediately beginning at \(t_n\). Then the held control should be called \(E_n\), and the update should be
+
+\[
+E_n
+=
+\Pi\{E_{n-1}+T_rF_B(E_{n-1},\widehat Z_n)\}.
+\]
+
+### Interpretation B: assessment at \(t_n\), deployment at \(t_{n+1}\)
+
+Equation (4) computes \(E_{n+1}\), which is not deployed until the next review. This introduces a full review-period deployment delay even though Section 2.2 declares
+
+\[
+\tau_{\rm dec}=\tau_{\rm dep}=0.
+\]
+
+### Interpretation C: flow first, update at \(t_{n+1}\)
+
+The state first evolves under \(E_n\), then the endpoint assessment is used to compute \(E_{n+1}\). In that case the update should use \(\widehat Z_{n+1}\), not \(\widehat Z_n\).
+
+This is not merely an indexing issue. The different conventions produce different Poincaré maps and different spectra.
+
+### Required repair
+
+Define pre- and post-review states explicitly. For example:
+
+\[
+X_n^-=(N(t_n^-),Z(t_n^-),E_{n-1}),
+\]
+
+\[
+E_n
+=
+\Pi\left\{
+E_{n-1}
++
+T_rF_B(E_{n-1},\widehat Z_n)
+\right\},
+\]
+
+\[
+X_n^+=(N(t_n^-),Z(t_n^-),E_n),
+\]
+
+followed by
+
+\[
+(N(t_{n+1}^-),Z(t_{n+1}^-))
+=
+\varphi_{T_r}^{E_n}(N(t_n^-),Z(t_n^-)).
+\]
+
+The resulting pre-review map is then
+
+\[
+X_{n+1}^-
+=
+\mathcal P_{T_r}(X_n^-).
+\]
+
+Alternatively, use an endpoint update, but derive that map consistently.
+
+Until this is resolved, the claimed review-map spectrum is not uniquely defined.
+
+---
+
+## 2. “Exact contemporaneous assessment” is not connected to the latent signal
+
+Equation (2) defines a latent filtered signal \(Z(t)\), but equation (3) defines
+
+\[
+\widehat Z_n
+=
+\mathcal A_n(\{Y_j:t_j\le t_n-\tau_{\rm dec}\}).
+\]
+
+Section 2.2 says assessments are “contemporaneous and exact,” but does not say whether that means
+
+\[
+\widehat Z_n=Z(t_n),
+\]
+
+\[
+\widehat Z_n=qE_nN(t_n)-S(N(t_n)),
+\]
+
+or an exact estimate of \(N(t_n)\) subsequently transformed into a deficit.
+
+The distinction matters because the controller is driven by \(\widehat Z_n\), while the memory equation evolves \(Z\). Unless
+
+\[
+\widehat Z_n=Z(t_n)
+\]
+
+is imposed, the variable \(Z\) may not affect the effort update at all.
+
+### Required repair
+
+Specify the deterministic assessment operator, for example:
+
+\[
+\widehat Z_n=Z(t_n^-)
+\]
+
+in the baseline model.
+
+For noisy assessment, specify:
+
+\[
+\widehat Z_n
+=
+\Psi\bigl(Z(t_n^-),\epsilon_n\bigr)
+\]
+
+or derive \(\widehat Z_n\) from observations and the assessment model. Do not leave \(\mathcal A_n\) arbitrary while claiming a definite sampled operator.
+
+---
+
+## 3. The assessment model can make the effort law undefined
+
+The manuscript allows assessment errors that:
+
+> “need not be independent or Gaussian.”
+
+No support restriction is imposed on \(\widehat Z_n\). But the controller contains
+
+\[
+\frac{\widehat Z_n}{Z_{\rm ref}+\widehat Z_n}.
+\]
+
+If
+
+\[
+\widehat Z_n=-Z_{\rm ref},
+\]
+
+the update is singular. If \(\widehat Z_n<-Z_{\rm ref}\), the term changes sign in a way not discussed. Projection of the final effort command does not repair an undefined update.
+
+### Required repair
+
+Either impose
+
+\[
+\widehat Z_n\ge0,
+\]
+
+for example through
+
+\[
+\widehat Z_n=\Pi_{[0,\infty)}(\widetilde Z_n),
+\]
+
+or replace the rational term by a globally defined bounded response function. State the admissible observation-error support.
+
+---
+
+## 4. The paper refers to three operators, not two
+
+Section 2.3 is titled “The two review-map operators,” but the paper distinguishes:
+
+1. the logistic sample-and-hold map;
+2. the stage-structured review map;
+3. the continuous-delay equation.
+
+The Discussion also refers to all three.
+
+More importantly, the first two are not merely two delay operators applied to the same loop. They appear to use different ecological plants:
+
+- logistic stock dynamics;
+- delayed-recruitment or stage-structured dynamics.
+
+They may also have different state dimensions, equilibria, gains, and parameterisations.
+
+### Consequence
+
+The contrast
+
+\[
+3\text{–}4\ \mathrm{yr}
+\quad\text{versus}\quad
+47.5\ \mathrm{yr}
+\]
+
+cannot presently be attributed to sample-and-hold architecture. It confounds:
+
+- ecological-model substitution;
+- state-dimension substitution;
+- parameter substitution;
+- controller discretisation;
+- review-event timing;
+- possibly assessment timing.
+
+### Required conceptual correction
+
+The paper must distinguish:
+
+\[
+\text{review-operator effect}
+\]
+
+from
+
+\[
+\text{ecological-plant effect}.
+\]
+
+A valid operator comparison holds the ecological plant, equilibrium, controller linearisation, and parameters fixed while changing only the timing operator.
+
+A factorial comparison would be preferable:
+
+| Ecology | Controller update | Timing operator |
+|---|---|---|
+| Logistic | continuous controller | no delay |
+| Logistic | continuous controller | fixed delay |
+| Logistic | Euler-reviewed controller | sample-and-hold |
+| Logistic | exact reviewed controller | sample-and-hold |
+| Stage structured | same controller variants | same timing variants |
+
+Only matched rows can identify architecture substitution.
+
+---
+
+# II. Abstract and headline claims
+
+## 5. “Forward invariant—stock, signal, and effort constraints hold” overstates the proposition
+
+The proposition proves:
+
+\[
+N(t)\ge0,\qquad Z(t)\ge0,\qquad E(t)\in[0,E_{\max}].
+\]
+
+It does not state or prove a stock upper constraint such as
+
+\[
+N(t)\le K.
+\]
+
+If “stock constraints” means only non-negativity, say so. If the intended admissible stock interval is \([0,K]\), add the assumption
+
+\[
+N(0)\in[0,K]
+\]
+
+and prove invariance of the upper face:
+
+\[
+\dot N\big|_{N=K}=-qE(t)K\le0.
+\]
+
+More generally,
+
+\[
+0\le N(t)\le\max\{N(0),K\}.
+\]
+
+The abstract should say:
+
+> Non-negativity of stock and signal and admissibility of projected effort are preserved over review intervals.
+
+---
+
+## 6. “The rapid-review limit establishes nothing about stability at any positive interval” is too categorical
+
+The finite-horizon consistency theorem alone does not imply stability. That part is correct.
+
+But the statement as written suggests that no positive-\(T_r\) stability conclusion can follow from rapid-review analysis. Under standard additional assumptions, that is false. If:
+
+- the continuous equilibrium is locally exponentially stable;
+- it is hyperbolic;
+- the sampled map is a \(C^1\)-consistent approximation;
+- projection remains inactive locally;
+- the event timing is fixed consistently;
+
+then the sampled fixed point generally remains locally stable for all sufficiently small \(T_r>0\).
+
+At the linear level, if the continuous Jacobian \(A\) is Hurwitz and
+
+\[
+D\mathcal P_h(x^*)
+=
+I+hA+O(h^2),
+\]
+
+then its multipliers satisfy
+
+\[
+\mu_j(h)
+=
+1+h\lambda_j(A)+O(h^2),
+\]
+
+so
+
+\[
+|\mu_j(h)|<1
+\]
+
+for sufficiently small \(h>0\).
+
+### Correct statement
+
+> Finite-horizon consistency by itself does not establish stability at any fixed positive review interval. Stability transfer requires additional hyperbolicity and \(C^1\)-consistency assumptions.
+
+The same correction is needed in the abstract, Section 3.2, and the conclusion.
+
+---
+
+## 7. The abstract gives numerical findings a stronger status than the manuscript allows
+
+The abstract reports:
+
+- stage-structured response windows near \(3\)–\(4\) and \(6\)–\(12\) yr;
+- cod convergence over \(1\)–\(20\) yr;
+- restabilisation near \(47.5\) yr;
+- a 42-stock null;
+- a zero-count search;
+- a cod two-window result.
+
+But Sections 2.2, 4.7, and Data availability say that:
+
+- the stage model is not fully registered;
+- solver configurations and histories are pending;
+- multiplier analysis has not been done;
+- computational artifacts are not attached;
+- some cod quantities are unreproduced;
+- the stage-output values are exploratory.
+
+The abstract must distinguish completed results from pending or exploratory records.
+
+### Better wording
+
+> Exploratory trajectory classifications suggest response regions near \(3\)–\(4\) and \(6\)–\(12\) yr in an incompletely archived stage-structured implementation. A separately defined logistic Euler-review map has a reported linear unit-circle crossing near \(47.5\) yr.
+
+If the artifacts are unavailable, exact-looking numerical claims should not be presented as established results.
+
+---
+
+## 8. “A 42-stock spectral null” is too strong for the title
+
+The screen is:
+
+- selected rather than population-representative;
+- based on an incompletely supplied eligibility table;
+- low-powered for at least one target class;
+- unable to classify controller sign;
+- based on assessment-derived series;
+- sensitive to detrending, record length, and red-noise calibration.
+
+A more defensible title phrase is:
+
+> a selected 42-stock spectral screen
+
+rather than:
+
+> a 42-stock spectral null.
+
+“Null” can mean either no rejection or evidence for a null model. Here it is only a no-discovery result.
+
+---
+
+# III. Model definition and forward invariance
+
+## 9. The explicit controller is not the same as a generic sample-and-hold controller
+
+Equation (4),
+
+\[
+E_{n+1}
+=
+E_n+T_rF_B(E_n,\widehat Z_n),
+\]
+
+is a forward-Euler discretisation of a continuous effort law. It is not intrinsic to sample-and-hold governance.
+
+A reviewed institution could instead use:
+
+- a direct command rule \(E_{n+1}=H(\widehat Z_n)\);
+- exact integration of the controller under held assessment;
+- an implicit update;
+- a bounded incremental rule independent of \(T_r\);
+- a policy table or optimisation;
+- a fixed proportional change limit.
+
+The manuscript acknowledges that it is an explicit discretisation, but later interprets the \(47.5\)-yr result as an effect of periodic review generally.
+
+### Required terminology
+
+Use consistently:
+
+> projected forward-Euler reviewed controller
+
+or:
+
+> Euler-reviewed sample-and-hold implementation.
+
+Then compare it with at least one non-Euler reviewed controller.
+
+---
+
+## 10. Multiplication by \(T_r\) changes the institutional rule as cadence changes
+
+The update is
+
+\[
+\Delta E_n=T_rF_B(E_n,\widehat Z_n).
+\]
+
+Thus increasing \(T_r\) increases both:
+
+1. the duration of the hold;
+2. the size of the command update.
+
+A five-year review does not merely hold an annual decision for five years. It applies a five-times larger Euler increment.
+
+Consequently, a sweep over \(T_r\) changes two mechanisms simultaneously:
+
+\[
+\text{hold duration}
+\quad\text{and}\quad
+\text{controller gain per review}.
+\]
+
+This is a major identification problem.
+
+### Needed comparison
+
+Analyze at least two conventions:
+
+#### Rate-preserving Euler rule
+
+\[
+E_{n+1}
+=
+E_n+T_rF_B(E_n,\widehat Z_n).
+\]
+
+#### Decision-increment-preserving rule
+
+\[
+E_{n+1}
+=
+E_n+\kappa F_B(E_n,\widehat Z_n),
+\]
+
+with fixed \(\kappa\).
+
+Or calibrate a continuous controller and compare its exact held-measurement update with forward Euler. This will show whether the crossing is due to cadence, accumulated gain, or Euler stability restrictions.
+
+---
+
+## 11. The signal map is not generally smooth
+
+The map
+
+\[
+\Phi_k(s)
+=
+\max\left\{
+0,\,
+\frac1k\log(1+e^{ks})-\frac{\log2}{k}+\delta
+\right\}
+\]
+
+is locally Lipschitz but not \(C^1\) at an active flooring point.
+
+Section 3.2 assumes that the assembled continuous vector field \(G\) is continuously differentiable. That assumption is not automatic for the declared model.
+
+### Required repair
+
+State either:
+
+- the floor is inactive on a neighborhood containing the compared trajectories; or
+- the rapid-review result is proved under local Lipschitz assumptions with an appropriate nonsmooth consistency argument.
+
+Also declare the numerical relation among \(k\) and \(\delta\). If \(\delta>0\), the floor may be locally inactive around \(s=0\), but that needs to be stated.
+
+---
+
+## 12. Global existence should be proved rather than qualified away
+
+The invariance proposition applies:
+
+> “for every time at which the sampled solution exists.”
+
+For this system, global existence should be straightforward under a globally defined assessment update.
+
+Since \(E(t)\in[0,E_{\max}]\),
+
+\[
+\dot N
+\le
+rN\left(1-\frac NK\right),
+\]
+
+so
+
+\[
+0\le N(t)\le\max\{N(0),K\}.
+\]
+
+The forcing of \(Z\) is then bounded on the resulting compact stock-effort region if \(\Phi\) is continuous. Hence \(Z\) cannot blow up in finite time. Projection bounds \(E\).
+
+### Upgrade
+
+Prove:
+
+\[
+0\le N(t)\le N_{\max},
+\]
+
+\[
+0\le Z(t)
+\le
+\max\left\{
+Z(0),\,
+\sup_{0\le N\le N_{\max},\,0\le E\le E_{\max}}
+\Phi(qEN-S(N))
+\right\},
+\]
+
+and global existence follows.
+
+---
+
+## 13. The proof uses an interpolation not included in the baseline model
+
+The baseline says effort is held. The proposition additionally covers:
+
+> “any between-review deployment interpolation…”
+
+That is a useful extension, but it belongs in a separately defined deployment model. With positive \(\tau_{\rm dep}\), the interpolation timing and queue are part of the state.
+
+The proof should distinguish:
+
+- zero-order hold;
+- linear deployment interpolation;
+- queued delayed deployment.
+
+These do not have the same review map.
+
+---
+
+# IV. Rapid-review analysis
+
+## 14. The one-step consistency argument depends on the unresolved timing convention
+
+The manuscript claims:
+
+> “The frozen-effort flow followed by the explicit effort step then has a one-step defect of order \(O(T_r^2)\).”
+
+That is plausible for a Lie splitting or Euler-type method, but only after the map is written exactly.
+
+If the endpoint signal is used, the step differs from one using the beginning-of-period signal. If the command computed at \(t_n\) is not deployed until \(t_{n+1}\), the method includes a one-step delay and may not approximate the intended no-delay controller in the claimed way.
+
+### Required derivation
+
+Display
+
+\[
+\mathcal P_h(u)
+=
+u+hG(u)+O(h^2)
+\]
+
+component by component, including the signal at which \(F_B\) is evaluated.
+
+Then establish a derivative estimate:
+
+\[
+D\mathcal P_h(u)
+=
+I+hDG(u)+O(h^2)
+\]
+
+if any local stability comparison is intended.
+
+---
+
+## 15. The citation to sampled-data stabilisation does not substitute for a theorem matched to this hybrid model
+
+Nešić and Teel concern sampled-data approximations under explicit hypotheses. The manuscript should state:
+
+- the exact compact set;
+- uniform local truncation-error constants;
+- regularity of the projected map;
+- whether projection is inactive;
+- whether the held flow and review reset satisfy the required consistency notion.
+
+The present paragraph is a correct sketch, not an exact established property.
+
+---
+
+# V. Missing mathematical core of the spectral claims
+
+## 16. The stage-structured review map is absent
+
+Section 3.3 reports detailed results for:
+
+- anchovy class;
+- sprat class;
+- cod class;
+- slow-stock class;
+- delayed recruitment;
+- parameter \(g\);
+- parameter \(\eta\);
+- biomass and effort peaks.
+
+But the manuscript never displays:
+
+- the stage equations;
+- the recruitment law;
+- state variables;
+- parameter values;
+- equilibrium equations;
+- review update;
+- assessment rule;
+- initial histories;
+- numerical integrator;
+- convergence criterion.
+
+The stage-structured results are therefore not independently interpretable, much less reproducible.
+
+### Required minimum
+
+Add a complete model block:
+
+\[
+X_{n+1}
+=
+\mathcal P^{\rm stage}_{T_r,\theta}(X_n),
+\]
+
+with every state and parameter defined. Supply a class table giving the exact anchovy, sprat, cod, and slow-stock vectors.
+
+Without this, Sections 3.3, 3.4, and parts of the abstract and Discussion should be removed.
+
+---
+
+## 17. The continuous-delay comparator is also absent
+
+The manuscript reports continuous-delay windows near:
+
+\[
+rg\approx1.5\text{–}1.6,
+\]
+
+with delay ranges such as:
+
+\[
+2.6\text{–}7.8\ \mathrm{yr}.
+\]
+
+But no continuous-delay equation or characteristic equation is given. The parameter \(g\) is undefined in the main model.
+
+The phrase
+
+> “the continuous delay equation and the sample-and-hold map are the same feedback loop under two delay operators”
+
+cannot be assessed until the continuous-delay equation is shown and matched coefficient by coefficient to the sampled model.
+
+---
+
+## 18. The logistic hold-map Jacobian and monodromy are not given
+
+The paper repeatedly invokes
+
+\[
+\det(M-e^{i\theta}I)=0,
+\]
+
+but \(M\) is never defined for either map.
+
+For the logistic hold model, the authors should derive the flow. With held \(E\), let
+
+\[
+a(E)=r-qE.
+\]
+
+Then, for \(a(E)\ne0\),
+
+\[
+N(t+h)
+=
+\frac{
+a(E)N(t)e^{a(E)h}
+}{
+a(E)+\frac rK N(t)(e^{a(E)h}-1)
+}.
+\]
+
+When \(a(E)=0\),
+
+\[
+N(t+h)
+=
+\frac{N(t)}
+{1+\frac rK N(t)h}.
+\]
+
+The signal flow may require quadrature because of \(\Phi\), but its variational equations can still be integrated exactly or numerically. The complete map derivative should be assembled from:
+
+- the held-flow state-transition matrix;
+- the assessment derivative;
+- the review-reset derivative;
+- the projection derivative where inactive.
+
+Only then can multiplier claims be checked.
+
+---
+
+## 19. The \(47.54\)-yr label \(T_r^{\rm NS}\) is unjustified
+
+Section 3.4 states:
+
+\[
+T_r^{\rm NS}=47.54\ \mathrm{yr}.
+\]
+
+A pair of unit-modulus multipliers is not by itself a Neimark–Sacker bifurcation. The following are required:
+
+- a simple conjugate pair on the unit circle;
+- all other multipliers strictly inside;
+- transverse modulus crossing;
+- exclusion of low-order resonances;
+- nonlinear nondegeneracy;
+- nonzero first Lyapunov coefficient for the map.
+
+Section 2.2 explicitly says no multiplier or monodromy calculations support the response regions. It is unclear whether the \(47.54\)-yr result is exempt from that caveat.
+
+### Correct wording
+
+Unless all conditions are computed, use:
+
+> a reported complex unit-circle crossing near \(47.54\) yr
+
+and denote it
+
+\[
+T_r^{\rm UC},
+\]
+
+not \(T_r^{\rm NS}\).
+
+---
+
+## 20. “Restabilises only near 47.5 yr” requires a complete crossing count
+
+To claim “only” requires showing that:
+
+- the equilibrium is unstable for every \(0<T_r<47.54\);
+- no earlier real or complex crossing restores stability;
+- the crossing direction at \(47.54\) is stabilising;
+- all multipliers lie inside afterward;
+- the later stability interval is stated;
+- no immediate second crossing occurs.
+
+None of that is displayed.
+
+A table is needed:
+
+| \(T_r\) interval | multiplier count outside unit disk | dominant multiplier | status |
+|---|---:|---:|---|
+| \(0<T_r<T_1\) |  |  |  |
+| \(T_1<T_r<T_2\) |  |  |  |
+
+---
+
+## 21. The \(47.5\)-yr result may be an explicit-Euler artifact
+
+For a scalar controller mode with linear coefficient \(C_E<0\), forward Euler contributes a factor approximately
+
+\[
+1+T_rC_E.
+\]
+
+Large review intervals can therefore cross the Euler stability boundary even when the corresponding exact continuous controller remains stable.
+
+The manuscript should compare equation (4) with an exact held-assessment controller update. If
+
+\[
+\dot e=C_Ee+C_Zz_n
+\]
+
+and \(z_n\) is held during the review interval, then
+
+\[
+e_{n+1}
+=
+e^{C_ET_r}e_n
++
+\frac{e^{C_ET_r}-1}{C_E}C_Zz_n,
+\qquad C_E\ne0.
+\]
+
+Comparing this exact update with forward Euler would identify whether \(47.54\) yr is caused by:
+
+- review cadence;
+- zero-order holding;
+- ecological feedback;
+- Euler discretisation.
+
+Without that comparison, the result should not be interpreted as a general governance-cadence phenomenon.
+
+---
+
+## 22. Local spectral stability at 47.5 yr says nothing about safe governance
+
+Even if the equilibrium is locally stable, a 47.5-year hold may allow severe depletion before the next review.
+
+A meaningful governance criterion should intersect local stability with inter-review safety:
+
+\[
+\rho(D\mathcal P_{T_r}(X^*))<1
+\]
+
+and
+
+\[
+N(t)\ge N_{\min}
+\quad
+\text{for every }t\in[t_n,t_{n+1}]
+\]
+
+over an uncertainty set.
+
+Define a governable review set:
+
+\[
+\mathcal T_{\rm gov}
+=
+\mathcal T_{\rm stable}
+\cap
+\mathcal T_{\rm viable}
+\cap
+\mathcal T_{\rm institutionally\ feasible}.
+\]
+
+The \(47.5\)-yr threshold should be presented as a local spectral curiosity unless viability is checked.
+
+---
+
+# VI. Response-region interpretation
+
+## 23. Long-horizon trajectory classification cannot establish stability or bifurcation windows
+
+The manuscript correctly calls the regions exploratory, but later uses terms such as:
+
+- “window relocates”;
+- “annual-review stability”;
+- “restabilises”;
+- “two-operator spectrum.”
+
+Trajectory convergence from a finite set of starts does not establish local stability for all perturbations, and persistent oscillation does not identify a bifurcation.
+
+Use consistently:
+
+- “tested trajectories converged”;
+- “persistent oscillations were observed”;
+- “finite-grid response region.”
+
+Reserve “stability window” for multiplier-supported intervals.
+
+---
+
+## 24. “Annual review is stable at every tested response value” is internally imprecise
+
+Stability is not something tested at finitely many initial histories and parameter values. The supported statement is:
+
+> At every tested response value, all declared annual-review trajectories converged to the equilibrium within the declared numerical criteria.
+
+The distinction matters because the manuscript itself emphasizes this methodological discipline.
+
+---
+
+## 25. Different dominant component periods need a clearer interpretation
+
+The manuscript correctly notes that components of a stationary periodic orbit share a fundamental period. Reported peaks of approximately:
+
+- 4 yr in biomass;
+- 12 yr in effort;
+
+could reflect a third harmonic, subharmonic response, modulation, transient dynamics, or different spectral leakage.
+
+But the target bands in the empirical screen are then set differently for biomass and effort:
+
+\[
+4\text{–}8\ \mathrm{yr}
+\quad\text{and}\quad
+12\text{–}60\ \mathrm{yr}.
+\]
+
+If the model mechanism has not established which frequency relation is structural, those bands may be analysis-dependent rather than genuine predictions.
+
+### Required upgrade
+
+Report the full cross-spectrum:
+
+- coherence;
+- phase;
+- fundamental frequency;
+- harmonic ratios;
+- transient versus asymptotic spectra.
+
+The more identifiable prediction is not separate univariate peaks but a joint gain–phase signature.
+
+---
+
+## 26. The “institutional signal is carried by effort and quota utilisation” does not follow from the presented analysis
+
+The model contains effort, but not quota utilisation as a distinct state or observable. An effort excursion of
+
+\[
+80\%\text{–}240\%
+\]
+
+of equilibrium is not the same as quota utilisation.
+
+The claim also appears in the “two-operator spectrum” section without a derivation.
+
+Replace it with:
+
+> In the reported simulations, relative effort excursions were larger than relative biomass excursions.
+
+Any quota-utilisation conclusion requires a quota, realised catch, and compliance model.
+
+---
+
+## 27. “No real small-pelagic system currently operates a responsive 3–4 yr review” needs evidence and a defined universe
+
+This is a universal institutional claim. It requires:
+
+- jurisdictional scope;
+- date;
+- definition of “responsive review”;
+- search protocol;
+- treatment of multiannual plans with annual adjustment clauses.
+
+Otherwise use:
+
+> No qualifying example was found in the declared case search.
+
+---
+
+# VII. The 42-stock spectral screen
+
+## 28. FDR is not familywise-error control
+
+The manuscript says:
+
+> “familywise interpretation … under false-discovery-rate control in the Benjamini–Hochberg sense.”
+
+Benjamini–Hochberg controls the false discovery rate under independence or certain positive-dependence conditions. It does not generally control the familywise error rate.
+
+Under a global null and ideal independence, FDR and the probability of any rejection are related, but this does not justify calling BH a familywise procedure.
+
+### Correct wording
+
+> P-values were adjusted across the declared family using the Benjamini–Hochberg false-discovery-rate procedure.
+
+If familywise control is desired, use Holm, Bonferroni, max-statistic permutation, or an explicitly justified alternative.
+
+---
+
+## 29. The multiplicity family is underdefined
+
+The paper mentions multiplicity across:
+
+- stocks;
+- observables;
+- bands.
+
+But it also requires robustness across:
+
+- detrending methods;
+- endpoint choices;
+- possibly several effort proxies;
+- several periodogram peaks.
+
+Are these sensitivity analyses filters, separate hypotheses, or researcher degrees of freedom? The multiplicity family must be specified before seeing results.
+
+Provide the exact number of tests:
+
+\[
+m
+=
+\sum_{\text{stocks}}
+\sum_{\text{series}}
+\sum_{\text{bands}}
+\sum_{\text{predeclared variants}}1.
+\]
+
+---
+
+## 30. The statistic is described inconsistently as band power and peak power
+
+Section 2.4 says the analysis:
+
+> “integrates power in the predeclared bands”
+
+but then classifies:
+
+> “A peak … as robust…”
+
+These are different statistics:
+
+\[
+T_{\rm band}
+=
+\int_{\omega_1}^{\omega_2}I(\omega)\,d\omega
+\]
+
+versus
+
+\[
+T_{\max}
+=
+\max_{\omega\in[\omega_1,\omega_2]}I(\omega).
+\]
+
+Their null distributions and power differ.
+
+The manuscript must state exactly which statistic is tested.
+
+---
+
+## 31. The AR(1) red-noise null needs a complete calibration procedure
+
+A valid per-series null requires specifying:
+
+- how the AR coefficient is estimated;
+- whether uncertainty in that estimate is propagated;
+- whether detrending occurs before or within each null simulation;
+- how missing observations are handled;
+- whether the fitted variance is conditioned on;
+- the number of Monte Carlo replicates;
+- whether the full selection pipeline is rerun on every null replicate.
+
+Analytical Lomb–Scargle false-alarm formulas generally do not remain valid after estimated AR(1) noise, detrending, band search, and endpoint sensitivity.
+
+A parametric bootstrap of the entire pipeline is the natural solution.
+
+---
+
+## 32. Dependence across stocks and observables is ignored
+
+Fish stocks share:
+
+- climate forcing;
+- assessment methods;
+- survey systems;
+- regional management;
+- database revisions.
+
+Biomass and fishing-mortality series from the same assessment are also strongly dependent.
+
+Standard BH is valid under independence and some positive-dependence structures, but not under arbitrary dependence. The manuscript should either justify positive regression dependence, use Benjamini–Yekutieli, or employ a hierarchical/max-statistic resampling design.
+
+---
+
+## 33. “Annually assessed” does not establish annual review
+
+RAM contains assessment series. It does not necessarily establish that:
+
+- decisions were made annually;
+- decisions were responsive;
+- commands were implemented annually;
+- the controller was extractive;
+- the same rule persisted throughout the record.
+
+The manuscript acknowledges part of this, but the title and comparison with annual-review simulations still encourage an unsupported mapping from annual assessment records to annual sample-and-hold governance.
+
+Call the cohort:
+
+> stocks with annual assessment-series resolution satisfying the declared data criterion.
+
+Do not call it an annual-review cohort unless review dates are independently established.
+
+---
+
+## 34. Lomb–Scargle is not automatically the best choice for annual assessment series
+
+Lomb–Scargle is useful for irregular observations, but many RAM series are annual and regularly spaced, possibly with missing years. More important issues are:
+
+- assessment smoothing;
+- retrospective revisions;
+- model-induced autocorrelation;
+- time-varying uncertainty;
+- nonstationarity;
+- regime shifts.
+
+Assessment outputs are not raw observations. Their spectra partly reflect assessment-model regularisation.
+
+At minimum, include sensitivity to:
+
+- ordinary Fourier or multitaper estimates on complete annual segments;
+- state-space uncertainty;
+- assessment revision vintages;
+- change-point or regime models;
+- local spectral methods.
+
+---
+
+## 35. A 12–60 yr effort band is poorly resolved in many records
+
+A 60-year period requires substantially more than one cycle for meaningful frequency discrimination. On 50–80-year records, power near that endpoint is dominated by:
+
+- detrending;
+- endpoints;
+- low-frequency leakage;
+- regime shifts.
+
+Predeclare a minimum cycles criterion, such as requiring at least three complete candidate periods:
+
+\[
+L_{\rm record}\ge3P.
+\]
+
+Otherwise “12–60 yr” is partly a trend test, not a cycle test.
+
+---
+
+## 36. “No robust peak” is not a spectral null model result
+
+The reported result is:
+
+\[
+\text{zero discoveries under one testing pipeline}.
+\]
+
+It does not establish that an AR(1) null adequately describes the series, nor that no periodic component exists. The manuscript often states this correctly, but “spectral null” is still potentially misleading.
+
+Use:
+
+> no target-band discoveries after the declared robustness and multiplicity filters.
+
+---
+
+# VIII. Power analysis
+
+## 37. The power experiment is not sufficiently specified
+
+Power depends critically on:
+
+- signal amplitude;
+- phase;
+- transient alignment;
+- record length;
+- sampling pattern;
+- AR coefficient;
+- innovation variance;
+- detrending;
+- multiplicity adjustment;
+- number of Monte Carlo replicates;
+- whether all 42 stocks are simulated jointly.
+
+“Noise scale \(\sigma=0.1\)” is uninterpretable without saying relative to what scale.
+
+### Required definition
+
+For example:
+
+\[
+Y_t
+=
+a\,s_t+\epsilon_t,
+\qquad
+\epsilon_t=\rho\epsilon_{t-1}+\sigma u_t,
+\]
+
+with \(s_t\) standardised in a declared way.
+
+Report Monte Carlo confidence intervals for power. A value of \(1.0\) should be reported as, for example,
+
+\[
+1000/1000
+\]
+
+with a binomial interval, not as exact power one.
+
+---
+
+## 38. The power design should reproduce the empirical record-length distribution
+
+The empirical screen includes records shorter than \(100\)–\(200\) yr, while the power analysis focuses on \(100\)–\(200\) yr synthetic records.
+
+That power analysis does not characterize the actual screen.
+
+For every empirical series \(i\), power should be simulated using:
+
+\[
+\{t_{ij}\},
+\quad
+L_i,
+\quad
+\widehat\rho_i,
+\quad
+\widehat\sigma_i,
+\]
+
+and its exact missingness pattern. Report the distribution of stock-specific power.
+
+---
+
+## 39. Family-level power is different from single-series power
+
+If BH is applied across 42 stocks and multiple observables, the power experiment must simulate the entire multiple-testing family. Injecting one signal into one AR(1) series and applying a per-series threshold does not estimate discovery power under the actual screen.
+
+Specify whether the reported power is:
+
+- unadjusted per-series power;
+- BH-adjusted marginal power;
+- probability of at least one discovery;
+- probability of discovering a particular injected stock.
+
+---
+
+# IX. Structured case search
+
+## 40. The search is not systematic enough to support a meaningful zero count
+
+“More than thirty systems” is too vague. The manuscript needs:
+
+- the exact number;
+- a predefined search universe;
+- databases and search strings;
+- dates searched;
+- inclusion and exclusion decisions;
+- source hierarchy;
+- duplicate handling;
+- reviewer count;
+- inter-rater agreement;
+- adjudication procedure.
+
+Without these, the zero count is an author-curated case inventory.
+
+---
+
+## 41. Criterion (iii) is effectively impossible and structurally guarantees exclusion
+
+The criterion requires:
+
+> “no major environmental, biological, or structural driver capable of generating the same outcome.”
+
+In open ecological systems, some alternative driver is almost always capable of generating a similar pattern. “Capable of” is much stronger than “empirically supported” and is generally not falsifiable.
+
+This criterion selects only unrealistically isolated systems and makes the zero count unsurprising.
+
+### Better criterion
+
+Require that the institutional model outperform preregistered alternatives on:
+
+- held-out prediction;
+- phase ordering;
+- intervention response;
+- likelihood or predictive score;
+- causal timing.
+
+Do not require proof that no competing mechanism is capable of generating the pattern.
+
+---
+
+## 42. The search mixes mechanism eligibility with evidence quality
+
+A case can contain institutional feedback while also containing climate or cohort effects. Confounding makes identification difficult; it does not make the mechanism absent.
+
+Separate:
+
+1. mechanism-present eligibility;
+2. timing-data adequacy;
+3. confounding risk;
+4. identification strength.
+
+Then report a graded evidence table rather than a binary eligible/ineligible count.
+
+---
+
+## 43. The “two structural reasons explain the null” are post hoc hypotheses
+
+The manuscript says:
+
+> “Two structural reasons explain the null.”
+
+The proposed reasons—crisis-driven record selection and predicted periods longer than institutional persistence—are plausible, but they are not established by the search.
+
+Use:
+
+> Two hypotheses may help explain the zero count.
+
+The claim that:
+
+> “at any regeneration rate inside the instability window the predicted period is centuries”
+
+also conflicts with the paper’s own reported 3–12 yr response regions unless it refers only to a particular slow-stock parameter regime. State the exact model and parameter subset.
+
+---
+
+## 44. Some case comparisons use mismatched timescales
+
+The Icelandic cod discussion compares an implementation lag of \(0.2\)–\(0.3\) yr with a predicted period and review interval. These are different time objects, as Table 1 itself emphasizes.
+
+Likewise, the anchoveta comparison invokes subannual review versus a \(3\)–\(4\)-yr response region without establishing:
+
+- controller sign;
+- controller gain;
+- ecological parameter match;
+- whether the model’s \(T_r\) corresponds to actual decision opportunities.
+
+These examples illustrate screening logic, but do not test the model quantitatively.
+
+---
+
+# X. Northern cod model and phase-line obstruction
+
+## 45. The phase-line proposition is mathematically sound but scientifically nearly tautological
+
+For a locally Lipschitz scalar autonomous ODE,
+
+\[
+\dot x=f(x),
+\]
+
+non-equilibrium trajectories are monotone. Therefore any observed reversal excludes that model class.
+
+This is correct, but it excludes virtually every fluctuating ecological time series from a one-dimensional deterministic autonomous model. It does not identify:
+
+- an Allee effect;
+- governance feedback;
+- changing mortality;
+- ecological regime change;
+- predation;
+- age structure.
+
+Its scientific contribution is therefore a model-class adequacy check, not a mechanism result.
+
+---
+
+## 46. The proof should use Rolle’s theorem rather than claiming an interior extremum
+
+If
+
+\[
+x(t_1)=x(t_2),
+\]
+
+Rolle’s theorem gives some \(\tau\in(t_1,t_2)\) with
+
+\[
+\dot x(\tau)=0.
+\]
+
+That is sufficient. The statement that the trajectory “attains an interior extremum” is not the cleanest argument.
+
+A concise proof is:
+
+\[
+x(t_1)=x(t_2)
+\implies
+\exists\tau:\dot x(\tau)=0
+\implies
+f(x(\tau))=0.
+\]
+
+By uniqueness, the trajectory through \(x(\tau)\) is the equilibrium trajectory, contradicting nonconstancy.
+
+---
+
+## 47. The obstruction does not “apply directly” to the cod assessment series
+
+The manuscript says:
+
+> “The phase-line obstruction … applies directly.”
+
+It does not, for two independent reasons.
+
+### First: the data are estimated observations, not an exact trajectory
+
+The SSB values are outputs of NCAM and carry:
+
+- observation error;
+- process assumptions;
+- smoothing;
+- retrospective uncertainty;
+- age structure;
+- model dependence.
+
+The proposition concerns an exact scalar trajectory \(S(t)\).
+
+### Second: removals were not fixed
+
+Equation (5) is
+
+\[
+\dot S=f(S)-C(t).
+\]
+
+It is autonomous only when \(C(t)\) is constant. The post-moratorium period still had time-varying:
+
+- reported removals;
+- bycatch;
+- food and recreational fisheries;
+- unreported removals;
+- changing natural mortality.
+
+No evidence is shown that \(C(t)\) was fixed.
+
+### Required correction
+
+Replace:
+
+> “applies directly”
+
+with:
+
+> “The reversals are incompatible with an exact fixed-parameter scalar autonomous representation if removals are constant and the reported SSB sequence is treated as an error-free observation of the state. Those assumptions are not satisfied by the assessment record, so the proposition is a diagnostic of model inadequacy rather than a direct empirical rejection.”
+
+---
+
+## 48. The claim that the stock crossed an Allee threshold in both directions is unsupported
+
+The manuscript says:
+
+> “the series cannot remain in one basin of the threshold and cannot cross the threshold in both directions.”
+
+No numerical value or fitted interval for \(\mathfrak s\) is supplied. Repeated direction reversals do not establish threshold crossing. They merely exclude monotone motion under a scalar autonomous vector field.
+
+Delete the threshold-crossing language unless \(\mathfrak s\) is estimated with uncertainty and the state trajectory is shown to cross it.
+
+---
+
+## 49. The strong-Allee model with constant catch does not preserve nonnegative biomass
+
+With
+
+\[
+\dot S=f(S)-C,
+\qquad C>0,
+\]
+
+one has
+
+\[
+\dot S\big|_{S=0}=-C<0.
+\]
+
+Thus the model crosses into negative biomass unless catch is constrained near zero or the state equation is modified.
+
+Because the manuscript emphasizes forward invariance elsewhere, it should acknowledge this inconsistency.
+
+A biologically admissible formulation could use:
+
+\[
+C(t,S)\le cS
+\]
+
+or impose a state-constrained harvest rule.
+
+---
+
+## 50. Constant loss and extra mortality are not the same perturbation
+
+The lemma groups:
+
+- constant loss \(C>0\);
+- extra mortality \(M_x>0\).
+
+But these modify production differently:
+
+\[
+f_C(S)=f(S)-C,
+\]
+
+\[
+f_M(S)=f(S)-M_xS.
+\]
+
+For constant loss, \(S=0\) is no longer an equilibrium. For proportional mortality, it remains an equilibrium. The relevant production maxima and saddle-node conditions differ.
+
+The lemma should be split into two statements and proved separately.
+
+For constant catch, positive equilibria solve
+
+\[
+f(S)=C.
+\]
+
+For proportional mortality, positive equilibria solve
+
+\[
+\frac{f(S)}S=M_x.
+\]
+
+---
+
+## 51. “The crash interpretation is formulation-dependent” is defensible only as assessment attribution
+
+The manuscript later clarifies that this is an attribution conditional on model structure. That qualification should appear immediately and consistently.
+
+The two formulations are not exhaustive causal explanations. Formulation dependence shows non-identifiability between modeled mortality components, not that the true crash mechanism is one of exactly two alternatives.
+
+Better wording:
+
+> The allocation of estimated deaths between natural mortality and unreported fishing is assessment-formulation dependent.
+
+---
+
+## 52. The constrained-\(M\) quantities cannot support Results or conclusions if they are unreproduced
+
+The manuscript gives specific values:
+
+\[
+M=0.46,\quad F=1.37,\quad 257.8\ {\rm kt\,yr^{-1}},
+\]
+
+then says they are:
+
+> “unreproduced … hypotheses, not results.”
+
+These values should not appear as substantive Results until the equations, data, code, windows, and uncertainty are supplied.
+
+Also,
+
+> “102.5% of mean spawning biomass”
+
+compares a yearly flow with a stock. The dimensionally correct ratio is approximately:
+
+\[
+1.025\ {\rm yr}^{-1}
+\]
+
+relative to mean SSB, not simply “102.5%.”
+
+---
+
+## 53. “Non-recovery unexplained in both formulations” is not demonstrated
+
+One formulation is unreproduced. More importantly, mortality-attribution formulations are not necessarily full post-collapse growth models. Failure of a scalar Allee equation to reproduce reversals does not show that both NCAM formulations fail to explain non-recovery.
+
+The manuscript must define “explain” operationally:
+
+- fit the trajectory?
+- reproduce reversals?
+- predict the post-2015 stall?
+- identify causal mortality components?
+- forecast recovery?
+
+At present, “unexplained” shifts among these meanings.
+
+---
+
+## 54. The “two-window split” is not a positive result in the strong sense claimed
+
+The proposed split is:
+
+1. crash attribution is model dependent;
+2. later dynamics are not captured by a fixed scalar autonomous model.
+
+Both are useful cautions, but neither is a novel empirical mechanism. Calling the split the paper’s “one defensible positive result” gives it more inferential weight than warranted.
+
+A more accurate statement is:
+
+> The cod case illustrates two distinct identification problems: mortality-component attribution during collapse and structural nonstationarity during the post-collapse period.
+
+That is a strong methodological contribution without overstating the evidence.
+
+---
+
+## 55. “Production has not returned to levels implied by any single-regime growth law” is unsupported
+
+No family of single-regime growth laws is fitted or excluded. A sufficiently flexible density-dependent model with environmental covariates or time-varying observation error might reproduce the record. Even among autonomous laws, sparse noisy data do not permit the universal statement “any.”
+
+Use:
+
+> The post-2015 production stall is inconsistent with the simplest fixed-parameter surplus-production interpretation considered here.
+
+---
+
+# XI. Empirical and bibliographic precision in the cod section
+
+## 56. The selected-year table can exaggerate reversal narratives
+
+Table 2 omits many intervening years. Selecting:
+
+\[
+1996,\ 2000,\ 2004,\ 2005,\ 2010,\ 2015
+\]
+
+highlights rises and falls but does not show the full trajectory or uncertainty.
+
+Supply:
+
+- every annual estimate;
+- confidence or credible intervals;
+- retrospective revisions;
+- removals over the same years;
+- assessment-vintage information.
+
+The phase-line discussion should not rely on a selectively thinned table.
+
+---
+
+## 57. \(\exp(-M)\) is survival from natural mortality alone
+
+The column should be labelled:
+
+> annual survival conditional on the estimated natural-mortality component alone.
+
+It is not total survival, because fishing mortality and other modeled removals may also apply.
+
+---
+
+## 58. “Ten times pre-collapse levels” needs a displayed baseline and uncertainty
+
+The table starts in 1991 and does not display the pre-collapse reference used for this ratio. Add the baseline period, estimator, and uncertainty, or remove “roughly ten times.”
+
+---
+
+## 59. Current references need complete release metadata
+
+The 2024 DFO reference is incomplete. Provide:
+
+- report number;
+- title;
+- issuing body;
+- URL or DOI;
+- access or release date.
+
+The 2026 Rose paper should be checked against final bibliographic metadata. Database and government references should include version and retrieval information.
+
+---
+
+# XII. Prospective designs
+
+## 60. The designs are protocols, not preregistrations
+
+The manuscript says:
+
+> “Five designs are specified as preregistration targets…”
+
+which is appropriate, but then:
+
+> “each is preregistered before outcome inspection.”
+
+No registration identifier or archived protocol is supplied.
+
+Use:
+
+> Each design is intended for preregistration before outcome inspection.
+
+Do not call an intended future protocol preregistered.
+
+---
+
+## 61. “Confirmed” is too strong for the prospective programme
+
+The conclusion says the designs specify how the mechanism would be:
+
+> “falsified or confirmed.”
+
+No finite empirical design confirms a mechanistic model in the strong sense, especially under structural alternatives.
+
+Use:
+
+> falsified, comparatively supported, or left unresolved.
+
+---
+
+## 62. The most powerful prospective target is the gain–phase relation, not periodicity
+
+This is one of the manuscript’s strongest ideas and should be made central.
+
+For a local linear system, identify the closed-loop transfer relationships among:
+
+\[
+\text{assessment}
+\longrightarrow
+\text{command}
+\longrightarrow
+\text{realised effort}
+\longrightarrow
+\text{stock}.
+\]
+
+The empirical targets should include:
+
+- gain;
+- phase;
+- coherence;
+- delay decomposition where identifiable;
+- controller sign;
+- saturation and nonlinearities.
+
+A peak alone cannot identify the loop direction. A preregistered gain–phase curve is much more diagnostic.
+
+---
+
+## 63. Randomising “feedback sign” raises ethical and interpretive problems
+
+A human-in-the-loop experiment may randomise simulated signs safely. A field pilot that randomises extractive response to decline could be ecologically dangerous.
+
+Distinguish:
+
+- laboratory simulation;
+- digital twin;
+- advisory-interface experiment;
+- real field intervention.
+
+Field designs require viability constraints and stopping rules before controller-sign randomisation is considered.
+
+---
+
+# XIII. Distributive-constraints section
+
+## 64. Section 4.6 is largely disconnected from the paper’s tested analysis
+
+The section introduces:
+
+- worst-off constituencies;
+- multidimensional poverty;
+- non-compensatory floors;
+- normative baselines;
+- future persons;
+- knowledge recognition.
+
+These are important, but no operational social dataset or policy comparison is actually performed. The manuscript itself admits:
+
+> “The social object is not operationalised.”
+
+This section is too compressed to function as a serious distributive analysis and too long to function as a brief limitation.
+
+### Recommendation
+
+Either:
+
+1. remove it from this paper and retain a short paragraph on distributive performance metrics in MSE; or
+2. develop it as a formal framework with data, variables, population definitions, and decision rules.
+
+The current single paragraph contains several separate papers’ worth of normative claims.
+
+---
+
+## 65. The long sentence on constituency and income is unreadable and logically overloaded
+
+The sentence beginning:
+
+> “The worst-off relevant population is a modelling choice…”
+
+combines:
+
+- population definition;
+- candidate constituency;
+- Statistics Canada tables;
+- income composition;
+- mismatch diagnosis;
+- alternative data requirements.
+
+Break it into a table:
+
+| Object | Candidate definition | Available measure | Mismatch | Required data |
+|---|---|---|---|---|
+| Population | licence holders | census-subdivision residents | not same population | licence microdata |
+| Income | fishing income | all-resident sector income | includes processing/aquaculture | administrative income |
+| Floor | unspecified | none | not operational | declared cutoff |
+
+---
+
+# XIV. Data availability and reproducibility
+
+## 66. The manuscript reports results whose underlying artifacts are not available
+
+Data availability says key items are merely:
+
+> “declared registration requirements”
+
+and that stage outputs remain exploratory until attached.
+
+That means the paper presently lacks:
+
+- stage-model equations;
+- parameter registry;
+- solver configuration;
+- initial histories;
+- RAM stock list;
+- processed series;
+- spectral routines;
+- power seeds;
+- case-screening log.
+
+These are not optional supplements. They are the evidence underlying the Results.
+
+### Required publication standard
+
+Archive with a permanent identifier:
+
+- all code;
+- exact data versions;
+- complete parameter files;
+- environment lockfile;
+- random seeds;
+- raw and processed outputs;
+- scripts regenerating every figure and table;
+- checksums.
+
+Until that archive exists, the numerical sections should be framed as proposed analyses rather than completed findings.
+
+---
+
+## 67. “Supplementary material accompanies this article” conflicts with the availability statement
+
+The end says supplementary material accompanies the article and includes the reproducibility register. The Data availability section says required artifacts are not yet attached.
+
+Clarify whether the supplement actually exists and contains the materials. If not, do not list it as accompanying the paper.
+
+---
+
+# XV. Recommended profound upgrade: separate four inferential layers
+
+The paper will be much clearer if it is rebuilt around four layers.
+
+## Layer 1: fully specified sampled-data mathematics
+
+Define one baseline ecological plant and one review convention. Derive:
+
+\[
+X_{n+1}=\mathcal P_{T_r}(X_n),
+\]
+
+\[
+D\mathcal P_{T_r}(X^*),
+\]
+
+and the fixed-point and multiplier conditions.
+
+Prove:
+
+- global existence;
+- stock and effort invariance;
+- rapid-review state consistency;
+- \(C^1\) consistency;
+- conditional small-\(T_r\) stability preservation.
+
+## Layer 2: matched architecture comparison
+
+For the same ecological plant and coefficients, compare:
+
+1. continuous controller;
+2. continuous fixed-delay controller;
+3. exact reviewed controller;
+4. Euler-reviewed controller.
+
+This isolates:
+
+\[
+\text{delay operator},
+\quad
+\text{holding},
+\quad
+\text{Euler discretisation}.
+\]
+
+Only after that should the stage-structured plant be introduced as a separate ecological sensitivity analysis.
+
+## Layer 3: empirical identification
+
+Replace univariate periodicity as the main empirical signature with:
+
+\[
+\text{gain–phase–coherence across assessment, command, effort, and stock}.
+\]
+
+The spectral screen can remain as a weak descriptive check, but it should not occupy the title unless fully archived and calibrated.
+
+## Layer 4: governance feasibility
+
+Intersect local spectral stability with ecological safety and institutional feasibility:
+
+\[
+\mathcal T_{\rm gov}
+=
+\left\{
+T_r:
+\rho(D\mathcal P_{T_r}(X^*))<1
+\right\}
+\cap
+\left\{
+T_r:
+\operatorname{Reach}_{[0,T_r]}(B,a)
+\subseteq\mathcal V
+\right\}
+\cap
+\mathcal T_{\rm inst}.
+\]
+
+This prevents the paper from treating a 47.5-year local restabilisation as a plausible management recommendation.
+
+---
+
+# XVI. Suggested revised central claims
+
+Replace:
+
+> “The continuous delay equation and the sample-and-hold map are the same feedback loop under two delay operators.”
+
+with:
+
+> “A continuous-delay model and a reviewed sample-and-hold model can represent related feedback mechanisms, but they are distinct dynamical operators. A valid architecture comparison must hold the ecological plant, controller linearisation, equilibrium, and parameter vector fixed.”
+
+Replace:
+
+> “the rapid-review limit … establishes nothing about stability at any positive review interval.”
+
+with:
+
+> “Finite-horizon rapid-review consistency alone establishes no fixed-\(T_r\) stability result. Under additional hyperbolicity and \(C^1\)-consistency assumptions, local stability can persist for sufficiently small positive review intervals.”
+
+Replace:
+
+> “the sampled equilibrium restabilises only at \(T_r^{\rm NS}=47.54\) yr.”
+
+with:
+
+> “For the declared Euler-reviewed logistic implementation, a reported complex unit-circle crossing occurs near \(T_r=47.54\) yr. The crossing direction, complete multiplier count, nonlinear bifurcation type, and sensitivity to replacing Euler updating by an exact reviewed controller must be established.”
+
+Replace:
+
+> “annual review is stable at every tested response value.”
+
+with:
+
+> “All declared annual-review trajectories converged at every tested response value.”
+
+Replace:
+
+> “the 42-stock spectral null.”
+
+with:
+
+> “zero target-band discoveries in a selected 42-stock screen under the declared pipeline.”
+
+Replace:
+
+> “The phase-line obstruction applies directly.”
+
+with:
+
+> “The phase-line proposition shows that an error-free trajectory with repeated reversals cannot arise from a fixed scalar autonomous model. Because the cod SSB series is an assessment estimate and removals vary through time, this is a model-class diagnostic rather than a direct empirical rejection.”
+
+Replace:
+
+> “the non-recovery is unexplained in both formulations.”
+
+with:
+
+> “The post-collapse dynamics expose a second identification problem not resolved by the mortality-allocation comparison: a fixed scalar autonomous model cannot represent the observed reversals under its own assumptions.”
+
+Replace:
+
+> “falsified or confirmed.”
+
+with:
+
+> “falsified, comparatively supported, or left unresolved.”
+
+---
+
+# XVII. Recommended title and paper scope
+
+The current title combines three studies:
+
+1. sampled governance theory;
+2. a 42-stock spectral screen;
+3. a northern cod case.
+
+The mathematical operator comparison is the strongest potential contribution, but it is presently the least completely specified. The empirical components are cautious but do not identify the mechanism.
+
+A more accurate title would be:
+
+> **Periodic Review as Sampled Governance: Operator-Matched Effort Control, a Selected-Stock Spectral Screen, and an Identification Audit for Northern Cod**
+
+Or, if the paper is narrowed:
+
+> **Periodic Review as Sampled Governance: Exact Review Maps, Euler Artifacts, and Gain–Phase Identification in Fisheries Control**
+
+The latter would produce a substantially more coherent methodological article.
+
+---
+
+# Final diagnosis
+
+The manuscript’s most defensible current results are:
+
+1. a useful seven-part governance-time ontology;
+2. a basic positivity and projected-effort invariance argument;
+3. the correct warning that finite-horizon consistency alone is not a fixed-review stability theorem;
+4. the insistence that sampled maps and continuous-delay equations are different operators;
+5. a no-discovery result in a selected spectral screen, subject to full calibration and release;
+6. a valid scalar phase-line proposition, if kept at its exact mathematical scope;
+7. a strong prospective emphasis on gain–phase identification and closed-loop MSE.
+
+Its least defensible claims are:
+
+1. that the reported map comparison isolates architecture substitution;
+2. that the review timing is fully specified;
+3. that a Neimark–Sacker threshold occurs at \(47.54\) yr;
+4. that “restabilises only” has been established;
+5. that annual-review stability follows from trajectory convergence;
+6. that the cod phase-line obstruction applies directly to the assessment record;
+7. that non-recovery is shown to be unexplained in two formulations;
+8. that unavailable exploratory computations can support title- and abstract-level numerical conclusions.
+
+The most important upgrade is to replace the present “same loop, different operator” narrative with a controlled decomposition:
+
+\[
+\boxed{
+\text{ecological plant}
+\times
+\text{controller law}
+\times
+\text{review timing}
+\times
+\text{numerical implementation}.
+}
+\]
+
+Only a comparison that varies one factor at a time can identify architecture substitution. Once that is done, the empirical target should be changed from “does a spectral peak exist?” to:
+
+\[
+\boxed{
+\text{Does the observed assessment}\to\text{command}\to
+\text{effort}\to\text{stock gain–phase relation match the registered loop?}
+}
+\]
+
+That shift would close the paper’s largest gap: the gap between a plausible sampled-data mechanism and evidence capable of identifying it.
