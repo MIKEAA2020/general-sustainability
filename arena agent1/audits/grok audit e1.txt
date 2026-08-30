@@ -1,0 +1,408 @@
+audit 1:** Dual identity (empirical forecast test vs. framework manifesto) is the root of most problems. Numbers internally reconcile; several claims, comparators, and the retention rule do not.
+
+---
+
+## Critical flaws
+
+**1. “Preregistered” is false in the front matter.**  
+Abstract, §1, and §2.3 call the retention rule preregistered. §4 then states there is no dated pre-score protocol, and that passes evolved (primary → landings → survey-start → capelin → Spec B). That is a specification search, not preregistration. The Edwards contrast makes the overclaim sharper. Fix: strip “preregistered” from highlights/abstract/intro; use the freeze-discipline paragraph’s own wording (“fixed in scripts before execution, extensions declared in the manuscript”).
+
+**2. Spec B rolling RMSE is not on a common origin set.**  
+§2.3: ladder min 12 years (`n=59/55`); persist/mean min 8 (`n=63/59`). Table 6 therefore compares different samples. You did the right thing for capelin post-break (“identical origin set”) and then did not do it for the headline table. Persistence may be helped by four extra early origins. **Non-negotiable fix:** recompute persist/mean on the exact M-model origins and put those numbers in Table 6.
+
+**3. Table 3 omits the only baseline that matters.**  
+Collapse/recovery scores are given only for M1–M4. Persistence is missing. Annual-catch recovery later admits frozen persist = 104 kt vs M1b = 78 and M1 = 264. On the coarse recovery window M1b = 90 could beat persist; the table cannot be read against the retention rule. Collapse persist (forecast frozen at \(S_{1990}\)) is also required if you want “every model missed the crash” to include the winner of the paper. Add persist and mean to Table 3.
+
+**4. Brier explanation on Spec A is logically wrong.**  
+§3.3: persist Brier = 0.00 “because every target year 1991–2015 is below the LRP, so the persistence indicator is always correct.” Brier uses \(f=\mathbf{1}\{\hat S_{t+h}<\mathrm{LRP}\}=\mathbf{1}\{S_t<\mathrm{LRP}\}\), not the target indicator. Targets being below LRP does not make persist correct; you need \(S_t\) and \(S_{t+h}\) on the same side of 884.6 for every origin. First origin is 1990 after an 8-year train; §3.1 calls 1983–1990 a “high, weakly trending” stock around a mean-based LRP. If \(S_{1990}\ge 884.6\) and \(S_{1991+}<884.6\), Brier cannot be 0. Either the 0.00 is a bug, origins were silently restricted, or \(S_t\) was already below LRP at every origin (then the parenthetical is still the wrong reason). Recompute and rewrite the sentence.
+
+**5. Stated retention rule ≠ executed rule.**  
+§1: retain structure if it improves **early warning, OOS prediction, or intervention selection**. Execution: primary RMSE vs next-simpler **and** vs persist. Intervention selection is never tested. Early warning (Brier) **improves** on Spec B at \(h=1\) (M3 0.02, M1 0.05 vs persist 0.06) and is discarded. Either narrow the rule in §1 to “primary RMSE” or apply the other two legs. As written this is an internal contradiction, not a wording quibble.
+
+**6. No uncertainty on the score that decides retention.**  
+Rolling \(n\approx 21\)–\(63\), no Diebold–Mariano, Clark–West, or bootstrap RMSE intervals. §4 says \(n\) “do not suffice to certify a small skill difference,” then issues a “negative certificate” / “certified non-existence.” Those cannot coexist. Spec A \(h=5\): 265 vs 289 is not a certificate.
+
+**7. Predictand stacks the deck for persistence.**  
+Primary series is NCAM **smoothed state**, jointly estimated with time-varying \(M\). Last-value persistence is the default forecast of a random-walk-like state. Constant-\(r\) surplus is then asked to track an assessment built around \(M(t)\). “Crash is not a catch-drop event” largely restates Cadigan/Regular (\(M\) pulse, peak \(\approx 2.5\)). That can still be a useful scored demonstration, but “negative certificate for the autonomous surplus-production **class**” is too large for “constant-\(r\) lost to persist on an \(M\)-shift smoother.” §4 already says the test is not of NCAM-as-filter; the certificate language ignores that limit.
+
+---
+
+## Internal inconsistencies
+
+| Item | Conflict |
+|---|---|
+| Ablation vs nested expansion | Highlights: “ablation ladder.” Design is forward nesting (persist → M1 → M1b → M2 → M3 → M4), not ablation from a full model. |
+| Equation vs ladder | Displayed map has \(\varepsilon_t\) for all; M1/M2 have no residual until M3. |
+| M1b nesting | Text correctly says \(\mathfrak s=0\) is **not** Schaefer (\(a=S/K\), cubic). Still sold as “autonomous with Allee” and, on recovery, as lowest structural RMSE. Boundary \(\mathfrak s\to 0\), \(K\) on/above training max is a different model, not depensation. |
+| Spec A vs Spec B delay of stronger result | Spec A collapse: 8-year high-flat window, \(r\) at bound 2 — identification failure. Spec B collapse: train 1954–89, M1 = 817, M2 = 1898. That is the real class test; it is buried. |
+| Capelin \(n\) | Table 8 persist = 98 (full SSB origins) vs \(M_{\mathrm{cap\_index}}\) on \(n=24/20\). Same mismatch you avoided in the post-break two-regime paragraph. |
+| Safe-set / Brier vs circular LRP | §4: 2016 LRP = 1983–89 mean ⇒ slack \(\approx 0\) on the pre-collapse train, leading-indicator claim circular. Yet Brier is still reported as a secondary “early warning” score on that same bound. |
+| Conditional vs unconditional forecasts | M2–M4 get **realized** future \(C_t\) (ex-post, generous). Persist does not. They still lose. Under-sold in the abstract; not named as conditional forecasts in §2.3. |
+| Highlights post-2015 | Stall is Spec B / Rose 2026 only. Spec A ends 2015. |
+| “Machine-verified certificate” vs optimizer note | Data availability: M1b Spec B rolling is environment-sensitive (\(\pm 17\) kt). A certificate that is not invariant to `scipy` version is not machine-verified in the sense the prose claims. |
+| Three-legged rule vs “primary score” | Abstract already retreats to primary RMSE; §1 does not. |
+| Framework leftovers vs FR audience | “Observation fibre,” “viability kernel,” “norm-field drift,” “interval-verified linear template,” “community-level early-warning margins (extract not archived)” are uninterpretable here and unused in scoring. |
+| Negative certificate vs conclusions | §5: does not conclude the framework is empirically confirmed. Highlights/abstract nevertheless “issue” a certificate **from** that framework. |
+
+**Arithmetic that does check:** 33.8% of 884.6 = 299; 342/276 = 1.24; Table 4 range 115–196; Table 5 M2 = 160; across-treatment 115–206; \(h=5\) 289–488; collapse 694–819; overlap 2015 299 vs 273. Coarse vs Schijns story is coherent (more accurate \(C\) **worsens** M2). M1 = M2 on recovery when \(C\equiv 5\) is correct.
+
+**Likely number to re-verify:** Spec A persist Brier 0.00 (see above). Recovery-window persist vs M1b 90 (missing). Spec B persist on \(n=59\).
+
+---
+
+## Profound upgrades (high leverage)
+
+1. **Rewrite the claim to the result you actually have.**  
+   Conditional-on-realized-catch surplus production, AR residuals, a one-year delay, two capelin modules, and an unidentified Allee term do not beat last-value persistence of NCAM/xteNCAM SSB. The 1992 catch drop cannot produce the crash under either catch treatment, including a 36-year pre-crash train. Extra unidentified modules raise error. That is a strong, publishable forecast paper. Drop certificate/class-nonexistence/machine-verified.
+
+2. **Lead with Spec B collapse, not Spec A’s 8-year bound-hit.**  
+   M2 = 1898 vs M1 = 817 on official landings is the cleanest sentence in the manuscript: giving the model the true catch path makes the crash forecast worse. Move it to the abstract.
+
+3. **Name M2–M4 as catch-conditional forecasts.**  
+   They enjoy information persist does not have, and still lose. That is the result most useful to assessment readers.
+
+4. **Score a less-filtered predictand.**  
+   Survey-start still targets NCAM SSB. Add rolling RMSE against the RV index (or \(\hat q I_t\) as predictand, not just initializer). If persist still wins, the “smoother artifact” objection dies. If not, you have a real nuance.
+
+5. **Common origins + RMSE uncertainty + persist in every table.**  
+   One origin mask per row of Tables 4–8. DM or bootstrap. Table 3 includes persist/mean. Then the ranking is reviewable.
+
+6. **Align §1 with what you measure.**  
+   Retention = primary RMSE only. Report Brier as diagnostic, or actually define an early-warning protocol (lead time, alarm threshold, false-alarm rate) and apply it.
+
+7. **Demote M1b and M4.**  
+   M1b: boundary/extrapolated \(K\), cubic-not-Schaefer, environment-sensitive. Report as a failed identification check, not a ladder member that “almost wins.” M4 is M3 started from \(S_{t-1}\); it will lose by construction on a persistent series. Replace with a genuine assessment-delay (fit on data available at \(t-1\) only, including catch) or cut it.
+
+8. **Add one more naive model** (RW with drift or ETS). Mean is a straw man on a non-stationary crash series (RMSE 424/449). A stronger naive set makes a persist win more informative.
+
+9. **Self-contain the paper.**  
+   One sentence on Edwards. Delete unused framework objects (fibre, kernel, linear template, community EWS). Fisheries Research will not review those, and they currently read as incomplete imports.
+
+10. **State the M-shift tautology in one explicit sentence.**  
+    “A constant-productivity map is misspecified for a series whose assessment attributes the crash to \(M\approx 2.5\); the test is whether that misspecification still forecasts SSB better than persist.” Honesty here protects the catch-treatment result, which does **not** depend on beating persist.
+
+---
+
+## Gap closures
+
+**Already closed well**
+- Two unpooled assessment objects; overlap RMSE 126 kt; no splicing; LRP 884.6 vs 276 not mixed.
+- Coarse regime **and** Schijns/STATLANT; collapse-window source equality documented; 1956 discrepancy declared out of sample.
+- Not feeding NCAM \(F,M\) back in as covariates.
+- Survey index not treated as independent of NCAM.
+- No interpolation of capelin; no pre-1991 acoustics carried across the break.
+- Allee non-identification actually described (\(s\to 0\), \(K\) at bound / \(K=500\) vs train max 117).
+- Freeze-discipline and optimizer sensitivity written down (too late, but the content is good).
+- Byte-level reproducibility protocol is unusually serious for this journal.
+- Scope limits in §1 and §5 (no Allee threshold estimate, no moratorium verdict, no “unsustainable” claim) — keep these; they are the right size for the evidence.
+- Rose (2026) stall as reconstruction-level parallel — useful if you stop claiming it as independent certification of the ladder.
+
+**Gaps still open (close or declare)**
+- Persistence on matched origins and on fixed windows.
+- Significance of RMSE gaps.
+- Three-criterion rule vs RMSE-only.
+- True ex-ante catch (projected \(C\), not realized). You can declare M2 as a generous counterfactual and not claim operational forecast skill.
+- Assessment error in the predictand (point SSB as truth).
+- Recreational/unreported catch: mentioned, not bounded. A one-line sensitivity (\(C_t+\delta\)) would close more than the current caveat.
+- Age-structured or delay-difference competitor — without it, “surplus-production class” is one scalar family.
+- 2023 40% \(B_{\mathrm{MSY}}\) LRP on Spec A: correctly refused; do not imply Spec B Brier answers that question.
+- Intervention selection: cut from the rule or add a minimal closed-loop (e.g. harvest-control-rule trajectories scored on realized SSB path).
+
+---
+
+## Line-level nits (not structural, still worth fixing)
+
+- Highlights “seven-model” is persist, mean, M1, M1b, M2, M3, M4 — say so once; mean is absent from most result sentences.
+- Abstract “stock-flow RMSE 160 kt” is annual-landings M2 only; coarse M2 is 144. Fine if labelled.
+- Table 1 type codes (D/E/M/N) are unexplained theory cargo; drop or define in one footnote.
+- \(r\in(0.001,2]\) saturating at 2 on collapse should be reported as a bound hit in Table 3, not only in prose.
+- Log-RMSE 8.02 / 8.70: say “trajectories hit the \([\,\cdot\,]_+\) floor” in the table note; raw RMSE then needs a “models that absorb at 0” flag.
+- Figure 1 “33.8% … matching 34%” — good check; keep.
+- “Negative certificate … distinct from a statistical null” — if you keep any of this, it belongs in a methods appendix, not keywords.
+- CRediT placeholder: fine for draft, not for submission.
+- Rose 2026 / Regular 2025 / Murphy 2025: verify in-press status at submission; the stall interpretation is load-bearing.
+- `general-sustainability` repo name vs single-stock paper: consider a frozen tag cited in Data availability (you already say frozen spec is archived).
+- M4 “information cost of the one-year delay” over-interprets a worse initializer.
+- “Exact fixed autonomous scalar trajectory cannot reproduce” a non-monotone path: true for **one** global \((r,K,C)\), not for rolling refits. Do not use it as the explanation of Table 4.
+
+---
+
+## What to protect
+
+The empirical core is real: **even with realized catch, constant-\(r\) stock-flow cannot make the 1990s crash, annual landings make that worse, unidentified extra modules add error, capelin as a forecast module fails the same score, and persist wins on two unpooled series.** That is enough for Fisheries Research if you (i) kill preregistration/certificate language, (ii) put persist on every table on matched origins, (iii) shrink the retention rule to what you computed, and (iv) cut framework jargon that is not scored.
+
+The paper currently asks to be believed as a verified non-existence proof. After the fixes it would be what §5 already says it is: a forecast comparison.
+
+audit 2: The manuscript is internally serious: nested ablation, two unpooled specifications, two catch treatments, a hard persistence bar, and a real freeze-discipline admission. The core empirical pattern (persist wins on primary RMSE; catch cannot produce 1991–95; unidentified modules add error) is coherent and probably correct. What follows is line-level, not a request to soften the result.
+
+---
+
+## 1. Flaws
+
+### 1.1 “Preregistered” is false as written
+
+Abstract, §1, and §2.3 call the retention rule **preregistered**. §4 then states there is **no dated pre-score protocol file** and that passes evolved (primary → annual landings → survey-start → capelin → Spec B) in the manuscript.
+
+Those cannot both stand. Script-order is not preregistration. For *Fisheries Research* this is the first thing a reviewer will flag. Either:
+
+- drop “preregistered” everywhere and keep the freeze-discipline caveat, or
+- lock a dated protocol now and label everything after it as exploratory.
+
+The Edwards contrast makes this worse, not better: it documents that the authors know what a lock looks like and did not do it here.
+
+### 1.2 Retention rule is stated as three criteria, implemented as one
+
+Abstract / §1: retain structure if it improves **early warning, out-of-sample prediction, or intervention selection** (OR).
+
+§2.3: retain only if it reduces **primary RMSE** vs the nested parent **and** vs persistence (AND).
+
+Intervention selection is never operationalized (§1 explicitly declines to evaluate the moratorium). Early warning exists only as secondary Brier and is forbidden from changing the verdict (Spec B: M3 Brier 0.02 vs persist 0.06 at \(h=1\), still not retained). The OR in the abstract is not the rule that was run.
+
+### 1.3 Predictand is a smoothed assessment state — persistence is then the default, not a tough bar
+
+The predictand is NCAM / xteNCAM SSB, i.e. a state-space *filter/smoother output*. Such series are autocorrelated by construction. Last-value persistence on a smoother is the forecast to beat only in a weak sense; it is often unbeatable even when the assessment is wrong in real time.
+
+The paper cites Hutchings & Myers (1994) and Walters & Maguire (1996) — papers about **real-time overestimation** — then never uses a vintage assessment. Every origin uses 2016/2025 hindsight \(S_t\). That is pseudo out-of-sample on a final smoother, not early warning. The historical failure mode is not in the experiment.
+
+This does not invalidate “can this ladder track the hindsight trajectory?” It does invalidate any sentence that reads as a test of assessment architecture, early warning, or 1992 decision quality. Several sentences still read that way (highlight 3, abstract “early warning”, §4 “leading-indicator claim”).
+
+### 1.4 Origin sets are not matched — Spec B rolling and Table 8
+
+Spec B: ladder min 12 training years (\(n=59/55\)), naive min 8 (\(n=63/59\)). Table 6 therefore compares persist and M1 on **different origins**. That is not a scored ablation.
+
+Table 8: index model \(n=24/20\) (A) and \(n=36/32\) (B) vs persist \(n=25/21\) and \(n=59/55\). On B the origin sets are not even close. You already know how to do this: post-break Table 7 reports “M_cap 107 versus persistence 75 on the **identical** origin set.” Table 6 and Table 8 do not.
+
+Until persist is recomputed on the exact origin set of each competitor, Spec B “second negative certificate” and the index-module non-retention are not machine-verified.
+
+### 1.5 Scope of the “negative certificate” overruns the design
+
+What was shown: on two SSB columns, one-step LS Schaefer/Allee, this catch/residual/delay/capelin ladder, persist has lower RMSE.
+
+What is written: “negative certificate for the **autonomous surplus-production model class**”; “certified non-existence”; “incompatible with the observed path.”
+
+That class, in this journal, includes Pella–Tomlinson, SPiCT, JABBA, time-varying \(r\), process-error state-space SPMs. None of those were fitted. One-step LS with \(r\) hitting 2 is not a sufficient statistic for the class.
+
+Separately, “an exact fixed autonomous scalar trajectory cannot reproduce a non-monotone path” is a tautology, not a certificate. The empirical content is mean-reversion toward a mis-identified \(K\) under regime shifts — M2–M4 and prey, not M1.
+
+“Machine-verified” also overruns the checksums: 29/29 verifies arithmetic, not incompatibility of a model class.
+
+### 1.6 M4 is information-disadvantaged relative to persist; no delayed-persistence control
+
+M4 starts from \(S_{t-1}\); persist uses \(S_t\). The gap (196 vs 98 on A, \(h=1\)) mixes delay cost with information loss. The control is \(\hat S_{t+h}=S_{t-1}\). Without it, “information cost of the one-year delay” is not identified, and “M4 is the worst structural model” is partly by construction.
+
+### 1.7 Estimation method is a straw opponent for this journal
+
+One-step LS, \(r\in(0.001,2]\), \(K\) above training max, no process/observation error split, no SPiCT/JABBA/BSP. Surplus-production estimation bias is a 30-year literature. A reviewer will say: persist beating a boundary-hitting OLS Schaefer is not news; persist beating a state-space SPM on the same score would be.
+
+The ablation logic (add one module at a time) can still justify OLS — but then the certificate must be restricted to **this estimator and this ladder**, not the class.
+
+### 1.8 Table 3 has no persistence row on the collapse window
+
+Abstract: collapse missed by every model, RMSE 694–819. Table 3: structural only. Persist frozen at \(S_{1990}\) for 1991–95 is the number that tells whether M1’s 694 is “everyone failed” or “high frozen \(C\) accidentally beats persist.” Without it, highlight 3 and the collapse paragraph are incomplete.
+
+Same table: recovery M1b 90 vs later “frozen-persistence error of 104 kt” (annual, §3.2). On that **single origin** M1b beats persist. You correctly keep retention on rolling RMSE; then Table 3 cannot be presented as if the structural RMSEs are self-interpreting.
+
+### 1.9 Log-RMSE at the floor is unspecified
+
+M1/M1b log-RMSE 8.02 / 8.70 because trajectories hit \([\,\cdot\,]_+\). \(\log 0\) is undefined. The 8.02 implies an undeclared \(\varepsilon\)-floor. Secondary scores that depend on an undeclared floor cannot be reproduced from the text.
+
+### 1.10 Sample-size / “certificate” tension
+
+§4: \(n=25/21\) “suffice to rank … do not suffice to certify a small skill difference.” Adjacent: “negative certificate.” No Diebold–Mariano, no block bootstrap, no interval on RMSE. Ranking with large gaps (98 vs 115–196) is fine; “certificate” is not a substitute for a test. Drop the word or add a test on matched origins.
+
+---
+
+## 2. Internal inconsistencies
+
+### 2.1 M1 / M1b must not move with the catch file if \(C\) is a free parameter — but they do
+
+Table 2: M1 free \((r,K,C)\) on training; landings are not an input.
+
+Rolling: M1 \(h=1\) is 121 in both Table 4 and Table 5. Consistent.
+
+Fixed recovery, same years 1995–2007 / 2008–2015:
+
+- coarse (Table 3): M1 = 120, M1b = 90
+- annual (§3.2): M1 = 264, M1b = 78
+
+If \(C\) is estimated from SSB alone, both numbers are invariant to Schijns vs 240/120/5. They are not. So either:
+
+- implementation sets “constant \(C\)” to training-mean landings (then Table 2’s “free \(C\)” is wrong), or
+- the 264 / 78 numbers are from a different object.
+
+This is the sharpest numerical inconsistency in the paper. It also explains “M1 = M2 on recovery” as an implementation identity (\(C\equiv 5\)), not an estimate.
+
+### 2.2 Abstract “the delay raises it” vs Table 3 collapse
+
+Collapse RMSE: M2 = M3 = M4 = 819. Delay does not raise collapse RMSE. It raises **rolling** RMSE (196 vs 135). The abstract sentence is tied to the collapse window (“neither an AR residual nor a one-year delay reduces **that** error, and the delay raises it”). False for that window.
+
+### 2.3 Spec B is both done and “required” as future work
+
+§3.3 already runs the ladder on xteNCAM with LRP 276 kt (40% \(B_{\mathrm{MSY}}\)).
+
+§4: “Repeating the ladder under the 2023 40% \(B_{\mathrm{MSY}}\) LRP requires the xteNCAM series and a fresh specification-matching review.”
+
+Stale sentence. It reads as un-done work that is already Table 6.
+
+### 2.4 Rose (2026) configuration is stated two ways
+
+§4: “surplus production **and stock growth stalled** after 2015”
+
+then: “a stock whose **biomass continues to rise** while its surplus production stalls”
+
+then Spec B test path: 167 → 462 kt (2013–2024), with 2017 = 451, 2024 = 342 (rise then stall).
+
+Pick one configuration and match it to the window. Constant-\(r\) Schaefer at low \(S\), low \(C\) cannot produce a **production stall at low biomass**; it can produce a **rise**. Those are different failures. The highlight “fail in the same place” needs the stall years isolated (post-2015), not 2013–2024 as a lump.
+
+### 2.5 Brier persist 0.00 on A implies \(S_{1990} < 884.6\), vs “high, weakly trending” train
+
+§3.3: every target 1991–2015 is below LRP **and** persist’s indicator is always correct \(\Rightarrow\) every origin state is below LRP, including \(S_{1990}\).
+
+§3.1: 1983–1990 is “a high, weakly trending stock.”
+
+Both can be true only if 1990 is slightly below the 1983–89 mean. State that number. If 1990 is already on the downslope, the collapse train is not a pure pre-break window and “slack to that bound is near zero by construction” is slightly off (the bound is 1983–89, train includes 1990).
+
+### 2.6 Seven-model ladder vs variants
+
+Highlight: seven models. Table 2: 2 baselines + 5 M’s. Survey-start, two-regime \(r\), and index-\(b\) are extra, not ladder members, not always on matched \(n\). Call them variants in the highlight or put them in Table 2.
+
+### 2.7 Autonomous \(C\) on collapse vs “same \(C\)” frozen
+
+If M1 freezes a high \(C\) into 1991–95, it is no longer “autonomous productivity” in the economic sense; it is frozen fishing mortality by another name. That is why M1 (694) beats M2 (819) on collapse: keeping 240 kt of catch **helps** the crash forecast. The text says this (“dropping \(C\) … raises forecast SSB”) but still treats M1 as the pure productivity null. It is a mixed null: constant \(r,K\) **and** constant high \(C\) after a moratorium that actually happened. The clean productivity null is M2 (prescribed \(C_t\), constant \(r\)). M2 is the one that fails harder. Lead with that.
+
+### 2.8 29 checksums / 30 files
+
+Data availability: 29/29 pinned, 30/30 regenerated. One file has no checksum, or the counts are off. Line-level reproducibility claim should match.
+
+---
+
+## 3. Profound upgrades
+
+These are not polish. They are the paper that is already sitting inside this one.
+
+### 3.1 Model-free catch accounting bound (stronger than the whole ladder)
+
+The decisive fact is already in prose: apparent net production \(S_{t+1}-S_t+C_t\) is “strongly negative in 1991–93” and “observed \(\Delta S\) is far larger than \(C_t\).”
+
+That is an identity, not a fit. Tabulate 1990–94:
+
+\[
+\Delta S_t,\quad C_t,\quad \Delta S_t+C_t,\quad \text{implied }M\text{ or extra removals}.
+\]
+
+A one-line bound: even with \(r=0\) (no production), required catch to match \(\Delta S\) is \(\sim -\Delta S\); even with \(r=2\) at low \(S\), extra removals still dwarf Schijns/STATLANT. Regular et al.’s \(M\approx 2.5\) is the same residual.
+
+This **closes** “catch-regime stock-flow is not sufficient for collapse” without OLS, without \(K\), without a certificate vocabulary. It should precede Table 3, not appear as a remark in §3.2. It also makes the coarse-vs-annual comparison a robustness check on the bound, which is what it already is.
+
+### 3.2 Inter-assessment RMSE vs forecast RMSE
+
+Overlap 1983–2015: two specifications disagree at **126 kt RMSE**. Persist \(h=1\) is **98 kt** (A) / **88 kt** (B). Best forecast error on one smoother is smaller than disagreement between smoothers.
+
+That single comparison:
+
+- caps the practical value of any module that “beats persist by 10 kt,”
+- justifies non-pooling better than the specification-matching sermon,
+- is the right place to put LRP drift (884.6 vs 276) as a **norm** change, not a data change.
+
+You have the number and do not use it.
+
+### 3.3 Smoother-inflation of persistence, stated as a limitation of the predictand
+
+One paragraph in §4: forecasting \(S_t^{\mathrm{NCAM}}\) is forecasting a filtered state; persist inherits the smoother’s AR(1). The test is still valid for “does this process model track this assessment.” It is not valid for “surplus production has no forecast value for Northern cod.” That distinction is the difference between a methods paper and an overclaim.
+
+Optional empirical close: repeat \(h=1\) on the **raw autumn RV index** (you already load it for survey-start). If persist still wins on the unsmoothed index, the result is much stronger. If persist collapses and M2/index-start win, you have identified the smoother as the source of the bar. Either outcome is a contribution.
+
+### 3.4 Matched-origin, nested skill table as the only retention object
+
+One table, both specifications:
+
+| origin set (identical \(n\)) | persist | mean | M1 | M1b | M2 | M3 | M4 | variants |
+
+\(h=1\) RMSE, \(h=5\) RMSE, MAE; **MASE** (= MAE / MAE_persist) so the bar is visible; Diebold–Mariano or a circular block bootstrap on the loss differential.
+
+Retention = cell vs parent and vs persist on that row. Everything else (fixed windows, Brier, log-RMSE, single-origin stall) moves to an appendix labelled non-retention.
+
+This closes 1.4, 1.8, 1.10, 2.6 at once.
+
+### 3.5 Delayed persist and vintage persist
+
+- \(\hat S_{t+h}=S_{t-1}\) beside M4.
+- If any historical NCAM/SPA vintages exist, one real-time collapse origin (1990/91 advice vs 1991–95 outcome). Even a failed attempt belongs in §4: “vintages not archived; hindsight only.”
+
+That is how this paper would actually speak to Walters & Maguire rather than citing them.
+
+### 3.6 Stall window as a separate, pre-declared object
+
+Rose (2026) + Spec B 2013–2024 + “some years negative” is the live scientific question. Split:
+
+- 2013–2017 rise,
+- 2018–2024 stall/decline,
+
+report persist vs M1 vs M1b vs M_cap on **each**, with \(K\) and \(\mathfrak{s}\) printed. You already have the identification story (\(K=500\) vs train max 117; \(\mathfrak{s}=5.3\times 10^{-3}\)). Make the stall the exhibit, not a rolling average that persist wins because 1954–89 is long and quiet.
+
+### 3.7 Drop or quarantine framework vocabulary
+
+Negative certificate, observation fibre, viability kernel, interval-verified linear template, closed-loop information filter, community-level early-warning margins, specification-matching discipline.
+
+Every one of these costs a Fisheries Research reader and none of them does work that “not retained on RMSE vs persist, matched origins” does not do. Keep **one** invented term if you must: non-retention. Archive the rest in the companion.
+
+The **substance** that should stay: unidentified modules increase error; catch is not the crash; a driver’s reconstruction-level reality \(\neq\) forecast-module identification (the capelin paragraph is the best in §4).
+
+---
+
+## 4. Gap closures (concrete, local)
+
+| Location | Gap | Close |
+|---|---|---|
+| Abstract L.1, §1, §2.3 | “preregistered” | Replace with “stated retention rule; no dated protocol (see §4).” |
+| Abstract retention sentence | OR of three criteria | Match §2.3: primary RMSE vs parent and vs persist, per specification. |
+| Abstract delay sentence | “delay raises it” on collapse | Move to rolling; collapse: M4 = M2 = 819. |
+| Table 2 | Role of \(C\) in M1 | One sentence: \(C\) estimated from SSB / set to training-mean landings / frozen regime value. Then **recompute** recovery M1 so coarse = annual, or explain the 120 vs 264 split. |
+| Table 3 | No persist/mean | Add both; add \(S_{1990}\) and \(S_{2007}\) levels. |
+| Table 6, Table 8 | Unmatched \(n\) | Persist on the competitor’s origins; put \(n\) in the table header. |
+| §2.2 | Survey-start not independent | Already said; add “not a retention candidate” in Table 2 footnote so it cannot look like M5. |
+| §2.3 | Min train 8 vs 12 on B | Same min for all, or dual rows. |
+| §2.3 | log-RMSE | \(\log\max(\hat S,\varepsilon)\), state \(\varepsilon\). |
+| §3.1 | \(r\approx 2\) on collapse | Print \(\hat r,\hat K,\hat C\) for every fixed window. Bound hits are results. |
+| §3.1 | M1 = M2 on recovery | State whether identity is \(C\equiv 5\) imposed or estimated. |
+| §3.2 | Net production “strongly negative” | 1991–93 table of \(\Delta S+C\). This is the bound in 3.1. |
+| §3.2 | M1 264 / M1b 78 | Reconcile with Table 3 or withdraw. |
+| §3.3 | Brier improvements on B | Keep (honest). Add: secondary cannot retain. Already almost there. |
+| §3.3 | Single-origin M1b 178 vs persist 262 | Keep as **non-retention** exhibit of extrapolation, not as a near-miss. |
+| §3.4 | Harp seals in Rose, absent in ladder | One sentence: not tested; capelin was the only prey series with a public index. |
+| §4 circular LRP | Excellent | Add \(S_{1983},\ldots,S_{1990}\) vs 884.6 so circularity is numeric. |
+| §4 Spec B “requires xteNCAM” | Already done | Delete or rewrite as “§3.3 is that review.” |
+| §4 Rose rise vs stall | Contradictory | Split years; align with 2017/2021/2024 checkpoints you already quote. |
+| §4 “model class” | Overrun | “this OLS Schaefer/Allee ladder on these two series.” |
+| §4 freeze vs abstract | Direct contradiction | One version of the paper, both ends. |
+| §5 | Already the right scope | Do not touch the last paragraph. It is the most disciplined text in the MS. |
+| Data availability | 29 vs 30 | Align counts; pin the missing file or explain. |
+| Data availability | M1b ±17 kt | Keep; it **is** the identification result. Point to it from §3.3. |
+| Keywords | “negative certificate” | Replace with “out-of-sample RMSE” / “model comparison.” |
+
+---
+
+## 5. What is already tight (do not break)
+
+- Unpooled specifications; overlap RMSE 126 kt reported; 2015 299 vs 273; LRP 34% vs 1.24 as a **norm** change.
+- STATLANT–Schijns collapse window closed (0 t); 2015 landings 4.436 kt checked; 1956 discrepancy parked.
+- Annual landings make M2 **worse** (160 vs 144): the right robustness direction.
+- Allee non-identification: \(\mathfrak{s}\to 0\), \(K\) at training range (A) or \(K=500\) vs max 117 (B). Environment sensitivity of M1b on B is evidence, not a nuisance.
+- M3 \(\phi=0.95\) persisting a negative residual across recovery: the generic AR-regime warning, cleanly shown.
+- Capelin: reconstruction-level driver ≠ identified forecast module. Best distinction in the paper. Table 7 post-break matched origins is the template for every other table.
+- Survey index is an NCAM input, not an observation channel: correctly refused as independent.
+- §5: no sustainability conclusion, no framework confirmation. That paragraph should govern the abstract’s last three sentences.
+
+---
+
+## 6. Priority order if only a few things move
+
+1. Kill “preregistered”; align the retention rule to RMSE-only in the abstract.  
+2. Explain or recompute M1/M1b recovery 120 vs 264.  
+3. Matched-origin persist on Spec B and Table 8.  
+4. Table of \(\Delta S+C\) for 1991–93 (the model-free bound).  
+5. Persist rows on Table 3; delayed-persist next to M4.  
+6. Restrict the certificate to this ladder/estimator/series; drop class-level language.  
+7. One paragraph on smoother-as-predictand and hindsight-vs-vintage.
+
+The result you actually have — persist wins; catch cannot close 1991–95; extra unidentified structure hurts; capelin as module fails even if capelin as driver is real — is enough for this journal if the claims are cut to the design. The present text argues a larger theorem than the scores support.
