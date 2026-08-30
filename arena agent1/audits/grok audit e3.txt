@@ -1,0 +1,396 @@
+audit 1: The manuscript is internally disciplined on predictand definition, oracle exclusion, and the “certificate vs forecast” distinction. The main problems are (1) retention rules that are not the same rule in every section, (2) a “water-balance” map that is not a balance, (3) an AR(1) retain decision that MAE and the five-year score contradict, and (4) unused series that would close the paper’s own gaps. Below is line-level, not a general referee vibe.
+
+---
+
+## 1. Internal inconsistencies
+
+**“Preregistered” vs protocol disclaimer.**  
+Abstract: “preregistered retention rule” / “preregistered out-of-sample score.” §3: “fixed computational protocol rather than a prospective clinical-style registration.” Those are different claims. Groundwater readers will treat “preregistered” as a stronger object than a dated script lock.
+
+**Sign-hit rate is specified and never appears.**  
+§4: secondary scores include “the sign-hit rate of ΔH on fixed windows.” No number in §5.2, tables, or discussion. Either report it or delete it from the design.
+
+**Primary score vs which horizon retains.**  
+§4: “The primary score is RMSE of annual-mean J-17” — horizon not named. Table 5 retains M1 on **h = 1**. At **h = 5**, M1 (21.25) loses to persistence (21.11) and to the training mean (16.80). Abstract/conclusions speak as if AR(1) is *the* retained model. State: retained only at h = 1; at h = 5 nothing but climatology is retained.
+
+**MAE vs RMSE for the one retained model.**  
+Table 4: persist MAE 10.73, M1 MAE **10.72**. The 0.39 ft RMSE margin is a squared-error story; absolute error is a tie. Retention “by a margin of 0.39 ft” in the abstract is not the same evidence as “improves forecasts” in operational language.
+
+**Asymmetric strictness on tiny margins.**  
+M1 kept at 0.39 ft. Climate combo 12.71 vs M1 12.84 (0.13 ft), Rprecip 0.04, Renso 0.02 — §5.4 says the point-RMSE rule *lists* them, then none is retained. Extra predicates (h = 5, “M2m with a weakly adjusted intercept,” margins) are not in the §4 sentence that actually defines retention: *strictly less than persistence and strictly less than the next-simpler causal model.* Under that sentence, combo/precip/ENSO beat persist and beat M1 at h = 1. Either the frozen protocol contains the extra predicates (quote them) or the climate reject is post-hoc.
+
+**M2m “same class as M1” vs different estimator.**  
+§3: constant fluxes ⇒ \(H_{t+1}=(1+\delta)H_t+\mathrm{const}\), “same affine class as M1.” Table 4: M2m 12.28 vs M1 12.84. Same *forecast function class*, not the same *estimator*: M2m uses R and P **in training** to pin \(\delta\) and the intercept, then freezes mean fluxes. That is extra identifying information. “Numerical advantage is not extra structure” is too strong. Protocol can still decline it; the prose should not say the models are the same object.
+
+**“Causal” vs the identification you report.**  
+Table 2 labels M2 “causal stock-flow.” §5.2: on 1934–1950, \(\gamma=+0.021\) (wrong sign) because pumping rose as the drought deepened. Full-sample signs recover only when the window is long. Endogenous P (and stream-loss R that physically depends on head) means M2 is a conditional linear map, not a causal stock-flow. Oracle language in the abstract is more careful (“given realized future recharge and pumpage”) than “causal” in Table 2.
+
+**Oracle is not omniscience.**  
+Drawdown window: M2 **18.11 beats oracle 19.69**. That only makes sense if “oracle” = this linear map with realized fluxes, including a bad \(\gamma\). Abstract/Table 2/§5.3 are consistent with that definition; “the map accounts for contemporaneous increments” in §6 can be misread as mass-conserving truth. One sentence should lock: M2_oracle is perfect flux foresight **inside a misspecified affine map**, not a physical upper bound.
+
+**Data Availability Statement vs itself.**  
+Opening: “All input data … are archived.” Later: nClimDiv raw file is **not** in the repo; three precipitation columns are not reproducible from committed code alone. The twenty-column panel-as-record clause repairs this only if the opening sentence is narrowed.
+
+**240-day rule wording.**  
+“Years with fewer than 240 observations are dropped; 1935 (n = 258) and 1939 (n = 242) are retained as incomplete-coverage means.” 242 and 258 **pass** the rule. They are not exceptions; they are the incomplete years that still qualify. As written it reads like a waiver.
+
+**Comal: full-sample r vs 1934–1950 map.**  
+§5.5: contemporaneous r = 0.986 (implied full sample) but \(Q=c_0+c_1H\) fitted only on 1934–1950 (\(c_0=-2876\), \(c_1=4.77\)) and applied to already-issued \(\hat H\). Fine as a freeze, but do not present 0.986 as if it were the fitted service map’s in-sample fit.
+
+**Recharge as both driver and disturbance.**  
+Table 1 Disturbance: “Recharge pulses; unmodeled karst; Uvalde–San Antonio exchange.” Recharge is also the candidate driver. Pulse timing is the result; listing R as unmodeled disturbance blurs the specification.
+
+**Scanlon et al. 2003.**  
+Barton Springs Edwards, not San Antonio Pool. §6 says the lumped/EPM question is “inherited, not resolved.” Accurate enough if the first mention in §1 does not sound as if Scanlon studied this pool.
+
+**“Nested.”**  
+Abstract/§1. M1–M4 are a ladder, not nested likelihood models (M4 changes the state origin; climate modules replace a flux; clip is outside the linear nest). Harmless if you stop saying nested.
+
+**DAS “byte for byte” vs provisional 2023.**  
+§2: 2023 values carry provisional TWDB status. Byte-for-byte regeneration cannot survive a TWDB revision unless the committed panel is frozen as-of a date. Name that date.
+
+---
+
+## 2. Flaws (method, claim strength, hydrogeology)
+
+**The one-pool map is not a water balance.**  
+\[
+H_{t+1}=\bigl[H_t+\alpha+\beta\tilde R_{t+1}+\gamma\tilde P_{t+1}+\delta H_t\bigr]_{\mathrm{clip}}
+\]
+No storage conversion, no spring discharge, no underflow, clip instead of a water-table floor. \(\delta H_t\) is a linear drain, not \(Q(H)\). You stored **total spring discharge and did not use it as a driver** (§2) — correct for not using a concurrent service as a predictor, but then the oracle still omits the largest head-dependent outflow as an accounting term. Calling this “stock-flow,” “one-pool water-balance,” and “the water-balance class is not empty” oversells a four-parameter linear predictor. The interesting result (oracle RMSE 7.55 vs persist 13.23) is still real: **contemporaneous R and P explain increments inside this regression.** It does not show that a balance “certifies the year.”
+
+**Implied hydraulics are unchecked.**  
+Full-sample \((\hat\beta,\hat\gamma)=(0.017,-0.026)\) ft per \(10^3\) acre-ft. That is ~17 ft of J-17 per million acre-ft of recharge, vs ~26 ft per million acre-ft of pumpage. No comparison to pool area × specific yield / storativity, no reason \(|\beta|\neq|\gamma|\) (springs and exchange). A Groundwater reviewer will ask for this before accepting “stock-flow.” \(\hat\phi=0.66\) implies \(\delta\approx-0.34\) yr⁻¹ on head — strong annual drain. That may be springs; it is not shown.
+
+**Endogeneity of both fluxes.**  
+P responds to drought (you document 1956). Puente R is stream loss, which depends on the water table. Treating \(\tilde R_{t+1},\tilde P_{t+1}\) as exogenous drivers is a forecasting device, not identification of \(\beta,\gamma\). The wrong-sign \(\gamma\) on 1934–1950 is a symptom, not a one-window curiosity.
+
+**P_{t+1} is not the same kind of unknown as R_{t+1}.**  
+Forecasts “from (H, R, P) through t.” For Edwards operations, next-year pumpage is largely permits plus critical-period rules — a **scenario**, not a persisted shock. Persisting last P is why M2 can be a bad *management* forecast even if the map were right. This is the largest operational miss given the introduction’s Stage I / permit framing.
+
+**Predictand ≠ decision variable.**  
+Calendar-year mean of **daily highs**, vs EAA Stage I = **10-day mean**, vs physical service = **lows near 618 ft**. You flag the proxy. You still Brier-score \(1\{\hat H<660\}\) on the annual mean (n = 16 post-2007). Fig. 1 already has daily-high range. Scoring an annual mean of highs will systematically understate drought-stage risk. 31/90 years with annual mean < 660 is not Stage I frequency.
+
+**“Nearly half” the persistence error.**  
+13.23 → 7.55 is a **43%** cut, remainder 57% of persist RMSE. Abstract “rent of nearly half the persistence error” and §7 “cuts error nearly in half” are both slightly high. Improvement is 5.68 ft; half of 13.23 is 6.62.
+
+**No test of whether 0.39 ft is distinguishable from noise.**  
+n = 75. You correctly refuse a significance claim, then retain on a strict point-RMSE inequality. Diebold–Mariano / model confidence set is the standard companion to that gate. Without it, M1 vs persist is a coin-flip on MAE and a small RMSE gap.
+
+**Fixed windows are too small to bold “best.”**  
+n = 6, 5, 5, 9. Table 3 boldface and the drawdown “M2 also beats the oracle” sentence overweight noise. Keep the 1957 recharge-pulse narrative (that is the paper’s best hydrograph argument); demote window rankings.
+
+**h > 1 design stacks the rejection.**  
+Climate: “the one-step recharge forecast is held constant.” M2: last (R, P) persisted for five years. With corr(R_t, R_{t−1}) = 0.17 that **must** explode (M2 h = 5 RMSE 33.49). A fair process multi-step is: year-1 flux forecast, then **climatological** fluxes. You already know climatological fluxes work (M2m 17.44 vs persist 21.11 at h = 5). Holding a white pulse for five years is not a test of stock-flow; it is a test of persisting white noise.
+
+**Clip [610, 710] never audited.**  
+1956 daily min 612.51, 1992 daily max 703.31. Does clip bind on rolling multi-step paths? Unstated. If it binds, M2/M3/M4 RMSE is not the linear map’s RMSE.
+
+**Early-origin overfitting.**  
+Min 15 training years, four free parameters + clip. Early rolling origins can make M2 worse by variance, not only by non-persistent R. No rolling coefficient paths, no shrinkage.
+
+**No operational or literature comparator you yourself cite.**  
+Intro: ANNs, wavelet–NN, GEMS-GER, Zhu et al. karst ML. None is run on J-17. That is a legitimate design choice (ablate a process ladder against naive baselines), but then the intro’s benchmark-culture paragraphs over-promise engagement. Either one simple ML benchmark or a shorter intro.
+
+**Beverly Lodges + incomplete 1935/1939** sit inside the 1934–1950 training window that produces the wrong-sign \(\gamma\) and the drawdown results. No sensitivity drop of reconstructed/incomplete years.
+
+**0.39 ft vs decision scale.**  
+2023 mean 635.68, Stage I 660, 1956 mean 623.15. A 0.39 ft one-year RMSE gain does not move declarations. If the paper’s point is “structure lost to persistence,” say the **effect is operationally nil**; that is stronger, not weaker.
+
+**Karst + annual aggregation.**  
+Annual means of a conduit system turn pulse timing into a residual. Failure of persisted-R at an **annual origin** may be the time step, not the one-pool idea. You almost say this (“timing-bound”) but still frame the result as a verdict on lumped water balance rather than on **annual issuance**.
+
+**Companion Northern cod.**  
+§1 and §6. Scores not pooled — good. For *Groundwater*, the 2016 LRP / 1983–90 analogy costs space and invites a scope objection. One sentence in acknowledgements or omit.
+
+---
+
+## 3. Profound upgrades
+
+These would change what the paper *is*, not polish it.
+
+**A. Make the map a balance, then re-score the oracle.**  
+\(\Delta S = R - P - Q_{\mathrm{springs}}(H) - X_{\mathrm{exchange}}\), \(H=H(S)\), with \(Q\) from the stored total spring series (rating on H) and clip replaced by a storage floor. Then M2_oracle is a real certificate: *given this year’s water, does mass accounting recover J-17?* If oracle RMSE stays ~7.5 ft, the linear regression was enough; if it drops toward measurement error, the current map was leaving the “water-balance” claim on the table. This is the single upgrade that matches the title.
+
+**B. Split the forecast problem into weather vs policy.**  
+- Unconditional: persist / mean / M1 (what you have).  
+- Recharge unknown, **pumpage as scenario** (permits, CP cutbacks as function of \(\hat H\)).  
+- True oracle: realized R and realized P.  
+
+Right now P is treated like rainfall. That understates implementable skill and overstates “no signal at the annual origin.”
+
+**C. Score the rule the Authority uses.**  
+Daily highs are already in hand (Fig. 1). Primary or co-primary: RMSE of 10-day mean, Brier/hit rate for Stage I, days below 660, min annual daily high vs 618. Keep annual-mean RMSE as a comparable but secondary score. The institutional/physical thresholds in Table 1 then do work.
+
+**D. Treat M2m as a flux-informed AR(1), not a declined clone.**  
+Hypothesis: using in-sample R, P identifies \(\delta\) better than univariate \(\phi\). That is a real (small) research claim and matches 12.28 vs 12.84. Protocol can still refuse “extra **forecast-time** structure.” Do not throw away the estimator distinction.
+
+**E. Fair multi-step and a real climate test.**  
+Year 1: ENSO/precip R̂. Years 2–5: climatological R, P. If climate still loses at h = 5, the reject is clean. As written, h = 5 climate RMSE 24–27 ft is largely the hold-constant rule.
+
+**F. Pre-commit a minimum important difference.**  
+e.g. 1 ft or 5% of persist RMSE, plus DM on MAE and RMSE. Then M1 is **not** retained, climate is **not** listed, and the paper’s thesis (naive baselines win) is sharper. The current strict-inequality gate is why you are forced into “class grounds” special pleading.
+
+**G. Hydrologic sanity table.**  
+Implied pool area / S_y from \(\beta\); spring drain from \(\delta\) vs Comal+total Q; why \(|\gamma|>\beta\); clip frequency; rolling \((\beta_t,\gamma_t,\delta_t)\). Without this, “the water-balance class is not empty” is a correlation (corr(\(\Delta H,R\))=0.74) dressed as structure.
+
+**H. Issuance time.**  
+“End of year t” should persist the **last daily high of December**, not the calendar-year mean of highs (which includes January–December and is not known as a mean until the year is closed — actually the year’s mean *is* known at 31 Dec, but it is the wrong state for a stock). Stock-flow wants \(H_{\mathrm{31\,Dec}}\), not \(\overline{H}_{\mathrm{year}}\). Using the annual mean as both state and predictand smears the increment \(\Delta H\) that you then correlate with annual R.
+
+---
+
+## 4. Gap closures (data you already have)
+
+You can close these without a new theory or a new well.
+
+| Gap | Already in the paper / repo | Closure |
+|---|---|---|
+| Mixed SA+Uvalde fluxes for J-17 | “Eastern-basin recharge was stored and not used” | Re-estimate M2/oracle with SA-only R; report whether mixing caused M2’s loss |
+| Springs omitted from the “balance” | Total spring discharge stored; Comal used only post-freeze | Put Q(H) in the map for **oracle and in-sample accounting only**; keep Q out of forecasts |
+| Sign-hit of \(\Delta H\) | Promised in §4 | One column on Table 3 |
+| MAE retention | Table 4 | Parallel to Table 5; M1 would fail |
+| Stage I / 618 | Daily highs, 660 and 618 in Table 1 | 10-day and annual-min scores |
+| Coefficient instability | Rolling origins n = 75 | Median/IQR of \(\beta,\gamma,\delta,\phi\) |
+| Clip | Equation (1) | Bind rate by model/horizon |
+| Reproducibility | nClimDiv missing | Commit the three columns’ source extract or a hash; soften “all input data” |
+| Incomplete/reconstructed heads | 1935, 1939, Beverly Lodges | Drop-and-rescore drawdown window |
+| P as decision | EAA CP rules cited | One scenario: persist R, set P from last year’s CP stage |
+| Climate reject vs protocol | Table 6 vs §4 | Quote the frozen predicates that allow rejecting 12.71 < 12.84 |
+| Oracle wording | Table 2 vs drawdown | “Flux-foresight linear map” in abstract and Table 2 ID |
+| Effect size | 0.39 ft, MAE 0.01 ft | One sentence: not decision-relevant; retain/reject is a methodological gate, not a management upgrade |
+| 1957 ENSO counterexample | SON 1956 La Niña −0.92 | Add whether 1991–92 ENSO announced the 1992 peak (691.96 ft) — same test, other tail |
+
+**Unused eastern recharge** is the most striking self-inflicted gap: the discussion blames pool mixing, and the unused series is exactly the control.
+
+**Unused total spring discharge** is the second: it is why the title’s “water-balance model” is still a regression.
+
+---
+
+## 5. Line-level claim risks (high leverage)
+
+- Abstract “model structure is retained only when it improves a preregistered out-of-sample score” — not what happened to M2m or M2_combo.  
+- Abstract “climatological stock-flow variant … collapses to an affine AR(1) … declined on class grounds” — true of the **equation**, false of the **fit**.  
+- §5.3 “The margin is 0.39 ft on n = 75 and is not a significance claim: it records a slightly mean-reverting head series, not a confirmation of stock-flow structure.” — this sentence is excellent; it should govern the abstract (MAE tie belongs next to it).  
+- §5.4 “they do not constitute forecast structure on head” while listing RMSE < M1 — pick one.  
+- §6 “the same structure that cannot forecast next year certifies this year” — best sentence in the paper; make “structure” = linear map with known fluxes, not a closed water balance.  
+- §7 “It does not conclude that the evaluation framework is empirically confirmed on this basin.” — in tension with selling the framework via a Northern-cod companion and “missing test” in §1. Either this is a J-17 forecast paper (drop framework confirmation language everywhere) or it is a methods paper (then M1’s MAE tie is a problem for the gate).  
+- Physical threshold row: “≈618 ft; 1956 daily minimum 612.51 ft” — 618 is a service heuristic, 612.51 is a fact. Do not splice them as if 618 were observed cessation.  
+- Stage I “in force after 2007” vs Brier only post-2007: consistent. Applying 660 as a “leading indicator” for 1951–56 and then scolding that application (§6) is a straw man you introduced in Table 1’s institutional row.  
+
+---
+
+## 6. What is already strong (do not “upgrade” away)
+
+- Predictand locked; GRACE/G3P/MODFLOW/J-27/San Marcos excluded.  
+- Oracle and Comal excluded from retention **before** scoring the service series.  
+- corr(R_t, R_{t−1}) = 0.17 vs corr(\(\Delta H_t, R_t\)) = 0.74 as the whole paper in two numbers.  
+- 1957 pulse: persist stays on the floor, persisted-R falls further, flux-foresight rises — that figure is the result.  
+- h = 5 climatology beats persist — transferable and rare in this literature.  
+- Climate variables known at 31 Dec do not recover the oracle gap; SON 1956 La Niña does not announce R_1957 = 1143.  
+- Comal as measured fibre of the same state, not a second well.  
+- Explicit non-conclusions on sustainability and on two-pool.
+
+The paper’s scientific payload is: **at an annual origin, J-17 is a slightly mean-reverting level; last year’s recharge is not a forecast of next year’s increment; knowing this year’s water would be worth ~6 ft RMSE and nothing you can observe on 31 December buys that.** That payload is currently wrapped in a retention machine that does not apply itself consistently and in a “water-balance” label the equation does not earn.
+
+Highest-leverage repairs, in order: (1) write the retention predicate once and apply it to M1, M2m, and climate; (2) report MAE and DM; (3) put stored springs (and SA-only R) into an accounting oracle; (4) stop treating next-year pumpage as weather; (5) score 10-day/lows if the introduction stays operational.
+
+audit 2: The manuscript’s core empirical claim is coherent and important: \(\Delta H\) tracks recharge (\(r=0.74\)), recharge is nearly white at annual scale (\(r=0.17\)), so a causal map that must guess next year’s \(R\) loses to last-value / AR(1); the same map given realized fluxes cuts error almost in half; climate known at 31 Dec does not close that gap; at \(h=5\) the training mean wins. That story is already in the tables. What follows is line-level friction that still sits on top of it.
+
+---
+
+## 1. Internal inconsistencies (rule vs table vs prose)
+
+**Retention is not applied with one rule.**  
+§4: a causal module is retained only if primary RMSE is strictly below persistence **and** strictly below the next-simpler causal model. Abstract/§3 call this preregistered. Then:
+
+| Object | h=1 RMSE | vs persist | vs nested comparator | Decision as written |
+|---|---|---|---|---|
+| M1 | 12.84 | −0.39 | output-only | **retained** |
+| M2m | 12.28 | −0.95 | same affine class as M1 | listed, declined on class |
+| M2_combo | 12.71 | −0.52 | **worse than M2m (12.28)** | “listed” vs M1, then not retained |
+| M2_Renso / Rprecip | 12.82 / 12.80 | tiny | also worse than M2m | same |
+
+Three different extra-statutory tests are used: (i) point RMSE vs persist and vs M1, (ii) “class grounds,” (iii) tiny margins plus \(h=5\) plus “weakly adjusted intercept.” M1 is kept on (i) alone at 0.39 ft; climate is rejected despite beating persist and M1; M2m is the best non-oracle number in Table 4 and is discarded by a class argument that was not how M1 was judged. The climate pass is actually nested under M2m (noisy \(R\) forecast vs mean \(R\)). Combo **loses** that nested test (12.71 > 12.28). That is the clean reject. The paper instead says the point-RMSE rule “lists” climate modules, then overrides. That is not the frozen rule as stated.
+
+Abstract “preregistered” vs §3 “fixed computational protocol rather than a prospective clinical-style registration” — same object, two strengths of claim. Data are 90 years old; freeze-before-scoring is real, preregistration is not.
+
+**Sign-hit rate of \(\Delta H\)** is declared a secondary score on fixed windows (§4) and never appears again. Either report it or strike it from the protocol paragraph.
+
+**Multi-step generation is not specified, and the numbers fight each other.**  
+M1 \(h=5\) RMSE = 21.25 ≈ persist 21.11, **not** like the training mean 16.80.  
+M2m \(h=5\) = 17.44 ≈ mean.  
+M2/M3/M4 \(h=5\) ≈ 33.4 (runaway).  
+
+M1 and M2m are the same affine forecast equation. If both are iterated, \(\hat H_{t+5}=\mu+\varphi^5(H_t-\mu)\). Full-sample \(\hat\varphi=0.66\) gives \(\varphi^5\approx0.13\), i.e. climatology, i.e. M1 should look like the mean, not like persist. Three mutually exclusive readings, none written down:
+
+1. M1 at \(h>1\) is the **one-step map applied to \(H_t\)** (not iterated, not direct-\(h\)). Then M1≈persist at every horizon by construction, the \(h=5\) “climatology wins” headline is true against persist and **uninformative against a proper AR(1)**, and M1 vs M2m at \(h=5\) is an apples-to-oranges implementation.
+2. Both iterated, but rolling-window \(\hat\varphi\) sits near 1 while M2m’s \(1+\delta\) is smaller (flux-conditional persistence). Then the \(h=5\) gap is a real result and should be shown as paths of \(\hat\varphi_t\) and \(1+\hat\delta_t\).
+3. M2/M3/M4 are iterated with persisted fluxes (hence 33 ft) while M1 is not.
+
+§3 only says that for climate modules “the one-step recharge forecast is held constant.” It does not say how M1, M2, M2m step from \(h=1\) to \(h=5\). Until that is a frozen formula, Table 4’s horizon contrast is not interpretable.
+
+**Oracle is not an information bound; the paper treats it as one.**  
+Abstract: “a rent of nearly half the persistence error.” Rolling oracle 7.55 vs persist 13.23 is a property of **this linear map plugged with future \((R,P)\)**. Table 3 drawdown: M2 **beats** the oracle (18.11 vs 19.69) because 1934–1950 gives \(\gamma=+0.021\) (wrong sign). So “knowing the future” can hurt. The 7.55 number is not the value of knowing next year’s water; it is the value of knowing it **given** \((\hat\alpha,\hat\beta,\hat\gamma,\hat\delta)\) from an expanding linear OLS. Call it that.
+
+**“Nested” ladder is not nested.**  
+M4 (start from \(H_{t-1}\)) is not a restriction of M2. M3 (AR residual on \(\Delta H\)) is an add-on, not a nest. M1 is not nested in M2 under the way M2m is nested in M1. “Ladder of nested one-pool water-balance models” overstates the algebra.
+
+**Introduction overclaims the literature gap.**  
+“none ablates a process-based water balance against its data-driven alternatives.” This paper ablates linear one-pool against persist/AR(1)/mean, not against the ANN/wavelet/GEMS-GER/Zhu architectures it cites. Those names never re-enter the score tables. Either run one dumb data-driven competitor under the same gate or narrow the sentence.
+
+**Comal linear map vs the 1956 fact the paper itself highlights.**  
+\(Q=-2876+4.77H\) fit on 1934–1950 only. At 1956 mean 623.15 ft that is ~97 cfs; the paper’s own discussion gives 1956 Comal annual mean 32 cfs. The service-series score in §5.5 therefore uses a map that already fails on the drought-of-record, applied to \(\hat H\) from models that also fail there. \(r=0.986\) is full-sample contemporaneous, not the 1934–1950 fit, and not tail behaviour. The qualitative point (Comal is not an independent information source) does not need this map; the RMSE row does, and the map is not up to 1956.
+
+**\(\beta\neq-\gamma\) is a rejected one-pool already, unremarked.**  
+Full-sample \((\hat\beta,\hat\gamma)=(0.017,-0.026)\). Per acre-foot, J-17 moves more under pumpage than under basin recharge. That is expected for a confined artesian index well. It is also exactly the statement that \(R\) and \(P\) are **not** interchangeable volumes in one tank. The paper never tests the nested restriction \(\beta=-\gamma\) (common storage). Rejecting “stock-flow” while estimating an unrestricted four-parameter affine increment leaves the hydrogeologic target fuzzy: what was rejected is “linear map with free \(\beta,\gamma,\delta\) and persisted annual fluxes,” not “conservation of volume in one pool.”
+
+**Jargon vs the journal.**  
+“Rent,” “fibre,” “blocking list,” “locked” predictand, “two-pool parameterization the relative-exchange term is removed, leakage is not applicable,” companion NAFO 2J3KL scores “never pooled.” These are sentences from a parent framework. In *Groundwater* they read as unclosed modules, not as precision. §6’s two-pool paragraph cannot be decoded from this manuscript alone. Eastern-basin recharge “was stored and not used” is the same tell.
+
+**Clip \([610,710]\).**  
+Never reported whether it bound. M2 at \(h=5\) RMSE 33 ft on a 100-ft allowed band is the regime where clip, if active, **is** the model. Unclipped vs clipped RMSE is a missing row.
+
+---
+
+## 2. Scientific and design flaws
+
+**The causal class is too thin for the conclusion’s wording.**  
+The rejected object is
+\[
+H_{t+1}=\bigl[H_t+\alpha+\beta\tilde R_{t+1}+\gamma\tilde P_{t+1}+\delta H_t\bigr]_{\mathrm{clip}}
+\]
+with \(\tilde R,\tilde P\) last-year or mean. Edwards springflow is a weir/orifice in head, storage is unconfined in the recharge zone and confined at J-17, and 1956 is the year springs nearly quit and the linear Comal map already fails. A one-pool **linear** annual map is the thing that cannot forecast. Scanlon et al. 2003 (Barton Springs, EPM) is asked to carry the karst caveat; it does not make this map a serious lumped Edwards model. The discussion correctly says “not a karst model.” The title/abstract still say “one-pool water-balance model.” Those are not the same.
+
+**Annual origin is not the operational problem named in sentence 1.**  
+Drought-stage declarations key on **10-day** J-17 means, intra-annual. Calendar-year mean of **daily highs**, issued 31 Dec for the next calendar year, is a different decision. EAA Stage I is dated correctly as 2007 and not backcast — good — but Brier on \(1\{\text{annual mean}<660\}\) for \(n=16\) is then a proxy of a proxy. The paper says this once (“coarse proxy,” “not the 10-day rule”) and still leads the management motivation with stage declarations.
+
+**Daily-high, incomplete years, Beverly Lodges, provisional 2023.**  
+Why daily-high rather than daily mean or the Authority’s averaging convention is never justified. 1935 (\(n=258\)) and 1939 (\(n=242\)) are kept; “missing days are not interpolated” means the annual mean **is** a seasonal-coverage-weighted mean. Beverly Lodges extension “used as issued” has no citation, no join date, no homogeneity check. 2023 is provisional and is inside the \(n=75\) origins. Any of these can move a 0.39 ft RMSE margin.
+
+**\(R\) and \(P\) are the wrong spatial objects for J-17, and the authors have the right ones.**  
+Umphres and Choi (2025) is **by stream basin or ungaged area**. The paper uses total San Antonio-area \(R\) (Uvalde + San Antonio) to forecast the San Antonio index well, then lists that mix as a limitation, then notes eastern-basin recharge was stored and unused. That is a gap that can be closed **from the cited data release** without a new theory. If SA-only \(R\) still cannot beat persist, the retention verdict is much stronger. As written, M2 may fail because the driver is the wrong pool.
+
+**Pumpage is not a forecastable exogenous flux.**  
+Post-1997/2007 \(P\) is a policy function of J-17. Persisting last \(P\) ignores a rule that **is** known at the origin. Oracle \(P\) is not in any information set and is endogenous to the predictand. The remark that a critical-period switch “adds no degree of freedom beyond the pumpage series” is true for **in-sample accounting** and false for **forecasting** \(P\).
+
+**No estimation recipe.**  
+Expanding vs sliding window, OLS vs constrained, intercept always on, whether \(\delta\) is free when \(R,P\) are replaced by means, whether coefficients are re-fit at every origin — not stated. The 1934–1950 wrong-sign \(\gamma\) shows that short-window OLS is part of the M2 failure. Without coefficient paths, one cannot separate “recharge is not persistent” (true, and sufficient) from “expanding OLS on 15–40 years of collinear drought pumping is unidentified.”
+
+**No forecast-comparison test.**  
+They correctly refuse to call 0.39 ft a significance claim, then retain/reject on that point. With \(n=75\), Diebold–Mariano or a block bootstrap of RMSE difference is the standard object. MAE for M1 vs persist is 10.72 vs 10.73: the RMSE win is almost entirely a squared-tail effect. Decision-relevant scores (Stage I Brier, low-quantile loss, 618-ft tail) may not rank the same way. Post-2007 Brier (0.31 / 0.25 / 0.19) is the more operational number and sits on \(n=16\).
+
+**Fixed windows are event studies, then bolded as model rankings.**  
+\(n=5\)–9. 1957 and 1992 are single recharge pulses. M4 “best causal” on 1991–95 at 15.26 ft is a one-year information delay beating the model that uses current head — a warning that short-window RMSE is noise, not a result to bold. Figure 2 already shows the years; Table 3’s boldface fights that figure.
+
+**Climate pass: the \(R\) scores already tell the story; the head scores are a rounding error.**  
+Rain climatology RMSE on \(R\) is 556; ENSO/precip/combo 528–545 (~5% skill); persist \(R\) 702; rain oracle 354. Head: combo 12.71 vs M1 12.84 vs M2m 12.28. That is M2m with a jittered intercept, which is what the prose says, and it should be the **lead** comparison, not M1. SON 1956 Niño 3.4 \(=-0.92\) not announcing \(R_{1957}=1143\) is the right anecdote; it belongs next to the \(R\) column, not only next to head RMSE.
+
+**M1 retained as “slightly mean-reverting head,” which is right, but then \(h=5\) M1 loses to persist.**  
+If the series is mean-reverting, iterated AR(1) should beat persist at \(h=5\). It does not (21.25 > 21.11). That is either implementation (see above) or rolling \(\hat\varphi\approx 1\). Either way, “retained AR(1)” and “five-year forecasts are climatology” are currently two different models of the same series.
+
+**Storage implied by \(\hat\beta\) is never compared to a published number.**  
+0.017 ft per \(10^3\) acre-ft \(\approx 5.9\times10^4\) ac-ft per foot of J-17. That is a lumped equivalent (unconfined Sy plus artesian S) in the right order of magnitude for Edwards tank models. Showing it would make Table 4’s \(\beta,\gamma\) hydrogeology rather than only a horse race. \(|\gamma|>\beta\) is the confined-well signature.
+
+---
+
+## 3. Profound upgrades (same data, much stronger paper)
+
+These are ordered by how much they change the retention verdict or the management sentence.
+
+**U1. Write the \(h\)-step map as code-equivalent algebra, once, for every ID.**  
+Iterated affine, direct \(h\), or persist-the-one-step-increment. Freeze it. Add a table of rolling \(\hat\varphi\), \(1+\hat\delta\), \(\hat\beta\), \(\hat\gamma\). If M1 is then iterated and still ≈ persist at \(h=5\), the finding is local unit roots in expanding windows — publish that. If M1 was not iterated, re-score; the headline “at five years, climatology” may become “iterated AR(1) already is climatology,” which is a different (and more standard) sentence.
+
+**U2. Treat M2m as a physically informed estimator of AR(1), not as a class error.**  
+M2m is the one place the water-balance **does** something: it pins the intercept to mean fluxes and estimates persistence **conditional on** \(R,P\). It is the best non-oracle \(h=1\) RMSE (12.28) and nearly the best \(h=5\) (17.44 vs mean 16.80). Declining it “because constant fluxes reduce the forecast equation to affine AR(1)” throws away the result that the **estimator** of \((a,\varphi)\) informed by fluxes beats OLS AR(1). That is a legitimate, retainable, output-only model: “equilibrium head from mean \(R,P\), then persist the residual.” It is also the right nested parent for every climate module.
+
+**U3. Nested physical restrictions, not only nested forecast IDs.**  
+Score, under the same protocol: (i) \(\beta=-\gamma\) (one storage coefficient); (ii) \(\gamma=0\) (recharge-only); (iii) piecewise or \(Q(H)=c(H-H_{\mathrm{spr}})_+\) spring law, clip replaced by a weir; (iv) two tanks (recharge-zone unconfined + artesian) even with exchange held at zero. If (i)–(iii) still lose to persist at \(h=1\), “stock-flow fails because \(R\) is not persistent” is no longer vulnerable to “you only tried a straw-man affine map.”
+
+**U4. Split \(R\) the way Puente/USGS already split it.**  
+San Antonio-pool recharge vs Uvalde vs total. Same M2/M2m/oracle ladder. This is the highest-leverage specification change in the paper, and the files are in the cited DOI.
+
+**U5. Decompose the oracle.**  
+A 2×2 of \(\{R_{\mathrm{persist}}, R_{\mathrm{mean}}, R_{\mathrm{climate}}, R_{\mathrm{oracle}}\}\times\{P_{\mathrm{persist}}, P_{\mathrm{mean}}, P_{\mathrm{oracle}}\}\) on the same origins. Precipitation-oracle head RMSE 10.56 already sits between persist (13.23) and full oracle (7.55). That decomposition **is** the “rent.” Right now 7.55 is a single magic number.
+
+**U6. Formal comparison + operational loss.**  
+DM or block-bootstrap on RMSE(M1)−RMSE(persist) and on RMSE(M2m)−RMSE(M1). Keep the point-RMSE rule if you must, but do not let 0.13 ft and 0.39 ft look like different kinds of evidence. Add a loss that matches EAA: 10-day mean, or at least a proper scoring rule on crossing 660 and 627/618, fit only on post-2007 origins as already begun.
+
+**U7. One data-driven horse, same gate.**  
+Even \(H_{t+1}=a+\varphi H_t+\sum_{k=0}^{1}(b_k R_{t-k}+c_k P_{t-k})+d\,\mathrm{Niño}_t\), or a two-lag linear model, or the simplest GEMS-GER analogue. If it also fails the persist/M1 gate, the introduction’s claim about ML inventory vs naive baselines becomes a result rather than a sermon. If it passes, the paper’s “complexity is kept only if…” discipline has something to keep.
+
+**U8. Reinterpret the 5-year result for managers.**  
+As written: “five-year forecasts on this basin are climatology.” After U1/U2 that may read: do not persist last year’s drought four more years; revert to a water-balance equilibrium head implied by mean fluxes (M2m), which is almost the training mean. That is an implementable product. Persist-R at \(h=5\) (RMSE 33 ft) is the thing to warn against, not “models.”
+
+**U9. Drop or quarantine the companion fishery and the blocking-list language.**  
+One sentence: scored ablation is being applied elsewhere and scores are not pooled. Everything about NAFO LRPs, relative-exchange, fibres, and unclosed two-pool lists costs referees and buys nothing Edwards-specific. Invert the frame: Edwards first, protocol as method.
+
+**U10. Homogeneity and predictand convention.**  
+Document Beverly Lodges. Re-score 1950–2023 only (drops the wrong-sign \(\gamma\) window from training, not from the drought test). Replace daily-high annual mean with the series EAA actually watches, or show the 0.39 ft is robust to that choice.
+
+---
+
+## 4. Gap closures (what is already shut vs what is only named)
+
+**Already closed, and the paper should lean on these harder**
+
+- Persistence **and** training-mean as first bars; this really is the hole in much of the GW ML literature they cite.  
+- No leakage: SON Niño of year \(t\), no DJF that contains January of \(t+1\).  
+- Oracle excluded from retention.  
+- Comal excluded as driver; contemporaneous \(r=0.986\) is the right warning.  
+- 660 ft not backcast before 2007; 1956 treated as physical near-cessation, not Stage I.  
+- Protocol dated before the RMSE tables (even if “preregistered” is too strong).  
+- Honest negative conclusions: not a sustainability verdict, not a confirmation of the parent framework.  
+- 1957/1992 narrative: recoveries are recharge pulses, not autonomous reversion and not a pumping-regime change. Supported by Table 3 and by \(R_{1956}=43.7\) vs \(R_{1957}=1142.6\).  
+- “Recharge is not persistent” as the mechanism. That sentence is the paper.  
+- Reproducibility posture (committed panel, byte-for-byte rerun), with one real hole (nClimDiv raw not in the repo).
+
+**Named as limitations, still open, and some are closable now**
+
+- Mixed-pool \(R\) — closable from Umphres and Choi.  
+- Linear spring/storage — closable with a weir and \(\beta=-\gamma\) nest.  
+- Annual step vs intra-annual management — not closable without a new protocol (they say this); then do not open the paper on 10-day declarations.  
+- Unreported domestic/livestock/federal pumpage — not closable; keep.  
+- \(n=90\), four short windows, 0.39 ft not a test — closable with a test, not with more caveats.  
+- PDO/AMO fishing — correctly refused; leave in SI as a pre-declared robustness or do not mention.  
+- Two-pool exchange — either a sequel or silence; the current paragraph does not close it and cannot.
+
+**Promised and missing**
+
+- Sign-hit rate.  
+- Whether clip bound.  
+- Estimation method and coefficient paths.  
+- Why daily-high.  
+- Beverly Lodges provenance.  
+- Precipitation raw or a content hash.
+
+---
+
+## 5. Line-level nits that still matter at this journal
+
+- Abstract “rent of nearly half”: oracle/persist \(=7.55/13.23\approx0.57\), so error is cut 43%; at \(h=5\) it really is ~half (10.87/21.11). Tighten.  
+- \(\approx618\) ft “approaches cessation” vs 1956 daily min 612.51 and 32 cfs annual Comal: cessation elevation in the literature is often ~619–623. Pick a cited rating curve.  
+- Scanlon et al. 2003 is Barton Springs, not San Antonio Pool. Say so, or cite a San Antonio lumped/EPM paper.  
+- Ropelewski & Halpert 1986 is fine as a canonical ENSO–precip cite; Texas-specific ENSO–Edwards recharge papers exist and would be more persuasive for §5.4.  
+- Table 1 type codes D/E/M/N are unused elsewhere; they look like residue of the parent specification language.  
+- “Values from 2023 onward carry provisional status. The complete estimation panel ends in 2023.” Onward vs ends.  
+- 1956 pumpage “321 kaf” vs \(P\) in \(10^3\) acre-ft elsewhere: same unit, three names (kaf, \(10^3\) acre-ft, Table 1).  
+- Keywords: add karst, ENSO, forecast verification / persistence; “model evaluation” is doing too much work.  
+- Ohmer 2026 and Zhu 2026 as if published: if they are not citable at submission, the “benchmark culture” paragraph collapses. Have a fallback (Daliakopoulos, Adamowski, plus M4).  
+- GitHub `general-sustainability` plus fishery companion will signal to NGWA referees that Edwards is a case study in a private framework. That is a positioning problem, not a data problem.  
+- M4 “starts from \(H_{t-1}\)” winning a 5-year wet window should be treated as a diagnostic that short RMSE is unstable, not as a rung that almost counted.
+
+---
+
+## 6. What I would not “fix”
+
+Do not add structure to save M2. The mechanism (white \(R\), \(\mathrm{corr}(\Delta H,R)=0.74\)) already explains the reject. A fancier karst lumped model that still has to guess \(R_{t+1}\) will lose the same way; U3 is to stop referees calling M2 a straw man, not to reverse Table 4.
+
+Do not pool Comal into retention. §5.5 is right: independent gauge, not independent information.
+
+Do not back off the \(h=5\) climatology sentence if U1 confirms it. That is the transferable management result.
+
+Do not turn 0.39 ft into a significance theatre if a DM test is equivocal; then the honest retain is “M1 is a tie with persist at \(h=1\), mean wins at \(h=5\), causal fluxes lose.” That is still a paper.
+
+---
+
+**Bottom line.** The forecast ranking is likely right: persist/AR(1) at one year, mean at five, oracle only with next year’s water, climate ≈ mean \(R\). The manuscript currently wraps that in a retention liturgy it does not follow, a multi-step implementation it does not write down, a “one-pool water-balance” it never physically restricts, and a driver series it aggregated one basin too far — while sitting on the USGS basin-level recharge that would close the most important specification gap. Tighten the rule to match Table 4 (climate nested under M2m; M2m as informed AR(1) estimator), write the \(h\)-step maps, split \(R\), and the paper becomes what it claims to be: a scored gate, not a framework excerpt.
