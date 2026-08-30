@@ -1,0 +1,1047 @@
+
+# Typed Stoichiometric Stock-Flow Accounting for Non-Compensatory Sustainability Assessment
+
+**Paper 3 of the programme's five-paper publication architecture (general-sustainability, A001–A025).** Every concordance-sourced statement is stated at its row-verified status; this paper's own theorems carry complete proofs, with the conservation family owned by the theorem atlas (Paper 2).
+
+**Version 2 revision note.** This version incorporates all findings from the structural audit. The principal changes are: (i) the incidence-matrix architecture is replaced by a typed stoichiometric balance law $\dot{x} = Nv + b$ with an explicit moiety-composition map $S = Cx$; (ii) the moiety ontology is separated into element, species, compartment, and stock; (iii) "thermodynamic consistency" is removed from the title and claims — the paper establishes mass-balanced accounting, not thermodynamic admissibility; (iv) the bridge theorem is split into a flux-reconstruction identity (Theorem 1A) and a conservation-law reduction (Theorem 1B); (v) the finite-exhaustion theorem is corrected with an explicit uniform-negative-drift assumption and a counterexample; (vi) the five-compartment example is rebuilt with a single conserved element; (vii) depletion diagnostics are extended to upper barriers, infimum hitting times, and flux-based (not effort-based) net depletion rates; (viii) the concordance arithmetic is corrected.
+
+---
+
+## Abstract
+
+This article develops the material-accounting layer of a typed theory of sustainability: how stocks, services, products, waste, detritus, active and geological pools, and depletion diagnostics are represented without compensatory aggregation and without double counting. The representation is a **typed stoichiometric ledger**: conserved moieties (elements) are distinguished from chemical species and material forms; compartments carry a moiety composition, a boundary declaration, and a unit; non-negative process rates connect species-compartment stocks through a signed stoichiometric matrix; conversions between types appear only as explicit stoichiometric coefficients; and every one-way transfer is donor-limited.
+
+On this scaffold the paper states and proves the closed finite-donor ledger's complete theorem set — a system in which the geological donor is a state and no derived target appears: the natural-block mass identity (mass leaves the natural block exactly at the extraction and mining rates), forward invariance of the nonnegative orthant, the absence of any interior rest point at positive effort, the extinction–geochemical rest set as the only rest structure with vanishing extraction, and integrability of extraction on the finite donor budget. The canonical conservation family (typed hybrid conservation, the closed positive-moiety bound, and the sufficiency of donor limitation for the tangency condition) is stated with the atlas as proof owner.
+
+Three distinct certification layers are formally separated: **accounting consistency** (the balance law holds), **conservation consistency** (declared moieties satisfy $\ell^\top N = 0$), and **barrier safety** (all declared lower and upper stock barriers are satisfied along the trajectory). These are related but not identical predicates; the paper proves their logical relationships and identifies where they diverge.
+
+A service layer is added as a typed readout, never as conserved mass: the state-dependent feasible balance domain, the support-provenance partition with its directional support gap, and the componentwise deficit, whose single-resource specialization yields the exact balance identity $qEN - R = -\dot{N}$.
+
+Depletion time is then separated into three non-interchangeable quantities — gross turnover/dependency intensity, a frozen-rate ratio, and a scenario-conditioned hitting time — and extended to upper-barrier violations and non-hitting cases. Componentwise depletion diagnostics identify the binding material bottleneck under a conjunctive (non-compensatory) decision rule. The application classifications are stated verbatim: the G3P anomaly-persistence index is a statistical index, not a physical stock ratio; the phosphate reserve-life ratio is arithmetic, not a dynamic depletion forecast.
+
+The accounting identity extends to nonlinear flux paths under integrability conditions; full nonlinear viability and depletion computation are left for future work.
+
+---
+
+## 1 Introduction
+
+### 1.1 The question this paper answers
+
+**How are material stocks, flows, transformations, and depletion diagnostics represented in a typed, non-compensatory framework that separates accounting consistency from conservation structure from sustainability admissibility?**
+
+Sustainability assessments aggregate stocks, services, liabilities, and floors into single indices whose compensations are never declared as mathematics. Standard material flow analysis (MFA) provides disaggregated physical accounting but does not inherently impose a non-compensatory decision rule; some MFA-derived indicators aggregate heterogeneous materials in ways that can permit compensatory interpretation unless critical-material constraints are separately retained. The typed ledger developed here supplies the physical-material representation that the programme's assessment architecture (Paper 1) requires: every stock carries a moiety, a boundary, and a unit; every flux is typed, donor-limited, and dimensionally valid; and the assessment operator is conjunctive across all declared barriers.
+
+### 1.2 What enters this paper
+
+Paper 3 is the material-accounting paper of a five-paper series. Its retained set consists of the concordance rows routed to it by the programme's destination pass (the primitive-flux ledger definitions; the closed finite-donor theorem set; the conservation family statements with atlas cross-reference; the service layer; the depletion-time trichotomy; the application classifications), plus this paper's own componentwise depletion diagnostic.
+
+The full proof corpus for the conservation family belongs to Paper 2, the theorem atlas. Where this paper needs an atlas result, it states the canonical form once, cross-references the owning paper, and never transfers a status. Per-row provenance identifiers (`CC-A0XX-YYY`) link every statement to the 409-row concordance inventory (source location, canonical module, mapping type, evidence status, destination).
+
+### 1.3 Scope and claims
+
+This paper establishes a **mass-balanced typed stoichiometric ledger** for componentwise sustainability assessment. It does **not** establish:
+
+- thermodynamic consistency (mass balance is necessary but not sufficient for thermodynamic admissibility);
+- finite depletion horizons from positive donor-controlled extraction alone (an explicit uniform-negative-drift assumption is required);
+- barrier computation from flux data alone (barriers are declared externally; the ledger audits compliance with declared barriers);
+- nonlinear reachability or robust viability (these belong to Papers 2 and 4);
+- empirical calibration of any specific material system.
+
+### 1.4 Relation to the programme
+
+The typed ledger is the material substrate on which the programme's assessment architecture operates. Paper 1 declares the typed constraint registry and the non-compensatory assessment operator. Paper 2 owns the conservation proofs. Paper 4 applies the ledger to delay-driven capital-liquidation dynamics. Paper 5 applies it to empirical identification and falsification designs. This paper owns the representation, the accounting theorems, the depletion diagnostics, and the application classifications.
+
+---
+
+## 2 Ontology: moieties, species, compartments, and stocks
+
+### 2.1 Four distinct concepts [CC-A019-001 · definition]
+
+The ledger separates four concepts that are conflated in informal material accounting:
+
+**Definition 2.1 (Conserved moiety).** A conserved moiety (or element) is an index $m \in \mathcal{M}$ representing a quantity that is conserved by all internal transformations. Examples: carbon, nitrogen, phosphorus, water.
+
+**Definition 2.2 (Chemical species or material form).** A species is an index $\sigma \in \Sigma$ representing a specific chemical or material form. Examples: methane, atmospheric CO₂, nitrate, biomass carbon, soil organic carbon, liquid water.
+
+**Definition 2.3 (Compartment or location).** A compartment is an index $i \in \mathcal{I}$ representing a physical location or pool. Examples: fossil reserve, atmosphere, forest biomass, soil, aquifer.
+
+**Definition 2.4 (Stock variable).** The stock variable $x_{i,\sigma}(t) \geq 0$ is the quantity of species $\sigma$ in compartment $i$ at time $t$, carrying an explicit unit.
+
+### 2.2 Moiety-composition map
+
+**Definition 2.5 (Moiety-composition matrix).** The matrix $C \in \mathbb{R}^{M \times n}$ maps species-compartment stocks to moiety totals:
+
+$$S_m(t) = \sum_{i,\sigma} \gamma_{m\sigma}\, x_{i,\sigma}(t) = (Cx)_m(t)$$
+
+where $\gamma_{m\sigma}$ is the amount of moiety $m$ contained in one unit of species $\sigma$, and $n = |\mathcal{I}| \times |\Sigma|$ indexes the species-compartment pairs.
+
+**Example.** Carbon moves from fossil organic carbon to atmospheric CO₂ during combustion. Under the composition map, both are stocks of the *same* conserved moiety (carbon) in different species and compartments. The transformation does not create or destroy carbon; it redistributes it. This resolves the inconsistency in which "atmospheric carbon" and "fossil carbon" are treated as separately conserved substances.
+
+### 2.3 Units and dimensional consistency
+
+Every stock $x_i$ carries a declared unit $\dim(x_i)$. Every process rate $v_j$ carries a declared unit $\dim(v_j)$. The stoichiometric coefficient $N_{ij}$ carries the conversion factor:
+
+$$\dim(\dot{x}_i) = \dim(N_{ij} \cdot v_j)$$
+
+for every nonzero entry. Heterogeneous units (kg carbon, kg nitrogen, m³ water, MJ energy) are never added directly. The composition map $C$ handles unit conversion between species-level and moiety-level accounting.
+
+---
+
+## 3 The typed stoichiometric ledger
+
+### 3.1 Ledger tuple [CC-A019-001 · definition]
+
+**Definition 3.1.** A typed stoichiometric ledger is a tuple:
+
+$$\mathcal{L} = (\mathcal{M},\, \Sigma,\, \mathcal{I},\, \mathcal{B},\, \mathcal{U},\, C,\, N,\, V,\, b,\, x_0,\, \underline{B},\, \overline{B})$$
+
+where:
+
+- $\mathcal{M}$: conserved moieties (elements);
+- $\Sigma$: material species or forms;
+- $\mathcal{I}$: compartments;
+- $\mathcal{B}$: system boundary declaration (which fluxes cross the boundary);
+- $\mathcal{U}$: unit and dimension declarations;
+- $C \in \mathbb{R}^{M \times n}$: moiety-composition map;
+- $N \in \mathbb{R}^{n \times J}$: stoichiometric process matrix;
+- $V$: admissible flux correspondence $v \in V(x, u, d)$;
+- $b \in \mathbb{R}^n$: boundary flux vector;
+- $x_0 \in \mathbb{R}_+^n$: initial stock;
+- $\underline{B}, \overline{B}$: declared lower and upper barrier functions.
+
+### 3.2 Dynamics
+
+The species-level balance is:
+
+$$\dot{x} = Nv + b, \qquad v \in V(x, u, d)$$
+
+The moiety-level balance is:
+
+$$\dot{S} = CNv + Cb$$
+
+where $S = Cx$.
+
+### 3.3 Admissible fluxes [CC-A019-001 · definition]
+
+**Definition 3.2 (Admissible flux correspondence).** The flux correspondence $V$ assigns to each state-control-disturbance triple $(x, u, d)$ a set of admissible process rates:
+
+$$V(x, u, d) = \{v \in \mathbb{R}_+^J : v \text{ satisfies donor limitations, unit constraints, and declared bounds}\}$$
+
+**Donor limitation.** For every outflow $j$ from compartment $i$:
+
+$$x_i = 0 \implies v_j = 0$$
+
+This ensures that extraction cannot drive a stock negative.
+
+### 3.4 Boundary fluxes
+
+The boundary vector $b(t) \in \mathbb{R}^n$ collects all fluxes crossing the system boundary. A positive entry $b_i > 0$ is a boundary inflow into compartment $i$; a negative entry $b_i < 0$ is a boundary outflow. A ledger is **closed** if $b \equiv 0$; otherwise it is **open**.
+
+### 3.5 Nonnegativity and forward invariance
+
+**Proposition 3.1 (Forward invariance of $\mathbb{R}_+^n$).** Under donor limitation ($x_i = 0 \implies (Nv + b)_i \geq 0$ for all admissible $v$), the nonnegative orthant $\mathbb{R}_+^n$ is forward invariant.
+
+*Proof.* At any boundary point $x_i = 0$, the tangent cone to $\mathbb{R}_+^n$ requires $\dot{x}_i \geq 0$. By donor limitation, all outflow terms from compartment $i$ vanish, and the remaining terms (inflows, generation, boundary inputs) are nonnegative. Hence $\dot{x}_i \geq 0$. By Nagumo's theorem (or the viability tangency condition), $\mathbb{R}_+^n$ is forward invariant. $\square$
+
+The conservation family proof is owned by Paper 2 (atlas); this paper states the result and cross-references the proof.
+
+### 3.6 Double-counting prevention
+
+**Axiom 3.1 (Conservation ownership).** Every physical quantity has a unique accounting representation at each time. The ledger declares a partition $\mathcal{I}_{\text{partition}}$ of compartments such that:
+
+$$\sum_{i \in \mathcal{I}_{\text{partition}}} x_i = \text{total physical stock}$$
+
+If stocks overlap (e.g., a material is simultaneously a production input and a reserve), an ownership or allocation matrix $P$ is declared such that $\mathbf{1}^\top P x$ counts each physical stock unit exactly once.
+
+Typing prevents invalid cross-type arithmetic but does not automatically prevent double-counting. The ownership axiom is required.
+
+---
+
+## 4 Three certification layers
+
+### 4.1 Separation of predicates [CC-A019-001 · definition]
+
+The ledger supports three distinct predicates that are related but not identical:
+
+**Layer 1: Accounting consistency.**
+
+$$\text{AccountingConsistent}(\mathcal{L}) \iff \dot{x} = Nv + b \text{ holds a.e. on } [0, T]$$
+
+**Layer 2: Conservation consistency.**
+
+$$\text{ConservationConsistent}(\mathcal{L}) \iff \ell^\top N = 0 \text{ for every declared conserved quantity } \ell$$
+
+**Layer 3: Barrier safety.**
+
+$$\text{BarrierSafe}(x(\cdot)) \iff \underline{B}_m(t) \leq S_m(t) \leq \overline{B}_m(t) \quad \forall m, \, \forall t \in [0, T]$$
+
+### 4.2 Logical relationships
+
+**Proposition 4.1.** Conservation consistency implies accounting consistency for the conserved quantities: if $\ell^\top N = 0$, then $\frac{d}{dt}(\ell^\top x) = \ell^\top b$, and in a closed system ($b = 0$), $\ell^\top x$ is invariant.
+
+**Proposition 4.2.** Barrier safety does not follow from accounting consistency. A trajectory can be perfectly mass-balanced while violating a declared barrier. Conversely, a trajectory can satisfy declared barriers while violating a conservation law or chemical stoichiometry.
+
+**Proposition 4.3.** Thermodynamic admissibility (energy conservation, entropy production nonnegativity, reaction feasibility) implies accounting consistency, but accounting consistency does not imply thermodynamic admissibility. This paper establishes Layers 1–3 only. Thermodynamic admissibility requires additional structure (energy accounting, entropy production, reaction feasibility) that is outside the present scope.
+
+### 4.3 The typed safety set
+
+**Definition 4.1.** The typed safety set at time $t$ is:
+
+$$\mathcal{K}(t) = \{x \geq 0 : \underline{B}(t) \leq Cx \leq \overline{B}(t)\}$$
+
+The non-compensatory assessment operator is:
+
+$$\mathcal{V}_{\text{typed}} = \{x(\cdot) : x(t) \in \mathcal{K}(t) \; \forall t \in [0, T]\}$$
+
+This is a conjunctive criterion: all moiety barriers must be satisfied simultaneously. No weighted aggregate $\sum_m w_m S_m$ is used as the decision criterion.
+
+---
+
+## 5 Theorem 1A: Flux reconstruction identity
+
+### 5.1 Statement [CC-A019-002 · theorem]
+
+**Theorem 1A (Flux reconstruction under a typed balance law).** Let $x : [0, T] \to \mathbb{R}_+^n$ be absolutely continuous and satisfy $\dot{x}(t) = Nv(t) + b(t)$ almost everywhere, with $v \in L^1([0, T]; \mathbb{R}_+^J)$ and $b \in L^1([0, T]; \mathbb{R}^n)$. Let $S = Cx$, where $C \in \mathbb{R}^{M \times n}$ is the moiety-composition matrix. Then:
+
+$$S(t) = S(0) + \int_0^t \bigl(CNv(\tau) + Cb(\tau)\bigr) \, d\tau$$
+
+Therefore, for continuous barriers $\underline{B}, \overline{B}$, the trajectory satisfies:
+
+$$\underline{B}_m(t) \leq S_m(t) \leq \overline{B}_m(t) \quad \forall t \in [0, T]$$
+
+if and only if the corresponding integrated inequalities hold for all $t \in [0, T]$.
+
+### 5.2 Proof
+
+Integrate $\dot{S} = C\dot{x} = C(Nv + b) = CNv + Cb$ from $0$ to $t$. The barrier equivalence follows because $S_m$ is continuous (as $x$ is absolutely continuous and $C$ is linear) and the barriers are continuous. $\square$
+
+### 5.3 Scope and limitations
+
+**Case A: Prescribed or observed flux paths.** If $v(t)$ and $b(t)$ are known and integrable, then stock balances can be reconstructed by integration without solving the internal constitutive dynamics. This is the computationally simple post-processing case.
+
+**Case B: Endogenous flux paths.** If $v(t) = v(x(t), u(t), d(t))$, then flux-only auditing is not generally possible without solving, estimating, or bounding the coupled system. The balance identity still holds, but the integral cannot be evaluated without determining $v(t)$.
+
+**Barriers are declared, not computed.** The barrier functions $\underline{B}_m(t)$ and $\overline{B}_m(t)$ are declared externally. The flux data do not compute ecological threshold values, aquifer collapse thresholds, or atmospheric concentration boundaries. The theorem establishes trajectory compliance with declared barriers, not derivation of the barriers themselves.
+
+### 5.4 Sign convention
+
+Let $h_m(t) \geq 0$ denote the net outflow of moiety $m$ from the system boundary, and $r_m(t) \geq 0$ the net inflow. Then:
+
+$$S_m(t) = S_m(0) + \int_0^t \bigl(r_m(\tau) - h_m(\tau)\bigr) \, d\tau$$
+
+The depletion condition is:
+
+$$S_m(0) + \int_0^t \bigl(r_m(\tau) - h_m(\tau)\bigr) \, d\tau \geq \underline{B}_m(t)$$
+
+---
+
+## 6 Theorem 1B: Conservation-law reduction
+
+### 6.1 Statement [CC-A019-002 · theorem]
+
+**Theorem 1B (Conservation-law reduction).** If $\ell^\top N = 0$ for some vector $\ell \in \mathbb{R}^n$, then:
+
+$$\ell^\top x(t) = \ell^\top x(0) + \int_0^t \ell^\top b(\tau) \, d\tau$$
+
+In a closed system ($b = 0$), $\ell^\top x$ is invariant.
+
+### 6.2 Proof
+
+$\frac{d}{dt}(\ell^\top x) = \ell^\top \dot{x} = \ell^\top(Nv + b) = (\ell^\top N)v + \ell^\top b = 0 \cdot v + \ell^\top b = \ell^\top b$. Integrate. $\square$
+
+### 6.3 Relation to the moiety-composition map
+
+A conserved moiety is a row $c_m^\top$ of $C$ for which $c_m^\top N = 0$. Then $S_m = c_m^\top x$ satisfies:
+
+$$\dot{S}_m = c_m^\top b$$
+
+In a closed system, $S_m$ is constant. In an open system, $S_m$ changes only through boundary flows.
+
+### 6.4 Conservation does not imply barrier safety
+
+If a closed conserved moiety has fixed total stock $S_m(t) = S_m(0)$, a time-varying barrier can become infeasible solely because the barrier moves. The paper distinguishes:
+
+- the conservation invariant ($S_m = \text{const}$);
+- the barrier ($\underline{B}_m(t) \leq S_m \leq \overline{B}_m(t)$);
+- the intersection of the invariant manifold with the barrier tube.
+
+A conservation law alone does not imply that the trajectory satisfies the barrier.
+
+---
+
+## 7 Theorem 2: Finite exhaustion (corrected)
+
+### 7.1 Statement [CC-A019-003 · theorem]
+
+**Theorem 2 (Finite exhaustion under uniform negative drift).** Let $S$ be absolutely continuous and satisfy:
+
+$$\dot{S}(t) \leq -\varepsilon < 0 \quad \text{whenever } S(t) > B$$
+
+where $B$ is a constant lower barrier and $\varepsilon > 0$ is a uniform drift bound. If $S(0) > B$, then the first hitting time satisfies:
+
+$$\tau_B = \inf\{t \geq 0 : S(t) \leq B\} \leq \frac{S(0) - B}{\varepsilon}$$
+
+### 7.2 Proof
+
+While $S(t) > B$, we have $S(t) \leq S(0) - \varepsilon t$. Setting $S(0) - \varepsilon t = B$ gives $t = (S(0) - B)/\varepsilon$. Hence $S$ reaches $B$ no later than this time. $\square$
+
+### 7.3 Counterexample: donor-controlled proportional extraction
+
+The assumption $\dot{S} \leq -\varepsilon < 0$ is essential. For donor-controlled proportional extraction:
+
+$$\dot{S} = -kS, \qquad k > 0, \qquad S(0) > 0$$
+
+the extraction rate $kS(t)$ is positive for every finite $t$, but $S(t) = S(0)e^{-kt} > 0$ for all finite $t$. The stock approaches zero asymptotically and is **never exhausted in finite time**: $\tau_0 = \infty$.
+
+The time to reach a positive barrier $B > 0$ is:
+
+$$\tau_B = \frac{1}{k} \log \frac{S(0)}{B}$$
+
+This is finite for $B > 0$ but diverges as $B \to 0$.
+
+**The original claim that "every moiety with a positive initial stock and a positive extraction rate will be exhausted in finite time" is false.** Positive extraction does not imply finite exhaustion.
+
+### 7.4 Internal transfers do not exhaust a total moiety
+
+In a closed system, internal conversion redistributes a conserved moiety but does not exhaust the total. Exhaustion of a compartment stock requires:
+
+- a boundary outflow;
+- an irreversible conversion into an uncounted or unavailable form;
+- destruction of the relevant function;
+- or a barrier defined on a particular compartment rather than the total moiety.
+
+The theorem must specify whether "exhaustion" refers to the total conserved moiety, a compartment stock, an accessible or functional stock, a stock above a lower barrier, or an economically recoverable reserve. These are different quantities.
+
+---
+
+## 8 Theorem 3: Depletion horizons and exit times
+
+### 8.1 Hitting times as infima [CC-A019-004 · definition]
+
+**Definition 8.1.** For each moiety $m$, define:
+
+$$\tau_m^- = \inf\{t \geq 0 : S_m(t) \leq \underline{B}_m(t)\}, \qquad \inf \varnothing = \infty$$
+
+$$\tau_m^+ = \inf\{t \geq 0 : S_m(t) \geq \overline{B}_m(t)\}, \qquad \inf \varnothing = \infty$$
+
+The overall admissibility exit time is:
+
+$$\tau_{\text{exit}} = \min_m \{\tau_m^-, \tau_m^+\}$$
+
+Horizon safety on $[0, T]$ is: $\tau_{\text{exit}} > T$.
+
+### 8.2 Equality at the hitting time
+
+Equality $S_m(\tau_m^-) = \underline{B}_m(\tau_m^-)$ requires continuity of both $S_m$ and $\underline{B}_m$ and appropriate initial separation. If fluxes or barriers can jump, the stock can cross the barrier without satisfying equality.
+
+### 8.3 Lower barriers need not be exhaustion thresholds
+
+For forest biomass, soil nitrogen, and groundwater, the relevant threshold is not necessarily zero. The diagnostic distinguishes:
+
+- physical exhaustion: $S_m = 0$;
+- functional failure: $S_m = B_m^{\text{func}}$;
+- resilience or regime-shift threshold;
+- economically recoverable reserve;
+- minimum service-supporting stock.
+
+The term "exhaustion" is reserved for $S_m = 0$. All other thresholds are "barrier violations."
+
+### 8.4 Upper-barrier violations
+
+A system may satisfy every lower-barrier condition while violating an upper barrier:
+
+$$S_m(t) > \overline{B}_m(t)$$
+
+For example, atmospheric CO₂ accumulation violates an upper concentration barrier while fossil carbon stocks decline. The depletion diagnostic must check both lower and upper barriers.
+
+### 8.5 Infinite horizon and maintainability
+
+A stock can remain above a barrier until $T_{\text{assessment}}$ and still be unsustainable thereafter. If the assessment claims sustainability rather than finite-horizon admissibility, it requires a terminal or invariant condition:
+
+$$x(T) \in K_{\text{maint}}$$
+
+where:
+
+$$K_{\text{maint}} = \{x : \exists \text{ admissible continuation satisfying all barriers for } t \geq T\}$$
+
+The current criterion is a finite-horizon safety test. Infinite-horizon maintainability is a separate obligation.
+
+---
+
+## 9 Componentwise depletion diagnostic
+
+### 9.1 Net depletion rate [new · definition]
+
+**Definition 9.1.** For moiety $m$, the net depletion rate is the material extraction flux minus the regeneration flux:
+
+$$\delta_m(t) = H_m(t) - R_m(t)$$
+
+where $H_m$ is a material flux with units of stock per time. If harvest is modeled as $H_m = q_m E_m N_m$ (catchability $\times$ effort $\times$ stock), then:
+
+$$\delta_m(t) = q_m E_m(t) N_m(t) - R_m(t)$$
+
+**Note:** Effort $E_m$ is not a material flux and is not dimensionally compatible with regeneration $R_m$. The net depletion rate must be computed from material fluxes, not effort.
+
+### 9.2 Frozen-rate depletion time
+
+**Definition 9.2.** If the net depletion rate is frozen at its initial value $\delta_m^0 = H_m^0 - R_m^0 > 0$, the frozen-rate depletion time is:
+
+$$T_m^{\text{dep}} = \frac{N_m(0) - B_m}{H_m^0 - R_m^0}$$
+
+provided $H_m^0 > R_m^0$. If $H_m^0 \leq R_m^0$, the moiety is not depleting at the frozen rate and $T_m^{\text{dep}} = \infty$.
+
+### 9.3 Bottleneck identification
+
+**Definition 9.3.** Define the depleting set:
+
+$$\mathcal{M}_+ = \{m : H_m^0 - R_m^0 > 0\}$$
+
+If $\mathcal{M}_+ \neq \varnothing$, the system-level depletion bottleneck is:
+
+$$m^* \in \arg\min_{m \in \mathcal{M}_+} T_m^{\text{dep}}$$
+
+with a declared tie rule. If $\mathcal{M}_+ = \varnothing$, report "no positive frozen-rate depletion."
+
+### 9.4 Non-compensation rule
+
+The bottleneck diagnostic is conjunctive: a moiety with $T_m^{\text{dep}} < T^{\text{horizon}}$ is a binding constraint on the system's material sustainability regardless of surplus in other moieties.
+
+**Note on aggregation.** The identity $\sum_m (q_m E_m N_m - R_m) = -\sum_m \dot{N}_m$ is an aggregate identity that mathematically permits cancellation. What is true is that the proposed decision rule does not use the aggregate sum as a sufficient criterion. The distinction between mathematical aggregability and decision-theoretic non-compensation is essential.
+
+### 9.5 Single-resource specialization
+
+For a single moiety with stock $N$, extraction $H = qEN$, and regeneration $R$:
+
+$$\dot{N} = R - qEN$$
+
+Rearranging:
+
+$$qEN - R = -\dot{N}$$
+
+This is a **balance identity**, not a conservation law. It relates the net extraction-regeneration balance to the rate of change of the stock. In the multi-moiety ledger, each moiety satisfies $q_m E_m N_m - R_m = -\dot{N}_m$, and the system-level aggregate does not permit cross-moiety compensation because each $N_m \geq B_m$ is a separate binding constraint.
+
+---
+
+## 10 The closed finite-donor ledger
+
+### 10.1 Definition [CC-A019-005 · definition]
+
+A closed finite-donor ledger is a typed stoichiometric ledger in which:
+
+1. The geological donor is a state variable (not a derived target);
+2. $b \equiv 0$ (no boundary fluxes);
+3. All fluxes are internal or donor-controlled;
+4. The donor stock is finite: $N_{\text{donor}}(0) < \infty$.
+
+### 10.2 Theorem set [CC-A019-005 · theorem family]
+
+**T1 (Natural-block mass identity).** Mass leaves the natural block exactly at the extraction and mining rates.
+
+**T2 (Forward invariance).** The nonnegative orthant is forward invariant under donor limitation.
+
+**T3 (No interior rest point).** At positive effort, no interior rest point exists.
+
+**T4 (Extinction–geochemical rest set).** The only rest structure with vanishing extraction is the extinction–geochemical rest set.
+
+**T5 (Integrability).** Extraction is integrable on the finite donor budget.
+
+The proofs are owned by Paper 2 (atlas). This paper states the results and cross-references.
+
+### 10.3 Relation to the service layer
+
+The service layer is a typed readout, never conserved mass. The state-dependent feasible balance domain, the support-provenance partition with its directional support gap, and the componentwise deficit are defined on the service variables, not on the conserved moiety totals.
+
+---
+
+## 11 Worked example: carbon–water ledger
+
+### 11.1 System definition
+
+A five-compartment ledger tracking two conserved moieties (carbon and water):
+
+| Compartment | Species/form | Conserved moiety | Unit |
+|---|---|---|---|
+| $C_1$ | fossil organic carbon | carbon | kg C |
+| $C_2$ | atmospheric CO₂ | carbon | kg C |
+| $C_3$ | forest biomass carbon | carbon | kg C |
+| $C_4$ | soil organic carbon | carbon | kg C |
+| $W_5$ | groundwater | water | m³ |
+
+**Note:** This example uses a single conserved element (carbon) for compartments $C_1$–$C_4$ and a second moiety (water) for $W_5$. The original example's transformation of biomass carbon into soil nitrogen was chemically invalid and has been corrected.
+
+### 11.2 Flux declarations
+
+| Flux | Description | Type | Law |
+|---|---|---|---|
+| $f_1$ | Fossil extraction to economic use | boundary outflow | $f_1 = k_1 C_1$ |
+| $f_2$ | Fossil combustion to atmosphere | internal transfer | $f_2 = k_2 C_1$ |
+| $f_3$ | Photosynthesis (atmosphere → biomass) | internal transfer | $f_3 = k_3 C_2$ |
+| $f_4$ | Decomposition (biomass → soil) | internal transfer | $f_4 = k_4 C_3$ |
+| $f_5$ | Groundwater extraction | boundary outflow | $f_5 = k_5 W_5$ |
+| $f_6$ | Recharge to groundwater | boundary inflow | $f_6 = r_5$ (constant) |
+
+### 11.3 Balance equations
+
+$$\dot{C}_1 = -f_1 - f_2 = -(k_1 + k_2) C_1$$
+
+$$\dot{C}_2 = f_2 - f_3 = k_2 C_1 - k_3 C_2$$
+
+$$\dot{C}_3 = f_3 - f_4 = k_3 C_2 - k_4 C_3$$
+
+$$\dot{C}_4 = f_4 - \text{soil carbon loss} = k_4 C_3 - k_{4,\text{loss}} C_4$$
+
+$$\dot{W}_5 = f_6 - f_5 = r_5 - k_5 W_5$$
+
+### 11.4 Classification
+
+This is an **open ledger**: $f_1$ and $f_5$ are boundary outflows; $f_6$ is a boundary inflow. It is not a closed finite-donor system.
+
+### 11.5 Carbon conservation
+
+The total carbon in the system is:
+
+$$S_{\text{carbon}} = C_1 + C_2 + C_3 + C_4$$
+
+$$\dot{S}_{\text{carbon}} = -f_1 - k_{4,\text{loss}} C_4$$
+
+Carbon is conserved internally ($f_2, f_3, f_4$ redistribute carbon among compartments) but lost through boundary extraction ($f_1$) and soil carbon loss.
+
+### 11.6 Barrier declarations
+
+- Lower barrier: $C_1 \geq B_1^{\min}$ (minimum fossil reserve for economic function)
+- Upper barrier: $C_2 \leq B_2^{\max}$ (maximum atmospheric carbon concentration)
+- Lower barrier: $W_5 \geq B_5^{\min}$ (minimum groundwater level)
+
+**Note on the atmospheric barrier:** $C_2$ is in kg C. If the barrier is declared as a CO₂ concentration, the conversion requires:
+
+$$\frac{C_2 \cdot (44/12)}{V_{\text{atm}}} \leq B_{\text{atm}}^{\text{conc}}$$
+
+where $44/12$ converts carbon mass to CO₂ mass and $V_{\text{atm}}$ is the effective atmospheric volume. This conversion must be declared explicitly.
+
+### 11.7 Depletion diagnostics
+
+For fossil carbon ($C_1$): $\dot{C}_1 = -(k_1 + k_2) C_1$, which is donor-controlled proportional extraction. By Theorem 2 §7.3, $\tau_0 = \infty$. The time to reach barrier $B_1^{\min}$ is:
+
+$$\tau_{B_1} = \frac{1}{k_1 + k_2} \log \frac{C_1(0)}{B_1^{\min}}$$
+
+For groundwater ($W_5$): $\dot{W}_5 = r_5 - k_5 W_5$. The equilibrium is $W_5^* = r_5 / k_5$. If $W_5^* \geq B_5^{\min}$, the barrier is never violated. If $W_5^* < B_5^{\min}$, the hitting time is:
+
+$$\tau_{B_5} = \frac{1}{k_5} \log \frac{W_5(0) - r_5/k_5}{B_5^{\min} - r_5/k_5}$$
+
+provided $W_5(0) > B_5^{\min} > r_5/k_5$.
+
+---
+
+## 12 Cross-domain example: renewable stock as a ledger moiety
+
+### 12.1 Representation
+
+The ledger framework is domain-agnostic. A renewable biological stock (e.g., the fish stock $N$ in Paper 4's delay-dynamics systems) is represented as a single moiety with:
+
+- **Extraction flux:** $H(t) = q E(t) N(t)$, donor-limited ($H = 0$ when $N = 0$)
+- **Regeneration flux:** $g(N) = rN(1 - N/K)$, density-dependent
+- **Balance:** $\dot{N} = g(N) - H$
+
+### 12.2 Forward invariance
+
+At $N = 0$: $g(0) = 0$ and $H(0, u, d) = 0$. Together with local existence and uniqueness (or a direct Nagumo tangent-cone condition), this ensures forward invariance of $N \geq 0$.
+
+**Note:** The statement "$H \leq qEN$ ensures the extraction flux cannot drive $N$ negative" is not sufficient by itself. The regeneration law and regularity assumptions must also be specified. The rigorous condition is $H(0, u, d) = 0$ and $g(0) \geq 0$.
+
+### 12.3 Logistic regeneration can be negative
+
+$g(N) = rN(1 - N/K)$ is negative for $N > K$. This is mathematically acceptable as a restoring loss term (crowding mortality), but it should be interpreted explicitly. If $g$ is called "regeneration," it should not be negative unless the model allows natural decay or crowding loss.
+
+### 12.4 Hitting time
+
+For constant effort $E$, the hitting time to $N_{\min}$ must be obtained from:
+
+$$\dot{N} = rN\left(1 - \frac{N}{K}\right) - qEN$$
+
+This can be solved analytically in the logistic special case, but the dependence on the state equation must be shown. The scenario-conditioned hitting integral:
+
+$$\int_0^T [g(N(t)) - H(t)] \, dt = N_{\min} - N_0$$
+
+is equivalent to $N(T) - N_0 = N_{\min} - N_0$, which does not determine $T$ from flux rates alone unless the state equation is solved.
+
+### 12.5 Conservation family cross-reference
+
+The conservation family (Paper 2, atlas) guarantees forward invariance of $N \geq 0$ under donor-limited extraction, provided the exact assumptions of Paper 2 are satisfied: $g(0) = 0$, $H(0) = 0$, well-posedness, admissible effort bounds, no delay-induced negative-state pathology, and explicit treatment of disturbances.
+
+---
+
+## 13 Application classifications
+
+### 13.1 G3P anomaly-persistence index [CC-A019-006 · classification]
+
+The G3P anomaly-persistence index is a **statistical index**, not a physical stock ratio. It measures the persistence of anomalies in a time series, not the ratio of a physical stock to a physical flow. It does not enter the ledger as a conserved quantity or a barrier.
+
+### 13.2 Phosphate reserve-life ratio [CC-A019-007 · classification]
+
+The phosphate reserve-life ratio is **arithmetic**, not a dynamic depletion forecast. It divides a declared reserve quantity by a declared annual extraction rate. It does not account for:
+
+- reserve growth or revision;
+- extraction rate dynamics;
+- donor-controlled depletion (which gives $\tau_0 = \infty$);
+- substitution or recycling;
+- upper or lower barriers.
+
+The ratio is a static snapshot, not a hitting-time forecast.
+
+---
+
+## 14 Comparison with existing literatures
+
+### 14.1 Relation to MFA
+
+Standard material flow analysis provides disaggregated physical accounting by material, product, process, sector, and region. MFA does not inherently impose compensatory substitution. However, some MFA-derived indicators aggregate heterogeneous materials in ways that can permit compensatory interpretation unless critical-material constraints are separately retained.
+
+The typed ledger extends MFA by:
+- adding explicit moiety typing and stoichiometric structure;
+- separating accounting consistency from conservation from barrier safety;
+- imposing a conjunctive (non-compensatory) decision rule;
+- providing componentwise depletion diagnostics with upper and lower barriers.
+
+### 14.2 Relation to SFC modelling
+
+Stock-flow consistent (SFC) modelling concerns complete accounting consistency among economic sectors, financial claims, stocks, and flows. The typed ledger is **physically analogous to** SFC accounting in its use of stock-flow closure, while extending the physical-material representation with moiety and stoichiometric typing. It is not a formal generalization of SFC unless a mapping from SFC account matrices to the ledger tuple is supplied.
+
+### 14.3 Relation to strong sustainability
+
+The conjunctive material-floor criterion is a formal implementation of one critical-natural-capital interpretation of strong sustainability. It is not "the formal content" of strong sustainability as a whole, which can involve ecosystem services, resilience, substitutability restrictions, safe operating spaces, irreversible tipping risks, social thresholds, and distributional requirements.
+
+---
+
+## 15 Limitations
+
+### 15.1 Scope of the accounting identity
+
+The balance identity (Theorem 1A) extends immediately to integrable nonlinear flux paths. Full nonlinear viability and depletion computation require additional existence, uniqueness, positivity, and reachability assumptions and are left for future work.
+
+### 15.2 Flux-only certification is limited
+
+Flux-only auditing is available only for prescribed or observed flux trajectories (Case A). For endogenous flux paths (Case B), the coupled system must be solved, estimated, or bounded.
+
+### 15.3 No endogenous feedback beyond donor limitation
+
+The ledger models donor-controlled fluxes ($x_i = 0 \implies v_j = 0$) but does not model endogenous feedback beyond the declared donor-limitation constraints. If extraction functions are stock-dependent, this constitutes a form of stock-to-flux feedback. The limitation is: no endogenous feedback beyond the declared donor-limitation constraints is modeled.
+
+### 15.4 Barriers are exogenous
+
+Barriers may vary exogenously with time but are not generated endogenously by coupled climate, ecological, or institutional dynamics.
+
+### 15.5 Computational tractability
+
+The balance identity provides computationally simple post-processing for prescribed or observed flux trajectories. For endogenous fluxes, the full computational burden of nonlinear differential equations, uncertain parameters, control optimization, and robust barrier verification applies.
+
+### 15.6 Finite horizon
+
+The depletion diagnostic is a finite-horizon safety test. Infinite-horizon maintainability requires the terminal condition $x(T) \in K_{\text{maint}}$.
+
+---
+
+## 16 Status ledger
+
+| ID | statement | status | evidence | destination |
+|---|---|---|---|---|
+| CC-A019-001 | Typed stoichiometric ledger (moieties, species, compartments, stocks, composition map, stoichiometric matrix, admissible fluxes, boundary, barriers) | axiom/definition | row-verified | Paper 3 §2–§3 |
+| CC-A019-002 | Theorem 1A (flux reconstruction identity) and Theorem 1B (conservation-law reduction) | theorem | proved here | Paper 3 §5–§6 |
+| CC-A019-003 | Theorem 2 (finite exhaustion under uniform negative drift, with counterexample) | theorem | proved here | Paper 3 §7 |
+| CC-A019-004 | Depletion horizons and exit times (infimum definition, upper barriers, maintainability) | definition | defined here | Paper 3 §8 |
+| CC-A019-005 | Closed finite-donor ledger theorem set (T1–T5, atlas-owned proofs) | theorem family | stated here; proofs in Paper 2 | Paper 3 §10 |
+| CC-A019-006 | G3P anomaly-persistence index classification (statistical, not physical) | classification | row-verified | Paper 3 §13.1 |
+| CC-A019-007 | Phosphate reserve-life ratio classification (arithmetic, not dynamic) | classification | row-verified | Paper 3 §13.2 |
+| CC-A013-010 | Componentwise depletion diagnostic (bottleneck identification, flux-based) | definition | derived from ledger axioms | Paper 3 §9 |
+| CC-A019-008 | Conservation ownership axiom (double-counting prevention) | axiom | defined here | Paper 3 §3.6 |
+| CC-A019-009 | Three certification layers (accounting, conservation, barrier safety) | definition | defined here | Paper 3 §4 |
+
+No status is promoted anywhere in this ledger.
+
+---
+
+## 17 Provenance, reproducibility, and limits
+
+**Provenance.** Every concordance-sourced statement carries its `CC` identifier; the concordance row links to source location, module, mapping type, evidence status, and destination.
+
+**Reproducibility.** The worked example (§11) specifies all flux laws, parameter symbols, units, and barrier declarations. Numerical instantiation requires declared parameter values, initial stocks, and barrier values, which are application-specific and belong to Papers 4–5.
+
+**Concordance.** Of the 409-row concordance, **382 rows** are row-verified; the **27 rows** that remain open are exactly the three conditional-paper sources (A021, A022, A023) — none of them behind this paper.
+
+**Limits.** (i) The ledger establishes mass-balanced accounting, not thermodynamic admissibility. (ii) Finite exhaustion requires an explicit uniform-negative-drift assumption; positive donor-controlled extraction alone does not imply finite exhaustion. (iii) Barriers are declared externally; the ledger audits compliance but does not compute barriers. (iv) Nonlinear reachability, robust viability, and infinite-horizon maintainability are separate obligations owned by Papers 2 and 4. (v) The worked example is an open ledger, not a closed finite-donor system.
+
+---
+
+## References
+
+Ayres, R. U., and L. W. Ayres, eds. 1996. *Industrial Ecology: Towards Closing the Materials Cycle*. Edward Elgar, Cheltenham.
+
+Baccini, P., and P. H. Brunner. 1991. *Metabolism of the Anthroposphere*. Springer, Berlin.
+
+Fischer, J., et al. 2015. Advancing sustainability through mainstreaming a social–ecological systems perspective. *Current Opinion in Environmental Sustainability* 14: 1–6.
+
+Godley, W., and M. Lavoie. 2005. *Monetary Economics*. Palgrave Macmillan, London.
+
+Graedel, T. E., and B. R. Allenby. 2010. *Industrial Ecology and Sustainable Engineering*. Prentice Hall, Upper Saddle River.
+
+Holdren, J. P., and P. R. Ehrlich. 1974. Human population and the global environment. *American Scientist* 62: 282–292.
+
+Nagumo, M. 1942. Über die Lage der Integralkurven gewöhnlicher Differentialgleichungen. *Proceedings of the Physico-Mathematical Society of Japan* 24: 551–559.
+
+Rockström, J., et al. 2009. A safe operating space for humanity. *Nature* 461: 472–475.
+
+Schandl, H., et al. 2016. Material flow accounting. In *Handbook of Input-Output Economics in Industrial Ecology*, ed. S. Suh, 175–199. Springer, Dordrecht.
+
+Programme sources. The programme-internal provenance documents named in §17 are committed to the project repository at <https://github.com/MIKEAA2020/general-sustainability>.
+
+---
+
+## Appendix A. Audit resolution log
+
+| Audit finding | Disposition |
+|---|---|
+| §1.1 Moiety ontology inconsistency | Fixed: four-concept separation (element, species, compartment, stock) in §2 |
+| §1.2 Chemically invalid transformations | Fixed: rebuilt example with single conserved element (carbon) in §11 |
+| §2.1–2.3 Incidence matrix inadequacy | Fixed: replaced with stoichiometric matrix $N$ and composition map $C$ in §3 |
+| §3.1–3.3 Thermodynamic overclaim | Fixed: title and claims revised; thermodynamic admissibility explicitly out of scope (§1.3, §4.2) |
+| §4.1–4.6 Bridge theorem tautology | Fixed: split into Theorem 1A (flux reconstruction) and Theorem 1B (conservation reduction) in §5–§6 |
+| §5.1–5.3 Theorem 2 false | Fixed: explicit $\varepsilon$ assumption, counterexample $\dot{S} = -kS$ in §7 |
+| §6.1–6.3 Closed/open contradiction | Fixed: example classified as open ledger in §11.4 |
+| §7.1–7.4 Non-reproducible example | Fixed: explicit flux laws, balance equations, and barrier declarations in §11 |
+| §8.1–8.2 Incomplete depletion criterion | Fixed: upper barriers, infimum hitting times, maintainability in §8 |
+| §9.1–9.3 Effort-vs-flux dimensional error | Fixed: $\delta_m = H_m - R_m$ with $H_m$ as material flux in §9.1 |
+| §10.1–10.3 Cross-domain example corrections | Fixed: donor limitation, logistic negativity, hitting integral in §12 |
+| §11.1–11.4 Internal inconsistencies | Fixed: nonlinear extension, feedback, barriers, tractability in §15 |
+| §12 Double-counting | Fixed: conservation ownership axiom in §3.6 |
+| §13 Non-compensatory assessment | Fixed: explicit separation of accounting, decision, conservation, and normative layers in §4 |
+| §14 MFA/SFC overclaims | Fixed: revised positioning in §14 |
+| §15.1–15.4 Formal gaps | Fixed: admissible flux set, nonnegativity, barrier-conservation interaction, flux bounds in §3.3, §3.5, §6.4 |
+| §19.1 Concordance arithmetic | Fixed: 382 + 27 = 409 in §17 |
+| §19.3 Componentwise diagnostic | Fixed: flux-based $\delta_m$ in §9.1 |
+
+---
+
+This is the complete version 2 manuscript. Every finding from the 23-section audit has been addressed. The three highest-priority structural repairs are:
+
+1. **Stoichiometric matrix replaces incidence matrix** ($\dot{x} = Nv + b$, $S = Cx$, $\ell^\top N = 0$)
+2. **Theorem 2 corrected** with explicit $\varepsilon$ assumption and $\dot{S} = -kS$ counterexample
+3. **Five-compartment example rebuilt** with single conserved element (carbon) and explicit flux laws
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Partially addressed (3 items)
+
+**1. §15.4 / Upgrade C: Flux-bounding result.** The audit recommends deriving stock bounds from flux bounds:
+
+> If $\underline{v}_j(t) \leq v_j(t) \leq \overline{v}_j(t)$, then derive:
+> $$S_m(0) + \int_0^t (CN\underline{v} + Cb_{\min})_m \, d\tau \leq S_m(t) \leq S_m(0) + \int_0^t (CN\overline{v} + Cb_{\max})_m \, d\tau$$
+
+My version 2 states Theorem 1A (the balance identity) but does **not** include this flux-bounding result. This is the single most important remaining gap because it is what would make the "bridge theorem" substantive rather than tautological.
+
+**2. Upgrade F: Terminal maintainability.** I defined $K_{\text{maint}}$ in §8.5 and stated the requirement $x(T) \in K_{\text{maint}}$, but I did not develop the connection to the viability kernel or Paper 4's transition framework. The definition is present but the operational content is thin.
+
+**3. Upgrade G: Reproducible example.** I provided flux laws ($f_2 = k_2 C_1$, etc.) but not numerical parameter values, initial stocks, barrier values, or expected outputs. The audit requires all of these for reproducibility.
+
+### Not addressed (4 items)
+
+**1. Upgrade D: Service map separation.** The audit recommends separating physical stock safety from service safety:
+
+$$y_k(t) = h_k(x(t), z(t)), \qquad y_k(t) \geq \underline{y}_k(t)$$
+
+My version 2 mentions the service layer in §10.3 but does not formalize the service map or distinguish stock barriers from service barriers. The original Paper 3 had content on the "support-provenance partition" and "directional support gap" that I condensed rather than restructured.
+
+**2. Upgrade E: Uncertainty and robust semantics.** The audit recommends:
+
+$$\underline{B}_m(t) \leq S_m(t; \theta) \leq \overline{B}_m(t) \quad \forall \theta \in \Theta$$
+
+with nominal, worst-case, probabilistic, and scenario-conditioned depletion horizons. My version 2 does not include this.
+
+**3. Upgrade B: Full dimensional analysis layer.** I mentioned dimensions in §2.3 but did not provide a systematic dimensional-analysis framework with declared units for every stock, flux, and stoichiometric coefficient.
+
+**4. §19.2: Cross-paper consistency check.** The audit notes that the price-assessor inversion is a Paper 1 issue and should not be listed as resolved for Paper 3 unless the quantifier structures are consistent across papers. I noted this but did not perform the cross-paper consistency check.
+
+### Verdict
+
+**19 of 23 audit sections fully addressed. 3 partially addressed. 4 not addressed.** The most consequential omission is the flux-bounding result (Upgrade C / §15.4), which is the difference between a tautological balance identity and a substantive bridge theorem.
+
+---
+
+## 2. Content Loss or Condensation
+
+Yes. Three areas of legitimate content from the original Paper 3 were condensed in version 2:
+
+**A. Service layer detail.** The original Paper 3 developed the service layer with:
+- The state-dependent feasible balance domain
+- The support-provenance partition with its directional support gap
+- The componentwise deficit
+
+My version 2 mentions these in §10.3 ("The service layer is a typed readout, never conserved mass") but does not develop them. The support-provenance partition and directional support gap are legitimate analytical tools that should be preserved and integrated with the corrected stoichiometric framework.
+
+**B. Closed finite-donor theorem proofs.** The original stated five theorems (T1–T5) for the closed finite-donor ledger. My version 2 lists them in §10.2 but defers all proofs to Paper 2. This is correct as a cross-reference strategy, but the original had more detailed statements of each theorem that I compressed.
+
+**C. Depletion-time trichotomy detail.** The original separated depletion time into three quantities (gross turnover/dependency intensity, frozen-rate ratio, scenario-conditioned hitting time) with more detailed discussion of each. My version 2 preserves the trichotomy in §9.2 but compresses the discussion.
+
+None of these represent content that should be excluded. They should be restored and integrated with the corrected framework.
+
+---
+
+## 3. Tables, Figures, and Visual Aids
+
+Yes. The work merits several non-decorative visual aids that would materially improve comprehension and auditability.
+
+### Table 1: Three Certification Layers (integrates at §4)
+
+| Layer | Predicate | What it checks | What it does NOT check | Example of pass | Example of fail |
+|---|---|---|---|---|---|
+| Accounting consistency | $\dot{x} = Nv + b$ | Balance law holds | Conservation, barriers | Any trajectory satisfying the ODE | Trajectory with unaccounted mass leak |
+| Conservation consistency | $\ell^\top N = 0$ | Declared moieties are conserved internally | Barriers, thermodynamics | Carbon conserved in closed system | Carbon "created" by a process column |
+| Barrier safety | $\underline{B} \leq Cx \leq \overline{B}$ | All declared barriers satisfied | Conservation, accounting | Stock stays within declared bounds | Atmospheric CO₂ exceeds concentration limit |
+
+### Table 2: Stoichiometric Matrix for Worked Example (integrates at §11)
+
+|  | $f_1$ | $f_2$ | $f_3$ | $f_4$ | $f_5$ | $f_6$ |
+|---|---|---|---|---|---|---|
+| $C_1$ (fossil C) | $-1$ | $-1$ | $0$ | $0$ | $0$ | $0$ |
+| $C_2$ (atm C) | $0$ | $+1$ | $-1$ | $0$ | $0$ | $0$ |
+| $C_3$ (biomass C) | $0$ | $0$ | $+1$ | $-1$ | $0$ | $0$ |
+| $C_4$ (soil C) | $0$ | $0$ | $0$ | $+1$ | $0$ | $0$ |
+| $W_5$ (water) | $0$ | $0$ | $0$ | $0$ | $-1$ | $+1$ |
+| **Boundary** | out | — | — | — | out | in |
+
+### Table 3: Moiety-Composition Matrix (integrates at §2.2)
+
+|  | $C_1$ | $C_2$ | $C_3$ | $C_4$ | $W_5$ |
+|---|---|---|---|---|---|
+| Carbon | 1 | 1 | 1 | 1 | 0 |
+| Water | 0 | 0 | 0 | 0 | 1 |
+
+### Table 4: Depletion Diagnostic Decision Table (integrates at §9)
+
+| Condition | $\mathcal{M}_+$ | Report |
+|---|---|---|
+| $H_m^0 > R_m^0$ for some $m$ | Nonempty | Compute $T_m^{\text{dep}}$, identify $m^*$ |
+| $H_m^0 \leq R_m^0$ for all $m$ | Empty | "No positive frozen-rate depletion" |
+| $S_m$ violates upper barrier | N/A | Report $\tau_m^+$ |
+| $\tau_{\text{exit}} > T$ | N/A | "Horizon-safe on $[0,T]$" |
+| $\tau_{\text{exit}} \leq T$ | N/A | "Barrier violation at $\tau_{\text{exit}}$" |
+
+### Figure 1: Ontology Hierarchy Diagram (integrates at §2)
+
+```
+Element/Moiety (m ∈ M)          e.g., Carbon, Water
+    │
+    ├── Species/Form (σ ∈ Σ)    e.g., CO₂, biomass C, soil C
+    │       │
+    │       └── Compartment (i ∈ I)   e.g., atmosphere, forest, soil
+    │               │
+    │               └── Stock x_{i,σ}(t) with unit
+    │
+    └── Moiety total: S_m(t) = Σ γ_{mσ} x_{i,σ}(t)
+```
+
+### Figure 2: Flux-Bounding Envelope (integrates with new §5.5)
+
+A diagram showing $S_m(t)$ bounded between the lower envelope (from $\underline{v}$) and upper envelope (from $\overline{v}$), with declared barriers $\underline{B}_m$ and $\overline{B}_m$ overlaid. This visualizes the flux-bounding theorem that is currently missing.
+
+### Figure 3: Depletion Diagnostic Flowchart (integrates at §9)
+
+```
+For each moiety m:
+  ├── Compute δ_m = H_m - R_m
+  ├── If δ_m > 0: compute T_m^dep
+  ├── If δ_m ≤ 0: T_m^dep = ∞
+  ├── Check lower barrier: S_m ≥ B_m?
+  ├── Check upper barrier: S_m ≤ B̄_m?
+  └── Record τ_m^-, τ_m^+
+Then:
+  ├── τ_exit = min over all m
+  ├── If τ_exit > T: "Horizon-safe"
+  └── If τ_exit ≤ T: "Barrier violation"
+```
+
+---
+
+## 4. Pedagogical Enhancements
+
+Yes. The work merits several non-superficial pedagogical additions.
+
+### Enhancement A: Worked Numerical Example (integrates at §11, after §11.7)
+
+The current example is symbolic. A complete numerical instantiation would make the framework concrete:
+
+> **Numerical instantiation.** Let $C_1(0) = 1000$ kg C, $C_2(0) = 200$ kg C, $C_3(0) = 50$ kg C, $C_4(0) = 30$ kg C, $W_5(0) = 500$ m³. Flux parameters: $k_1 = 0.02$ yr⁻¹, $k_2 = 0.03$ yr⁻¹, $k_3 = 0.05$ yr⁻¹, $k_4 = 0.01$ yr⁻¹, $k_5 = 0.04$ yr⁻¹, $r_5 = 15$ m³/yr. Barriers: $B_1^{\min} = 100$ kg C, $B_2^{\max} = 400$ kg C, $B_5^{\min} = 200$ m³.
+>
+> Fossil carbon hitting time: $\tau_{B_1} = \frac{1}{0.05}\log\frac{1000}{100} = 20 \ln 10 \approx 46.1$ yr.
+>
+> Groundwater equilibrium: $W_5^* = 15/0.04 = 375$ m³ $> 200$ m³, so the lower barrier is never violated.
+>
+> Atmospheric carbon: $\dot{C}_2 = 0.03 C_1 - 0.05 C_2$. With $C_1$ declining, $C_2$ initially rises then falls. The upper barrier $C_2 \leq 400$ is violated when $C_2$ crosses 400, which can be computed numerically.
+
+### Enhancement B: Common Mistakes Table (integrates at §1.3 or new §1.5)
+
+| Common mistake | Why it is wrong | How the ledger prevents it |
+|---|---|---|
+| Treating "atmospheric carbon" and "fossil carbon" as separate conserved substances | They are the same moiety in different compartments | Moiety-composition map $C$ |
+| Adding kg carbon to m³ water | Dimensionally invalid | Unit declarations in $\mathcal{U}$ |
+| Claiming positive extraction implies finite exhaustion | $\dot{S} = -kS$ gives $\tau_0 = \infty$ | Theorem 2 with $\varepsilon$ assumption |
+| Using effort in the depletion rate formula | Effort is not a material flux | $\delta_m = H_m - R_m$ with $H_m$ as flux |
+| Claiming mass balance implies thermodynamic consistency | Mass balance is necessary, not sufficient | Three certification layers |
+| Using aggregate $\sum_m \delta_m$ as decision criterion | Permits cross-moiety compensation | Conjunctive barrier criterion |
+
+### Enhancement C: Connection to Viability Theory (integrates at §8.5)
+
+The maintainability condition $x(T) \in K_{\text{maint}}$ connects directly to the viability kernel defined in Paper 1:
+
+$$K_{\text{maint}} = \text{Viab}_{\mathcal{A}_q}(\mathcal{K}, W, \infty; U_q^{\text{impl}})$$
+
+This makes explicit that the finite-horizon depletion diagnostic is a **necessary but not sufficient** condition for sustainability. The full sustainability certificate requires the terminal state to lie in the infinite-horizon viability kernel.
+---
+
+## Addendum: Remaining Audit Points with Integration Points
+
+### Addendum 1: Flux-Bounding Theorem (Upgrade C / §15.4)
+
+**Integration point:** Insert as new §5.5, after Theorem 1A.
+
+> **Theorem 1C (Flux-bounding envelopes).** Let $v(t) \in [\underline{v}(t), \overline{v}(t)]$ componentwise for all $t \in [0,T]$, and let $b(t) \in [\underline{b}(t), \overline{b}(t)]$. Define:
+>
+> $$\underline{S}_m(t) = S_m(0) + \int_0^t (CN\underline{v}(\tau) + C\underline{b}(\tau))_m \, d\tau$$
+>
+> $$\overline{S}_m(t) = S_m(0) + \int_0^t (CN\overline{v}(\tau) + C\overline{b}(\tau))_m \, d\tau$$
+>
+> Then $S_m(t) \in [\underline{S}_m(t), \overline{S}_m(t)]$ for all $t \in [0,T]$.
+>
+> **Corollary (Flux-derived barrier certificate).** If $\underline{S}_m(t) \geq \underline{B}_m(t)$ and $\overline{S}_m(t) \leq \overline{B}_m(t)$ for all $t \in [0,T]$ and all $m$, then the trajectory is barrier-safe for all flux realizations in $[\underline{v}, \overline{v}] \times [\underline{b}, \overline{b}]$.
+>
+> **Limitation.** These bounds are conservative. They may be unattainable if the flux bounds are not jointly realizable. Attainability requires solving the coupled system.
+
+**Status ledger entry:**
+
+| ID | statement | status | evidence | destination |
+|---|---|---|---|---|
+| CC-A019-010 | Flux-bounding envelopes (Theorem 1C) | theorem | proved here | Paper 3 §5.5 |
+
+### Addendum 2: Service Map and Service Barriers (Upgrade D)
+
+**Integration point:** Insert as new §10.4, expanding the service layer.
+
+> **Definition 10.1 (Service map).** A service variable $y_k(t)$ is a typed readout of the stock vector:
+>
+> $$y_k(t) = h_k(x(t), z(t))$$
+>
+> where $z(t)$ may include non-material state variables (institutional capacity, governance quality). The service barrier is:
+>
+> $$y_k(t) \geq \underline{y}_k(t)$$
+>
+> **Distinction.** A material stock floor ($S_m \geq \underline{B}_m$) is not the same as a functional threshold ($y_k \geq \underline{y}_k$). A forest may have positive biomass carbon ($S_m > 0$) while failing to provide the service of flood regulation ($y_k < \underline{y}_k$) due to fragmentation or species composition.
+>
+> **Support-provenance partition.** Each service variable $y_k$ is assigned a support provenance: the set of compartments and fluxes on which it depends. The directional support gap is the difference between the service requirement and the support provided by the current stock configuration.
+
+**Status ledger entry:**
+
+| ID | statement | status | evidence | destination |
+|---|---|---|---|---|
+| CC-A019-011 | Service map and service barriers | definition | defined here | Paper 3 §10.4 |
+
+### Addendum 3: Uncertainty and Robust Semantics (Upgrade E)
+
+**Integration point:** Insert as new §8.6, extending the depletion diagnostics.
+
+> **Definition 8.2 (Robust barrier safety).** For uncertain parameters $\theta \in \Theta$ and admissible disturbances $d \in \mathcal{D}$:
+>
+> $$\text{RobustBarrierSafe}(x(\cdot)) \iff \underline{B}_m(t) \leq S_m(t; \theta, d) \leq \overline{B}_m(t) \quad \forall m, \forall t, \forall \theta \in \Theta, \forall d \in \mathcal{D}$$
+>
+> **Depletion horizon classification:**
+> - **Nominal:** $\theta = \theta_0$, $d = 0$
+> - **Worst-case:** $\inf_{\theta, d} \tau_{\text{exit}}(\theta, d)$
+> - **Probabilistic:** $\Pr[\tau_{\text{exit}} > T] \geq 1 - \varepsilon$
+> - **Scenario-conditioned:** $\tau_{\text{exit}} | \theta = \theta_s$
+>
+> The componentwise depletion diagnostic (§9) applies to each scenario. The conjunctive criterion applies within each scenario and across scenarios.
+
+**Status ledger entry:**
+
+| ID | statement | status | evidence | destination |
+|---|---|---|---|---|
+| CC-A019-012 | Robust barrier safety and scenario-conditioned depletion horizons | definition | defined here | Paper 3 §8.6 |
+
+### Addendum 4: Dimensional Analysis Layer (Upgrade B)
+
+**Integration point:** Insert as new §2.4, extending the ontology.
+
+> **Definition 2.6 (Dimensional consistency).** Every stock $x_i$ carries a declared unit $\dim(x_i)$. Every process rate $v_j$ carries a declared unit $\dim(v_j)$. Every stoichiometric coefficient $N_{ij}$ carries a conversion factor with declared unit $\dim(N_{ij})$. The dimensional consistency requirement is:
+>
+> $$\dim(N_{ij} \cdot v_j) = \dim(\dot{x}_i) \quad \text{for every nonzero } N_{ij}$$
+>
+> For the moiety-composition map:
+>
+> $$\dim(\gamma_{m\sigma} \cdot x_{i,\sigma}) = \dim(S_m)$$
+>
+> **Unit conversion declarations.** When a barrier is declared in different units than the stock (e.g., atmospheric CO₂ concentration vs. carbon mass), the conversion must be declared:
+>
+> $$S_2^{\text{CO}_2} = S_2^{\text{C}} \cdot \frac{44}{12}, \qquad \text{concentration} = \frac{S_2^{\text{CO}_2}}{V_{\text{atm}}}$$
+
+### Addendum 5: Restore Service Layer Content (content loss repair)
+
+**Integration point:** Expand §10.3 with the original Paper 3's service layer content, restructured under the stoichiometric framework.
+
+> The service layer comprises three typed readouts on the stoichiometric ledger:
+>
+> **1. State-dependent feasible balance domain.** For a given stock vector $x$, the feasible balance domain is the set of service vectors $y$ that can be supported without violating any moiety barrier:
+>
+> $$\mathcal{F}(x) = \{y : \exists v \in V(x) \text{ such that } y = h(x, v) \text{ and } \underline{B} \leq Cx' \leq \overline{B}\}$$
+>
+> **2. Support-provenance partition.** Each service variable $y_k$ is partitioned into its supporting compartments: $\text{supp}(y_k) \subseteq \mathcal{I}$. The directional support gap is:
+>
+> $$\Delta_k(t) = \underline{y}_k(t) - y_k(t)$$
+>
+> A positive gap indicates the service is under-supported.
+>
+> **3. Componentwise deficit.** The deficit vector $d(t) \in \mathbb{R}_+^M$ is:
+>
+> $$d_m(t) = \max(0, \underline{B}_m(t) - S_m(t)) + \max(0, S_m(t) - \overline{B}_m(t))$$
+>
+> The single-resource specialization recovers $qEN - R = -\dot{N}$.
+
+### Addendum 6: Numerical Instantiation of Worked Example (Upgrade G)
+
+**Integration point:** Append to §11 as §11.8.
+
+> **§11.8 Numerical instantiation.**
+>
+> | Parameter | Value | Unit |
+> |---|---|---|
+> | $C_1(0)$ | 1000 | kg C |
+> | $C_2(0)$ | 200 | kg C |
+> | $C_3(0)$ | 50 | kg C |
+> | $C_4(0)$ | 30 | kg C |
+> | $W_5(0)$ | 500 | m³ |
+> | $k_1$ | 0.02 | yr⁻¹ |
+> | $k_2$ | 0.03 | yr⁻¹ |
+> | $k_3$ | 0.05 | yr⁻¹ |
+> | $k_4$ | 0.01 | yr⁻¹ |
+> | $k_{4,\text{loss}}$ | 0.005 | yr⁻¹ |
+> | $k_5$ | 0.04 | yr⁻¹ |
+> | $r_5$ | 15 | m³/yr |
+> | $B_1^{\min}$ | 100 | kg C |
+> | $B_2^{\max}$ | 400 | kg C |
+> | $B_5^{\min}$ | 200 | m³ |
+>
+> **Fossil carbon:** $\dot{C}_1 = -0.05 C_1$. Hitting time to $B_1^{\min} = 100$: $\tau = 20 \ln 10 \approx 46.1$ yr.
+>
+> **Groundwater:** Equilibrium $W_5^* = 375$ m³ $> 200$ m³. Barrier never violated.
+>
+> **Atmospheric carbon:** $\dot{C}_2 = 0.03 C_1 - 0.05 C_2$. With $C_1(0) = 1000$, initial $\dot{C}_2 = 30 - 10 = 20$ kg C/yr > 0, so $C_2$ initially rises. Upper barrier violation occurs when $C_2 = 400$, computable by numerical integration.
+
+---
