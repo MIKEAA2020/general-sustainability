@@ -1,0 +1,186 @@
+audit 1: **Flaws, inconsistencies, upgrades, and remaining gaps, from a line-level read.**
+
+The manuscript is internally coherent on the core calculations (logistic map, kernels, \(F'\), \(g(K^*)\), 57.62 kt boundary, geometric accumulation of \(\varepsilon\)). The grouping of S1/cascade with flat-60 is not a bug: because the constraint is “never leave \([K^*,\infty)\)”, sub-LRP stages are unreachable without already having failed, so those rules are 60 kt policies on the relevant set and are therefore strictly dominated by BAU at the boundary. The two negative certificates (productivity vs. certified-layer expansion) are correctly distinguished. Reproducibility claims are unusually strong.
+
+### Internal inconsistencies and small defects
+- Naming drift for the unpublished companions: “forecast-evaluation study” / “forecast study” / “prediction study” / “catch-insufficiency certificate of the companion prediction study”. Same object, three labels.
+- Residual percentile: methods give \(e_{q10}=-114.8\); §3.3 uses 114.85 and \(172.47-114.85=57.62\). Harmless rounding, but the constructive number is quoted as 57.6 everywhere else.
+- Replay window: supply means over “1983–2006 states”; fit is 1983–2007; classification uses 33 observed states (1983–2015). Off-by-one / series-end not explained.
+- Cascade description vs. 1990 replay: stages written “60/30/5/0 at LRP/0.75 LRP/0.5 LRP/below”; 1990 SSB = 861.9 is below LRP so the 30 kt stage is used. That is consistent only if the first breakpoint is a closed/open interval starting *at* LRP. S1 is defined as 60 *above*, 0 *below* — at-exactly-\(K^*\) is left unspecified for both rules (immaterial for the kernels, material for a discrete-time implementation).
+- \(a_{\max}=\sup|F'|\) is taken from the *open-loop* surplus map \(1+r(1-2S/K)\) and applied uniformly, including to discontinuous feedbacks. For constant-catch policies this is exact; for S1/cascade the closed-loop map is not even Lipschitz. The paper never computes a policy-specific Lipschitz constant.
+- Certified inflation uses the *global* \(a_{\max}\) attained at the original LRP even after the threshold has been moved past \(K/2=2500\) (where the map is contracting). The bound is therefore extremely conservative once \(K^*+r_T>2500\); the emptiness after \(T=5\) is an artefact of that Lipschitz choice as much as of expansion itself.
+- Table 1 shows only selected horizons/classes. Infinite-horizon emptiness for the two harsh classes is stated in prose, not in the table; a reader can miss that every policy, zero included, is empty at \(T=\infty\) under q05 and worst.
+- “33 observed states” / “only {1985,1987,1989} (plus 1988 for BAU)” — the series start year and whether 2015 is included are not lined up with the fit/OOS split in one place.
+- Frozen protocol date 2026-08-26 sits in the future relative to most readers and to the 2016 DFO / 2021 catch citations; it will look like a placeholder or a time-stamp error.
+- Abstract “machine-verified non-retention finding, distinct from a statistical null” belongs to the companion forecast paper; repeating it here without the certificate itself does not verify anything in *this* document.
+
+### Substantive methodological / framing flaws
+- The paper cannot be refereed standalone. Model, defect \(\varepsilon=460\), persistence-unbeaten RMSE, and the groundwater contrast are all imported from “under separate review” companions. A Fisheries Research short communication that is unintelligible without two unpublished manuscripts is a structural problem.
+- “Viability kernel” is used for the *robust positively invariant set of a fixed closed-loop policy* under a constant additive floor. Classical viability (Aubin, and the fisheries papers cited) is existential over controls. The distinction is real: here there is no choice of \(C_t\) inside the kernel computation, only evaluation of declared rules. The language overclaims the link to that literature.
+- Persistent floors (especially the perpetual worst one-step residual) are not a model of productivity; they are a stress test that by construction makes \(g_{\max}=296<|e|\) for the two harsh classes. The headline “no catch policy, zero included, holds the LRP” is therefore true of *this disturbance class*, not of Northern cod productivity. The discussion acknowledges harshness but the abstract and §3.2 do not qualify it as strongly.
+- Residuals are used simultaneously as process shock, defect bound, and OOS audit. No observation-error / process-error split (standard in state-space assessment). The 1992 transition that *defines* \(\varepsilon\) lies inside the estimation window.
+- \(K=5000\) is an optimisation bound, never approached. Local behaviour near the LRP is identified (\(r\)), global certified calculations that travel to 4000 kt are not.
+- Certified layer is vacuous on the observed range (already at \(T=5\), 4005 kt). The interesting negative result is therefore “no certified claim is possible on this object”, not a quantitative safety margin. That could be stated in one sentence in the abstract.
+- Retention clause (c) (mean catch vs. dominating flats) is never triggered. The three-clause rule is heavier than the data it processes; a simpler “kernel dominance + supply” would have sufficed and would have been easier to preregister.
+- One-pool annual surplus with Allee off, after a collapse whose biology is age-structured, migratory and depensatory, is a severe misspecification for a *governance* claim about the LRP. The limitations paragraph lists the points but still lets the abstract speak in the voice of “the LRP is protected by good years, not by catch management.”
+
+### What is already a genuine upgrade / gap closure
+- Preregistered, dated protocol frozen before any kernel was computed, with an explicit retention rule. Rare in fisheries modelling and correctly emphasised.
+- Scoring (keep only if the kernel is everywhere at least as protective as BAU *and* improves somewhere *and* the improvement is not dominated on supply by a simpler flat) instead of asserting that a DFO-style critical-zone rule is “precautionary.” The finding that S1/cascade are *strictly worse* than a 5 kt moratorium for LRP viability is the sharp result of the paper; it follows mechanically from the constraint never seeing the sub-LRP stages.
+- Two cleanly separated negative certificates (robust-layer productivity vs. certified-layer expansion) plus an explicit warning not to paraphrase one as the other.
+- Constructive number 57.6 kt under q10 only, with the disclaimer that it is geometry at one shock class, not a quota. The arithmetic \(g(K^*)-|e_{q10}|\) is transparent and reproducible.
+- Diagnosis that \(F'(K^*)=1.153>1\) makes the usual contraction-form defect-to-margin conversion inapplicable, and that this is the first scored fisheries example in which the steepest growth sits exactly at the scarcity boundary the governance question is about. That is a real methods contribution relative to Krawczyk et al. (contracting by-catch setting) and to the groundwater companion (contracting, defect-bound \(T\le3\)).
+- Stress replay from 1990 (already below LRP) with the actual 1991–95 residuals: even \(C=0\) exits in the same year as BAU. This is the cleanest single demonstration that the crash was a productivity event.
+- Byte-for-byte deterministic archive, raised iteration cap + convergence assertion for the 2338.3 fixed point, no random components. Stronger than typical “code available.”
+- Refusal to pool the 1954–2024 xteNCAM / 276 kt LRP series. Correct.
+
+### Remaining gaps that a revision should close (or explicitly refuse)
+- Stand up without the companions: one paragraph of self-contained fit diagnostics (or an appendix table) so a referee can check \(r\), residual SD, and \(\varepsilon\) without the other manuscript.
+
+audit 2: **The arithmetic on the declared object is internally tight. The scientific object is not.** The surplus identities, \(F'(K^*)\), \(g(K^*)\), the 57.62 kt bound, Table 1 edges, and the expansive \(r_T\) sequence all check out to the reported rounding. The problems sit in what that object is allowed to mean, in several results that are true by construction, in a certified-layer framework that fights the biology it is applied to, and in a paper that cannot stand alone.
+
+---
+
+## 1. Results that are guaranteed by the modelling choices
+
+**Harsh-class emptiness is tautological.** \(g_{\max}=rK/4=296.1\) kt. Both the perpetual-worst floor (\(-460\)) and the 5th-percentile floor (\(-318.8\)) exceed \(g_{\max}\). Then *every* trajectory declines under *every* \(C\ge 0\), LRP or not, zero catch included. Section 3.2’s “productivity negative certificate” does not use the LRP, does not use the policy family, and does not use closed-loop structure. It is the sentence “a persistent additive shock larger than maximum surplus implies extinction.” Once the floors are chosen on the far side of \(g_{\max}\), the certificate cannot fail.
+
+Only the 10th-percentile class (\(-114.8\)) is on the near side of \(g_{\max}\), and the paper itself calls it “the mildest with non-vacuous content.” So the headline claim (1) is vacuous on two of three declared classes, and the whole intervention-selection drama lives on one class.
+
+**Non-retention is almost automatic given BAU.** BAU is already the moratorium (\(C\equiv 5\)). On a single constraint \(S\ge K^*\), any rule that takes 60 kt *on the safe set* (S1, cascade, flat-60) strictly raises the kernel lower edge relative to 5 kt. Clause (a) then kills them at the boundary under every class. Flat-0 is more protective and fails (c) on supply. The retention rule is a lexicographic Pareto test against a near-zero benchmark; with that benchmark the only way to raise catch is to weaken protection, so the empty retention set is the rule, not a discovery about Northern cod. The groundwater “mirror image” is the same rule on a system whose BAU is *not* already a shutdown.
+
+**S1 and the cascade cannot outperform flat-60 on this safe set.** While \(S\ge K^*\) they *are* flat-60. Sub-LRP stages are unreachable without violating the only constraint. Grouping them in one Table 1 row is correct and, for that reason, the extra structure is dead on arrival. That is worth one sentence, not a governance-architecture verdict.
+
+**Additive perpetual floors do the work that biology usually assigns to multiplicative productivity.** \(e_t\) is a biomass-scale (kt) hit, independent of \(S\). At the LRP a \(-460\) shock is a 52% strike; at \(K\) it is 9%. Recruitment failure, \(M\)-spikes, and capelin collapses scale with stock. A multiplicative floor (a persistent drop in \(r\), or \(e_t \propto S_t\)) changes both the existence of a positive equilibrium *and* whether \(K^*\) sits above it. The present negative certificate is the interaction of (additive shock) \(\times\) (perpetual application) \(\times\) (tail larger than \(g_{\max}\)). None of those three is forced by the DFO series.
+
+---
+
+## 2. Internal inconsistencies and tensions
+
+**\(\varepsilon\) and the disturbance classes are the same number in two costumes.** Methods say so. Then Section 4 insists the robust-layer emptiness and the certified-layer emptiness “must be kept distinct” and “neither result paraphrases the other.” Distinct *mechanisms* (known floor vs amplified defect), same *measured object* (the 1992 residual). For a reader who is not inside the companion suite, this is the same \(-460\) kt yr\(^{-1}\) producing two certificates with different names.
+
+**Inconsistent \(e_{q10}\).** Methods: \(-114.8\). §3.3: \(114.85\), \(172.47-114.85=57.62\). Table 1 is consistent with \(\approx 114.8\). Trivial but sloppy in a paper that advertises byte-for-byte regeneration.
+
+**Companion forecast failure vs intervention object.** The governed map is taken from a study whose preregistered certificate is that last-value persistence beats it out of sample. Section 4 then says nothing here “promotes or demotes any forecast module.” That is a boundary the journal will not police for you. Using a map that lost a forecast evaluation as the closed-loop generator of “certified” kernels is a methodological choice that has to be argued, not declared by firewall.
+
+**“Holds the LRP” is infinite-horizon in the abstract, finite-horizon in Table 1.** Under the harsh classes the \(T=1\) kernels are nonempty (1141 kt, 1016 kt, …). The abstract’s “no catch policy holds the LRP” is a \(T=\infty\) statement. Say so.
+
+**LRP superfluous for claim (1), indispensable for claim (3).** Harsh-class extinction does not mention \(884.6\). The 57.6 kt bound is \(g(K^*)-|e_{q10}|\) and exists only because \(K^*<K/2\). Those are different theorems. The abstract stacks them as four parts of one finding.
+
+**2016 LRP vs the live assessment.** You refuse the xteNCAM series and the 276 kt LRP. At \(S=276\), \(g\approx 62\) kt, so even the q10 floor already yields \(C\le 62-115<0\): zero catch would not hold the *current* LRP under the *mildest* class. Staying on DFO (2016) Table A2 is therefore not a neutral “no pooling” decision; it is the only LRP at which the constructive 57.6 kt sentence exists. Either run the second specification as a declared sensitivity or drop claims that this is about Northern cod rather than about one archived SSB column.
+
+**\(K=5000\) “pinned at its bound” vs “results depend chiefly on \(r\).”** At the LRP, \(1-S/K=0.823\). Halving \(K\) to 2500 cuts \(g(K^*)\) by ~30% and would push the constructive bound near zero under q10. \(K\) is not a nuisance parameter at the boundary you study. Pinning it at the optimisation edge is a declared defect that is not propagated.
+
+**\(F'\) does not depend on \(C\).** Expansion at the LRP is policy-invariant. The certified-layer obstruction therefore cannot be “governed away” by any member of the family. That is a sharp, currently buried, sentence. It also means the certified emptiness beyond \(T=5\) is not an intervention-selection result; it is a property of Schaefer geometry below \(K/2\).
+
+**Replay starts outside the safe set.** 1990 SSB \(=861.9<K^*\). The 1991–92 paths are not kernel membership tests; they are uncontrolled shock accounting. Useful as illustration, mislabelled if read as viability.
+
+**Supply replay on 1983–2006.** S1’s 10 kt mean is “the stock was below the LRP for almost the entire history.” That is a fact about the estimation window, not a property of the rule after recovery. Using collapsed-era occupancy to score post-collapse supply mixes the regimes the paper is trying to separate.
+
+**Freeze date 2026-08-26.** Fine as preregistration if true; surreal if the file is circulating before that date. The “frozen before any kernel was computed” claim is doing a lot of rhetorical work and will be checked against commit timestamps.
+
+---
+
+## 3. The certified layer is the wrong instrument below \(B_{\mathrm{msy}}\)
+
+On Schaefer, \(F'(S)=1+r(1-2S/K)>1\) iff \(S<K/2\). Every standard LRP sits in that region. Compensatory growth *is* \(F'>1\). The same derivative that pulls biomass away from the limit (the biological point of an LRP) inflates additive defects (the certification penalty). Importing a contraction-form margin from groundwater / linearly stable closed loops, then announcing that the contraction form is “provably inapplicable,” is not a discovery about cod. It is the generic geometry of surplus production below \(B_{\mathrm{msy}}\).
+
+Three consequences:
+
+- “First scored instance” is first-instance-of-applying-a-contracting-tool-to-an-expanding-map, not first instance of expansion at an LRP.
+- \(r_T=\varepsilon(a^T-1)/(a-1)\) with \(\varepsilon=460\) and \(K^*=885\) means the defect bound is half the reference point. Emptiness by \(T=5\) is then unsurprising and does not diagnose catch governance.
+- Expansion of *state* (recovery) and expansion of *uncertainty* (certificate decay) are glued together by \(F'\). A fisheries-usable certificate has to split them: e.g. a recovery eigenvalue versus a Lipschitz bound on model error, or a probabilistic hitting-time under the residual measure. The present expansive form treats recovery as an obstruction.
+
+The contrast with Krawczyk et al. (by-catch, contracting) is correctly observed and belongs in a methods note, not as claim (4) of a Northern-cod short communication.
+
+---
+
+## 4. Standalone failure and audience mismatch
+
+A *Fisheries Research* short communication must be readable without four unpublished companions (forecast evaluation, groundwater intervention, prediction/catch-insufficiency, interval-verified linear template). At present the abstract, the object definition, the defect declaration, the “mirror image,” and the last paragraph of the Discussion are all pointers into that suite. The defensive sentence “Nothing here promotes or demotes any forecast module, transfers numbers from an interval-verified linear template… or pools the extended xteNCAM series” is unintelligible to every referee who has not read the other drafts.
+
+Missing on purpose, and fatal for this journal:
+
+- No MSE literature (the field that already scores harvest-control rules for this stock under uncertainty).
+- No DFO HCR / rebuilding-plan documents beyond the 2009 PA cartoon.
+- No post-2016 NCAM assessments, no time-varying \(M\), no capelin, no seals.
+- No comparison of additive residual floors with the stochastic co-viability of Doyen et al. (2012), which you cite but do not use.
+- No process-error vs observation-error production-model alternatives; \(r=0.2369\) is low, and the entire harsh-class certificate is an \(rK/4\) vs tail-residual comparison. If \(r\approx 0.4\), \(g_{\max}\approx 500>460\) and claim (1) dies.
+
+Viability citations (Aubin, Béné–Doyen, Martinet, Krawczyk) are the right family and are well chosen. They cannot replace MSE as the relevant scoring culture for NAFO 2J3KL catch rules.
+
+Tone: “machine-verified non-retention,” “negative certificate,” “byte for byte,” “distinct from a statistical null” is formal-methods register. In this journal it reads as overclaim. The protocol freeze and the public runner are genuine strengths; they do not need that diction.
+
+---
+
+## 5. Line-level nits (not the main problem, but they accumulate)
+
+- Abstract opening (“Intervention selection is scored rather than asserted”) is protocol, not a result; move it.
+- “Allee term off” is mentioned once and never sensitivity-tested. Depensation would strengthen the negative certificate; state that.
+- Pre-1992 “240 kt level” is a family scaling, not a historical mean. Schijns et al. (2021) contain much higher 1960s landings. Define 240 or drop “24% of the pre-1992 level.”
+- Table 1 should show `empty` for harsh-class \(T=\infty\) rather than omitting the columns.
+- Safe-set upper edge \(10^4\) kt is twice \(K\) and is never approached; it only exists so kernels can be written \([s,\infty)\).
+- Positive-part \([\cdot]_+\) never binds in any reported kernel path; irrelevant or say so.
+- CRediT “[To be completed at submission]” plus a 2026 freeze date will annoy production.
+- 1991 cascade figure 876.5 vs S1/flat-0 906.5: the 30 kt stage is applied *below* LRP, i.e. after the constraint is already lost. Do not score it as an LRP-protection instrument in the same sentence.
+
+---
+
+## 6. What is actually solid
+
+- Protocol freeze *before* kernels, public deterministic runner, explicit retention rule: this is better practice than most HCR papers.
+- Arithmetic on the declared map is correct. \(F'(K^*)=1.153\), \(g(K^*)=172.47\), constructive bound \(57.6\), Table 1 \(T=1\) edges, expansive \(r_1\ldots r_8\), and the 2338 kt flat-180 fixed point all reproduce.
+- The 1990–95 replay with *observed* residuals is the one result that does not depend on perpetual floors: even \(C=0\) crosses in 1992 with 622 vs BAU 612. That is the clean “crash is a productivity event on this map” statement. It should lead, not trail §3.5.
+- Policy-invariant expansion at any Schaefer LRP below \(K/2\) is a real methods warning, if it is labelled as such rather than as a cod certificate.
+- Refusing to treat 57.6 kt as a quota is the right sentence.
+
+---
+
+## 7. Profound upgrades (in order of leverage)
+
+**A. Make the harsh-class claim non-tautological.** Report the critical floor \(\bar e = g_{\max}=296\) (zero catch) and \(\bar e(C)=g_{\max}-C\). Place \(-460\), \(-318.8\), \(-114.8\) on that axis. Add the residual percentile at which \(|e|=g_{\max}\) (~1–2nd percentile if the SD \(=135\) Gaussian approximation is even roughly right). Then claim (1) becomes a statement about tail vs surplus, which is the actual content.
+
+**B. Replace or complement perpetual additive floors.** (i) iid draws from the residual measure, stochastic viability probabilities at \(T=5,10,20\); (ii) a two-regime \(r\) (pre/post-1990) with the LRP tested under the low regime; (iii) multiplicative \(r\)-floors. If the negative certificate survives (ii) and (iii), it is about Northern-cod productivity. If it dies, it was the additive-perpetual design.
+
+**C. Propagate \(r\) and \(K\).** The bound \(C_{\mathrm{rob}}=g(K^*)-|e_{q10}|\) is linear in \(r\) at fixed \(K^*\) and increasing in \(K\) below \(K/2\). A one-at-a-time or profile-likelihood band on \(57.6\) kt is the difference between a number and a geometry. Pinning \(K\) at a bound without that band is inconsistent with a paper whose subject is robustness.
+
+**D. Run the live LRP as a named sensitivity, not a pooled row.** State, in one table, kernels at \(276\) kt on the same map (even if you refuse xteNCAM dynamics). Readers will compute it anyway; you already have the formula.
+
+**E. Discard lexicographic retention against moratorium-BAU as the only selection rule.** Keep it as one preregistered test (“does any extra structure beat the moratorium on protection?”). Add a Pareto front: kernel lower edge vs mean catch vs P(stay \(\ge K^*\)) under stochastic shocks, with BAU, flats, S1, cascade, and a real DFO-like HCR as points. Non-retention under the strict rule can stay; it should not be the only verdict.
+
+**F. Split recovery from uncertainty in the certified layer, or cut the layer from this paper.** For *Fisheries Research*, the certified expansion obstruction is a methods result about applying contraction-form margins below \(B_{\mathrm{msy}}\). Move it to the methodological companion. Here, one paragraph: “\(F'>1\) for all \(S<K/2\), hence for every standard LRP; Lipschitz defect margins grow; we therefore do not claim certified infinite-horizon protection on this map.” That closes the gap without a second emptiness certificate that paraphrases \(\varepsilon \approx K^*/2\).
+
+**G. Make the paper standalone.** Fit table (window, \(r\), \(K\), residual SD, max residual, OOS max) in this text. One sentence on why a map that lost to persistence is still a legitimate scenario generator (structure for closed-loop comparison, not forecast skill). Delete groundwater mirror, linear-template, and “under separate review” except one footnote. Cite MSE and the post-2016 assessments.
+
+**H. Lead with the replay and the q10 geometry, not with certificates.** The order that matches evidence strength is: (i) observed-residual crash is not a catch event on this map; (ii) under a persistent 10th-percentile floor the invariant-bound catch is \(57.6\) kt and anything \(\ge 60\) lifts the kernel off the LRP; (iii) under floors beyond \(g_{\max}\) nothing, including zero, saves any positive biomass; (iv) reactive structure that harvests 60 above the LRP is strictly less protective than the moratorium on a single limit constraint. That is a short communication. The rest is suite-internal.
+
+**I. One figure.** Horizontal axis catch (0–240), vertical axis kernel lower edge under q10 at \(T=\infty\), horizontal line at \(884.6\), vertical line at \(57.6\), points for BAU/S1/cascade/flats. Table 1 then becomes numbers under the figure. Harsh-class panels can be a single annotated “empty / \(g_{\max}<|e|\)”.
+
+**J. Multiplicative Allee / depensation as a one-row stress.** If the negative result holds with Allee *off*, it will hold with Allee *on*. Show it; it is cheap and preempts the obvious referee question.
+
+---
+
+## 8. Gap closures (what the draft claims to close vs what is still open)
+
+| Claimed closure | Status |
+|---|---|
+| Catch vs productivity as the LRP protector | Open, except on the q10 additive-perpetual slice and the 1990–95 residual replay. Harsh-class “closure” is tautological. |
+| Intervention selection without assertion | Closed as *procedure* (frozen rule, empty set). Open as *substance* (rule + moratorium-BAU make emptiness the default). |
+| Certified defect-to-margin on an expansive fishery map | Closed as a computation. Open as an interpretation: expansion-at-LRP is generic Schaefer, not a cod obstruction. |
+| Architecture is system-dependent (vs groundwater) | Not closable in this paper; the other system is unpublished. |
+| 2016 LRP kernels on NCAM-1983–2015 SSB | Closed, on that column, on that map. Not closed for Northern cod 2023/24, age structure, or multiplicative productivity. |
+| Forecast skill vs intervention scoring firewall | Asserted, not closed. |
+
+The gap that *would* be worth closing, and that this draft almost has the machinery for, is: **on a surplus-production map fitted to the 2016 SSB column, the LRP is an expanding boundary; the largest constant catch that leaves it invariant under a persistent 10th-percentile additive floor is 57.6 kt; under observed 1991–92 residuals even zero catch does not hold it; and any HCR that takes 60 kt above the LRP is strictly worse than the moratorium for that single constraint.** That paragraph is true, checkable, and journal-shaped. The two “negative certificates,” the expansive \(r_T\) sequence, the companion firewall, and the retention-rule theatre currently bury it.
+
+Cut until that paragraph is the paper. Put the expansion-form methods, the groundwater comparison, and the forecast-evaluation firewall where they belong (the other manuscripts). Add stochastic or regime-shift productivity so claim (1) can fail. Then the selection test is a test rather than a corollary of BAU \(=5\) and \(|e_5|>g_{\max}\).
+- Tighten the Lipschitz / certified calculation: either compute trajectory-wise or state-dependent amplification, or state that the \(T=5\) emptiness is an upper bound that becomes vacuous once the inflated threshold crosses \(K/2\).
+- Replace or qualify “viability kernel” with “robust basin / robust invariant set of the closed-loop map.”
+- Put the disturbance-class qualification in the abstract’s first result: “under persistent floors at the 5th percentile and worse…”
+- Resolve at-exactly-\(K^*\) and the cascade breakpoints in one sentence; they affect only the already-below-LRP replay but should not be ambiguous.
+- Drop or move the 2026 protocol date; keep the freeze claim.
+- Harmonise companion names and the 1983–2006 / 2007 / 33-state windows.
+- A one-line sensitivity: what happens to the 57.6 kt and to \(F'\) if a small Allee term is turned on, or if \(K\) is taken as a large finite number rather than the bound. The paper already says results depend chiefly on \(r\); show it.
+- The certified layer currently adds a negative statement that is true but operationally empty at observed biomasses. Either drop it from the abstract’s (4) or recast it as “no expansion-aware certified claim exists beyond five years.”
+
+The scientific payload that should survive is: under this map and these floors, catch rules that only tighten after the LRP is breached cannot protect the LRP; even zero catch cannot protect it against the two harsher floors; the local expansion at the LRP blocks the usual safety-margin conversion. Everything else is either supporting arithmetic or series-internal scaffolding that currently makes the short communication harder, not clearer.
