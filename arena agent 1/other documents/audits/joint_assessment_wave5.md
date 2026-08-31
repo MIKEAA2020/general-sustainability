@@ -1,6 +1,6 @@
 # Joint assessment, wave 5 — the second Grok batch (7 files, 2026-08-31)
 
-**Status: VERIFICATION COMPLETE; implementation queued (this file is the pre-implementation joint assessment).**
+**Status: VERIFICATION COMPLETE; IMPLEMENTATION DONE (wave 6).** All GENUINE/GENUINE-micro items were implemented into new versioned files (older versions untouched); DEFERRED items stay registered with reasons; HALLUCINATION/STALE items needed no action. Per-paper disposition: P1 v6 (5 micros), P2 v3 (17 fixes incl. both theorem repairs), P4 v4 (9 fixes; the two optional micros were reviewed and skipped with reasons — see queue), E1 v5 (11 fixes), E3 v4 (15 fixes + 1 optional), E4 v5 (10 fixes), P5 v3 (8 fixes). E2 cod intervention was not in this batch; its wave-6 audit produced v5 (research-article elevation) and v6 (formal 1992 breakpoint test + lag-1 disposition).
 Every item below was checked line-by-line against the current paper versions in `arena agen1/` before
 classification. Papers with multiple audits (all of them) are assessed jointly: the new Grok audit is
 evaluated against the current version **which already carries the wave-2 (Grok) and wave-3 (GPT) fixes**,
@@ -185,13 +185,13 @@ Verdict: strong, accurate; independently verifies my new Proposition 7 numbers (
 
 ## 9. Implementation queue (new versions only; older versions untouched)
 
-| Paper | New file | Edits |
-|---|---|---|
-| P1 | `paper1_assessment_separation_v6.md` | 5 micro |
-| P2 | `paper2_obstruction_calculus_v3.md` | ~14 (2 substantive theorem fixes + micros) |
-| P4 | `paper4_delay_dynamics_v4.md` | ~9 |
-| E1 | `paperE1_cod_forecast_ladder_v5.md` | ~11 |
-| E3 | `paperE3_edwards_forecast_ladder_v4.md` | ~14 |
-| E4 | `paperE4_edwards_intervention_v5.md` | ~9 |
-| P5 | `paper5_sampled_governance_v3.md` | ~9 |
-| E2 cod | — | no audit in this batch; wave-2/3 dispositions stand |
+| Paper | New file | Edits | Status |
+|---|---|---|---|
+| P1 | `paper1_assessment_separation_v6.md` | 5 micro | DONE (earlier wave) |
+| P2 | `paper2_obstruction_calculus_v3.md` | 17 (T1a–T1d, T2a–T2b, A1–A10, A12–A13; U4 deferred by design) | **DONE (wave 6)** |
+| P4 | `paper4_delay_dynamics_v4.md` | 9 (items 1–8; items 9–10 optional micros reviewed and skipped: no A_hold anchor exists in v3, and the Proposition 1 displays were found consistent) | **DONE (wave 6)** |
+| E1 | `paperE1_cod_forecast_ladder_v5.md` | 11 (items 1–4, 6–11; item 5 was a hallucination) | **DONE (wave 6)** |
+| E3 | `paperE3_edwards_forecast_ladder_v4.md` | 16 (items 1–13, 15–17; items 14/18–20 needed no action) | **DONE (wave 6)** |
+| E4 | `paperE4_edwards_intervention_v5.md` | 10 (items 1–10; item 11 stale, 12–13 deferred) | **DONE (wave 6)** |
+| P5 | `paper5_sampled_governance_v3.md` | 8 (items 1–7, 9; item 8 stale, 10 deferred) | **DONE (wave 6)** |
+| E2 cod | — | no audit in this batch; wave-6 audit produced `paperE2_cod_intervention_v5.md` (elevation) and `_v6` (1992 breakpoint test) | DONE (wave 6) |

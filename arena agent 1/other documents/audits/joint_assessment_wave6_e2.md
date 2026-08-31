@@ -32,7 +32,7 @@ or certificate error exists in v4.**
 | 4 | "Model class too crude for the biological claim" | STALE for v4's internal scoping (the Discussion carries the model-type limitations); the elevation adds the standalone methods recap so the reader sees the object before the claims | New §2.1 operating-model recap |
 | 5 | "Certified layer is a severe map-dependent penalty" | GENUINE (framing) — reweighted with the K-grid + bootstrap evidence (F′ 90% bootstrap interval [1.001, 1.177]: the expansion persists under residual resampling) | §3.4 extended: the certified emptiness is reframed as a methods warning about the conversion on expanding maps, supported by the new layers |
 | 6 | "Allee refit is not a mild sensitivity" | GENUINE-micro — v4 already reports the better SSE and the single reversal | §3.6 retitled "Model-form comparison"; the depensatory form stated as the data-preferred co-equal specification |
-| 7 | "Perfect observation, no lag" | GENUINE-micro for the framing (already a caveat in v4's Discussion) | The upper-bound statement is retained; **lag-1 kernels are DEFERRED** — the audit's "one extra column" is under-specified: a one-year assessment delay needs an information-timing declaration (which lagged state sets the catch, and what the initial segment is) before any kernel is well-defined; registered with that requirement |
+| 7 | "Perfect observation, no lag" | GENUINE-micro for the framing (already a caveat in v4's Discussion) | **RESOLVED (wave 6):** the audit's lag-1 item has two senses. (a) Residual autocorrelation — implemented: lag-1 ACF = 0.652 reported in §2.1, and §3.8's block-4 resampling respects it. (b) Delayed control — the project-wide timing convention exists and declares the base model's timing as same-year perfect observation: the companion forecast study's M4 module IS the one-year assessment delay ("forecast starts from S_{t−1}"), and E2 v5's Discussion states "real governance operates under assessment lags (the one-year delay module of the companion)… delay-aware kernels would be smaller or empty". A lag-1 governance kernel is therefore a declared companion extension, not a paper defect; no kernel is added |
 | 8 | "Disturbance = residual = defect; circular" | STALE — v4 already states "the disturbance classes and the defect declaration are the same measured quantity in two roles" | Kept; the new stochastic layers explicitly separate the 1992 draw (one-off) from the persistent classes |
 | 9 | "S1's 10 kt uninformative" | STALE — v4 already scopes the supply replay ("a fact about the collapsed-era estimation window, not about the rule's post-recovery supply properties") | Kept |
 | 10 | "Replay from 1990 already outside" | STALE — v4 already says "uncontrolled shock accounting rather than a kernel-membership test" | Kept; Figure 3 draws it |
@@ -49,7 +49,7 @@ or certificate error exists in v4.**
 | 21 | "Co-viability second constraint" | DEFERRED | Registered |
 | 22 | "Fox/Pella–Tomlinson third form" | DEFERRED | Registered |
 | 23 | "xteNCAM sensitivity row" | DEFERRED — the no-pooling discipline of v4 stands; a labelled different-safe-set row is registered | Registered |
-| 24 | "Residual diagnostics (ACF, normality, 1992 as outlier, Chow)" | PARTIAL — lag-1 ACF = 0.652 computed and reported in §2.1 (strong persistence justifies the block scheme); formal breakpoint tests DEFERRED | §2.1 + registered |
+| 24 | "Residual diagnostics (ACF, normality, 1992 as outlier, Chow)" | DONE (wave 6) — lag-1 ACF = 0.652 in §2.1; formal Chow-type break test at the 1992 transition now executed (`rerun_campaigns/e2_breakpoint_1992.py`, seed fixed): F = 3.68, permutation p = 0.062 (10^5 draws), mean shift −106.1 kt (1984–1991 +50.3 vs 1992–2007 −55.8 kt); sentence added in E2 v6 §3.8 — the one-off treatment is a tested declared sensitivity, not an identified break | §2.1 + §3.8 (v6) |
 
 ## 3. Key numbers computed for v5 (all new, all script-verified; archived in results/)
 
@@ -105,4 +105,4 @@ or certificate error exists in v4.**
 | 1 | `campaign_e2_elevation.py` + 6 CSVs + 6 figures | DONE (this wave) |
 | 2 | `paperE2_cod_intervention_v5.md` (research-article form; v4 untouched) | DONE (this wave) |
 | 3 | push (two permitted folders only) | DONE (this wave) |
-| 4 | Registered follow-ups: lag-1 kernels (needs the information-timing declaration), DP/viability-kernel regret, co-viability, DFO-grounded policy rows, Fox form, xteNCAM sensitivity, formal residual breakpoint tests | docket |
+| 4 | Registered follow-ups: lag-1 kernels **RESOLVED** (timing convention found — see row 7); formal residual breakpoint tests **DONE** (row 24, E2 v6). Still on the docket: DP/viability-kernel regret, co-viability, DFO-grounded policy rows, Fox form, xteNCAM sensitivity | docket |
