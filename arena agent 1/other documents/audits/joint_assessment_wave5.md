@@ -89,8 +89,8 @@ Verdict: strong, accurate; independently verifies my new Proposition 7 numbers (
 | 6 | Theorem 3: undelayed polynomial's c₁′, c₀′ not displayed (audit supplies 0.2038, 0.003044) | Confirmed; audit's values re-verified (c₁′ = 0.20376, c₀′ = 0.003046 with full precision) | GENUINE-micro | Display c₁′ = 0.2038, c₀′ = 0.00305 in the Routh sentence |
 | 7 | Proposition 2 labeled with a "Proof" that is a two-sentence sketch (unproved reduction conjecture; IFT/Rouché named, not written) | Confirmed (parenthetical proof) | GENUINE (augmented) | Expand into a full conditional argument: factorisation case (exact, once the block-triangular identity is granted) + ε-case via the zero set F(ω,τ;ε) = (Re Δ, Im Δ) with det DF ≠ 0 by simplicity + transversality; the unproved hypotheses stay explicit |
 | 8 | Theorem 2 statement's last sentence ("certified branch pairs are separated… simultaneous double-Hopf excluded on the computed set") is a numerical report inside an algebraic statement | Confirmed verbatim | GENUINE-micro | Mark it: "(computed on the declared search range; not an algebraic consequence of the cubic)" |
-| 9 | R·exp(A_hold T) and exp(A_hold T)·R are similar — the flow-then-update vs update-then-flow spectra coincide | True (similarity); optional | GENUINE-micro (optional) | One clause in Thm 5/Prop 7's proof |
-| 10 | Proposition 1: dummy-variable looseness (NN vs ÑÑ), C₁ unexpanded | Confirmed (minor) | GENUINE-micro (optional) | Harmonize the two displays |
+| 9 | R·exp(A_hold T) and exp(A_hold T)·R are similar — the flow-then-update vs update-then-flow spectra coincide | True (similarity); optional | **EXECUTED (wave 7)** | Similarity clause added in P4 v5 §7 (identical spectra; linear classification transfers; nonlinear maps differ; convention fixed) |
+| 10 | Proposition 1: dummy-variable looseness (NN vs ÑÑ), C₁ unexpanded | Confirmed (minor) | **EXECUTED (wave 7)** | C₁ anchored in P4 v5 §2.4 (scaled-norm Lipschitz constant of the difference field, finite by the statement's hypothesis); the Δ displays were found consistent as written |
 
 ## 4. E1 (`paperE1_cod_forecast_ladder_v4.md`) — audit: grok e1 v4 (two sub-audits)
 
@@ -167,7 +167,7 @@ Verdict: strong, accurate; independently verifies my new Proposition 7 numbers (
 | 7 | F3: forward-invariance proof — logistic boundedness from above used implicitly | Confirmed | GENUINE-micro | Add the boundedness sentence to the proof |
 | 8 | F5 constrained-M numbers in main text as "hypotheses, not results" | Already labeled verbatim (line 201) | STALE (micro-optional) | Optionally box the hypothesis display; no substance change |
 | 9 | I3: §4.1 rhetorical grouping against the plant-operator confound disclosure | Confirmed | GENUINE-micro | Reorder the §4.1 sentence to keep the operator-isolation disclaimer adjacent |
-| 10 | U1(ii) sample-and-hold vs continuous delay on one plant; U3 protective-controller run | Real computations | DEFERRED | Registered on the open docket |
+| 10 | U1(ii) sample-and-hold vs continuous delay on one plant; U3 protective-controller run | Real computations | **EXECUTED (wave 7)** | Model level, logistic hold map: complete crossing record (Euler {47.536 complex, 79.143 real −1}, stable band [47.54, 79.14]; exact single 6.501, stable [6.50, 200+]; Euler protective 2.306 artefact; exact protective none, max ρ = 0.9967); protective controller run; one-plant operator contrast (continuous {3.666, 150.358} vs sampled {6.50}); comparator MSE executed (extractive-Euler crashes 10/10 seeds at T_r = 8/12/20 under 30% assessment error; protective-exact holds everywhere; see `open_items_registry_wave7.md` §2) |
 
 ---
 
@@ -189,9 +189,9 @@ Verdict: strong, accurate; independently verifies my new Proposition 7 numbers (
 |---|---|---|---|
 | P1 | `paper1_assessment_separation_v6.md` | 5 micro | DONE (earlier wave) |
 | P2 | `paper2_obstruction_calculus_v3.md` | 17 (T1a–T1d, T2a–T2b, A1–A10, A12–A13; U4 deferred by design) | **DONE (wave 6)** |
-| P4 | `paper4_delay_dynamics_v4.md` | 9 (items 1–8; items 9–10 optional micros reviewed and skipped: no A_hold anchor exists in v3, and the Proposition 1 displays were found consistent) | **DONE (wave 6)** |
+| P4 | `paper4_delay_dynamics_v5.md` | 10 (items 1–8 in v4; items 9–10 EXECUTED in v5, wave 7) | **DONE (wave 7)** |
 | E1 | `paperE1_cod_forecast_ladder_v5.md` | 11 (items 1–4, 6–11; item 5 was a hallucination) | **DONE (wave 6)** |
 | E3 | `paperE3_edwards_forecast_ladder_v4.md` | 16 (items 1–13, 15–17; items 14/18–20 needed no action) | **DONE (wave 6)** |
 | E4 | `paperE4_edwards_intervention_v5.md` | 10 (items 1–10; item 11 stale, 12–13 deferred) | **DONE (wave 6)** |
-| P5 | `paper5_sampled_governance_v3.md` | 8 (items 1–7, 9; item 8 stale, 10 deferred) | **DONE (wave 6)** |
+| P5 | `paper5_sampled_governance_v4.md` | 8 in v3 (items 1–7, 9); item 10 EXECUTED in v4 (wave 7, model-level operator package + comparator MSE) | **DONE (wave 7)** |
 | E2 cod | — | no audit in this batch; wave-6 audit produced `paperE2_cod_intervention_v5.md` (elevation) and `_v6` (1992 breakpoint test) | DONE (wave 6) |
