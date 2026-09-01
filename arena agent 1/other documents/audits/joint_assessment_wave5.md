@@ -134,7 +134,7 @@ Verdict: strong, accurate; independently verifies my new Proposition 7 numbers (
 | 18 | Table 3 bold rule inconsistency | FALSE POSITIVE — bold = best of window throughout; "best causal beats oracle" is prose commentary | STALE | None |
 | 19 | 660 ft anachronism in Table 1 | Already handled (Table 1 dates it "(in force after 2007)"; line 38 states it) | STALE | None |
 | 20 | M1 retained 0.39 abstract over-claim | Abstract already carries MAE-tie/h=5 qualifiers | STALE | None |
-| — | One-pool blackboard rebuild; wet-season information set; pumpage scenario; A·S storage reporting; companion-cod syntax pruning; M4-as-physics; sign-hit strike line | Real design work / venue-pass items | DEFERRED | Reserved for the venue pass |
+| — | One-pool blackboard rebuild; wet-season information set; pumpage scenario; A·S storage reporting; companion-cod syntax pruning; M4-as-physics; sign-hit strike line | Real design work / venue-pass items | DEFERRED — pumpage scenario EXECUTED (wave 7) | Reserved for the venue pass; the pumpage scenario was executed as E3 v5 §5.6 (four counterfactual pumpage paths through the fitted pre-permit map; Table 7: actual 382.1 / frozen-1990 489.4 / pre-permit mean 469.8 / 20%-cut 305.7 × 10³ acre-ft yr⁻¹; policy spread at 2023 spans 630.9–646.8 ft, the same order as the map's RMSE — pumpage is a secondary lever) |
 
 ## 6. E4 (`paperE4_edwards_intervention_v4.md`) — audit: grok e4.v4 (two sub-audits)
 
@@ -152,7 +152,7 @@ Verdict: strong, accurate; independently verifies my new Proposition 7 numbers (
 | 10 | BAU = constant training mean, not the historical operating path | Confirmed | GENUINE-micro | Add to the BAU definition: "— a flat 100% cap, not the historical pumpage path" |
 | 11 | T=1 boundary 618.8 vs 618.776; T=12 692.6 vs 692.4 | Rounding, consistent | STALE | None |
 | 12 | "Viability kernel" vocabulary vs the policy-fixed disclosure | Already disclosed (§2.3); title/abstract sell the classical object | DEFERRED | Venue pass (wording alongside the disclosure) |
-| 13 | Springs in K*/drain; sequence disturbances; closed-loop supply; verified rungs only; certified-layer redesign; one-pool control volume | Real design work | DEFERRED | Venue/design pass |
+| 13 | Springs in K*/drain; sequence disturbances; closed-loop supply; verified rungs only; certified-layer redesign; one-pool control volume | Real design work | DEFERRED — sequence disturbances + closed-loop supply EXECUTED (wave 7) | Venue/design pass for the rest; the two disturbance/supply layers were executed as E4 v6 §3.6: finite-duration floors (BAU n=5/10 reproduce the committed 625.6/658.4 ft boundaries, n=15 empty; every cut policy holds 618 ft at all durations) and floor-class supply (S1 → flat-80's 622.04 ft attractor with +0.4% trigger-lag supply; CPM → flat-60's 628.36 ft, +3.1%; BAU end head 615.72 = committed worst-case attractor) |
 
 ## 7. P5 (`paper5_sampled_governance_v2.md`) — audit: grok paper 5 v2 (two sub-audits)
 

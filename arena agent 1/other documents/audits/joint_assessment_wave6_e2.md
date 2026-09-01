@@ -47,8 +47,8 @@ or certificate error exists in v4.**
 | 19 | "Policy family grounded in DFO" (actual post-1992 catch history, F-lim rule) | DEFERRED — needs DFO-document sourcing of the historical inshore TAC path before it can be scored | Registered |
 | 20 | "True viability kernel / DP maximal catch, regret metric" | DEFERRED — a different computation class (existential kernels over controls), registered as the next methods extension | Registered |
 | 21 | "Co-viability second constraint" | DEFERRED | Registered |
-| 22 | "Fox/Pella–Tomlinson third form" | DEFERRED | Registered |
-| 23 | "xteNCAM sensitivity row" | DEFERRED — the no-pooling discipline of v4 stands; a labelled different-safe-set row is registered | Registered |
+| 22 | "Fox/Pella–Tomlinson third form" | EXECUTED (wave 7) — E2 v7 §3.6: r = 0.1044, K = 5000 pinned, MSE = 13,873.1 kt² (worst of the three co-equal forms; Schaefer 12,772.2, Allee 7,690.1); F′(K*) = 1.0764 > 1; constructive q10 = 45.1 kt; BAU/zero-catch q10 certificates exactly unchanged; 60-kt rule T∞ = 1119.0, 120-kt rule empty | `rerun_campaigns/campaign_e2_fox_form.py` |
+| 23 | "xteNCAM sensitivity row" | EXECUTED (wave 7) — E2 v7 §3.11 labelled row, no pooling: own classes from own training residuals (e_min −470.8, e_q05 −269.5, e_q10 −178.7); r = 0.5023, K = 4812.9, MSE = 18,028; F′(276) = 1.4447; own-q10 constructive bound negative (−48.0 kt); zero-catch T1 = 309.4 kt > LRP 276 — the reference point is not robustly viable from itself on the second specification | `rerun_campaigns/campaign_e2_xteNCAM_row.py` |
 | 24 | "Residual diagnostics (ACF, normality, 1992 as outlier, Chow)" | DONE (wave 6) — lag-1 ACF = 0.652 in §2.1; formal Chow-type break test at the 1992 transition now executed (`rerun_campaigns/e2_breakpoint_1992.py`, seed fixed): F = 3.68, permutation p = 0.062 (10^5 draws), mean shift −106.1 kt (1984–1991 +50.3 vs 1992–2007 −55.8 kt); sentence added in E2 v6 §3.8 — the one-off treatment is a tested declared sensitivity, not an identified break | §2.1 + §3.8 (v6) |
 
 ## 3. Key numbers computed for v5 (all new, all script-verified; archived in results/)
@@ -105,4 +105,4 @@ or certificate error exists in v4.**
 | 1 | `campaign_e2_elevation.py` + 6 CSVs + 6 figures | DONE (this wave) |
 | 2 | `paperE2_cod_intervention_v5.md` (research-article form; v4 untouched) | DONE (this wave) |
 | 3 | push (two permitted folders only) | DONE (this wave) |
-| 4 | Registered follow-ups: lag-1 kernels **RESOLVED** (timing convention found — see row 7); formal residual breakpoint tests **DONE** (row 24, E2 v6). Still on the docket: DP/viability-kernel regret, co-viability, DFO-grounded policy rows, Fox form, xteNCAM sensitivity | docket |
+| 4 | Registered follow-ups: lag-1 kernels **RESOLVED** (timing convention found — see row 7); formal residual breakpoint tests **DONE** (row 24, E2 v6). Still on the docket: DP/viability-kernel regret, co-viability, DFO-grounded policy rows. The Fox form and the xteNCAM sensitivity row were executed in wave 7 (E2 v7 §3.6, §3.11 — see rows 22–23). | docket |
