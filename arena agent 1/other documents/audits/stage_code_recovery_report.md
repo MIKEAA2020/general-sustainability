@@ -1,6 +1,6 @@
 # Stage-Scan Code Recovery and Verified Re-Run — report (2026-09-01)
 
-**Trigger:** the user recovered a batch of files from earlier chat sessions (14 unique files, two names duplicated in the upload) and attached them. This report states what the batch is, how it changes the provenance record, and the outcome of a verified re-run of the recovered code.
+**Trigger:** the user recovered a batch of files from earlier chat sessions (15 attachments, two duplicate pairs — compute_core.py.txt ×2 and stage_r_window.txt ×2 — i.e. 13 unique files; the unrelated recover.txt arrived in the same upload session but outside the batch) and attached them. This report states what the batch is, how it changes the provenance record, and the outcome of a verified re-run of the recovered code.
 
 ## 1. What the batch is
 
