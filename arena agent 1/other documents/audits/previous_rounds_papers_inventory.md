@@ -16,7 +16,7 @@
 
 - **Corrected sources in place:** A001–A007, A011–A025 (A008/A009 replaced by revised negative/redesign articles, A010 preserved as an intentional negative audit).
 - **Direct relatives of our nine papers:** A003 (institutional feedback), A012 (delay dynamics), A013 (component accounting), A014 (northern cod), A018 (capital liquidation — its correction list includes **CES**), A019 (closed ledger), A020 (two channels), A021 (Liebig graph), A023 (spatial), A024 (first passage), A025 (interval folds).
-- **Cross-document consistency item flagged this turn:** A018's correction list records a CES correction ("Donor sign, CES, norm…"). After the A001 CES witness fix (A₀=4), the natural next check is whether A018's CES instance is consistent with the same dimensional convention — a small, well-defined audit for a future turn.
+- **Cross-document consistency item flagged this turn:** A018's correction list records a CES correction ("Donor sign, CES, norm…"). After the A001 CES witness fix (A₀=4), the natural next check is whether A018's CES instance is consistent with the same dimensional convention — **DONE 2026-09-02 (turn 53): `audits/a018_ces_crosscheck.md`. Verdict: corrected edition fully discharges the flagged CES defect (verified claim by claim, numerically and analytically) and is convention-consistent with the A₀=4-fixed A001 witness; no further correction needed.**
 - **Not yet independently audited by us:** A002, A006, A010 (the formal supplement's other three members), and the whole A003–A025 corrected set beyond the provenance work done for A011/A022.
 
 ## What each class requires (in order of bindingness)

@@ -731,3 +731,10 @@ GitHub: token file at /home/user/.github-token (600); account MIKEAA2020; repo g
 - Push script patched for figs_p1/figs_p5/figs_e2/figs_e4.
 - **Latest versions: P1 v8, P2 v4, P3 v8, P4 v9, P5 v9, E1 v6, E2 v10, E3 v7, E4 v8.**
 - Pushed after this entry.
+
+## Turn 53 (2026-09-02) — repo asset check, P4 40/41 data check, A018 CES cross-check
+
+- **Repo asset check:** fresh full clone @ `df97c1f`. All 21 workspace PNGs byte-identical (md5) to repo counterparts; 9 SVGs + EAA 2023 groundwater PDF + two `batch 2/` PDFs existed only on the repo — mirrored locally into `arena agen1/repo_assets_mirror/` (local copies; originals stay on GitHub at their own paths, nothing pushed back). Manifest: `repo_assets_mirror/MANIFEST.md`.
+- **P4 turn-40/41 continuation data — definitive negative, repo-verified:** full-tree + full-history filename scan (single branch `main`): no attractor/basin/topology/regime CSV (or any p4/paper4 data beyond the three known DR files) exists now or ever. The P4 five-regime topology figure **stays data-gated**; the prospective pre-registered campaign remains the only non-fabricated path. Turn-52's "no committed CSVs survive" is upgraded to "none anywhere on the repo, ever".
+- **A018 CES cross-check EXECUTED** (`audits/a018_ces_crosscheck.md`): archived `uploads/manuscript.txt` carries the defective ρ-form CES exactly as the joint audit's A018-L2 described; the corrected edition `revised_articles/A018_capital_liquidation_corrected.tex` reparameterizes cleanly (σ_Q only). Verified claim by claim: σ_S=1/(1−γ) (FD 2.0000), nested CES elasticity σ_Q, Cobb–Douglas limit σ_Q→1 (equals CD value 3.24901 to 5 decimals), Leontief limit σ_Q→0⁺ (monotone → min), no residual ρ in CES role, donor-sign fix (L1) spot-verified. Cross-check vs the A₀=4-fixed A001 witness: CONSISTENT (same conventions; no numeric CES pair exists in A018). No corrections needed.
+- Registry + previous-rounds inventory updated (turn-53 marker block; A018 item marked DONE). Pushed after this entry.
