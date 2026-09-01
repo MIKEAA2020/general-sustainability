@@ -721,3 +721,13 @@ GitHub: token file at /home/user/.github-token (600); account MIKEAA2020; repo g
 - **Final venue pass** (`audits/final_venue_pass.md`): P2/P5 venue-ready; P1/P3/P4/E1/E2 need only submission-step metadata (Highlights/graphical abstract/CRediT); E3/E4 Groundwater structured-abstract + impact-statement conversion documented as a flagged submission-step item.
 - **Previous-rounds inventory** (`audits/previous_rounds_papers_inventory.md`): 3 held papers (A001/A011/A022) need owner decisions only; A001–A025 corpus mapped; **next audit flagged: A018 CES correction cross-check against the fixed A₀=4 witness**; A002/A006/A010 unaudited.
 - Pushed after this entry.
+
+## Turn 52 — visual aids, clarity/remnants, terminology/style, E3/E4 Groundwater conversions
+
+- **Visual aids (merit-based, non-decorative only):** implemented 3 new figures from committed data — P1 v8 witness geometry (analytic spec), P5 v9 crossing record (p5_crossing_record.csv), E4 v8 worst-case attractors (e4_floor_supply.csv); E2 v10 wires its 6 committed PNGs with clean captions. P2/P3: not merited. **P4 five-regime topology figure: merited but data-gated** (no committed attractor CSVs survive from turn-40/41) — recorded as a prospective pre-registered recomputation campaign; nothing fabricated. Report: `audits/visual_aids_assessment.md`.
+- **Clarity/remnants: real defect found — P4's subsection headers were desynced from the renumbered sections** (### 8.x under §9, 9.x under §10, 10.x under §11; top-level headers and text refs had been fixed, subsections not). Fixed in P4 v9. E2 caption filename remnants → v10; E3 trailing "--" → v7. Duplicate-sentence sweep: all five flagged repeats legitimate. Report: `audits/clarity_flow_remnants_scan.md`.
+- **Terminology/style: 5 mixed-spelling defects fixed** (P1 specialisation→v8; P3 analyzed→analysed→v8; P4 hypothesized→hypothesised→v9; P5 stabilization→stabilisation→v9). All papers internally uniform; caption convention uniform; no stray markers. Report: `audits/terminology_style_scan.md`.
+- **E3/E4 Groundwater conversions implemented after verification:** every number in both structured abstracts checked against papers + CSVs (all verified). E3 draft adopted at 216 words; E4 draft trimmed 307→250 (venue cap) with all numbers retained. E3 v7 + E4 v8: four-headed structured abstract + Article Impact Statement; E4 also gets Figure 1.
+- Push script patched for figs_p1/figs_p5/figs_e2/figs_e4.
+- **Latest versions: P1 v8, P2 v4, P3 v8, P4 v9, P5 v9, E1 v6, E2 v10, E3 v7, E4 v8.**
+- Pushed after this entry.
