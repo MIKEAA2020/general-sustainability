@@ -704,3 +704,11 @@ GitHub: token file at /home/user/.github-token (600); account MIKEAA2020; repo g
 - **Supplementary v2** (`paper4_supplementary_v2.md` = v1 verbatim + S9 registration records + S10 expanded-proof details).
 - **Artifacts:** report `audits/proof_presentation_check.md`; campaign + gate log + fine-map CSV in `rerun_campaigns/`; registry markers (PROOF-PRESENTATION FINDINGS — IMPLEMENTED; P4 V6 — NEW SECTION); reading-log entries.
 - Pushed after this entry.
+
+## Turn 50 (cont.) — supplementary alignment pass across all papers
+
+- **Checked every supplementary file against the latest paper version, anchor by anchor.** P1 aligned (S1–S7 match the pointer; S7 witness matches v6 §4.5/§4.9: 29,791-state grid, scale 40, 25 checks). P3 aligned (all 17 statement anchors exist in v6; §2.4/§2.5/§3.1/§4.9/§6.4/§7.6–7.7/§8–9 valid; split-assignment values match). P4: S1–S8 verified free of references into the renumbered range; S9–S10 written to v6 numbering. P2 and E1–E4: no supplementary files, no pointers — consistent.
+- **P4 flaw fixed — P4 v7** (single-line diff vs v6): the supplementary pointer now names `paper4_supplementary_v2.md` (S1–S10) as the single accompanying file instead of splitting S1–S8 (old file) from S9–S10.
+- **P5 flaws fixed — P5 v7 + `paper5_supplementary_v2.md`**: (1) main-text pointer mislabeled S1–S3 and omitted the statement inventory → corrected pointer in v7, now also stating the reconstruction's attachment; (2) supp subtitle stale ("42-Stock Spectral Null" → "Selected 42-Stock Spectral Screen"); (3) supp S2.2 still carried the informal threshold-shift proof (now proved in full in the main text) and S8 predated the §3.4 reconstruction → v2 fixes both (deferral + retained status remarks; legacy-exploratory vs committed-reconstruction distinction). All S4/S5/S6 values verified against v6.
+- **Latest versions now:** P4 v7, P5 v7 (others unchanged: P1 v6, P3 v6, P2 v3, E1 v5, E2 v8, E3 v5, E4 v6).
+- Pushed after this entry.
