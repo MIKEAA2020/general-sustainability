@@ -18,15 +18,19 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 BASE = "/home/user/arena agen1/repo_assets_mirror/p4_five_regime_campaign"
+BASE2 = "/home/user/arena agen1/repo_assets_mirror/a025_second_fold"
 small_lower = pd.read_csv(f"{BASE}/p4_branch_small_lower.csv")
 large_lower = pd.read_csv(f"{BASE}/p4_branch_large_lower.csv")
 small_upper = pd.read_csv(f"{BASE}/p4_branch_small_upper.csv")
+sf_branch = pd.read_csv(f"{BASE2}/second_fold_branch.csv")
+sf_basin = pd.read_csv(f"{BASE2}/second_fold_basin.csv")
 basin = pd.read_csv(f"{BASE}/p4_basin_archive.csv")
 res = json.load(open(f"{BASE}/p4_campaign_results.json"))
 
 TAU_MINUS = 3.6661490142741          # certified Hopf (lower), interval midpoint
 TAU_PLUS = 150.3584773101415         # certified Hopf (upper), interval midpoint
 FOLD = 5.5872361986901               # certified fold (m=64 MS; Krawczyk box)
+FOLD2 = 64.4023272033699              # certified second fold (m=64 MS; Krawczyk box)
 CAP_LO, CAP_HI = 148.6, 149.5        # basin-grid capture onset bracket
 
 fig, axs = plt.subplots(2, 2, figsize=(9.2, 7.4))
@@ -94,23 +98,31 @@ for h in ["H1", "H2", "H3"]:
         ax.scatter(grp.tau, [y] * len(grp), s=34, color=C[cls],
                    edgecolor="0.3", lw=0.4, zorder=3,
                    label=None if h != "H1" else cls)
-for b, lab in [(TAU_MINUS, "$\\tau_-$"), (FOLD, "fold"), (CAP_LO, ""), (CAP_HI, ""), (TAU_PLUS, "$\\tau_+$")]:
+for b, lab in [(TAU_MINUS, "$\\tau_-$"), (FOLD, "fold"), (FOLD2, "$\\tau_{f2}$"), (CAP_LO, ""), (CAP_HI, ""), (TAU_PLUS, "$\\tau_+$")]:
     ax.axvline(b, color="0.55" if lab else "0.8", ls="--", lw=0.8)
     if lab:
         ax.text(b, 2.62, lab, fontsize=8, ha="center")
+# second-fold grids (squares; grid A 133-146, grid B 62.4-66.4)
+for h in ["H1", "H2", "H3"]:
+    sub = sf_basin[(sf_basin.history == h) & (sf_basin.dt == 0.02)]
+    y = hist[hmap[h]]
+    for cls, grp in sub.groupby("classification"):
+        ax.scatter(grp.tau, [y] * len(grp), s=26, color=C[cls], marker="s",
+                   edgecolor="0.25", lw=0.3, zorder=3)
 ax.set_yticks([0, 1, 2]); ax.set_yticklabels(list(hist.keys()), fontsize=8)
 ax.set_xlim(0, 158)
 ax.set_xlabel("delay $\\tau$ (yr)")
-ax.set_title("(d) basin classifications, 27 $\\tau$ values $\\times$ 3 histories (dt = 0.02)", fontsize=9)
+ax.set_title("(d) basin classifications: 27$\\times$3 grid (circles) + second-fold grids A/B (squares), dt = 0.02", fontsize=9)
 from matplotlib.patches import Patch
 ax.legend(handles=[Patch(color=C[k], label=k) for k in ["captured", "settles", "intermediate"]],
           fontsize=7, loc="lower left", framealpha=0.9)
 ax.grid(alpha=0.2, lw=0.4, axis="x")
 
-fig.suptitle("Five-regime attractor topology — committed campaign record (2026-09-02, first run, "
-             "no independent rerun yet; all data from $p4\\_five\\_regime\\_campaign/$, commit 295d4f4)",
+fig.suptitle("Five-regime attractor topology — committed records, both campaigns (2026-09-02, first runs, "
+             "no independent reruns yet; all data from the deposited p4_five_regime_campaign/ and "
+             "a025_second_fold/ CSVs; no inherited number drawn)",
              fontsize=8.5, y=0.995)
 fig.tight_layout(rect=[0, 0, 1, 0.985])
-out = "/home/user/arena agen1/figs_p4/fig2_five_regime_topology.png"
+out = "/home/user/arena agen1/figs_p4/fig2_five_regime_topology_v2.png"
 fig.savefig(out, dpi=160)
 print("saved", out)
