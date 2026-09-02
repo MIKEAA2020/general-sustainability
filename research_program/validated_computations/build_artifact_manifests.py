@@ -87,6 +87,17 @@ COMMANDS = {
         'a025_fold_pipeline.py 128 --dtau-min 5e-6 --tau-end 5.62 --resume-ms',
         'repository root',
         'NOMINAL m=128 fold record; INSIDE the lost interval'),
+    'a025_fold/a025_fold_krawczyk.json': (
+        'python3 research_program/validated_computations/a025_fold/'
+        'a025_fold_krawczyk.py', 'repository root',
+        'INTERVAL KRAWCZYK CERTIFICATE (2026-09-03, re-attempt of the lost '
+        'stage): unique Moore-Spence zero in the box tau_f in '
+        '[5.587236197890, 5.587236199490] (the lost interval, 1 ulp '
+        'widened), final enclosure [5.587236198689, 5.587236198691]; G\' '
+        'nonsingular throughout (simple nondegenerate fold of the m=64 '
+        'collocation system); psi^T F_tau in [0.313266, 0.314822] and '
+        'psi^T D2F[v,v] in [5.6923e-5, 5.8943e-5] both exclude 0; '
+        'first-run status (no independent rerun yet)'),
     'a021_c4/c4_piecewise_chebyshev_stage1.json': (
         'python3 research_program/validated_computations/a021_c4/'
         'c4_piecewise_chebyshev_stage1.py',
