@@ -46,8 +46,7 @@ median ≈1.8 yr is reported "with its cohort conditions and is not promoted to 
 forecast" — the direct counterpart of the review's demand, satisfied. C4: the
 pure-decay proxy is labeled a proxy. C5: the ledger is typed accounting
 (parameter-free); the constitutive g(S) is declared as such. C7: the \ln→\log
-convention fix applied (v9). Residual: the registered quartile summary of F and
-log(SSB/B_lim) over the cohort remains an open revision requirement (registry).
+convention fix applied (v9). Residual addressed 2026-09-02 (P3 v10): the quartile requirement is resolved into a pinned protocol — the quartile summary of F and log(SSB/B_lim) belongs to the archived cohort pull alone, and Supplementary S5 (paper3_supplementary_v2.md) carries the public database versions' corresponding statistics (v4.44: n=352, median ADH 3.65; v4.495: n=362, 3.72; neither reproduces the archived 43-stock/1.8-yr cohort under the stated filters) as a version-sensitivity record, not substitutes.
 
 **P4 (delay dynamics, v11).** C1: parameters swept extensively — η ∈ [0.5, 3],
 r-windows, k ∈ {5, 10, 20, 40} (§9.5), Candidates A/B as anchors. C3/C4: the
@@ -64,11 +63,7 @@ first-run reruns; the 64.438–148.6 gap; continuum lift (registry).
 
 **P5 (sampled governance, v9).** C1/C5: literature-only parameter sets (anchovy
 M = 0.90 Pauly–Tsukayama 1987; sprat/cod values cited), no tuning to the legacy
-bands (the adopted protocol). C2: parameter sources cited. C3: two sentences carry
-the review's pattern and are the closest live instances: "robust period near 3.7 yr,
-consistent with ENSO recurrence… |r| ≈ 0.31" and "is consistent with a selection
-mechanism…" — both give their magnitude and are labeled interpretations; mild,
-venue-pass review only. C4: response-region bands labeled exploratory
+bands (the adopted protocol). C2: parameter sources cited. C3: two sentences carried the review's pattern and were addressed 2026-09-02 (P5 v10): the anchoveta sentence now states the evidential magnitude (|r| ≈ 0.31 labeled a weak-to-moderate association recording shared periodicity, not an identified mechanism) and the selection sentence is reworded as a hypothesis that the retrospective search cannot distinguish from the null, with no causal claim. C4: response-region bands labeled exploratory
 (Gurney–Blythe–Nisbet lineage). C6: **the strongest residual instance across the
 nine papers** — the stage-map multiplier-scan bands have no generating code
 (CODE-ABSENT, permanent); they cannot be re-derived from the declared map, and the
@@ -112,11 +107,12 @@ residual.
 - **Fixed this session or the previous one**: C7 (P3 \ln→\log; E2 precision clause;
   P4 ω unit), C3 for P4 (inherited-label discipline, v10/v11).
 - **Live residual items, in registry order**: (1) P5 stage-map registration
-  (CODE-ABSENT) — the one place C6 remains unclosed; (2) P5's two
-  "consistent with" interpretive sentences — venue-pass review; (3) P3's cohort
-  quartile summary (registered revision requirement); (4) P4's campaign reruns and
-  the 64.438–148.6 gap; (5) P4's non-calibration parameter status to be kept
-  explicit at the venue pass.
+  (CODE-ABSENT) — the one place C6 remains unclosed; (2) P4's campaign reruns and
+  the 64.438–148.6 gap; (3) P4's non-calibration parameter status to be kept
+  explicit at the venue pass. **Addressed 2026-09-02**: P5's two "consistent
+  with" sentences (P5 v10) and P3's cohort quartile item (P3 v10 + Supplementary
+  S5 version-sensitivity record; the archived cohort's own quartiles remain
+  pinned to the archived pull, not pending).
 - **Note on the review's own target**: the reviewed Footprint paper is outside our
   set; if the owner wants the review's specific items addressed on that manuscript,
   the full review (items a–b) and the target file are needed. The general sweep
