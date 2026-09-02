@@ -98,6 +98,136 @@ COMMANDS = {
         'collocation system); psi^T F_tau in [0.313266, 0.314822] and '
         'psi^T D2F[v,v] in [5.6923e-5, 5.8943e-5] both exclude 0; '
         'first-run status (no independent rerun yet)'),
+    'p4_five_regime_campaign/p4_campaign.py': (
+        'python3 research_program/validated_computations/'
+        'p4_five_regime_campaign/p4_campaign.py all',
+        'repository root',
+        'P4 five-regime campaign orchestrator (the pre-registered plan of '
+        '2026-09-03, EXECUTED 2026-09-02/03): stages 0-4; FIRST-RUN status '
+        '(no independent rerun); deterministic (fixed LCG seed 1 for the '
+        'Arnoldi starts)'),
+    'p4_five_regime_campaign/p4_kernels.py': (
+        'python3 research_program/validated_computations/'
+        'p4_five_regime_campaign/p4_campaign.py all',
+        'repository root',
+        'P4 campaign numba kernels (method-of-steps RK4 basin + variational '
+        'segment map); RHS equivalence vs a025_model.rhs verified to '
+        '5.7e-14 (stage 0)'),
+    'p4_five_regime_campaign/p4_branch_small_lower.csv': (
+        'python3 research_program/validated_computations/'
+        'p4_five_regime_campaign/p4_campaign.py 2',
+        'repository root',
+        'P4 campaign branch record, small arm of the lower S-branch '
+        '(subcritical Hopf small branch): 47 converged collocation points '
+        '+ variational Floquet at every point; the +1 crossing bracket '
+        '[5.587236127, 5.587236187]; FIRST-RUN'),
+    'p4_five_regime_campaign/p4_branch_large_lower.csv': (
+        'python3 research_program/validated_computations/'
+        'p4_five_regime_campaign/p4_campaign.py 2',
+        'repository root',
+        'P4 campaign branch record, large arm of the lower S-branch '
+        '(seeded from the basin archive at tau=4.0): 55 converged points, '
+        'tau in [1.703322, 5.587236], Floquet at every point; the +1 '
+        'crossing bracket [5.587236089, 5.587236197]; lower-end stall '
+        'recorded honestly; FIRST-RUN'),
+    'p4_five_regime_campaign/p4_branch_small_upper.csv': (
+        'python3 research_program/validated_computations/'
+        'p4_five_regime_campaign/p4_campaign.py 2',
+        'repository root',
+        'P4 campaign branch record, upper Hopf small branch: 46 converged '
+        'points on tau in [130.0, 150.3085], amplitude 0.100-1.874, '
+        'residual ~1e-12, unstable (mu>1) at every point; FIRST-RUN'),
+    'p4_five_regime_campaign/p4_branch_large_upper.csv': (
+        'python3 research_program/validated_computations/'
+        'p4_five_regime_campaign/p4_campaign.py 2',
+        'repository root',
+        'P4 campaign branch record, upper large family: the HONEST FAILURE '
+        'record (the captured E~Emax face cycle is not m=64/128 '
+        'Fourier-resolvable; seed residuals 4.5e2 / 9.0e2, Newton '
+        'diverged/stalled); the family is recorded by the basin archive; '
+        'FIRST-RUN'),
+    'p4_five_regime_campaign/p4_branch_archive.csv': (
+        'python3 research_program/validated_computations/'
+        'p4_five_regime_campaign/p4_campaign.py 2',
+        'repository root',
+        'P4 campaign branch records, the union of the four families (148 '
+        'records); FIRST-RUN'),
+    'p4_five_regime_campaign/p4_basin_archive.csv': (
+        'python3 research_program/validated_computations/'
+        'p4_five_regime_campaign/p4_campaign.py 1',
+        'repository root',
+        'P4 campaign history/basin archive: 87 runs (27-tau grid x 3 '
+        'history classes at dt=0.02 + 6 dt-halving runs at dt=0.01, all '
+        'classifications UNCHANGED under halving); the pre-registered '
+        'classifications; FIRST-RUN'),
+    'p4_five_regime_campaign/p4_environment.json': (
+        'python3 research_program/validated_computations/'
+        'p4_five_regime_campaign/p4_campaign.py 0',
+        'repository root',
+        'P4 campaign environment record (versions, machine, committed-code '
+        'hashes, no random seeds; the inherited Hopf/fold certificates '
+        'recorded as inputs); FIRST-RUN'),
+    'p4_five_regime_campaign/p4_campaign_results.json': (
+        'python3 research_program/validated_computations/'
+        'p4_five_regime_campaign/p4_campaign.py 4',
+        'repository root',
+        'P4 campaign results: the section-5 comparison verdicts reported '
+        'ONCE (MATCH 5 / MISMATCH 6 / NOT-TESTED 1) + the five-regime '
+        'boundary table (brackets only) + the fold solves; FIRST-RUN'),
+    'p4_five_regime_campaign/p4_campaign_report.md': (
+        'python3 research_program/validated_computations/'
+        'p4_five_regime_campaign/p4_campaign.py 4',
+        'repository root',
+        'P4 campaign execution report: the section-7 provenance statement, '
+        'the records table, the acceptance-criteria outcomes, the boundary '
+        'table, the verdicts, the deviations/honest failures; FIRST-RUN'),
+    'p4_five_regime_campaign/p4_solver_archive.log': (
+        'python3 research_program/validated_computations/'
+        'p4_five_regime_campaign/p4_campaign.py all',
+        'repository root',
+        'P4 campaign solver archive (the documentation action the paper '
+        'names): residual floors, stall acceptances, failed seeds, '
+        'continuation step sequences, ladder scans, per-run timings; '
+        'FIRST-RUN'),
+    'p4_five_regime_campaign/p4_fold_ms_large_lower.npz': (
+        'python3 research_program/validated_computations/'
+        'p4_five_regime_campaign/p4_campaign.py 3',
+        'repository root',
+        'P4 campaign Moore-Spence fold solves for the lower S-branch at '
+        'm=64/96/128 (three-order agreement 2.69e-11; the same fold as '
+        'the Krawczyk-certified small-branch fold); FIRST-RUN'),
+    'p4_five_regime_campaign/p4_branch_orbits.npz': (
+        'python3 research_program/validated_computations/'
+        'p4_five_regime_campaign/p4_campaign.py 2',
+        'repository root',
+        'P4 campaign cached branch/fold orbits (the collocation solve '
+        'vectors behind the CSV records); FIRST-RUN'),
+    'p4_five_regime_campaign/p4_basin_seeds.npz': (
+        'python3 research_program/validated_computations/'
+        'p4_five_regime_campaign/p4_campaign.py 1',
+        'repository root',
+        'P4 campaign basin seed trajectories (the captured-cycle rings at '
+        'tau=4.0 and 155.0 used to seed the collocation); FIRST-RUN'),
+    'p4_five_regime_campaign/p4_topology_figure.py': (
+        'python3 research_program/validated_computations/'
+        'p4_five_regime_campaign/p4_topology_figure.py',
+        'repository root',
+        'P4 topology figure builder: reads ONLY the committed campaign '
+        'records (the pre-registration section-6 ungating rule); '
+        'FIRST-RUN'),
+    'p4_five_regime_campaign/p4_topology_figure.png': (
+        'python3 research_program/validated_computations/'
+        'p4_five_regime_campaign/p4_topology_figure.py',
+        'repository root',
+        'P4 topology figure (the first five-regime figure drawn from '
+        'committed records; un-gates the visual-aids item; deliberately '
+        'not hash-pinned, per the standing figure policy)'),
+    'p4_five_regime_campaign/p4_stage_status.json': (
+        'python3 research_program/validated_computations/'
+        'p4_five_regime_campaign/p4_campaign.py all',
+        'repository root',
+        'P4 campaign internal stage checkpoint (resumability state); '
+        'FIRST-RUN'),
     'a021_c4/c4_piecewise_chebyshev_stage1.json': (
         'python3 research_program/validated_computations/a021_c4/'
         'c4_piecewise_chebyshev_stage1.py',
