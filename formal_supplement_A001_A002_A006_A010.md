@@ -400,8 +400,122 @@ Historical delay-crossing and spectral values are not propositions of the unclos
 | Typed conservation, Farkas, observation, sampled/RFDE/hybrid kernels, reduction, coarse graining, Halanay | `revised_articles/A002_general_theory_corrected.tex` |
 | Institutional information state, safe learning, observer and recovery templates | `revised_articles/A006_robust_epistemic_corrected.tex` |
 | Admissibility and closure audit | `uploads/paper4_perspective.txt` and its registered evaluation |
+| Numerical witness appendix (S10) | `arena agent 1/other documents/audits/computational_appendix.md` (archived verbatim; block C corrected per Remark 8.3 of A001) |
 
 This supplement and the corrected sources are alternate publication layers of one developing theoretical system. They do not create additional paper identities by file count.
+
+# S10. Numerical witness appendix (corrected computational appendix)
+
+**Provenance.** The ten witness blocks below are the corrected fold of the computational
+appendix companion to A001 (`uploads/topdown.txt`), received 2026-09-01 from a parallel
+authoring session and archived verbatim at
+`arena agent 1/other documents/audits/computational_appendix.md`. On receipt, nine of the
+ten blocks were independently re-derived and verified exactly; the one defective block —
+the CES witness (archived block C) — carried the stated parameters σ=2, α=0.5, Y₀=10, A₀=2
+while its displayed values F(5,0)=3.125, F(10,0)=6.25 require A₀=4, the parameter its
+computation actually used. The correction is recorded as **Remark 8.3** of A001 (applied
+2026-09-01 to both A001 copies under the owner's one-turn permission; record
+`audits/computational_appendix_ces_correction.md`), and S10.3 below carries the corrected
+witness. The archived appendix file is left verbatim; this section supersedes its block C.
+Each block states the model it instantiates and the numbers that were computed.
+
+## S10.1 Constrained MSY (Corollary 6.1)
+
+Logistic growth \(g(S)=rS(1-S/C)\), \(H_*=rC/4\) at \(S_m=C/2\). The reduced formula
+\(\min(H_*,H_{\mathrm{sink}})\) overstates the true constrained MSY when the floor is
+above the MSY stock. Parameters: \(r=1\), \(C=10\) (so \(H_*=2.5\), \(S_m=5\)),
+\(H_{\mathrm{sink}}=4\). (The article's single-instance witness uses
+\(H_{\mathrm{sink}}=3\); the overstatement \(9/10\) is independent of the loose sink cap.)
+
+| \(S_{\min}\) | \(\min(H_*,H_{\mathrm{sink}})\) | \(\min(g(S_{\min}),H_{\mathrm{sink}})\) | Verdict |
+|---|---|---|---|
+| 5.0 | 2.500 | 2.500 | match |
+| 7.0 | 2.500 | 2.100 | overstated |
+| 9.0 | 2.500 | 0.900 | overstated |
+
+Single-instance witness used in the article: \(r=1\), \(C=10\), \(S_{\min}=8\) gives
+\(g(8)=8/5=1.6<H_*=25/10=2.5\), overstatement \(9/10\).
+
+## S10.2 Over-extraction comparison (Theorem 12.1)
+
+Payoffs \(\pi_i(h)=a_ih-h^2\), damage \(d_i(H)=c_iH^2/2\). Interior comparison:
+\(H_{\mathrm{Nash}}=\sum a/(2+\sum c)\), \(H_{\mathrm{soc}}=\sum a/(2+n\sum c)\).
+
+| Scenario (\(n=2\)) | \(H_{\mathrm{Nash}}\) | \(H_{\mathrm{soc}}\) | strict \(>\) |
+|---|---|---|---|
+| symmetric \(\pi,d\) | 1.923 | 1.200 | yes |
+| asymmetric benefits \(a=9,1.2\) | 2.000 | 1.500 | yes |
+| one zero-damage agent | 2.250 | 1.600 | yes |
+| all zero damages | 4.000 | 4.000 | no (equal) |
+
+Witness: \(a_1=a_2=5\), \(c_1=c_2=0.8\) gives \(H_{\mathrm{Nash}}=10/3.6=2.78 >
+H_{\mathrm{soc}}=10/5.2=1.92\); decoupled (\(c=0\)) gives \(H_{\mathrm{Nash}}=H_{\mathrm{soc}}=5\).
+
+## S10.3 CES essentiality (Corollary 8.1) — corrected witness
+
+\(F(A,R)=Y_0[\alpha(A/A_0)^{\rho}+(1-\alpha)(R/R_0)^{\rho}]^{1/\rho}\),
+\(\rho=(\sigma-1)/\sigma\).
+
+- \(F(A,0)=0\) for \(\sigma\le1\); \(F(A,0)=Y_0\alpha^{\sigma/(\sigma-1)}(A/A_0)\) for
+  \(\sigma>1\).
+- **Corrected witness** \(\sigma=2\), \(\alpha=0.5\), \(Y_0=10\), \(A_0=4\):
+  \(F(5,0)=3.125\), \(F(10,0)=6.25\) (the displayed values of the archived block;
+  they require \(A_0=4\), not the archived block's stated \(A_0=2\) — see the provenance
+  note above and Remark 8.3 of A001).
+- \(c_{\max}(R)=+\infty\) when \(\sigma>1\) and \(\mu_A>\delta_A\); verified that
+  \(\Phi(A)\approx(\mu_A-\delta_A)A\) with ratio \(\to1\) as \(A\to\infty\)
+  (e.g. at \(A=10^{15}\), ratio \(=1.000000\)).
+
+## S10.4 Sink obstructions (Remark 6.1)
+
+\(\delta\equiv0\) or \(\delta(K_{\max})<w(H_{\min})\) force an empty kernel. Witness:
+\(K_{\max}=2\), \(H_{\min}=1\), \(w(H)=0.5H\), \(\delta(K)=0.1K\) gives
+\(\delta(K_{\max})=0.2<w(H_{\min})=0.5\), \(K^\dagger=5>K_{\max}=2\).
+
+## S10.5 Delay margin (Theorem 4.3)
+
+\(\dot x=-ax-Bx(t-\tau)\), stable for
+\(\tau<\tau_{\mathrm{crit}}=\arccos(-a/B)/\sqrt{B^2-a^2}\) when \(B>a\).
+
+- Witness \(a=1\), \(B=2\): \(\tau_{\mathrm{crit}}=\arccos(-1/2)/\sqrt3\approx1.209\).
+  Stable at \(0.4\tau_{\mathrm{crit}}\), unstable at \(1.6\tau_{\mathrm{crit}}\).
+  Stable for all \(\tau\) when \(B\le a\) (e.g. \(a=1\), \(B=0.5\)).
+
+## S10.6 Pollution-suppressed growth (Theorem 6.6)
+
+\(g(S,K)=S(1-S/C(K))\), \(C(K)=10/(1+0.05K)\), \(w(H)=0.5H\), \(\delta(K)=0.3K\).
+
+- The \(H_{\min}\)-control dominates coordinatewise (\(S\) higher, \(K\) lower).
+- Rectangle \([S_\circ(K_{\max}),\infty)\times[0,K_{\max}]\) is invariant.
+- Threshold stock \(S(K)\) needed for viability increases in \(K\):
+  \(0.528,0.531,0.534\) at \(K=0,2,4\) (frontier is a strictly decreasing curve).
+
+## S10.7 Observer safety buffer (Theorem 4.4)
+
+On the boundary, \(L\bar e\le\eta\) preserves \(Q\); \(L\bar e>\eta\) causes exit.
+Witness \(\dot x=-z+u+d\), \(u\in[0,2]\), \(d\in[-0.1,0.1]\), margin \(\eta=0.2\),
+sensitivity \(L=1\): safe for \(\bar e\le0.2\), exit for \(\bar e>0.2\).
+
+## S10.8 Hidden-mode conflict (Theorem 4.7)
+
+\(\dot z=\theta u\), \(\theta\in\{-1,+1\}\), \(u\in\{-1,+1\}\), \(z\ge0\).
+At \(z=0\): \(R((0,+1))=\{+1\}\), \(R((0,-1))=\{-1\}\), common action empty. Each
+state individually in \(\mathrm{RViab}\); the joint belief \(\{(0,+1),(0,-1)\}\) is not
+in \(\mathrm{ERViab}\). \(\mathrm{Viab}=\mathrm{RViab}\) (six states) but
+\(K_I=\emptyset\) under constant observation — a purely epistemic contraction.
+
+## S10.9 Jump discontinuity (Theorem 10.1)
+
+Two-patch MSY, \(C_1=10\), \(C_2=12\), \(d=0.2\): decoupled equilibrium \((5,6)\) at
+\(d=0\); no equilibrium for any \(d>0\) (so kernel empty), since \(d>0\), \(C_1\ne C_2\)
+forces \(C_1=C_2\).
+
+## S10.10 Clark under-extraction (Theorem 12.1)
+
+Open-access stock \(S_{\mathrm{OA}}=c/(pq)\). Witness \(p=10\), \(c=5\), \(q=1\):
+\(S_{\mathrm{OA}}=0.5\). A per-unit harvest tax \(t\) shifts
+\(S_{\mathrm{OA}}(t)=c/((p-t)q)\): \(S_{\mathrm{OA}}(0)=0.50\), \(S_{\mathrm{OA}}(1)=0.56\),
+\(S_{\mathrm{OA}}(4)=0.83\) (increasing in \(t\)).
 
 ---
 
