@@ -125,6 +125,41 @@ residual.
   the two-failure-modes paragraph, tied to §6.5.2 and §10.1. No passage is duplicated
   across papers; the shared vocabulary is cross-referenced, not repeated.
 
+- **Analogy fidelity audit (2026-09-02, owner-question)**: the three restored
+  passages were checked element-by-element against the repo's full scaffold
+  (`uploads/manuscript.txt` lines ~35–41; `manuscript_v18_dehedged.txt` §Introduction;
+  `old article not previously uploaded/manuscript_corrected.txt` lines 35–45).
+  Present and faithful: hen → slaughter → capital liquidation; the runaway deficit
+  loop; the three liquidation channels (hens/eggs/apple-seeds); the portfolio of hens
+  (orchard, pond, soil); both senses of the productivity illusion; the ties to
+  Theorem 5(4), the ψ-mixture of §9.3 M3-LC, and §6.5.2/§10.1. One gap fixed: the
+  repo's own gloss "the hen captures the dynamics of a single asset **under delayed
+  stress**" — the delay link was added to the P4 passage (**P4 v13**). Remaining
+  repo exposition elements not yet in the nine (candidates, awaiting owner choice):
+  (i) the spruce-budworm aside (r ≈ 0.025–0.033 yr⁻¹ inside the delay-instability
+  window; endogenous predator–prey cycles corroborate the mechanism class, not the
+  institutional claim) — natural home P5 §3.7; (ii) the "Overshoot Day" scalar
+  critique by name (lin2018/wackernagel2019/blomqvist2013/meadows1972, v18's
+  "Why compensatory scalars fail") — P1/P3 carry the mathematics but never name the
+  object; (iii) the "weak and strong sustainability are regimes of the same system"
+  framing (manuscript_corrected.txt line 43) — P1 carries the formal side (blend
+  theorem) but not the one-sentence framing. No other pedagogical/non-technical
+  exposition was found in the repo articles (swept: all `revised_articles/*`,
+  `papers/*/*`, `uploads/*`).
+- **Elevator analogy (owner-proposed)**: assessed and implemented in **P3 v12** §1 —
+  the mapping (rated capacity = sustainable yield; the 14 passengers = overshoot;
+  invisible accumulated wear = supporting-pool drawdown; the sudden snap = collapse)
+  is precisely the yield-inflation sense of the productivity illusion and the reason
+  the §6.5.2 tables report supporting pools; it is tied to P3's own diagnostics, not
+  decoration. Assessed and rejected for the other eight papers (P1's tubes are
+  per-horizon worst-case without accumulation; P4's boundaries are certified folds,
+  not gradual wear; P2/P5/E1–E4 are obstruction/empirical papers).
+- **RAM ADH cohort (owner-directed deep search)**: first-pass "not reproducible"
+  retracted — the source caption's zero convention was recovered; corrected protocol,
+  example-row verifications, and corrected version-sensitivity statistics are in
+  `audits/ram_adh_cohort_deep_search.md`; P3 v12 + `paper3_supplementary_v3.md`
+  carry the corrected record.
+
 - **Note on the review's own target**: the reviewed Footprint paper is outside our
   set; if the owner wants the review's specific items addressed on that manuscript,
   the full review (items a–b) and the target file are needed. The general sweep
