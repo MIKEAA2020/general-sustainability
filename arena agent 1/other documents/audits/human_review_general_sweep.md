@@ -113,6 +113,18 @@ residual.
   with" sentences (P5 v10) and P3's cohort quartile item (P3 v10 + Supplementary
   S5 version-sensitivity record; the archived cohort's own quartiles remain
   pinned to the archived pull, not pending).
+- **Analogy restoration (owner-directed, 2026-09-02, three-way plan)**: the repo
+  manuscript layer's expository scaffold (hen = capital liquidation; hens/eggs/
+  apple-seeds = the three liquidation channels; orchard/portfolio-of-hens = the
+  productivity illusion) was confirmed absent from all nine papers and restored by
+  the owner-chosen three-way split, each passage self-contained and cross-referencing
+  its own paper's results only: **P4 v12** — the hen and the channel trichotomy at
+  the end of §1.1, tied to the §9.3 M3-LC ψ mixture; **P1 v9** — the orchard and the
+  compensatory sense of the productivity illusion after the two failure modes, tied
+  to the acceptance gap of Theorem 5(4); **P3 v11** — the yield-inflation sense after
+  the two-failure-modes paragraph, tied to §6.5.2 and §10.1. No passage is duplicated
+  across papers; the shared vocabulary is cross-referenced, not repeated.
+
 - **Note on the review's own target**: the reviewed Footprint paper is outside our
   set; if the owner wants the review's specific items addressed on that manuscript,
   the full review (items a–b) and the target file are needed. The general sweep
