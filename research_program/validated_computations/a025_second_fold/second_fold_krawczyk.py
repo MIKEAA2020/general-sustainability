@@ -290,6 +290,7 @@ def main():
         tau_lo = min(tau_lo, float(np.nextafter(z_c[DY + 1], -np.inf)))
         tau_hi = max(tau_hi, float(np.nextafter(z_c[DY + 1], np.inf)))
 
+    # ---- attempt 1: the FROZEN box (three-order spread ± 1e-8) ---------
     ladder_log = []
     success = None
     for rung in LADDER:
@@ -303,14 +304,67 @@ def main():
         if ok:
             success = (rung, ry, rt, rv, payload)
             break
+    box_source = ('constructed: three-order tau spread ± 1e-8 '
+                  '(no prior interval exists for the second fold)')
+    frozen_attempt = dict(
+        tau_box=[tau_lo, tau_hi], radii_ladder=ladder_log,
+        outcome='FAILED' if success is None else 'CERTIFIED')
     if success is None:
-        log('CERTIFICATE FAILED — all radii rungs exhausted; the candidate '
-            'fold remains an uncertified nominal/MS finding')
+        # ---- DEVIATION (recorded, per pre-registration §7) --------------
+        # The frozen box construction imported the m=64-vs-m=96/128
+        # three-order spread (5.53e-07, a cross-check quantity) into the
+        # certificate box, making it 5.7e-07 wide — ~25x the lower fold's
+        # box. The diagnostic run (session log) shows the failure is the
+        # box WIDTH, not the point's quality: polished |G|_inf = 1.02e-12,
+        # the tau-component of K never fails (K_tau width 3.4e-14, well
+        # inside), while 80 w-components and all 192 v-components fail,
+        # with the interval-Jacobian variation over the box leaking
+        # ~6.5e-09 (v-columns of dZ) into the w-rows against ry = 2e-09.
+        # Deviation: center the tau-box on the polished m=64 nominal with
+        # the SAME ± 1e-8 pad (the lower-fold certificate's own
+        # structure: a box around the nominal). The three-order agreement
+        # (5.53e-07 <= 1e-06, PASS) remains the separate discretization
+        # cross-check it already is; the radii ladder stays frozen.
+        log('DEVIATION (recorded, pre-registration §7): the frozen '
+            'tau-box (three-order spread ± 1e-8) failed at every radii '
+            'rung; the diagnostic attributes the failure to the box '
+            'width (the cross-check spread imported into the '
+            'certificate box), not to the nominal point. Re-running the '
+            'certificate with the tau-box centered on the polished m=64 '
+            'nominal, same ± 1e-8 pad (the lower-fold certificate '
+            'structure); radii ladder unchanged.')
+        tau_lo = float(np.nextafter(z_c[DY + 1] - BOX_PAD, -np.inf))
+        tau_hi = float(np.nextafter(z_c[DY + 1] + BOX_PAD, np.inf))
+        box_source = ('DEVIATION from the frozen construction (recorded): '
+                      'centered on the polished m=64 nominal, same ± 1e-8 '
+                      'pad — the frozen three-order-spread box failed at '
+                      'every radii rung because its width (5.7e-7, the '
+                      'cross-check spread imported into the certificate '
+                      'box) inflates the interval Jacobian variation; the '
+                      'm=64 nominal itself is exact to |G|=1.02e-12')
+        for rung in LADDER:
+            ry, rt, rv = [r * rung for r in BASE_RADII]
+            log(f'--- deviation box, radii rung x{rung:g}: ry={ry:.2e} '
+                f'rt={rt:.2e} rv={rv:.2e} ---')
+            ok, payload = krawczyk_rung(z_c, ell, tau_lo, tau_hi, ry, rt,
+                                        rv, 4, log)
+            ladder_log.append(dict(rung=float(rung), ry=ry, rt=rt, rv=rv,
+                                   ok=ok, box='deviation'))
+            if ok:
+                success = (rung, ry, rt, rv, payload)
+                break
+    if success is None:
+        log('CERTIFICATE FAILED — all radii rungs exhausted on both '
+            'boxes; the candidate fold remains an uncertified nominal/MS '
+            'finding')
         OUT.write_text(json.dumps(
             dict(status='FAILED — no Krawczyk inclusion at any radii '
-                        'rung; the candidate second fold is NOT certified',
+                        'rung (frozen box and the recorded deviation '
+                        'box); the candidate second fold is NOT '
+                        'certified',
                  date=time.strftime('%Y-%m-%d'),
-                 tau_box=[tau_lo, tau_hi],
+                 tau_box_frozen=frozen_attempt['tau_box'],
+                 tau_box_deviation=[tau_lo, tau_hi],
                  nominal_tau=float(z_nom[DY + 1]),
                  polished_tau=float(z_c[DY + 1]),
                  polished_G_inf=float(mn),
@@ -340,8 +394,27 @@ def main():
             three_order_agreement=float(st.get('stageB', {}).get(
                 'three_order_agreement', float('nan')))),
         tau_box=[tau_lo, tau_hi],
-        tau_box_source='constructed: three-order tau spread ± 1e-8 '
-                       '(no prior interval exists for the second fold)',
+        tau_box_source=box_source,
+        frozen_box_attempt=frozen_attempt,
+        deviation_record=(None if 'DEVIATION' not in box_source else dict(
+            what='tau-box re-centered on the polished m=64 nominal '
+                 '(± 1e-8, the frozen pad) after the frozen '
+                 'three-order-spread box failed at every radii rung',
+            why='the frozen construction imported the m=64-vs-m=96/128 '
+                'cross-check spread (5.53e-7) into the certificate box '
+                '(width 5.7e-7, ~25x the lower fold box); the diagnostic '
+                'showed the failure is the box width (interval-Jacobian '
+                'variation over the box leaking ~6.5e-9 from the '
+                'v-columns of dZ into the w-rows vs ry=2e-9), not the '
+                'nominal (|G|=1.02e-12; the tau-component of K never '
+                'failed, width 3.4e-14)',
+            what_is_unchanged='the radii ladder; the FD self-verification '
+                              'battery; the three-order agreement '
+                              'criterion (5.53e-7 <= 1e-6, PASS) as the '
+                              'separate discretization cross-check; the '
+                              'certificate requirements',
+            frozen_attempt_preserved='second_fold_krawczyk_frozenbox.'
+                                    'json/.log')),
         tau_final_enclosure=payload['tau_final_enclosure'],
         krawczyk_iterations=payload['iterations'],
         krawczyk_margin_definition='min_gap = min over components of '

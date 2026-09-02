@@ -177,21 +177,29 @@ def stage0(log, st):
         r'-?\d+\.?\d*(?:e-?\d+)?', certs[0]['tau_k0'])[:2]]
     tau_plus_iv = [float(x) for x in re.findall(
         r'-?\d+\.?\d*(?:e-?\d+)?', certs[1]['tau_k1'])[:2]]
-    from a025_model import tau_of_omega
-    tm = float(tau_of_omega(0.025191543577286703, branch_k=0))
-    tp = float(tau_of_omega(0.0394366, branch_k=1))
-    inside = (tau_minus_iv[0] <= tm <= tau_minus_iv[1]
-              and tau_plus_iv[0] <= tp <= tau_plus_iv[1])
+    # verify the model's own characteristic function has pure-imaginary
+    # roots at the certified tau midpoints (root-Newton, the campaign's
+    # hopf_root_at machinery)
+    lam_m = pc.hopf_root_at(tau_minus_iv[0], 0.0015 + 0.0251915j)
+    lam_p = pc.hopf_root_at(tau_plus_iv[0], -1e-4 + 0.0394366j)
+    from a025_model import characteristic
+    root_m = dict(lam_re=float(lam_m.real), lam_im=float(lam_m.imag),
+                  residual=float(abs(characteristic(lam_m,
+                                                    tau_minus_iv[0]))))
+    root_p = dict(lam_re=float(lam_p.real), lam_im=float(lam_p.imag),
+                  residual=float(abs(characteristic(lam_p,
+                                                    tau_plus_iv[0]))))
+    inside = (abs(lam_m.real) < 1e-9 and root_m['residual'] < 1e-12
+              and abs(lam_p.real) < 1e-9 and root_p['residual'] < 1e-12)
     env['inherited_certificates'] = dict(
         tau_minus_interval=tau_minus_iv,
         tau_plus_interval=tau_plus_iv,
-        model_tau_minus_reproduction=tm,
-        model_tau_plus_reproduction=tp,
+        tau_minus_root=root_m, tau_plus_root=root_p,
         reproductions_inside=bool(inside),
         lower_fold_krawczyk=json.loads(
             (A025 / 'a025_fold_krawczyk.json').read_text()).get(
                 'tau_final_enclosure'))
-    assert inside, 'Hopf tau reproduction outside the certified intervals'
+    assert inside, 'Hopf root verification failed at the certified taus'
     env['equilibrium'] = [float(x) for x in equilibrium()]
     (HERE / 'second_fold_environment.json').write_text(
         json.dumps(env, indent=1))

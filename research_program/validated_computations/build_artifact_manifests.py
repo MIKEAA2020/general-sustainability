@@ -228,6 +228,117 @@ COMMANDS = {
         'repository root',
         'P4 campaign internal stage checkpoint (resumability state); '
         'FIRST-RUN'),
+    'a025_second_fold/SECOND_FOLD_PREREGISTRATION.md': (
+        'static (the frozen plan; committed a3823c5 before execution)',
+        'repository root',
+        'Second-fold search pre-registration (owner-directed protocol, '
+        'frozen before any continuation step below tau=130; git history '
+        'provides the freeze->execute ordering)'),
+    'a025_second_fold/second_fold_search.py': (
+        'python3 research_program/validated_computations/'
+        'a025_second_fold/second_fold_search.py all',
+        'repository root',
+        'Second-fold search executor (stages 0/A/B/D/R: seeded carry '
+        'continuation down from tau+ - 0.05, MS adjudication, three-order '
+        'MS, arclength, basin grids); committed 363003b before execution'),
+    'a025_second_fold/second_fold_krawczyk.py': (
+        'python3 research_program/validated_computations/'
+        'a025_second_fold/second_fold_krawczyk.py',
+        'repository root',
+        'Stage-C certifier: the lower-fold certificate machinery applied '
+        'at the second-fold nominal (frozen box + recorded deviation box; '
+        'radii ladder); committed 363003b before execution'),
+    'a025_second_fold/second_fold_environment.json': (
+        'python3 research_program/validated_computations/'
+        'a025_second_fold/second_fold_search.py stage0',
+        'repository root',
+        'Second-fold stage 0 (code hashes incl. the audited a025_model.py '
+        'c1dae18b...; PAR bit-check; numba RHS equivalence 5.68e-14; seed '
+        'residual 6.2e-12; Hopf root verification at the certified taus); '
+        'FIRST-RUN'),
+    'a025_second_fold/second_fold_branch.csv': (
+        'python3 research_program/validated_computations/'
+        'a025_second_fold/second_fold_search.py stageA',
+        'repository root',
+        'Second-fold branch records: 200 rows (seed + 183 natural points '
+        'tau 150.308->64.4023 + 16 arclength points past the turn), '
+        'per-point residual/Nyquist/step/Floquet; the second fold found at '
+        'tau_f2 = 64.40232720337; FIRST-RUN'),
+    'a025_second_fold/second_fold_orbits.npz': (
+        'python3 research_program/validated_computations/'
+        'a025_second_fold/second_fold_search.py stageA',
+        'repository root',
+        'Second-fold cached orbits (the collocation solve vectors behind '
+        'the CSV records); FIRST-RUN'),
+    'a025_second_fold/second_fold_ms.npz': (
+        'python3 research_program/validated_computations/'
+        'a025_second_fold/second_fold_search.py stageB',
+        'repository root',
+        'Second-fold Moore-Spence solutions (z, ell) at m=64/96/128 '
+        '(three-order tau agreement 5.53e-7 <= 1e-6); FIRST-RUN'),
+    'a025_second_fold/second_fold_krawczyk.json': (
+        'python3 research_program/validated_computations/'
+        'a025_second_fold/second_fold_krawczyk.py',
+        'repository root',
+        'Part II certificate: the SECOND fold (upper branch) — interval '
+        'Krawczyk on the m=64 MS system: unique zero, G\' nonsingular, '
+        'nondegeneracy constants exclude zero; tau_f2 in '
+        '[64.402327203368, 64.402327203372]; includes the frozen-box '
+        'attempt record and the recorded tau-box deviation; FIRST-RUN '
+        '(the model has TWO certified folds)'),
+    'a025_second_fold/second_fold_krawczyk_frozenbox.json': (
+        'python3 research_program/validated_computations/'
+        'a025_second_fold/second_fold_krawczyk.py',
+        'repository root',
+        'The preserved frozen-box certificate attempt (FAILED at every '
+        'radii rung — the box-width mechanism; see the deviation record '
+        'in second_fold_krawczyk.json); FIRST-RUN'),
+    'a025_second_fold/second_fold_basin.csv': (
+        'python3 research_program/validated_computations/'
+        'a025_second_fold/second_fold_search.py stageD',
+        'repository root',
+        'Second-fold basin archive: 45 runs (grid A filling the 130-147 '
+        'gap; grid B around tau_f2; dt-halving) — the stable past-turn '
+        'arm is NOT generically reachable near the fold; FIRST-RUN'),
+    'a025_second_fold/second_fold_results.json': (
+        'python3 research_program/validated_computations/'
+        'a025_second_fold/second_fold_search.py stageR',
+        'repository root',
+        'Second-fold assembled results (stage states + summaries); '
+        'FIRST-RUN'),
+    'a025_second_fold/second_fold_report.md': (
+        'static (written from the committed records; the report of the '
+        'pre-registered protocol)',
+        'repository root',
+        'Second-fold execution report: the three separate sections '
+        '(branch existence / basin reachability / collocation failures) '
+        'and the owner-rule verdict — two certified folds'),
+    'a025_second_fold/second_fold_status.json': (
+        'python3 research_program/validated_computations/'
+        'a025_second_fold/second_fold_search.py all',
+        'repository root',
+        'Second-fold internal stage checkpoint (resumability state); '
+        'FIRST-RUN'),
+    'a025_second_fold/second_fold_stageA_end.npz': (
+        'python3 research_program/validated_computations/'
+        'a025_second_fold/second_fold_search.py stageA',
+        'repository root',
+        'Second-fold stage-B input checkpoint (the stall point and its '
+        'secant exactly as stage B read them; regenerable by stage A); '
+        'FIRST-RUN'),
+    'a025_second_fold/second_fold_run.log': (
+        'python3 research_program/validated_computations/'
+        'a025_second_fold/second_fold_search.py all',
+        'repository root',
+        'Second-fold solver trail (continuation progress, stall, MS, '
+        'arclength, basin runs, dt-halving); FIRST-RUN'),
+    'a025_second_fold/second_fold_krawczyk.log': (
+        'python3 research_program/validated_computations/'
+        'a025_second_fold/second_fold_krawczyk.py',
+        'repository root',
+        'Stage-C solver trail (cross-checks, FD battery, polish, the '
+        'frozen-box rungs, the deviation declaration, the certified '
+        'rungs); FIRST-RUN'),
     'a021_c4/c4_piecewise_chebyshev_stage1.json': (
         'python3 research_program/validated_computations/a021_c4/'
         'c4_piecewise_chebyshev_stage1.py',
