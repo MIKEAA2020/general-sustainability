@@ -70,3 +70,29 @@ recovered specification; the first-pass "not reproducible" claim is retracted an
 replaced by the corrected protocol record. Exact reconstruction from public data
 alone is impossible because the extract-time series state no longer exists in any
 public release — this is a data-vintage fact, now documented rather than guessed.
+
+
+## 5. Resolution (2026-09-03) — the archived pull is supplied and re-verified
+
+The owner supplied the archived extract itself (`uploads/fisheries_adh.csv`: header +
+43 stocks; columns `stock, SSB, F, B_lim, ADH_yr, lastyear`; 2,505 bytes). Recomputing
+every row against the recovered specification (ADH = (1/F)·log(SSB_now/(0.2·max SSB)),
+zero entered at/below the reference) closes the search:
+
+- **The extract is internally consistent, row by row.** With B_lim identified as
+  0.2·max SSB (checked on every row), all 35 positive rows reproduce
+  ADH = F⁻¹ log(SSB/B_lim) to relative error < 10⁻⁹; the 8 zero rows are exactly the
+  stocks with SSB ≤ B_lim, none violating the convention. The ADH column is
+  max(0, F⁻¹ log(SSB/B_lim)) throughout.
+- **The headline numbers reproduce.** Median 1.7902 yr with zeros included (the
+  reported ≈1.8; the positive sub-cohort alone gives 2.8578); maximum 201.1797 yr
+  (ANCHMEDGSA7). The agent's accompanying description is correct on the stock-level
+  values (HERRVIa 0.385, SPRATIIIa-IV 0.457, SPRATNS 0.723, ANCHIXa 0.783,
+  PANCHNCH 0.993) but wrong that ~17 stocks are at zero — the file has **8**.
+- **The four published-F anchors read off the file**: 1.0026 (1.00), 0.2274 (0.23;
+  extract id HERRNS-IIIa-VIId, ADH 3.461 vs published 3.5), 0.193 (0.19), 0.0114 (0.011).
+- **One stale residue fixed**: P3 v13 still carried the pre-correction sentence
+  ("stocks already at or below the reference are reported separately and excluded")
+  and a §7 matching clause — both contradicting S5's corrected protocol and the
+  verified median. Fixed in **P3 v14**, and the pull verification is recorded in
+  **paper3_supplementary_v4.md** (S5).
