@@ -1,0 +1,365 @@
+# An Obstruction Calculus for Viability under Incomplete Observation
+
+## Abstract
+Viability under perfect measurement has a mature kernel, tangency, and approximation theory: the viability kernel (the set of states from which some feedback keeps the system within its constraints) characterizes exactly those states that admit a feasible maintenance policy. When the state is observed only through an incomplete map, the sufficiency direction has a canonical answer — Veliov's output-feedback regulation condition and the estimation-set reduction. This paper supplies the complementary necessity side. We develop an obstruction calculus of necessary conditions for viability, in the form of finite certificates that no observation-based policy exists. The certificates are sound sufficient conditions for nonviability; they do not exhaust the complement of the epistemic kernel. Five mechanisms are proved and a sixth is exhibited under a policy-class restriction. (i) A finite-time exit certificate: under an Isaacs-type drift condition the disturbance forces violation within a computable time against every control. (ii) An epistemic-emptiness construction: a constant observation merges states whose safe controls differ. (iii) A common-action obstruction: if the safe controls of the compatible states intersect emptily, no observation-based policy is viable, though every compatible state is individually viable. (iv) A delayed-information obstruction with timing bound: information arriving after the enforced exit time cannot save the belief state. (v) A certification limit: an exact observation-only certifier exists if and only if safe-set membership is constant on observation fibres. (vi) Certainty-equivalence control under a biased observation empties a nonempty perfect-information kernel (exhibited under a policy-class restriction, Remark 1). The calculus is positioned against barrier certificates and estimation tubes, and its consequences for monitoring design are drawn.
+
+**Keywords:** viability theory; obstruction certificates; robust viability; epistemic viability; constrained sustainability
+
+**Mathematics Subject Classification:** 49J53; 93B03; 93C41; 91B76
+
+## 1. Introduction
+
+### 1.1 The problem
+
+Viability theory characterizes the states of a constrained control system from which there exists at least one control keeping every future state within a constraint set (Aubin, 1991). For sustainability problems the constraint set is a set of floors — stock levels, service thresholds, safety margins — and viability is the formal counterpart of the requirement that a development path be maintained rather than merely optimized (Béné, Doyen, and Gabay, 2001; De Lara and Doyen, 2008; Doyen et al., 2012; Doyen and Gajardo, 2020). The theory under *perfect measurement* is complete in the relevant sense: the viability kernel exists as the largest viable subset, and Nagumo-type tangency conditions certify it.
+
+Sustainability governance, however, operates under *incomplete observation*. Stocks are assessed at discrete review intervals. Indicators are coarser than the state. Some stocks are unobserved altogether. And the information that does arrive may arrive late. The question this paper addresses is the following. Under an incomplete observation structure, when can we *certify that no policy works* — that is, when is the viability problem infeasible for reasons of information rather than of dynamics?
+
+Floors in sustainability assessment are typically constraints not on what a system yields but on the state of the system that yields it — on a productive base. Such a base can be read as natural capital, as a stock, or as a slowly regenerating flow of services. These are overlapping readings of the same asset rather than mutually exclusive ones. What makes a use of it sustainable is whether the use falls on the yield or on the base itself. Across assets, whether the base behaves as a flow or as a stock is a continuum, set by its regeneration timescale relative to the rate of use. This continuum runs from a season, through a year, to geological time for a mineral deposit. If a base regenerates too slowly for the rate at which it is taken, drawdown is still liquidation.
+
+Such a base can be eroding while measured output is maintained. The degradation is not yet reflected in the measured quantity, or it is offset by a higher per-unit service, because use may draw on the base rather than on its yield. The signal that would reveal the erosion is accordingly often the one that is coarse, postponed, or absent. Incompleteness of observation in sustainability governance is therefore not merely a practical limitation. It is a structural feature of the certification problem, and it is in this sense that the sufficiency literature and the obstruction calculus of this paper address the same underlying ill-posedness rather than competing ones.
+
+The question has a natural split. The *sufficiency* direction has a canonical literature. Veliov (1993) gives conditions under which an output-feedback regulation map exists when only incomplete and inexact measurement is available, and shows that under perfect measurement his condition reduces to the classical viability condition of Haddad (1981). The estimation-tube programme of Quincampoix, Cardaliaguet, and Saint-Pierre (see Cardaliaguet, Quincampoix, and Saint-Pierre, 2007) passes from imperfect information in the measurement space to perfect information in an estimation space, with equality of the corresponding value functions and a Dini-derivative characterization. In the control-verification literature, barrier certificates certify safety for continuous and hybrid systems (Prajna and Jadbabaie, 2004; Prajna, Jadbabaie, and Pappas, 2007), and converse results show that — under convex-duality conditions on density functions — the existence of a barrier certificate is also *necessary* for safety (Prajna and Rantzer, 2005), with necessary-and-sufficient characterizations for hybrid inclusions under mild regularity (Maghenem and Sanfelice, 2019).
+
+What is missing, and what this paper supplies, is the *necessity* side of the viability question itself under incomplete observation: a calculus of obstruction certificates. An obstruction certificate (a finite, checkable witness that no observation-based policy exists) is an argument that a prescribed class of observation-based policies fails — not because a particular policy is bad, but because the information structure leaves no room for any policy. In its polyhedral common-action and certification forms (Theorems 3–5) the argument is a finite, checkable test. The drift certificates of Theorems 1 and 4 are not finite objects — one exhibits an enforcement selection, the other bounds the timing uniformly over every policy — and are reported as such. The two directions are complementary. Veliov's condition tells us when output feedback *can* work; the obstruction calculus tells us when it *cannot*. For the borderline cases it identifies which quantitative feature of the observation design — timing, coarseness, bias, aggregation — is responsible.
+
+### 1.2 Contributions
+
+Five obstruction mechanisms are developed, each with a complete proof, and one further mechanism is exhibited by construction:
+
+1. **The finite-time exit certificate** (Theorem 1). Under a Dini-drift condition of Isaacs type — the disturbance chooses after the control — the disturbance can force exit from the safe set within an explicit time bound, for *every* admissible control of any information structure. This is the base obstruction: when it applies, the viability question is closed without any observation-theoretic argument.
+
+2. **Epistemic emptiness by construction** (Theorem 2). A constant observation merges states whose safe controls differ. The unresolved initial observation fibre then lies outside the epistemic kernel, even though every physical state is viable under full information.
+
+3. **The instantaneous common-action obstruction** (Theorem 3, Example 1). If the safe-control sets of the states compatible with the current information set intersect emptily, then no observation-based policy is viable, even though every compatible state is individually viable under full information. The failure is purely informational: no stochasticity, no estimation error.
+
+4. **The delayed-information obstruction** (Theorem 4). If the information needed to distinguish safe from unsafe compatible states arrives only at time $T_{\mathrm{obs}}$, and the disturbance can force constraint violation earlier than $T_{\mathrm{obs}}$, then no observation-based policy is viable. The timing bound $\inf q / \varepsilon < T_{\mathrm{obs}}$ is stated explicitly: information may be accurate but arrive too late.
+
+5. **The fibre certification criterion** (Theorem 5, Corollary 6). An exact observation-only safety certifier — a function of the observation that returns "safe" exactly on the safe set — exists if and only if safe-set membership is constant on every observation fibre. The certainly-safe set is the sound relaxation: the largest set of observations that can be labelled safe without further information.
+
+6. **The certainty-equivalence trap** (Remark 1). Even an *injective* observation empties a nonempty perfect-information kernel if the policy class is restricted to certainty-equivalence controllers that apply a fixed state-feedback law to the uncorrected observation. The kernel empties by restriction of the policy class, not by loss of information.
+
+Throughout, "obstruction" means a *certified* failure. Each theorem exhibits the violating constraint, the admissible disturbance, and the quantitative bound that make failure inevitable, for every policy in the declared class. The calculus is positioned against the barrier-certificate literature (Section 6.2) and the estimation-tube programme (Section 6.3), and its consequences for the design of monitoring and indicators in sustainability governance are drawn in Section 6.4.
+
+### 1.3 Related work
+
+The viability theory background is Aubin (1991) and Aubin, Bayen, and Saint-Pierre (2011); approximation of kernels is due to Saint-Pierre (1994). Robust (disturbance-averse) viability is developed in Aubin and Frankowska (1990) and Frankowska (1989). Under incomplete measurement, Veliov (1993) gives the sufficiency theorem already mentioned; Quincampoix and Veliov (1994) treat viability with a priori unknown but observable parameters; and the estimation-set reduction is presented in Cardaliaguet, Quincampoix, and Saint-Pierre (2007). In verification, barrier certificates originate with Prajna and Jadbabaie (2004); their worst-case framework and converse are Prajna, Jadbabaie, and Pappas (2007) and Prajna and Rantzer (2005); hybrid necessary-and-sufficient characterizations are Maghenem and Sanfelice (2019). The sustainability application domain is represented by Béné, Doyen, and Gabay (2001), De Lara and Doyen (2008), Doyen et al. (2012), and Doyen and Gajardo (2020). To our knowledge, the obstruction certificates of Theorems 3–5 — in particular the certification criterion of Theorem 5 and the timing bound of Theorem 4 — have not been stated in this form; we do not claim the underlying elementary facts (quantifier commutation; Dini comparison) as new.
+
+### 1.4 Organization
+
+Section 2 fixes the framework: the control system, the viability kernel hierarchy, observation structures, information states, and the safe-control correspondence. Section 3 develops the obstruction calculus (Theorems 1–4, Example 1). Section 4 develops the certification limits (Theorem 5, Corollary 6, Remark 1). Section 5 reviews the sufficiency landscape, which this paper does not re-derive, with citations. Section 6 discusses the position of the calculus relative to barrier certificates and estimation tubes, and draws the governance consequences. Section 7 concludes. Proofs are complete in the main text; results whose proofs repeat established literature are cited rather than reproduced, and are marked as such.
+
+---
+
+## 2. Framework
+
+### 2.1 The control system and the kernel hierarchy
+
+This section fixes the mathematical objects used throughout the paper: the control system, the disturbance structure, the constraint set, and the four kernels (perfect-information, robust, epistemic, and institutionally restricted) that organise the analysis.
+
+Fix a state space $X \subseteq \mathbb{R}^n$, a control set $U$, a disturbance set $D$, and dynamics
+$$\dot x(t) = f(x(t), u(t), d(t)), \qquad u(t) \in U(x(t)), \quad d(t) \in D(x(t)),$$
+with $f$ continuous, $U$ and $D$ set-valued with closed graph and nonempty compact values, and admissible controls and disturbances taken to be measurable selections. Let $\mathcal{V} \subseteq X$ be a closed constraint set. A *causal policy* $\pi$ is a map from the observation record to controls, respecting the declared information structure. The standard objects are:
+
+- $\mathrm{Viab}(\mathcal{V}; U, \pi_{\mathrm{perf}})$: the **viability kernel** under full-information (state-feedback) policies — the largest closed subset of $\mathcal{V}$ from which there exists a state-feedback control keeping the trajectory in $\mathcal{V}$ for all time (Aubin, 1991).
+- $\mathrm{RViab}(\mathcal{V})$: the **robust kernel**, the largest subset of $\mathcal{V}$ from which there exists a state-feedback policy keeping every trajectory — for *every* admissible disturbance realization — in $\mathcal{V}$ (Aubin and Frankowska, 1990).
+- $\mathrm{EViab}_{\mathcal{I}}(\mathcal{V})$, $\mathrm{ERViab}_{\mathcal{I}}(\mathcal{V})$: the **epistemic kernels** — the objects of this paper. Their elements are *states of information*, not physical states (Section 2.3).
+
+Projected to physical state space, the informational hierarchy reads
+$$\mathrm{IRViab}_{\mathfrak{I}}(\mathcal{V}) \;\subseteq\; K_{\mathcal{I}} \;\subseteq\; \mathrm{RViab}(\mathcal{V}) \;\subseteq\; \mathrm{Viab}(\mathcal{V}),$$
+where $K_{\mathcal{I}}$ is the epistemic kernel projected to physical states under the *existential* projection $\mathrm{proj}_{\exists}(\mathfrak{K}) = \bigcup_{B \in \mathfrak{K}} B$ (the hierarchy is read with this projection applied to the first two terms, whose native elements are information states) and $\mathrm{IRViab}_{\mathfrak{I}}$ is the institutionally restricted counterpart (Section 6.4). The physical implication of epistemic viability is the inclusion at the level of beliefs: $B_0 \in \mathrm{ERViab}_{\mathcal{I}}(\mathcal{V}) \Rightarrow B_0 \subseteq \mathrm{RViab}(\mathcal{V})$. Each inclusion can be strict, with a distinct cause: robust contraction arises from disturbances; epistemic contraction from indistinguishability; institutional contraction from restricted authority, enforcement, and allocation. The present paper characterizes the *epistemic* contraction: the mechanisms by which indistinguishability empties or shrinks the kernel.
+
+### 2.2 The safe-control correspondence
+
+For a constraint set $\mathcal{V}$ described by finitely many $C^1$ constraint functions, $\mathcal{V} = \{ x : q_j(x) \ge 0,\ j = 1..m \}$, define the **safe-control correspondence** at $x \in \mathcal{V}$:
+$$\mathcal{R}_{\mathcal{V}}(x) \;=\; \Big\{ u \in U(x) : \forall d \in D(x),\; \forall j \text{ with } q_j(x) = 0,\; \nabla q_j(x) \cdot f(x, u, d) \ge 0 \Big\},$$
+the set of controls whose drift is inward (subtangential) on every active constraint face, uniformly over the disturbance. For $x$ in the interior of $\mathcal{V}$ (no active constraints), $\mathcal{R}_{\mathcal{V}}(x) = U(x)$. Two levels of the tangency condition are distinguished throughout. The *local* reading applies the correspondence to the constraint set itself: by Nagumo's theorem in its robust form, if $\mathcal{V}$ is closed and $\mathcal{R}_{\mathcal{V}}(x) \neq \varnothing$ on $\partial\mathcal{V}$ with a measurable selection $u(x) \in \mathcal{R}_{\mathcal{V}}(x)$, then $\mathcal{V}$ is itself robustly invariant, i.e. $\mathrm{RViab}(\mathcal{V}) = \mathcal{V}$ (Aubin, 1991; Frankowska, 1989). When $\mathcal{V}$ is not invariant, viability of a point $x_0 \in \mathcal{V}$ requires instead a selection $u(x) \in \mathcal{R}_K(x)$ along the trajectory, where $K = \mathrm{RViab}(\mathcal{V})$ and $\mathcal{R}_K$ is the same correspondence computed on the kernel: points of $\mathcal{V} \setminus K$ may admit controls that are instantaneously safe while every trajectory is doomed to exit later. The obstruction theorems below are *local certificates against $\mathcal{R}_{\mathcal{V}}$*: exhibiting a state at which even the weaker pointwise condition fails certifies exclusion from the kernel, and this is the reading in which the certificates are used. The correspondence is the bridge between the pointwise (tangency) and the global (kernel) description, and it is the object the observation structure acts upon: an observation-based policy can select controls only as a function of the observation record.
+
+### 2.3 Observation structures, information states, and epistemic kernels
+
+An **observation structure** $\mathcal{I} = (Y, O)$ is a measurable space $Y$ and an observation map $O : X \to Y$. The policy observes $y(t) = O(x(t))$. At time $t$, the **information set** (belief) of a regulator who knows the dynamics, the disturbance class, and the record $(y(s))_{s \le t}$ is
+$$B_t \;=\; \left\{ \xi(t) : \xi(0) \in B_0,\ \dot\xi(s) = f(\xi(s), u(s), d(s)),\ d(s) \in D(\xi(s)),\ O(\xi(s)) = y(s) \text{ for all observed } s \le t \right\},$$
+where $\xi(\cdot)$ ranges over candidate trajectories: the set of current states compatible with the record. We assume the standard set-membership semantics, so that $B_t$ contains every state consistent with the observations and the applied controls. (With observation error, the equality becomes membership $y(s) \in H(\xi(s), v(s))$; with hidden parameters the belief lives in $X \times \Theta$; with delays it lives in a history space — the extensions are stated in Section 6.5.) A policy is **observation-based** if $u(t)$ depends on the record only through $B_t$; this is a special case of record-based policies, and the two coincide when the belief is a sufficient statistic for the decision problem, which holds in the set-membership semantics used throughout. We write $U^B(B) = \bigcap_{x \in B} U(x)$ for the controls available at every compatible state — the only controls an observation-based policy may select without risking inadmissibility.
+
+**Definition 1 (epistemic kernels).**
+
+(i) $B_0 \in \mathrm{EViab}_{\mathcal{I}}(\mathcal{V})$ if there exists an observation-based policy and an admissible disturbance realization compatible with the record such that every trajectory compatible with the record remains in $\mathcal{V}$ for all time — with the coupling caveat that the record is the one generated by the fixed realization and policy, so "compatible with the record" is read under that same realization, not across all realizations.
+
+(ii) $B_0 \in \mathrm{ERViab}_{\mathcal{I}}(\mathcal{V})$ if there exists an observation-based policy such that, for *every* admissible disturbance realization compatible with the record, every compatible trajectory remains in $\mathcal{V}$ for all time; trivially $\mathrm{ERViab}_{\mathcal{I}}(\mathcal{V}) \subseteq \mathrm{EViab}_{\mathcal{I}}(\mathcal{V})$.
+
+We use $\mathrm{ERViab}$ throughout, since the disturbance classes of sustainability problems are adverse by construction; the theorems hold a fortiori for the weaker (non-robust) notion.
+
+With these definitions, the informal statement of the paper is precise: **the epistemic kernel is the greatest recursively viable collection of information states in the sense of the estimation-space reduction cited in Section 5, not re-derived here; common-action compatibility is a necessary one-step condition, but not by itself a complete characterization — and the obstruction calculus certifies, mechanism by mechanism, the information states outside it.**
+
+### 2.4 Notation
+
+We collect the principal symbols used throughout the paper. The state space is $X \subseteq \mathbb{R}^n$; the control set is $U$ (set-valued $U(x)$ at state $x$); the disturbance set is $D$ (set-valued $D(x)$). The dynamics are $\dot x = f(x,u,d)$. The closed constraint set is $\mathcal{V} \subseteq X$, described by finitely many $C^1$ constraint functions $q_j$ ($j = 1,\ldots,m$). The safe-control correspondence at $x \in \mathcal{V}$ is $\mathcal{R}_{\mathcal{V}}(x)$. The observation structure is $\mathcal{I} = (Y, O)$ with observation map $O : X \to Y$; the information set (belief) at time $t$ is $B_t$; the initial belief is $B_0$. The common admissible action set at belief $B$ is $U^B(B) = \bigcap_{x \in B} U(x)$; the common safe-action set is $\mathcal{R}_{\mathcal{V}}^B(B) = \bigcap_{x \in B} \mathcal{R}_{\mathcal{V}}(x)$. The upper right Dini derivative of $q$ in direction $v$ is $D^+ q(x; v) = \limsup_{h \downarrow 0} [q(x + hv) - q(x)]/h$. The four kernels of the hierarchy are $\mathrm{Viab}(\mathcal{V}; U, \pi_{\mathrm{perf}})$, $\mathrm{RViab}(\mathcal{V})$, $\mathrm{EViab}_{\mathcal{I}}(\mathcal{V})$, $\mathrm{ERViab}_{\mathcal{I}}(\mathcal{V})$, with the institutionally restricted counterpart $\mathrm{IRViab}_{\mathfrak{I}}(\mathcal{V})$. The first informative observation time is $T_{\mathrm{obs}}$.
+
+---
+
+## 3. The Obstruction Calculus
+
+### 3.1 The finite-time exit certificate
+
+The base obstruction operates before any observation-theoretic argument. It is a drift condition under which *no* control — of any information structure — can be viable. In management terms: when the dynamics themselves force exit before any control can react, no monitoring design can rescue viability, and the certification problem is closed without any observation-theoretic reasoning.
+
+**Theorem 1 (finite-time exit certificate).**
+
+Let $q : X \to \mathbb{R}$ be a constraint function with $\mathcal{V} \subseteq \{ q \ge 0 \}$, and suppose the following hypotheses hold.
+
+(H1) There exist constants $a > 0$ and $\varepsilon > 0$ such that on the strip $\mathcal{S}_a = \{ x : 0 \le q(x) \le a \}$,
+$$\sup_{u \in U(x)} \inf_{d \in D(x)} D^+ q(x; f(x,u,d)) \;\le\; -\varepsilon \qquad \forall x \in \mathcal{S}_a, \tag{1}$$
+where $D^+ q(x; v) = \limsup_{h \downarrow 0} [q(x + hv) - q(x)]/h$ is the upper right Dini derivative of $q$ in direction $v$.
+
+Then for every admissible control and every initial state $x_0 \in \mathcal{S}_a$ there exists an admissible disturbance realization under which the trajectory leaves $\{ q \ge 0 \}$ — hence leaves $\mathcal{V}$ — by every time strictly larger than $q(x_0)/\varepsilon$, in particular within time at most $a/\varepsilon$ (since $q(x_0) \le a$).
+
+*Proof.* Trajectories of $\dot x = f(x, u(t), d(t))$ exist in the Carathéodory sense under the standing hypotheses — $D$ compact-valued, $f$ measurable in $t$ and continuous in $(x,u,d)$, linearly bounded — for every measurable control–disturbance pair; convexity of $D$ is not assumed, and is needed only for Filippov-style closure arguments, which play no role here. Fix an admissible control $u(\cdot)$. For each $x \in \mathcal{S}_a$, condition (1) gives $\inf_{d \in D(x)} D^+ q(x; f(x,u(t),d)) \le -\varepsilon$. Define the adverse-selection correspondence
+$$D_{\varepsilon}(x, u) \;=\; \big\{ d \in D(x) : D^+ q(x; f(x,u,d)) \le -\varepsilon \big\},$$
+which has nonempty values on $\mathcal{S}_a$ by (1). For $q$ of class $C^1$ the Dini derivative reduces to $\nabla q(x) \cdot f(x,u,d)$, continuous in $(x,u,d)$; with the closed graph and compact values of $D$ (Section 2.1), $D_{\varepsilon}$ then has closed graph and compact values, and the measurable-selection theorem (Aubin and Frankowska, 1990, Thm. 8.1.3) supplies a measurable selection $d(\cdot)$ with $d(t) \in D_{\varepsilon}(x(t), u(t))$ along the trajectory. (The statement and proof below are for $q$ of class $C^1$; the locally Lipschitz case is a declared extension, not proved here: the Clarke derivative is only upper semicontinuous in $x$, and the Dini comparison must be re-derived for almost-everywhere-differentiable arcs before the same conclusion may be asserted there.) Along the realization $(u(\cdot), d(\cdot))$ from $x_0$, the Dini comparison lemma (e.g. Aubin, 1991, Ch. 2) integrates the inequality to
+$$q(x(t)) \;\le\; q(x_0) - \varepsilon t$$
+as long as $x(t)$ remains in $\mathcal{S}_a$. Hence $q \le 0$ at a time not exceeding $q(x_0)/\varepsilon \le a/\varepsilon$. If the trajectory has not already left the strip by time $t^* + \delta$ for some $\delta > 0$, the comparison continues to apply and gives $q(x(t^* + \delta)) \le q(x_0) - \varepsilon(t^* + \delta) \le -\varepsilon\delta < 0$ with $t^* = q(x_0)/\varepsilon$; in either case the trajectory violates $\{ q \ge 0 \} \supseteq \mathcal{V}$ before every time strictly larger than $q(x_0)/\varepsilon$. The selection $d(t) \in D_\varepsilon(x(t), u(t))$ is itself nonanticipative feedback of the pair $(x, u)$ — a disturbance strategy in the Isaacs order, responding to the current state and control without anticipating future controls — and this is exactly what the certificate needs; no Elliott–Kalton upgrade to a closed-loop strategy is required for the stated claim. □
+
+Two readings of (1) matter. First, it is an **Isaacs-type condition**: the disturbance chooses after the control, so the certificate asserts that the disturbance can *enforce* exit against any policy. Second, (1) is an outward-drift certificate *dual in spirit, but not logically complementary*, to an inward barrier condition. The pointwise robust barrier reading is $\sup_u \inf_d D^+ q \ge 0$ — some control keeps the drift inward against every disturbance — and the two conditions leave an unresolved intermediate region in which neither holds (Section 6.2). Theorem 1 is the "unsafety" side of that duality, and it is unconditional: it needs no observation argument because it defeats all controls, including clairvoyant ones.
+
+### 3.2 Epistemic emptiness: hidden modes
+
+The remaining obstructions are *purely informational*. They apply to systems in which every state is individually viable under full information, and the kernel empties only because the observation structure merges states with incompatible safe controls. In ecological terms, this is the situation in which each stock, considered on its own, is manageable; the failure arises because the indicator cannot tell the manager which stock is present.
+
+**Theorem 2 (epistemic emptiness by construction).**
+
+There exists a system with $\mathrm{Viab}(\mathcal{V}; U, \pi_{\mathrm{perf}}) = \mathcal{V} \neq \varnothing$ such that, for a non-injective observation map $O$, every admissible initial information state — the observation fibres $B_0 = O^{-1}(O(S_0))$, $S_0 \in \mathcal{V}$ — lies outside $\mathrm{ERViab}_{\mathcal{I}}(\mathcal{V})$: the epistemic kernel over the fibre-induced initial beliefs is empty.
+
+*Proof (by construction).* Let $X = [1,2]$, $\dot S = u - r(S)$ with $r : [1,2] \to \mathbb{R}_{++}$ continuous and **injective on $[1,2]$** (e.g. $r(S) = S - 1 + c$, $c > 0$, strictly increasing), $U(S) = \{0, r(S)\}$, $\mathcal{V} = [1,2]$, and the constant observation $O(S) \equiv 0$. Under perfect information, the state-feedback control $u = r(S)$ gives $\dot S = 0$, so every $S_0 \in \mathcal{V}$ is viable: $\mathrm{Viab}(\mathcal{V}; U, \pi_{\mathrm{perf}}) = \mathcal{V}$. Under the constant observation, the initial information state is the fibre $B_0 = [1,2]$, and the set-membership semantics propagates it: at time $t$ the belief is $B_t = \Phi_t(B_0) \cap \mathcal{V}$, the image of the initial set under the flow generated by the applied control — under a constant observation with no exit observation, this flow-image coincides with the record-compatibility definition of Section 2.3. The common control set at the initial belief is
+$$U^B(B_0) = \bigcap_{S \in [1,2]} \{0, r(S)\} = \{0\},$$
+because $r(S) > 0$ for every $S$ and, by injectivity on $[1,2]$, no single control equals $r(S)$ for all $S$. An observation-based policy may select time-varying actions, but robust admissibility requires the selected action to lie in $U^B(B_t)$ at every $t$; the propagated belief $B_t$ is nonempty and, while the state remains in $[1,2]$, $U^B(B_t) = \{0\}$ by the same computation (the flow of $\dot S = -r(S)$ with $r > 0$ moves $B_t$ monotonically downward, preserving the injectivity of $r$ on the surviving interval). Hence the policy must hold $u(t) = 0$ almost everywhere, giving $\dot S = -r(S) \le -\min_{[1,2]} r < 0$; every compatible trajectory exits $\mathcal{V}$ downward in finite time. The same argument applies verbatim to any initial fibre, since $O$ is constant. Hence $\mathrm{ERViab}_{\mathcal{I}}(\mathcal{V})$ contains no fibre-induced initial belief, while beliefs that are singletons (exact prior knowledge) are not admissible initial states of this observation structure. The system has no disturbance and no estimation error: the failure is caused entirely by the non-injectivity of $O$. □
+
+The construction isolates the mechanism: the observation merges states whose safe controls differ, and the merged belief admits no common control. The example also shows the empty-kernel phenomenon at its minimal size — two control values, one scalar state. The next theorem generalizes the mechanism from constant observations to arbitrary information sets.
+
+### 3.3 The instantaneous common-action obstruction
+
+**Theorem 3 (common-action obstruction).**
+
+Let $B$ be an information set of the declared observation structure. Suppose the following hypotheses hold.
+
+(H1) The selected action is held until the next observation (sampled review: no informative observation arrives before the next action must be selected, and the policy holds the selected action over the review interval — the institutional reading; without a positive dwell time the instantaneous statement below must be replaced by the tube-safety statement of the following remark).
+
+(H2) Either the **common admissible action set** is empty,
+$$U^B(B) \;=\; \bigcap_{x \in B} U(x) \;=\; \varnothing, \qquad \text{(admissibility obstruction)}$$
+or the **common safe-action set** is empty while common admissibility holds,
+$$\mathcal{R}_{\mathcal{V}}^B(B) \;:=\; \bigcap_{x \in B} \mathcal{R}_{\mathcal{V}}(x) \;=\; \varnothing \quad \text{with} \quad U^B(B) \neq \varnothing, \tag{2} \qquad \text{(safety obstruction)}$$
+
+Then $B \notin \mathrm{ERViab}_{\mathcal{I}}(\mathcal{V})$: every compatible state may be individually robustly viable, and the belief is nevertheless nonviable, because the state-specific safe actions are incompatible.
+
+*Proof.* Let $\pi$ be any observation-based policy, and let $a = \pi(B)$ be the action it selects at the information set $B$.
+
+**Admissibility case.** If $a \notin U^B(B)$, then for some compatible state $x \in B$ the action is inadmissible ($a \notin U(x)$): at that state the selected action is not an admissible control, so the policy fails outright on the compatible branch from $x$ — an obstruction independent of the safe set.
+
+**Safety case.** Otherwise $a \in U^B(B)$. Because $\bigcap_{x \in B} \mathcal{R}_{\mathcal{V}}(x) = \varnothing$ while $\mathcal{R}_{\mathcal{V}}(x) = U(x)$ at interior points of $\mathcal{V}$ (no constraint is active there) and $a \in U(x)$ for every $x \in B$, the emptiness of the intersection must be caused by the boundary: there is a state $\bar x \in B \cap \partial \mathcal{V}$ with $a \notin \mathcal{R}_{\mathcal{V}}(\bar x)$. By the defining inequality of the safe-control correspondence, there are an active constraint $j$ (with $q_j(\bar x) = 0$) and a disturbance $\bar d \in D(\bar x)$ such that
+$$\nabla q_j(\bar x) \cdot f(\bar x, a, \bar d) < 0.$$
+With $\eta = - \nabla q_j(\bar x) \cdot f(\bar x, a, \bar d) > 0$, define the adverse-selection correspondence $D_{\eta}(x) = \{ d \in D(x) : \nabla q_j(x) \cdot f(x, a, d) \le -\eta/2 \}$ on a neighbourhood of $\bar x$; by continuity of the right-hand side in $(x,d)$ and the closed graph of $D$ (Section 2.1), it has nonempty compact values near $\bar x$ and admits a measurable local selection $d(x)$ with $d(\bar x) = \bar d$. Let the disturbance realize this selection on a small initial interval; then along the compatible trajectory from $\bar x$ (compatible, since $\bar x \in B$), $q_j$ strictly decreases from $q_j(\bar x) = 0$ at rate at least $\eta/2$, so the trajectory leaves $\mathcal{V}$ within the first review period — before any informative observation can arrive, whichever action the policy takes. Since $\pi$ was arbitrary, no observation-based policy keeps every compatible trajectory in $\mathcal{V}$: $B \notin \mathrm{ERViab}_{\mathcal{I}}(\mathcal{V})$. □
+
+Condition (2) is checkable: it requires computing the intersection of the safe-control sets over the information set, which for polyhedral constraint and control sets is a finite linear program. When the intersection is nonempty, the common action is a candidate for viability — Theorem 3 is a *necessary* condition with a constructive witness of failure, not a sufficient condition for success. For polyhedral data the emptiness certificate is a Farkas pair: with safe actions given by finitely many affine inequalities $A_i u \le b_i$ across compatible states, stacked as $A u \le b$, the intersection is empty if and only if there exists $\lambda \ge 0$ with $\lambda^{\top} A = 0$ and $\lambda^{\top} b < 0$ (Farkas, 1902; Gale, 1960) — a finite, independently checkable certificate of epistemic infeasibility, the control-space analogue of the material-substitution separation certificates reported in the companion assessment-separation analysis (under review).
+
+**The tube-safety form.** The instantaneous condition (2) is the $\Delta \downarrow 0$ boundary approximation of the exact one-step obstruction: with the action held over a review interval of length $\Delta$, the exact condition is the emptiness of the tube-safe action set
+$$\mathcal{A}_{\mathrm{tube}}(B, \Delta) \;=\; \Big\{ a : \mathrm{Reach}_{[0,\Delta]}(B, a) \subseteq \mathcal{V} \Big\},$$
+and $\mathcal{A}_{\mathrm{tube}}(B, \Delta) = \varnothing$ certifies $B \notin \mathrm{ERViab}_{\mathcal{I}}(\mathcal{V})$ for every review interval of length $\Delta$ and every target collection. The theorems above and below use the instantaneous and timing readings; the tube form is the unifying one-step object.
+
+**Example 1 (hidden-mode conflict, within the hidden-parameter extension of Section 2.3).** Let an unobserved parameter satisfy $\theta \in \{-1, +1\}$, with $\dot z = \theta u$, $u \in \{-1, +1\}$, and constraint $z \ge 0$. At $z = 0$: if $\theta = +1$, only $u = +1$ is safe; if $\theta = -1$, only $u = -1$ is safe. Both compatible states are individually robustly viable under full information (each admits its safe control), but the information set $B = \{(0, +1), (0, -1)\}$ satisfies $\mathcal{R}_{\mathcal{V}}^B(B) = \{+1\} \cap \{-1\} = \varnothing$, so $B \notin \mathrm{ERViab}_{\mathcal{I}}(\mathcal{V})$. This is a purely informational failure: no stochasticity and no estimation-quality argument is involved. The example is the two-action skeleton of every "the stock is either recovering or collapsing, and the safe policy differs between the two" situation.
+
+### 3.4 The delayed-information obstruction
+
+**Theorem 4 (delayed-information obstruction).**
+
+Let $B_0$ be an initial information set. Suppose the following hypotheses hold.
+
+(H1) No informative observation arrives before time $T_{\mathrm{obs}} > 0$ — formally, for every observation-based policy the hypothesis below supplies branches that are **observation-equivalent on $[0, T_{\mathrm{obs}})$**: they produce identical observation records throughout that interval, so the policy cannot distinguish them before $T_{\mathrm{obs}}$; between observations the information set evolves by the set-membership semantics of Section 2.3.
+
+(H2) There exist a constraint function $q$ with $\mathcal{V} \subseteq \{ q \ge 0 \}$ and a constant $\varepsilon > 0$ such that, for every observation-based policy, there is a compatible initial state $x^* \in B_0$ attaining $q(x^*) = \inf_{x \in B_0} q(x)$ (with $B_0$ compact and $q$ lower semicontinuous; otherwise replace the infimum by $\inf q + \delta$ for an arbitrary $\delta$-minimizer, let $\delta \downarrow 0$, and read the timing bound with $\inf q + \delta$) and an admissible disturbance realization such that, along the realized trajectory from $x^*$ under the policy's actions, the record remains compatible and
+$$D^+ q(x(t); f(x(t), u(t), d(t))) \;\le\; -\varepsilon \qquad \text{while } q(x(t)) > 0, \tag{3}$$
+
+(H3) The timing bound holds:
+$$T_{\mathrm{obs}} \;>\; \frac{\inf_{x \in B_0} q(x)}{\varepsilon}. \tag{4}$$
+
+Then $B_0 \notin \mathrm{ERViab}_{\mathcal{I}}(\mathcal{V})$: information may be accurate but arrive too late.
+
+*Proof.* Fix any observation-based policy. By hypothesis there is a compatible initial state $x^*$ with $q(x^*) = \inf_{x \in B_0} q(x)$ and an admissible disturbance realization satisfying (3), observation-equivalent on $[0, T_{\mathrm{obs}})$ to the other compatible branches. The Dini comparison lemma integrates (3) to
+$$q(x(t)) \;\le\; q(x^*) - \varepsilon t \;=\; \inf_{x \in B_0} q(x) - \varepsilon t$$
+while $q(x(t)) > 0$, so the trajectory violates the constraint at a time not exceeding $t^* = \inf_{x \in B_0} q(x) / \varepsilon$ (the same argument with the $\delta$-minimizer bounds the violation time by $(\inf q + \delta)/\varepsilon$), which by (4) is strictly less than $T_{\mathrm{obs}}$. Until $t^*$, the record contains no informative observation: the violating branch is observation-equivalent to every other compatible branch before $T_{\mathrm{obs}}$, so the policy cannot have altered its action in response to the violation before it occurs. Since the policy was arbitrary and the violating realization is compatible with the observation record, no observation-based policy is robustly viable: $B_0 \notin \mathrm{ERViab}_{\mathcal{I}}(\mathcal{V})$. □
+
+The hypothesis (3) is the set-membership form of the drift condition: for *every* policy there is a compatible state and disturbance enforcing the drift; the adversary selects the true state and the disturbance, and the observations cannot expose the selection in time. Condition (4) is the **timing bound**: the first informative observation must precede the enforced exit time $\inf q / \varepsilon$. Theorem 4 refines Theorem 3 quantitatively: the common-action obstruction is a **zero-margin formal analogue** of the delayed tube-safety obstruction; the two certificates are stated separately ($\inf_{x \in B} q(x) = 0$ with $T_{\mathrm{obs}} > 0$ — any strictly positive observation delay is then too late under a uniform outward drift), not a $T_{\mathrm{obs}} \to \infty$ limit. It is the obstruction that governs discrete-review governance: a review interval longer than the worst-case exit time is an information structure in which the exit is inevitable.
+
+---
+
+## 4. Certification Limits
+
+### 4.1 Exact certification and the fibre criterion
+
+The obstruction theorems of Section 3 concern *policies*. Sustainability governance also consumes *certificates*: verdicts — safe or unsafe — computed from observations alone, without reference to a policy. The question is when such verdicts can be exact. For a manager operating under partial ecological information, this is the question of whether an indicator reading alone can ever settle that the system is, or is not, on the safe side of a declared floor.
+
+**Definition 2 (exact certifier).** For an admissible domain $Z \subseteq X$ and a safe set $K \subseteq Z$, an **exact certifier** based on the observation map $O : Z \to Y$ is a function $C : Y \to \{0,1\}$ such that
+$$C(O(z)) = 1 \iff z \in K \qquad \text{for every } z \in Z.$$
+
+**Theorem 5 (observation-fibre criterion).** An exact certifier based on $O$ exists if and only if membership in $K$ is constant on every observation fibre:
+$$O(z_1) = O(z_2) \;\Longrightarrow\; \big[ z_1 \in K \iff z_2 \in K \big] \qquad \forall z_1, z_2 \in Z, \tag{5}$$
+equivalently, $K = O^{-1}(O(K))$ on the admissible domain.
+
+*Proof.* ($\Rightarrow$) If $C$ exists and $O(z_1) = O(z_2)$, then $\mathbf{1}_K(z_1) = C(O(z_1)) = C(O(z_2)) = \mathbf{1}_K(z_2)$, so membership is fibre-constant.
+
+($\Leftarrow$) If (5) holds, define $C(y) = \mathbf{1}_K(z)$ for any $z \in Z$ with $O(z) = y$; (5) makes $C$ well defined on $O(Z)$ and exact by construction; extend $C$ arbitrarily on $Y \setminus O(Z)$. A *measurable* exact certifier exists under the same condition on standard Borel spaces when $O(K)$ is measurable, taking $C = \mathbf{1}_{O(K)}$; measurability is the only additional requirement and is stated once here. □
+
+The fibre criterion concerns static classification — whether membership in a safe set factors through the observation — and applies verbatim to three distinct certification problems, which should not be conflated: constraint certification ($K = \mathcal{V}$), full-information viability certification ($K = \mathrm{RViab}(\mathcal{V})$), and policy-specific safety certification ($K = \mathrm{Safe}^{\Pi}_T$). The same theorem governs all three, but its governance meaning differs.
+
+**Corollary 6 (safety-crossing fibres and the certainly-safe set).** If two admissible states share an observation and lie on opposite sides of a component safety constraint, no exact observation-only certificate exists. The largest set of observations that can soundly be labelled safe without further information is the certainly-safe set
+$$\mathcal{Y}_{\mathrm{safe}} \;=\; \big\{ y \in O(Z) : O^{-1}(y) \subseteq K \big\}.$$
+
+*Proof.* A safety-crossing fibre violates (5), so Theorem 5 denies the certifier. On $\mathcal{Y}_{\mathrm{safe}}$ every compatible state is safe, so the constant verdict "safe" is sound; outside $\mathcal{Y}_{\mathrm{safe}}$ some compatible state is unsafe, so no sound "safe" verdict exists there. □
+
+The fibre criterion has a direct governance reading. A composite sustainability index is an observation map from the state of a socio-ecological system to a scalar; a floor is a safe set. Corollary 6 then states: an index whose fibres cross a floor boundary — whose value cannot distinguish a state violating the floor from one satisfying it — cannot support an exact certification of that floor, however carefully the index is thresholded. The structural requirement is not that each floor be measured separately, but that the observation *separate every admissible pair lying on opposite sides of a declared floor*; direct per-floor measurement is one sufficient design, not the unique one, and any statistic refining the floor's safe/unsafe partition certifies equally well. The certainly-safe set is the honest relaxation: the region where the index may certify safety, and the region where it must fall silent.
+
+### 4.2 Output-feedback form
+
+Theorem 3 covers the output-feedback form directly: the theorem quantifies over observation-based policies, and an output-feedback policy that must select its action before an informative observation arrives is one of them, so no separate proposition is stated.
+
+### 4.3 The certainty-equivalence trap
+
+The obstruction of Theorem 2 relies on a non-injective observation — information genuinely lost. The same emptying occurs with a fully *injective* observation when the policy class is restricted to certainty-equivalence controllers.
+
+**Remark 1 (certainty-equivalence obstruction).** Consider $\dot S = u - g(S)$ with $u \in [0, \bar u]$, $g$ strictly increasing on $[S_{\min}, S^* + b]$, $g(0) = 0$, and $\mathcal{V} = [S_{\min}, S^*]$. Assume the range condition $g(S + b) \le \bar u$ for every $S \in [S_{\min}, S^*]$, so that the certainty-equivalence command below is admissible rather than inadmissible. Under perfect information the feedback $u(t) = g(S(t))$ gives $\dot S = 0$, so every $S_0 \in \mathcal{V}$ is viable and $\mathrm{Viab}(\mathcal{V}; U, \pi_{\mathrm{perf}}) = \mathcal{V} \neq \varnothing$. Now take the injective, biased observation $\hat S = S + b$ with $b > 0$, and restrict the policy class to **certainty-equivalence controllers** — causal maps that apply a fixed state-feedback law directly to the observation without correcting the bias: $u = g(\hat S)$. Then
+$$\dot S = g(S + b) - g(S) > 0 \qquad \forall S,$$
+and since $g$ is strictly increasing on the compact interval $[S_{\min}, S^* + b]$, $\dot S$ is bounded below by a positive constant there; hence $S$ strictly increases and exits above $S^*$ in finite time from every $S_0 \in \mathcal{V}$:
+$$\mathrm{Viab}(\mathcal{V}; U, \pi_{\mathrm{CE}}) = \varnothing.$$
+The mechanism is a *restriction of the policy class*, not a loss of information: for a known invertible observation the output-feedback class is as powerful as the state-feedback class, $\Pi_{\mathrm{CE}} \subsetneq \Pi_{\mathrm{output}} \cong \Pi_{\mathrm{state}}$, so $\mathrm{Viab}_{\Pi_{\mathrm{CE}}} \subsetneq \mathrm{Viab}_{\Pi_{\mathrm{output}}} = \mathrm{Viab}_{\Pi_{\mathrm{state}}}$ — the kernel empties exactly when the controller refuses the correction. An observer who inverts the bias, $u = g(\hat S - b) = g(S)$, recovers the perfect-information kernel. The remark is the mechanism behind the monitoring-design consequence of Section 6.4: monitoring bounds observation error so that a desired state-feedback law is implementable, but the bound is useful only if the controller uses the correction; an uncorrected biased indicator empties the kernel that a corrected one preserves.
+
+---
+
+## 5. The Sufficiency Landscape (Cited)
+
+For completeness and contrast, we record the sufficiency results against which the obstruction calculus is defined. Their proofs repeat established literature and are cited, not reproduced.
+
+**(a) Veliov's output-feedback condition.** Veliov (1993) considers the same problem as Section 3 — a tube in the state space, incomplete and inexact measurement — and gives a sufficient condition for the existence of an *output-feedback regulation map*: a set-valued feedback of the measurement under which all trajectories starting from the graph of the tube remain in it. Under perfect measurement his condition reduces to the classical viability condition (Haddad, 1981). The complementarity with this paper is exact: Veliov's theorem certifies existence; the obstruction calculus certifies nonexistence; a problem that satisfies neither is the open middle ground, where a stronger observer or a finer observation structure is the only remedy.
+
+**(b) The estimation-tube programme.** Cardaliaguet, Quincampoix, and Saint-Pierre (2007) pass from imperfect information in the measurement space to perfect information in an estimation space of *sets* of compatible states: the value functions of the two problems coincide, and the estimation-space problem admits a Dini-derivative characterization. The reduction is exact for value functions; what it does not supply is a *common prescription* — the estimation-space policy is a set-valued feedback, and its pointwise selections need not be jointly admissible. The common-action obstruction (Theorem 3) is precisely the certificate that no such joint selection exists at the information state in question.
+
+**(c) Observer-and-buffer transfer.** When a full-information feedback exists with a strict inward margin, and an observer supplies exponentially convergent estimates, output feedback of the estimate preserves safety on a buffered subset: if $K_\varepsilon$ is a compact controlled-invariant subset of the interior of the kernel, the state feedback $u = k(x)$ is Lipschitz with constant $L_k$, the observer satisfies $\|\hat x(t) - x(t)\| \le M e^{-\lambda t}\|\hat x(0) - x(0)\|$, and the initial estimation error is small enough that $L_k M \|\hat x(0) - x(0)\|$ is absorbed by the margin, then $K_\varepsilon$ is viable under output feedback (observer-to-viability transfer with safety buffer; standard arguments in the observer-based control literature). Similarly, eroded kernels: if $K$ is robustly invariant under full-state feedback with a strict inward margin on $\partial K$, and estimation and implementation errors are bounded by $\varepsilon$, then an eroded set $K^{-c\varepsilon}$ is invariant under output feedback for a sensitivity constant $c > 0$ (erosion absorbs the error; see the buffer constructions of Section 1.3's cited literature). These results delimit the middle ground: under margins and convergence, output feedback *can* work; the obstruction calculus of Sections 3–4 states the conditions under which it *cannot*.
+
+**(d) The linear substitution alternative.** For the finite linear model in which a resource-typed system must meet a demand vector through declared substitution pathways, exactly one of the following holds (Farkas, 1902; Gale, 1960): (i) there exists a non-negative pathway vector $a \ge 0$ satisfying the linear substitution constraints; or (ii) there exist multipliers $\alpha, \beta, \gamma \ge 0$ such that
+$$\alpha^\top R + \beta^\top E - \gamma^\top Q \ge 0 \quad\text{componentwise},\qquad \gamma^\top s^{\mathrm{req}} > \alpha^\top x + \beta^\top e.$$
+The second statement is a certificate that the declared substitution pathways cannot meet demand within the typed resource and capacity bounds; writing all constraints as $Aa \le \rho$, the pair is exactly the Farkas lemma alternative. The multipliers are a separation certificate, not universal exchange rates: nonlinear, nonconvex, path-dependent, spatial, or irreversible technologies require their own feasibility analysis, and an elasticity fitted near one operating point cannot establish global substitutability. This is the feasibility-side complement of the observation-side obstructions of Sections 3–4: where the present paper's certificates bound what *information* can achieve, the substitution alternative bounds what *material pathways* can achieve, and the same infeasibility discipline — exhibit the separating multiplier rather than assert impossibility — applies to both.
+
+---
+
+## 6. Discussion
+
+### 6.1 The shape of the calculus
+
+The six mechanisms form a useful but nonexhaustive taxonomy of information-theoretic failure. The exit certificate (Theorem 1) is the dynamic obstruction: it defeats all controls, so it needs no observation argument. The epistemic-emptiness construction (Theorem 2) exhibits the mechanism at minimal size: one scalar state, two safe controls, one constant observation. The common-action obstruction (Theorem 3) is the static obstruction: it defeats all policies at a single information state. The delayed-information obstruction (Theorem 4) interpolates between them in time. The fibre criterion (Theorem 5) is the certification obstruction: it limits not policies but verdicts. The certainty-equivalence trap (Remark 1) limits policy classes.
+
+A governance failure of observation can be diagnosed by which certificate applies. If the exit certificate holds, no monitoring design helps — the dynamics are adverse under every control. If only the common-action obstruction holds, the remedy is a finer observation structure (an informative measurement distinguishing the incompatible states). If the delayed-information obstruction holds with a slack timing bound, the remedy is a shorter review interval or a faster indicator. If the fibre criterion fails, the remedy is an observation that separates the sides of the floor rather than a better threshold on the aggregate.
+
+### 6.2 Relation to barrier certificates
+
+Barrier certificates certify safety of continuous and hybrid systems from a scalar function whose zero level set separates the unsafe region from all trajectories (Prajna and Jadbabaie, 2004; Prajna, Jadbabaie, and Pappas, 2007). The converse direction — that safety implies, under convex-duality conditions on density functions, the existence of a barrier certificate — is Prajna and Rantzer (2005); necessary-and-sufficient barrier characterizations for hybrid inclusions under mild regularity are Maghenem and Sanfelice (2019). Theorem 1 is the unsafety complement of that converse, not its observation-theoretic counterpart: it is a certificate of *unsafety* needing no observation structure — a Dini-drift condition under which failure is inevitable against all controls, observation-based or not — and it is constructive, exhibiting the enforcing disturbance and the exit time.
+
+The two literatures meet at the boundary. When a converse barrier theorem applies, the outward-drift certificate can be compared with the failure of the corresponding inward condition; outside converse settings, the absence of a found barrier has no diagnostic force, and no sentence in this paper relies on it. The remaining certificates (Theorems 2–5) act at the level of the *information set itself*: state-space barrier constructions presuppose that the state — or a specified state estimate — is available for feedback, while observer-based and belief-space barrier constructions exist and certify safety under a specified controller; neither addresses the emptiness of the common safe-action set at a given information state, which is the object of the common-action and timing obstructions.
+
+### 6.3 Relation to estimation tubes
+
+The estimation-tube programme shows that imperfect measurement can be absorbed into set-valued dynamics on an estimation space with no loss in value (Cardaliaguet, Quincampoix, and Saint-Pierre, 2007). The present theorems do not contradict that reduction; they delimit its reach. The reduction preserves *values* — whether the problem has a solution at a given information state — and, correctly carried out, its belief-state controls are common controls applicable to all compatible states under the declared semantics.
+
+The obstruction calculus is not outside the estimation-space programme; it is the local certificate layer of it. The common-action obstruction is a finite certificate that the belief-state predecessor is empty, the timing bound quantifies when the predecessor fails for reasons of information arrival, and the fibre criterion states when no observation-based verdict can be exact at all. The two directions are thus complementary at the level of governance: belief-space viability answers *whether*, the obstruction calculus answers *why not, and what to change*.
+
+### 6.4 Consequences for monitoring and indicator design
+
+Five consequences follow directly from the certificates. Each translates a formal impossibility into a concrete design specification for monitoring systems under partial ecological information.
+
+**Timing.** Theorem 4 gives the minimal monitoring frequency in closed form: the first informative observation must precede the enforced exit time $\inf q / \varepsilon$. A review interval longer than the worst-case time from the least-constrained compatible state to constraint violation is an information structure under which the violation is undetectable in time, whatever the review then concludes. The bound is computable from the drift certificate (1), which is the same certificate a robustness analysis computes anyway.
+
+**Coarseness.** Theorem 3 states that an observation structure merging two compatible states with incompatible safe controls is nonviable *at that information state*, even though both states are viable in isolation. The design consequence is that the observation must separate safety classes, not states: coarse indicators are admissible exactly when they are constant on the safe-control partition of the state space, and no finer.
+
+**Aggregation.** Theorem 5 and Corollary 6 apply verbatim to composite indices, which are observation maps from the system state to a scalar. An index whose fibres cross a floor boundary cannot support exact floor certification; the certainly-safe set is the honest domain of an index-based verdict. Where separately-binding floors matter, exact certification requires an observation that separates every admissible pair on opposite sides of a floor — per-floor measurement is one sufficient design — a formal complement to the thesis, argued verbally since Martinez-Alier, Munda, and O'Neill (1998), that weakly comparable values cannot be fused into one metric without loss. The requirement is sharpest where the floor constrains the productive base rather than its output: an aggregate of services can read at full level while the base regenerating them is reduced beneath it, and only an observation reaching the base itself can detect the discrepancy.
+
+**Bias.** Remark 1 shows that the loss need not be in the measurement: a biased indicator with an uncorrected certainty-equivalence policy empties a nonempty perfect-information kernel. Monitoring therefore has two obligations — bounding the observation error and supplying the correction — and the second is the one governance structures most often omit: the indicator is published, the correction is not applied, and the kernel empties although the information was sufficient.
+
+**Institutions.** The hierarchy of Section 2.1 records that epistemic contraction is one of three causes of kernel shrinkage, the others being disturbances and institutional restriction (authority, enforcement, allocation). The epistemic-institutional kernel $\mathrm{IRViab}_{\mathfrak{I}}$ combines them: an institution restricted in what it may observe *and* in what it may command inherits both contractions. The obstruction calculus characterizes the first; its certificates remain valid — and typically tighten — when the institution's command set is further restricted, since restriction of the action correspondence can only empty kernels, never create them (one-sided monotonicity of viability under correspondence restriction).
+
+### 6.5 Limitations
+
+We close the discussion by stating the scope of the results explicitly. The certificates are sound but not complete; several extensions are noted as open.
+
+(i) The certificates are sufficient conditions for nonviability, not necessary-and-sufficient characterizations of the epistemic kernel; the middle ground (neither a Veliov-type condition nor an obstruction certificate) is open. (ii) The information-set semantics is set-membership; probabilistic or belief-space formulations require separate statements, although the common-action obstruction transfers mutatis mutandis to any semantics in which the policy must choose a single action per information state. (iii) The results are finite-dimensional and time-invariant; the delay-free setting makes the timing bound of Theorem 4 sharp, and delay systems require the retarded extension of the Dini comparison argument (Hale and Verduyn Lunel, 1993). (iv) Theorem 1's measurable-selection step presupposes the closed-graph regularity of Section 2.1; without it the certificate remains a heuristic. (v) The institutional consequences of Section 6.4 are design conclusions from the certificates, not empirical findings; their empirical testing belongs to applied studies.
+
+---
+
+## 7. Conclusion
+
+Viability under perfect measurement has, under standard finite-dimensional regularity assumptions, a mature kernel, tangency, and approximation theory. Viability under incomplete observation has long been asymmetric: the sufficiency side is carried by Veliov's output-feedback condition and the estimation-tube programme, while the failure side lacked a comparable instrument. This paper supplies the necessity side in the sense of *necessary conditions for viability*: the obstruction calculus develops sound, computationally interpretable sufficient certificates for nonviability. They do not exhaust the complement of the epistemic kernel — Section 6.5 states the open middle ground — and the paper claims no complete characterization.
+
+With displayed proofs and explicit witnesses, the certificates identify five mechanisms by which an observation structure can make robust viability impossible, plus one through which the policy class alone empties the kernel: the disturbance can enforce exit in finite time against every control; a constant observation can merge states with incompatible safe controls; the compatible states can demand incompatible actions at a single information state; the information can arrive after the enforced exit; and the observation fibres can cross the safe-set boundary, defeating every exact certifier — with certainty-equivalence control as the sixth, policy-class, mechanism. Each certificate identifies the design change that removes it: a faster indicator, a separating observation, an observation that separates the sides of each floor instead of aggregate certification, or the correction of a known bias. For sustainability governance, where observation is conducted through coarse indicators at discrete reviews, the calculus states the quantitative limits of what monitoring can deliver — and converts each impossibility into a design specification.
+
+---
+
+## Declarations
+
+**Funding.** None declared. **Competing interests.** None. **Data availability.** No data were used; all constructions are symbolic. **Code availability.** Verification code for the worked examples is available from the authors on request.
+
+---
+
+## Appendix A: Bounded Constructions and Scope Remarks
+
+The following bounded constructions complement the obstruction theorems of Sections 3–4. They are stated in full because each carries a scope remark that is itself part of the contribution; none of them is promoted to a theorem of the main text.
+
+**A.1 Example (coupling creates viability absent in a factor).** Take the two-patch logistic system
+$$\dot S_i = g_i(S_i) + d\,(S_j - S_i) - H_i, \qquad i, j \in \{1,2\},\ i \ne j,$$
+with $g_i(s) = s(1-s)$, $d = 0.2$, constraints $S_i \in [0,1]$ and $H_i \ge H_{\min,i}$ (harvest floors), and admissible controls the constant harvest vectors $H = (H_1, H_2)$ with $H_i \ge 0$. Choose $(S_1^*, S_2^*) = (0.5, 0.8)$. Define harvest floors by the equilibrium equations: $H_{\min,1} = g_1(0.5) + 0.2(0.8 - 0.5) = 0.31$; $H_{\min,2} = g_2(0.8) + 0.2(0.5 - 0.8) = 0.10$. Patch 1 in isolation: $\max_s g_1(s) = 0.25 < H_{\min,1} = 0.31$, so patch 1 is not viable in isolation. Yet the coupled system has the equilibrium $(0.5, 0.8)$ with $H = (0.31, 0.10)$ admissible and the stock constraints satisfied, so its kernel is nonempty. The example is the constructive counterpart of the emptiness results of Section 3: where the obstruction theorems certify that no policy works for reasons of information, patch coupling exhibits the opposite direction — a jointly viable operating point that no factor sustains alone.
+
+**A.2 Counterexample (emptiness despite factorwise viability at MSY).** Take $d > 0$, $C_1 \ne C_2$, $H_{\min,i} = r_i C_i / 4$ (MSY level), in the same coupled system with $\phi_i(S_i) := g_i(S_i) - H_{\min,i}$ and growth laws $g_i(S) = r_i S (1 - S/C_i)$, so that
+$$\phi_i(S_i) = -\frac{r_i}{C_i}\left(S_i - \frac{C_i}{2}\right)^2 \le 0$$
+with equality only at $S_i = C_i/2$, and the constraint set is the box $[C_1/2, K_{\max,1}] \times [C_2/2, K_{\max,2}]$. Each isolated system has kernel $[C_i/2, K_{\max,i}]$ (from $S_i > C_i/2$ the stock declines toward $C_i/2$ asymptotically, never below). For the coupled system, define $U = S_1 + S_2$; then
+$$\dot U = \phi_1(S_1) + \phi_2(S_2) \le 0,$$
+with equality exactly at $p^* = (C_1/2, C_2/2)$, where the flow is nevertheless nonzero:
+$$\big(\dot S_1, \dot S_2\big)\big|_{p^*} = \left(\tfrac{d}{2}(C_2 - C_1), \tfrac{d}{2}(C_1 - C_2)\right) \ne 0.$$
+Suppose a trajectory remained in the constraint box for all time. Then $U$ is non-increasing and bounded below by $(C_1 + C_2)/2$, so $U(t) \downarrow U_\infty \ge (C_1 + C_2)/2$; the $\omega$-limit set of the trajectory is nonempty, compact, and invariant, and $\dot U \equiv 0$ on it (otherwise $U$ would keep decreasing along the set). Hence the $\omega$-limit set is contained in $\{p^*\}$, so it equals $\{p^*\}$ and the trajectory converges to $p^*$. But convergence to $p^*$ is impossible: along a trajectory with $x(t) \to p^*$ the velocity satisfies $\dot x(t) = f(x(t)) \to f(p^*) \ne 0$, so $x(t) - p^* \sim (t - t_0) f(p^*)$, contradicting convergence. Therefore no trajectory remains admissible for all time: the kernel is empty, and since the box is compact and the vector field smooth, every trajectory violates the constraint in finite time. Note the logical order: the emptiness conclusion here rests on the Lyapunov–$\omega$-limit argument, *not* on the absence of an equilibrium — absence of equilibria alone does not imply an empty kernel (periodic and nonstationary viable trajectories are possible in general), and the two are separated deliberately. The counterexample is specific to the MSY parameter choice; for $H_{\min,i} < r_i C_i / 4$, equilibria may exist. Together with A.1 it delimits what coupling can and cannot repair: factorwise nonviability is repairable (A.1), but factorwise viability at an incompatible operating point is not (A.2).
+
+## References
+
+Aubin, J.-P.: Viability Theory. Birkhäuser, Boston (1991)
+
+Aubin, J.-P., Bayen, A.M., Saint-Pierre, P.: Viability Theory: New Directions, 2nd edn. Birkhäuser, Boston (2011)
+
+Aubin, J.-P., Frankowska, H.: Set-Valued Analysis. Birkhäuser, Boston (1990)
+
+Béné, C., Doyen, L., Gabay, D.: A viability analysis for a bio-economic model. Ecol. Econ. **36**, 385–396 (2001)
+
+Cardaliaguet, P., Quincampoix, M., Saint-Pierre, P.: Differential games through viability theory: old and recent results. In: Jørgensen, S., Quincampoix, M., Vincent, T.L. (eds.) Advances in Dynamic Game Theory. Annals of the International Society of Dynamic Games, vol. 9, pp. 3–35. Birkhäuser, Boston (2007)
+
+De Lara, M., Doyen, L.: Sustainable Management of Natural Resources: Mathematical Models and Methods. Springer, Berlin (2008)
+
+Doyen, L., Gajardo, P.: Sustainability standards, multicriteria maximin, and viability. Nat. Resour. Model. **33**(3), e12250 (2020)
+
+Doyen, L., Thébaud, O., Béné, C., Martinet, V., Gourguet, S., Bertignac, M., Fifas, S., Blanchard, F.: A stochastic viability approach to ecosystem-based fisheries management. Ecol. Econ. **75**, 32–42 (2012)
+
+Farkas, J.: Theorie der einfachen Ungleichungen. J. Reine Angew. Math. **124**, 1–27 (1902)
+
+Frankowska, H.: Optimal trajectories associated with a solution of contingent Hamilton–Jacobi equations. Appl. Math. Optim. **19**, 291–311 (1989)
+
+Gale, D.: The Theory of Linear Economic Models. McGraw-Hill, New York (1960)
+
+Haddad, G.: Monotone viable trajectories for functional-differential inclusions. J. Differ. Equ. **42**, 1–24 (1981)
+
+Hale, J.K., Verduyn Lunel, S.M.: Introduction to Functional Differential Equations. Springer, New York (1993)
+
+Maghenem, M., Sanfelice, R.G.: Characterizations of safety in hybrid inclusions via barrier functions. In: Proceedings of the 22nd ACM International Conference on Hybrid Systems: Computation and Control (HSCC), pp. 109–118 (2019)
+
+Martinez-Alier, J., Munda, G., O'Neill, J.: Weak comparability of values as a foundation for ecological economics. Ecol. Econ. **26**(3), 277–286 (1998)
+
+Prajna, S., Jadbabaie, A.: Safety verification of hybrid systems using barrier certificates. In: Alur, R., Pappas, G.J. (eds.) Hybrid Systems: Computation and Control (HSCC 2004). LNCS, vol. 2993, pp. 477–492. Springer, Berlin (2004)
+
+Prajna, S., Jadbabaie, A., Pappas, G.J.: A framework for worst-case and stochastic safety verification using barrier certificates. IEEE Trans. Autom. Control **52**(8), 1415–1428 (2007)
+
+Prajna, S., Rantzer, A.: On the necessity of barrier certificates. IFAC Proc. Vol. **38**(1), 526–531 (2005)
+
+Quincampoix, M., Veliov, V.M.: Viability with a target: theory and applications. In: Control Theory, Multivariate Analysis and Applications, pp. 47–63. Springer (1994)
+
+Saint-Pierre, P.: Approximation of the viability kernel. Appl. Math. Optim. **29**, 187–209 (1994)
+
+Veliov, V.M.: Sufficient conditions for viability under imperfect measurement. Set-Valued Anal. **1**, 305–317 (1993)
