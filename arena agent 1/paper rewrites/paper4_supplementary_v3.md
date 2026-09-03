@@ -1,0 +1,167 @@
+# Supplementary Material — Delay-Induced Regime Change in Harvested Stocks
+
+*Accompanies: "Delay-Induced Regime Change in Harvested Stocks: The Mobilising and Protective Channels of Institutional Feedback, and the Review Interval as Control."*
+
+This file carries the computational protocol details, the fold-certificate gap documentation, the stress-test frame, and the registered open problems, each at its declared status.
+
+---
+
+## S1. Interval Hopf Enclosures
+
+**S1.1 The cubic and its certification.** With $P(\lambda) = (\lambda - A_N)(\lambda + d)(\lambda - C_E)$ and $L(\lambda) = B_E(\lambda - A_N) + A_E B_N$, the modulus condition of Theorem 2 of the main article gives the explicit cubic
+$$H(x) = (x + A_N^2)(x + d^2)(x + C_E^2) - C_Z^2\bigl[B_E^2 x + (A_E B_N - A_N B_E)^2\bigr],$$
+and at the interior equilibrium of the gated core the filter identity $A_E B_N - A_N B_E = 0$ reduces it to $H(x) = (x + A_N^2)(x + d^2)(x + C_E^2) - C_Z^2 B_E^2 x$. The delay is the interval evaluation of the phase relation $\tau(\omega) = (-\arg(P(i\omega)/(C_Z L(i\omega))) + 2\pi k)/\omega$ at a certified positive root of $H$, not a root of an argument formula.
+
+**S1.2 Certified enclosures (gated Candidate A).** Interval Newton applied to the interval-enclosed coefficient representation certifies simple positive roots in $x = \omega^2$, and branch-safe interval evaluation of the phase relation gives
+$$\tau_- \in [3.6661490142739,\ 3.6661490142743], \qquad \tau_+ \in [150.3584773101408,\ 150.3584773101421],$$
+with upper-interval width of order $10^{-12}$ yr. The certificate is conditional on the stated interval coefficient and phase-evaluation pipeline, including correct handling of the argument branch; the committed pipeline implements the outward-rounded coefficient/equilibrium/phase construction with interval transcendentals and reproduces the displayed intervals exactly on re-execution. A full independent record must state the interval library, working precision, rounding mode, parameter and equilibrium enclosures, coefficient intervals, and the branch-safe implementation of the argument function — implementation details that are part of an interval certificate, not merely numerical-method metadata.
+
+**S1.3 Scope.** These are certified enclosures of the local spectrum of the cubic — a weaker statement than a certified Hopf bifurcation for retarded functional differential equations in the sense of Church and Lessard (2022) and Church and Queirolo (2024). Upgrading the present enclosures to that standard is an open task. Simplicity and transversality are checked by sign evaluation at the enclosed roots: the lower crossing is stabilising ($\mathrm{d\,Re}\,\lambda/\mathrm{d}\tau < 0$), the upper crossing destabilising.
+
+---
+
+## S2. Collocation Formulation and the Small-Branch Computation
+
+**Formulation.** With $m = 64$ Fourier nodes, $Y \in \mathbb{R}^{192}$ the coefficients of the three state variables, and $T > 0$ the unknown period, the phase-fixed collocation map is $F : \mathbb{R}^{192} \times \mathbb{R} \to \mathbb{R}^{193}$, with the phase equation among the 193 equations, removing the time-translation degeneracy; $D_{(Y,T)}F$ is $193 \times 193$. The map is a finite-dimensional collocation map; no continuous-DDE truncation bound is implied by its residual.
+
+**Small-branch continuation.** A Newton–Levenberg–Marquardt solver, initialised from the Hopf normal-form predictor at $\tau = \tau_- + 0.05$ and continued with a $\sqrt{\tau - \tau_-}$ predictor, finds one approximate periodic-orbit solution at each sampled $\tau \in [3.716, 5.58667]$ with discretised residual $\|F\|_2 \le 6\times10^{-14}$; the peak-to-peak amplitude of $N$ grows from $1.10$ to $21.80$ and the period from $250.0$ to $313.76$ yr. The solver fails at $\tau = 5.590$ under the stated budget with residual $2.8\times10^{-6}$: a solver-success/failure bracket, not a nonexistence result. The rebuilt fold pipeline at $m = 64/96/128$ gives nominal fold values $\tau_f = 5.587236198690$, $5.587236198663$, and $5.587236198663$, in cross-resolution agreement to $2.7\times10^{-11}$ — nominal values, re-execution-verified at the nominal level, not certificates.
+
+**Last collocation point.** At $\tau = 5.586666666666667$ the computed orbit satisfies $\|F\|_2 = 5.43\times10^{-14}$, $\|J^{-1}F\|_2 = 5.69\times10^{-12}$, with $\sigma_{\min}(J) = 4.54\times10^{-7}$ and $\operatorname{cond}_2(J) = 1.25\times10^7$; the effort gate and filter floor are inactive ($E = 7.93 \ll E_{\max}$, $N \ge 72.2$). $\|J^{-1}F\|_2$ is the norm of a linearised Newton correction for the finite-dimensional collocation map; it is not a rigorous error bound for the continuous equation or for the fold location. The data do not establish uniqueness of the collocation zero at each $\tau$, and solver failure at $5.590$ does not exclude another zero or family there.
+
+**Companion Floquet evidence.** Independent shooting/Floquet calculations of the companion core give a real nontrivial multiplier changing from approximately $1.0514$ at $\tau = 5.584$ to $0.99898$ at $\tau = 5.587$ on the corresponding small branch, consistent with a candidate simple turning point. This is not an interval certificate, and the parameter-mismatch caution applies ($5.58667$ and the fold-quoted $5.587$ are not the same parameter).
+
+---
+
+## S3. The Fold-Certificate Gap
+
+**The certification standard.** A practical validated fold computation uses the Moore–Spence system: with a right nullvector $v \in \mathbb{R}^{193}$ and normalisation $\ell$,
+$$\mathcal{M}(Y, T, \tau, v) = \bigl( F(Y,T;\tau),\ J(Y,T;\tau)v,\ \ell^\top v - 1 \bigr) = 0,$$
+387 unknowns and equations; a validated Krawczyk or interval-Newton inclusion would establish a unique fold of the $m = 64$ collocation equations inside the resulting box. For a simple fold one should additionally enclose a left nullvector $w$ and verify the nondegeneracy conditions $w^\top F_\tau \not\ni 0$ and $w^\top D^2F[v,v] \not\ni 0$ with the phase condition regular; a pseudo-arclength system continues through the turn but does not by itself certify fold nondegeneracy.
+
+**The gap, component by component.** (i) The converged Moore–Spence zero: **not obtained**. (ii) A preliminary fixed-$\tau$ Krawczyk construction based on an inverse of $J$ does not provide a contracting free-$\tau$ enclosure near the ill-conditioned turning region — a limitation of that formulation, not an exclusion of the fold. (iii) The discrete Krawczyk inclusion: **not completed**. (iv) The interval transversality and curvature conditions: **not completed**. (v) The continuous-DDE bordered radii-polynomial lift: **not implemented**; the discrete collocation proof and the continuous-RFDE proof are correctly separated. The insufficiency is structural: the tail of $f(U, SU)$ does not vanish merely because $U$ has finite Fourier support — softplus, rational terms, and gated products generate infinitely many modes — so a periodic-orbit radii polynomial without the bordered fold equations is insufficient for the lift.
+
+**Headline status.** The fold certificate is **not obtained**. The computations support — but do not interval-certify — a small-branch turning point near $\tau \approx 5.587$; the fold statement of the main article is numerical evidence, not a validated fold theorem. Rigorous saddle-node results for delay equations exist for specific classes (Beretka and Vas, 2020); none is claimed here.
+
+**Model-scope boundary.** All fold and branch statements concern the gated inner three-state equation and its collocation discretisation only. No transfer is claimed to the turnover-corrected working four-state core, the finite-donor primitive system, stage-structured models, or spatial systems.
+
+---
+
+## S4. The Stress-Test Frame
+
+**S4.1 Response-sign hypotheses.** The interpretive frame of the two channels is a three-hypothesis response-sign taxonomy: **H1**, scarcity-amplifying extraction ($\partial\mathcal{G}_{\mathrm{H1}}/\partial Z > 0$ over the relevant range); **H2**, protective restraint or restoration (the reversed or restoration-including effect on extraction); **H3**, inertia, capture, or state-dependent response. The frame's discipline is preserved verbatim: no result for H1 is generalised to H2 or H3. H1's named instantiation is the mobilising family of Section 5 of the main article; H2's named instantiation is the protective channel of Section 6; H3 belongs to the institutional-implementation family treated elsewhere. The model must state whether $E$ is an endogenous industry response, a legal quota-utilisation state, or an actual institutional control; these interpretations are not interchangeable, and a model-specific bifurcation threshold is not a universal policy threshold. One caveat disciplines the empirical reading of the delay parameter: the response-lag values that anchor $\tau$'s timescale plausibility rest on the Hocherman (2025) synthesis of 101 studies as a lower-bound proxy only — the distribution covers response lag (problem recognition to decision), not implementation lag (decision to effected action); no implementation-lag dataset exists, so measured $\tau$ values underestimate total institutional delay.
+
+**S4.2 Physical mechanism types.** The phrase "liquidation" has three distinct physical meanings: standing-stock culling (present extraction removes reproductive stock directly); recruitment suppression (present use prevents future recruits without immediate adult removal); and weak viability coupling (limited or indirect effect on reproduction). Recruitment suppression modifies or diverts a recruitment flux and is one typed-flux incidence family with culling and weak coupling; its named treatment in the main article is the recruitment channel of the two-channel stock law (Section 2.3). A diagnostic label never determines physical destination: material routing is determined by the typed physical module, not by whether a flow exceeds a benchmark.
+
+**S4.3 The variant registry.** Nine numerical-programme variants are archived: ungated, gated, hybrid-effort, four-state support-pool, two-channel liquidation, stage-structured, sampled-review, thermodynamic-tether, and unified-core. Each row is a registered obligation where no verified artifact exists: it requires source equations, parameters, scripts or software settings, and outputs before any numerical claim. The tabulation discipline is: governing equations and state/control interpretation; parameter units and identifiability status; equilibrium and boundary conditions; numerical method, mesh, time-step, event handling, and horizon; branch identity and uncertainty; and the status label (analytical, independently reproduced numerical, conjectural, or superseded). Distinct claim types are kept distinct: a persistence boundary, a fold, an SNPO-confirmed fold, and an initial-condition basin observation are different claims, and no fold is called SNPO-confirmed without branch-specific multiplier and transversality evidence. Two discipline remarks frame every row: a frozen pool is a formal limiting case, not a default physical assertion; and gating, damping, or saturation is not accepted merely because it preserves a desired bifurcation — it must have a constitutive interpretation and an independently stated parameter role (the multiplicative gate of the gated core does: it is the effort ceiling's hard saturation). The safety-relevance ladder governs interpretation: a local bifurcation in a reduced model is not automatically a sustainability transition — the three levels are existence of the bifurcation in a specified model, persistence of the organising structure under physically admissible coupling, and safety relevance, measured by the intersection of an attractor, basin, or uncertainty tube with the declared unsafe set, where basin membership and not only attractor location matters in bistable systems.
+
+**S4.4 The thermodynamic tether (illustrative worked extension).** If $E$ is physical effort with an energetic cost, the extinction rest $(0, \delta, E^*)$ of the main article requires an unmodelled subsidy; closing that gap without disturbing the interior Hopf analysis adds a governance-capital stock $K_{\mathrm{cap}}$ (distinct from the carrying capacity $K$) with its own dynamics and a pole-free gate:
+$$\dot K_{\mathrm{cap}} = qEN - K_{\mathrm{cap}}(\delta_K + c_E E), \qquad \dot E = \left(1 - \frac{E}{E_{\max}}\right)\bigl(1 - e^{-K_{\mathrm{cap}}/K_0}\bigr)\Bigl[\eta E\Bigl(\frac{Z(t-\tau)}{\Delta_{\mathrm{ref}}} - \frac{E}{E_{\max}}\Bigr) + \delta_0\frac{Z(t-\tau)}{Z_{\mathrm{ref}} + Z(t-\tau)}\Bigr] - \mu_E E,$$
+with $\delta_K$, $c_E$, $K_0$, $\mu_E > 0$ the capital depreciation, marginal effort cost, capital half-saturation, and institutional-entropy decay rates. At $K_{\mathrm{cap}} = 0$: $\dot K_{\mathrm{cap}} = qEN \ge 0$ and $\dot E = -\mu_E E$; on the extinction face $N = 0$ the yield vanishes, $K_{\mathrm{cap}} \to 0$, the gate vanishes exactly, and $E \to 0$, so every tested trajectory from $(E_0, K_{\mathrm{cap},0}) \in [0.5, 29] \times [0.1, 1000]$ converges to the thermodynamically closed extinction state $(0, \delta, 0, 0)$ — the extinction state is an attractor when the tether binds. The pole-free gate $1 - e^{-K_{\mathrm{cap}}/K_0}$ is chosen over the rational gate $K_{\mathrm{cap}}/(K_{\mathrm{cap}} + K_0)$, whose pole at $K_{\mathrm{cap}} = -K_0$ silently re-opens the gate once an insufficiently protected coupling drives $K_{\mathrm{cap}}$ negative. The interior equilibrium survives as the transcendental root of $F(E^*) = (1 - E^*/E_{\max})(1 - e^{-K_{\mathrm{cap}}^*(E^*)/K_0})\mathcal{B}(E^*) - \mu_E E^* = 0$, with $\mathcal{B}$ the untethered effort bracket and $K_{\mathrm{cap}}^*(E) = qEN^*(E)/(\delta_K + c_E E)$; a necessary condition for a positive root is $\mu_E < \alpha := qK\delta_0\delta/(K_0\delta_K(Z_{\mathrm{ref}} + \delta))$, and the true collapse threshold is a saddle-node of the equilibrium branch at $\mu_E^{\mathrm{SN}} \approx 5.9\alpha$ (the source locates the saddle-node at this multiple under an illustrative parameterisation that it does not itself tabulate, so no numerical value of $\alpha$ is asserted here; only the ratio form is used). Between $\alpha$ and $\mu_E^{\mathrm{SN}}$ the tether exhibits an institutional Allee effect: $E = 0$ and a positive $E_2^*$ are both locally stable, separated by an unstable basin boundary $E_1^*$. The extension is a worked feasibility analysis: the registered thresholds of the main article use the untethered effort law, the parameters $\delta_K$, $c_E$, $K_0$, $\mu_E$ carry no calibration, the tether's effect on the Hopf crossings and folds is not computed, and the variant's tabulation obligation stands.
+
+---
+
+## S5. The Macro-Reduction Conjecture (hypothesis of Proposition 2)
+
+**Conjecture (five-state macro reduction).** The five-state core (stock, active pool, detritus, memory, effort) admits a slow-fast reduction whose slow subsystem tracks the working core with $\sup_{[0,T]}\|\mathbf{x}^\varepsilon - \mathbf{x}^0\| \le C(\varepsilon + \omega_A T)$ and slow-manifold tracking $\|\mathbf{y}^\varepsilon - \mathbf{h}(\mathbf{x}^\varepsilon)\| \le C(\varepsilon + \omega_A T) + Ce^{-\gamma_{\mathbf{y}}t/\varepsilon}$.
+
+**Status of its hypotheses (verified 2026-09-03; audit `audits/tikhonov_unh_verification.md`).** The precise finite-time theorem — setting, hypotheses H1–H5 (index-1 DAE regularity; QSS manifold; uniform normal hyperbolicity; delay only in the slow variable; Lipschitz regularity), conclusion, and proof sketch (boundary layer on the fast clock with the delay as a slowly drifting parameter; retarded Gronwall closure) — is stated in full in the audit document. Two hypotheses are now established, one remains open:
+
+- **Fast-block uniform normal hyperbolicity — proved on a parameter set, quantified on the class.** At the QSS the fast Jacobian is block lower-triangular with eigenvalues $\{-\eta_{A,0}-\nu\tilde\Delta,\,-(\eta_{T,0}+\eta_{T,1}\tilde\Delta)\}$ and the $2\times2$ $K$–$L$ block
+$$J_{KL} = \begin{pmatrix} -(1-\alpha)(\delta_K+\theta\tilde\Delta) & \beta\varsigma Q/L \\ \eta\alpha r_{L,0} L/K & -r_{L,0}(1-\eta\beta) \end{pmatrix},$$
+whose trace is $(\alpha-1)(\delta_K+\theta\tilde\Delta) + r_{L,0}(\eta\beta-1)$ and whose determinant is $r_{L,0}(\delta_K+\theta\tilde\Delta)(1-\alpha-\eta\beta)$ (the K-row uses the QSS identity $\varsigma Q/K = \delta_K+\theta\tilde\Delta$). Hence the fast block is Hurwitz, uniformly in $\tilde\Delta\ge0$ and in the slow state, **if and only if $\alpha+\eta\beta<1$**, and the QSS is then unique. Verified: sympy reproduces the formulas; central differences reproduce the analytic $4\times4$ Jacobian to $3.9\times10^{-7}$ over 400 draws × QSS roots; a 11,792-draw sweep on the declared anchored class finds 1.9% of the class violating $\alpha+\eta\beta<1$ — exactly the subset where the block is genuinely unstable (worst $\mathrm{Re}\,\lambda=+3.9\times10^{-3}$; multi-root QSS confined to the same subset) — and on the restricted classes $\{\alpha+\eta\beta\le0.95\}$ / $\{\le0.90\}$ the worst eigenvalue real part is $-4.1\times10^{-4}$ / $-7.1\times10^{-4}$ over 56,127 / 53,859 draws. The hypothesis therefore holds on the restricted class with the quantified margin, and the 1.9% violating subset of the declared class is excluded with the worst violation reported.
+- **DAE regularity — theorem.** CES demand is strictly decreasing in price, so the algebraic equation is index-1 with a uniform bound (H1 holds).
+- **Memory-kernel condition — open.** Infinite-time persistence (Fenichel-type for the delayed system) requires the spectral gap and compactness of the memory kernel of the infinite-dimensional semigroup, which is not verified; the reduction remains a finite-time statement, and the $O(\omega_A T)$ term ($0.25$–$0.39$ on one oscillation period) means the bound does not control the multi-century objects on one period.
+
+**The "exact" boundary.** Exactness survives only for the strict-specialisation triangular projection (Theorem 2.1 of the main text's register: the core spectrum is a literal factor, proved). The macro reduction is leading-order with $O(\varepsilon+\omega_A T)$ corrections on finite intervals; the frozen-$A$ step is the inner-approximation bound of Proposition 1 (trajectory-level, with $\varepsilon_A=A_0/A^*\approx2.5\times10^{-3}$); and the recorded 3.2%/0.2% Hopf shifts are directly computed spectral sensitivities, 12.7 times the parameter ratio $\varepsilon_A$, not consequences of the trajectory bound.
+
+## S6. Open Problem Register
+
+1. **Periodic-orbit-fold persistence under typed coupling.** A transverse fold of periodic orbits in a registered retarded subsystem persists under sufficiently small typed vector coupling and compatible additional fixed delays when the orbit has the required spectral gap and the infinite-dimensional Poincaré map is sufficiently smooth. Missing: a verified fold baseline, formulation of the coupled system on a common phase space, and verification of transversality, spectral separation, and regularity. Disproof route: arbitrarily small admissible coupling destroying the fold through resonance, boundary contact, loss of regularity, or a competing centre direction. (Note: transverse normal hyperbolicity does not imply normal hyperbolicity of the fold orbit itself.)
+
+2. **RFDE/hybrid transition persistence.** Persistence of a reduced hybrid/RFDE nonlinear transition requires well-posedness of the semiflow, fast difference-operator contractivity, spectral separation, centre-manifold reduction, transverse Poincaré-map conditions, regular coupling, and preservation of material feasibility and safety. The fast difference-operator contractivity condition applies to particular neutral/difference formulations and is not a universal RFDE condition.
+
+3. **$n$-patch super-equilibrium equivalence.** For $n$ coupled patches with cooperative diffusion, the viability kernel is nonempty iff the minimal-harvest field has a super-equilibrium in the admissible set (two-patch instances verified); for type-(U) patches with product controls this is equivalent to the existence of an equilibrium. The equivalence holds for cooperative transport and fails in general for competitive or predator–prey couplings.
+
+4. **Variable-time delayed-hybrid information kernel.** A nontrivial class of variable-event delayed hybrids with compact piecewise-history phase space, uniform break and jump budgets, resets, and bounded-error partial observations admits an exact compact information process and closed information-state tube kernel. Two independent gaps: the piecewise-history topology, and the closure of bounded-error observation fibres.
+
+5. **Restricted delay-separation principle.** If ecological observation, assessment, decision, and deployment modules are independently identified and enter a locally linear loop as a product of stable transfer operators, their phase contributions can be separated from sufficiently rich input–output data up to declared structural symmetries. Missing: structural identifiability of factored transfer functions and persistence under feedback.
+
+6. **Exergy-gated suppression.** For a declared class of autocatalytic extractive controllers, sufficiently low deployable exergy reduces the loop gain below every admissible Hopf-frequency modulus condition (a prospective member of the loop-gain exclusion family of Theorem 6 of the main article). Not universal: depletion of institutional capacity may also disable protective action or create hysteresis. Stated at conjecture status; no class, bound, or proof is claimed.
+
+---
+
+## S7. Statement Inventory
+
+A per-statement inventory (each statement of the main article with its status — theorem, conditional statement, numerical result, conjecture, or definition — and its evidence source: displayed proof, interval certificate, re-execution-verified computation, or numerical record) is available from the authors and accompanies the deposited material. The certification hierarchy of the main article is instantiated claim by claim: proved theorems (the cubic, the even-pairs algebra, the no-Hopf theorem, the monodromy formulas, the loop-gain exclusions); interval-certified local spectrum (the Hopf enclosures of S1); re-execution-verified nominal computations (continuation, multipliers, basins, Lyapunov coefficients); and declared-numerical or open items (the fold classification, the registry variants); the reduction conjecture's fast-block spectral condition is now verified (S5), with the memory-kernel condition open.
+
+---
+
+## S8. Registered Algebraic Template: The Delayed-Effort Audit Core
+
+The audit core is the delayed-effort template in which deployed effort responds to a delayed decline signal through a deployable-capital gate $g_0 \in (0,1)$, with a linear loss $\mu_E E$ placed outside the multiplicative gate and a capital state $K_0$. Its algebraic consequences are registered here because the main article's effort laws are specialisations of this template.
+
+**Proposition S8.1 (Effort sensitivity coefficients).** *At a regular interior equilibrium of the template with deployable-capital gate $g_0 \in (0,1)$, the effort sensitivities are $C_Z = h_0 g_0 \eta E^*/\Delta_{\mathrm{ref}}$ and $C_K = \mu_E E^*(1 - g_0)/(K_0 g_0)$.*
+
+*Proof.* The displayed coefficients are the declared partial derivatives of the registered template effort law with respect to the delayed signal and to deployable capital, evaluated at the regular interior rest; both are elementary differentiations of the template algebra, and the gate factor $g_0$ multiplies the signal term as displayed. $\square$
+
+$C_Z$ is the local sensitivity of effort growth to the delayed decline signal, multiplied by the gate; $C_K$ becomes a damping pathway only through its coupling to the separate capital dynamics, not by its sign alone. The factor $1/g_0$ cannot be extrapolated to $g_0 = 0$, where the assumed regular positive interior branch and the algebra behind the coefficients need not persist.
+
+**Proposition S8.2 (Interior effort upper bound).** *An interior equilibrium with $Z^* = 0$ and $E^* > 0$ must satisfy $h_0 g_0(\delta_0 - \eta(E^*)^2/E_{\max}) = \mu_E E^* > 0$, hence $E^* < \sqrt{\delta_0 E_{\max}/\eta} \approx 0.573$ at $\delta_0 = 0.3$, $E_{\max} = 1$, $\eta = 0.914$.*
+
+*Proof.* At the rest, $Z^* = 0$ kills the signal term, and the effort equation reads $h_0 g_0(\delta_0 - \eta(E^*)^2/E_{\max}) - \mu_E E^* = 0$; positivity of the right-hand side of the first equality gives the strict bound, and solving the bound at the declared values gives the displayed number. $\square$
+
+This is an equilibrium consequence of placing the linear loss outside the multiplicative gate, not a failure of boundary invariance ($\dot E \ge 0$ at $E = 0$ and $\dot E < 0$ at $E = E_{\max}$ both hold); moving the loss terms defines a different model and requires renewed analysis.
+
+
+## S9. The Maturation-Delayed Recruitment System: Registration Records
+
+All records of Section 7 of the main paper are certified by the 21-gate registration campaign (`rerun_campaigns/campaign_p4_dr_registration.py`); the gate log is `rerun_campaigns/results/p4_dr_registration_gates.txt` and the fine-map table `rerun_campaigns/results/p4_dr_finemap_bands.csv`. Every gate passed.
+
+### S9.1 Sign-flip certificates (G1)
+
+At the committed gated Candidate A coefficients ($A_N = -0.01791$, $A_E = -0.089552$, $B_N = 0.001791$, $B_E = 0.008955$, $C_E = -0.059518$, $C_Z = 1.785019$, $d = 0.2$), the committed fundamental pair is reproduced exactly ($3.666149$ / $150.358477$). Flipping $C_Z$ gives fundamental delays $128.374373$ / $70.696578$ (the paper's displayed $128.374$ / $70.697$), by the branch mechanism $3.666149 + \pi/\omega_1$ and $150.358477 - \pi/\omega_2$ with $(\omega_1, \omega_2) = (0.0251915, 0.0394366)$; the flipped linearisation has loop gain $1.019$ (the paper's $1.016$; both exceed 1, and only the strict inequality is load-bearing); both shifted crossings are simple and transverse ($\mathrm{d}\,\mathrm{Re}\,\lambda/\mathrm{d}\tau = -6.07\times10^{-6}$ and $+1.83\times10^{-5}$).
+
+### S9.2 Fine-map institutional bands (G3)
+
+At $\eta = 0.914$ the $\tau = 0$-stable two-crossing bands are reproduced with refined edges, within the recorded fine-map grid resolution of $\pm 0.03$:
+
+| gate $g$ | recorded band | re-run band | points in band |
+|---|---|---|---|
+| 1 | $(1.565, 1.585)$ | $(1.5643, 1.5857)$ | 10 |
+| 2 | $(0.77, 0.81)$ | $(0.7669, 0.8049)$ | 15 |
+| 3 | $(0.50, 0.55)$ | $(0.4919, 0.5466)$ | 20 |
+| 5 | $(0.28, 0.33)$ | $(0.2603, 0.3324)$ | 26 |
+
+All eight recorded band cells (four band centres and four edges) are stable on the wide characteristic mesh with two delay crossings present (rightmost root $\approx -0.06$).
+
+### S9.3 Mesh-range caveat (G3-probe)
+
+The fine map's characteristic scan is a bounded mesh ($\sigma \in [-0.15, 0.08]$); the probe documents a mesh-range blind spot. At ($g = 5$, $\eta = 3.0$, $r \approx 1.54$–$1.60$) the narrow mesh reports an apparent $\tau = 0$-stable crossing cell; the wide mesh locates the true rightmost root at $+0.2445$ (unstable), and the nonlinear trajectory diverges — the cell is a cohort regime of the delayed plant, not a $\tau = 0$-stable band. The recorded table's absence of institutional $\tau = 0$-stable cells at $\eta = 3.0$ is thereby confirmed; the apparent band is withdrawn as a classification artefact, and band cells in the paper are claimed stable only where the wide mesh confirms them.
+
+### S9.4 Nonlinear ground truth (G4)
+
+| configuration | recorded | verbatim re-run |
+|---|---|---|
+| ($r = 0.02$, $g = 5$, $\tau = 0$) cohort cycle | $P = 358.8$, amplitude $66.9$ | $P = 358.7$, amplitude $66.9$ |
+| ($r = 0.5$, $g = 5$, $\tau = 0$) cohort cycle | $P \approx 20$ | $P = 20.1$ |
+| ($r = 0.3$, $g = 5$, $\tau = 0$) | stable, two crossings | stable, two crossings |
+| ($r = 0.3$, $g = 5$, $\tau = 10$) institutional cycle | $P = 16.96$, amplitude $8.66$ | $P = 16.95$, amplitude $9.36$ (tail-window dependent) |
+| ($r = 0.3$, $g = 5$, $\tau = 21$) | stable | stable (amplitude 0) |
+| ($r = 1.57$, $g = 1$, $\tau = 2.5$, $\eta = 3$) band centre | $P = 4.0$, amplitude $3.5$ | $P = 4.00$, amplitude $3.49$ |
+| ($r = 0.8$, $g = 2$, $\tau = 5.5$, $\eta = 3$) band centre | $P = 8.04$, amplitude $12.4$ | $P = 8.05$, amplitude $12.35$ |
+
+### S9.5 Compute-core self-check (G5)
+
+The recovered compute core's gated Candidate A Hopf pair reproduces the committed P4 certificates $3.666149$ / $150.358477$ (period rows $249.4$ / $159.3$ yr), closing the loop between the recovered stage machinery and the paper's own delay certificates.
+
+## S10. Expanded Proofs: Corollary 3 and Proposition 5
+
+### S10.1 The certificate map of Corollary 3
+
+The proof appended to Corollary 3 rests on two elementary facts, stated here for completeness. (a) *Uniform tail bound.* With $A_N, d, C_E$ continuous in $\chi_m \in [0,1]$ (hypothesis (i)) and $|C_m| + |C_p| \le |C_Z^{\mathrm{mob}}| + |C_Z^{\mathrm{prot}}|$, there is $\overline\omega$ such that $(|C_m|+|C_p|)|L(i\omega)|/|(i\omega-A_N)(i\omega+d)(i\omega-C_E)| < F(0)/2$ for all $\omega > \overline\omega$ and all $\chi_m \in [0,1]$ — the ratio is $O(\omega^{-2})$ with $O$-constant uniform on the compact parameter interval. (b) *Continuity of the maximum.* A maximum over a fixed compact set of a jointly continuous function is continuous in the parameter. Both are standard; (a) is where hypothesis (i)'s compactness is used, and (ii) is where the denominator's nonvanishing is used.
+
+### S10.2 The phase formula of Proposition 5
+
+The fundamental-delay formula used in the appended proof of Proposition 5 is the branch-safe phase evaluation: for the characteristic function $\Delta(\lambda, \tau) = P(\lambda) - C_Z L(\lambda) e^{-\lambda\tau}$, the delay families are
+$$\tau^{(k)}(\omega) = \frac{\varphi(\omega) + 2\pi k}{\omega}, \qquad \varphi(\omega) = -\arg\frac{P(i\omega)}{C_Z L(i\omega)},$$
+with the fundamental branch the smallest positive representative of each family. Flipping $C_Z$ adds $\pi$ to the phase numerator, translating each family by the odd half-period $\pi/\omega$: the lower family's fundamental branch moves from $3.666149$ to $3.666149 + \pi/\omega_1$, the upper family's from $150.358477$ to $150.358477 - \pi/\omega_2$ (the branch that keeps each family fundamental). Simplicity and transversality at the shifted points are certified numerically ($\partial_\lambda\Delta \ne 0$; $\mathrm{d}\,\mathrm{Re}\,\lambda/\mathrm{d}\tau = -6.07\times10^{-6}$ and $+1.83\times10^{-5}$), which is what "both remaining local Hopfs" means in the proposition.
