@@ -126,12 +126,12 @@ fig, ax = plt.subplots(figsize=(6.4, 3.6))
 ax.plot(C, b_inf, "k-", lw=1.4, label="$T=\\infty$ lower boundary (q10 floor)")
 ax.plot(C, b_1, "0.55", ls="--", lw=1.2, label="$T=1$ lower boundary (q10 floor)")
 ax.axvline(cons, color="0.6", ls=":", lw=0.9)
-# annotation placed in the empty wedge between the rising black curve (above)
-# and the dashed T=1 line (below), near C=150, clear of the legend; leader down
-# to the marked vertical
+# annotation placed in the empty band below the dashed T=1 line (which stays
+# near y~908-98x for C>=118) and right of the BAU / 60-kt point labels; short
+# leader up to the marked vertical
 ax.annotate(f"{cons:.1f} kt: maximal robust flat catch",
-            xy=(cons, b_inf[np.argmin(np.abs(C - cons))]),
-            xytext=(150, 1260), fontsize=8, ha="center",
+            xy=(cons, 884.6),
+            xytext=(121, 872), fontsize=8, ha="left",
             arrowprops=dict(arrowstyle="->", color="0.4", lw=0.7))
 for c_mark, lab, dx, dy in ((5, "BAU", 2, -55), (60, "60 kt / S1", 6, -55),
                             (120, "flat 120", 6, -55), (180, "flat 180", 6, -55),
@@ -240,7 +240,8 @@ ax.axhline(K_star, color="0.4", ls="--", lw=0.9)
 ax.text(1989.68, 1055, "LRP 884.6", fontsize=8, ha="left", va="top", color="0.25")
 ax.set_xlabel("Year"); ax.set_ylabel("Spawning-stock biomass (kt)")
 ax.set_xlim(1989.55, 1995.6); ax.set_ylim(0, 1100); ax.grid(alpha=0.25)
-ax.legend(loc="upper right", fontsize=7.5)
+# legend in the empty lower-left where only the black observed line descends
+ax.legend(loc="lower left", fontsize=7.0)
 fig.tight_layout(); fig.savefig(FIG / "fig5_replay.png", bbox_inches="tight"); plt.close(fig)
 
 # ===========================================================================
@@ -262,7 +263,11 @@ a1.set_ylim(100, 700); a1.grid(alpha=0.25)
 a2.plot(kk, kdf["Fp_Kstar"], "ko-", ms=4, lw=1.2)
 a2.axhline(1.0, color="0.4", ls="--", lw=0.9)
 a2.axvline(2 * K_star, color="0.6", ls=":", lw=0.9)
-a2.text(2 * K_star + 40, 0.995, "$K = 2K^* = 1769.2$", fontsize=7.5)
+# label moved into the empty upper-left region (left of the dotted vertical the
+# curve stays below y=1.0), with a short leader to the marked vertical
+a2.annotate("$K = 2K^* = 1769.2$", xy=(2 * K_star, 1.0),
+            xytext=(1280, 1.12), fontsize=7.5, ha="center",
+            arrowprops=dict(arrowstyle="->", color="0.4", lw=0.7))
 a2.set_xlabel("Carrying capacity $K$ (kt)")
 a2.set_ylabel("$F'(K^*)$ at the LRP")
 a2.set_ylim(0.9, 1.25); a2.grid(alpha=0.25)
