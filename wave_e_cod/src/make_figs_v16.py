@@ -126,12 +126,13 @@ fig, ax = plt.subplots(figsize=(6.4, 3.6))
 ax.plot(C, b_inf, "k-", lw=1.4, label="$T=\\infty$ lower boundary (q10 floor)")
 ax.plot(C, b_1, "0.55", ls="--", lw=1.2, label="$T=1$ lower boundary (q10 floor)")
 ax.axvline(cons, color="0.6", ls=":", lw=0.9)
-# annotation placed in the empty band below the dashed T=1 line (which stays
-# near y~908-98x for C>=118) and right of the BAU / 60-kt point labels; short
-# leader up to the marked vertical
+# The object this label names is the vertical dotted line at C=cons. The whole
+# region LEFT of that line and ABOVE the dashed T=1 boundary (y~884.6) is empty,
+# so the label sits snug beside the vertical, just above the base point, and a
+# short leader drops to the line.
 ax.annotate(f"{cons:.1f} kt: maximal robust flat catch",
             xy=(cons, 884.6),
-            xytext=(121, 872), fontsize=8, ha="left",
+            xytext=(89, 905), fontsize=8, ha="right",
             arrowprops=dict(arrowstyle="->", color="0.4", lw=0.7))
 for c_mark, lab, dx, dy in ((5, "BAU", 2, -55), (60, "60 kt / S1", 6, -55),
                             (120, "flat 120", 6, -55), (180, "flat 180", 6, -55),
@@ -235,9 +236,9 @@ for nm, f, ls, col in policies:
 obs = [861.9] + [float(ssb[np.where(years == y)[0][0]]) for y in range(1991, 1996)]
 ax.plot(yrs, obs, "k-", lw=2.2, label="observed SSB (Table A2)")
 ax.axhline(K_star, color="0.4", ls="--", lw=0.9)
-# LRP label pushed into the empty upper-left corner, clear of the trace bundle
-# that peaks near 1991 at ~950 ft and well above the dashed LRP line
-ax.text(1989.68, 1055, "LRP 884.6", fontsize=8, ha="left", va="top", color="0.25")
+# LRP label seated right on top of the horizontal dashed line it names, in the
+# empty area to the right (the forecast traces all run below y=884.6 there)
+ax.text(1993.3, 890, "LRP 884.6", fontsize=8, ha="left", va="bottom", color="0.25")
 ax.set_xlabel("Year"); ax.set_ylabel("Spawning-stock biomass (kt)")
 ax.set_xlim(1989.55, 1995.6); ax.set_ylim(0, 1100); ax.grid(alpha=0.25)
 # legend in the empty lower-left where only the black observed line descends
@@ -263,10 +264,10 @@ a1.set_ylim(100, 700); a1.grid(alpha=0.25)
 a2.plot(kk, kdf["Fp_Kstar"], "ko-", ms=4, lw=1.2)
 a2.axhline(1.0, color="0.4", ls="--", lw=0.9)
 a2.axvline(2 * K_star, color="0.6", ls=":", lw=0.9)
-# label moved into the empty upper-left region (left of the dotted vertical the
-# curve stays below y=1.0), with a short leader to the marked vertical
+# label seated above the (rising) curve and clear of the y-axis spine on the
+# left; short leader to the marked vertical
 a2.annotate("$K = 2K^* = 1769.2$", xy=(2 * K_star, 1.0),
-            xytext=(1280, 1.12), fontsize=7.5, ha="center",
+            xytext=(1560, 1.115), fontsize=7.5, ha="center",
             arrowprops=dict(arrowstyle="->", color="0.4", lw=0.7))
 a2.set_xlabel("Carrying capacity $K$ (kt)")
 a2.set_ylabel("$F'(K^*)$ at the LRP")
