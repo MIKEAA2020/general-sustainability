@@ -62,17 +62,23 @@ ax.axvline(K_star, color="0.35", ls="--", lw=0.9)
 ax.text(K_star + 12, 400, "LRP 884.6", rotation=90, fontsize=8, va="bottom", color="0.25")
 ax.axhline(gK, color="0.5", ls=":", lw=0.8)
 ax.plot([K_star], [gK], "ko", ms=4)
-ax.text(K_star + 14, gK + 8, "$g(K^*) = 172.5$", fontsize=8)
+# g(K*) label placed low-left in the clearly empty band beneath the curve,
+# with a leader to the marked point
+ax.annotate("$g(K^*) = 172.5$", xy=(K_star, gK), xytext=(430, 118),
+            fontsize=8, ha="center", arrowprops=dict(arrowstyle="-", color="0.4", lw=0.7))
 ax.axhline(gmax, color="0.5", ls=":", lw=0.8)
 ax.plot([K0 / 2], [gmax], "k^", ms=4)
-ax.text(K0 / 2 + 14, gmax + 8, "$g_{\\max}=296.1$", fontsize=8)
+# g_max label placed above the dotted g_max line in the empty top region
+ax.annotate("$g_{\\max}=296.1$", xy=(K0 / 2, gmax), xytext=(1750, 335),
+            fontsize=8, ha="center", arrowprops=dict(arrowstyle="-", color="0.4", lw=0.7))
 for y, lab in ((e_q10, "q10 floor $-80.9$"), (e_q05, "q05 floor $-287.4$"),
                (e_min, "worst floor $-329.0$")):
     ax.axhline(y, color="0.8", lw=1.2, ls=(0, (4, 2)))
     ax.text(90, y - 26, lab, fontsize=8)
 # only the perpetual-worst floor lies beyond gmax -> that class is vacuous
-ax.fill_between(S, gmax - 40, gmax - 60, color="0.9", alpha=0.6)
-ax.text(1200, gmax - 62, "only the worst floor is vacuous: $|e|>g_{\\max}$", fontsize=8)
+# placed in the empty band between the q05 and q10 floors, right side
+ax.text(1300, -185, "only the worst floor is vacuous: $|e|>g_{\\max}$",
+        fontsize=8, ha="center")
 ax.set_xlabel("Spawning-stock biomass $S$ (kt)")
 ax.set_ylabel("Surplus production $g(S)$ (kt yr$^{-1}$)")
 ax.set_xlim(0, 2500); ax.set_ylim(-520, 430); ax.grid(alpha=0.25)
@@ -120,13 +126,20 @@ fig, ax = plt.subplots(figsize=(6.4, 3.6))
 ax.plot(C, b_inf, "k-", lw=1.4, label="$T=\\infty$ lower boundary (q10 floor)")
 ax.plot(C, b_1, "0.55", ls="--", lw=1.2, label="$T=1$ lower boundary (q10 floor)")
 ax.axvline(cons, color="0.6", ls=":", lw=0.9)
-ax.text(cons + 4, 1000, f"{cons:.1f} kt: maximal robust flat catch", fontsize=8)
-for c_mark, lab in ((5, "BAU"), (60, "60 kt / S1"), (120, "flat 120"),
-                    (180, "flat 180"), (240, "flat 240")):
+# annotation placed in the empty wedge between the rising black curve (above)
+# and the dashed T=1 line (below), near C=150, clear of the legend; leader down
+# to the marked vertical
+ax.annotate(f"{cons:.1f} kt: maximal robust flat catch",
+            xy=(cons, b_inf[np.argmin(np.abs(C - cons))]),
+            xytext=(150, 1260), fontsize=8, ha="center",
+            arrowprops=dict(arrowstyle="->", color="0.4", lw=0.7))
+for c_mark, lab, dx, dy in ((5, "BAU", 2, -55), (60, "60 kt / S1", 6, -55),
+                            (120, "flat 120", 6, -55), (180, "flat 180", 6, -55),
+                            (240, "flat 240", 2, -55)):
     bm = tinf_boundary(c_mark, e_q10, r0, K0, K_star)
     if bm is not None:
         ax.plot([c_mark], [bm], "ks", ms=3.5)
-        ax.text(c_mark + 3, bm - 40, lab, fontsize=7)
+        ax.text(c_mark + dx, bm + dy, lab, fontsize=7)
 ax.set_xlabel("Constant catch $C$ (kt yr$^{-1}$)")
 ax.set_ylabel("Kernel lower boundary (kt)")
 ax.set_xlim(0, 240); ax.set_ylim(850, 2600); ax.grid(alpha=0.25)
@@ -134,8 +147,43 @@ ax.legend(loc="upper left")
 fig.tight_layout(); fig.savefig(FIG / "fig2_kernel_vs_catch.png", bbox_inches="tight"); plt.close(fig)
 
 # ===========================================================================
-# Figure 3 — reactive families (already regenerated; leave as-is)
+# Figure 3 — reactive families: Family A (phi*g) and Family B (graded)
 # ===========================================================================
+S3 = np.linspace(K_star, 3600, 600)
+fig, (axA, axB) = plt.subplots(1, 2, figsize=(12, 4.8))
+# panel (a): surplus-proportional Family A
+for ph, col in ((0.25, "#2ca02c"), (0.50, "#ff7f0e"), (0.75, "#1f77b4")):
+    axA.plot(S3, ph * g(S3), lw=2, color=col, label=f"$\\phi$={ph:.2f}  ($\\phi\\,g(S)$)")
+axA.axhline(60, color="#7f7f7f", ls="--", lw=1.5, label="flat 60 kt")
+axA.axvline(K_star, color="red", ls=":", lw=1.5)
+axA.set_xlabel(r"$S$ (kt)"); axA.set_ylabel(r"catch $C(S)$ (kt yr$^{-1}$)")
+axA.set_xlim(K_star, 3600); axA.set_ylim(-5, 260)
+# legend in empty lower-right of panel (a)
+axA.legend(fontsize=8, loc="lower right", bbox_to_anchor=(1.0, 0.02))
+axA.set_title("(a) surplus-proportional family A", fontsize=11)
+axA.grid(alpha=0.3)
+# panel (b): graded Family B
+def graded2(S):
+    return np.where(S < K_star, 0.0, np.where(S < 1.25 * K_star, 60.0, 90.0))
+def graded3(S):
+    out = np.zeros_like(S); out[S < K_star] = 0
+    out[(S >= K_star) & (S < 1.15 * K_star)] = 30
+    out[(S >= 1.15 * K_star) & (S < 1.35 * K_star)] = 60
+    out[S >= 1.35 * K_star] = 90
+    return out
+axB.plot(S3, graded2(S3), lw=2, label="graded2: 0/60/90")
+axB.plot(S3, graded3(S3), lw=2, label="graded3: 0/30/60/90")
+axB.axhline(60, color="#7f7f7f", ls="--", lw=1.5, label="flat 60 kt")
+for x in [K_star, 1.15 * K_star, 1.25 * K_star, 1.35 * K_star]:
+    axB.axvline(x, color="lightgray", ls=":", lw=1)
+axB.axvline(K_star, color="red", ls=":", lw=1.5)
+axB.set_xlabel(r"$S$ (kt)"); axB.set_ylabel(r"catch $C(S)$ (kt yr$^{-1}$)")
+axB.set_xlim(K_star, 3600); axB.set_ylim(-5, 110)
+# legend in the empty lower-left region of panel (b)
+axB.legend(fontsize=8, loc="lower left", bbox_to_anchor=(0.0, 0.02))
+axB.set_title("(b) graded family B", fontsize=11)
+axB.grid(alpha=0.3)
+fig.tight_layout(); fig.savefig(FIG / "fig3_reactive_rules.png", bbox_inches="tight"); plt.close(fig)
 
 # ===========================================================================
 # Figure 4 — F'(S) and the expansion region (source-year, unchanged values)
@@ -150,7 +198,11 @@ ax.axvline(K_star, color="0.35", ls="--", lw=0.7)
 ax.text(K_star + 10, 0.86, "LRP", fontsize=8, color="0.3")
 ax.text(K0 / 2 + 10, 0.86, "$K/2 = 2500$", fontsize=8, color="0.35")
 ax.fill_between(Sp, 1.0, 1.3, where=(Sp < K0 / 2), color="0.88", alpha=0.8)
-ax.text(700, 1.05, f"expansive at the LRP: $F'(K^*) = {Fp_K:.3f}$", fontsize=8)
+# label moved into the empty band above the curve with a leader to the point
+ax.annotate(f"expansive at the LRP: $F'(K^*) = {Fp_K:.3f}$",
+            xy=(K_star, Fp[np.argmin(np.abs(Sp - K_star))]),
+            xytext=(1000, 1.24), fontsize=8, ha="center",
+            arrowprops=dict(arrowstyle="-", color="0.4", lw=0.7))
 ax.plot([K_star], [Fp[np.argmin(np.abs(Sp - K_star))]], "ko", ms=4)
 ax.set_xlabel("Stock $S$ (kt)"); ax.set_ylabel("$F'(S) = 1 + r(1 - 2S/K)$")
 ax.set_xlim(0, 3000); ax.set_ylim(0.75, 1.3); ax.grid(alpha=0.25)
@@ -183,9 +235,11 @@ for nm, f, ls, col in policies:
 obs = [861.9] + [float(ssb[np.where(years == y)[0][0]]) for y in range(1991, 1996)]
 ax.plot(yrs, obs, "k-", lw=2.2, label="observed SSB (Table A2)")
 ax.axhline(K_star, color="0.4", ls="--", lw=0.9)
-ax.text(1990.1, K_star + 18, "LRP 884.6", fontsize=8)
+# LRP label pushed into the empty upper-left corner, clear of the trace bundle
+# that peaks near 1991 at ~950 ft and well above the dashed LRP line
+ax.text(1989.68, 1055, "LRP 884.6", fontsize=8, ha="left", va="top", color="0.25")
 ax.set_xlabel("Year"); ax.set_ylabel("Spawning-stock biomass (kt)")
-ax.set_ylim(0, 1100); ax.grid(alpha=0.25)
+ax.set_xlim(1989.55, 1995.6); ax.set_ylim(0, 1100); ax.grid(alpha=0.25)
 ax.legend(loc="upper right", fontsize=7.5)
 fig.tight_layout(); fig.savefig(FIG / "fig5_replay.png", bbox_inches="tight"); plt.close(fig)
 
@@ -198,8 +252,9 @@ fig, (a1, a2) = plt.subplots(1, 2, figsize=(9.6, 3.4))
 a1.plot(kk, kdf["g_max"], "ko-", ms=4, lw=1.2)
 a1.axhline(abs(e_q05), color="0.7", ls="--", lw=1)
 a1.axhline(abs(e_min), color="0.5", ls="--", lw=1)
-a1.text(1850, abs(e_q05) + 12, f"q05 floor {abs(e_q05):.1f}", fontsize=7.5)
-a1.text(1850, abs(e_min) + 12, f"worst floor {abs(e_min):.1f}", fontsize=7.5)
+# floor labels placed above their lines, clear of the rising curve
+a1.text(1020, abs(e_q05) + 16, f"q05 floor {abs(e_q05):.1f}", fontsize=7.5)
+a1.text(1020, abs(e_min) + 16, f"worst floor {abs(e_min):.1f}", fontsize=7.5)
 a1.axhline(gmax, color="0.8", ls=":", lw=0.9)
 a1.set_xlabel("Carrying capacity $K$ (kt)")
 a1.set_ylabel("$g_{\\max}=rK/4$ (kt yr$^{-1}$)")
@@ -224,7 +279,9 @@ for scheme, ls, lab in (("iid", "-", "i.i.d. residual draws"),
     sub = cdf[cdf["scheme"] == scheme]
     ax.plot(sub["C"], sub["P_stay"], ls, lw=1.4, label=lab)
 ax.axhline(0.9, color="0.5", ls=":", lw=0.9)
-ax.text(2, 0.902, "$P = 0.9$", fontsize=8)
+# P=0.9 label placed in the empty region right of the curves' upper plateau,
+# below the green no-1992 curve and above the blue i.i.d. curve
+ax.text(40, 0.905, "$P = 0.9$", fontsize=8, ha="left")
 ax.set_xlabel("Constant catch $C$ (kt yr$^{-1}$)")
 ax.set_ylabel("$P($stay $\\geq$ LRP for 20 yr$)$ from the LRP")
 ax.set_xlim(0, 122); ax.set_ylim(0.0, 1.02); ax.grid(alpha=0.25)
