@@ -92,3 +92,14 @@ elevator paragraph and P1's masking paragraph; nothing further was missing.
 | `paper3_material_ledgers_v17.md` | v16 | rope/integrity sentence in the elevator paragraph (1 edit) |
 
 Prior versions untouched; supplementary files unchanged (S9.2 verified correct).
+
+## Postscript — owner correction (2026-09-04)
+
+The rope addition of §B above is **withdrawn on the owner's direction**: the
+"flow/stock split is not about life" thread is a strawman the source dialogue's AI
+introduced and then argued against — chat-level meta-commentary with no place in a
+journal article. The elevator paragraph's scientific payload is the invisible-wear /
+sudden-snap asymmetry, which the paragraph states without the rope sentence.
+**Applied:** `paper3_material_ledgers_v17_corrected.md` = v17 with the single rope
+sentence removed (v17 itself left untouched per the never-overwrite rule; the live
+chain v18–v26 verified already clean of the sentence).
