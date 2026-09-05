@@ -922,3 +922,259 @@ Headlines:
 No frozen verdict, score, kernel, spectral record, or table value changed
 anywhere. Build scripts: `apply_batch7_leftover_fix.py` (E2 v18),
 `apply_batch7_wave2.py` (the six versions above).
+
+---
+
+## Batch-7 wave-3 addendum — the remaining-points joint assessment (Task 72, 2026-09-06)
+
+**Owner instruction:** *since there are two audits per paper, they must be evaluated jointly
+before implementing — any remaining points from any of the audits worth listing in the joint
+assessment?*
+
+**Method.** Both halves of every batch-7 audit file were re-read jointly (grok + claude per
+paper), every candidate remaining point re-verified against the current latest version
+(E1 v10, E2 v18, E3 v12, E4 v11, P1 v19, P2 v8, P3 v27, P4 v26, P5 v20) by direct
+grep/read of the files, and each point's endorsement recorded as **[both]** (grok ∧ claude —
+the highest-confidence class), **[grok]**, or **[claude]**. **Nothing was implemented in this
+wave: this listing is itself the joint evaluation the owner requires before implementation.**
+Line numbers refer to the current version files in `arena agent 1/paper rewrites/`.
+
+**Answer: yes — in two registers.**
+
+- **Register 1 — the wave-2 docket stands.** The deliberately deferred structural items
+  (`WAVE2_IMPLEMENTATION.md` §3, with reasons) remain the bulk of the remaining work; below,
+  each carries its joint endorsement.
+- **Register 2 — 24 newly-listed points the docket missed**, all verified open today. The
+  three loudest: **E1's companion citations are still absent from the References — a joint
+  consensus item whose recorded status ("companions cited … in ref list", E1 block above)
+  is not true of the file**; **E1's abstract still carries the "fixed in the analysis
+  scripts before execution" claim that its own §4 retracts (joint consensus item 6)**; and
+  **E1's A8 (retention-rule completion + a DM/bootstrap margin) is a joint-consensus ask
+  entirely absent from the docket**. Beyond E1, a verified cluster of jointly-endorsed
+  micro-errors in P3/P4 was never registered.
+
+### E1 — cod forecast ladder (v10) — 7 newly-listed + the docket's methodological asks
+
+- **R1 [both — consensus item 7] Companions uncited; the record's claim is false for the
+  file.** v10 carries four in-text companion mentions (the governance study, the Edwards
+  Aquifer evaluation, the interval-verified linear template) and **zero** entries in the
+  References (checked: no "in review / in preparation" entries; the list runs Cadigan 2016
+  → Shelton & Healey 1999). grok's fix: drop or footnote the empty companions ("except the
+  freeze-asymmetry sentence"); claude's A12: cite them. Neither cite-nor-drop was applied
+  in v9 or v10 — and the E1 (D) block above records "Companions cited … in ref list +
+  in-text", which the file does not support (the same record-vs-file failure class as the
+  "v10 never existed" finding). *Fix: cite-or-drop, one References-fabric edit.*
+- **R2 [both — consensus item 6] The freeze claim in the abstract.** Abstract (L16) and §1
+  (L32) still say "fixed in the analysis scripts before execution" while §4's freeze
+  paragraph (L304) discloses "no dated pre-score protocol file: the passes evolved … rather
+  than preregistered". grok's minimum repair — stop the "before execution" claim in the
+  abstract (or add a pass-dates table) — was not adopted. *Fix: one sentence (weaken to
+  "coded before the Specification-A rolling score was read", grok's suggested wording, or
+  equivalent).*
+- **R3 [both] A8 — retention-rule completion + uncertainty on the margins.** grok: "Put a
+  bootstrap or Diebold–Mariano (even with a caveat on small n) in a supplement, or state
+  that the certificate is a ranking under a pre-set rule, not a test of equal predictive
+  ability." claude A8 (its priority item 4): complete Definition 2.4 — the deciding horizon
+  (h=1 / h=5 / both), the comparison pairs for the non-nested ladder (is M2's comparator
+  M1 or M1b?), a tie band — and add a DM or block-bootstrap interval. Verified: v10 has no
+  DM/bootstrap anywhere, and Definition 2.4 remains incomplete. **Absent from the wave-2
+  docket** (which lists the drift baseline, LOO, the parameter table, etc., but not A8).
+  *Fix: one definition edit + a small post-freeze-labelled computation (E3's §5.3.1 is the
+  in-repo template).*
+- **R4 [grok] The 1898-kt Spec-B collapse number is absent from the abstract.** "That
+  number will dominate any talk … give it one sentence in the abstract" — the abstract
+  carries 694–819 / 670 / 688 kt but not M2's 1898. *Fix: one sentence.*
+- **R5 [claude] Floor disclosure.** Report the number of origins whose trajectories hit
+  the numerical floor and the ε actually used (v10 L294 says "the ε-floor part of the
+  registered scoring configuration" — the value is never stated; "registered where? State
+  ε"); also ε's double duty (process noise in Def 2.1 vs log floor in §4). *Fix: one
+  sentence + one symbol rename.*
+- **R6 [claude] "No module M2–M4 is retained" (L196)** — M1 and M1b also fail (H2); write
+  "no structural model". *Fix: one phrase.*
+- **R7 [claude, A9 residue] Statement apparatus.** No funding statement (Fisheries Research
+  requires one); Definition 4.2 still sits in §4 rather than Methods; the abstract's
+  "machine layer" is defined only indirectly (via Definition 4.2's certificate). *Fix:
+  small edits.*
+- Docket (registered, methodological asks — new computations, not corrections): the
+  drift/damped-trend baseline; leave-one-origin-out influence; the 900–1900 kt Table-6
+  forecast explanation; the M3/M4 609/586 deterioration explanation; the M4 decomposition
+  as a results table; the parameter table in a supplement; the log-RMSE demotion [grok].
+
+### P1 — assessment_separation (v19) — 1 newly-listed + the docket's 8 structural items
+
+- **R8 [standing instruction, not an audit point] Abstract length.** 310 words by a plain
+  whitespace count (v19 changed only the References; the v18 count was the same) — over
+  the ≤300 cap under that count, while the (C) block above records "now exactly 300 words".
+  E1's build pins its abstract mechanically (298); P1's was never pinned. *Fix: cut ten
+  words and pin the count in the next build.*
+- Docket items, endorsements attached: (1) the E_end,typ typed-endpoint operator — the
+  "photograph" claim remains unwitnessed **[both — consensus 4]**; (2) the §1.1
+  companion-prose strip (hen/orchard/cycle-closure/productivity-illusion prose, 30 grep
+  hits at v19) **[both — consensus 3; the cross-paper exposure]**; (3) the §2 13-slot
+  tuple cut **[both — consensus 6]**; (4) the notation pass (FP₀ / r / R / A / e / S)
+  **[both — consensus 5]**; (5) the demotions of Prop 1 / Lemma 2 / Thm 3 / Thm 6 (nine
+  numbered results remain) **[both — consensus 2]**; (6) the title's doctrinal sound
+  ("Title and §7 still sound like a doctrinal ranking … a referee will quote Theorem 8
+  against you" — grok; claude's E6 concurs) **[both]**; (7) the 25-check enumeration
+  ("which 25? Supplement" — claude; "name them or move to a supplement log" — grok)
+  **[both]**; (8) §6.1's unpublished-companion dependence (L434, "each under review")
+  **[both, cross-cutting]**. Plus the preregistration-vocabulary density (29
+  declared/registered/preregister hits in v19) **[both, cross-cutting]**.
+
+### P2 — obstruction_calculus (v8) — 2 newly-listed + the docket's theorem-level repairs
+
+- **R9 [both — grok "Notation drift ℐ/ℑ/ℨ/K_ℐ … freeze them in 2.4"; claude E11] Notation
+  unification + complete §2.4.** grok: pick one symbol for the observation structure and
+  one for the institution; claude: "Unify notation (U, K, a, ε, d, H, ℐ/ℑ), renumber
+  hypotheses per theorem, and complete §2.4." §2.4 remains the v6 partial. **Not in the
+  wave-2 P2 docket** (which lists only the theorem-level repairs). *Fix: a notation pass
+  bundled with the theorem-level edits.*
+- **R10 [grok] IRViab sits in the hierarchy, the notation list, and §6.4 without a formal
+  definition or a theorem.** grok: "Either give a one-line definition (command set
+  restricted to an institutionally admissible correspondence U_ℑ(x) ⊆ U(x), kernel of that
+  system) or drop it from the hierarchy until it is a theorem." v8 keeps it at L75 / L102 /
+  L289 with prose only. *Fix: one line.*
+- Docket (theorem-level, endorsements per the (A) block): Theorem 4's H2 circularity
+  **[both — consensus 1]**; the Theorem 1/3 closed-loop existence gap (D lsc/constant or
+  convexify; the "exactly backwards" convexity remark) **[both — consensus 2]**; Theorem 2
+  reframed as admissibility, not "hidden modes" **[both — consensus 3]**; the
+  Definition 1 / EViab deletion **[both — consensus 5]**; Corollary 6's single-floor
+  repair **[both — consensus 7]**; Remark 1's Π_CE class definition **[both — consensus
+  7]**; the §5(b)–§6.3 contradiction, the C¹/Dini mismatch, and the hitting-time
+  convention mismatch **[claude, section notes]**.
+
+### P3 — material_ledgers (v27) — 7 newly-listed + the docket's structural agenda
+
+- **R11 [both — grok twice + claude "again"] "horizontal exhaustion estimate" →
+  "horizon".** Two sites (L45 §1.1, L771 §11). *Fix: one word, twice.*
+- **R12 [both — grok's notation table; claude's §1.1/§11 notes] B = b·M is never defined
+  in the body** (L45, L771; B and M are later R+T and the natural-block mass; the object
+  reappears only in §11). *Fix: one defining clause.*
+- **R13 [claude, internal-inconsistency tag] The deep-time contradiction.** §1.1's
+  "natural regeneration acts far more slowly — often on deep-time scales" (L41) versus two
+  paragraphs later "a crop within a season, an aquifer within years to decades" — claude:
+  "Regeneration is human-timescale for most renewables; the claim as stated is wrong for
+  exactly the systems (fisheries, groundwater) the paper tabulates." *Fix: one scoping
+  sentence.*
+- **R14 [claude] Mt/kt harmonisation in §6.5.3.** L591: "approximately 74,000 Mt of world
+  reserves and 240,000 kt/yr of production" — the arithmetic is consistent across the unit
+  systems but the display mixes them. *Fix: one edit.*
+- **R15 [claude, internal-inconsistency tag] "each of the five right-hand sides."** The
+  closed block has six states; A^geo has vanished from the list in the one section arguing
+  the donor must be a state. *Fix: one list.*
+- **R16 [grok, notation] μ, ν, ρ are used in §2.2 before their §5.4 definition, and ρ also
+  serves as the retirement fraction** (L119's retirement use vs L458's "product, waste,
+  and price parameters"). *Fix: part of the notation pass, concretely listable.*
+- **R17 [both — consensus 5's undecided residue] Data-vintage decisions unmade.** The
+  Indo-Gangetic daggered row remains first in the §6.5.2 main table with the "≈ 2.7 yr"
+  index displayed alongside its do-not-reuse caveat (drop-to-supplement versus
+  keep-daggered-in-place was never decided); the fisheries-cohort decision
+  (v4.66-primary versus archived-pull-primary) is unmade — the 43-stock median 1.8
+  headline stands while S5 retracts "not reproducible" and the broad-cohort comparison
+  (454 / 3.39) lives in the supplement. *Fix: two owner decisions, then edits.*
+- Docket (structural, endorsements attached): the notation pass **[both — consensus 2]**;
+  theorem inflation (Thms 2/3/4/6/17/18/20, Lemma 16) **[both — consensus 3]**; the R₀
+  split (R_ext / R_K / R_frozen) **[both — consensus 4]**; displaying the four-row and
+  seven-compartment incidence matrices **[both — via (C) "high-value, low-risk"]**;
+  Theorem 14's missing E ≥ 0 **[both — grok A5 + claude]**; §9's three inconsistent
+  field-difference values (4.47 / O(κ_A K) = O(5) / 4.652 vs −0.348) **[grok A11 — "write
+  both vector fields at the same (N, A, U) before claiming the difference equals T*"]**;
+  the classification-matrix-vs-§6.5.4 Θ_F contradiction **[grok, §6 notes]**; the USGS
+  single-vintage re-pin **[both — consensus 5]**; the §11 weak/strong re-argument
+  **[both — consensus 7]**; the three uncited companions **[both]**; the length (21,110
+  words against a 10–12k target) **[both]**.
+- Housekeeping (not an audit point): the supplementary pointer cites
+  `paper3_supplementary_v6.md` (L841) while v7 exists in the same folder.
+
+### P4 — delay_dynamics (v26) — 5 newly-listed + the docket's presentation tail
+
+- **R18 [claude] §1.1's second cross-ref error.** "bifurcation analysis occupies Sections
+  2–9" (L23) — claude: "§6 is the protective channel" (and §8 is sample-and-hold, §9 the
+  global numerics). The v26 fix corrected the other §1.1 pointer (Section 4 → 5.1) but not
+  this one. *Fix: one edit.*
+- **R19 [grok, flagged three times] The G5 pair is still imported into §7.** §7.6's
+  registration paragraph (L418) lists "the registered compute-core Hopf pair
+  3.666149 / 150.358477 (G5)" — grok: "G5 does not belong in this section … a category
+  error" (§7's τ is the maturation lag, not the institutional delay). The §7 rebuild was
+  implemented at the framing level; this residue stands. *Fix: one relocation/relabel.*
+- **R20 [claude] Undefined symbols where used.** §5.3/Prop 5.1's σ_geo, α, β; §2.4's
+  γ_U, ε_U, σ_geo ("appear without definition"); the MPF Ů equation is used in the
+  invariance argument but never displayed. *Fix: definition-level edits.*
+- **R21 [grok A23 + claude] MPF material to the supplement.** The η_crit sweep, the
+  intermittency diagnostics (CV 1.58, anticorrelation −0.47), and the "more than 300
+  parameterisations" screen fact (stated at two sites, L489 and the §9.6 region) — both
+  auditors route this material to a supplement. *Fix: relocation.*
+- **R22 [grok, precision umbrella] The "within 0.05%" version-robustness claim** sits
+  beside a 0.4%-wide bracket and a 7-digit ω_A^* value. *Fix: presentation.*
+- Docket (presentation tail, endorsements): §9.2's multiplier digits / 1.1×10⁻⁷ precision
+  fusion; the revision-history changelog narration still in the main text (§9.2's "an
+  earlier two-fold reading … is superseded" passages) **[both]**; §1.2's digit stripping
+  **[grok + claude — "an introduction is not a computation log"]**; the M3-B family list
+  entry; the undefined "c > 0" Routh entry; the Halanay η collision; the q*/p/S-for-stock
+  notations; the uncited r-literature range; the three uncited-but-listed references
+  (Zhang et al. 2013; Cloud–Moore–Kearfott 2009; Moore 1979); §11.6's grant list; the
+  §8–§9 campaign tables (the consolidated table, the 2/|C_E| sentence, the growth rates,
+  the stock-mode reading).
+
+### P5 — sampled_governance (v20) — 2 newly-listed + the docket's middle layer
+
+- **R23 [both — consensus 3, partial] q-sensitivity surfacing.** grok: "That sensitivity
+  is important and should appear in the abstract or §4.1"; claude: "q = 0.001 vs q = 0.1
+  flips every verdict … the Reading should say the comparison is uninformative rather
+  than 'does not reproduce'." v20 reports the q = 0.1 destabilisation in §3.3/§3.4 (the
+  Records paragraph) but not in the abstract or §4.1, and the Reading keeps "does not
+  reproduce" with qualifiers rather than claude's blunter framing. *Fix: one-to-two
+  sentences.*
+- **R24 [claude E10 + grok's notation notes] Notation unification.** "Unify notation
+  (S, M, δ), define g, C_E, C_Z, 'four-state', and choose 'extractive' or 'mobilising'."
+  **Not in the wave-2 P5 docket.** *Fix: a notation pass.*
+- Docket (middle layer, endorsements): the claims-ledger box **[both — consensus 5]**; the
+  registration-vocabulary appendix **[both — consensus 6; ~42 hits]**; the logistic-core
+  parameter table **[claude A6]**; the λ/θ/margin reporting for ρ = 1.00035 (a multiplier
+  this close to the unit circle needs its computational archive or a short appendix —
+  grok; claude A2) **[both]**; the A1 undelayed-stability reconciliation (§2.3 vs §3.2 vs
+  §3.4) **[both]**; the A9 slow-stock "agreement" reclassification **[claude]**; the
+  screen-band lineage acknowledgment **[claude A4]**; §4.6's relocation; the
+  "42 vs several dozen" harmonisation (the abstract still reads "several dozen" against
+  §1.2's 42) **[both — grok + claude "use 42 throughout"]**; the companion citation
+  (in-text "companion delay study" sites with no References entry) **[both]**.
+- Housekeeping (not an audit point): the DFO 2022 reference entry (L418) is never cited
+  in text (in-text citations use DFO 2011/2016/2024) — cite it or drop the entry.
+
+### E2 / E3 / E4 — no remaining audit points
+
+- **E2 (v18):** every audit point is dispositioned (Tasks 69–70 verified v15/v16's
+  substantive adoptions; v17 applied the restructure items; v18 fixed the registered
+  SSE/MSE label). Nothing open.
+- **E3 (v12):** every audit point is implemented in v11/v12. The single declined element
+  is the parallel sandbox's §5.7/Table-8 literal layout, with the reason recorded
+  (`E2_V17_E3_V12_VERIFICATION.md` item 7); the substance (the DM/bootstrap layer, the
+  replication registration, the references) is fully incorporated. Nothing open.
+- **E4 (v11):** all seven consensus items are implemented. The one labelled follow-up
+  (Stage-I/flat-80% at current pumpage does not secure) is a disclosed, labelled
+  computation-layer fact, not an unimplemented audit point. Nothing open.
+
+### Cross-cutting (unchanged)
+
+- The **§1.1 shared-prose strip (P1/P3/P4)** remains the single largest standing
+  exposure — all auditors, all three papers.
+- **Preregistration vocabulary → appendix/limitations** (P1: 29 hits; P4: ~42; P5: ~42).
+- **Uncited companions**: E1's four (R1 above — the record-vs-file failure), P3's three,
+  P5's one.
+- **Rose (2026) and the frozen 2026-09-01 plan date in P5**: resolved-by-clock (the repo
+  clock is past both), recorded, not edited.
+
+### Recommended order when the owner confirms implementation (the joint gate)
+
+1. **The jointly-endorsed one-line fixes** (R4–R6, R10–R15, R18, R20's definition-level
+   edits, R8's ten words): cheap, verified, fail-loud buildable in one script.
+2. **R1 and R2 (E1's companions + the freeze claim)**: one-sentence-level but doctrinally
+   sensitive — the cite-vs-drop choice and the exact weakened wording are owner decisions.
+3. **R3 (E1's A8)**: the one new computation — a DM/block-bootstrap layer on E1's own
+   margins, post-freeze-labelled, with E3's §5.3.1 as the template.
+4. **The coherent docket passes**: P1's structural bundle; P2's theorem-level repairs
+   (bundled with R9/R10); P3's notation/inflation/re-pin agenda (bundled with R11–R16);
+   P4's presentation tail; P5's claims-ledger/appendix layer.
+
+This wave changed no paper, no frozen verdict, score, kernel, spectral record, or table
+value — it is the joint evaluation record only.
