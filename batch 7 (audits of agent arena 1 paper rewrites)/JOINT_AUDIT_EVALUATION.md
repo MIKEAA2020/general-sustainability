@@ -261,7 +261,7 @@ no-introduced-error standing rule. Those items should be a separate carefully-ve
 
 ---
 
-## P1 — assessment_separation (latest = **v19**; v17 hybrid resolved the thesis fork, v18 the Theorem-4 demotion, v19 the reference fabric — wave 2, 2026-09-06)
+## P1 — assessment_separation (latest = **v20**; v19 the reference fabric, v20 the wave-4 structural bundle (R8 + docket items 1–8 + vocabulary consolidation) — wave 4, 2026-09-06; record: wave4/p1_record.md)
 
 ### Three-audit joint assessment (grok + claude + deepseek) — full line-level read
 grok and claude independently converge on the same core findings; **deepseek's hybrid resolves the
@@ -330,7 +330,7 @@ hybrid; they are the follow-up edits.
 
 ---
 
-## P3 — material_ledgers (latest = **v27**; v24–v26 were six changed line-pairs, v27 the verified micro-error cluster — wave 2, 2026-09-06)
+## P3 — material_ledgers (latest = **v28**; v27 the verified micro-error cluster, v28 the wave-4 notation/inflation/re-pin bundle (R11–R17 + structural docket) — wave 4, 2026-09-06; record: wave4/p3_record.md)
 
 ### (A) Joint consensus
 1. **§1.1 vs §6.5.2 two-pool claim not discharged.** grok A10 + claude: the applied tables have
@@ -363,7 +363,7 @@ reading (not the received distinction).
 
 ---
 
-## P4 — delay_dynamics (latest = **v26**; v18–v25 implemented the substantive campaign, v26 the small-error cluster — wave 2, 2026-09-06)
+## P4 — delay_dynamics (latest = **v27**; v26 the small-error cluster, v27 the wave-4 presentation tail (R18–R22 + S11 relocation) — wave 4, 2026-09-06; record: wave4/p4_record.md)
 
 ### (A) Joint consensus
 1. **Conclusion reverts to the Euler artefact.** §8/abstract: exact crossing at **6.50 yr**, Euler
@@ -388,7 +388,7 @@ Fix #1 (conclusion) — this is the make-or-break. Then A2/§9.4/6.50-certificat
 
 ---
 
-## P2 — obstruction_calculus (latest = **v8**; v6/v7 changed nothing substantive, v8 the first safe tranche — wave 2, 2026-09-06)
+## P2 — obstruction_calculus (latest = **v9**; v8 the first safe tranche, v9 the wave-4 theorem-level repairs (R9 notation/§2.4, R10 IRViab, consensus 1/2/3/5/7 + claude's section notes) — wave 4, 2026-09-06; record: wave4/p2_record.md)
 
 ### (A) Joint consensus
 1. **Theorem 4 circular.** claude A1: (H2) already asserts the conclusion; restate H2 as an
@@ -416,7 +416,7 @@ consistency repairs, not restructuring.
 
 ---
 
-## P5 — sampled_governance (latest = **v20**; v19 the honest-tier correction, v20 the regression repair — wave 2, 2026-09-06)
+## P5 — sampled_governance (latest = **v21**; v20 the regression repair, v21 the wave-4 middle layer (R23/R24 + the claims-ledger/appendix docket) — wave 4, 2026-09-06; record: wave4/p5_record.md)
 
 ### (A) Joint consensus
 1. **Reconstruction/unreproduced stage-map status.** grok: the 3–4 yr / 6–12 yr windows are
@@ -437,7 +437,7 @@ fix future dates; move registration meta-text to appendix.
 
 ---
 
-## E1 — cod forecast ladder (latest = **v10**; v9 the presentation pass, v10 the never-landed factual-recheck layer — wave 2, 2026-09-06)
+## E1 — cod forecast ladder (latest = **v11**; v10 the never-landed factual-recheck layer, v11 the wave-4 docket (R1–R7 + the R3 DM/Künsch post-freeze layer, §3.5 + Table 9) — wave 4, 2026-09-06; record: wave4/e1_record.md)
 
 v9 (this pass) applies the convergent, non-destructive presentation/framing fixes from the joint
 audit (grok severity-grouped + claude A1–A12/B/C/D/E). No data movement, no content removal;
@@ -1178,3 +1178,58 @@ Line numbers refer to the current version files in `arena agent 1/paper rewrites
 
 This wave changed no paper, no frozen verdict, score, kernel, spectral record, or table
 value — it is the joint evaluation record only.
+
+---
+
+## Wave-4 addendum — the implementation record (Tasks 73/74, owner-directed, 2026-09-06)
+
+The owner directed implementation of the wave-3 recommended order under the principle
+**"cite, don't drop — decide on appropriate wording before implementing"**, in four parts plus
+the structural items: (1) the jointly-endorsed one-line fixes in one fail-loud build per paper;
+(2) E1's R1/R2 with the cite-vs-drop and wording decisions made per item; (3) R3 — the one new
+computation (DM/bootstrap on E1's margins, E3's §5.3.1 as template); (4) the coherent docket
+passes. All six papers with open points were rebuilt; E2/E3/E4 were confirmed closed at wave 3
+and are untouched here. Every build is a fail-loud Python script that reconstructs the new
+version from its predecessor with asserted-once anchors and mechanical checks, and every script
+was run twice (or more) to prove byte-stability.
+
+### Builds (all non-destructive: no frozen verdict, score, kernel, spectral record, or table
+value changed anywhere; every pre-existing table row byte-identical except the explicitly
+endorsed contradiction-fix cells)
+
+| Paper | New version | Script | Record | Words on the docket |
+|---|---|---|---|---|
+| E1 | paperE1_cod_forecast_ladder_v11.md (368→424 lines) | apply_batch7_wave4_e1.py | wave4/e1_record.md | R1–R7 + R3 all IMPLEMENTED; R1 = CITE (4 in-text sites + 3 reference entries); R2 = WEAKEN-WITH-CITATION at all three sites ("coded before the first scoring pass and applied unchanged; later passes declared, not preregistered"); R3 = the registered post-freeze DM/Künsch layer (§3.5 + Table 9's 32 rows; campaign_e1_dm_uncertainty.py, seed 0, 20,000 replications, CSV archived and byte-reproducible); Definition 2.4 completed with the completions disclosed as recorded-after-scoring |
+| P1 | paper1_assessment_separation_v20.md (518→529 lines) + paper1_supplementary_v2.md S8 append | apply_batch7_wave4_p1.py | wave4/p1_record.md | R8 (abstract 310→298, pinned) + docket items 1–8 + vocabulary consolidation (26→22) all IMPLEMENTED; demotions = relabels on the unchanged 1–9 counter; 25 checks enumerated in S8; declines: title change (no endorsed retitle), D_agg re-letter |
+| P2 | paper2_obstruction_calculus_v9.md (373→379 lines) | apply_batch7_wave4_p2.py | wave4/p2_record.md | R9 + R10 + consensus 1/2/3/5/7 + claude's three section notes IMPLEMENTED; Def-1 clause (i) withdrawn WITH tombstone; declines with reasons: δ-minimizer removal (grok endorses keeping), singleton-belief lemma (new mathematics) |
+| P3 | paper3_material_ledgers_v28.md | apply_batch7_wave4_p3.py | wave4/p3_record.md | R11–R17 + the notation/inflation/re-pin agenda all IMPLEMENTED; length PARTIAL-bounded-registered |
+| P4 | paper4_delay_dynamics_v27.md + paper4_supplementary_v4.md S11 append | apply_batch7_wave4_p4.py | wave4/p4_record.md | R18–R22 + the presentation tail all IMPLEMENTED (MPF material relocated verbatim to S11) |
+| P5 | paper5_sampled_governance_v21.md (465→541 lines) | apply_batch7_wave4_p5.py | wave4/p5_record.md | R23 + R24 + the middle-layer docket (Box 1 ledger 26 rows; Appendix A/Table 3; margins paragraph; undelayed-limit reconciliation; A9; A4 lineage; §4.6→Appendix B; 42; companion + DFO-2022 citations) all IMPLEMENTED; Rose (2026)/plan-date resolved-by-clock, untouched |
+
+### The three E1 wording decisions (recorded per the owner's directive)
+
+- **R1 (companions)** — CITE: the mentions were already in the text; the fix adds the
+  citations and the reference entries rather than removing the cross-paper linkage.
+- **R2 (freeze claim)** — neither keep nor drop: WEAKEN at all three sites to the wording the
+  paper's own §4 disclosure supports, with the companion asymmetry made the explicit caveat.
+- **R3 (A8)** — COMPUTE-AND-REGISTER as a post-freeze-labelled layer that "attaches
+  uncertainty to margins the point rule has already ranked; it changes no frozen verdict,
+  score, or table value" — the negative certificate stays a point-rule finding.
+
+### Standing items closed by this wave
+
+- The record-vs-file discrepancy "E1 companions cited" (wave-3 loud finding) is now true for
+  the file. P1's "exactly 300 words" claim is now true (298, pinned). The two wave-3
+  housekeeping notes (P3's supplementary pointer v6→v7; P5's DFO-2022 entry) are fixed in their
+  records. The cross-cutting preregistration-vocabulary density is consolidated in P1 (Appendix
+  A), P4, and P5; the uncited companions are cited in E1, P3, and P5.
+
+### Registered follow-ups (deliberately not implemented, with reasons in the records)
+
+P2's singleton-belief lemma and grok's restructure items (tube-form Thm-3 statement, Thm-2
+plant replacement, Thm-5 demotion, §4.2/§5(d)/Appendix-A relocation, Marchaud pass, chattering
+remark); P1's frozen-statement re-letters; P3's 21k→12k length remainder; E1's further
+methodological asks needing computations beyond the authorised R3. None is jointly endorsed as
+a one-line fix; all remain behind the owner gate.
+
+This wave changed no frozen verdict, score, kernel, spectral record, or table value anywhere.

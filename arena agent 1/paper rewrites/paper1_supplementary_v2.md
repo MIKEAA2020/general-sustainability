@@ -165,3 +165,38 @@ For sustainability-assessment research design, the implication of S6 is that con
 ## S7. Verification Artifact Details
 
 The companion artifact implements the witness datum of the main article (Section 4.5) in exact integer arithmetic at scale 40: no floating point, no tolerances, no randomness. It (i) computes the four actions' worst-case tubes and successors for every state on a 29,791-state grid; (ii) evaluates the typed, weighted, and physical admissibility predicates; (iii) checks the region identities $\mathcal{V}_{\mathrm{typ}}$, $\mathcal{V}_{\mathrm{weak}}$, $\mathcal{V}_{\mathrm{phys}}$, $R$, $I$, $\mathrm{FP}_{\mathrm{agg}}$ of Theorem 5; (iv) checks the threshold identities for $\rho_1, \rho_2$ at the analytically identified critical ratios and their midpoints; and (v) checks the propagation identities of Theorem 6 on a hold-prefixed horizon. All 25 checks pass; re-execution reproduces outputs exactly. The artifact is deposited with a stable identifier, software version, execution command, and expected output hashes. Its certification level is exact finite rational verification — rigorous for the finite rational computation, and distinct from the analytic proof of the continuum theorems, which rests on the displayed proofs in the main article.
+
+
+---
+
+## S8. The 25-Check Enumeration (Wave-4 Deposit)
+
+*Appended at the wave-4 revision (main-text v20), on the joint audit's "which 25 checks?" item. The machine checks of the verification artifact (main-text Section 4.9; S7 above) are enumerated here one by one. Each entry quotes the check's recorded name verbatim from the committed results file (`research_program/paper1_instantiation/typed_false_positive_instantiation.json`, execution of 2026-08-28, deterministic, exact integer arithmetic at scale 40, exit 0) and states the main-text claim it maps to. Nothing is recomputed here and no value is new; every check's recorded pass status is True (25/25). Two naming notes: the artifact's own tokens "FP" and "FP0" name the discrepancy region $\mathcal{Q}$ of the main text's v20 notation (formerly $\mathrm{FP}_0$), and where S7's existing text says "Theorem 6" the v20 status relabel reads Remark 6 — the statement numbers are unchanged, so every reference resolves by number.*
+
+1. *FAST breakpoint table exact (dip at t=1/2, recovery at t=1)* — the FAST row of the main-text Section 4.5 action table.
+2. *STAGED breakpoint table exact (linear spend/growth)* — the STAGED row of the same table.
+3. *per-coordinate exact ranges = breakpoint extremes (piecewise monotone)* — Section 4.5's declaration that every worst-case tube is the exact visited set.
+4. *worst-case dip constants: benign 3/2, adverse 2, floor threshold 2* — Section 4.5's disturbance convention (worst-case dip of fixed depth 2; the artifact's benign 3/2 scaling is part of its configuration).
+5. *machine typed-feasibility == {x>=1} ∪ {s1>=2} ∪ {s2>=2} on every grid state* — Theorem 5(1).
+6. *machine all-weights admissibility == {x>=1} ∪ {s1+s2>=2} on every grid state* — Theorem 5(2).
+7. *FAST/SLOW per-weight safety biconditionals confirmed on every grid state (dense r-grid)* — Theorem 5(6).
+8. *boundary weights exact: FAST safe at r=rho_1, SLOW safe at r=rho_2 (witness state (1/2, 6/5, 6/5))* — Theorem 5(6), with the boundary conventions of Section 4.6.
+9. *machine endpoint-only feasibility == all of X_0 on every grid state* — Theorem 5(3) (the physical endpoint operator).
+10. *typed ⇒ all-weights-aggregate ⇒ endpoint-only (no violations on the grid)* — the hierarchy of Proposition 3(i).
+11. *false-positive set nonempty on the grid* — Theorem 5(4); the artifact records 1,900 grid states in the set.
+12. *interior witness (1/2, 6/5, 6/5): aggregate-feasible for every critical weight, typed-INfeasible, endpoint-feasible* — Theorem 5(4)–(5), first strictness.
+13. *witness is an interior point (all ±0.1 neighbors remain in FP)* — Theorem 5(4)'s nonempty open interior.
+14. *endpoint-only witness (1/2, 1/10, 1/10): endpoint-feasible, aggregate-INfeasible (no action safe at w=(1,1))* — Theorem 5(5), second strictness.
+15. *aggregate-vs-typed strictness witness (the FP interior point above)* — Theorem 5(5).
+16. *r=1/2: SLOW-only (FAST unsafe, SLOW safe)* — Theorem 5(6), per-weight plan disagreement.
+17. *r=1: both plans safe* — Theorem 5(6).
+18. *r=2: FAST-only (SLOW unsafe, FAST safe)* — Theorem 5(6).
+19. *E_typ = ∩_w E_w = ∅ machine-verified (no action serves every critical weight)* — Proposition 3(ii) on the witness.
+20. *R witness (3/2, 6/5, 6/5): typed-transformable via STAGED (bridging plan at physical cost c=1)* — Theorem 5(7), the rescue.
+21. *I witness (1/2, 6/5, 6/5): all four actions rejected, each with its exhibited violated constraint (negative-certificate form)* — Theorem 5(7), the impossibility.
+22. *rescue split verified on the whole grid: FP0∩{x>=1} typed-feasible via STAGED; FP0∩{x<1} typed-infeasible* — Theorem 5(4) and (7).
+23. *stage-0 hierarchy holds and regions are preserved through two hold intervals (every grid state)* — Remark 6.
+24. *FP strictness witness survives the holds at stage 0* — Remark 6(ii).
+25. *endpoint-only strictness witness survives the holds at stage 0* — Remark 6(ii).
+
+Every recorded pass status is True, and re-execution reproduces the outputs exactly (S7). The main text keeps the count and the pointer; this deposit is the enumeration.
