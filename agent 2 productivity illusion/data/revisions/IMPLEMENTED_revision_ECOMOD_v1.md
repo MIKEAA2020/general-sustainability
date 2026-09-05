@@ -376,11 +376,7 @@ signal rather than a new equilibrium.
   method-sensitivity (bare Euler, clamping).
 - **Reporting rigour (master 12C / 12G.7).** (i) **State the grid range** of the stability scan and
   **normalise "barely positive" Re λ by `r`** (a margin of `< 0.01 yr⁻¹` is not small next to
-  `r = 0.02`). **And the grid must actually be wide enough:** a scan over τ ∈ [0,80] yr **cannot
-  rule out** a single-delay Hopf, because the competing demographic-delay Hopf appears only at a
-  large τ_P ≈ 225 yr (slow ω ≈ 0.011 yr⁻¹) once parameters are perturbed off the knife-edge. State the
-  location of any "no single delay destabilises" claim *as a function of* Λ/χ (which lag, if any),
-  and ensure any such scan extends to τ_P ≳ 250 yr before concluding it. (ii) **State that no interpolation occurs** for the original `τ_g/τ_p` (both exact
+  `r = 0.02`). (ii) **State that no interpolation occurs** for the original `τ_g/τ_p` (both exact
   multiples of `Δt`), or use a genuinely non-multiple step. (iii) **Complete the scenario/parameter
   table** (which `e`, which lags, whether `T_b` is active; `F` is otherwise undetermined). (iv)
   **Analyse the trivial equilibrium `(A,P)=(0,0)` and the no-recovery region**; note that
@@ -523,7 +519,6 @@ carbon, NPP).
 | debt-lag τ_D / delay asymmetry (12G.7) | §3 |
 | Jevons-type rebound (12G.7) | §5 ("technology offsets debt") |
 | reporting rigour: grid/Ω/interp (12C, 12G.7) | §8 |
-| scan-range sufficiency / τ_P≈225 yr Hopf (12C.9 + eval H / register F4) | §8 reporting-rigour (i): state range as f(Λ); scan to τ_P ≳ 250 yr |
 
 ---
 

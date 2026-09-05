@@ -2,13 +2,34 @@
 
 A granular, line-by-line scan of `MASTER_joint_assessment_and_implementation_plan.md`
 (Parts 1–12, incl. the Part 10 checklist and the 12A–12G completion pass) against the
-implemented revision `IMPLEMENTED_revision_ECOMOD.md`.
+implemented revision `IMPLEMENTED_revision_ECOMOD.md`. Three passes; the third (below)
+extended the scan to **Parts 1, 3, 4, 7 and 11** (the verdict, the findings layers, the
+orchard joint position, the sequenced implementation plan, and the round-2 unified-model
+adjudication) — not just the Part 10 / 12A–12G granular items.
 
 **Verdict: the revision is near-complete.** Every item in the master's Part 10 action
 checklist and every numbered point in Parts 12A–12G is addressed somewhere in the
 revision — either implemented, explicitly justified as *not* carrying over, or logged as
 open required work rather than silently assumed done. **No reverse is needed; no verdict
 is contradicted.**
+
+## Pass 3 — Parts 1, 3, 4, 7, 11 (verdict / findings / orchard / plan / round-2)
+
+Scanning the *whole* plan (not just the checklist) surfaced five more items that were
+present only as intent or only partially:
+
+| Master item | Where implemented |
+|---|---|
+| **"deficit = stock decline" identity** `dA/dt = G − [E−bA]₊/b_G = (B − E)/b_G` (Part 11.3) | §4.3, new opening derivation — the exact algebraic identity that makes "deficit-driven" rigorous |
+| **"illusion is necessarily transient"** — `d ln B/dt = d ln b/dt + d ln A/dt`, bounded tech vs unbounded `d ln A/dt` (Part 1, 2nd strongest result) | §6 — added as the explicit proof, not just the decomposition |
+| **B2 refined = bookkeeping error** (flow-book vs increment-book; correct-but-mislabelled, `γ=1/b_G` reproduces Eq. (1)) (Part 11.5) | §2.2 — added as a distinct diagnosis, more charitable than "wrong depletion term" |
+| **`γ = 1/b_G = 1/V` measurable** (standing-stock value, 20–100 yr) (Part 4 / 11.6) | §4.1 ψ subsection — added the estimator link |
+| **`ψ` is a falsifiable prediction** (small-ψ smooth-decline vs large-ψ hidden-overshoot-then-liquidation) (Part 11.3) | §4.1 ψ subsection — added the empirical, regime-distinguishing prediction |
+| **Exact stability-crossing curves — Hale & Huang 1993; Gu, Niculescu & Chen 2005** (Part 7 Step 4 / Part 11.6) | §8 R2 — added the classical crossing-curve references alongside the full-spectrum solver |
+
+All are additive; no verdict is reversed. After Pass 3 the revision carries every
+explicit point in Parts 1–11, with the two genuinely-open items (R1 corrected-model
+basin, R2 corrected-model characteristic equation/table/figures) stated as required work.
 
 ## How each block resolved
 
@@ -90,3 +111,39 @@ them after the scenario port was made faithful to `sim.py`:
 
 The tooling that produced this is the `scan_revision` pipeline in this folder
 (`README.md` maps each of the 10 blueprint augmentation items to its module).
+
+## Pass 4 (final): whole-corpus re-scan for any remaining unincorporated point
+
+Re-scanned the **entire** source corpus once more (all `uploads/*`, `findings_register`,
+`proposed_upgrades`, `root_cause_analysis` + `JOINT_*`, `evaluation_of_model_audits`,
+`response_to_human_reviewer`, `profound upgrades.txt`) for any point not already carried.
+
+**Finding-ID coverage matrix** (what the master/revision reference, vs. the corpus):
+
+| ID set | Where defined | Absorbed? |
+|---|---|---|
+| A1–A4, A7 | `findings_register` PART A | ✅ master + revision |
+| A5 (γ as empirical, γ=1/V) | `root_cause_FINAL` | ✅ master §(γ=1/V measurable) + revision §4.1 |
+| A6 (sign-structure exact) | `root_cause_FINAL` | ✅ master + revision §4.3 |
+| B1–B12 | `findings_register` PART B | ✅ master 12B + revision §2/§3/§5 |
+| C1–C4 | `findings_register` PART C | ✅ master 12C (C4 = complete scenario table → revision §8) |
+| E1–E5 | `findings_register` PART B/E | ✅ (E4 withdrawn/pedantic, not a point) |
+| Human reviewer (b)–(g) | `human reviewer.txt` | ✅ revision §2.1/§3/§7/§8 |
+| Grok / Claude audits | `*audit ecomod.txt` | ✅ full |
+| **Evaluation §H / register F4** | `evaluation_of_model_audits.md` | **⬅ this pass — added** |
+
+### F4 / eval-§H — the one genuinely-remaining actionable point (added this pass)
+
+The scan-range **sufficiency** point was only partially carried as "state the grid range." The
+stronger, concrete version (previously un-incorporated) is now in the master (12C item 9) and the
+revision (§8 reporting-rigour (i)):
+
+> A grid over τ ∈ [0,80] yr **cannot rule out** a single-delay Hopf — the competing demographic-delay
+> Hopf appears only at large τ_P ≈ 225 yr (slow ω ≈ 0.011 yr⁻¹) off the knife-edge. State any
+> "no single delay destabilises" claim *as a function of* Λ/χ, and extend any numeric scan to
+> τ_P ≳ 250 yr before concluding it. (This is why the earlier single-delay scans to τ ≈ 150 found
+> nothing.)
+
+**Result:** after this pass — 21 covered / 1 superseded (12A.1) / 0 missing / 0 ambiguous;
+auto_tier 20 auto-covered / 2 candidate; eval Recall@1 **0.86** / Recall@3 **0.91**; tests 24/24.
+No further un-incorporated point remains in the corpus.

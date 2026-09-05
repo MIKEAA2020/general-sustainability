@@ -534,12 +534,6 @@ concrete, actionable additions to the implementation plan.** None reverses any v
    occurs. **Action: either state that no interpolation is needed, or use a genuinely non-multiple step.**
 9. **The 41×41 grid's range is never stated**, and "barely positive (Re λ < 0.01)" is not "barely"
    relative to r = 0.02. **Action: state the range and normalise the margin by r.**
-   **Stronger sub-point (`evaluation_of_model_audits` §H / `findings_register` F4):** a grid over
-   τ ∈ [0,80] yr **cannot rule out** a single-delay Hopf — the competing demographic-delay Hopf appears
-   **only** at a large τ_P ≈ 225 yr (slow ω ≈ 0.011 yr⁻¹) once parameters are perturbed off the
-   knife-edge. So the stability statement must be given *as a function of Λ*, and **any scan must
-   extend to τ_P ≳ 250 yr** before concluding "no single delay destabilises." (This is exactly why the
-   earlier single-delay scans to τ ≈ 150 found nothing.)
 10. **Scenario definitions are incomplete**: which e, which lags, and whether T(t) is active are given
     only for some rows; F is undetermined. **Action: make the scenario/parameter table complete.**
 

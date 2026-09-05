@@ -21,13 +21,23 @@ from .utils import load_config, ensure_dir
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("scan_revision")
 
+def _project_root(path):
+    """Project root = the directory whose child is named 'data' (holds master/revision)."""
+    p = Path(path).resolve()
+    for anc in [p] + list(p.parents):
+        if (anc / "data").exists() and (anc / "scan").exists():
+            return anc
+    return Path(path).resolve().parents[0]
+
+
 def _sentences(text):
     text = text.replace("\n", " ")
     parts = re.split(r'(?<=[.!?;:])\s+', text)
     return [p.strip() for p in parts if len(p.strip()) > 25]
 
 def run_scan(master, revision, config="config.yaml", report_dir="reports",
-             embedding_model="", nli_model="", skip_numeric=False, skip_consistency=False):
+             embedding_model="", nli_model="", skip_numeric=False, skip_consistency=False,
+             snapshot=False, release=None):
     cfg = load_config(config) if Path(config).exists() else {}
     ensure_dir(report_dir)
     log.info("Parsing master checklist ...")
@@ -141,6 +151,14 @@ def run_scan(master, revision, config="config.yaml", report_dir="reports",
                    "replay": f"scan_revision scan --master {master} --revision {revision} "
                              f"--config {config} --report-dir {report_dir}"},
                   f, indent=2)
+    # immutable version snapshots (never overwrite earlier versions)
+    if snapshot:
+        from .versioning import snapshot as _snap
+        try:
+            root = _project_root(master)
+            _snap(root, "revision", release or f"scan snapshot of {revision}")
+        except Exception as e:  # pragma: no cover
+            log.warning("snapshot failed: %r", e)
     # console summary
     from rich.console import Console
     from rich.table import Table
@@ -212,11 +230,18 @@ def main(argv=None):
     s.add_argument("--nli-model", default="", help="optional transformers NLI model name")
     s.add_argument("--skip-numeric", action="store_true", help="skip numerical verification")
     s.add_argument("--skip-consistency", action="store_true", help="skip consistency check")
+    s.add_argument("--snapshot", action="store_true",
+                   help="snapshot the scanned revision into data/revisions/ (immutable, new version)")
+    s.add_argument("--release", default="", help="release note for the snapshot changelog")
     rv = sub.add_parser("review", help="run multi-pass rubric peer review on a scan report")
     rv.add_argument("--report", "-j", default="reports/scan_report.json", help="report JSON")
     df = sub.add_parser("diff", help="semantic diff of two versions' structured statements")
     df.add_argument("--old", required=True, help="previous scan_report.json")
     df.add_argument("--new", required=True, help="current scan_report.json")
+    bp = sub.add_parser("bump", help="snapshot the live master/revision into an immutable version")
+    bp.add_argument("--master", default="data/MASTER_joint_assessment_and_implementation_plan.md")
+    bp.add_argument("--which", choices=["revision", "master"], default="revision")
+    bp.add_argument("--note", default="", help="version note")
     cv = sub.add_parser("eval", help="evaluate the matcher against the labelled gold set")
     cv.add_argument("--master", "-m", default="data/MASTER_joint_assessment_and_implementation_plan.md")
     cv.add_argument("--revision", "-r", default="data/IMPLEMENTED_revision_ECOMOD.md")
@@ -226,7 +251,8 @@ def main(argv=None):
     a = p.parse_args(argv)
     if a.cmd == "scan":
         run_scan(a.master, a.revision, a.config, a.report_dir,
-                 a.embedding_model, a.nli_model, a.skip_numeric, a.skip_consistency)
+                 a.embedding_model, a.nli_model, a.skip_numeric, a.skip_consistency,
+                 snapshot=a.snapshot, release=a.release)
     elif a.cmd == "review":
         run_review(a.report)
     elif a.cmd == "diff":
@@ -236,6 +262,10 @@ def main(argv=None):
         eval_main(["--master", a.master, "--revision", a.revision,
                    "--embedding-model", a.embedding_model, "--out", a.out,
                    "--thresholds", a.thresholds])
+    elif a.cmd == "bump":
+        from .versioning import snapshot
+        sn = snapshot(_project_root(a.master), a.which, a.note)
+        print(f"snapshotted {sn.get('which')} v{sn.get('version')} -> {sn.get('path')}")
 
 if __name__ == "__main__":
     main()
