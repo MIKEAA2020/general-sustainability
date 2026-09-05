@@ -1,5 +1,5 @@
 # scan_revision — Audit summary
-*Generated 2026-09-05T20:55:33.338573Z*
+*Generated 2026-09-05T21:09:06.086661Z*
 
 ## Coverage
 **Master items: 22.** Covered: 21 · Partial: 0 · Missing: 0 · Superseded: 1 · Ambiguous: 0.
@@ -17,7 +17,7 @@
 | 12C.10 | covered | 0.63 | auto-covered | corrected (1‴) | complete scenario/parameter table. |
 | 12C.8 | covered | 0.64 | auto-covered | corrected (1‴) | state no interpolation / use non-multiple step. |
 | 12C.9 | covered | 0.90 | auto-covered | corrected (1‴) | state grid range; normalise Re lambda by r. |
-| 12D.11 | covered | 0.69 | auto-covered | original (see note) | cite Hutchinson 1948; soften Haberl & Aubauer novelty. |
+| 12D.11 | covered | 0.79 | auto-covered | original (see note) | cite Hutchinson 1948; soften Haberl & Aubauer novelty. |
 | 12D.12 | covered | 0.63 | auto-covered | original (see note) | correct Brander-Taylor characterisation. |
 | 12D.13 | covered | 0.88 | auto-covered | original (see note) | GFN reference list adopted. |
 | 12D.14 | covered | 0.85 | auto-covered | original (see note) | E5 cleanliness: antibiotic, elevator, per-year, units, tense |
