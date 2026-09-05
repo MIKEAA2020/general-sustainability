@@ -1,0 +1,39 @@
+# scan_revision configuration
+# Defaults are offline-safe. Set embedding_model / nli_model to enable heavy
+# backends ONLY if the models are installed (otherwise the matcher/consistency
+# fall back to TF-IDF / rule-based and warn).
+embedding_model: ""          # OPT-IN, e.g. "allenai/specter" or all-mpnet-base-v2 (needs weights)
+nli_model: ""                # OPT-IN, e.g. "facebook/bart-large-mnli" (needs weights)
+# Coverage thresholds for the hybrid 0.6*cosine + 0.4*BM25 score. Calibrated on the
+# labelled gold eval (eval/results_bm25.json): the score's F1 peaks near ~0.2 and the
+# old 0.75/0.55 over-thresholded (gold best-match mean ≈ 0.39). These lower cuts make the
+# AUTO layer better aligned with the curated verdicts; the curated layer stays authoritative.
+semantic_threshold: 0.45     # auto status covered/partial boundary (low: show to human)
+partial_threshold: 0.30      # partial vs missing boundary
+# Two-tier confidence (see eval note): the hybrid score is a RANKING score, not a
+# probability. `retrieval_threshold` = "show this match to a reviewer" (low, high recall);
+# `auto_covered_threshold` = "auto-mark as covered without human check" (higher, high
+# precision). Reports distinguish `auto-covered` vs `candidate` rows accordingly.
+retrieval_threshold: 0.20
+auto_covered_threshold: 0.60
+
+# Keywords that, when shared+negated between two sentences, flag a contradiction
+consistent_terms:
+  - masking
+  - mask
+  - overshoot
+  - biocapacity
+  - sustainability
+  - illusion
+  - deficit
+  - collapse
+  - equilibrium
+  - carrying capacity
+  - basin
+
+risk:
+  severity_weight: 0.55
+  uncertainty_weight: 0.30
+  actionable_weight: 0.15
+  threshold: 0.3          # items below this score are omitted from the register (kept in JSON)
+  block_on_criticality: high  # CI only blocks on missing/partial actionable items at this level

@@ -1,0 +1,58 @@
+name: Master-Revision Gap Scan
+
+on: [push, pull_request]
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install the tool
+        run: |
+          pip install -e .
+      - name: Run the unit / property / sweep tests
+        run: |
+          python -m pytest tests/ -q
+      - name: Run the gap scan
+        run: |
+          scan_revision scan \
+            --master data/MASTER_joint_assessment_and_implementation_plan.md \
+            --revision data/IMPLEMENTED_revision_ECOMOD.md \
+            --config config.yaml \
+            --report-dir reports
+      - name: Evaluate the matcher (offline TF-IDF+BM25)
+        run: |
+          scan_revision eval \
+            --master data/MASTER_joint_assessment_and_implementation_plan.md \
+            --revision data/IMPLEMENTED_revision_ECOMOD.md \
+            --out eval/results_bm25.json --thresholds 0.2,0.3,0.55,0.75
+      - name: Report (non-blocking) — auto vs curated discrepancies
+        run: |
+          python -c "
+          import json
+          data = json.load(open('reports/scan_report.json'))
+          disp = [m['master_claim']['id'] for m in data['matches']
+                  if m.get('auto_status') and m['auto_status'] != m['status']]
+          print('Discrepancies (NOT blocking):', disp or 'none')
+          "
+      - name: Fail only on critical actionable gaps (missing/partial)
+        run: |
+          python -c "
+          import json
+          data = json.load(open('reports/scan_report.json'))
+          # CI is a support tool: block ONLY on missing/partial ACTIONABLE items at high criticality.
+          critical = [r['claim_id'] for r in data['risk']
+                      if r['criticality']=='high' and r['status'] in ('missing','partial')
+                      and r['type']=='actionable']
+          if critical:
+              raise SystemExit('Critical actionable gaps: ' + str(critical))
+          print('No critical actionable gaps.')
+        "
+      - name: Upload report + audit summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: scan-report
+          path: reports/
