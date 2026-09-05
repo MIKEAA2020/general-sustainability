@@ -31,8 +31,19 @@ def _next_version(root: Path, stem: str) -> int:
     return mx + 1
 
 
+def _latest_content(root: Path, stem: str, ver: int):
+    """Content of the most recent existing snapshot (ver-1), or None."""
+    if ver <= 1:
+        return None
+    prev = root / "data" / "revisions" / f"{stem}_v{ver - 1}.md"
+    return prev.read_text(encoding="utf-8") if prev.exists() else None
+
+
 def snapshot(root: Path, which="revision", note="") -> dict:
-    """Copy the live `which` file into an immutable versioned snapshot. Returns metadata."""
+    """Copy the live `which` file into an immutable versioned snapshot. Returns metadata.
+
+    If the live content is unchanged from the latest snapshot it does **not** create a
+    duplicate version (so the version history only advances on a real revision)."""
     if which == "revision":
         live = root / "data" / "IMPLEMENTED_revision_ECOMOD.md"
         stem = "IMPLEMENTED_revision_ECOMOD"
@@ -46,15 +57,32 @@ def snapshot(root: Path, which="revision", note="") -> dict:
     rev_dir = root / "data" / "revisions"
     rev_dir.mkdir(parents=True, exist_ok=True)
     ver = _next_version(root, stem)
+    content = live.read_text(encoding="utf-8")
+    # no-op guard: do not create a redundant snapshot if nothing changed
+    if _latest_content(root, stem, ver) == content:
+        return {"ok": True, "which": which, "version": ver - 1,
+                "path": str(rev_dir / f"{stem}_v{ver - 1}.md"), "skipped": True,
+                "reason": "content unchanged since previous snapshot"}
     dst = rev_dir / f"{stem}_v{ver}.md"
-    dst.write_text(live.read_text(encoding="utf-8"), encoding="utf-8")
+    dst.write_text(content, encoding="utf-8")
     stamp = datetime.utcnow().isoformat() + "Z"
     changelog = rev_dir / "CHANGELOG.md"
     if not changelog.exists():
         changelog.write_text("# Revision / Master changelog\n\n", encoding="utf-8")
     with open(changelog, "a", encoding="utf-8") as f:
         f.write(f"- **{which} v{ver}** ({stamp}): {note or 'snapshot'}\n")
-    return {"ok": True, "which": which, "version": ver, "path": str(dst), "timestamp": stamp}
+    # VERSION pointer file: record the current version per document
+    vf = root / "VERSION"
+    existing = {}
+    if vf.exists():
+        for line in vf.read_text(encoding="utf-8").splitlines():
+            if "=" in line:
+                k, v = line.split("=", 1)
+                existing[k.strip()] = v.strip()
+    existing[which] = str(ver)
+    vf.write_text("\n".join(f"{k}={v}" for k, v in existing.items()) + "\n", encoding="utf-8")
+    return {"ok": True, "which": which, "version": ver, "path": str(dst),
+            "timestamp": stamp, "skipped": False}
 
 
 def log_release(root: Path, sig: dict) -> None:
