@@ -144,14 +144,10 @@ model (`A, P, D`) with `K` algebraic, and the ill-posed "2-D with no degradation
 - **(K) `K` is algebraic, not a state** — it is a function of the state; the system is genuinely 3-D
   (`A, P, D`), not "two-dimensional."
 - **(6′) Debt accrues only in overshoot, repayed at `η`** — `η` is primary (it decides whether an
-  equilibrium exists). We set **`η = 0.05 yr⁻¹`** — a minimal environmental regeneration /
-  degradation-removal rate (slow, ≈20-yr timescale); the model is **insensitive to `η` over a modest
-  range** provided `η > 0` (§13, point (3)). **State the delay asymmetry explicitly** (master 12G.7):
-  liquidation/depletion is immediate while functional degradation is a separate, slower state; either
-  **justify this asymmetry** or add a **third lag `τ_D`** (`dD/dt = [E(t−τ_D) − B]₊ − ηD` and/or
-  `b = b₀e^{−αD(t−τ_D)} + T_b`) to keep the delay structure consistent. R1/R2 operate on the
-  **constant-parameter S0** (`D` and `η` dropped), so the `η → 0` singular case concerns the **full
-  `(6′)` model**, not R1/R2 (§13, point (3)).
+  equilibrium exists). **State the delay asymmetry explicitly** (master 12G.7): liquidation/depletion
+  is immediate while functional degradation is a separate, slower state; either **justify this
+  asymmetry** or add a **third lag `τ_D`** (`dD/dt = [E(t−τ_D) − B]₊ − ηD` and/or
+  `b = b₀e^{−αD(t−τ_D)} + T_b`) to keep the delay structure consistent.
 - **(7′) Degradation erodes the surviving stock's yield** — a separately-evidenced channel (soil
   fertility, over-picking), *not* double-counting the trees already removed by `A`.
 - **(8′) Technology is bounded** — logistic waves; saturation is why the masking is transient.
@@ -235,11 +231,8 @@ det = r·ρ·A*/A_max > 0  (never a saddle)   →   zero-delay condition is  a�
   scale with the stock (`E = f·bA`) the interior point is `A* = A_max[1 − (f−1)b/(b_G ρ)]`, and it is
   **self-sustaining** (the environment's own mode goes locally runaway, `a₁₁ > 0`) precisely when
   `(2f−1) ν > 1`, where `ν = b/(b_G ρ)`. With `b_G` = standing-stock value (20–100 yr) and realistic
-  `ρ ≈ 0.02–0.1 yr⁻¹`, `ν` is `O(0.1–2)` — treat `(2f−1)ν > 1` only as an **estimated indicator**,
-  not a measured threshold, because `f` and the liability elasticity are set by the model, and this band
-  is an original-model fast–slow result that does **not** transfer as a stability criterion to the
-  corrected S0 (R2: §13, point 8). The paper's "vicious cycle" prose describes `1‴`, not its own `γE`
-  equation.
+  `ρ ≈ 0.02–0.1 yr⁻¹`, `ν` is `O(0.1–2)` — **the dangerous band is not exotic.** The paper's "vicious
+  cycle" prose describes `1‴`, not its own `γE` equation.
 - **The χ-classification (corrected sign).** For `ρ ≫ r`, the 2-D two-delay system reduces to a scalar
   two-gain delayed logistic with control `χ = q/(ρ − 2q)`, `q = γ e b₀/r_opt` (depletion pressure).
   - `χ > 1` (Λ > 0) ⇒ **τ_g-only** Hopf: `ω = r√(χ²−1)`, `τ_g* = arccos(−1/χ)/ω`.
@@ -249,10 +242,6 @@ det = r·ρ·A*/A_max > 0  (never a saddle)   →   zero-delay condition is  a�
   - **The sign structure is exact** (from the `|Q| = |P|` elimination); only `ω*, τ*` are `O(r/ρ)`
     approximate, and the fast–slow reduction is valid only while `a₁₁ ≤ 0` (else use the full 2-D
     transcendental equation, where the `A`-mode can itself oscillate).
-  - **But on the corrected S0 this Hopf classification is NOT realised** — R2 finds the exact `[·]₊`
-    gives a **monotone** positive-real eigenvalue with **no** imaginary-axis crossing for every delay
-    (§8, §13 point (8)). The χ-Hopf rules above describe the *fast–slow reduction*; they do not predict
-    the corrected model's actual (structural) instability.
   - Baseline sits at `χ = 1` **because `ρ` was set to `3q`** — a non-generic choice to be justified or
     perturbed off.
 
@@ -333,30 +322,17 @@ signal rather than a new equilibrium.
   biocapacity; the accounts do not capture soil erosion, deforestation or groundwater depletion, so
   estimated biocapacity likely **overstates** and the Footprint likely **understates** the real
   overshoot). This undergirds the §11 caveat.
-- **Non-smoothness:** at the switch `E = bA` the exact `[·]₊` is non-smooth, so the sustainable point is a
-  **boundary of the deficit regime, not an interior point** — report **one-sided** stability (linearise
-  from the deficit side only). The corrected model uses the exact switch (`ramp_soft=False`); the
-  original-model reference implementation may use a smooth ramp, but then fix its width `w` and report
-  insensitivity to it. Because R2 linearised the exact switch and found **no** imaginary-axis Hopf
-  crossing, the non-smoothness does **not** create spurious oscillations (§13, point 4).
+- **Non-smoothness:** at the switch `E = bA` the vector field is non-smooth; the sustainable point is a
+  **boundary of the deficit regime, not an interior point** — report one-sided stability, or use a
+  smooth ramp of stated width (we use a softplus ramp in the reference implementation).
 - **Delete:** "antibiotic resistance," the elevator/"sudden break" metaphor (B–C are asymptotic), the
   footnote-1 "per year" double-count, "independently verified to machine precision," and the truncated
   "when *ted…" sentence. Give units for `A_max, b₀, Δb`.
-- **Literature (priority statement — be precise).** The delayed-logistic *stability* result is
-  **Hutchinson (1948)**, G. E. Hutchinson, *Circular causal systems in ecology*, Annals of the New York
-  Academy of Sciences **50**(4):221–246 — the reference for the single-delay logistic (the
-  `π/(2r)` demographic threshold that our §4.3 explicitly distinguishes from the two-loop coincidence).
-  **We cannot support the claim that Haberl & Aubauer "first introduced" time delay into human
-  population dynamics**: their contribution is to apply the delayed-logistic framework to human
-  population/load dynamics, not to originate it; state the attribution as Hutchinson (1948) with
-  Haberl & Aubauer as an application. Correct the Brander–Taylor (1998) characterisation. Add the GFN
+- **Literature:** cite Hutchinson (1948) (delayed-logistic ancestor; softens the Haberl & Aubauer
+  priority/novelty claim), correct the Brander–Taylor (1998) characterisation, and add the GFN
   account + limitations references (Wackernagel & Rees; Wackernagel et al. 2002 PNAS; Borucke et al.
   2013; Lin et al. 2018; Galli et al. 2016; Blomqvist / van den Bergh & Grazi / Giampietro &
-  Saltelli), and append the **GFN-caveats sentence**: GFN's own documentation states the accounts are
-  *aggregate and data-limited* — they rely on measured yields and conversion factors, do not capture
-  soil erosion, deforestation or groundwater depletion, and GFN notes likely **overstate** biocapacity
-  and **understate** the Footprint, so the 1961–2022 series is a **lower bound** on genuine overshoot
-  (see §11). Cite or remove the orphan May (1973).
+  Saltelli). Cite or remove the orphan May (1973).
 - **Submission hygiene:** unify "Modeling"/"Modelling"; reconcile the keyword lists; provide code as
   `.py` and the verification report as `.pdf` (not `.docx`); strip the PDF author metadata and the
   submission-system URL / margin callout grid.
@@ -364,13 +340,9 @@ signal rather than a new equilibrium.
 ---
 
 ## 8. Numerics, verification, and well-posedness (RC5)
-- **Solver**: method-of-steps with RK4 (or `dde23`/`pydelay`; Shampine & Thompson 2001), the **exact
-  `[·]₊` switch** as the model states it (`ramp_soft=False` — never a smooth ramp for the corrected
-  model, because a softplus ramp leaks depletion when `E < bA`), **clamping** `A ≥ A_ext > 0`,
-  `P ≥ 0`, `K ≥ K_min`, and an explicit **extinction floor** (so "collapse" is a model result, not a
-  clamp). Where a *smooth* variant of the `[·]₊` switch is used (original-model reference
-  implementation only), fix its width `w` and report **insensitivity** to it (§13, point 4); the
-  corrected model must never be run with `ramp_soft=True`.
+- **Solver**: method-of-steps with RK4 (or `dde23`/`pydelay`; Shampine & Thompson 2001), a **smooth
+  ramp** of stated width for the `[·]₊` switch, **clamping** `A ≥ A_ext > 0`, `P ≥ 0`, `K ≥ K_min`, and
+  an explicit **extinction floor** (so "collapse" is a model result, not a clamp).
 - **Protocol + discrepancy**: state `dt`, history functions, and the **`Δt`-convergence table** (e.g.
   Scenario-A `A*`: 0.8022 at `dt=0.5` vs. 0.8021 at `dt=0.05`). Every "verified" number carries its
   protocol and its deviation from the original manuscript.
@@ -470,9 +442,8 @@ and it must be stated plainly.
 
 - **Method.** The reduced masking model (`dA/dt = G(A) − ramp(E−bA)/b_G`, `dD/dt = ramp(E−B) − ηD`,
   `B = bA + b_G G(A)`, `b = (b₀+T_b)e^{−αD}`, softplus ramp `w=0.05`) was integrated with a **converged
-  RK4** (`mask_rk4.py`); a 7,128-case scan plus a deficit sweep (`deficit_map.py`). The softplus width
-  `w = 0.05` is **stated**, and **insensitivity to `w`** should be reported (§13 point (4)); a mask is
-  scored as a contiguous span with `dB/dt > 0` **and** `dA/dt < 0`, converged over `dt = 0.25 → 0.01`.
+  RK4** (`mask_rk4.py`); a 7,128-case scan plus a deficit sweep (`deficit_map.py`). A mask is scored as
+  a contiguous span with `dB/dt > 0` **and** `dA/dt < 0`, converged over `dt = 0.25 → 0.01`.
 - **Result.** A **genuine mask exists, but only for a small initial deficit.** For the favourable
   configuration (`ρ=0.05, b_G=0.8, b₀=0.5, η=0.05, α=0.03, κ=0.2, t_wave=15, Δb=1.5`, `A₀=1.0`), the
   window is `5.4 yr` wide at deficit `E − b₀A₀ = 0.06`: across it (`t ≈ 1.4 → 6.8` yr) **`B` rises
@@ -606,122 +577,25 @@ carbon, NPP).
   appropriate *boundary* equilibrium rather than an interior point
   (`scans/r2_char_spectrum.png`, `scans/r2_a11_vs_delay.png`).
 
-**(1) R1 and R2 are now resolved, not "known but hidden."** Both were computed on the corrected `(1‴)`
-S0 and are reported above and in §8/`SCAN_risk_register_r1_r2.md`. The key results to carry forward:
-**R1** — recover fraction falls **39.9% → 5.3%** on the baseline `(τ_g,τ_p)=(30,25)` grid (collapse
-fraction 60.1% → 94.7%); **R2** — the corrected S0 has a **neutral zero eigenvalue** across the whole
-equilibrium family `P=B(A)/e` and a **monotone positive-real leading eigenvalue** (≈ +0.59) for every
-delay, i.e. **no Hopf**. There is no outstanding "required work" on R1/R2; the only non-computational
-step left is *presentation* of the corrected S0's numbers in the paper's own scenario-table format (a
-formatting/editorial task, not an open risk), and the original-model provenance of the §8 quoted numbers
-is stated there.
-
-**(2) The fast–slow `χ` reduction is valid only for `ρ ≫ r`; all of R2 uses the full equation.** The
-χ-classification of §4.3 reduces the 2-D two-delay system to a scalar two-gain delayed logistic under the
-fast–slow separation `ρ ≫ r` (and while `a₁₁ ≤ 0`). That separation is **not** satisfied at realistic
-`ρ`. The table below (computed at the sensitivity configuration `τ_g=30, τ_p=25, A*=0.8, b₀=0.5,
-b_G=0.8, e=0.55, r=0.02`) reports the leading real eigenvalue of the **full** transcendental
-`D(s;τ_g,τ_p)=0` alongside the fast–slow `a₁₁` and the timescale ratio `ρ/r`:
-
-| `ρ` (yr⁻¹) | full-`D(s)=0` leading `Re λ` | fast–slow `a₁₁ = G′(A*)+b/b_G` | `a₁₁ > r`? | `ρ/r` |
-|:--|:--|:--|:--:|:--:|
-| 0.02 | +0.625 | 0.618 | yes | 1.0 |
-| 0.05 | +0.625 | 0.608 | yes | 2.5 |
-| 0.10 | +0.625 | 0.592 | yes | 5.0 |
-| 0.50 | +0.625 | 0.458 | yes | 25 |
-| 1.50 | +0.625 | 0.125 | yes | 75 |
-
-Where the reduction **fails**: only at `ρ = 1.5` (`ρ/r = 75`, well separated) is the fast–slow scaling
-justified, and even there `a₁₁` stays positive — no qualitative flip. At realistic `ρ ∈ [0.02, 0.1]`
-(`ρ/r = 1–5`, not ≫ 1) the reduction is **out of its regime**, so the full `D(s)=0` must be used. R2
-always uses the full equation. Note also the full leading eigenvalue is essentially **independent of `ρ`**
-(≈ +0.62, dominated by the depletion gain `a₃ = b₀/b_G`) — itself evidence that the monotone instability
-is structural, not a fast–slow artifact, so the χ-Hopf classification of §4.3 does not carry over (§8,
-point (8)).
-
-**(3) `η` is set physical (non‑zero); the singular `η → 0` case concerns the full `(6′)` model, not
-R1/R2.** R1 and R2 operate on the **constant-parameter S0** (`D` and `η` dropped), where `η` is
-**absent** — so the R1/R2 results do **not** inherit the η-singularity caveat. `η → 0` applies to the
-**full `(6′)`** (`dD/dt = [E−B]₊ − ηD`), where `η` decides whether an equilibrium exists. We set
-`η = 0.05 yr⁻¹`, justified as a **minimal environmental regeneration / degradation-removal** rate: the
-accumulated "debt" is partially replenished by slow (≈20-yr) natural regeneration of the degraded
-resource base. Outcomes are **insensitive to `η` over a modest range** provided `η > 0` (only the
-*existence*, not the *magnitude*, of the equilibrium decision depends on it); `η = 0.05` is the value used
-in the §10 converged masking run and is recorded in the §3/§8 assumptions. A reader setting `η = 0` is
-deliberately removing the regeneration channel and should be told it removes the equilibrium rather than
-perturbing it.
-
-**(4) The sustainable point is a boundary equilibrium; stability is one-sided; the exact switch adds no
-spurious oscillation.** The exact `[·]₊` is **non-smooth** at `A = A_max` (and at `E = bA`), so the
-corrected S0's "sustainable" state is a **boundary of the deficit regime, not an interior point** —
-linearise **one-sided (from the deficit/lower side only)** and report that stability as such (§7, §8).
-R2 linearised the **exact** switch and found **no** imaginary-axis crossing, so **the non-smoothness does
-not create spurious oscillations** — the manuscript should say so explicitly. Where a smooth ramp
-replaces `[·]₊` (original-model reference implementation only), fix its width `w`, state it, and report
-**insensitivity** to `w`; the corrected model is never run with `ramp_soft=True` (§8).
-
-**(5) Masking illusion — small-deficit only, not generic.** §10 and §1 already bound it: the window
-maxes at **≈5.4 yr** (deficit 0.06) and **vanishes at deficit ≈ 0.075** (≈15 % of the initial flow yield
-`b₀A₀`), and it is **converged** (RK4, not the Euler artifact). Make the caveat explicit in the paper:
-the illusion is **not generic**; it **does not appear for deficit ≳ 0.075**, and it must **not be cited
-as a general phenomenon** — only as the narrow, transient, small-overshoot band of §10. The withdrawn
-Euler figure (`demo_masking_euler.png`) is **not** referenced; only the converged
-`IMPLEMENTED_demo_masking.png` is cited.
-
-**(6) Parameters are representative, not estimated; the two headline results have been sensitivity
-checked.** The results are **illustrative** and need calibration; `b_G`, `α` and the lags are lumped,
-not measured. Robustness:
-- **Recover–collapse (R1) is robust to `b_G`.** On the documented grid (computed, `(30,25)` baseline):
-
-| `b_G` | recover (no delay) | recover (baseline `(30,25)`) | Δ |
-|:--|:--|:--|:--:|
-| 0.4 | 0.394 | 0.053 | 0.341 |
-| 0.6 | 0.399 | 0.053 | 0.346 |
-| 0.8 | 0.399 | 0.053 | 0.346 |
-| 1.0 | 0.404 | 0.053 | 0.351 |
-| 1.2 | 0.404 | 0.053 | 0.351 |
-
-Over a **3×** range of the standing-stock value, the no-delay recover fraction varies only 0.394→0.404
-(±1.3 %) and the baseline-delay recover fraction is **pinned at 0.053** — so the qualitative result
-"the regeneration delay collapses the recover basin from ~40 % to ~5 %" is **robust**, not a `b_G`
-artefact.
-- **The monotone instability (R2) is structural** (independent of `ρ`; §(2)), and the **masking band** is
-  bounded by the §(5) deficit limits. `α` and `τ_p` were **not** independently swept here (each needs its
-  own RK4 grid sweep); state `α = 0.03` and `τ_p = 25` as **illustration values needing calibration**,
-  and soften the "dangerous band `(2f−1)ν > 1`" to "an **estimated** indicator" (§4.3).
-
-**(7) Priority/literature — be precise.** The delayed-logistic *stability* result is **Hutchinson
-(1948)**; we **cannot support** the claim that Haberl & Aubauer "first introduced" time delay into human
-population dynamics — they *apply* the delayed-logistic framework to human load, they do not originate it
-(§7). Add the **GFN-caveats** sentence: the accounts are aggregate and data-limited (measured yields and
-conversion factors; no soil erosion, deforestation or groundwater depletion), so biocapacity is likely
-**overstated** and the Footprint **understated** — meaning the 1961–2022 series is a **lower bound** on
-genuine overshoot.
-
-**(8) R1/R2-derived caveats that must accompany the results.** (i) **Monotone, not Hopf:** the leading
-mode is a positive-real eigenvalue with **no imaginary-axis crossing**, so the old `χ` two-gain **Hopf**
-classification derived for the ORIGINAL interior attractor does **not** transfer (§4.3, §8); the
-abstract's "'onset of instability is controlled by χ'" phrasing is the original-model interior-attractor
-statement — on the corrected S0 the instability is instead monotone and structural. (ii) **Neutral
-continuum / no isolated interior attractor:** `D(0)=0` on the whole family `P=B(A)/e`, so there is no
-isolated interior attracting state; the sustainable state is the **boundary** `(A_max, P=b₀A_max/e)`. Do
-not report a "stable fraction of an interior point" for the corrected S0. (iii) **Grid-dependence of the
-recover fraction is bounded but real** (computed, `τ_p=0`, same integrator, coarse 6×8 vs fine 25×31):
-
-| `τ_g` (yr) | fine (0.05 step) | coarse (0.2 step) | fine / coarse |
-|:--|:--|:--|:--:|
-| 30 | 0.027 | 0.104 | 0.26 |
-| 40 | 0.212 | 0.208 | 1.02 |
-| 50 | 0.301 | 0.417 | 0.72 |
-| 60 | 0.321 | 0.396 | 0.81 |
-
-The **coarse grid overstates** the recover fraction near collapse (at `τ_g=30`: 0.104 coarse vs 0.027
-fine), so publish the recover fraction computed on the **fine** mesh and report the coarse value only as a
-bound. (iv) **The delay-response non-monotonicity at `τ_g ≈ 40–60` is real, not a grid artifact.** The
-fine grid confirms and sharpens it: the recover fraction has a **deep minimum at `τ_g=30` (≈0.03, the
-vanished basin) and re-opens to ≈0.21 (40), ≈0.30 (50), ≈0.32 (60)**; the coarse grid shows the same
-min→rise shape (0.10 → 0.21 → 0.42 → 0.40), so the re-entry is **retained**. A boundary (separatrix)
-curve as a function of `(τ_g,τ_p)` is the natural follow-up to the §8 R1 figure.
+- **ρ** is still large in the original scale; at realistic `ρ ≈ 0.02–0.1 yr⁻¹` the fast–slow `χ`
+  reduction fails and the full transcendental equation must be used.
+- **`η → 0`** is the singular case; set it physical (non-zero) and justify it.
+- **Non-smoothness** at the switch means the sustainable point is a boundary; report one-sided
+  stability or use a stated-width ramp.
+- **The masking illusion is a narrow, deficit-bounded band** (≈5.4 yr max; vanishes at deficit ≈0.075
+  under converged RK4); it is *conditional*, not generic, and is confined to small overshoots — do not
+  claim it for strong overshoot, and do not cite the withdrawn Euler-based figure (see §10).
+- **Parameters are representative, not estimated**; `b_G` (standing-stock value), `α`, and the lags
+  need empirical grounding; the "dangerous band `(2f−1)ν > 1`" is estimated, not measured.
+- **Priority/literature:** the Hutchinson early-result point is *unsupported* (not disproven); GFN's
+  own caveats bound how much the 1961–2022 claim can say.
+- **Resolved, but not silent:** the corrected-model basin recomputation (R1) and the corrected
+  characteristic-equation/spectrum analysis (R2) are **now computed** and reported in
+  `SCAN_risk_register_r1_r2.md` and summarised above; the original-model provenance of several quoted
+  numbers is stated explicitly in §8. What remains open is the *corrected scenario table / figure
+  set* in the sense of reporting the corrected S0's numbers in the paper's own table format (see the
+  R1/R2 note) — the *computations* are done, the *presentation* in the manuscript's scenario table is
+  the residual editorial step.
 
 ---
 
