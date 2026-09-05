@@ -10,7 +10,7 @@ from pathlib import Path
 
 from . import char_eq as CE
 from .r1_basin import basin_cells, delay_response, boundary_row
-from .r1_basin import DEFAULT_GRID
+from .r1_basin import DEFAULT_GRID, equilibrium_line
 
 OUT = Path(__file__).resolve().parents[1] / "reports"
 
@@ -32,6 +32,29 @@ def compute():
     Ps = max(0.05, min(1.55, _P["b0"] * _P["Amax"] / _P["e"]))
     # recover boundary along A0=1.0 row (P0 below which recover)
     bnd = boundary_row(0.0, 0.0, A0=1.0)
+
+    # separatrix-vs-equilibrium-line agreement: does "recover <==> P0 < B(A0)/e" hold?
+    def _agree(bb):
+        n = ok = 0
+        for i, A0 in enumerate(bb["gridA"]):
+            line = float(equilibrium_line(float(A0), _P))
+            for j, P0 in enumerate(bb["gridP"]):
+                n += 1
+                ok += ((bb["cells"][i][j] == "R") == (float(P0) < line))
+        return (ok / n if n else 0.0)
+
+    sep_agree_00 = _agree(b00)
+    sep_agree_30_25 = _agree(b30_25)
+    # baseline recover strip: the A0 at which recover still occurs and its P0 ceiling
+    A0_rec = sorted({float(a) for a in b30_25["gridA"]
+                     for i, a2 in enumerate(b30_25["gridA"])
+                     if a2 == a and any(b30_25["cells"][i][j] == "R" for j in range(len(b30_25["gridP"])))},
+                    key=float)
+    rec_strip = [(round(float(A0), 2),
+                  round(float(equilibrium_line(float(A0), _P)), 3),
+                  int(sum(1 for j in range(len(b30_25["gridP"])) if b30_25["cells"][i][j] == "R")))
+                 for A0 in A0_rec
+                 for i in range(len(b30_25["gridA"])) if float(b30_25["gridA"][i]) == float(A0)]
 
     # ---- R2 characteristic equation ----
     Aref = 0.8
@@ -55,6 +78,9 @@ def compute():
         grid=f"{len(b00['gridA'])}x{len(b00['gridP'])}={b00['total']}",
         P_sustainable=b00["P_sustainable"],
         recover_boundary_A1=bnd,
+        separatrix_agree_nodelay=round(sep_agree_00, 4),
+        separatrix_agree_baseline=round(sep_agree_30_25, 4),
+        baseline_recover_strip=rec_strip,
         delay_response=[(float(tg), round(f, 4)) for tg, f in resp0],
         delay_response_tp25=[(float(tg), round(f, 4)) for tg, f in resp25],
     ), R2=dict(
@@ -106,6 +132,11 @@ def write_report(res):
                  f"vicious-cycle liquidation drives A to A_ext. The recover basin collapses abruptly as "
                  f"tau_g rises through ~20 yr (see `scans/r1_basin_delay_response.png`).")
     lines.append(f"- **Recover boundary at A0=1.0 (no delay):** recovers for `P0 <= {r1['recover_boundary_A1']}`.")
+    lines.append(f"- **Separatrix = equilibrium line (`P0 < B(A0)/e`):** agreement with the recover/collapse "
+                 f"classification is **{r1['separatrix_agree_nodelay']*100:.1f}%** (no delay) vs "
+                 f"**{r1['separatrix_agree_baseline']*100:.1f}%** (baseline `(30,25)`). So under no delay the "
+                 f"boundary curve is exactly the family line `P0 = B(A0)/e`; under baseline delays the recover "
+                 f"basin collapses to the strip at {r1['baseline_recover_strip']} (A0 near A_max, P0 up to ~B(A_max)/e).")
     lines.append(f"- **Delay response** (tau_p=0): "
                  + ", ".join(f"tau_g={tg}: {f:.2f}" for tg, f in r1["delay_response"]) + ".")
     lines.append("\n## R2 — corrected characteristic equation / crossing curves / full spectrum\n")

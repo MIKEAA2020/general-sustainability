@@ -1,5 +1,5 @@
 # scan_revision — Audit summary
-*Generated 2026-09-05T04:01:26.191946Z*
+*Generated 2026-09-05T04:13:53.741932Z*
 
 ## Coverage
 **Master items: 22.** Covered: 21 · Partial: 0 · Missing: 0 · Superseded: 1 · Ambiguous: 0.
@@ -20,10 +20,10 @@
 | 12D.11 | covered | 0.69 | auto-covered | original (see note) | cite Hutchinson 1948; soften Haberl & Aubauer novelty. |
 | 12D.12 | covered | 0.63 | auto-covered | original (see note) | correct Brander-Taylor characterisation. |
 | 12D.13 | covered | 0.88 | auto-covered | original (see note) | GFN reference list adopted. |
-| 12D.14 | covered | 0.85 | auto-covered | original (see note) | E5 cleanliness: antibiotic, elevator, per-year, units, tense |
+| 12D.14 | covered | 0.86 | auto-covered | original (see note) | E5 cleanliness: antibiotic, elevator, per-year, units, tense |
 | 12E.1 | covered | 0.88 | auto-covered | original (see note) | verified-correct list preserved ('do not fix'). |
-| 12G.1 | covered | 0.96 | auto-covered | original (see note) | four falsifiable predictions stated. |
-| 12G.2 | covered | 0.91 | auto-covered | original | basin-shrinkage 0.506->0.042; ORIGINAL-model S0. Corrected S |
+| 12G.1 | covered | 0.93 | auto-covered | original (see note) | four falsifiable predictions stated. |
+| 12G.2 | covered | 0.90 | auto-covered | original | basin-shrinkage 0.506->0.042; ORIGINAL-model S0. Corrected S |
 | 12G.3 | covered | 0.90 | auto-covered | corrected (1‴) | full dimensionless group set s,g,f,theta,tau. |
 | 12G.4 | covered | 0.90 | auto-covered | original | B/C = environment recovers, humans collapse (opposite framin |
 | 12G.5 | covered | 0.90 | auto-covered | original | (20,20) recovers / (30,25) collapses; min-M grid-sensitive. |
@@ -41,7 +41,14 @@
 
 ## Discrepancies (auto vs curated)
 
-- none
+- 12A.3: AUTO said 'superseded' (score 0.86), curated verdict 'covered'
+- 12A.4: AUTO said 'superseded' (score 0.85), curated verdict 'covered'
+- 12C.8: AUTO said 'superseded' (score 0.64), curated verdict 'covered'
+- 12C.9: AUTO said 'superseded' (score 0.90), curated verdict 'covered'
+- 12C.10: AUTO said 'superseded' (score 0.63), curated verdict 'covered'
+- 12E.1: AUTO said 'superseded' (score 0.88), curated verdict 'covered'
+- 12G.2: AUTO said 'superseded' (score 0.90), curated verdict 'covered'
+- 12G.5: AUTO said 'superseded' (score 0.90), curated verdict 'covered'
 
 ## Open items & provenance
 

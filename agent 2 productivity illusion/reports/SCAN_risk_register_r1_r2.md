@@ -9,6 +9,7 @@
 - **Baseline `(30,25)`:** recover = **5.3%**, collapse = **94.7%**.
 - **Mechanism:** with the regeneration delay, the stock overshoots A_max (up to ~1.36), the population (tracking delayed K) overshoots into `E>bA`, and the vicious-cycle liquidation drives A to A_ext. The recover basin collapses abruptly as tau_g rises through ~20 yr (see `scans/r1_basin_delay_response.png`).
 - **Recover boundary at A0=1.0 (no delay):** recovers for `P0 <= 0.85`.
+- **Separatrix = equilibrium line (`P0 < B(A0)/e`):** agreement with the recover/collapse classification is **99.0%** (no delay) vs **64.4%** (baseline `(30,25)`). So under no delay the boundary curve is exactly the family line `P0 = B(A0)/e` (the numerical witness to R2's neutral continuum); under baseline delays the recover basin collapses to the strip `[(1.2, 1.091, 11)]` — i.e. only `A0 ≈ A_max` with `P0 ≲ B(A_max)/e ≈ 1.09` recovers (5.3%), and nothing else.
 - **Delay response** (tau_p=0): tau_g=0.0: 0.42, tau_g=8.0: 0.42, tau_g=16.0: 0.42, tau_g=24.0: 0.10, tau_g=32.0: 0.10, tau_g=40.0: 0.21, tau_g=48.0: 0.42, tau_g=56.0: 0.27, tau_g=64.0: 0.31.
 
 ## R2 — corrected characteristic equation / crossing curves / full spectrum

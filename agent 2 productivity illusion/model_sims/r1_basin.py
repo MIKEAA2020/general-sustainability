@@ -104,6 +104,42 @@ def boundary_row(tg, tp, A0, gridP=None, **kw):
     return last_R
 
 
+def recover_boundary(tg, tp, A0, *,
+                     P0_lo=0.05, P0_hi=2.60, tol=0.02, maxit=26, **kw):
+    """Numerical separatrix: the highest P0 that still RECOVERS for a fixed A0,
+    found by bisection (recover fraction is monotone-decreasing in P0).  Returns
+    (P0_boundary, cls_lo, cls_hi).  If every P0 recovers -> P0_hi; if none ->
+    P0_lo (i.e. no recover boundary in range)."""
+    p = _params(kw)
+    dt = kw.get("dt", 0.5); T = kw.get("T", 1200.0)
+
+    def cls(pp):
+        return corrected_s0(tg=tg, tp=tp, A0=float(A0), P0=float(pp),
+                            dt=dt, T=T, **p)["cls"]
+
+    lo, hi = P0_lo, P0_hi
+    if cls(lo) != "R":                     # nothing recovers at A0
+        return (None, cls(lo), cls(hi))
+    if cls(hi) == "R":                     # everything recovers up to P0_hi
+        return (hi, "R", "R")
+    for _ in range(maxit):
+        mid = 0.5 * (lo + hi)
+        if cls(mid) == "R":
+            lo = mid
+        else:
+            hi = mid
+        if abs(hi - lo) < tol:
+            break
+    return (round(0.5 * (lo + hi), 3), cls(lo), cls(hi))
+
+
+def equilibrium_line(A, p):
+    """The one-parameter family of S0 equilibria P = B(A)/e (the sustainable line)
+    evaluated at stock A (scalar or array)."""
+    A = np.asarray(A, float)
+    return (p["b0"] * A + p["bG"] * _G(A, p["rho"], p["Amax"])) / p["e"]
+
+
 if __name__ == "__main__":
     import json
     res = dict(baseline={}, delay_scale=[])
