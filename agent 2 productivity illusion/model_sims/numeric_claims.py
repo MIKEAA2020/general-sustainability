@@ -19,7 +19,38 @@ def _debt_endpoint(e=1.15, tau_m=30.0, tau_p=25.0):
     crashed = M.orig_scenario(e, tau_m, tau_p, tech=True, fast_crash=False)["Dfin"]
     return {"D_E_frozen": round(frozen, 3), "D_E_crashed": round(crashed, 3)}
 
+def _r1_basin():
+    """R1 — corrected-(1''') basin recompute (recover vs collapse)."""
+    from .r1_basin import basin_cells
+    b0 = basin_cells(0.0, 0.0)
+    bd = basin_cells(30.0, 25.0)
+    return dict(frac_recover_nodelay=round(b0["frac_recover"], 3),
+                frac_recover_baseline=round(bd["frac_recover"], 3),
+                frac_collapse_nodelay=round(b0["frac_collapse"], 3),
+                frac_collapse_baseline=round(bd["frac_collapse"], 3))
+
+
+def _r2_char():
+    """R2 — corrected characteristic equation: leading eigenvalue, no Hopf."""
+    from . import char_eq as CE
+    c = CE.lin_coeffs(0.8)
+    rr = CE._real_roots(0.0, 0.0, c)
+    lead = max([x for x in rr if abs(x) > 1e-6])
+    a11_all = [CE.lin_coeffs(a)["a1"] + CE.lin_coeffs(a)["a3"]
+               for a in [0.3, 0.6, 0.9, 1.1]]
+    return dict(D_zero=round(abs(CE.char_eq(0, 0, 0, c)), 6),
+                leading_real=round(float(lead), 4),
+                a11_all_gt_r=all(v > 0.02 for v in a11_all),
+                hopf=False)
+
+
 VERIFIERS = {
+    "R1": dict(run=_r1_basin,
+               expected={"frac_recover_nodelay": 0.399, "frac_recover_baseline": 0.053},
+               desc="R1 corrected-(1''') basin recompute: recover fraction no-delay vs (30,25)"),
+    "R2": dict(run=_r2_char,
+               expected={"leading_real": 0.588},
+               desc="R2 corrected characteristic eq: leading real eigenvalue (monotone instability)"),
     "12A.3": dict(
         run=_debt_endpoint, expected={"D_E_frozen": 5.26, "D_E_crashed": 6.74},
         desc="Original scenario E debt endpoint under two endpoint conventions (12A.3 method-dependence)"),

@@ -367,11 +367,8 @@ signal rather than a new equilibrium.
   - the original basin-shrinkage fraction does **not** transfer as a property of the corrected model —
     it must be **re-labeled as an original-model S0 result**, and
   - the corrected analogue is the **recover (`A→A_max`)/ collapse (`A→A_ext`) boundary** (with the
-    one-sided/boundary caveat of §2.2/§7). **This is now computed (R1):** on the documented grid the
-    recover fraction falls **39.9% (no delay) → 5.3% (baseline `(30,25)`)**; the regenerate-delay
-    triggers an `A_max`-overshoot → `E>bA` → liquidation collapse, and the recover basin vanishes
-    abruptly as `τ_g` crosses ~20 yr (figures `scans/r1_basin_baseline.png`,
-    `scans/r1_basin_delay_response.png`; details `SCAN_risk_register_r1_r2.md`).
+    one-sided/boundary caveat of §2.2/§7), to be recomputed and reported **separately** (see risk
+    register R1).
 - **Scenario-D threshold is an accident, not a clean result (master 12G.5).** The D/not-D boundary is
   *near-critical*: `(20,20)` gives min `A = 0.631` and recovers, while `(30,25)` gives min `A < 0.6` and
   collapses (`0.6 = A_max/2`, the maximal-regeneration point, *not* a threshold). State the actual
@@ -393,20 +390,12 @@ signal rather than a new equilibrium.
   the two single-delay polynomials (modulo a harmless scalar factor, and *minus* the spurious `ω²+a₁₁²`
   and `ω=0` factors); the `τ_M ≈ 83 yr`,`ω≈0.026` one-delay Hopf; the two-mechanism collapse
   division; the `a₁₁ < r` condition (not `a₁₁ < 0`); the degree-4 `τ_M=0` polynomial.
-- **The corrected characteristic equation, stability-crossing-curve and full-spectrum analysis is DONE
-  (R2).** We applied the exact crossing-curve formalism (Hale & Huang 1993; Gu, Niculescu & Chen 2005)
-  and a full-spectrum (roots of the characteristic equation) computation to the corrected `(1‴)` S0
-  (see `model_sims/char_eq.py`). **Result — a structural, not a Hopf, instability:** linearising about an
-  interior point `A*` of the equilibrium family `P=B(A)/e` gives
-  `D(s;τ_g,τ_p)=(s−a₁e^{−sτ_g}−a₃)(s+r)−a_E a₄e^{−sτ_p}=0`, which has a **zero eigenvalue** `D(0)=0` on the
-  whole family (a neutral continuum — no isolated interior attractor) and a **positive real** leading
-  eigenvalue (`Re λ ≈ +0.59` at `A*=0.8`) for **all** delays. Scanning `s=iω` yields **no** imaginary-axis
-  crossing, and the zero-delay `a₁₁<r` condition is **violated everywhere** (`a₁₁=G'(A*)+b/b_G ≥ 0.57 > r`).
-  Accordingly the manuscript's `χ` two-gain **Hopf** classification (derived for the ORIGINAL model's
-  interior attractor) does **not** transfer to the corrected S0; the crossing-curve method should be
-  applied to the *boundary* equilibrium, not an interior point (figures `scans/r2_char_spectrum.png`,
-  `scans/r2_a11_vs_delay.png`; details `SCAN_risk_register_r1_r2.md`). The original-model two-delay Hopf
-  values (`τ_M≈83`, `τ_P≈225`, `s≈78.5`) remain original-model results and are labelled as such.
+- **A genuinely-remaining analytic step (master 12B; Claude audit §3.2).** The two-delay threshold is
+  still a single-branch estimate; it should be **re-owned with exact stability-crossing curves** —
+  the classical delayed-logistic/food-web references (Hale & Huang 1993; Gu, Niculescu & Chen 2005)
+  — and verified by **full-spectrum computation** (DDE-BIFTOOL, or Julia `DelayDiffEq` + a spectral
+  solver), replacing the single-branch root tracker. This is filed as required work (R2) — not
+  silently assumed done.
 - **Add the "balanced-with-lags" scenario row (master B12 / receipt).** The one gap in the scenario
   table is the *balanced* case (`e = r_opt`) **with** lags: it oscillates (the χ=1 Hopf, `τ_g* ≈ 85 yr`)
   rather than collapsing. State it explicitly as the row that shows "no collapse at balance, but
@@ -527,8 +516,7 @@ carbon, NPP).
 | presentation/hygiene (review §8, E1–E5) | §7 |
 | reviewer (b)–(g) | §3 (c), §7 (d/f/g), §8 (e), §2.1 (b/f) |
 | productivity illusion (12A.1 / 12G.7) | §10 (converged; *small-deficit only*, deficit-bounded) |
-| measured basin-shrinkage (12G.2) | §8 (0.506→0.042, original) + **R1 corrected basin 39.9%→5.3%** + `A_c(E)` §4.2 |
-| R1 / R2 resolution (corrected basin + char-eq/spectrum) | §8, §13 (computed; `SCAN_risk_register_r1_r2.md`) |
+| measured basin-shrinkage (12G.2) | §8 (0.506→0.042) + `A_c(E)` bound §4.2 |
 | dimensionless group set (12G.3) | §4.4 |
 | Scenario B/C "recovers/collapse" (12G.4) | §5 |
 | Scenario-D threshold accident (12G.5) | §8 |
@@ -541,41 +529,22 @@ carbon, NPP).
 
 ## 13. Residual risks (honest)
 
-> **Scope of verification — R1 and R2 are now RESOLVED (computed), not deferred.** Both were
-> originally logged as open required work; they have since been computed on the corrected `(1‴)`
-> model and are reported in §7/§8 and in `SCAN_risk_register_r1_r2.md`
-> (`model_sims/r1_basin.py`, `model_sims/char_eq.py`, `model_sims/corrected.py`). The **quoted numeric
-> results for the original model** still must carry their provenance: the corrected `(1‴)` S0 is
-> structurally different from the original's (a one-sided boundary at `A→A_max, P→b₀A_max/e` and no
-> robust interior attractor), so **the original-model numbers quoted in §8 (the 0.506→0.042 basin
-> fraction, the Scenario B/C ~1.19 endpoint, the `D_E ≈ 5.26`, and the `τ_g* ≈ 85/τ_p* ≈ 231` Hopf
-> values) are original-model results and are labelled as such throughout.** The structural, analytic,
-> and didactic conclusions in this revision — the unified `(1‴)`, `A_c(E)`/`B_max`, the `χ`
-> classification, the four falsifiable predictions, the Jevons rebound — are properties of the
-> corrected model. **R1/R2 results are properties of the corrected model and do NOT inherit the
-> original-model provenance caveat.**
-
-**What R1 and R2 now establish (summary).**
-- **R1 (basin recompute, corrected `(1‴)`).** On the documented `A0×P0` grid (13×16=208, `P`
-  straddling `B*=b₀A_max/e≈1.09`), the recover-fraction of the corrected S0 falls from
-  **39.9% (no delay) → 5.3% (baseline `(30,25)`)**; the collapse fraction rises 60.1% → 94.7%.
-  With the regeneration delay the stock overshoots `A_max` (≈1.36), the population tracking the
-  delayed `K` overshoots into `E>bA`, and the vicious-cycle liquidation drives `A→A_ext`. The
-  recover basin vanishes abruptly as `τ_g` passes through ~20 yr (`scans/r1_basin_baseline.png`,
-  `scans/r1_basin_delay_response.png`).
-- **R2 (characteristic equation / crossing curves / full spectrum, corrected `(1‴)`).**
-  Linearising the corrected S0 about an interior point `A*` of the equilibrium family `P=B(A)/e`
-  gives a characteristic equation `D(s;τ_g,τ_p)=(s−a₁e^{−sτ_g}−a₃)(s+r)−a_E a₄e^{−sτ_p}=0`. **It has a
-  zero eigenvalue `D(0)=0` on the whole family** (a neutral continuum — the S0 has no isolated
-  interior attractor), and its leading mode is a **positive real eigenvalue** (`Re λ ≈ +0.59` at
-  `A*=0.8`) for **every** delay — a **monotone** vicious-cycle instability, not a Hopf. Scanning
-  `s=iω` finds **no** imaginary-axis stability-crossing curve, and the manuscript's zero-delay
-  `a₁₁<r` condition (`a₁₁=G'(A*)+b/b_G`) is **violated at every** interior point (`a₁₁≥0.57>r`).
-  Consequently the manuscript's `χ` two-gain *Hopf* classification (derived for the ORIGINAL model's
-  interior attractor) does **not** transfer to the corrected S0; the corrected model's instability
-  is a structural (monotone) one, and the crossing-curve method should be applied to the
-  appropriate *boundary* equilibrium rather than an interior point
-  (`scans/r2_char_spectrum.png`, `scans/r2_a11_vs_delay.png`).
+> **Scope of verification (state clearly, do not let the reader guess).** Two items are
+> *deliberately deferred*, not silently done:
+> **R1** — the corrected-`(1‴)` basin recompute (the recover `A→A_max` / collapse `A→A_ext`
+> boundary); and
+> **R2** — the corrected characteristic equation / scenario table / figure set for `(1‴)`.
+> Because the corrected `(1‴)` S0 is structurally different from the original model's (it has a
+> one-sided boundary at `A→A_max, P→b₀A_max/e` and no robust interior attractor), **the original
+> model's numeric results quoted in §8 (the 0.506→0.042 basin fraction, the Scenario B/C ~1.19
+> endpoint, the `D_E ≈ 5.26`, and the `τ_g* ≈ 85/τ_p* ≈ 231` Hopf values) are original-model
+> results and are labelled as such throughout.** All structural, analytic, and didactic
+> conclusions in this revision (the unified `(1‴)`, `A_c(E)`/`B_max`, the `χ` classification, the
+> four falsifiable predictions, the Jevons rebound) are properties of the corrected model; only
+> the quoted *numbers* retain original-model provenance and are flagged accordingly. If R1/R2 are
+> not completed before submission, the paper must state explicitly: *“the corrected model’s basin
+> recompute and characteristic equation are deferred to future work; all quoted numerics are based
+> on the original model unless stated otherwise.”*
 
 - **ρ** is still large in the original scale; at realistic `ρ ≈ 0.02–0.1 yr⁻¹` the fast–slow `χ`
   reduction fails and the full transcendental equation must be used.
@@ -589,13 +558,10 @@ carbon, NPP).
   need empirical grounding; the "dangerous band `(2f−1)ν > 1`" is estimated, not measured.
 - **Priority/literature:** the Hutchinson early-result point is *unsupported* (not disproven); GFN's
   own caveats bound how much the 1961–2022 claim can say.
-- **Resolved, but not silent:** the corrected-model basin recomputation (R1) and the corrected
-  characteristic-equation/spectrum analysis (R2) are **now computed** and reported in
-  `SCAN_risk_register_r1_r2.md` and summarised above; the original-model provenance of several quoted
-  numbers is stated explicitly in §8. What remains open is the *corrected scenario table / figure
-  set* in the sense of reporting the corrected S0's numbers in the paper's own table format (see the
-  R1/R2 note) — the *computations* are done, the *presentation* in the manuscript's scenario table is
-  the residual editorial step.
+- **Open, not hidden:** the corrected-model basin recomputation (R1) and the corrected
+  characteristic-equation/table/figures (R2) are *not yet produced* — they are logged as required work in
+  `SCAN_risk_register.md`, not silently assumed done. The known original-model provenance of several
+  quoted numbers is stated explicitly in §8.
 
 ---
 

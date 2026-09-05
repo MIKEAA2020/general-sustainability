@@ -101,27 +101,18 @@ def corrected_s0_summary(rho=0.08, Amax=1.2, b0=0.5, bG=0.6, e=0.55, r=0.02,
     """Establish the structure of the corrected constant-parameter S0.
 
     Returns a dict: whether a unique interior attractor exists, the one-sided
-    boundary point (A->Amax, P->b0*Amax/e), and whether overshoot collapses."""
-    def G(a): a = max(a, 0.0); return rho * a * (1 - a / Amax)
-    def integrate(A0, P0):
-        n = int(T / dt); A = np.zeros(n + 1); P = np.zeros(n + 1)
-        A[0] = A0; P[0] = P0
-        for i in range(n):
-            a = A[i]; pp = P[i]
-            def F(aa, qq):
-                Bv = b0 * aa + bG * G(aa)
-                return (G(aa) - ramp(e * qq - b0 * aa, w) / bG,
-                        r * qq * (1 - qq / max(Bv / e, 1e-6)))
-            k1 = F(a, pp); k2 = F(a + dt / 2 * k1[0], pp + dt / 2 * k1[1])
-            k3 = F(a + dt / 2 * k2[0], pp + dt / 2 * k2[1]); k4 = F(a + dt * k3[0], pp + dt * k3[1])
-            A[i + 1] = max(a + dt / 6 * (k1[0] + 2 * k2[0] + 2 * k3[0] + k4[0]), Aext)
-            P[i + 1] = max(pp + dt / 6 * (k1[1] + 2 * k2[1] + 2 * k3[1] + k4[1]), 0.0)
-        return A[-1], P[-1]
-    # probe several ICs -> does any settle strictly interior (non-floor && non-Amax)?
+    boundary point (A->Amax, P->b0*Amax/e), and whether overshoot collapses.
+
+    Delegate to `model_sims.corrected.corrected_s0` (the current, corrected-U
+    implementation with the exact ``[x]_+`` switch and correctly-placed delayed
+    regeneration ``G(A(t-tau_g))`` and delayed carrying capacity ``K(t-tau_p)``).
+    """
+    from .corrected import corrected_s0
     interiors = []
     for (A0, P0) in [(1.0, 0.3), (0.8, 0.6), (1.1, 0.9), (0.6, 0.9)]:
-        Af, Pf = integrate(A0, P0)
-        interiors.append((round(Af, 3), round(Pf, 3)))
+        r_ = corrected_s0(A0=A0, P0=P0, tg=0.0, tp=0.0, rho=rho, Amax=Amax,
+                          b0=b0, bG=bG, e=e, r=r, Aext=Aext, dt=dt, T=T)
+        interiors.append((round(r_["Aend"], 3), round(r_["Pend"], 3)))
     return dict(point="A->Amax=%.3f, P->b0*Amax/e=%.3f" % (Amax, b0 * Amax / e),
                 unique_interior_attractor=False,
                 one_sided_boundary=True,

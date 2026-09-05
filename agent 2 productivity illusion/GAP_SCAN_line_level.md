@@ -147,3 +147,37 @@ revision (§8 reporting-rigour (i)):
 **Result:** after this pass — 21 covered / 1 superseded (12A.1) / 0 missing / 0 ambiguous;
 auto_tier 20 auto-covered / 2 candidate; eval Recall@1 **0.86** / Recall@3 **0.91**; tests 24/24.
 No further un-incorporated point remains in the corpus.
+
+## R1 / R2 — RESOLVED (computed, not deferred)
+
+Both previously-open items are now computed on the corrected `(1‴)` model and no longer logged as
+"required work not done":
+
+**R1 — corrected-`(1‴)` basin recompute.** On a documented `A0×P0` grid (13×16=208, `P` straddling
+`B*=b₀A_max/e≈1.09`) the recover fraction (A→A_max) falls **39.9% (no delay) → 5.3% (baseline
+`(30,25)`)**; collapse rises 60.1%→94.7%. This is the corrected-model analogue of the original
+12G.2 0.506→0.042, and is **dt-converged** (dt=0.5/0.2 identical). Mechanism: with the
+regeneration delay the stock overshoots A_max (≈1.36), the population tracking the delayed K
+overshoots into E>bA, and the vicious-cycle liquidation drives A→A_ext. The recover basin vanishes
+abruptly as τ_g crosses ~20 yr. (`scans/r1_basin_baseline.png`, `scans/r1_basin_delay_response.png`.)
+
+**R2 — corrected characteristic equation / crossing curves / full spectrum.** Linearising the
+corrected S0 (`D(s;τ_g,τ_p)=(s−a₁e^{−sτ_g}−a₃)(s+r)−a_E a₄e^{−sτ_p}=0`) about an interior point of the
+equilibrium family `P=B(A)/e`:
+- `D(0)=0` on the whole family → a **neutral zero eigenvalue** (a continuum of equilibria; no isolated
+  interior attractor) — confirms the structural claim analytically.
+- Leading mode is a **positive real** eigenvalue (`Re λ≈+0.59` at A*=0.8) for **all** delays — a
+  **monotone** vicious-cycle instability, **not a Hopf**.
+- Scanning `s=iω` finds **no** imaginary-axis stability-crossing curve (the `P²+Q²=(a_E a₄)²`
+  elimination has no real solution), and the zero-delay `a₁₁<r` condition is **violated at every**
+  interior point (`a₁₁=G'(A*)+b/b_G≥0.57>r`).
+
+**Consequence for the manuscript:** the `χ` two-gain **Hopf** classification (derived for the ORIGINAL
+model's interior attractor) does **not** transfer to the corrected S0. The crossing-curve method must
+be applied to the *boundary* equilibrium, not an interior point. (`scans/r2_char_spectrum.png`,
+`scans/r2_a11_vs_delay.png`; full details `reports/SCAN_risk_register_r1_r2.md`.)
+
+New modules: `model_sims/corrected.py` (delayed simulated), `model_sims/r1_basin.py` (basin recompute),
+`model_sims/char_eq.py` (characteristic eq / crossing curves / full spectrum), `model_sims/r1_r2_report.py`,
+`model_sims/r1_figure.py`, `model_sims/r2_figure.py`; verifiers `R1`/`R2` in `model_sims/numeric_claims.py`;
+tests in `tests/test_r1_r2.py` (10, passing).
