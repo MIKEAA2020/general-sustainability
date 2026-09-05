@@ -511,7 +511,7 @@ values/RMSEs reproduce. Verdicts:
 
 ---
 
-## E2 — cod intervention (latest = **v14**; v13 preserved as baseline)
+## E2 — cod intervention (latest = **v16**; v13/v14 preserved as baselines — v15 adopted the single-convention recompute, v16 corrected the retention mechanism and Fox constructive)
 
 v14 (this pass) applies the jointly-verified corrections. The intervention runner was re-executed in
 isolation and reproduced every reported value (r=0.2369, K=5000, SD 135, ε=460, constructive 57.62,
@@ -557,7 +557,7 @@ q10=−178.7). Full detail: `/home/user/E2_FACTUAL_RECHECK.md`. **No fabricated 
 Reframe abstract (scope-first); resolve retention-rule; fold vacuous emptiness; fix freeze date;
 state K-pin as fit defect. Slogan "protected by good years" → restrict to perpetual-floor construction.
 
-### (D) REMAINING / HELD (author decision; not applied in v14)
+### (D) REMAINING / HELD (author decision; not applied in v14) — RESOLVED in v15/v16 (arena-agent commits f076ee7, cdc7699): the source-year convention was ADOPTED
 - **SINGLE-CONVENTION RECOMPUTE RUN** (this pass): the source-year convention (the one the model
   equation and the fit use) is confirmed as the correct one — the source-year residuals give MSE
   = 12,772.2 kt² (the fit objective) and SSE = 306,532 (Table 3's K=5000 row), exactly, while the
@@ -573,7 +573,7 @@ state K-pin as fit defect. Slogan "protected by good years" → restrict to perp
 
 ---
 
-## E3 — Edwards forecast ladder (latest = **v8**)
+## E3 — Edwards forecast ladder (latest = **v11**; v8→v10 humanized/verification passes preserved)
 
 ### (A) Joint consensus
 1. **M1 retained by margin the paper calls operationally nil** (0.39 ft; MAE tie; loses at h=5).
@@ -589,9 +589,37 @@ state K-pin as fit defect. Slogan "protected by good years" → restrict to perp
 Rewrite Abstract/§7 around "stock-flow with climatological fluxes is best one-step; persisted
 recharge is the failure"; resolve M2m comparator; add uncertainty; fix dates.
 
+### (D) IMPLEMENTED (v11, 2026-09-05, non-destructive; no frozen verdict or score changed)
+- Abstract/Impact/§7 lead with the real result (causal loses; 0.39-ft coin-flip with MAE tie and h=5
+  loss stated; oracle = nowcast; climatology win with interval excluding zero); the two correlations
+  (0.17 / 0.74) in the abstract; "certificate" retired; "pre-registered" retired (freeze dated and
+  archived; deviations listed in one place in §4.1: M2m class clause, M2m-as-comparator,
+  struck sign-hit).
+- M2m kink resolved by full disclosure (both options' content): frozen rule quoted verbatim;
+  M2m's rule-as-written status stated (satisfies H1/H2); Table 5 gains a vs-M1 column; Table 6
+  gains vs-M1 margins and the M2m gate row; the climate rejection restated as point-rule outcome
+  with both margins visible; "no stock-flow retained is an artefact of the class clause" stated.
+- Post-freeze uncertainty layer (§5.3.1, `wave_e_edwards/src/e3_audit_uncertainty.py`, seeded):
+  8 DM/bootstrap rows — M1−persist −0.39 [−1.51,+0.71] covers 0; M2m−persist −0.95 [−1.45,−0.68]
+  EXCLUDES 0 (the only one-year margin separated); M2m−M1 covers 0; M2−persist borderline;
+  mean−persist h=5 −4.30 [−9.72,−2.09] excludes 0 (DM undersizedness caveat noted);
+  climate margins within noise.
+- Clip check: the [610,710] clip binds on the recovery-window M2 path from 1959 (raw
+  617.1→605.3), never on the observed record — now stated in §5.2 with both fixed-window M2
+  RMSEs reproduced exactly (18.11 / 55.32) as the cross-check.
+- §5.5 rewritten as rating-curve/redundancy check; tail-failure direction CORRECTED (the map
+  predicts non-cessation at every observed head; zero-discharge 602.9 ft < all observed heads);
+  Comal construction stated (same ladder scored directly on Q, n=75).
+- §5.6 fixed: 20%-cut path is closest (7.19 < 8.56) and labelled an artefact of the map running
+  high; 5.2-ft arithmetic; coefficient comparison corrected (range vs magnitude; OLS association;
+  1980–90 vs full-sample window labels).
+- M4 labelled symmetry control (Table 2 + §6); z→H unified; table-reading propositions converted
+  to result sentences; corr-vs-φ̂ distinction stated; "wrong timing"→"right timing, unforecastable";
+  PDO/AMO not-run disclosure; daily-high convention noted.
+
 ---
 
-## E4 — Edwards intervention (latest = **v9**)
+## E4 — Edwards intervention (latest = **v11**; v9/v10 humanized passes preserved)
 
 ### (A) Joint consensus
 1. **+3.3%/+0.4% are hybrid, not robust** — put hybrid caveat in the first results sentence.
@@ -605,6 +633,45 @@ recharge is the failure"; resolve M2m comparator; add uncertainty; fix dates.
 ### (C) Recommendation
 Lead Results with "retained nominally at 618/UC-min; not certified; not at 660." Fix comparator
 (attractor-twin), fix BAU baseline, report horiz`on-vs-ceiling, drop the 660 certificate framing.
+
+### (D) IMPLEMENTED (v11, 2026-09-05, non-destructive; no frozen verdict, kernel, or score changed)
+- Three-verdict lead everywhere (abstract Results/Implications, Impact Statement, §5): nominal
+  at 618 ft / UC-min; not certified; nothing at 660 ft; hybrid caveat in the first results
+  sentence (+3.3%/+0.4% are historical-replay entitlement; under the floors the margin is a
+  0.4% trigger lag).
+- BAU renamed training-mean (unregulated-mean) pumping at every definition site; baseline choice
+  in the abstract; current-pumpage sensitivity added (382.16 kaf → attractor 604.5 ft; securing
+  cut ≈31.5%; Stage-I/flat-80% 613.1 ft does NOT secure — registered follow-up, labelled).
+- Comparator table (Table 6) consolidating all readings: kernel-matched flat-90 (+3.3/+0.4%);
+  attractor twins flat-80/flat-60 (+16.2/+50.6%); interpolated 7.2% cut (+0.2%/−2.6% CPM fails);
+  1%-grid flat-92 (+1.1%/−1.8%) and flat-93 (S1 fails) — R2's grid dependence now visible.
+- Certified-layer mechanism CORRECTED: affine policies shift only the intercept → a identical
+  across policies → (F4) exact, certified kernel = closed-loop nominal kernel of the raised
+  threshold with feedback included; the reactive collapse at certified level is trigger-band
+  entry (618 + r_T crosses 660 between T=4 at 659.89 and T=5 at 664.66); per-step tube note
+  (K*+r_t is tighter); Prop 2.1 restated as Calculation 2.1.
+- 660-ft restated as a design observation (scoring a trigger against its own level; cascade's
+  purpose is springflow near 618) — "negative certificate" framing dropped; flat-cap horizon
+  extensions given with the ceiling formula T_empty(C) = ln((C−H*)/(K*−H*))/ln(1/a);
+  "empty beyond ~13 yr" restated as "required initial head exceeds the ceiling"; new
+  boundary-vs-T table (Table 3).
+- OOS-defect sensitivity recorded numerically (ε=21.81 → r₃ 50.2, r₅ 66.0, r_∞ 85.9; the
+  bound is optimistic; certified horizons scoped out of findings).
+- THREE post-freeze layers (`wave_e_edwards/src/e4_audit_layer.py`, seeded, on the declared
+  coefficients): (i) closed-loop historical-replay supply — S1 262.36→258.98 (−1.3%), CPM
+  254.93→254.70; hybrid margins attenuate but survive (S1 +2.0% vs flat-90, +14.7% vs flat-80;
+  CPM +50.4% vs flat-60); closed-loop 1990 bias +31.8 ft disclosed; (ii) attractor residual
+  bootstrap (5000 reps, none non-contractive) — P(≥618): BAU 0.41, flat-90 0.53, S1/flat-80
+  0.65, CPM/flat-60 0.83, zero 0.99; flat-90−BAU gap [1.9, 5.0] excludes zero (ordering
+  resolved, threshold clearance NOT resolved — "the fitted map cannot resolve the marginal
+  caps"); (iii) current-baseline algebra as above.
+- Lucas caveat moved into Methods (§2.1) with the γ-window comparison row; 10-day-vs-annual
+  note at the safe-set definitions; five-stage disclosure (Stage V not scored); UC-q05/q10
+  percentile estimator stated with "only the perpetuity is harsher than any recorded year"
+  corrected; companion studies cited (Author et al. entries); "machine-verified" vocabulary
+  retired; fit hypotheses relabelled (F1)–(F4); z→H unified; tables renumbered 1–7; Fig 1
+  caption scoped to UC-min with flat-90's 0.88-ft clearance flagged; "positive selection
+  result"→"nominal selection"; "two scored systems bound the answer" removed.
 
 ---
 
