@@ -1,5 +1,5 @@
 # scan_revision — Audit summary
-*Generated 2026-09-05T03:56:18.938484Z*
+*Generated 2026-09-05T04:01:26.191946Z*
 
 ## Coverage
 **Master items: 22.** Covered: 21 · Partial: 0 · Missing: 0 · Superseded: 1 · Ambiguous: 0.
@@ -47,4 +47,4 @@
 
 - 12A.1
 
-*The automated system is decision support, not an arbiter. Status reflects the curated layer where set; the auto verdict is retained as evidence. Original-model numerics are labelled 'original' and corrected-model content 'corrected (1‴)'. The corrected-model basin (R1) and characteristic-equation/spectrum (R2) are now **computed and reported** (see `SCAN_risk_register_r1_r2.md`, §8/§13); R1: recover fraction 39.9%→5.3%; R2: neutral zero eigenvalue + monotone positive-real leading eigenvalue (no Hopf). The scan's numeric pass still runs original-model verifier IDs; R1/R2 are exercised via `run_numeric` (`model_sims/numeric_claims.py`).*
+*The automated system is decision support, not an arbiter. Status reflects the curated layer where set; the auto verdict is retained as evidence. Original-model numerics are labelled 'original' and corrected-model content 'corrected (1‴)'. The corrected-model basin (R1) and characteristic-equation/spectrum (R2) are now **computed and reported** (SCAN_risk_register_r1_r2.md, §8/§13): R1 recover fraction 39.9%→5.3%; R2 neutral zero eigenvalue + monotone positive-real leading eigenvalue (no Hopf). The scan's numeric pass runs original-model verifier IDs; R1/R2 are exercised via `run_numeric` (model_sims/numeric_claims.py).*

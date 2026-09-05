@@ -234,8 +234,11 @@ def generate_audit_summary(report, output_path):
               "*The automated system is decision support, not an arbiter. Status reflects the "
               "curated layer where set; the auto verdict is retained as evidence. "
               "Original-model numerics are labelled 'original' and corrected-model content "
-              "'corrected (1‴)'; the corrected-model basin (R1) and characteristic equation (R2) "
-              "remain open and are not silently assumed done.*",
+              "'corrected (1‴)'. The corrected-model basin (R1) and characteristic-equation/spectrum "
+              "(R2) are now **computed and reported** (SCAN_risk_register_r1_r2.md, §8/§13): R1 "
+              "recover fraction 39.9%→5.3%; R2 neutral zero eigenvalue + monotone positive-real "
+              "leading eigenvalue (no Hopf). The scan's numeric pass runs original-model verifier IDs; "
+              "R1/R2 are exercised via `run_numeric` (model_sims/numeric_claims.py).*",
               ""]
     Path(output_path).write_text("\n".join(lines), encoding="utf-8")
     return output_path
