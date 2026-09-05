@@ -1,5 +1,5 @@
 # scan_revision — Audit summary
-*Generated 2026-09-05T21:09:06.086661Z*
+*Generated 2026-09-05T21:44:54.007992Z*
 
 ## Coverage
 **Master items: 22.** Covered: 21 · Partial: 0 · Missing: 0 · Superseded: 1 · Ambiguous: 0.
@@ -7,10 +7,10 @@
 ## Master claims and status
 | ID | Status | Score | Auto tier | Model | Note |
 |---|---|---|---|---|---|
-| 12A.1 | superseded | 0.93 | auto-covered | corrected (1‴) | Head-line masking numbers were computed on the ORIGINAL mode |
+| 12A.1 | superseded | 0.90 | auto-covered | corrected (1‴) | Head-line masking numbers were computed on the ORIGINAL mode |
 | 12A.2 | covered | 0.86 | auto-covered | corrected (1‴) | K->0 blow-up fixed via A_ext extinction floor + clamps. |
 | 12A.3 | covered | 0.86 | auto-covered | original | D_E method-dependent (5.26/6.74/18.70); verified 5.26. |
-| 12A.4 | covered | 0.85 | auto-covered | original (see note) | Knife-edge chi=1 <=> rho=3q flagged as non-generic. |
+| 12A.4 | covered | 0.84 | auto-covered | original (see note) | Knife-edge chi=1 <=> rho=3q flagged as non-generic. |
 | 12B.5 | covered | 0.63 | auto-covered | corrected (1‴) | per-capita footprint constant; endogenising e, r_opt offered |
 | 12B.6 | covered | 0.62 | auto-covered | corrected (1‴) | gross gamma E retained as named supplement variant. |
 | 12B.7 | covered | 0.64 | auto-covered | corrected (1‴) | K is algebraic, not a state; system is 3-D. |
@@ -42,7 +42,7 @@
 ## Discrepancies (auto vs curated)
 
 - 12A.3: AUTO said 'superseded' (score 0.86), curated verdict 'covered'
-- 12A.4: AUTO said 'superseded' (score 0.85), curated verdict 'covered'
+- 12A.4: AUTO said 'superseded' (score 0.84), curated verdict 'covered'
 - 12C.8: AUTO said 'superseded' (score 0.64), curated verdict 'covered'
 - 12C.9: AUTO said 'superseded' (score 0.90), curated verdict 'covered'
 - 12C.10: AUTO said 'superseded' (score 0.63), curated verdict 'covered'
