@@ -261,7 +261,7 @@ no-introduced-error standing rule. Those items should be a separate carefully-ve
 
 ---
 
-## P1 — assessment_separation (latest = **v16**, hybrid implemented)
+## P1 — assessment_separation (latest = **v19**; v17 hybrid resolved the thesis fork, v18 the Theorem-4 demotion, v19 the reference fabric — wave 2, 2026-09-06)
 
 ### Three-audit joint assessment (grok + claude + deepseek) — full line-level read
 grok and claude independently converge on the same core findings; **deepseek's hybrid resolves the
@@ -330,7 +330,7 @@ hybrid; they are the follow-up edits.
 
 ---
 
-## P3 — material_ledgers (latest = **v23**)
+## P3 — material_ledgers (latest = **v27**; v24–v26 were six changed line-pairs, v27 the verified micro-error cluster — wave 2, 2026-09-06)
 
 ### (A) Joint consensus
 1. **§1.1 vs §6.5.2 two-pool claim not discharged.** grok A10 + claude: the applied tables have
@@ -363,7 +363,7 @@ reading (not the received distinction).
 
 ---
 
-## P4 — delay_dynamics (latest = **v16/v17**)
+## P4 — delay_dynamics (latest = **v26**; v18–v25 implemented the substantive campaign, v26 the small-error cluster — wave 2, 2026-09-06)
 
 ### (A) Joint consensus
 1. **Conclusion reverts to the Euler artefact.** §8/abstract: exact crossing at **6.50 yr**, Euler
@@ -388,7 +388,7 @@ Fix #1 (conclusion) — this is the make-or-break. Then A2/§9.4/6.50-certificat
 
 ---
 
-## P2 — obstruction_calculus (latest = **v5**)
+## P2 — obstruction_calculus (latest = **v8**; v6/v7 changed nothing substantive, v8 the first safe tranche — wave 2, 2026-09-06)
 
 ### (A) Joint consensus
 1. **Theorem 4 circular.** claude A1: (H2) already asserts the conclusion; restate H2 as an
@@ -416,7 +416,7 @@ consistency repairs, not restructuring.
 
 ---
 
-## P5 — sampled_governance (latest = **v18**)
+## P5 — sampled_governance (latest = **v20**; v19 the honest-tier correction, v20 the regression repair — wave 2, 2026-09-06)
 
 ### (A) Joint consensus
 1. **Reconstruction/unreproduced stage-map status.** grok: the 3–4 yr / 6–12 yr windows are
@@ -437,7 +437,7 @@ fix future dates; move registration meta-text to appendix.
 
 ---
 
-## E1 — cod forecast ladder (latest = **v9**; v8 preserved as baseline)
+## E1 — cod forecast ladder (latest = **v10**; v9 the presentation pass, v10 the never-landed factual-recheck layer — wave 2, 2026-09-06)
 
 v9 (this pass) applies the convergent, non-destructive presentation/framing fixes from the joint
 audit (grok severity-grouped + claude A1–A12/B/C/D/E). No data movement, no content removal;
@@ -511,7 +511,7 @@ values/RMSEs reproduce. Verdicts:
 
 ---
 
-## E2 — cod intervention (latest = **v17**; v13–v16 preserved as baselines — v15 adopted the single-convention recompute, v16 corrected the retention mechanism and Fox constructive, v17 applies the restructure-level joint-audit items)
+## E2 — cod intervention (latest = **v18**; v13–v17 preserved as baselines — v15 adopted the single-convention recompute, v16 corrected the retention mechanism and Fox constructive, v17 applies the restructure-level joint-audit items)
 
 v14 (this pass) applies the jointly-verified corrections. The intervention runner was re-executed in
 isolation and reproduced every reported value (r=0.2369, K=5000, SD 135, ε=460, constructive 57.62,
@@ -867,3 +867,58 @@ da1b609) and is the only artifact that could be verified directly. Evaluation an
   registered replication, which is the same content under a different (already-implemented)
   layout. Nothing from the described changes was rejected on substance; the only declined
   element is presentational (their §5.7 placement), with the reason recorded.
+
+---
+
+## Batch-7 wave-2 addendum — the six P1–P5/E1 audits, full status (2026-09-06, Task 71)
+
+The owner's question for this wave: *any points from any of the joint audits
+remaining to be implemented in any of the papers?* Answer: **yes — materially.**
+Six parallel deep-read audit subagents (Task IDs 71-a…71-f) extracted every point
+from both halves of each audit and classified it against the repo's latest
+version; every load-bearing claim was re-verified here (including fresh
+computation against `wave_e_cod/`). Full record:
+`batch 7 (audits of agent arena 1 paper rewrites)/WAVE2_IMPLEMENTATION.md`.
+Headlines:
+
+- **E1:** the "v10" described in the E1 (D) block below **never existed in the
+  repo** (no file; every v10 number greps to zero in v9). Wave 2 built it for
+  real: all five verified fixes (A7 decomposition relabel 86.4/11.1 and
+  65.1/158.4; A3 bounds; A5 flat-valley ranking caveat; A1/A2 two-equilibrium
+  obstruction restatement — repeller 144 / attractor 889 / monotone below 783;
+  A4 unifying sentence) plus the presentation fixes v9's log claimed but the
+  file lacked (keyword, origin-matched abstract, §2.3 Brier/Direction
+  conventions, "weaker than a statistical null", Highlights ≤ 85 chars,
+  abstract 298 words).
+- **P1:** the thesis fork stays resolved, but the v17 hybrid left **dangling
+  citations** (von Neumann 1928 / Sion 1958 / Ben-Tal et al. 2004 in §4.10,
+  absent from the References) — repaired as v19. The five "(D) still
+  outstanding" items (E_end,typ; §1.1 strip; §2 tuple cut; notation; demotions)
+  remain open and registered.
+- **P2:** the audit was **essentially unimplemented** (v6 = humanized rewrite
+  with no claim changes; v7 = abstract-only from a different checklist that
+  re-asserted the flagged overclaim). Wave 2 applied the first safe tranche as
+  v8: the a-fortiori direction corrected, the abstract's "finite, checkable"
+  scoped, the companion given a reference entry, §6.4's certificate number
+  fixed. The theorem-level repairs (Thm 4's H2, Thm 1/3 existence gap, Thm 2
+  admissibility, Def 1/EViab, Cor 6, Remark 1) are registered follow-ups.
+- **P3:** ~100 audit points, ~2 implemented by v24–v26; wave 2's v27 applies the
+  verified micro-error cluster (Prop 2 cites Theorem 7; the safety-condition
+  rename; the primitives retitle; "first three" → named predicates; the §5.4
+  double-C disambiguation; 47.5 not 47.6; the blank-cell claim corrected).
+  The structural agenda (notation, theorem inflation, R₀ split, incidence
+  displays, the USGS re-pin, §11) remains registered.
+- **P4:** the substantive campaign was real (all 7 consensus items closed);
+  v26 applies the small-error tail (τ_M pair, §5.1 pointer, regime (iii) arm
+  range). Remaining: presentation-layer items only.
+- **P5:** v19's honest-tier correction was inconsistent — it **broadened** the
+  abstract's non-transfer claim (the opposite of the audit's ask) and left
+  §3.4/§4.1 asserting the archived windows as findings, contradicting the
+  corrected §3.3 lead. v20 repairs both regressions and attributes the windows
+  to the archived record. The middle layer (claims-ledger box, registration
+  appendix, parameter table, ρ = 1.00035 margins, A1/A9 reconciliations)
+  remains registered.
+
+No frozen verdict, score, kernel, spectral record, or table value changed
+anywhere. Build scripts: `apply_batch7_leftover_fix.py` (E2 v18),
+`apply_batch7_wave2.py` (the six versions above).
