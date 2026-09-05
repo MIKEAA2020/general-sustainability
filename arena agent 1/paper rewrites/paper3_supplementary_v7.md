@@ -177,3 +177,46 @@ Cohort statistics recomputed from the pull: 43 stocks; 8 zeros; **median 1.7902 
 The four published-$F$ anchors read off the file itself: Adriatic anchovy 17–18 $F=1.0026$ (published 1.00); North Sea herring — extract id `HERRNS-IIIa-VIId` — $F=0.2274$ (published 0.23) with $\mathrm{ADH}=3.461$ (published 3.5); W. Baltic herring (ICES 22–24) $F=0.193$ (published 0.19); Argentine anchovy south $F=0.0114$ (published 0.011). The two example stocks that no longer carry series in public releases are present in the extract (W. Scotland herring `HERRVIa`, ADH 0.385; N. Adriatic anchovy `ANCHMEDGSA17`, ADH 4.782), confirming the extract predates their removal. The earlier "not reproducible" reading is fully retracted: the archived pull is internally consistent and carries exactly the cohort statistics the main text reports.
 
 For ecological-economics measurement, the implication is that an archived, dated extraction with a declared selection rule is a legitimate unit of analysis when its protocol and cohort are pinned; a public release's full-cohort statistic is not a substitute. The pure-decay ADH proxy is a class-specific first-passage diagnostic, not a general forecast of fishery removals time, and its cohort-sensitivity record makes that scoping explicit.
+
+
+## S6. Statement-Status Naming Offset (Appended at Main-Text v29)
+
+*Appended at the wave-5 revision, when the main text stood at v29, to record the
+naming offset between this file and the main text's statement labels. Nothing
+above this section is edited; the note exists because the main text's v28
+revision demoted eight audited inflations as status relabels on the unchanged
+statement counter, and S1–S5 above (written before that revision) still carry
+the pre-v28 status words.*
+
+The main text's demotion map, status word changed and number unchanged:
+
+| this file's label (S1–S5) | main text's label since v28 |
+|---|---|
+| Theorem 2 (registered-family support-saturated identity) | Remark 2 |
+| Theorem 3 (flux reconstruction) | Lemma 3 |
+| Theorem 4 (conservation reduction) | Proposition 4 |
+| Theorem 6 (finite exhaustion under uniform drift) | Proposition 6 |
+| Lemma 16 (specialization deficit identity) | Remark 16 |
+| Theorem 17 (threshold-horizon bracket) | Proposition 17 |
+| Theorem 18 (inverse-Gaussian passage) | Proposition 18 |
+| Theorem 20 (geometric-Brownian passage) | Proposition 20 |
+
+Every other label in S1–S5 (Theorems 1, 5, 7–15, Corollary 19, Definitions 1–6,
+and the layering Propositions 1–2) is unchanged and matches the main text. No
+statement content, hypothesis, proof, number, or recorded value changed in any
+of these relabels; only the status word moved, per the audits' theorem-inflation
+item, and every cross-reference in the main text was updated with it. Because the
+numbers are unchanged, every reference in this file still resolves by number,
+with this table as the status-word key.
+
+One further numbering declaration, recorded here for the same reason: the main
+text runs two statement counters. The 1–20 counter carries the results in order
+of appearance (with the mixed status words above); the two layering propositions
+of the main text's Section 3.1 ("conservation consistency implies accounting
+consistency"; "barrier safety does not follow from accounting consistency")
+carry their own counter, Propositions 1–2. The demotions of Theorems 4, 6, 17,
+18, and 20 onto the word "Proposition" therefore produce the proposition list
+1, 2, 4, 6, 17, 18, 20 — the first two are the layering pair, the rest are
+demoted theorems keeping their sequence numbers. Each label is unique in the
+main text and resolves directly; the main text declares this convention at the
+layering site.

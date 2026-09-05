@@ -330,7 +330,7 @@ hybrid; they are the follow-up edits.
 
 ---
 
-## P3 — material_ledgers (latest = **v28**; v27 the verified micro-error cluster, v28 the wave-4 notation/inflation/re-pin bundle (R11–R17 + structural docket) — wave 4, 2026-09-06; record: wave4/p3_record.md)
+## P3 — material_ledgers (latest = **v29**; v27 the verified micro-error cluster, v28 the wave-4 notation/inflation/re-pin bundle (R11–R17 + structural docket), v29 the wave-5 numbering-convention declaration (§3.1 note + supplementary S6 naming-offset append) — wave 5, 2026-09-07; records: wave4/p3_record.md, wave5/p3_record.md)
 
 ### (A) Joint consensus
 1. **§1.1 vs §6.5.2 two-pool claim not discharged.** grok A10 + claude: the applied tables have
@@ -388,7 +388,7 @@ Fix #1 (conclusion) — this is the make-or-break. Then A2/§9.4/6.50-certificat
 
 ---
 
-## P2 — obstruction_calculus (latest = **v9**; v8 the first safe tranche, v9 the wave-4 theorem-level repairs (R9 notation/§2.4, R10 IRViab, consensus 1/2/3/5/7 + claude's section notes) — wave 4, 2026-09-06; record: wave4/p2_record.md)
+## P2 — obstruction_calculus (latest = **v10**; v8 the first safe tranche, v9 the wave-4 theorem-level repairs (R9 notation/§2.4, R10 IRViab, consensus 1/2/3/5/7 + claude's section notes), v10 the wave-5 re-opened one-liners (§1.2 exhibit scoping, §6.4 most-constrained, §6.4 coarseness exposure wording) — wave 5, 2026-09-07; records: wave4/p2_record.md, wave5/p2_record.md)
 
 ### (A) Joint consensus
 1. **Theorem 4 circular.** claude A1: (H2) already asserts the conclusion; restate H2 as an
@@ -416,7 +416,7 @@ consistency repairs, not restructuring.
 
 ---
 
-## P5 — sampled_governance (latest = **v21**; v20 the regression repair, v21 the wave-4 middle layer (R23/R24 + the claims-ledger/appendix docket) — wave 4, 2026-09-06; record: wave4/p5_record.md)
+## P5 — sampled_governance (latest = **v22**; v20 the regression repair, v21 the wave-4 middle layer (R23/R24 + the claims-ledger/appendix docket), v22 the wave-5 re-opened micro items (architecture-name fence, 'more than thirty', Figure-1 caption wording) — wave 5, 2026-09-07; records: wave4/p5_record.md, wave5/p5_record.md)
 
 ### (A) Joint consensus
 1. **Reconstruction/unreproduced stage-map status.** grok: the 3–4 yr / 6–12 yr windows are
@@ -437,7 +437,7 @@ fix future dates; move registration meta-text to appendix.
 
 ---
 
-## E1 — cod forecast ladder (latest = **v11**; v10 the never-landed factual-recheck layer, v11 the wave-4 docket (R1–R7 + the R3 DM/Künsch post-freeze layer, §3.5 + Table 9) — wave 4, 2026-09-06; record: wave4/e1_record.md)
+## E1 — cod forecast ladder (latest = **v12**; v10 the never-landed factual-recheck layer, v11 the wave-4 docket (R1–R7 + the R3 DM/Künsch post-freeze layer, §3.5 + Table 9), v12 the wave-5 re-opened presentation layer (§3.6 + Table 10 parameters-as-printed + the §4 constructive timeliness sentence) — wave 5, 2026-09-07; records: wave4/e1_record.md, wave5/e1_record.md)
 
 v9 (this pass) applies the convergent, non-destructive presentation/framing fixes from the joint
 audit (grok severity-grouped + claude A1–A12/B/C/D/E). No data movement, no content removal;
@@ -1233,3 +1233,59 @@ methodological asks needing computations beyond the authorised R3. None is joint
 a one-line fix; all remain behind the owner gate.
 
 This wave changed no frozen verdict, score, kernel, spectral record, or table value anywhere.
+
+---
+
+## Wave-5 addendum — the registered follow-ups re-evaluated behind the opened owner gate (Task 75, 2026-09-07)
+
+The owner instructed: (1) check the recorded reasons for declining — are they still valid now
+that other changes have happened? (2) decide if any should be re-opened (for example, if a
+paper's statement numbering is causing confusion, a controlled re-letter might now be worth
+doing). The full re-evaluation — every registered or declined item of the wave-2/3/4 records
+re-verified by direct grep/read against the then-current versions — is
+**wave5/REOPEN_EVALUATION.md**; the four build records are wave5/{e1,p2,p3,p5}_record.md.
+
+**Answers.** (1) The computation-grounded and claim-change reasons all survive; two classes did
+not: the "awaiting the next registered wave" reasons (P2's three one-liners — that wave is this
+one), and three mis-stated blanket reasons (E1's parameter table registered under "needs a
+scored campaign" though everything it needs is printed; claude A7's constructive timeliness
+finding, never registered as its own item though its label-half was implemented at v10; P5's
+term unification declined as "title-level" though a title-free fence exists). (2) Nine items
+re-opened, all implemented:
+
+| Paper | New version | Script | Re-opened items |
+|---|---|---|---|
+| E1 | paperE1_cod_forecast_ladder_v12.md | apply_batch7_wave5_e1.py | §3.6 + Table 10 (fitted parameters as printed, claude priority 5, the P5-Table-3 pattern with archive markers) + §2.2 pointer; the §4 constructive sentence (A7's buried finding: the 86.4-kt delay cost exceeds every delay-free module's structural cost — 23/17/46/37 kt, one-line subtractions of Table 4's printed values — and the 184.4-kt stale control loses to every delay-free module while beating only M4 at 195.6) |
+| P2 | paper2_obstruction_calculus_v10.md | apply_batch7_wave5_p2.py | §1.2's exhibit sentence scoped by mechanism (Thms 1/4 the full triple; Thms 2/3 the incompatible admissible controls, no bound claimed; Thm 5 the converse-side limit); §6.4 "least-constrained" → "most-constrained (minimum-q, least slack)"; §6.4 coarseness restated as exposure-to-the-obstruction with "finer never hurts" |
+| P3 | paper3_material_ledgers_v29.md + paper3_supplementary_v7.md S6 | apply_batch7_wave5_p3.py | The verified statement-numbering confusion: the v28 demotions put Propositions 4/6/17/18/20 on the type-word of the paper's separate layering stream (Propositions 1–2), so the propositions read 1, 2, 4, 6, 17, 18, 20 with the convention undeclared, and the supplementary's S4 inventory carried the pre-v28 status words unfenced. Fixed by declaration, not re-letter: the §3.1 numbering note + the appended S6 naming-offset table (8 rows) + the pointer naming S6 |
+| P5 | paper5_sampled_governance_v22.md | apply_batch7_wave5_p5.py | The architecture-name fence (§1 declares "sampled governance" = the abstract/title's "sample-and-hold governance", one object, two names, interchangeable — title untouched); the abstract's "thirty-plus" harmonised to "more than thirty"; Figure 1's caption to claude's exact "four update × channel combinations" wording |
+
+**The owner's specific example — P1's statement numbering — was verified first and found NOT in
+need of a re-letter**: P1's shared 1–9 counter is coherent, every cross-reference resolves, the
+four old-name tokens sit only inside the version log's demotion record, and S7's single
+"Theorem 6" token is already fenced inside the supplementary by the S8 preamble. The verified
+instance of exactly that confusion is P3's two-counter Proposition hybrid, fixed by declaration
+above (a re-letter would break the supplementary's number resolution, which the relabel
+strategy was chosen to preserve).
+
+**Registered follow-ups after this wave** (reasons re-verified as still valid): E1's
+drift/damped-trend baseline, leave-one-origin-out influence, Table-6 forecast explanation,
+M3/M4 deterioration explanation (new computations beyond the authorised R3), the M4
+decomposition's promotion to a results table (relocation of frozen-record prose), and the
+log-RMSE demotion (declined on the disclosure ground — v11's floor/hit-count layer answers it
+without dropping a recorded score column); P2's singleton-belief lemma (new mathematics) and
+grok's restructure items plus claude's remaining structural asks; P1's frozen-statement
+re-letters and the title question (no endorsed retitle); P3's 21k→12k length remainder and the
+per-row USGS re-pin (external data); P4's per-campaign tables (restructure-scale on frozen
+record prose; the consolidated table delivered the substance) and its five computation-grounded
+declines; P5's claim-changing declines (seal-predation application, Prop 2.1 demotion, θ
+resonance check); E2's single-convention recompute, E3's declined layout (churn, no content
+gain), E4's Stage-I/flat-80% securing computation. The a025_model.py model-consistency audit
+was confirmed already resolved (Tasks 65–66: SHA-256 c1dae18b… identical across all four
+manuscripts).
+
+All four builds are fail-loud and byte-reproducible (E1 MD5 fa7632aa…, P2 6a629cf5…, P3
+b778d6f0…, P5 64aa113a…; the S6 append idempotent-with-verification). This wave changed no
+frozen verdict, score, kernel, spectral record, or table value anywhere; every pre-existing
+table row is byte-identical (machine-checked); E1's abstract is untouched at 300 words and
+P5's title is untouched.
