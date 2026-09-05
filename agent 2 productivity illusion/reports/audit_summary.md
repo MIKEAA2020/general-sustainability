@@ -1,5 +1,5 @@
 # scan_revision — Audit summary
-*Generated 2026-09-05T20:39:12.014122Z*
+*Generated 2026-09-05T20:55:33.338573Z*
 
 ## Coverage
 **Master items: 22.** Covered: 21 · Partial: 0 · Missing: 0 · Superseded: 1 · Ambiguous: 0.
@@ -7,7 +7,7 @@
 ## Master claims and status
 | ID | Status | Score | Auto tier | Model | Note |
 |---|---|---|---|---|---|
-| 12A.1 | superseded | 0.92 | auto-covered | corrected (1‴) | Head-line masking numbers were computed on the ORIGINAL mode |
+| 12A.1 | superseded | 0.93 | auto-covered | corrected (1‴) | Head-line masking numbers were computed on the ORIGINAL mode |
 | 12A.2 | covered | 0.86 | auto-covered | corrected (1‴) | K->0 blow-up fixed via A_ext extinction floor + clamps. |
 | 12A.3 | covered | 0.86 | auto-covered | original | D_E method-dependent (5.26/6.74/18.70); verified 5.26. |
 | 12A.4 | covered | 0.85 | auto-covered | original (see note) | Knife-edge chi=1 <=> rho=3q flagged as non-generic. |
