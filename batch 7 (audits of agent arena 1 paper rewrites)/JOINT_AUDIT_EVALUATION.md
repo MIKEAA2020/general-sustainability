@@ -511,7 +511,7 @@ values/RMSEs reproduce. Verdicts:
 
 ---
 
-## E2 — cod intervention (latest = **v18**; v13–v17 preserved as baselines — v15 adopted the single-convention recompute, v16 corrected the retention mechanism and Fox constructive, v17 applies the restructure-level joint-audit items)
+## E2 — cod intervention (latest = **v19**; v13–v18 preserved as baselines — v15 adopted the single-convention recompute, v16 corrected the retention mechanism and Fox constructive, v17 applies the restructure-level joint-audit items, v18 the MSE relabelling, v19 the wave-6 scan restore (the critical-zone supply gloss in Result 3.4's Reason) — record: wave6/e2_record.md)
 
 v14 (this pass) applies the jointly-verified corrections. The intervention runner was re-executed in
 isolation and reproduced every reported value (r=0.2369, K=5000, SD 135, ε=460, constructive 57.62,
@@ -609,7 +609,7 @@ replacements); verified: **zero table rows changed** between v16 and v17.
 
 ---
 
-## E3 — Edwards forecast ladder (latest = **v12**; v8→v11 preserved — v11 is the batch-7 implementation; v12 registers the independent replication and resolves the comparator kink)
+## E3 — Edwards forecast ladder (latest = **v13**; v8→v12 preserved — v11 is the batch-7 implementation, v12 registers the independent replication and resolves the comparator kink, v13 the wave-6 scan restore (the post-2007 secondary-score record: the declared Brier values 0.31/0.25/0.19 printed again) — record: wave6/e3_record.md)
 
 ### (A) Joint consensus
 1. **M1 retained by margin the paper calls operationally nil** (0.39 ft; MAE tie; loses at h=5).
@@ -1289,3 +1289,53 @@ b778d6f0…, P5 64aa113a…; the S6 append idempotent-with-verification). This w
 frozen verdict, score, kernel, spectral record, or table value anywhere; every pre-existing
 table row is byte-identical (machine-checked); E1's abstract is untouched at 300 words and
 P5's title is untouched.
+
+## Wave-6 addendum — the sentence-level normalised diff scan of the five preceding versions of each paper (Task 76, 2026-09-07)
+
+Owner directive: "conduct deep, systematic, granular sentence-level normalised diff scan; anything
+from any of the preceding 5 versions of each paper worth implementing in the final versions?" The
+scanner (`wave6/scan_sentence_diff.py`) compares each final against its five preceding versions at
+sentence granularity after normalisation (table rows and display-math atomic; version logs excluded
+as meta; a sentence counts as dropped only if absent from the whole final; P-family drops checked
+against every supplementary of the family). Full reports in `wave6/scan/<paper>.md` (1,322 dropped
+sentences across 45 transitions, every one classified against the recorded version logs, wave
+records, the papers' current text, the committed data/results, and the audit files); master
+evaluation in `wave6/SCAN_EVALUATION.md`.
+
+**Verdict: exactly two unregistered drops were worth implementing, both presentation-layer
+collections of already-recorded values — the class wave 5 re-opened — and both are implemented.**
+
+* **E2 v19** (`apply_batch7_wave6_e2.py`; MD5 84197bad…): the v14→v15 source-year restructure lost,
+  unrecorded, the explanation of the printed S1 supply value — the critical-zone cut is active in 20
+  of the 24 replay years (the stock sat below the reference point in all but the 1985 and 1987–1989
+  states, 83% of the window), a collapsed-era-window property, regimes not mixed. Restored as one
+  sentence in Result 3.4's Reason beside the values it explains; arithmetic re-verified against the
+  committed DFO-2016 series (60 × 4/24 = 10.0 kt).
+* **E3 v13** (`apply_batch7_wave6_e3.py`; MD5 a127891a…): the v11 restructure (not among its log's
+  seven listed items) dropped §5.3's post-2007 paragraph wholesale, leaving Definition 4.1's declared
+  Brier secondary score with no printed values. Restored as one paragraph before §5.3.1: Brier
+  0.31/0.25/0.19 (persist/M1/oracle) on the n = 16 post-2007 origins, the unchanged one-year ranking
+  (13.09/12.16/13.31/8.03 ft), the h = 5 subsample reversal (17.16 vs 25.10 ft) "reported without
+  changing the one-year retention statement", the misclassification-rate and small-n caveats, and the
+  pointer to the committed record — every value byte-verified against
+  `wave_e_edwards/results/rolling_modern_2007.csv` and identical to the v9/v10 frozen print the
+  external audit verified.
+
+**Everything else dropped over the last five versions of each paper is declined with recorded
+reasons** (full table in `wave6/SCAN_EVALUATION.md`): recorded docket edits (E1 v10/v11, E4 v11, P1
+v20, P2 v9/v10, P3 v28/v29, P4 v27, P5 v21/v22); superseded pre-correction numbers (E2's v14→v16
+source-year/floor corrections — including the Chow test, whose recomputation stays registered behind
+the gate; E3's old decision table, now result sentences); audit-flagged imprecision replaced by the
+corrected statement (E4's "credits no feedback" → the (F4)-exact form); relocations (P4's
+Hopf-baseline/intermittency detail → the supplementary; P5's §4.6 → Appendix B); and content
+preserved elsewhere in the finals (verified by grep for every candidate: E2's supply-replay row and
+family declarations, E3's correlations/φ̂ 0.66/0.986/karst statements and the Table 7 climate values,
+E4's companion description and limitations, P2's setting/diagnostic tree/barrier statements, P4's
+literature-range line, P5's archived-windows attribution).
+
+Both builds are fail-loud and byte-reproducible; both add sentences only (E2's changed lines are
+exactly the version log and the one Reason line; E3 inserts exactly the version log and the one
+paragraph, zero non-blank lines removed); all markdown table rows byte-identical in both; no frozen
+verdict, score, kernel, boundary, spectral record, or table value changes anywhere; both abstracts
+untouched. E2 v19 = 342 lines, E3 v13 = 324 lines; the post-build re-scan is archived in
+`wave6/scan/verify/`.
