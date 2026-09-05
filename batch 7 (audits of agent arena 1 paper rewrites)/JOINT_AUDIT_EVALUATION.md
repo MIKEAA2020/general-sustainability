@@ -511,7 +511,7 @@ values/RMSEs reproduce. Verdicts:
 
 ---
 
-## E2 — cod intervention (latest = **v16**; v13/v14 preserved as baselines — v15 adopted the single-convention recompute, v16 corrected the retention mechanism and Fox constructive)
+## E2 — cod intervention (latest = **v17**; v13–v16 preserved as baselines — v15 adopted the single-convention recompute, v16 corrected the retention mechanism and Fox constructive, v17 applies the restructure-level joint-audit items)
 
 v14 (this pass) applies the jointly-verified corrections. The intervention runner was re-executed in
 isolation and reproduced every reported value (r=0.2369, K=5000, SD 135, ε=460, constructive 57.62,
@@ -571,9 +571,45 @@ state K-pin as fit defect. Slogan "protected by good years" → restrict to perp
   substantive result changes (three choices offered in the recompute doc: adopt into v15, add labelled
   appendix, or hold).
 
+### (D-b) RESTRUCTURE APPLIED (v17, 2026-09-06, non-destructive; no value, kernel, or boundary changed)
+
+Implements the owner-directed restructure-level items (the parallel sandbox's "E2 v17" description,
+evaluated and verified in this repository; its manuscript files were lost in that sandbox's reset —
+see the addendum at the end of this file). Built by `apply_batch7_restructure.py` (fail-loud exact
+replacements); verified: **zero table rows changed** between v16 and v17.
+- **Abstract re-scoped**: the governed-object scope leads (a single fitted map; every statement scoped
+  to that map, its declared classes, and its declared family; "nothing here is a Northern-cod-general
+  result"); the K = 5000 pin is named a declared fit defect in the abstract. The abstract's numbered
+  list renumbers to five findings plus an unnumbered definitional-note sentence (the vacuity demoted).
+- **Retention filter → dominance partial order** (Definition 2.6, clauses verbatim, vocabulary
+  retired): the (H1)-at-every-reading structural block stated as the reason (BAU's marginal
+  5th-percentile T=∞ nonemptiness, 2219.6 kt, where every positive-catch rule is empty); a
+  *Why the filter vocabulary is retired* note added; Result 3.1 → **"No dominance"** with the
+  verdict's selection-theoretic status stated and the groundwater-companion comparison reframed
+  (different constraint structure — not a single fatal floor — so not comparable selections).
+- **Finding-2 demotion**: Result 3.2 → **Definitional note 3.2 (the vacuous-class identity)** —
+  |e| > g_max ⇒ monotone decline for every C ≥ 0, "an identity of the map's algebra, not a
+  measurement"; Conclusions renumbered to **five findings + two definitional notes** (Note A = the
+  identity; Note B = the rule-level structural block).
+- **§3.7 / Figure 4 / §4 / Conclusions expansion contradiction resolved** in one consistent reading:
+  not an artifact of the particular pinned value (holds for every admissible K ≥ 2K* = 1769.2 kt),
+  explicitly conditional on K ≥ 2K*, data-selected within that range. Verified from the registered
+  data: the K-grid r and F′(K*) values reproduce exactly at every grid K; SSE falls monotonically
+  521,053 → 306,532 kt² as K rises, so "the fit cost rises below 2K*" is correct.
+- **Freeze date / post-freeze disclosure**: verified already present in v16 (frozen 2026-08-26 prior
+  to any kernel/boundary/replay/score; §2.1 post-freeze list) — retained.
+- Numerically re-verified non-destructively: r = 0.2369; SD 114.9 (sample, ddof = 1); mean −10.9;
+  range [−329.0, +206.6]; q05 −287.4; q10 −80.9; g_max = 296.1; g(K*) = 172.46; F′(K*) = 1.1531;
+  the r_T chain 329.0 / 708.4 / 1146.1 / 2232.4 / 3675.2 with K*+r_7 = 4559.8 and K*+r_8 = 5451.3
+  > K — all reproduce from `wave_e_cod/data/` (source-year convention).
+- **Registered residual** (NOT changed in v17 — outside the described restructure scope): §3.6's
+  "residual SSE 7690.1 kt² against 12,772.2 kt²" — 12,772.2 is the **MSE** (SSE 306,532 / 24), so
+  the first occurrence's "SSE" label is a one-word mislabel (the audit's priority-1 reconciliation
+  item); fix at owner acceptance.
+
 ---
 
-## E3 — Edwards forecast ladder (latest = **v11**; v8→v10 humanized/verification passes preserved)
+## E3 — Edwards forecast ladder (latest = **v12**; v8→v11 preserved — v11 is the batch-7 implementation; v12 registers the independent replication and resolves the comparator kink)
 
 ### (A) Joint consensus
 1. **M1 retained by margin the paper calls operationally nil** (0.39 ft; MAE tie; loses at h=5).
@@ -616,6 +652,48 @@ recharge is the failure"; resolve M2m comparator; add uncertainty; fix dates.
 - M4 labelled symmetry control (Table 2 + §6); z→H unified; table-reading propositions converted
   to result sentences; corr-vs-φ̂ distinction stated; "wrong timing"→"right timing, unforecastable";
   PDO/AMO not-run disclosure; daily-high convention noted.
+
+### (D-b) v12 (2026-09-06, non-destructive; no frozen verdict or score changed)
+
+Built by `apply_batch7_restructure.py`; verified: **the only table-row change between v11 and v12 is a
+label** ("climate gate" → "nested baseline") — every value identical.
+
+- **Comparator kink RESOLVED against the frozen document.** `wave_e_edwards/protocol_pass2.md`
+  (frozen 2026-08-25) states the climate question as "reduce primary RMSE on J-17 relative to
+  persistence **and relative to M1**" — and M2m-as-comparator appears in **no** frozen document
+  (grep of protocol.md / protocol_pass2.md / protocol_intervention.md / SPECIFICATION.md). The
+  v10/v11 "declared nested comparator M2m" was the papers' own (mis)statement, which v11 had
+  disclosed as a kink; the joint audit demanded resolution, not disclosure ("a referee will not
+  treat an acknowledged kink as resolved"). v12 corrects the comparator to the frozen M1:
+  §4.1 deviation #2 rewritten (the correction itself disclosed); §5.4 narrative restated — the
+  three climate modules are **listed on the frozen gate** by within-noise margins (0.02–0.13 ft),
+  and not retained on three stated grounds (within-noise gate margins; h = 5 persistence failure;
+  no forecast structure beyond the declined M2m class — they are affine AR(1) maps with a
+  climate-indexed intercept shift); the M2m margins kept as a nested-baseline reading, not the
+  gate; the Table-7 caption relabelled; the §6 "entire causal ladder is rejected" sentence
+  qualified. **Verdict unchanged** (no climate module retained under either statement); the
+  stated mechanism is corrected — matching the repo's own final edition's reasoning
+  (wave_e v2 §5.4: "M2m with a weakly adjusted intercept … not additional forecast structure").
+- **Independent replication registered and verified.** The owner-archived
+  `campaign_e3_dm_uncertainty.py` (uploaded to this batch-7 directory) was executed against the
+  registered `wave_e_edwards/results/rolling_forecasts.csv`: **deterministic** (byte-identical
+  md5 across runs, seed 0, 20,000 block-bootstrap replications) and reproducing every claimed
+  number exactly — M1−persist: gap −0.391 ft, DM z = −0.858, CI [−1.218, +0.560], p = 0.384;
+  M2m−persist p = 0.001; h = 5 naive_mean−persist p = 0.035. Output archived at
+  `results/e3_dm_uncertainty.csv` and registered in §5.3.1 + Data Availability. Cross-implementation
+  agreement with `wave_e_edwards/src/e3_audit_uncertainty.py` verified; the differences are fully
+  explained (population- vs sample-variance HAC scaling — the −0.858 vs −0.852 DM statistics differ
+  by exactly the sqrt((n−1)/n) factor; unweighted-truncated vs Bartlett HAC at h = 5; block length
+  h vs 8; 20k vs 10k replications; different seeds); every load-bearing conclusion is identical
+  under either implementation.
+- **Diebold & Mariano (1995) + Künsch (1989) references added** (with citation hooks in §5.3.1);
+  the §5.3.1 table is numbered (**Table 6**), climate → Table 7, counterfactuals → Table 8; the
+  two replication-only rows registered in prose (h = 1 climatology loss +2.94 ft, p = 0.046;
+  M2 h = 5 loss +12.4 ft, p < 0.001).
+- Verified already present in v11 (the described parallel-sandbox "E3 v11" elements): the
+  abstract/Implications/Conclusions real-result lead; the "certificate" retirement with the
+  nowcast / forecast / contemporaneous-accounting closure (§6); the "pre-registered" retirement
+  (fixed computational protocol, freeze dated, deviations listed in one place, §4.1).
 
 ---
 
@@ -764,3 +842,28 @@ Convexified-menu closure kept as the main result (relabeled honestly; minimax fr
 converse result that discrete time-sharing does not close the gap. This is the deepseek
 recommendation, embedded in P1_v16 as §4.11/Prop 9; the pure convex-reframe (grok-only) and the
 pure union-tube substitution (claude-only) were both rejected as sole answers.
+
+---
+
+## Batch-7 addendum — the parallel-sandbox E2 v17 / E3 v11 (2026-09-06)
+
+The owner supplied a second sandbox's implementation report: "E2 v17" (restructure-level,
+non-destructive) and "E3 v11" (with a new §5.7 uncertainty layer, Table 8, and the companion
+script `campaign_e3_dm_uncertainty.py`). That sandbox's manuscript files were lost in its reset;
+the surviving uncertainty script was owner-archived into this batch-7 directory (remote commit
+da1b609) and is the only artifact that could be verified directly. Evaluation and disposition
+(recorded item-by-item in `E2_V17_E3_V12_VERIFICATION.md`):
+
+- The script was **executed and verified**: deterministic, and every headline number in the
+  owner's description reproduces exactly (−0.86 / [−1.22, +0.56] / 0.38 / 0.001 / 0.035).
+- The E2 v17 described changes were evaluated against the frozen state and **implemented as
+  this repository's paperE2 v17** (five restructure items; no value/kernel/boundary changed;
+  zero table rows differ from v16).
+- The E3 v11 described changes split three ways: already present in this repo's v11 (real-result
+  lead; trio; pre-registered retirement — verified); **incorporated as paperE3 v12** (campaign
+  script registration + references + table numbering; and the comparator kink resolved against
+  the frozen protocol document); and the parallel sandbox's own §5.7/Table 8 layout, which is
+  not reproduced literally — this repo's v11/v12 carry the equivalent §5.3.1 layer plus the
+  registered replication, which is the same content under a different (already-implemented)
+  layout. Nothing from the described changes was rejected on substance; the only declined
+  element is presentational (their §5.7 placement), with the reason recorded.
