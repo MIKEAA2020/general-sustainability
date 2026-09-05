@@ -1,5 +1,5 @@
 # scan_revision — Audit summary
-*Generated 2026-09-05T23:43:21.935272Z*
+*Generated 2026-09-05T23:56:07.578137Z*
 
 ## Coverage
 **Master items: 22.** Covered: 21 · Partial: 0 · Missing: 0 · Superseded: 1 · Ambiguous: 0.
