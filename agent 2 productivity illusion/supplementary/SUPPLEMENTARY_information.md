@@ -2,9 +2,9 @@
 
 **Manuscript:** Emergent Carrying Capacity, the Biocapacity Ratio, and the Productivity Illusion: Deficit-Driven Collapse in a Delayed Coupled Human–Environment Model
 
-*Revision 29 · Companion to `IMPLEMENTED_revision_ECOMOD_v29.md` · Journal: Ecological Modelling*
+*Revision 30 · Companion to `IMPLEMENTED_revision_ECOMOD_v30.md` · Journal: Ecological Modelling*
 
-This document collects the supporting material that keeps the main text focused: the full model specification, the scaling, the analytic derivations, the scenario and parameter tables, the sensitivity/robustness record, the prediction-to-section map, and the supplementary references. It does not restate results already in the main text; it provides the derivations and tables behind them. Where a derivation is used in the main text, the relevant section is cited so the reader can cross-reference.
+This document collects the supporting material: the full model specification, the scaling, the analytic derivations, the scenario and parameter tables, the sensitivity/robustness record, the prediction-to-section map, and the supplementary references. It provides the derivations and tables behind the main-text results. Where a derivation is used in the main text, the relevant section is cited so the reader can cross-reference.
 
 ---
 

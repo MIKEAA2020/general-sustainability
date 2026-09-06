@@ -1,8 +1,8 @@
 # Supplementary Package — Index
 
-Companion to the manuscript *Emergent Carrying Capacity, the Biocapacity Ratio, and the Productivity Illusion: Deficit-Driven Collapse in a Delayed Coupled Human–Environment Model* (Revision 29, *Ecological Modelling*).
+Companion to the manuscript *Emergent Carrying Capacity, the Biocapacity Ratio, and the Productivity Illusion: Deficit-Driven Collapse in a Delayed Coupled Human–Environment Model* (Revision 30, *Ecological Modelling*).
 
-This is the **bundled supplementary package**: documentation + supporting figures + reproducibility guidance, designed to keep the main text focused while preserving full transparency.
+This is the **bundled supplementary package**: documentation + supporting figures + reproducibility guidance accompanying the manuscript.
 
 ## Contents
 
@@ -34,7 +34,7 @@ This is the **bundled supplementary package**: documentation + supporting figure
 
 ## Relationship to the manuscript
 
-- The **main text** is `data/revisions/IMPLEMENTED_revision_ECOMOD_v29.md`.
+- The **main text** is `data/revisions/IMPLEMENTED_revision_ECOMOD_v30.md`.
 - The **abstract** in the main text is the same as `ABSTRACT_submission.tex`, rendered in the manuscript's backtick-math notation.
-- The **SI** provides derivations/tables behind the main-text results and does not restate them.
+- The **SI** provides derivations/tables behind the main-text results.
 - The **figures** here are the non-essential-to-the-main-text set; the manuscript cites the core figures inline.

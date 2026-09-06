@@ -1,0 +1,90 @@
+# Response to Reviewer
+
+**Manuscript:** *Emergent Carrying Capacity, the Biocapacity Ratio, and the Productivity Illusion: Deficit-Driven Collapse in a Delayed Coupled Human–Environment Model* (M.S. ECOMOD-26-1191)
+
+**Revision addressed:** the current revision (v29 → v30). All section numbers cited below refer to the manuscript as set out in `data/revisions/IMPLEMENTED_revision_ECOMOD_v30.md`; the sections the reviewer's comments concern (§2.1 Units, §3 Assumptions, §7 Presentation, §11 Model scope, §13 Limitations) are unchanged between v29 and v30. The only change between v29 and v30 is the referencing/supplementary-handling: the nine companion manuscripts are now cited as full entries with their Zenodo DOIs (they were previously a single generic "Various companion manuscripts" entry), a units-reconciliation note has been added to §2.1, and a "Supplementary material" statement now cites all files in the bundled package.
+
+The reviewer's comments are reproduced as items (b)–(g) followed by a conclusion. We respond to each in turn, grounded in the specific section that addresses it. Where a comment identifies a real gap we say so and state the change made; where the concern is a matter of framing or convention we explain the convention and point to the sentence that establishes it.
+
+---
+
+## (b) Units
+
+> The units are inconsistent. Accumulation should be expressed in global hectare–years (gha·years), whereas Footprint is measured in global hectares (gha) — not gha per year. This needs correction for clarity and consistency.
+
+The reviewer is right to flag this, and we have clarified the convention explicitly. There are two self-consistent schemes, and the model uses the one in which the time-basis is made explicit so that the quantities can be differentiated in time.
+
+- **Footprint `E` and biocapacity `B` are per-annum flows.** They are written `gha·yr⁻¹` (the amount of global-hectare-equivalent demand or supply in one year). The Global Footprint Network reports these for a given year in global hectares (gha) with the "per year" basis left implicit; the model makes that basis explicit because `E` and `B` appear inside the rate equations (4) and (7), which cannot contain a pure area if they are to be differentiated in time.
+- **Accumulated ecological debt `D` is a stock.** It is the time-integral of the deficit, `D = ∫[E − B]₊ dt`, and therefore carries `gha·yr` (global-hectare-years). It is *not* a rate, and it enters only the degradation law (8) as `e^{−αD}` — never a rate equation.
+- **Consequence.** The two are never interchanged: a `gha·yr⁻¹` flow enters (4) and (7); the `gha·yr` accumulation enters only (8). The per-capita footprint `e` is `gha·cap⁻¹·yr⁻¹`, so `E = eP` is a flow.
+
+This reconciliation has been added as an explicit note to the symbol table in §2.1 ("**Units — the flow/stock convention**"), and the full symbol table with the unit of every quantity is also given in §S1.2 of the Supplementary Information. We agree with the reviewer that no `gha·yr⁻¹` quantity should be read as a pure `gha`; the note and the table now make the basis explicit verbatim.
+
+## (c) Assumptions about parameters
+
+> Per-capita requirements are treated as fixed, but in reality they are not. Similarly, the productivity factor for biocapacity may change over time. These parameters should be treated as dynamic rather than static.
+
+We partly agree, and the distinction is important.
+
+- **The productivity factor for biocapacity is already dynamic.** It is not a constant. Eq. (8) is `b = (b₀ + T_b(t)) e^{−αD(t)}` — the flow yield per unit area is driven by (i) a time-varying technology/management wave `T_b(t)` (a bounded logistic step, Eq. (9)) and (ii) debt- and degradation-induced erosion `e^{−αD}`. So the model does *not* hold `b` fixed; `b` co-evolves with the stock and the debt. The "static" impression that `B = bA + b_G G(A)` may give is because `G(A)` and `A` carry the dynamics at a given `b`; `b` itself is endogenous.
+- **Per-capita requirement `e` is deliberately held constant — and stated as such.** Assumption (3) (§3) reads: "Per-capita footprint is constant — `e` (and the per-capita requirement it represents) is held constant as a baseline modelling choice, since this is the only way to isolate the stock–flow–demand feedbacks; endogenising `e` as a time-varying per-capita requirement is an offered extension." The model does not carry a co-evolving per-capita requirement, and this is stated explicitly rather than left implicit. Holding `e` constant is a *design choice for isolation*, not an oversight; the sensitivity of the results to it is a stated extension.
+
+We think the reviewer's underlying concern (that a co-evolving per-capita demand would change the conclusions) is a fair empirical extension, and we have flagged it as such rather than hidden it. §6 and §11 note that the model is a conceptual/stylised framework whose parameters are representative, and §S5 records the robustness that has been checked.
+
+## (d) Missing references and data limitations
+
+> The paper discusses national Footprint accounts without citing the relevant literature. Including these references is important, as it would clarify that such accounts are approximations constrained by available UN datasets.
+
+The National Footprint Accounts literature *is* cited, in §7 "Related literature": the methodology and framework are documented in **Wackernagel & Rees (1996)**, **Wackernagel et al. (2002)**, **Borucke et al. (2013)**, and **Lin et al. (2018)**; the methodological objections are in **Blomqvist et al. (2013)**, **Giampietro & Saltelli (2014)**, and **van den Bergh & Grazi (2015)**; and the Global Footprint Network-side rejoinders appear in **Galli et al. (2016)**. The reviewer's point that these accounts are approximations constrained by available datasets is precisely the way the manuscript frames them, and it is the substantive content of the two points below.
+
+> In those National Footprint and Biocapacity Accounts: Biocapacity is likely overstated because environmental degradation is poorly captured; because of data limitations, the fragility of biocapacity is not reflected, leading to an underestimation of ecological overshoot.
+
+We agree entirely, and this is a made explicit limitation, not an assumption we hide. §11, "**National Footprint Accounts (NFA) data limitation**", states: the GFN accounts are account-based — measured yields and conversion factors, with no soil erosion, deforestation, groundwater depletion, or other cumulative degradation; consequently the estimated biocapacity most likely overstates the real resource base and the Footprint most likely understates the true overshoot — the actual overshoot is likely larger than the accounts document. This is the same conclusion the reviewer reaches, and §11 gives it as the strongest reason to treat the 1961–2022 series as "consistent with" the illusion reading *rather than as evidence for it*.
+
+> For this reason, the statement (line 328) that "global data from 1961–2022 are consistent with this interpretation: biocapacity grew modestly while ecological overshoot persisted, suggesting that technology has been outpacing degradation" is misleading and should be reconsidered.
+
+Agreed. That sentence was in the original submission and read as evidence. In the current revision the same claim is *qualified* rather than asserted. §11 (Model scope) states: "The 1961–2022 sentence is a qualified observation: the accounts are conservative (biocapacity likely overstated, overshoot understated); the series is **consistent with** the illusion reading but **does not demonstrate it**." We deliberately stopped short of treating the series as confirming the mechanism, because the signature of the illusion (biocapacity rising while the stock falls) is not identifiable contemporaneously without independent proxies for the technology channel (§11, "**Information-layer limit**"). We have modified the wording so it no longer reads as evidence.
+
+## (e) Missing empirical grounding
+
+A key challenge is demonstrating how overuse leads to declining biocapacity; the relationship, while intuitive, is not universally accepted, particularly by those who argue technological progress offsets degradation. To strengthen the paper: provide empirical evidence supporting this link; estimate parameters rather than asserting them; justify modelling choices. At present the model assumes dynamics (e.g., time lags) and then reproduces them, which risks being self-referential. Critical parameters (such as γ and ρ) are fixed without explanation. Why are they constant? Why is the proportionality structured this way?
+
+We respond to the four sub-points in turn, and are candid about the paper's scope.
+
+1. **Scope.** The paper is a conceptual/stylised model, not a forecast. This is declared at the outset of §11: "This is a conceptual / stylised model with representative calibration — not a forecast." It is not offered as an empirically calibrated prediction, and its results are framed as falsifiable hypotheses (§6) rather than stated facts. We agree the paper should not be read as demonstrating the link empirically; it *derives* the structural conditions under which overuse feeds back on yield, and it *states* the observable signature that would test that link.
+
+2. **Empirical grounding of the link.** §11 defines the empirical programme explicitly and bounds what it can show. The `b`-channel (the technology contribution to yield) is an unobserved internal flux; the discipline is to reconstruct unobserved internal fluxes from observed stock changes and to state which fluxes are identifiable ("The empirical programme is a flux reconstruction, not a curve-fit"). The decomposition targeted is `d ln B = d ln b + d ln A` with independent `A`-proxies (land cover, soil carbon, NPP). So the paper does not claim the link is established; it specifies how it would be tested and what is needed (independent proxies for the technology channel) rather than a fit to the composite `B` series. §11 also states we cannot distinguish a genuine recovery from a technology-driven mask at observation time — both reproduce the same signature — which is an honest statement of the identifiability limit.
+
+3. **Parameter status.** The parameters that the reviewer singles out are not free in the way the comment implies, and their status is stated.
+   - **`γ`** is not an independent constant: it is defined as `γ = 1/b_G`, where `b_G` is the value of one hectare of standing stock. §4.1 states "`γ = 1/b_G = 1/V`, the orchard's salvage value (`V` = standing biomass ÷ annual production, ≈ 20–100 yr). The capital-harvest coefficient is therefore **measurable** and is not a free parameter." So `γ` is derived from a measurable quantity, not asserted.
+   - **`ρ`** is the regeneration rate, a standard logistic growth rate. Its value is stated as representative and the results' dependence on it is checked (§12.3 shows the leading eigenvalue is essentially independent of `ρ` — "the monotone instability is structural"), and §13 states parameters are "representative, not estimated... `b_G`, `α` and the lags are lumped, not measured." The one parameter that *is* field-banded is the regeneration lag `τ_g` (§8), and the manuscript reports it as an interval over an observed band rather than a single value.
+   - **The justification for the structure.** The reason `e` is constant (to isolate the stock–flow–demand feedbacks), the reason the deficit `[·]₊` is thresholded (demand is met first from the flow, only the shortfall liquidates capital — §2.2, Eq. (4)), and the reason degradation is multiplicative (Eq. (8)) are each stated in §3 as explicit numbered assumptions. The proportionality is not arbitrary: the multiplicative form is what makes the debt-compounding asymmetry a *theorem* (that "debt compounds without bound while technology saturates" follows from the model, and is false under an additive form — §5).
+
+4. **Self-referentiality.** The concern that the model "assumes the dynamics and then reproduces them" is a fair one to raise. The response is that the key result is not reproduced dynamics but a *deliberately structural* outcome that the model does not include. The critical time scale — the regeneration lag that flips recovery into collapse at ≈18–20 yr (§6 prediction 6; §8) — is *not fitted* from the model; it is taken from independent ecological field studies (Poorter et al. 2016; Poeplau et al. 2011; Hutchings & Reynolds 2004; Neubauer et al. 2013) and then *used as input* to ask whether the collapse mechanism operates across the observed band. The model states that the collapse mechanism operates for any `τ_g` in the observed band; it does not claim to have measured that band. We have also been explicit that the model is "literature-banded," not fitted (§8, "**Calibration outlook**" and "**Honesty caveat**").
+
+## (f) Clarity of the model
+
+We agree the equations should carry their assumptions, and the corrections below address the unit issue that reduced confidence.
+
+- **Each equation carries an explicit modelling choice.** §3 begins "Each equation carries an explicit modelling choice" and lists nine numbered assumptions, one per structural feature: (1) logistic regeneration; (2) biocapacity additive flow + capital growth; (3) constant per-capita footprint; (4) deficit-driven, immediate depletion (delay in recruitment, not depletion); (5) demographic delay on carrying capacity; (6) `K` algebraic; (7) debt accrues only in overshoot, repaid at `η`; (8) degradation erodes the surviving stock's yield; (9) bounded technology. Eq. (8)–(9) for the degradation and technology channels are covered by (8) and (9). §S1.1 of the Supplementary Information walks through each equation with the same assumptions in one place.
+- **The unit dimensions are now stated and reconciled.** Responded to in (b): §2.1 now carries the flow/stock convention in words, and §S1.2 gives the unit of every symbol. The reviewer is right that the previous presentation did not make the per-year vs. accumulated distinction explicit; it now does.
+- **Non-smoothness and one-sided stability.** §13 states that the sustainable point is a boundary of the deficit regime (the exact `[·]₊` is non-smooth at `A = A_max` and at `E = bA`), so stability is reported one-sided, and that because the exact switch yields no imaginary-axis crossing the non-smoothness does not create spurious oscillations. This is the kind of modelling detail the reviewer wants made explicit, and §13 and §8 both address it.
+
+## (g) Didactic clarity
+
+We have made the reasoning more transparent throughout, and we agree the argument should not rest on formulas with implicit assumptions.
+
+- §3 lists the nine modelling choices in plain language first ("why this assumption") before any algebra.
+- §7 "**Mappings**" translates each model object into the orchard framing (flowing fruit = biocapacity; standing trees = capital stock; `ψ` = share of sustainable biocapacity that comes from the flow), giving a non-technical reading of the model.
+- §4 introduces the two registers explicitly: the *dynamical* view (how the system behaves) and the *observational* view (what a policy-maker can watch), so the reader always knows whether a statement is about behaviour or about monitoring. The thesis is stated once in §4 and again in §7.
+- §12 lists the phenomena *absent* from the model (critical slowing down before the `τ_g` cliff; hysteresis; endogenous limit cycles; an Allee rescue threshold) and why each absence is structural rather than an oversight — so a reader is not misled into expecting them.
+
+We have also reduced the reliance on unexplained formulas by making each sign and each parameter's provenance explicit (see (e) for `γ`, `ρ`; (b) for units; (c) for `e` and `b`). The result is a model whose logic is stated before its algebra, and whose scope and limits are declared rather than implied.
+
+## Conclusion
+
+> The overall idea is understandable and the message is compelling, but the paper remains overly speculative and theoretical in its current form. Significant revision is needed to improve clarity, empirical grounding, and methodological rigor.
+
+We thank the reviewer for this assessment, and we agree with much of it. The paper is a *conceptual* framework, and we have been explicit about what that entails rather than claiming otherwise. In response we have: (i) reconciled the units by differentiating flows (`gha·yr⁻¹`) from the accumulated stock (`gha·yr`) and added the convention to §2.1 and §S1.2; (ii) explained that `b` is dynamic (Eq. (8)–(9)) and that `e` is held constant as a stated isolation device with an offered endogenisation; (iii) pointed to the existing NFA literature in §7 and to §11, which already states the accounts' limitations and treats the 1961–2022 series as consistent-with but not evidence-for the illusion; (iv) restated the empirical programme (§11) as a flux reconstruction with an explicit identifiability limit, and flagged that the paper is a stylised model, not a forecast; (v) justified `γ` (derived from the measurable `b_G`) and `ρ` (representative, with reported structural insensitivity), and declared the fit-defect and interval-discipline protocols; and (vi) made the assumptions, logic, and scope transparent (§3, §7, §13).
+
+We believe the revision addresses the clarity and rigour concerns without over-claiming empirical support. The empirical calibration the reviewer requests is a substantial programme in its own right, and we have specified how it would be carried out (§11) rather than presenting its results prematurely. If the reviewer would find it useful, we are glad to add the calibration of `τ_g` (and possibly `b`) from a small set of well-documented case studies as a clearly-labelled extension, or to expand the was-scoped robustness record in §S5.
