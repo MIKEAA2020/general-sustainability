@@ -11,6 +11,12 @@ Every number is the paper's registered value; nothing is invented.
   B  THE TYPED LEDGER         : per-moiety compartments, conservation from
                                 incidence, positivity from donor limitation
   C  NO WEIGHT HIDES A DEFICIT: the noncompensation obstruction, b*M >= 0
+Wave-11 root-cause fix inherited from the owner's E2 feedback: the
+vlines stacker drew every multi-line box's list bottom-to-top, so all
+boxes rendered in reverse reading order (bold headline at the bottom);
+vlines now renders lists in reading order (headline on top, the ECOMOD
+house convention; stack geometry unchanged). No other change to this
+generator.
 Outputs: graphical_abstracts/graphical_abstract_p3.{pdf,png,tiff}
 Run twice to pin the MD5s.
 """
@@ -68,6 +74,11 @@ def vlines(x, ybot, w, h, lines):
     """Place 1-4 stacked centred lines inside box (x, ybot, w, h).
     Each line is auto-fitted to width (w-14); stack clearance is computed
     from the fitted sizes (1pt = PX px, 3px inter-line gaps)."""
+    # wave-11 root-cause fix: the wave-10 stacker drew the list bottom-to-top,
+    # so every multi-line box rendered in REVERSE reading order (the root cause
+    # of the owner-flagged E2 text). Reverse here so the list's first line
+    # renders at the TOP; the stack geometry is unchanged (same slots).
+    lines = list(reversed(lines))
     n = len(lines)
     fitted = []
     for (s, sz) in lines:

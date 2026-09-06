@@ -11,6 +11,20 @@ artefact 47.5 yr); nothing is invented.
                                     the institutional link, the two laws
   B  TWO CHANNELS, OPPOSITE MATH  : stability vs deployment delay tau
   C  THE REVIEW INTERVAL AS CONTROL: sample-and-hold, 6.5-yr crossing
+Wave-11 owner-directed layout fix, scoped exactly as instructed: the
+RIGHT COLUMN's review-interval axis label ("review interval T_r (yr,
+log)") grazed the protective strip above it (text bbox top 247.1 vs
+strip bottom edge 244, the tall paren glyphs entering the green band);
+it is moved down 8 px (238 -> 230, "just a tiny bit"), now 5.7 px of
+ink clearance. The middle column's "tau (yr, log)" keeps its wave-10
+position: the owner scoped the instruction to the right column, and
+moving the middle label down collides with the no-Hopf box text below
+it (audit-proven).
+Wave-11 root-cause fix inherited from the owner's E2 feedback: the
+vlines stacker drew every multi-line box's list bottom-to-top, so all
+boxes rendered in reverse reading order (bold headline at the bottom);
+vlines now renders lists in reading order (headline on top, the ECOMOD
+house convention; stack geometry unchanged).
 Outputs: graphical_abstracts/graphical_abstract_p4.{pdf,png,tiff}
 """
 import hashlib
@@ -69,6 +83,11 @@ def lines_weight(s): return ATTR.get(s, {}).get("weight", "normal")
 def lines_style(s): return ATTR.get(s, {}).get("style", "normal")
 
 def vlines(x, ybot, w, h, lines):
+    # wave-11 root-cause fix: the wave-10 stacker drew the list bottom-to-top,
+    # so every multi-line box rendered in REVERSE reading order (the root cause
+    # of the owner-flagged E2 text). Reverse here so the list's first line
+    # renders at the TOP; the stack geometry is unchanged (same slots).
+    lines = list(reversed(lines))
     n = len(lines)
     fitted = [(s, fit(s, w - 14, lines_weight(s), sz)) for (s, sz) in lines]
     halves = [fsz * PX / 2 for (_, fsz) in fitted]
@@ -154,7 +173,7 @@ txt(715, 290, "holds the window stable",
     size=fit("holds the window stable", 240, maxsize=6.6), color=GREY, style="italic")
 txt(700, 257, "stable at every \u03c4",
     size=fit("stable at every \u03c4", 230, maxsize=6.4), color="#ffffff", z=7)
-txt(715, 238, "\u03c4 (yr, log)", size=6.4, color=GREY)
+txt(715, 238, "\u03c4 (yr, log)", size=6.4, color=GREY)  # NOT moved: owner scoped the fix to the right column; moving this collides with the no-Hopf box text
 box(446, 178, 394, 46, fc="#e7f4ec", ec=FLOW, lw=1.4)
 ATTR.clear()
 ATTR["no-Hopf theorem at every \u03c4"] = {"weight": "bold", "color": FLOW}
@@ -195,7 +214,7 @@ txt(1125, 257, "annual review: stable", size=fit("annual review: stable", 180, m
 ax.plot([rx(47.5)], [339], "x", ms=8, mec=GREY, mew=1.6, zorder=7)
 txt(1125, 302, "Euler 47.5 \u2014 artefact",
     size=fit("Euler 47.5 \u2014 artefact", 210, maxsize=6.2), color=GREY, ha="center")
-txt(1125, 238, "review interval T_r (yr, log)", size=6.4, color=GREY)
+txt(1125, 230, "review interval T_r (yr, log)", size=6.4, color=GREY)  # wave-11: 238 -> 230 (owner-directed nudge down)
 box(876, 96, 422, 74, fc="#f0f4f8", ec="#c3d3e3", lw=1.4)
 ATTR.clear()
 ATTR["the form and timing of response,"] = {"weight": "bold"}

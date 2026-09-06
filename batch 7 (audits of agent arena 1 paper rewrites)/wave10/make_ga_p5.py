@@ -9,6 +9,16 @@ screen; the Northern cod case); nothing is invented.
   A  GOVERNANCE IS PERIODIC     : the sample-and-hold staircase
   B  THE CROSSING RECORD        : exact vs Euler update, T_r axis
   C  STABILITY DOES NOT TRANSFER: distinct operators
+Wave-11 owner-directed layout fix: the four row labels (prot.exact /
+prot.Euler / extr.exact / extr.Euler) were centred at x=560 and their
+right ends (up to x=617.8) overlapped the strips' left end (x=594) by
+up to 24 px; they are now right-aligned at x=588 (6 px clear of the
+strips, leftmost edge ~x=472, well inside the panel B frame).
+Wave-11 root-cause fix inherited from the owner's E2 feedback: the
+vlines stacker drew every multi-line box's list bottom-to-top, so all
+boxes rendered in reverse reading order (bold headline at the bottom);
+vlines now renders lists in reading order (headline on top, the ECOMOD
+house convention; stack geometry unchanged).
 Outputs: graphical_abstracts/graphical_abstract_p5.{pdf,png,tiff}
 """
 import hashlib
@@ -64,6 +74,11 @@ def lines_weight(s): return ATTR.get(s, {}).get("weight", "normal")
 def lines_style(s): return ATTR.get(s, {}).get("style", "normal")
 
 def vlines(x, ybot, w, h, lines):
+    # wave-11 root-cause fix: the wave-10 stacker drew the list bottom-to-top,
+    # so every multi-line box rendered in REVERSE reading order (the root cause
+    # of the owner-flagged E2 text). Reverse here so the list's first line
+    # renders at the TOP; the stack geometry is unchanged (same slots).
+    lines = list(reversed(lines))
     n = len(lines)
     fitted = [(s, fit(s, w - 14, lines_weight(s), sz)) for (s, sz) in lines]
     halves = [fsz * PX / 2 for (_, fsz) in fitted]
@@ -136,8 +151,9 @@ ROWS = [
      [(47.536, "D"), (79.143, "v")]),
 ]
 for (lbl, y, segs, marks) in ROWS:
-    txt(560, y + 13, lbl, size=fit(lbl, 120, "bold", 6.4), color=DARK,
-        weight="bold", ha="center")
+    # wave-11: right-aligned at x=588 (was centred at 560, riding the strips)
+    txt(588, y + 13, lbl, size=fit(lbl, 120, "bold", 6.4), color=DARK,
+        weight="bold", ha="right")
     for (t0, t1, c) in segs:
         ax.add_patch(Rectangle((tx(t0), y), tx(t1) - tx(t0), 26,
                                facecolor=c, edgecolor="none", alpha=0.9, zorder=3))

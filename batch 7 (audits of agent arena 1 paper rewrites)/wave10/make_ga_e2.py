@@ -11,6 +11,23 @@ nothing is invented.
   A  AFTER THE COLLAPSE : the object, the map, the floor
   B  WHAT CATCH CAN HOLD: the 91.6-kt robust catch under the worst case
   C  WHEN CATCH CANNOT HELP: no dominance, empty kernels, good years
+
+Wave-11 owner-directed fixes, root-caused: the wave-10 vlines stacker drew
+each box's line list BOTTOM-TO-TOP, so every multi-line box rendered in
+reverse reading order (bold headline at the bottom) - the owner's two E2
+comments exposed it ("zone rule holds ... does not make sense" = the top
+line of the reversed panel-B lower box; "first and second sentence should
+swap" = the two reversed fragments of the panel-C margin sentence). vlines
+now renders lists in reading order (headline on top, the ECOMOD house
+convention; stack geometry unchanged). On top of that root fix: panel B's
+lower box restores the paper's registered abstract wording verbatim
+("zero catch and the moratorium hold the safe set; the critical-zone and
+cascade rules hold the LRP from itself" - wave-10 had also dropped the
+"from" and the cascade); panel C's lower box is in the owner-directed
+margin-first order ("the margin good years must supply is smaller than
+the frozen convention implied", then bold "the LRP is protected by good
+years" - "they" resolved to "good years", the paper's own Section-4
+wording).
 Outputs: graphical_abstracts/graphical_abstract_e2.{pdf,png,tiff}
 """
 import hashlib
@@ -65,6 +82,11 @@ def lines_weight(s): return ATTR.get(s, {}).get("weight", "normal")
 def lines_style(s): return ATTR.get(s, {}).get("style", "normal")
 
 def vlines(x, ybot, w, h, lines):
+    # wave-11 root-cause fix: the wave-10 stacker drew the list bottom-to-top,
+    # so every multi-line box rendered in REVERSE reading order (the root cause
+    # of the owner-flagged E2 text). Reverse here so the list's first line
+    # renders at the TOP; the stack geometry is unchanged (same slots).
+    lines = list(reversed(lines))
     n = len(lines)
     fitted = [(s, fit(s, w - 14, lines_weight(s), sz)) for (s, sz) in lines]
     halves = [fsz * PX / 2 for (_, fsz) in fitted]
@@ -141,11 +163,9 @@ txt(836, 190, "120 kt: survival 0.65",
 box(446, 96, 394, 74, fc="#e7f4ec", ec=FLOW, lw=1.4)
 ATTR.clear()
 ATTR["zero catch and the moratorium"] = {"weight": "bold"}
-ATTR["the critical-zone rule holds the"] = {"color": DARK}
-ATTR["LRP from itself"] = {"color": DARK}
 vlines(643, 96, 394, 74, [("zero catch and the moratorium", 7.0),
-                          ("hold the safe set; the critical-", 6.4),
-                          ("zone rule holds the LRP itself", 6.4)])
+                          ("hold the safe set; the critical-zone and", 6.4),
+                          ("cascade rules hold the LRP from itself", 6.4)])
 
 # =====================================================================
 # PANEL C — WHEN CATCH CANNOT HELP
@@ -165,10 +185,10 @@ for (t1, t2, yy, col, bg) in calls:
 box(876, 96, 422, 74, fc="#f0f4f8", ec="#c3d3e3", lw=1.4)
 ATTR.clear()
 ATTR["the LRP is protected by good years"] = {"weight": "bold"}
-ATTR["than the frozen convention implied"] = {"color": GREY, "style": "italic"}
-vlines(1087, 96, 422, 74, [("the LRP is protected by good years", 7.0),
-                           ("the margin they must supply is smaller", 6.6),
-                           ("than the frozen convention implied", 6.6)])
+ATTR["smaller than the frozen convention implied"] = {"color": GREY, "style": "italic"}
+vlines(1087, 96, 422, 74, [("the margin good years must supply is", 6.6),
+                           ("smaller than the frozen convention implied", 6.6),
+                           ("the LRP is protected by good years", 7.0)])
 
 txt(W / 2, 40, "Robust Viability of the 2J3KL Limit Reference Point under a Surplus-Production",
     size=fit("Robust Viability of the 2J3KL Limit Reference Point under a Surplus-Production",

@@ -12,6 +12,12 @@ gap on the compensatory region only); nothing is invented.
   A  ONE NUMBER FROM MANY CAPITALS : compensatory aggregation
   B  THE WITNESS                   : aggregate passes, a floor fails
   C  THE SEPARATION                : V_weak strictly contains V_typ
+Wave-11 root-cause fix inherited from the owner's E2 feedback: the
+vlines stacker drew every multi-line box's list bottom-to-top, so all
+boxes rendered in reverse reading order (bold headline at the bottom);
+vlines now renders lists in reading order (headline on top, the ECOMOD
+house convention; stack geometry unchanged). No other change to this
+generator.
 Outputs: graphical_abstracts/graphical_abstract_p1.{pdf,png,tiff}
 """
 import hashlib
@@ -70,6 +76,11 @@ def lines_weight(s): return ATTR.get(s, {}).get("weight", "normal")
 def lines_style(s): return ATTR.get(s, {}).get("style", "normal")
 
 def vlines(x, ybot, w, h, lines):
+    # wave-11 root-cause fix: the wave-10 stacker drew the list bottom-to-top,
+    # so every multi-line box rendered in REVERSE reading order (the root cause
+    # of the owner-flagged E2 text). Reverse here so the list's first line
+    # renders at the TOP; the stack geometry is unchanged (same slots).
+    lines = list(reversed(lines))
     n = len(lines)
     fitted = [(s, fit(s, w - 14, lines_weight(s), sz)) for (s, sz) in lines]
     halves = [fsz * PX / 2 for (_, fsz) in fitted]

@@ -1512,3 +1512,60 @@ deterministic pixel-bbox layout audit — wave10/audit_ga.py — passes with
 zero issues on all five, and every PNG is VLM-verified collision-free).
 Non-destructive: no existing file touched; git status shows only new
 files.
+
+## Wave-11 addendum — author front matter + graphical-abstract fixes (Task 81, 2026-09-07)
+
+Owner directive: (1) all nine papers' PDF and LaTeX carry the author
+front matter (Amin Abaee, Independent Researcher, amin_abaee@ut.ac.ir,
+ORCID 0000-0002-0019-1842, AI declaration: GLM (Z.ai), Qwen (Alibaba
+Cloud) and DeepSeek AI assisted with drafting and iterative review);
+(2) four graphical-abstract fixes (E2 middle-column lower box sentence
+sense; E2 right-column lower box sentence swap; P4 right-column review
+interval down a tiny bit; P5 middle-column row labels to the left).
+
+**Root cause found and fixed (record: wave11/WAVE11_IMPLEMENTATION.md):**
+the owner's two E2 comments exposed a systemic wave-10 defect — the
+vlines box-text stacker drew every multi-line box's line list
+bottom-to-top, so every text box in all five graphical abstracts
+rendered in reverse reading order (bold headline at the bottom). All
+five generators now render lists in reading order (headline on top, the
+ECOMOD house convention; stack geometry unchanged). On top of the root
+fix: E2's panel-B lower box now quotes the paper's registered abstract
+sentence verbatim ("zero catch and the moratorium hold the safe set; the
+critical-zone and cascade rules hold the LRP from itself" — wave-10 had
+also dropped the "from" and the cascade); E2's panel-C lower box is in
+the owner-directed margin-first order ("the margin good years must
+supply is smaller than the frozen convention implied", then bold "the
+LRP is protected by good years"); P4's right-column review-interval
+label moved down 8 px (bbox top 247.1 was 3.1 px inside the strip;
+now 5.7 px ink clearance; the middle column stays per the owner's
+scoping — moving it collides with the no-Hopf box, audit-proven); P5's
+four row labels right-aligned at x 588 (were riding the strips' left
+end by up to 24 px). All 15 GA files regenerated, byte-reproducible
+across two runs; wave10/audit_ga.py 0 issues on all five; the new
+wave11/audit_fixes.py (text-vs-strip clearance, reading order, label
+positions — the checks the wave-10 auditor lacked) 0 issues; VLM
+transcription confirms every box reads top-to-bottom on all five.
+
+**Author front matter (wave11/build_latex_author.py):** the wave-9
+pipeline with exactly one functional change — the title block's
+\author now carries the byline (name + "Independent Researcher"), a
+\thanks footnote (email, ORCID, AI declaration). Every wave-9 fail-loud
+check inherited (numeric-token multiset exactly equal, no word lost,
+pure-ASCII body, figure counts), plus a new body-identity assertion:
+each new tex is byte-identical to the wave-9 output after only the
+header-comment and \author substitutions (and the rebuild is
+idempotent). 9/9 compiled error-free; page counts unchanged (20/19/16/
+14/23/20/40/39/29); VLM-verified page 1 (E2, P4). Tex MD5s pinned:
+E1 d94ba3e4a3, E2 689fe8d28a, E3 89648f0e7f, E4 2962dcc8d5,
+P1 b3dfcb01d5, P2 7a3fd916fb, P3 96954a9338, P4 c6fe1ec5e2,
+P5 b56525b715.
+
+Non-destructiveness: no paper, supplementary, or figure file touched;
+no frozen value restated in altered form (the LaTeX body is
+machine-asserted byte-identical to wave-9). The 9 latex and 15 GA files
+are regenerated in place under their canonical names (the owner's own
+ECOMOD practice for generated artifacts), with the wave-9/wave-10
+originals exactly recoverable at commits 05b0fe7/da21eaa and surgical
+per-file diffs; git shows the modified deliverables plus only new
+wave-11 record files.
