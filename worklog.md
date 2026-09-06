@@ -1639,3 +1639,16 @@ Stage Summary:
 - Delivered: the owner-directed E2 GA fix (bold LRP line on top of the right column's last box, byte-reproducible, audit-clean 0 issues on all five, VLM-verified) and the advisory answer with recorded reasoning (no constructive retitle merited for E2 or P2; both current titles are the honest register; one optional refinement registered).
 - Non-destructive: no paper, supplementary, figure, LaTeX, or PDF file touched; no frozen value restated in altered form (the same three registered GA lines, re-ordered per the directive); the three E2 GA files regenerate in place under canonical names with the wave-11 originals exactly recoverable at 314c939; the other 12 GA files untouched.
 - Committed locally; push requires the owner's PAT (not available in this session - to be pasted fresh per the in-memory-only security rule).
+---
+Task ID: 82 (push record)
+Agent: main (Z.ai Code)
+Task: Push the wave-12 commit (Task 82) to GitHub using the owner's fine-grained PAT.
+
+Work Log:
+- Fresh session diagnosis: the user reported the E2 graphical abstract on the repo still showed the LRP line at the bottom. Verified the fix was completed and committed locally as f38d929 (all three E2 GA MD5s on disk matching the wave-12 pinned values: pdf d35012e2, png 1c776da5, tiff 513a0d5f; wave11/audit_fixes.py re-run, 0 issues, right box in wave-12 LRP-headline-first order), but remote main was still at 2fe1b47 - the wave-12 commit had never been pushed (the prior session ended at the push step awaiting a fresh PAT).
+- Remote main was at 2fe1b47 (wave-11 push record) with no new owner commits (fetch clean, zero divergence) - fast-forward push, no rebase needed.
+- Pushed 2fe1b47..f38d929 main -> main successfully with the owner's PAT; re-verified via git ls-remote (remote main now at f38d929faf3b).
+- Security: the PAT was used in-memory only (shell variable, unset immediately after use; redacted from all command output); never written to any file, commit, config, or worklog. The user should revoke/rotate it since it was pasted into chat.
+
+Stage Summary:
+- Wave 12 (Task 82) fully delivered and pushed: the E2 graphical abstract's right-column last box renders the bold "the LRP is protected by good years" line on top (byte-reproducible across two builds, audit-clean 0 issues on all five abstracts, VLM-verified), plus the recorded advisory answer that neither E2 nor P2 merits a constructive retitle. Remote main is at f38d929; working tree clean after this push-record commit.
