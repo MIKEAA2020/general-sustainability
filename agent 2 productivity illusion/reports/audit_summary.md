@@ -1,5 +1,5 @@
 # scan_revision — Audit summary
-*Generated 2026-09-06T02:57:24.328590Z*
+*Generated 2026-09-06T03:19:45.422135Z*
 
 ## Coverage
 **Master items: 22.** Covered: 21 · Partial: 0 · Missing: 0 · Superseded: 1 · Ambiguous: 0.
@@ -7,28 +7,28 @@
 ## Master claims and status
 | ID | Status | Score | Auto tier | Model | Note |
 |---|---|---|---|---|---|
-| 12A.1 | superseded | 0.90 | auto-covered | corrected (1‴) | Head-line masking numbers were computed on the ORIGINAL mode |
+| 12A.1 | superseded | 0.82 | auto-covered | corrected (1‴) | Head-line masking numbers were computed on the ORIGINAL mode |
 | 12A.2 | covered | 0.86 | auto-covered | corrected (1‴) | K->0 blow-up fixed via A_ext extinction floor + clamps. |
-| 12A.3 | covered | 0.85 | auto-covered | original | D_E method-dependent (5.26/6.74/18.70); verified 5.26. |
-| 12A.4 | covered | 0.88 | auto-covered | original (see note) | Knife-edge chi=1 <=> rho=3q flagged as non-generic. |
+| 12A.3 | covered | 0.79 | auto-covered | original | D_E method-dependent (5.26/6.74/18.70); verified 5.26. |
+| 12A.4 | covered | 0.89 | auto-covered | original (see note) | Knife-edge chi=1 <=> rho=3q flagged as non-generic. |
 | 12B.5 | covered | 0.62 | auto-covered | corrected (1‴) | per-capita footprint constant; endogenising e, r_opt offered |
 | 12B.6 | covered | 0.62 | auto-covered | corrected (1‴) | gross gamma E retained as named supplement variant. |
-| 12B.7 | covered | 0.64 | auto-covered | corrected (1‴) | K is algebraic, not a state; system is 3-D. |
+| 12B.7 | covered | 0.63 | auto-covered | corrected (1‴) | K is algebraic, not a state; system is 3-D. |
 | 12C.10 | covered | 0.63 | auto-covered | corrected (1‴) | complete scenario/parameter table. |
 | 12C.8 | covered | 0.64 | auto-covered | corrected (1‴) | state no interpolation / use non-multiple step. |
-| 12C.9 | covered | 0.90 | auto-covered | corrected (1‴) | state grid range; normalise Re lambda by r. |
-| 12D.11 | covered | 0.79 | auto-covered | original (see note) | cite Hutchinson 1948; soften Haberl & Aubauer novelty. |
+| 12C.9 | covered | 0.79 | auto-covered | corrected (1‴) | state grid range; normalise Re lambda by r. |
+| 12D.11 | covered | 0.83 | auto-covered | original (see note) | cite Hutchinson 1948; soften Haberl & Aubauer novelty. |
 | 12D.12 | covered | 0.62 | auto-covered | original (see note) | correct Brander-Taylor characterisation. |
-| 12D.13 | covered | 0.88 | auto-covered | original (see note) | GFN reference list adopted. |
-| 12D.14 | covered | 0.85 | auto-covered | original (see note) | E5 cleanliness: antibiotic, elevator, per-year, units, tense |
-| 12E.1 | covered | 0.87 | auto-covered | original (see note) | verified-correct list preserved ('do not fix'). |
+| 12D.13 | covered | 0.86 | auto-covered | original (see note) | GFN reference list adopted. |
+| 12D.14 | covered | 0.77 | auto-covered | original (see note) | E5 cleanliness: antibiotic, elevator, per-year, units, tense |
+| 12E.1 | covered | 0.77 | auto-covered | original (see note) | verified-correct list preserved ('do not fix'). |
 | 12G.1 | covered | 0.90 | auto-covered | original (see note) | four falsifiable predictions stated. |
 | 12G.2 | covered | 0.90 | auto-covered | original | basin-shrinkage 0.506->0.042; ORIGINAL-model S0. Corrected S |
-| 12G.3 | covered | 0.90 | auto-covered | corrected (1‴) | full dimensionless group set s,g,f,theta,tau. |
-| 12G.4 | covered | 0.90 | auto-covered | original | B/C = environment recovers, humans collapse (opposite framin |
-| 12G.5 | covered | 0.90 | auto-covered | original | (20,20) recovers / (30,25) collapses; min-M grid-sensitive. |
-| 12G.6 | covered | 0.76 | auto-covered | corrected (1‴) | submission hygiene: May orphan, Modeling/Modelling, keywords |
-| 12G.7 | covered | 0.90 | auto-covered | corrected (1‴) | Jevons rebound, tau_D asymmetry, omega=0, trivial equilibriu |
+| 12G.3 | covered | 0.80 | auto-covered | corrected (1‴) | full dimensionless group set s,g,f,theta,tau. |
+| 12G.4 | covered | 0.75 | auto-covered | original | B/C = environment recovers, humans collapse (opposite framin |
+| 12G.5 | covered | 0.86 | auto-covered | original | (20,20) recovers / (30,25) collapses; min-M grid-sensitive. |
+| 12G.6 | covered | 0.73 | auto-covered | corrected (1‴) | submission hygiene: May orphan, Modeling/Modelling, keywords |
+| 12G.7 | covered | 0.76 | auto-covered | corrected (1‴) | Jevons rebound, tau_D asymmetry, omega=0, trivial equilibriu |
 
 ## Key numeric verifications re-checked
 
@@ -41,13 +41,13 @@
 
 ## Discrepancies (auto vs curated)
 
-- 12A.3: AUTO said 'superseded' (score 0.85), curated verdict 'covered'
+- 12A.3: AUTO said 'superseded' (score 0.79), curated verdict 'covered'
 - 12C.8: AUTO said 'superseded' (score 0.64), curated verdict 'covered'
-- 12C.9: AUTO said 'superseded' (score 0.90), curated verdict 'covered'
+- 12C.9: AUTO said 'superseded' (score 0.79), curated verdict 'covered'
 - 12C.10: AUTO said 'superseded' (score 0.63), curated verdict 'covered'
-- 12E.1: AUTO said 'superseded' (score 0.87), curated verdict 'covered'
+- 12E.1: AUTO said 'superseded' (score 0.77), curated verdict 'covered'
 - 12G.2: AUTO said 'superseded' (score 0.90), curated verdict 'covered'
-- 12G.5: AUTO said 'superseded' (score 0.90), curated verdict 'covered'
+- 12G.5: AUTO said 'superseded' (score 0.86), curated verdict 'covered'
 
 ## Open items & provenance
 
