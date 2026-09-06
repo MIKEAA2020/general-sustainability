@@ -1,5 +1,5 @@
 # scan_revision — Audit summary
-*Generated 2026-09-05T23:56:07.578137Z*
+*Generated 2026-09-06T02:38:59.804918Z*
 
 ## Coverage
 **Master items: 22.** Covered: 21 · Partial: 0 · Missing: 0 · Superseded: 1 · Ambiguous: 0.
@@ -9,7 +9,7 @@
 |---|---|---|---|---|---|
 | 12A.1 | superseded | 0.90 | auto-covered | corrected (1‴) | Head-line masking numbers were computed on the ORIGINAL mode |
 | 12A.2 | covered | 0.86 | auto-covered | corrected (1‴) | K->0 blow-up fixed via A_ext extinction floor + clamps. |
-| 12A.3 | covered | 0.86 | auto-covered | original | D_E method-dependent (5.26/6.74/18.70); verified 5.26. |
+| 12A.3 | covered | 0.85 | auto-covered | original | D_E method-dependent (5.26/6.74/18.70); verified 5.26. |
 | 12A.4 | covered | 0.84 | auto-covered | original (see note) | Knife-edge chi=1 <=> rho=3q flagged as non-generic. |
 | 12B.5 | covered | 0.62 | auto-covered | corrected (1‴) | per-capita footprint constant; endogenising e, r_opt offered |
 | 12B.6 | covered | 0.62 | auto-covered | corrected (1‴) | gross gamma E retained as named supplement variant. |
@@ -22,7 +22,7 @@
 | 12D.13 | covered | 0.88 | auto-covered | original (see note) | GFN reference list adopted. |
 | 12D.14 | covered | 0.85 | auto-covered | original (see note) | E5 cleanliness: antibiotic, elevator, per-year, units, tense |
 | 12E.1 | covered | 0.87 | auto-covered | original (see note) | verified-correct list preserved ('do not fix'). |
-| 12G.1 | covered | 0.91 | auto-covered | original (see note) | four falsifiable predictions stated. |
+| 12G.1 | covered | 0.90 | auto-covered | original (see note) | four falsifiable predictions stated. |
 | 12G.2 | covered | 0.90 | auto-covered | original | basin-shrinkage 0.506->0.042; ORIGINAL-model S0. Corrected S |
 | 12G.3 | covered | 0.90 | auto-covered | corrected (1‴) | full dimensionless group set s,g,f,theta,tau. |
 | 12G.4 | covered | 0.90 | auto-covered | original | B/C = environment recovers, humans collapse (opposite framin |
@@ -41,7 +41,7 @@
 
 ## Discrepancies (auto vs curated)
 
-- 12A.3: AUTO said 'superseded' (score 0.86), curated verdict 'covered'
+- 12A.3: AUTO said 'superseded' (score 0.85), curated verdict 'covered'
 - 12A.4: AUTO said 'superseded' (score 0.84), curated verdict 'covered'
 - 12C.8: AUTO said 'superseded' (score 0.64), curated verdict 'covered'
 - 12C.9: AUTO said 'superseded' (score 0.90), curated verdict 'covered'
