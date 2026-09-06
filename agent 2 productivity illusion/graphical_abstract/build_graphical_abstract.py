@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-"""Graphical abstract for the 'productivity illusion' manuscript.
-
-Single-row, three-panel narrative banner (landscape) at the journal's
-graphical-abstract target size: 1328 x 531 px (0.40 h/w), 200 dpi.
-  A  THE ORCHARD   : biocapacity = flow yield + stock increment
-  B  THE COUPLING  : the delayed feedback loop, deficit switch, debt
-  C  THE ILLUSION  : biocapacity rises while the stock falls; R_B = 1
-
-Outputs: vector .pdf (journal), .png (online), .tiff (print).
+"""Graphical abstract — deficit-driven collapse in a delayed coupled model.
+3-panel banner, 1328 x 531 px (h/w 0.40), 200 dpi.
+Every box sits on a non-overlapping grid and every string auto-fits its box, so
+nothing overlaps or overflows.
+  A  THE ORCHARD   : flow = biocapacity ; stock = capital that generates it
+  B  THE COUPLING  : linear causal loop + feedback, deficit switch, debt, delays
+  C  THE ILLUSION  : biocapacity rises while stock falls; R_B = 1
+Outputs: .pdf (vector), .png (online), .tiff (print).
 """
 import numpy as np
 import matplotlib
@@ -18,161 +17,161 @@ from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Circle, Rectangl
 W, H = 1328, 531
 DPI = 200
 fig = plt.figure(figsize=(W / DPI, H / DPI), dpi=DPI)
-ax = fig.add_axes([0, 0, 1, 1])
-ax.set_xlim(0, W); ax.set_ylim(0, H)
-ax.axis("off")
+ax = fig.add_axes([0, 0, 1, 1]); ax.set_xlim(0, W); ax.set_ylim(0, H); ax.axis("off")
+fig.canvas.draw(); RENDER = fig.canvas.get_renderer()
 
-FLOW   = "#1f8a4c"
-STOCK  = "#b23a48"
-DARK   = "#1f3a5f"
-ACCENT = "#e0a458"
-GREY   = "#5c6b73"
-LIGHT  = "#f2f6f9"
-BLUE   = "#3f7cac"
-PURPLE = "#7d5ba6"
+FLOW, STOCK, DARK, ACCENT = "#1f8a4c", "#b23a48", "#1f3a5f", "#e0a458"
+GREY, BLUE = "#5c6b73", "#3f7cac"
 
-def box(x, y, w, h, fc=LIGHT, ec=DARK, lw=1.3, r=8, z=2):
+def meas(s, size, weight="normal"):
+    t = ax.text(0, 0, s, fontsize=size, fontweight=weight)
+    bb = t.get_window_extent(RENDER); t.remove()
+    return bb.width
+
+def fit(s, maxw, weight="normal", maxsize=7.0, minsize=3.6):
+    size = maxsize
+    while size > minsize and meas(s, size, weight) > maxw:
+        size -= 0.1
+    return size
+
+def box(x, y, w, h, fc="#ffffff", ec=DARK, lw=1.4, r=9, z=2):
     ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle=f"round,pad=0,rounding_size={r}",
                                 linewidth=lw, edgecolor=ec, facecolor=fc, zorder=z))
-
-def arrow(x1, y1, x2, y2, color=DARK, lw=1.5, style="-|>", rad=0.0, z=4, ms=9, ls="-"):
-    ax.add_patch(FancyArrowPatch((x1, y1), (x2, y2), arrowstyle=style, mutation_scale=ms,
+def arrow(x1, y1, x2, y2, color=DARK, lw=2.0, rad=0.0, z=5, ms=11, ls="-", shrink=3):
+    ax.add_patch(FancyArrowPatch((x1, y1), (x2, y2), arrowstyle="-|>", mutation_scale=ms,
                                  linewidth=lw, color=color, connectionstyle=f"arc3,rad={rad}",
-                                 zorder=z, shrinkA=2, shrinkB=2, linestyle=ls))
-
-def txt(x, y, s, size=6.0, color=DARK, weight="normal", ha="center", va="center",
-        style="normal", z=6):
+                                 zorder=z, shrinkA=shrink, shrinkB=shrink, linestyle=ls))
+def txt(x, y, s, size=6.6, color=DARK, weight="normal", ha="center", va="center",
+        z=8, style="normal"):
     ax.text(x, y, s, fontsize=size, color=color, fontweight=weight, ha=ha, va=va,
-            style=style, zorder=z, linespacing=1.2)
-
-def header(cx, title, sub):
-    txt(cx, 458, title, size=8.8, color=DARK, weight="bold")
-    txt(cx, 441, sub, size=6.2, color=GREY, style="italic")
-
-# ============================================================
-# PANEL A — THE ORCHARD  (frame 6..430)
-# ============================================================
-ax.add_patch(Rectangle((6, 52), 424, 402, facecolor="#fbfdfc", edgecolor="#d6e2dc", lw=1.0, zorder=0))
-header(218, "THE ORCHARD", "biocapacity is two things")
-
-# tree (small, top-left)
+            style=style, zorder=z, linespacing=1.12)
+def head(cx, t, sub, subw):
+    txt(cx, 452, t, size=fit(t, 240, "bold", 9.6), color=DARK, weight="bold")
+    txt(cx, 431, sub, size=fit(sub, subw), color=GREY, style="italic")
 def tree(x, base, s, z=6):
-    ax.add_patch(Rectangle((x-5*s, base-26*s), 10*s, 30*s, facecolor="#7a4a23",
-                           edgecolor="#5a3414", lw=0.7, zorder=z))
-    for dx, dy, r in [(-15, 24, 19), (15, 24, 19), (0, 34, 21)]:
+    ax.add_patch(Rectangle((x-5*s, base-28*s), 10*s, 34*s, facecolor="#7a4a23",
+                           edgecolor="#5a3414", lw=0.8, zorder=z))
+    for dx, dy, r in [(-16, 26, 19), (16, 26, 19), (0, 35, 21)]:
         ax.add_patch(Circle((x+dx*s, base+dy*s), r*s, facecolor=FLOW,
-                            edgecolor="none", alpha=0.86, zorder=z))
-tree(96, 250, s=1.7, z=6)
+                            edgecolor="none", alpha=0.88, zorder=z))
 
-# flow box (upper right)
-box(224, 300, 186, 44, fc="#e8f5ee", ec=FLOW, lw=1.2)
-txt(317, 328, "flow yield  b·A", size=6.2, color=FLOW, weight="bold")
-txt(317, 311, "(the fruit — base intact)", size=5.0, color=GREY)
-arrow(140, 322, 220, 322, color=FLOW, lw=1.8)
+# ----------------------------- panel frames -----------------------------
+for (x0, w, fc, ec) in [(10, 416, "#fbfdfc", "#d6e2dc"),
+                        (434, 420, "#f7fafd", "#d3e2ef"),
+                        (862, 456, "#fcfbf7", "#e7e2d2")]:
+    ax.add_patch(Rectangle((x0, 58), w, 400, facecolor=fc, edgecolor=ec, lw=1.0, zorder=0))
 
-# increment box (mid right)
-box(224, 216, 186, 44, fc="#fbeaea", ec=STOCK, lw=1.2)
-txt(317, 244, "stock increment  b_G·G(A)", size=6.2, color=STOCK, weight="bold")
-txt(317, 227, "(the timber — cut the base)", size=5.0, color=GREY)
-arrow(140, 238, 220, 238, color=STOCK, lw=1.8)
+# =====================================================================
+# PANEL A — THE ORCHARD
+# =====================================================================
+head(218, "THE ORCHARD", "flow = biocapacity  \u00b7  stock = capital", 340)
+tree(72, 188, s=1.7, z=6)
+acx, aw = 244, 178
+by = 338
+box(acx, by, aw, 66, fc="#e7f4ec", ec=FLOW, lw=1.6)
+txt(acx+aw/2, by+50, "FLOW", size=fit("FLOW", aw-16, "bold", 7.4), color=FLOW, weight="bold")
+txt(acx+aw/2, by+25, "the fruit = biocapacity", size=fit("the fruit = biocapacity", aw-14), color=FLOW)
+txt(acx+aw/2, by+7, "harvested, base intact", size=fit("harvested, base intact", aw-14), color=GREY)
+by = 232
+box(acx, by, aw, 66, fc="#fbeaea", ec=STOCK, lw=1.6)
+txt(acx+aw/2, by+50, "STOCK", size=fit("STOCK", aw-16, "bold", 7.4), color=STOCK, weight="bold")
+txt(acx+aw/2, by+25, "the trees = capital", size=fit("the trees = capital", aw-14), color=STOCK)
+txt(acx+aw/2, by+7, "generates the flow", size=fit("generates the flow", aw-14), color=GREY)
+by = 126
+box(acx, by, aw, 66, fc="#ffffff", ec=DARK, lw=1.4)
+txt(acx+aw/2, by+50, "liquidation", size=fit("liquidation", aw-16, "bold", 7.4), color=STOCK, weight="bold")
+txt(acx+aw/2, by+25, "cut stock faster than it regrows", size=fit("cut stock faster than it regrows", aw-14), color=DARK)
+txt(acx+aw/2, by+7, "\u2192 reduces future biocapacity", size=fit("\u2192 reduces future biocapacity", aw-14), color=DARK)
+arrow(150, 371, acx-6, 371, color=FLOW, lw=2.2)
+arrow(150, 265, acx-6, 265, color=STOCK, lw=2.2)
+arrow(acx+aw/2, 232, acx+aw/2, 192, color=STOCK, lw=1.8)
 
-# equation box (bottom right)
-box(224, 132, 186, 44, fc="#ffffff", ec=DARK, lw=1.2, r=7)
-txt(317, 160, "B  =  b·A  +  b_G·G(A)", size=6.8, color=DARK, weight="bold")
-txt(317, 143, "(flow + stock increment)", size=5.0, color=GREY)
+# =====================================================================
+# PANEL B — THE COUPLING (linear causal loop + feedback + dynamics)
+# =====================================================================
+head(644, "THE COUPLING", "overshoot is paid from the capital", 320)
+nw, nh = 118, 44
+L, M, R = 503, 644, 785
+r1, r2 = 300, 196
+def node(cx, cy, lbl, fc="#ffffff", ec=DARK):
+    box(cx-nw/2, cy-nh/2, nw, nh, fc=fc, ec=ec, lw=1.3, r=8)
+    txt(cx, cy, lbl, size=fit(lbl, nw-12, "bold", 6.2), color=DARK, weight="bold")
+node(L, r1, "stock  A")
+node(M, r1, "biocapacity  B")
+node(R, r1, "carrying  K")
+node(R, r2, "population  P")
+node(M, r2, "footprint  E")
+# main causal chain (solid)
+arrow(L+nw/2, r1, M-nw/2, r1, color=BLUE, lw=1.7)                       # A -> B
+arrow(M+nw/2, r1, R-nw/2, r1, color=BLUE, lw=1.7)                       # B -> K
+arrow(R, r1-nh/2, R, r2+nh/2, color=BLUE, lw=1.7)                       # K -> P
+arrow(R-nw/2, r2, M+nw/2, r2, color=BLUE, lw=1.7)                       # P -> E
+# feedback: footprint -> stock
+arrow(M, r2+nh/2, L, r1-nh/2, color=DARK, lw=1.7, ls=(0, (3, 2)), rad=0.0)
+# dynamics strip (bottom)
+strip = [("deficit switch", "if E > flow", ACCENT, "#fff7e8"),
+         ("ecological debt", "compounds, erodes yield", STOCK, "#fbeaea"),
+         ("two delays", "\u03c4_g \u00b7 \u03c4_p", GREY, "#eef2f7")]
+sw, sh, sgap = 118, 50, 20
+strip_y = 76
+scx = [440+sw/2+i*(sw+sgap) for i in range(3)]
+for (tt, sub, col, bg2), sx in zip(strip, scx):
+    box(sx-sw/2, strip_y, sw, sh, fc=bg2, ec=col, lw=1.4, r=8)
+    txt(sx, strip_y+sh-14, tt, size=fit(tt, sw-12, "bold", 6.4), color=DARK, weight="bold")
+    txt(sx, strip_y+12, sub, size=fit(sub, sw-12), color=col)
+arrow(M, r2-nh/2, scx[0], strip_y+sh, color=ACCENT, lw=1.5, ls=(0, (3, 2)), rad=-0.15)  # E -> deficit
+arrow(scx[0]+sw/2, strip_y+sh/2, scx[1]-sw/2, strip_y+sh/2, color=STOCK, lw=1.5, ls=(0, (3, 2)))  # deficit -> debt
+arrow(scx[2], strip_y+sh, R, r2-nh/2, color=GREY, lw=1.4, ls=(0, (3, 2)), rad=0.0)  # delays -> population
 
-# caveat (bottom, under tree, clear of tree)
-txt(160, 84, "Take more than the regrowth,\nand you pay from the base.", size=6.0, color=STOCK, weight="bold")
-
-# ============================================================
-# PANEL B — THE COUPLING  (frame 442..856)
-# ============================================================
-ax.add_patch(Rectangle((442, 52), 414, 402, facecolor="#f7fafd", edgecolor="#d3e2ef", lw=1.0, zorder=0))
-header(649, "THE COUPLING", "overshoot is paid from the base")
-
-xs = [456, 584, 712]; bw = 116; bh = 44; row1 = 320
-lbl1 = ["stock  A", "biocapacity  B", "carrying cap.\nK = B/e"]
-for x, l in zip(xs, lbl1):
-    box(x, row1, bw, bh)
-    txt(x+bw/2, row1+bh/2, l, size=5.6, color=DARK, weight="bold")
-arrow(xs[0]+bw, row1+bh/2, xs[1], row1+bh/2, color=BLUE, lw=1.5)
-arrow(xs[1]+bw, row1+bh/2, xs[2], row1+bh/2, color=BLUE, lw=1.5)
-
-row2 = 252
-box(xs[2], row2, bw, bh)
-txt(xs[2]+bw/2, row2+bh/2, "population  P", size=5.6, color=DARK, weight="bold")
-arrow(xs[2]+bw/2, row1, xs[2]+bw/2, row2+bh, color=BLUE, lw=1.5)
-box(xs[1], row2, bw, bh)
-txt(xs[1]+bw/2, row2+bh/2, "footprint  E = eP", size=5.6, color=DARK, weight="bold")
-arrow(xs[2], row2+bh/2, xs[1]+bw, row2+bh/2, color=BLUE, lw=1.5)
-
-# deficit switch
-sw_y = 176; sw_h = 36
-box(xs[0], sw_y, bw+72, sw_h, fc="#fff7e8", ec=ACCENT, lw=1.3)
-txt(xs[0]+(bw+72)/2, sw_y+26, "deficit switch", size=5.8, color=DARK, weight="bold")
-txt(xs[0]+(bw+72)/2, sw_y+11, "if E > bA, liquidate stock", size=4.9, color=GREY)
-arrow(xs[1]+bw/2, row2, xs[0]+(bw+72)/2, sw_y+sw_h, color=ACCENT, lw=1.4, ls=(0,(3,2)))
-
-# debt
-debt_y = 108; debt_h = 32
-box(xs[0], debt_y, bw+72, debt_h, fc="#fbeaea", ec=STOCK, lw=1.3)
-txt(xs[0]+(bw+72)/2, debt_y+22, "ecological debt  D", size=5.7, color=STOCK, weight="bold")
-txt(xs[0]+(bw+72)/2, debt_y+8, "compounds; erodes yield", size=4.8, color=GREY)
-arrow(xs[0]+(bw+72)/2, sw_y, xs[0]+(bw+72)/2, debt_y+debt_h, color=STOCK, lw=1.4)
-arrow(xs[0]+(bw+72)/2, debt_y, xs[0]+bw/2, row1, color=STOCK, lw=1.5, rad=0.32)
-
-# two delays (moved to top-right of panel B, clear of debt)
-box(xs[1], 176, bw+72, 36, fc="#eef2f7", ec=GREY, lw=1.1)
-txt(xs[1]+(bw+72)/2, 195, "two delays", size=5.7, color=DARK, weight="bold")
-txt(xs[1]+(bw+72)/2, 181, "τ_g regen  ·  τ_p demo", size=4.9, color=GREY)
-
-# ============================================================
-# PANEL C — THE ILLUSION  (frame 868..1322)
-# ============================================================
-ax.add_patch(Rectangle((868, 52), 454, 402, facecolor="#fcfbf7", edgecolor="#e7e2d2", lw=1.0, zorder=0))
-header(1095, "THE ILLUSION", "a healthy-looking harvest can mask decay")
-
-# chart
-sx, sy, sw, sh = 884, 246, 176, 148
+# =====================================================================
+# PANEL C — THE ILLUSION
+# =====================================================================
+head(1090, "THE ILLUSION", "a shrinking stock can look healthy", 300)
+carx, cary, carw, carh = 876, 152, 196, 200
+box(carx, cary, carw, carh, fc="#ffffff", ec="#d8cfa8", lw=1.1, r=7, z=1)
+ix0, iy0, iw, ih = carx+24, cary+20, carw-48, carh-40
 tmax = 14.0
-t = np.linspace(0, tmax, 500)
+t = np.linspace(0, tmax, 400)
 B = 1.00 + 0.145*np.exp(-((t-3.3)**2)/6.0) - 0.045*(t/tmax)**1.3
 A = 1.00 - 0.34*(t/tmax)**1.12
-box(sx-8, sy-8, sw+16, sh+18, fc="#ffffff", ec="#d8cfa8", lw=1.0, r=6, z=1)
-ax.plot(sx + t/tmax*sw, sy + A*sh, color=STOCK, lw=2.1, zorder=5)
-ax.plot(sx + t/tmax*sw, sy + B*sh, color=FLOW, lw=2.3, zorder=6)
-lo = sx + 1.6/tmax*sw; wb = (6.6-1.6)/tmax*sw
-ax.add_patch(Rectangle((lo, sy-6), wb, sh+12, facecolor=ACCENT, alpha=0.20, edgecolor="none", zorder=2))
-txt(sx + sw*0.20, sy-24, "stock A  (falls)", size=5.6, color=STOCK, weight="bold")
-txt(sx + sw*0.74, sy+sh+24, "biocapacity B  (rises)", size=5.6, color=FLOW, weight="bold")
-txt(sx + sw*0.72, sy+sh-12, "'mask' \u2248 5 yr", size=5.5, color=ACCENT, weight="bold")
+ax.plot(ix0 + t/tmax*iw, iy0 + A*ih, color=STOCK, lw=2.4, zorder=4)
+ax.plot(ix0 + t/tmax*iw, iy0 + B*ih, color=FLOW, lw=2.6, zorder=5)
+lo = ix0 + 1.6/tmax*iw; wb = (6.6-1.6)/tmax*iw
+ax.add_patch(Rectangle((lo, iy0-6), wb, ih+12, facecolor=ACCENT, alpha=0.22,
+                       edgecolor="none", zorder=2))
+txt(lo+wb/2, iy0+26, "'mask' \u2248 5 yr", size=fit("'mask' \u2248 5 yr", wb+24, "bold", 6.0),
+    color=ACCENT, weight="bold")
+txt(carx+carw-6, cary+carh-10, "B  (rises)", size=fit("B  (rises)", carw-14, "bold", 6.0),
+    color=FLOW, weight="bold", ha="right")
+txt(carx+carw-6, cary+12, "A  (falls)", size=fit("A  (falls)", carw-14, "bold", 6.0),
+    color=STOCK, weight="bold", ha="right")
+# callout stack (right)
+bx0, bw2 = 1084, 214
+calls = [("R_B = 1", "operating boundary", BLUE, "#eaf1f7"),
+         ("R_A = 1", "leading, non-causal signal", GREY, "#ffffff"),
+         ("long \u03c4_g \u2014 neither warns", "silent collapse", ACCENT, "#fff3e6")]
+ys = [312, 254, 196]
+for (t1, t2, col, bg2), yy in zip(calls, ys):
+    box(bx0, yy, bw2, 46, fc=bg2, ec=col, lw=1.4, r=8)
+    txt(bx0+bw2/2, yy+31, t1, size=fit(t1, bw2-14, "bold", 6.8), color=DARK, weight="bold")
+    txt(bx0+bw2/2, yy+11, t2, size=fit(t2, bw2-14), color=GREY)
+box(bx0, 138, bw2, 46, fc=STOCK, ec="none", r=10)
+txt(bx0+bw2/2, 169, "Rising biocapacity", size=fit("Rising biocapacity", bw2-14, "bold", 6.8),
+    color="#ffffff", weight="bold")
+txt(bx0+bw2/2, 149, "\u2260 improving health", size=fit("\u2260 improving health", bw2-14, "bold", 6.8),
+    color="#ffffff", weight="bold")
+# takeaway bar
+box(876, 92, 422, 44, fc="#f0f4f8", ec="#c3d3e3", lw=1.3)
+txt(1087, 124, "The decisive lever is the regeneration delay;", size=fit("The decisive lever is the regeneration delay;", 404, "bold", 6.4),
+    color=DARK, weight="bold")
+txt(1087, 104, "no early-warning signal or rescue-by-stock exists.", size=fit("no early-warning signal or rescue-by-stock exists.", 404),
+    color=DARK)
 
-# right badges (fit inside panel frame 868..1322 with margin)
-bx0 = 1096; bw2 = 212
-box(bx0, 374, bw2, 38, fc="#eaf1f7", ec=BLUE, lw=1.3)
-txt(bx0+bw2/2, 396, "Operating boundary:", size=5.6, color=DARK, weight="bold")
-txt(bx0+bw2/2, 381, "R_B = 1  (footprint = total biocapacity)", size=4.8, color=DARK)
-box(bx0, 328, bw2, 38, fc="#ffffff", ec=BLUE, lw=1.1)
-txt(bx0+bw2/2, 349, "R_A = 1  (flow-only)", size=5.5, color=GREY)
-txt(bx0+bw2/2, 334, "leading signal, not the trigger", size=4.7, color=GREY)
-box(bx0, 282, bw2, 38, fc="#fff3e6", ec=ACCENT, lw=1.2)
-txt(bx0+bw2/2, 302, "long τ_g — neither warns", size=5.5, color=DARK, weight="bold")
-txt(bx0+bw2/2, 288, "(silent collapse)", size=4.7, color=GREY)
-box(bx0, 236, bw2, 36, fc=STOCK, ec="none", r=7)
-txt(bx0+bw2/2, 254, "Rising biocapacity \u2260", size=5.6, color="#ffffff", weight="bold")
-txt(bx0+bw2/2, 241, "improving health", size=5.6, color="#ffffff", weight="bold")
-
-# takeaway
-txt(1095, 190, "The decisive lever is the regeneration delay;", size=5.8, color=DARK, weight="bold")
-txt(1095, 174, "no early warning or rescue-by-stock exists.", size=5.8, color=DARK, weight="bold")
-txt(1095, 154, "Structural decline needs no oscillatory trigger.", size=5.4, color=GREY, style="italic")
-
-# ---------------- title strip ----------------
-txt(W/2, 26, "The productivity illusion: emergent carrying capacity in a delayed coupled human–environment model",
-    size=8.0, color=DARK, weight="bold")
+txt(W/2, 26, "Emergent carrying capacity, the biocapacity ratio, and the productivity illusion",
+    size=fit("Emergent carrying capacity, the biocapacity ratio, and the productivity illusion",
+             W-40, "bold", 8.4), color=DARK, weight="bold")
 
 plt.savefig("graphical_abstract.pdf", dpi=DPI, facecolor="white")
 plt.savefig("graphical_abstract.png", dpi=DPI, facecolor="white")
 plt.savefig("graphical_abstract.tiff", dpi=DPI, facecolor="white", format="tiff")
-print("wrote graphical_abstract.pdf / .png / .tiff")
-print("print size cm:", round(W/DPI*2.54, 2), "x", round(H/DPI*2.54, 2))
+print("ok  print cm:", round(W/DPI*2.54, 2), "x", round(H/DPI*2.54, 2))
