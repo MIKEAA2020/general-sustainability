@@ -1569,3 +1569,42 @@ ECOMOD practice for generated artifacts), with the wave-9/wave-10
 originals exactly recoverable at commits 05b0fe7/da21eaa and surgical
 per-file diffs; git shows the modified deliverables plus only new
 wave-11 record files.
+
+## Wave-12 addendum (Task 82)
+
+Owner-directed E2 GA fix plus an advisory, both confined to the paper
+rewrites. **(1)** E2's right-column last box (panel C lower) re-ordered
+per the directive "the lrp line should be at top": the bold
+"the LRP is protected by good years" now renders on top, above
+"the margin good years must supply is / smaller than the frozen
+convention implied". Root-caused to history: the wave-11 margin-first
+order was the owner's compensation issued while boxes still rendered
+bottom-to-top (the wave-10 vlines reversal); with the reading-order root
+fix in place it had left the bold takeaway on the last line — the
+wave-12 directive restores the headline-first house convention of every
+other box. Same three registered strings, same sizes, same box and stack
+geometry (order-independent), the other four abstracts untouched. All
+three E2 outputs byte-reproducible across two runs (MD5s pinned in
+wave12/WAVE12_IMPLEMENTATION.md: pdf b168d8bb… → d35012e2…, png
+be7768f9… → 1c776da5…, tiff 6dbf9985… → 513a0d5f…); wave10/audit_ga.py
+0 issues on all five; wave11/audit_fixes.py updated to assert the
+wave-12 order, 0 issues; VLM transcription of the rendered PNG confirms
+the bold LRP line on top, all four right-column boxes in reading order,
+no collisions. **(2)** Advisory "does paper 2 merit a constructive
+title?" — answered NO for both readings, no file changed: E2 (the GA
+paper) because its own dominance-partial-order protocol forbids claiming
+an adopted policy and its load-bearing results are negative certificates
+(no dominance; empty positive-catch kernels at the 5th-percentile T = ∞;
+expansive map empties certified kernels beyond 7 yr), with the
+constructive content class-scoped and already carried by the abstract's
+final sentence, the GA bold line, and the keywords — "when catch cannot
+help" encodes the paper's answer to its own Introduction question (the
+LRP is protected by good years); P2 because "An Obstruction Calculus for
+Viability under Incomplete Observation" already takes the constructive
+instrument-naming form (the contribution is the calculus). Registered
+option, not implemented: E2's subtitle middle term "expansion" is the
+plainer-wording candidate if ever wanted — the verdict clause stays.
+Non-destructive: no paper, supplementary, figure, LaTeX, or PDF file
+touched; the three E2 GA files regenerate in place with wave-11
+originals recoverable at 314c939; records: wave12/WAVE12_IMPLEMENTATION.md
++ this addendum + worklog Task 82.

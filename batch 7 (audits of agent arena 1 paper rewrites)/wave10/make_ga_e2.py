@@ -23,11 +23,13 @@ convention; stack geometry unchanged). On top of that root fix: panel B's
 lower box restores the paper's registered abstract wording verbatim
 ("zero catch and the moratorium hold the safe set; the critical-zone and
 cascade rules hold the LRP from itself" - wave-10 had also dropped the
-"from" and the cascade); panel C's lower box is in the owner-directed
-margin-first order ("the margin good years must supply is smaller than
-the frozen convention implied", then bold "the LRP is protected by good
-years" - "they" resolved to "good years", the paper's own Section-4
-wording).
+"from" and the cascade). Panel C's lower box: wave-11 put it in the
+owner-directed margin-first order (a compensation issued while the box
+still rendered bottom-to-top); the owner's wave-12 directive - "the LRP
+line should be at top" - restores the headline-first house convention:
+bold "the LRP is protected by good years" on top, then "the margin good
+years must supply is smaller than the frozen convention implied" ("they"
+resolved to "good years", the paper's own Section-4 wording).
 Outputs: graphical_abstracts/graphical_abstract_e2.{pdf,png,tiff}
 """
 import hashlib
@@ -186,9 +188,9 @@ box(876, 96, 422, 74, fc="#f0f4f8", ec="#c3d3e3", lw=1.4)
 ATTR.clear()
 ATTR["the LRP is protected by good years"] = {"weight": "bold"}
 ATTR["smaller than the frozen convention implied"] = {"color": GREY, "style": "italic"}
-vlines(1087, 96, 422, 74, [("the margin good years must supply is", 6.6),
-                           ("smaller than the frozen convention implied", 6.6),
-                           ("the LRP is protected by good years", 7.0)])
+vlines(1087, 96, 422, 74, [("the LRP is protected by good years", 7.0),
+                           ("the margin good years must supply is", 6.6),
+                           ("smaller than the frozen convention implied", 6.6)])
 
 txt(W / 2, 40, "Robust Viability of the 2J3KL Limit Reference Point under a Surplus-Production",
     size=fit("Robust Viability of the 2J3KL Limit Reference Point under a Surplus-Production",

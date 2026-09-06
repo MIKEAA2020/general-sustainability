@@ -17,11 +17,15 @@ wave-10 auditor lacks (text-vs-strip clearance, box order, positions):
           "zero catch and the moratorium hold the safe set; the critical-zone
           and / cascade rules hold the LRP from itself" in READING order
           (bold headline on top) and no trace of the mangled wave-10 text;
-      (b) the panel-C lower box is in the owner-directed margin-first
-          order: "the margin good years must supply is" (top) above
-          "smaller than the frozen convention implied" (italic grey) above
-          the bold "the LRP is protected by good years" (bottom), with the
-          wave-10 "they"-wording absent.
+      (b) the panel-C lower box is in the wave-12 owner-directed
+          headline-first order: the bold "the LRP is protected by good
+          years" (top) above "the margin good years must supply is" above
+          "smaller than the frozen convention implied" (italic grey,
+          bottom), with the wave-10 "they"-wording absent. (Wave-11's
+          margin-first order was a compensation issued while the box still
+          rendered bottom-to-top; the owner's wave-12 directive - "the LRP
+          line should be at top" - restored the bold headline to the top,
+          the house convention in every other box.)
   P4  the right column's "review interval T_r (yr, log)" bbox top is
       clear of the protective strip's bottom edge (244) by >= 3 px, and
       the middle column's label is still at its wave-10 position (the
@@ -83,18 +87,19 @@ right_l3 = find(pairs, "the LRP is protected by good years")
 assert not [t for (t, _) in pairs if t in ("the margin they must supply is smaller",
                                            "than the frozen convention implied")], \
     "wave-10 right-box wording remains"
-# swapped order: margin line ABOVE the protected line
-if not (right_l1.y0 > right_l3.y1 and right_l2.y0 > right_l3.y1):
-    print("E2 right box not in swapped (margin-first) order")
+# wave-12 owner-directed order: the bold LRP headline on TOP, the margin
+# sentence beneath it (LRP line above the margin line above "smaller")
+if not (right_l3.y0 > right_l1.y1 and right_l1.y0 > right_l2.y1):
+    print("E2 right box not in wave-12 headline-first (LRP on top) order")
     issues += 1
 # box geometry: box(876, 96, 422, 74) -> x 876..1298, y 96..170
 for (name, bb) in (("right-l1", right_l1), ("right-l2", right_l2), ("right-l3", right_l3)):
     if not (876 <= bb.x0 and bb.x1 <= 1298 and 96 <= bb.y0 and bb.y1 <= 170):
         print(f"E2 {name} outside its box: {bb.x0:.1f},{bb.y0:.1f}-{bb.x1:.1f},{bb.y1:.1f}")
         issues += 1
-print("E2: registered sentence restored; right box swapped to margin-first order; "
+print("E2: registered sentence restored; right box in wave-12 LRP-headline-first order; "
       f"box bboxes mid=({mid_l2.x0:.0f},{mid_l2.y0:.0f})-({mid_l3.x1:.0f},{mid_l3.y1:.0f}) "
-      f"right=({right_l1.x0:.0f},{right_l1.y0:.0f})-({right_l3.x1:.0f},{right_l1.y1:.0f})")
+      f"right=({right_l2.x0:.0f},{right_l2.y0:.0f})-({right_l3.x1:.0f},{right_l3.y1:.0f})")
 
 # ---------------------------------------------------------------- P4 ----
 ns = body(str(WAVE10 / "make_ga_p4.py"))
