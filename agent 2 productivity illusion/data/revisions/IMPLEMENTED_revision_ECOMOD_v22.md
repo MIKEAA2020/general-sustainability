@@ -1,33 +1,26 @@
-# Carrying Capacity, the Biocapacity Ratio, and Deficit-Driven Collapse in a Delayed Coupled Human–Environment Model
+# Carrying Capacity, the Biocapacity Ratio, and the Productivity Illusion: Deficit-Driven Collapse in a Delayed Coupled Human–Environment Model
 
 ## Abstract
 
-We present a minimal coupled human–environment model in which carrying capacity is not an imposed ceiling
-but an emergent function of environmental stock, technological productivity, and per-capita resource
-demand. Environmental regeneration and demographic response are modelled as two distinct time delays;
-cumulative overshoot is tracked as an ecological debt that erodes productivity. Biocapacity is the sum of a
-flow yield (separable from the stock, as in an orchard) and a stock increment (harvested only by removal, as
-in a forest) — a decomposition that reduces to the standard harvest model in one limit and to the orchard
-metaphor in the other. For the constant-parameter subsystem, biocapacity defines a one-parameter family of
-equilibria `P = B(A)/e` rather than a single isolated attractor, and any interior point of it is
-monotonically unstable — a positive real eigenvalue for every delay (driven by the delayed-regeneration
-overshoot), with no imaginary-axis crossing — so the onset is a structural vicious cycle rather than a
-delay-ratio Hopf and is not controlled by a single stability index. Two collapse mechanisms arise: debt
-accumulation that drives population collapse even with no delay, and a delay-amplified transient that
-shrinks the basin of attraction.
+Coupled human–environment models often treat carrying capacity as an imposed ceiling. We show it is instead
+an emergent quantity, and that treating it as fixed can produce a false sense of environmental health. We
+develop a minimal deterministic model in which biocapacity is the sum of a separable flow yield and a stock
+increment, cumulative overshoot accumulates as ecological debt that degrades yield, and environmental
+regeneration and demographic response act through two distinct delays. The model is deliberately stylised,
+with representative parameters, and its eight predictions are stated as falsifiable hypotheses. Three
+results follow. First, the constant-parameter subsystem admits a one-parameter family of equilibria rather
+than an isolated attractor, and any interior point is monotonically unstable — a positive real eigenvalue for
+every delay, with no imaginary-axis crossing. The collapse onset is therefore a structural vicious cycle, not
+a delay-ratio Hopf, and is not governed by a single stability index. Second, the operating boundary is the
+biocapacity ratio `R_B = 1` (footprint equal to total biocapacity); the flow-yield ratio `R_A = 1` is a
+leading but non-causal signal, and once the regeneration lag is long neither ratio warns. Third, a
+sufficiently early technology wave can make biocapacity rise while the stock falls — but only for a narrow,
+small-deficit window of about five years that vanishes beyond a modest overshoot. This is a productivity
+illusion, not improving health: yield gains saturate while debt compounds, and the same technology raises
+biocapacity, sustainable population and aggregate demand, tending to increase cumulative debt under
+overshoot.
 
-In the observational register these results collapse to a single statement. The operating boundary is the
-biocapacity ratio `R_B = 1` (footprint equal to total biocapacity, equivalently the neutral family
-`P = B(A)/e`); the flow-yield ratio `R_A = 1` is a leading but non-causal signal; and once the regeneration
-lag is too long neither ratio forecasts collapse. A sufficiently early technology wave can produce a window
-in which biocapacity rises while the environmental stock falls — the weak-sustainability regime — but this
-masking is narrow, bounded, and transient, confined to a small initial deficit: it widens to only ~5 yr and
-collapses entirely beyond a modest overshoot (deficit ≈0.075, i.e. ≈15 % of the initial flow yield `b₀A₀`).
-The reason is twofold — yield gains saturate while debt compounds, and the same technology that raises
-biocapacity also raises the sustainable population and hence aggregate demand, tending to increase cumulative
-debt under overshoot. Rising biocapacity therefore need not signal improving environmental health; it may be
-a productivity illusion that precedes a reckoning. The paper is a conceptual/stylised model: parameters are
-representative, and the eight predictions it makes are stated as falsifiable hypotheses, not calibrations.
+**Keywords:** carrying capacity; ecological footprint; biocapacity; time delay; ecological debt; sustainability; delayed feedback
 
 ---
 
@@ -801,10 +794,15 @@ an oversight. Each is stated so the reader does not expect it:
 (a finite-amplitude basin erosion), not by a fold, not by Allee low-density dynamics, and it carries no
 generic CSD precursor.** This is more informative than a set of positive results: it tells a manager which
 levers do not exist (no rescue-by-stock, no early-warning signal) and which do (shorten the lag; and, only for
-the increment-dominated `E`-fold, watch for slowing). Model extensions suggested by the negative results —
-stochasticity, seasonal forcing (to test for induced cycles), or an explicit Allee term (to test for a rescue
-route) — are future-work directions, not changes to the present deliberately minimal, deterministic, Allee-free
-model.
+the increment-dominated `E`-fold, watch for slowing). The result also inverts the classical
+complexity–stability expectation of May (1973), who showed that increasing species number and connectance in
+model ecosystems does not confer stability but tends to destabilise beyond a critical complexity threshold.
+Here instability is generated in the opposite sense: it emerges in a deliberately minimal, low-complexity
+system (two state variables, a single feedback loop, and an Allee-free regeneration term), so the collapse is
+not a by-product of model richness but follows from the deficit mechanism and the regeneration lag alone.
+Model extensions suggested by the negative results — stochasticity, seasonal forcing (to test for induced
+cycles), or an explicit Allee term (to test for a rescue route) — are future-work directions, not changes to
+the present deliberately minimal, deterministic, Allee-free model.
 
 **The macro-ratio monitor fails silently in the long-`τ_g` regime.** The `R_B`/`R_A` ratios of §4.5 are
 necessary-but-not-sufficient once the lag is too long: on the documented `A₀×P₀` grid at `τ_g = 30`, 36.5 %
@@ -1038,6 +1036,14 @@ exist (no rescue-by-stock, no early warning).
 - Abaee, A. Various companion manuscripts. Cited where their methods or framing are used (compensatory
   aggregation; typed flux ledgers; incomplete-observation viability; mobilising vs. protective controller
   sign; negative-certificate and interval-discipline methods; surplus-production forecast scoring).
+
+**(Data availability.)** This study is a mathematical and computational analysis and reports no new empirical
+dataset. All numerical results, parameter sweeps, and figures were generated by the accompanying model code
+run from stated initial conditions and parameters; the code (see Reproducibility below) is the primary artefact,
+and its generated outputs are written to `data/topdown_results.json`. No primary observational data were
+collected. The only empirical inputs are published values used to bound the regeneration lag, which are drawn
+from the National Footprint Accounts and the field studies cited in the References and are not reproduced or
+re-distributed here; readers should consult those sources for the underlying data.
 
 **(Reproducibility.)** The model is implemented as
 `model_sims/corrected.py`, `model_sims/topdown.py`, `model_sims/r1_basin.py`, and `model_sims/char_eq.py`
