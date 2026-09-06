@@ -1489,3 +1489,26 @@ Non-destructiveness: the .md files on disk are untouched by the LaTeX build
 (the in-memory literal-star/display-width fixes are conversion-layer only,
 exact-count asserted); no frozen verdict, score, kernel, boundary, spectral
 record, or table value changed anywhere; git status shows only new files.
+
+## Wave-10 addendum — the graphical abstracts (Task 80, 2026-09-07)
+
+Owner directive: graphical abstracts as separate files for P3 and P4 plus
+any other papers that genuinely merit one, journal spec 531 × 1328 px
+(h × w) or proportionally more, readable at 5 × 13 cm, preferred types
+TIFF/EPS/PDF/MS-Office.
+
+**Implemented (record: wave10/WAVE10_IMPLEMENTATION.md):** five graphical
+abstracts in `arena agent 1/paper rewrites/graphical_abstracts/`, each as
+PDF (vector) + TIFF (2656 × 1062 @ 400 dpi) + PNG (1328 × 531 @ 200 dpi,
+online preview) — P3, P4 (mandated), and P5, E2, P1 (the merit assessment);
+E1, E3, E4, P2 declined with recorded reasons. Every number is the paper's
+registered value quoted verbatim (P4's 3.7/150-yr Hopf window, 0.080 loop
+gain, 6.5-yr crossing, 47.5-yr Euler artefact; P5's crossing record
+2.306/6.501/47.536/79.143; E2's 884.6-kt LRP, 91.6-kt robust catch,
+0.91/0.65 survival, [0, 87.1] CI; P3's three-quantity/three-application
+separation; P1's every-weight witness and FP_agg gap). Builds are
+fail-loud and byte-reproducible (all 15 files identical across two runs; a
+deterministic pixel-bbox layout audit — wave10/audit_ga.py — passes with
+zero issues on all five, and every PNG is VLM-verified collision-free).
+Non-destructive: no existing file touched; git status shows only new
+files.
