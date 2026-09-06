@@ -44,7 +44,11 @@ unified stock–flow model, labelled a conceptual/stylised model.
 > `P = B(A)/e`** rather than a single isolated attractor, and any interior point of it is
 > **monotonically unstable** — a **positive real eigenvalue** for *every* delay (driven by the
 > delayed-regeneration overshoot), with **no imaginary-axis crossing** — so the onset is a structural
-> vicious cycle, **not** a delay-ratio Hopf and **not** controlled by a single `χ`. We
+> vicious cycle, **not** a delay-ratio Hopf and **not** controlled by a single `χ`. In the observable
+> (monitoring) register this is one statement: **the operating boundary is the biocapacity ratio `R_B = 1`
+> (footprint = total biocapacity = the neutral family `P = B(A)/e`), while the flow-yield ratio `R_A = 1`
+> is a leading but non-causal signal — and for a regeneration lag that is too long, *neither* ratio
+> forecasts collapse.** We
 > identify two collapse mechanisms: debt accumulation that drives population collapse even with no
 > delay, and a delay-amplified transient that shrinks the basin of attraction. A sufficiently early
 > technology wave can produce a window in which biocapacity rises while the environmental stock falls
@@ -163,7 +167,8 @@ defect**, never silently.
   it is the *maximal-growth* point that `A_max/2` refers to — **not** a threshold.
 - **(B) Biocapacity is additive flow + increment** — the flow is separable (crops, orchard), the
   increment is removable-only-by-stock (forest, fish). The composition is captured by the flow share
-  `ψ = bA*/B*`.
+  `ψ = bA*/B*` (**defined here; its operational role as the master parameter that separates `R_A` from
+  `R_B` and locates the masking illusion is §4.5 and prediction #5**).
 - **(E) Per-capita footprint is constant** — default; it is the *only* way to isolate the M–P–D–T
   feedbacks. We state this as a modelling choice; endogenising `e` and `r_opt` is an offered extension.
 - **(1‴) Deficit-driven, immediate depletion** — liquidation is immediate; the delayed response is in
@@ -192,6 +197,16 @@ defect**, never silently.
 ---
 
 ## 4. The analytic core (re-derived, verified)
+
+> **Two views of one object.** This section presents the analytic core in two registers that are the same
+> object read differently. The **dynamical** view (§4.1–§4.4, §8, §13) asks *how* the system behaves — the
+> regime, the interior-MSY fold, the neutral continuum, the no-Hopf/monotone instability, the basin-boundary
+> crisis, and the negative results. The **observable / monitoring** view (§4.5, §6, §13(9)) asks *what a
+> policy-maker can watch* — the ratio safe-operating space (`R_B` vs `R_A`), the `R_A` leading-indicator, the
+> silent-collapse, and the class-imbalance-aware separator accuracy. The thesis that holds both together is
+> stated once here and again in §7: **the balance point is `R_B = 1` (footprint = total biocapacity); `R_A = 1`
+> is a leading but non-causal signal; and when the regeneration lag is too long *neither* ratio warns — the
+> lag, not the ratio, is the controlling variable.**
 
 ### 4.1 Carrying capacity, MSY, and the emergent ceiling
 `K = B/e` is emergent (it moves with `A` and `b`). Because the increment `b_G G(A)` is only positive
@@ -303,7 +318,9 @@ identity that makes "deficit-driven" rigorous — the *shortfall* between biocap
 gross harvest, drives stock decline, and the unified model's stock-buildup exactly cancels against its
 flow term. **The identity is exact only in the lag-adjusted form** `dA/dt = (B̃ − E)/b_G`; the un-delayed
 `(B − E)/b_G` is the formal bookkeeping limit. Corollary (`R_B` form, §4.5): `dA/dt < 0 ⟺ E > B̃`, and at
-equilibrium `E = B̃`, so `R_B = E/B̃ = 1` at the balance point.
+equilibrium `E = B̃`, so `R_B = E/B̃ = 1` at the balance point. **The `R_B = 1` locus of §4.5 is exactly the
+neutral continuum** on which the characteristic equation has `D(0) = 0` (§8) — the separator and the
+continuum are one and the same object, seen from the ratio (monitoring) and spectral (dynamical) views.
 It is why the two flow accounts (flow-yield vs increment) cease to be parallel.
 
 Linearising `(1‴)+(4′)` in the deficit region gives (at the interior point)
@@ -399,7 +416,9 @@ therefore a *signature* of the increment-dominated regime, not a general warning
 A_max(b+b_Gρ)²/(4b_Gρ)` is precisely the `R_B = 1` boundary evaluated at `(A*, E = B_max)`. Verified
 (increment-dominated `b = 0.02`): interior MSY `A* = A_max(b+b_Gρ)/(2b_Gρ) = 0.900`, `B(A*) = B_max = 0.0270`,
 `E_sn = 0.0270`, so **`R_B = E_sn/B_max = 1.000` exactly** — the fold and the balance point are the *same
-object*. This fold is **only** realized when `b_Gρ > b` (§4.2); at baseline it is absent.
+object*. This fold is **only** realized when `b_Gρ > b` — the identical scoping as the §4.1 regime table and
+the §4.2 "scope it correctly" note (the fold is the increment-dominated interior-MSY; at the flow-dominated
+baseline `B(A)` is monotone, so there is no interior fold). At baseline it is absent.
 
 **The separator is `R_B = 1`, and it degrades with the lag — two sides of one coin.** At short/no delay the
 neutral family `P = B(A)/e` (i.e. `R_B = 1`) separates recover from collapse at **balanced accuracy 99.2 %**
@@ -408,6 +427,20 @@ raw 94.7 % = the majority-collapse class = a class-imbalance artefact). So `R_B 
 recovery but **not sufficient** once the lag is too long — the operating boundary (here) and the basin
 crisis (§8, §13(9)) are complementary statements about one object. The family `P = B(A)/e` is the
 separator, **not** a "first integral".
+
+**One object, many faces — the spine.** The single scalar `R_B = 1` is simultaneously the **bookkeeping
+trigger** `dA/dt < 0 ⟺ E > B̃` (§2.2, §4.3); the **basin separator** `P = B(A)/e` (§4.3, §8 — the R2 neutral
+continuum); the **interior-MSY fold threshold** of §4.2, **only when `b_Gρ > b`** (absent at baseline); the
+**target of prediction #8** (§6); and the object whose **long-`τ_g` failure** produces the §13(9)
+silent-collapse and measure-zero-rescue negatives. No new parameter appears; each face is the same
+statement "`E = B`" in a different coordinate.
+
+**Figures (observable view).** `scans/topdown_macro_ratios.png` — the macro-ratio plane (`R_B` vs `R_A`,
+two panels `τ_g=10` and 30), showing the `R_B=1` boundary as **both** the basin separator (recover/collapse)
+**and** the safe-operating boundary, with the `R_A>1` buffer; `scans/topdown_ratio_separation.png` — the
+`ψ`-regime closed form `R_A^eq=(1+b_Gρ/b)/2` (and `ψ*=2/(1+b_Gρ/b)`), i.e. how far the leading indicator
+`R_A` sits above the trigger `R_B` as the regime index `b_Gρ/b` grows. (The `τ_g` cliff and the full-plane
+no-Hopf belong to the dynamical view; they are in §8.)
 
 ---
 
@@ -423,6 +456,12 @@ separator, **not** a "first integral".
 | "two-dimensional" | "the full system is three delayed states (`A,P,D`); only the `α=0` subsystem is 2-D; `K` is algebraic." |
 | "debt compounds without bound while technology saturates" | "a theorem under multiplicative `b = (b₀+T_b)e^{−αD}`; false under the additive form." |
 
+**The trigger this table corrects — "`E > bA` is the true irreversible-decline trigger" — is **no**, and the
+monitoring counterfactual is the macro-ratio result of §4.5.** `dA/dt < 0 ⟺ E > B̃` (`R_B = 1`), while
+`E > bA` (`R_A = 1`) is necessary-but-not-sufficient. Consequently a system can sit on the collapse side
+with `R_A > 1` (increment-dominated) or, at long `τ_g`, even with **both** ratios below 1 (silent collapse,
+§13(9)).
+
 **Scenario B/C is the *inverse* of the orchard framing (master 12G.4).** In Scenarios B and C the
 environmental stock `A` rebounds to ≈`A_max` (≈1.19) while population `P` and the harvest/biocapacity
 `B` collapse — an "**environment recovers, humans collapse**" outcome that is the *opposite* of the
@@ -434,7 +473,10 @@ framing in the abstract; it is a scenario outcome, not a claim to be over-claime
 
 ## 6. Falsifiable predictions (emergent, not built in)
 
-These are the honest, testable content (the model is no longer circular):
+These are the honest, testable content (the model is no longer circular). They fall into two registers:
+predictions **1–3, 6, 7 are [dynamical]** (they concern stability, onset, and recovery dynamics);
+**5 straddles** the two views (it is the `ψ`-mediated mask, §4.5); and **8 is the [observable / monitoring]
+one** — it is about the ratio safe-operating space and whether a monitor can forecast collapse (§4.5).
 
 1. **Which lag destabilises** is set by the sign of `Λ`/`χ` (not set by the equations) — **original-model
    interior-attractor result**; on the corrected `(1‴)` S0 the interior point is instead **monotonically
@@ -447,12 +489,15 @@ These are the honest, testable content (the model is no longer circular):
    "`B` rising while `A` falls" (and a measurable `t_peak`).
 4. **Reducing a policy lag `τ_e` matters comparably to reducing the overshoot `f`** — a testable,
    policy-relevant ranking.
-5. **The flow-share `ψ` locates the masking illusion** (§4.1): the "`B` rises while `A` falls" window
+5. **The flow-share `ψ` locates the masking illusion** (§4.1, §4.5 — here `ψ` is the **master parameter**
+   that separates `R_A` from `R_B` and sets the gap, §4.5): the "`B` rises while `A` falls" window
    should be **more visible in flow-dominated (high-`ψ`, `b_Gρ < b`) systems than in increment-dominated
    (low-`ψ`, `b_Gρ > b`) ones** — a falsifiable, GFN-faithful regime prediction that distinguishes the
    orchard (flow) from the forest (increment).
-6. **The regeneration lag `τ_g` sets recovery vs collapse** (§8, v13–v18): on the corrected `(1‴)` S0 the
-   recover fraction collapses from ≈40 % to ≈5 % across a steep **18–20 yr band**, so the model predicts
+6. **The regeneration lag `τ_g` sets recovery vs collapse** (§8, v13–v18) — the §4.5
+   necessary-but-not-sufficient reading, since `R_B = 1` is necessary for recovery but **not sufficient** once
+   `τ_g` is long: on the corrected `(1‴)` S0 the recover fraction collapses from ≈40 % to ≈5 % across a steep
+   **18–20 yr band**, so the model predicts
    the **collapse outcome whenever the field-supported regeneration lag exceeds ≈20 yr** (forests, soils,
    many fisheries) and the recovery outcome only for `τ_g ≲ 18`. This is a *quantitative, direct*
    prediction tied to the empirical `τ_g` band — not a free parameter.
@@ -486,6 +531,14 @@ signal rather than a new equilibrium.
 ---
 
 ## 7. Didactics / presentation
+- **State the thesis once, in §6–§8 wording (and in §4):** *"the balance point is `R_B = 1` (footprint =
+  total biocapacity); the flow-yield ratio `R_A = 1` is a leading but non-causal signal; and when the
+  regeneration lag is too long *neither* ratio warns — the lag, not the ratio, is the controlling
+  variable."* This is the one-sentence bridge between the dynamical view (§4.1–§4.4, §8, §13) and the
+  observable/monitoring view (§4.5, §6, §13(9)).
+- **Walk through the two views, then the regimes.** Present the macro-ratio reading first (`R_B` vs `R_A`,
+  §4.5) as the *monitor's* view, then the regime table (§4.1) as the *dynamics* question, so the reader sees
+  the same `R_B=1` object as both the separator and the safe-operating boundary.
 - **Symbol table** (§2.1); **assumption-before-equation** (§3).
 - **Feedback diagram with a switch** (fruit harvest vs. capital liquidation): `A →^{\!b} B → K → P → E`,
   with `E − bA` deciding the switch, `D →^{\!α} b`, and an exogenous bounded `T_b`. Present it with the
@@ -734,7 +787,9 @@ structurally different, so each is either recomputed (R1/R2) or explicitly flagg
   characteristic roots finds **`n_crossings = 0`** imaginary-axis crossings with `Re λ ≈ +0.625` constant
   (`scans/topdown_delay_boundary.png`). So the §4.2/§13(9) "basin-boundary crisis, not a fold" statement is
   confirmed over the **whole plane**, not just a single-delay slice — the single-delay no-Hopf result
-  (v19) is strengthened to a **full-plane** one.
+  (v19) is strengthened to a **full-plane** one. The same `topdown.py` run supplies the §4.5 macro-ratio
+  results (`R_B=1` onset `R_B=1.000`/`R_A=1.01–1.06`; silent-collapse %; separator balanced accuracy;
+  rescue set), which corroborate the R2 neutral-continuum / no-Hopf finding from the monitoring view.
 - **Reproducibility (v20).** Every number in §4.5 and §13(9) that is labelled "verified" is generated by
   `PYTHONPATH=. python -m model_sims._run_topdown`, which writes `data/topdown_results.json` (the quoted
   onset `R_B=1.000`/`R_A=1.01–1.06`, `ψ`-regime values, silent-collapse %, rescue-set A-span and %, the
@@ -973,6 +1028,7 @@ composite `B`.
 | silent collapse / macro-ratio monitor fails at long `τ_g` (v20, 36.5 %) | §13(9) (prediction #8, §6) |
 | rescue set measure-zero strip; nonlocal (not map) cliff; separator balanced-accuracy (v20) | §13(9), §8 (`topdown.py` AI‑C4/C6) |
 | full-delay-plane no-Hopf & `τ_p`-independence (v20, A1/A5) | §8 (`scans/topdown_delay_boundary.png`) |
+| internal connections / "one object, many faces" spine + two-view framing (v20, JL-1) | §4 (head), §4.3, §4.5, §5, §6, §7, §8, §13(9) |
 
 ---
 
@@ -1243,6 +1299,13 @@ recovery overshoot scales steeply with the lag (a fit to the computed pulse give
 not a single `τ_g` law); it is an initial-condition-dependent transient, so report it as a scoped number
 rather than a universal amplitude.
 
+**Read together, the §13(9) negatives are the *failure* of the §4.5 operating boundary, not a separate
+story.** The same `R_B = 1` object that is the trigger and separator at short `τ_g` is the object that
+(a) gives no early warning at long `τ_g` (silent collapse — the *leading indicator* `R_A` cannot help,
+§4.5), (b) leaves a measure-zero rescue set (so no "start higher" fix), and (c) fails to be reproduced by the
+asymptotic map (nonlocal, not a map bifurcation). Each is a facet of "`R_B = 1` is necessary but not
+sufficient once the lag is too long."
+
 **Companion-study discipline and attribution (Amin Abaee; all nine are unpublished manuscripts).**
 **All companion works are by the same author (Amin Abaee) as this paper** — they are his own companion
 manuscripts, cited here as the shared body of work, **not** as independent corroborating sources. They
@@ -1339,6 +1402,10 @@ metadata carry them (not left in the master alone):
   findings/all-sources registers — so nothing is claimed as novel that came from a specific audit
   (e.g. the `a₁₁ < r` correction, the χ/Λ sign, the GFN convention, the ψ decomposition). The
   consolidated source list and per-point attribution go in an appendix, keyed by the §12 IDs.
+  **The §4.5 and §13(9) top-down results (`R_B`/`R_A` macro-ratio boundary, silent collapse, measure-zero
+  rescue set, nonlocal-not-map cliff, separator balanced accuracy) come from the corrected AI top-down
+  (`model_sims/topdown.py`, Parts A–E) cross-checked with the Lens-1/‑4 bookkeeping analysis; cite them as
+  such so nothing here is claimed as novel from the AI/Lens work.
 - **Decision document.** This revision deliberately restructures the master as a *decision* document
   (what was kept, what was changed, what is open) rather than a continuous audit narrative — the
   §5 "original claim → corrected claim" table and the §12/§13 receipts are the decision record.
