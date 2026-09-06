@@ -335,8 +335,14 @@ det = r·ρ·A*/A_max > 0  (never a saddle)   →   zero-delay condition is  a�
     gives a **monotone** positive-real eigenvalue with **no** imaginary-axis crossing for every delay
     (§8, §13 point (8)). The χ-Hopf rules above describe the *fast–slow reduction*; they do not predict
     the corrected model's actual (structural) instability.
-  - Baseline sits at `χ = 1` **because `ρ` was set to `3q`** — a non-generic choice to be justified or
-    perturbed off.
+  - Baseline sits at `χ = 1` **because `ρ` was set to `3q`** — i.e. `Λ = 0`, the **measure-zero surface**
+    where the two gain surfaces `r²a₁₁² = (γ·e·a₂₁)²` are *equal* (`g_M = g_P`). This is a **non-generic,
+    unexplained parameter choice**, and it is precisely why "no single delay destabilises" holds at
+    baseline. We **do not justify** it; instead we report the **generic** result that follows from the sign
+    of `Λ`: perturbing off the knife-edge gives **exactly one lag destabilises** — `τ_g`-only if
+    `χ > 1` (`Λ > 0`), `τ_p`-only if `χ < 1` (`Λ < 0`) (§4.3 above). Consequently the scan range and any
+    "no single delay destabilises" claim must be stated **as a function of `Λ`/`χ`**, never as a
+    parameter-free statement (§8).
 
 ### 4.4 The complete dimensionless group set (not just χ)
 
