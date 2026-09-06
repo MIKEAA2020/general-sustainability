@@ -261,7 +261,7 @@ no-introduced-error standing rule. Those items should be a separate carefully-ve
 
 ---
 
-## P1 — assessment_separation (latest = **v20**; v19 the reference fabric, v20 the wave-4 structural bundle (R8 + docket items 1–8 + vocabulary consolidation) — wave 4, 2026-09-06; record: wave4/p1_record.md)
+## P1 — assessment_separation (latest = **v21**; v19 the reference fabric, v20 the wave-4 structural bundle (R8 + docket items 1–8 + vocabulary consolidation) — wave 4, 2026-09-06; record: wave4/p1_record.md)
 
 ### Three-audit joint assessment (grok + claude + deepseek) — full line-level read
 grok and claude independently converge on the same core findings; **deepseek's hybrid resolves the
@@ -330,7 +330,7 @@ hybrid; they are the follow-up edits.
 
 ---
 
-## P3 — material_ledgers (latest = **v29**; v27 the verified micro-error cluster, v28 the wave-4 notation/inflation/re-pin bundle (R11–R17 + structural docket), v29 the wave-5 numbering-convention declaration (§3.1 note + supplementary S6 naming-offset append) — wave 5, 2026-09-07; records: wave4/p3_record.md, wave5/p3_record.md)
+## P3 — material_ledgers (latest = **v30**; v27 the verified micro-error cluster, v28 the wave-4 notation/inflation/re-pin bundle (R11–R17 + structural docket), v29 the wave-5 numbering-convention declaration (§3.1 note + supplementary S6 naming-offset append) — wave 5, 2026-09-07; records: wave4/p3_record.md, wave5/p3_record.md)
 
 ### (A) Joint consensus
 1. **§1.1 vs §6.5.2 two-pool claim not discharged.** grok A10 + claude: the applied tables have
@@ -363,7 +363,7 @@ reading (not the received distinction).
 
 ---
 
-## P4 — delay_dynamics (latest = **v27**; v26 the small-error cluster, v27 the wave-4 presentation tail (R18–R22 + S11 relocation) — wave 4, 2026-09-06; record: wave4/p4_record.md)
+## P4 — delay_dynamics (latest = **v28**; v26 the small-error cluster, v27 the wave-4 presentation tail (R18–R22 + S11 relocation) — wave 4, 2026-09-06; record: wave4/p4_record.md)
 
 ### (A) Joint consensus
 1. **Conclusion reverts to the Euler artefact.** §8/abstract: exact crossing at **6.50 yr**, Euler
@@ -388,7 +388,7 @@ Fix #1 (conclusion) — this is the make-or-break. Then A2/§9.4/6.50-certificat
 
 ---
 
-## P2 — obstruction_calculus (latest = **v10**; v8 the first safe tranche, v9 the wave-4 theorem-level repairs (R9 notation/§2.4, R10 IRViab, consensus 1/2/3/5/7 + claude's section notes), v10 the wave-5 re-opened one-liners (§1.2 exhibit scoping, §6.4 most-constrained, §6.4 coarseness exposure wording) — wave 5, 2026-09-07; records: wave4/p2_record.md, wave5/p2_record.md)
+## P2 — obstruction_calculus (latest = **v11**; v8 the first safe tranche, v9 the wave-4 theorem-level repairs (R9 notation/§2.4, R10 IRViab, consensus 1/2/3/5/7 + claude's section notes), v10 the wave-5 re-opened one-liners (§1.2 exhibit scoping, §6.4 most-constrained, §6.4 coarseness exposure wording) — wave 5, 2026-09-07; records: wave4/p2_record.md, wave5/p2_record.md)
 
 ### (A) Joint consensus
 1. **Theorem 4 circular.** claude A1: (H2) already asserts the conclusion; restate H2 as an
@@ -416,7 +416,7 @@ consistency repairs, not restructuring.
 
 ---
 
-## P5 — sampled_governance (latest = **v22**; v20 the regression repair, v21 the wave-4 middle layer (R23/R24 + the claims-ledger/appendix docket), v22 the wave-5 re-opened micro items (architecture-name fence, 'more than thirty', Figure-1 caption wording) — wave 5, 2026-09-07; records: wave4/p5_record.md, wave5/p5_record.md)
+## P5 — sampled_governance (latest = **v23**; v20 the regression repair, v21 the wave-4 middle layer (R23/R24 + the claims-ledger/appendix docket), v22 the wave-5 re-opened micro items (architecture-name fence, 'more than thirty', Figure-1 caption wording) — wave 5, 2026-09-07; records: wave4/p5_record.md, wave5/p5_record.md)
 
 ### (A) Joint consensus
 1. **Reconstruction/unreproduced stage-map status.** grok: the 3–4 yr / 6–12 yr windows are
@@ -437,7 +437,7 @@ fix future dates; move registration meta-text to appendix.
 
 ---
 
-## E1 — cod forecast ladder (latest = **v12**; v10 the never-landed factual-recheck layer, v11 the wave-4 docket (R1–R7 + the R3 DM/Künsch post-freeze layer, §3.5 + Table 9), v12 the wave-5 re-opened presentation layer (§3.6 + Table 10 parameters-as-printed + the §4 constructive timeliness sentence) — wave 5, 2026-09-07; records: wave4/e1_record.md, wave5/e1_record.md)
+## E1 — cod forecast ladder (latest = **v13**; v10 the never-landed factual-recheck layer, v11 the wave-4 docket (R1–R7 + the R3 DM/Künsch post-freeze layer, §3.5 + Table 9), v12 the wave-5 re-opened presentation layer (§3.6 + Table 10 parameters-as-printed + the §4 constructive timeliness sentence) — wave 5, 2026-09-07; records: wave4/e1_record.md, wave5/e1_record.md)
 
 v9 (this pass) applies the convergent, non-destructive presentation/framing fixes from the joint
 audit (grok severity-grouped + claude A1–A12/B/C/D/E). No data movement, no content removal;
@@ -511,7 +511,7 @@ values/RMSEs reproduce. Verdicts:
 
 ---
 
-## E2 — cod intervention (latest = **v19**; v13–v18 preserved as baselines — v15 adopted the single-convention recompute, v16 corrected the retention mechanism and Fox constructive, v17 applies the restructure-level joint-audit items, v18 the MSE relabelling, v19 the wave-6 scan restore (the critical-zone supply gloss in Result 3.4's Reason) — record: wave6/e2_record.md)
+## E2 — cod intervention (latest = **v20**; v13–v18 preserved as baselines — v15 adopted the single-convention recompute, v16 corrected the retention mechanism and Fox constructive, v17 applies the restructure-level joint-audit items, v18 the MSE relabelling, v19 the wave-6 scan restore (the critical-zone supply gloss in Result 3.4's Reason) — record: wave6/e2_record.md)
 
 v14 (this pass) applies the jointly-verified corrections. The intervention runner was re-executed in
 isolation and reproduced every reported value (r=0.2369, K=5000, SD 135, ε=460, constructive 57.62,
@@ -609,7 +609,7 @@ replacements); verified: **zero table rows changed** between v16 and v17.
 
 ---
 
-## E3 — Edwards forecast ladder (latest = **v13**; v8→v12 preserved — v11 is the batch-7 implementation, v12 registers the independent replication and resolves the comparator kink, v13 the wave-6 scan restore (the post-2007 secondary-score record: the declared Brier values 0.31/0.25/0.19 printed again) — record: wave6/e3_record.md)
+## E3 — Edwards forecast ladder (latest = **v14**; v8→v12 preserved — v11 is the batch-7 implementation, v12 registers the independent replication and resolves the comparator kink, v13 the wave-6 scan restore (the post-2007 secondary-score record: the declared Brier values 0.31/0.25/0.19 printed again) — record: wave6/e3_record.md)
 
 ### (A) Joint consensus
 1. **M1 retained by margin the paper calls operationally nil** (0.39 ft; MAE tie; loses at h=5).
@@ -697,7 +697,7 @@ label** ("climate gate" → "nested baseline") — every value identical.
 
 ---
 
-## E4 — Edwards intervention (latest = **v11**; v9/v10 humanized passes preserved)
+## E4 — Edwards intervention (latest = **v12**; v9/v10 humanized passes preserved)
 
 ### (A) Joint consensus
 1. **+3.3%/+0.4% are hybrid, not robust** — put hybrid caveat in the first results sentence.
@@ -1339,3 +1339,71 @@ paragraph, zero non-blank lines removed); all markdown table rows byte-identical
 verdict, score, kernel, boundary, spectral record, or table value changes anywhere; both abstracts
 untouched. E2 v19 = 342 lines, E3 v13 = 324 lines; the post-build re-scan is archived in
 `wave6/scan/verify/`.
+
+---
+
+## Wave-7 addendum — the diverging-audit-point verification and the full-paper quality scan (Task 77, 2026-09-08)
+
+Owner directive (three parts): (1) *where audits disagree, they must be assessed and adjudicated jointly,
+otherwise you risk executing contradictory edits sequentially — verify you did this for diverging audit points
+for all papers*; (2) scan all papers for conceptual clarity, seamless flow, remnants and redundancy; (3) scan
+all papers for consistent terminology, stylistic writing and syntax.
+
+**Part 1 — verification (full record: wave7/DIVERGENCE_ADJUDICATION.md).** Both halves of all nine audit files
+were re-read in full; 106 divergence points were extracted (E1 17, E2 14, E3 14, E4 11, P1 13, P2 12, P3 11,
+P4 7, P5 7) and cross-checked against every adjudication layer (the (A)/(B)/(C)/(D) blocks here, the wave-2
+docket, the wave-3 endorsements, the wave-4/5 per-item records and declines, the wave-6 record) and the current
+texts. Verdict: for every divergence that led to an executed edit, a joint adjudication is on record — explicit
+fork resolutions (P1's deepseek hybrid; P2's δ-minimizer decline and Theorem-2 reframing; P5's R23; E1's
+fixed-window framing), adjudications by computation or frozen record (E1's A7 decomposition labels; E2's
+T=7 emptiness and Allee bound; E3's M2m comparator resolved against protocol_pass2.md; E4's certified-layer
+mechanism), both-accommodated syntheses (E1's machine-verified split; E2's slogan scoping and vacuous
+vocabulary; E4's 660-ft three-verdict lead and BAU rename+sensitivity; P4's Euler-mechanism pair), and
+declined-with-recorded-reason (P3's cohort; P5's claim-changing trio; P4's computations). No pair of
+contradictory edits was executed sequentially on any paper. One formatting gap is closed here: P5, E2, E3, and
+E4 lacked a labelled (B) Divergence block in their sections above (the evaluation was never missing — the
+wave-3 pass read both halves of every audit jointly and E2/E3/E4 were fully dispositioned at Tasks 69–70 — but
+the blocks were not written out). Their (B)-equivalents, from the extraction: **E2** — the good-years slogan
+(scope vs delete; resolved scope-first + perpetual-floor restriction), the retention-rule redesign (dominance
+order vs switch-above-LRP rules; resolved as the partial order with the structural block stated), the
+"vacuous" vocabulary (lead-with-it vs rename; resolved as both), the expansion obstruction's status, the
+certified-conversion remedy, the T=7 emptiness (grok "OK" vs claude "wrong" — resolved by re-execution), the
+same-map claim, the Allee status, the bootstrap-vs-K-pin, the 40–60-kt summary, the §3.9 floors, the
+proposition apparatus, and the robust-viability naming. **E3** — the M2m disposition and headline (resolved
+against the frozen protocol), the climate-rejection verdict (resolved as the frozen M1 gate with margins
+listed), the certificate vocabulary (retired with the closure statement kept), the pumpage and Comal-tail
+readings (resolved by the §5.5/§5.6 corrections), the M4 disposition (labelled symmetry control), the
+retention-rule repair (Definition 4.2 completed + the DM/bootstrap layer), the companion citation (cited),
+and the h=5 reversal reporting. **E4** — the nominal-618 resolvability (the bootstrap layer answers it), the
+hybrid supply measure (the closed-loop replay was computed), the matched comparator (the consolidated Table
+6), the 7.2% interpolant (reported as the comparator with the family scoping), the certified-layer diagnosis
+(corrected to the (F4)-exact form), the certified-horizon remedy (the OOS sensitivity + scope-out), the 660-ft
+disposition (the design-observation restatement), the BAU baseline (rename + current-pumpage sensitivity),
+the emptiness language (the ceiling formula + boundary-vs-T table), and the T=4 grid-vs-algebra record.
+**P5** — the MATCH/MISMATCH framing (R23: the qualified non-reproduction kept, the "uninformative" reading
+added), Prop 2.1 and Lemma 2.2 (declined with reasons), the Neimark–Sacker strength vs θ-check (the strength
+kept; the check declined), the anchoveta placement (kept), the §4.6 routing (moved to Appendix B), and the
+band caveat. One genuine cross-audit contradiction surfaced by the scan — P5 §3.4's inversion of the
+companion's declared window orientation — is corrected in P5 v23 below.
+
+**Parts 2–3 — the scan and its implementation (full records: wave7/QUALITY_SCAN_FINDINGS.md,
+wave7/WAVE7_IMPLEMENTATION.md).** Four parallel full-read passes covered the nine finals and the four current
+supplementaries; every finding was adjudicated and the accepted set implemented in nine fail-loud
+byte-reproducible builds: **E1 v13** (91f09b63), **E2 v20** (1b98afc9), **E3 v14** (eb025e02), **E4 v12**
+(2ed109e6), **P1 v21** (73d912eb, + supplementary S1/S6 re-lettering), **P2 v11** (1b872c9b), **P3 v30**
+(2b3ae4d6), **P4 v28** (f1a488de, + supplementary S12 append), **P5 v23** (00d42840). The two substantive
+corrections, both disclosed in the version logs: E4's mirror-verdict clause was swapped against both papers'
+records and is un-swapped (the cod companion retains nothing; the aquifer retains the reactive rules
+nominally); P5's one-plant operator contrast had read the companion's delay-stabilised window as a
+delay-destabilised one — inverting the continuous-delay stability at τ = 1 yr and manufacturing the recorded
+zero-delay tension, which dissolves under the companion's actual orientation (λ > 0, the 3.666-yr crossing
+being the first). Everything else is presentation-layer: remnant clearances (retired vocabulary, stale
+cross-references, version-log narration in bodies, dangling claims), reference hygiene (uncited entries
+dropped or cited; missing entries added; same-year disambiguation), label corrections verified against
+committed data or printed arithmetic (E1's SSE→MSE; E2's 80–90→70–90; E3's RMSE owners; E4's 691.96), the E4
+table renumbering into appearance order, terminology harmonisations, and echo-redundancy trims where a
+verbatim repeat was carried elsewhere. No frozen verdict, score, kernel, boundary, spectral record, or table
+value changed anywhere; every pre-existing table row is byte-identical except the seven disclosed label
+cells; E1's and P1's abstract word counts are preserved (300/298 pinned). Declines are recorded with reasons
+in QUALITY_SCAN_FINDINGS.md; two new items are registered for the next allowed pass (P2's §5(d) symbol
+definitions; P5's S2 supplementary gloss drift).

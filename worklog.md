@@ -1498,3 +1498,21 @@ Stage Summary:
 - Everything else dropped is declined with recorded reasons (wave6/SCAN_EVALUATION.md): recorded docket edits, superseded pre-correction numbers, audit-driven corrections, relocations, or preserved content.
 - Still registered behind the owner gate (unchanged from wave 5): E1's four computation items + the decomposition-table relocation + the log-RMSE demotion; P2's singleton lemma + restructures; P1's frozen-statement re-letters + title; P3's length + USGS re-pin; P4's per-campaign tables + computation declines; P5's claim-changing declines; E2's single-convention recompute + the Chow recomputation; E3's declined layout; E4's securing computation.
 - No frozen verdict, score, kernel, spectral record, or table value changed anywhere.
+
+---
+Task ID: 77
+Agent: main (Z.ai Code)
+Task: Owner directive (three parts): (1) verify that diverging audit points were assessed and adjudicated jointly for all papers (no sequentially-executed contradictory edits); (2) scan all papers for conceptual clarity, seamless flow, remnants and redundancy; (3) scan all papers for consistent terminology, stylistic writing and syntax. Implement the warranted fixes; commit and push with the PAT.
+
+Work Log:
+- Repo re-cloned after another sandbox reset (all waves intact on the remote through 88140c5 + the owner's ECOMOD v20-v24 work).
+- Part 1: dispatched two full-read extraction passes over the nine audit files (Tasks 77-a/77-b): 106 grok-vs-claude divergence points inventoried with quotes, plus ~190 single-auditor items. Cross-checked every divergence against the adjudication layers (JOINT (A)/(B)/(C)/(D) blocks, wave-2 docket, wave-3 endorsements, wave-4/5 records and declines, wave-6) and the current texts. Verdict: every divergence that led to an edit carries a joint adjudication; no contradictory sequential edits anywhere; the P5/E2/E3/E4 sections' missing (B)-blocks now recorded in the wave-7 addendum. Record: wave7/DIVERGENCE_ADJUDICATION.md.
+- Parts 2-3: dispatched four full-read scan passes (Tasks 77-c/d/e/f) over the nine finals + four supplementaries, plus a central remnant battery. Adjudicated every finding; ran targeted verifications myself (E4's mirror-verdict swap vs both papers' records; E4's 692.7/691.96 against the committed annual panel; E1's SSE/MSE labels against the printed RMSE arithmetic; E3's 13.31 ownership against rolling_modern_2007.csv; E2's 80-90/70-90 provenance; P5's continuous-delay orientation against P4's certified record; P4's S3 supplementary status vs the main text; the DM campaign CSV for E1's M2-M1b margins). Records: wave7/QUALITY_SCAN_FINDINGS.md.
+- Implemented the accepted set in nine fail-loud byte-reproducible builds (wave7/apply_batch7_wave7_*.py, each run twice, MD5s pinned): E1 v13, E2 v20, E3 v14, E4 v12, P1 v21 (+supp S1/S6 re-lettering + note), P2 v11, P3 v30, P4 v28 (+supp S12 append), P5 v23. Two substantive corrections, both disclosed: E4's mirror-verdict clause un-swapped; P5's operator-contrast orientation corrected against the companion's delay-stabilised window (no frozen record of either paper changes). Implementation record: wave7/WAVE7_IMPLEMENTATION.md.
+- Updated JOINT_AUDIT_EVALUATION.md: nine headers to the new versions + the wave-7 addendum (the verification answer, the four (B)-block summaries, the scan outcome).
+
+Stage Summary:
+- Part 1 answered with evidence: the joint-gate discipline held across all waves; 106 divergences accounted for; no sequential contradictions; the formatting gap closed.
+- Parts 2-3 delivered: ~120 findings adjudicated; ~104 implemented presentation-layer fixes across nine builds; ~16 declined with recorded reasons; two new registered items (P2 §5(d) symbol definitions; P5 S2 gloss drift).
+- Non-destructive throughout: no frozen verdict, score, kernel, boundary, spectral record, or table value changed; table rows byte-identical except the seven disclosed label cells; E1/P1 abstract word counts preserved.
+- Committed and pushed with the owner's PAT.
