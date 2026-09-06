@@ -1670,3 +1670,15 @@ Stage Summary:
 - Delivered all four directive items: the nine papers' LaTeX+PDF now carry the pinned date (September 6, 2026), the clickable ORCID and email lines beneath the author name (PDF link annotations verified), and the back-matter Declarations section (each declaration a separate titled subsection, the AI declaration last), and the eight papers' reference lists carry the owner's nine Zenodo DOIs as new md versions (15 entries substituted; P4 has no substitutable entries; the tenth-manuscript placeholders stay because no DOI was given for them).
 - Non-destructive: eight new md files and eight new tex+pdf pairs under their new canonical names; the old-version tex/pdf files remain untouched in latex/; P4's tex/pdf regenerate in place (wave-11 original recoverable at dc1d501); no frozen value restated in altered form (numeric-token multiset asserted exactly equal for every paper); the owner's ECOMOD folder read for the DOI registry but not touched.
 - Committed locally; push follows with the owner's PAT (in-memory only, redacted from all output; the user should revoke/rotate it since it was pasted into chat).
+---
+Task ID: 83 (push record)
+Agent: main (Z.ai Code)
+Task: Push the wave-13 commit (Task 83) to GitHub using the owner's fine-grained PAT.
+
+Work Log:
+- Before committing, fast-forwarded local main onto the owner's latest commits (7d10b03 ECOMOD v30 DOI registry, then d27dae1 v30 manuscript LaTeX - both in the agent-2 folder, zero overlap with wave-13's files).
+- Committed wave 13 as 3d16935 (8 new md versions, 8 new tex+pdf pairs, P4 tex/pdf regenerated in place, wave13/ records, JOINT_AUDIT_EVALUATION wave-13 addendum, worklog Task 83) and pushed d27dae1..3d16935 main -> main successfully with the owner's PAT; re-verified via git ls-remote (remote main now at 3d169350ad4).
+- Security: the PAT was used in-memory only (shell variable, unset immediately after use; redacted from all command output); never written to any file, commit, config, or worklog. The user should revoke/rotate it since it was pasted into chat.
+
+Stage Summary:
+- Wave 13 (Task 83) fully delivered and pushed: the pinned date (September 6, 2026), clickable ORCID + email lines beneath the author name, the back-matter Declarations section (each declaration a separate titled subsection, the AI declaration last), and the owner's nine Zenodo DOIs in the reference lists (15 substitutions across eight new md versions). Remote main is at 3d16935; working tree clean after this push-record commit.
