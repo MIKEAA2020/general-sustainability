@@ -1608,3 +1608,55 @@ Non-destructive: no paper, supplementary, figure, LaTeX, or PDF file
 touched; the three E2 GA files regenerate in place with wave-11
 originals recoverable at 314c939; records: wave12/WAVE12_IMPLEMENTATION.md
 + this addendum + worklog Task 82.
+
+
+## Wave 13 addendum (Task 83, 2026-09-06) — front matter, back-matter
+Declarations, and the nine Zenodo DOIs
+
+Owner directive, four items: (1) date = September 6, 2026; (2) ORCID and
+email in clickable format, all beneath the author name; (3) AI declaration
+at the end with the other declarations, each a separate title and
+subsection; (4) substitute "these dois" for references - the nine Zenodo
+DOIs registered in the owner's ECOMOD v30 revision (commit 7d10b03, agent-2
+folder, read-only here).
+
+References (item 4, md level, mirrors the owner's own ECOMOD v30
+treatment): eight new md versions (E1 v15, E2 v22, E3 v16, E4 v14, P1 v23,
+P2 v13, P3 v32, P5 v26) replace the 15 anonymous
+"Author, X., et al., in review" companion-citation placeholders with the
+real records - Abaee, A. (2026), registered title, Zenodo, DOI - in each
+paper's house style, keeping the papers' own companion descriptor tails.
+P4 stays v30 (no companion-citation entries in its list). The tenth
+manuscript ("Interval-verified bounds in linear management templates",
+cited by E1 and E2) has no DOI among the nine and stays a placeholder - no
+DOI can be invented. Fail-loud: each placeholder found exactly once; the
+new file differs from its source only on the substituted lines
+(line-diff asserted); sources asserted byte-identical after the run.
+
+Front/back matter (items 1-3, typesetting layer): date pinned; the
+wave-11 \thanks footnote replaced by a clickable \href ORCID line and
+mailto email line beneath the byline (xcolor added to the preamble - the
+blue!45!black link mix, configured but never instantiated since wave 9,
+now renders; all nine PDFs carry exactly the two URI annotations); the
+papers' own declaration subsections relocated to a trailing
+\section*{Declarations} after the references and supplementary material,
+each as its own titled subsection (P2's bold-label Declarations paragraph
+restructured into Funding / Competing interests / Data availability / Code
+availability subsections), the AI declaration appended last. Every
+wave-9/11 integrity check inherited and passing (numeric-token multiset
+exactly equal per paper - the relocated text and new DOI tokens stay
+inside the checked corpus; no word lost; pure ASCII; figure counts; P4
+body asserted identical to the wave-11 pandoc output with only the
+canonical substitutions). Two full build runs byte-identical; VLM-verified
+(E2 page 1 byline with blue linked ORCID/email and the date; E2 and P2
+final pages with each declaration under its own heading and the AI
+declaration last; E1 references page transcribing the two DOI entries
+verbatim). Page counts 20/19/16/14/23/21/40/39/29 (P2 +1: the
+restructured declarations plus AI subsection).
+
+Non-destructive: eight new md files, eight new tex+pdf pairs under their
+new canonical names, P4's tex/pdf regenerated in place (wave-11 original
+recoverable at dc1d501), records only otherwise; no frozen value restated
+in altered form; the owner's ECOMOD folder read but not touched. Records:
+wave13/{WAVE13_IMPLEMENTATION.md, apply_md_doi.py, build_latex_v13.py,
+logs/} + this addendum + worklog Task 83.
