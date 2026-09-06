@@ -363,7 +363,7 @@ reading (not the received distinction).
 
 ---
 
-## P4 — delay_dynamics (latest = **v29** (wave-8: version-log removed, label-error narration recast, §9.6 present-tense, supplementary v5 pointer); v28 the wave-7 pass; v26 the small-error cluster, v27 the wave-4 presentation tail (R18–R22 + S11 relocation) — wave 4, 2026-09-06; record: wave4/p4_record.md)
+## P4 — delay_dynamics (latest = **v30** (wave-9 LaTeX/PDF pass: the §9.6 setext-heading markdown accident fixed — one blank line inserted so the Status paragraph is no longer parsed as a section heading; LaTeX+PDF in latex/); v29 the wave-8 journal-presentation pass; v28 the wave-7 pass; v26 the small-error cluster, v27 the wave-4 presentation tail (R18–R22 + S11 relocation) — wave 4, 2026-09-06; record: wave4/p4_record.md)
 
 ### (A) Joint consensus
 1. **Conclusion reverts to the Euler artefact.** §8/abstract: exact crossing at **6.50 yr**, Euler
@@ -416,7 +416,7 @@ consistency repairs, not restructuring.
 
 ---
 
-## P5 — sampled_governance (latest = **v24** (wave-8: version-log removed, abstract under 310, Figure 1 v24 with the compact title + Extractive/Protective row labels, 7 keywords, supplementary file cited); v23 the wave-7 pass; v20 the regression repair, v21 the wave-4 middle layer (R23/R24 + the claims-ledger/appendix docket), v22 the wave-5 re-opened micro items (architecture-name fence, 'more than thirty', Figure-1 caption wording) — wave 5, 2026-09-07; records: wave4/p5_record.md, wave5/p5_record.md)
+## P5 — sampled_governance (latest = **v25** (wave-9 LaTeX/PDF pass: Figure 1 v25 with the legend re-anchored above the title — v24's legend row superimposed on the title words; exactly the figure reference changed; LaTeX+PDF in latex/); v24 the wave-8 journal-presentation pass (version-log removed, abstract under 310, compact title + Extractive/Protective row labels, 7 keywords, supplementary file cited); v23 the wave-7 pass; v20 the regression repair, v21 the wave-4 middle layer (R23/R24 + the claims-ledger/appendix docket), v22 the wave-5 re-opened micro items (architecture-name fence, 'more than thirty', Figure-1 caption wording) — wave 5, 2026-09-07; records: wave4/p5_record.md, wave5/p5_record.md)
 
 ### (A) Joint consensus
 1. **Reconstruction/unreproduced stage-map status.** grok: the 3–4 yr / 6–12 yr windows are
@@ -1452,3 +1452,40 @@ collision-free).
   record, or table value changed anywhere; table rows byte-identical except
   P3's two notation-table rows (the dropped "(re-lettered …)" cells) and the
   one P3-supplementary header cell.
+
+## Wave-9 addendum — the LaTeX/PDF pass (Task 79, 2026-09-07)
+
+Owner directive: provide LaTeX sources and compiled, error-free PDFs of all
+nine papers, confined to `arena agent 1/paper rewrites`.
+
+**Implemented (record: wave9/WAVE9_IMPLEMENTATION.md):** LaTeX + PDF for
+all nine papers in `latex/` (E1 v14 20 pp, E2 v21 19 pp, E3 v15 16 pp,
+E4 v13 14 pp, P1 v22 23 pp, P2 v12 20 pp, P3 v31 40 pp, P4 v30 39 pp,
+P5 v25 29 pp), built by wave9/build_latex.py — pandoc conversion with
+post-processing (title, abstract environment, figure+caption merge, Unicode
+→ macros), tectonic compile with zero TeX errors and no missing glyphs, and
+fail-loud integrity checks: the numeric-token multiset is EXACTLY equal
+between markdown and LaTeX body (frozen values cannot change in conversion)
+and no markdown word is lost. Every build run twice; all nine .tex files
+byte-identical across the runs.
+
+The pass is a rendering stress test and surfaced exactly two latent
+presentation defects, both fixed as new versions first (nothing overwritten):
+
+- **P4 v30** (15c85c5f): the §9.6 `**Status.**` paragraph was followed
+  directly by a `---` separator with no blank line, so markdown parsers
+  (pandoc included) read the pair as a setext H2 heading — the entire
+  paragraph rendered as a section heading and was duplicated into the PDF
+  bookmarks. Fix: one blank line inserted; zero `texorpdfstring`
+  occurrences in the built tex; all table rows asserted byte-identical.
+- **P5 v25 + figure v25**: the v24 figure's four-entry legend row
+  (anchored 0.5, 1.01) superimposed on the centred title. Fix: legend
+  re-anchored above the title (0.5, 1.17); data unchanged (the registered
+  §3.3 crossing record); VLM-verified collision-free. P5 v25 (a75021e2)
+  changes exactly one line — the Figure 1 image reference; caption and all
+  table rows asserted byte-identical.
+
+Non-destructiveness: the .md files on disk are untouched by the LaTeX build
+(the in-memory literal-star/display-width fixes are conversion-layer only,
+exact-count asserted); no frozen verdict, score, kernel, boundary, spectral
+record, or table value changed anywhere; git status shows only new files.
