@@ -2,7 +2,7 @@
 
 **Manuscript:** Emergent Carrying Capacity, the Biocapacity Ratio, and the Productivity Illusion: Deficit-Driven Collapse in a Delayed Coupled Human–Environment Model
 
-*Revision 30 · Companion to `IMPLEMENTED_revision_ECOMOD_v30.md` · Journal: Ecological Modelling*
+*Revision 32 · Companion to `IMPLEMENTED_revision_ECOMOD_v32.md` · Journal: Ecological Modelling*
 
 This document collects the supporting material: the full model specification, the scaling, the analytic derivations, the scenario and parameter tables, the sensitivity/robustness record, the prediction-to-section map, and the supplementary references. It provides the derivations and tables behind the main-text results. Where a derivation is used in the main text, the relevant section is cited so the reader can cross-reference.
 
@@ -211,6 +211,53 @@ The mask window is 5.4 yr wide at deficit `E − b₀A₀ = 0.06`, vanishing at 
 - **Masking band** is bounded by the deficit limits of §Demonstration (≈5.4 yr at deficit 0.06; vanishes ≈0.075). `α` and `τ_p` are illustration values needing calibration.
 - **Grid dependence is bounded.** A fine (0.05 step) vs coarse (0.2 step) grid at `τ_p=0`: at `τ_g=30` the coarse grid overstates the recover fraction (0.104 coarse vs 0.027 fine). The fine mesh is the published value; the coarse value is reported as a bound.
 - **The separator degrades with lag** — balanced accuracy 99.2 % (no-delay) → 81.2 % (`τ_g = 30`); a linear functional is chance (50.0 % balanced) at `τ_g = 30`.
+
+### S5.1 Illustrative empirical anchoring of the regeneration timescale
+
+**What is anchored, and what is not.** The model separates two regeneration quantities: the regeneration
+**rate** `ρ` (yr⁻¹), which sets *how long* recovery takes (the recovery timescale ≈ `1/ρ = 20 yr` at the
+baseline `ρ = 0.05`), and the regeneration **lag** `τ_g` (yr), which sets *whether* the stock recovers at all
+(§12.2). Published "recovery-time" and "time-to-equilibrium" statistics are therefore, in the model's terms,
+statements about the *rate* `ρ` (they are timescales); they become statements about the *lag* `τ_g` only
+under an explicit "effective-timescale" reading, stated below. We label the result **illustrative** — it is a
+transparency exercise, not a formal parameter estimation.
+
+**The recovery statistics as reported (verified against the sources).** The three published measures are
+heterogeneous in metric (time to a recovery level, time to a new equilibrium, probability of recovery over a
+window), so there is no single clean `t₅₀`:
+
+| System | Metric actually reported | Source |
+|---|---|---|
+| Tropical secondary forest | 122 Mg ha⁻¹ above-ground biomass recovered within 20 yr; median 66 yr to reach 90 % of old-growth biomass | Poorter et al. (2016) |
+| Temperate soil (land-use change) | new SOC equilibrium reached after 23 yr (deforestation) and 17 yr (grassland→cropland) | Poeplau et al. (2011) |
+| Marine fisheries | only 29 % of collapsed stocks recovered to 50 % within 5–15 yr; most showed little change by 15 yr; recovery generally within ≈20 yr once fishing pressure reduced to FMSY | Hutchings & Reynolds (2004); Neubauer et al. (2013) |
+
+**The exponential-recovery conversion, used as an effective-timescale heuristic.** If recovery is
+approximated as exponential so the time to 50 % recovery satisfies `t₅₀ = τ̄ ln 2`, then the effective
+regeneration timescale is `τ̄ ≈ 1.44 · t₅₀`. Applied to the sourced timescales (soil 17–23 yr → 25–33 yr;
+fisheries ≈20 yr under FMSY → 29 yr, with the Hutchings–Reynolds caveat that recovery is often far slower or
+fails, extending the upper edge) this gives an **effective regeneration timescale ≈ 25–33 yr, representative
+≈ 29 yr**, consistent with the manuscript's baseline `τ_g = 30 yr` and its core band of order 10–40 yr.
+
+We note explicitly that the earlier readings "forest ≈ 50 % by 20 yr" and "fisheries ≈ 12–13 yr to 50 %" are
+**not** what those sources report, and we have corrected them here. These conversions are transparent
+transformations of published summary values under a stated recovery model; they are not formal parameter
+estimates from raw recovery curves.
+
+**Rate vs. lag, and the sensitivity statement.** Because the model assigns recovery time to `ρ`
+(`1/ρ = 20 yr`) and recovery type to `τ_g`, converting a recovery-time statistic into `τ_g` is a
+category-crossing heuristic: it is a useful order-of-magnitude anchor for `τ_g`, but it is not the same
+object as the model's `ρ`-based timescale. The model's *structural* results are robust across this band —
+at `τ_g = 17, 25, 30, 33 yr` the constant-parameter subsystem keeps a positive real leading eigenvalue
+(`+0.625`, real) and no imaginary-axis crossing (no Hopf), so the monotone instability, the
+`R_B = 1` necessary-but-not-sufficient bound, and the silent-collapse signature are unchanged (verified). The
+*recover-vs-collapse outcome*, by contrast, is *not* band-insensitive: the recover fraction falls through the
+≈18–20 yr cliff (coarse grid 0.54 at `τ_g = 18` → 0.21 at `τ_g = 20` → 0.00 at `τ_g ≥ 25`; reported fine
+values 0.399 → 0.240 → 0.0529). The effective anchored band (≈25–33 yr) therefore lies at or above the
+collapse threshold, so the model's principal prediction — that these regeneration timescales place forests,
+soils, and many fisheries in the collapse regime — holds. The blanket statement that "the model's qualitative
+results are unchanged over 17–33 yr" is thus not accurate: the *mechanism* is unchanged over the whole band,
+but the *outcome* switches inside it.
 
 ---
 
