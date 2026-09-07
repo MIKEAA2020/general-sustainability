@@ -120,3 +120,71 @@ condition 2× · composition step 6× · composition window 2× · composition m
 liquidation mask (distinguished) · masking signal 1× · aggregate mask 2× ·
 compensatory-aggregation gap 1×. No single term carries two concepts; no concept
 has two names.
+
+---
+
+## Round 2 — first-appearance definitions, cross-section alignment, title
+
+### Task 2: terms defined/explained on first appearance
+- Core quantities are defined in the Introduction at first appearance: carrying
+  capacity, biocapacity, global hectare (gha), natural capital, land-use
+  conversion, "productivity illusion" (L58), and "composition of biocapacity"
+  (explicit em-dash gloss, L60).
+- Coinages that first appear in the abstract/Intro (composition effect,
+  aggregation face, typed floor, floor collision, gate sign, composition-loop
+  gain) are standard, explained by immediate contrast (floor collision ↔
+  saddle-node), or defined at first body use (typed floor in Assumptions #10;
+  gate sign in §Recovery dynamics; composition diagnostic in §4.3).
+- Headline "composition illusion" is first glossed/defined at §4.4 (its first
+  body use) via the Round-1 back-link sentence. Title/keywords use is a label.
+- **Verdict:** adequate; no further definition edits required.
+
+### Task 3: do Abstract / Introduction / Discussion / Conclusions fully align?
+- **Substantively consistent on every number and claim:** biocapacity +≈23% ↔
+  +23.0%; per-capita −364%, population +464% of d ln B; overshoot onset 1971;
+  E_ceil≈1.138; leading eigenvalue ≈−0.0537 yr⁻¹; floor collision (not fold);
+  no critical slowing down; demand-driven drawdown; recovery gate-sign;
+  identifiability; "real, bounded, demand-driven … separated from a
+  non-identifiable single-stock reading."
+- **FIX APPLIED:** abstract now reads "the *aggregation* face of the **masking
+  result**" (was "of the **composition effect**"), matching Discussion and
+  Conclusions, which explicitly separate the per-capita/population split from
+  the two-land composition illusion. "composition effect" remains once in the
+  abstract as the correct closing summary.
+- **Optional nit:** abstract leaves "composition-loop gain", "typed floor",
+  "gate sign" unglossed — acceptable for abstract brevity.
+
+### Task 4: does the title merit improvement?
+- **Current:** "Emergent Carrying Capacity, the Biocapacity Ratio, and the
+  Composition Illusion: Two-Land Conversion and the Identifiability of Collapse"
+- **Strengths:** names the central novel concepts (emergent carrying capacity,
+  composition illusion) and two contributions (two-land conversion, identifiability
+  of collapse); "Composition Illusion" is a memorable headline.
+- **Weaknesses:** list-heavy (3 main + 2 subtitle = five claims); "the Biocapacity
+  Ratio" (R_B) is the weakest element — a defined monitoring quantity, not a
+  conceptual headline; subtitle "Two-Land Conversion" overlaps the composition-
+  illusion theme.
+- **Options:** (A) drop "the Biocapacity Ratio" → "Emergent Carrying Capacity and
+  the Composition Illusion: Two-Land Conversion and the Identifiability of
+  Collapse"; (B) front-load the hook → "The Composition Illusion: Emergent
+  Carrying Capacity, Two-Land Conversion, and the Identifiability of Collapse";
+  (C) retain as-is.
+- **Ripple if changed:** manuscript `\title`, `\hypersetup{pdftitle=…}`, the SI
+  header line, and the comment header — no body use of the title string.
+- **Verdict:** competent and consistent; only a light tightening worth doing if
+  desired; not wrong as-is.
+
+---
+
+## Git sync (Round 2)
+
+Pushed to `MIKEAA2020/general-sustainability` `main` (subdir `agent 2
+productivity illusion`):
+- `84a39ef` — "ECOMOD v33->v34: terminology & clarity pass, plus prior-round
+  artifacts" (added v33/v34, SI v2, latest audits/, model_sims/, data/nfa/).
+- `89b7e9a` — "v34: align abstract with Discussion/Conclusions" (abstract
+  "aggregation face" → masking result).
+
+Token read from `.github_pat` (never printed); used via `http.extraHeader` for
+push, then scrubbed from the clone config; the clone lives in `/tmp` (outside the
+workspace snapshot).
