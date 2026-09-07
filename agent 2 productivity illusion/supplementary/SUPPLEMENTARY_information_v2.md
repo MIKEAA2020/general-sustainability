@@ -1,6 +1,6 @@
 # Supplementary Information
 
-**Manuscript:** Emergent Carrying Capacity, the Biocapacity Ratio, and the Composition Illusion: Two-Land Conversion and the Identifiability of Collapse
+**Manuscript:** Emergent Carrying Capacity and the Composition Illusion: Two-Land Conversion and the Identifiability of Collapse
 
 *Companion to `manuscript_ECOMOD_v34.tex` (two-land). Journal: Ecological Modelling.*
 

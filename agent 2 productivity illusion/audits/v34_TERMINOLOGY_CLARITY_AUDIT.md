@@ -188,3 +188,59 @@ productivity illusion`):
 Token read from `.github_pat` (never printed); used via `http.extraHeader` for
 push, then scrubbed from the clone config; the clone lives in `/tmp` (outside the
 workspace snapshot).
+
+---
+
+## Round 3 — title (Option A), effective-class presentation, keywords, error check
+
+### Task 1: title — chose Option A
+Dropped "the Biocapacity Ratio": **"Emergent Carrying Capacity and the
+Composition Illusion: Two-Land Conversion and the Identifiability of Collapse."**
+Applied to `\title`, `\hypersetup{pdftitle}` (main title), the comment header, and
+the SI v2 `**Manuscript:**` line. No body use of the title string; no lingering
+"Biocapacity Ratio" anywhere.
+
+### Task 2: revisiting the "one effective class" (four-discipline) recommendation
+- **Assessment:** all four disciplines are **already implemented** in v34.
+  (a) "strategic reduction, not one real land type" + "effective capital-land
+  class" (Model formulation, "Two conventions", L153) and Limitations ("effective
+  class, not a single land type"); (d) multi-type decomposition handed to paper3
+  ("cite rather than re-derive", L153 & §Identifiability); (c) fold/capacity-max
+  marked regime-conditional with both regimes reported (`tab:regime`, `tab:neg`,
+  §4.1, §Results); (b) band + disclaimer in §Discussion
+  ("illustrative of the band, not a calibration of a single ρ_c") and quantified
+  in SI §S5.3 (≈25–33 yr, representative ≈29 yr).
+- **Improvement applied (b):** surfaced the quantitative band in the main text and
+  explicitly separated the model's ρ_c from the field band. Added to the
+  §Discussion regeneration paragraph: "…the effective timescale is roughly 25–33 yr
+  (representative ≈29 yr; order 10–40 yr; conversion in SI §S5.3). This band is an
+  illustrative anchor, not a calibration of the model's ρ_c: ρ_c=0.08 yr⁻¹ is an
+  effective consolidation parameter rather than a measured forest recovery rate,
+  and the recover/collapse boundary is a demand threshold rather than a ρ_c- or
+  τ_g-governed timescale." (echoes the SI's own 25–33/≈29 figures; no new band
+  invented).
+- **How to present it / worth it:** the disciplines belong where they already are —
+  an up-front convention (a, d), `tab:regime`/`tab:neg` (c), and a dedicated
+  qualified paragraph in §Discussion (b). A separate boxed "limitation note" or
+  appendix would fragment the argument and read defensively, so it is **not**
+  recommended. Yes, worth it: the cost was one sentence and it pre-empts the two
+  sharpest reviewer objections ("you have one forest type"; "ρ_c isn't the forest
+  rate").
+
+### Task 3: seven keywords (discoverability + contributions)
+**"carrying capacity; biocapacity; ecological footprint; land-use conversion;
+composition illusion; identifiability; critical slowing down."** Two headline
+contributions (carrying capacity, composition illusion), the core mechanism
+(land-use conversion), the applied domain (biocapacity, ecological footprint), and
+the two methodological hooks (identifiability; critical slowing down — the paper's
+no-CSD / floor-collision result engages the early-warning literature). Dropped
+"time delay", "ecological debt", "sustainability" (niche / low value).
+
+### Task 4: new errors introduced?
+**None.** Verified on the edited manuscript: environment balance OK; no undefined
+`\ref` and no orphan `\label`; abstract still self-contained (no
+`\cite`/`\ref`/`\label`/`\S`); every data row of the Variables-and-units table has
+exactly 4 cells (the only non-4 row is the `\bottomrule` line); recovery metric
+unified (`\mathcal{R}_c` 8× in manuscript / 15× in SI, 0 bare `R_c`); title,
+`pdftitle`, comment header and SI header all updated; no stale "Biocapacity Ratio".
+(No LaTeX engine in the sandbox, so this is structural, not a full compile.)
