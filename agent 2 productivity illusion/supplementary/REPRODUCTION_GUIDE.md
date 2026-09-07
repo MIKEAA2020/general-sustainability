@@ -37,6 +37,11 @@ agent 2 productivity illusion/
 │   ├── numeric_claims.py            # auto verifiers for reported numerical claims
 │   ├── _run_sensitivity.py          # ρ-sensitivity sweep
 │   ├── _run_topdown.py              # runner that writes data/topdown_results.json + top-down figures
+│   ├── twoland_fixed.py             # root-cause-corrected two-book model (quality split; SI S5.2)
+│   ├── twoland_nfa_proxy.py         # world NFA proxy decomposition (SI S5.1)
+│   ├── twoland_nfa_proxy_sensitivity.py  # α-sensitivity of the proxy decomposition (SI S5.1)
+│   ├── verify_tab_conv_basin.py     # re-derives `tab:conv` Δb_conv/λ_+ and `tab:basin` thresholds (SI S5.2)
+│   ├── recovery_metric_and_tau_p_scan.py  # SI S5.4 R_c(T) gate-sign + S5.5 τ_p-extended delay scan
 │   └── r1_r2_report.py / r1_r2_sensitivity.py
 ├── scans/                           # rendered model figures (inputs for the SI figure set)
 ├── data/

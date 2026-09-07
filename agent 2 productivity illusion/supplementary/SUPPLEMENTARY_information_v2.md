@@ -1,20 +1,20 @@
 # Supplementary Information
 
-**Manuscript:** Emergent Carrying Capacity, the Biocapacity Ratio, and the Productivity Illusion: Deficit-Driven Collapse in a Delayed Coupled Human–Environment Model
+**Manuscript:** Emergent Carrying Capacity, the Biocapacity Ratio, and the Composition Illusion: Two-Land Conversion and the Identifiability of Collapse
 
-*Companion to `manuscript_ECOMOD_v33.tex` (two-land, scope-A). Journal: Ecological Modelling.*
+*Companion to `manuscript_ECOMOD_v34.tex` (two-land). Journal: Ecological Modelling.*
 
 This document collects the supporting material: the full model specification, the scaling, the analytic
 derivations, the scenario and parameter tables, the sensitivity/robustness record, the prediction-to-section
 map, and the supplementary references. It provides the derivations and tables behind the main-text results.
 Where a derivation is used in the main text, the relevant section is cited so the reader can cross-reference.
 
-**Structure and scope.** The manuscript is the **two-land** (fast-provisioning + ecological-capital, scope-A)
-model. §S1–§S4 and the *first* block of §S5 describe the **one-stock** (single-capital `A`) base model, which
+**Structure and scope.** The manuscript is the **two-land** (fast-provisioning + ecological-capital) model.
+§S1–§S4 and the *first* block of §S5 describe the **one-stock** (single-capital `A`) base model, which
 the manuscript retains explicitly as a **one-stock comparator** (it recovers as a limit; its spectral features
 `+0.62`/`+0.625`, the `5.4 yr` masking window and the `τ_g≈18–20 yr` recovery cliff are one-stock, *not*
 two-land, properties). The **two-land** specification and its robustness are given by the manuscript's
-"Model formulation" section and by §S5.1–§S5.3 below. Do not read the one-stock §S1–§S4 values as the
+"Model formulation" section and by §S5.1–§S5.5 below. Do not read the one-stock §S1–§S4 values as the
 two-land result. Likewise the comparator's symbols and parameter values are comparator-only and must not be
 imported into the two-book model: `A_max=1.2`, `b₀=0.5`, `A_ext`, `ρ=0.05`, the area-based MSY/saddle-node of
 §S3, and the comparator's units `[D]=gha·yr`, `[α]=(gha·yr)⁻¹`. The two-book model instead uses `D` in
@@ -195,8 +195,8 @@ Baseline sits at a **knife-edge** `χ = 1` because `ρ = 3q` (`Λ = 0`), the mea
 
 | Regime | Condition | `B(A)` shape | Sustainable point | MSY | Collapse / mask behaviour |
 |---|---|:--:|---|---|---|
-| capital-dominated | `b_G ρ > b` (`ψ → 0`) | interior maximum | interior `A* < A_max` | interior MSY `A*`, `B_max` | smooth decline stabilised by demographic feedback — illusion small |
-| flow-dominated (baseline) | `b_G ρ < b` (`ψ → 1`) | monotone ↑ | boundary `A_max` | none interior (max at `A_max`) | liquidation with threshold `A_c(E)`; overshoot invisible until demand exceeds flow yield — illusion more visible |
+| capital-dominated | `b_G ρ > b` (`ψ → 0`) | interior maximum | interior `A* < A_max` | interior MSY `A*`, `B_max` | smooth decline stabilised by demographic feedback — masking weak |
+| flow-dominated (baseline) | `b_G ρ < b` (`ψ → 1`) | monotone ↑ | boundary `A_max` | none interior (max at `A_max`) | liquidation with threshold `A_c(E)`; overshoot invisible until demand exceeds flow yield — masking more visible |
 | marginal | `b_G ρ = b` | max at the boundary | `A* = A_max` (interior max merges with boundary) | boundary `A_max` | `ψ → 1` |
 
 ### S4.3 Delay-response sweep (baseline `τ_p = 25`)
@@ -337,10 +337,10 @@ fisheries ≈20 yr under FMSY → 29 yr, with the Hutchings–Reynolds caveat th
 fails, extending the upper edge) this gives an **effective regeneration timescale ≈ 25–33 yr, representative
 ≈ 29 yr**, consistent with the manuscript's baseline `τ_g = 30 yr` and its core band of order 10–40 yr.
 
-We note explicitly that the earlier readings "forest ≈ 50 % by 20 yr" and "fisheries ≈ 12–13 yr to 50 %" are
-**not** what those sources report, and we have corrected them here. These conversions are transparent
-transformations of published summary values under a stated recovery model; they are not formal parameter
-estimates from raw recovery curves.
+The readings "forest ≈ 50 % by 20 yr" and "fisheries ≈ 12–13 yr to 50 %" are **not** what those sources report;
+the sourced statistics are as given in the table above. These conversions are transparent transformations of
+published summary values under a stated recovery model; they are not formal parameter estimates from raw
+recovery curves.
 
 **Rate vs. lag, and the sensitivity statement.** Because the model assigns recovery time to `ρ`
 (`1/ρ = 20 yr`) and recovery type to `τ_g`, converting a recovery-time statistic into `τ_g` is a
@@ -357,32 +357,31 @@ soils, and many fisheries in the collapse regime — holds. The blanket statemen
 results are unchanged over 17–33 yr" is thus not accurate: the *mechanism* is unchanged over the whole band,
 but the *outcome* switches inside it.
 
-### S5.4 Recovery metric `R_c(T)` and the gate-sign asymmetry
+### S5.4 Recovery metric `\mathcal{R}_c(T)` and the gate-sign asymmetry
 
-GPT item 8 requested an explicit recovery metric. We define it on the capital book, measured from a
-degraded level `A_c^deg` back toward the healthy reference `A_c^init`:
+We define an explicit recovery metric on the capital book, measured from a degraded level `A_c^deg` back
+toward the healthy reference `A_c^init`:
 
 ```
-R_c(T) = (A_c(T) − A_c^deg) / (A_c^init − A_c^deg)
+\mathcal{R}_c(T) = (A_c(T) − A_c^deg) / (A_c^init − A_c^deg)
 ```
 
 `A_c^init` / `P^init` are taken to be the **base-model healthy reference** — the representative member of the
 one-parameter equilibrium family (the `A_c0 → long-run` attractor at `A_c0=0.9`, giving
 `A_c^init=0.8225`, `P^init=1.489`); `A_c^deg=0.0513` is the degraded crash-equilibrium capital level
 (capital driven to its typed floor under an over-populated start). All runs are on the **base model**
-(`T_b=0`, the wave off — the configuration used for every reported result). Reproducible:
-`model_sims/recovery_metric_and_tau_p_scan.py`.
+(`T_b=0`, i.e. the technology step is not applied — the configuration used for every reported result).
+Reproducible: `model_sims/recovery_metric_and_tau_p_scan.py`.
 
-**Model-fidelity note (important, and it corrects an earlier draft).** An earlier version of this section
-applied the bounded technology step `T_b` unconditionally. That produced a *wave-artefact*: surplus-gating
-drove `A_c` to ≈2.39 (96% of `A_tot`), pushed `A_r` below its stated floor (`0.049 < 0.10`), collapsed `B`
-to ≈0.17, and let `R_c` misread as a *large* "over-restoration" (≈2.07) with the population "paying"
-(`P_end/P_init≈0.26`). That is **not** a model result. On the base model the capital book is bounded by
-`A_tot` and `A_c^min`, `A_r` **never** approaches its floor (min `0.602`), `B` stays bounded, and the
-over-restoration is a modest move along the equilibrium family (`R_c` ≈ 1.07–1.27). In the
-*surplus-restoration* rows the final aggregate biocapacity lies at `B≈0.70–0.91`; the no-restoration and
-deficit-gating rows remain near the degraded high-`B` equilibrium (`B≈1.13–1.14`). We report the base-model
-result here.
+**Model-fidelity note.** On the base model the capital book is bounded by `A_tot` and `A_c^min`, the reserve
+`A_r` **never** approaches its floor (min `0.602`), `B` stays bounded, and the over-restoration is a modest
+move along the equilibrium family (`\mathcal{R}_c` ≈ 1.07–1.27). In the *surplus-restoration* rows the final aggregate
+biocapacity lies at `B≈0.70–0.91`; the no-restoration and deficit-gating rows remain near the degraded
+high-`B` equilibrium (`B≈1.13–1.14`). Applying the bounded technology step `T_b` non-contingently would not be
+a model result: it drives `A_c` to ≈2.39 (96% of `A_tot`), pushes `A_r` below its stated floor
+(`0.049 < 0.10`), collapses `B` to ≈0.17, and yields an apparent "over-restoration" of `\mathcal{R}_c` ≈ 2.07 with
+`P_end/P_init≈0.26` — an artefact of applying the step without the correct gate, not a property of the model.
+We report the base-model result here.
 
 The metric is evaluated from the **non-equilibrium post-crash state** (`A_c=0.058` near the floor, `A_f=0.6`,
 `q=0.9`, `P=1.2`), because — and this is the phase-dependence the manuscript's gate claim implies — **both
@@ -390,7 +389,7 @@ gates are exactly zero at the degraded equilibrium itself**: there `R_B=1`, so `
 nor `(E−B)_+` can fire. Restoration therefore needs a *surplus* to act on, and it is tested on a state that
 has one. `χ_r` values are the manuscript's surplus-gated reserve→capital rate.
 
-| Restoration policy / gate                        | R_c(100) | R_c(900) | A_c   | A_f   | A_r   | B     | E     | R_B(T) | P/P^init | min A_r | max A_c | D_peak |
+| Restoration policy / gate                        | \mathcal{R}_c(100) | \mathcal{R}_c(900) | A_c   | A_f   | A_r   | B     | E     | R_B(T) | P/P^init | min A_r | max A_c | D_peak |
 |--------------------------------------------------|---------:|---------:|------:|------:|------:|------:|------:|-------:|---------:|--------:|--------:|-------:|
 | none (`R_rc=0`)                                  | −0.00    | −0.00    | 0.051 | 1.336 | 1.113 | 1.138 | 1.138 | 1.00   | 1.39     | 1.113   | 0.057   | 0.152  |
 | **surplus-gated**, `χ_r=0.02`                    | 0.69     | 0.73     | 0.612 | 1.030 | 0.858 | 0.906 | 0.906 | 1.00   | 1.11     | 0.858   | 0.612   | 0.152  |
@@ -402,29 +401,29 @@ has one. `χ_r` values are the manuscript's surplus-gated reserve→capital rate
 | **deficit-gated**, `χ_r=0.10`                    | 0.01     | 0.01     | 0.059 | 1.331 | 1.110 | 1.135 | 1.135 | 1.00   | 1.39     | 1.110   | 0.065   | 0.139  |
 | deficit, `χ_r=0.10` *conversion frozen*           | 0.05     | 0.05     | 0.088 | 1.315 | 1.096 | 1.123 | 1.123 | 1.00   | 1.37     | 1.096   | 0.088   | 0.159  |
 
-(`A_c^init=0.8225`, `A_c^deg=0.0513`; `R_c=1` corresponds to exact return to `A_c^init`. `E=eP` is the
+(`A_c^init=0.8225`, `A_c^deg=0.0513`; `\mathcal{R}_c=1` corresponds to exact return to `A_c^init`. `E=eP` is the
 end-state footprint and `R_B=E/B`; every row re-equilibrates to `R_B=1`, i.e. `E=B`, so the value in the
 `E` column equals that in `B` and `R_B(T)=1.00` throughout. `min A_r` and `max A_c` are over the whole run;
 area conservation `|A_f+A_c+A_r−A_tot|` is `0.0` to machine precision in every row, so no
 `A_r`-is-taken-below-floor or `A_c`-exceeds-`A_tot` artefact is present.)
 
 **Reading — a *phase-dependent* gate-sign asymmetry, not "surplus works" or "deficit is false."**
-- **No restoration** → no recovery (`R_c≈0`); the degraded capital floor persists and the fast land supports a
+- **No restoration** → no recovery (`\mathcal{R}_c≈0`); the degraded capital floor persists and the fast land supports a
   *larger-than-reference* population (`P/P^init=1.39`). The degraded state is a valid `R_B=1` equilibrium,
   just a low-capital, high-population one.
 - **Surplus-gated restoration** recovers the capital book, but **at `χ_r≥0.05` it restores it *beyond* the
-  reference** (`R_c>1`): because the flow keeps running while `B>E`, the capital book moves up the
+  reference** (`\mathcal{R}_c>1`): because the flow keeps running while `B>E`, the capital book moves up the
   one-parameter family to a *higher-capital*, *lower-biocapacity* member, and the supported population falls
   below the reference (`P/P^init` 0.97 at `χ_r=0.05`, 0.90 at `χ_r=0.10`). This is **over-restoration relative
   to the reference target**, not an ecosystem optimum, and the population change is best read neutrally: the
   path **re-equilibrates at a modestly lower supported population** (`R_B=1` at the new member,
   `P/P^init` 0.97–0.90 for `χ_r=0.05`–0.10).
 - **Surplus-gated with a target cap** (`R_rc` limited so `A_c` stops at `A_c^*`) recovers *exactly* to the
-  reference (`R_c=1.00`) with `P/P^init=1.00` and no overshoot — the clean target-level stopping rule.
+  reference (`\mathcal{R}_c=1.00`) with `P/P^init=1.00` and no overshoot — the clean target-level stopping rule.
 - **Deficit-gated restoration** is **not false, but insufficient at these rates**: it is the one gate that can
   act *during* the shortfall (`(E−B)_+>0`), yet the concurrent conversion channel outpaces it, so it gives
-  essentially **no net recovery** (`R_c≈0`). Its role is necessary-but-insufficient, and it may be swamped by
-  conversion unless `χ_r` is large or conversion is capped (the frozen-deficit row still gives `R_c=0.05`).
+  essentially **no net recovery** (`\mathcal{R}_c≈0`). Its role is necessary-but-insufficient, and it may be swamped by
+  conversion unless `χ_r` is large or conversion is capped (the frozen-deficit row still gives `\mathcal{R}_c=0.05`).
 
 **Interpretation / policy reading.** Recovery is not automatic and the gate sign is decisive, but only in a
 *phase-dependent* sense: a surplus-gated flow is the **ecologically sign-correct rewilding** (it retires land
@@ -434,8 +433,8 @@ it may **over-restore** the capital book while the supported population re-equil
 is the only gate that acts *during* the shortfall, but on its own it is swamped by conversion. The clean policy
 implication is therefore exactly as the manuscript's stabilising-institutional-signature point states:
 **restoration should be correctly gated, correctly sized, and bounded by typed floors or a target-level
-stopping rule** — and, as audit review previously recommended, a surplus-gated flow should be *paired with a
-conversion ceiling or target cap* rather than left unbounded.
+stopping rule** — and a surplus-gated flow should be *paired with a conversion ceiling or target cap* rather
+than left unbounded.
 
 | Restoration policy                 | Expected/measured role                                      |
 |------------------------------------|-------------------------------------------------------------|
@@ -443,7 +442,7 @@ conversion ceiling or target cap* rather than left unbounded.
 | deficit-gated only                 | acts during shortfall but may be swamped (≈no net recovery)  |
 | surplus-gated only                 | inert during shortfall; later restores, may over-restore     |
 | surplus-gated + conversion freeze  | over-restores further and *raises* `D_peak` (0.546)          |
-| surplus-gated + target cap         | **clean recovery to reference, `R_c=1.00`, `P/P^init=1.00`** |
+| surplus-gated + target cap         | **clean recovery to reference, `\mathcal{R}_c=1.00`, `P/P^init=1.00`** |
 
 **Why conversion-freeze *raises* `D_peak` (0.152 → 0.546), and how `A_f` falls despite the freeze.**
 Freezing conversion sets `u_c=0`, so the fast-land-release channel cannot close the deficit. The
@@ -456,13 +455,13 @@ can still fall under the freeze because `A_f` is replenished only by reserve→f
 `μA_r` can no longer sustain the reference `A_f`, which settles lower (to the point where
 `μA_r=η_fA_f`).
 
-**Added value.** `R_c(T)` — reported together with `P_end/P^init`, `min A_r` and `max A_c` (not alone) —
+**Added value.** `\mathcal{R}_c(T)` — reported together with `P_end/P^init`, `min A_r` and `max A_c` (not alone) —
 converts the qualitative gate-sign claim into a measured trade-off, and the target-capped row shows the exact
-bound that turns "recovers but over-restores" into "recovers to the reference," closing GPT item 8.
+bound that turns "recovers but over-restores" into "recovers to the reference."
 
 ### S5.5 `τ_p`-extended delay scan (to `τ_p = 2000` yr)
 
-GPT item 9 requested the delay scan extended to `τ_p ≳ 250` yr. Reproducible:
+The delay scan is extended to `τ_p ≳ 250` yr. Reproducible:
 `model_sims/recovery_metric_and_tau_p_scan.py`. (a) recover/collapse fraction vs `τ_p` (grid over
 `A_c0 ∈ {0.40,0.70,1.00,1.18}`, `P_0 ∈ {0.5,…,3.0}`; crash = `min A_c ≤ A_c^min`), `τ_g = 20`, `χ_r=0`;
 (b) long-horizon (`T=3000` yr) probe for a limit cycle / Hopf, measured as the peak-to-peak `P` amplitude in
@@ -499,26 +498,33 @@ range and to `τ_p` far beyond the baseline `25` yr.
 `0.565` (`dt=0.1`), `0.514` (`dt=0.05`), `0.484` (`dt=0.02`) — bounded and monotonically *decreasing* as the
 step is refined, so there is no growing oscillation and no Hopf regardless of resolution.
 
-**Summary of the two additions.** `R_c(T)` turns the gate-sign claim into a measured metric with an explicit
-population trade-off; the `τ_p`-extended scan confirms the recover-boundary is demand-set (not lag-set) and that
-no limit cycle appears, closing GPT items 8 and 9 as supplementary results.
+**Summary of the two supplementary results.** `\mathcal{R}_c(T)` turns the gate-sign claim into a measured metric with an
+explicit population trade-off; the `τ_p`-extended scan confirms the recover-boundary is demand-set (not lag-set)
+and that no limit cycle appears.
 
 ---
 
-## S6. Mapping of the eight falsifiable predictions to manuscript sections
+## S6. Mapping of the falsifiable predictions to manuscript sections
+
+The manuscript's §6 (Falsifiable predictions) states **seven** predictions, each framed against the two-book
+series (`B`, `A_c`, `A_f` and the land-cover/yield proxies) rather than the one-stock aggregate. Predictions
+1–4 and 6 are dynamical (onset, duration, response to a regime index, recovery); prediction 5 is the
+regime-conditional (fold) statement; prediction 7 is the observational (identifiability) one. The table maps
+each to the manuscript section that establishes it.
 
 | # | Prediction | Primary section | Supporting sections |
 |:--:|---|---|---|
-| 1 | Which lag destabilises is set by the sign of `Λ`/`χ`; on S0 the interior point is monotonically unstable for every delay | §6, §4.3 | §8 Numerics |
-| 2 | Oscillation period near onset ≈ 4× dominant lag — only on a Hopf boundary; S0 has no oscillatory onset | §6 | §8 |
-| 3 | Productivity illusion has a computable peak-biocapacity time `t_peak` | §6, §10 Demonstration | §10 |
-| 4 | Reducing a policy lag `τ_e` matters comparably to reducing overshoot `f` | §6 | §9 |
-| 5 | Flow share `ψ` locates the masking illusion | §6, §4.1, §4.5 | §10 |
-| 6 | Regeneration lag `τ_g` sets recovery vs collapse (18–20 yr band) | §6, §8 | §12.2 |
-| 7 | Regeneration rate vs lag are two decoupled levers | §6, §12.2 | §8 |
-| 8 | Operating boundary is `R_B = 1`, not `R_A = 1` | §6, §4.5 | §8, §12.1 |
+| 1 | The masking signal is `\dot A_c < 0` with `R_B ≲ 1` (aggregate at or below demand while ecological capital falls) | §6, §4.4 | §2.2, §5 |
+| 2 | The duration of the composition window is set by `Δb_conv` and the demand deficit, not a fixed horizon | §6 | §4.1, §4.3 |
+| 3 | No critical slowing precedes the drawdown (leading eigenvalue constant ≈ −0.0537 yr⁻¹; no CSD precursor) — a *negative* prediction | §6, §4.3 | §8 |
+| 4 | The collapse trigger is a demand threshold in `P_0` (hence `E`), essentially flat in `τ_g` — not a regeneration-delay threshold | §6 | §4.2, §5, §8 |
+| 5 | The capital-land catastrophic shift (fold) does not exist; the drawdown is a floor collision — a *negative* structural statement | §6, §4.1 | §4.2, §5, Tables `tab:basin`, `tab:conv` |
+| 6 | Recovery requires an explicit restoration flow with a gate whose sign matters | §6, §12.2 | §4.3 |
+| 7 | The composition step is not identifiable from aggregate biocapacity (observational programme) | §6, §12.3 | §4.4, §5 |
 
-**The two masks.** *Technology mask:* `B` rises while `A` falls (requires progress). *Liquidation mask:* `E` steady while `A` falls (requires none). The discriminating observable is exactly which holds.
+**The two masks.** *Composition mask:* `B` rises while `A_c` falls (requires a productivity contrast
+`b_f > b_{c,eff}`). *Liquidation mask:* `E` steady while `A_c` falls (requires none). These are distinct and
+the discriminating observable is which holds.
 
 ---
 
