@@ -62,6 +62,7 @@ Technology:    T_b  = Δb / (1 + e^{−κ(t−t_wave)})               (S9)
 | `R_B` | biocapacity ratio = `E/B` | — | derived |
 | `R_A` | flow-yield ratio = `E/(bA)` | — | derived |
 | `ψ` | flow share = `bA/B` (0 ≤ ψ ≤ 1) | — | derived |
+| `σ` | human-available share of the flow (dimensionless, 0 ≤ σ ≤ 1); σ = 1 means all flow yield harvestable without stock damage | — | param |
 
 Because `A` is in physical hectares it is independent of yield, so `b = B/A` is definable and the decomposition `B = b·A + b_G·G(A)` is identifiable. (With a stock measured directly in global hectares — as in the National Footprint Accounts — a hectare already embeds `b`, and the decomposition is not identifiable.)
 
@@ -114,6 +115,19 @@ A fixed liability above `B_max` cannot be sustained by harvesting regrowth. The 
 
 ### S3.3 The equilibrium family `P = B(A)/e`
 
+**The family is defined under full harvest, `σ = 1`.** Imposing `dA/dt = 0` on the family at an interior
+point `A*` (with `E* = eP* = B(A*)` in the deficit region) gives
+
+```
+G(A*) = [E* − σ b A*]₊/b_G = G(A*) + (1−σ) b A*/b_G
+```
+
+which holds for arbitrary interior `A*` only if `σ = 1`. Thus the one-parameter family `P = B(A)/e` and
+the neutral continuum below require `σ = 1`. Under a reservation `σ < 1` the equilibrium locus shifts to
+`P = (σbA + b_G G(A))/e < B/e`, which removes `(1−σ)bA` from the sustainable population (verified: at
+`σ = 0.9`, `dA/dt(P = B/e)` is negative for every interior `A*`). Each interior point is nevertheless
+locally unstable, and the family is a continuum bounded by the conservation of the deficit identity.
+
 In the deficit region (`E > bA`), Eq. (S4) reduces exactly to
 
 ```
@@ -139,7 +153,7 @@ det = r·ρ·A*/A_max > 0  (never a saddle)   →   zero-delay condition is  a�
 - `χ < 1` (`Λ < 0`) ⇒ `τ_p`-only Hopf: `ω = r√(1−χ²)`, `τ_p* = arccos(−χ)/ω`.
 - `χ = 1` (`Λ = 0`, i.e. `ρ = 3q`) ⇒ neither; two-delay boundary `s = π/ω`, `ω = 2r·cos(ωd/2)` ⇒ `s ≈ π/(2r) = 78.5 yr` at `d → 0`.
 
-On the constant-parameter S0 of the present model this Hopf classification is **not** realised: the exact `[·]₊` gives a monotone positive-real eigenvalue with no imaginary-axis crossing for every delay. The classification describes the fast–slow reduction and does not predict the actual (structural) instability.
+On the constant-parameter S0 of the present model this Hopf classification is **not** realised: the exact `[·]₊` gives a monotone positive-real eigenvalue with no imaginary-axis crossing for every delay. **This is conditional, not parameter-free.** The sufficient condition is `S = a₁ + a₃ = G′(A*) + b/b_G > r` (with the delay condition `F′(0) = r − S + r a₁ τ_g − r S τ_p < 0`), which at baseline (`a₁ = −0.0167`, `S = 0.6083`, `r = 0.02`) holds over the whole `(τ_g, τ_p)` plane (`max F′(0) = −0.5883`), so a positive real eigenvalue is guaranteed for every delay combination (verified: leading `Re λ = +0.625` real across the plane; zero imaginary-axis crossings by the exact `s = iω` crossing-curve method). The classification describes the fast–slow reduction and does not predict the actual (structural) instability.
 
 ---
 
