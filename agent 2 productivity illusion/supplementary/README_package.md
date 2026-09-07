@@ -1,6 +1,6 @@
 # Supplementary Package — Index
 
-Companion to the manuscript *Emergent Carrying Capacity, the Biocapacity Ratio, and the Productivity Illusion: Deficit-Driven Collapse in a Delayed Coupled Human–Environment Model* (Revision 30, *Ecological Modelling*).
+Companion to the manuscript **Emergent Carrying Capacity and the Composition Illusion: Two-Land Conversion and the Identifiability of Collapse** (Revision 34, *Ecological Modelling*).
 
 This is the **bundled supplementary package**: documentation + supporting figures + reproducibility guidance accompanying the manuscript.
 
@@ -8,33 +8,22 @@ This is the **bundled supplementary package**: documentation + supporting figure
 
 | File | What it is |
 |---|---|
-| `SUPPLEMENTARY_information.md` | **Supplementary Information.** Full model equations + symbol table, non-dimensionalisation/scaling, analytic derivations (MSY, fixed-liability threshold, equilibrium family `P = B(A)/e`, stability classification), scenario & parameter tables, sensitivity/robustness record, prediction→section map, supplementary references. |
-| `FIGURES/` | **14 supporting figures** (S1–S14), each produced by a script in `model_sims/` or `graphical_abstract/`. Captions in `FIGURE_CAPTIONS.md`. |
-| `FIGURE_CAPTIONS.md` | Captions for S1–S14, linked to their generating script. |
-| `REPRODUCTION_GUIDE.md` | **Code map + reproduction guide.** Dependencies, file/folder structure, step-by-step commands to rebuild every numeric result and figure, output registry (figure ↔ script ↔ `data/*.json`), verification protocol. |
+| `SUPPLEMENTARY_information_v2.md` | **Supplementary Information (v2, aligned with v34).** Full model + symbol table, scaling, analytic derivations, scenario & parameter tables, sensitivity/robustness, the recovery metric `\mathcal{R}_c(T)` and gate-sign asymmetry, prediction→section map, supplementary references. |
+| `FIGURES/` | **15 supporting figures** (S1–S15), each produced by a script in `model_sims/`, `graphical_abstract/`, or `reports/`. Captions in `FIGURE_CAPTIONS.md`. |
+| `FIGURE_CAPTIONS.md` | Captions for S1–S15, linked to their generating script, with the one-stock-comparator vs two-land scope split made explicit. |
+| `REPRODUCTION_GUIDE.md` | **Code map + reproduction guide.** Dependencies, file/folder structure, step-by-step commands to rebuild every numeric result and figure, output registry (figure ↔ script ↔ data), verification protocol. |
 | `DATA_AVAILABILITY.md` | **Data & code availability statement**, including deposit/repository recommendation (Zenodo / GitHub release). |
-| `ABSTRACT_submission.tex` | The abstract as LaTeX (mathematics kept as LaTeX for the submitted manuscript); 300 words. |
+| `ABSTRACT_submission.tex` | The abstract as LaTeX (mathematics kept as LaTeX for the submitted manuscript); self-contained; `\mathcal{R}_c`-consistent. |
 
-## Figure set (S1–S14)
+## Figure set (S1–S15)
 
-- **S1** Feedback / causal-loop diagram
-- **S2** Macro-ratio plane — `R_B` vs `R_A` (`τ_g = 10` and 30)
-- **S3** Flow-share separation (generality of the `ψ`-regime closed form)
-- **S4** Delay-boundary / `τ_g`-driven cliff
-- **S5** Representative overshoot run (stock `A`, biocapacity `B`, population `P`)
-- **S6** Productivity-illusion / masking window (B rising while A falls)
-- **S7** Recovery vs collapse for the same initial condition
-- **S8** Recovery insight (density-dependent sigmoidal recovery; rate vs lag)
-- **S9** Characteristic spectrum (leading eigenvalue vs `τ_g`; always positive real)
-- **S10** `a₁₁` vs delay (zero-delay condition violated everywhere)
-- **S11** Sustainable-yield regimes (`B(A)` shape by regime)
-- **S12** Basin heatmap (baseline delays)
-- **S13** Basin recover-fraction vs regenerative delay
-- **S14** Graphical abstract (three-panel banner)
+- **S1–S13** — **one-stock comparator** (single-capital `A`) limit, retained as the comparator the manuscript keeps as a limit: feedback loop, macro-ratio plane, flow-share separation, delay-boundary cliff, overshoot run, masking window, recovery vs collapse, recovery insight, characteristic spectrum, `a₁₁` vs delay, sustainable-yield regimes, basin heatmap, basin delay response.
+- **S14** — Graphical abstract (two-land): the two books, the coupling, the composition illusion.
+- **S15** — The **aggregation face** of the masking result (two-land, real data, 1961–2022).
 
-## Relationship to the manuscript
+## Relationship to the manuscript (v34)
 
-- The **main text** is `data/revisions/IMPLEMENTED_revision_ECOMOD_v30.md`.
+- The **main text** is `manuscript_ECOMOD_v34.tex` (two-land).
+- The **SI** is `SUPPLEMENTARY_information_v2.md` (v2); the older `SUPPLEMENTARY_information.md` (v33) is retained for reference and is **not** the live SI for v34.
 - The **abstract** in the main text is the same as `ABSTRACT_submission.tex`, rendered in the manuscript's backtick-math notation.
-- The **SI** provides derivations/tables behind the main-text results.
-- The **figures** here are the non-essential-to-the-main-text set; the manuscript cites the core figures inline.
+- The **figures** here are the non-essential-to-the-main-text set; the manuscript cites the core results inline (5 tables in text; S15 is the recommended main-text figure for the real-series claim).

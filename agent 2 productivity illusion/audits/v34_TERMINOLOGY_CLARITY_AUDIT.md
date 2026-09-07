@@ -244,3 +244,78 @@ exactly 4 cells (the only non-4 row is the `\bottomrule` line); recovery metric
 unified (`\mathcal{R}_c` 8× in manuscript / 15× in SI, 0 bare `R_c`); title,
 `pdftitle`, comment header and SI header all updated; no stale "Biocapacity Ratio".
 (No LaTeX engine in the sandbox, so this is structural, not a full compile.)
+
+---
+
+## Round 4 — visual aids, reviewer response, before/after, supplementary, citations
+
+### Task 1: graphical abstract — UPDATED for two-land v34
+Rebuilt `graphical_abstract/build_graphical_abstract.py` and regenerated
+`graphical_abstract.{pdf,png,tiff}`. New 3-panel framing: (A) THE TWO BOOKS
+(fast provisioning `A_f` vs ecological capital `A_c`, `B = b_f A_f + Υ_c A_c`,
+conversion `u_c`); (B) THE COUPLING (loop `A_f·A_c → B → K → P → E → deficit S`,
+debt, delays, restoration); (C) THE COMPOSITION ILLUSION (B up while `A_c` down;
+demand-driven drawdown to a typed floor, floor collision not a fold; no critical
+slowing; composition step not identifiable). Footer uses the new title. Copied to
+`supplementary/FIGURES/S14_graphical_abstract.png`.
+
+### Task 3: merit of additional visuals — RECOMMENDATION + built S15
+The manuscript has 5 in-text tables but **no inline figure**, yet its headline is a
+*data-driven* claim (the real-series aggregation face). Built
+`reports/real_series_aggregation_face.png` from `data/nfa/`
+(`model_sims/real_series_aggregation_face.py`): (a) index of aggregate `B` vs
+per-capita `B/P` vs `E/P`; (b) `R_B = E/B` crossing 1 in 1971; (c) the log-change
+split `d ln B = d ln(B/P) + d ln P` (per-capita `−0.752`/`−364%`, population
+`+0.959`/`+464%`). **Reproduces the manuscript's exact figures.** Recommended as the
+one main-text figure (currently supplementary S15). No other new figure is
+warranted: the analytic results are already covered by `tab:regime`/`tab:conv`/
+`tab:basin`/`tab:neg`/`tab:ladder`, and the one-stock comparator figures S1–S13 are
+retained as the comparator.
+
+### Task 2: figures/tables alignment
+Manuscript tables (5: `tab:regime`, `tab:conv`, `tab:basin`, `tab:neg`,
+`tab:ladder`) are all two-land and align with the latest manuscript. The
+*figures*, however, were **not** aligned: `FIGURE_CAPTIONS.md` and
+`README_package.md` used the one-stock framing ("productivity illusion", `+0.625`,
+`5.4 yr` mask, `R_A=1`) and the old title. Rewrote both now to (i) the new title,
+(ii) a one-stock-comparator vs two-land scope note, and (iii) S14 (two-land
+graphical abstract) + S15 (two-land real-series). Captions for S1–S13 are marked
+**one-stock comparator**.
+
+### Task 4: reviewer response — UPDATED
+`reviews/RESPONSE_to_reviewer.md` (was for one-stock v30->v32, old title) now has a
+new title + "Revision status" preamble: the manuscript is the two-land v34; the
+one-stock model is only a comparator. Added a "Post-two-land update to (d)" passage
+replacing the flagged line with the aggregation-face framing (accounting split, not
+evidence for the composition illusion) and citing NFA literature. Each comment
+(b)–(g) still addressed; where the two-land revision changes the answer, it is
+pointed to v34.
+
+### Task 5: before/after document — CREATED
+New `reviews/BEFORE_AFTER_v34_vs_original.md`: compares v34 with the original
+single-stock submission (title, model, fold->floor-collision, composition
+diagnostic + identifiability, aggregation face, recovery asymmetry, rigour
+changes, what was removed/not carried, and the reviewer-concern map). References
+the v33->v34 content-loss audit.
+
+### Task 6: reference all supplementary in manuscript — FIXED
+The manuscript's "Supplementary material" block previously named only the stale
+`SUPPLEMENTARY_information.md` (v1) and the abstract. Now lists: v2 SI (with the
+one-stock-comparator vs two-land split), `FIGURES/` (S1–S15) + `FIGURE_CAPTIONS.md`,
+`REPRODUCTION_GUIDE.md`, `DATA_AVAILABILITY.md`, and `ABSTRACT_submission.tex`;
+notes that v1 is retained for reference and v2 is the live SI. Also aligned
+`supplementary/ABSTRACT_submission.tex` (title comment, the aggregation-face
+phrasing, 7-keyword set) to match the v34 manuscript abstract exactly.
+
+### Task 7: citations / grounding
+The References are already comprehensive (105 entries) and cover the ecology /
+global-hectare / land-use / MSY / catastrophic-shift / DDE literature. The one
+area where additional grounding would genuinely add value is the **identifiability
+of composite indices** (why an aggregate, value-weighted index conceals component
+composition) — see note in the round summary. Awaiting user decision before adding;
+no fabricated citations added.
+
+### Verification (post-edit)
+Environment balance OK; no undefined `\ref`; no orphan `\label`; 5 `tab:` labels;
+asset files present (S14, S15, `reports/real_series_aggregation_face.png`,
+graphical_abstract). No LaTeX engine in the sandbox, so structural only.
