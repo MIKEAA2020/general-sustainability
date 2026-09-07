@@ -34,7 +34,7 @@ Bpc = B / P
 Ep = E / P
 RB = E / B
 
-fig, axes = plt.subplots(1, 3, figsize=(12.5, 3.7), dpi=150)
+fig, axes = plt.subplots(1, 3, figsize=(12.5, 3.7), dpi=300)
 FLOW, STOCK, GREY, ACCENT, BLUE = "#1f8a4c", "#b23a48", "#5c6b73", "#e0a458", "#3f7cac"
 DARK = "#1f3a5f"
 
@@ -79,7 +79,7 @@ axes[2].grid(alpha=0.25, axis="y")
 fig.suptitle("The aggregation face of the masking result — National Footprint & Biocapacity Accounts (world, 1961–2022)",
              fontsize=11, color=DARK, y=1.02)
 fig.tight_layout()
-fig.savefig(OUT, dpi=150, bbox_inches="tight")
+fig.savefig(OUT, dpi=300, bbox_inches="tight")
 print("wrote", os.path.relpath(OUT, HERE))
 print("  d ln(B/P)=%+.3f  d ln P=%+.3f  d ln B=%+.3f  (per-capita %+.1f%%, population %+.1f%%)"
       % (dlBpc[-1], dlP[-1], dlB[-1], dlBpc[-1]/dlB[-1]*100, dlP[-1]/dlB[-1]*100))

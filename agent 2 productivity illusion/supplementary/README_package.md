@@ -19,7 +19,9 @@ This is the **bundled supplementary package**: documentation + supporting figure
 
 - **S1–S13** — **one-stock comparator** (single-capital `A`) limit, retained as the comparator the manuscript keeps as a limit: feedback loop, macro-ratio plane, flow-share separation, delay-boundary cliff, overshoot run, masking window, recovery vs collapse, recovery insight, characteristic spectrum, `a₁₁` vs delay, sustainable-yield regimes, basin heatmap, basin delay response.
 - **S14** — Graphical abstract (two-land): the two books, the coupling, the composition illusion.
-- **S15** — The **aggregation face** of the masking result (two-land, real data, 1961–2022).
+- **S15** — The **aggregation face** of the masking result (two-land, real data, 1961–2022). **This is main-text Figure 1**, embedded in §Discussion and referenced as `Figure~\ref{fig:aggregation}`; a publication-resolution copy (300 dpi PNG) for separate upload is in `reports/figures_for_submission/Figure1_aggregation_face.png`.
+
+For submission (Elsevier convention, matching the original ECOMOD-26-1191 upload), upload each figure as a **separate file** and place the caption text in the manuscript's figure-caption list. Captions for all figures are collected in `FIGURE_CAPTIONS.md`.
 
 ## Relationship to the manuscript (v34)
 

@@ -319,3 +319,30 @@ no fabricated citations added.
 Environment balance OK; no undefined `\ref`; no orphan `\label`; 5 `tab:` labels;
 asset files present (S14, S15, `reports/real_series_aggregation_face.png`,
 graphical_abstract). No LaTeX engine in the sandbox, so structural only.
+
+---
+
+## Round 5 — composite-index citations, promote S15 to Figure 1, figure packaging, one-stock retention
+
+### Task 1: 3 verified composite-index / identifiability citations — ADDED
+All three verified (authors + journal/DOI confirmed):
+- **Nardo, M., Saisana, M., Saltelli, A., Tarantola, S., Hoffmann, A. & Giovannini, E. (2008).** *Handbook on Constructing Composite Indicators: Methodology and User Guide.* OECD Publishing, Paris. — grounds the **compensatory-aggregation gap**: in linear/geometric aggregation "weights express trade-offs… a deficit in one dimension can be offset (compensated) by a surplus in another"; a poorly constructed composite can send a misleading policy message. Also grounds the **identifiability** point (normalisation/weighting/aggregation are themselves choices, so a weighted sum cannot be inverted into its components).
+- **Becker, W., Saisana, M., Paruolo, P. & Vandecasteele, I. (2017).** Weights and importance in composite indicators: Closing the gap. *Ecological Indicators*, 80, 12–22. doi:10.1016/j.ecolind.2017.03.056. — supports the point that when components move in opposite directions (here `B`↑ while `A_c`↓) the indicators are best shown as a **scoreboard** rather than aggregated.
+- **Fischer, S. M., Joy, M. K., Abrahamse, W., Milfont, T. L. & Petherick, L. M. (2022).** The use and misuse of composite environmental indices. *bioRxiv* 2022.03.15.484501. doi:10.1101/2022.03.15.484501. — grounds the environmental-index concealment / indicator-choice confounds-the-reading point.
+Inserted in the §Demonstration "compensatory-aggregation gap" paragraph, the §Discussion "Why composition is the hard part" reading, and added to the References list (References now 108 items: +3).
+
+### Task 2 & 3: promote S15 to main-text Figure 1 + separate-file packaging
+- Added `\graphicspath{{reports/}{supplementary/FIGURES/}{graphical_abstract/}}`.
+- Added a `\begin{figure}[t]` float in §Discussion ("Application to the real series"), `\includegraphics{real_series_aggregation_face.png}`, with a detailed caption and `\label{fig:aggregation}`; referenced in prose as `(Figure~\ref{fig:aggregation})`.
+- The figure is a **separate standalone file** (`reports/real_series_aggregation_face.png`, generated at 300 dpi = 3720×1147 px, publication-ready), plus a copy in `reports/figures_for_submission/Figure1_aggregation_face.png`.
+- `FIGURE_CAPTIONS.md` and `README_package.md` updated: S15 = main-text Figure 1, with a note on the Elsevier convention (upload each figure as a separate file; captions in a figure-caption list), matching the original ECOMOD-26-1191 upload.
+
+### Task 4: does the one-stock content merit restoration? — ASSESSMENT
+**Recommendation: do NOT restore as positive main-text results.** Reasons:
+- The one-stock model is **already fully retained** as a comparator/limit in the SI v2 §S1–S4 (14 section headings: S1.1 governing equations, S1.2 symbol table, S3.1 MSY, S3.2 saddle-node=MSY, S3.3 equilibrium family `P=B(A)/e`, S3.4 stability classification, the χ control, the `0.608–0.625`/`+0.62` spectral features, `5.4 yr` mask, `τ_g≈18–20 yr` cliff). Nothing was lost; it was relocated to the SI.
+- The main text already labels these as one-stock **comparator** properties, not two-land: "What we are not claiming" (L451–458) explicitly calls `0.608–0.625` a *fast-provisioning single-stock comparator eigenvalue*, and attributes `P=B/e` + `det J≡0` to the comparator (§Equilibria); the `18–20 yr` cliff is a **negative result** ("There is no one-stock 18–20 yr regeneration cliff", L290; tab:neg).
+- Re-introducing them as positive claims would re-create the one-stock/two-land conflation that the whole revision was designed to remove (the reviewer's "self-referential / too theoretical" concern).
+- **Improvement applied:** added a single explicit cross-reference in "What we are not claiming" telling the reader the one-stock comparator is retained in full in SI §S1–§S4 and figures S1–S13, so it is navigable rather than appearing dropped.
+
+### Verification (post-edit)
+Environment balance OK; no undefined `\ref`; no orphan `\label`; `\label{fig:aggregation}` present; 3 in-text citations + 3 reference-list entries present; `\graphicspath` and `\includegraphics{real_series_aggregation_face.png}` present; figure file exists at the included path; References = 108. No LaTeX engine in the sandbox, so structural only.
