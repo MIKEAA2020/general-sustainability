@@ -1,5 +1,14 @@
 # scan_revision — Master → Revision gap scan (`agent 2 productivity illusion`)
 
+> **Editing note — the manuscript (`manuscript_ECOMOD_v34.tex`) is a separate deliverable.**
+> To compile it see [`COMPILE.md`](COMPILE.md). In short: it uses `fontspec` + `unicode-math`,
+> so it **must** be built with LuaLaTeX, not pdfLaTeX:
+> ```bash
+> latexmk manuscript_ECOMOD_v34.tex     # or: lualatex manuscript_ECOMOD_v34.tex  (x3)
+> ```
+> (A bundled `latexmkrc` and `Makefile` force the LuaLaTeX engine automatically.)
+
+
 Implements the augmentation blueprint in `uploads/scan augmentation.txt` as an
 installable, repeatable, auditable pipeline that cross-checks a **master** plan
 (the authoritative joint assessment, `data/MASTER_joint_assessment_and_implementation_plan.md`)
