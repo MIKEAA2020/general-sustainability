@@ -357,6 +357,63 @@ soils, and many fisheries in the collapse regime — holds. The blanket statemen
 results are unchanged over 17–33 yr" is thus not accurate: the *mechanism* is unchanged over the whole band,
 but the *outcome* switches inside it.
 
+### S5.3a Formal multi-system calibration of `τ_g` from raw recovery curves
+
+The band above (`≈25–33 yr`, rep `≈29 yr`) was derived from **published summary statistics** (e.g. "median
+66 yr to 90% of old-growth") under an effective-timescale heuristic. As stated there, that is *illustrative*,
+not a formal parameter estimate. Here we report the formal calibration whose prerequisite (per-study curve
+extraction) was listed as pending: we fit a lagged saturating recovery model to the underlying **plot-level
+curves**, not to the summaries.
+
+**Data.** Poorter et al. (2016), *Biomass resilience of Neotropical secondary forests*, Nature 530:211–214;
+2ndFOR database (`doi:10.5061/dryad.82vr4`). 1,334 plots across 41 Neotropical chronosequences, recording
+stand age vs above-ground biomass (AGB) — the same study the summary statistic "122 Mg ha⁻¹ within 20 yr,
+median 66 yr to 90%" was drawn from. This is a genuine recovery *curve* dataset (raw age–AGB pairs), not a
+set of t₅₀ summaries. Reproducible: `model_sims/calibrate_tau_g_recovery_curves.py`; figure
+`S1b_tau_g_calibration.png`.
+
+**Model and operational definition.** In the manuscript the regeneration is
+`G(A(t−τ_g)) = ρ·A(t−τ_g)(1 − A(t−τ_g)/A_max)`, so `τ_g` is the **time lag between a change in the stock and
+the subsequent regeneration response**. Operationally this is the lag before measurable recovery onset, NOT
+the total or half-recovery time. Per chronosequence we fit
+
+```
+AGB(t) = AGB_inf (1 − e^(−(t − t_lag)/τ_r)),   AGB = 0 for t < t_lag
+```
+
+A per-site screen removed a small number of non-physical outliers (a site aggregate at 3655 Mg ha⁻¹ ≈ 8× the
+plausible old-growth maximum; sites with no measurable recovery). 39 of 41 systems converged; 35 with
+R² > 0.20 were retained (median R² ≈ 0.68).
+
+**Result.** Across the 35 fits:
+
+| quantity | median | IQR | 95% interval |
+|---|---|---:|---:|
+| onset lag `t_lag` | 1.4 yr | −0.5–3.5 | −2.0–8.8 |
+| recovery timescale `τ_r` | 38.3 yr | 19.5–120 | 9.8–120 |
+| time to 50% `t₅₀` | **29.9 yr** | 15.8–81.8 | 14.4–120 |
+| asymptote `AGB_inf` | 310 Mg ha⁻¹ | — | — |
+
+The fitted **`t₅₀ ≈ 30 yr`** now reproduces the earlier illustrative band's representative value (`≈29 yr`)
+**independently from the raw curves**, and the recovery timescale `τ_r ≈ 38 yr` places the system **entirely in
+the collapse regime** at or above the ≈18–20 yr cliff. The early-accumulation onset lag `t_lag ≈ 1.4 yr` is
+*not* the model's `τ_g` (a regeneration *delay*, not the onset of biomass accumulation) and is explicitly not
+used as such — it confirms the SI's earlier caution that these are separate objects.
+
+**Why `t₅₀` (not `τ_r` or `t_lag`) is the model-consistent estimate.** The SI's effective-timescale heuristic
+equates the *model's* recovery object to the time to 50% of the asymptote (`t₅₀ = τ_r ln 2`, shifted by
+`t_lag`). This is the quantity the published summaries report, so it is directly comparable. `τ_r` is the
+underlying relaxation rate, and `t_lag` is an artefact of plot establishment, not the ecological delay. The
+full per-system fit table is `scans/tau_g_calibration_raw_curves.csv`.
+
+**Relationship to §S5.3.** §S5.3 gives the illustrative band from published summaries; §S5.3a confirms it from
+raw curves. The two agree (both ≈30 yr), so the earlier illustrative band is now supported by a formal
+fit rather than merely asserted.
+
+**What is NOT calibrated.** `b` is *not* estimated here. The forest dataset measures above-ground biomass
+recovery, which is not the flow-yield coefficient; calibrating `b` would require an independent observation
+operator (an FAO yield series) and remains future work. We therefore do not claim a calibrated `b`.
+
 ### S5.4 Recovery metric `\mathcal{R}_c(T)` and the gate-sign asymmetry
 
 We define an explicit recovery metric on the capital book, measured from a degraded level `A_c^deg` back
