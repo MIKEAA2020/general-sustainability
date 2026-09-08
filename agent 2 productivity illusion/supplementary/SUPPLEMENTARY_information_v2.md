@@ -500,14 +500,13 @@ cropland share of `B`). Two measures of the yield channel are used and reported 
 physical cereal sentinel (continuous, no splicing, `d ln b_f = +1.128`) and the measured NFA cropland
 biocapacity per area (model units, `d ln b_f = +0.888`); both give the same qualitative conclusion.
 
-> **NFA vintage note.** Two NFA series are used in the paper and give marginally different aggregate totals
-> (an NFA-edition difference, not a substantive one). The table above and all quantities in this section use the
-> **land-type** file (`Record = BiocapTotGHA`), whose world total is `9.73e9 → 1.21e10` gha (`1.25×`,
-> `d ln B = +0.219`); this is the file from which the cropland biocapacity is read, so the table is internally
-> consistent. The manuscript's headline aggregation figure uses a second NFA aggregate series
-> (`9.76e9 → 1.20e10`, `1.23×`, `d ln B = +0.207`), which yields the same attribution conclusion (see the
-> composition-attribution paragraph, where the two totals bracket a ≈97–103 % band). Both are reported so the
-> reader can reconcile the two numbers.
+> **Table note — NFA vintage.** The precise attribution percentage depends slightly on the NFA data vintage used.
+> The cropland-book log-growth (`Δ ln B_f = +1.048`) accounts for **≈103%** of net aggregate growth when measured
+> against the manuscript's core global aggregate series (`+23.0%`, `Δ ln B = +0.207`), and **≈97%** when evaluated
+> strictly within the newer land-type total (`+24.5%`, `Δ ln B = +0.219`; `Record = BiocapTotGHA`, the file the
+> cropland biocapacity in this table is read from). The non-cropland book is flat (≈±0.01, i.e. 0.99–1.01×) in both
+> cases. We therefore report that cropland drives effectively all of the net aggregate biocapacity growth,
+> demonstrating that the conclusion is robust to NFA vintage shifts.
 
 **The decomposition (index form, robust to `α`).** Applied over 1961–2022, the identity
 `d ln B = d ln b_f + d ln A_f` gives:
