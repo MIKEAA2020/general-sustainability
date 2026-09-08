@@ -6,11 +6,19 @@
 
 The comprehensive before/after comparison is `reviews/BEFORE_AFTER_v34_vs_original.md`; a byte-level content-loss audit (v33→v34, no removals) is `audits/v33_vs_v34_CONTENT_LOSS_AUDIT.md`.
 
-Each reviewer comment (b)–(g) is still addressed — the principles below remain the operative responses, and where the two-land revision changes the answer we say so and point to the v34 location. Section numbers cited below refer to v34.
+Each reviewer comment (a)–(g) is still addressed — the principles below remain the operative responses, and where the two-land revision changes the answer we say so and point to the v34 location. Section numbers cited below refer to v34.
 
 **Revise address.** The comments were made on the earlier single-stock draft. The substantive changes since then are: the model is now two-land (fast provisioning + ecological capital); the units-reconciliation in §2.1; the notation/units audit; the two-sufficiency-condition corrections; the explicit, illustrative anchoring of the regeneration band (≈25–33 yr, rep ≈29 yr) with two source readings corrected (SI §S5.3); the identifiability result and the *aggregation* face of the masking result (real data, 1961–2022); and the recovery metric `\mathcal{R}_c(T)` (SI §S5.4) with the gate-sign asymmetry.
 
-The reviewer's comments are reproduced as items (b)–(g) followed by a conclusion. We respond to each in turn, grounded in the specific section that addresses it. Where a comment identifies a real gap we say so and state the change made; where the concern is a matter of framing or convention we explain the convention and point to the sentence that establishes it.
+The reviewer's comments are reproduced as items (a)–(g) followed by a conclusion. We respond to each in turn, grounded in the specific section that addresses it. Where a comment identifies a real gap we say so and state the change made; where the concern is a matter of framing or convention we explain the convention and point to the sentence that establishes it.
+
+---
+
+## (a) The orchard analogy
+
+> The orchard analogy — number of trees × average productivity rate = total productivity rate. If your needs exceed the total productivity rate such that all the apples in the orchard cannot fully meet them, then you will have to start killing trees to cover your liabilities, which leads to fewer trees and a vicious cycle with a positive feedback loop; your future liabilities will increase and your problems will get worse over time. Another analogy is hens that produce eggs: if you start killing hens to cover your liabilities, a vicious cycle unleashes.
+
+The reviewer is right, and we take the point directly. The analogy is now fully explained in the introduction — the orchard (trees standing = capital stock; the fruit they bear = the flow; cutting into the standing stock faster than it regenerates = liquidating capital rather than using the flow) is set out before any algebra (§1), and the two books are introduced as two kinds of ground so that the same tree/fruit logic carries over unchanged. We also agree that the mismatch was in part the author's fault: the *original* manuscript's equations did not faithfully capture the details of the analogy — they did not represent the two distinct books (provisioning land vs. ecological capital), nor the finite-rate conversion between them, nor the per-hectare capacity state that regenerates separately from area. The two-land revision corrects exactly this, so the equations and the analogy now say the same thing. Hens-and-eggs is likewise an apt model of the same mechanism, and it is the intuition behind the composition diagnostic: the aggregate (eggs) can be held up by converting the capital (hens) that produces it, at the cost of the future supply.
 
 ---
 

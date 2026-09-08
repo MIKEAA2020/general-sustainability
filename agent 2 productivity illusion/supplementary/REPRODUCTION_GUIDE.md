@@ -84,7 +84,7 @@ Which script produces which figure / number. All paths relative to the project r
 
 | Figure / output | Produced by | Source figure in package |
 |---|---|---|
-| `scans/feedback_diagram.png` | (feedback-loop diagram; see manuscript §7) | `FIGURES/S1_feedback_diagram.png` |
+| `scans/feedback_diagram.png` | (feedback-loop diagram; see manuscript §7). Regenerate with `model_sims/rebuild_S1_feedback_diagram.py`. | `FIGURES/S1_feedback_diagram.png` |
 | `scans/topdown_macro_ratios.png` | `_run_topdown.py` | `FIGURES/S2_macro_ratios_RB_vs_RA.png` |
 | `scans/topdown_ratio_separation.png` | `_run_topdown.py` | `FIGURES/S3_flow_share_separation.png` |
 | `scans/topdown_delay_boundary.png` | `_run_topdown.py` | `FIGURES/S4_delay_boundary_cliff.png` |
