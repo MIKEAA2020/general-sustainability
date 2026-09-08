@@ -1,21 +1,30 @@
 """
 Faithful, high-DPI recreation of the S1 feedback-loop diagram (ECOMOD v34).
 
-This reproduces the original figure (scans/feedback_diagram.png, the committed
-source of record) in geometry, colour and text, honouring the original colour
-coding exactly:
-  - the K->P edge AND its k(t-tau_p) label are BOTH orange (they must match);
-  - gray flow arrows on A->B, B->K, P->E (the flow b.A + increment label is gray);
-  - red for the A->switch / E->switch loops, the 'bA' and 'E' labels, Loop 1;
-  - purple for the switch->D / D->b edges, 'b->' and 'e^{-alpha D}', Loop 2;
-  - blue for the G->A regeneration arrow and 'delayed tau_g'.
+The figure depicts the ONE-STOCK comparator (single capital A) whose two
+positive-feedback loops the manuscript describes in Section 7:
 
-Only the six labels the author flagged are nudged (into clear whitespace, still
-adjacent to the arrow they describe); every box, arrow and other label retains
-its original position.  Rendered at 400 dpi.
+    Loop 1  (stock-liquidation / conversion):  A -> B -> deficit -> A
+        A down -> B down -> deficit up -> liquidation up -> A down
 
-Box coordinates are the pixel coordinates measured directly from the original
-1667x995 raster; y increases downward.
+    Loop 2  (debt-erosion of the flow yield):  D -> b -> B -> deficit -> D
+        D up -> b down -> B down -> deficit up -> D up
+
+Both loops converge on the deficit switch  S = [E - bA]_+  but act on different
+books.  Unlike the original raster (which labelled the loops only in a caption
+and never drew the return edges), this recreation draws BOTH loops as genuinely
+closed cycles.
+
+Colour coding (kept from the original):
+    gray      forward processing chain (A->B->K->P->E) and its flow labels
+    blue      G(A) regeneration edge (delayed tau_g)
+    orange    delayed K->P edge (k(t - tau_p)) and the T_b -> b ( -db ) input
+    red       Loop 1 (stock-liquidation) and the E -> deficit demand edge
+    purple    Loop 2 (debt-erosion)
+
+The meta-labelling title ("Corrected (1st) unified stock-flow model ...") has
+been removed; the figure carries only a neutral, descriptive title.
+Rendered at 400 dpi.
 """
 
 import matplotlib
@@ -23,7 +32,6 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
 
-# ---- palette (sampled from the original) ----
 RED    = (239/255, 68/255, 68/255)
 PURPLE = (124/255, 58/255, 237/255)
 ORANGE = (180/255, 83/255, 9/255)
@@ -32,124 +40,136 @@ GRAY   = (108/255, 108/255, 120/255)
 BORDER = (51/255, 51/255, 68/255)
 TXT    = "#1b1b1b"
 FILLS  = {
-    "G": "#E0E7FF",   # (224,231,255)
-    "A": "#DBEAFE",   # (219,234,254)
-    "B": "#DCFCE7",   # (220,252,231)
-    "K": "#D1D1D5",   # (209,209,213)
-    "P": "#FEF9C3",   # (254,249,195)
-    "E": "#FDE68A",   # (253,230,138)
-    "sw": "#FBE2E2",  # (254,226,226)
-    "D": "#E5E7EB",   # (229,231,235)
-    "b": "#F3ECFF",   # (243,232,255)
-    "T_b": "#FDF3C7", # (254,243,199)
+    "G": "#E0E7FF", "A": "#DBEAFE", "B": "#DCFCE7", "K": "#D1D1D5",
+    "P": "#FEF9C3", "E": "#FDE68A", "S": "#FBE2E2", "D": "#E5E7EB",
+    "b": "#F3ECFF", "T_b": "#FDF3C7",
 }
 
-# ---- box geometry (x0,y0,x1,y1) ----
-BOXES = {
-    "G":   (12,  38, 352,  95),
-    "A":   (30, 107, 256, 240),
-    "B":   (476,103, 731, 244),
-    "K":   (877,107,1053, 240),
-    "P":   (1206,107,1382, 240),
-    "E":   (1494,107,1653, 240),
-    "sw":  (542,404, 862, 527),
-    "D":   (1280,543,1513, 668),
-    "b":   (905,718,1040, 805),
-    "T_b": (192,718, 489, 810),
+# ---- boxes: (cx, cy, w, h) ----
+BX = {
+    "G":   (150,  78, 280, 56),
+    "A":   (150, 200, 200, 120),
+    "B":   (520, 200, 200, 120),
+    "K":   (840, 200, 190, 120),
+    "P":   (1180,200, 200, 120),
+    "E":   (1520,200, 190, 120),
+    "S":   (760, 530, 340, 130),
+    "D":   (1360,620, 180, 120),
+    "b":   (520, 880, 190, 115),
+    "T_b": (150, 880, 250, 115),
 }
-
-TEXTS = {
+TEX = {
     "G":   r"G(A(t$-\tau_g$))   regeneration",
     "A":   "A\nproductive\nstock",
-    "B":   r"B = bA + b$_G$ G(A)" + "\nbiocapacity",
+    "B":   "B = bA + increment\nbiocapacity",
     "K":   "K = B/e\ncarrying cap.",
     "P":   "delayed\nP\npopulation",
-    "E":   r"E = e$\cdot$P" + "\nharvest",
-    "sw":  r"switch [E $-$ bA]$_+$" + "\nliquidation when E > bA",
+    "E":   "E = e\u00b7P\nharvest",
+    "S":   "deficit switch\nS = [E \u2212 bA]$_{+}$",
     "D":   "D\ndebt",
-    "b":   "b (eroded)",
-    "T_b": r"T_b (bounded" + "\ntechnology wave)",
+    "b":   "b\nflow yield",
+    "T_b": r"T$_b$ (bounded" + "\ntechnology wave)",
 }
 
-W, H = 1667, 995
+W, H = 1700, 1120
 DPI = 400
 fig = plt.figure(figsize=(W/100.0, H/100.0), dpi=DPI)
 ax = fig.add_axes([0, 0, 1, 1])
 ax.set_xlim(0, W); ax.set_ylim(H, 0)
 ax.axis("off")
 
-def box(name):
-    x0, y0, x1, y1 = BOXES[name]
-    w, h = x1-x0, y1-y0
-    ax.add_patch(FancyBboxPatch((x0, y0), w, h,
-                 boxstyle="round,pad=0,rounding_size=0",   # matches original (square-ish, slim rounding)
-                 linewidth=2.0, edgecolor=BORDER, facecolor=FILLS[name], zorder=2))
-    ax.text(x0+w/2, y0+h/2, TEXTS[name], ha="center", va="center",
-            fontsize=14.5, fontweight="bold", color=TXT, zorder=3, linespacing=1.1)
+for n, (cx, cy, w, h) in BX.items():
+    ax.add_patch(FancyBboxPatch((cx-w/2, cy-h/2), w, h,
+                 boxstyle="round,pad=0,rounding_size=12",
+                 linewidth=2.0, edgecolor=BORDER, facecolor=FILLS[n], zorder=2))
+    ax.text(cx, cy, TEX[n], ha="center", va="center", fontsize=13,
+            fontweight="bold", color=TXT, zorder=3, linespacing=1.15)
 
-for n in BOXES:
-    box(n)
-
-def arrow(p0, p1, color, lw=3.0, rad=0.0, ms=16, z=1):
+def arrow(p0, p1, color, lw=3.0, rad=0.0, ms=16, z=4):
     ax.add_patch(FancyArrowPatch(p0, p1, connectionstyle=f"arc3,rad={rad}",
                  arrowstyle="-|>", lw=lw, color=color, mutation_scale=ms,
                  shrinkA=0, shrinkB=0, zorder=z))
 
-def lbl(x, y, s, color, ha="center", va="center", fs=13, rot=0, z=5, ls=1.1):
+def lbl(x, y, s, color, ha="center", va="center", fs=13, rot=0, z=6, ls=1.15):
     ax.text(x, y, s, color=color, ha=ha, va=va, rotation=rot, fontsize=fs,
             fontweight="bold", zorder=z, linespacing=ls)
 
-# ---- title ----
-ax.text(W/2, 22, r"Corrected (1$^{\mathrm{st}}$) unified stock-flow model $\mathrm{---}$ causal / feedback structure",
-        ha="center", va="center", fontsize=16, fontweight="bold", color="#1b1b1b")
+# ================= title (neutral, no meta-labelling) =================
+ax.text(W/2, 26,
+        "Feedback structure of the one-stock comparator: two compounding positive-feedback loops",
+        ha="center", va="center", fontsize=15.5, fontweight="bold", color="#1b1b1b")
 
-# ---- gray flow arrows ----
-arrow((256,173),(476,173), GRAY, lw=2.6)      # A -> B
-arrow((731,173),(877,173), GRAY, lw=2.6)      # B -> K
-arrow((1382,173),(1494,173), GRAY, lw=2.6)    # P -> E
-# flow b.A + increment: nudged DOWN closer to the arrow (and a touch RIGHT) into whitespace
-lbl(372, 172, "flow b.A" + "\n+ increment", GRAY, ha="center", va="bottom", fs=12.5, ls=1.15)
+# ================= forward processing chain (gray) =================
+arrow((250,200),(420,200), GRAY, lw=2.6)      # A -> B
+arrow((620,200),(745,200), GRAY, lw=2.6)      # B -> K
+arrow((935,200),(1080,200), GRAY, lw=2.6)     # K -> P
+arrow((1280,200),(1425,200), GRAY, lw=2.6)    # P -> E
+lbl(350, 236, "flow b.A\n+ increment", GRAY, ha="center", va="top", fs=12)
 
-# ---- orange K->P arrow (matches its label) ----
-arrow((1053,170),(1206,170), ORANGE, lw=2.8)
-# k(t-tau_p) delayed: nudged UP and somewhat LEFT into whitespace above the arrow
-lbl(1090, 133, "k(t" + r"$-\tau_p$" + ")\ndelayed", ORANGE, ha="center", va="center", fs=12.5, ls=1.15)
+# ================= regeneration edge (blue) =================
+arrow((150,106),(150,140), BLUE, lw=2.8)
+lbl(298, 170, r"delayed $\tau_g$", BLUE, ha="right", va="center", fs=13)
 
-# ---- blue G->A regeneration arrow ----
-arrow((175,95),(210,107), BLUE, lw=2.8)
-lbl(238, 104, "delayed " + r"$\tau_g$", BLUE, ha="left", va="center", fs=13)  # nudged right+down
+# ================= delayed K->P edge (orange) =================
+arrow((935,225),(1080,225), ORANGE, lw=2.8)
+lbl(1008, 156, r"k(t$-\tau_p$)" + "\ndelayed", ORANGE, ha="center", va="bottom", fs=12)
 
-# ---- red E->switch curve ----
-arrow((1366,240),(884,404), RED, lw=3.2, rad=-0.18)
-lbl(1150, 300, "E", RED, ha="center", va="center", fs=15)  # nudged closer to the arrow
+# ================= supply line B -> deficit switch (gray) =================
+arrow((560,260),(660,470), GRAY, lw=2.6, rad=0.0)      # B -> S (bA supply)
+lbl(585, 350, "b.A", GRAY, ha="center", va="center", fs=12.5)
 
-# ---- red A->switch ----
-arrow((150,240),(542,468), RED, lw=3.2, rad=0.10)
-lbl(288, 322, "bA", RED, ha="center", va="center", fs=14)
+# ================= E -> deficit demand edge (red) =================
+arrow((1500,262),(890,500), RED, lw=3.2, rad=-0.16)
+lbl(1300, 370, "E", RED, ha="center", va="center", fs=15)
 
-# ---- purple switch->D ----
-arrow((770,527),(1140,635), PURPLE, lw=3.0, rad=-0.08)
-lbl(812, 610, "b" + r"$\to$", PURPLE, ha="center", va="center", fs=14)  # nudged LEFT into whitespace
+# =========== Loop 1 (red, stock-liquidation): A->B->S->A ===========
+arrow((560,262),(660,470), RED, lw=0)   # (B->S already gray; Loop1 closes below)
+arrow((590,530),(250,270), RED, lw=3.2, rad=0.24)       # S -> A  (RETURN)
+lbl(340, 460, "Loop 1: stock-liquidation\n(A\u2193 \u2192 B\u2193 \u2192 deficit\u2191 \u2192 liquidation\u2191 \u2192 A\u2193)",
+    RED, ha="center", va="center", fs=12.5)
 
-# ---- purple D->b ----
-arrow((1270,640),(1040,710), PURPLE, lw=3.0, rad=0.05)
-lbl(1195, 690, r"e$^{-\alpha D}$", PURPLE, ha="center", va="center", fs=14)  # nudged DOWN into whitespace
+# =========== Loop 2 (purple, debt-erosion): D->b->B->S->D ===========
+arrow((900,565),(1285,610), PURPLE, lw=3.0, rad=-0.10)   # S -> D  (deficit -> debt)
+arrow((1355,680),(640,875), PURPLE, lw=3.0, rad=0.10)    # D -> b  (debt erodes yield)
+arrow((520,822),(520,262), PURPLE, lw=3.0, rad=0.0)      # b -> B  (yield -> biocapacity) RETURN
+lbl(1345, 745, "b\u2193", PURPLE, ha="center", va="center", fs=14)
+lbl(538, 300, "b\u2192", PURPLE, ha="left", va="center", fs=13, z=8)
+lbl(410, 990, "Loop 2: debt-erosion\n(D\u2191 \u2192 b\u2193 \u2192 B\u2193 \u2192 deficit\u2191 \u2192 D\u2191)",
+    PURPLE, ha="center", va="center", fs=12.5)
 
-# ---- orange T_b->b (-db) ----
-arrow((489,700),(905,700), ORANGE, lw=2.8)
-lbl(697, 676, r"$-$db", ORANGE, ha="center", va="bottom", fs=13.5)
+# ================= T_b -> b input ( -db ) =================
+arrow((275,900),(425,900), ORANGE, lw=2.8)
+lbl(350, 872, r"$-$db", ORANGE, ha="center", va="bottom", fs=13.5)
 
-# ---- feedback-loop captions ----
-ax.text(430, 322, "Loop 1: liquidation drains A   (A\u2193$\u2192$B\u2193$\u2192$deficit\u2191$\u2192$liquidation\u2191$\u2192$A\u2193)",
-        color=RED, fontsize=12, fontweight="bold", ha="left", va="center")
-ax.text(270, 858, "Loop 2: debt erodes yield.   (D\u2191$\u2192$b\u2193$\u2192$B\u2193$\u2192$deficit\u2191$\u2192$D\u2191)",
-        color=PURPLE, fontsize=12, fontweight="bold", ha="left", va="center")
+# ================= colour legend (bottom-right whitespace) =================
+lx, ly, lw2, lh2 = 1220, 760, 470, 292
+ax.add_patch(FancyBboxPatch((lx, ly), lw2, lh2,
+             boxstyle="round,pad=0,rounding_size=10",
+             linewidth=1.5, edgecolor="#9aa0b0", facecolor="white",
+             alpha=0.94, zorder=9))
+ax.text(lx + 16, ly + 22, "Colour key", ha="left", va="center",
+        fontsize=12.5, fontweight="bold", color="#1b1b1b", zorder=10)
+rows = [
+    (ORANGE, "k(t\u2212\u03c4_p)  \u2014 delayed K\u2192P edge"),
+    (ORANGE, "T_b \u2192 b (\u2212db)  \u2014 tech wave lifts b"),
+    (GRAY,   "forward chain  A\u2192B\u2192K\u2192P\u2192E"),
+    (BLUE,   "regeneration  G(A), delayed \u03c4_g"),
+    (RED,    "Loop 1  stock-liquidation (closes S\u2192A)"),
+    (PURPLE, "Loop 2  debt-erosion (closes S\u2192D\u2192b\u2192B)"),
+]
+y0 = ly + 48
+for i, (c, t) in enumerate(rows):
+    yy = y0 + i * 40
+    ax.plot([lx + 24, lx + 74], [yy, yy], color=c, lw=3.2, zorder=10,
+            solid_capstyle="round")
+    ax.text(lx + 86, yy, t, ha="left", va="center", fontsize=10.5,
+            color="#222", zorder=10, linespacing=1.1)
 
-# ---- footer ----
-ax.text(W/2, 972,
-        "Two positive-feedback loops, which compound:  Loop 1 = stock-liquidation (A drains), Loop 2 = debt-erosion (yield is eroded).\n"
-        r"$\tau_g$ (regeneration lag) and $\tau_p$ (carrying-capacity lag) are the only delays.  "
-        r"An exogenous, bounded technology wave T_b lifts b but cannot outrun either loop.",
+# ================= footer =================
+ax.text(W/2, 1080,
+        "Both loops close above: each returns to the deficit switch S = [E \u2212 bA]$_{+}$.  "
+        r"$\tau_g$ and $\tau_p$ are the only delays; an exogenous bounded technology wave "
+        r"$T_b$ lifts $b$ but cannot outrun either loop.",
         ha="center", va="center", fontsize=11.5, color="#333", linespacing=1.5)
 
 fig.savefig("scans/feedback_diagram.png", dpi=DPI)
