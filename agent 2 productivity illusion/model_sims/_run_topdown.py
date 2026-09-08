@@ -66,7 +66,10 @@ def _panel(ax, tg, tp):
         ax.scatter(RB[sm], RA[sm], s=90, c="none", edgecolor="#1f3b8a", lw=1.4, marker="x",
                    label=f"silent collapse: $R_B$<1 & $R_A$<1 ({int(sm.sum())})")
     ax.axvline(1, color="k", ls="--", lw=1.4); ax.axhline(1, color="k", ls="--", lw=1.4)
-    ax.text(1.03, 1.18, "$R_B=1$ (E=B, the trigger)\n$R_A=1$ (E=bA)", fontsize=7.2, va="bottom")
+    # Place the ratio annotation in the whitespace of the upper-right quadrant:
+    # above the dashed R_B=1 / R_A=1 axes, clear of the red collapse curve
+    # (points with R_A>1.5 lie at R_B>1.44), and left of the dashed x=1 line.
+    ax.text(1.02, 1.48, "$R_B=1$ (E=B, the trigger)\n$R_A=1$ (E=bA)", fontsize=7.2, va="bottom")
     ax.set_xlabel("$R_B=E/B$ (footprint ÷ biocapacity)", fontsize=9)
     ax.set_ylabel("$R_A=E/(bA)$ (footprint ÷ flow-yield)", fontsize=9)
     ax.set_title(f"$\\tau_g$={tg:.0f} yr", fontsize=9.6)
