@@ -472,6 +472,54 @@ recovery, which is not the flow-yield coefficient; calibrating `b` would require
 operator (an FAO yield series) and remains future work. We therefore do not claim a calibrated `b`, and the
 `T_b` bounds on `b` in the manuscript are not upgraded by this dataset.
 
+### S5.3b Human-relevant leg: calibrating the fast-book yield `b_f` and provisioning land `A_f`
+
+The regeneration-timescale legs above (§S5.3a, §S5.3) estimate the *ecological* side — how fast the capital-land
+class regenerates. The food-supply side is where humans sit, and its calibration is a **different object**:
+the fast provisioning land `A_f` and its flow yield `b_f`. This is the model's human-relevant leg, and it uses the
+observation operator stated in the manuscript (§12.3): `A_f(t)` = cropland area, `b_f(t)` = crop production /
+`A_f(t)`, normalised to the base year.
+
+**Data (World aggregate, 1961–2022).** Fetched from FAOSTAT via Our World in Data, plus the world biocapacity
+from the National Footprint and Biocapacity Accounts for the base-year anchor:
+
+| quantity | 1961 | 2022 | growth |
+|---|---:|---:|---:|
+| cropland area `A_f` | 1.34e9 ha | 1.57e9 ha | 1.17× |
+| cereal yield `b_f` (physical) | 1.35 t/ha | 4.21 t/ha | 3.11× |
+| cereal production | 877 Mt | 3,133 Mt | 3.57× |
+| world biocapacity `B` | 9.76e9 gha | 1.20e10 gha | 1.23× |
+
+**The decomposition (index form, robust to `α`).** Applied over 1961–2022, the identity
+`d ln B = d ln b_f + d ln A_f` gives:
+
+| channel | raw component log-change |
+|---|---:|
+| fast-book yield `b_f` | **+1.128** |
+| fast-book area `A_f` | +0.160 |
+| sum | **+1.288** |
+
+These are the raw component log-changes the manuscript reports (§12.3, SI §S5.1); the weighted (log-mean)
+contributions are +0.393 (yield) and +0.056 (area), summing to `d ln B = +0.207` exactly. The result is a
+**composition premium**: `b_f` (yield) rose 3.11× while `A_f` (area) rose only 1.17×, so intensification
+dominates land expansion. This is the *human-relevant* expression of the model's composition mechanism — the
+aggregate, and its yield component, can rise even if the capital book falls.
+
+**Calibration caveat (stated in the manuscript, and restated here).** FAOSTAT yields are physical output per
+hectare (t/ha), not `gha·ha⁻¹·yr⁻¹`. Therefore an *absolute* `b_f` in the model's units requires the base-year
+anchor `b_f(1961) = α·B(1961)/A_f(1961)` with the unidentified cropland share `α` (the manuscript uses
+`α = 0.19`). Only the **index / sign** of the yield channel, and the **composition-premium sign**
+(`b_f >> b_{c,eff}`), are robust to `α`; the absolute level is not, and the fast-book share `w_X` ranges
+0.183–0.622 (SI §S5.1). We therefore report the growth indices and sign robustly, and do not claim an absolute
+`b_f` from this data alone.
+
+**What this does NOT calibrate.** It says nothing about the capital book `A_c` or the regeneration timescale
+`τ_g`/`ρ_c` — those require land-cover (FRA/LUH2/HYDE) and the recovery data of §S5.3a. It also does not resolve
+the yield-vs-area split *within* `b_f` (that is the identifiability limit of §12.3).
+
+**Reproducibility.** `model_sims/calibrate_bf_af_human_leg.py`; figure `S1d_bf_af_calibration.png`; series
+`scans/bf_af_calibration_series.csv`.
+
 ### S5.4 Recovery metric `\mathcal{R}_c(T)` and the gate-sign asymmetry
 
 We define an explicit recovery metric on the capital book, measured from a degraded level `A_c^deg` back
