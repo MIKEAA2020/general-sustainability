@@ -116,14 +116,20 @@ print("\n>>> composition-premium sign (yield >> area) for BOTH numerator measure
 print("    d ln b_f %+.4f (cereal) / %+.4f (NFA)  >>  d ln A_f %+.4f" % (dlnb_cereal, dlnb_nfa, dlnA))
 
 # aggregate attribution: how much of total world biocapacity growth is the cropland book?
-B0 = nfa.loc[BASE, "Total"]; B1 = nfa.loc[2022, "Total"]
+# (two NFA vintages in the repo give slightly different totals; report the range)
 C0t = crop_biocap.loc[BASE]; C1t = crop_biocap.loc[2022]
-share = 100 * (C1t - C0t) / (B1 - B0)
-print("\n=== aggregate composition attribution (measured NFA) ===")
-print("  d ln B (total) = %+.4f  (%.3fx)" % (np.log(B1/B0), B1/B0))
-print("  d ln B_f (cropland book) = %+.4f  (%.3fx)" % (np.log(C1t/C0t), C1t/C0t))
-print("  non-cropland book d ln = %+.4f  (%.3fx)" % (np.log((B1-C1t)/(B0-C0t)), (B1-C1t)/(B0-C0t)))
-print("  cropland book contributes %.1f%% of the aggregate biocapacity growth" % share)
+B0 = nfa.loc[BASE, "Total"]; B1 = nfa.loc[2022, "Total"]          # land-type file total
+g = pd.read_csv(os.path.join(ROOT, "data", "nfa", "GFN_world_biocapacity_footprint_population_1961_2022.csv")).set_index("Year")
+Gb0 = g.loc[BASE, "Biocapacity_gha"]; Gb1 = g.loc[2022, "Biocapacity_gha"]  # aggregate series total
+print("\n=== aggregate composition attribution (measured NFA, two vintages) ===")
+for label, (A0, A1) in {"land-type file total": (B0, B1), "aggregate series total": (Gb0, Gb1)}.items():
+    dlnB_agg = np.log(A1/A0)
+    dlnncn = np.log((A1-C1t)/(A0-C0t))
+    shar = 100*(C1t-C0t)/(A1-A0)
+    print("  %-26s total %.1f%% (d ln B %+.4f);  cropland book d ln %+.4f (%.2fx);  non-crop d ln %+.4f;  cropland = %.0f%% of net growth"
+          % (label, 100*(A1/A0-1), dlnB_agg, np.log(C1t/C0t), C1t/C0t, dlnncn, shar))
+print("  => the cropland (fast) book accounts for essentially all of the net aggregate")
+print("     biocapacity growth; the non-cropland book is flat in both vintages.")
 
 print("\n  b_f(2022) absolute (NFA, measured): %.4f gha*ha^-1*yr^-1" % ser["b_f_gha_per_ha_per_yr"].iloc[-1])
 

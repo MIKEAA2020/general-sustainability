@@ -2,8 +2,6 @@
 
 **Manuscript:** Emergent Carrying Capacity and the Composition Illusion: Two-Land Conversion and the Identifiability of Collapse
 
-*Companion to `manuscript_ECOMOD_v34.tex` (two-land). Journal: Ecological Modelling.*
-
 This document collects the supporting material: the full model specification, the scaling, the analytic
 derivations, the scenario and parameter tables, the sensitivity/robustness record, the prediction-to-section
 map, and the supplementary references. It provides the derivations and tables behind the main-text results.
@@ -429,7 +427,9 @@ exploited stocks recovering under reduced fishing pressure, and consistent with 
 right-censored (the rebuild is still in progress at the 2015 end of the window), so their fitted `τ_r` should be
 read as a lower bound on the true timescale; that censoring is flagged rather than hidden. Figure
 `S1c_fishery_recovery.png` shows representative fits; full per-stock table is
-`scans/tau_g_calibration_fisheries.csv`.
+`scans/tau_g_calibration_fisheries.csv`. The combined multi-ecosystem comparison —
+forest (n=35) and fishery (n=33) `t₅₀` distributions against the one-stock collapse-cliff
+reference (≈18 yr) — is `S1_multi_ecosystem_tau_g.png`.
 
 **What this does and does not establish.** The model distinguishes the regeneration **rate** `ρ`
 (which sets *how long* recovery takes) from the regeneration **lag** `τ_g` (which sets *whether* the stock
@@ -500,6 +500,15 @@ author-supplied value. Two measures of the yield channel are used and reported s
 physical cereal sentinel (continuous, no splicing, `d ln b_f = +1.128`) and the measured NFA cropland
 biocapacity per area (model units, `d ln b_f = +0.888`); both give the same qualitative conclusion.
 
+> **NFA vintage note.** Two NFA series are used in the paper and give marginally different aggregate totals
+> (an NFA-edition difference, not a substantive one). The table above and all quantities in this section use the
+> **land-type** file (`Record = BiocapTotGHA`), whose world total is `9.73e9 → 1.21e10` gha (`1.25×`,
+> `d ln B = +0.219`); this is the file from which the cropland biocapacity is read, so the table is internally
+> consistent. The manuscript's headline aggregation figure uses a second NFA aggregate series
+> (`9.76e9 → 1.20e10`, `1.23×`, `d ln B = +0.207`), which yields the same attribution conclusion (see the
+> composition-attribution paragraph, where the two totals bracket a ≈97–103 % band). Both are reported so the
+> reader can reconcile the two numbers.
+
 **The decomposition (index form, robust to `α`).** Applied over 1961–2022, the identity
 `d ln B = d ln b_f + d ln A_f` gives:
 
@@ -515,45 +524,40 @@ contributions are +0.393 (yield) and +0.056 (area), summing to `d ln B = +0.207`
 dominates land expansion. This is the provisioning-side expression of the model's composition mechanism — the
 aggregate, and its yield component, can rise even if the capital book falls.
 
-**Data-fetch note on the preferred numerator (aggregate crop-production index).** The manuscript's operator
-says `b_f(t) = crop production / A_f(t)`. The crop-production line we fetch directly is the **cereal** series
-(physical tonnes); a full all-crops aggregate would be the FAOSTAT **Gross Crop Production Index** (domain
-Production Indices `QI`, item `2041` "Crops, gross", element `432` "Production Index Number", base
-2014–2016 = 100). We attempted this. The World Bank transmits that series as indicator `AG.PRD.CROP.XD`, and it
-was retrieved, **but it cannot be used as a continuous numerator**: the transmitted series shows several
-base-period **splice discontinuities** — physically impossible single-year jumps of **+52 % in 2000, +43 % in
-1993, −18 % in 1989** — which are index-rebasing artefacts, not changes in crop output. The native FAOSTAT
-API (`fenixservices.fao.org`) and bulk-data host were unreachable from the analysis environment (HTTP 521 /
-connection failed), so a clean, continuously-rebased `QI`/`2041`/`432` series could not be obtained. We
-therefore retain the **cereal sentinel** (a physical quantity, continuous, no splicing) as the numerator and
-note that, **to replace it with the aggregate index, the author should download the `QI`/`2041`/`432`,
-1961–2022 table directly from FAOSTAT or the UN Data portal** and confirm the base is continuous across the
-window.
+**Observation operator for `b_f` (numerator choice, and its limitation).** The manuscript's operator is
+`b_f(t) = crop production / A_f(t)`. The crop-production series used throughout is the **cereal** one (physical
+tonnes). The preferred all-crops numerator is the FAOSTAT **Gross Crop Production Index** (domain Production
+Indices `QI`, item `2041` "Crops, gross", element `432` "Production Index Number", base 2014–2016 = 100), but
+the index available in the analysed data (the World Bank series `AG.PRD.CROP.XD`) shows several base-period
+**splice discontinuities** — single-year jumps of **+52 % in 2000, +43 % in 1993, −18 % in 1989** — that are
+index-rebasing artefacts rather than changes in crop output, so it is not used as a continuous growth measure.
+A clean, continuously-rebased `QI`/`2041`/`432` series would resolve this; the cereal sentinel is retained
+because it is a physical quantity, continuous and free of splicing.
 
 **Aggregate composition attribution (measured NFA, world 1961–2022).** The decomposition of the *cropland
 book alone* is exact and measured: `d ln B_f = d ln b_f + d ln A_f = +0.888 + +0.160 = +1.048` (i.e. cropland
 biocapacity grew 2.85×, area 1.17×, per-ha yield 2.43×). Against the aggregate, the cropland book is the
-dominant driver: world total biocapacity grew only 1.25× (`d ln B = +0.219`) while the non-cropland book grew
-just 1.008× (`d ln ≈ +0.008`), so the cropland (fast) book accounts for **≈97 %** of the entire aggregate
-biocapacity growth over 1961–2022. This is a direct, measured expression of the composition mechanism — the
-aggregate rose chiefly through the fast provisioning book — and it is reported alongside the growth indices
-rather than alone.
+dominant driver: the non-cropland book is essentially flat (`d ln ≈ −0.009` to `+0.008`, i.e. 0.99–1.01×) while
+the cropland book grew 2.85×, so the cropland (fast) book accounts for **essentially all of the net aggregate
+biocapacity growth** (≈97–103%, the small band reflecting the two NFA vintages in the data directory; the
+aggregate total grew ≈23–24 %, `d ln B = +0.207` to `+0.219`). This is a direct, measured expression of the
+composition mechanism — the aggregate rose almost entirely through the fast provisioning book — and it is
+reported alongside the growth indices rather than alone.
 
 **Calibration caveat, and the absolute `b_f` (stated in the manuscript, restated here).** FAOSTAT yields are
 physical output per hectare (t/ha), not `gha·ha⁻¹·yr⁻¹`. An *absolute* `b_f` in the model's units needs a
 base-year anchor. In the manuscript this is `b_f(1961) = α·B(1961)/A_f(1961)` with the unidentified cropland
 share `α` (the manuscript uses `α = 0.19`). Here we anchor directly on the **measured NFA
 cropland-biocapacity** category, `b_f(1961) = CroplandBiocapacity(1961)/A_f(1961)`, which removes the
-`α`-dependence — the cropland biocapacity *is* the cropland share of `B`. The NFA land-type value was supplied
-as a local table (`NFA_world_landtype_biocapacity_footprint_1961_2023.csv`, `Record = BiocapTotGHA`,
-`Cropland` column); the live `data.footprintnetwork.org` API remained auth-gated (HTTP 403), but the data were
-obtained directly from this land-type dataset. This gives **`b_f(1961) = 0.93 gha·ha⁻¹·yr⁻¹`** and
+`α`-dependence — the cropland biocapacity *is* the cropland share of `B`. The NFA land-type value is taken from the local
+table `data/nfa/NFA_world_landtype_biocapacity_footprint_1961_2023.csv` (`Record = BiocapTotGHA`,
+`Cropland` column; world). This gives **`b_f(1961) = 0.93 gha·ha⁻¹·yr⁻¹`** and
 `b_f(2022) = 2.27` (2.43×). Two measures of the yield channel are reported — physical cereal sentinel
 (`d ln b_f = +1.128`) and measured NFA per-ha biocapacity (`d ln b_f = +0.888`) — which differ in level (the
 NFA value embeds the ~2.5 cropland equivalence factor) and magnitude but agree in sign and dominance. Only the
 **index / sign** of the yield channel and the **composition-premium sign** (`b_f >> b_{c,eff}`) are robust to
 the choice of numerator; the fast-book share `w_X` ranges 0.183–0.622 (SI §S5.1), and the *absolute* `b_f`
-(0.93 gha·ha⁻¹·yr⁻¹) is now measured rather than α-anchored or author-supplied.
+(0.93 gha·ha⁻¹·yr⁻¹) is measured from the NFA cropland biocapacity rather than α-anchored.
 
 **What this does NOT calibrate.** It says nothing about the capital book `A_c` or the regeneration timescale
 `τ_g`/`ρ_c` — those require land-cover (FRA/LUH2/HYDE) and the recovery data of §S5.3a. It also does not resolve
