@@ -357,13 +357,13 @@ soils, and many fisheries in the collapse regime — holds. The blanket statemen
 results are unchanged over 17–33 yr" is thus not accurate: the *mechanism* is unchanged over the whole band,
 but the *outcome* switches inside it.
 
-### S5.3a Formal multi-system calibration of `τ_g` from raw recovery curves
+### S5.3a Formal raw-curve estimation of the forest recovery timescale
 
 The band above (`≈25–33 yr`, rep `≈29 yr`) was derived from **published summary statistics** (e.g. "median
 66 yr to 90% of old-growth") under an effective-timescale heuristic. As stated there, that is *illustrative*,
-not a formal parameter estimate. Here we report the formal calibration whose prerequisite (per-study curve
-extraction) was listed as pending: we fit a lagged saturating recovery model to the underlying **plot-level
-curves**, not to the summaries.
+not a formal parameter estimate. To sharpen it, we estimate the regeneration timescale directly from the
+underlying **plot-level curves** rather than from the summaries, by fitting a lagged saturating recovery model
+to raw age--biomass pairs.
 
 **Data.** Poorter et al. (2016), *Biomass resilience of Neotropical secondary forests*, Nature 530:211–214;
 2ndFOR database (`doi:10.5061/dryad.82vr4`). 1,334 plots across 41 Neotropical chronosequences, recording
@@ -371,6 +371,16 @@ stand age vs above-ground biomass (AGB) — the same study the summary statistic
 median 66 yr to 90%" was drawn from. This is a genuine recovery *curve* dataset (raw age–AGB pairs), not a
 set of t₅₀ summaries. Reproducible: `model_sims/calibrate_tau_g_recovery_curves.py`; figure
 `S1b_tau_g_calibration.png`.
+
+**Why forest regeneration data, in a study about humans.** The model is human--ecological, but the parameter
+this dataset constrains is *not* a human quantity. `τ_g` and `ρ` govern how fast the **capital-land class
+regenerates** — the ecological recovery of the standing stock after it is drawn down. That is a property of the
+ecosystem (how long a forest or soil takes to rebuild its productive capacity), not of the human population
+that consumes it. The human side is carried by `P`, `e` and demand `E = eP`; the regeneration leg is
+ecological. A forest chronosequence is therefore the *right* object for this parameter — it is exactly the
+field measurement of capital-land recovery that `ρ`/`τ_g` summarise — and it is independent of, and hence does
+not confound, the human demand terms. What this dataset does *not* constrain is the human population or demand
+side, which remains a representative parameter as stated above.
 
 **Model and operational definition.** In the manuscript the regeneration is
 `G(A(t−τ_g)) = ρ·A(t−τ_g)(1 − A(t−τ_g)/A_max)`, so `τ_g` is the **time lag between a change in the stock and
@@ -394,25 +404,44 @@ R² > 0.20 were retained (median R² ≈ 0.68).
 | time to 50% `t₅₀` | **29.9 yr** | 15.8–81.8 | 14.4–120 |
 | asymptote `AGB_inf` | 310 Mg ha⁻¹ | — | — |
 
-The fitted **`t₅₀ ≈ 30 yr`** now reproduces the earlier illustrative band's representative value (`≈29 yr`)
-**independently from the raw curves**, and the recovery timescale `τ_r ≈ 38 yr` places the system **entirely in
-the collapse regime** at or above the ≈18–20 yr cliff. The early-accumulation onset lag `t_lag ≈ 1.4 yr` is
+The fitted **`t₅₀ ≈ 30 yr`** reproduces the earlier illustrative band's representative value (`≈29 yr`)
+**independently from the raw curves**, and the recovery timescale `τ_r ≈ 38 yr` lies at or above the one-stock
+comparator's ≈18–20 yr cliff. (This cliff is a **one-stock comparator** feature, not a two-land property: in
+the two-land model the recover/collapse boundary is a demand threshold, essentially flat in `τ_g` — see the
+manuscript. We use the comparator cliff only as a reference scale, and do not imply the two-land model has it.) The early-accumulation onset lag `t_lag ≈ 1.4 yr` is
 *not* the model's `τ_g` (a regeneration *delay*, not the onset of biomass accumulation) and is explicitly not
 used as such — it confirms the SI's earlier caution that these are separate objects.
 
-**Why `t₅₀` (not `τ_r` or `t_lag`) is the model-consistent estimate.** The SI's effective-timescale heuristic
-equates the *model's* recovery object to the time to 50% of the asymptote (`t₅₀ = τ_r ln 2`, shifted by
-`t_lag`). This is the quantity the published summaries report, so it is directly comparable. `τ_r` is the
-underlying relaxation rate, and `t_lag` is an artefact of plot establishment, not the ecological delay. The
-full per-system fit table is `scans/tau_g_calibration_raw_curves.csv`.
+**What this does and does not establish.** The model distinguishes the regeneration **rate** `ρ`
+(which sets *how long* recovery takes) from the regeneration **lag** `τ_g` (which sets *whether* the stock
+recovers at all). The fit here estimates a **recovery timescale** — the `ρ`-object — not the lag `τ_g`. The
+mapping from a recovery timescale to `τ_g` is the *same category-crossing heuristic* described in §S5.3 (the
+`t₅₀` effective-timescale reading); the present fit makes that heuristic *quantitative* by estimating `τ_r` and
+`t₅₀` from raw curves rather than from the published summaries. So this is not a direct measurement of the
+delay `τ_g`, and we do not present it as one.
 
-**Relationship to §S5.3.** §S5.3 gives the illustrative band from published summaries; §S5.3a confirms it from
-raw curves. The two agree (both ≈30 yr), so the earlier illustrative band is now supported by a formal
-fit rather than merely asserted.
+**Scope of the calibration.** This is **multi-site but single-ecosystem**: 41 chronosequences of Neotropical
+secondary forest. It is *not* a multi-ecosystem calibration — soils (Poeplau et al. 2011) and fisheries
+(Hutchings & Reynolds 2004; Neubauer et al. 2013) are not fit here because their recovery data are not a
+stand-age-vs-biomass curve in the same units and would require a different extraction. The model's `τ_g` is an
+*effective* capital-land consolidation across types (see the manuscript's convention (i)), so a forest-only
+estimate is consistent with that framing but does not bound the soil or fishery legs.
+
+**Fit-defect disclosure (per §13).** Six fits pinned `τ_r` at its 120-yr upper bound — these are slow-recovery
+systems where the timescale is not resolved within the data and the bound, not an estimate, is returned. They
+are retained in the table but the 95% upper edge (`120`) is a fit bound, not a measured value; the median `τ_r`
+(≈38 yr) and the `t₅₀` median (≈30 yr) are robust to their exclusion (recomputed without them the medians move
+by <3 yr). We flag this rather than presenting the 120-yr tail as a clean estimate.
+
+**Relationship to §S5.3.** §S5.3 gives the illustrative band from published summaries; §S5.3a estimates the
+same effective timescale from raw curves. The two agree (both ≈30 yr for `t₅₀`), so the earlier illustrative
+band is now supported by a fit — but note the scope caveat above: this is a forest `ρ`-timescale, and
+its reading as a `τ_g` band is a stated heuristic, not a measurement of the lag.
 
 **What is NOT calibrated.** `b` is *not* estimated here. The forest dataset measures above-ground biomass
 recovery, which is not the flow-yield coefficient; calibrating `b` would require an independent observation
-operator (an FAO yield series) and remains future work. We therefore do not claim a calibrated `b`.
+operator (an FAO yield series) and remains future work. We therefore do not claim a calibrated `b`, and the
+`T_b` bounds on `b` in the manuscript are not upgraded by this dataset.
 
 ### S5.4 Recovery metric `\mathcal{R}_c(T)` and the gate-sign asymmetry
 

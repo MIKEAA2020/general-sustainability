@@ -178,11 +178,16 @@ ax1.legend(fontsize=7.2, frameon=False); ax1.grid(alpha=0.25)
 ax2.set_title("Calibrated regeneration timescale vs collapse cliff", fontsize=11, fontweight="bold")
 ax2.hist(t50, bins=26, range=(0, 130), color="#2ca02c", alpha=0.75, edgecolor="white", label="t$_{50}$ (raw-curve fit)")
 ax2.hist(tr, bins=26, range=(0, 130), color="#1f77b4", alpha=0.45, edgecolor="white", label="$\\tau_r$ (recovery timescale)")
+# one-stock collapse region: shade as a single band and annotate once, INSIDE the axes
+ax2.axvspan(18, 130, color="#d62728", alpha=0.06)
 ax2.axvline(18, color="#d62728", ls="--", lw=1.6)
-ax2.text(18, ax2.get_ylim()[1]*0.99, "$\\tau_g$=18\ncliff start", color="#d62728", fontsize=7.2, ha="right")
-ax2.axvline(20, color="#d62728", ls="--", lw=1.6)
-ax2.text(20, ax2.get_ylim()[1]*0.99, "$\\tau_g\\!\u226520\ncollapse", color="#d62728", fontsize=7.2, ha="left")
-ax2.set_xlim(0, 130); ax2.set_xlabel("years"); ax2.set_ylabel("systems"); ax2.legend(fontsize=7.5, frameon=False)
+ax2.text(24, ax2.get_ylim()[1]*0.72, "one-stock collapse\n$\\tau_g \\geq 20$ yr",
+         color="#d62728", fontsize=7.6, ha="left", va="center")
+yl = ax2.get_ylim()
+ax2.set_xlim(0, 130)
+ax2.set_ylim(0, yl[1]*1.14)              # headroom so the annotation never meets the title
+ax2.set_xlabel("years"); ax2.set_ylabel("systems")
+ax2.legend(fontsize=7.5, frameon=False, loc="upper left")
 ax2.grid(alpha=0.25)
 fig.suptitle("Formal calibration of the regeneration timescale from raw recovery curves\n"
              "(41 Neotropical chronosequences; 1334 plots)", fontsize=11.5, fontweight="bold")
