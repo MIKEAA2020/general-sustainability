@@ -229,7 +229,7 @@ values `+0.62`/`+0.625`, `5.4 yr`, `τ_g≈18–20 yr`). The **two-land** spectr
 - **Grid dependence is bounded.** A fine (0.05 step) vs coarse (0.2 step) grid at `τ_p=0`: at `τ_g=30` the coarse grid overstates the recover fraction (0.104 coarse vs 0.027 fine). The fine mesh is the published value; the coarse value is reported as a bound.
 - **The separator degrades with lag** — balanced accuracy 99.2 % (no-delay) → 81.2 % (`τ_g = 30`); a linear functional is chance (50.0 % balanced) at `τ_g = 30`.
 
-### S5.1 Sensitivity of the proxy decomposition to the calibration `α` (share caveat, quantified)
+### S5.1 Sensitivity of the proxy decomposition to the calibration `α`
 
 The absolute split of World biocapacity into a fast-book proxy `X_t = b_f,t · A_f,t` and an
 accounting residual `C_t = B_t − X_t` turns on the (unidentified) base-year calibration
@@ -549,7 +549,7 @@ aggregate total grew ≈23–24 %, `d ln B = +0.207` to `+0.219`). This is a dir
 composition mechanism — the aggregate rose almost entirely through the fast provisioning book — and it is
 reported alongside the growth indices rather than alone.
 
-**Calibration caveat, and the absolute `b_f` (stated in the manuscript, restated here).** FAOSTAT yields are
+**Calibration of the absolute `b_f`.** FAOSTAT yields are
 physical output per hectare (t/ha), not `gha·ha⁻¹·yr⁻¹`. An *absolute* `b_f` in the model's units needs a
 base-year anchor. In the manuscript this is `b_f(1961) = α·B(1961)/A_f(1961)` with the unidentified cropland
 share `α` (the manuscript uses `α = 0.19`). Here we anchor directly on the **measured NFA
@@ -588,7 +588,7 @@ one-parameter equilibrium family (the `A_c0 → long-run` attractor at `A_c0=0.9
 (`T_b=0`, i.e. the technology step is not applied — the configuration used for every reported result).
 Reproducible: `model_sims/recovery_metric_and_tau_p_scan.py`.
 
-**Model-fidelity note.** On the base model the capital book is bounded by `A_tot` and `A_c^min`, the reserve
+**Base-model behaviour.** On the base model the capital book is bounded by `A_tot` and `A_c^min`, the reserve
 `A_r` **never** approaches its floor (min `0.602`), `B` stays bounded, and the over-restoration is a modest
 move along the equilibrium family (`\mathcal{R}_c` ≈ 1.07–1.27). In the *surplus-restoration* rows the final aggregate
 biocapacity lies at `B≈0.70–0.91`; the no-restoration and deficit-gating rows remain near the degraded

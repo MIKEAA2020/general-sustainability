@@ -175,7 +175,7 @@ FOOTPRINT:    E = e P                                     (3)
 DEFICIT:      S = [E − σ_f Y_f − σ_c Y_c]_+              (4)
 CAPITAL AREA: dA_c/dt = −u_c + R_fc + R_rc               (5)
 FAST AREA:    dA_f/dt = +u_c + μ A_r − η_f A_f − R_fc    (6)
-RESERVE:      dA_r/dt = −μ A_r + η_f A_f − R_rc          (7)   [note: must equal −dA_f/dt − dA_c/dt]
+RESERVE:      dA_r/dt = −μ A_r + η_f A_f − R_rc          (7)
 QUALITY:      dq/dt = G_c(q(t−τ_g))                      (8)
 POPULATION:   dP/dt = r P [1 − P / K(t−τ_p)],  K = B/e  (9)
 CARRYING CAP: K = B / e                                   (10)  [algebraic]
@@ -185,6 +185,8 @@ TECHNOLOGY:   T_b = Δb / (1 + e^{−κ_w (t−t_wave)})       (13)
 CONVERSION RATE (dimensionally ha/yr):
   u_c = min(S/b_f, A_c − A_c,min) / τ_conv               (14)
 \end{verbatim}\endgroup
+
+Area is conserved across the three land books, so the reserve equation (7) is not independent: differentiating $A_f+A_c+A_r=A_{tot}$ gives the aggregate identity $dA_r/dt=-\mathrm{d}A_f/\mathrm{d}t-\mathrm{d}A_c/\mathrm{d}t$, which (5)--(7) satisfy by construction. The reserve is therefore a constrained balance, not an additional degree of freedom.
 
 \textbf{Notation and conventions.} Four conventions are used throughout.
 
@@ -340,7 +342,7 @@ These are the testable content of the model. They fall into two registers: predi
 
 \begin{itemize}
 \item \textbf{Solver.} Method-of-steps, exact $[\cdot]_+$ (never ramped, since a smooth ramp leaks conversion when $E<b_cA_c+b_{G,c}G_c$), clamping $A_c\ge A_c^{\min}$, $A_f\ge0$, $K\ge K_{min}$, with explicit event detection at land boundaries and non-negativity enforcement.
-\item \textbf{Delay-history functions (reproducibility).} The carrying-capacity history $K(t-\tau_p)$ is populated over $[-\max(\tau_g,\tau_p),0]$ with the initial-state value, \emph{not} zero. (This data-integrity fix materially changed the basin: with a degenerate zero history, spurious early collapses appeared at $\tau_p=0$.)
+\item \textbf{Delay-history functions.} The carrying-capacity history $K(t-\tau_p)$ is populated over $[-\max(\tau_g,\tau_p),0]$ with the initial-state value, \emph{not} zero. (This data-integrity fix materially changed the basin: with a degenerate zero history, spurious early collapses appeared at $\tau_p=0$.)
 \item \textbf{Conservation and forward invariance.} $\max|A_f+A_c+A_r-A_{tot}|=2.2\times10^{-16}$ (machine precision) at every $dt$; non-negativity held (no clamp violation).
 \item \textbf{Convergence.} The demand-threshold basin classification converges in $dt$; the exact boundary is reported as a band (it shifts slightly between $dt=0.1$ and $0.05$).
 \item \textbf{The basin is a demand threshold.} For $\tau_g=20$, $\tau_p=25$: the capital book $A_c$ is drawn down to its typed floor $A_c^{\min}=0.05$ only when initial demand exceeds a threshold that scales with initial capital (Table \ref{tab:basin}: $A_c0=0.40$ crashes for $P_0\gtrsim2.41$, $A_c0=1.00$ for $P_0\gtrsim2.98$, $A_c0=1.18$ for $P_0\gtrsim3.14$). Higher initial capital $A_c0$ supports \emph{higher} demand before collapse; lower capital has \emph{less} headroom and is drawn down at lower demand. The maintenance term $\mu A_r$ and the finite conversion rate $\tau_{\mathrm{conv}}$ buffer the shortfall, raising these thresholds.
@@ -487,15 +489,15 @@ realisation --- a minimal two-book, delay-coupled model --- for the \emph{global
 The term is deliberately \emph{composition} illusion here (two-book land conversion of capital into
 provisioning land), which the companion frames as the yield-inflation sense of its ``productivity illusion.''
 
-\noindent\textbf{Why composition is the hard part (an accessible reading).} Biocapacity in global hectares is a
-\emph{value-weighted scalar}, not a count of the underlying assets. If you are told only that a portfolio's value
-rose $20\%$, you cannot tell whether every holding grew a little, or some holdings made large gains while others
+\noindent\textbf{Why composition is the hard part.} Biocapacity in global hectares is a
+\emph{value-weighted scalar}, not a count of the underlying assets. Given only that a portfolio's value
+rose $20\%$, there is no way to tell whether every holding grew a little, or some holdings made large gains while others
 quietly fell --- the scalar gloss hides the composition. This is the generic identifiability limit of any
 value-weighted composite index, not a peculiarity of biocapacity: an aggregate that is a
 weighted sum over components cannot be inverted into those components without auxiliary information, because
 the normalisation, weighting and aggregation conventions are themselves choices (Nardo et al., 2008). So with
-aggregate biocapacity: a rising $B$ does not tell
-you whether land became more productive, whether more land was pulled into provisioning, or whether ecological
+aggregate biocapacity: a rising $B$ does not reveal
+whether land became more productive, whether more land was pulled into provisioning, or whether ecological
 capital was converted into provisioning land. Reading the composition therefore requires the individual holdings
 (land cover) and yields from \emph{outside} the aggregate, which is exactly the observation operator the empirical
 programme below describes.
@@ -593,7 +595,7 @@ robustness band $\alpha\in[0.10,0.34]$, so the index-weighted decomposition is u
 nominal $\alpha=0.19$ anchor with the measured one.
 
 \medskip
-\noindent\textbf{Robustness to the calibration $\alpha$ (share caveat, quantified).} The absolute split turns on
+\noindent\textbf{Robustness of the decomposition to the base-year cropland share $\alpha$.} The absolute split turns on
 the unidentified calibration $\alpha$ (base-year cropland share of $B$). Recomputing the weighted decomposition
 over $\alpha\in[0.10,0.34]$ leaves the qualitative conclusion unchanged --- the weighted identity sums to
 $d\ln B=+0.207$ exactly and the \emph{yield} channel is the dominant positive term at every $\alpha$. It does
@@ -601,7 +603,7 @@ not pin down the split: $w_X$ ranges $0.18$--$0.62$ and the raw residual log-cha
 so only the sign ordering, not the magnitudes, survives. The full table and the threshold at which the
 log-mean weights become invalid are given in Supplementary S5.1.
 
-\noindent\textbf{Level-decomposition fallback (validity gate).} The log-mean weighting requires both $X_t$ and
+\noindent\textbf{Level-decomposition fallback.} The log-mean weighting requires both $X_t$ and
 $C_t$ to be strictly positive in both end years. Here $X,C>0$ in 1961 and 2022 at the anchor $\alpha=0.19$; the
 fallback is still worth stating because it is reached at larger $\alpha$: $C_{2022}\le0$ once $\alpha\ge
 \frac{B_{2022}}{B_{1961}e^{\Delta\ln A_f+\Delta\ln b_f}}\approx0.339$. In that regime $\ln C$ is undefined, and
