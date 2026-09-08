@@ -494,9 +494,9 @@ Data, plus the measured NFA world cropland biocapacity and total biocapacity for
 | **absolute `b_f = cropland biocapacity / A_f`** | **0.93 gha·ha⁻¹·yr⁻¹** | 2.27 gha·ha⁻¹·yr⁻¹ | 2.43× |
 
 The last three rows are fully **measured** from the NFA land-type data (`Record = BiocapTotGHA`,
-`Cropland` column; world, 1961–2022), so the absolute `b_f(1961) = 0.93 gha·ha⁻¹·yr⁻¹` no longer needs the
-unidentified share `α` (the cropland biocapacity *is* the cropland share of `B`) and no longer rests on an
-author-supplied value. Two measures of the yield channel are used and reported side-by-side (§S5.3b): the
+`Cropland` column; world, 1961–2022), so the absolute `b_f(1961) = 0.93 gha·ha⁻¹·yr⁻¹` is measured directly from
+the cropland biocapacity and does not depend on the unidentified share `α` (the cropland biocapacity *is* the
+cropland share of `B`). Two measures of the yield channel are used and reported side-by-side (§S5.3b): the
 physical cereal sentinel (continuous, no splicing, `d ln b_f = +1.128`) and the measured NFA cropland
 biocapacity per area (model units, `d ln b_f = +0.888`); both give the same qualitative conclusion.
 
