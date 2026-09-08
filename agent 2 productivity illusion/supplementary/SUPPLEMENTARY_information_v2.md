@@ -372,11 +372,11 @@ median 66 yr to 90%" was drawn from. This is a genuine recovery *curve* dataset 
 set of t₅₀ summaries. Reproducible: `model_sims/calibrate_tau_g_recovery_curves.py`; figure
 `S1b_tau_g_calibration.png`.
 
-**Why forest regeneration data, in a study about humans.** The model is human--ecological, but the parameter
-this dataset constrains is *not* a human quantity. `τ_g` and `ρ` govern how fast the **capital-land class
+**Relevance of forest regeneration data to the human--ecological model.** The model is human--ecological, but the
+parameter this dataset constrains is *not* a human quantity. `τ_g` and `ρ` govern how fast the **capital-land class
 regenerates** — the ecological recovery of the standing stock after it is drawn down. That is a property of the
 ecosystem (how long a forest or soil takes to rebuild its productive capacity), not of the human population
-that consumes it. The human side is carried by `P`, `e` and demand `E = eP`; the regeneration leg is
+that consumes it. The demand side is carried by `P`, `e` and demand `E = eP`; the regeneration leg is
 ecological. A forest chronosequence is therefore the *right* object for this parameter — it is exactly the
 field measurement of capital-land recovery that `ρ`/`τ_g` summarise — and it is independent of, and hence does
 not confound, the human demand terms. What this dataset does *not* constrain is the human population or demand
@@ -472,23 +472,30 @@ recovery, which is not the flow-yield coefficient; calibrating `b` would require
 operator (an FAO yield series) and remains future work. We therefore do not claim a calibrated `b`, and the
 `T_b` bounds on `b` in the manuscript are not upgraded by this dataset.
 
-### S5.3b Human-relevant leg: calibrating the fast-book yield `b_f` and provisioning land `A_f`
+### S5.3b Calibrating the provisioning-book yield `b_f` and area `A_f` (food-supply subsystem)
 
 The regeneration-timescale legs above (§S5.3a, §S5.3) estimate the *ecological* side — how fast the capital-land
-class regenerates. The food-supply side is where humans sit, and its calibration is a **different object**:
-the fast provisioning land `A_f` and its flow yield `b_f`. This is the model's human-relevant leg, and it uses the
+class regenerates. The food-supply (provisioning) subsystem is represented by the fast land book; its calibration
+is a **different object**: the fast provisioning area `A_f` and its flow yield `b_f`. This is the
+provisioning-book leg of the empirical programme, and it uses the
 observation operator stated in the manuscript (§12.3): `A_f(t)` = cropland area, `b_f(t)` = crop production /
 `A_f(t)`, normalised to the base year.
 
-**Data (World aggregate, 1961–2022).** Fetched from FAOSTAT via Our World in Data, plus the world biocapacity
-from the National Footprint and Biocapacity Accounts for the base-year anchor:
+**Data (World aggregate, 1961–2022).** Cropland area and cereal yield/production from FAOSTAT via Our World in
+Data, plus the NFA world biocapacity and the NFA cropland-biocapacity category for the base-year anchor:
 
 | quantity | 1961 | 2022 | growth |
 |---|---:|---:|---:|
 | cropland area `A_f` | 1.34e9 ha | 1.57e9 ha | 1.17× |
-| cereal yield `b_f` (physical) | 1.35 t/ha | 4.21 t/ha | 3.11× |
+| cereal yield `b_f` (physical, numerator) | 1.35 t/ha | 4.21 t/ha | 3.11× |
 | cereal production | 877 Mt | 3,133 Mt | 3.57× |
 | world biocapacity `B` | 9.76e9 gha | 1.20e10 gha | 1.23× |
+| NFA-anchored `b_f` (absolute, `b_f(1961) = CroplandBio/ A_f`) | **0.96 gha·ha⁻¹·yr⁻¹** | 2.9 gha·ha⁻¹·yr⁻¹ | 3.11× |
+
+The last row gives the **absolute** `b_f` in the model's units, anchored on the author-supplied NFA
+cropland-biocapacity value (`≈1.28e9 gha`, world 1961; the NFA API is auth-gated, see the data-fetch note
+below). Its trajectory follows the (continuous) cereal-sentinel yield index, so the growth ratio 3.11× equals
+that row's ratio.
 
 **The decomposition (index form, robust to `α`).** Applied over 1961–2022, the identity
 `d ln B = d ln b_f + d ln A_f` gives:
@@ -502,22 +509,43 @@ from the National Footprint and Biocapacity Accounts for the base-year anchor:
 These are the raw component log-changes the manuscript reports (§12.3, SI §S5.1); the weighted (log-mean)
 contributions are +0.393 (yield) and +0.056 (area), summing to `d ln B = +0.207` exactly. The result is a
 **composition premium**: `b_f` (yield) rose 3.11× while `A_f` (area) rose only 1.17×, so intensification
-dominates land expansion. This is the *human-relevant* expression of the model's composition mechanism — the
+dominates land expansion. This is the provisioning-side expression of the model's composition mechanism — the
 aggregate, and its yield component, can rise even if the capital book falls.
 
-**Calibration caveat (stated in the manuscript, and restated here).** FAOSTAT yields are physical output per
-hectare (t/ha), not `gha·ha⁻¹·yr⁻¹`. Therefore an *absolute* `b_f` in the model's units requires the base-year
-anchor `b_f(1961) = α·B(1961)/A_f(1961)` with the unidentified cropland share `α` (the manuscript uses
-`α = 0.19`). Only the **index / sign** of the yield channel, and the **composition-premium sign**
-(`b_f >> b_{c,eff}`), are robust to `α`; the absolute level is not, and the fast-book share `w_X` ranges
-0.183–0.622 (SI §S5.1). We therefore report the growth indices and sign robustly, and do not claim an absolute
-`b_f` from this data alone.
+**Data-fetch note on the preferred numerator (aggregate crop-production index).** The manuscript's operator
+says `b_f(t) = crop production / A_f(t)`. The crop-production line we fetch directly is the **cereal** series
+(physical tonnes); a full all-crops aggregate would be the FAOSTAT **Gross Crop Production Index** (domain
+Production Indices `QI`, item `2041` "Crops, gross", element `432` "Production Index Number", base
+2014–2016 = 100). We attempted this. The World Bank transmits that series as indicator `AG.PRD.CROP.XD`, and it
+was retrieved, **but it cannot be used as a continuous numerator**: the transmitted series shows several
+base-period **splice discontinuities** — physically impossible single-year jumps of **+52 % in 2000, +43 % in
+1993, −18 % in 1989** — which are index-rebasing artefacts, not changes in crop output. The native FAOSTAT
+API (`fenixservices.fao.org`) and bulk-data host were unreachable from the analysis environment (HTTP 521 /
+connection failed), so a clean, continuously-rebased `QI`/`2041`/`432` series could not be obtained. We
+therefore retain the **cereal sentinel** (a physical quantity, continuous, no splicing) as the numerator and
+note that, **to replace it with the aggregate index, the author should download the `QI`/`2041`/`432`,
+1961–2022 table directly from FAOSTAT or the UN Data portal** and confirm the base is continuous across the
+window.
+
+**Calibration caveat, and the absolute `b_f` (stated in the manuscript, restated here).** FAOSTAT yields are
+physical output per hectare (t/ha), not `gha·ha⁻¹·yr⁻¹`. An *absolute* `b_f` in the model's units therefore
+needs a base-year anchor. In the manuscript this is `b_f(1961) = α·B(1961)/A_f(1961)` with the unidentified
+cropland share `α` (the manuscript uses `α = 0.19`). Here we instead anchor directly on the **NFA
+cropland-biocapacity** category, `b_f(1961) = CroplandBiocapacity(1961)/A_f(1961)`, which removes the
+`α`-dependence — the cropland biocapacity *is* the cropland share of `B`. The NFA cropland-biocapacity API
+(`data.footprintnetwork.org`) returned **HTTP 403** (authentication required) and could not be fetched, so we
+use the author-supplied value **`CroplandBiocapacity(1961) ≈ 1.28e9 gha`** (world, 1961), which gives
+`b_f(1961) ≈ 0.96 gha·ha⁻¹·yr⁻¹` and, on the cereal-sentinel yield index, `b_f(2020) ≈ 2.9 gha·ha⁻¹·yr⁻¹`.
+Only the **index / sign** of the yield channel, and the **composition-premium sign** (`b_f >> b_{c,eff}`), are
+robust to the choice of anchor; the absolute level turns on the NFA cropland value, and the fast-book share
+`w_X` ranges 0.183–0.622 (SI §S5.1). We report the growth indices and sign robustly; the absolute `b_f` is
+reported **conditional on the NFA cropland value** and is not independent of it.
 
 **What this does NOT calibrate.** It says nothing about the capital book `A_c` or the regeneration timescale
 `τ_g`/`ρ_c` — those require land-cover (FRA/LUH2/HYDE) and the recovery data of §S5.3a. It also does not resolve
 the yield-vs-area split *within* `b_f` (that is the identifiability limit of §12.3).
 
-**Reproducibility.** `model_sims/calibrate_bf_af_human_leg.py`; figure `S1d_bf_af_calibration.png`; series
+**Reproducibility.** `model_sims/calibrate_bf_af_provisioning_leg.py`; figure `S1d_bf_af_calibration.png`; series
 `scans/bf_af_calibration_series.csv`.
 
 ### S5.4 Recovery metric `\mathcal{R}_c(T)` and the gate-sign asymmetry
