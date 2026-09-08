@@ -482,20 +482,23 @@ observation operator stated in the manuscript (§12.3): `A_f(t)` = cropland area
 `A_f(t)`, normalised to the base year.
 
 **Data (World aggregate, 1961–2022).** Cropland area and cereal yield/production from FAOSTAT via Our World in
-Data, plus the NFA world biocapacity and the NFA cropland-biocapacity category for the base-year anchor:
+Data, plus the measured NFA world cropland biocapacity and total biocapacity for the base-year anchor:
 
 | quantity | 1961 | 2022 | growth |
 |---|---:|---:|---:|
 | cropland area `A_f` | 1.34e9 ha | 1.57e9 ha | 1.17× |
 | cereal yield `b_f` (physical, numerator) | 1.35 t/ha | 4.21 t/ha | 3.11× |
 | cereal production | 877 Mt | 3,133 Mt | 3.57× |
-| world biocapacity `B` | 9.76e9 gha | 1.20e10 gha | 1.23× |
-| NFA-anchored `b_f` (absolute, `b_f(1961) = CroplandBio/ A_f`) | **0.96 gha·ha⁻¹·yr⁻¹** | 2.9 gha·ha⁻¹·yr⁻¹ | 3.11× |
+| world biocapacity `B` | **9.73e9 gha** | **1.21e10 gha** | 1.25× |
+| NFA cropland biocapacity | **1.251e9 gha** | 3.568e9 gha | 2.85× |
+| **absolute `b_f = cropland biocapacity / A_f`** | **0.93 gha·ha⁻¹·yr⁻¹** | 2.27 gha·ha⁻¹·yr⁻¹ | 2.43× |
 
-The last row gives the **absolute** `b_f` in the model's units, anchored on the author-supplied NFA
-cropland-biocapacity value (`≈1.28e9 gha`, world 1961; the NFA API is auth-gated, see the data-fetch note
-below). Its trajectory follows the (continuous) cereal-sentinel yield index, so the growth ratio 3.11× equals
-that row's ratio.
+The last three rows are fully **measured** from the NFA land-type data (`Record = BiocapTotGHA`,
+`Cropland` column; world, 1961–2022), so the absolute `b_f(1961) = 0.93 gha·ha⁻¹·yr⁻¹` no longer needs the
+unidentified share `α` (the cropland biocapacity *is* the cropland share of `B`) and no longer rests on an
+author-supplied value. Two measures of the yield channel are used and reported side-by-side (§S5.3b): the
+physical cereal sentinel (continuous, no splicing, `d ln b_f = +1.128`) and the measured NFA cropland
+biocapacity per area (model units, `d ln b_f = +0.888`); both give the same qualitative conclusion.
 
 **The decomposition (index form, robust to `α`).** Applied over 1961–2022, the identity
 `d ln B = d ln b_f + d ln A_f` gives:
@@ -527,26 +530,38 @@ note that, **to replace it with the aggregate index, the author should download 
 1961–2022 table directly from FAOSTAT or the UN Data portal** and confirm the base is continuous across the
 window.
 
+**Aggregate composition attribution (measured NFA, world 1961–2022).** The decomposition of the *cropland
+book alone* is exact and measured: `d ln B_f = d ln b_f + d ln A_f = +0.888 + +0.160 = +1.048` (i.e. cropland
+biocapacity grew 2.85×, area 1.17×, per-ha yield 2.43×). Against the aggregate, the cropland book is the
+dominant driver: world total biocapacity grew only 1.25× (`d ln B = +0.219`) while the non-cropland book grew
+just 1.008× (`d ln ≈ +0.008`), so the cropland (fast) book accounts for **≈97 %** of the entire aggregate
+biocapacity growth over 1961–2022. This is a direct, measured expression of the composition mechanism — the
+aggregate rose chiefly through the fast provisioning book — and it is reported alongside the growth indices
+rather than alone.
+
 **Calibration caveat, and the absolute `b_f` (stated in the manuscript, restated here).** FAOSTAT yields are
-physical output per hectare (t/ha), not `gha·ha⁻¹·yr⁻¹`. An *absolute* `b_f` in the model's units therefore
-needs a base-year anchor. In the manuscript this is `b_f(1961) = α·B(1961)/A_f(1961)` with the unidentified
-cropland share `α` (the manuscript uses `α = 0.19`). Here we instead anchor directly on the **NFA
+physical output per hectare (t/ha), not `gha·ha⁻¹·yr⁻¹`. An *absolute* `b_f` in the model's units needs a
+base-year anchor. In the manuscript this is `b_f(1961) = α·B(1961)/A_f(1961)` with the unidentified cropland
+share `α` (the manuscript uses `α = 0.19`). Here we anchor directly on the **measured NFA
 cropland-biocapacity** category, `b_f(1961) = CroplandBiocapacity(1961)/A_f(1961)`, which removes the
-`α`-dependence — the cropland biocapacity *is* the cropland share of `B`. The NFA cropland-biocapacity API
-(`data.footprintnetwork.org`) returned **HTTP 403** (authentication required) and could not be fetched, so we
-use the author-supplied value **`CroplandBiocapacity(1961) ≈ 1.28e9 gha`** (world, 1961), which gives
-`b_f(1961) ≈ 0.96 gha·ha⁻¹·yr⁻¹` and, on the cereal-sentinel yield index, `b_f(2020) ≈ 2.9 gha·ha⁻¹·yr⁻¹`.
-Only the **index / sign** of the yield channel, and the **composition-premium sign** (`b_f >> b_{c,eff}`), are
-robust to the choice of anchor; the absolute level turns on the NFA cropland value, and the fast-book share
-`w_X` ranges 0.183–0.622 (SI §S5.1). We report the growth indices and sign robustly; the absolute `b_f` is
-reported **conditional on the NFA cropland value** and is not independent of it.
+`α`-dependence — the cropland biocapacity *is* the cropland share of `B`. The NFA land-type value was supplied
+as a local table (`NFA_world_landtype_biocapacity_footprint_1961_2023.csv`, `Record = BiocapTotGHA`,
+`Cropland` column); the live `data.footprintnetwork.org` API remained auth-gated (HTTP 403), but the data were
+obtained directly from this land-type dataset. This gives **`b_f(1961) = 0.93 gha·ha⁻¹·yr⁻¹`** and
+`b_f(2022) = 2.27` (2.43×). Two measures of the yield channel are reported — physical cereal sentinel
+(`d ln b_f = +1.128`) and measured NFA per-ha biocapacity (`d ln b_f = +0.888`) — which differ in level (the
+NFA value embeds the ~2.5 cropland equivalence factor) and magnitude but agree in sign and dominance. Only the
+**index / sign** of the yield channel and the **composition-premium sign** (`b_f >> b_{c,eff}`) are robust to
+the choice of numerator; the fast-book share `w_X` ranges 0.183–0.622 (SI §S5.1), and the *absolute* `b_f`
+(0.93 gha·ha⁻¹·yr⁻¹) is now measured rather than α-anchored or author-supplied.
 
 **What this does NOT calibrate.** It says nothing about the capital book `A_c` or the regeneration timescale
 `τ_g`/`ρ_c` — those require land-cover (FRA/LUH2/HYDE) and the recovery data of §S5.3a. It also does not resolve
 the yield-vs-area split *within* `b_f` (that is the identifiability limit of §12.3).
 
 **Reproducibility.** `model_sims/calibrate_bf_af_provisioning_leg.py`; figure `S1d_bf_af_calibration.png`; series
-`scans/bf_af_calibration_series.csv`.
+`scans/bf_af_calibration_series.csv`; NFA land-type input
+`data/nfa/NFA_world_landtype_biocapacity_footprint_1961_2023.csv`.
 
 ### S5.4 Recovery metric `\mathcal{R}_c(T)` and the gate-sign asymmetry
 
