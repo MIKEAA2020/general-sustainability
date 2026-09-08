@@ -66,7 +66,9 @@ Recovery is **not** reversible by reversing the forcing. It requires an explicit
 
 - **Effective-parameter discipline** (Limitations, Model scope): the capital land is an *effective class*, not one real land type; `b_c, b_G, ρ_c` are not individually identifiable from a single cross-section; only `b_Gρ_c` and `b_c,eff` are identifiable combinations.
 - **Illustrative, not calibrated**: representative parameters, `τ_g`/`ρ_c` banded (≈25–33 yr, rep ≈29 yr) and labelled illustrative; the SI §S5.3 derives the band from sourced recovery timescales and flags the two readings that were not faithful to the sources.
-- **Scope statements kept**: "conceptual/stylised… not a forecast"; "fit-defect disclosure"; "interval discipline".
+- **Scope statements kept**: most governing parameters are representative rather than fitted, the empirically
+  anchored quantities being the capital-land regeneration timescale (§S5.3a) and the provisioning-book yield and
+  area (§S5.3b); "the model is not a forecast"; "fit-defect disclosure"; "interval discipline".
 
 ---
 
