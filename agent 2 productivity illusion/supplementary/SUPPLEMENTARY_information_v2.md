@@ -472,7 +472,17 @@ recovery, which is not the flow-yield coefficient; calibrating `b` would require
 operator (an FAO yield series) and remains future work. We therefore do not claim a calibrated `b`, and the
 `T_b` bounds on `b` in the manuscript are not upgraded by this dataset.
 
-### S5.3b Calibrating the provisioning-book yield `b_f` and area `A_f` (food-supply subsystem)
+### S5.3b Calibrating the provisioning-book yield `b_f` and area `A_f` (food-supply subsystem)¹
+
+*¹ **Note on data vintages and consistency.** The core manuscript anchors its aggregate global-biocapacity
+framework on the aggregate NFA series, yielding a net growth of **+23%** (`Δ ln B = +0.207`) between the baseline
+and end years. The land-type asset split (e.g. cropland vs. non-cropland) is resolved via the NFA land-type
+matrix, which incorporates subsequent retroactive NFA re-baselining and yields an aggregate growth of **+24.5%**
+(`Δ ln B = +0.219`). Rather than artificially blending these timelines into a single spurious value, we report the
+attribution robustly across both vintages: the cropland book drives effectively all of the net aggregate growth
+(**≈97% to 103%**, depending on the vintage configuration), while the non-cropland asset baseline remains
+statistically flat (`Δ ln ≈ ±0.01`, i.e. 0.99–1.01×). The fundamental scientific conclusions of this paper are
+structurally invariant to these minor database updates.*
 
 The regeneration-timescale legs above (§S5.3a, §S5.3) estimate the *ecological* side — how fast the capital-land
 class regenerates. The food-supply (provisioning) subsystem is represented by the fast land book; its calibration
@@ -500,13 +510,9 @@ cropland share of `B`). Two measures of the yield channel are used and reported 
 physical cereal sentinel (continuous, no splicing, `d ln b_f = +1.128`) and the measured NFA cropland
 biocapacity per area (model units, `d ln b_f = +0.888`); both give the same qualitative conclusion.
 
-> **Table note — NFA vintage.** The precise attribution percentage depends slightly on the NFA data vintage used.
-> The cropland-book log-growth (`Δ ln B_f = +1.048`) accounts for **≈103%** of net aggregate growth when measured
-> against the manuscript's core global aggregate series (`+23.0%`, `Δ ln B = +0.207`), and **≈97%** when evaluated
-> strictly within the newer land-type total (`+24.5%`, `Δ ln B = +0.219`; `Record = BiocapTotGHA`, the file the
-> cropland biocapacity in this table is read from). The non-cropland book is flat (≈±0.01, i.e. 0.99–1.01×) in both
-> cases. We therefore report that cropland drives effectively all of the net aggregate biocapacity growth,
-> demonstrating that the conclusion is robust to NFA vintage shifts.
+> **Attribution.** The cropland-book log-growth (`Δ ln B_f = +1.048`) accounts for **≈103%** of the net aggregate
+> growth against the aggregate series and **≈97%** against the land-type total (see the header footnote ¹ for the
+> vintage framing).
 
 **The decomposition (index form, robust to `α`).** Applied over 1961–2022, the identity
 `d ln B = d ln b_f + d ln A_f` gives:
