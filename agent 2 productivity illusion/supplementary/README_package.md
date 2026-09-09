@@ -1,6 +1,6 @@
 # Supplementary Package — Index
 
-Companion to the manuscript **Emergent Carrying Capacity and the Composition Illusion: Two-Land Conversion and the Identifiability of Collapse** (Revision 34, *Ecological Modelling*).
+Companion to the manuscript **How Aggregation Can Conceal Composition: Aggregate Biocapacity and the Identifiability of Modelled Ecological-Capital Drawdown** (Revision 35, *Ecological Modelling*).
 
 This is the **bundled supplementary package**: documentation + supporting figures + reproducibility guidance accompanying the manuscript.
 

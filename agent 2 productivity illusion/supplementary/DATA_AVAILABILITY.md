@@ -1,6 +1,6 @@
 # Data and Code Availability Statement
 
-**Manuscript:** Emergent Carrying Capacity and the Composition Illusion: Two-Land Conversion and the Identifiability of Collapse
+**Manuscript:** How Aggregation Can Conceal Composition: Aggregate Biocapacity and the Identifiability of Modelled Ecological-Capital Drawdown
 
 ---
 

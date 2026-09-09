@@ -187,9 +187,17 @@ txt(1087, 124, "Recovery needs a gated restoration flow;", size=fit("Recovery ne
     color=DARK, weight="bold")
 txt(1087, 104, "the collapse trigger is demand, not a delay.", size=fit("the collapse trigger is demand, not a delay.", 404),
     color=DARK)
+# measured tag (bottom free band of panel C; full data in manuscript Fig. 2)
+box(876, 60, 422, 30, fc="#ffffff", ec="#c3d3e3", lw=1.0, r=5)
+txt(1087, 80, "measured 1961\u20132022: cropland 2.85\u00d7, built-up 8.63\u00d7",
+    size=fit("measured 1961\u20132022: cropland 2.85\u00d7, built-up 8.63\u00d7", 400, "bold", 5.2),
+    color=GREY, weight="bold")
+txt(1087, 66, "aggregate +24.5% \u00b7 non-cropland \u2248 flat (1.01\u00d7)",
+    size=fit("aggregate +24.5% \u00b7 non-cropland \u2248 flat (1.01\u00d7)", 400, 5.2),
+    color=GREY)
 
-txt(W / 2, 26, "Emergent Carrying Capacity and the Composition Illusion: Two-Land Conversion and the Identifiability of Collapse",
-    size=fit("Emergent Carrying Capacity and the Composition Illusion: Two-Land Conversion and the Identifiability of Collapse",
+txt(W / 2, 26, "How Aggregation Can Conceal Composition: Aggregate Biocapacity and the Identifiability of Modelled Ecological-Capital Drawdown",
+    size=fit("How Aggregation Can Conceal Composition: Aggregate Biocapacity and the Identifiability of Modelled Ecological-Capital Drawdown",
              W - 40, "bold", 8.2), color=DARK, weight="bold")
 
 for ext, fmt in [("pdf", "pdf"), ("png", "png"), ("tiff", "tiff")]:

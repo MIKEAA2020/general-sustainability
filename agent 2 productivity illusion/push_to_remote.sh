@@ -15,11 +15,12 @@ if [ ! -d "$CLONE/.git" ]; then
   exit 1
 fi
 
-# Copy workspace -> clone, excluding build/cache/generated junk.
+# Copy workspace -> clone, excluding build/cache/generated junk (PBDFs ARE deliverables; tectonic
+# is a 36 MB local build binary that is never a submission artefact and is excluded).
 tar -C "$SRC" \
   --exclude='__pycache__' --exclude='*.egg-info' --exclude='.pytest_cache' \
   --exclude='*.pyc' --exclude='.venv' --exclude='build' --exclude='dist' \
-  --exclude='*.pdf' -cf - . | tar -C "$CLONE/agent 2 productivity illusion" -xf -
+  --exclude='tectonic' -cf - . | tar -C "$CLONE/agent 2 productivity illusion" -xf -
 
 cd "$CLONE"
 if [ -z "$(git status --porcelain -- 'agent 2 productivity illusion')" ]; then

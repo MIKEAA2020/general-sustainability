@@ -1,7 +1,6 @@
 # Reproduction Guide & Code Map
 
-Companion to the manuscript *Emergent Carrying Capacity and the Composition Illusion: Two-Land Conversion and
-the Identifiability of Collapse*. This guide tells a reader how to rebuild every numeric result and figure.
+Companion to the manuscript *How Aggregation Can Conceal Composition: Aggregate Biocapacity and the Identifiability of Modelled Ecological-Capital Drawdown*. This guide tells a reader how to rebuild every numeric result and figure.
 
 Workflow: **reproduce the two-land model** → **run the equilibrium / spectrum / basin analyses** →
 **run the empirical calibrations (SI §S5.3)** → **render the figures** → **verify the claims**.

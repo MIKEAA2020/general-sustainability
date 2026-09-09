@@ -1,6 +1,6 @@
 # Supplementary Information
 
-**Manuscript:** Emergent Carrying Capacity and the Composition Illusion: Two-Land Conversion and the Identifiability of Collapse
+**Manuscript:** How Aggregation Can Conceal Composition: Aggregate Biocapacity and the Identifiability of Modelled Ecological-Capital Drawdown
 
 This document collects the supporting material: the full model specification, the scaling, the analytic
 derivations, the scenario and parameter tables, the sensitivity/robustness record, the prediction-to-section
@@ -39,7 +39,7 @@ Degradation:   b    = (b₀ + T_b(t)) e^{−α D(t)}                 (S8)
 Technology:    T_b  = Δb / (1 + e^{−κ(t−t_wave)})               (S9)
 ```
 
-`[x]₊ = max(x, 0)`. `σ` is the human-available share of the flow; `σ = 1` with no reservation policy, and setting `σ` together with a population cap enforces a reservation / Half-Earth stance (`E ≤ σ·B`).
+`[x]₊ = max(x, 0)`. `σ` is the human-available share of the flow; `σ = 1` with no reservation policy, and setting `σ` together with a population cap enforces a reservation / Half-Earth stance on the flow yield (reserve the share `(1−σ)bA` so that `E ≤ σ·bA`). A reservation on the total biocapacity `B` would be a different policy (it would still permit liquidating capital growth); here the reservation is on the harvestable flow, as in Eq. (S4).
 
 **Central structural assumption (Eq. S4).** Demand is satisfied *first* from the flow yield `bA` (the fruit — leave the tree); only the shortfall `[E − bA]₊` liquidates the standing stock, at rate `1/b_G`. This is the deficit mechanism, and it is what makes the two flow accounts no longer parallel: biocapacity appears directly in the stock equation. In the capital-only limit (`ψ → 0`, equivalently the saw-log form) Eq. (S4) reduces to the standard gross-depletion harvest equation with harvest coefficient `γ = 1/b_G`.
 
@@ -76,6 +76,8 @@ Technology:    T_b  = Δb / (1 + e^{−κ(t−t_wave)})               (S9)
 | `R_A` | flow-yield ratio = `E/(bA)` | — | derived |
 | `ψ` | flow share = `bA/B` (0 ≤ ψ ≤ 1) | — | derived |
 | `σ` | human-available share of the flow (dimensionless, 0 ≤ σ ≤ 1); σ = 1 means all flow yield harvestable without stock damage | — | param |
+| `r_opt` | reference per-capita growth rate used only to non-dimensionalise the fast–slow reduction (§S2); not the model `r` | yr⁻¹ | derived |
+| `χ`, `Λ` | fast–slow gain-share control (`χ = q/(ρ − 2q)`, `q = γ e b₀/r_opt`) and the sign `Λ` of `r²a₁₁² − (γ e a₂₁)²` (§S2, §S4) | — | derived |
 
 Because `A` is in physical hectares it is independent of yield, so `b = B/A` is definable and the decomposition `B = b·A + b_G·G(A)` is identifiable. (With a stock measured directly in global hectares — as in the National Footprint Accounts — a hectare already embeds `b`, and the decomposition is not identifiable.)
 
@@ -95,7 +97,7 @@ The full generality statement and the single clean control are complementary.
 
 with `Λ` the sign of the gain-surface comparison `r²a₁₁² − (γ e a₂₁)²`. `χ` (and its sign structure) is the cleanest single stability index; the six-group set is retained for full generality. The two are complementary, not competing.
 
-The `2` appears throughout because the two regime classes are separated at `b_G ρ = b`, equivalently `ψ = 1/2`.
+The `2` appears throughout because the two regime classes are separated at `b_G ρ = b`, equivalently `ψ = 1` (the marginal/boundary case, where `G(A_max) = 0`; `ψ = 1/2` corresponds to `b_G ρ = 3 b`, not to `b_G ρ = b`).
 
 ---
 
@@ -155,7 +157,7 @@ Linearising (S4)+(S5) in the deficit region at an interior point gives
 
 ```
 a₁₁ = ρ(1 − 2A*/A_max) + b/b_G   ;  a₁₂ = −e/b_G   ;  a₂₂ = −r
-det = r·ρ·A*/A_max > 0  (never a saddle)   →   zero-delay condition is  a₁₁ < r  (NOT a₁₁ < 0)
+det = 0 on the σ=1 family `P = B(A)/e` (the family is a neutral continuum: on the full-harvest manifold the Jacobian is exactly singular; det = (r/b_G)[B′(A*) − b − b_G G′(A*)] = 0). The non-neutral root is a₁₁ − r, so the zero-delay condition is a₁₁ < r (NOT a₁₁ < 0); there is no saddle-node here, and "det > 0 (never a saddle)" is a leftover from the gross-harvest comparator, not a property of the deficit-driven family.
 ```
 
 **The vicious cycle is real and quantitative.** `a₁₁` gains the `+b/b_G` term. For liabilities that scale with the stock (`E = f·bA`) the interior point is `A* = A_max[1 − (f−1)b/(b_G ρ)]`, self-sustaining (`a₁₁ > 0`) precisely when `(2f−1)ν > 1`, where `ν = b/(b_G ρ)`.
@@ -311,9 +313,12 @@ book is drawn down; the boundary shifts by a band between `dt=0.1` and `dt=0.05`
 ### S5.3 Illustrative empirical anchoring of the regeneration timescale
 
 **What is anchored, and what is not.** The model separates two regeneration quantities: the regeneration
-**rate** `ρ` (yr⁻¹), which sets *how long* recovery takes (the recovery timescale ≈ `1/ρ = 20 yr` at the
+**rate** `ρ` (yr⁻¹), which sets *how long* recovery takes (the rate's e-folding timescale ≈ `1/ρ = 20 yr` at the
 baseline `ρ = 0.05`), and the regeneration **lag** `τ_g` (yr), which sets *whether* the stock recovers at all
-(§12.2). Published "recovery-time" and "time-to-equilibrium" statistics are therefore, in the model's terms,
+(§12.2). Note that `1/ρ` is the rate *e-folding*, not the model's measured time to 50 % recovery from the
+extinction floor — at `ρ = 0.05` the measured `t₅₀ ≈ 142 yr` (`≈ 105–142 yr` across the relevant `ρ`, per
+§12.2), which is ≈ 7× longer than the `1/ρ = 20 yr` gloss. The two must not be conflated; `1/ρ` is a rate
+convenience, and the empirically-relevant quantity is the measured `t₅₀`. Published "recovery-time" and "time-to-equilibrium" statistics are therefore, in the model's terms,
 statements about the *rate* `ρ` (they are timescales); they become statements about the *lag* `τ_g` only
 under an explicit "effective-timescale" reading, stated below. We label the result **illustrative** — it is a
 transparency exercise, not a formal parameter estimation.
@@ -348,8 +353,11 @@ at `τ_g = 17, 25, 30, 33 yr` the constant-parameter subsystem keeps a positive 
 (`+0.625`, real) and no imaginary-axis crossing (no Hopf), so the monotone instability, the
 `R_B = 1` necessary-but-not-sufficient bound, and the silent-collapse signature are unchanged (verified). The
 *recover-vs-collapse outcome*, by contrast, is *not* band-insensitive: the recover fraction falls through the
-≈18–20 yr cliff (coarse grid 0.54 at `τ_g = 18` → 0.21 at `τ_g = 20` → 0.00 at `τ_g ≥ 25`; reported fine
-values 0.399 → 0.240 → 0.0529). The effective anchored band (≈25–33 yr) therefore lies at or above the
+≈18–20 yr cliff (registered fine-grid values at `τ_p = 25`: `0.399` at `τ_g ≤ 17`, `0.394` at `τ_g = 18`,
+`0.240` at `τ_g = 19`, `0.0529` at `τ_g ≥ 20`; the collapse is *not* total — ≈5 % of initial conditions
+recover even at long lag, the rescue strip at `A₀ = A_max`). An earlier coarse-grid variant (0.54 → 0.21 →
+0.00) does **not** reproduce on any registered grid/integration setting and is superseded by the registered
+fine values. The effective anchored band (≈25–33 yr) therefore lies at or above the
 collapse threshold, so the model's principal prediction — that these regeneration timescales place forests,
 soils, and many fisheries in the collapse regime — holds. The blanket statement that "the model's qualitative
 results are unchanged over 17–33 yr" is thus not accurate: the *mechanism* is unchanged over the whole band,
@@ -542,12 +550,33 @@ because it is a physical quantity, continuous and free of splicing.
 **Aggregate composition attribution (measured NFA, world 1961–2022).** The decomposition of the *cropland
 book alone* is exact and measured: `d ln B_f = d ln b_f + d ln A_f = +0.888 + +0.160 = +1.048` (i.e. cropland
 biocapacity grew 2.85×, area 1.17×, per-ha yield 2.43×). Against the aggregate, the cropland book is the
-dominant driver: the non-cropland book is essentially flat (`d ln ≈ −0.009` to `+0.008`, i.e. 0.99–1.01×) while
+dominant driver: the non-cropland book is essentially flat as an endpoint change (`d ln ≈ −0.009` to `+0.008`, endpoint ratio ≈1.008×, its intra-period index reaching ≈1.024×) while
 the cropland book grew 2.85×, so the cropland (fast) book accounts for **essentially all of the net aggregate
 biocapacity growth** (≈97–103%, the small band reflecting the two NFA vintages in the data directory; the
 aggregate total grew ≈23–24 %, `d ln B = +0.207` to `+0.219`). This is a direct, measured expression of the
 composition mechanism — the aggregate rose almost entirely through the fast provisioning book — and it is
 reported alongside the growth indices rather than alone.
+
+The measured NFA land-type composition, world 1961–2022, is:
+
+| NFA land-type | 1961 (gha) | 2022 (gha) | Ratio | Δ ln |
+|---|---:|---:|---:|---:|
+| Cropland | 1.251×10⁹ | 3.568×10⁹ | 2.85 | +1.048 |
+| Forest Products | 5.766×10⁹ | 5.201×10⁹ | 0.90 | −0.103 |
+| Grazing Land | 1.517×10⁹ | 1.489×10⁹ | 0.98 | −0.019 |
+| Fishing Grounds | 1.098×10⁹ | 1.053×10⁹ | 0.96 | −0.041 |
+| Built-up Land | 0.093×10⁹ | 0.801×10⁹ | 8.63 | +2.155 |
+| Non-cropland (Total − Cropland) | 8.474×10⁹ | 8.545×10⁹ | 1.008 | +0.008 |
+| **Land-type Total** | 9.725×10⁹ | 12.112×10⁹ | **1.245** | **+0.219** |
+| **Aggregate-file Total** | 9.755×10⁹ | 11.997×10⁹ | **1.230** | **+0.207** |
+
+*The Carbon category is zero over the study window (1961–2023) and absent (NaN) for 2024–2025. The land-type Total
+and the aggregate-file Total differ slightly because they correspond to different NFA vintages/summations; the paper
+reports the attribution robustly across both. Within the non-cropland book the near-flat endpoint is a cancellation:
+Forest Products, Grazing Land and Fishing Grounds biocapacity together fell by ≈6.4×10⁸ gha (≈7.6%), offset by an
+≈8.6× rise in Built-up Land, netting to a roughly unchanged non-cropland total. These are NFA biocapacity accounting
+categories, not a direct measurement of the model's ecological-capital stock A_c; Built-up Land in particular should not
+be read as ecological capital or ecosystem regeneration.*
 
 **Calibration of the absolute `b_f`.** FAOSTAT yields are
 physical output per hectare (t/ha), not `gha·ha⁻¹·yr⁻¹`. An *absolute* `b_f` in the model's units needs a
@@ -752,7 +781,7 @@ Sources cited for the empirical regeneration-lag band, the National Footprint Ac
 - Poorter, L., et al. (2016). Biomass resilience of Neotropical secondary forests. *Nature*, 530(7590), 211–214.
 - Poeplau, C., et al. (2011). Temporal dynamics of soil organic carbon after land-use change. *Global Change Biology*, 17(7), 2415–2427.
 - Hutchings, J. A. & Reynolds, J. D. (2004). Marine fish population collapses: consequences for recovery and extinction risk. *BioScience*, 54(4), 297–309.
-- Neubauer, P., et al. (2013). Resilience of recovering fish populations. *Fish and Fisheries*, 14(3).
+- Neubauer, P., Jensen, O. P., Hutchings, J. A. & Baum, J. K. (2013). Resilience and recovery of overexploited marine populations. *Science*, 340(6130), 347–349.
 - Borucke, M., et al. (2013). Accounting for demand and supply of the biosphere's regenerative capacity: the National Footprint Accounts' underlying methodology and framework. *Ecological Indicators*, 24, 518–533.
 - Wackernagel, M., et al. (2002). Tracking the ecological overshoot of the human economy. *PNAS*, 99(14).
 - Hutchinson, G. E. (1948). Circular causal systems in ecology. *Annals of the New York Academy of Sciences*, 50(4), 221–246.
