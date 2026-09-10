@@ -126,8 +126,8 @@ I take that as settled and will not relitigate it.
 
 | | Action | Note |
 |---|---|---|
-| **B1** | Misspecified-truth DGP | Already declared in `SPECIFICATION_v4.md` §2b as a deferred extension, so it needs no new sheet — only execution and a recorded replicate count. |
-| **B2** | `T = 71` extension | Same. |
+| **B1** | Misspecified-truth DGP | **Correction to an earlier draft of this synthesis, which said §2b already covered this. It does not.** §2b declares only `T = 71`, `σ = 0` and `𝔰 ∈ {5, 30}` — all still members of the ladder's class. A truth *outside* the class is a new design element and requires an amendment to `SPECIFICATION_v4.md`, dated and committed before execution. A feasibility test also shows the obvious candidate needs care: a regime switch from the collapse to the recovery parameterisation drives the series to the numerical floor within four steps, so it would measure floor behaviour rather than power. A misspecified DGP must be calibrated to stay inside the observed biomass range. |
+| **B2** | `T = 71` extension | Covered by §2b; execution and a recorded replicate count only. |
 | **B3** | Tie-band and horizon sensitivity | Cheap: no refitting, applied post hoc to the archived table. Fold into A1. |
 
 **Tier C — the actual gate on retitling**
@@ -152,3 +152,69 @@ Tier A in one pass: A1 is the highest-value item in the entire round and costs n
 simulation, because every rule variant can be evaluated on the archived per-replicate
 scores. A5 converts a failed attempt into a stated open problem, which is a contribution in
 a methods context and an honest disclosure in any context.
+
+---
+
+## Part 3 — Revisiting this synthesis: what it got wrong and how it improves
+
+Re-examined against v43. Two defects in the synthesis itself, and four structural
+improvements.
+
+### 3.1 Errors found on re-reading
+
+**E-1. Tier A was reported as "done now"; three of its five items were not implemented.**
+Checking v42 directly rather than trusting the plan: A1 (rule comparison) and A5 (pre-check
+as open problem) were in; **A2 (power map), A3 (algorithm box) and A4 (reporting template)
+were not.** A plan that marks a tier complete when 40% of it shipped is a plan that will
+lose items. All three are now implemented in v43.
+
+**E-2. B1 was wrongly described as already pre-registered.** The synthesis said a
+misspecified-truth DGP "needs no new sheet — already declared in §2b". It is not: §2b
+declares `T = 71`, `σ = 0` and `𝔰 ∈ {5, 30}`, every one of which is still a member of the
+ladder's class. A truth outside the class is a **new design element** and needs a dated
+amendment before execution. Corrected in §2.3 above.
+
+A feasibility test made the point sharper. The obvious misspecified candidate — a regime
+switch from collapse to recovery parameters — drives the series to the numerical floor
+within four steps (900 → 888 → … → 305 → 77 → 0). It would measure floor behaviour, not
+power. Any misspecified DGP must be calibrated to remain inside the observed biomass
+range, which is design work, not just execution.
+
+### 3.2 How the synthesis improves as an instrument
+
+**I-1. Verify tier completion against the artefact, not the plan.** E-1 arose because I
+checked my own record rather than the manuscript. The rule already adopted for audit items
+after round 5 — verify by grep against the compiled source — applies to plans as well.
+
+**I-2. Distinguish "declared" from "declared *and covering this case*".** E-2 arose from
+matching on the word "deferred" rather than reading what was deferred. A pre-registration
+is only a defence for the elements it actually names.
+
+**I-3. Feasibility-test Tier B items before ranking them.** The misspecified DGP was ranked
+"highest value, low effort" by the reviewer and carried into my plan at that rating. Five
+minutes of simulation showed the naive version is degenerate. Effort estimates for
+unexecuted work should be checked with a smoke test before they enter a plan.
+
+**I-4. The plan needs an explicit stopping condition.** Nine rounds have each produced a
+new tier. Absent a stated endpoint this continues indefinitely. The endpoint implied by
+the whole sequence, and now stated: **E1 is complete as a case study with a pre-registered,
+validated decision rule.** Everything remaining — misspecified truth, `T = 71`, the Edwards
+coordination, retitling — belongs to a *successor* framework paper, not to E1. The
+appropriate next action on E1 itself is submission, not another tier.
+
+### 3.3 Current state of the plan
+
+| Tier | Item | Status |
+|---|---|---|
+| A1 | Rule comparison from archived replicates | **done, v42** |
+| A2 | Power map figure | **done, v43** |
+| A3 | Algorithm box | **done, v43** |
+| A4 | Table 2b proposed as a reporting template | **done, v43** |
+| A5 | Pre-check stated as an open problem | **done, v42** |
+| B1 | Misspecified-truth DGP | **blocked**: needs a v4 amendment and a non-degenerate design |
+| B2 | `T = 71` | ready; covered by §2b |
+| B3 | Tie-band / horizon sensitivity | **absorbed into A1** |
+| C1 | Edwards coordination | open; the real gate on retitling |
+| C2 | Retitle | not before B1, B2, C1 |
+
+**Tier A is now genuinely complete.** Tier B and C belong to the successor paper.
