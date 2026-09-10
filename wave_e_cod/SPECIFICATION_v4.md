@@ -70,22 +70,33 @@ refit disagreed with the registered estimator.)
 | DGP | Truth | Parameters, anchored to archived fits |
 |---|---|---|
 | **D1** | M1, autonomous Schaefer | `r = 1.935`, `K = 1032.7`, constant `C = 240` (collapse-window fit) |
-| **D2** | M1, low-productivity regime | `r = 0.458`, `K = 500.0`, `C = 5` (recovery-window coarse fit) |
-| **D3** | M2, stock-flow | `r = 1.935`, `K = 1032.7`, prescribed `C_t` = the coarse regime path |
-| **D4** | M3, AR residual | D3 plus `φ = 0.95`, the archived recovery-window value |
-| **D5** | M1b, genuine depensation | `r = 0.458`, `K = 500.0`, `𝔰 ∈ {5, 15, 30}` kt — a **positive, identifiable** threshold, unlike the real fits |
-| **D6** | Persistence-like null | random walk with drift 0 and matched innovation variance; no surplus term |
+| **D2** | M1, low-productivity regime | `r = 0.458`, `K = 500.0`, constant `C = 5` (recovery-window coarse fit) |
+| **D3** | M2, stock-flow | `r = 1.935`, `K = 1032.7`, prescribed `C_t` = the coarse regime path 240/120/5 |
+| **D4** | M1b, genuine depensation | `r = 0.458`, `K = 500.0`, `𝔰 = 15` kt — a **positive, identifiable** threshold, unlike the real fits |
+| **D5** | Persistence-true null | `S_{t+1} = S_t + η_t`, no surplus term, `C ≡ 0` |
 
 **Process noise.** `σ ∈ {11.8, 33.8}` kt, the archived recovery- and collapse-window
-residual standard deviations, plus `σ = 0` as a noise-free control.
+residual standard deviations. Innovations are Gaussian, applied inside `step` exactly as
+`ε_t` enters the registered map.
 
-**Series length.** `T ∈ {33, 71}`, matching Specification A (1983–2015) and Specification B
-(1954–2024) exactly.
+**Series length.** `T = 33`, matching Specification A (1983–2015). Specification B's
+`T = 71` is **not** simulated in the core design; see §2b.
 
-**Replicates.** 1,000 per cell, seeded (`seed = 0`, incremented per replicate). Total cells
-= 6 DGPs × 3 noise levels × 2 lengths, with D5 expanded over three 𝔰 values.
+**Replicates.** **200 per cell**, seeded (`seed = 0`, incremented deterministically per
+replicate). Cells = 5 DGPs × 2 noise levels = 10; total 2,000 rolling-ladder passes.
 
----
+**Why 200 and not 1,000.** A rolling-ladder pass on `T = 33` costs ≈7 s, measured. The
+1,000-replicate design in the first draft of this sheet implied ≈70 h and was not
+executable. At 200 replicates the 95% interval on a proportion near 0.80 is ±5.5 pp, which
+resolves the 0.80 and 0.90 thresholds of §5 without ambiguity, at a cost of ≈4 h. The
+count is fixed now and will not be raised after seeing results.
+
+### 2b. Declared extensions, not part of the core claim
+
+`T = 71`, `σ = 0`, and `𝔰 ∈ {5, 30}` are **declared but deferred**. If run later they are
+reported as extensions with their own replicate counts, and they cannot revise the core
+thresholds of §5. Recording them here prevents a later run being presented as if it had
+been part of the original design.
 
 ## 3. What is applied to each synthetic series
 
@@ -119,16 +130,22 @@ retention against σ at each T.
 
 ## 5. Declared interpretation, written before the result
 
+Two thresholds, fixed now, following the reviewer's formulation:
+
+- **Power.** For a module that is true and identifiable, the rule should retain it in
+  **≥ 80%** of replicates under the baseline DGP.
+- **Specificity.** Under the persistence-true DGP (D5), the rule should retain **no**
+  structural module in **≥ 90%** of replicates.
+
 | Observed | Reported conclusion |
 |---|---|
-| True-module retention **≥ 0.80** at the real σ and T | The rule has adequate power at this sample size; Northern cod non-retention reflects the data, not the instrument. |
-| Retention **0.30–0.80** | The rule has partial power; the real negative result is consistent with both an uninformative dataset and a moderately underpowered test, and must be reported as such. |
-| Retention **< 0.30** | The rule is substantially underpowered at this sample size. The manuscript's negative result is then primarily a statement about power and must say so in the abstract. |
-| False-retention under D6 **> 0.10** | The rule over-retains; the 5% tie band is too permissive and the finding must be disclosed. |
+| Both thresholds met | The rule is an adequate decision instrument at this sample size. Northern cod non-retention is then a data and identification result, not an artefact of the rule. |
+| Power < 80%, specificity met | The rule is conservative: it under-retains true structure. The cod negative result must be reported as **partly power-limited**, with the measured rate stated in the Discussion. |
+| Power < 30% | The rule is **substantially underpowered** at this sample size, and the manuscript's negative result must say so **in the abstract**. |
+| Specificity < 90% | The rule over-retains under a null. The 5% tie band is too permissive, and this must be disclosed as a defect of the instrument. |
 
-**These thresholds are fixed now.** They may not be adjusted after seeing the curves.
-
----
+**These thresholds may not be adjusted after seeing the curves.** Either outcome is
+reportable; only misreporting is not.
 
 ## 6. Known limitations, disclosed in advance
 
@@ -172,7 +189,9 @@ placed in Tables 3–10 and never compared row-for-row with the real scores.
 
 ## 9. Authorisation status
 
-**Written and locked. Not executed.**
+**Written and locked. Execution authorised immediately after locking, per the
+round-8 decision; results reported in `E1_SIMULATION_RESULTS.md` and in the manuscript's
+"Rule operating characteristics" section.**
 
 The manuscript as it stands (v37) makes no claim this sheet would contradict. Executing
 Ω_sim is what would justify the methods reframing proposed in the round-8 review — and,
