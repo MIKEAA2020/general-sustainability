@@ -1,0 +1,796 @@
+deepseek:
+This joint verification is a substantial improvement, and the identification of the `T_b` wave-on artefact is exactly the kind of root-cause correction that needed to happen. The corrected S5.4 table is now internally credible: `A_r` stays above its floor, `A_c` stays inside `A_tot`, conservation holds, and the `R_c>1` result is a modest shift, not a domain violation.
+
+However, I would not yet mark all six Audit-1 items as fully resolved, and there are several remaining issues the verification does not address.
+
+---
+
+## 1. Audit-1 claims: mostly resolved, but not all are closed
+
+### 1.1 Debt unit — resolved if and only if \(\alpha\) is also updated
+
+The verification correctly changes \(D\) to gha, making Eq. (11) dimensionally consistent.
+
+But the degradation term is
+
+\[
+b_f=(b_{f0}+T_b)e^{-\alpha D}.
+\]
+
+If \(D\) is in **gha**, then \(\alpha\) must be in **gha\(^{-1}\)**, not the earlier \((gha\cdot yr)^{-1}\) and not the baseline registry's \(yr^{-1}\).
+
+The verification does not state the new unit of \(\alpha\). That must be fixed, or the debt correction is incomplete.
+
+**Verdict:** debt unit partially resolved; \(\alpha\) unit still needs explicit updating.
+
+---
+
+### 1.2 \(\sigma_f,\sigma_c\) — resolved, but confirm consistency in analytics
+
+The baseline values \(\sigma_f=\sigma_c=1\) and the statement that \(S=[E-Y_f-Y_c]_+\) in baseline are fine.
+
+But the earlier analytic sections still contained expressions such as
+
+\[
+\frac{\partial S}{\partial A_f}=-\sigma_fb_f,\qquad
+\frac{\partial S}{\partial A_c}=-\sigma_c(b_c+b_{G,c}G_c').
+\]
+
+If the baseline sets \(\sigma=1\), the analytics simplify, but the verification does not confirm that all subsequent equations and matrices use the simplified form consistently. This is likely fine, but it is worth a pass to ensure no \(\sigma\) symbol remains in a matrix or derivative that is then evaluated at baseline.
+
+**Verdict:** resolved if a consistency pass is done.
+
+---
+
+### 1.3 \(A_{c,\max}\) removal — this is the largest unresolved problem
+
+The verification says:
+
+> “The corrected quality formulation has no interior area-based \(A_{c,\max}\); §Model (2) states the old \(A_c\)-capacity \(G_c(A_c)\) is superseded.”
+
+That is a major structural change. If the model no longer uses
+
+\[
+G_c(A_c)=\rho_c A_c\left(1-\frac{A_c}{A_{c,\max}}\right),
+\]
+
+then the earlier analytic results based on that function are no longer valid unless re-derived:
+
+- the capacity maximum \(A_c^*\),
+- the regime condition \(b_{G,c}\rho_c>b_c\),
+- the fold condition and Table tab:regime,
+- the expression for \(\psi_c^*\),
+- the entire “capital-land fold is regime-conditional” claim.
+
+The verification does not say whether these sections were rewritten for the quality-based formulation. If they were not, the manuscript now has a serious internal contradiction: the model formulation says one thing, and the analytic results assume another.
+
+This is not a minor issue. It affects the core of the paper.
+
+**Verdict:** not resolved; requires a statement that the analytic sections were re-derived under the quality model, or a clear note that the old logistic results are illustrative only.
+
+---
+
+### 1.4 \(R_A=R_B/\psi_f\) — resolved only if \(\psi_f\) is defined
+
+The verification says the manuscript now uses
+
+\[
+R_A=R_B/\psi_f.
+\]
+
+This is algebraically correct if
+
+\[
+\psi_f=\frac{Y_f}{B}.
+\]
+
+But the earlier manuscript defined only \(\psi_c\), not \(\psi_f\). The verification does not confirm that \(\psi_f\) is defined in the symbol table or text.
+
+**Verdict:** resolved if \(\psi_f\) is explicitly defined.
+
+---
+
+### 1.5 Proxy decomposition — resolved in principle, but presentation matters
+
+The verification says the manuscript already states that the raw component log changes are not additive and gives the share-weighted identity.
+
+That is good. But the earlier proxy table was presented as a decomposition table with rows that visually implied additivity. If the table still has a “Total” row that equals \(d\ln B\), or if the rows are labelled as contributions, the caveat may not be enough.
+
+The safest fix is the one I recommended earlier:
+
+> Keep the raw component log-changes table, but do **not** present it as additive. Either add the share-weighted contribution column with correct totals, or retitle the table “Component log changes, not additive contributions.”
+
+**Verdict:** partly resolved; table formatting still needs checking.
+
+---
+
+### 1.6 Restoration sign — resolved only if the equations are explicit
+
+The verification says the base model uses \(R_{rc}\) (reserve→capital) and relegates \(R_{fc}\) to a variant. That is acceptable.
+
+But the earlier text still contained:
+
+\[
+R_{fc}=\chi A_f\Phi(B-E)
+\]
+
+described as surplus-gated, and then later a deficit-gated form using \((E-B)_+\).
+
+The verification says the apparent tension is resolved by phase-dependent wording. That may be true, but the actual equations must be unambiguous:
+
+- surplus-gated restoration: gate \(B>E\), i.e. \((B-E)_+\);
+- deficit-gated restoration: gate \(E>B\), i.e. \((E-B)_+\);
+- base model uses one of them consistently.
+
+If \(R_{rc}\) is surplus-gated, then the main text must not say that recovery requires deficit-gating without qualification. The S5.4 result now shows that surplus-gating works from a non-equilibrium degraded state but is inert from equilibrium. That is a nuanced, correct statement. The verification should confirm the manuscript equations match that nuance.
+
+**Verdict:** resolved if the final equations and text are aligned; otherwise still a wording risk.
+
+---
+
+## 2. Issues not covered by the verification
+
+Several earlier issues remain unaddressed or only partially addressed:
+
+### 2.1 \(\gamma\) unit error
+
+The symbol table earlier listed
+
+\[
+\gamma=1/b_{G,c},\qquad \text{unit } ha\cdot gha^{-1}\cdot yr^{-1}.
+\]
+
+The extra \(yr^{-1}\) is wrong. The reciprocal of \(gha\cdot ha^{-1}\) is \(ha\cdot gha^{-1}\).
+
+The verification does not mention this.
+
+---
+
+### 2.2 \(\kappa\) is listed as a parameter but is not independent
+
+Earlier, \(\kappa=b_f\) and \(b_f\) evolves via Eq. (10). Therefore \(\kappa\) is not a fixed parameter. The symbol table and baseline registry need to reflect that it is derived.
+
+The verification does not mention this.
+
+---
+
+### 2.3 Missing symbols
+
+The earlier draft lacked definitions for:
+
+\[
+b_{f0},\ H_c,\ R_{fc},\ R_{rc},\ \chi,\ \rho_r,\ A_f^{\max},\ \Delta b,\ \kappa_w,\ t_{wave},\ \Phi,\Psi,\ V_{eco}.
+\]
+
+The verification does not state that these have all been added.
+
+---
+
+### 2.4 \(A_{c,ext}\) is listed but never used
+
+This was in the symbol table but not used in the model. If the quality formulation removed \(A_{c,\max}\), does \(A_{c,ext}\) still exist? The verification does not say.
+
+---
+
+## 3. S5.4/S5.5 evaluation
+
+The corrected S5.4 table is now more trustworthy. The key rows are:
+
+- no restoration: `A_c=0.051`, `P/P_init=1.39`, `D_peak=0.152`;
+- surplus \(\chi_r=0.10\): `R_c=1.27`, `P/P_init=0.90`, `min A_r=0.602`;
+- target-cap: `R_c=1.00`, `P/P_init=1.00`.
+
+These numbers are internally consistent with the floors and conservation. The target-cap row is especially useful because it shows a clean restoration rule.
+
+The S5.5 result — flat recover fraction in \(\tau_p\) and no Hopf — is plausible and consistent with the earlier \(\tau_g\) result.
+
+I would keep both sections, but only after the analytic sections are re-checked against the quality model. If the fold/regime analytics still use the old logistic \(G_c(A_c)\), then S5.4/S5.5 are computed from a different model than the one used to derive the paper’s main theoretical claims.
+
+---
+
+## 4. Bottom line
+
+The verification is a genuine improvement, and the wave-on correction is important. I would accept S5.4/S5.5 as provisional, but I would **not** yet mark all Audit-1 items resolved.
+
+**Required before final acceptance:**
+
+1. State the unit of \(\alpha\) explicitly as \(gha^{-1}\).
+2. Confirm whether the quality model replaced the logistic regeneration, and if so, re-derive the capacity maximum, fold condition, regime index, and Table tab:regime.
+3. Define \(\psi_f\).
+4. Fix the \(\gamma\) unit.
+5. Reclassify \(\kappa\) as derived.
+6. Ensure all missing symbols are added.
+7. Make the proxy decomposition table non-additive in presentation, not only in caveat.
+8. Align the restoration equations with the phase-dependent wording.
+qwen:
+## Overall verdict
+
+The joint verification is **substantively credible and improves the paper**. It does three things well:
+
+1. **It finds a real root-cause defect** in the original S5.4 computation: the technology wave \(T_b\) was accidentally left on in the recovery integrator, while the base model uses \(T_b=0\). That defect explains the earlier alarming results:
+   \[
+   R_c(900)=2.07,\quad A_c\to 2.39,\quad A_r< A_r^{\min},\quad P/P^{\rm init}=0.26.
+   \]
+
+2. **It replaces those artefactual numbers with bounded, conserved, in-domain base-model results**, where over-restoration is modest:
+   \[
+   R_c(900)\approx 1.07\text{–}1.27,\quad P/P^{\rm init}\approx 0.90\text{–}0.97
+   \]
+   for \(\chi_r=0.05\text{–}0.10\).
+
+3. **It adopts the correct interpretation**: surplus-gating is not “better”; it is phase-dependent. It is inert during an active deficit, can restore only after a surplus appears, and may over-restore relative to the reference target. Deficit-gating is not falsified; it is necessary during the shortfall but can be swamped by conversion unless sized or combined with a conversion limit.
+
+That said, there are still a few **internal-consistency and presentation improvements** that should be made before treating this as fully verified and final.
+
+---
+
+# 1. What is convincingly resolved
+
+## 1.1. The main S5.4 artefact has been plausibly identified
+
+The key correction is:
+
+> The recovery integrator applied the technology step \(T_b\) unconditionally, even though the reference model uses \(T_b=0\).
+
+This is exactly the kind of bug that can generate dramatic but spurious recovery/overshoot behaviour, because \(T_b\) raises \(b_f\), alters \(B\), \(K\), \(P\), \(E\), debt, and the restoration gate. The corrected base-model behaviour is much more plausible:
+
+- \(A_c\) remains inside the land total;
+- \(A_r\) stays above its floor;
+- conservation holds to machine precision;
+- \(R_c>1\) becomes modest over-restoration relative to reference;
+- population adjustment is mild rather than catastrophic.
+
+This is the most important correction in the document.
+
+---
+
+## 1.2. The corrected S5.4 table is internally arithmetically consistent
+
+From the table, the reference/degadation levels are implicitly:
+
+\[
+A_c^{\rm deg}\approx 0.051,
+\qquad
+A_c^{\rm ref}\approx 0.822.
+\]
+
+The target-cap row confirms this because it has:
+
+\[
+A_c=0.822,\quad R_c=1.00.
+\]
+
+Using
+
+\[
+R_c=\frac{A_c-A_c^{\rm deg}}{A_c^{\rm ref}-A_c^{\rm deg}},
+\]
+
+the table values check out:
+
+| Row | \(A_c\) | implied \(R_c\) | table \(R_c\) |
+|---|---:|---:|---:|
+| none | 0.051 | 0.000 | −0.00 |
+| surplus \(\chi_r=0.02\) | 0.612 | 0.728 | 0.73 |
+| surplus \(\chi_r=0.05\) | 0.875 | 1.069 | 1.07 |
+| surplus \(\chi_r=0.10\) | 1.030 | 1.270 | 1.27 |
+| surplus \(\chi_r=0.10\) target-cap | 0.822 | 1.000 | 1.00 |
+| surplus \(\chi_r=0.10\) conv-freeze | 1.098 | 1.358 | 1.36 |
+| deficit \(\chi_r=0.05\) | 0.055 | 0.005 | 0.00 |
+| deficit \(\chi_r=0.10\) | 0.059 | 0.010 | 0.01 |
+
+So the recovery metric is consistent with the reported \(A_c\) values.
+
+---
+
+## 1.3. The population ratios are also consistent with aggregate biocapacity ratios
+
+If the final states are equilibria with \(R_B=1\) and \(e\) fixed, then
+
+\[
+P=\frac{B}{e},
+\]
+
+so population ratios should match biocapacity ratios relative to the reference equilibrium.
+
+The target-cap/reference row has:
+
+\[
+B^{\rm ref}=0.819,\quad P/P^{\rm init}=1.00.
+\]
+
+Other rows:
+
+| Row | \(B\) | \(B/B^{\rm ref}\) | table \(P/P^{\rm init}\) |
+|---|---:|---:|---:|
+| none | 1.138 | 1.389 | 1.39 |
+| surplus \(\chi_r=0.02\) | 0.906 | 1.106 | 1.11 |
+| surplus \(\chi_r=0.05\) | 0.797 | 0.973 | 0.97 |
+| surplus \(\chi_r=0.10\) | 0.733 | 0.895 | 0.90 |
+| surplus target-cap | 0.819 | 1.000 | 1.00 |
+| surplus conv-freeze | 0.705 | 0.861 | 0.86 |
+| deficit \(\chi_r=0.05\) | 1.136 | 1.387 | 1.39 |
+| deficit \(\chi_r=0.10\) | 1.135 | 1.386 | 1.39 |
+
+This is a strong internal consistency check. It also clarifies the mechanism: surplus-gated restoration shifts the system toward a lower-\(B\) capital-restored equilibrium, so the supported population is slightly lower.
+
+---
+
+## 1.4. The phase-dependent interpretation is correct
+
+The corrected interpretation is the right one:
+
+- From a **degraded equilibrium** with \(B=E\), both gates are inactive:
+  \[
+  (B-E)_+=0,\qquad (E-B)_+=0,
+  \]
+  so \(R_c=0\) for all gates.
+
+- From a **non-equilibrium post-crash state**, a surplus can emerge as population and demand adjust. Then surplus-gating can become active and restore \(A_c\).
+
+- Deficit-gating is the only gate that can act while \(E>B\), but if conversion is strong relative to \(\chi_r\), it produces little or no net recovery.
+
+This reconciles the earlier manuscript claim with the new numerical evidence.
+
+---
+
+# 2. Issues that should still be improved
+
+These are not fatal, but they should be fixed before the SI and manuscript are considered fully clean.
+
+---
+
+## 2.1. The statement about \(B\) range is too broad
+
+In Section 0 the document says:
+
+> Corrected … \(B\) stays \(O(1)\) (\(0.70\text{–}0.91\)).
+
+But the corrected table includes rows with:
+
+\[
+B=1.138,\quad 1.136,\quad 1.135.
+\]
+
+So the range \(0.70\text{–}0.91\) applies only to the surplus-restoration rows, not to the no-restoration or deficit-gating rows.
+
+### Recommended fix
+
+Rewrite as:
+
+> In the corrected surplus-restoration runs, final aggregate biocapacity lies in \(B\approx0.70\text{–}0.91\). The no-restoration and deficit-gating runs remain near the degraded high-\(B\) equilibrium, \(B\approx1.14\).
+
+This avoids an internal contradiction.
+
+---
+
+## 2.2. “Substantially lower population” should be softened or removed
+
+The corrected surplus-gating results are:
+
+\[
+P/P^{\rm init}\approx0.90\text{–}0.97.
+\]
+
+That is a modest reduction, not a substantial one. The earlier dramatic value,
+
+\[
+P/P^{\rm init}=0.26,
+\]
+
+was caused by the \(T_b\) artefact.
+
+If the manuscript or SI still says “substantially lower population” for the corrected runs, that wording should be changed.
+
+### Recommended wording
+
+> The surplus-gated restoration path re-equilibrates at a modestly lower supported population, \(P/P^{\rm init}\approx0.90\text{–}0.97\) for \(\chi_r=0.05\text{–}0.10\). The population cost is therefore small but nonzero in the corrected base model.
+
+Or, more neutrally:
+
+> The supported population at the restored equilibrium is slightly below the reference population.
+
+Avoid “population pays” unless you explicitly define a population objective.
+
+---
+
+## 2.3. The table should state the reference values explicitly
+
+The table uses \(R_c(T)\), but the reader should not have to infer:
+
+\[
+A_c^{\rm deg}\approx0.051,
+\qquad
+A_c^{\rm ref}\approx0.822.
+\]
+
+### Recommended table caption addition
+
+> Recovery is measured relative to the degraded state \(A_c^{\rm deg}=0.051\) and the healthy reference state \(A_c^{\rm ref}=0.822\). Thus \(R_c=1\) corresponds to exact return to the reference capital-land level.
+
+This makes the table reproducible and prevents confusion about why \(R_c>1\) is possible.
+
+---
+
+## 2.4. Add \(E\) and \(R_B\) columns to the S5.4 table
+
+The table currently includes \(B\) and \(P/P^{\rm init}\), but not \(E\) or \(R_B=E/B\). Since the whole restoration mechanism is gated by \(B-E\), the end-state values of \(E\) and \(R_B\) should be shown.
+
+### Recommended additional columns
+
+| Policy | \(E(T)\) | \(R_B(T)\) |
+|---|---:|---:|
+
+For final equilibria, you should have approximately:
+
+\[
+R_B(T)\approx1.
+\]
+
+This will make the claim “re-equilibrates to \(R_B=1\)” directly visible.
+
+---
+
+## 2.5. Include the deficit + conversion-freeze row if it is discussed
+
+The document says:
+
+> deficit + conversion freeze: \(R_c=0.05\) — still no net recovery.
+
+But that row is not in the table. If the result is important enough to mention, it should be in the table, or at least in a small supplementary sub-table.
+
+Otherwise a reader may think the claim is unsupported.
+
+### Recommended fix
+
+Add a row:
+
+| Policy | \(R_c(900)\) | \(A_c\) | \(A_f\) | \(A_r\) | \(B\) | \(P/P^{\rm init}\) | \(D_{\rm peak}\) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| deficit \(\chi_r=0.05\) + conv-freeze | 0.05 | … | … | … | … | … | … |
+
+If the row is omitted for space, say explicitly:
+
+> The deficit + conversion-freeze case gives \(R_c=0.05\); details are omitted from the main table but are reproducible in the script.
+
+Better to include it.
+
+---
+
+## 2.6. Explain why conversion freeze increases debt in the surplus case
+
+The table shows:
+
+| Policy | \(D_{\rm peak}\) |
+|---|---:|
+| surplus \(\chi_r=0.10\) | 0.152 |
+| surplus \(\chi_r=0.10\) + conv-freeze | 0.546 |
+
+This is plausible but potentially counterintuitive. The reader needs a one-sentence mechanism.
+
+Likely explanation:
+
+- conversion freeze prevents capital-to-fast conversion;
+- restoration shifts land toward capital or reserve;
+- aggregate \(B\) falls or remains low;
+- population adjusts slowly because of \(\tau_p\);
+- demand remains above \(B\) for longer, so debt accumulates.
+
+### Recommended sentence
+
+> The conversion-freeze case protects the capital book from conversion but does not prevent debt accumulation: by suppressing the fast-land conversion channel while population adjusts slowly, it prolongs the period during which demand exceeds aggregate biocapacity, raising \(D_{\rm peak}\).
+
+If the actual mechanism is fast-land retirement rather than conversion suppression, say that explicitly.
+
+---
+
+## 2.7. Clarify how \(A_f\) can fall under conversion freeze
+
+In the surplus + conversion-freeze row:
+
+\[
+A_f=0.765,
+\]
+
+which is below the reference value \(A_f=0.915\). If conversion is frozen, the reader may ask: how did \(A_f\) fall?
+
+Possible mechanisms:
+
+- fast-land retirement \(\eta_f A_f\) continues;
+- retired fast land goes to reserve, not capital;
+- a variant \(R_{fc}\) may be active;
+- the initial non-equilibrium state had too much \(A_f\), so it relaxes downward.
+
+The SI should state the exact equation used under “conversion freeze”.
+
+### Recommended clarification
+
+> In the conversion-freeze runs, the conversion term \(S/\kappa\) is set to zero. Fast-land retirement \(-\eta_f A_f\) remains active, so \(A_f\) can still decline; retired fast land enters the reserve book.
+
+If that is not the correct mechanism, replace with the correct one.
+
+---
+
+## 2.8. Reconcile the “no interior \(A_{c,\max}\)” claim with any older manuscript text
+
+The verification document says:
+
+> the model has no interior \(A_{c,\max}\); the manuscript’s §Model explicitly superseded it.
+
+That may be true in `manuscript_ECOMOD_v33.tex`, but it is important to ensure that **all** old area-based \(A_{c,\max}\) language has been removed.
+
+Earlier versions contained statements such as:
+
+\[
+G_c(A_c)=\rho_c A_c(1-A_c/A_{c,\max}),
+\]
+
+and:
+
+\[
+A_{c,\max}=1.2.
+\]
+
+If any of that remains, it will contradict the corrected S5.4 interpretation.
+
+### Recommended verification step
+
+Search the manuscript for:
+
+```text
+A_{c,\max}
+A_c,max
+A_c^{\max}
+carrying-area ceiling
+G_c(A_c) = ρ_c A_c
+```
+
+If the model now uses a per-hectare quality index \(q\in[0,q_{\max}]\), make sure:
+
+- the symbol table no longer defines \(A_{c,\max}\) as a ceiling;
+- the governing equations no longer use the old logistic area regeneration unless as a superseded variant;
+- analytic results about capacity maxima/folds are expressed in the new quality formulation;
+- the composition demonstration uses \(A_{tot}=2.5\) consistently.
+
+This is important because Audit 1’s item 3 is only “not confirmed” if v33 truly removed the old structure.
+
+---
+
+## 2.9. Check unit consistency after changing \(D\) to a stock in gha
+
+The verification says:
+
+> Symbol table now reads \(D\) … gha (a stock), and \(\eta D\) with \(\eta\) in yr\(^{-1}\) gives gha·yr\(^{-1}\).
+
+That is consistent if \(B\) and \(E\) are flows in gha·yr\(^{-1}\). Good.
+
+But this has a downstream implication for the degradation term:
+
+\[
+b_f=(b_{f0}+T_b)\exp(-\alpha D).
+\]
+
+If \(D\) is now in gha, then \(\alpha\) must have units:
+
+\[
+\alpha:\ \text{gha}^{-1}.
+\]
+
+Previously, \(D\) may have been written as gha·yr, in which case \(\alpha\) had different units.
+
+### Recommended fix
+
+Check that the symbol table and baseline registry say:
+
+\[
+[D]=\text{gha},
+\qquad
+[\alpha]=\text{gha}^{-1}.
+\]
+
+If \(\alpha\) is still listed as \((\text{gha}\cdot\text{yr})^{-1}\) or yr\(^{-1}\), correct it.
+
+---
+
+## 2.10. Ensure the proxy decomposition table is still share-weighted
+
+The verification says the manuscript already states that raw \(\Delta\ln\) components are not additive and gives the exact share-weighted identity. That is the right approach.
+
+Make sure the empirical table does one of these:
+
+### Preferred
+
+Report weighted contributions:
+
+\[
+\Delta\ln B
+=
+w_X \Delta\ln X
++
+w_C \Delta\ln C,
+\]
+
+with
+
+\[
+X=\hat b_f A_f,
+\qquad
+C=B-X.
+\]
+
+Then split:
+
+\[
+\Delta\ln X
+=
+\Delta\ln \hat b_f
++
+\Delta\ln A_f.
+\]
+
+### Acceptable alternative
+
+Keep raw component log changes, but label them clearly:
+
+> Component log changes are diagnostics only and are not additive contributions to \(\Delta\ln B\).
+
+The exact population identity,
+
+\[
+d\ln B=d\ln(B/P)+d\ln P,
+\]
+
+is separate and genuinely additive because it is a product identity:
+
+\[
+B = (B/P)P.
+\]
+
+Do not let readers confuse that exact identity with the proxy land-book decomposition.
+
+---
+
+# 3. Suggested improvements to the S5.4 wording
+
+The current interpretation is close, but I would tighten it as follows.
+
+## Suggested S5.4 opening
+
+> We measure capital-book recovery by
+> \[
+> R_c(T)=\frac{A_c(T)-A_c^{\rm deg}}{A_c^{\rm ref}-A_c^{\rm deg}},
+> \]
+> where \(A_c^{\rm deg}=0.051\) is the degraded capital-land level and \(A_c^{\rm ref}=0.822\) is the healthy reference level. Values \(0<R_c<1\) indicate partial recovery, \(R_c=1\) indicates exact return to the reference level, and \(R_c>1\) indicates restoration beyond the reference level. We use “over-restoration” to denote \(R_c>1\); this is relative to the chosen reference, not an ecological optimum.
+
+---
+
+## Suggested S5.4 interpretation
+
+> The corrected base-model results show a phase-dependent gate-sign asymmetry. From the degraded equilibrium itself, where \(B=E\), both surplus- and deficit-gated restoration are inert, so \(R_c=0\). From the non-equilibrium post-crash state, surplus-gated restoration can become active once a surplus appears. For \(\chi_r\ge0.05\), it restores \(A_c\) beyond the reference level, but the resulting equilibrium has lower aggregate biocapacity and therefore a modestly lower supported population. Deficit-gated restoration is active during the shortfall but, at the tested rates, is swamped by conversion and produces essentially no net recovery. The policy implication is not that surplus-gating is superior; it is that restoration must be correctly gated, adequately sized, and bounded by a target or floor.
+
+---
+
+## Suggested main-text pointer
+
+> The supplementary recovery experiments show that the gate-sign result is phase-dependent. A surplus-gated restoration flow is inert while the system is in deficit and therefore cannot initiate recovery during the shortfall. If the system later enters a surplus state, surplus-gating can restore the capital book and may over-restore it relative to the reference level, with a modest reduction in supported population. Deficit-gated restoration remains the only form that can act during the shortfall itself, but it is not sufficient unless its rate is large enough relative to conversion or is paired with a conversion ceiling.
+
+This avoids contradiction between the main text and S5.4.
+
+---
+
+# 4. Suggested improvements to S5.5
+
+The S5.5 result is clean:
+
+- recover/collapse fraction flat at 0.833 for \(\tau_p=25\text{–}500\);
+- no sustained limit cycle;
+- no Hopf up to \(\tau_p=2000\) yr;
+- pulse amplitude bounded around 0.57;
+- pulse shifts later rather than growing.
+
+I would keep it, but add three methodological details if they are not already there.
+
+## 4.1. Define the recovery fraction
+
+What is the denominator? For example:
+
+> The recover fraction is the fraction of tested initial conditions or demand levels that return to the healthy basin rather than collapsing to the capital floor.
+
+If it is 5 out of 6 cases, say so.
+
+---
+
+## 4.2. Define how oscillation was measured
+
+For example:
+
+> Oscillation strength was measured by the standard deviation of \(P\) after excluding the initial transient.
+
+State the transient exclusion window.
+
+---
+
+## 4.3. State numerical robustness
+
+For very long delays, readers may worry about solver artefacts. Add:
+
+> The result was checked under reduced step size and was stable; the bounded pulse is not a step-size artefact.
+
+If you have not done a dt refinement, run one.
+
+---
+
+# 5. High-priority verification checklist
+
+Before final sign-off, I would require the following.
+
+## Code/script checks
+
+- [ ] `recovery_metric_and_tau_p_scan.py` explicitly sets `T_b_on=False` or equivalent.
+- [ ] There is an assertion or logged check that `max(T_b)==0` in base runs.
+- [ ] The start state is clearly defined as non-equilibrium post-crash versus degraded equilibrium.
+- [ ] The target-cap implementation stops restoration at \(A_c^{\rm ref}\).
+- [ ] The conversion-freeze implementation only disables \(S/\kappa\), not retirement or restoration, unless otherwise stated.
+- [ ] Land conservation is checked:
+  \[
+  A_f+A_c+A_r=A_{tot}
+  \]
+  to machine precision.
+- [ ] Reserve floor is checked:
+  \[
+  A_r\ge A_r^{\min}.
+  \]
+- [ ] Delay histories are populated correctly for both \(\tau_g\) and \(\tau_p\).
+
+---
+
+## Manuscript checks
+
+- [ ] No stale \(A_{c,\max}\) area-ceiling language remains if the model now uses quality \(q\).
+- [ ] The symbol table defines \(D\) in gha and \(\alpha\) in gha\(^{-1}\).
+- [ ] \(\sigma_f=\sigma_c=1\) is stated if the baseline uses that.
+- [ ] The false \(R_A=R_B/\psi_c\) identity is removed or explicitly marked false.
+- [ ] The recovery prediction is phase-dependent, not “surplus-gating never works”.
+- [ ] The empirical proxy decomposition table is share-weighted or explicitly labelled non-additive.
+- [ ] S5.4 uses “over-restoration relative to reference”, not “overshoot” in the demand/biocapacity sense.
+
+---
+
+## SI table checks
+
+- [ ] Table states \(A_c^{\rm deg}\) and \(A_c^{\rm ref}\).
+- [ ] Table includes \(E(T)\) and \(R_B(T)\).
+- [ ] Table includes deficit + conversion-freeze row if discussed.
+- [ ] Exact values such as \(R_c=1.00\) and \(P/P^{\rm init}=1.00\) are reported with tolerance or explained as target-imposed.
+- [ ] The text does not describe \(P/P^{\rm init}=0.90\text{–}0.97\) as “substantially lower”.
+
+---
+
+# 6. Substantive interpretation I would use
+
+I would summarise the corrected S5.4 result like this:
+
+> The corrected base model shows that surplus-gated restoration is not a general rescue mechanism. It is inactive from a degraded equilibrium because \(B=E\), and it is inactive during an active deficit because \(B-E<0\). It can restore capital only after the system has moved into a surplus state. When it does, it may restore \(A_c\) beyond the reference level, but this over-restoration is bounded and is associated with a modestly lower aggregate biocapacity and supported population. Deficit-gated restoration is the only gate that can act during the shortfall, but at the tested restoration rates it is insufficient because conversion pressure dominates. Therefore the recovery result is not “surplus beats deficit”; it is that recovery requires the right gate, adequate strength, and a bound such as a target cap or conversion ceiling.
+
+That is the strongest and safest version.
+
+---
+
+# 7. Final recommendation
+
+I would **accept the joint verification with minor revisions**.
+
+The correction of the \(T_b\) artefact is essential and convincing. The revised S5.4 numbers are internally consistent, bounded, and much more credible. The phase-dependent interpretation is correct and should be used throughout.
+
+Before finalising, I would make these specific improvements:
+
+1. Remove any remaining “substantially lower population” language for the corrected runs.  
+2. Clarify that \(B\in[0.70,0.91]\) applies to surplus-restoration rows only.  
+3. State \(A_c^{\rm deg}\) and \(A_c^{\rm ref}\) explicitly.  
+4. Add \(E\) and \(R_B\) to the S5.4 table.  
+5. Add the deficit + conversion-freeze row if it is discussed.  
+6. Explain the conversion-freeze debt increase.  
+7. Verify globally that old \(A_{c,\max}\) language has been removed.  
+8. Check \(D\) and \(\alpha\) units after the debt-unit change.  
+9. Ensure the proxy decomposition table is share-weighted or explicitly non-additive.  
+10. Add a short main-text paragraph summarising the phase-dependent restoration result.

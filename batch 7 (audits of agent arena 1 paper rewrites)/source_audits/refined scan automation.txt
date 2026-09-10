@@ -1,0 +1,93 @@
+## How to address these weaknesses
+
+### 1. Fix the superseding logic
+The matcher should **only mark an item as superseded** if:
+- The numerical verification explicitly returns a `SUPERSEDED` verdict (as for 12A.1), **or**
+- The revision text contains explicit supersession markers (e.g., “does not transfer”, “superseded”, “withdrawn”).
+
+Do **not** infer supersession from low semantic score or from the mere presence of a match. In `matcher.py`, adjust the status assignment to:
+- Use `semantic_threshold` → `covered` or `partial`.
+- Use `partial_threshold` → `partial` or `missing`.
+- `superseded` should be set **only** after numeric verification or explicit keyword detection, not during matching.
+
+### 2. Improve semantic matching
+The low scores suggest the generic `all-MiniLM-L6-v2` model is not ideal for this scientific/technical domain. Options:
+- Use a domain‑adapted model like **SPECTER** (trained on scientific papers) or **SciBERT**.
+- Combine embeddings with **BM25** (lexical overlap) using a weighted score.
+- Add a **keyword‑overlap bonus** for terms like “masking”, “deficit”, “basin‑shrinkage”, etc.
+- If the revision consistently uses the same section headings, you could also incorporate **section‑level similarity**.
+
+A hybrid approach (e.g., `score = 0.7 * cosine_sim + 0.3 * bm25_norm`) often works better for structured documents.
+
+### 3. Filter the risk register
+In `risk.py`, add a threshold (e.g., `risk_score > 0.3`) before including an item in the risk register, or create a separate “All items” table. For the CI gate, only **missing** or **partial** actionable items with high criticality should cause failure.
+
+### 4. Clean up the report
+- Separate automated notes from curated notes.
+- Add a “Discrepancy” section listing items where `AUTO` and `Curated` disagree, so a human can quickly review.
+- For numerical verification, add a third status: `superseded` (instead of `n/a`), and color it differently.
+
+### 5. Human‑in‑the‑loop integration
+The report already flags discrepancies – that’s good. Make sure the CI pipeline **does not fail** on discrepancies, only on actual missing/partial items (after human confirmation). The automated system should be a **support tool**, not a final arbiter.
+
+## How to proceed
+
+1. **Patch `matcher.py`** to remove the erroneous superseding logic.  
+2. **Experiment with better embeddings** (e.g., `allenai/specter` or `sentence-transformers/all-mpnet-base-v2`). Evaluate on a small manually labelled set to measure improvement.  
+3. **Adjust risk threshold** and **report layout**.  
+4. **Re‑run the scan** on your current files and verify that the false “superseded” flags disappear.  
+5. **Manually review the remaining low‑score matches** (e.g., 12C.9) to confirm they are truly covered. If they are, consider adding a mapping file that forces exact ID matches for those items.  
+6. Once the pipeline produces accurate statuses, integrate it into your CI as a **non‑blocking check** that generates the report and only fails when a critical actionable item is missing.
+
+The current output is already valuable because it shows the revision is largely complete, but the automation needs refinement before it can be trusted without human oversight.
+
+The work is thorough and the pipeline looks solid, but before accepting it as final, I recommend the following checks and next steps.
+
+## 1. Do not rely solely on the automated traceability matrix
+- **Spot-check the 25 consistency hits** in the consistency report. Some may be false positives from shared terms, others may reveal real contradictions.  
+- **Review the curated layer manually.** The auto-scorer can over- or under-flag, and the curated layer is what will be trusted. Confirm each of the 21 covered / 1 superseded claims is correctly assigned.
+
+## 2. Validate the numeric verifiers against the original source
+- The verifiers now reproduce the master’s numbers for 12A.3 under both endpoint conventions, which is good.  
+- But confirm that the **original `sim.py`** is the exact code used in the master manuscript. If the master’s numbers came from a different version of the model, the verifier may be testing the wrong thing.  
+- Document the **endpoint convention** clearly: the report shows two values (5.26 vs 6.74). This must not be buried; it is a methodological finding and should be highlighted, not hidden in a footnote.
+
+## 3. Clarify model provenance
+The agent notes: *“The model-simulator verifiers run against the original gross-depletion model numerics, not the corrected `(1‴)` model.”*  
+This is critical.  
+- Ensure the revision and the traceability report **explicitly state** which claims are based on the original model and which on the corrected model.  
+- If the master’s headline results depend on the original model but the paper now uses the corrected model, those claims may need updating or caveating.  
+- Consider adding a column in the traceability matrix for **model version** so reviewers can see at a glance.
+
+## 4. Decide on the two open items (R1 and R2)
+The agent lists:  
+- R1: corrected-`(1‴)` basin recompute  
+- R2: corrected characteristic equation/table/figures  
+
+These are **not** closed.  
+- If they are necessary for the paper’s conclusions, they must be done before submission.  
+- If they are explicitly out of scope, add a clear note in the paper: *“The corrected model’s basin recompute and characteristic equation are deferred to future work; all findings in this paper are based on the original model unless stated otherwise.”*  
+Do not leave them as silent open items in a risk register only; the paper must be honest about what is and is not verified.
+
+## 5. Add regression tests / CI
+The agent built 16 passing tests. Good.  
+- Recommend wiring the `scan_revision` pipeline into a **CI workflow** so every future revision automatically re-runs the verifiers and consistency checks.  
+- This prevents silent drift and ensures the traceability report is always up-to-date.
+
+## 6. Produce a human-readable “audit summary” for authors
+The HTML report is useful, but for the paper authors, a one-page summary is better:
+- List of all master claims and their status (covered / superseded / missing).  
+- The three key numeric results that were re-verified.  
+- The two open items and their impact.  
+- A note on the model provenance caveat.
+
+## 7. Next step for the agent
+Ask the agent to either:
+- **Close R1 and R2** if feasible, or  
+- **Produce a clear, explicit statement** in the revision’s Discussion/Limitations section that these two items remain open and that the paper’s findings are scoped to the original model.
+
+Then re-run the pipeline one final time after any edits and confirm all checks still pass.
+
+---
+
+**Bottom line:** the pipeline is a strong foundation, but the human decision points are the model provenance and the two open items. Do not accept the work as final until those are addressed explicitly in the manuscript.

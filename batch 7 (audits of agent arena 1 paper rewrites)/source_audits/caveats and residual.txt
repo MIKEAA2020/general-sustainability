@@ -1,0 +1,221 @@
+### Areas to Strengthen or Clarify
+
+1. **Grid-dependence of recovery fraction**  
+   The basin recovery fraction (39.9% vs 5.3%) depends on the chosen grid domain. The agent acknowledges this, but the final manuscript should clearly state the grid boundaries used and, if possible, provide the boundary curve (in terms of initial conditions) rather than a single percentage. This will make the result more interpretable.
+
+2. **Non-monotonic delay response**  
+   The observation that recovery fraction increases slightly at `τ_g = 40` and `60` (before collapsing) is intriguing. While dt-convergence was verified, it may be worth a brief exploration: could this be a real dynamic (delayed logistic overshoot allowing temporary recovery) or an artifact of the coarse grid? If real, it may deserve a sentence in the discussion. If it is a grid artifact, it should be noted to avoid misinterpretation.
+
+3. **Manuscript integration**  
+   The corrections from R2 (no Hopf, monotone instability) need to be thoroughly integrated not only in §8 and §13 but also anywhere else in the manuscript that references the original model’s `χ` Hopf classification or delay-ratio-controlled onset. A global search for terms like “Hopf,” “χ,” “delay-ratio” should be performed to ensure no stale claims remain in the main text or figure captions.
+
+4. **Scenario table consistency**  
+   The agent mentions that “corrected scenario-table rendering remains the last editorial step.” It is important to ensure that any scenario table values (e.g., from the original model) that were used as benchmarks are either reproduced or explicitly marked as superseded under the corrected model. This will prevent readers from mistaking original-model numbers for corrected-model outputs.
+
+5. **Potential addition of a dedicated section**  
+   Given the significant change in stability characterization, the manuscript might benefit from a short subsection or appendix that explicitly contrasts the original model’s Hopf picture with the corrected model’s monotone instability and neutral continuum. This would make the correction clear and pedagogically useful.
+
+### Recommendations for Next Steps
+
+1. **Final cross-check of manuscript language**  
+   Perform a targeted search for all occurrences of “Hopf,” “χ,” “delay ratio,” “oscillatory,” etc., and ensure each is updated or qualified as necessary. Also verify that the new characteristic-equation result (`D(0)=0`, positive real eigenvalue) is described in the main text with appropriate references to figures.
+
+2. **Document the bugs and their fixes**  
+   The two simulator bugs are important; they should be mentioned in the revision’s numerics section (perhaps as a “Note on simulator corrections”) so that future readers understand why earlier runs were invalid.
+
+3. **Consider refining the basin visualization**  
+   The heatmaps are functional but could be improved: add contour lines showing the boundary between recovery and collapse, and include the sustainable equilibrium line (`P = B(A)/e`). This will help readers see the relationship between initial conditions and outcomes.
+
+4. **Maintain the evaluation harness**  
+   If SPECTER or SciBERT becomes available, run the eval with those backends to see if the two paraphrase misses are recovered. If so, adopt them for future scans; if not, keep BM25 as default and rely on curated overrides.
+
+5. **Final human review**  
+   Before submission, a careful human read of the entire revision is warranted, especially around the new R1/R2 results and the claim that the corrected model has no isolated interior attractor. Ensure that this statement is correctly formulated and that the implications for the paper’s narrative (e.g., the “productivity illusion”) are consistent.
+
+### Conclusion
+
+The work is thorough and scientifically sound. It closes both R1 and R2 with credible computations and integrates them into the verification pipeline. The remaining tasks are largely editorial and presentational: ensure that all references to the old Hopf picture are corrected, and make the new stability properties explicit throughout the manuscript. With those final touches, the revision will be robust and ready for submission.
+
+The caveats are important because they affect how the new results should be interpreted and presented. Here’s a plain‑language rundown of each caveat, why it matters, and what to do about it.
+
+---
+
+### 1. The instability is **monotone**, not a **Hopf** (oscillatory) onset  
+**What it means:**  
+The original manuscript claimed the onset of collapse was controlled by a delay‑ratio‑dependent Hopf bifurcation (oscillatory instability). The new computation shows the corrected model’s interior equilibrium is unstable via a **positive real eigenvalue** – the system grows monotonically (no oscillation) and there is **no imaginary‑axis crossing**. In addition, `D(0)=0` on the whole equilibrium family means there is a **neutral zero eigenvalue** and a **continuum of equilibria**, so there is no isolated interior attractor.
+
+**Why it matters:**  
+This changes a central mechanistic story. The “productivity illusion” narrative must be recast: the instability is a vicious‑cycle (monotone) growth, not a delay‑induced oscillatory onset. Any language about “Hopf,” “delay ratio,” or “oscillatory onset” in the manuscript is now incorrect.
+
+**Action:**  
+Do a full‑text search for “Hopf,” “χ,” “delay ratio,” “oscillat*” and rewrite every occurrence to reflect the corrected monotone instability and the neutral continuum. The revision already documents this, but ensure the abstract, introduction, and discussion are consistent.
+
+---
+
+### 2. The **basin recovery fraction is grid‑dependent**  
+**What it means:**  
+The percentages (39.9% recover vs 5.3% recover) depend on the chosen grid of initial conditions (e.g., 13×16 over a specified range). Different grids would give different fractions.
+
+**Why it matters:**  
+A single percentage can be misleading; it is not an invariant of the model. The original 12G.2 result also suffered from this. The manuscript must not present “39.9%” as a universal truth without context.
+
+**Action:**  
+State the exact grid bounds and spacing. If possible, provide the **boundary curve** in `(A₀, P₀)` space that separates recovery from collapse – that is more meaningful than a percentage. Add a contour or boundary line to the basin heatmap.
+
+---
+
+### 3. The **non‑monotonic delay response** may be real or an artifact  
+**What it means:**  
+The recovery fraction increases slightly at `τ_g = 40` and `60` before collapsing again. This could be a real delayed‑logistic overshoot effect, or it could be due to the coarse grid used for the delay‑response scan.
+
+**Why it matters:**  
+If real, it adds nuance to the story (the system can transiently recover for certain delays). If an artifact, it should not be mentioned or should be flagged as unresolved.
+
+**Action:**  
+Run a fine‑grid check specifically at `τ_g = 40` and `60` to see if the non‑monotonicity persists. If it does, add a sentence; if not, note that the coarse grid caused the apparent recovery and exclude those points from the narrative.
+
+---
+
+### 4. The **neutral zero eigenvalue** and **continuum of equilibria** require careful wording  
+**What it means:**  
+Because `D(0)=0` everywhere on the family `P = B(A)/e`, the system does not have a unique attractor; there is a whole line of equilibria. The interior point is unstable, but the boundary point (`A → A_max`) appears to be the sustainable state.
+
+**Why it matters:**  
+This is a structural property that changes how one discusses stability. The manuscript must not imply that the model has a unique stable equilibrium; instead, it has a **family of equilibria** and the system’s fate depends on initial conditions and whether it reaches the boundary.
+
+**Action:**  
+Explicitly state that the corrected model has a neutral direction (zero eigenvalue) along the equilibrium family, and that the sustainable state is the boundary `A = A_max` with `P = bA_max/e`. This should be included in the stability section.
+
+---
+
+### 5. **Simulator bugs** made earlier runs invalid  
+**What it means:**  
+Two bugs (softplus leak and wrong time evaluation) caused the previous corrected‑model simulator to collapse everything erroneously. These have been fixed, but any earlier numbers based on the old simulator are wrong.
+
+**Why it matters:**  
+The manuscript must clearly state that earlier runs were invalid and have been superseded by the corrected simulator. Otherwise, a reader might find conflicting numbers in earlier versions or notes.
+
+**Action:**  
+Add a short “Note on simulator corrections” in the numerics section (e.g., in §8) explaining the two bugs and that all results in the current revision use the fixed simulator. Ensure no stale references to the old runs remain.
+
+---
+
+### How to proceed
+
+1. **Update manuscript text** to remove all Hopf/oscillatory claims and replace with monotone vicious‑cycle instability + neutral continuum.
+2. **Refine basin presentation** with grid bounds, boundary curve, and possibly fine‑grid check of non‑monotonic delay response.
+3. **Add simulator correction note** and make sure all figures/tables are from the fixed code.
+4. **Perform a final human read** focusing on these caveats to catch any lingering inconsistencies.
+
+The work itself is sound; the caveats are primarily about **presentation and interpretation**, not about the validity of the computations. Addressing them will make the revision scientifically rigorous and defensible.
+
+Now that R1 and R2 have been completed, the residual risks section (§13) must be updated to reflect the new results. Below is a point‑by‑point plan for addressing each residual risk in the manuscript, plus the additional caveats introduced by the R1/R2 computations.
+
+---
+
+## 1. Update the “Open, not hidden” bullet
+
+**Current:**  
+> Open, not hidden: the corrected-model basin recomputation (R1) and the corrected characteristic-equation/table/figures (R2) are *not yet produced* — they are logged as required work …
+
+**Action:**  
+Replace with text stating that R1 and R2 have now been performed, summarising the key results, and point to the relevant files/figure references. Example:
+
+> R1 and R2 are now resolved. The corrected-model basin recomputation (R1) shows that with `(τ_g, τ_p) = (0,0)` the recover fraction is **39.9%** on the documented 13×16 grid, falling to **5.3%** at baseline delays `(30,25)`. The corrected characteristic equation (R2) yields a **monotone positive real eigenvalue** (no Hopf crossing) and a **neutral zero eigenvalue** along the equilibrium family `P = B(A)/e`. All results are computed with the fixed simulator (exact `[·]₊` and delayed `K(t−τ_p)`). See §8, §13, and `scans/r1_*.png`, `scans/r2_*.png`.
+
+Remove any reference to “required work” since the computations are now done.
+
+---
+
+## 2. Address the **ρ** scaling limitation
+
+**Issue:** The fast–slow `χ` reduction is only valid for large `ρ`; realistic values `ρ ≈ 0.02–0.1 yr⁻¹` invalidate it.
+
+**Action:**  
+- In §8 (or wherever the reduction is introduced), add a clear statement: “The `χ` reduction is an approximation valid only for `ρ ≫ r`; for the realistic range `ρ ∈ [0.02, 0.1]`, the full transcendental characteristic equation `D(s)=0` must be used. All R2 computations presented here use the full equation, not the reduction.”  
+- Optionally, include a figure or table comparing the leading eigenvalue computed with the full equation vs. the reduced `χ` approximation for several `ρ` values, to show where the reduction fails.  
+- This will explicitly close the gap and prevent misuse of the old Hopf `χ` classification.
+
+---
+
+## 3. Set `η` to a physical, non‑zero value and justify it
+
+**Issue:** `η → 0` is singular.
+
+**Action:**  
+- Choose a small but non‑zero value, e.g., `η = 0.01` or `0.05`, and state its interpretation (e.g., a minimal environmental damping or a small natural recovery rate).  
+- Justify the choice by citing a plausible ecological mechanism (e.g., a low background regeneration rate even at very small `A`) or by noting that it avoids the singularity while having negligible effect on the main dynamics away from the boundary.  
+- Add a sentence in §3 (assumptions) or §8 (numerics) explaining the value and its rationale.  
+- Ensure all simulations use this non‑zero `η`; if the results are insensitive to `η` in the range of interest, say so.
+
+---
+
+## 4. Handle non‑smoothness at the switch
+
+**Issue:** The exact `[·]₊` switch creates a non‑differentiable point at `A = A_max`, making the sustainable state a boundary equilibrium.
+
+**Action:**  
+- In §8, explicitly state: “The model uses the exact `[·]₊` function, which is non‑smooth at `A = A_max`. The sustainable point `(A_max, P = bA_max/e)` is therefore a **boundary equilibrium**. Its stability is reported as **one‑sided** (linearization from below only).”  
+- If a smooth ramp is preferred for numerical or analytical convenience, introduce one with a fixed width `w` (e.g., `softplus_w(x) = w·log(1+exp(x/w))`), document the chosen `w`, and show that results are insensitive to `w` for small enough `w`.  
+- Since R2 used the exact switch and found no Hopf crossing, this non‑smoothness does not create spurious oscillations; it simply means the linearization is one‑sided. The manuscript should say so.
+
+---
+
+## 5. Masking illusion qualifications
+
+**Issue:** The masking window is deficit‑bounded and conditional; the old Euler‑based figure is withdrawn.
+
+**Action:**  
+- Verify that §10 and the abstract explicitly say “small‑deficit only” and include the maximum window (~5.4 yr) and the vanishing threshold (deficit ≈ 0.075).  
+- Ensure no figure or text references the withdrawn Euler‑based `demo_masking_euler.png`.  
+- Add a sentence in §13 or §10: “This illusion is **not generic**; it does not appear for strong overshoots (deficit > ~0.075) and should not be cited as a general phenomenon of the model.”  
+
+---
+
+## 6. Empirical grounding of parameters
+
+**Issue:** Parameters are representative, not estimated; `b_G`, `α`, lags need empirical support; the dangerous band `(2f−1)ν > 1` is estimated.
+
+**Action:**  
+- Acknowledge this limitation clearly in §13 (as already done) and perhaps in the discussion.  
+- Provide a **sensitivity analysis** for the key parameters: vary `b_G`, `α`, `τ_g`, `τ_p` over plausible ranges and show that the qualitative results (existence of collapse, masking band, monotone instability) are robust. This demonstrates that the conclusions do not hinge on exact values.  
+- For `b_G` (standing‑stock value) and `α`, add a footnote or table indicating the source of the representative values (e.g., “based on typical values from [citation]”) or state explicitly that they are chosen for illustration and need empirical calibration.  
+- For the dangerous band, either derive it more rigorously or soften the language to “an estimated indicator” and note that it is not directly measurable.
+
+---
+
+## 7. Priority/literature corrections
+
+**Issue:** Hutchinson early‑result claim unsupported; GFN caveats limit the 1961–2022 claim.
+
+**Action:**  
+- In §7 (didactics), rewrite the Hutchinson sentence to say: “The delayed‑logistic stability result is **Hutchinson (1948)**; we cannot support the claim that Haberl & Aubauer ‘first introduced’ time delay into human population dynamics.”  
+- Add a sentence about GFN: “The GFN data (1961–2022) provide a lower bound on ecological overshoot; their own caveats (e.g., data quality, aggregation) should be acknowledged.”  
+- Ensure the reference list includes Hutchinson 1948 and the GFN caveat source.
+
+---
+
+## 8. New caveats from R1/R2 (must be added)
+
+The completed R1/R2 introduced important new findings that must be reflected in §13:
+
+- **Monotone instability, not Hopf:** The corrected model’s interior equilibrium is unstable via a **positive real eigenvalue**; there is **no imaginary‑axis crossing**, so the onset of collapse is not oscillatory. The old `χ` Hopf classification does **not** transfer.  
+- **Neutral zero eigenvalue / continuum of equilibria:** `D(0)=0` on the whole equilibrium family `P = B(A)/e`; the system has no isolated interior attractor. The sustainable state is the boundary `(A_max, P = bA_max/e)`.  
+- **Grid‑dependence of recover fraction:** The reported percentages (39.9%, 5.3%) depend on the chosen initial‑condition grid. State the grid bounds and, if possible, provide the boundary curve separating recovery from collapse.  
+- **Delay‑response non‑monotonicity:** The coarse‑grid scan suggested a slight recovery at `τ_g ≈ 40–60`. If this persists after fine‑grid checking, it should be mentioned; otherwise, it should be excluded as an artifact. (A fine‑grid check is recommended before finalising.)
+
+**Action:**  
+Add these as new bullet points in §13, perhaps under a subheading “Residual risks specific to the corrected model.” Ensure the main text (§8) already contains the detailed derivations and figures; the residual risks section should summarise them and note any remaining uncertainties.
+
+---
+
+## Final Steps
+
+1. **Edit §13** to incorporate all the above changes.  
+2. **Perform a global search** for the words “Hopf,” “χ,” “oscillat,” “delay ratio,” and “fast‑slow” to ensure no stale references remain.  
+3. **Check all figures and tables** to confirm they are consistent with the corrected simulator and the new stability picture.  
+4. **Run the full test suite and scan once more** after the edits to confirm nothing is broken and the traceability matrix remains clean.  
+5. **Have a human reviewer** read the final §8, §10, and §13 to ensure clarity and scientific accuracy.
+
+With these actions, the residual risks will be either resolved or explicitly acknowledged with appropriate qualifications, making the manuscript robust and ready for submission.
+

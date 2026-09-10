@@ -1,0 +1,2710 @@
+deepseek:
+## 1. Fatal / high-severity issues
+
+### 1.1 The units of ecological debt \(D\) are inconsistent in Eq. (11)
+
+The symbol table says:
+
+\[
+D \text{ has units } \mathrm{gha\cdot yr}
+\]
+
+and later the text claims:
+
+> “\([E-B]_+\) (in \(\mathrm{gha\cdot yr^{-1}}\)) integrates to \(D\) (in \(\mathrm{gha\cdot yr}\))”
+
+But an integral of \(\mathrm{gha\cdot yr^{-1}}\) over time gives \(\mathrm{gha}\), not \(\mathrm{gha\cdot yr}\).
+
+Moreover, Eq. (11):
+
+\[
+\frac{dD}{dt}=[E-B]_+-\eta D
+\]
+
+is dimensionally inconsistent if \(D\) is \(\mathrm{gha\cdot yr}\):
+
+- \(dD/dt\): \(\mathrm{gha\cdot yr / yr} = \mathrm{gha}\)
+- \([E-B]_+\): \(\mathrm{gha\cdot yr^{-1}}\)
+- \(\eta D\): \(\mathrm{yr^{-1}\cdot gha\cdot yr} = \mathrm{gha}\)
+
+So the right-hand side contains both \(\mathrm{gha\cdot yr^{-1}}\) and \(\mathrm{gha}\). This is not a minor wording issue; it affects the debt equation, degradation exponent \(\alpha D\), and all later debt-related claims.
+
+**Fix:** Most likely \(D\) should be in \(\mathrm{gha}\), not \(\mathrm{gha\cdot yr}\). Then \(\eta D\) has units \(\mathrm{gha\cdot yr^{-1}}\), matching \([E-B]_+\), and \(\alpha\) must be \(\mathrm{gha^{-1}}\), not \(\mathrm{gha^{-1}\cdot yr^{-1}}\).
+
+---
+
+### 1.2 The shares \(\sigma_f,\sigma_c\) are introduced but then effectively ignored
+
+Equation (4) defines the conversion deficit as
+
+\[
+S=[E-\sigma_fY_f-\sigma_cY_c]_+.
+\]
+
+But many later analytic statements assume \(\sigma_f=\sigma_c=1\).
+
+For example:
+
+> “At a population equilibrium \(P=K=B/e\), so \(E=eP=B\) and hence \(S=[E-B]_+=0\).”
+
+This is false unless \(\sigma_f=\sigma_c=1\), because
+
+\[
+S=[E-\sigma_fY_f-\sigma_cY_c]_+
+\]
+
+and if \(E=B=Y_f+Y_c\), then
+
+\[
+E-\sigma_fY_f-\sigma_cY_c
+=
+(1-\sigma_f)Y_f+(1-\sigma_c)Y_c
+\]
+
+which is generally positive.
+
+The same problem appears in the conversion subsystem:
+
+\[
+J_c=
+\begin{bmatrix}
+G_c'+Y_c'/b_f & 1\\
+-Y_c'/b_f & -(1+\eta_f)
+\end{bmatrix}.
+\]
+
+This matrix is correct only if \(\sigma_f=\sigma_c=1\). Otherwise the entries should contain \(\sigma_f,\sigma_c\).
+
+The baseline registry does not give values for \(\sigma_f,\sigma_c\), so the model is not fully specified, yet the analytics silently set them to unity.
+
+---
+
+### 1.3 Restoration-flow sign is reversed in one place
+
+In the recovery section, the text says:
+
+\[
+R_{fc}=\chi A_f\Phi(B-E)
+\]
+
+is an \(A_f\to A_c\) restoration flow.
+
+But later it says:
+
+> “the surplus-gated form \((B>E)\) is zero during a shortfall and thus cannot recover a collapse; a deficit-gated form \((E>B)\) is active during the shortfall and recovers it.”
+
+Those two statements conflict. A deficit-gated restoration flow must depend on \(E-B\), not \(B-E\).
+
+The Demonstration section uses the correct deficit-gated form:
+
+\[
+R_{fc}=\chi A_f(E-B)_+
+\]
+
+but the Recovery section writes \(B-E\). That is an internal sign inconsistency.
+
+---
+
+### 1.4 Demonstration initial condition violates the capital-land ceiling
+
+The baseline registry gives:
+
+\[
+A_{c,\max}=1.2\,\mathrm{ha}.
+\]
+
+But the Demonstration says:
+
+> “\(A_{c0}=1.5\)”
+
+and reports:
+
+\[
+A_c:1.500\to0.558.
+\]
+
+So \(A_c(0)>A_{c,\max}\). Since
+
+\[
+G_c(A_c)=\rho_cA_c\left(1-\frac{A_c}{A_{c,\max}}\right),
+\]
+
+this makes \(G_c(A_c)\) negative at initialization. The state is outside the intended domain, and the logistic regeneration is already negative before conversion is considered.
+
+This is not just a semantic violation; it affects the reported \(B\) increase and the composition illusion.
+
+---
+
+### 1.5 The identity \(R_A=R_B/\psi_c\) is algebraically false
+
+The text defines:
+
+\[
+R_A=\frac{E}{Y_f},
+\qquad
+R_B=\frac{E}{B},
+\qquad
+\psi_c=\frac{b_cA_c}{Y_c},
+\]
+
+and then immediately writes:
+
+\[
+R_A=\frac{R_B}{\psi_c}.
+\]
+
+But
+
+\[
+\frac{R_B}{\psi_c}
+=
+\frac{E/B}{b_cA_c/Y_c}
+=
+\frac{EY_c}{B b_cA_c},
+\]
+
+which is not generally \(E/Y_f\).
+
+So \(R_A\) is defined twice in contradictory ways.
+
+---
+
+## 2. Notation and symbol-table issues
+
+### 2.1 Missing definitions
+
+The following symbols appear in the text or equations but are not in the symbol table:
+
+- \(b_{f0}\) — used in Eq. (10), not listed
+- \(H_c\) — used in \(L_c=[H_c-\sigma_cY_c]_+/b_{G,c}\), not listed
+- \(R_{fc},R_{rc}\) — appear in Eqs. (5)–(6), not listed
+- \(\chi\) — used in restoration flows, not listed
+- \(\rho_r\) — used in recovery section, not listed
+- \(A_f^{\max}\) — mentioned in assumptions and policy, not in table
+- \(\Delta b,\kappa_w,t_{wave}\) — used in Eq. (12) and baseline, but only \(T_b\) is listed
+- \(\Phi,\Psi\) — restoration functions, not defined
+- \(V_{eco}\) — used in the notation paragraph, not defined
+
+Some of these may be intentional, but as written the model is not fully specified.
+
+---
+
+### 2.2 \(\alpha\) has conflicting units
+
+The symbol table gives:
+
+\[
+\alpha:\ (\mathrm{gha\cdot yr})^{-1}
+\]
+
+but the baseline registry gives:
+
+\[
+\alpha=0.03\,\mathrm{yr^{-1}}.
+\]
+
+Those are not the same unit. If \(D\) is in \(\mathrm{gha\cdot yr}\), then \(\alpha\) must be \(\mathrm{(gha\cdot yr)^{-1}}\). If \(D\) is corrected to \(\mathrm{gha}\), then \(\alpha\) must be \(\mathrm{gha^{-1}}\). In neither case is plain \(\mathrm{yr^{-1}}\) correct.
+
+---
+
+### 2.3 \(\gamma\) has an incorrect time unit
+
+The table lists:
+
+\[
+\gamma=1/b_{G,c},\qquad \text{unit } \mathrm{ha\cdot gha^{-1}\cdot yr^{-1}}.
+\]
+
+But \(b_{G,c}\) has units \(\mathrm{gha\cdot ha^{-1}}\), so its reciprocal has units:
+
+\[
+\frac{1}{b_{G,c}}:\ \mathrm{ha\cdot gha^{-1}},
+\]
+
+with no \(\mathrm{yr^{-1}}\). The added \(\mathrm{yr^{-1}}\) is dimensionally wrong.
+
+---
+
+### 2.4 \(A_{c,ext}\) is introduced but never used
+
+The symbol table lists:
+
+\[
+A_{c,ext},A_{c,\min}
+\]
+
+but the assumptions and numerics only use \(A_c^{\min}\). \(A_{c,ext}\) is not defined conceptually or used.
+
+---
+
+### 2.5 \(\kappa\) is listed as a parameter but is not independent
+
+The table says:
+
+\[
+\kappa = b_f
+\]
+
+and lists it as a parameter. But \(b_f\) is a derived variable evolving via Eq. (10). Therefore \(\kappa\) is not a fixed parameter. This matters for conversion dynamics.
+
+---
+
+### 2.6 \(A_r\) is listed as a state but later called a balance
+
+The symbol table says:
+
+\[
+A_r \text{ is a state? yes (balance)}
+\]
+
+but later:
+
+> “The system is genuinely four-dimensional in the states \((A_f,A_c,P,D)\) with reserve \(A_r\) a constrained balance.”
+
+This is a minor inconsistency, but the table should not list \(A_r\) as a state if it is not part of the state vector.
+
+---
+
+## 3. Equation-level inconsistencies
+
+### 3.1 Two different deficit definitions
+
+Equation (4):
+
+\[
+S=[E-\sigma_fY_f-\sigma_cY_c]_+
+\]
+
+is the conversion deficit.
+
+Equation (11):
+
+\[
+\frac{dD}{dt}=[E-B]_+-\eta D
+\]
+
+uses total biocapacity \(B\), not the share-adjusted flows.
+
+Thus it is possible to have \(S>0\) while \([E-B]_+=0\). Conversion can occur without debt accrual. This might be intentional, but it is not stated, and it creates ambiguity about what “overshoot” means.
+
+---
+
+### 3.2 The conversion loop matrix omits \(\sigma_f,\sigma_c\)
+
+As noted above,
+
+\[
+J_c=
+\begin{bmatrix}
+G_c'+Y_c'/b_f & 1\\
+-Y_c'/b_f & -(1+\eta_f)
+\end{bmatrix}
+\]
+
+is valid only for \(\sigma_f=\sigma_c=1\). Otherwise the entries should be
+
+\[
+\frac{\partial S}{\partial A_f}=-\sigma_f b_f,
+\qquad
+\frac{\partial S}{\partial A_c}=-\sigma_c(b_c+b_{G,c}G_c').
+\]
+
+This would change the eigenvalues and the sign of the conversion loop.
+
+---
+
+### 3.3 Donor-limited conversion is dimensionally odd
+
+The text says:
+
+> “The conversion rate is donor-limited. \(S/\kappa \le A_c\).”
+
+But \(S/\kappa\) is a flow:
+
+\[
+\mathrm{gha\cdot yr^{-1}}
+/
+\mathrm{gha\cdot ha^{-1}}
+=
+\mathrm{ha\cdot yr^{-1}}
+\]
+
+whereas \(A_c\) is a stock in \(\mathrm{ha}\). A rate cannot be compared directly to a stock without a time interval.
+
+This should be restated as a cumulative or saturation condition, not an instantaneous inequality.
+
+---
+
+## 4. Numerical and empirical inconsistencies
+
+### 4.1 The reported annual growth rates do not match the log changes
+
+The empirical section says:
+
+> “aggregate biocapacity rose \(+23.0\%\) (\(+0.377\%\,\mathrm{yr^{-1}}\); \(\ln B=+0.207\))”
+
+But over 1961–2022, \(\ln B=0.207\) gives a continuous annual rate of
+
+\[
+\frac{0.207}{61}=0.00339\ \mathrm{yr^{-1}}
+=
+0.339\%\,\mathrm{yr^{-1}},
+\]
+
+not \(0.377\%\).
+
+Likewise:
+
+> “per-capita biocapacity \(B/P\) fell \(-52.9\%\) (\(-0.867\%\,\mathrm{yr^{-1}}\))”
+
+The log change is approximately \(-0.752\), so the continuous annual rate is
+
+\[
+-0.752/61=-0.0123\ \mathrm{yr^{-1}}
+=
+-1.23\%\,\mathrm{yr^{-1}},
+\]
+
+not \(-0.867\%\).
+
+The \(+0.377\) and \(-0.867\) figures appear to be arithmetic averages of the total percentage change, which is inconsistent with the reported log changes.
+
+---
+
+### 4.2 The proxy decomposition does not sum to the total
+
+The proxy table gives:
+
+\[
+\begin{array}{ll}
+\text{Biocapacity }B & +0.207\\
+\text{Land area }A_f & +0.160\\
+\text{Yield/technology }b_f & +1.128\\
+\text{Capital-book residual }B_c^{\mathrm{res}} & -0.404
+\end{array}
+\]
+
+But
+
+\[
+0.160+1.128-0.404=+0.884,
+\]
+
+not \(+0.207\).
+
+If these are intended as logarithmic contributions, they must be weighted by the appropriate shares. As written, the table is internally inconsistent with the total.
+
+---
+
+### 4.3 Basin table text contradicts the table
+
+The text says:
+
+> “Lower initial \(A_c0\) has more headroom; higher \(A_c0\) collapses at lower demand.”
+
+But the table shows the opposite pattern:
+
+\[
+\begin{array}{c|c}
+A_c0 & \text{threshold}\\
+0.40 & P_0\lesssim0.9\\
+0.70 & P_0\lesssim1.0\\
+1.00 & P_0\lesssim1.10\\
+1.18 & P_0\lesssim1.10
+\end{array}
+\]
+
+Higher initial capital allows equal or higher demand before collapse, not lower demand. The caption repeats the same contradiction.
+
+---
+
+### 4.4 The Demonstration numbers do not obviously satisfy Eqs. (5)–(6)
+
+The Demonstration reports:
+
+\[
+A_c:1.500\to0.558,\qquad
+A_f:0.600\to0.875,\qquad
+B:0.561\to0.783
+\]
+
+over about 5.4 years, with fixed \(E=0.825\).
+
+But this starts with \(A_c>A_{c,\max}\), so \(G_c\) is negative. The implied conversion rates and retirement rates are not shown to balance with Eq. (5) and Eq. (6). At minimum, the initial state is outside the model domain.
+
+---
+
+## 5. Additional internal conflicts
+
+### 5.1 \(A_c^*\) is overloaded
+
+Earlier, \(A_c^*\) is the capital-land capacity maximum:
+
+\[
+A_c^*=\frac{A_{c,\max}}{2}\left(1+\frac{b_c}{b_{G,c}\rho_c}\right).
+\]
+
+Later, in the equilibrium section:
+
+> “\(E_{ceil}=0.478\) at \(A_c^*=0.620\)”
+
+Here \(A_c^*\) is a frozen-demand conversion equilibrium, not the capital-land capacity maximum. This is a notation collision.
+
+---
+
+### 5.2 “Every symbol has units” claim is false
+
+The Presentation section says:
+
+> “no dimensionless parameter is left without its stated unit.”
+
+But several parameters lack units or baseline values:
+
+- \(\Delta b\)
+- \(\kappa_w\)
+- \(\chi\)
+- \(A_f^{\max}\)
+- \(\sigma_f,\sigma_c\) appear in the table but not the baseline registry
+
+So the claim is not true as written.
+
+---
+
+## 6. Recommended priority fixes
+
+1. **Correct the debt unit.** Decide whether \(D\) is \(\mathrm{gha}\) or \(\mathrm{gha\cdot yr}\), and make Eq. (11), \(\alpha\), and all debt language consistent.
+
+2. **Either set \(\sigma_f=\sigma_c=1\) explicitly or carry them through all analytics.** Many current results assume unity shares while Eq. (4) and the symbol table retain them.
+
+3. **Fix the restoration sign.** Deficit-gated restoration must use \(E-B\), not \(B-E\).
+
+4. **Re-run the Demonstration with \(A_c(0)\le A_{c,\max}\).** The current initial condition invalidates the logistic regeneration equation.
+
+5. **Recheck the empirical annual rates and decomposition table.** The log changes, annual rates, and additive contributions are mutually inconsistent.
+
+6. **Reconcile the basin threshold text with the table.** Higher initial capital should not be described as collapsing at lower demand if the table shows the opposite.
+
+7. **Define all missing symbols:** \(b_{f0},H_c,R_{fc},R_{rc},\chi,\rho_r,A_f^{\max},\Delta b,\kappa_w,t_{wave},\Phi,\Psi,V_{eco}\).
+
+The core ideas are clear, but the current draft is not yet internally consistent enough for rigorous use.
+qwen:
+1. **Must-fix contradictions and mathematical errors**  
+2. **Section-by-section line-level issues**  
+3. **Suggested corrections and wording fixes**
+
+---
+
+# 1. Must-fix contradictions and mathematical errors
+
+These are the issues that most directly undermine internal consistency.
+
+---
+
+## 1.1. The baseline `A_{c,max}` conflicts with the demonstration initial condition
+
+### Where
+
+Baseline registry:
+
+> `$A_{c,\max}$ & $1.2$\,ha & capital carrying-area ceiling`
+
+Demonstration:
+
+> `With a fixed demand $E=0.825$ ... $A_{f0}=0.6$, $A_{c0}=1.5$, $P_0=1.5$`
+
+Also in Results:
+
+> `$A_c:1.500\to0.558$`
+
+### Problem
+
+If \(A_{c,\max}=1.2\) is a “carrying-area ceiling”, then \(A_{c0}=1.5\) is outside the admissible domain. With the logistic regeneration function
+
+\[
+G_c(A_c)=\rho_c A_c\left(1-\frac{A_c}{A_{c,\max}}\right),
+\]
+
+\(G_c\) becomes negative for \(A_c>A_{c,\max}\). That may be mathematically possible, but it contradicts the interpretation of \(A_{c,\max}\) as a ceiling. It also makes the demonstration run start in a region where “regeneration” is negative, which confuses the ecological interpretation.
+
+### Fix
+
+Choose one:
+
+1. **Raise \(A_{c,\max}\)** so that all demonstration initial values are inside the domain, e.g. \(A_{c,\max}\ge 1.5\) or \(1.6\).  
+2. **Change the demonstration initial condition** to \(A_{c0}\le A_{c,\max}\).  
+3. **Reinterpret \(A_{c,\max}\)** not as a hard ceiling but as the peak-flow stock level, and explicitly allow \(A_c>A_{c,\max}\) with negative net regeneration. But then “carrying-area ceiling” is misleading.
+
+This must be fixed because the same parameter appears in analytic results, baseline tables, and numerical demonstrations.
+
+---
+
+## 1.2. `G_c` is called “not a land-area transition”, but the equation makes it one
+
+### Where
+
+Convention 4:
+
+> “Regeneration is a growth flow, not a land-area transition. $G_c(A_c)$ adds to capital-land accounting capacity ... it is not an $A_r\to A_c$ area transfer unless a restoration flow $R_{rc}$ is explicitly active.”
+
+But Eq. (5):
+
+\[
+\frac{dA_c}{dt}=G_c(A_c(t-\tau_g))-\frac{S}{\kappa}-L_c+R_{fc}+R_{rc}.
+\]
+
+And Eq. (7):
+
+\[
+A_r=A_{tot}-A_f-A_c.
+\]
+
+### Problem
+
+If \(A_c\) is measured in hectares and \(A_{tot}\) is fixed, then any positive \(G_c\) increasing \(A_c\) automatically reduces \(A_r\). That is, dynamically, an area transfer from reserve to capital, even if it is not written as an explicit \(A_r\to A_c\) term.
+
+So the statement that \(G_c\) is “not a land-area transition” is inconsistent with the model equations unless \(A_c\) is not physical area but some effective “capital capacity” index. But the table says \(A_c\) has units ha and \(A_r\) is reserve land.
+
+### Fix
+
+Choose one interpretation and state it cleanly.
+
+#### Option A: Treat \(G_c\) as succession from reserve to capital
+
+Then rewrite convention 4:
+
+> Regeneration represents natural succession or recovery that increases effective capital land and correspondingly reduces reserve land through the land balance.
+
+#### Option B: Treat \(A_c\) as effective capital capacity, not physical area
+
+Then change the table and language:
+
+> \(A_c\) is effective capital-land capacity measured in hectare-equivalents, not necessarily physical land area; \(A_r\) is an accounting residual.
+
+But then “reserve land” and “total bioproductive area” need careful interpretation.
+
+As written, the text contradicts the equations.
+
+---
+
+## 1.3. The deficit \(S\) and debt \(D\) use different overshoot definitions
+
+### Where
+
+Eq. (4):
+
+\[
+S=[E-\sigma_f Y_f-\sigma_c Y_c]_+.
+\]
+
+Eq. (11):
+
+\[
+\frac{dD}{dt}=[E-B]_+ - \eta D.
+\]
+
+Convention 1:
+
+> “only a positive shortfall above the harvestable/share-adjusted flow converts land or accrues debt”
+
+### Problem
+
+Conversion uses the share-adjusted available flow:
+
+\[
+\sigma_f Y_f+\sigma_c Y_c.
+\]
+
+Debt uses total biocapacity:
+
+\[
+B=Y_f+Y_c.
+\]
+
+If \(\sigma_f=\sigma_c=1\), these are consistent. But the model defines \(\sigma_f,\sigma_c\) and never gives baseline values. If \(\sigma_f,\sigma_c<1\), then it is possible to have:
+
+\[
+S>0
+\]
+
+while
+
+\[
+E<B,
+\]
+
+so conversion occurs but debt does not accrue. That contradicts the convention that the same shortfall “converts land or accrues debt”.
+
+### Fix
+
+Either:
+
+1. **Set and state** \(\sigma_f=\sigma_c=1\) in the baseline registry, and simplify Eq. (4) to  
+   \[
+   S=[E-B]_+,
+   \]
+   or
+
+2. **Change debt equation** to match the share-adjusted deficit:  
+   \[
+   \frac{dD}{dt}=[E-\sigma_fY_f-\sigma_cY_c]_+ - \eta D,
+   \]
+   or
+
+3. **Explicitly distinguish** two deficits:  
+   - access deficit \(S\), driving conversion;  
+   - ecological overshoot \([E-B]_+\), driving debt.
+
+But then do not say that the same positive shortfall does both unless conditions are specified.
+
+This is central because several later claims about masking with \(R_B<1\) depend on this distinction.
+
+---
+
+## 1.4. The relation \(R_A=R_B/\psi_c\) is algebraically incorrect as defined
+
+### Where
+
+Analytic results:
+
+\[
+R_B=\frac{E}{B},\qquad R_A=\frac{E}{Y_f},\qquad \psi_c=\frac{b_cA_c}{Y_c},\qquad R_A=\frac{R_B}{\psi_c}.
+\]
+
+### Problem
+
+Given the definitions,
+
+\[
+\frac{R_B}{\psi_c}
+=
+\frac{E/B}{b_cA_c/Y_c}
+=
+\frac{E Y_c}{B b_c A_c},
+\]
+
+which is not generally equal to
+
+\[
+R_A=\frac{E}{Y_f}.
+\]
+
+The identity would require something like
+
+\[
+\psi_f = \frac{Y_f}{B},
+\]
+
+then
+
+\[
+R_A = \frac{E}{Y_f}=\frac{E/B}{Y_f/B}=\frac{R_B}{\psi_f}.
+\]
+
+But \(\psi_c=b_cA_c/Y_c\) is the share of the capital-book yield that is direct yield, not the fast-book share of total biocapacity.
+
+### Fix
+
+Either:
+
+1. Define a fast-book share  
+   \[
+   \psi_f=\frac{Y_f}{B},
+   \]
+   and write  
+   \[
+   R_A=\frac{R_B}{\psi_f}.
+   \]
+
+2. Or remove the identity  
+   \[
+   R_A=R_B/\psi_c.
+   \]
+
+This should be corrected because the macro-ratio section relies on it.
+
+---
+
+## 1.5. Sign error in \(\partial S/\partial D\)
+
+### Where
+
+Conversion-loop section:
+
+\[
+\frac{\partial S}{\partial D}=-\alpha\sigma_fY_f.
+\]
+
+### Problem
+
+From
+
+\[
+Y_f=b_f A_f,
+\]
+
+and
+
+\[
+b_f=(b_{f0}+T_b)e^{-\alpha D},
+\]
+
+we have
+
+\[
+\frac{\partial b_f}{\partial D}=-\alpha b_f.
+\]
+
+Thus
+
+\[
+\frac{\partial Y_f}{\partial D}=-\alpha Y_f.
+\]
+
+Since
+
+\[
+S=E-\sigma_fY_f-\sigma_cY_c,
+\]
+
+then
+
+\[
+\frac{\partial S}{\partial D}
+=
+-\sigma_f\frac{\partial Y_f}{\partial D}
+=
++\alpha\sigma_fY_f.
+\]
+
+The sign should be positive: more debt reduces \(b_f\), reduces available fast yield, and therefore increases the deficit.
+
+### Fix
+
+Replace with:
+
+\[
+\frac{\partial S}{\partial D}=+\alpha\sigma_fY_f.
+\]
+
+This matters because the debt feedback loop is described as a positive feedback. The sign error contradicts the verbal loop description.
+
+---
+
+## 1.6. The masking condition \(R_B<1\) while \(\dot A_c<0\) is inconsistent unless additional assumptions are stated
+
+### Where
+
+Analytic results:
+
+> “the masking signal is $R_B<1$ (or $R_A\lesssim1$) while $\dot A_c<0$”
+
+### Problem
+
+If \(\sigma_f=\sigma_c=1\), then
+
+\[
+S=[E-B]_+.
+\]
+
+If \(R_B<1\), then \(E<B\), so \(S=0\). With no timber liquidation \(L_c\) and no restoration, Eq. (5) gives
+
+\[
+\dot A_c=G_c(A_c(t-\tau_g))\ge 0
+\]
+
+for \(A_c\in[0,A_{c,\max}]\). So capital land does not fall when \(R_B<1\).
+
+Therefore, \(R_B<1\) with \(\dot A_c<0\) can occur only if:
+
+1. \(\sigma_f,\sigma_c<1\), so demand can exceed the available share-adjusted flow even while \(E<B\);  
+2. there is timber liquidation \(L_c>0\);  
+3. \(A_c>A_{c,\max}\), so \(G_c<0\); or  
+4. some other exogenous capital loss is present.
+
+But the paper does not state which of these is operating in the masking prediction.
+
+### Fix
+
+Qualify the prediction:
+
+> When available access shares satisfy \(\sigma_f,\sigma_c<1\), or when liquidation \(L_c>0\), capital land can decline even while aggregate biocapacity exceeds footprint, i.e. \(R_B<1\).
+
+If the baseline assumes \(\sigma_f=\sigma_c=1\), then the masking signal should not be written as \(R_B<1\). It would instead be associated with \(R_B>1\) or with a different observable.
+
+This is important because Prediction 1 is one of the falsifiable predictions.
+
+---
+
+## 1.7. The empirical proxy decomposition is not additive as presented
+
+### Where
+
+Proxy two-book decomposition table:
+
+| Term | \(d\ln\) |
+|---|---:|
+| Biocapacity \(B\) | \(+0.207\) |
+| Land area \(A_f\) | \(+0.160\) |
+| Yield / technology \(b_f\) | \(+1.128\) |
+| Capital-book residual \(B_c^{\mathrm{res}}\) | \(-0.404\) |
+
+### Problem
+
+The components do not sum:
+
+\[
+0.160+1.128-0.404=0.884\neq 0.207.
+\]
+
+If the table reports unweighted log changes of components, that is fine, but then they are not contributions to \(d\ln B\). If they are intended as contributions to aggregate growth, they need weights.
+
+For
+
+\[
+B = X+Z,
+\]
+
+where
+
+\[
+X=b_fA_f,
+\qquad
+Z=B_c^{\mathrm{res}},
+\]
+
+a log-growth decomposition is approximately
+
+\[
+d\ln B
+\approx
+\frac{X}{B}d\ln X
++
+\frac{Z}{B}d\ln Z,
+\]
+
+and
+
+\[
+d\ln X=d\ln b_f+d\ln A_f.
+\]
+
+So the contribution of yield growth is not simply \(d\ln b_f=1.128\); it is
+
+\[
+\frac{X}{B}d\ln b_f.
+\]
+
+Without weights, the statement
+
+> “the growth of aggregate biocapacity is dominated by the yield channel ($+1.13$ ln units)”
+
+does not follow.
+
+### Fix
+
+Either:
+
+1. Present the table as **component log changes**, not contributions:
+
+   > The fast-book yield index rose by \(+1.128\) log points, cropland area by \(+0.160\), while the residual capital-book component fell by \(-0.404\). These are not additive contributions to aggregate \(d\ln B\) because the components enter with changing budget shares.
+
+2. Or present a proper weighted growth decomposition:
+
+   \[
+   \Delta \ln B
+   =
+   \bar w_X \Delta\ln X
+   +
+   \bar w_Z \Delta\ln Z,
+   \]
+
+   with  
+   \[
+   \Delta\ln X=\Delta\ln b_f+\Delta\ln A_f.
+   \]
+
+   Report the weights \(\bar w_X,\bar w_Z\).
+
+Also, if \(B_c^{\mathrm{res}}\) becomes zero or negative, a log decomposition is not well-defined. In that case use level changes:
+
+\[
+\Delta B = \Delta(b_fA_f)+\Delta B_c^{\mathrm{res}}.
+\]
+
+---
+
+## 1.8. The capital-book residual is not an independent ecological-capital proxy
+
+### Where
+
+Observation operator section:
+
+> “we constructed the minimal external proxies ... with the capital book as a residual.”
+
+And:
+
+> “We did not fetch the LUH2/HYDE/FRA series here, so in the reported decomposition the capital book was taken as the residual $B_c^{\mathrm{res}}=B_{\mathrm{NFA}}-b_fA_f$.”
+
+But elsewhere:
+
+> “With independent proxies the growth of aggregate biocapacity is dominated by the yield channel...”
+
+and
+
+> “Aggregated measured biocapacity rose while independent ecological-capital proxies either fell or were not recoverable...”
+
+### Problem
+
+The residual
+
+\[
+B_c^{\mathrm{res}}=B_{\mathrm{NFA}}-b_fA_f
+\]
+
+is not independent of \(B_{\mathrm{NFA}}\). It is an accounting residual. It also contains every non-cropland component of the NFA: grazing land, forest products, fishing grounds, built-up land, equivalence-factor effects, and measurement error. It is therefore not a clean ecological-capital proxy.
+
+Calling it “independent” conflicts with the paper’s own identifiability message.
+
+### Fix
+
+Use more cautious language:
+
+> The capital-book component was not independently observed; it was inferred as a residual after removing a proxy fast-book component. This residual should not be interpreted as a direct ecological-capital measure, because it also includes grazing, forestry, fishing, built-up land, and accounting-convention effects.
+
+Then the strongest claim becomes:
+
+> Independent cropland-area and crop-yield proxies show that the fast-book yield channel grew strongly, while the residual non-fast-book component declined. This is consistent with the composition-mask mechanism but does not structurally identify ecological capital.
+
+That is more defensible and actually strengthens the identifiability argument.
+
+---
+
+## 1.9. Annual growth rates in the real-series paragraph appear arithmetically inconsistent
+
+### Where
+
+> “Over 1961--2022 aggregate biocapacity rose $+23.0\%$ ($+0.377\%\,\text{yr}^{-1}$; $\ln B=+0.207$); per-capita biocapacity $B/P$ fell $-52.9\%$ ($-0.867\%\,\text{yr}^{-1}$) ...”
+
+### Problem
+
+For 1961 to 2022 there are 61 annual intervals.
+
+If
+
+\[
+\Delta\ln B=0.207,
+\]
+
+then the average log growth rate is
+
+\[
+0.207/61=0.00339=0.339\%\,\text{yr}^{-1},
+\]
+
+not \(0.377\%\).
+
+If per-capita biocapacity fell by \(52.9\%\), then
+
+\[
+\ln(1-0.529)=\ln(0.471)=-0.752.
+\]
+
+Dividing by 61 gives
+
+\[
+-0.0123=-1.23\%\,\text{yr}^{-1},
+\]
+
+not \(-0.867\%\).
+
+The contribution percentages — population \(+464\%\), per-capita \(-364\%\) — are consistent with the log changes \(+0.959\) and \(-0.752\). But the annualised rates need correction or a clear statement of a different convention.
+
+### Fix
+
+Recompute all annualised rates using the exact sample length and state the convention. For 1961–2022:
+
+\[
+\text{annual log growth}=\frac{\Delta\ln x}{2022-1961}.
+\]
+
+So, if the log changes are correct:
+
+- \(B\): \(+0.207\) over 61 years \(\Rightarrow +0.34\%\,\text{yr}^{-1}\)
+- \(B/P\): \(-0.752\) over 61 years \(\Rightarrow -1.23\%\,\text{yr}^{-1}\)
+- \(P\): \(+0.959\) over 61 years \(\Rightarrow +1.57\%\,\text{yr}^{-1}\)
+
+If the reported annual rates come from a different period length or a non-log compound average, state that explicitly.
+
+---
+
+## 1.10. Hysteresis is described as bistable, but the stated branches do not establish bistability
+
+### Where
+
+Discussion table:
+
+> “Hysteresis / path dependence & Conditional & A property of the fold (bistable equilibria), not of the deficit dynamics”
+
+Earlier:
+
+> “At an active-conversion equilibrium the low-$A_c$ (high-conversion) branch is a saddle ... and the high-$A_c$ (low-conversion) branch is stable.”
+
+### Problem
+
+A fold with one stable branch and one saddle branch is not by itself bistable. Hysteresis generally requires two alternative stable equilibria separated by an unstable branch. If the only stable branch is the high-\(A_c\) branch and the other branch is a saddle, then the fold can generate a threshold/collapse, but not necessarily hysteresis in the strict dynamical-systems sense.
+
+### Fix
+
+Either:
+
+1. Show that there is another stable branch, perhaps under a different active set or with restoration, and then claim hysteresis; or  
+2. Replace “bistable equilibria” with “fold-induced threshold dynamics” or “saddle-node transition”.
+
+Suggested wording:
+
+> Hysteresis is conditional and requires an additional stable branch; the fold itself establishes a threshold, not necessarily bistability.
+
+---
+
+# 2. Section-by-section line-level audit
+
+Below are more detailed issues, including smaller but still important inconsistencies.
+
+---
+
+# Introduction
+
+## 2.1. “Demand is met first from the fast flow” is not exactly what the equations say
+
+### Text
+
+> “Demand is met first from the fast flow; only the excess above the harvestable flow converts capital into provision.”
+
+### Problem
+
+Equation (4) uses both fast and capital available flows:
+
+\[
+S=[E-\sigma_fY_f-\sigma_cY_c]_+.
+\]
+
+So demand is met from the share-adjusted sum of fast and capital flows, not strictly “first” from fast flow.
+
+### Fix
+
+Rewrite as:
+
+> Demand is met first from the available harvestable flows; only a shortfall above those share-adjusted flows converts capital into provision.
+
+Or, if the intention is truly sequential, the equations should be changed to a sequential rule.
+
+---
+
+## 2.2. “Because the stock is the only way to meet a shortfall” needs qualification
+
+### Text
+
+> “Because the stock is the only way to meet a shortfall...”
+
+### Problem
+
+The model contains reserve land \(A_r\), though it is not directly convertible in the equations. If reserve land is unavailable, say so. Otherwise “only way” is under-explained.
+
+### Fix
+
+Add:
+
+> Reserve land is assumed not to be directly convertible in the base model; conversion draws only on the capital book.
+
+Or modify the model if reserve conversion is intended.
+
+---
+
+## 2.3. Literature claim may be too broad
+
+### Text
+
+> “What these share is a treatment of the environment as a single stock or a single aggregate balance...”
+
+### Problem
+
+Some cited land-use and metabolism literature does distinguish land types, material stocks, and land-use composition. The claim is defensible as a stylised critique but could be softened.
+
+### Fix
+
+> “Much of this literature treats the environment as a single stock or a single aggregate balance, or does not link the composition of biocapacity to an explicit dynamical identifiability problem.”
+
+---
+
+# Model formulation
+
+## 2.4. \(A_r\) should not be called an independent state if it is a balance
+
+### Table
+
+> `$A_r$ & reserve land ... & ha & yes (balance)`
+
+Later:
+
+> “The system is genuinely four-dimensional in the states $(A_f,A_c,P,D)$ with reserve $A_r$ a constrained balance...”
+
+### Problem
+
+If the system is four-dimensional, \(A_r\) is not an independent state. “yes (balance)” is confusing.
+
+### Fix
+
+Change the “State?” column to:
+
+- `no (diagnostic balance)` or
+- `constrained residual`.
+
+---
+
+## 2.5. \(b_f\) is listed as derived but appears as a baseline parameter
+
+### Table
+
+> `$b_f$ & fast-land flow yield per unit area & ... & derived`
+
+Baseline registry:
+
+> `$b_f$ & $0.85$ ... & fast-land yield`
+
+Equation (10):
+
+\[
+b_f=(b_{f0}+T_b)e^{-\alpha D}.
+\]
+
+### Problem
+
+The baseline should specify \(b_{f0}\), not \(b_f\), unless \(b_f\) is the initial value at \(D=0,T_b=0\).
+
+### Fix
+
+In the baseline registry, replace:
+
+\[
+b_f=0.85
+\]
+
+with
+
+\[
+b_{f0}=0.85.
+\]
+
+Add \(b_{f0}\) to the symbol table.
+
+---
+
+## 2.6. \(\kappa=b_f\) becomes time-varying if \(b_f\) is dynamic
+
+### Text
+
+> `$\kappa$ & conversion coefficient $= b_f$`
+
+But \(b_f\) changes with \(D\) and \(T_b\).
+
+### Problem
+
+If \(\kappa=b_f(t)\), then conversion responds to yield degradation and technology. That may be intended, but it should be stated. It also complicates linearisation and units.
+
+### Fix
+
+State explicitly:
+
+> The conversion coefficient is \(\kappa(t)=b_f(t)\); as yield degrades, more capital land must be converted to meet a given flow shortfall.
+
+Alternatively, fix \(\kappa=\kappa_0\) and do not tie it to dynamic \(b_f\).
+
+---
+
+## 2.7. Unit of \(\gamma\) is inconsistent
+
+### Table
+
+> `$\gamma$ & capital-harvest coefficient $=1/b_{G,c}$ ... & ha$\cdot$gha$^{-1}\cdot$yr$^{-1}$`
+
+### Problem
+
+If
+
+\[
+b_{G,c}\quad\text{has units}\quad \text{gha}\cdot\text{ha}^{-1},
+\]
+
+then
+
+\[
+1/b_{G,c}
+\]
+
+has units
+
+\[
+\text{ha}\cdot\text{gha}^{-1},
+\]
+
+without \(\text{yr}^{-1}\).
+
+The \(\text{yr}^{-1}\) would come from the flow \(H_c-\sigma_cY_c\), not from \(\gamma\).
+
+### Fix
+
+Change unit to:
+
+\[
+\text{ha}\cdot\text{gha}^{-1}.
+\]
+
+---
+
+## 2.8. Unit of \(\alpha\) is inconsistent between symbol table and baseline registry
+
+### Symbol table
+
+> `$\alpha$ & degradation rate & (gha$\cdot$yr)$^{-1}$`
+
+Baseline registry
+
+> `$\alpha$ & $0.03\,\text{yr}^{-1}$`
+
+### Problem
+
+Equation (10):
+
+\[
+b_f=(b_{f0}+T_b)e^{-\alpha D}.
+\]
+
+Since \(D\) has units \(\text{gha}\cdot\text{yr}\), \(\alpha\) must have units \((\text{gha}\cdot\text{yr})^{-1}\). The baseline unit \(\text{yr}^{-1}\) is wrong.
+
+### Fix
+
+Correct baseline registry to:
+
+\[
+\alpha=0.03\;(\text{gha}\cdot\text{yr})^{-1}.
+\]
+
+Or rescale \(D\) and state the convention.
+
+---
+
+## 2.9. \(A_{c,ext}\) appears but is not used
+
+### Table
+
+> `$A_{c,ext}, A_{c,\min}$ & capital-land extinction floor, viability floor`
+
+### Problem
+
+Only \(A_{c,\min}\) appears in equations, assumptions, or numerics. \(A_{c,ext}\) is unused.
+
+### Fix
+
+Either remove \(A_{c,ext}\) or define where it binds.
+
+---
+
+## 2.10. \(A_{tot}\) is missing from the baseline registry
+
+### Problem
+
+The model requires
+
+\[
+A_r=A_{tot}-A_f-A_c.
+\]
+
+But the baseline table does not give \(A_{tot}\). The demonstration uses \(A_f+A_c\) values that imply some \(A_{tot}\), but it is not stated.
+
+### Fix
+
+Add \(A_{tot}\) to the baseline registry, or state that areas are normalised and \(A_{tot}\) is large enough not to bind in the reported runs.
+
+---
+
+## 2.11. \(\sigma_f,\sigma_c\) are not given baseline values
+
+### Problem
+
+\(\sigma_f,\sigma_c\) appear in Eq. (4) and in the analytic expressions, but no values are given. Many results depend on whether they equal 1.
+
+### Fix
+
+Add to baseline registry:
+
+\[
+\sigma_f=1,\quad \sigma_c=1,
+\]
+
+if that is intended.
+
+If not, give values and adjust claims accordingly.
+
+---
+
+## 2.12. \(T_b\) is called a parameter but is a time-varying variable
+
+### Table
+
+> `$T_b$ & technology-driven yield step & ... & param`
+
+Equation (12):
+
+\[
+T_b=\frac{\Delta b}{1+e^{-\kappa_w(t-t_{wave})}}.
+\]
+
+### Problem
+
+\(T_b\) is a deterministic function of time, not a fixed parameter.
+
+### Fix
+
+Mark it as:
+
+- `derived` or
+- `time-varying exogenous variable`.
+
+Add \(\kappa_w\) to the symbol table with units \(\text{yr}^{-1}\).
+
+---
+
+## 2.13. Exponential \(e\) conflicts with footprint parameter \(e\)
+
+### Equations
+
+Eq. (10):
+
+\[
+b_f=(b_{f0}+T_b)e^{-\alpha D(t)}.
+\]
+
+Eq. (12):
+
+\[
+T_b=\Delta b/(1+e^{-\kappa_w(t-t_{wave})}).
+\]
+
+But \(e\) is also per-capita footprint.
+
+### Problem
+
+This notation is ambiguous.
+
+### Fix
+
+Use `\exp`:
+
+\[
+b_f=(b_{f0}+T_b)\exp(-\alpha D),
+\]
+
+\[
+T_b=\frac{\Delta b}{1+\exp[-\kappa_w(t-t_{wave})]}.
+\]
+
+---
+
+## 2.14. \(L_c\) and \(H_c\) are underdefined
+
+### Convention
+
+> “the harvest coefficient is $\gamma=1/b_{G,c}$ and applies only to the timber channel $L_c=[H_c-\sigma_c Y_c]_+/b_{G,c}$.”
+
+### Problem
+
+\(H_c\) is not in the symbol table and does not appear elsewhere. \(L_c\) appears in Eq. (5), but its governing expression is only in a convention note.
+
+### Fix
+
+Either:
+
+1. Remove \(L_c\) if it is not used in the main model; or  
+2. Add \(H_c\) to the symbol table, define its units, and give its governing equation or exogenous path.
+
+---
+
+## 2.15. “Four conventions” heading says four, but five bullets follow
+
+### Text
+
+> “Four conventions are used throughout.”
+
+But there are five bullets, including “Units: flows vs accumulation.”
+
+### Fix
+
+Change to:
+
+> “Five conventions are used throughout.”
+
+Or merge/remove one.
+
+---
+
+## 2.16. “A global hectare is a normalised annual flow of regeneration” is imprecise
+
+### Text
+
+> “a global hectare is a normalised annual flow of regeneration, not a standing stock.”
+
+### Problem
+
+A global hectare is usually a standardised bioproductive area unit. Biocapacity, measured in gha/yr, is the flow. The gha itself is not strictly a flow.
+
+### Fix
+
+Rewrite:
+
+> Biocapacity is an annual flow measured in global hectares per year; the global hectare is a productivity-normalised area unit, not a standing-stock unit.
+
+---
+
+## 2.17. State space definition includes \(A_r\) but calls system four-dimensional
+
+### Text
+
+> “The system is genuinely four-dimensional in the states $(A_f,A_c,P,D)$ with reserve $A_r$ a constrained balance ... $\Omega=\{(A_f,A_c,A_r,P,D):...\}$”
+
+### Problem
+
+This is not wrong if the constraint is understood, but it can be cleaner.
+
+### Fix
+
+> The independent states are \((A_f,A_c,P,D)\); \(A_r\) is an algebraic residual satisfying the land balance.
+
+---
+
+# Assumptions
+
+## 2.18. Assumption (7) is unclear about the floor for \(\eta\to0\)
+
+### Text
+
+> “$\eta>0$ set physical ($0.05\,\text{yr}^{-1}$); the $\eta\to0$ singular case is excluded by a floor.”
+
+### Problem
+
+Which floor? \(K_{\min}\)? \(A_{c,\min}\)? A debt floor? Not clear.
+
+### Fix
+
+Specify:
+
+> The singular \(\eta\to0\) limit is excluded by imposing \(\eta\ge\eta_{\min}>0\).
+
+Or if the floor is elsewhere, state it.
+
+---
+
+## 2.19. Assumption (10) mentions saturation but equations do not show it
+
+### Text
+
+> “the conversion $u_c=S/\kappa$ saturates as $A_r\to A_r^{\min}$ or $A_c\to A_c^{\min}$.”
+
+### Problem
+
+The governing equations show only \(S/\kappa\). No saturation function or clamp appears.
+
+### Fix
+
+Define the effective conversion term:
+
+\[
+u_c = \min\left\{\frac{S}{\kappa},\, A_c-A_{c,\min},\, \text{reserve constraint}\right\},
+\]
+
+or specify the numerical clamp formally.
+
+---
+
+# Analytic results
+
+## 2.20. “Interior fold at \(E=Y_c^{\max}\)” conflicts with later \(E_{ceil}=0.478\)
+
+### Table regime
+
+> “interior fold at $E=Y_c^{\max}$”
+
+Earlier:
+
+> “verified: $E_{ceil}=0.478$ at $A_c^*=0.620$”
+
+### Problem
+
+With baseline parameters, the capital-book maximum \(Y_c^{\max}\) is much smaller than 0.478. If the fold is in the full two-land frozen-demand system, \(E_{ceil}\) need not equal \(Y_c^{\max}\). If the table refers to a pure capital book, that must be stated.
+
+### Fix
+
+Clarify:
+
+- For a pure capital-book system, the fold occurs at the maximum of \(Y_c(A_c)\).  
+- For the two-land frozen-demand system, the fold occurs at \(E_{ceil}\), which depends on \(A_f\), \(b_f\), and the conversion equilibrium.
+
+Do not state the table as if it applies universally to the two-land case.
+
+---
+
+## 2.21. No-conversion equilibria assume \(\sigma_f=\sigma_c=1\) or impose \(S=0\) by hand
+
+### Text
+
+> “No-conversion face ($S=0$, $L_c=0$, $\eta_f>0$).”
+
+### Problem
+
+If \(\sigma_c<1\), then at population equilibrium \(E=B\), but
+
+\[
+S=[E-\sigma_fY_f-\sigma_cY_c]_+
+\]
+
+may be positive. So the no-conversion face is not automatically satisfied.
+
+### Fix
+
+State:
+
+> On the no-conversion face we assume \(\sigma_f=\sigma_c=1\), or equivalently that the available flow equals total biocapacity.
+
+Otherwise derive the equilibria under general \(\sigma\).
+
+---
+
+## 2.22. Boundary equilibrium at \(A_c=0\) conflicts with \(A_{c,\min}>0\)
+
+### Text
+
+> equilibria include \((A_f^*=0,\;A_c^*=0)\)
+
+But baseline:
+
+\[
+A_{c,\min}=0.05.
+\]
+
+### Problem
+
+If the viability floor binds, \(A_c=0\) is not an allowed state.
+
+### Fix
+
+Either:
+
+1. Present boundary equilibria for the unclamped system; or  
+2. Replace \(A_c=0\) with \(A_c=A_{c,\min}\) when floors are active.
+
+State which convention is being used.
+
+---
+
+## 2.23. The conversion subsystem matrix should include \(\sigma_f,\sigma_c\) if they are not unity
+
+### Matrix
+
+\[
+J_c=
+\begin{bmatrix}
+G_c'+Y_c'/b_f & 1\\
+-Y_c'/b_f & -(1+\eta_f)
+\end{bmatrix}.
+\]
+
+### Problem
+
+With general shares,
+
+\[
+S=E-\sigma_fY_f-\sigma_cY_c,
+\]
+
+the matrix becomes approximately
+
+\[
+J_c=
+\begin{bmatrix}
+G_c'+\sigma_cY_c'/b_f & \sigma_f\\
+-\sigma_cY_c'/b_f & -(\sigma_f+\eta_f)
+\end{bmatrix},
+\]
+
+assuming \(\kappa=b_f\).
+
+### Fix
+
+Either set \(\sigma_f=\sigma_c=1\) explicitly or present the general matrix.
+
+---
+
+## 2.24. \(\Delta b_{\mathrm{conv}}\) should likely include access shares
+
+### Text
+
+\[
+\Delta b_{\mathrm{conv}}=b_f-b_c-b_{G,c}G_c'(A_c).
+\]
+
+### Problem
+
+If only shares \(\sigma_f,\sigma_c\) are available, the relevant productivity contrast is closer to
+
+\[
+\Delta b_{\mathrm{conv}}
+=
+\sigma_f b_f-\sigma_c\left(b_c+b_{G,c}G_c'(A_c)\right).
+\]
+
+### Fix
+
+If \(\sigma_f=\sigma_c=1\), state so. Otherwise generalise.
+
+---
+
+# Results: principal claims
+
+## 2.25. Demonstration run does not end at \(B\to E\)
+
+### Text
+
+> “It is a bounded transient ending when $B\to E$ or a floor binds.”
+
+Demonstration:
+
+\[
+B:0.561\to0.783,
+\qquad
+E=0.825.
+\]
+
+### Problem
+
+At the reported endpoint, \(B<E\). If \(S>0\), conversion should continue unless a floor binds. But \(A_c=0.558\) is above \(A_{c,\min}=0.05\). It is not clear which floor binds.
+
+### Fix
+
+Either:
+
+1. Report the actual endpoint where \(B\) reaches \(E\) or a floor binds; or  
+2. State that the quoted 5.4-year window is an illustrative subinterval, not the full transient.
+
+---
+
+## 2.26. “Debt compounds without bound” needs conditions
+
+### Text
+
+> “With $b_f=(b_{f0}+T_b)e^{-\alpha D}$, debt compounds without bound while the technology wave saturates...”
+
+### Problem
+
+This may occur in a positive-feedback region, but it is not guaranteed globally. Population falls when \(B\) falls; floors and clamps may intervene. The claim needs precise assumptions.
+
+### Fix
+
+Qualify:
+
+> Under sustained overshoot and absent floors, the multiplicative degradation form implies that debt can compound and eventually dominate the bounded technology gain.
+
+Or present it as a proposition with conditions.
+
+---
+
+# Falsifiable predictions
+
+## 2.27. Prediction classification has a typo/inconsistency
+
+### Text
+
+> “predictions 1--4, 6, 7 are dynamical ... prediction 7 is the observational one”
+
+### Problem
+
+Prediction 7 is listed in both categories.
+
+### Fix
+
+Probably:
+
+> Predictions 1–4 and 6 are dynamical; prediction 5 is regime-conditional; prediction 7 is observational.
+
+---
+
+## 2.28. Prediction 1 needs the access-share condition
+
+### Text
+
+> “The masking signal is $\dot A_c<0$ with $R_B\lesssim1$”
+
+### Problem
+
+As noted above, this requires \(\sigma<1\), \(L_c>0\), or another capital-loss channel.
+
+### Fix
+
+Rewrite:
+
+> The masking signal is capital decline while aggregate biocapacity remains at or above footprint, which can occur when the available harvestable flow is less than total biocapacity (\(\sigma_f,\sigma_c<1\)) or when liquidation is active.
+
+---
+
+# Presentation
+
+## 2.29. “No dimensionless parameter is left without its stated unit” is odd
+
+### Text
+
+> “no dimensionless parameter is left without its stated unit.”
+
+### Problem
+
+Dimensionless parameters have no unit. The intended meaning is probably that no dimensionful parameter lacks a unit.
+
+### Fix
+
+> Every dimensionful parameter has an explicit unit; dimensionless parameters are identified as dimensionless.
+
+---
+
+## 2.30. “paper1”, “paper3”, “paper4/v18” should be formalised
+
+### Text
+
+> “the aggregation theorem (Prop 1) is paper1's; ... paper3 ... paper4/v18”
+
+### Problem
+
+This reads like an internal draft note.
+
+### Fix
+
+Replace with proper citations, or remove if not available.
+
+---
+
+# Numerics, verification, and well-posedness
+
+## 2.31. Basin table wording conflicts with the table
+
+### Text
+
+> “Lower initial $A_c0$ has more headroom; higher $A_c0$ collapses at lower demand.”
+
+Table:
+
+| \(A_{c0}\) | recover threshold |
+|---:|---:|
+| 0.40 | \(P_0\lesssim0.9\) |
+| 0.70 | \(P_0\lesssim1.0\) |
+| 1.00 | \(P_0\lesssim1.10\) |
+| 1.18 | \(P_0\lesssim1.10\) |
+
+### Problem
+
+The table shows higher \(A_{c0}\) tolerating higher or equal demand, not collapsing at lower demand. The phrase “more headroom” is ambiguous: more recovery headroom? more demand headroom? The sentence contradicts the table if read as demand headroom.
+
+### Fix
+
+Rewrite carefully:
+
+> Lower initial \(A_{c0}\) allows a larger recovery ratio \(\mathcal R_c\) because there is more relative room to recover, but it is associated with a lower demand threshold for collapse in these runs. Higher \(A_{c0}\) tolerates higher or similar demand thresholds but has less relative recovery room.
+
+Or correct the table if the intended result is different.
+
+---
+
+## 2.32. Critical slowing notation uses \(\lambda_+\) ambiguously
+
+### Text
+
+> “the active-conversion saddle's positive eigenvalue $\to0$”
+
+and later:
+
+> “$\lambda_+\to0^-$ as a parameter approaches a fold”
+
+### Problem
+
+\(\lambda_+\) is used both for a positive saddle eigenvalue and for a stable eigenvalue approaching zero from below. That is confusing.
+
+### Fix
+
+Use distinct notation:
+
+- \(\lambda_u>0\): unstable eigenvalue of the saddle branch.  
+- \(\lambda_s<0\): leading stable eigenvalue of the stable branch.
+
+Then state:
+
+> At the saddle-node, both relevant eigenvalues approach zero: \(\lambda_u\to0^+\) on the saddle branch and \(\lambda_s\to0^-\) on the stable branch. Critical slowing is associated with \(\lambda_s\to0^-\).
+
+---
+
+# Policy extensions
+
+## 2.33. “Freeze conversion” does not guarantee \(A_c\ge A_{c,\min}\) if \(L_c\) or negative regeneration is present
+
+### Text
+
+> “Freeze conversion is the single operator that guarantees $A_c\ge A_c^{\min}$”
+
+### Problem
+
+If timber liquidation \(L_c>0\) is active, or if \(A_c>A_{c,\max}\) so \(G_c<0\), freezing conversion \(S/\kappa\) alone does not guarantee the capital floor.
+
+### Fix
+
+Rewrite:
+
+> In the base model without timber liquidation and with \(A_c\le A_{c,\max}\), freezing conversion guarantees \(A_c\ge A_{c,\min}\). With liquidation or negative regeneration, additional controls are required.
+
+---
+
+# Demonstration
+
+## 2.34. Restoration flow sign is inconsistent in recovery dynamics section
+
+### Demonstration
+
+Deficit-gated:
+
+\[
+R_{fc}=\chi A_f(E-B)_+.
+\]
+
+Recovery dynamics later:
+
+\[
+R_{fc}=\chi A_f\Phi(B-E).
+\]
+
+### Problem
+
+\(\Phi(B-E)\) is surplus-gated if \(\Phi\) is positive-part-like. The text then says surplus-gated forms are inert during shortfall. So the formula in recovery dynamics has the wrong sign unless \(\Phi\) is defined unusually.
+
+### Fix
+
+Use:
+
+\[
+R_{fc}=\chi A_f\Phi(E-B),
+\]
+
+or define \(\Phi\) explicitly as a deficit-gating function.
+
+---
+
+# Identifiability and empirical programme
+
+## 2.35. The schematic log decomposition is not exact
+
+### Text
+
+\[
+\frac{d\ln B}{dt}=
+\underbrace{\frac{d\ln b}{dt}}_{\text{yield}}
++
+\underbrace{\text{composition/area}}_{\text{land-use}}
++
+\underbrace{\text{capital-land terms}}_{\text{regeneration}}.
+\]
+
+### Problem
+
+Because \(B\) is a sum of heterogeneous terms, the log derivative is not simply the sum of unweighted log derivatives. The exact expression requires shares.
+
+### Fix
+
+Write:
+
+\[
+\frac{d\ln B}{dt}
+=
+s_f\frac{d\ln Y_f}{dt}
++
+s_c\frac{d\ln Y_c}{dt},
+\]
+
+where
+
+\[
+s_f=\frac{Y_f}{B},\qquad s_c=\frac{Y_c}{B}.
+\]
+
+Then expand:
+
+\[
+\frac{d\ln Y_f}{dt}=\frac{d\ln b_f}{dt}+\frac{d\ln A_f}{dt}.
+\]
+
+This is cleaner and consistent with the identifiability argument.
+
+---
+
+## 2.36. Observability table gives wrong units for \(Y_f,Y_c\)
+
+### Table
+
+> “Observable (physical flow) & $P$; harvested yields $Y_f$, $Y_c$ [product$\cdot$ha$^{-1}\cdot$yr$^{-1}$]”
+
+### Problem
+
+In the model, \(Y_f\) and \(Y_c\) are total flows in \(\text{gha}\cdot\text{yr}^{-1}\). The per-hectare yields are \(b_f,b_c\). Also \(P\) is not a physical flow.
+
+### Fix
+
+Change to:
+
+| Tier | Quantities | Units |
+|---|---|---|
+| Population | \(P\) | cap or persons |
+| Total biocapacity flows | \(Y_f,Y_c,B\) | gha yr\(^{-1}\) |
+| Per-area yields | \(b_f,b_c\) | gha ha\(^{-1}\) yr\(^{-1}\) |
+
+Or adjust the wording.
+
+---
+
+## 2.37. “FAO yield index” needs a precise definition
+
+### Text
+
+> “$b_f$ (yield) from the FAO yield index”
+
+### Problem
+
+FAO does not provide a single “yield index” matched to global hectares. The paper later says a cereal-yield sentinel was used. That is not the same as aggregate crop production per arable-plus-permanent-crop hectare.
+
+### Fix
+
+Specify:
+
+> We use FAOSTAT cereal yield as a sentinel proxy for \(b_f\); a stronger proxy would be aggregate crop production per hectare of arable land plus permanent crops, ideally on a calorie or dry-matter basis and calibrated to NFA yield factors.
+
+Avoid calling it “the FAO yield index” unless you define it formally.
+
+---
+
+## 2.38. Cereal-yield sentinel may not match the denominator \(A_f\)
+
+### Text
+
+> “We used a cereal-yield sentinel”
+
+But:
+
+\[
+A_f=\text{arable land}+\text{permanent crops}.
+\]
+
+### Problem
+
+Cereal yield applies to cereal area, not all arable plus permanent crops. Permanent crops and non-cereal crops may behave differently.
+
+### Fix
+
+State clearly:
+
+> The cereal-yield sentinel is a partial proxy for fast-land productivity and does not exactly match the arable-plus-permanent-crop area denominator.
+
+Or use aggregate crop production divided by \(A_f\).
+
+---
+
+## 2.39. The residual capital book includes non-capital NFA components
+
+### Text
+
+> “capital-book residual $B_c^{\mathrm{res}}=B_{\mathrm{NFA}}-b_fA_f$”
+
+### Problem
+
+The NFA total includes cropland, grazing land, forest land, fishing grounds, built-up land, and carbon-related components depending on edition. Subtracting a cropland fast-book proxy leaves all of these together. It is not purely ecological capital.
+
+### Fix
+
+Rename:
+
+> non-fast-book residual
+
+or
+
+> residual non-cropland biocapacity.
+
+Then say:
+
+> This residual is consistent with ecological-capital drawdown but is not a direct measure of it.
+
+---
+
+# Limitations
+
+## 2.40. The limitation about \(\eta\) incorrectly says it removes the regeneration channel
+
+### Text
+
+> “setting $\eta=0$ removes the regeneration channel and, with it, the existence of an equilibrium”
+
+### Problem
+
+\(\eta\) is the debt-repayment rate. It does not remove the regeneration channel \(G_c\). Setting \(\eta=0\) removes debt decay, making debt a pure integral of overshoot. That can change equilibrium existence or yield dynamics, but it is not the regeneration channel.
+
+### Fix
+
+Rewrite:
+
+> Setting \(\eta=0\) removes debt repayment, turning ecological debt into a pure cumulative overshoot integral. This changes the long-run equilibrium structure and is excluded by imposing \(\eta>0\).
+
+---
+
+## 2.41. “Fit-defect disclosure” and “interval discipline” are good but slightly out of place
+
+These bullets are sensible but read like general research-practice rules rather than model limitations.
+
+### Fix
+
+Either keep them under a heading like “Reporting discipline” or shorten.
+
+---
+
+# Conclusions
+
+The conclusion is rhetorically strong. The main issue is that it inherits the earlier empirical overclaim if the residual is described as independent.
+
+### Suggested adjustment
+
+Replace:
+
+> “independent ecological-capital proxies either fell or were not recoverable”
+
+with:
+
+> “independent fast-book proxies show yield-led growth, while the non-fast-book residual is consistent with ecological-capital drawdown but is not independently identified.”
+
+That preserves honesty and strengthens the identifiability claim.
+
+---
+
+# 3. Consolidated list of concrete corrections
+
+Below is the short list I would implement before circulating the paper.
+
+---
+
+## Equations and notation
+
+1. Use `\exp(...)` instead of `e^{...}` because \(e\) is already footprint.
+2. Add \(b_{f0}\) to symbol table; baseline should list \(b_{f0}\), not \(b_f\).
+3. State whether \(\kappa\) is fixed or \(\kappa(t)=b_f(t)\).
+4. Correct \(\gamma\) units to \(\text{ha}\cdot\text{gha}^{-1}\).
+5. Correct \(\alpha\) baseline units to \((\text{gha}\cdot\text{yr})^{-1}\).
+6. Add \(\sigma_f,\sigma_c\) baseline values.
+7. Add \(A_{tot}\) baseline value or state normalisation.
+8. Define or remove \(L_c,H_c\).
+9. Make conversion saturation explicit:
+   \[
+   u_c=\min\left\{\frac{S}{\kappa},A_c-A_{c,\min}\right\}
+   \]
+   or equivalent.
+10. Decide whether debt uses \([E-B]_+\) or share-adjusted deficit, and make Convention 1 consistent.
+
+---
+
+## Analytic corrections
+
+11. Fix or remove \(R_A=R_B/\psi_c\).
+12. Correct:
+   \[
+   \frac{\partial S}{\partial D}=+\alpha\sigma_fY_f.
+   \]
+13. If \(\sigma_f,\sigma_c\neq1\), include them in \(J_c\) and \(\Delta b_{\mathrm{conv}}\).
+14. Clarify that \(R_B<1\) with \(\dot A_c<0\) requires non-unity access shares, liquidation, or another capital-loss channel.
+15. Clarify relationship between \(Y_c^{\max}\) and \(E_{ceil}\).
+16. Replace “bistable” with “threshold/fold dynamics” unless another stable branch is shown.
+
+---
+
+## Numerical consistency
+
+17. Fix \(A_{c,\max}=1.2\) versus \(A_{c0}=1.5\).
+18. State endpoint criterion for the 5.4-year masking demonstration.
+19. Reconcile basin-table text with the table.
+20. Use separate notation for stable and unstable eigenvalues near the fold.
+
+---
+
+## Empirical section
+
+21. Recompute annualised rates.
+22. Add weights to the proxy growth decomposition or present the table as unweighted component log changes.
+23. Rename the residual as “non-fast-book residual” or “residual biocapacity component”, not independent ecological capital.
+24. State explicitly that cereal yield is a sentinel and not matched exactly to \(A_f\).
+25. If using FAOSTAT arable + permanent crops, note that permanent crops are not captured well by cereal yield.
+
+---
+
+## Language and presentation
+
+26. Change “Four conventions” to “Five conventions”.
+27. Mark \(T_b\) as time-varying, not param.
+28. Mark \(A_r\) as diagnostic/residual, not independent state.
+29. Replace internal labels “paper1/paper3/paper4/v18” with proper citations or remove.
+30. Soften “no dimensionless parameter is left without its stated unit”.
+
+---
+
+# 4. Suggested rewritten passages for the most fragile spots
+
+## For Convention 4
+
+Current:
+
+> “Regeneration is a growth flow, not a land-area transition.”
+
+Suggested:
+
+> Regeneration is an endogenous recovery flow that increases effective capital land. Because total land is fixed, it reduces the residual reserve balance unless offset by other flows. It is distinct from policy-driven restoration \(R_{rc}\), but it is still reflected in the land balance.
+
+---
+
+## For the masking prediction
+
+Current:
+
+> “The masking signal is $R_B<1$ while $\dot A_c<0$.”
+
+Suggested:
+
+> The masking signal is a decline in ecological capital while aggregate biocapacity remains at or above footprint. In the model this requires that the available harvestable flow be less than total biocapacity, e.g. because access shares satisfy \(\sigma_f,\sigma_c<1\), or because liquidation \(L_c\) is active. If all biocapacity is available (\(\sigma_f=\sigma_c=1\)), conversion-driven capital decline requires \(R_B>1\).
+
+---
+
+## For the empirical residual
+
+Current:
+
+> “capital-book residual”
+
+Suggested:
+
+> residual non-fast-book biocapacity
+
+Then:
+
+> This residual is not an independent ecological-capital measure. It includes all NFA biocapacity components not captured by the cropland fast-book proxy, including grazing, forestry, fishing, built-up land, and accounting-convention effects. Its decline is consistent with the composition-mask mechanism but does not by itself identify the capital book.
+
+---
+
+## For the empirical growth decomposition
+
+Suggested:
+
+> Let \(X_t=b_{f,t}A_{f,t}\) be the proxy fast-book component and \(Z_t=B_t-X_t\) the residual non-fast-book component. The exact level decomposition is \(\Delta B_t=\Delta X_t+\Delta Z_t\). A log decomposition requires time-varying weights \(w_{X,t}=X_t/B_t\) and \(w_{Z,t}=Z_t/B_t\). We therefore report component log changes as diagnostics, not as additive contributions to \(d\ln B\).
+
+---
+
+# 5. Overall assessment
+
+The paper’s central argument is coherent and important: **aggregate global-hectare biocapacity can conceal composition change and ecological-capital drawdown**. The identifiability point is especially strong.
+
+However, the current draft needs a consistency pass before the claims are safe. The most important fixes are:
+
+1. reconcile \(A_{c,\max}\) with the demonstration runs;  
+2. resolve the \(G_c\)/area-transition contradiction;  
+3. specify \(\sigma_f,\sigma_c\) and align \(S\) with debt;  
+4. fix the \(R_A\) identity;  
+5. fix the \(\partial S/\partial D\) sign;  
+6. qualify the \(R_B<1\) masking condition;  
+7. correct the empirical growth-accounting table;  
+8. stop calling the residual an independent ecological-capital proxy;  
+9. recompute annualised empirical rates;  
+10. clarify fold/hysteresis language.
+
+Once those are fixed, the paper will be much stronger: the model will be internally consistent, the empirical section will be properly bounded, and the central identifiability claim will be harder to attack.
+gemini:
+### 1. Fatal Conceptual & Structural Flaws
+
+#### 1.1 The Double-Counting of $G_c(A_c)$ and the Land-Conservation Breach
+Equation (5) and the accounting identity in Equation (7) break the physical conservation of land area and double-count biological growth:
+$$\frac{dA_c}{dt} = G_c(A_c(t-\tau_g)) - \frac{S}{\kappa} - L_c + R_{fc} + R_{rc} \tag{5}$$
+$$A_r = A_{tot} - A_f - A_c \implies \frac{dA_r}{dt} = -\frac{dA_f}{dt} - \frac{dA_c}{dt} \tag{7}$$
+
+Substituting $\frac{dA_f}{dt} = \frac{S}{\kappa} - \eta_f A_f - R_{fc}$ and Equation (5) yields:
+$$\frac{dA_r}{dt} = \eta_f A_f + L_c - R_{rc} - G_c(A_c(t-\tau_g))$$
+
+This introduces two severe contradictions:
+1. **Direct Contradiction with Stated Modeling Conventions**: Section 2.2 explicitly asserts:
+   > *"Regeneration is a growth flow, not a land-area transition. $G_c(A_c)$ adds to capital-land accounting capacity (a cohort matures); it is not an $A_r \to A_c$ area transfer unless a restoration flow $R_{rc}$ is explicitly active."*
+   Yet in Equation (5), $G_c$ is placed directly on the right-hand side of $\frac{dA_c}{dt}$ (units: $\text{ha}\cdot\text{yr}^{-1}$). Through Equation (7), this forces $\frac{dA_r}{dt}$ to decrease by $G_c$. Land area is physically transferred from reserve $A_r$ to capital $A_c$ at rate $G_c$ at every instant.
+2. **Double-Counting of the Regrowth Increment**: Biocapacity $Y_c$ in Equation (2b) already credits $b_{G,c} G_c(A_c)$ as a harvestable flow to satisfy human footprint $E$. If harvesting $Y_c$ does not deplete $A_c$, while $G_c$ simultaneously expands the physical footprint of $A_c$ via Equation (5), the biological increment is credited twice: once as consumed product $Y_c$, and once as physical land expansion $dA_c/dt$.
+3. **No Boundary Clamping on Reserve**: Equation (1) has no dependence on available reserve $A_r$. If $A_r \to A_r^{\min}$, $G_c(A_c)$ continues to add hectares to $A_c$, driving $A_r < A_r^{\min}$ and violating Assumption 10.
+
+#### 1.2 The Zero-Cropland Equilibrium Pathology
+In Section 4.2, the manuscript states:
+> *"No-conversion face ($S=0, L_c=0, \eta_f>0$)... $\eta_f A_f^* = 0$ forces $A_f^* = 0$. The equilibria are thus boundary: $(A_f^*=0, A_c^*=0)$ and $(A_f^*=0, A_c^*=A_{c,\max})$... There is no interior population-consistent active-conversion steady state."*
+
+This is a critical structural defect. Because Equation (6) contains only retirement ($-\eta_f A_f$) and deficit conversion ($+S/\kappa$), **cropland can only exist while civilization is undergoing an active ecological deficit collapse ($S > 0$)**. 
+
+Under any sustainable balance ($E \le B \implies S = 0$), all cropland on Earth decays to zero ($A_f \to 0$) at rate $\eta_f = 0.05\,\text{yr}^{-1}$ (half-life $\approx 14$ years). Humanity is forced to abandon all agriculture and live exclusively off primary ecological capital. A model of human carrying capacity where sustainable agriculture cannot exist in steady state is ecologically indefensible.
+
+#### 1.3 The "Deficit-Gated Restoration" Fallacy
+Sections 6, 7, 9, 10, and 12.2 advocate for a "deficit-gated restoration flow":
+$$R_{fc} = \chi A_f [E - B]_+$$
+and argue that surplus-gated restoration ($[B - E]_+$) is "inert during collapse".
+
+Consider the dynamical consequences:
+1. When humanity is in deficit ($E > B$), population demand exceeds carrying capacity. 
+2. The deficit-gated policy responds by retiring cropland $A_f$ and converting it back into forest ($R_{fc} > 0$).
+3. Because $b_f = 0.85 \gg b_{c,\text{eff}} \approx 0.11$, retiring 1 hectare of cropland destroys $0.74\,\text{gha}$ of food production while yielding almost no immediate biocapacity.
+4. Biocapacity $B$ collapses faster, driving $E - B$ higher, accelerating $R_{fc}$, and rapidly liquidating the remaining food supply.
+5. In Section 10, this dynamic "recovers" $A_c$ only because population was artificially frozen ($P = 1.5$). With endogenous demography (Equation 8), $K = B/e \to 0$, causing mass starvation ($P \to 0$). The forest "recovers" solely because the human population is eliminated. 
+
+Labeling the destruction of cropland during a famine as a "protective, stabilizing institutional stance" inverts basic ecological feedback logic.
+
+---
+
+### 2. Mathematical, Dimensional & Algebraic Errors
+
+#### 2.1 Dimensional Inconsistency of Ecological Debt $D$
+In Section 2.1 and Equation (11):
+$$\frac{dD}{dt} = [E - B]_+ - \eta D \tag{11}$$
+- Section 2.1 defines $D$ with units $\text{gha}\cdot\text{yr}$, and $[E - B]_+$ as a flow in $\text{gha}\cdot\text{yr}^{-1}$.
+- Taking the time derivative of $D$ gives:
+  $$\left[\frac{dD}{dt}\right] = \frac{\text{gha}\cdot\text{yr}}{\text{yr}} = \mathbf{gha}$$
+- On the right-hand side:
+  $$[[E - B]_+] = \mathbf{gha}\cdot\mathbf{yr}^{-1}, \qquad [\eta D] = \text{yr}^{-1} \times (\text{gha}\cdot\text{yr}) = \mathbf{gha}$$
+- Term 1 is in $\text{gha}\cdot\text{yr}^{-1}$, while Term 2 and the LHS are in $\text{gha}$. Adding them violates dimensional homogeneity.
+
+*Correction*: The integral of an annual flow $[E - B]_+$ ($\text{gha}\cdot\text{yr}^{-1}$) over time $dt$ ($\text{yr}$) has units $\mathbf{gha}$, not $\text{gha}\cdot\text{yr}$. Debt $D$ must have units $\text{gha}$, $\frac{dD}{dt}$ has units $\text{gha}\cdot\text{yr}^{-1}$, and the degradation parameter $\alpha$ in $e^{-\alpha D}$ must have units $\text{gha}^{-1}$ (matching the baseline table, not the variables table).
+
+#### 2.2 Algebraic Breakdown: $R_A \neq R_B / \psi_c$
+In Section 4.4, the manuscript defines:
+$$R_B = \frac{E}{B}, \qquad R_A = \frac{E}{Y_f}, \qquad \psi_c = \frac{b_c A_c}{Y_c}$$
+and states:
+$$R_A = \frac{R_B}{\psi_c}$$
+
+Evaluating the right-hand side:
+$$\frac{R_B}{\psi_c} = \frac{E/B}{\frac{b_c A_c}{Y_c}} = \frac{E \cdot Y_c}{B \cdot b_c A_c} \neq \frac{E}{Y_f} = R_A$$
+
+The identity $R_A = R_B / \psi$ was valid only in the single-stock model where $\psi = Y_{\text{flow}} / B$. In the two-land model, the fast-land share is $\psi_f = Y_f / B$. The capital flow share $\psi_c$ is unrelated to the ratio between $R_A$ and $R_B$.
+
+#### 2.3 Accounting Sum Mismatch in the Empirical Proxy Decomposition
+In Section 12.3, the proxy growth table claims:
+$$\text{Biocapacity } B: +0.207$$
+$$\text{Land area } A_f: +0.160$$
+$$\text{Yield / technology } b_f: +1.128$$
+$$\text{Capital-book residual } B_c^{\text{res}}: -0.404$$
+
+Summing the components:
+$$+0.160 + 1.128 - 0.404 = \mathbf{+0.884} \neq \mathbf{+0.207}$$
+
+The log of a sum $B = Y_f + B_c$ does not equal the unweighted sum of the logs of its components. The logarithmic decomposition requires share-weighting:
+$$d\ln B = w_f (d\ln b_f + d\ln A_f) + w_c d\ln B_c^{\text{res}}$$
+Presenting raw unweighted log changes as components that add to $d\ln B$ is an elementary accounting error.
+
+#### 2.4 Confusion Between Fold Thresholds: $Y_c^{\max}$ vs $E_{\text{ceil}}$
+- Table 2 states that in the capital-dominated regime, the system undergoes an *"interior fold at $E = Y_c^{\max}$"*.
+- For the baseline parameters, $Y_c^{\max} = \mathbf{0.061\,\text{gha}\cdot\text{yr}^{-1}}$.
+- Section 4.2 states that the fold occurs at the conversion-capacity ceiling $E_{\text{ceil}} = \mathbf{0.478\,\text{gha}\cdot\text{yr}^{-1}}$.
+- $E_{\text{ceil}}$ is nearly an order of magnitude larger than $Y_c^{\max}$. $Y_c^{\max}$ was the fold threshold of the single-stock model. In the two-land model, the fold includes converted fast land $A_f$. Table 2 copy-pastes the single-stock threshold without accounting for the fast-land book.
+
+---
+
+### 3. Internal Inconsistencies & Self-Contradictions
+
+#### 3.1 The Direct Contradiction on the Regeneration Delay Cliff
+Table 4 contains a direct, line-level contradiction:
+
+| Location | Statement in Text |
+|---|---|
+| **Table 4, Row 3** | *"One-stock $\approx 18$--$20\,$yr regeneration cliff \| **No** \| Recover/collapse is a demand ($P_0$) threshold, essentially flat in $\tau_g$"* |
+| **Table 4, Row 6** | *"Allee-type rescue threshold \| **No** \| **Collapse at large delay is domain-wide; only shortening the lag helps**"* |
+
+If the recover/collapse threshold is flat in $\tau_g$ and the cliff does not exist (Row 3), shortening the lag cannot be the only intervention that prevents domain-wide collapse (Row 6). Row 6 was carried over from the earlier single-stock draft.
+
+#### 3.2 Unphysical Initial Conditions in Demonstration
+In Section 10:
+> *"With a fixed demand $E = 0.825$ (endogenous population held, isolating conversion, $A_{f0}=0.6, \mathbf{A_{c0}=1.5}, P_0=1.5$)..."*
+
+The baseline registry establishes:
+$$A_{c,\max} = \mathbf{1.2\,\text{ha}}$$
+
+Initializing $A_{c0} = 1.5$ sets the initial capital area **25% above the absolute carrying-area ceiling**. At $A_{c0} = 1.5$:
+$$G_c(1.5) = 0.08 \times 1.5 \times \left(1 - \frac{1.5}{1.2}\right) = 0.12 \times (-0.25) = \mathbf{-0.03\,\text{ha}\cdot\text{yr}^{-1}}$$
+Regeneration begins negative. Furthermore, if $A_{c0} = 1.5$, $A_{f0} = 0.6$, and $A_r \ge A_r^{\min} = 0.1$, the total area required is $A_{\text{tot}} \ge 2.2\,\text{ha}$, which is nowhere defined in the baseline parameters.
+
+#### 3.3 The Orphaned Timber Channel $L_c$ and Variable $H_c$
+- Equation (5) includes the term $-L_c$.
+- Section 2.2 defines $L_c = [H_c - \sigma_c Y_c]_+ / b_{G,c}$.
+- The variable $H_c$ is:
+  1. Missing from Table 1 (Variables and units).
+  2. Missing from the Baseline Registry table.
+  3. Absent from all analytical derivations (Section 4 assumes $L_c = 0$).
+  4. Absent from all numerical runs (Section 8 sets $L_c = 0$).
+$L_c$ is an orphaned, non-functional term that clutters Equation (5).
+
+#### 3.4 Missing Baseline Parameters
+The Baseline Registry table omits three parameters required to close the system:
+1. $A_{\text{tot}}$ (Total bioproductive area, required for $A_r = A_{\text{tot}} - A_f - A_c$).
+2. $A_f^{\max}$ (Arable ceiling, listed in Table 1 and Assumption 10).
+3. $b_{f0}$ (Base fast yield in Equation 10; only derived $b_f = 0.85$ is listed).
+
+---
+
+### 4. Epistemological & Methodological Fallacies
+
+#### 4.1 The $d\ln B$ Population Artifact Fallacy
+In Section 12.3, the manuscript argues:
+> *"Because the identity $d\ln B = d\ln(B/P) + d\ln P$ is exact, the contribution split over the period is unambiguous: population $+0.959$ ($+464\%$ of $d\ln B$) and per-capita $-0.752$ ($-364\%$). So the aggregate biocapacity rise in these accounts is a population-scale artefact --- it masks a $53\%$ per-capita (per-person) halving, and the population term is larger than the whole rise."*
+
+This conflates an accounting identity with a causal mechanism:
+- Biocapacity $B$ is a measure of biophysical area and agricultural yield ($\sum \text{Area}_i \times \text{Yield Factor}_i \times \text{Equivalence Factor}_i$). It is calculated independently of human population size.
+- Defining $y = B/P$ means $B \equiv y \cdot P$. Differentiating gives $d\ln B = d\ln y + d\ln P$.
+- Attributing the growth of $B$ to $P$ via this identity is mathematically equivalent to defining the land area of a continent as $A = (A/P) \cdot P$ and asserting that the continent's physical area is an artifact of population growth because $d\ln P > 0$ while $d\ln(A/P) < 0$.
+- Global biocapacity rose $+23\%$ between 1961 and 2022 because agricultural crop yields tripled ($b_f \uparrow$). Because population grew faster ($+167\%$), per-capita biocapacity fell. Population growth did not create the $23\%$ rise in biocapacity; it caused per-capita provisioning to decline despite rising yields.
+
+#### 4.2 Mischaracterization of Critical Slowing Down (CSD)
+In Section 4.2, Section 5, and Table 4, the manuscript claims:
+> *"Critical slowing down is present at the fold... verified: $\lambda_+ = 0.058 \to 0.0379 \to 0.0225 \to 0.0120 \to 0.0003$ as $E \to E_{\text{ceil}}$"*
+
+This misapplies bifurcation theory:
+- $\lambda_+$ is the **unstable eigenvalue of the saddle branch**. On an unstable saddle, trajectories diverge exponentially; perturbations do not recover, so return time is undefined.
+- Critical slowing down is a phenomenon of the **stable attractor branch** ($\lambda_- \to 0^-$). As the stable node approaches the fold, the recovery rate of perturbations back to the attractor vanishes, leading to increased variance and autocorrelation.
+- Reporting the decay of an unstable eigenvalue on an unobservable saddle branch as evidence of observable critical slowing down indicates a confusion between attractor dynamics and separatrix dynamics.
+
+---
+
+### 5. Line-Level Mechanical & Textual Defects
+
+1. **LaTeX Syntax Error in Table 1**:
+   Line 128: `(\\$f,\\$c)` will render as literal backslashes and dollar signs `(\$f,\$c)`. It should be `($f, c$)`.
+2. **LaTeX Subscript Syntax in Table 1**:
+   Line 104: `$A_tot - A_f - A_c$` will render with only the `t` subscripted ($A_tot$). It must be `$A_{\text{tot}} - A_f - A_c$`.
+3. **Internal Lab-Notebook Jargon**:
+   The manuscript repeatedly cites internal project names:
+   - Line 140: *"companion typed-flux-ledger paper (paper3)"*
+   - Line 310: *"The aggregation theorem (Prop 1) is paper1's; the multi-type typed-flux ledger is paper3's; the slow-turnover delay-amplified regime is paper4/v18's."*
+   - Line 446: *"heterogeneity is the object of paper3."*
+   These references must be replaced with proper scholarly citations or standard descriptive cross-references.
+4. **Numbering Inconsistency in Predictions**:
+   - Section 1 states: *"the seven predictions are falsifiable hypotheses"*.
+   - Section 6 states: *"predictions 1--4, 6, 7 are dynamical... prediction 7 is the observational one"*. Prediction 7 is double-counted across two categories, and the list of dynamical predictions should be 1–4, 6.
+5. **Dimensional Error in Parameter Table**:
+   Table 1 lists $\alpha$ with units $(\text{gha}\cdot\text{yr})^{-1}$. The Baseline Registry lists $\alpha = 0.03\,\text{yr}^{-1}$. The units table conflicts with the parameter table.
+
+---
+
+### 6. Architectural Remediation Plan
+
+To resolve these contradictions while preserving the paper's genuine contributions (the composition illusion, the unidentifiable aggregate gha, and the two-land structure), the model requires three targeted mathematical corrections:
+
+```
+                          CORRECTED LAND-FLUX ARCHITECTURE
+                          
+                     ┌──────────────────────────────────┐
+                     │       Reserve Land (A_r)         │
+                     └──────────┬─────────────▲─────────┘
+        Restoration Flow R_rc   │             │ Natural Retirement η_f A_f
+       (Active when E < B)     ▼             │
+                     ┌──────────────────┐     │
+                     │  Capital (A_c)   │     │
+                     └──────────┬───────┘     │
+        Deficit Conversion S/κ  │             │
+       (Active when E > B)      ▼             │
+                     ┌────────────────────────┴─────────┐
+                     │         Fast Land (A_f)          │
+                     └──────────────────────────────────┘
+```
+
+#### Step 1: Fix Land Conservation and Remove $G_c$ from Area Dynamics
+Redefine $A_c$ strictly as the physical area of ecological capital land. Area transitions must occur only via explicit land conversion or physical restoration:
+$$\frac{dA_c}{dt} = -\frac{S}{\kappa} + R_{fc} + R_{rc} \tag{5'}$$
+$$\frac{dA_f}{dt} = \frac{S}{\kappa} - \eta_f A_f - R_{fc} \tag{6'}$$
+$$\frac{dA_r}{dt} = \eta_f A_f - R_{rc} \tag{7'}$$
+$$\implies \frac{d}{dt}(A_c + A_f + A_r) \equiv 0 \quad (\text{Exact mass balance})$$
+
+$G_c(A_c)$ remains strictly an ecological yield increment in Equation (2b) ($Y_c = b_c A_c + b_{G,c} G_c(A_c)$). It does not create physical land area out of nothing.
+
+#### Step 2: Establish a Viable Agricultural Equilibrium
+Introduce a baseline agricultural maintenance/replanting rate so that cropland does not decay to zero when humanity lives sustainably:
+$$\frac{dA_f}{dt} = \mu(P) A_r + \frac{S}{\kappa} - \eta_f A_f$$
+where $\mu(P) A_r$ maintains the cropland area necessary to feed population $P$ in steady state. Deficit conversion $S/\kappa$ then acts cleanly as emergency conversion of capital land under overshoot.
+
+#### Step 3: Correct the Restoration Sign Logic
+Replace the self-destructive "deficit-gated" restoration with ecologically sound rewilding:
+- **Restoration of Reserve to Capital ($R_{rc}$)**: Occurs when society has surplus carrying capacity ($E < B$):
+  $$R_{rc} = \rho_r A_r [B - E]_+$$
+- **Emergency Protection Cap**: Under severe deficit, institute an active conversion freeze:
+  $$\frac{S}{\kappa} \cdot \Theta(A_c - A_c^{\min})$$
+  which stops conversion dynamically at the ecological viability floor without starving the population by liquidating active cropland.
+grok:
+The two-land rewrite fixed the *narrative* category error (fruit vs trees) and then reintroduced it as **algebra**. The governing ODEs are not dimensionally homogeneous; several “results” are properties of that inhomogeneity, or leftovers from the one-stock comparator, or both. Below, load-bearing failures first.
+
+---
+
+## 1. Fatal: `S/κ` does not have the units of `dA/dt`
+
+**Declared:** `S` is a flow (`gha·yr⁻¹`); `κ = b_f` is a flow yield (`gha·ha⁻¹·yr⁻¹`); therefore `S/κ` is put in (5)–(6) as a **land-conversion rate**.
+
+**Arithmetic:**
+
+\[
+\frac{S}{b_f} \;=\; \frac{\mathrm{gha\cdot yr^{-1}}}{\mathrm{gha\cdot ha^{-1}\cdot yr^{-1}}} \;=\; \mathbf{ha},
+\]
+
+not `ha·yr⁻¹`. Converted land of area `ΔA` produces flow `b_f ΔA` **every subsequent year**. Closing a persistent shortfall `S` is a **one-time** stock adjustment `ΔA = S/b_f`, or an adjustment with an explicit conversion time `τ_conv`:
+
+\[
+\frac{\mathrm{d}A_f}{\mathrm{d}t} = \frac{1}{\tau_{\mathrm{conv}}}\Big(\tfrac{S}{b_f} - \text{already-converted gap}\Big).
+\]
+
+As written, (5)–(6) add **hectares** to **hectares per year**. That is the original `γ = 1/b_G = 1/V` error with a new name: a flow yield is being used as if it were a stock value `b_{G,c}`.
+
+**Immediate wreckage**
+
+- `J_c` cannot be a Jacobian of an ODE. You already have the smoking gun in the matrix you printed:
+
+\[
+J_c = \begin{bmatrix} G_c' + Y_c'/b_f & 1 \\ -Y_c'/b_f & -(1+\eta_f) \end{bmatrix}.
+\]
+
+`G_c'` and `η_f` are `yr⁻¹`; `Y_c'/b_f` and `1` are dimensionless. **`(1,1)` and `(2,2)` add 1/time to 1.** The “1” in `(1,2)` and in `-(1+η_f)` is `∂(S/b_f)/∂A_f` with `S/b_f` treated as a rate. Eigenvalues `+0.039…+0.073 yr⁻¹`, `E_{\mathrm{ceil}}=0.478`, CSD `λ_+ : 0.058 → 0.0003`, and Table `tab:conv` are not numbers about land-use change; they are numbers about this mix.
+
+- “Donor-limited `S/κ ≤ A_c`” compares `ha` (or `ha/yr`, depending which story you believe) to `ha`. A rate cannot be `≤` a stock unless a time step or a saturation function is specified.
+
+- Physical reading if you *keep* `S/b_f` in the ODE anyway: you reconvert `S/b_f` hectares **every year**, as if new cropland yielded once and then vanished. That is liquidation, not conversion — the operator the upgrade was meant to replace.
+
+Until (5)–(6) are rewritten with a time constant (or as a DAE with algebraic conversion), **§4.2–4.3, Table `tab:conv`, Prediction 3, the “demand-driven fold”, and the 5.4 yr window are not results.**
+
+---
+
+## 2. Fatal: `G_c` cannot sit in `dA_c/dt` if `A_c` is land that sums to `A_{tot}`
+
+You state both of the following:
+
+1. Regeneration “is a growth flow, not a land-area transition… not an `A_r → A_c` transfer unless `R_{rc}` is active” (avoids “book-mixing”).
+2. `A_r = A_{tot} - A_f - A_c` and “the fixed-total land constraint is satisfied *dynamically* by conservation of (5)–(7)”.
+
+From (5)–(6) with `S=L_c=R_{fc}=0`:
+
+\[
+\dot A_f + \dot A_c = G_c(A_c(t-\tau_g)) - \eta_f A_f.
+\]
+
+The residual `A_r` then **must** fall when `G_c>0`. That *is* colonization of reserve by capital land, which you forbade. If instead `G_c` is standing-stock increment (biomass, m³, gha of timber) it does not belong in an equation whose left-hand side is **hectares of land**.
+
+Same object cannot be:
+
+- a conserved land-cover compartment (`A_f + A_c + A_r = A_{tot}`, conversion `S/κ`), and
+- a logistic biomass/capacity stock (`G_c = ρ_c A_c(1-A_c/A_{c,max})`).
+
+Machine-precision `|A_f+A_c+A_r-A_{tot}|=2.2\times10^{-16}` is **vacuous**: it holds by definition of (7), whatever (5)–(6) do. It is not evidence of conservation.
+
+**Minimal well-posed split** (one extra state, still Allee-free):
+
+| Symbol | Meaning |
+|---|---|
+| `A_c` | capital **area** (ha), converts 1:1 with `A_f`, `A_r` |
+| `Q_c` | standing quality/stock on that area (tC ha⁻¹ or gha ha⁻¹) |
+| `G_c` | acts on `Q_c`, not on `A_c` |
+
+Conversion moves **area**; timber harvest `L_c` draws down `Q_c`; `Y_c = Y_c(A_c,Q_c)`. Without that split you have not built two books. You have built one book with two names.
+
+`L_c` is used in (5) and never defined in the equation block; `H_c` is undefined everywhere. `R_{fc}, R_{rc}` appear in (5)–(6) and are only specified in § Discussion / Demonstration.
+
+---
+
+## 3. There is no sustainable cropland equilibrium
+
+**No-conversion face, as you derived:** `S=L_c=R=0`, `η_f>0` ⇒ `A_f^*=0` and `A_c^*∈\{0,A_{c,max}\}`.
+
+**Active conversion, as you derived:** endogenous `P=K` ⇒ `E=B` ⇒ `S=0`. “No interior population-consistent active-conversion steady state.”
+
+Together: **the only equilibria of the endogenous-`P` model have zero fast land.** Agriculture exists only as a transient financed by converting `A_c`, while `η_f A_f` dumps cropland into `A_r` and nothing grows cropland except the deficit. That is a model of obligatory deforestation, not of an orchard that can be in balance.
+
+You present this as a *virtue* (“no one-parameter family, no `det J≡0`”). It is a defect of `η_f A_f` as linear decay of all cropland. Either:
+
+- `η_f=0` except when `Y_f` is unprofitable,
+- retirement is balanced by an explicit `A_r → A_f` (pioneer) term, or
+- `η_f` is abandonment of land already converted in excess of `E/b_f`.
+
+Until one of those is in (6), “balance point `R_B=1`” is not an agricultural state of this system.
+
+---
+
+## 4. `R_A = R_B/ψ_c` is false; `ψ_c` is the wrong share
+
+You define
+
+\[
+R_B=\frac{E}{B},\quad R_A=\frac{E}{Y_f},\quad \psi_c=\frac{b_c A_c}{Y_c},\quad R_A=\frac{R_B}{\psi_c}.
+\]
+
+The last equality is the **one-stock** identity `ψ = bA/B`. Here
+
+\[
+\frac{R_B}{\psi_c} = \frac{E\,Y_c}{B\,b_c A_c} \neq \frac{E}{Y_f}.
+\]
+
+`ψ_c` is the split *inside* `Y_c`, not the share of `B` that is fast land. Conversion onset is `S>0`, i.e. `E > σ_f Y_f + σ_c Y_c`, not `R_A=1`. The sentence “`R_A=1` is necessary but not sufficient because capital growth is untouched” is the old orchard line, and it does not describe (4)–(5).
+
+Regime Table `tab:regime` then attaches “mask small / mask more visible” to `b_{G,c}ρ_c ≷ b_c`. In *this* model the composition mask is `Δb_{\mathrm{conv}}=b_f-b_{c,\mathrm{eff}}>0`, which is a statement about **cropland vs forest yield**, almost automatic in NFA equivalence factors, and almost independent of whether `Y_c` has an interior maximum. The table is the one-stock regime table with “two-land analogue” written on it.
+
+---
+
+## 5. Two folds are named as one; CSD is shown on the wrong branch
+
+The paper uses “fold” for:
+
+| Object | Where | What |
+|---|---|---|
+| Capital-land MSY | §4.1 | interior max of `Y_c` iff `b_{G,c}ρ_c>b_c` |
+| Frozen-demand conversion SN | §4.2, Results | `E\to E_{\mathrm{ceil}}`, two conversion eq. merge |
+| Endogenous-`P` basin edge | § Numerics, Pred. 4 | `P_0` threshold, “essentially flat in `τ_g`” |
+
+Intro conclusion 2 and Prediction 3 sell “the” transition as a demand-driven fold **with CSD**. Numerics of CSD are `λ_+` on the **saddle** branch (`+0.058 → +0.0003`). Early-warning CSD is the **stable** branch `λ\to 0^-` (return time). You correctly warn that `T_{ret}` is not defined on the saddle, then still let Prediction 3 say “leading relaxation time should grow.”
+
+Even if §1’s unit error were fixed: the endogenous-`P` result you actually have is a **demand threshold**, not a fold you have linearised. Do not quote frozen-`E` saddle numbers as the policy trigger.
+
+---
+
+## 6. Demonstration is off-domain; 5.4 yr is not a conversion identity
+
+Baseline: `A_{c,max}=1.2`. Demo: `A_{c0}=1.5 > A_{c,max}`, `A_{f0}+A_{c0}=2.1`, `A_{tot}` **never given**.
+
+For `A_c>A_{c,max}`, `G_c` is **negative** (`G_c(1.5)≈ -0.03 ha/yr` at `ρ_c=0.08`). Capital is already shrinking from the logistic *before* conversion.
+
+Area accounting of the advertised window:
+
+- `ΔA_c = 1.500-0.558 = -0.942`
+- `ΔA_f = 0.875-0.600 = +0.275`
+
+Not 1:1. ~0.67 ha vanished into `G_c<0`, `η_f`, and/or `A_r`. The figure is not “conversion raises `B` while `A_c` falls.” It is overflow + retirement + conversion, started outside the carrying area, at frozen `E=0.825 > E_{\mathrm{ceil}}=0.478`.
+
+The 5.4 yr duration matching the old one-stock mask is a coincidence to be treated as a red flag, not a confirmation.
+
+---
+
+## 7. Baseline is not the land the prose describes
+
+Registry (claimed to satisfy `b_{G,c}ρ_c>b_c` so that a capital-land fold exists):
+
+- `ρ_c=0.08` ⇒ `V_{eco}:=1/ρ_c=12.5 yr`
+- `b_{G,c}=0.8`, `b_c=0.05` ⇒ `b_{G,c}/b_c=16 yr`
+- `b_{G,c}ρ_c=0.064>0.05` (barely)
+
+Your own forest-effective check: `ρ_c=1/30` ⇒ `b_{G,c}ρ_c=0.027<b_c`, **no interior max, no capital-land fold**. So:
+
+- the land you cite (Poorter, Poeplau, Hutchings, NFA carbon) is the **flow-dominated `Y_c`** regime;
+- the land you simulate is a **12.5 yr hybrid** chosen so that `Y_c'` has a root.
+
+`V_{eco}=1/ρ_c` is also not the old `V=b_G/b` and not vegetation stock/NPP. Using the same letter for a third quantity guarantees the next draft will again set `γ=1/V`.
+
+`α`: symbol table `(gha·yr)^{-1}` vs registry `0.03 yr^{-1}` — pick one, or `e^{-αD}` is undefined.
+
+`γ` units in the table: `ha·gha^{-1}·yr^{-1}` is wrong. `γ=1/b_{G,c}` is `ha·gha^{-1}`; times a flow (`gha·yr^{-1}`) it yields `ha·yr^{-1}`.
+
+`κ=b_f` while `b_f=(b_{f0}+T_b)e^{-αD}`: is conversion cheaper or dearer as soils fail? Registry lists `b_f=0.85` as if it were a parameter; (10) makes it a derived state. Freeze `κ=b_{f0}` or track `κ=b_f(t)` — not both silently.
+
+Missing as numbers: `A_{tot}`, `A_f^{\max}`, `σ_f,σ_c`, `b_{f0}`, `L_c`/`H_c` law, history `A_c(θ)` for `θ<0` (you only specified `K` history).
+
+`σ_f,σ_c` in the table: `(\\$f,\\$c)` is broken TeX. `$A_tot$` likewise.
+
+---
+
+## 8. Direct contradictions (keep these even if you ignore the rest)
+
+**Basin sentence vs Table `tab:basin`.** Text: “Lower initial `A_c0` has more headroom; higher `A_c0` collapses at lower demand.” Table: `A_c0=0.40` recovers only for `P_0≲0.9`; `A_c0=1.00` for `P_0≲1.10`. Higher capital supports **higher** demand. The sentence is backwards.
+
+**Allee row vs Prediction 4.** `tab:neg`: “Collapse at large delay is domain-wide; only shortening the lag helps.” Results / Pred. 4: recover fraction **flat** in `τ_g` (`0.54→0.52→0.50`), trigger is `P_0`. You cannot retire the 18–20 yr cliff and keep “only shortening the lag helps.”
+
+**“Seven predictions” vs intro’s three conclusions.** Fine as counts; not fine that conclusion 2 (CSD fold) is frozen-`E` while Pred. 4 (no delay threshold) is endogenous `P`.
+
+**Loop 1 vs endogenous `P`.** Feedback diagram: `A_c↓ → A_f↑ → B↑ → K↑ → P↑ → S↑`. At a population equilibrium `E=B` forces `S=0`, so this loop **has no interior stationary point**. It is a transient booster, not a coexisting saddle/stable pair of the closed system. Table `tab:conv` is frozen `E=0.30`.
+
+**One-stock leftovers still asserted as two-land facts**
+
+- Intro para that begins “Because the stock is the only way to meet a shortfall…” (liquidation + debt; no conversion).
+- `R_A=R_B/ψ_c`.
+- “consistent with the monotone (no-Hopf) mode” — no two-land Hopf scan is reported.
+- `χ`, `+0.62` correctly exiled in §12.1, then the **structure** those objects lived in (`det`, family, `R_A` identity) is reused.
+- “unboundedly negative `-α dD`”: `D` has repayment `ηD`; `A_c≥A_c^{\min}`; `b_f` cannot run away. Bounded technology vs bounded debt, not bounded vs unbounded.
+
+**`[·]_+` never ramped “because a ramp leaks when `E < b_c A_c + b_{G,c}G_c`.”** Leak condition is `E < σ_f Y_f + σ_c Y_c`. The fast book is missing from the sentence that justifies the numerical method.
+
+---
+
+## 9. Empirical block: the proxy table does not decompose `B`
+
+Identity `d\ln B = d\ln(B/P)+d\ln P` is true for any two series. Population `+464\%` of `d\ln B` and per-capita `-364\%` is the arithmetic of a small rise in `B` against a large rise in `P`. It is **not** the composition illusion (`B` up, `A_c` down). You caveat this; the conclusions still call it “the aggregation face of this masking more directly.” A per-capita halving is a different theorem (extensive vs intensive). Keep it; do not brand it as the two-land result.
+
+Proxy table:
+
+| term | `d\ln` |
+|---|---|
+| `B` | `+0.207` |
+| `A_f` | `+0.160` |
+| `b_f` | `+1.128` |
+| `B_c^{res}` | `-0.404` |
+
+These **do not sum** (`0.160+1.128-0.404=0.884 ≠ 0.207`) and **must not**. Additive accounting is
+
+\[
+\mathrm{d}\ln B = s_f(\mathrm{d}\ln b_f + \mathrm{d}\ln A_f) + s_c\,\mathrm{d}\ln B_c,\quad s_f=\frac{b_f A_f}{B}.
+\]
+
+Without shares, listing raw `d\ln` of components is not a decomposition. Residual `B_c^{res}=B_{\mathrm{NFA}}-b_f A_f` also inherits every calibration error in `b_f(t_0)` and every NFA land type you did not put in `A_f` (grazing, forest products, fishing, carbon). Carbon is the majority of the Footprint; a cropland residual is not “ecological capital.”
+
+FAO yields are physical; gha already include equivalence factors. You say this, then still print `+1.128` as “the yield channel.” At most: *a cereal-yield index rose a lot; a residual fell; shares unknown.*
+
+Typo: “aglobal-hectare”.
+
+---
+
+## 10. Restoration, policy, and other local holes
+
+- `R_{fc}=χ A_f(E-B)_+` with `χ=0.10`: `A_f(E-B)_+` has units `ha·gha·yr⁻¹`. `χ` has no units that yield `ha·yr⁻¹`. Same class of error as `S/κ`.
+- Deficit-gated restoration **shrinks cropland during a shortfall**. That can recover `A_c` in a model; as policy it is “reforest during famine.” State the short-run deepening of `S`.
+- Freeze-conversion does not freeze `G_c`, `L_c`, or `η_f`. It does not by itself implement `A_c≥A_c^{\min}`.
+- `K≥K_{\min}` is required because (10) can send `b_f→0`; say so next to (8).
+- State space: table marks `A_r` as a state; text says 4-D `(A_f,A_c,P,D)`. Pick.
+- “The system **is** a DDE” → “we model it as.”
+- World3 already has arable land, soil fertility, and non-renewable land. “What these share is a single stock” overstates the hole you are filling; Erb/Krausmann/Haberl are composition papers you cite as if they weren’t.
+- Prop 1 / paper3 / paper4: undefined in this document. Either one sentence each or cut.
+- Exact-tube / typed-floor “theorem”: still a slogan. The real claim is informational (observe `B` ⇏ control `A_c`); it does not need the dialect.
+
+`ψ_c^*=2b_c/(b_c+b_{G,c}ρ_c)` at the MSY point is algebraically correct. `A_c^*=1.069` at baseline is correct. Those are almost the only two displayed formulae that survive a unit check.
+
+---
+
+## What still stands (if the ODEs are repaired)
+
+These do **not** depend on `S/κ` as a rate, and they are the actual paper:
+
+1. **GFN `B` is a value-weighted aggregate**; yield vs area vs book are not identifiable from World `B` alone. The NFA file structure is the proof. Keep § Identifiability; drop the non-adding `d\ln` table or replace it with a share-weighted decomposition plus a carbon/forest area series.
+2. **Composition mask as an accounting identity:** if `b_f > b_{c,\mathrm{eff}}`, shifting a hectare from `A_c` to `A_f` raises current `B`. That is Proposition 1, and it is **static**. It does not need a 5.4 yr ODE window and should not be timed until conversion has a clock.
+3. **Recovery is not the inverse of conversion** unless an explicit `A_f\to A_c` or `A_r\to A_c` flow exists. Sign of the gate (`(E-B)_+` vs `(B-E)_+`) is a real, cheap result — after units on `χ` are fixed.
+4. **Capital-land interior max iff `b_{G,c}ρ_c>b_c`**, a ratio, identification-dependent. Keep; stop calling the baseline “forest.”
+5. **Controller that sees only `B` cannot enforce a floor on `A_c`.** Informational, not dynamical.
+
+Everything that looks like a spectrum (`Δb_{\mathrm{conv}}` eigenvalues, `E_{\mathrm{ceil}}`, CSD, 5.4 yr, `J_c`, “no family so we’re well posed”) is downstream of §§1–3 and should not be reprinted until (5)–(6) are homogeneous and cropland has an equilibrium.
+
+---
+
+## The repair that makes the ambitions jointly true (again)
+
+Do not add delays, Allees, or a fudge `κ`. Change the operator:
+
+\[
+\underbrace{\Delta A = \min\big(A_c-A_c^{\min},\; [E-\sigma_f Y_f-\sigma_c Y_c]_+ / b_f\big)}_{\text{hectares, instantaneous or }/\tau_{\mathrm{conv}}}
+\]
+
+moves area `A_c\to A_f`; `G_c` updates **quality** `Q_c` on remaining `A_c`; `A_f+A_c+A_r=A_{tot}` is an identity with 1:1 area flows only. Then `Δb_{\mathrm{conv}}` is a **static** mask diagnostic, the conversion “fold” is a ceiling on how much area exists to convert, endogenous `P` can sit at `S=0` with `A_f^*=E/b_f>0` if `η_f=0` on that face, and forest `ρ_c` can be 1/30 without being asked to produce `+0.06` eigenvalues.
+
+Until that is the registered code, ECOMOD is still a one-stock liquidation model wearing two land symbols, and the `+0.62` debate is moot because the two-land Jacobian is not a Jacobian.

@@ -1,0 +1,774 @@
+% =====================================================================
+% Manuscript: How Aggregation Can Conceal Composition: Aggregate Biocapacity
+% and the Identifiability of Modelled Ecological-Capital Drawdown
+% Author: Amin Abaee (Independent Researcher)
+% Compiled with LuaLaTeX (fontspec + unicode-math).
+% Two-land conversion model.
+% =====================================================================
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{fontspec}
+\usepackage{amsmath,amssymb}
+\usepackage{unicode-math}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{graphicx}
+\graphicspath{{reports/}{supplementary/FIGURES/}{graphical_abstract/}}
+\usepackage{enumitem}
+\emergencystretch=3em
+\setlength{\tolerance}{2000}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue,citecolor=blue]{hyperref}
+
+\setmainfont{DejaVu Serif}
+\setmonofont{DejaVu Sans Mono}
+\setmathfont{Latin Modern Math}
+
+\hypersetup{
+  pdfauthor={Amin Abaee},
+  pdftitle={How Aggregation Can Conceal Composition: Aggregate Biocapacity and the Identifiability of Modelled Ecological-Capital Drawdown},
+}
+
+\title{How Aggregation Can Conceal Composition: Aggregate Biocapacity and the Identifiability of Modelled Ecological-Capital Drawdown\thanks{Data vintages and consistency. The aggregate global-biocapacity growth of $+23\%$ ($\Delta\ln B=+0.207$; 1961--2022) reported throughout is anchored to the aggregate National Footprint and Biocapacity Accounts (NFA) series. The land-type asset split (e.g.\ cropland vs.\ non-cropland) is resolved from the NFA land-type matrix, which incorporates subsequent retroactive NFA re-baselining and yields a slightly higher aggregate growth of $+24.5\%$ ($\Delta\ln B=+0.219$). Rather than blending these timelines into a single value, the attribution is reported robustly across both vintages: the cropland book drives effectively all of the net aggregate growth (\raisebox{0pt}{$\approx$}97--103\%, depending on vintage), while the non-cropland book is statistically flat ($\Delta\ln\approx\pm0.01$, i.e.\ $0.99$--$1.01\times$). The paper's conclusions are structurally invariant to these minor database updates; see SI~§S5.3b.}}
+\author{
+  \textbf{Amin Abaee}\\
+  \textit{Independent Researcher}\\
+  \href{mailto:amin_abaee@ut.ac.ir}{amin\_abaee@ut.ac.ir}\\
+  \href{https://orcid.org/0000-0002-0019-1842}{ORCID: 0000-0002-0019-1842}
+}
+\date{September 7, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Humanity's headline index of annual bioproductive supply --- total biocapacity --- is a single number built from heterogeneous land accounts: cropland, grazing land, forest products, fishing grounds, and built-up land. This paper asks whether that single number can conceal the composition of what is growing. It can, and the concealment is structural. From 1961 to 2022, global biocapacity grew about 23\%, but measured land-type accounts show that this growth came almost entirely from cropland, whose biocapacity grew 2.85$\times$, while the non-cropland book remained essentially flat at the endpoint. Over the same period, per-capita biocapacity fell by about half as population grew. A deliberately simple two-land model makes the mechanism precise: conversion from ecological-capital land to provisioning land can raise the measured total while the model's capital book falls; the drawdown is demand-driven and approaches a floor rather than showing slow precursors; and recovery requires an explicitly gated restoration flow. The deeper point is measurement. Because aggregate biocapacity combines areas, yields, and equivalence factors, the aggregate does not identify its own composition; a rising total may reflect broad growth, fast-provisioning expansion, or offsetting changes among components, and these cannot be separated from the total alone. Identifying composition requires independent land-cover and yield data, and global sustainability indicators should therefore report components alongside totals. These results establish an identifiability property of aggregate biocapacity and a measured composition pattern for 1961--2022; they are not a forecast and do not show a measured decline in the model's ecological-capital book.
+\end{abstract}
+
+\medskip
+\noindent\textbf{Keywords:} carrying capacity; biocapacity; ecological footprint; land-use conversion; composition illusion; identifiability; critical slowing down
+
+\section{Introduction}
+
+Carrying capacity is one of ecology's most enduring yet elusive ideas. In classical population biology it is a fixed number --- the ceiling that caps growth. Imported into global human ecology it is usually treated as a static boundary, the maximum number of people the Earth can support (Cohen, 1995). Such treatments overlook a feedback that matters: if a population overshoots its resource base, it degrades the very environment that sustains it and thereby lowers the future ceiling. The ceiling is a moving target. This paper is concerned with a subtler and, we argue, more consequential failure than treating the ceiling as fixed. It concerns the \emph{measurement} on which monitoring and policy depend.
+
+The setting is an orchard with two kinds of ground. Each year some of the ground bears fruit that can be gathered without harming the ground itself --- a \emph{flow}; ecologists call this annual regenerative supply biocapacity. The trees and soil remain standing --- a stock of natural capital --- and it is this stock that generates the flow. Taking the fruit at or below the rate at which the ground regrows uses the flow, which is biocapacity; cutting into the standing stock faster than it regenerates is liquidation of capital, which reduces the future flow rather than adding to it. Now suppose the ground is of two sorts. One sort is fast provisioning land --- cropland and intensively managed systems --- whose yield is high and quickly restored, but whose regenerative standing value is small. The other sort is ecological capital land --- forest, soil, wetland, long-rotation and regenerative systems --- whose regenerative flow and standing value are large but slowly rebuilt, and which are degraded when drawn down faster than they regrow. Demand is met first from the fast flow; only the excess above the harvestable flow converts capital into provision. This is land-use conversion, the historical operator by which agricultural systems have expanded at the expense of ecological systems. A harvest that looks stable, or a \emph{rising} aggregate measure of capacity, can therefore be masking a shrinking ecological capital account.
+
+The arithmetic is the arithmetic of any productive stock. The harvest is the sum over the land of (productivity per unit) $\times$ (number of units), so with two kinds of land the aggregate rate is a \emph{value-weighted} average of the two yields, and that weighting is exactly what can hide which land is growing. So long as needs stay within total productivity the harvest can be taken without touching the base: the orchard yields fruit and the flock yields eggs. But if needs exceed total productivity, the shortfall has to be covered by eating into the base itself --- cutting branches, felling trees, killing hens, and in the two-land model converting ecological capital into provisioning land. That covers the current liability, but it changes the \emph{composition} of future production. In the two-land model the conversion loop raises the measured aggregate while the standing capital book falls, so the mask is a \emph{bounded} composition effect, not a monotone slide. The genuinely \emph{unbounded} vicious cycle runs through the debt channel: the shortfall accrues as ecological debt that erodes the flow-yield coefficient, so the harvest that must meet the next shortfall is itself smaller, a larger shortfall follows, and the cycle compounds. The two loops act on different books and can reinforce --- conversion hides the decline in the near term, debt-erosion turns the mask into a reckoning later --- which is why the aggregate illusion is real even when the aggregate looks healthy, and why it cannot persist. This is the \emph{composition} mechanism of this paper.
+
+The standard aggregate measure is biocapacity, and in the National Footprint Accounts it is expressed in global hectares (gha). A global hectare is already a value-weighted product of bioproductive area, a yield factor, and an equivalence factor (Borucke et al., 2013). This is the crux of the difficulty this paper addresses: because the value-weighting is \emph{inside} the unit, an aggregate biocapacity series does not tell a monitor whether capacity rose because land became more productive, because more land was brought into provision, or because ecological capital was converted into provisioning land. Aggregate biocapacity and ecological capital are two different objects, and the former can rise while the latter falls.
+
+That this concealment is not merely a theoretical possibility is the empirical core of the paper. In the measured National Footprint and Biocapacity Accounts, aggregate biocapacity rose from 1961 to 2022, but land-type attribution shows that this growth came almost entirely from cropland, whose biocapacity grew 2.85$\\times$, while the non-cropland book remained essentially flat at the endpoint. The two-land model then asks whether a still-rising aggregate could, under sustained demand, coexist with a declining ecological-capital book in a way the aggregate cannot detect.
+
+This has a direct consequence for how sustainability is measured. Aggregate biocapacity is an annual flow index, not a state variable and not a direct measure of ecological-capital stock: it combines land areas, yield factors, and equivalence factors into one number. The composite-indicator literature warns that in additive aggregation weights act as trade-offs, allowing a deficit in one dimension to be offset by a surplus in another (Nardo et al., 2008). Biocapacity is exactly such a composite; reporting only the total can therefore send a misleading policy signal (Becker et al., 2017; Fischer et al., 2022). The aggregate remains useful as a headline indicator, but only if its components are reported alongside it.
+
+Nor do the orchard and its harvesters respond instantly. Forest loss, soil degradation and climate change unfold over decades, while demographic patterns and social norms are slow to change. The system is therefore a delay differential equation, a class widely used to capture feedback delays in ecology (Kuang, 1993), and this is why societies can prosper for long periods while quietly undermining their productive base, only to suffer abrupt decline (Tainter, 1988; Diamond, 2005). To a first approximation the harvest follows the classical logistic form (Pearl, 1925).
+
+The general idea --- that a steady or rising harvest (or biocapacity) need not signal a healthy orchard --- is what the companion ledger work (Abaee, 2026c) calls the productivity illusion, and it sits at the heart of a long-standing debate in sustainability science between those who hold that technology can always substitute for natural capital and those who argue that substitution has hard limits. The orchard has an everyday analogue. A system can bear overload for a while --- an elevator rated for ten people will still carry fourteen, showing little visible strain before the cable gives way --- while its underlying integrity is quietly eroding. Judged by what it delivers (the harvest) the elevator still runs; judged by its reserve (the stock, the cable) it is already failing.
+
+The specific form we address here is the \emph{composition} illusion: the aggregate rises \emph{not} merely because technology outpaces degradation (the productivity illusion as Abaee, 2026c, defines it), but because the two books are re-weighted --- ecological capital is converted into provisioning land, so the value-weighted aggregate can rise while the standing capital book falls. This is a property of the \emph{measurement}, not only of the dynamics, and the question this paper addresses is not whether such masking can occur but when it is sustained, which results are structural versus regime-conditional, and whether the composition step can be identified from the aggregate at all.
+
+The wider literature frames the same problem. The most prominent global human--environment model is the World3 system of \emph{The Limits to Growth} (Meadows et al., 1972, 2004) and \emph{Dynamics of Growth in a Finite World} (Meadows et al., 1974); a rich literature on coupled human--environment and resource-harvest dynamics has since developed (Brander \& Taylor, 1998; Anderies, 2000). Estimates of Earth's carrying capacity span an enormous range, from well under one billion to over one trillion people (Cohen, 1995; van den Bergh \& Rietveld, 2004), and some scholars argue the very notion of a fixed carrying capacity is inapplicable to humans (Simon, 1996). Meyer (1994) and Meyer \& Ausubel (1999) model carrying capacity as itself logistically varying, and Dasgupta (2021) formalises natural capital as a depreciating asset. More recently several authors have argued that Earth-system models must incorporate bidirectional feedbacks with human population, inequality and consumption rather than relying on exogenous projections (Motesharrei et al., 2016; Donges et al., 2017; Calvin \& Bond-Lamberty, 2018; Henderson \& Loreau, 2018); the United Nations population projections that inform most global assessments assume demographic trends unfold independently of environmental constraints (United Nations, 2022) --- precisely the assumption challenged here. The stability of model ecosystems and the classical surplus-production/MSY curve rest on May (1973) and Schaefer (1954). Land-use change and its biogeochemical consequences are quantified by Krausmann et al. (2013), Erb et al. (2017), Haberl et al. (2007), and Carvalhais et al. (2014); the National Footprint Accounts are documented in Wackernagel \& Rees (1996), Wackernagel et al. (2002), Borucke et al. (2013), and Lin et al. (2018), and are criticised by Blomqvist et al. (2013), Giampietro \& Saltelli (2014), and van den Bergh \& Grazi (2015). The delayed-logistic stability result is Hutchinson (1948); the surplus-production/MSY curve is Schaefer (1954); the catastrophic-shift structure is Scheffer et al. (2001). What these share is a treatment of the environment as a single stock or a single aggregate balance, in which the composition of biocapacity --- its split between provisioning land and ecological capital --- is either absent or not identifiable.
+
+We therefore develop a minimal deterministic two-land model. Biocapacity is $B=b_f A_f + [\,b_c + b_{G,c}G_c(q)\,]A_c$ with per-ha capacity $q$: the fast-land flow yield, the capital-land direct yield, and the capital-land regenerative growth. Population follows a delayed logistic on an emergent carrying capacity $K=B/e$; regeneration of capital land is delayed by $\tau_g$; demography by $\tau_p$; cumulative overshoot accumulates as ecological debt $D$ that erodes the flow-yield coefficient. Because the stock is the only way to meet a shortfall, overshoot feeds damage back onto the supply: demand in excess of the flow yield is paid from the base, and cumulative overshoot accumulates as an ecological debt that steadily erodes yield. We use this model to ask not whether masking can occur but \emph{when} it is sustained, \emph{which} results are structural versus regime-conditional, and \emph{whether the aggregate can be identified}. (Throughout we keep two models distinct: the two-land model developed here, and the single-stock comparator retained in the Supplementary Information. The distinction that matters is that some results are properties of the \emph{accounting} --- the value-weighted aggregate can rise while a component falls, and the composition step is not identifiable from the aggregate alone --- and therefore hold as a matter of structure; while others, such as the \emph{sign and magnitude} of the composition diagnostic and the specific floor-collision threshold, are statements about the representative parameters and are genuine conditional/regime claims, not marks of the structure itself.)
+
+Three conclusions follow, and each concerns the orchard with two kinds of land. First, the commonly used aggregate can rise while a component falls, and this is a robust composition effect, not an artefact of one parameter set. Second, the collapse of the capital book is demand-driven --- it is drawn to its typed floor once demand exceeds a ceiling that rises with the initial capital stock, and it is \emph{not} regeneration-delay-driven; and it is a \emph{floor collision} at $E_{ceil}\approx1.138$, not an interior fold, so there is no critical slowing down (the leading eigenvalue is constant along the branch). Third, recovery is not reversible by reversing the forcing: it requires an explicit restoration flow whose gate sign matters, one that acts \emph{against} the shortfall. The structural content is the composition logic and the identifiability limit; the conditional content is the composition diagnostic's sign and magnitude and the specific demand thresholds. It is a conceptual, stylised illustration of the accounting and dynamical logic rather than a calibrated forecast; the seven predictions are falsifiable hypotheses, and the consequences of the deliberately minimal, Allee-free choices are discussed in \S Model scope and \S Limitations.
+
+\section{Model formulation}
+
+\subsection{Variables and units}
+
+\small
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.115\textwidth}>{\raggedright\arraybackslash}p{0.37\textwidth}>{\raggedright\arraybackslash}p{0.235\textwidth}>{\raggedright\arraybackslash}p{0.13\textwidth}}
+\toprule
+Symbol & Meaning & Unit & State? \\
+\midrule
+\endfirsthead
+\toprule
+Symbol & Meaning & Unit & State? \\
+\midrule
+\endhead
+$A_f$ & fast provisioning land (cropland, intensive) & ha & yes \\
+$A_c$ & ecological capital land (forest, soil, fishery) & ha & yes \\
+$A_r$ & reserve land ($A_{tot}-A_f-A_c$) & ha & balance (not independent) \\
+$q$ & per-hectare capital-land quality (a capacity index) & dimensionless & yes \\
+$P$ & human population & cap & yes \\
+$D$ & accumulated ecological debt & gha & yes \\
+$b_f$ & fast-land flow yield per unit area & gha$\cdot$ha$^{-1}\cdot$yr$^{-1}$ & derived \\
+$b_c$ & capital-land direct yield per unit area & gha$\cdot$ha$^{-1}\cdot$yr$^{-1}$ & param \\
+$b_{G,c}$ & value of one hectare of standing capital & gha$\cdot$ha$^{-1}$ & param \\
+$G_c(q)$ & per-ha regeneration of capital-land quality & yr$^{-1}$ & no \\
+$\mu$ & cropland maintenance rate (reserve$\to$fast) & yr$^{-1}$ & param \\
+$R_{rc}$ & reserve$\to$capital restoration flow ($A_r\to A_c$) & ha$\cdot$yr$^{-1}$ & param \\
+$R_{fc}$ & fast$\to$capital restoration variant ($A_f\to A_c$, stated extension, not base) & ha$\cdot$yr$^{-1}$ & extension \\
+$\rho_r$ & reserve-scaled restoration rate (in $R_{rc}=\rho_r A_r \Psi$) & yr$^{-1}$ & param \\
+$\Psi,\Phi$ & restoration gates (surplus-gated $\Psi(B-E)_+$; deficit-gated $\Phi(E-B)_+$) & --- & extension \\
+$L_c$ & capital-land timber liquidation flow ($=[H_c-\sigma_cY_c]_+/b_{G,c}$; off in the base model) & ha$\cdot$yr$^{-1}$ & extension \\
+$H_c$ & capital-land timber flow target (off in the base model) & gha$\cdot$ha$^{-1}\cdot$yr$^{-1}$ & extension \\
+$\chi_r$ & reserve$\to$capital restoration gate & yr$^{-1}$ & param \\
+$\chi$ & fast$\to$capital restoration rate (in $R_{fc}=\chi A_f\Phi$; extension) & yr$^{-1}$ & extension \\
+$\tau_{\mathrm{conv}}$ & conversion time constant & yr & param \\
+$q_{\max}$ & per-ha capital-quality ceiling & dimensionless & param \\
+$\Upsilon_c(q)$ & per-ha capital value $=b_c+b_{G,c}G_c(q)$ & gha$\cdot$ha$^{-1}\cdot$yr$^{-1}$ & derived \\
+$B$ & biocapacity $=b_f A_f+b_c A_c+b_{G,c}G_c(q)\,A_c$ & gha$\cdot$yr$^{-1}$ & no \\
+$E$ & footprint $=eP$ & gha$\cdot$yr$^{-1}$ & no \\
+$K$ & carrying capacity $=B/e$ & cap & algebraic \\
+$e$ & per-capita footprint & gha$\cdot$cap$^{-1}\cdot$yr$^{-1}$ & param \\
+$\rho_c$ & capital-land regeneration rate & yr$^{-1}$ & param \\
+$r$ & per-capita population growth rate & yr$^{-1}$ & param \\
+$\alpha$ & degradation rate & gha$^{-1}$ & param \\
+$\eta_f$ & fast-land retirement rate & yr$^{-1}$ & param \\
+$\eta$ & debt-repayment rate & yr$^{-1}$ & param \\
+$\mathcal{R}_c$ & capital-land recovery metric $=(A_c(T)-A_c^{\mathrm{deg}})/(A_c^{\mathrm{init}}-A_c^{\mathrm{deg}})$ & dimensionless & derived \\
+$A_{c,\min}$ & capital-land viability floor & ha & param \\
+$A_{tot}$ & total bioproductive area ($A_f+A_c+A_r$) & ha & param \\
+$A_r^{\min}, A_f^{\max}, K_{\min}$ & reserve floor, arable ceiling, carrying-capacity floor & ha, ha, cap & param \\
+$\sigma_f,\sigma_c$ & human-available share of flow $(\sigma_f,\sigma_c)$ & dimensionless & param \\
+$\tau_g,\tau_p$ & recruitment, demographic delays & yr & param \\
+$T_b$ & technology-driven yield step & gha$\cdot$ha$^{-1}\cdot$yr$^{-1}$ & param \\
+\bottomrule
+\end{longtable}
+
+\noindent\textbf{Baseline registry (single source of truth; $R_B$-consistent).} Unless stated otherwise, the
+two-land model is run at the following representative values, which put it in the composition-premium regime
+($\Delta b_{\mathrm{conv}}=b_f-b_c-b_{G,c}G_c(q)>0$ at the capital capacity maximum):
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{l>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X}
+\toprule
+Parameter & Value & Note \\
+\midrule
+$\rho_c$ & $0.08\,\text{yr}^{-1}$ & capital-land capacity regeneration rate \\
+$b_f$ & $0.85\,\text{gha}\cdot\text{ha}^{-1}\cdot\text{yr}^{-1}$ & fast-land yield \\
+$b_c$ & $0.05\,\text{gha}\cdot\text{ha}^{-1}\cdot\text{yr}^{-1}$ & capital direct yield \\
+$b_{G,c}$ & $0.8\,\text{gha}\cdot\text{ha}^{-1}$ & standing-stock value \\
+$\eta_f$ & $0.05\,\text{yr}^{-1}$ & fast-land retirement \\
+$\alpha$ & $0.03\,\text{gha}^{-1}$ & degradation rate \\
+$\eta$ & $0.05\,\text{yr}^{-1}$ & debt-repayment rate \\
+$e$ & $0.55\,\text{gha}\cdot\text{cap}^{-1}\cdot\text{yr}^{-1}$ & per-capita footprint \\
+$r$ & $0.02\,\text{yr}^{-1}$ & intrinsic growth \\
+$\tau_g,\tau_p$ & $20,25$\,yr & recruitment, demographic delays \\
+$A_{tot}$ & $2.5$\,ha & total bioproductive area \\
+$q_{\max}$ & $1.0$ & per-ha capital-quality ceiling \\
+$\sigma_f,\sigma_c$ & $1.0,1.0$ & human-available flow shares \\
+$b_{f0}$ & $0.85\,\text{gha}\cdot\text{ha}^{-1}\cdot\text{yr}^{-1}$ & base fast-land yield \\
+$\mu$ & $0.06\,\text{yr}^{-1}$ & cropland maintenance (reserve$\to$fast) \\
+$\tau_{\mathrm{conv}}$ & $1.0$\,yr & conversion time constant \\
+$\chi_r$ & $0.10\,\text{yr}^{-1}$ & surplus-gated reserve$\to$capital restoration ($R_{rc}=\chi_r A_r(B-E)_+$; \emph{off} in the no-restoration base runs) \\
+$A_{c,\min},A_r^{\min},K_{\min}$ & $0.05,0.10,0.02$ & typed floors \\
+$\Delta b,\kappa_w,t_{wave}$ & $1.0,\,0.1,\,30$\,yr & technology wave (when active) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Two conventions are essential and are stated up front. (i) \textbf{The capital book is a strategic reduction, not one real land type.} Ecological capital is in reality a vector of types --- mature forest, wetland, high-carbon soil, long-rotation and low-intensity regenerative systems, each with its own $b_c$, $b_{G,c}$, $\rho_c$ and $\tau_g$. The two-book model treats them as an \emph{effective} capital-land class. This is deliberate, and the full multi-type decomposition is the object of the companion typed-flux-ledger work (Abaee, 2026c), which we cite rather than re-derive. The consequence is that the single capital-land regeneration timescale is an \emph{effective} consolidation, and any capacity-maximum or fold result is regime-conditional on effective value/rate parameters that are not separately identified. (ii) \textbf{The value-weighting is inside the unit.} Because $B$ is expressed in gha, and gha already embed yield and equivalence factors, an aggregate biocapacity series is \emph{not} identifiable into yield versus area terms without an independent observation operator. This is the identifiability result developed in \S Identifiability and the empirical programme.
+
+\subsection{Governing equations}
+
+\begingroup\small\begin{verbatim}
+QUALITY (per-ha capacity, a state; NOT land area):
+  G_c(q) = ρ_c q (1 − q/q_max)                          (1)
+FAST YIELD:   Y_f = b_f A_f                              (2a)
+CAPITAL YIELD: Y_c = [b_c + b_G,c G_c(q)] A_c            (2b)
+BIOCAPACITY:  B = Y_f + Y_c                               (2c)
+FOOTPRINT:    E = e P                                     (3)
+DEFICIT:      S = [E − σ_f Y_f − σ_c Y_c]_+              (4)
+CAPITAL AREA: dA_c/dt = −u_c + R_fc + R_rc               (5)
+FAST AREA:    dA_f/dt = +u_c + μ A_r − η_f A_f − R_fc    (6)
+RESERVE:      dA_r/dt = −μ A_r + η_f A_f − R_rc          (7)
+QUALITY:      dq/dt = G_c(q(t−τ_g))                      (8)
+POPULATION:   dP/dt = r P [1 − P / K(t−τ_p)],  K = B/e  (9)
+CARRYING CAP: K = B / e                                   (10)  [algebraic]
+DEGRADATION:  b_f = (b_f0 + T_b(t)) e^{−α D(t)}          (11)
+DEBT:         dD/dt = [E − B]_+ − η D                    (12)
+TECHNOLOGY:   T_b = Δb / (1 + e^{−κ_w (t−t_wave)})       (13)
+CONVERSION RATE (dimensionally ha/yr):
+  u_c = min(S/b_f, A_c − A_c,min) / τ_conv               (14)
+\end{verbatim}\endgroup
+
+Area is conserved across the three land books, so the reserve equation (7) is not independent: differentiating $A_f+A_c+A_r=A_{tot}$ gives the aggregate identity $dA_r/dt=-\mathrm{d}A_f/\mathrm{d}t-\mathrm{d}A_c/\mathrm{d}t$, which (5)--(7) satisfy by construction. The reserve is therefore a constrained balance, not an additional degree of freedom.
+
+\textbf{Notation and conventions.} Four conventions are used throughout.
+
+\begin{itemize}
+\item \textbf{$[x]_+$ is the positive part, $[x]_+=\max(x,0)$, and is exact, never ramped.} It enforces the one-sided deficit mechanism: only a positive shortfall above the harvestable/share-adjusted flow converts land or accrues debt; a surplus contributes nothing.
+\item \textbf{Conversion is a rate with an explicit time constant.} $S$ is a flow shortfall in $\text{gha}\cdot\text{yr}^{-1}$; dividing by $b_f$ (in $\text{gha}\cdot\text{ha}^{-1}\cdot\text{yr}^{-1}$) gives a \emph{stock} in $\text{ha}$ — the area that would close the shortfall. This is not yet a rate. A rate is obtained only through an explicit time constant: $u_c=\min\left(S/b_f,\;A_c-A_{c,\min}\right)/\tau_{\mathrm{conv}}$ in $\text{ha}\cdot\text{yr}^{-1}$. The capital-land ecological turnover lives only in $\rho_c$, $\tau_g$ and $q_{\max}$; $\gamma=1/b_{G,c}$ (in $\text{ha}\cdot\text{gha}^{-1}$) applies only to the timber channel $L_c=[H_c-\sigma_c Y_c]_+/b_{G,c}$, which is a \emph{stated extension} (set to zero in the base model and all reported runs) and does not appear in Eqs.~(5)--(8).
+\item \textbf{Land area is conserved 1:1; capacity is a separate book.} The area book is $A_f,A_c,A_r$ with $A_f+A_c+A_r=A_{tot}$ and every area flow one-to-one ($u_c$ moves $A_c\to A_f$; $\mu A_r$ moves $A_r\to A_f$; $\eta_f A_f$ moves $A_f\to A_r$; $R_{rc}$ moves $A_r\to A_c$). The per-hectare capacity $q$ is a distinct state: regeneration $G_c(q)$ is a \emph{flow of capacity} into $q$ and never transfers land, so Eqs.~(5)--(8) each conserve area. The machine-precision `$|A_f+A_c+A_r-A_{tot}|$` check is a genuine 1:1 conservation, not an identity imposed afterwards.
+\item \textbf{Regeneration is a growth flow of capacity, not a land-area transition.} $G_c(q)$ adds to capital-land per-hectare capacity (a cohort matures); it is not an $A_r\to A_c$ area transfer unless a restoration flow $R_{rc}$ is explicitly active. This avoids the book-mixing of a capacity growth with an area transition.
+\item \textbf{A sustainable cropland equilibrium exists.} Because $dA_f/dt$ contains a maintenance term $\mu A_r$ (pioneer/replant from reserve), a sustainable $A_f^*>0$ is possible; without it, the fast book would decay to zero at every equilibrium (the ``obligatory-deforestation'' pathology).
+\item \textbf{Units: flows vs accumulation.} Biocapacity $B$ and footprint $E$ are \emph{annual flows}, in $\text{gha}\cdot\text{yr}^{-1}$; a global hectare is a normalised annual flow of regeneration, not a standing stock. The ecological debt $D$ is the accumulation of a flow over time, in $\text{gha}$: $[E-B]_+$ (in $\text{gha}\cdot\text{yr}^{-1}$) integrates to $D$ (in $\text{gha}$) with repayment at $\eta$ (in $\text{yr}^{-1}$), so Eq.~(12) is dimensionally consistent. The distinction is the familiar one between a flow and a stock: when the footprint exceeds biocapacity an ecological deficit occurs, analogous to drawing down a bank account --- the annual balance is a flow, but its cumulative effect (the running balance, here $D$) erodes the underlying stock of natural capital, which in turn determines future biocapacity. The two are never interchanged in this model: a flow enters the rate equations, an accumulation enters the degradation law. $b_{G,c}$ is a \emph{stock} value ($\text{gha}\cdot\text{ha}^{-1}$) and $b_f,b_c$ are \emph{flow} yields ($\text{gha}\cdot\text{ha}^{-1}\cdot\text{yr}^{-1}$); mixing a stock value with a flow yield is exactly the book-mixing the model is built to avoid.
+\end{itemize}
+
+\textbf{Delay structure.} The two delays enter only where stated. Regeneration of capacity is delayed, $G_c(q(t-\tau_g))$ in (8): the environment responds to its own capacity $\tau_g$ years earlier. Population response is delayed, $K(t-\tau_p)$ in (9). Debt formation (12) and conversion (via $S$) act on current values. $K=B/e$ (10) is algebraic and not itself delayed. The system is genuinely five-dimensional in the states $(A_f,A_c,q,P,D)$ with reserve $A_r$ a constrained balance ($A_r=A_{tot}-A_f-A_c$) and one delay each in regeneration and demography. The model is a valid delay differential equation with a well-posed state space $\Omega=\{(A_f,A_c,A_r,q,P,D):A_i\ge0,\;q\in[0,q_{\max}],\;A_f+A_c+A_r=A_{tot},\;K\ge K_{min}\}$.
+
+\section{Assumptions}
+
+\begin{itemize}
+\item \textbf{(1) Logistic regeneration of capital-land capacity} ($G_c$, Eq. 1) --- a modelling assumption; it acts on the per-hectare quality $q$, with $q_{\max}/2$ the maximal-regeneration point. It is a flow of capacity, never a land-area transfer.
+\item \textbf{(2) Biocapacity is additive, two-book} --- fast flow yield plus capital direct yield plus capital regenerative growth. The composition is captured by the fast-land share $\psi_f=Y_f/B$ (the correct ratio between $R_A$ and $R_B$), and the per-hectare capital value is $\Upsilon_c(q)=b_c+b_{G,c}G_c(q)$ (Table~\ref{tab:regime}). The structural composition diagnostic is $\Delta b_{\mathrm{conv}}=b_f-\Upsilon_c(q)$: conversion raises current accounting capacity iff $\Delta b_{\mathrm{conv}}>0$. (In the quality-based formulation there is no interior area-based capacity maximum; the direct-yield share of capital value at the regeneration maximum $q^*=q_{\max}/2$ is $b_c/(b_c+b_{G,c}G_c(q_{\max}/2))=b_c/(b_c+b_{G,c}\rho_c q_{\max}/4)\approx0.758$, which is a property of that point, not a structural constant.)
+\item \textbf{(3) Per-capita footprint constant} --- to isolate the stock--flow--demand feedbacks; endogenising $e$ is an offered extension.
+\item \textbf{(4) Deficit-driven conversion with a finite rate} --- conversion is not instantaneous: it closes a shortfall at rate $u_c=\min(S/b_f,\,A_c-A_c^{\min})/\tau_{\mathrm{conv}}$ with an explicit time constant $\tau_{\mathrm{conv}}$; the delayed response is in recruitment $\tau_g$, not in the conversion operator.
+\item \textbf{(4b) Human-available flow shares} --- $\sigma_f,\sigma_c$ are the share of each book's harvestable flow available to meet demand. In the baseline they are set to $1$ (the full, share-adjusted flow is available) and are stated as such, so that $S=[E-Y_f-Y_c]_+$ consistent with the accounts; a reservation $\sigma<1$ is a stated extension.
+\item \textbf{(5) Demographic delay on carrying capacity} --- the population responds to a delayed $K(t-\tau_p)$.
+\item \textbf{(6) $K$ is algebraic, not a state.}
+\item \textbf{(7) Debt accrues only in overshoot, repaid at $\eta$} --- $\eta>0$ set physical ($0.05\,\text{yr}^{-1}$); the $\eta\to0$ singular case is excluded by a floor.
+\item \textbf{(8) Degradation erodes the surviving \emph{flow-yield} coefficient $b_f$} --- a separately-evidenced channel, not double-counting the land converted by $u_c$.
+\item \textbf{(9) Technology is bounded} --- a logistic wave; saturation is why the yield channel cannot support an unbounded mask.
+\item \textbf{(10) Typed floors and complementarity} --- reserve $A_r\ge A_r^{\min}$, capital viability $A_c\ge A_c^{\min}$, arable ceiling $A_f\le A_f^{\max}$, carrying capacity $K\ge K_{min}$; the conversion rate $u_c=\min(S/b_f,\,A_c-A_c^{\min})/\tau_{\mathrm{conv}}$ saturates as $A_r\to A_r^{\min}$ or $A_c\to A_c^{\min}$. Floors are \emph{typed} (distinct per book), not a single symbol.
+\end{itemize}
+
+\textbf{Delay asymmetry.} Conversion and debt act on current values; regeneration and demography are delayed. A third lag on debt formation could be added; we keep the two stated lags and declare that $\tau_p$ lumps several institutional time objects and is not a single measured lag.
+
+\section{Analytic results}
+
+This section develops the analytic core. The thesis is stated in \S Presentation and the abstract: the collapse/drawdown trigger is demand-driven; the aggregate can mask a falling capital book; and the composition logic is structural. \textbf{Scope of the spectra.} Throughout, the per-hectare capital value is $\Upsilon_c(q)=b_c+b_{G,c}G_c(q)$ with $G_c(q)=\rho_c q(1-q/q_{\max})$, so the composition diagnostic is $\Delta b_{\mathrm{conv}}=b_f-\Upsilon_c(q)=b_f-b_{c,\mathrm{eff}}$. The demand ceiling, its location and the absence of critical slowing are derived directly on the quality-based formulation (they are \emph{not} calibrated, but they are analytic and verified against the code). Two things must be kept apart. The \emph{structural} finding is that the aggregate is a value-weighted composite and so can rise while a component falls, and that the composition step is not identifiable from the aggregate alone --- both hold as a matter of the accounting. The \emph{conditional} finding is that the composition premium actually occurs (i.e.\ $\Delta b_{\mathrm{conv}}=b_f-b_{c,\mathrm{eff}}>0$) --- this is a condition on the representative (effective) parameters, and the threshold value $E_{ceil}$ at which the drawdown begins is likewise a parameter- and regime-specific quantity.
+
+\subsection{Capacity maximum of the capital land (quality form, unconditional; the composition regime is the diagnostic)}
+
+The total capital-land value per hectare is $\Upsilon_c=b_c+b_{G,c}G_c(q)$ with per-ha capacity regeneration $G_c(q)=\rho_c q(1-q/q_{\max})$, $q\in[0,q_{\max}]$, so capital yield is $\Upsilon_c A_c$. Because $G_c$ now acts on a \emph{separate} quality state $q$ --- not on the area book --- the per-hectare value $\Upsilon_c(q)$ is a concave quadratic and is maximised at the maximal-regeneration point
+\[
+q^*=\frac{q_{\max}}{2},\qquad \frac{\partial}{\partial q}\left(b_c+b_{G,c}G_c(q)\right)=b_{G,c}\rho_c\left(1-\frac{2q}{q_{\max}}\right)=0,
+\]
+with $\Upsilon_c(q^*)=b_c+b_{G,c}\rho_c q_{\max}/4$. This is \emph{unconditional} in the quality-based model: any $\rho_c>0$ yields an interior quality maximum, because quality is an independent state. What is identification-dependent is the \emph{magnitude and sign} of the composition diagnostic, and whether regeneration contributes materially relative to the direct yield. At the representative parameters ($b_c=0.05$, $b_{G,c}=0.8$, $\rho_c=0.08\,\text{yr}^{-1}$, $q_{\max}=1.0$) the regenerative term at the maximum is $b_{G,c}G_c(q^*)=0.016$ versus $b_c=0.05$, i.e.\ $b_{G,c}G_c(q^*)/b_c=0.32$ --- direct yield dominates, and capital-land value is only modestly enhanced by regeneration. (Under an area-based formulation in which $G_c$ is a function of $A_c$, the per-hectare value would be quadratic in area and the condition $b_{G,c}\rho_c>b_c$ would define an ``area capacity maximum'' $A_c^*$; under the quality-based formulation adopted here $Y_c$ is linear in $A_c$ at fixed $q$, so the corresponding $Y_c'(A_c)=0$ statement has \emph{no} analogue.) The composition diagnostic is therefore \emph{not} contingent on there being an interior area capacity maximum --- see the conversion loop below.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X}
+\toprule
+Regime & Condition (composition diagnostic) & Capital-land value & Fold / mask behaviour \\
+\midrule
+composition-premium & $b_f>b_{c,\mathrm{eff}}$ ($\Delta b_{\mathrm{conv}}>0$) & per-ha value $\Upsilon_c(q)$; interior max at $q^*=q_{\max}/2$ & conversion \emph{raises} accounting $B$; mask visible (the baseline) \\
+composition-neutral & $b_f=b_{c,\mathrm{eff}}$ ($\Delta b_{\mathrm{conv}}=0$) & value $\Upsilon_c(q)=b_f$ & first-order neutrality; conversion neither raises nor lowers $B$; non-generic \\
+composition-discount & $b_f<b_{c,\mathrm{eff}}$ ($\Delta b_{\mathrm{conv}}<0$) & per-ha value exceeds fast-land yield & conversion \emph{lowers} $B$ immediately; no mask; liquidation sign is clear \\
+\bottomrule
+\end{tabularx}
+\caption{The composition diagnostic $\Delta b_{\mathrm{conv}}=b_f-b_{c,\mathrm{eff}}$ with
+$b_{c,\mathrm{eff}}=b_c+b_{G,c}G_c(q)$: the decision condition for mask visibility under the quality-based model.
+Under this formulation there is \emph{no} interior area-based capacity maximum
+$A_c^*$; the shape-regime split of an area-based form (interior fold vs.\ monotone liquidation) does not arise,
+because $Y_c$ is linear in $A_c$ at fixed $q$ and the per-hectare value is concave in $q$ with an
+unconditional interior maximum at $q^*=q_{\max}/2$. The structural quantity is the composition diagnostic, not a
+capacity-maximum ratio. The demand ceiling and its structure are derived in \S Active conversion: a floor collision at $E_{ceil}\approx1.138$, $B_{eq}(A_c)$ monotone, no fold and no critical slowing.}
+\label{tab:regime}
+\end{table}
+
+\subsection{Equilibria: boundary, no \texorpdfstring{$\det J\equiv0$}{det J identically zero}}
+
+\noindent\textbf{No-conversion face ($S=0$, $L_c=0$, $\eta_f>0$).} With $S=0$ the fast book obeys $dA_f/dt=\mu A_r-\eta_f A_f$, so an equilibrium requires $\mu A_r^*=\eta_f A_f^*$, i.e.\ $A_r^*=(\eta_f/\mu)A_f^*$; with $A_r^*=A_{tot}-A_f^*-A_c^*$ this pins the fast/reserve split up to the capital book. Setting $S=0$ gives $E=\sigma_f b_f A_f^*+\sigma_c\Upsilon_c(q^*)A_c^*$ (a flow balance), and $dA_c/dt=0$ requires $u_c=R_{rc}$ (no net conversion). The resulting equilibrium is a \emph{one-parameter family indexed by the capital book} $A_c^*$: for each $A_c^*$ the fast book is $A_f^*=(A_{tot}-A_c^*)/(1+\eta_f/\mu)$ and $P^*=B^*/e$ is determined within that member. Verified: $A_r^*/A_f^*=\eta_f/\mu=0.8333$ exactly; a representative interior member is $(A_f^*,A_c^*,A_r^*,P^*)=(0.914,0.824,0.762,1.488)$, and a larger-capital member is $(1.091,0.500,0.909,1.731)$ --- a \emph{sustainable cropland equilibrium}, supported by the maintenance term. This family is in the \emph{land allocation}, \emph{not} a free $P$: there is \emph{no} one-parameter family $P=B/e$ and \emph{no} identically singular Jacobian. The $P=B/e$ continuum and $\det J\equiv0$ are properties of a single-stock comparator, and an $A_c$-as-capacity book-mix would give $A_f^*=0$ at every equilibrium; neither holds under the quality-based two-land model, in which the area book and the per-hectare quality state are distinct.
+
+\noindent\textbf{Active conversion ($S>0$) under endogenous population.} At a population equilibrium $P=K=B/e$, so $E=eP=B$ and hence $S=[E-B]_+=0$. \textbf{There is no interior population-consistent active-conversion steady state.} The conversion regime is an overshoot / transient regime, not an attractor; it possesses a steady state only under a \emph{frozen} exogenous demand $E$ pinned above the flow. Under the corrected rate form the conversion-capacity ceiling and its structure are re-derived analytically as follows. On the no-conversion face with a frozen $E$, setting $S=0$ gives $E=B_{eq}(A_c)$ with $B_{eq}(A_c)=b_{f0}kA_{tot}-A_c(b_{f0}k-b_c)$ (using $A_f=k(A_{tot}-A_c)$, $k=\mu/(\mu+\eta_f)$, and $q=q_{\max}$ so $\Upsilon_c=b_c$). Since $b_{f0}k-b_c=0.414>0$, $B_{eq}$ is \emph{monotone decreasing} in $A_c$:
+\[
+E_{ceil}=B_{eq}(A_c^{\min})=b_{f0}kA_{tot}-A_c^{\min}(b_{f0}k-b_c)\;\approx\;1.138,
+\]
+which is the largest demand with an interior equilibrium. \textbf{There is no interior saddle-node (fold).} Because $B_{eq}$ is monotone, for each $E<E_{ceil}$ a \emph{unique} interior equilibrium $A_c^*(E)$ exists: verified $A_c^*=1.110,0.626,0.385,0.143,0.070$ at $E=0.70,0.90,1.00,1.10,1.13$, matching the integrated equilibrium. For $E>E_{ceil}$ the capital book is driven to its typed floor $A_c=A_c^{\min}$ and debt $D$ accrues ($D\to1.21,5.39$ at $E=1.158,1.238$) --- a \emph{boundary / floor collision}, not a fold. \textbf{No critical slowing down.} The leading eigenvalue of the active-conversion linearisation is constant along the branch, $-\max(\ldots)\approx-0.0537\,\text{yr}^{-1}$ (set by the linear $B_{eq}$ structure, the decoupled quality mode $-0.08$, and $\tau_{\mathrm{conv}}$), and does \emph{not} tend to $0$ as $E\to E_{ceil}$, so $\lambda_+\to0$ critical slowing at a fold is absent.
+
+\noindent\textbf{Characteristic structure.} With state vector $z=(A_f,A_c,q,P,D)$, the delayed system is $\dot z(t)=J_0z(t)+J_gz(t-\tau_g)+J_pz(t-\tau_p)$ and the characteristic equation is
+\[
+\det\Delta(\lambda)=0,\qquad \Delta(\lambda)=\lambda I-J_0-J_ge^{-\lambda\tau_g}-J_pe^{-\lambda\tau_p}.
+\]
+$J_0$ contains the conversion and debt feedbacks on the current state; $J_g$ the delayed regeneration $G_c'(q^*)$ in the $q$ row (the delayed quality dynamics $dq/dt=G_c(q(t-\tau_g))$); $J_p$ the delayed demography $K'(\cdot)/e$ in the $P$ row. The area-conservation constraint means the 5D state has one algebraic redundancy ($A_r=A_{tot}-A_f-A_c$), so the linearisation is a constrained DDE; the reserve row is not an independent degree of freedom. No entry, no determinant sign, and no eigenvalue value is inherited from the one-stock characteristic equation; each is derived per active set (no conversion, active conversion, active timber liquidation, nonsmooth boundary, $K=K_{min}$).
+
+\subsection{The conversion loop: a state- and parameter-dependent stability contrast}
+
+For fixed $P,D$, no timber liquidation, and active conversion, $S=[eP-\sigma_fb_fA_f-\sigma_c\Upsilon_c(q)A_c]_+$ with $\Upsilon_c(q)=b_c+b_{G,c}G_c(q)$, so (on the deficit side $S>0$)
+\[
+\frac{\partial S}{\partial A_f}=-\sigma_fb_f,\quad
+\frac{\partial S}{\partial A_c}=-\sigma_c\Upsilon_c(q),\quad
+\frac{\partial S}{\partial q}=-\sigma_cb_{G,c}G_c'(q)A_c,\quad
+\frac{\partial S}{\partial P}=e,\quad
+\frac{\partial S}{\partial D}=-\alpha\sigma_fY_f.
+\]
+Now $Y_c$ is linear in $A_c$ at fixed $q$, so the conversion-loop gain is set by the \emph{value} $\Upsilon_c(q)$ (not its area derivative, which no longer exists), and the quality state $q$ enters the deficit as a third state. The composition diagnostic is
+\[
+\Delta b_{\mathrm{conv}}(q,D)=b_f(D)-\Upsilon_c(q)=b_f-b_c-b_{G,c}G_c(q)=b_f-b_{c,\mathrm{eff}},
+\]
+where $b_{c,\mathrm{eff}}=b_c+b_{G,c}G_c(q)$ is the per-hectare mix-weighted value of capital land. $\Delta b_{\mathrm{conv}}>0$ means conversion raises current accounting capacity; $\Delta b_{\mathrm{conv}}=0$ is first-order capacity neutrality; $\Delta b_{\mathrm{conv}}<0$ means conversion immediately lowers capacity. Verified under the corrected baseline ($b_f=0.85$): $\Delta b_{\mathrm{conv}}=+0.787$ at $q=0.3$, $+0.784$ at $q=0.6$, $+0.794$ at $q=0.9$ --- robustly positive across the quality regime, so the \emph{composition mechanism is structural, not contingent} on the existence of an interior capacity maximum. The 2$\times$2 conversion subsystem's eigenvalues are state- and parameter-dependent (of order $10^{-2}\,\text{yr}^{-1}$) and are quoted illustratively, not as a universal index. \textbf{This is not a universal $+0.62$:} it is a state- and parameter-dependent conversion-loop gain.
+
+\subsection{The composition illusion and the macro-ratio safe operating space}
+
+This is the special two-land sense of the productivity illusion introduced in the Introduction: here the aggregate rises because converting ecological capital into provisioning land inflates current accounting capacity (the yield-inflation sense) --- a rising aggregate index built on a shrinking ecological base --- rather than because the orchard is healthier. Define the biocapacity ratio and the flow-yield ratio,
+\[
+R_B=\frac{E}{B},\qquad R_A=\frac{E}{Y_f},\qquad \psi_f=\frac{Y_f}{B},\qquad R_A=\frac{R_B}{\psi_f}.
+\]
+\noindent The fast-land share $\psi_f=Y_f/B$ is the share of total biocapacity that is the fast-provisioning flow, so $R_A=R_B/\psi_f$ is an identity (matching the one-stock relation with $\psi=bA/B$, now built on the correct share). $\psi_c=b_cA_c/Y_c$ is a \emph{different} share --- the direct-yield share \emph{inside} the capital book --- and is not the ratio between $R_A$ and $R_B$; using it in $R_A=R_B/\psi_c$ is algebraically false.
+\par The aggregate balance condition is $R_B=1$ (footprint equals total biocapacity). The flow-yield ratio $R_A$ is a leading but non-causal signal: $R_A=1$ means demand equals the fast-land flow ($E=Y_f$), which is necessary but not sufficient for decline, because the capital direct yield and the capital regeneration flow are untouched. The true stock-decline condition is not ``$R_B>1$'' along a delayed trajectory but the deficit expression: with $\sigma_f,\sigma_c$ the human-available flow shares, capital-land area declines iff conversion $u_c$ exceeds the restoration inflow, i.e.\ $\dot A_c<0\iff u_c>R_{rc}$, with $u_c=\min(S/b_f,\,A_c-A_{c,\min})/\tau_{\mathrm{conv}}$ and $S=[E-\sigma_fY_f-\sigma_cY_c]_+$. Two consequences follow and differ sharply from the one-stock reading: (i) the \emph{masking} signal is $\dot A_c<0$ while $B$ rises (the composition condition $\Delta b_{\mathrm{conv}}=b_f-b_{c,\mathrm{eff}}>0$), and it is \emph{not} required that $R_B>1$ --- the capital book can fall while the aggregate is at or below demand; and (ii) the drawdown of the capital book is demand-driven (a threshold in the initial demand), and ``$R_B=1$ is the fold'' is a statement about the frozen-demand reducer, not a structural two-land property.
+
+\section{Results: principal claims}
+
+\begin{itemize}
+\item \textbf{The composition illusion is structural and generic, but bounded.} Aggregate biocapacity can rise while ecological capital falls whenever the composition condition $b_f>b_{c,\mathrm{eff}}$ (i.e.\ $\Delta b_{\mathrm{conv}}>0$) holds and demand exceeds the flow, for a demand-driven window. The $\Delta b_{\mathrm{conv}}$ diagnostic is robust across the capital-land regime (verified $+0.79$ over $q\in[0.3,0.9]$), so the composition mechanism is structural, not contingent on there being an interior capital capacity maximum. At a fixed demand, the window ends when $B\to E$ (the balance point, $S\to0$) or a typed floor binds --- it is a bounded transient, not universal.
+\item \textbf{The collapse transition is a demand-driven drawdown, and it is a \emph{floor collision}, not a fold.} The capital book is driven to its typed floor when demand exceeds $E_{ceil}\approx1.138$ (a unique interior equilibrium exists iff $E<E_{ceil}$, since $B_{eq}(A_c)$ is monotone in $A_c$). This is demand-driven, not regeneration-delay-driven, and it is \emph{not} an interior saddle-node: the leading eigenvalue is constant ($\approx-0.0537\,\text{yr}^{-1}$) along the branch and does not tend to zero. Early warning, if any, is a \emph{boundary} signal (the capital book reaching its typed floor), not an eigenvalue vanishing.
+\item \textbf{There is no universal scalar stability index.} The local conversion-loop gain is $\Delta b_{\mathrm{conv}}$, of order $10^{-2}\,\text{yr}^{-1}$ and state- and $q$-dependent, not a constant $+0.62$.
+\item \textbf{There is no one-stock $18$--$20$\,yr regeneration cliff.} With endogenous population and the delay-history functions populated from the initial state, the recover fraction is essentially flat in $\tau_g$ and declines only weakly ($0.54\to0.52\to0.50$ for $\tau_g=5\to25\to40$).
+\item \textbf{The composition mechanism is robust; the fold/regime content is identification-dependent.} The mechanism --- aggregate $B$ rises while $A_c$ falls --- holds whenever $\Delta b_{\mathrm{conv}}=b_f-b_{c,\mathrm{eff}}>0$, which is robust across the capital-land regime ($+0.784$ at the baseline). The \emph{fold} and the capacity-maximum condition $b_{G,c}\rho_c>b_c$ arise only under an area-based formulation in which regeneration is a function of area; the quantities that are structural here are the composition diagnostic and the demand-driven drawdown threshold, both of which are functions of un-identified value/rate parameters through $b_{c,\mathrm{eff}}$ and $b_f$.
+\item \textbf{Recovery is not reversible by reversing the forcing.} It requires an explicit restoration flow ($A_r\to A_c$), whose gate sign determines whether it is inert during a shortfall or deepens it.
+\item \textbf{The composition step is not identifiable from the aggregate alone.} An aggregate biocapacity series (in gha) conflates yield, equivalence and area; separating them needs independent land-cover and yield proxies.
+\item \textbf{Technology can increase cumulative debt (a Jevons-type rebound).} Under overshoot, the yield wave $T_b$ raises $b_f$, hence $K$, $P$ and $E$, and thereby increases the accrued debt $D$; the same technology that raises the aggregate also deepens the shortfall it is meant to relieve. This is the engine behind the bounded mask: technology lifts $B$ but also $E$, so the mask opens only while the wave outpaces the debt build-up.
+\item \textbf{Debt-compounding asymmetry (a theorem under multiplicative degradation).} With $b_f=(b_{f0}+T_b)e^{-\alpha D}$, debt compounds without bound while the technology wave saturates ($T_b\to\Delta b$), so $d\ln B$ is eventually dominated by the unboundedly negative $-\alpha dD$ term rather than the bounded $d\ln b_f$ --- the analytic reason the aggregate mask cannot persist. This holds under the multiplicative form and is false under an additive degradation $b_f=b_{f0}+T_b-\alpha D$.
+\end{itemize}
+
+\noindent\textbf{Scenarios and scope.} The composition mechanism is the headline; a one-stock model and a pure-capital (saw-log) model recover as limits, and a frozen-demand system exhibits a genuine conversion fold.
+
+\section{Falsifiable predictions}
+
+These are the testable content of the model. They fall into two registers: predictions 1--4 and 6 are dynamical (onset, duration, the response to a regime index, recovery); prediction 5 is the regime-conditional (fold) statement; prediction 7 is the observational (identifiability) one (identifiability and what a monitor can and cannot read off). Each is framed against the two-book series ($B$, $A_c$, $A_f$, and the land-cover/yield proxies), not the one-stock aggregate.
+
+\begin{enumerate}
+\item \textbf{The masking signal is $\dot A_c<0$ with $R_B\lesssim1$} --- aggregate biocapacity at or below demand while ecological capital falls. Falsifiable: observe the two-book series directly.
+\item \textbf{The duration of the composition window is set by $\Delta b_{\mathrm{conv}}$ and the demand deficit}, not a fixed horizon.
+\item \textbf{No critical slowing precedes the drawdown} --- the leading eigenvalue is constant ($\approx-0.0537\,\text{yr}^{-1}$) along the frozen-demand branch and does not tend to zero, so there is no CSD precursor. The observable warning, if any, is the capital book reaching its typed floor, not a growing return time. (This is a \emph{negative} prediction: a nominal ``catastrophic-shift early-warning'' indicator is not expected to precede the two-land drawdown.)
+\item \textbf{The collapse trigger is a demand threshold, not a regeneration-delay threshold} --- the recover/collapse boundary is in $P_0$ (hence $E$), essentially flat in $\tau_g$.
+\item \textbf{The capital-land catastrophic shift (fold) does not exist; the drawdown is a floor collision.} The genuine, falsifiable content is the demand-driven capital drawdown (the ceiling $E_{ceil}\approx1.138$ set by the typed floor, Table \ref{tab:basin}) and the composition diagnostic $\Delta b_{\mathrm{conv}}>0$ (Table \ref{tab:conv}). Because $B_{eq}(A_c)$ is monotone, there is no interior saddle-node and hence no catastrophic-shift fold --- this is a \emph{negative} structural statement.
+\item \textbf{Recovery requires an explicit restoration flow with a gate whose sign matters.} The surplus-gated form ($R_{rc}$ active when $B>E$) is the sign-correct rewilding but is inert during a shortfall; the deficit-gated form ($E>B$) is active during the shortfall but can deepen the short-run deficit by retiring productive land. Both signs are a restorable lever; the deficit-gated one is not an unqualified good.
+\item \textbf{The composition step is not identifiable from aggregate biocapacity} --- an observational programme, separable only with independent $A_c$ and $b_f$ proxies.
+\end{enumerate}
+
+\noindent\textbf{The two masks.} \emph{Composition mask:} $B$ rises while $A_c$ falls (requires a productivity contrast $b_f>b_{c,\mathrm{eff}}$). \emph{Liquidation mask:} $E$ steady while $A_c$ falls (requires none). These are distinct and the discriminating observable is which holds.
+
+\section{Presentation}
+
+\begin{itemize}
+\item \textbf{Thesis:} the aggregate biocapacity can rise while ecological capital falls (composition illusion); the collapse/drawdown trigger is demand-driven; recovery requires an explicit restoration flow whose gate sign matters (a surplus-gated form is the sign-correct rewilding, a deficit-gated form is active during a shortfall but can deepen it); and the composition step is not identifiable from the aggregate alone. The structural content is the composition logic and the identifiability limit; the composition premium itself ($\Delta b_{\mathrm{conv}}>0$) and the specific drawdown thresholds are conditional on the representative (effective) parameters, while the fold/regime content is illustrative and identification-dependent.
+\item \textbf{Feedback diagram.} $A_f,A_c,q\to B\to K\to P\to E$, with $S=[E-\sigma_fY_f-\sigma_cY_c]_+$ driving conversion at rate $u_c=\min(S/b_f,\,A_c-A_c^{\min})/\tau_{\mathrm{conv}}$ (reallocating area, not capacity), $D\to b_f$ degrading the flow yield, and an exogenous bounded $T_b$. Conversion loop: $A_c\!\downarrow\!\to A_f\!\uparrow\!\to B\!\uparrow\!$ (if $b_f>b_{c,\mathrm{eff}}$) $\!\to\!K\!\uparrow\!\to\!P\!\uparrow\!\to\!S\!\uparrow\!\to\!A_c\!\downarrow$.
+\item \textbf{Two positive-feedback loops compound, and act on different books.} Loop 1 is the conversion/stock-liquidation loop shown in the feedback diagram above --- the composition mechanism, which reallocates the books and temporarily raises $B$ while $A_c$ falls. Loop 2 (debt-erosion of the flow yield): $D\!\uparrow\!\to b_f\!\downarrow\!\to B\!\downarrow\!\to\mathrm{deficit}\!\uparrow\!\to D\!\uparrow$ --- the degradation mechanism, which erodes the surviving yield and eventually turns back against the aggregate. The two are distinct and can reinforce: Loop 1 raises $B$ while $A_c$ falls, whereas Loop 2 later drives $B$ down, which is one reason the aggregate mask is bounded and not a sustainable state.
+\item \textbf{Units.} Symbols and units are given for $A_{tot}$, $A_{c,\min}$, $b_f$, $b_c$, $b_{G,c}$, $\rho_c$, $\alpha$, $\eta_f$, $\eta$, $\mu$, $q_{\max}$, $\tau_{\mathrm{conv}}$, $\tau_g$, $\tau_p$ and every other symbol in the symbol table; no dimensionless parameter is left without its stated unit.
+\item \textbf{Non-smoothness and one-sided stability.} At $S=0$ the exact $[\cdot]_+$ is non-smooth; linearise one-sided from the deficit side.
+\item \textbf{Parameter justification.} The two-land parameters are representative and effective/lumped ($\rho_c$, $\alpha$, the yields and the lag $\tau_g$ are not individually measured), with two empirically anchored quantities: the capital-land regeneration \emph{timescale}, estimated from raw recovery curves in two ecosystem classes (forest and fishery; SI~\S\ S5.3a), and the provisioning-book yield and area, from the cropland-book calibration against NFA biocapacity and the crop-yield index (SI~\S\ S5.3b). These sharpen those legs without making the remaining effective parameters fitted.
+\item \textbf{Division of labour.} The aggregation theorem (Prop 1) is from the companion work on compensatory aggregation (Abaee, 2026b); the static typed-flux ledger, conservation/donor-limitation rules, depletion arithmetic and the no-nonnegative-weighting aggregation obstruction are from the companion typed-flux-ledger work (Abaee, 2026c), which owns the accounting layer and cedes all delay/Hopf dynamics to its companion, registering a two-pool dynamical model as an open gap; the slow-turnover delay-amplified \emph{institutional} regime is from the companion work on institutional delay (Abaee, 2026a). The delay channels are deliberately distinct: ECOMOD's delays are \emph{ecological} (regeneration $\tau_g$, demography $\tau_p$), whereas the companion's lie in the \emph{institutional} feedback loop (governance response and review interval). Here we state the two-land composition and identifiability core --- the minimal \emph{dynamical} two-book realisation for global-hectare biocapacity --- and cite, not re-derive, those.
+\end{itemize}
+
+\section{Numerics, verification, and well-posedness}
+
+\begin{itemize}
+\item \textbf{Solver.} Method-of-steps, exact $[\cdot]_+$ (never ramped, since a smooth ramp leaks conversion when $E<b_cA_c+b_{G,c}G_c$), clamping $A_c\ge A_c^{\min}$, $A_f\ge0$, $K\ge K_{min}$, with explicit event detection at land boundaries and non-negativity enforcement.
+\item \textbf{Delay-history functions.} The carrying-capacity history $K(t-\tau_p)$ is populated over $[-\max(\tau_g,\tau_p),0]$ with the initial-state value, \emph{not} zero. (This data-integrity fix materially changed the basin: with a degenerate zero history, spurious early collapses appeared at $\tau_p=0$.)
+\item \textbf{Conservation and forward invariance.} $\max|A_f+A_c+A_r-A_{tot}|=2.2\times10^{-16}$ (machine precision) at every $dt$; non-negativity held (no clamp violation).
+\item \textbf{Convergence.} The demand-threshold basin classification converges in $dt$; the exact boundary is reported as a band (it shifts slightly between $dt=0.1$ and $0.05$).
+\item \textbf{The basin is a demand threshold.} For $\tau_g=20$, $\tau_p=25$: the capital book $A_c$ is drawn down to its typed floor $A_c^{\min}=0.05$ only when initial demand exceeds a threshold that scales with initial capital (Table \ref{tab:basin}: $A_c0=0.40$ crashes for $P_0\gtrsim2.41$, $A_c0=1.00$ for $P_0\gtrsim2.98$, $A_c0=1.18$ for $P_0\gtrsim3.14$). Higher initial capital $A_c0$ supports \emph{higher} demand before collapse; lower capital has \emph{less} headroom and is drawn down at lower demand. The maintenance term $\mu A_r$ and the finite conversion rate $\tau_{\mathrm{conv}}$ buffer the shortfall, raising these thresholds.
+\item \textbf{The no-CSD negative result.} The leading eigenvalue is constant ($\approx-0.0537\,\text{yr}^{-1}$) along the frozen-demand branch and does not vanish as $E\to E_{ceil}$, so there is no critical slowing down. Critical slowing down is \emph{also} absent under a single-stock comparator, but the two results are established independently; the two-land model is not a reduction of the one-stock case.
+\item \textbf{Definition of critical slowing and return time (precise).} By \emph{critical slowing down} we mean the leading (least-negative) eigenvalue of the relevant linearisation $\lambda_{\max}\to0^-$ as a parameter approaches a fold, so a perturbation's decay is no longer exponential but algebraic/slow ($\lambda_{\max}=0$ at the fold). We characterise it by the \emph{return time} $T_{ret}\approx-1/\lambda_{\max}$. \emph{Caution:} $T_{ret}$ is only defined where a real eigenvalue dominates and $\lambda_{\max}<0$; near a zero root ($\lambda_{\max}\to0$) $T_{ret}\to\infty$ and the $-1/\lambda_{\max}$ estimate must not be quoted as a finite recovery time. \emph{Under the quality-based model this does not arise}: there is no fold, and the leading eigenvalue is constant ($\approx-0.0537\,\text{yr}^{-1}$) along the branch, so no CSD and no finite return-time divergence is reported.
+\item \textbf{Integrated debt is modulo repayment.} The debt $D(t)=\int_0^t[E-B]_+\,dt'-\eta\int_0^tD(t')\,dt'$ (Eq.~11) is the \emph{net} accumulated overshoot \emph{after} repayment at rate $\eta$ --- not the raw gross overshoot $\int[E-B]_+dt$. Wherever a ``cumulative overshoot'' is quoted it is modulo this repayment; the gross (un-repaid) integral is larger.
+\end{itemize}
+
+\noindent\textbf{Conversion-loop stability.} At a frozen-demand
+active-conversion equilibrium the no-conversion state is the unique interior equilibrium ($B_{eq}(A_c)$ monotone),
+and the leading eigenvalue of the active-conversion linearisation stays at a small negative value
+($\mathcal{O}(10^{-2}\,\text{yr}^{-1})$: $\approx-0.0537\,\text{yr}^{-1}$ at the baseline $b_f=0.85$, ranging
+$\approx-0.0522$ to $\approx-0.0556$ across the $b_f$ sweep of Table~\ref{tab:conv}). It is constant along the
+frozen-demand branch (it does not vanish as $E\to E_{ceil}$, so there is no CSD) but it is \emph{not} independent
+of the fast-land yield: it varies monotonically with $b_f$. It never changes sign, so the loop gain is a
+small, state- and parameter-dependent negative value --- not a universal $+0.62$.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{ll>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X}
+\toprule
+$b_f$ & $\Delta b_{\mathrm{conv}}$ & $\lambda_+$ (high-conversion branch) & Regime \\
+\midrule
+$0.60$ & $+0.534$ & $\approx-0.0522$ (no $+$ eigenvalue) & composition-premium \\
+$0.85$ (baseline) & $+0.784$ & $\approx-0.0537$ (no $+$ eigenvalue) & composition-premium \\
+$1.20$ & $+1.134$ & $\approx-0.0547$ (no $+$ eigenvalue) & composition-premium \\
+$2.00$ & $+1.934$ & $\approx-0.0556$ (no $+$ eigenvalue) & composition-premium \\
+\bottomrule
+\end{tabularx}
+\caption{Composition diagnostic $\Delta b_{\mathrm{conv}}=b_f-b_{c,\mathrm{eff}}$ at $q^*=q_{\max}/2$
+($b_{c,\mathrm{eff}}=0.066$) vs.\ fast-land yield $b_f$, in the quality-based model. $\Delta b_{\mathrm{conv}}>0$
+means converting capital land \emph{raises} accounting capacity, so the loop is composition-premium
+(mask-visible). The $\Delta b_{\mathrm{conv}}$ and $\lambda_+$ columns are verified. Because $B_{eq}(A_c)$ is
+monotone, the conversion loop has \emph{no} interior fold and \emph{no} saddle eigenvalue that $\to0$; the
+leading eigenvalue of the frozen-demand active-conversion subsystem is negative and \emph{constant along the
+branch} (it does not tend to $0$ as $E\to E_{ceil}$, so there is no critical slowing down), but it is
+\emph{not} a single universal number --- it varies monotonically with $b_f$ ($\approx-0.0522$ at
+$b_f=0.60$, $\approx-0.0537$ at the baseline $0.85$, $\approx-0.0547$ at $1.20$, $\approx-0.0556$ at $2.00$).}
+\label{tab:conv}
+\end{table}
+
+\noindent\textbf{Demand-threshold basin.} With endogenous population the recover/collapse boundary is a demand
+($P_0$, hence $E$) threshold for a given capital stock, essentially flat in $\tau_g$ (Table
+\ref{tab:basin}).
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{l>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X}
+\toprule
+$A_c0$ & capital-crash demand threshold $P_0$ & $A_c$ draws down to its typed floor $A_c^{\min}=0.05$ \\
+\midrule
+$0.40$ & $\approx 2.41$ & crash only for $P_0\gtrsim2.41$ \\
+$0.70$ & $\approx 2.70$ & crash only for $P_0\gtrsim2.70$ \\
+$1.00$ & $\approx 2.98$ & crash only for $P_0\gtrsim2.98$ \\
+$1.18$ & $\approx 3.14$ & crash only for $P_0\gtrsim3.14$ \\
+\bottomrule
+\end{tabularx}
+\caption{Capital-crash demand threshold by initial capital stock in the quality-based model ($\tau_g=20$,
+$\tau_p=25$; ``crash'' means $A_c$ draws down to the typed viability floor $A_c^{\min}=0.05$ during the run).
+Higher initial $A_c0$ supports \emph{higher} demand before the capital book is drawn down: the threshold is
+monotone increasing in $A_c0$ ($\approx2.41\to3.14$): lower capital has less headroom, so it is drawn down at
+lower demand. The maintenance term $\mu A_r$ and the finite conversion rate $\tau_{\mathrm{conv}}$ buffer the
+shortfall, so these thresholds exceed those of a model without a maintenance term. Thresholds are
+endogenous-demand runs ($\tau_g=20$, $\tau_p=25$), grid-converged at $dt=0.05$, $T=1000$ yr
+(see \texttt{model\_sims/verify\_tab\_conv\_basin.py}).}
+\label{tab:basin}
+\end{table}
+
+\section{Policy extensions (Half-Earth \& reservation, typed floors, freeze conversion)}
+
+The Half-Earth proposal (Wilson, 2016) caps human-usable biocapacity at half of the total. In the two-land setting this is a reservation constraint of the form $E\le\sigma B$ with $\sigma$ set to the human-available share, enforced either as a cap on the fast book or on the carrying capacity. The following are the operators that bear on the typed floors.
+
+\begin{itemize}
+\item \textbf{Freeze conversion} is the single operator that guarantees $A_c\ge A_c^{\min}$: cap $A_f$ at $A_f^{\max}$ or floor $A_c$ at $A_c^{\min}$. A policy observing only the aggregate $B$ cannot guarantee capital-land integrity (the typed-floor theorem).
+\item \textbf{Typed floors are distinct.} Reserve $A_r\ge A_r^{\min}$, capital viability $A_c\ge A_c^{\min}$, arable ceiling $A_f\le A_f^{\max}$, and $K\ge K_{min}$ are separate constraints, not one symbol.
+\item \textbf{The stabilising institutional signature is the protective one.} Freeze-conversion protects the capital book; restoration is protective only when surplus-gated (retiring land when the system has spare capacity). The mobilising/extractive sign (demand responding to a perceived shortfall by converting more) is the destabilising one. A deficit-gated restoration is \emph{not} unambiguously protective --- it can deepen the short-run deficit by retiring productive land.
+\item \textbf{Controller observability.} A governor that observes only the composite $B$ cannot guarantee a capital-land floor; the failure is informational (aggregation relative to the typed floor), not dynamical.
+\item \textbf{The reservation result is a nominal-path consequence until scored for robust viability.} The claim that a reservation rule keeping $E\le\sigma B$ succeeds with no liquidation is asserted under the nominal path. To state it as a robustly-viable policy result it must be certified against a declared disturbance class (persistent productivity, $b_f$ or $\rho_c$ shocks), under a preregistered retention rule (a governance module is retained only if it improves a declared protection-and-supply score), with the model's declared fit defects converted into an erosion margin on the closed loop's contraction rate. Until that certification is done, the result is a nominal-path consequence --- a property of the nominal calibration, not a robustness claim. This is the same structural caveat as the controller-observability bullet: both limit what can be claimed from observation of the composite alone.
+\item \textbf{An aggregate growth headline is compositionally uninformative.} A growth headline for total biocapacity carries no information about whether fast-provisioning cropland growth is compensating for stagnation or offsetting changes in the other components. This is intrinsic to the scalar projection, so the informative assessment states the components as well as the total --- at minimum component endpoint ratios, log contributions, attribution shares, data vintage, and endpoint sensitivity.
+\end{itemize}
+
+\section{Demonstration}
+
+Two properties are verified and reproducible. (i) \textbf{Composition illusion.} With a fixed demand $E=0.825$ (endogenous population held, isolating the conversion channel, restoration off, $A_{f0}=0.6$, $A_{c0}=1.5$, $q_0=0.9$; a consistent $A_{tot}=2.5$ so that $A_r(0)=0.4\ge A_r^{\min}$ is in-domain), $B:0.594\to0.825$ while $A_c:1.500\to0.808$ and $A_f:0.600\to0.923$ over a $\approx150$\,yr window, with quality rising $q:0.9\to1.0$ (the capital \emph{quality} is not being drawn down even as its \emph{area} is; the drawdown is a conversion of capital area into fast land). The area changes are one-to-one ($\Delta A_f+\Delta A_c+\Delta A_r=0.0000$; $\max|A_f+A_c+A_r-A_{tot}|=0.00e{+}00$), so the mask is a genuine conversion of capital area into fast land, not an overflow-plus-retirement reading of an off-domain start. It is a bounded transient ending when $B\to E$ or a floor binds. (ii) \textbf{Irreversibility and deficit-gated restoration.} Reducing the demand or conversion does not reverse prior conversion (there is no direct $A_f\to A_c$ flow except the explicit restoration $R_{rc}$, surplus-gated); the shortfall-deepening consequence of an in-deficit restoration is noted, and a surplus-gated form is the sign-correct rewilding.
+
+\noindent\textbf{The illusion is an instance of the compensatory-aggregation gap.} By weak sustainability, in the material-cycle reading adopted here (Abaee, 2026c), we mean the idealised regime in which humans consume and populate slowly enough that technological substitution and natural regeneration \emph{jointly} redistribute matter so that it is used as it arises: the by-products of use are returned to use in time and are therefore not waste (waste is a relational status, not an intrinsic property of any material); substitution is admissible only through an identified physical pathway, and no substitute is admitted merely because a weighted aggregate permits it. Strong sustainability is the regime in which that closure fails --- because no identified physical pathway re-routes the extracted matter, or because depletion outruns the rate at which such a pathway could be deployed --- so a separately-binding floor on a critical stock binds. The weighted composite $B$ is the weak-sustainability index: it satisfies its aggregate floor while the \emph{typed} floor on ecological capital $A_c$ is violated. Quantitatively it is the substitution buffer: because $B=b_fA_f+[b_c+b_{G,c}G_c(q)]A_c$, an aggregate floor on $B$ can be met while the typed floor on $A_c$ is violated by exactly the amount that the fast-land yield gains against the capital loss. This is the same separation as the gap between $R_B$ and $R_A$ (\S Analytic results). The aggregate that an index reads is a weighted sum over several typed floors, so a deficit in one (the capital book) can be masked by a surplus in another (the yield), and a transition can satisfy the aggregate all the way along while it never satisfies the individual floors. The indicator implication introduced in Section~1 follows directly from this structure: a value-weighted aggregate cannot be inverted into its components without component-level data, so the composition step is not identifiable from the aggregate alone (a formal anchor is developed in the Identifiability subsection).
+
+\noindent\textbf{Consequences.} (a) The mask is a structural failure of any aggregate that compensates a falling capital book with a rising yield, not an accident of one parameter set. (b) Under \emph{exact-tube} semantics (a transition is safe only if every state along it, not merely the endpoint, satisfies the constraints), the intermediate passage where $A_c$ falls is itself a violation even if the endpoint recovers --- a reason to report the through-time trajectory and the boundary curve, not only an endpoint attractor. (c) The mask is \emph{bounded and deficit-limited}: it persists only while the fast-land yield gain ($b_f$ and the area shift) outpaces the capital loss, and it terminates when the arable ceiling $A_f^{\max}$, the capital floor $A_c^{\min}$, or the capacity balance $B\to E$ binds. It is therefore a transient diagnostic, not a new equilibrium.
+
+\section{Model scope}
+
+This is a conceptual/stylised two-land model. Most governing parameters are representative rather than fitted; the empirically anchored quantities are the capital-land regeneration timescale (estimated from raw recovery curves in forest and fishery, SI~\S\ S5.3a) and the provisioning-book yield and area (the cropland-book calibration from NFA biocapacity and the crop-yield index, SI~\S\ S5.3b). The model is not a forecast. Its purpose is to make explicit the \emph{composition} logic of aggregate biocapacity and to state which outcomes are structural versus regime-conditional. \textbf{National Footprint Accounts (NFA) data limitation.} The accounts are account-based (measured yields and conversion factors) and do not capture soil erosion, deforestation, groundwater depletion or other cumulative degradation; estimated biocapacity likely overstates the real base and the Footprint likely understates the true overshoot. Moreover, because biocapacity is expressed in global hectares --- which already embed yield and equivalence factors --- an aggregate biocapacity series is \emph{not identifiable} into yield versus area terms without an independent observation operator. \textbf{Information-layer limit.} The composition signature ($B$ rises while $A_c$ falls) is contemporaneously observable. Whether that rise is a genuine recovery or a yield-driven mask is not identifiable at observation time without independent $A_c$ (land cover) and $b_f$ (FAO yield) proxies. So the empirical programme is a flux reconstruction, not a curve-fit.
+
+\section{Discussion}
+
+\subsection{Structural properties and negative results (re-scoped)}
+
+Several phenomena are absent or conditional here, and the absences are structural, not oversights. They are
+summarised in Table \ref{tab:neg}, and each is re-derived under the two-land structure rather than inherited.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X}
+\toprule
+Phenomenon & Present? & Status under two-land \\
+\midrule
+Capital-land catastrophic fold & No (as a fold) & $B_{eq}(A_c)$ is monotone, so the frozen-demand equilibrium is unique; there is no interior saddle-node. The transition to drawdown is a \emph{typed-floor collision} at $E_{ceil}\approx1.138$, not a fold \\
+Critical slowing down (on any branch) & No & Leading eigenvalue is constant ($\approx-0.0537\,\text{yr}^{-1}$) along the branch; no eigenvalue $\to0$. No saddle-node $\Rightarrow$ no CSD. The drawdown is a floor collision, not a fold \\
+One-stock $\approx$18--20\,yr regeneration cliff & No & Recover/collapse is a demand ($P_0$) threshold, essentially flat in $\tau_g$ ($0.54\to0.52\to0.50$) \\
+Hysteresis / path dependence & No (no fold) & The no-conversion equilibrium is unique (monotone $B_{eq}(A_c)$); the drawdown is a one-sided floor collision at $E_{ceil}$, not a saddle-node, so there is no hysteresis loop \\
+Sustained boom--bust limit cycle & No & Single recovery-overshoot pulse; consistent with the monotone (no-Hopf) mode \\
+Allee-type rescue threshold & No & Collapse at large delay is domain-wide; no rescue level. Consistent with the flat-in-$\tau_g$ boundary: the set is set by demand, not the lag, so the remedy is a demand/restoration change, not merely shortening the lag \\
+\bottomrule
+\end{tabularx}
+\caption{Structural properties and re-scoped negative results under the two-land model.}
+\label{tab:neg}
+\end{table}
+
+\noindent\textbf{What is not claimed.} The two-gain Hopf classification $\chi=q/(\rho-2q)$ --- the ``which
+single delay destabilises'' rule with $\chi>1\Rightarrow\tau_g$-only and $\chi<1\Rightarrow\tau_p$-only, and the
+associated $\tau_m\approx85.4$, $\tau_p\approx231$\,yr numbers --- belongs to a \emph{single-stock} fast--slow
+reduction, not to the two-land system, and is therefore not claimed for the two-land model. Likewise the
+reference eigenvalue range $0.608$--$0.625$ (the ``one-stock $+0.62$'') is the eigenvalue of that
+\emph{fast-provisioning} single-stock comparator, which we retain --- in \S S1--\S S4 of the Supplementary
+Information and its figures S1--\S S13 --- as a simplifying limit of the two-land model, not as an
+independent account of the forest, soil or Earth system. Its equations, MSY/fold, equilibrium family $P=B(A)/e$ and stability classification are given there with its figures, and its features are not carried into the two-land results.
+
+\subsection{Recovery dynamics}
+
+Recovery from conversion is not reversible by reversing the forcing. The model is structurally asymmetric: $A_c\to A_f$ proceeds through conversion, but there is no direct $A_f\to A_c$ term in the base equations. Fast-land retirement sends land to $A_r$, not automatically to $A_c$. Therefore reducing population, footprint, or shortfall does not reverse prior conversion. Recovery of capital land requires an explicit restoration flow --- e.g. $R_{rc}=\rho_rA_r\Psi(\text{restoration})$ ($A_r\to A_c$), where $\rho_r$ (yr$^{-1}$) scales the reserve and $\Psi$ is the gate --- with the land equations modified consistently. An $A_f\to A_c$ variant $R_{fc}=\chi A_f\Phi(\cdot)$ requires $\chi$ in yr$^{-1}$ to give ha$\cdot$yr$^{-1}$; we treat $R_{rc}$ as the base-model restoration and relegate $R_{fc}$ to a stated variant. A useful metric is $\mathcal{R}_c(T)=(A_c(T)-A_c^{\mathrm{deg}})/(A_c^{\mathrm{init}}-A_c^{\mathrm{deg}})$ with $\mathcal{R}_c=0$ (no recovery), $\mathcal{R}_c=1$ (full), $\mathcal{R}_c<0$ (continued decline), $\mathcal{R}_c>1$ (overshoot). \textbf{The form of the restoration flow matters for sign.} A surplus-gated form ($B>E$) is the ecologically sign-correct rewilding (it retires land only when the system has spare capacity) but is inert during a shortfall; a deficit-gated form ($E>B$) is active during the shortfall but can \emph{deepen} the short-run deficit by retiring productive land (a famine-rewilding hazard). We therefore report the surplus-gated $R_{rc}$ as the base model and flag the deficit-gated variant's hazard rather than endorsing it. The gate-sign asymmetry is \emph{phase-dependent}, not a universal superiority (SI~\S S5.4): a surplus-gated flow is inert during the shortfall it must address --- and at the degraded $R_B=1$ equilibrium there is no surplus for it to act on --- so it restores only once a surplus has opened up, and it can then over-restore the capital book (moving up the equilibrium family) while the supported population re-equilibrates downward; a target-level stopping rule yields the clean $\mathcal{R}_c=1$ recovery. A deficit-gated flow is not unqualifiedly false: it is the one gate active during the shortfall, but at the tested rates conversion outpaces it, so it is necessary-but-insufficient and must be sized or capped.
+
+\subsection{Identifiability and the empirical programme}
+
+\noindent\textbf{Relation to the general ledger framework (Abaee, 2026c).} The general closed material-flow ledger,
+conservation/donor-limitation rules, depletion arithmetic and the no-nonnegative-weighting aggregation
+obstruction are the object of the companion typed-flux-ledger work (Abaee, 2026c), which we cite rather than
+re-derive. The two are complementary and non-overlapping, and the boundary is fixed by that work's own
+declared scope. It owns the \emph{static} accounting layer, cedes all delay/Hopf/periodic dynamics to the
+companion (its ``global periodic results ... do not transfer to the closed primitive ledger''), and explicitly
+registers a two-pool \emph{dynamical} model as an open gap (its groundwater two-pool is a registered gap whose
+admitted applied object is the one-pool affine approximation). ECOMOD supplies exactly that missing dynamical
+realisation --- a minimal two-book, delay-coupled model --- for the \emph{global-hectare biocapacity} case.
+The term is deliberately \emph{composition} illusion here (two-book land conversion of capital into
+provisioning land), which the companion frames as the yield-inflation sense of its ``productivity illusion.''
+
+\noindent\textbf{Why composition is not identifiable from the aggregate.} Biocapacity in global hectares is a
+\emph{value-weighted scalar}, not a count of the underlying assets. Given only that a portfolio's value
+rose $20\%$, there is no way to tell whether every holding grew a little, or some holdings made large gains while others
+quietly fell --- the scalar gloss hides the composition. This is the generic identifiability limit of any
+value-weighted composite index, not a peculiarity of biocapacity: an aggregate that is a
+weighted sum over components cannot be inverted into those components without auxiliary information, because
+the normalisation, weighting and aggregation conventions are themselves choices (Nardo et al., 2008). So with
+aggregate biocapacity: a rising $B$ does not reveal
+whether land became more productive, whether more land was pulled into provisioning, or whether ecological
+capital was converted into provisioning land. Reading the composition therefore requires the individual holdings
+(land cover) and yields from \emph{outside} the aggregate, which is exactly the observation operator the empirical
+programme below describes.
+
+The decomposition is $B=b_fA_f+[b_c+b_{G,c}G_c(q)]A_c$. Writing $\ln B$ and differentiating,
+\[
+\frac{d\ln B}{dt}=\underbrace{\frac{d\ln b}{dt}}_{\text{yield}}+\underbrace{\text{composition/area}}_{\text{land-use}}+\underbrace{\text{capital-land terms}}_{\text{regeneration}}.
+\]
+But $B$ in gha is already value-weighted, so a \emph{raw} gha series does \emph{not} separate yield change from area change. The genuine decomposition requires independent proxies: $A_f,A_c$ from land cover (FAO, ESA-CCI, national inventories); $b_f$ (yield) from the FAO yield index; $b_c,b_{G,c},\rho_c$ from ecological value and regeneration data. $b_c,b_{G,c},\rho_c$ are \textbf{not} individually identifiable from a single cross-section of $Y_c$; identification requires time-series of $A_c$ and independent ecological valuation. $b_{G,c}\rho_c$ (the growth-capacity product) and $b_{c,\mathrm{eff}}$ are identifiable \emph{combinations}; the individual factors are not. The identifiability status of every quantity is collected in Table \ref{tab:ladder}.
+
+\noindent\textbf{A minimal formal anchor for the identifiability claim.} Aggregate biocapacity $B$ is a scalar projection of a vector of land-type components: a weighted sum over those components, with weights given by convention-dependent yield and equivalence factors. A scalar time series therefore cannot, without additional independent restrictions, recover the vector that produced it --- and the projection weights are themselves modelling choices, not fixed constants.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X}
+\toprule
+Tier & Quantities & Status \\
+\midrule
+Observable (area / land cover) & $A_f$, $A_c$, $A_r$, $A_{tot}$ [ha] & direct (area ontology) \\
+Observable (physical flow) & $P$; harvested yields $Y_f$, $Y_c$ [product$\cdot$ha$^{-1}\cdot$yr$^{-1}$] & direct \\
+Observable (value flow, under a convention) & $B$, $E$ [gha$\cdot$yr$^{-1}$] & only under the GFN accounting convention, since gha is already value-weighted \\
+Identifiable combination & $b_{G,c}\rho_c$; $b_{c,\mathrm{eff}}=b_c+b_{G,c}G_c(q)$ & up to the value convention; follows from the per-ha value $\Upsilon_c(q)$ \\
+Not identifiable & $b_c$, $b_{G,c}$, $\rho_c$ individually; the split of $B$ into fast-flow vs capital-growth books; $\alpha$ and $D$ (confounded without an independent debt proxy) & requires time-series of $A_c$ plus independent ecological valuation \\
+\bottomrule
+\end{tabularx}
+\caption{Observability ladder: what is measured, what is an identifiable combination, and what is genuinely
+non-identifiable --- the basis for the claim that the composition step needs an independent observation operator.}
+\label{tab:ladder}
+\end{table}
+
+\noindent\textbf{Regeneration timescale (field-anchored, and qualified).} The capital-land regeneration lag is a lumped, effective recruitment-response timescale; the empirical anchors are \emph{illustrative of the band}, not a calibration of a single ``$\rho_c$''. Forest above-ground biomass recovers to $\approx$half of old growth by $\approx$20\,yr and to $\approx$90\,\% at a median $\approx$66\,yr (Poorter et al.\ 2016, \emph{secondary} forests; the 66--95\,yr tail lies \emph{beyond} the core band); soil organic carbon re-equilibrates after $\approx$23 and $\approx$17\,yr (Poeplau et al.\ 2011); and only $\approx$29\,\% of collapsed fish stocks recovered to $50\,\%$ within 5--15\,yr (Hutchings \& Reynolds 2004, reported as a paraphrase, not a precise rate; see also Neubauer et al.\ 2013, \emph{Science} 340:347--349). Because the two-land recover/collapse boundary is a \emph{demand} threshold (not a sharp $\tau_g$ cliff), these field timescales bound the capital-land regeneration \emph{band} rather than a single recovery time: the effective timescale is roughly 25--33\,yr (representative $\approx$29\,yr; order 10--40\,yr; conversion in SI~\S S5.3). This band is an illustrative anchor, not a calibration of the model's $\rho_c$: $\rho_c=0.08\,\text{yr}^{-1}$ is an \emph{effective} consolidation parameter rather than a measured forest recovery rate, and the recover/collapse boundary is a \emph{demand} threshold rather than a $\rho_c$- or $\tau_g$-governed timescale. For two of the legs this anchor is quantified directly from raw recovery curves rather than from published summaries. A lagged saturating recovery model fitted to the plot-level age--above-ground-biomass records of the forest leg (2ndFOR, Poorter et al.\ 2016; 1{,}334 plots, 41 chronosequences; 35 good fits) gives $t_{50}\approx30$\,yr (median) and a recovery timescale $\tau_r\approx38$\,yr; the same model fitted to the deplete-then-rebuild trajectories of the fishery leg (RAM Legacy B/BMSY, 33 episodes) gives $t_{50}\approx5.6$\,yr and $\tau_r\approx3.4$\,yr. Both are statements about the regeneration \emph{rate} $\rho$ (how long recovery takes), not the lag $\tau_g$; the two are kept distinct, so this does not re-label a timescale as a delay. The two fit legs bracket the effective capital-land regeneration timescale (forest slow, fishery fast), with the cited soil re-equilibration timescale (Poeplau et al.\ 2011, $\approx$17--23\,yr) between them. On the one-stock comparator the forest value lies at or above the $\approx$18--20\,yr cliff; in the two-land model, where the recover/collapse boundary is a demand threshold, these bound the regeneration timescale rather than setting the collapse point. See SI~\S\ S5.3a and Figs.~S1b--S1c.
+
+\noindent\textbf{Application to the real series.} We applied the identity to the actual National Footprint and Biocapacity Accounts (world, 2025 edition, \texttt{data/nfa/}). Over 1961--2022 aggregate biocapacity rose $+23.0\%$\footnote{The $+23.0\%$ aggregate growth ($\Delta\ln B=+0.207$) reported throughout the core manuscript is anchored to the global aggregate series (the NFA \emph{aggregate} file in \texttt{data/nfa/}). The newer NFA land-type vintage (the \texttt{NFA\_world\_landtype\_biocapacity...} file, which is what the cropland-book calibration in SI~§S5.3b reads) has a slightly different, retroactively re-based total, $+24.5\%$ ($\Delta\ln B=+0.219$): the two NFA vintages differ by an edition/re-basing move of about $1.5$ percentage points in the aggregate growth, not by any change in the underlying land facts. The core finding is unchanged by this vintage shift: the cropland (fast-provisioning) book accounts for essentially all of the net aggregate biocapacity growth in both vintages ($\approx103\%$ of net growth against the $+23.0\%$ aggregate series, $\approx97\%$ against the $+24.5\%$ land-type total, the residual band reflecting the edition move; the non-cropland book is flat as an endpoint change ($\approx1.008\times$), though its intra-period index reaches $\approx1.024\times$, in both). We therefore report both numbers and treat the attribution as robust to the NFA vintage.} (continuous rate $\ln B/\Delta t=+0.339\%\,\text{yr}^{-1}$; $\ln B=+0.207$); per-capita biocapacity $B/P$ fell $-52.9\%$ (continuous rate $-1.23\%\,\text{yr}^{-1}$; $\ln(B/P)=-0.752$); per-capita footprint rose $+16.9\%$; and the biocapacity ratio $R_B=E/B$ rose $0.718\to1.782$, crossing $1$ (overshoot onset) in 1971. Because the identity $d\ln B=d\ln(B/P)+d\ln P$ is exact (residual $<10^{-16}$), the contribution split over the period is unambiguous: population $+0.959$ ($+464\%$ of $d\ln B$) and per-capita $-0.752$ ($-364\%$). \textbf{Interpretation.} This is the extensive/intensive split: global biocapacity rose because the population term grew while per-capita (intensive) biocapacity halved --- it is \emph{not} a causal claim about population ``causing'' biocapacity (biocapacity is computed from area and yield independently of $P$), and it is \emph{not} the two-land composition illusion ($B$ up, $A_c$ down). It is the \emph{aggregation} face of the masking result: the same aggregate that hides a per-capita halving is what hides a capital-land drawdown. This is \emph{not}, by itself, the two-land conversion composition: the public World file gives only total $B$, total $E$, and $P$ --- \textbf{no land-type (book) split and no separate yield vs.\ area} --- so the `$A_f$'/'$A_c$' composition and the yield-vs-area split cannot be read off this product at all. That is the identifiability result, demonstrated by the data structure itself; resolving it requires independent land-cover ($A_c,A_f$) and FAO-yield ($b_f$) proxies, which we do not claim here. The empirical statement is therefore: aggregate biocapacity rose only because population grew while per-capita capacity halved (intensive), and the two-book composition behind that rise is \emph{not identifiable} from the aggregate accounts alone (Figure~\ref{fig:aggregation}).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{real_series_aggregation_face.png}
+\caption{The aggregation face of the masking result, National Footprint \& Biocapacity Accounts (world, 1961--2022). (a) Index (1961 = 1) of aggregate biocapacity $B$, per-capita biocapacity $B/P$, and per-capita footprint $E/P$: $B$ rises while $B/P$ falls. (b) The biocapacity ratio $R_B=E/B$, crossing $1$ (overshoot onset) in 1971. (c) The exact identity $d\ln B=d\ln(B/P)+d\ln P$: population $+0.959$ ($+464\%$) and per-capita $-0.752$ ($-364\%$). This is the \emph{aggregation} face of the masking result --- the per-capita halving is hidden by population growth --- and is explicitly \emph{not} the two-land composition illusion ($B$ up, $A_c$ down), since the public accounts carry no land-type or yield/area split.}
+\label{fig:aggregation}
+\end{figure}
+
+\noindent\textbf{Proxy two-book decomposition (independent observation operator).} To advance past the aggregate, we
+constructed the minimal external proxies identified for this purpose --- $A_f$ from FAOSTAT cropland area
+(arable $+$ permanent crops), $b_f$ from a normalized FAO crop-yield index calibrated to gha/ha at the base year,
+with the non-fast-book as an accounting residual. Define the proxy fast-book component $X_t=\hat b_{f,t}A_{f,t}$
+and the residual $C_t=B_t-X_t$, so $B_t=X_t+C_t$. Applied over 1961--2022 (world):
+
+\begin{center}
+\small
+\begin{tabular}{llll}
+\toprule
+Component & Raw $\Delta\ln$ & Share weight ($\bar s$ or $w$) & \textbf{Contribution to $d\ln B$} \\
+\midrule
+Fast-book yield $b_f$ & $+1.128$ & $w_X=0.349$ & \textbf{$+0.393$} \\
+Fast-book area $A_f$ & $+0.160$ & $w_X=0.349$ & \textbf{$+0.056$} \\
+Proxy residual $C$ (non-cropland) & $-0.404$ & $w_C=0.600$ & \textbf{$-0.242$} \\
+\midrule
+\textbf{Total} & & & \textbf{$+0.207$ $=d\ln B$} \\
+\bottomrule
+\end{tabular}
+\par\vspace{2pt}
+{\footnotesize Raw component log-changes ($+0.160$, $+1.128$, $-0.404$) are changes in the components
+themselves, \emph{not} additive contributions to $d\ln B$; they cannot be summed directly. The contributions are
+weighted. With the exact logarithmic-mean (Divisia) weights
+\[
+w_X=\frac{L(X_T,X_0)}{L(B_T,B_0)},\qquad w_C=\frac{L(C_T,C_0)}{L(B_T,B_0)},\qquad
+L(a,b)=\frac{a-b}{\ln a-\ln b}\ (a\neq b),\qquad L(a,a)=a,
+\]
+the identity $\Delta\ln B=w_X(\Delta\ln b_f+\Delta\ln A_f)+w_C\Delta\ln C$ holds exactly. Using simple
+\emph{average} shares instead ($\bar s_X=0.375$, $\bar s_C=0.625$) gives $+0.231$, an $\approx11\%$ overshoot, so
+we do not use them.}
+\end{center}
+
+After weighting by the fast book's log-mean share, the \emph{yield} channel remains the dominant positive
+contributor ($+0.393$), cropland \emph{area} is a small positive ($+0.056$), and the \emph{proxy residual} is a
+large negative ($-0.242$) --- so aggregate biocapacity growth is dominated by yield/intensification, partially
+offset by a falling residual. This is the composition-mask mechanism, now with independent proxies rather than
+asserted. The bound is explicit: this is a \emph{proxy growth decomposition} on an accounting residual, and
+$b_c,\ b_{G,c},\ \rho_c$ and the yield/area split remain unidentified. The absolute split depends on the
+(unidentified) book shares and base-year calibration; only the growth/index and sign statements are robust.
+Whether the capital book is being drawn down while the fast-land yield channel rises is precisely the question
+the model answers under the composition mechanism, and this decomposition is consistent with it --- as a \emph{proxy}, not a structural identification.
+
+\textbf{Residual caveat.} The residual $C_t=B_t-\hat b_{f,t}A_{f,t}$ is an accounting residual, not an
+independently observed ecological-capital stock. It contains all NFA biocapacity not captured by the fast-book
+proxy --- grazing, forest products, fishing grounds, built-up land, equivalence-factor effects and calibration
+effects. Both $X_t$ and $C_t$ are strictly positive in 1961 and 2022, so the log-mean decomposition is valid; the
+instantaneous fast-book share $s_X$ rises from $0.19$ (1961) to $0.56$ (2022), a rise that follows from the
+base-year calibration $b_f(1961)=\alpha B(1961)/A_f(1961)$ with $\alpha=0.19$ and from applying the crop-yield
+index to the whole fast book. This sharp share trend further underscores that the \emph{absolute} split is a
+proxy: only the growth/index decomposition and its sign ordering are defensible. The base-year calibration can
+instead be pinned directly from the measured NFA cropland biocapacity,
+$b_f(1961)=B_{\mathrm{cropland,NFA}}(1961)/A_f(1961)\approx0.93\,\text{gha}\cdot\text{ha}^{-1}\cdot\text{yr}^{-1}$
+(SI~\S\ S5.3b), which corresponds to a cropland share of $B$ of $\approx0.128$ in 1961 --- a value inside the
+robustness band $\alpha\in[0.10,0.34]$, so the index-weighted decomposition is unchanged by replacing the
+nominal $\alpha=0.19$ anchor with the measured one.
+
+\noindent\textbf{The identifiability result is recursive.} The total biocapacity number does not identify the cropland/non-cropland split; likewise, the non-cropland total does not identify its own internal components. In the NFA land-type accounts the near-flat non-cropland endpoint is the net of declining forest-products, grazing and fishing biocapacity and a rapidly rising built-up-land biocapacity (forest-products, grazing and fishing together fell by about $6.4\\times10^8$ gha, offset by an $\\approx8.6\\times$ increase in built-up land, netting to a roughly unchanged non-cropland total). The land-type decomposition underlying this is summarised in Figure~\ref{fig:composition}. This does not demonstrate a measured decline in the model's ecological-capital stock, because these NFA categories are accounting flows and land categories rather than the model's capital stock $A_c$. It does, however, illustrate the paper's central point: aggregate summary statistics can conceal composition at more than one level, so component reporting is required at every level at which an aggregate is used to summarize ecological change.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.95\textwidth]{composition_attribution.png}
+\caption{Measured land-type composition of the aggregate biocapacity change, National Footprint \& Biocapacity Accounts (world, 1961--2022). The aggregate grew $+24.5\%$ ($\Delta\ln B=+0.219$), yet (a) the growth is almost entirely cropland and built-up land: cropland contributes $+23.8$ points and built-up $+7.3$ points to the aggregate increase (gross $+31.1$ points) while forest products, grazing and fishing together contribute $-6.6$ points, so the components sum exactly to the aggregate growth. (b) The measured change ratios confirm the composition: cropland $2.85\times$, built-up $8.63\times$, forest products $0.90\times$, grazing $0.98\times$, fishing $0.96\times$. A single aggregate number therefore cannot reveal this composition; component reporting is required at every level at which an aggregate is used to summarise ecological change.}
+\label{fig:composition}
+\end{figure}
+
+\medskip
+\noindent\textbf{Robustness of the decomposition to the base-year cropland share $\alpha$.} The absolute split turns on
+the unidentified calibration $\alpha$ (base-year cropland share of $B$). Recomputing the weighted decomposition
+over $\alpha\in[0.10,0.34]$ leaves the qualitative conclusion unchanged --- the weighted identity sums to
+$d\ln B=+0.207$ exactly and the \emph{yield} channel is the dominant positive term at every $\alpha$. It does
+not pin down the split: $w_X$ ranges $0.18$--$0.62$ and the raw residual log-change ranges $\approx-0.04$--$\approx-6.8$,
+so only the sign ordering, not the magnitudes, survives. The full table and the threshold at which the
+log-mean weights become invalid are given in Supplementary S5.1.
+
+\noindent\textbf{Level-decomposition fallback.} The log-mean weighting requires both $X_t$ and
+$C_t$ to be strictly positive in both end years. Here $X,C>0$ in 1961 and 2022 at the anchor $\alpha=0.19$; the
+fallback is still worth stating because it is reached at larger $\alpha$: $C_{2022}\le0$ once $\alpha\ge
+\frac{B_{2022}}{B_{1961}e^{\Delta\ln A_f+\Delta\ln b_f}}\approx0.339$. In that regime $\ln C$ is undefined, and
+the valid, exact decomposition is the \emph{level} one
+\[
+\Delta B=\Delta X+\Delta C,\qquad \Delta X=B_{1961}\big(e^{\Delta\ln A_f+\Delta\ln b_f}-1\big)\alpha,\quad
+\Delta C=\Delta B-\Delta X ,
+\]
+which holds for any $\alpha$ (it reproduces $\Delta B=+2.242\text{e}9$ gha directly). Thus the level decomposition
+safely covers the whole $\alpha$ range that the log decomposition cannot, and it preserves the SAME sign
+statement: the fast book rises ($\Delta X>0$) while the residual declines ($\Delta C<0$).
+
+\noindent\textbf{The observation operator (what the proxies are, and their limits).} The minimal empirical stack
+that advances past the aggregate is a mapping from model quantities to independent sources; it is best read as a
+hierarchy, from first-best to fallback:
+
+\begin{itemize}
+\item \textbf{Fast provisioning land.} $A_f(t)=\text{FAOSTAT arable}+$ permanent crops, element \emph{Area},
+world, 1961--2022.
+\item \textbf{Fast-book yield.} $\tilde b_f(t)=\text{FAOSTAT crop production}/A_f(t)$, normalised to the base year,
+$b_f(t)=b_f(t_0)\,\tilde b_f(t)/\tilde b_f(t_0)$; $b_f$ is calibrated at the base year against the measured NFA
+cropland biocapacity, $b_f(t_0)=B_{\mathrm{cropland,NFA}}(t_0)/A_f(t_0)$, so it is expressed in
+gha$\cdot$ha$^{-1}\cdot$yr$^{-1}$ at the base year. The numerator is the cereal-yield sentinel; a cleaner proxy is
+aggregate crop production per (arable$+$permanent-crop) hectare, or a calorie/dry-matter basis.
+\emph{FAOSTAT yields are physical output per hectare, not gha/ha} --- $b_f$ must be normalised or, where NFA
+land-type biocapacity is available, calibrated, before any absolute statement.
+\item \textbf{Ecological-capital land.} $A_c(t)=\text{FAO/FRA forest area}$, with the natural grassland / shrub /
+wetland proxy added where available; before 1990 use a historical reconstruction (LUH2, Hurtt et al.\ 2011, or
+HYDE 3.2, Klein Goldewijk et al.\ 2017) scaled to FRA/FAO forest area. \emph{Forest area is a sentinel proxy, not
+the whole capital book:} it does not measure soil carbon, wetland capital, fishery capital, or non-forest
+regenerative systems. Where they are not separately measured, the capital book is taken as the residual
+$B_c^{\mathrm{res}}=B_{\mathrm{NFA}}-b_fA_f$ (the cropland book $b_fA_f$ is measured here from NFA cropland
+biocapacity; the LUH2/HYDE/FRA land-cover series are left as available extensions).
+\item \textbf{Capital yield / regeneration (the hardest part).} $b_{G,c}G_c(q)$ is \emph{not} observed in the
+NFA; independent proxies would need FAO FRA growing-stock / net-annual-increment (not annual for the full period),
+FAO GAEZ potential productivity, or EarthStat/MapSPAM. This is precisely why $b_c,\ b_{G,c},\ \rho_c$ are not
+individually identified --- the observable combinations are $b_fA_f$, $b_{c,\mathrm{eff}}A_c$ and $b_{G,c}G_c(q)A_c$,
+not the separate structural parameters.
+\item \textbf{Hierarchy.} (1) NFA land-type biocapacity plus physical area/yield factors, if obtainable (best);
+(2) FAOSTAT land-use area plus FAOSTAT yields, as independent external proxies (used here); (3) remote-sensing /
+historical land cover plus EarthStat/MapSPAM/GAEZ, for validation or extension.
+\end{itemize}
+
+\noindent\textbf{The empirical claim.} Aggregated measured biocapacity rose while independent
+ecological-capital proxies either fell or were not recoverable, but the exact split of biocapacity into yield,
+area and book composition is only \emph{partially} identified. The proxies do not solve global-hectare
+identifiability; they make the composition mechanism a falsifiable, independently-anchored statement rather
+than an asserted one.
+
+\section{Limitations}
+
+\begin{itemize}
+\item \textbf{The capital land is an effective class, not a single land type.} The two-book model consolidates forest, soil, wetland, long-rotation and regenerative systems; their heterogeneity is the object of the companion typed-flux-ledger work (Abaee, 2026c). Consequently the single capital-land regeneration timescale, the composition diagnostic $\Delta b_{\mathrm{conv}}$ and the (illustrative) fold/CSD results are effective-parameter statements. The full vector decomposition is cited, not re-derived.
+\item \textbf{Parameters are effective, not estimated.} $b_c$, $b_{G,c}$, $\rho_c$ and the yields are lumped; $b_c,b_{G,c},\rho_c$ are not identifiable from a single cross-section. $b_{G,c}\rho_c$ and $b_{c,\mathrm{eff}}$ are identifiable combinations; the individual factors are not.
+\item \textbf{The composition window is bounded and demand-driven.} It is not a permanent state; without a sustained exogenous deficit or a technology/demand feedback it is attracted to the low-productivity boundary.
+\item \textbf{Non-smoothness at $S=0$.} The sustainable state is a boundary; stability is one-sided and must be reported as such.
+\item \textbf{Step-size sensitivity at the basin boundary.} The exact demand threshold is reported as a band, not a single value.
+\item \textbf{The NFA does not separate yield from area.} Aggregate biocapacity in gha conflates the two; the decomposition requires independent proxies. This is a bounded-identifiability limitation, not an estimation error.
+\item \textbf{$\eta$ is set physical and non-singular.} The debt-repayment rate is $\eta=0.05\,\text{yr}^{-1}$. The $\eta\to0$ case is deliberately excluded by a floor; setting $\eta=0$ removes the regeneration channel and, with it, the existence of an equilibrium rather than merely perturbing it. Outcomes are insensitive to $\eta$ over a modest range provided $\eta>0$.
+\item \textbf{Fit-defect disclosure.} Any parameter pinned at an optimisation bound (a fit artefact rather than an estimate) is declared as such, never presented silently as a calibration; representative values here are illustrative, not fitted.
+\item \textbf{Interval discipline.} A point-margin small next to an uncertainty scale is reported as a coin-flip, not as skill or stability; the same wording discipline applies to any tight margin reported here (in particular the banded recover/collapse demand threshold).
+\end{itemize}
+
+\section{Conclusions}
+
+The model's conclusions depart from the single-stock, single-aggregate reading of the environment that dominates the resource and sustainability literature --- the treatment of the environment as one stock or one aggregate balance (Meadows et al., 1972, 2004; Brander \& Taylor, 1998; Schaefer, 1954; May, 1973; Wackernagel \& Rees, 1996), which we retain as a one-stock comparator in the Supplementary Information --- in three respects. First, aggregate biocapacity can rise while ecological capital falls, as a composition effect; the real National Footprint and Biocapacity Accounts show the \emph{aggregation} face of this masking more directly --- aggregate biocapacity rose only because population grew, while per-capita biocapacity halved (identity $d\ln B=d\ln(B/P)+d\ln P$; population $+464\%$, per-capita $-364\%$, $R_B$ crossing $1$ in 1971). Second, the collapse of the capital book is demand-driven: it is drawn to its typed viability floor once demand exceeds a threshold that rises with the initial capital stock, and it is \emph{not} regeneration-delay-driven (no one-stock regeneration cliff). The fold/critical-slowing content is a property of the frozen-demand reducer and is illustrative; the composition premium ($\Delta b_{\mathrm{conv}}=b_f-b_{c,\mathrm{eff}}>0$) is robust across the quality regime at the representative parameters, so the conversion-loop gain has no universal eigenvalue. Third, recovery from conversion is not reversible by reversing the forcing; it requires an explicit restoration flow whose gate sign matters --- a surplus-gated form is the sign-correct rewilding but is inert during a shortfall, while a deficit-gated form is active during the shortfall but can deepen the short-run deficit by retiring productive land, so it is not an unqualified good. The most consequential methodological result is identifiability: because biocapacity is expressed in value-weighted global hectares, the composition step cannot be read off the aggregate alone. The NFA land-type data do provide a measured cropland (fast) book --- cropland biocapacity grew 2.85×, area 1.17×, per-ha yield 2.43× --- and it accounts for essentially all of the net aggregate biocapacity growth (the non-cropland book is flat as an endpoint change, ≈1.008×, its intra-period index reaching ≈1.024×), so the composition mechanism is independently anchored; but the capital-land yield and regeneration parameters ($b_c,\\ b_{G,c},\\ \\rho_c$) are not identifiable from the aggregate and require independent ecological valuation. The composition illusion is therefore real, bounded, and demand-driven, and it must be separated --- observationally and theoretically --- from the single-stock, single-aggregate reading of the literature, which the one-stock comparator in the Supplementary Information retains as a limit. A modern economy can run for decades on a harvest that looks healthy while the orchard behind it quietly shrinks, because the unit in which capacity is measured already mixes the fruit with the trees.
+
+\section{References}
+
+\begin{itemize}
+\item Abaee, A. (2026a). \emph{Delay-Induced Regime Change in Harvested Stocks: The Mobilising and Protective Channels of Institutional Feedback, and the Review Interval as Control.} Zenodo. \url{https://doi.org/10.5281/zenodo.22554217}.
+\item Abaee, A. (2026b). \emph{The Limits of Compensatory Aggregation: A Formal Separation of Weak and Strong Sustainability Assessment.} Zenodo. \url{https://doi.org/10.5281/zenodo.22545740}.
+\item Abaee, A. (2026c). \emph{Typed Flux Ledgers and Depletion Arithmetic: Conservation, Componentwise Diagnostics, and the Semantics of Depletion Horizons.} Zenodo. \url{https://doi.org/10.5281/zenodo.22554177}.
+\item Anderies, J. M. (2000). On modeling human behavior and institutions in simple ecological economic systems. \emph{Ecological Economics}, 35(3), 393--412.
+\item Becker, W., Saisana, M., Paruolo, P. \& Vandecasteele, I. (2017). Weights and importance in composite indicators: Closing the gap. \emph{Ecological Indicators}, 80, 12--22.
+\item Blomqvist, L., Brook, B. W., Ellis, E. C., Kareiva, P. M., Nordhaus, T. \& Shellenberger, M. (2013). Does the shoe fit? Real versus imagined ecological footprints. \emph{PLoS Biology}, 11(11), e1001700.
+\item Borucke, M., Moore, D., Cranston, G., Gracey, K., Iha, K., Larson, J., Lazarus, E., Morales, J. C., Wackernagel, M. \& Galli, A. (2013). Accounting for demand and supply of the biosphere's regenerative capacity: The National Footprint Accounts' underlying methodology and framework. \emph{Ecological Indicators}, 24, 518--533.
+\item Brander, J. A. \& Taylor, M. S. (1998). The simple economics of Easter Island: A Ricardo--Malthus model of renewable resource use. \emph{American Economic Review}, 88(1), 119--138.
+\item Carvalhais, N., Forkel, M., Khomik, M., Bellarby, J., Jung, M., Migliavacca, M., Mu, M., Saatchi, S., Santoro, M., Thurner, M., Weber, U., Ahrens, B., Beer, C., Cescatti, A., Randerson, J. T. \& Reichstein, M. (2014). Global covariation of carbon turnover times with climate in terrestrial ecosystems. \emph{Nature}, 514(7521), 213--217.
+\item Calvin, K. \& Bond-Lamberty, B. (2018). Integrated human--Earth system modeling --- state of the science and future directions. \emph{Environmental Research Letters}, 13(6), 063006.
+\item Cohen, J. E. (1995). Population growth and Earth's human carrying capacity. \emph{Science}, 269(5222), 341--346.
+\item Dasgupta, P. (2021). \emph{The Economics of Biodiversity: The Dasgupta Review.} London: HM Treasury.
+\item Diamond, J. (2005). \emph{Collapse: How Societies Choose to Fail or Succeed.} New York: Viking.
+\item Donges, J. F., Winkelmann, R., Cornell, S. E., Lucht, W., Dyke, J. G., Rockstr\"om, J., Heitzig, J. \& Schellnhuber, H. J. (2017). Closing the loop: Reconnecting human dynamics to Earth system science. \emph{The Anthropocene Review}, 4(2), 151--157.
+\item Erb, K.-H., Luyssaert, S., Meyfroidt, P., Pongratz, J., Don, A., Kloster, S., Kuemmerle, T., Fetzel, T., Fuchs, R., Hasegawa, T., Haberl, H., et al. (2017). Land management: data availability and process understanding for global change studies. \emph{Global Change Biology}, 23(2), 512--533.
+\item ESA (2017). \emph{Land Cover CCI Product User Guide, Version 2.0.} European Space Agency.
+\item FAO (2020). \emph{Global Forest Resources Assessment 2020: Main Report.} Rome: Food and Agriculture Organization.
+\item Fischer, S. M., Joy, M. K., Abrahamse, W., Milfont, T. L. \& Petherick, L. M. (2022). The use and misuse of composite environmental indices. \emph{bioRxiv}, 2022.03.15.484501. \url{https://doi.org/10.1101/2022.03.15.484501}.
+\item FAO (2023). \emph{FAOSTAT: Land Use; Crops and Livestock Products.} Rome: Food and Agriculture Organization.
+\item Galli, A., Giampietro, M., Goldfinger, S., Lazarus, E., Lin, D., Saltelli, A., Wackernagel, M. \& M\"uller, F. (2016). Questioning the ecological footprint. \emph{Ecological Indicators}, 69, 224--232.
+\item Giampietro, M. \& Saltelli, A. (2014). Footprints to nowhere. \emph{Ecological Indicators}, 46, 610--621.
+\item Haberl, H., Erb, K.-H., Krausmann, F., Gaube, V., Bondeau, A., Plutzar, C., Gingrich, S., Lucht, W. \& Fischer-Kowalski, M. (2007). Quantifying and mapping the human appropriation of net primary production in earth's terrestrial ecosystems. \emph{PNAS}, 104(31), 12942--12947.
+\item Henderson, K. \& Loreau, M. (2018). How ecological feedbacks between human population and land cover influence sustainability. \emph{PLoS Computational Biology}, 14(8), e1006389. doi:10.1371/journal.pcbi.1006389.
+\item Hurtt, G. C., Chini, L. P., Frolking, S., Betts, R. A., Feddema, J., Fischer, G., et al. (2011). Harmonization of land-use scenarios for the period 1500--2100: 600 years of global gridded annual land-use transitions, wood harvest, and resulting secondary lands. \emph{Climatic Change}, 109(1--2), 117--161.
+\item Hutchings, J. A. \& Reynolds, J. D. (2004). Marine fish population collapses: consequences for recovery and extinction risk. \emph{BioScience}, 54(4), 297--309.
+\item Hutchinson, G. E. (1948). Circular causal systems in ecology. \emph{Annals of the New York Academy of Sciences}, 50(4), 221--246.
+\item Krausmann, F., Erb, K.-H., Gingrich, S., Haberl, H., Bondeau, A., Gaube, V., Lauk, C., Plutzar, C. \& Searchinger, T. D. (2013). Global human appropriation of net primary production doubled in the 20th century. \emph{PNAS}, 110(25), 10324--10329.
+\item Klein Goldewijk, K., Beusen, A., Doelman, J. \& Stehfest, E. (2017). Anthropogenic land use estimates for the last 12,000 years --- HYDE 3.2. \emph{Earth System Science Data}, 9(2), 927--953.
+\item Kuang, Y. (1993). \emph{Delay Differential Equations, with Applications in Population Dynamics.} Academic Press.
+\item Lin, D., Hanscom, L., Murthy, A., Galli, A., Evans, M., Neill, E., et al. (2018). Ecological footprint accounting for countries: updates and results of the National Footprint Accounts. \emph{Sustainability}, 10(12).
+\item May, R. M. (1973). \emph{Stability and Complexity in Model Ecosystems.} Princeton: Princeton University Press.
+\item Meadows, D. H., Meadows, D. L., Randers, J. \& Behrens, W. W. (1972). \emph{The Limits to Growth.} New York: Universe Books.
+\item Meadows, D. H., Randers, J. \& Meadows, D. L. (2004). \emph{The Limits to Growth: The 30-Year Update.} White River Junction, VT: Chelsea Green.
+\item Meadows, D. L., Behrens, W. W., Meadows, D. H., Naill, R. F., Randers, J. \& Zahn, E. (1974). \emph{Dynamics of Growth in a Finite World.} Cambridge, MA: Wright-Allen Press.
+\item Meyer, P. S. (1994). Bi-logistic growth. \emph{Technological Forecasting and Social Change}, 47(1), 89--102.
+\item Meyer, P. S. \& Ausubel, J. H. (1999). Carrying capacity: A model with logistically varying limits. \emph{Technological Forecasting and Social Change}, 61(3), 209--214.
+\item Monfreda, C., Ramankutty, N. \& Foley, J. A. (2008). Farming the planet: 2. Geographic distribution of crop areas, yields, physiological types, and net primary production in the year 2000. \emph{Global Biogeochemical Cycles}, 22(1), GB1022.
+\item Motesharrei, S., Rivas, J., Kalnay, E., Asrar, G. R., Busalacchi, A. J., Cahalan, R. F., Cane, M. A., Colwell, R. R., Feng, K., Franklin, R. S., et al. (2016). Modeling sustainability: Population, inequality, consumption, and bidirectional coupling of the Earth and human systems. \emph{National Science Review}, 3(4), 470--494.
+\item Nardo, M., Saisana, M., Saltelli, A., Tarantola, S., Hoffmann, A. \& Giovannini, E. (2008). \emph{Handbook on Constructing Composite Indicators: Methodology and User Guide.} Paris: OECD Publishing.
+\item Copernicus (2019). \emph{Global Land Cover LC100.} European Commission, Land Copernicus.
+\item Neubauer, P., Jensen, O. P., Hutchings, J. A. \& Baum, J. K. (2013). Resilience and recovery of overexploited marine populations. \emph{Science}, 340(6130), 347--349.
+\item Pearl, R. (1925). \emph{The Biology of Population Growth.} New York: Alfred A. Knopf.
+\item Poeplau, C., et al. (2011). Temporal dynamics of soil organic carbon after land-use change. \emph{Global Change Biology}, 17(7), 2415--2427.
+\item Poorter, L., et al. (2016). Biomass resilience of Neotropical secondary forests. \emph{Nature}, 530(7590), 211--214.
+\item Schaefer, M. B. (1954). Some aspects of the dynamics of populations important to the management of the commercial marine fisheries. \emph{Bulletin of the Inter-American Tropical Tuna Commission}, 1(2), 25--56.
+\item Scheffer, M., Carpenter, S., Foley, J. A., Folke, C. \& Walker, B. (2001). Catastrophic shifts in ecosystems. \emph{Nature}, 413(6856), 591--596.
+\item Simon, J. L. (1996). \emph{The Ultimate Resource 2.} Princeton: Princeton University Press.
+\item Tainter, J. A. (1988). \emph{The Collapse of Complex Societies.} Cambridge: Cambridge University Press.
+\item United Nations (2022). \emph{World Population Prospects 2022: Summary of Results.} New York: Department of Economic and Social Affairs, Population Division.
+\item van den Bergh, J. C. J. M. \& Grazi, F. (2015). Reply to the first systematic response by the Global Footprint Network to criticism: a real debate finally? \emph{Ecological Indicators}, 58, 458--463.
+\item van den Bergh, J. C. J. M. \& Rietveld, P. (2004). Reconsidering the limits to world population: Meta-analysis and meta-prediction. \emph{BioScience}, 54(3), 195--204.
+\item Wackernagel, M. \& Rees, W. (1996). \emph{Our Ecological Footprint: Reducing Human Impact on the Earth.} New Society Publishers.
+\item Wackernagel, M., et al. (2002). Tracking the ecological overshoot of the human economy. \emph{PNAS}, 99(14).
+\item Wilson, E. O. (2016). \emph{Half-Earth: Our Planet's Fight for Life.} New York: Liveright.
+\end{itemize}
+
+\noindent\textbf{(Data availability.)} This study is a mathematical and computational analysis and reports no new empirical dataset. All numerical results, parameter sweeps, and figures were generated by the accompanying model code run from stated initial conditions and parameters. The reference two-land determinist model is \texttt{model\_sims/twoland\_fixed.py} (area book $\{A_f,A_c,A_r\}$ conserved 1:1 under conversion, a separate per-hectare capacity state $q$, conversion as a finite rate $u_c=\min(S/b_f,\,A_c-A_c^{\min})/\tau_{\mathrm{conv}}$, and a maintenance term $\mu A_r$), together with \texttt{twoland\_dyn.py}, \texttt{twoland\_stab.py}, \texttt{twoland\_gates45.py}, and \texttt{twoland\_nfa.py} for the stability, gate, and empirical decompositions. The only empirical inputs are published values used to bound the regeneration lag and to demonstrate the composition sign, drawn from the National Footprint Accounts and the field studies cited in the References; these are not reproduced or re-distributed here. \textbf{(Reproducibility.)} Each simulation reports its parameter set, initial state, delay-history functions, active policy regime, solver, step size, event/boundary handling, and whether conversion, restoration, and typed floors are enabled. \textbf{(Supplementary material.)} A supplementary package accompanies this manuscript.
+
+\begin{itemize}
+\item \texttt{supplementary/SUPPLEMENTARY\_information\_v2.md} --- the Supplementary Information. \S S1--S4 give the \emph{one-stock comparator} specification (retained as a limit; its $\approx+0.62$ eigenvalue, $5.4$\,yr mask and $\tau_g\approx18$--$20$\,yr cliff are one-stock, \emph{not} two-land); the two-land specification and its robustness are in the manuscript's Model formulation and SI \S S5.1--S5.5 (proxy-$\alpha$ sensitivity; spectral robustness of the composition diagnostic and conversion-loop eigenvalue; recovery metric $\mathcal{R}_c(T)$ and gate-sign asymmetry; $\tau_p$-extended delay scan to $\tau_p=2000$\,yr; prediction-to-section map).
+\item \texttt{supplementary/FIGURES/} (S1--S15) --- supporting figures with captions in \texttt{FIGURE\_CAPTIONS.md}: S1--S13 are the one-stock comparator (retained as a limit); S14 is the graphical abstract; S15 is the real-series aggregation face of the masking result (National Footprint \& Biocapacity Accounts, world, 1961--2022).
+\item \texttt{supplementary/REPRODUCTION\_GUIDE.md} --- code map and reproduction guide (dependencies, run commands, figure$\leftrightarrow$script$\leftrightarrow$data registry, verification protocol).
+\item \texttt{supplementary/DATA\_AVAILABILITY.md} --- data \& code availability statement (Zenodo / GitHub release).
+\item \texttt{supplementary/ABSTRACT\_submission.tex} --- the abstract as LaTeX (mathematics kept as LaTeX for the submitted manuscript).
+\end{itemize}
+
+\section*{Declarations}
+
+\subsection*{Data availability}
+The code and data supporting the findings are in the accompanying supplementary package. A version of this manuscript together with the supplementary package is deposited at \url{https://zenodo.org/records/22554480}. This study reports no new empirical dataset; the only empirical inputs are published values used to bound the regeneration lag and to demonstrate the composition sign.
+
+\subsection*{Funding}
+This research received no specific grant from any funding agency in the public, commercial, or not-for-profit sectors.
+
+\subsection*{Competing interests}
+The author declares that he has no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+
+\subsection*{Declaration of generative AI and AI-assisted technologies in the writing process}
+During the preparation of this work the author used AI-assisted tools for editorial support, including language refinement, formatting, and computational-reproducibility checks on the accompanying model code. After using these tools, the author reviewed and validated the content as needed and takes full responsibility for the content of the publication.
+
+\end{document}

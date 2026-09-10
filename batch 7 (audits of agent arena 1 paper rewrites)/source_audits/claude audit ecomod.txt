@@ -1,0 +1,423 @@
+appendix:
+Below is a check of the derivation line by line, followed by the problems I find. Where the source equations (1) and (4) are not shown, I state the form the derivation implicitly assumes.
+
+## What checks out
+
+Assuming Eq. (1) is dM/dt = ρM(1 − M/Mₘₐₓ) − γeP(t−τₘ) and Eq. (4) is dP/dt = rP(t)[1 − P(t−τₚ)/K(M(t))] with K = b₀M/rₒₚₜ:
+
+- a₁₁ = ρ(1 − 2M*/Mₘₐₓ) is correct.
+- a₂₁ = rb₀/rₒₚₜ is correct (equivalently rP*/M*).
+- The zero entry for ∂/∂P(t) is correct because 1 − P*/K* = 0.
+- The matrices A, B, C and the determinant expansion are correct; the characteristic equation follows.
+- Units are consistent (γea₂₁ has units 1/time², as does λ²).
+
+So the algebra is internally consistent. The problems are in the surrounding claims and in what the derivation leaves unstated.
+
+## Flaws and inconsistencies
+
+**1. The stability "requirement" a₁₁ < 0 (M* > Mₘₐₓ/2) is wrong for the system actually being analyzed.**
+It is stated as a requirement, but it is (a) a condition on a different object (the M-equation with p ≡ 0), and (b) neither necessary nor the correct condition for the coupled linearization. At zero delay the characteristic equation is
+
+λ² + (r − a₁₁)λ + (γea₂₁ − ra₁₁) = 0,
+
+so Routh–Hurwitz requires r − a₁₁ > 0 and γea₂₁ − ra₁₁ > 0. Using the equilibrium condition ρ(1 − M*/Mₘₐₓ) = γeb₀/rₒₚₜ (which follows from P* = K*), the constant term equals rρM*/Mₘₐₓ > 0 identically. Hence the zero-delay stability condition is a₁₁ < r, not a₁₁ < 0. Equilibria with 0 < a₁₁ < r are stable at zero delay, and the text's condition would wrongly exclude them. The condition is also never used afterward, so it dangles in the narrative.
+
+**2. a₁₁ is not a free parameter, and the condition M* > Mₘₐₓ/2 is a strong, unacknowledged parameter restriction.**
+From the equilibrium condition, M* = Mₘₐₓ(1 − γeb₀/(ρrₒₚₜ)) and a₁₁ = 2γeb₀/rₒₚₜ − ρ. So "a₁₁ < 0" is really γeb₀/rₒₚₜ < ρ/2, i.e. harvesting pressure below half the intrinsic regeneration rate. Existence of the equilibrium only needs γeb₀/rₒₚₜ < ρ. The text presents a stability-looking condition that in fact halves the admissible parameter range, and says nothing about existence (M* > 0) at all.
+
+**3. The "verification" claims do not verify what matters.**
+- Checking that the zero-delay eigenvalues satisfy the equation "to machine precision" is circular: at τₘ = τₚ = 0 the equation is just det(λI − (A+B+C)) = 0, which the eigenvalues satisfy by construction. It says nothing about whether e^{−λτₘ} and e^{−λτₚ} multiply the right terms—the only nontrivial content of Eq. (13).
+- A residual "< 10⁻¹⁶" is below double-precision ε (≈ 2.2×10⁻¹⁶) for O(1) quantities; either the eigenvalues are small in magnitude (making the number uninformative) or the figure is overstated.
+- "Symbolic computation and independent re-derivation" is an unverifiable assertion, not evidence.
+
+**4. Which delay attaches to which term depends on unstated features of Eq. (4).**
+The derivation silently assumes (i) the outer factor is P(t), not P(t−τₚ), and (ii) the carrying capacity is evaluated at the current time, K(M(t)), not K(M(t−τₚ)). If Eq. (4) has the delay on the whole ratio P/K, the a₂₁ term picks up e^{−λτₚ} and the coupling term becomes γea₂₁e^{−λ(τₘ+τₚ)}; if the outer factor is delayed, the structure changes again. The text writes "K(t)" and "K(M)" interchangeably without ever stating the form of Eq. (4), so consistency with the main text cannot be confirmed from what is given.
+
+**5. The linearization of Eq. (1) is likewise stated without the equation.**
+The absence of a −∂(harvest)/∂M · m term implies the harvesting term is independent of M (pure γeP). If Eq. (1) has, e.g., γeMP or a saturating term, a₁₁ acquires an extra contribution and the "M* > Mₘₐₓ/2" reading is wrong even as a condition on the isolated M-equation.
+
+**6. Terminology is inconsistent.**
+"Constant-parameter subsystem" (α = 0, b = b₀) and "non-delayed subsystem" (the M-equation with p set to zero?) are used as if related, but refer to different reductions. The M-equation does contain a delay (τₘ), so "non-delayed subsystem" is ambiguous unless p ≡ 0 is meant, which should be said.
+
+**7. Minor.**
+- "Applying the chain rule" to P/K: it is the quotient rule (or chain rule on K⁻¹); trivial, but the labelling is sloppy.
+- The trivial equilibrium P* = 0 is discarded without comment; the claim P* = K* presupposes P* ≠ 0.
+- Sign conventions for m and p in B and C are correct, but the text never states λI − A − Be^{−λτₘ} − Ce^{−λτₚ} as the characteristic matrix; the reader must infer why the (1,2) entry is +γe e^{−λτₘ}.
+
+## Summary
+
+The characteristic equation itself is correctly derived under the (unstated) assumed forms of Eqs. (1) and (4). The substantive errors are: the claimed stability condition a₁₁ < 0 is the wrong condition for the coupled system (the correct zero-delay condition is a₁₁ < r, with the constant term automatically positive), it is really a restriction on harvesting parameters rather than a stability result, and the "verification" offered is circular and cannot detect misplacement of the delay factors.
+
+main text:
+Below is a section-by-section audit. I re-derived every checkable number from the stated parameters (ρ = 1.5, Mₘₐₓ = 1.2, γ = 1, b₀ = 0.5, rₒₚₜ = 1, r = 0.02, e ∈ {1, 1.15}). Items are grouped by severity; each cites the offending passage.
+
+---
+
+## A. Errors in the analytical core
+
+**A1. The headline result ("no single delay can destabilize the sustainable baseline") holds only on a measure-zero parameter set, and the stated sufficient condition is wrong for one of the two cases.**
+
+From Eq. (13), eliminating the delay via |·|² gives:
+
+- τₚ = 0: ω⁴ + (r² + a₁₁²)ω² + [r²a₁₁² − (γea₂₁)²] = 0
+- τₘ = 0: ω⁴ + (a₁₁² − r² − 2γea₂₁)ω² + [(γea₂₁)² − r²a₁₁²] = 0
+
+The constant terms have **opposite signs**. With the baseline numbers, a₁₁ = −0.5, γea₂₁ = 0.01, so r²a₁₁² = (0.02·0.5)² = 0.0001 = (γea₂₁)². The constant term is *exactly zero* in both cases—which is why both of the paper's polynomials carry a factored ω². This is not generic: it happens because ρ = 3γeb₀/rₒₚₜ (1.5 = 3·0.5), i.e. M*/Mₘₐₓ = 2/3 exactly. Perturb any parameter and one of the two single delays destabilizes:
+
+- If r²a₁₁² < (γea₂₁)² (e.g. e slightly above 1), the τₚ = 0 polynomial has a negative constant → τₘ alone produces a Hopf. (This is exactly Scenario B, and the paper's τₘ ≈ 83 yr, ω ≈ 0.026 check out.)
+- If r²a₁₁² > (γea₂₁)² (e.g. ρ = 1.6), the τₘ = 0 polynomial has a negative constant → **τₚ alone produces a Hopf**. E.g. ρ = 1.6 gives ω⁴ + 0.3396ω² − 0.000044 = 0, ω ≈ 0.011 > 0.
+
+Hence the sentence "This result holds under the condition r²a₁₁² ≥ (γea₂₁)²" (§3.2, §5, §6) is false: strict inequality *guarantees* a τₚ-only Hopf. The paper appears to have derived the condition from the τₚ = 0 polynomial alone and assumed it covered both. The Discussion's gloss that the property is "specific to the balanced case (e = rₒₚₜ)" is likewise spurious—it is specific to ρ = 3γeb₀/rₒₚₜ, not to e = rₒₚₜ.
+
+Corollary: the two-delay threshold "τₘ + τₚ ≈ 80 yr" is suspiciously close to the classical Hutchinson threshold π/(2r) = 78.5 yr for a delayed logistic with r = 0.02. The most parsimonious reading is that the instability is the ordinary demographic-delay Hopf, which the knife-edge cancellation suppresses only at τₘ = 0 exactly; any positive τₘ restores it. This would also explain why the boundary in Fig. 6 sits near a fixed total of ~80 yr.
+
+**A2. "Strictly positive coefficients" is untrue as stated.**
+Both un-factored quartics have a *zero* constant term (0.0001 − 0.0001). Factoring out ω² and then calling the remaining coefficients "strictly positive" hides the degeneracy that A1 exposes. Also "positive coefficients for ω > 0" is garbled—coefficients do not depend on ω.
+
+**A3. The two reported polynomials are of inconsistent degree, and one contains an extraneous factor.**
+τₚ = 0: ω²(10000ω² + 2504) — correct (10000·(r² + a₁₁²) = 2504).
+τₘ = 0: ω²(2500ω⁴ + 1199ω² + 143.5) — this is degree 6, but the modulus identity applied to a quadratic characteristic function with one delay yields degree 4. Indeed 2500ω⁴ + 1199ω² + 143.5 = 2500(ω² + 0.2296)(ω² + 0.25): the correct factor is (ω² + 0.2296) [= ω² + a₁₁² − r² − 2γea₂₁], and (ω² + 0.25) = (ω² + a₁₁²) is spurious, introduced by whatever manipulation was used. The conclusion survives, but the "analytic proof" was not performed cleanly and the two cases were evidently treated by different methods.
+
+**A4. Condition (12) is mis-derived and mis-motivated (§3.1).**
+At zero delay, Eq. (13) reduces to λ² + (r − a₁₁)λ + (γea₂₁ − ra₁₁) = 0. Using the equilibrium condition, the constant term equals rρM*/Mₘₐₓ > 0 identically; stability therefore requires only a₁₁ < r, i.e. M* > (Mₘₐₓ/2)(1 − r/ρ). Because r ≪ ρ here this is numerically close to M* > Mₘₐₓ/2, but (12) is neither the correct condition nor derived correctly. The justification—"the equilibrium must lie on the upper branch of the logistic"—is a conceptual error: a logistic has no branches or bistability; Mₘₐₓ/2 is merely where regeneration is maximal.
+
+**A5. The "Mₘₐₓ/2 threshold from which recovery is impossible" (§4 Scenario D, §5) does not exist in the model.**
+ρM(1 − M/Mₘₐₓ) > 0 for all 0 < M < Mₘₐₓ. Nothing irreversible happens at Mₘₐₓ/2. The only absorbing state is M = 0 exactly (and only if the code clips M at 0). Three internal contradictions follow:
+- §5 "less environmental stock means lower regeneration, which accelerates further depletion" — depletion is γE(t−τₘ), independent of M; lower M does not accelerate it.
+- §5 Limitations: "The logistic recovery model neglects hysteresis and irreversible thresholds" — directly contradicts §4's claim of an irreversible threshold at Mₘₐₓ/2.
+- §4 "Primary mechanism" paragraph gives the *correct* mechanism (delayed depletion keeps removing stock after P falls, so M can hit zero in finite time because γE does not scale with M)—which is a different story from the threshold paragraph two paragraphs earlier.
+
+## B. Model–narrative inconsistencies
+
+**B1. "Two-dimensional" system (§1) vs. three ODE states.**
+With Eq. (6), the full model has states (M, P, D) plus delays. Only the α = 0 subsystem is 2-D. "Keeping the state dimension minimal" (§2.3) is asserted while D is added in §2.4.
+
+**B2. The GFN accounting logic of §1 is not what Eq. (1) implements.**
+§1: the *deficit* (E − B) draws down the stock. Eq. (1): the *entire footprint* E depletes M one-for-one (γ = 1), whether or not E < B, and B = bM plays no role in the M-equation. Depletion is then counted a second time through D → b. The orchard metaphor ("apples" vs "trees") is contradicted by an equation in which every harvested apple removes a tree.
+
+**B3. Delay in Eq. (1) contradicts its own justification (§2.1).**
+"Resource extraction removes stock immediately" — yet Eq. (1) has *no* immediate term; current consumption has zero effect for τₘ years. The delay displaces depletion in time; it does not add a slow degradation channel as claimed.
+
+**B4. Delay in Eq. (4) contradicts its own justification (§2.3).**
+Text: "people respond to conditions they knew decades ago" → this describes K(t − τₚ). Equation: P(t − τₚ)/K(t), i.e. delayed *population*, current conditions. The paragraph then argues the opposite ("today's environmental conditions immediately constrain…"). The reason given for not delaying K ("environmental delay already enters through Eq. (1)") is a non sequitur—Eq. (1)'s delay is on depletion, not on K.
+
+**B5. "Debt compounds without bound while technology saturates" is contradicted by Eq. (7).**
+b = b₀e^{−αD} + T(t) ⇒ b ≥ T(t) for all D. Debt can erase at most b₀; it cannot touch T. The "asymmetry" invoked in §2.4, §4 (Scenario E), §5, §6 does not exist in the equations. The actual reason Scenario E collapses even with Δb = 2.0 is the opposite of the stated one: higher b → higher K → higher P → higher E → faster depletion of M via γE. In this model technology is Jevons-like and accelerates collapse; the paper attributes the outcome to a mechanism its own equation rules out.
+
+**B6. "Co-evolving per-capita resource requirement" (§1) is never modeled.**
+rₒₚₜ(t) and e(t) carry time arguments but are constant in every analysis and scenario.
+
+**B7. "The model explores dynamics for general γ" (footnote 1) — only γ = 1 is used.**
+
+**B8. Parameterization contradicts the motivating timescales.**
+§1: environmental processes "operate over decades." §4: ρ = 1.5 yr⁻¹ (doubling time ≈ 5.5 months), 75× faster than r = 0.02. At the "sustainable" equilibrium half the stock (E* = 0.4 of M* = 0.8) is removed and regrown *every year*. The environment is the fast variable, slaved to the slow population—the reverse of the narrative.
+
+**B9. Half-Earth implementation is internally inconsistent (§2.5, Scenario F).**
+K is capped at 0.5B/rₒₚₜ, but D still uses max(E − B, 0) with the *full* B, and Ω is reported against full B. Under Half-Earth accounting the human share is 0.5B; Scenario F's Ω_HE = 0.575 means humanity uses 115% of its share, yet D = 0 is reported. Also, whether Scenario F includes the lags, the technology wave, or e = 1.15 is never stated (the reported equilibrium implies e = 1.15).
+
+**B10. Debt-repayment claims contradict each other.**
+§2.4: "the qualitative conclusions are unchanged for plausible η." §4: "η ≥ 0.02 yr⁻¹ shifts these scenarios from collapse to persistent oscillation." Collapse → sustained oscillation is a qualitative change, and η = 0.02 (50-yr recovery) is plausible.
+
+**B11. Scenario D's "locally stable equilibrium" does not exist in Scenario D.**
+§4 (Scenarios B–C) correctly notes that with e = 1.15 and α > 0, E* > B* forces D → ∞, so the full model has no equilibrium. The Scenario D paragraph then asserts "the equilibrium is locally stable (Re(λ) < 0 at the baseline delays)"—only meaningful in a *different* model (η → large). And "Re(λ) < 0 at (30, 25)" is asserted for e = 1.15 without any computation shown; the only two-delay result given (≈80 yr) is for e = 1.
+
+**B12. The stability result is about a scenario never simulated.**
+The "both delays required" result concerns e = rₒₚₜ with delays; Scenario A is run with *no* lags, and no sustainable-with-lags scenario appears in the table. Conversely, the policy claim (§5) that "long delays can drive collapse even where the annual deficit is modest and technological progress is rapid" is not demonstrated: every collapse in the table has a 15% deficit, and the only delay-induced phenomenon shown for the balanced case is a Hopf (oscillation), not collapse.
+
+## C. Numerics and reporting
+
+**C1. M = 0.000, P = 0.000 and "total collapse" depend on unstated boundary handling.**
+Eq. (4) divides by K = bM/rₒₚₜ → singular as M → 0. Forward Euler with ρΔt = 0.75 and a large delayed depletion term can drive M negative in one step; presumably it is clipped to 0, after which M = 0 is a fixed point of the logistic and stays there. None of this (clipping, treatment of K = 0, history function for the delays, general initial conditions) is stated; the initial condition (1.0, 0.1) appears only in passing in the Scenario D paragraph.
+
+**C2. Euler with Δt = 0.5 yr and ρ = 1.5 yr⁻¹** is first-order with a step-stiffness product of 0.75; error near the M → 0 crossing is large. "Interpolation for delayed quantities" is moot since 30 and 25 are integer multiples of 0.5. "Follows the tradition of early DDE models" is not a justification.
+
+**C3. The 41 × 41 grid's range is never stated;** "barely positive (Re(λ) < 0.01)" is not barely positive relative to r = 0.02. §4 concedes the map is a single-branch, preliminary estimate, yet §5 and §6 present the two-delay result as "established analytically."
+
+**C4. Scenario definitions are incomplete.** Which value of e, which lags, and whether T(t) is active are specified only for some rows (C, D, E are inferred to use e = 1.15; F is undetermined).
+
+## D. Presentation-level inconsistencies
+
+- Tense drift: "We will introduce…", "We will model…", "will be shown in Figures 1–5" (six scenarios, five figures) — draft language in a results paper.
+- Garbled text: "However, when *ted near the notional equilibrium" (§4).
+- Eq. (6) is called "a first-order process"; without the −ηD term it is not.
+- "Each additional unit of debt reduces the remaining productivity by a fixed proportion" — true only of the b₀e^{−αD} part (see B5); "diminishing marginal damage" is a stretch for a constant relative rate.
+- Footnote 1: "each global-hectare-year of consumption permanently degrades one global hectare … per year" — the units sentence double-counts "per year."
+- §2.1 says γ "carries the units required" then footnote says γ is dimensionless — harmless but clumsy.
+- Mₘₐₓ = 1.2, b₀ = 0.5, Δb = 0.3 are given without units while rₒₚₜ, r, α are given with units; populations of 0.400 are dimensionless — the "gha" bookkeeping of §2 is abandoned in §4 without comment.
+- K is called "an emergent state variable" (§1); it is algebraic (Eq. 3), not a state.
+- "Haberl and Aubauer (1992) first introduced time delay into human population dynamics" — the delayed logistic dates to Hutchinson (1948); "first" is unsupportable.
+- "Unlike earlier resource-harvest models that assume a fixed resource growth function and constant harvesting effort" — this model *also* uses a fixed logistic growth function and constant per-capita e; Brander & Taylor (1998) in fact endogenizes effort.
+- "Dimensional consistency of Eq. (13) has been independently verified" / "robust to the numerical root-finding method" — assertions, not evidence; the Hopf values come from a closed-form quartic and need no root finding.
+- §5: "antibiotic resistance" listed as a symptom of biocapacity overshoot — non sequitur. "The global data from 1961–2022 are consistent with…" — no data are presented, and the same section defers the empirical decomposition to future work.
+- The elevator/cable "sudden break" metaphor does not describe the model's own output: Scenarios B–C show *asymptotic* decay of P tracking K → 0, not abrupt failure.
+
+## Summary of what survives
+
+Correct and internally consistent: Eqs. (10)–(11); M*_A = 0.8, P*_A = 0.4; M*_B = 0.74; the Half-Earth equilibrium (0.970, 0.243, Ω = 0.575); the Scenario B one-delay Hopf (τₘ ≈ 82.7 yr, ω ≈ 0.026, spacing 2π/ω ≈ 242 yr); the coefficient 2504; the units bookkeeping of Eqs. (1)–(8); and the Scenario B endpoint (b = 0.5e^{−0.5·8.847} ≈ 0.006 ⇒ K ≈ 0.007 ≈ P_final).
+
+What does not survive: the central analytical claim (A1–A3) rests on an exact parameter coincidence and a sign error; the stability condition (12) and the "regeneration threshold" (A4–A5) misdescribe the logistic; and several stated mechanisms (technology-vs-debt asymmetry, deficit-driven depletion, delayed response to past conditions) are contradicted by the equations that supposedly implement them (B2–B5).
+
+improvements:
+
+Below is a reconstruction plan. The aim is to keep everything the paper is reaching for—emergent carrying capacity, GFN accounting as the driver, two interacting lags, cumulative debt, bounded technology waves, the weak/strong-sustainability reconciliation, the Half-Earth lever—while replacing the parts that the audit showed to be wrong, knife-edge, or contradicted by the equations. Each item is keyed to the flaws it repairs.
+
+---
+
+## 1. Guiding principles for the revision
+
+1. Every mechanism invoked in the text must be visible in an equation (fixes B2–B5).
+2. Every analytical claim must be stated as a condition on dimensionless parameters, not as a fact about one baseline (fixes A1–A3).
+3. Fast/slow ordering must match the story: environment slow, demography intermediate, technology waves slowest (fixes B8).
+4. Where the narrative needs an irreversibility, put one in the model rather than asserting it of the logistic (fixes A5).
+
+## 2. Corrected core model
+
+### 2.1 Environmental stock: net (deficit-driven) depletion with an accounting switch
+
+dM/dt = ρ M (1 − M/Mₘₐₓ) − γ [ E(t−τₘ) − θ B(t−τₘ) ],  θ ∈ [0, 1].   (1′)
+
+- θ = 0 recovers the original gross-depletion form; θ = 1 is the GFN-consistent form in which only the *deficit* liquidates stock and a surplus accrues as regrowth ("interest vs. principal"). Presenting θ as an accounting parameter preserves the original model as a special case while making the bank-account metaphor literally true.
+- Because E − θB = b(f − θ)M at P = K (with f = e/rₒₚₜ), the depletion term now scales with M: M = 0 becomes a genuine equilibrium rather than a clipped boundary (fixes C1), and a "less stock → less absolute depletion" story is available honestly.
+- Optional but recommended: if the paper wants a threshold "from which recovery is impossible" (as §4–§5 repeatedly assert), add a strong Allee term:
+
+ ρ M (M/M_A − 1)(1 − M/Mₘₐₓ),  0 < M_A < Mₘₐₓ.
+
+ This makes the threshold real, generates bistability and hysteresis, and aligns with the tipping-point literature (Scheffer et al.) and with the paper's own Limitations paragraph. It also gives the basin-shrinkage narrative of Scenario D a rigorous object: the separatrix of the Allee threshold in the delayed system.
+
+### 2.2 Delay placement matched to the text
+
+- Environmental lag: keep a lagged component but allow an immediate one, since §2.1 says extraction is immediate:
+
+ depletion = γ [ (1−w) X(t) + w X(t−τₘ) ],  X ≡ E − θB, w ∈ [0,1].
+
+ Or use the linear-chain (gamma-distributed) form, dQ/dt = (X − Q)/τₘ, depletion = γQ, which adds one linear state and keeps the characteristic equation rational-exponential. Report discrete-delay results as the w = 1 limit.
+- Demographic lag: delay the *conditions*, as the narrative requires:
+
+ dP/dt = r P(t) [ 1 − P(t−τₚ)/K(t−τₚ) ] = r P(t) [ 1 − Ω_P(t−τₚ) ].   (4′)
+
+ People respond to the overshoot ratio they experienced τₚ years ago. This is the Hutchinson form and forces the paper to confront (rather than obscure) the classical threshold rτₚ = π/2, which is where the "≈ 80 yr" number was coming from.
+
+### 2.3 Carrying capacity: true vs perceived
+
+The original defines K with rₒₚₜ but consumes with e, so for e ≠ rₒₚₜ the state P = K is not an equilibrium of the full model (B11). Make this explicit and turn it into content:
+
+K_true = B/e,  K_perc = B/r_perc,  f = e/r_perc.
+
+The overshoot factor f becomes a *perception–consumption gap*: demography is calibrated to a per-capita need lower than actual consumption. P → K_perc is a false attractor; the model then shows what happens when a society regulates itself to the wrong target. Keep rₒₚₜ as r_perc; add the promised co-evolution (B6) with a minimal adaptation law,
+
+de/dt = −ε e [Ω(t−τₑ) − 1],
+
+so that footprint contracts under perceived scarcity (ε = 0 recovers the original). This closes the loop, creates true equilibria for f > 1, and introduces a *policy-response delay* τₑ that the Discussion already talks about.
+
+### 2.4 Debt and technology with the asymmetry actually built in
+
+D: dD/dt = softplus_k(E − θB) − η D,  (6′)
+
+(k → ∞ recovers max(·,0); the smooth version removes the kink for linearization; η ≥ 0 makes "first-order process" true).
+
+b(t) = [ b₀ + T_b(t) ] · exp(−α D),  (7′)
+
+Multiplicative debt erodes technological gains too. Now the paper's central asymmetry is a theorem: T_b is bounded, D is unbounded under persistent overshoot (η small), so b → 0 regardless of Δb. Under the original additive form the claim was false (B5).
+
+Two technology channels, because they behave oppositely:
+
+- yield technology T_b (raises b, raises K, invites rebound: higher K → higher P → higher E — the Jevons channel that actually caused Scenario E to collapse faster);
+- efficiency technology T_e (lowers e and r_perc together, e.g. e = e₀/(1 + T_e)).
+
+Each is a sum of logistic waves as in Eq. (8). The comparison "yield vs efficiency innovation" is a genuinely new result the original was blind to and is highly policy-relevant.
+
+### 2.5 Half-Earth as a continuous, internally consistent lever
+
+Human-usable share σ ∈ (0,1]:
+
+B_h = σB,  K = B_h/r_perc,  Ω = E/B_h,  dD/dt uses (E − θB_h)₊,
+
+with optional conservation benefit ρ(σ) or Mₘₐₓ(σ) increasing as (1−σ) grows. This fixes the F-scenario bookkeeping (B9) and gives a stability map in σ—far more informative than one scenario at σ = 0.5.
+
+## 3. Corrected analytics
+
+### 3.1 Characteristic equation of the corrected constant-parameter subsystem
+
+With (1′) (w = 1), (4′), constant b, e, r_perc, linearize at (M*, P*). Using a₁₁ = ρ(1 − 2M*/Mₘₐₓ), a₂₁ = r b/r_perc:
+
+(λ − a₁₁ − γθb e^{−λτₘ})(λ + r e^{−λτₚ}) + γ e a₂₁ e^{−λ(τₘ+τₚ)} = 0.   (13′)
+
+Two structural gains over Eq. (13):
+
+- The loop-gain term carries the *round-trip* delay τₘ + τₚ, because a perturbation must pass through both lags to return to its origin. This gives a mechanistic reason for the empirical "instability aligns with contours of τₘ + τₚ" finding, which the original could only report.
+- Using the equilibrium identity ρ(1 − M*/Mₘₐₓ) = γb(f − θ), the zero-delay constant term equals rρM*/Mₘₐₓ > 0 for all θ: the interior equilibrium is never a saddle; the only zero-delay condition is the trace condition a₁₁ + γθb < r. Replace Eq. (12) and the "upper branch" language with this (fixes A4).
+
+### 3.2 Replace "no single delay can destabilize" with a classification theorem
+
+For the original structure (θ = 0, current K), the one-delay quartics are
+
+τₚ = 0: ω⁴ + (r² + a₁₁²)ω² + Λ₋ = 0, Λ₋ ≡ r²a₁₁² − (γea₂₁)²
+τₘ = 0: ω⁴ + (a₁₁² − r² − 2γea₂₁)ω² − Λ₋ = 0.
+
+The constant terms have opposite signs, so generically **exactly one** lag is individually destabilizing, selected by the sign of
+
+Λ ≡ γ e a₂₁ − r|a₁₁|  (loop gain minus product of self-dampings):
+
+- Λ > 0: environmental lag τₘ alone can trigger a Hopf (over-consumption regime; Scenario B's 83 yr is this case).
+- Λ < 0: demographic lag τₚ alone can trigger a Hopf (Hutchinson regime).
+- Λ = 0: neither (measure-zero curve; the original baseline sat exactly on it because ρ = 3γeb₀/rₒₚₜ).
+
+State this as Proposition 1, give Λ its physical reading, and then ask the more interesting question the paper was reaching for: how the second lag shifts the threshold of the first. That is the two-delay problem, to be done properly with stability-crossing curves (Gu, Niculescu & Chen 2005) and verified by full-spectrum computation (DDE-BIFTOOL or Julia's DelayDiffEq + spectral solver), replacing the single-branch root tracker (fixes A1–A3, C3).
+
+Note the caveat for the τₘ = 0 quartic: its ω² coefficient can be negative, allowing two positive roots and hence stability *switches* in τₚ—worth reporting, since it is the mechanism by which a moderate demographic lag can be stabilizing.
+
+### 3.3 The productivity illusion as a proposition
+
+With (7′), B = (b₀ + T_b) e^{−αD} M and
+
+d ln B/dt = T_b′/(b₀ + T_b) − αD′ + d ln M/dt.
+
+Biocapacity rises while stock falls iff T_b′/(b₀ + T_b) > αD′ − d ln M/dt. Because T_b′ → 0 (logistic saturation) while D′ > 0 under persistent overshoot, the inequality must eventually fail: the weak-sustainability window is transient, and the peak-biocapacity time t_peak is computable. This converts the paper's rhetorical centrepiece into a proved statement and supplies an observable (the sign change of d ln B/dt decomposed into stock and yield components).
+
+### 3.4 Name the actual collapse mechanism
+
+In the θ = 0, discrete-delay model, depletion in the pipeline γE(t−τₘ) does not scale with M, so once past demand exceeds current regeneration the stock is exhausted in finite time. Call this *committed degradation* (by analogy with committed warming). It is the honest version of "the environmental lag sustains high depletion while the demographic lag delays the response," and it is a stronger message than the fictitious Mₘₐₓ/2 threshold. With the Allee variant, the mechanism becomes a genuine crossing of a separatrix, and Scenario D's basin claim can be demonstrated with (M₀, P₀) basin maps at fixed (τₘ, τₚ), η large.
+
+## 4. Parameterization and generality
+
+Non-dimensionalize: t̂ = rt, m = M/Mₘₐₓ, p = P r_perc/(b₀Mₘₐₓ). The constant-parameter subsystem then depends on
+
+s = ρ/r (timescale separation), g = γ b₀ f/ρ (depletion pressure; g < 1 for existence), f (perception gap), θ, τ̂ₘ = rτₘ, τ̂ₚ = rτₚ,
+
+plus α̂, η̂, Δb̂, κ̂ for the full model. Present all results as phase diagrams in (g, f), (τ̂ₘ, τ̂ₚ) and σ, not as six point scenarios. Choose a baseline (i) off the Λ = 0 curve, (ii) with s = O(1–5) so that the environment is slow as §1 claims (ρ ≈ 0.02–0.1 yr⁻¹, r ≈ 0.01–0.02 yr⁻¹, γ well below 1 to reflect that only a fraction of footprint permanently degrades stock), and (iii) show both signs of Λ.
+
+Empirical anchoring (optional but transformative): calibrate to GFN 1961–2022 (biocapacity ≈ 9.6 → 12 Ggha, footprint ≈ 7 → 20 Ggha, Ω ≈ 1.7), taking M from land-cover/NPP products and b = B/M. This gives the paper a real decomposition of biocapacity growth into stock and yield components—the test the Discussion says is needed.
+
+## 5. Numerical protocol
+
+- Solver: method of steps with RK4/dense output or a dedicated DDE package; Δt ≤ 0.1/ρ; report results at two step sizes.
+- State explicitly: history functions on [−max τ, 0], initial conditions, treatment of M → 0 (with (1′) or the Allee term no clipping is needed; define an extinction floor and report time-to-collapse), regime definitions (stable / oscillatory / collapse by quantitative criteria).
+- Scenario matrix, fully specified (e, θ, σ, τₘ, τₚ, α, η, waves on/off), and including the sustainable-with-lags case that the analytics are about but the table omits (fixes B12).
+- Fig. 6: full-spectrum stability chart in (τₘ, τₚ) for several Λ; overlay the analytic crossing curves; retire the "barely positive" grid scan.
+
+## 6. Claims to rewrite
+
+| Original | Corrected |
+|---|---|
+| Two-dimensional model | 2-D constant-parameter core; 3-D (+ delays) full model |
+| No single delay can destabilize the sustainable baseline | Generically exactly one lag is individually destabilizing; sign of Λ selects which; Λ = 0 is a knife-edge |
+| Instability requires the interaction of both delays at τₘ + τₚ ≈ 80 yr | Coupled instability is governed by the round-trip delay through the e^{−λ(τₘ+τₚ)} term; thresholds given as curves in (rτₘ, rτₚ) |
+| Stability requires M* > Mₘₐₓ/2 (upper branch) | Zero-delay stability requires only a₁₁ + γθb < r; constant term is positive identically |
+| Below Mₘₐₓ/2 recovery is impossible | Either: committed degradation exhausts stock in finite time (logistic), or: an explicit Allee threshold M_A exists (bistable variant) |
+| Technology saturates while debt compounds (additive b) | Proved under multiplicative (7′); with additive form technology floors b and collapse is via rebound |
+| Debt repayment leaves conclusions unchanged | Report the η at which collapse gives way to oscillation and its scaling |
+| Half-Earth "keeps E < B" | Continuous σ; consistent Ω, D, K definitions; stability map in σ |
+| Weak/strong reconciliation (verbal) | Proposition 3.3 with computable t_peak and an observable decomposition |
+
+## 7. Extensions that fall out naturally
+
+- Third (policy) delay τₑ in the footprint adaptation law → three-delay stability structure; direct test of "reducing delays may matter as much as reducing overshoot."
+- Distributed vs discrete delays as robustness.
+- Natural vs managed capital (two stocks, one with restoration technology acting on M directly) → formalizes the "technology can rebuild the orchard" extension already flagged.
+- Stochastic forcing of ρ (climate variability) → early-warning indicators before the Hopf/Allee crossing.
+
+## 8. Manuscript hygiene
+
+Uniform past/present tense; correct the priority claim (delayed logistic: Hutchinson 1948; Haberl & Aubauer is the human-population application); correct the characterization of Brander–Taylor (effort is endogenous there); drop antibiotic resistance from the list of overshoot symptoms; either show the 1961–2022 GFN series or do not cite it as evidence; units on all parameters or a stated non-dimensionalization; six scenarios ↔ figure count; remove unverifiable "verified to machine precision" phrasing in favour of reproducible checks (code and DDE-BIFTOOL scripts in a repository).
+
+---
+
+The net effect: the paper keeps its identity—a minimal, analytically tractable, delay-feedback model in which carrying capacity is emergent and cumulative debt plus lags produce overshoot-and-collapse—but every headline result becomes a parameter-dependent statement that is true, the equations implement the mechanisms the prose describes, and two of the original's weakest points (the knife-edge "two delays required" claim and the false technology/debt asymmetry) become its two strongest: a classification of which lag is dangerous, and a proof that the productivity illusion is necessarily transient.
+
+reviewer response:
+Below is a point-by-point response with concrete revisions. Where a point interacts with the structural corrections already proposed (deficit-driven depletion, delayed overshoot ratio, multiplicative debt, Λ-classification), I note the link rather than repeat the material.
+
+---
+
+## (b) Units
+
+**The reviewer is right, and the problem is deeper than a stray "yr⁻¹".** The manuscript mixes two conventions: the GFN convention, in which a global hectare (gha) is *already* an annual flow (the biocapacity of one world-average productive hectare in one year), and a physics convention in which stocks and flows must be distinguished by an explicit time unit. Writing E in "gha yr⁻¹" double-counts the year; writing D in "gha" then makes accumulated overshoot dimensionally identical to a stock of land, which is exactly the confusion Eq. (1) exploits when it subtracts a footprint flow from a land stock one-for-one (γ = 1).
+
+**Revision.** Adopt the GFN convention throughout and separate physical area from productivity-weighted area explicitly:
+
+| Symbol | Meaning | Unit |
+|---|---|---|
+| A (was M) | Stock of biologically productive area | ha (physical) |
+| b | Bioproductivity of that area, i.e. yield factor × equivalence factor | gha ha⁻¹ (per year implicit) |
+| B = bA | Biocapacity (annual regenerative flow) | gha |
+| E = eP | Ecological footprint (annual demand) | gha |
+| e, r_perc | Per-capita footprint / reference requirement | gha cap⁻¹ |
+| K = B/r_perc | Carrying capacity | cap |
+| Ω = E/B | Overshoot ratio | – |
+| D = ∫(E − B)₊ dt | Accumulated ecological deficit | gha·yr |
+| α | Productivity sensitivity to accumulated deficit | (gha·yr)⁻¹ |
+| γ | Physical area lost per unit of accumulated deficit | ha (gha·yr)⁻¹ |
+| ρ, r, η, κ | Rates | yr⁻¹ |
+| τₘ, τₚ, τₑ | Lags | yr |
+
+Consequences for the equations:
+
+- Eq. (1) becomes dA/dt = ρA(1 − A/Aₘₐₓ) − γ [E − θB](t−τₘ), with γ now a genuine conversion coefficient (physical hectares degraded per gha·yr of overshoot) rather than a dimensionless "1". Its magnitude is then an empirical question (see (e)), not a modelling convenience.
+- Eq. (6) accumulates gha·yr, matching the reviewer's requirement and matching how GFN and Dasgupta (2021) describe cumulative deficit.
+- Footnote 1 is deleted and replaced by the table above plus one paragraph explaining the gha convention and why the paper distinguishes A (hectares) from B (gha): this distinction *is* the stock/yield decomposition on which the "productivity illusion" argument rests, so getting the units right strengthens rather than weakens the paper's central point.
+- All simulation parameters will be reported in these units, with the non-dimensionalization (t̂ = rt, a = A/Aₘₐₓ, …) stated so that readers can see which combinations actually govern the dynamics.
+
+## (c) Static parameters
+
+**Agreed.** Per-capita requirement and bioproductivity are the two quantities that have changed most in the historical record (per-capita footprint ≈ 2.3 → 2.6 gha, per-capita biocapacity ≈ 3.1 → 1.5 gha, 1961–2022), and treating them as constants was inconsistent with the paper's own claim to model "co-evolving" resource needs.
+
+**Revision.** Both become dynamic; each dynamic law is stated with its assumption and its constant-parameter limit.
+
+*Per-capita footprint e(t)*: three components, any of which can be switched off.
+- Affluence drift: de/dt = g_e e (exogenous, Kaya-style; calibrated to 1961–2022 trend).
+- Efficiency waves: e = e₀ / (1 + T_e(t)), T_e a sum of logistic waves (bounded gains in resource efficiency—the Green Revolution, decarbonization).
+- Scarcity adaptation: de/dt ∋ −ε e [Ω(t−τₑ) − 1], i.e. footprint contracts in response to *perceived* overshoot with a policy lag τₑ (ε = 0 recovers the original).
+
+The reference requirement r_perc(t) is tied to e(t) through the perception gap f = e/r_perc, which is itself allowed to close over time (df/dt = −ξ(f − 1) once Ω is observed), representing improving accounting and awareness.
+
+*Bioproductivity b(t)*: b = [b₀ + T_b(t)]·exp(−αD) (multiplicative debt), with T_b the yield-technology wave. This removes the false additive floor on b and makes the saturation-vs-accumulation asymmetry a property of the equations. A state-dependent regeneration rate ρ(A) and land-type-specific γ are offered as variants in the Supplement.
+
+The paper will make explicit which of these are treated as endogenous (D, b via D, e via adaptation) and which as exogenous forcings (technology wave timing, affluence drift), and will show the sensitivity of the headline results to each.
+
+## (d) Missing references and the 1961–2022 statement
+
+**Agreed on both counts.** The manuscript uses GFN vocabulary without citing the accounts, their methodology, or their known limitations, and the sentence at line 328 draws an inference the data cannot support.
+
+**Revision 1 — literature.** A new subsection "Footprint accounting: method and limitations" citing at least: Wackernagel & Rees (1996); Wackernagel et al. (2002, PNAS); Kitzes et al. (2009, research agenda); Borucke et al. (2013) and Lin et al. (2018) for the current methodology; Galli et al. (2016) and Mancini et al. (2016) on data sources and uncertainty; Wackernagel et al. (2019, *Nature Sustainability*, "Defying the Footprint Oracle") on what the accounts do and do not measure; and the critical exchange—Blomqvist et al. (2013) with the Rees & Wackernagel (2013) reply, van den Bergh & Grazi (2014), Giampietro & Saltelli (2014) with Goldfinger et al. (2014). The subsection will state plainly that the National Footprint and Biocapacity Accounts are built from FAOSTAT, UN Comtrade, IEA and IPCC data, are constrained by what those datasets record, and are designed to be conservative: biocapacity is computed from *realized yields* and does not deduct soil loss, aquifer drawdown, biodiversity loss or the fragility of yields sustained by external inputs; overshoot is therefore a lower bound.
+
+**Revision 2 — line 328.** Replaced by:
+
+> "Accounted biocapacity rose modestly over 1961–2022 while the footprint more than doubled. Three explanations are observationally equivalent in the accounts alone: (i) genuine expansion of the productive base; (ii) yield technology raising b faster than degradation lowers A; (iii) yield-based accounting that records b but not the concurrent erosion of A. The accounts' own documentation acknowledges that degradation is poorly captured, so (iii) is not a fringe possibility. The model contributes precisely the missing distinction: it separates A from b and predicts that under (ii) the observed rise is transient with a computable peak, whereas under (i) it is not. Discriminating among (i)–(iii) requires independent estimates of A (land-cover, soil-carbon, groundwater and NPP data), which we outline in §X."
+
+This turns the passage from a claim of support into a statement of what the model can help test, and it aligns the paper's message with the reviewer's point that measured overshoot is an underestimate.
+
+## (e) Empirical grounding and the "self-referential" charge
+
+This is the most important criticism and it deserves a structural answer rather than a sentence.
+
+**Revision 1 — evidence for overuse → declining biocapacity.** A new §2.0 "Empirical basis" collecting the quantitative literature on each channel through which A or b decline under overuse: soil erosion outpacing soil formation by one to two orders of magnitude on cultivated land (Montgomery 2007; Borrelli et al. 2017); global land degradation affecting ~75% of land surface (IPBES 2018); groundwater depletion (Wada et al. 2010; Famiglietti 2014); the share of overfished stocks rising from ~10% (1974) to ~35% (2019) (FAO SOFIA); forest loss (Hansen et al. 2013); soil organic carbon loss (Sanderman et al. 2017); yield stagnation in major cereals (Ray et al. 2012; Grassini et al. 2013); human appropriation of NPP (Haberl et al. 2007; Krausmann et al. 2013); and the recovery-time literature (Jones & Schmitz 2009 meta-analysis; MEA 2005). The section will also state the counter-position fairly (Ausubel, Simon, ecomodernist arguments for land sparing) and identify what would distinguish the two: whether yield gains are accompanied by declining or stable A.
+
+**Revision 2 — parameters estimated, not asserted.** Each parameter gets a source and a range:
+
+| Parameter | Basis | Prior range |
+|---|---|---|
+| r | UN WPP: 2.1%/yr (1965) → 0.9% (2022) | 0.005–0.02 yr⁻¹ |
+| τₚ | generation length; fertility response lags in demographic-transition studies | 20–30 yr |
+| ρ | recovery-time meta-analyses (forest, soil, fisheries: 10–100 yr) | 0.01–0.1 yr⁻¹ |
+| τₘ | committed-degradation timescales (soil, aquifers, climate) | 20–60 yr |
+| γ | annual degraded area (~12 Mha yr⁻¹, UNCCD) relative to accumulated overshoot (~250 Ggha·yr since 1970) | 10⁻⁵–10⁻⁴ ha (gha·yr)⁻¹ |
+| α | yield-loss per unit degradation from erosion–yield studies | order 10⁻³–10⁻² (Tgha·yr)⁻¹ |
+| b₀, Aₘₐₓ | GFN biocapacity ÷ FAO productive area; potential arable/forest area | fixed by data |
+
+A formal identification exercise follows: fit the reduced model (A, P, D with e(t) from data) to the GFN series 1961–2022 with an A-proxy from land-cover/NPP products, using profile likelihood to report which parameters the data constrain and which they do not (τₘ and γ will be weakly identified—this is an honest result, and it motivates the sensitivity analysis). Global sensitivity (Sobol indices) over the prior ranges replaces the six point scenarios.
+
+**Revision 3 — the self-referential charge.** The paper will separate imposed from emergent content in a dedicated paragraph. *Imposed*: logistic regeneration, existence of two lags, bounded technology, the accounting identity. *Emergent and falsifiable*: (i) which lag is destabilizing is determined by the sign of Λ = γe a₂₁ − r|a₁₁|, a prediction about *regimes*, not built into any equation; (ii) the oscillation period near onset is ≈ 4× the dominant lag, testable against archaeological/historical cycles (Brander & Taylor 1998; Turchin & Nefedov 2009); (iii) the productivity illusion has a computable peak-biocapacity time t_peak with a specific signature—B rising while A falls—checkable against the A-proxy; (iv) the model predicts that reducing τₑ (policy lag) has an effect comparable to reducing f, a claim that would fail if the stability boundary turned out to be insensitive to τₑ. Assuming lags exist does not by itself imply collapse, oscillation, or a knife-edge classification; those are outputs.
+
+**Revision 4 — why constant γ and ρ, and why this proportionality.** State the leading-order argument (γ constant ⇔ degradation proportional to the deficit, the simplest form consistent with the empirical channels above; ρ constant ⇔ regeneration rate independent of degradation history), state its known failure modes (ρ should fall with soil loss; γ differs by land type), and show in the Supplement that a state-dependent ρ(A) and a two-land-type γ do not change the qualitative regime map but do shift the boundaries—which is precisely the information a reader needs to judge robustness.
+
+## (f) Clarity of the model
+
+**Revision.** Each equation is presented in a fixed template: *what it says in words* → *the equation* → *assumptions box* (three to five bullets: what is held fixed, what is neglected, what would change if it were relaxed) → *units check*. A causal-loop diagram (Figure 1) shows the two reinforcing and two balancing loops and where each lag sits. A worked numerical example ("an orchard of 1000 ha, yield 2 gha ha⁻¹, 800 people needing 2 gha each…") walks through K, Ω, D and one year of Eqs. (1)–(7) by hand so that the accounting is transparent before any simulation is shown. A glossary and the unit table above go in a box at the start of §2. Code (solver, spectral computation, figure scripts) goes in a public repository with a notebook that reproduces every figure.
+
+## (g) Didactic clarity and positioning
+
+**Revision.** The paper will state its status in the abstract and introduction: a *conceptual model with illustrative calibration*, whose purpose is to make explicit the logic connecting footprint accounting, cumulative deficit, lagged feedbacks and the stock/yield decomposition of biocapacity—not to forecast. The text is reorganised on two tracks: §2–§3 in prose with the equations as support, each result restated in one non-technical sentence ("if the environment recovers slowly relative to the pace at which past demand is still degrading it, then the environmental lag alone can produce boom-and-bust; if demography adjusts slowly relative to environmental recovery, the demographic lag alone can"); derivations, spectral computations and the identification exercise move to appendices and the Supplement. Metaphors (orchard, bank account, elevator) are retained only where the equations actually implement them—the orchard metaphor now matches the A/b decomposition, the bank-account metaphor now matches deficit-driven depletion (θ = 1), and the elevator metaphor is dropped.
+
+## Response to the overall conclusion
+
+We accept the characterization. The revised manuscript will (1) correct the unit system and the equations that depended on the error, (2) make per-capita requirement and bioproductivity dynamic, (3) cite and honestly characterise the National Footprint and Biocapacity Accounts and withdraw the 1961–2022 inference, (4) ground every parameter in a stated empirical range and fit the reduced model to data, (5) separate imposed assumptions from falsifiable outputs, and (6) restructure the presentation around the reasoning rather than the formulas. The paper's ambition—an analytically tractable framework in which carrying capacity is emergent, lags interact, and accounted biocapacity can rise while the underlying stock falls—is preserved; it is now stated as a set of conditional, testable propositions rather than as conclusions from one parameter set.

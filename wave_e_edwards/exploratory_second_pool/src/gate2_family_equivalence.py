@@ -1,0 +1,80 @@
+#!/usr/bin/env python3
+"""Gate 2 — declared-family equivalence: BSEACD vs E4's P in [0, K_PHYS].
+
+DOCUMENTS-ONLY. Reads no Barton Springs / Lovelady observational data and
+computes no statistic on the third pool. Every number below is a *declared*
+regulatory constant quoted from BSEACD/TWDB/USFWS documents, or a structural
+fact about the frozen E4 code in /tmp/wrepo/.../run_intervention.py.
+"""
+import json, os
+
+# ---- E4's declared family (read off the frozen leg, make_policies) ----------
+E4 = {
+  "source": "run_intervention.py::make_policies (frozen E4 leg)",
+  "state_variable": "H (head, ft-msl) only",
+  "form": "P(H) = rho(H) * P_bar, rho piecewise-constant, jumps at declared head thresholds",
+  "memoryless": True, "path_dependent": False, "n_state_vars": 1,
+  "members": {
+    "flat_rho": {"rho": [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.0], "thresholds": []},
+    "S1":  {"rule": "0.8*P_bar if H<660 else P_bar", "thresholds": [660.0], "cuts_pct": [20]},
+    "cpm": {"thresholds": [660.0, 650.0, 640.0, 630.0], "cuts_pct": [20, 30, 35, 40]}},
+  "range": "P in [0, P_bar]  (rho=0 admitted => full cessation is IN the family)"}
+
+# ---- BSEACD's declared family (documents) -----------------------------------
+BSEACD = {
+  "sources": ["BSEACD Mgmt Plan 2022 (amended 2024-08-15), Table 1-1 Mandatory Drought Curtailments",
+              "Smith et al. 2013, BSEACD RI 2013-1201 (Drought Trigger Methodology)",
+              "USFWS ECOS fdoc_3055 (HCP annual report), Table 1",
+              "BSEACD drought declarations 2018 / 2023-12 / 2024-10 / 2025-09"],
+  "state_variables": "Barton Springs flow Q (cfs) AND Lovelady head H_L (ft-msl)",
+  "trigger_rule": "10-day running averages; ENTER a stage if EITHER crosses; EXIT only if BOTH recover",
+  "form": "P = rho(stage) * P_authorized, rho piecewise-constant in stage",
+  "memoryless": False, "path_dependent": True, "n_state_vars": 2,
+  "stages": [
+    {"stage": "Conservation (May-Sep)", "Q_cfs": None,  "lovelady_ftmsl": None,   "cut_pct": 10, "mandatory": False},
+    {"stage": "II Alarm",               "Q_cfs": 38.0,  "lovelady_ftmsl": 478.4,  "cut_pct": 20, "mandatory": True},
+    {"stage": "III Critical",           "Q_cfs": 20.0,  "lovelady_ftmsl": 462.7,  "cut_pct": 30, "mandatory": True},
+    {"stage": "IV Exceptional",         "Q_cfs": 14.0,  "lovelady_ftmsl": 457.1,  "cut_pct": 40, "mandatory": True},
+    {"stage": "Emergency Response",     "Q_cfs": 10.0,  "lovelady_ftmsl": 453.4,  "cut_pct": 50, "mandatory": True}],
+  "conditional_permits": "up to 100% cessation (rho = 0) in deep stages",
+  "aggregate_constants_cfs": {"DFC_min_springflow": 6.5, "MAG_total_pumping": 5.2,
+                              "EDWL_2007": 8.5, "aggregate_after_curtailment_2010": 6.7,
+                              "remaining_gap": 0.3}}
+
+# ---- the comparison ---------------------------------------------------------
+cmp_ = {
+ "shared_form": ("BOTH are multiplicative piecewise-constant reductions off an authorized baseline, "
+                 "with jumps at declared trigger levels, and BOTH admit rho=0 (full cessation). "
+                 "E4 cpm cuts 20/30/35/40 vs BSEACD 20/30/40/50 - same shape, 4 mandatory steps."),
+ "differences": [
+   {"id": "D1", "issue": "two trigger variables (Q and H_L) vs E4's single H",
+    "effect": "BSEACD rules are P=f(Q,H_L); E4's family cannot express them", "direction": "SUPERSET"},
+   {"id": "D2", "issue": "hysteresis: enter on EITHER, exit only on BOTH",
+    "effect": "rule is path-dependent, not a memoryless function of current state", "direction": "SUPERSET"},
+   {"id": "D3", "issue": "curtailment is off *authorized permit volume*, not off realized pumpage",
+    "effect": "P_bar must be defined as authorized baseline, else cuts are not comparable", "direction": "DEFINITIONAL"}],
+ "verdict_B_half": {
+   "ruling": "CLEARS UNCONDITIONALLY",
+   "why": ("The margin lemma bounds H_{t+1} = a H_t + alpha + beta F + gamma P_t <= a H_t + alpha + beta F "
+           "for ANY non-negative pumping SEQUENCE (gamma<0). Domination by the zero-pumping trajectory plus "
+           "contraction (0<a<1) gives limsup H_t <= H*_0 < K. The argument never refers to a rule's functional "
+           "form, so it subsumes two-variable (D1) and path-dependent/hysteretic (D2) rules. "
+           "E4-negative* is therefore family-free even against BSEACD's strict superset.")},
+ "verdict_C_half": {
+   "ruling": "CLEARS ONLY UNDER A RESTRICTION",
+   "why": ("Construction is family-relative. BSEACD's family is a strict SUPERSET of E4's (D1, D2), so an "
+           "unrestricted construction could succeed using a rule E4 never admitted - which by this memo's own "
+           "rule is NOT a generalization of E4."),
+   "restriction": ("Define the v3 declared family as the E4-COMPARABLE SUBFAMILY: single-state-variable, "
+                   "memoryless, piecewise-constant multiplicative cuts at the declared BSEACD trigger levels "
+                   "(20/30/40/50% at Q = 38/20/14/10 cfs for the springflow spec; at H_L = 478.4/462.7/457.1/"
+                   "453.4 ft-msl for the head spec), plus flat_rho members. This is a SUBSET of what BSEACD "
+                   "actually has, so a positive result is CONSERVATIVE and comparable to E4."),
+   "consequence_if_violated": "Report as a BSEACD policy finding, NOT as a generalization of E4."}}
+
+out = {"E4_family": E4, "BSEACD_family": BSEACD, "comparison": cmp_,
+       "gate2_status": "RESOLVED: B unconditional; C conditional on the E4-comparable subfamily restriction",
+       "discipline": "Documents only. No Barton Springs or Lovelady statistic computed."}
+R = os.path.join(os.path.dirname(__file__), '..', 'results')
+json.dump(out, open(os.path.join(R, 'gate2_family_equivalence.json'), 'w'), indent=2)
+print(json.dumps(cmp_, indent=2))

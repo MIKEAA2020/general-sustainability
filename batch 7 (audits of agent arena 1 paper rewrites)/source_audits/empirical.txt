@@ -1,0 +1,84 @@
+# Revised Empirical Grounding Plan (incorporating all refinements)
+
+## Opening: bypass GFN for the most leverage‑sensitive parameter
+
+You're right: calibrating against GFN data would inject a systematic conservative bias. GFN’s biocapacity estimates tend to be overstated and its overshoot understated, which would pull any calibration of `b_G` and `τ_g` downward and mask the severity of the delay‑driven instability. That undermines exactly the empirical anchor we need. The fix is to bypass GFN for the parameter that matters most: the regeneration delay `τ_g`.
+
+---
+
+## Revised empirical target: anchor `τ_g` from documented ecosystem recovery lags
+
+**Core idea.** Estimate the regeneration delay `τ_g` from field‑measured *lag times before recovery onset* in well‑studied overshoot episodes (forest regrowth after clear‑cutting, soil organic‑carbon rebound after intensive tillage, fish‑stock rebuilding after fishery collapse), rather than from GFN aggregate national accounts.
+
+**Operational definition (critical).**  
+In the corrected model, `τ_g` is the **time delay** between a change in the state variable `A` and the subsequent regeneration response: regeneration at time `t` depends on `A(t − τ_g)`. Empirically, this corresponds to the **lag before measurable recovery begins**, not the total time to reach a recovery target. For forests, it is the delay before aboveground biomass starts to increase significantly after disturbance; for soils, the time before carbon stocks begin to rebound; for fisheries, the time before spawning biomass starts to recover. *Do not equate `τ_g` with total recovery time or half‑recovery time.* If the literature reports only total recovery durations, those numbers are not directly usable as `τ_g`; they must be converted via re‑analysis (see Step 1a) or approximated with a clear proxy.
+
+---
+
+## Why this remains the single highest‑leverage empirical investment
+
+- **Profound impact.** `τ_g` controls the corrected model’s central qualitative finding: the delay‑driven overshoot of `A_max` that triggers the collapse trajectory. Grounding it converts the paper’s most important lag assumption from an illustrative “30 years” into an empirically motivated range, directly neutralising the “parameters are representative, not estimated” objection.
+
+- **High feasibility.** Decades of restoration ecology, soil science, and fisheries science provide quantitative recovery data from direct field measurements—no new data collection is required. Useful entry points include:
+  - **Forests:** Chazdon (2008) *Tropical Forest Recovery*; Poorter et al. (2016, *Nature*) on secondary‑forest biomass recovery; Poorter et al. (2021, *Science*) on multidimensional tropical forest recovery; Martin et al. (2013) meta‑analysis of tropical reforestation.
+  - **Soils:** Six et al. (2002); Powlson et al. (2014); Poeplau et al. (2011) meta‑analysis of soil organic‑carbon recovery after land‑use change.
+  - **Fisheries:** Hutchings & Reynolds (2004); Pinsky & Byler (2015) on stock rebuilding timelines post‑collapse.
+  - **Meta‑analyses / syntheses:** Moreno‑Mateos et al. (2012, *PLOS ONE*); Curran et al. (2014) on time‑lags in ecosystem‑service restoration.
+
+- **Immediate reward.** A literature‑derived `τ_g` range lets you run the R1/R2 basin and characteristic‑equation analyses with realistic lags and demonstrate that the qualitative results (collapse basin, monotone instability) are robust across that range. This is categorically more defensible than a round‑number “30 years.”
+
+---
+
+## Implementation (six concrete steps, including operational calibration)
+
+### Step 0: Define `τ_g` operationally
+State in the methods section that `τ_g` is the **lag before measurable recovery onset**, not total recovery time. Provide examples for each ecosystem type (forest, soil, fishery). If necessary, define a fallback proxy: **time to reach 10% of the full recovery** as an approximation of the initial response lag, with a sensitivity analysis around that choice.
+
+### Step 1: Scope the search
+Pick three ecosystem classes most relevant to the model’s aggregate biocapacity term (tropical/temperate forests, agricultural soils, marine fisheries). Search Web of Science / Scopus using strings like:
+- `("regeneration lag" OR "recovery lag" OR "time to onset of recovery" OR "delayed recovery") AND (forest OR soil OR fishery)`
+- `"recovery time" AND ("delay" OR "lag") AND (deforestation OR "soil degradation" OR "fishery collapse")`
+Restrict to 2000–present. Prioritise studies that present **time‑series data** or raw recovery curves, not just summary statistics.
+
+### Step 1a: Pilot extraction (feasibility check)
+Take 2–3 well‑known studies (e.g., a forest biomass recovery curve, a soil carbon recovery curve, a fish stock rebuilding timeline) and test whether you can extract a lag parameter from their published data or figures. If the lag is not directly reported, digitise the curve (using WebPlotDigitizer or similar) and fit a delayed‑exponential model:  
+`R(t) = R∞ (1 − exp(−(t − τ_g)/T))` for `t ≥ τ_g`.  
+Document the extraction process and the resulting lag estimates. This pilot will reveal whether the approach is viable within the planned time and whether the fallback proxy is needed.
+
+### Step 2: Extract quantitative lags
+From 5–8 well‑cited empirical studies or meta‑analyses, record the **lag before recovery onset** (or the estimated `τ_g` from your fits). Tabulate ecosystem type, disturbance type, lag estimate, and uncertainty range. If a study reports only total recovery time, note that it is not directly usable unless re‑analysed; use the fallback proxy if re‑analysis is infeasible.
+
+### Step 3: Derive a defensible `τ_g` interval
+For each ecosystem type, compute the median lag and interquartile range. Aggregate across types using a conservative rule: take the union of the interquartile ranges, or use the slowest type’s range as the upper bound. State the aggregation rule clearly in the methods. A plausible interval may be **10–40 years**, but it must emerge from the data, not be pre‑assumed.
+
+### Step 4: Run the sensitivity sweep
+Recompute the basin of attraction and the characteristic‑equation stability condition over the full `τ_g` interval, including at sub‑range boundaries (fast vs. slow ecosystem types). Produce a single figure: stability boundary or basin area as a function of `τ_g`, with the literature‑derived interval shaded. Show that the qualitative conclusion (existence of a collapse basin, monotone instability) persists throughout.
+
+### Step 5: Report transparently
+Cite every source in the calibration paragraph. Include the extraction table and fitted curves as a supplementary appendix. Add a one‑sentence caveat: *“τ_g summarises heterogeneous ecosystem dynamics into a single delay; the sensitivity analysis in Fig. X demonstrates that the qualitative results are robust to this simplification.”*
+
+---
+
+## Pre-empting reviewer concerns
+
+- **“Why not calibrate to GFN?”** One sentence: GFN biocapacity accounting is known to overstate regenerative capacity (cite Wiedmann & Barrett 2010 or similar), which would bias `τ_g` downward and understate the model’s instability. Independent field data avoid that circularity.
+- **“A single τ_g is unrealistic.”** Acknowledge it. The sensitivity sweep across the literature range is the answer; the point is not that 28 years is *the* delay but that the collapse mechanism operates for any delay in the empirically observed band.
+- **“The range is wide.”** Width is honest. A narrow but unjustified value is worse.
+- **“Your τ_g is not a delay; it’s a total recovery time.”** Pre‑empt this by stating the operational definition (Step 0) and showing the extraction methodology (Step 1a). The pilot will demonstrate that you are using lag before onset, not total recovery.
+
+---
+
+## Optional extension: grounding `b_G` (larger effort, lower priority)
+
+If a second empirical anchor is desired, replace the GFN‑derived biocapacity coefficient `b_G` with **satellite‑ or model‑derived net primary production (NPP)**:
+- MODIS MOD17A3 annual NPP product (1982–present, 0.05° resolution),
+- FLUXCOM ensemble NPP estimates (Jung et al. 2020),
+- Dynamic global vegetation model (DGVM) outputs from ISIMIP.
+
+These avoid the accounting conventions of GFN and provide physically measured carbon fluxes. However, converting NPP into the model’s biocapacity units requires an additional harvest‑fraction adjustment, so the workload is substantially larger. **Recommend treating this as a revision‑round or follow‑up task, not a blocker for the current submission.**
+
+---
+
+## Bottom line
+
+The single most profound and feasible empirical step is to **anchor `τ_g` using ecosystem recovery lags from independent, field‑based case studies**—not GFN, and not by equating total recovery time with the model’s delay. With a clear operational definition, a pilot extraction to confirm feasibility, and a sensitivity sweep over the derived range, this work converts the paper’s central delay from an assumption into a calibration. Realistic effort: **four to five focused days**, yielding a robust, reviewer‑ready empirical grounding for the model’s key mechanism.
