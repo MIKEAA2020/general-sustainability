@@ -88,14 +88,20 @@ def run(base_p, new_p, si_p=None):
     from collections import Counter
     b = Counter(data_numerals(base))
     n = Counter(data_numerals(new)) + Counter(data_numerals(si))
-    lost = {k: b[k] - n.get(k, 0) for k in b if b[k] > n.get(k, 0)}
-    if lost:
-        for k, cnt in sorted(lost.items(), key=lambda x: -x[1])[:40]:
+    # A numeral that EVAPORATES entirely (main text + SI) is a blocker: evidence gone.
+    # A numeral that merely appears FEWER times is a warning: condensing a repeated
+    # figure (e.g. tightening an abstract that restates a body number) is legitimate
+    # Tier 3 work, and blocking it would make the gate fire on correct edits.
+    for k in b:
+        if n.get(k, 0) == 0:
             ctx = ''
             m = re.search(r'[^.\n]{0,70}\b' + re.escape(k) + r'\b[^.\n]{0,70}', base)
             if m: ctx = ' '.join(m.group().split())
-            blockers.append(("B1-numeral-lost",
-                             f"'{k}' x{cnt} present in base, absent from new+SI | {ctx}"))
+            blockers.append(("B1-numeral-evaporated",
+                             f"'{k}' present in base, absent from new AND SI | {ctx}"))
+        elif b[k] > n[k]:
+            warnings.append(("B1-numeral-fewer",
+                             f"'{k}' x{b[k]}->x{n[k]} (still present; confirm intentional)"))
 
     # --- B2 cross-reference integrity ---
     defs, tbls = defined_objects(new), defined_tables(new)
@@ -154,9 +160,12 @@ def run(base_p, new_p, si_p=None):
         cb = len(re.findall(re.escape(ph), base, flags=re.I))
         cn = len(re.findall(re.escape(ph), new, flags=re.I)) + \
              len(re.findall(re.escape(ph), si, flags=re.I))
-        if cb > cn:
-            blockers.append(("B5-scope-lost",
-                             f"scope/hedge '{ph}' {cb}->{cn}; a claim may have been unscoped"))
+        if cb > 0 and cn == 0:
+            blockers.append(("B5-scope-evaporated",
+                             f"scope/hedge '{ph}' {cb}->0; claim may now be unscoped"))
+        elif cb > cn:
+            warnings.append(("B5-scope-fewer",
+                             f"scope/hedge '{ph}' {cb}->{cn} (still present; confirm intentional)"))
 
     # --- W2 orphaned definitions ---
     for d in defined_objects(new):
