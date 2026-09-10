@@ -156,11 +156,80 @@ forecast convention does not produce.
 
 ## 6. Items that remain declined on the merits
 
-| Item | Reason |
+**Standard applied.** "It is outside the frozen specification" is a statement about
+bookkeeping, not about science, and it is not on its own a reason to decline anything. A
+frozen specification exists to stop a preregistered negative result being rewritten after
+the fact; it does not exist to protect the paper from valid criticism. So each item below
+is judged on whether the *proposal is valid*, and only then on where it belongs. Where a
+proposal is valid, the disposition must be either soften the specification, or delegate to
+a named successor object — never silence.
+
+| Item | Ruling |
 |---|---|
-| **E13** — refit M1b with 𝔰 above max training S *(grok D(1))* | The estimator's feasibility restriction `0 < 𝔰 < 0.8K` and the non-negativity of `a(S)` are frozen estimation elements. grok's own alternative D(2) — state that M1b cannot represent a threshold above the collapsed range — is honest, costs one sentence, and is implemented. |
-| **E14** — time-varying / random-walk productivity *(qwen 3.5)* | A new model class, not a rung. Also the direct subject of the companion capelin/regime work. Would need v3 and would not change the tested question. |
-| **E16** — drop Prop 4.1 etc. from introduction *(grok §6)* | Already done in v24; grok is reading pre-v24 text. Companion citations stay by standing policy. |
+| **E13** — refit M1b with 𝔰 above max training S *(grok D(1))* | **Valid, and my original decline was too quick — see §6.6.** Delegated to `SPECIFICATION_v3.md` as object Ω_pit, not silenced. |
+| **E14** — time-varying / random-walk productivity *(qwen 3.5)* | **Valid proposal, delegated — see §6.7.** The reason is not "frozen spec" but that the item is already the subject of a companion object, and that a random-walk `r_t` is unidentifiable on these windows for a reason the paper can state. |
+| **E16** — drop Prop 4.1 etc. from introduction *(grok §6)* | Already done in v24; grok is reading pre-v24 text. Companion citations stay by standing policy. This is the one genuine non-item. |
+
+---
+
+## 6.6 E13 revisited — the predator-pit refit is a real test, and it is now specified
+
+grok's D(1) asks for M1b refitted with the Allee threshold allowed *above* the training
+range, so that a predator pit can be represented. I declined it by pointing at the
+estimator's feasibility restriction. That was bookkeeping, not a scientific answer, and
+checking the mathematics shows the proposal has content.
+
+The depensation factor is `a(S) = (S − 𝔰)/(K − 𝔰)`. On the recovery window the observed
+SSB spans 9.68–81.10 kt, so:
+
+| 𝔰 (kt) | observed recovery states with `a(S) < 0` |
+|---|---|
+| 9.68 (the current bound) | 0 of 13 |
+| 50 | 12 of 13 |
+| 100 | 13 of 13 |
+
+**The current bound does not merely restrict the threshold — it selects the one region
+where the model cannot express depensation at all.** Every 𝔰 that would represent a
+predator pit implies negative surplus across the observed range, which the estimator
+forbids by construction. So "M1b was not retained" carries no information about high
+thresholds: the hypothesis was excluded by the feasible set, not tested and rejected.
+
+A capacity check confirms the model class *can* represent the trajectory. Fitting the
+2008–2015 rebuild directly from the 2007 state gives a test-window RMSE of 18.7 kt at
+𝔰 = 50 kt against 103.8 kt for persistence. **This is a fit to the test window, not a
+forecast, and it must not be reported as skill** — and the 18.7 kt figure depends on `r`
+sitting at its upper bound of 2.0, with K = 1000 and 5000 giving 104.8 and 124.4 kt. The
+honest reading is narrow: a threshold above the data is representationally capable of the
+rebuild, and the current specification cannot see it.
+
+**Disposition: delegate to `SPECIFICATION_v3.md` as a third object, Ω_pit** — M1b with
+𝔰 allowed above `max_train S`, negative `a(S)` accepted as the depensatory prediction,
+scored out-of-sample on rolling origins like everything else. It is *not* a softening of
+v2: v2's M1b verdict stands, and gains the sharper interpretation above. The paper keeps
+grok's D(2) sentence, which v27 already carries.
+
+## 6.7 E14 revisited — why time-varying productivity is delegated, on the merits
+
+qwen 3.5 is right that the ecological history is non-stationary and that constant-`r`
+models are brittle. v28 now *demonstrates* this rather than asserting it: the implied
+productivity series runs +1.82 before 1991, negative through 1991–94, then +0.37 and
++0.25. So the diagnosis is accepted and in the paper.
+
+The reason not to add a random-walk `r_t` module to E1 is not that the specification
+forbids it. It is that **on these windows it would not be identified, for the same reason
+already documented in the paper**: the collapse window fixes only the product `rS(1−S/K)`,
+and the recovery window is flat in `K` over 60–5000 kt. A latent `r_t` following a random
+walk adds one free state per year to a series with 33 annual observations and an
+unidentified `K`; it would fit the reconstruction and forecast nothing, which is precisely
+qwen's own "explains reconstruction changes but does not improve forecasts" outcome.
+
+Predeclared regime breaks (qwen's option 1) are the identifiable version, and those are
+**already the companion capelin/regime object** — a 1991 break in `r` was scored and not
+retained. Adding a second, differently-broken version to E1 would duplicate it.
+
+**Disposition: diagnosis implemented in E1 v28; the module delegated to the regime
+companion, where the identification problem can be addressed with a stated break rather
+than a free state.**
 
 ---
 
@@ -177,7 +246,9 @@ forecast convention does not produce.
 | E15 MSE | different paper | E2 line |
 | E11 full decomposition | different project | needs N matrix |
 | E12 seal / recruitment depensation | declined | needs new data |
-| E13, E14, E16 | declined / already done | — |
+| E13 predator-pit refit | **delegated (was declined)** | `SPECIFICATION_v3.md` object Ω_pit |
+| E14 time-varying productivity | diagnosis implemented; module delegated | E1 v28 §3.2; regime companion |
+| E16 | already done in v24 | — |
 
 ---
 

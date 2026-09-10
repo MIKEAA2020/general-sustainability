@@ -141,6 +141,39 @@ it is a different functional class and would need its own pre-registration.
 
 ---
 
+## 4b. Object Ω_pit — high-threshold (predator-pit) ablation
+
+Added on review of grok D(1). The v2 estimator confines the Allee threshold to
+`𝔰 ≤ min_train S = 9.68` kt, and the depensation factor `a(S) = (S − 𝔰)/(K − 𝔰)` turns
+negative for any 𝔰 above the observed range: at 𝔰 = 50 kt, 12 of 13 recovery-window states
+have `a(S) < 0`, and at 𝔰 = 100 kt all 13 do. The feasible set therefore **excludes every
+threshold that could represent a predator pit**, so the v2 result "M1b not retained" is
+silent about high thresholds rather than evidence against them.
+
+| Element | Frozen value |
+|---|---|
+| **Model** | M1b's functional form with `𝔰` allowed on `(min_train S, max_train S]` and beyond, and negative `a(S)` accepted as the model's depensatory prediction rather than penalised |
+| **Declared thresholds** | 𝔰 ∈ {25, 50, 75, 100} kt, fixed before scoring; the profile over this grid is the reported object |
+| **Estimation** | `r` and `K` re-optimised at each fixed 𝔰, training window only, refit at every origin |
+| **Score** | Rolling-origin RMSE at h = 1 and h = 5, origin-matched against persistence — **out-of-sample, never a fit to the test window** |
+| **Status** | **Ablation. Outside the ladder. Cannot retain or promote any v2 module.** |
+
+**Recorded in advance so it cannot be mistaken for a result.** A capacity check fitting the
+2008–2015 rebuild *directly from the 2007 state* gives 18.7 kt at 𝔰 = 50 kt against 103.8
+kt for persistence. That is a fit to the test window, it depends on `r` pinning at its
+upper bound of 2.0, and it degrades to 104.8 and 124.4 kt at K = 1000 and 5000. It
+demonstrates only that the class can represent the rebuild. **It is not skill, it must
+never be quoted as skill, and Ω_pit exists precisely to replace it with an honest
+out-of-sample score.**
+
+**Declared interpretations.** If a high threshold forecasts better than persistence
+out-of-sample, the v2 M1b verdict was a statement about the feasible set rather than about
+depensation, and that is the finding. If it does not, then depensation is not rescued by
+widening the threshold range, which strengthens v2. If it fits in-sample and fails
+out-of-sample, the pit is descriptive of the reconstruction only.
+
+---
+
 ## 5. What is explicitly out of scope
 
 | Excluded | Reason |
@@ -149,7 +182,7 @@ it is a different functional class and would need its own pre-registration.
 | Four-way ΔSSB decomposition (survival / growth / maturity / recruitment) | Same missing N matrix |
 | Recruitment depensation `R_t = f(S_t)` with threshold | Requires a stock–recruit model this programme does not build |
 | Seal / predation module | Requires a harp seal index not in the repository; severe collinearity with capelin |
-| Time-varying or random-walk productivity | New model class, not a timing ablation; would need its own sheet |
+| Time-varying or random-walk productivity | Not identified on these windows (collapse window fixes only the product `rS(1−S/K)`; recovery window flat in `K` over 60–5000 kt). A free state per year on 33 observations would fit the reconstruction and forecast nothing. Predeclared breaks are the identifiable version and belong to the regime companion |
 | Additive food-deficit loss term | Different functional class (see §4) |
 | Any change to the v2 ladder, estimator, retention rule, tie band, or scoring rule | v2 is frozen |
 
