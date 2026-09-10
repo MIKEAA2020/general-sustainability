@@ -34,7 +34,10 @@ from pathlib import Path
 RULES: list[tuple[str, str, str, str]] = [
     # ---- A/B: version & changelog references -------------------------------
     ("BLOCKER", "version-reference",
-     r"\b(?:earlier|previous|prior|superseded|former|the last)\s+(?:version|versions|draft|drafts|revision|revisions|submission)\b",
+     # Only fires on versions OF THIS manuscript. Companion papers are fine.
+     r"\b(?:earlier|previous|prior|superseded|former|the\s+last)\s+"
+     r"(?:version|versions|draft|drafts|revision|revisions|submission)\b"
+     r"(?!\s+of\s+(?:the\s+)?(?:companion|Abaee|[A-Z]))",
      "References an unpublished/superseded version of this manuscript."),
     ("BLOCKER", "version-reference",
      # internal manuscript version tag: bare vNN NOT followed by a dot-decimal
@@ -55,6 +58,13 @@ RULES: list[tuple[str, str, str, str]] = [
     ("REVIEW", "changelog",
      r"\b(?:as\s+printed|quoted\s+verbatim\s+from\s+the\s+text|values?\s+as\s+printed)\b",
      "'As printed' implies a transcription record rather than a result."),
+
+    # ---- A2: unpublished-status citations ----------------------------------
+    # Companion papers ARE citable (they get published, and carry Zenodo DOIs).
+    # What is not citable is an unresolvable "in review"/"in preparation" tag.
+    ("REVIEW", "unresolvable-citation",
+     r"\b(?:in\s+review|in\s+preparation|under\s+separate\s+review|submitted|forthcoming)\b",
+     "Unresolvable citation status; cite the companion paper by its DOI instead."),
 
     # ---- D: project-report / diary register --------------------------------
     ("BLOCKER", "diary",

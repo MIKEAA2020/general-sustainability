@@ -23,25 +23,47 @@ The sole exception is where a correction carries genuine methodological or pedag
 value for the reader — and even then it must be framed as a substantive point about
 method, never tied to an unpublished draft of this paper.
 
-**3. No phantom or strawman contrasts.**
+**3. Companion papers ARE citable; superseded versions are not.**
+This is the distinction that matters, and it is easy to get backwards. The nine companion
+papers in this programme are published and carry Zenodo DOIs (listed below); cite them
+normally, by DOI, as `Abaee (2026a)` etc. What must never be cited is an *earlier version
+of the manuscript in hand* — those are superseded and will never be published. Avoid
+`in review`, `in preparation`, `under separate review`, `forthcoming`: if the companion is
+citable, give its DOI; if it is not, do not lean on it.
+
+**Companion DOIs**
+
+| ref | paper | DOI |
+|---|---|---|
+| P1 | The Limits of Compensatory Aggregation | `10.5281/zenodo.22545740` |
+| P2 | An Obstruction Calculus for Viability under Incomplete Observation | `10.5281/zenodo.22552616` |
+| P3 | Typed Flux Ledgers and Depletion Arithmetic | `10.5281/zenodo.22554177` |
+| P4 | Delay-Induced Regime Change in Harvested Stocks | `10.5281/zenodo.22554217` |
+| P5 | Periodic Review as Sampled Governance | `10.5281/zenodo.22554297` |
+| E1 | Does a surplus-production ladder improve forecasts of Northern cod? | `10.5281/zenodo.22553609` |
+| E2 | Robust viability of the 2J3KL limit reference point | `10.5281/zenodo.22552060` |
+| E3 | Does a one-pool water-balance model improve forecasts of Edwards Aquifer head? | `10.5281/zenodo.22552680` |
+| E4 | Governance operators and viability kernels of the Edwards Aquifer | `10.5281/zenodo.22553311` |
+
+**4. No phantom or strawman contrasts.**
 The manuscript may debunk or contrast positions **in the published literature**, with
 citation. It may not argue against naive positions nobody holds, or against unpublished
 work, or against its own earlier drafts.
 
-**4. No project-diary register.**
+**5. No project-diary register.**
 Remove "in this pass", "post-freeze layer", "freeze-discipline record", "pre-score
 protocol file", "the machine layer", "this round", "we then implemented". Describe what
 the method *is*, not the order in which the authors did it. Where provenance genuinely
 matters (protocol status, what was fixed before scoring), state it once, factually, in a
 single short paragraph.
 
-**5. No editorial, self-praise, or self-assessment.**
+**6. No editorial, self-praise, or self-assessment.**
 Remove "this is a strength", "the paper is honest/rigorous/careful", "this paper guards
 against that failure in its own presentation", "we are careful to". Also remove
 promotional adjectives: "novel", "unprecedented", "state-of-the-art". Let the result
 carry itself.
 
-**6. No metaphor apologies / naive over-hedging.**
+**7. No metaphor apologies / naive over-hedging.**
 Readers understand that an orchard analogy is not an empirical claim about global ecology.
 Saying so explicitly reads like "note: the map is not the territory". Remove:
 "the metaphor is not an empirical claim", "this needs one sentence, not a parable",
@@ -57,16 +79,16 @@ that a scope statement constrains *the claim*; an over-hedge apologises for *the
 
 ## Soft rules (REVIEW — judgement call)
 
-**7. Project-internal coinages.** Terms like "negative certificate", "machine layer",
+**8. Project-internal coinages.** Terms like "negative certificate", "machine layer",
 "observation fibre", "class-level incompatibility", "safe-set map", "specification-matching
 discipline" are invisible to readers. Replace with plain equivalents, or define once at
 first use and then speak normally. A coinage that *is* formally defined in the paper
 (e.g. "scored ladder" via a numbered definition) is acceptable.
 
-**8. Editorial intensifiers.** "Importantly", "notably", "crucially", "it is worth noting".
+**9. Editorial intensifiers.** "Importantly", "notably", "crucially", "it is worth noting".
 If the sentence matters, its content shows that.
 
-**9. Stacked hedges.** "may possibly", "could potentially". One hedge is enough.
+**10. Stacked hedges.** "may possibly", "could potentially". One hedge is enough.
 
 ---
 
@@ -87,28 +109,18 @@ Run it before every commit that touches a manuscript, and before any submission.
 
 ## Applied history
 
-| paper | blockers found | status |
+Scan status as of E1 v19:
+
+| paper | blockers | status |
 |---|---|---|
-| `paperE1_cod_forecast_ladder` | 13 → 0 | cleared in v18 |
-| `paper1_assessment_separation_v23` | 4 | **outstanding** (orchard/parable apology + self-commentary, §1.1) |
+| `paperE1_cod_forecast_ladder_v19` | 0 | clean |
+| `paper1_assessment_separation_v23` | **4** | outstanding: parable apology + self-commentary, 1.1 |
+| `paperE4_edwards_intervention_v14` | **1** | outstanding: "post-freeze layer" |
+| `paper2_obstruction_calculus_v13` | 0 | clean |
 | `paper3_material_ledgers_v32` | 0 | clean |
+| `paper4_delay_dynamics_v30` | 0 | clean |
 | `paper5_sampled_governance_v26` | 0 | clean |
+| `paperE2_cod_intervention_v22` | 0 | clean |
 | `paperE3_edwards_forecast_ladder_v16` | 0 | clean |
-| `paperE4_edwards_intervention_v14` | 1 | **outstanding** ("post-freeze layer", §closed-loop re-check) |
-| others (2, 4, E2) | 0 | clean |
 
----
-
-## CI installation
-
-`tools/manuscript-style.yml.workflow-template` is the GitHub Actions workflow. It is shipped
-as a template because the token used for automated pushes lacks the `workflow` scope. To
-activate:
-
-```bash
-mkdir -p .github/workflows
-cp tools/manuscript-style.yml.workflow-template .github/workflows/manuscript-style.yml
-git add .github/workflows/manuscript-style.yml && git commit && git push
-```
-
-(Requires a token with `workflow` scope, or a commit made through the web UI.)
+Revisions are always issued as a **new version file**; no version is ever overwritten.
