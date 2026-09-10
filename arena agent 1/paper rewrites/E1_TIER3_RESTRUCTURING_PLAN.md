@@ -1,5 +1,9 @@
 # E1 — Tier 3 Restructuring Plan (grok's presentation pass)
 
+> **REVISION 3.** T-FIX is **APPLIED** (v22, commit `3c503ff`). Added §0c (failure-mode
+> analysis) and a mechanical guardrail, `tools/tier3_guard.py`, because the verification
+> gate in revisions 1–2 was **unsound** — see R3-1 below. Revision 2 notes follow.
+>
 > **REVISION 2.** Revision 1 was audited against the source and had four defects, one of
 > them a missed correctness bug. Corrections are marked **[R2]** throughout and summarised
 > in §0b. The headline word-count target in revision 1 was wrong in both operands.
@@ -105,9 +109,74 @@ should attach to any claim that "all surviving Tier 1/2 points are implemented."
 
 ---
 
-## Item T-FIX — Resolve the *M*-vs-residual contradiction *(Tier 1, not Tier 3)* **[R2]**
+## 0c. [R3] What could go wrong — failure-mode analysis
 
-**Priority 0. Do before any presentation work.**
+Each risk below was **tested against the source**, not imagined.
+
+**R3-1 — The verification gate was unsound and would have been switched off.**
+Revisions 1–2 said: *"every RMSE, p-value, count and parameter identical to v21; a Tier 3
+pass that changes a digit has failed."* But T4 explicitly proposes moving the
+floor-binding counts ("15 of 25 M1 and 17 of 25 M1b… 19 of 21…") to SI. That is a
+**correct** edit which **changes digits**. A gate that fires on correct work gets
+disabled after the second false alarm, and then it protects nothing.
+**Fix:** the rule is now *relocation-aware* — a numeral may move to the supplement but
+may not vanish from main text **and** SI together. Implemented as check B1.
+
+**R3-2 — The register scanner is blind to content evaporation. Demonstrated.**
+I deleted 600 characters of §3.1 Results from v22 and ran
+`manuscript_style_scan.py`: it reported **"0 blockers"**. The scanner checks *how* text is
+written, never *whether it still exists*. Since Stage C removes ~1,700 words, relying on
+it would have been the single most dangerous assumption in this plan.
+**Fix:** `tier3_guard.py` B1/B4. On the same sabotage it reports **15 blockers**,
+including the vanished section by name.
+
+**R3-3 — Renumbering breaks remote cross-references silently.**
+LaTeX will happily compile a dangling "Definition 2.4". Measured live references:
+Def 2.1 x5, **Def 2.4 x4 (three remote: L1063, L1255, L1596)**, Def 2.3 x2.
+**Fix:** check B2 resolves every Definition/Lemma/Proposition/Observation/Table/SI
+reference against objects actually defined in the new file.
+
+**R3-4 — "Move to SI" had no destination, and the guard proved it.**
+Running the guard on the *unmodified* v22 immediately returned
+`[BLOCK B2-dangling-SI] SI-1 referenced but absent from supplement`. §4 has been citing a
+non-existent supplement section since before this plan. T-SI is therefore not
+bookkeeping — it is a live defect.
+
+**R3-5 — A claim can be weakened without any numeral moving.**
+The subtlest Tier 3 accident: "No structural model --- M1 through M4 --- is retained"
+rewritten as "No model is retained" during a sentence split. Same numbers, broader claim,
+scope silently lost. B1–B4 all passed this sabotage.
+**Fix:** check B5 tracks the count of load-bearing scope phrases ("within noise",
+"conditional hindcast", "origin-matched", "M1 through M4", "not identified", …) and
+blocks if any falls. It catches the above.
+**Residual limitation, stated plainly:** B5 is a phrase-count heuristic. A rewrite that
+preserves the phrases but changes their referent will still pass. Stage C therefore
+requires human diff review; the guard reduces the search space, it does not replace
+judgement.
+
+**R3-6 — T3's word saving was overstated.**
+"Apparatus demotion ~ -150 words" — but Def 2.4 alone is **289 words**, and the plan
+itself requires its criteria to survive verbatim. Demoting it changes presentation, not
+length. Realistic saving from T3 is small; the honest justification for T3 is
+*readability*, not word count. The -20% target rests on T4 and T5.
+
+**R3-7 — Stage A is not as independent as claimed.**
+T0 rewrites the abstract, which must state the result in the corrected H1/H2 form
+("M3 beats M2; M1b sometimes beats M1"). If T2 later rewords the same finding in §1, the
+two can drift apart. **Mitigation:** fix the canonical result sentence once during T0 and
+reuse that exact wording in §1 and §5.
+
+## Item T-FIX — Resolve the *M*-vs-residual contradiction *(Tier 1)* — **DONE (v22)**
+
+**Applied.** §3.3's "That split is the same as the surplus residual after subtracting
+official \(C_t\)" replaced with a pointer to §3.2, which carries the correct
+non-equivalence. Verified: 0 occurrences of the false equivalence remain, §3.2's
+"not the same object" statement intact, **zero data numerals changed** (1,832 in both
+v21 and v22; the single added numeral is the "Section 3.2" cross-reference), compiles
+clean at 501,179 B, scanner 0 blockers, title/thanks locks byte-identical.
+Commit `3c503ff`.
+
+*(original priority-0 note follows)*
 
 Delete the L971 sentence ("That split is the same as the surplus residual after
 subtracting official *C_t*"). §3.2's L839 statement is the correct one and already
@@ -272,23 +341,42 @@ scanned before the next. Rationale: T3 and T4 are where an over-aggressive cut c
 delete a real commitment, so they should land on top of a stable, already-verified base
 rather than being mixed into the same diff as the abstract rewrite.
 
-## Verification gate (every stage)
+## Verification gate (every stage) **[R3 — rewritten, now mechanical]**
 
-1. `manuscript_style_scan.py` → **0 blockers**.
-2. Tectonic compile from `paper rewrites/` (**not** `latex/` — figures resolve against source).
-3. Locks: title, `\thanks{Data vintages...}` author block, no `\citep{}`, no "in review",
-   no "negative certificate".
-4. **Numeric invariance:** every RMSE, p-value, count and parameter identical to v21.
-   Diff the extracted number set; a Tier 3 pass that changes a digit has failed.
-   *(Exception: T-FIX deletes a sentence containing no numerals; T8 relocates values and
-   must recompute them from the archived CSVs rather than retyping.)*
-5. Retention verdict unchanged: persistence wins both specifications, both horizons.
-6. **[R2] Cross-reference integrity.** After any renumbering, every `Definition N.M`,
-   `Lemma`, `Proposition`, `Observation` and `Section SI-N` string must resolve to an
-   object that exists. Baseline counts to preserve: Def 2.1 ×5, Def 2.4 ×4 (three remote:
-   L1063, L1255, L1596), Def 2.3 ×2, others ×1. Script this check; do not eyeball it.
-7. **[R2] No content evaporation.** Anything the diff removes from the main text must be
-   present in `E1_SUPPLEMENTARY.md`. Verify by string search, not by intention.
+Run **all four**; any blocker stops the stage.
+
+```bash
+# 1. register (how it is written)
+python3 tools/manuscript_style_scan.py NEW.tex            # must be 0 blockers
+
+# 2. content integrity (whether it still exists)  <-- NEW
+python3 tools/tier3_guard.py PREV.tex NEW.tex --si E1_SUPPLEMENTARY.md
+
+# 3. compile from 'paper rewrites/', NOT 'latex/' (figures resolve against source)
+/tmp/tectonic -X compile NEW.tex --outdir OUT
+
+# 4. guard's own regression suite, before trusting it
+bash tools/tier3_guard_selftest.sh                        # 5/5
+```
+
+`tier3_guard.py` enforces:
+
+| check | catches |
+|---|---|
+| **B1** claim-bearing numerals | a data numeral vanishing from main text *and* SI (relocation allowed) |
+| **B2** cross-reference integrity | dangling Definition/Lemma/Proposition/Table/SI-N refs after renumbering |
+| **B3** locked strings | title, `\thanks{Data vintages...}`, and banned tokens (`\citep{`, "in review", "negative certificate") |
+| **B4** section survival | a whole section disappearing |
+| **B5** scope preservation | a claim silently unscoped with numerals intact |
+| W1 | any section cut >60% (review, not block) |
+| W2 | objects defined but never cited |
+
+Self-test status: **5/5 passing** — identity, deleted-results-paragraph (blocks),
+legitimate SI relocation (passes), silently-unscoped claim (blocks), missing SI (blocks).
+
+**Plus, unchanged:** retention verdict must still be persistence-wins on both
+specifications at both horizons, and human diff review is mandatory for Stage C (see
+R3-5 residual limitation).
 
 ## Explicitly out of scope
 
