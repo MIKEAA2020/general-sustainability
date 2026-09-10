@@ -1,3 +1,22 @@
+<!-- ============================================================
+     SUPERSEDED SOURCE — DO NOT REBUILD THE .tex FROM THIS FILE
+     ------------------------------------------------------------
+     The authoritative manuscript is now the LaTeX file:
+         latex/paperE3_edwards_forecast_ladder_v16.tex
+     That .tex was originally generated from this .md by
+     wave13/build_latex_v13.py, but it has since been edited
+     DIRECTLY and now contains material that is NOT in this file:
+       - "Generalizability boundary" paragraph
+       - "Practical reading" paragraph
+       - AR(1)/head-AC(1) mechanism paragraph (Section 6)
+       - fourth item in "Practical reading"
+       - Uvalde no-transfer clarification in the boundary paragraph
+     Running build_latex_v13.py on this .md would SILENTLY DELETE
+     that material. If a rebuild is ever required, port the
+     .tex-only content into this file FIRST and re-verify.
+     Divergence recorded 10 Sep 2026.
+     ============================================================ -->
+
 # Does a one-pool water-balance model improve forecasts of Edwards Aquifer head? A scored test at J-17
 
 **Prepared in the format of Groundwater (Wiley/NGWA)**

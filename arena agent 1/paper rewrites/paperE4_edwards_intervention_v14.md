@@ -1,3 +1,22 @@
+<!-- ============================================================
+     SUPERSEDED SOURCE — DO NOT REBUILD THE .tex FROM THIS FILE
+     ------------------------------------------------------------
+     The authoritative manuscript is now the LaTeX file:
+         latex/paperE4_edwards_intervention_v14.tex
+     That .tex was originally generated from this .md by
+     wave13/build_latex_v13.py, but it has since been edited
+     DIRECTLY and now contains material that is NOT in this file:
+       - "Generalizability boundary" paragraph
+       - "Practical reading" paragraph
+       - attractor-to-threshold margin paragraphs (Section 3.2)
+       - "two senses of generality" paragraph (Discussion)
+       - revised Implications sentence in the Abstract
+     Running build_latex_v13.py on this .md would SILENTLY DELETE
+     that material. If a rebuild is ever required, port the
+     .tex-only content into this file FIRST and re-verify.
+     Divergence recorded 10 Sep 2026.
+     ============================================================ -->
+
 # Governance operators and viability kernels of the Edwards Aquifer: an intervention-selection test at J-17
 
 **Prepared in the format of Groundwater (Wiley/NGWA)**
