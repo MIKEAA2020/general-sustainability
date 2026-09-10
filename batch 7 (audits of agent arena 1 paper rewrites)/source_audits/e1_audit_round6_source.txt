@@ -1,0 +1,1603 @@
+deepseek:
+## Major internal inconsistencies
+
+1. **“Retention rule fixed before scoring” is contradicted by the Protocol status section.**  
+   - Abstract: “under a retention rule fixed before scoring.”  
+   - Introduction: “follows a stated retention rule whose scoring core was coded before the first scoring pass and applied unchanged.”  
+   - But Section 4, “Protocol status”:  
+     > “Two components of the retention rule were not: the 5% tie band and the comparator declarations for the non-nested rungs were formalised after the scores of Section 3 had been computed.”  
+     > “No dated pre-scoring protocol file exists for this study.”  
+   This is a direct contradiction. At best, only a “scoring core” was pre-specified, not the retention rule as stated in the abstract. The abstract and introduction overstate the pre-registration status.
+
+2. **M1b is treated as nested against M1, but the definition says it is not.**  
+   - Definition 2.1: Schaefer branch is \(a(S_t)=1\). Depensation branch is \(a(S_t)=(S_t-\mathfrak s)/(K-\mathfrak s)\).  
+   - Text immediately after: “Setting \(\mathfrak s=0\) gives \(a(S_t)=S_t/K\) (a cubic modification of the logistic surplus), not the Schaefer law. The Schaefer model is the separate member of the family in which the factor is replaced by \(1\).”  
+   - Retention rule H1: “the next-simpler rung for the nested steps (M1b against M1, M3 against M2).”  
+   This is inconsistent. If M1 is Schaefer and M1b is the depensation branch, then \(\mathfrak s\to 0\) in M1b does **not** recover M1. It recovers a cubic modification. So M1b is not a strict nesting of M1. Yet the retention rule treats M1b vs M1 as a nested comparator. This undermines the H1 comparator logic for M1b and the interpretation of M1b’s boundary estimate.
+
+3. **Specification B is said to differ in “four specification fields” but five are listed.**  
+   - Section 2.1: “The two objects differ in four specification fields: the state equation (xteNCAM versus NCAM M-shift; start year 1954 versus 1983), the reference threshold (276 kt versus 884.6 kt), the treatment of catch, and the horizon.”  
+   Counting: state equation, start year, reference threshold, treatment of catch, horizon = five. Minor but line-level inconsistent.
+
+4. **Abstract’s RMSE range does not match the primary table.**  
+   - Abstract: “one-year rolling RMSE is 98 kt for persistence against 115--206 kt, five-year 265 kt against 289--488 kt.”  
+   - Primary Specification A coarse-regime rolling table (Table 4): one-year structural range is 115–196 kt (M4 = 196). The 206 kt value appears in the annual-landings table (Table 5).  
+   - Five-year range 289–488 kt matches Table 4, but persistence 265 kt is Spec A only, while the abstract implies “these two unpooled series.” The abstract mixes Specification A and annual-landings figures without saying so.
+
+5. **M1b recovery-window \(K\) is described inconsistently.**  
+   - Section 3.1: “M1b reports a lower RMSE (90 kt against M1’s 120 kt), but \(\mathfrak s\to 0\) and \(K\) collapses to the training range.”  
+   - Table 10: M1b recovery coarse: \(\mathfrak s=2.1\times10^{-23}\), \(r=2.000\), \(K=105.8\) kt, “a valid interior fit.”  
+   - Earlier the training predictor maximum on that window is \(S^{\mathrm{pred}}_{\max}=40.83\) kt, and the terminal state is 81.10 kt. \(K=105.8\) kt is above the training range, not “collapsed to” it. This should be stated more carefully.
+
+6. **M3 “increases error” conflicts with its improvement over M2.**  
+   - Section 3.1: “M3’s \(\phi=0.95\) persists a negative residual and increases error.”  
+   - But Table 4 shows M3 (135 kt at \(h=1\), 366 kt at \(h=5\)) is **lower** than M2 (144, 398). Section 4 also says: “M3 reads below M2 in all six rolling comparisons.”  
+   “Increases error” is presumably relative to persistence, not to its declared comparator M2. The text should say so.
+
+7. **Table 9 has a striking DM/bootstrap inconsistency.**  
+   - Row: Spec A, \(h=1\), M4 vs M3: gap \(+52.7\) kt, DM \(z=0.99\), 95% CI \([+4.7,+144.7]\), \(p<0.001\).  
+   A DM \(z\) of 0.99 is nowhere near conventional significance, yet the bootstrap interval excludes zero and the reported \(p\) is \(<0.001\). The manuscript acknowledges four such rows, but this specific row is so extreme that it weakens the uncertainty layer’s credibility. It should either be explained in detail or the interval/\(p\) recomputed.
+
+8. **“Two of the four modules” is inconsistent with a five-module ladder.**  
+   - Section 4: “Unidentified extra structure does not close the gap to persistence, and in two of the four modules it widens it.”  
+   - The paper repeatedly says five structural modules (M1, M1b, M2, M3, M4) and two baselines. “Four” is wrong or needs definition.
+
+9. **M1 is included in “when the prescribed catch falls” although M1 uses constant catch.**  
+   - Section 4: “Every module carries stationary production, so when the prescribed catch falls in 1992 the predicted increment rises: the models turn upward exactly where the reconstruction turns down.”  
+   - But M1 plugs a **training-mean constant catch** (240 kt on collapse), not the prescribed 1992 drop. The catch-drop mechanism applies to M2–M4, not M1. M1 may still turn upward, but not because of a prescribed catch drop. The mechanism is not uniform across “every module.”
+
+10. **The uncertainty analysis for Specification A is not run on the primary coarse-regime pass.**  
+    - Section 3.5 and Table 9 caption: Spec A rows are computed on the annual-landings pass of Section 3.2, not the primary coarse-regime pass, because coarse-regime per-origin files were not archived.  
+    - The retention rule’s primary score on Spec A is the coarse-regime rolling RMSE (Table 4). So the uncertainty layer does not attach to the primary scored object for Spec A. The verdict may coincide, but the paper’s claim that uncertainty is attached “to the retention margins” is only partly true.
+
+## Gaps and methodological weaknesses
+
+11. **M4 delay design is not a genuine delayed-information experiment.**  
+    The manuscript admits this: M4 starts at \(S_{t-1}\), but parameters are M3’s, fitted on transitions ending at \(S_t\), and it takes \(h+1\) updates. It is therefore a perturbed initialisation, not a fully stale information set. This is acknowledged but not fixed. The M4 results should not be read as a clean test of delay.
+
+12. **The prey-informed module has severe degrees-of-freedom starvation.**  
+    Section 3.4 says three parameters \((r,K,b)\) are fitted on as few as eight training years. Eight years supply only seven one-step transitions, not eight. This is worse than stated. The non-retention of the prey modules is therefore partly a sample-size artifact, as the paper partly acknowledges.
+
+13. **Catch dating and the 1992 drop may be misaligned with the collapse window.**  
+    Catch is dated so \(C_t\) is taken during \(t\) to \(t+1\). Under the coarse regime, the 1992 drop is placed in the step from 1992 to 1993. The fixed collapse test window is 1991–1995. So the 1992 catch drop does not affect the first forecast step from origin 1990 to 1991, nor 1991 to 1992. This timing should be made explicit when interpreting “the 1992 catch drop cannot reproduce the crash.”
+
+14. **The claim that “every origin state is below the 884.6-kt LRP” needs qualification.**  
+    Section 3.3 says the LRP is the 1983–1989 mean SSB, and that persistence’s Brier score is zero because every origin state is below the LRP. But if the LRP is the mean of 1983–1989, at least some of those years must be at or above the mean unless all values are identical. The relevant origin set for rolling evaluation may start later (e.g. 1990), but the text does not clearly distinguish fixed-window origins from rolling origins. This is a potential source of confusion.
+
+15. **Cross-reference “Table 1 landings” is ambiguous.**  
+    Section 3.3: “Catch is Table 1 landings (2024 persisted from 2023).” In this manuscript, Table 1 is the Specification A field table, not landings. The intended table is probably Regular et al. (2025) Table 1. This should be corrected.
+
+16. **The 1995 overlap is noted for Specification A but not Specification B.**  
+    Section 2.3 notes that 1995 appears in the collapse test window and recovery training window for Spec A and explains why it is not leakage. For Spec B, the collapse test is 1990–1995 and recovery-stall training begins 1995, so the same overlap occurs. The manuscript does not note or justify this for Spec B. Minor but should be consistent.
+
+17. **“Unbeatable” Brier scores are confusing.**  
+    Section 3.3: “The structural scores are M1 0.04/0.05, M1b 0.00/0.05, M2 0.08/0.14, M3 0.08/0.10, M4 0.08/0.14 --- unbeatable there.” Lower Brier is better, so “unbeatable” is ambiguous. It probably means “not beaten by persistence” or “reported for completeness,” but the wording is unclear.
+
+18. **The M1b alternative comparator for M2 is undermined by the non-nesting problem.**  
+    The retention rule says M1b is an alternative comparator for M2, but if M1b is not a nested extension of M1, the comparator declaration becomes arbitrary. This compounds the M1/M1b nesting inconsistency.
+
+19. **The “four specification fields” count is not the only counting issue.**  
+    The paper says “five surplus-production modules and two naive baselines,” but later “two of the four modules.” It also says “five-module ladder” in the abstract and introduction. Counting should be made consistent throughout.
+
+20. **The identification profile for \(\mathfrak s\) is not a likelihood-ratio test, but the manuscript occasionally reads like one.**  
+    Section 3.1 reports \(n_{\mathrm{tr}}\log\{\mathrm{SSE}(\mathfrak s)/\mathrm{SSE}(\hat{\mathfrak s})\}\) and says it is descriptive. That is fine, but the value 0.78 under coarse regime is close to a \(\chi^2_1\) 95% threshold (3.84) times something? Actually it is far from it, but the text should be careful not to let readers infer statistical non-identifiability from a descriptive curvature measure.
+
+## Smaller line-level issues
+
+21. **“M1b reads below M1 at \(h=1\) on Specification A and on the fixed recovery window.”**  
+    This is true for Spec A \(h=1\) and fixed recovery, but not for Spec B \(h=1\) (M1b 152 vs M1 120). The sentence could be read as universal. It should specify “on Specification A” clearly.
+
+22. **“The two objects differ in four specification fields”** — see item 3.
+
+23. **“M1b’s recovery-window \(K=105.8\) kt is a valid interior fit, not a bound violation”** vs “\(K\) collapses to the training range” — see item 5.
+
+24. **“The floor binds often --- for M1 and M1b it binds on a majority of five-year origins on both specifications”** — this is a significant scoring caveat. The raw-RMSE column is the retention score, but the log-RMSE column is badly affected. The paper should state whether any retention verdict could change if the floor were removed or the log score were computed differently.
+
+25. **The paper says “No module is retained on these two unpooled series on the pooled score” in the abstract.**  
+    But the retention rule is applied separately per specification and per horizon. “Pooled score” is not clearly defined. Does it mean pooled across origins? Across horizons? Across specifications? This should be clarified.
+
+## Overall assessment
+
+The manuscript is unusually self-aware about many limitations, but several of those admissions directly contradict its headline claims. The most serious issues are:
+
+- The **retention rule was not fully pre-specified**, despite the abstract saying it was “fixed before scoring.”
+- **M1b is not nested in M1**, yet the retention rule treats it as a nested comparator.
+- The **uncertainty analysis for Specification A uses the annual-landings pass**, not the primary coarse-regime pass.
+- **M4 is not a clean delay experiment**, as the manuscript itself admits.
+- **Table 9 contains a \(p<0.001\) with DM \(z=0.99\)**, which is a red flag for the bootstrap implementation or its interpretation.
+- Several **counts, ranges, and references are internally inconsistent** (four vs five fields, four vs five modules, 115–206 vs 115–196, “Table 1 landings”).
+
+These are fixable, but they need to be addressed explicitly rather than left as caveats. The core empirical finding—persistence is hard to beat on these series—may survive, but the paper’s protocol and comparator claims need tightening.
+gpt:
+
+## main problems concern:
+1. **what exactly is being scored and retained;**
+2. **whether M4 is a delay model or a stale-initial-condition experiment;**
+3. **whether the uncertainty statements match Table 9;**
+4. **whether the Allee parameter is actually allowed to equal zero;**
+5. **whether several numerical and statistical claims are reproducible from the definitions given;**
+6. **whether the catch/SSB equation is being interpreted too physically despite acknowledged ontology problems.**
+
+The manuscript should be revised with a single formal specification of the forecasting experiment, a machine-readable origin table, and a reconciliation table for every reported number.
+
+---
+
+# 1. Highest-priority internal contradictions
+
+## 1.1 Abstract: “intervals excluding zero only on Specification B” is false as written
+
+The abstract says:
+
+> “on Specification A the margins are a point-rule ranking within bootstrap noise, intervals excluding zero only on Specification B.”
+
+That is contradicted by Table 9. On Specification A:
+
+\[
+\text{M4}-\text{M3},\ h=1
+\]
+
+has
+
+\[
+95\%\ \mathrm{CI}=[4.7,144.7]\ {\rm kt},
+\]
+
+which excludes zero, with \(p<0.001\).
+
+The later discussion partially repairs this by saying:
+
+> “On Specification A no non-retention margin against persistence separates from zero.”
+
+That narrower statement is compatible with Table 9. The abstract is not.
+
+### Recommended replacement
+
+> “Against persistence, Specification A margins remain unresolved by the reported bootstrap intervals, whereas several Specification B margins exclude zero. One within-ladder Specification A comparison—M4 against M3 at \(h=1\)—also excludes zero, but this does not alter the non-retention verdict.”
+
+Or, more compactly:
+
+> “Bootstrap intervals exclude zero for some margins on both specifications, but no Specification A module-versus-persistence margin excludes zero; several such margins do on Specification B.”
+
+This distinction must also be used consistently in the Discussion and Conclusions.
+
+---
+
+## 1.2 “Pooled score” is ambiguous and sometimes misleading
+
+The abstract opens with:
+
+> “Five surplus-production modules and two naive baselines are scored ... on these two unpooled series on the pooled score”
+
+There are at least three possible meanings of “pooled” here:
+
+1. pooled across rolling origins within Specification A;
+2. pooled across horizons \(h=1,5\);
+3. pooled across Specifications A and B.
+
+The paper does **not** pool A and B, and it does not appear to pool horizons into one RMSE. It pools origin-level errors for a given specification and horizon.
+
+### Recommended terminology
+
+Replace “pooled score” with:
+
+> “origin-pooled rolling RMSE within each specification and horizon”
+
+For example:
+
+> “No structural module beats persistence on the origin-pooled rolling RMSE within either specification at either evaluated horizon.”
+
+Do not write “on these two unpooled series on the pooled score.”
+
+---
+
+## 1.3 The model count is technically correct but rhetorically confusing
+
+The text alternates among:
+
+- “five surplus-production modules”;
+- “five-module ladder”;
+- “seven entries”;
+- “two naive baselines and five structural modules”;
+- “prey-informed variants ... not part of the ladder.”
+
+The five structural entries are M1, M1b, M2, M3, and M4. But M1b is not simply an incremental module in the same sense as M2–M4: it is an alternative production-function branch.
+
+### Recommended clarification
+
+At first use:
+
+> “The core comparison contains five structural specifications—M1, M1b, M2, M3, and M4—and two baselines, persistence and the training mean. M1b is an alternative production-function branch rather than a nested extension of M1. The capelin and acoustic-index variants are exploratory extensions and are not members of the retention ladder.”
+
+Then use “core ladder” consistently.
+
+---
+
+# 2. M4 is not currently defined consistently
+
+## 2.1 M4 is called a delay module, but it is mainly a stale-start experiment
+
+Table 2 defines M4 as:
+
+> “delay ... \(r,K\) and \(\phi\) refitted exactly as for M3 ... forecast starts from \(S_{t-1}\)”
+
+Later, the manuscript correctly says:
+
+> “M4 is a stale-start experiment rather than a fully delayed information set”
+
+and:
+
+> “The delay evaluated here is a one-year information delay in the forecast start state, not a continuous-time retarded system.”
+
+This is an important qualification, but it comes too late. The model is repeatedly called “delay,” “delayed information,” and “a one-year delay,” which invites readers to interpret it as a delayed-observation or delayed-state model. It is not.
+
+The model appears to:
+
+- estimate parameters using data through \(S_t\);
+- use \(S_{t-1}\) as the initial state;
+- perhaps apply the catch sequence and residual sequence with shifted indices;
+- take \(h+1\) updates to reach the target \(t+h\).
+
+That is not equivalent to forecasting from an information set available at \(t-1\), because the parameters and residuals may have been estimated using \(S_t\).
+
+### Recommended change
+
+Rename M4 to something like:
+
+- M4: **stale-start residual model**;
+- M4: **one-step lagged-initialization model**;
+- M4: **M3 with lagged forecast initialization**.
+
+Do not call it simply “delay.”
+
+### Required formal definition
+
+Give a separate equation. For origin \(t\), define explicitly:
+
+\[
+\widehat S^{(4)}_{t-1|t}=S_{t-1},
+\]
+
+and then specify whether the first update is
+
+\[
+\widehat S_{t|t}
+=
+F\!\left(S_{t-1},C_{t-1},\widehat e_{?}\right),
+\]
+
+followed by
+
+\[
+\widehat S_{t+1|t},\ldots,\widehat S_{t+h|t},
+\]
+
+or whether the forecast starts at \(S_{t-1}\) but uses \(C_t\) immediately. The current prose is not sufficient to determine this.
+
+You must also specify the residual index:
+
+- Is the first projected residual \(e_t\)?
+- Is it \(\phi e_{t-1}\)?
+- Is \(e_{\mathrm{last}}\) the residual from \(t-1\to t\)?
+- Is the catch for the first update \(C_{t-1}\) or \(C_t\)?
+
+These choices materially affect M4.
+
+---
+
+## 2.2 M4’s comparator should be defined as part of the design, not reconstructed later
+
+The paper says:
+
+> “The separating control—persistence issued from the last available assessment, \(S_{t-1}\)—decomposes the gap.”
+
+This is useful, but it is introduced in the Discussion after M4 has already been scored. The control must be defined in Section 2.3 and reported in a dedicated table.
+
+At minimum, define:
+
+- ordinary persistence:
+  \[
+  \widehat S_{t+h|t}^{\rm P}=S_t;
+  \]
+- stale-start persistence:
+  \[
+  \widehat S_{t+h|t}^{\rm P,lag}=S_{t-1};
+  \]
+- M4:
+  \[
+  \widehat S_{t+h|t}^{\rm M4}=...
+  \]
+
+Then report all three on the same origins.
+
+### Important interpretive correction
+
+The text says:
+
+> “the delay, not the structure, separates M4 from persistence.”
+
+That is too causal. The decomposition is algebraic, but the two differences are not independently identified causal contributions. The manuscript later acknowledges this, but the stronger wording remains.
+
+Use:
+
+> “Relative to the stale-start persistence control, the M4–persistence gap is numerically decomposed into an initialization component and a residual-surplus-model component. This is a forecast-rule decomposition, not a causal attribution.”
+
+---
+
+# 3. The Allee parameter has an unresolved boundary inconsistency
+
+## 3.1 The stated feasible set excludes zero, but the fitted estimates are effectively zero
+
+You state:
+
+> “\(\mathfrak s \in [0,\max_{\mathrm{train}}S_t]\)”
+
+but also:
+
+> “with the further feasibility restriction \(0 < \mathfrak s < 0.8K\)”
+
+and later:
+
+> “\(\mathfrak s\to0\)”  
+> “\(\mathfrak s=2.1\times10^{-23}\)”  
+> “the fitted \(\mathfrak s\) approaches its lower bound”
+
+If the actual optimization domain is \(0<\mathfrak s\), then zero is not an attainable lower bound; it is an infimum. If zero is allowed, then the model at \(\mathfrak s=0\) is the cubic production model
+
+\[
+g(S)=rS(1-S/K)(S/K),
+\]
+
+not a positive-threshold Allee model.
+
+### Required decision
+
+Choose one of these formulations:
+
+#### Option A: zero allowed
+
+State:
+
+\[
+\mathfrak s\in[0,\min(\max S_t,0.8K)).
+\]
+
+Then explicitly say:
+
+> “At \(\mathfrak s=0\), M1b is not a positive-threshold Allee model; it is the cubic zero-threshold branch.”
+
+#### Option B: zero excluded
+
+State:
+
+\[
+\mathfrak s\in(0,\min(\max S_t,0.8K)).
+\]
+
+Then do not call the numerical value \(2.1\times10^{-23}\) a boundary estimate. It is a numerical approximation to an unattained infimum. Report the optimization tolerance and whether the objective is minimized at the smallest permitted value.
+
+The present text uses both conventions.
+
+---
+
+## 3.2 M1b’s “Allee” interpretation is too strong
+
+The text says:
+
+> “M1b reports a lower RMSE ... but \(\mathfrak s\to0\) ... an unidentified Allee parameter”
+
+At \(\mathfrak s\approx0\), the fitted model is not identifying a biologically meaningful threshold. It is selecting a different nonlinear production shape. The model can have a cubic production function with zero threshold and still improve a particular finite-horizon forecast.
+
+### Recommended wording
+
+> “M1b’s apparent improvement is not evidence for a positive Allee threshold. The estimated threshold is numerically indistinguishable from zero, so the fit selects the zero-threshold cubic branch, with \(K\) and \(r\) compensating for \(\mathfrak s\).”
+
+Use “zero-threshold cubic branch” throughout instead of “boundary Allee estimate” where appropriate.
+
+---
+
+## 3.3 The profile range argument needs a more precise interpretation
+
+You write:
+
+> “above \(\min_{\mathrm{train}}S_t\) the depensation factor turns negative where the observed increment is positive.”
+
+This is not generally a reason to exclude that region. A negative production term may be compatible with negative observed increments, and the model could trade errors across observations. You do acknowledge this elsewhere, but the profile restriction still appears partly justified by an outcome-dependent argument.
+
+The correct distinction is:
+
+- **scored parameter domain:** fixed before scoring;
+- **descriptive profile domain:** narrower because it avoids regions where the production factor is negative for at least one observed state.
+
+Do not imply the narrower range is statistically or biologically compelled.
+
+### Suggested wording
+
+> “For descriptive profiling we additionally restrict \(\mathfrak s\le\min S_t\), so the production multiplier is nonnegative at every predictor state. This is a post hoc interpretive restriction for the profile, not a necessary feasibility condition of the model and not a basis for excluding higher thresholds from the biological hypothesis space.”
+
+---
+
+# 4. The catch–SSB accounting problem is more serious than the current wording suggests
+
+The manuscript correctly states:
+
+> “\(S\) here is spawning-stock biomass while \(C_t\) is total landings”
+
+and:
+
+> “this quantity is a diagnostic construct, not an exact stock balance.”
+
+That caveat is necessary but not yet strong enough. The model equation itself is
+
+\[
+S_{t+1}=S_t+g(S_t)-C_t+\varepsilon_t.
+\]
+
+If \(S_t\) is SSB and \(C_t\) is total landings, then \(C_t\) is not generally the removal from the SSB state. SSB depends on:
+
+- age composition;
+- maturation;
+- weight-at-age;
+- spawning timing;
+- survival;
+- recruitment;
+- selectivity;
+- natural mortality;
+- cohort progression.
+
+Thus the model is not merely “a scalar approximation.” The removal term is ontologically mismatched unless \(C_t\) is explicitly redefined as an SSB-equivalent removal.
+
+### Why this matters
+
+The manuscript repeatedly uses language such as:
+
+> “The crash is not a catch-drop event in this accounting.”
+
+That statement is valid only in the narrow fitted equation. It should not be allowed to sound like evidence against catch as a causal driver of the actual SSB collapse.
+
+### Recommended recurring formulation
+
+> “Within this deliberately misspecified SSB-plus-total-landings accounting, supplying the observed catch path does not improve the hindcast. This does not test whether fishing caused the historical collapse because total landings are not an age-structured removal from SSB.”
+
+Also replace:
+
+> “The collapse is not a catch-drop event in this accounting.”
+
+with:
+
+> “The tested scalar catch formulations do not reproduce the collapse when the post-1991 catch decline is supplied.”
+
+That is more precise and less causal.
+
+---
+
+# 5. The forecasting target and information set need a formal table
+
+The manuscript is commendably explicit that the target is retrospectively reconstructed. However, the information structure remains scattered across many paragraphs.
+
+The paper needs one formal table with rows for:
+
+- target series;
+- origin state;
+- training observations;
+- catch information;
+- prey-index information;
+- parameter estimation window;
+- residual information;
+- forecast initialization;
+- target vintage;
+- whether future covariates are used.
+
+For example:
+
+| Quantity | Available at origin \(t\)? | Used by |
+|---|---:|---|
+| \(S_t\) reconstructed SSB | yes, retrospectively | persistence, M1–M4 |
+| revised historical \(S_{1:t-1}\) | yes in pseudo-experiment | fitting |
+| \(S_{t+h}\) target | no, used only for scoring | score |
+| \(C_{t:t+h-1}\) | yes by design, but not operationally | M2–M4 |
+| \(I_{t:t+h-1}\) | yes by design, but often published later | prey modules |
+| future assessment revisions | embedded in target | all targets |
+
+This is especially important because the paper currently uses the phrase:
+
+> “conditional hindcast”
+
+for both catch and prey information. That is technically defensible, but readers need to see exactly what is conditioned on.
+
+For the prey module, the text explicitly admits:
+
+> “a five-year path may use index values published after its issue date.”
+
+That means the five-year prey evaluation is not merely conditional on a known exogenous path; it uses future observations relative to the origin. It should be labelled:
+
+> “ex post covariate-conditioned hindcast”
+
+rather than simply “conditional hindcast.”
+
+---
+
+# 6. Rolling-origin origin sets need a canonical definition
+
+There are many counts:
+
+- Specification A: \(n=25/21\);
+- Specification B: \(n=59/55\);
+- baseline sets of \(n=63/59\);
+- prey-index sets \(n=24/20\), \(n=36/32\);
+- post-break sets \(n=33\), \(n=24\);
+- fixed windows with their own origins.
+
+These are plausible, but they are hard to audit because the origin convention is not given as a single formula.
+
+Define:
+
+\[
+\mathcal O_{d,h}
+=
+\{t:
+t\ge t_{\min}+m_{\min}-1,\;
+t+h\le t_{\max}\},
+\]
+
+where \(t\) is the final training year and \(m_{\min}\) is the minimum number of training states.
+
+Then state explicitly:
+
+\[
+\widehat S_{t+h|t}
+\quad\text{targets}\quad S_{t+h}.
+\]
+
+For each model, print the first and last origin and the target range. A supplementary origin table should contain:
+
+- specification;
+- model;
+- \(h\);
+- origin \(t\);
+- target \(t+h\);
+- training range;
+- whether the origin is eligible;
+- forecast;
+- realized target;
+- loss;
+- active constraints;
+- fitted parameters.
+
+Without this table, the numerous baseline-recomputation claims are difficult to verify.
+
+---
+
+# 7. The uncertainty analysis is useful but overinterpreted
+
+## 7.1 DM tests are not well calibrated for this design
+
+The manuscript acknowledges several problems:
+
+> “origins overlap at \(h=5\), the estimation window expands, the predictand is a smoothed reconstruction and the sample straddles a structural break”
+
+but still presents DM statistics and \(p\)-values in a way that invites inferential interpretation.
+
+Additional issues are:
+
+1. forecasts are generated by recursively estimated models;
+2. loss differentials are dependent because training samples overlap;
+3. models are sometimes nested or nearly nested;
+4. the target is a revised smoother rather than a real-time observation;
+5. the sample is very small;
+6. multiple model/horizon/specification comparisons are reported.
+
+The DM test with HAC lag \(h-1\) is not automatically valid for expanding-window recursively estimated forecasts. For nested models, a standard DM test can also have nonstandard behavior.
+
+### Recommended change
+
+Call these:
+
+> “descriptive loss-differential diagnostics”
+
+rather than ordinary hypothesis tests.
+
+If the \(p\)-values are retained, state:
+
+> “The reported DM \(p\)-values are exploratory and should not be interpreted as calibrated evidence of equal predictive ability.”
+
+A Clark–West-type adjustment could be considered for nested comparisons, but with this design and small samples it may not solve the broader problem.
+
+---
+
+## 7.2 The bootstrap is conditional on fixed forecast files
+
+The bootstrap is computed from archived forecast errors without re-estimating the model in each bootstrap sample. Therefore it measures uncertainty in the empirical loss sequence conditional on the already fitted forecast paths. It does not incorporate:
+
+- parameter-estimation uncertainty;
+- uncertainty in the assessment target;
+- uncertainty in catch reconstruction;
+- uncertainty caused by origin-specific model selection;
+- uncertainty in the future covariate path.
+
+This should be stated explicitly.
+
+### Recommended wording
+
+> “The moving-block intervals quantify sampling variation in the archived origin-level loss sequence conditional on the fitted forecast paths. They are not full predictive intervals and do not propagate parameter, assessment-revision, catch, or covariate uncertainty.”
+
+---
+
+## 7.3 Table 9’s \(p\)-values need a precise definition
+
+You write:
+
+> “\(p\) is obtained by inverting the percentile interval rather than from a null-centred resampling scheme”
+
+This is unconventional and potentially confusing. A percentile interval does not automatically define a valid two-sided \(p\)-value. If you use an interval-derived descriptive quantity, call it something else, such as:
+
+- “percentile-tail fraction”;
+- “interval-based tail diagnostic.”
+
+If you retain the label \(p\), give the exact formula. For example:
+
+\[
+p_{\rm perc}
+=
+2\min\left\{
+\frac{\#(\Delta^*_b\le0)}{B},
+\frac{\#(\Delta^*_b\ge0)}{B}
+\right\}.
+\]
+
+Then say clearly that this is not a calibrated null-bootstrap \(p\)-value.
+
+---
+
+## 7.4 “Four of twenty-eight rows...” should be checked and documented
+
+The statement:
+
+> “Four of the twenty-eight rows have an interval excluding zero while \(|z|<1.96\)”
+
+appears plausible, but it is exactly the sort of claim that should be generated from the table rather than stated narratively. The relevant rows seem to include:
+
+- A, M4 vs M3, \(h=1\);
+- B, M1b vs persistence, \(h=5\);
+- B, M3 vs persistence, \(h=1\);
+- B, M4 vs M3, \(h=5\).
+
+Add a footnote naming the rows directly. Otherwise readers must inspect the entire table.
+
+---
+
+# 8. Several statements conflate fixed-window and rolling-window results
+
+This occurs repeatedly.
+
+For example:
+
+> “The autoregressive module reads below the stock-flow module in all six rolling comparisons”
+
+is fine, but later:
+
+> “M3's \(\phi=0.95\) persists a negative residual and increases error.”
+
+That \(\phi=0.95\) appears to refer to a particular fixed or recovery-window fit, not necessarily all rolling fits. Table 10 says:
+
+> “M3 & Rolling, Specification A ... \(\phi=0.95\)”
+
+but then says per-window values are archived.
+
+### Required distinction
+
+Every fitted parameter should carry one of:
+
+- fixed collapse-window fit;
+- fixed recovery-window fit;
+- rolling-origin parameter distribution;
+- representative rolling fit;
+- annual-landings fit;
+- coarse-regime fit;
+- Specification B fit.
+
+Do not write “M3’s \(\phi=0.95\)” unless the scope is specified.
+
+Use:
+
+> “In the reported recovery/collapse fit, \(\hat\phi=0.95\)...”
+
+or:
+
+> “The upper-clipped value \(\hat\phi=0.95\) occurs in the relevant rolling fits...”
+
+and document how often.
+
+---
+
+# 9. The phrase “M1 and M2 coincide” needs qualification
+
+You write:
+
+> “On recovery, M1 and M2 coincide.”
+
+The subsequent explanation is correct for the coarse regime:
+
+> “\(C_t\equiv5\) kt on both train and test windows”
+
+but this is not true under annual landings. Under annual landings, Table 5 gives materially different recovery scores:
+
+- M1: \(264\) kt;
+- M2: \(303\) kt.
+
+Therefore use:
+
+> “Under the coarse catch regime, M1 and M2 coincide on the recovery window because the prescribed and training-mean catch paths are both 5 kt.”
+
+Do not introduce the unqualified statement before the treatment is specified.
+
+---
+
+# 10. The statement about M1/M1b rolling insensitivity to catch treatment needs a narrower claim
+
+You write:
+
+> “the rolling M1 and M1b scores ... are insensitive to the catch treatment—both are identical to the kilotonne across the two treatments”
+
+This is a property of the implementation because M1 and M1b use the **training-mean catch**, not the future catch path. But the fitted training mean changes between treatments. The scores happen to be identical after rounding or nearly identical, not necessarily mathematically invariant.
+
+Use:
+
+> “The reported rolling M1 and M1b scores are identical after the displayed rounding under the two catch treatments, because future catch is not supplied to these modules; the training-mean catch can still alter their fitted parameters and trajectories.”
+
+If they are exactly identical in the archived values, say so and provide the unrounded difference.
+
+---
+
+# 11. Numerical precision and rounding are too coarse for some claims
+
+The paper makes conclusions from differences such as:
+
+- \(M3\) versus \(M2\);
+- persistence versus M1b;
+- annual versus coarse catch;
+- \(0.93\) kt within a \(1.03\)-kt tie band;
+- 3-kt origin-mix effects;
+- 0.95-kt training-RMSE spreads.
+
+Yet most tables report integer kt. This is acceptable for presentation but not for auditability.
+
+### Recommended table policy
+
+Report:
+
+- one decimal place in the main tables for RMSE, MAE, and gaps;
+- integer kt only in the abstract and prose summaries;
+- unrounded values in supplementary files;
+- the exact tie-band calculation from unrounded values.
+
+The phrase:
+
+> “the smallest structural deficit ... is 17%”
+
+should identify the exact comparator and unrounded calculation. M1b’s Specification A \(h=1\) deficit is:
+
+\[
+\frac{114.8-98.0}{98.0}=17.1\%.
+\]
+
+State that explicitly.
+
+---
+
+# 12. The Proposition 4.1 needs mathematical tightening
+
+## 12.1 The assumptions are not sufficient as currently written
+
+The proposition assumes:
+
+> “at most two positive equilibria ... and a one-step map monotone below its maximum”
+
+Then the proof says:
+
+> “below the lower equilibrium \(F(S)<S\), and \([0,S_-)\) is forward-invariant because \(F\) is monotone there”
+
+The conclusion requires more explicit assumptions:
+
+1. \(F(S)<S\) for every \(0\le S<S_-\);
+2. \(F\) is nondecreasing on \([0,S_-]\);
+3. \(F(S_-)=S_-\);
+4. \(F(S)\ge0\) after clipping;
+5. the lower interval does not map across \(S_-\).
+
+“Monotone below its maximum” is not the clearest condition, and for M1b it may not hold in the same way.
+
+### Better proposition
+
+> Let \(F:[0,\infty)\to[0,\infty)\) be the clipped deterministic map. Suppose there exists \(S_->0\) such that \(F(S_-) = S_-\), \(F(S)<S\) for all \(0<S<S_-\), and \(F([0,S_-])\subseteq[0,S_-]\). Then any trajectory entering \([0,S_-)\) is nonincreasing and cannot later exceed \(S_-\).
+
+This is nearly tautological but correct. Then separately verify the conditions for the fitted Schaefer map.
+
+---
+
+## 12.2 The clipping convention is inconsistent inside the proposition
+
+Definition 2.1 uses:
+
+\[
+[\cdot]_+,
+\]
+
+while the forecast implementation uses:
+
+\[
+[10^{-3},10^6].
+\]
+
+The proposition says:
+
+> “the interval being closed at the left because the implementation clips the state at a non-negative floor.”
+
+But the actual floor is \(10^{-3}\), not zero, and the mathematical map uses a zero floor.
+
+Use one notation:
+
+\[
+[x]_{\ell}^{u}=\min\{u,\max\{\ell,x\}\}.
+\]
+
+Then distinguish:
+
+- analytical map:
+  \[
+  \ell=0;
+  \]
+- forecast implementation:
+  \[
+  \ell=10^{-3},\quad u=10^6.
+  \]
+
+Do not mix the two in the proof.
+
+---
+
+## 12.3 The proposition should not imply anything about the historical cause
+
+The discussion is mostly careful, but the proposition appears adjacent to historical language about the observed path. Add an explicit sentence:
+
+> “This proposition is a property of the fitted deterministic forecast map. It is not a causal statement about why the observed assessment series crossed the fitted lower equilibrium.”
+
+That should appear immediately after the proposition.
+
+---
+
+# 13. The productivity inversion is useful but needs stronger dimensional and domain qualifications
+
+The text defines:
+
+\[
+\hat r_t=\frac{P_t}{S_t(1-S_t/K)}.
+\]
+
+This is fine for a Schaefer increment, but the denominator can be:
+
+- zero at \(S_t=0\);
+- zero at \(S_t=K\);
+- negative for \(S_t>K\);
+- very small near \(S_t=0\) or \(K\).
+
+You acknowledge some of this, but the reported mean comparisons can be highly sensitive to denominator magnitude and to \(K\).
+
+### Recommended additions
+
+Report:
+
+- the range of the denominator;
+- whether any transitions are excluded because the denominator is near zero;
+- the exact rule for handling \(S_t>K\);
+- uncertainty or sensitivity to \(K\);
+- whether the mean is arithmetic in \(\hat r_t\) or weighted by production scale.
+
+Also avoid:
+
+> “no constant \(r\) reproduces a sequence that changes sign.”
+
+A constant positive \(r\) cannot reproduce negative **implied production** while \(0<S<K\), but a full model with \(S>K\), negative residuals, or time-varying catch could behave differently. Say:
+
+> “Under the Schaefer branch with \(0<S_t<K\), a constant positive \(r\) cannot reproduce the observed sign reversal in the reconstructed apparent-production diagnostic.”
+
+---
+
+# 14. The use of “forecast” needs systematic qualification
+
+The paper repeatedly calls the exercise forecasting, while also stating that:
+
+- the target is retrospectively reconstructed;
+- historical values include future information;
+- future catch is supplied;
+- future prey indices may be supplied;
+- M4 uses a stale state but potentially current fitted parameters.
+
+The final conclusion says:
+
+> “The retained forecast is persistence.”
+
+That sounds operational. It should be:
+
+> “The retained rule under this retrospective, ex post-covariate-conditioned evaluation is last-value persistence.”
+
+Likewise replace broad phrases such as:
+
+> “persistence is more accurate than surplus production”
+
+with:
+
+> “last-value persistence has lower retrospective origin-pooled RMSE than the tested surplus-production implementations on the revised assessment series.”
+
+This is not merely stylistic; it prevents the paper from claiming operational forecast skill.
+
+---
+
+# 15. The LRP/Brier section is overlong relative to its informational value
+
+The manuscript correctly recognizes that the Specification A LRP diagnostic is degenerate:
+
+> “the \(884.6\)-kt LRP sits above the entire origin range”
+
+and:
+
+> “persistence attains 0.00 by construction.”
+
+However, several pages of text are devoted to this score, including repeated statements that it contains no early-warning information.
+
+### Recommended compression
+
+Retain a short formal note:
+
+> “For Specification A, the LRP indicator is degenerate over the scored origins: all origins and targets lie below 884.6 kt. Consequently, the persistence Brier score is zero by construction, and this diagnostic is not used for interpretation or retention.”
+
+Then move the detailed origin-by-origin explanation to the supplement.
+
+For Specification B, retain the Brier results because the threshold varies over time.
+
+---
+
+# 16. The fixed-window early-warning interpretation remains vulnerable
+
+You correctly say:
+
+> “a one-step forecast issued in 1993 from an already-collapsed state is not evidence that a model predicted the collapse.”
+
+This is an important distinction. But the collapse results are still described in ways that could be read as an early-warning test:
+
+> “Every module misses the 1991–1995 collapse.”
+
+The fixed-window test assesses a particular pre-collapse fit extrapolated into the collapse period. It does not test:
+
+- a model re-estimated in real time with assessment vintages;
+- a probabilistic warning;
+- a threshold crossing forecast;
+- an intervention trigger.
+
+### Recommended label
+
+Call it:
+
+> “pre-collapse extrapolation test”
+
+rather than “collapse forecast” where possible.
+
+For example:
+
+> “The pre-collapse extrapolation from 1983–1990 fails to reproduce the 1991–1995 SSB decline.”
+
+This is more exact.
+
+---
+
+# 17. The discussion of “the 1992 catch drop” risks reverse-causality confusion
+
+You write:
+
+> “The 1992 catch drop was an endogenous response to depletion rather than an exogenous policy lever”
+
+and then:
+
+> “prescribing it in a constant-\(r\) stock-flow equation forces the mechanical rebound”
+
+The first sentence is historical interpretation; the second is model mechanics. They should be separated.
+
+The catch reduction may have been:
+
+- a response to depletion;
+- a policy decision;
+- partly endogenous to assessment information;
+- itself affected by unreported removals or implementation.
+
+The model uses the realized catch path conditionally and does not estimate the policy response.
+
+### Suggested replacement
+
+> “Historically, the catch reduction followed severe depletion and the moratorium; the evaluation treats the recorded catch path as an exogenous conditioning sequence, not as an estimated policy response. In the scalar model, reducing \(C_t\) mechanically raises the next predicted state whenever production remains positive.”
+
+This avoids claiming that the forecast setup has represented the historical endogeneity.
+
+---
+
+# 18. “No exact fixed autonomous noise-free scalar trajectory can reproduce that” is too broad
+
+The sentence:
+
+> “The observed path falls far below the fitted lower equilibrium and then recovers. No exact fixed autonomous noise-free scalar trajectory can reproduce that.”
+
+is broader than the proposition that follows. It is not true for every autonomous scalar map. Autonomous one-dimensional maps can produce complicated trajectories, including recoveries after low values, depending on their shape and parameters.
+
+The actual claim is about the fitted map under its invariant lower region.
+
+### Replace with
+
+> “The fitted autonomous, noise-free scalar map cannot reproduce the observed path after the path enters its lower invariant region.”
+
+That is mathematically defensible.
+
+---
+
+# 19. “Repeller” and “attractor” should be verified under the actual clipped map
+
+The fitted equilibria are calculated for the unclipped Schaefer map. The implementation clips at \(10^{-3}\) and \(10^6\). Since the equilibria are far from the lower floor, this likely does not alter the local classification, but the manuscript should state that.
+
+Add:
+
+> “Both positive equilibria lie well inside the clipping interval, so their locations and local stability classifications are unchanged by the numerical floor and ceiling.”
+
+For M1b, do not assume the same without calculating its equilibria.
+
+---
+
+# 20. The treatment of negative and zero production needs a clearer notation
+
+The model uses \(\varepsilon_t\) both as process disturbance and later discusses numerical \(\varepsilon_{\log}=10^{-3}\). The text does distinguish them, but the notation is needlessly collision-prone.
+
+Use:
+
+- \(\eta_t\) for the one-step residual or disturbance;
+- \(\epsilon_{\rm floor}\) for the numerical floor;
+- \(\epsilon_{\rm log}\) for log scoring.
+
+For example:
+
+\[
+S_{t+1}
+=
+\left[S_t+g(S_t)-C_t+\eta_t\right]_+.
+\]
+
+Then define the forecast with \(\eta_t=0\), except for M3/M4.
+
+This would eliminate repeated clarification such as:
+
+> “\(\varepsilon_{\mathrm{log}}\) is ... distinct from the process noise \(\varepsilon_t\).”
+
+---
+
+# 21. The parameter-fitting description is not fully reproducible
+
+You state:
+
+> “Parameters are estimated by one-step least squares”
+
+but important details remain unclear:
+
+- Is the objective computed on raw increments or clipped one-step states?
+- Is the fitted prediction clipped during optimization?
+- Are \(r\) and \(K\) jointly optimized or profiled?
+- What optimizer is used?
+- How many starts?
+- What convergence criterion?
+- How are boundary solutions treated?
+- Is \(K=500\) a start only or also a candidate retained if the optimizer stops immediately?
+- Is the optimizer deterministic across platforms?
+- What happens when \(K\) hits 5000?
+- Is the M1b feasibility constraint enforced by rejection, transformation, or penalty?
+
+The manuscript sometimes says:
+
+> “one-step least squares on the increments”
+
+but elsewhere discusses:
+
+> “the objective ... after clipping”
+
+and:
+
+> “the trajectory code clips the state.”
+
+Those are not necessarily the same objective.
+
+### Required addition
+
+Write the exact objective:
+
+\[
+\operatorname{SSE}(\theta)
+=
+\sum_{t=t_0}^{t_1-1}
+\left[
+\Delta S_t-
+g(S_t;\theta)+C_t
+\right]^2,
+\]
+
+or, if clipping is involved, give the actual formula used.
+
+Then distinguish:
+
+1. training objective;
+2. forecast recursion;
+3. log-score floor;
+4. state floor and ceiling.
+
+---
+
+# 22. The initializer/bound language is unnecessarily confusing
+
+You write:
+
+> “\(K=500\) kt is the multi-start initialiser rather than the lower bound”
+
+and:
+
+> “Where a reported fit sits at \(500.0\) kt this is the multi-start initialiser, which the optimiser has not left because the objective is flat there, and not an active constraint.”
+
+This is clear after several readings but unusual. A numerical optimizer that remains exactly at an initial value may have:
+
+- converged due to tolerance;
+- failed to find a descent direction;
+- encountered numerical scaling problems;
+- been stopped prematurely;
+- found a stationary point;
+- been constrained by an implicit parameterization.
+
+Calling it evidence of flatness is not enough without optimizer diagnostics.
+
+### Required reporting
+
+For such fits, report:
+
+- objective gradient or finite-difference gradient at the final point;
+- optimizer termination status;
+- objective values at nearby \(K\);
+- results from multiple initializers;
+- whether a profile or grid search confirms the valley.
+
+You do provide a profile later, which helps. Move the profile evidence before the strong interpretation.
+
+Use:
+
+> “The optimizer terminated at its initial value; a separate fixed-\(K\) profile confirms that the objective is shallow over the relevant range.”
+
+Do not infer flatness solely from failure to move.
+
+---
+
+# 23. The “five-module ladder” is not truly a ladder for M2 and M4
+
+The manuscript openly says:
+
+> “It is not a strict nesting for M2 and M4.”
+
+That is good, but the retention rule still calls these “rungs,” “next-simpler modules,” and “structural additions.” M2 changes the catch treatment; M4 changes initialization and timing. These are not pure complexity increments.
+
+### Recommended framing
+
+Call the design:
+
+> “a forward-ordered comparison set with declared pairwise comparators”
+
+rather than a “ladder” unless the ladder is retained as a metaphor.
+
+Then state:
+
+- M1b vs M1: production-function comparison;
+- M2 vs M1: catch-input comparison;
+- M3 vs M2: residual-memory comparison;
+- M4 vs M3: initialization/timing comparison.
+
+This makes the hypotheses scientifically interpretable.
+
+---
+
+# 24. The retention rule was partly specified after seeing the scores
+
+The manuscript is commendably transparent:
+
+> “the tie band and the comparator declarations ... were formalised after the scores ... had been computed.”
+
+However, the text then says:
+
+> “the scoring core was coded before the first scoring pass and applied unchanged”
+
+and the abstract says:
+
+> “under a retention rule fixed before scoring.”
+
+Those are not equivalent. The full retention rule was not fixed before scoring.
+
+### Required correction
+
+Replace all claims that the full rule was “fixed before scoring” with:
+
+> “The primary score and persistence comparison were fixed before scoring; the 5% tie band and non-nested comparator conventions were formalised after the scores were computed.”
+
+The abstract must not say “retention rule fixed before scoring” without this qualification.
+
+Suggested abstract wording:
+
+> “under a pre-specified primary-RMSE comparison; the tie-band and comparator conventions were formalised after scoring and are reported as protocol amendments.”
+
+This is more accurate and preserves the methodological strength.
+
+---
+
+# 25. The abstract understates the protocol amendment
+
+The abstract currently says:
+
+> “under a retention rule fixed before scoring”
+
+but Section 4 admits there was no dated preregistration and that two components were post hoc.
+
+That is a credibility issue. It is better to be exact in the abstract than to make the reader discover the qualification later.
+
+### Suggested revised abstract sentence
+
+> “A primary-RMSE comparison and persistence bar were fixed before scoring; a 5% tie band and comparator conventions for non-nested variants were formalised after scoring and did not change any verdict.”
+
+---
+
+# 26. The claim that “none closes the pooled gap” should be quantified
+
+“Closes the gap” is rhetorically vague. Give the range:
+
+- A, \(h=1\): structural models are \(17\%\) to \(111\%\) worse than persistence;
+- A, \(h=5\): approximately \(9\%\) to \(84\%\) worse;
+- B, etc.
+
+Alternatively:
+
+> “No module had lower origin-pooled RMSE than persistence at either horizon.”
+
+That is sufficient and avoids implying that a model needed to match a historical collapse exactly.
+
+---
+
+# 27. The “productivity illusion” is not currently formalized
+
+The manuscript refers to:
+
+> “the productivity illusion”
+
+but does not appear to define it mathematically in the excerpt. If this is an important conceptual contribution, define it.
+
+For example:
+
+\[
+\mathcal I_t
+=
+\mathbf 1\{
+\widehat B_{t+h}^{\rm model}
+\text{ rises while }
+A_t^{\rm ecological}
+\text{ falls}
+\},
+\]
+
+or, in this paper’s actual terms, define the specific phenomenon as:
+
+> “a forecast or fitted trajectory that rises mechanically after catch declines despite negative observed apparent production.”
+
+If the term is only rhetorical, remove it or use it sparingly.
+
+---
+
+# 28. The empirical citation structure needs checking
+
+Several references appear future-dated or potentially unavailable:
+
+- Rose (2026);
+- Abaee (2026a,b,c);
+- Regular et al. (2025);
+- Murphy et al. (2025);
+- Kokkalis et al. (2024).
+
+This may be entirely legitimate if the paper is being prepared in 2026, but the bibliography and access status must distinguish:
+
+- published;
+- accepted;
+- preprint;
+- working paper;
+- personal communication;
+- repository dataset.
+
+Do not use a future or unpublished source as the sole support for a central empirical claim without stating its status.
+
+Also check the wording:
+
+> “Regular et al. (2025) Table 1 matches Schijns exactly on 1983–1993 (11 years...)”
+
+The interval 1983–1993 is indeed 11 years, but this should be moved to a reproducibility appendix with a direct data comparison, not left in prose.
+
+---
+
+# 29. “DFO, 2016, Table A2” and “NCAM M-shift” need a formal data definition
+
+The paper should state:
+
+- whether the series is median, mode, posterior mean, or point estimate;
+- whether units are kt wet weight;
+- whether values are annual mid-year or spawning-season values;
+- whether 1983–2015 includes retrospective revisions;
+- whether the xteNCAM series is directly comparable in units and timing.
+
+The text says “NCAM M-shift SSB series,” but many readers will not know what “M-shift” means. Define the shift and explain whether it changes natural mortality by period or is a retrospective model variant.
+
+---
+
+# 30. The fixed-window Brier values need denominator definitions
+
+Table 3 gives:
+
+- collapse Brier \(0.80\) for M1b;
+- recovery Brier \(0.00\) for all models.
+
+The text explains Specification A’s degenerate threshold, but fixed-window recovery and collapse have different target/origin sets. Give:
+
+\[
+\mathrm{Brier}
+=
+\frac{1}{n}
+\sum_{i=1}^n
+\left(
+\mathbf 1\{\widehat S_i<\mathrm{LRP}\}
+-
+\mathbf 1\{S_i<\mathrm{LRP}\}
+\right)^2.
+\]
+
+Then state whether the score is computed over targets only, not origins. At present the discussion shifts between “origin range,” “target years,” and “indicator forecasts” in a way that could confuse readers.
+
+---
+
+# 31. Sign-hit rate treatment is asymmetric and should be justified more formally
+
+The paper says:
+
+> “The sign-hit rate is conventionally 0.00 for persistence, whose forecast \(\Delta S=0\) has no sign; persistence is excluded from that ranking by declaration.”
+
+This is not necessarily conventional. There are several reasonable conventions:
+
+1. count zero as no hit;
+2. exclude zero forecast changes;
+3. assign half credit;
+4. define a ternary directional score.
+
+The current choice gives persistence a missing score rather than a bad score, which is defensible but should be pre-specified.
+
+### Recommended definition
+
+Use a three-class directional score:
+
+\[
+d_t\in\{-1,0,+1\}
+\]
+
+and report accuracy including the zero class. Or explicitly state:
+
+> “Because persistence predicts zero change by construction, it is not comparable under a binary sign-hit metric. We therefore report NA rather than assigning it a score.”
+
+Do not call \(0.00\) “conventional” unless cited.
+
+---
+
+# 32. The survey-start variant may be affected by target-derived scaling
+
+You define:
+
+\[
+\widehat q=\operatorname{median}(SSB/I)
+\]
+
+on the training window. Since \(I_t\) is an NCAM input and \(SSB_t\) is an assessment output informed by that input, \(\widehat q\) is not an independent calibration relationship. You acknowledge this, but the method needs more detail:
+
+- Is the median taken only where \(I_t>0\)?
+- Are years with missing index excluded?
+- Is the ratio calculated from contemporaneous or lagged values?
+- Is \(\widehat q\) re-estimated at each rolling origin?
+- Is \(I_t\) itself revised?
+
+State these explicitly.
+
+---
+
+# 33. The acoustic-index module has an information-set inconsistency
+
+The text says:
+
+> “\(I_{\mathrm{known}}(t)\) is the last observation at or before \(t\)”
+
+but later:
+
+> “a five-year path may use index values published after its issue date.”
+
+Those are different concepts:
+
+- last observation available by calendar year \(t\);
+- last observation available at forecast origin \(t_0\).
+
+The code evidently uses the first, ex post calendar-time rule. That should be named explicitly.
+
+### Recommended replacement
+
+> “For the reported ex post hindcast, the index at forecast step \(u\) is constructed from the last observation dated at or before calendar year \(u\), even when that observation would not have been available at origin \(t\). This is not an operational information set.”
+
+If the intended operational rule is instead “last observation available at origin,” implement that as a separate sensitivity analysis.
+
+---
+
+# 34. The conclusion overstates the cross-specification similarity
+
+The conclusion says:
+
+> “The same retention outcome holds on the unpooled xteNCAM series, whose post-2015 stall period fails in the same way the reconstructions stall.”
+
+This is rhetorically strong. The two specifications differ in:
+
+- time coverage;
+- state equation;
+- LRP;
+- catch treatment;
+- model inputs;
+- likely uncertainty structure.
+
+The same non-retention decision is robust, but “fails in the same way” implies a common mechanism.
+
+Use:
+
+> “The same non-retention decision is obtained on the independently scored xteNCAM specification, although the two specifications should not be interpreted as interchangeable evidence.”
+
+---
+
+# 35. The Discussion is too long and repeats caveats
+
+The paper repeatedly states:
+
+- not operational forecasting;
+- target is revised;
+- not causal;
+- no threshold identification;
+- catch is supplied;
+- modules are implementation-specific;
+- Brier is secondary;
+- M4 is stale-start;
+- Specification A LRP is degenerate.
+
+All are important, but the repetitions dilute the main result.
+
+### Suggested restructuring
+
+Create a compact subsection:
+
+## Scope and identification limits
+
+With six numbered limitations:
+
+1. revised target;
+2. conditional future catch;
+3. conditional future index;
+4. SSB/landings accounting mismatch;
+5. small and dependent forecast sample;
+6. implementation-specific model conclusions.
+
+Then refer back to it rather than restating each caveat throughout the Results and Discussion.
+
+---
+
+# 36. Recommended revised claim hierarchy
+
+## Claims directly supported by the reported scores
+
+These are safe:
+
+1. On the stated origin sets, persistence has the lowest reported RMSE at \(h=1\) and \(h=5\) for Specifications A and B.
+2. No tested structural module satisfies the retention rule.
+3. M3 has lower RMSE than M2 in the six reported rolling comparisons.
+4. M4 has substantially higher error than M3 in most reported comparisons.
+5. The pre-collapse extrapolation fails to reproduce the observed collapse.
+6. Supplying the tested catch paths does not improve the scalar model’s collapse-window hindcast.
+7. The estimated M1b threshold is numerically near zero in the reported recovery fits.
+8. The Specification A LRP indicator is degenerate over the scored period.
+
+## Claims requiring stronger qualification
+
+These should be rewritten:
+
+- “the crash is not a catch-drop event”;
+- “persistence is the retained forecast”;
+- “the delay accounts for...”;
+- “the structure did not pay for itself”;
+- “prey information does not help”;
+- “the stock’s surplus production stalled in the same way.”
+
+Use “in the tested implementation,” “under the retrospective scoring design,” and “does not establish causation.”
+
+## Claims to remove or prove
+
+Remove unless the definitions are repaired:
+
+- “retention rule fixed before scoring”;
+- “intervals excluding zero only on Specification B”;
+- “M4 is a delay module” without formal delayed recursion;
+- “M1 and M2 coincide” without specifying the coarse regime;
+- “no autonomous scalar trajectory can reproduce that” in its broad form.
+
+---
+
+# 37. Proposed revised abstract
+
+A more internally consistent abstract would be:
+
+> Five structural surplus-production specifications and two naive baselines are evaluated for Northern cod (\emph{Gadus morhua}) in NAFO 2J3KL. The primary target is the retrospectively reconstructed NCAM M-shift spawning-stock biomass series for 1983–2015; an independently reconstructed xteNCAM series for 1954–2024 is evaluated separately. Forecasts are scored by origin-pooled rolling RMSE at one- and five-year horizons. The primary RMSE comparison and persistence bar were fixed before scoring; a 5% tie band and comparator conventions for non-nested variants were formalised after scoring and did not change any verdict.
+>
+> On Specification A, persistence has RMSEs of 98 and 265 kt at one- and five-year horizons, compared with 115–206 and 289–488 kt for the structural modules. On Specification B, persistence has RMSEs of 84 and 300 kt, compared with 120–206 and 432–1059 kt. No structural module satisfies the retention rule on either specification. The pre-collapse extrapolation from 1983–1990 fails to reproduce the 1991–1995 decline; supplying either a coarse catch regime or annual landings does not repair the scalar model’s collapse hindcast. The residual module improves on stock-flow in all six reported rolling comparisons but remains worse than persistence. The reported acoustic-index and capelin-regime variants also fail to beat origin-matched persistence.
+>
+> These are retrospective, conditional hindcast results rather than operational forecast results: the target is a revised assessment reconstruction, catch is supplied over the forecast horizon, and the acoustic-index variant can use ex post calendar-year covariates. The findings apply to the tested implementations and series. They show that the additional structure evaluated here does not improve RMSE over persistence under this scoring design; they do not establish that surplus production, catch, prey limitation, or assessment structure is unimportant biologically.
+
+---
+
+# 38. Minimum revision checklist
+
+Before submission, I would require the following.
+
+### Definitions
+
+- [ ] Define the exact origin and target indexing convention.
+- [ ] Give an explicit M4 recursion.
+- [ ] Distinguish M4 from a true delayed-information model.
+- [ ] Resolve whether \(\mathfrak s=0\) is allowed.
+- [ ] Define all clipping operations separately from the analytical map.
+- [ ] Rename \(\varepsilon_t\) or \(\varepsilon_{\log}\) to avoid collision.
+
+### Numerical reconciliation
+
+- [ ] Provide an origin-level supplementary file.
+- [ ] Give first/last origin and \(n\) for every model and horizon.
+- [ ] Reconcile Table 4, Table 5, and Table 9 using exact unrounded values.
+- [ ] Explain the A M4–M3 confidence interval that excludes zero.
+- [ ] Verify all percentage and difference claims from unrounded results.
+
+### Statistical interpretation
+
+- [ ] Describe DM results as exploratory diagnostics.
+- [ ] Define the bootstrap statistic and interval exactly.
+- [ ] State that the bootstrap conditions on fixed forecast paths.
+- [ ] Avoid calling percentile-derived quantities calibrated \(p\)-values.
+- [ ] Discuss multiple comparisons and nested-model issues.
+
+### Scientific interpretation
+
+- [ ] Replace causal language about catch with implementation-scoped language.
+- [ ] Emphasize that total landings are not SSB-equivalent removals.
+- [ ] Label the fixed-window exercise a pre-collapse extrapolation test.
+- [ ] Call the prey test ex post covariate-conditioned when appropriate.
+- [ ] Reframe M1b as a zero-threshold cubic fit when \(\mathfrak s\approx0\).
+
+### Protocol claims
+
+- [ ] Remove “retention rule fixed before scoring.”
+- [ ] State precisely which elements were pre-specified and which were post hoc.
+- [ ] Move the protocol amendment disclosure into the abstract or methods.
+
+### Presentation
+
+- [ ] Replace “pooled score” with “origin-pooled RMSE.”
+- [ ] Compress repeated caveats into a dedicated scope section.
+- [ ] Report exact model names and comparator relationships in one diagram.
+- [ ] Separate core ladder results from exploratory prey/index variants.
+
+The central empirical finding is potentially publishable, but it should be stated narrowly:
+
+> Under a retrospective, origin-pooled evaluation of revised assessment reconstructions, with future catch supplied and the tested scalar SSB-plus-landings equations, last-value persistence has lower RMSE than every evaluated structural implementation at both horizons. This is a result about the specified forecasting rules and information design, not a biological conclusion that the underlying mechanisms are absent or unimportant.
