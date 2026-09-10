@@ -169,3 +169,60 @@ behind by my own v30 correction pass*. Round 4 established that v27–v29 were w
 faster than they were checked; round 5 establishes that the correction pass had the same
 problem. For v31 the rule is: after every edit that touches a number or a table cell,
 grep the whole document for that value and for the surrounding claim before compiling.
+
+---
+
+## 5. Second pass — remaining sections, and unapplied round-4 items
+
+As in round 4, the first table triaged the priority items only. What follows rules on the
+remainder and records an audit of my own follow-through.
+
+### 5.1 Round-4 items marked ACCEPT that were never applied to v30
+
+Checked directly against `E1_v30.tex`:
+
+| round-4 item | status in v30 |
+|---|---|
+| F15 event-type attribution ("a productivity, unallocated-mortality, or observation event") | **still present** |
+| F16 "the value of a timely assessment exceeds…" | **still present** |
+| F20 "measures how severely that bar penalizes…" | **still present** |
+| F21 "retention rule, coded before…" → "scoring core" | **still present** |
+
+**Four items I recorded as accepted last round were never implemented.** Both auditors
+re-raise them (grok 2.1, 2.2; gpt 1.4), which is how the gap surfaced. Accepting an item
+in an evaluation document is not implementing it; the v31 pass must verify each acceptance
+against the manuscript rather than against the previous evaluation.
+
+### 5.2 Newly triaged, verified against code
+
+| # | Item | Auditor | Verification |
+|---|---|---|---|
+| **G17** | **Proposition 4.1 conflates zero-clipping with the positive floor** | gpt 10.1 | **Confirmed.** With `EPS = 1e-3`, `F(0) = F(EPS) = 0.001`: the floor is itself a fixed point, so "strict decline throughout `[0, S_-)`" fails on `[0, EPS]`. The proposition must be stated either for the zero-clipped map or on `[EPS, S_-)`. |
+| **G18** | **M4's first residual is ambiguous in the text** | gpt 10.5 | **Resolved from code.** `forecast_path` applies `resid = phi * resid` *before* the first step, so the first update uses **φ·e_last**, where `e_last` is the residual of the transition `S_{t-1} → S_t`. Because M4 restarts at `S_{t-1}`, its first update re-forecasts the very transition its residual was fitted on. This must be stated. |
+| **G19** | Aggregate sign scores do not establish timing | gpt 10.7 | Accepted, wording. |
+| **G20** | Stale state does not make a map nonautonomous | gpt 10.3, grok | Accepted — M4's time dependence comes from the residual state and catch path, not the age of `S₀`. |
+| **G21** | "single-equilibrium special case" unspecified | gpt 10.2 | Accepted: remove, or formulate separately. |
+| **G22** | Unbounded `b` permits the opposite ecological response | gpt 8.7, grok 3.6 | Accepted as a disclosure — `b` is fitted without bounds, so the sign of the prey response is not constrained. |
+| **G23** | "Monotonically related" too strong across varying comparisons | gpt 9.1 | Accepted. |
+| **G24** | Interval-derived `p` lacks an operational definition | gpt 9.2 | Accepted (already partly disclosed). |
+| **G25** | Zero-gap intervals are not the 5% retention margins | gpt 9.3 | Accepted — the intervals test a zero difference, not the tie band the rule uses. |
+
+### 5.3 Accepted as wording, folded into v31
+
+gpt 8.5, 8.6, 8.8, 8.9, 9.4, 10.8, 10.9, 10.10, 11; grok 3.1–3.6, 4, 5, 6, 7. Precision
+repairs: unstated conventions, leftover scaffolding, caption/prose mismatches.
+
+### 5.4 Delegated, not silenced
+
+- **Primary-pass per-origin forecasts** (gpt 3.4 equivalent, grok 3.4): still a rerun, not
+  a revision. Prerequisite recorded in the programme document.
+- **Two-regime capelin specification** (grok 3.1): needs the pass rerun to document fully.
+- **Orphan SI-2 pointer** (grok 3.3): checked — SI-2 exists in `E1_SUPPLEMENTARY.md`; the
+  manuscript pointer is correct. **No action.**
+
+### 5.5 What this round changes about the process
+
+Round 4 found v27–v29 were written faster than checked. Round 5 finds the correction pass
+had the same flaw **and** that four accepted items were never applied. The v31 gate is
+therefore extended: every item marked accepted in rounds 4 and 5 must be verified by a
+grep against the compiled manuscript, not against the evaluation document.
