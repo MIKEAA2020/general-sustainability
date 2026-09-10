@@ -198,3 +198,42 @@ compiled manuscript. Round 6 adds a second rule: **when replacing a deleted clai
 replacement needs the same scrutiny as an addition.** H5 is a defect I introduced while
 repairing a different defect, which is the third time in three rounds that a fix has
 carried its own error.
+
+---
+
+## 5. Second pass — gpt §4–12, not covered by the table above
+
+The round-1 table triaged deepseek in full and gpt §1–3. gpt §4–12 are ruled on here.
+Each numerical claim was recomputed from `results/rolling_summary.csv` or the archived DM
+file.
+
+### 5.1 Newly accepted, verified
+
+| # | Item | Verification |
+|---|---|---|
+| **H25** | **"M1/M1b scores identical to the kilotonne across catch treatments" is a rounding artefact** *(gpt 10)* | **Confirmed.** Archived values differ: M1 h=1 **120.5095 vs 120.5406** (0.0311 kt), M1b h=1 **114.8024 vs 114.7665** (0.0358 kt), M1 h=5 differ by 0.00025, M1b h=5 by 0.0264. They are *not* mathematically invariant — the training-mean catch does change with treatment and does move the fitted parameters. The claim must be restated as "identical after the displayed rounding", with the mechanism (future catch is not supplied to these modules) given as the reason. |
+| **H26** | **"On recovery, M1 and M2 coincide" is true only under the coarse regime** *(gpt 9)* | **Confirmed.** Under annual landings Table 5 gives M1 264 kt and M2 303 kt on the recovery window. The coincidence follows from `C_t ≡ 5` kt on both train and test under the coarse regime only. Must be qualified at first use. |
+| **H27** | **The 17% smallest deficit needs its comparator and unrounded value** *(gpt 11)* | **Confirmed: 17.09%.** `(114.8024 − 98.0494)/98.0494`. gpt's 17.1% is right; state the comparator (M1b vs persistence, Specification A, h=1) and the unrounded figure. |
+| **H28** | **Bootstrap is conditional on archived forecast paths** *(gpt 7.2)* | Accepted. The intervals resample the origin-level loss sequence from fixed forecast files; they do not propagate parameter-estimation, assessment-revision, catch-reconstruction or covariate uncertainty. This is true and currently unstated. |
+| **H29** | **DM statistics are not calibrated for this design** *(gpt 7.1)* | Accepted. Expanding-window recursive estimation, overlapping training samples, near-nested models, a smoothed target and multiple comparisons all bear on calibration. The paper already declines to rest verdicts on DM; it should also stop calling these tests. Relabel as descriptive loss-differential diagnostics. |
+| **H30** | **The interval-derived `p` needs a formula or a new name** *(gpt 7.3)* | Accepted, and it supersedes my round-6 §3 recommendation to simply drop the column: gpt's `p_perc = 2·min{#(Δ*≤0), #(Δ*≥0)}/B` is the right disclosure if the column is kept. Either give that formula or rename it a percentile-tail fraction. |
+| **H31** | **Name the four disagreement rows in a footnote** *(gpt 7.4)* | Accepted. gpt lists A/M4-vs-M3/h=1, B/M3-vs-persist/h=1, B/M1b-vs-persist/h=5, B/M4-vs-M3/h=5 — **exactly the four I verified independently** in §2. Naming them removes the need for readers to scan the table. |
+| **H32** | **Catch–SSB ontology mismatch is stronger than "a scalar approximation"** *(gpt 4)* | Accepted. `C_t` is total landings while `S_t` is SSB, so the removal term is not an SSB-equivalent removal. The recurring formulation must make clear that failing to reproduce the collapse with a supplied catch path **does not test whether fishing caused the collapse**. |
+| **H33** | **Fixed-window and rolling-window results are conflated in several statements** *(gpt 8)* | Accepted — same defect as round-5 G9, which v31 fixed in one location only. A document-wide sweep is needed. |
+
+### 5.2 Accepted as structural additions, deferred with reasons
+
+| # | Item | Ruling |
+|---|---|---|
+| **H34** | Formal information-set table — what is available at origin `t`, and to which module *(gpt 5)* | **Accept in principle, defer the full table.** This is the single most useful addition either auditor proposes and would pre-empt a whole class of confusion (G2, H24, H32). It is a new table assembled from existing facts, so it is not blocked by the frozen spec — but it must be built from the code, not from prose, and that is a pass of its own. Logged for v33. |
+| **H35** | Canonical rolling-origin definition with a machine-readable origin list *(gpt 6)* | **Accept, defer.** Same reasoning; the origin sets are archived and can be printed, but doing it properly means emitting a table per experiment. Pairs with H34. |
+| **H36** | One-decimal reporting in main tables *(gpt 11)* | **Decline for the main tables, accept for the claims.** Reformatting every table to one decimal is a large diff with a high transcription-error risk, and this project has already shipped two errors from hand-edited numbers. The auditable path is unrounded values in the supplement plus exact figures where a claim turns on a small difference (H27, the 0.93 kt tie-band case). |
+| **H37** | Proposition 4.1 mathematical tightening *(gpt 12)* | **Accept, merge with round-5 G17.** Both concern the same object: state the proposition for the zero-clipped map or on `[ε, S₋)`, and drop the unspecified single-equilibrium case. |
+
+### 5.3 Revision to my own round-6 ruling
+
+In §3 above I judged the fix for the `z = 0.99 / p < 0.001` row to be "print the interval
+and drop or relabel the `p` column". gpt 7.3 gives the better answer: **publish the exact
+formula** for the percentile-tail quantity, or rename it. Dropping a column that readers
+can recompute from the archived file is less transparent than defining it. H30 replaces my
+earlier wording.
