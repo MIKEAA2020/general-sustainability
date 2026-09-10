@@ -1,5 +1,9 @@
 # E1 — Tier 3 Restructuring Plan (grok's presentation pass)
 
+> **REVISION 2.** Revision 1 was audited against the source and had four defects, one of
+> them a missed correctness bug. Corrections are marked **[R2]** throughout and summarised
+> in §0b. The headline word-count target in revision 1 was wrong in both operands.
+
 **Baseline:** `paperE1_cod_forecast_ladder_v21.tex` (0 blockers, compiles, 501,159 B).
 **Target:** v22. **Nothing in this plan changes a number, a verdict, or a scored result.**
 Every item is presentation. Tier 1 and Tier 2 (correctness, completeness) are already
@@ -16,7 +20,7 @@ which is why it was deferred — and why it should now be done in one deliberate
 
 | Section | Words (excl. tables) |
 |---|---|
-| Highlights | 533 |
+| ~~Highlights 533~~ **[R2]** Highlights 63 · **abstract 456** (measured separately) |
 | 1. Introduction | 945 |
 | 2.1 Data | 225 |
 | 2.2 Forecast models | 1,119 |
@@ -30,7 +34,7 @@ which is why it was deferred — and why it should now be done in one deliberate
 | **4. Discussion** | **2,511** |
 | 5. Conclusions | 119 |
 | References | 960 |
-| **Total** | **11,323** |
+| ~~**Total 11,323**~~ **[R2] TRUE BODY (Intro→Conclusions): 9,830** |
 
 **Diagnostics:**
 - **Abstract: 458 words.** *Fisheries Research* permits **250**. **Hard violation — 208 over.**
@@ -47,6 +51,88 @@ The two journal-limit breaches were found while measuring for this plan. They ar
 independent of grok and are the most urgent items in it.
 
 ---
+
+## 0b. [R2] What was wrong with revision 1
+
+Revision 1 was checked against the source before execution. Four defects:
+
+**D1 — The headline metric was wrong in both operands.** "~11,300 → ~9,000 body words" was
+doubly incorrect. The 11,323 figure silently included the abstract, highlights, title block
+*and* the 960-word reference list; the true body is **9,830**. And the plan's own itemised
+cuts (T2–T6) total roughly **−1,960**, landing near **7,900**, not 9,000. So the plan
+understated the reduction it was actually proposing by about 1,100 words while overstating
+the starting point by 1,500. A reviewer trusting the summary would have been misled about
+how aggressive this pass is. **Corrected target: 9,830 → ~7,900 body words (−20%).**
+
+**D2 — The "Highlights: 533 words" row was a measurement artefact.** It bundled the
+abstract into the highlights section because I sliced on section markers without excluding
+the `abstract` environment. Highlights are **63 words**; the abstract is **456**. The two
+have different journal limits and different owners, so conflating them is not cosmetic.
+(The 458 vs 456 discrepancy is `\emph{}`-markup tokenisation; either way it is ~200 over.)
+
+**D3 — "Move to SI" appears five times, but no E1 supplement exists.** Searched: there is
+no E1 SI file anywhere in the workspace or repo. §4 already references "Section SI-1"
+(qwen flagged this in round 2, item C7-adjacent, and it was never resolved). So T3, T4, T5
+and T7 all depend on an artefact that must be *created first*. This is a missing
+prerequisite, not a detail — without it "move to SI" means "delete".
+**Added as T-SI, which now blocks Stage C.**
+
+**D4 — Renumbering hazard was unassessed.** Deleting Def 2.5 and demoting Def 2.3/Lem 2.2
+shifts every subsequent label. Measured cross-reference counts: **Def 2.1 ×5, Def 2.4 ×4
+(three of them remote — L1063, L1255, L1596), Def 2.3 ×2**, the rest ×1. Def 2.4's remote
+references are load-bearing (they carry the protocol-status disclosure). Renumbering must
+therefore be mechanical and verified, not incidental.
+**Added to the verification gate as a hard check.**
+
+### And one thing the plan should never have contained: a correctness bug
+
+While auditing T3 I found a **live self-contradiction still in v21**:
+
+- **L839 (§3.2):** Regular et al.'s *M* ≈ 2.5 peak "is **not the same object** as this
+  scalar residual, though the two point in the same direction."
+- **L971 (§3.3):** "That split **is the same as** the surplus residual after subtracting
+  official *C_t*."
+
+These cannot both be true. gpt raised exactly this in round 2 ("Final sentence equating
+*M* and the residual … **directly contradicts** your correction in Section 3.2 … Delete
+it", audit line 1100). **It never entered my joint evaluation** — I confirmed the §3.2
+half in v20 and silently dropped the §3.3 half. `grep` of the evaluation for "equating"
+returns nothing, so this was an omission in my audit, not a deferred decision.
+
+This is a **Tier 1 correctness item, not Tier 3.** It is now **T-FIX**, ahead of all
+presentation work, and it means my round-2 evaluation was not exhaustive — a caveat that
+should attach to any claim that "all surviving Tier 1/2 points are implemented."
+
+---
+
+## Item T-FIX — Resolve the *M*-vs-residual contradiction *(Tier 1, not Tier 3)* **[R2]**
+
+**Priority 0. Do before any presentation work.**
+
+Delete the L971 sentence ("That split is the same as the surplus residual after
+subtracting official *C_t*"). §3.2's L839 statement is the correct one and already
+survives v20's overclaim pass; the §3.3 sentence is the residual remnant that contradicts it.
+Deleting is right — the two objects genuinely differ (an age-structured *M* estimate
+informed by tagging and a predictor vs. a scalar one-step residual), and §3.2 already
+says so with the appropriate hedge.
+
+**Do not** "reconcile" them by softening §3.2 — that would undo a completed Tier 1 fix.
+**Risk:** none, it is a deletion of a false equivalence. **Effort:** one edit.
+
+## Item T-SI — Create the supplement *(prerequisite, blocks Stage C)* **[R2]**
+
+Four items in this plan (T3, T4, T5, T7) move material "to SI", and §4 already cites
+"Section SI-1", but **no E1 supplement exists**. Create `E1_SUPPLEMENTARY.md` first, with
+the sections the main text will point at:
+
+- **SI-1** pass order (already cited at L1600 — currently a dangling reference)
+- **SI-2** Lemma 2.2 statement and proof (from T3)
+- **SI-3** HAC grid, block-length grid, the four named DM/bootstrap disagreement rows, script names (from T5)
+- **SI-4** floor-binding counts, the 1956 catch-source discrepancy, the 3.6→3.2 kt origin-mix arithmetic (from T4/T7)
+
+Until this exists, "move to SI" is indistinguishable from deletion, and the standing
+no-fabrication rule means content cannot simply vanish.
+**Risk:** low. **Effort:** 1 pass, but it gates Stage C.
 
 ## Item T0 — Abstract to ≤250 words *(NEW — hard journal limit)*
 
@@ -166,14 +252,18 @@ primary column and demote all-origin baselines to an audit table.
 
 ---
 
-## Sequencing
+## Sequencing **[R2 — revised]**
 
-**Stage A — journal compliance (do first, independently shippable):** T0, T1.
-Fixes two hard violations. Small, self-contained, no dependency on the rest.
+**Stage 0 — correctness + prerequisite:** **T-FIX**, then **T-SI**.
+T-FIX is a Tier 1 bug and must not ride along inside a presentation diff. T-SI must exist
+before anything is "moved" to it.
+
+**Stage A — journal compliance (independently shippable):** T0, T1.
+Fixes two hard violations. Small, self-contained.
 
 **Stage B — first-page rewrite:** T2, then T6 (coinages are densest in §1–§2).
 
-**Stage C — apparatus and bulk:** T3, T4, T5.
+**Stage C — apparatus and bulk:** T3, T4, T5. **Blocked by T-SI.**
 
 **Stage D — line level and tables:** T7, T8.
 
@@ -190,7 +280,15 @@ rather than being mixed into the same diff as the abstract rewrite.
    no "negative certificate".
 4. **Numeric invariance:** every RMSE, p-value, count and parameter identical to v21.
    Diff the extracted number set; a Tier 3 pass that changes a digit has failed.
+   *(Exception: T-FIX deletes a sentence containing no numerals; T8 relocates values and
+   must recompute them from the archived CSVs rather than retyping.)*
 5. Retention verdict unchanged: persistence wins both specifications, both horizons.
+6. **[R2] Cross-reference integrity.** After any renumbering, every `Definition N.M`,
+   `Lemma`, `Proposition`, `Observation` and `Section SI-N` string must resolve to an
+   object that exists. Baseline counts to preserve: Def 2.1 ×5, Def 2.4 ×4 (three remote:
+   L1063, L1255, L1596), Def 2.3 ×2, others ×1. Script this check; do not eyeball it.
+7. **[R2] No content evaporation.** Anything the diff removes from the main text must be
+   present in `E1_SUPPLEMENTARY.md`. Verify by string search, not by intention.
 
 ## Explicitly out of scope
 
@@ -202,8 +300,17 @@ rather than being mixed into the same diff as the abstract rewrite.
   cited by DOI.
 - Anything in the audit's rejected set (H1–H4, B1–B4).
 
-## Expected outcome
+## Expected outcome **[R2 — corrected]**
 
-~11,300 → ~9,000 body words; abstract 458 → ≤250; highlights compliant; 8 numbered
-objects → 3; longest sentence <45 words; result visible in the first 150 words.
+**Body 9,830 → ~7,900 words (−20%)**, not the "11,300 → 9,000" claimed in revision 1.
+Abstract 456 → ≤250. Highlights ≤85 characters each. 8 numbered objects → 3. Longest
+sentence <45 words. Result visible in the first 150 words. Plus one Tier 1 correctness
+fix (T-FIX) and one new artefact (`E1_SUPPLEMENTARY.md`).
+
 No scientific content removed — the apparatus moves to SI, the numbers stay put.
+
+**Honest caveat:** −20% of the body is a substantial rewrite, not a copy-edit. Stage C in
+particular rewrites the two longest sections. The staged sequencing exists so that each
+step is separately verifiable and revertible; if the Discussion cut starts to bite into
+substance rather than repetition, stopping after Stage B still leaves the paper
+submission-compliant and materially better than v21.
