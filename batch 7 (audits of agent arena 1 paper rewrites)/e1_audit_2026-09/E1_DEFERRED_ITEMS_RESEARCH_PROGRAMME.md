@@ -246,13 +246,18 @@ Silence is not a disposition, and neither is diluting the proposal until it fits
 > claim** and is retained only so the error is on record. I wrote that the estimator's
 > bound "excludes every threshold that could represent a predator pit". That used the
 > range of the *profile diagnostic* (`[0, min_train S] = [0, 9.68]` kt). The **scored**
-> estimator bounds `𝔰 ∈ (0, max(S0))` — `[0, 81.10]` kt on the recovery window
-> (`run_ladder.py` line 85) — which is *above* most recovery-window states. A high
-> threshold was therefore **not** excluded from the fit that produced the verdict. What
-> suppresses it is the in-objective restriction `0 < 𝔰 < 0.8K` together with the penalty
-> on negative surplus, not the range bound. Ω_pit remains a legitimate object, but its
-> rationale must be restated: the question is why the scored fit, which *could* have
-> placed a high threshold, did not. See `E1_AUDIT_ROUND4_JOINT_EVALUATION.md` §2 F2.
+> estimator bounds `𝔰 ∈ (0, max(S0))` (`run_ladder.py` line 85), where `S0` is the
+> **predictor** states.
+>
+> **SECOND CORRECTION (round 5, item G1).** The line above originally read "`[0, 81.10]`
+> kt … a high threshold was therefore not excluded". That is also wrong: `np.max(S0)`
+> excludes the terminal state, so on the recovery window the bound is **40.83 kt**, not
+> 81.10 kt, and 𝔰 = 50 kt is **outside** the scored range. The original round-3 position —
+> that a pit-scale threshold is excluded from estimation — was therefore closer to correct
+> than the round-4 withdrawal. Both the scored bound (max over predictor states, 40.83 kt)
+> and the profile range (min over them, 9.68 kt) exclude a predator-pit threshold. Ω_pit
+> remains legitimate and is now the only way to test one. See
+> `E1_AUDIT_ROUND5_JOINT_EVALUATION.md` §2 G1.
 
 grok's D(1) asks for M1b refitted with the Allee threshold allowed *above* the training
 range, so that a predator pit can be represented. I declined it by pointing at the
@@ -260,7 +265,7 @@ estimator's feasibility restriction. That was bookkeeping, not a scientific answ
 checking the mathematics shows the proposal has content.
 
 The depensation factor is `a(S) = (S − 𝔰)/(K − 𝔰)`. On the recovery window the observed
-SSB spans 9.68–81.10 kt, so:
+SSB spans 9.68–81.10 kt (predictor states 9.68–40.83 kt), so:
 
 | 𝔰 (kt) | observed recovery states with `a(S) < 0` |
 |---|---|

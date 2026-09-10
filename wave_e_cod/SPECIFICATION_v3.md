@@ -144,20 +144,22 @@ it is a different functional class and would need its own pre-registration.
 ## 4b. Object Ω_pit — high-threshold (predator-pit) ablation
 
 Added on review of grok D(1). **Rationale corrected after round-4 audit item F2.** The
-*scored* estimator bounds `𝔰 ∈ (0, max(S0))` = `[0, 81.10]` kt on the recovery window
-(`run_ladder.py` line 85); it is the *profile diagnostic* that uses
-`[0, min_train S] = [0, 9.68]` kt. A high threshold was therefore **not excluded from the
-scored fit**, and the earlier claim that it was is withdrawn.
+*scored* estimator bounds `𝔰 ∈ (0, max(S0))`, where `S0` is the **predictor** states, so
+the recovery-window bound is **40.83 kt** (`run_ladder.py` line 85); the *profile
+diagnostic* uses `[0, min_train S] = [0, 9.68]` kt. Both therefore exclude a
+predator-pit threshold. An earlier draft of this sheet gave the bound as 81.10 kt — the
+maximum over all states including the terminal response — and concluded that a high
+threshold was not excluded; that is withdrawn (round-5 item G1).
 
-What remains, and what Ω_pit tests, is narrower and still substantive. The depensation
-factor `a(S) = (S − 𝔰)/(K − 𝔰)` turns negative for 𝔰 above the observed range — at
-𝔰 = 50 kt, 12 of 13 recovery-window states have `a(S) < 0` — and the objective's
-feasibility restriction `0 < 𝔰 < 0.8K` plus the penalty on negative surplus make such
-configurations unattractive to the optimiser even where the range bound permits them. The
-open question is therefore **why the scored fit, which could have placed a threshold up to
-81.1 kt, returned a boundary estimate near zero instead**: whether that is evidence
-against a high threshold, or an artefact of penalising the negative-surplus prediction a
-pit implies.
+What Ω_pit tests is therefore exactly what the scored ladder could not: a threshold above
+`max(S0)`. The depensation factor `a(S) = (S − 𝔰)/(K − 𝔰)` turns negative for 𝔰 above the
+observed range — at 𝔰 = 50 kt all 12 recovery-window predictor states have `a(S) < 0` —
+so such a model predicts negative production across the window, which the scored
+objective both excludes by its range bound and penalises. Ω_pit lifts the range bound and
+accepts the negative-surplus prediction as the model's depensatory content, then scores it
+out-of-sample. Its result is informative either way: a pit that forecasts better than
+persistence would show the v2 verdict was a statement about the feasible set, and one that
+does not would show widening the range does not rescue depensation.
 
 | Element | Frozen value |
 |---|---|
