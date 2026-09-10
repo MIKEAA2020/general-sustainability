@@ -222,3 +222,55 @@ than quietly amended.
 **Process rule added:** never re-fit a model by hand when the registered estimator exists
 in the repository — import `fit_params` and call it. Both F1 and the E13 misreading trace
 to reconstructing an estimator instead of using it.
+
+---
+
+## 6. Second pass — sections my first table did not triage
+
+**My round-4 table above covered 21 items. The two audits contain roughly 100 numbered
+sections.** That is the same failure mode recorded in round 2, where gpt's "final sentence
+equating *M* and the residual" was never transcribed and survived three versions. The
+sweep below closes it: every remaining section is now ruled on, and the ones that change
+the manuscript are marked.
+
+### 6.1 Newly accepted — verified against source
+
+| # | Item | Auditor | Verification |
+|---|---|---|---|
+| **F22** | **M4 takes h+1 updates, not h** | gpt 3.6, grok 3.2 | **Confirmed in code.** `start_idx = i_tr[-1] − delay`, then `lead0 = i_te[0] − start_idx`. With `delay=1`, reaching `t+h` costs **h+1** updates. The paper never says this. It must be described as a perturbed initialisation at calendar time *t*, with the first catch and the residual alignment stated. |
+| **F23** | **`r ≈ 2` implausibility claim conflates rate conventions** | gpt 5.8 | **Confirmed by arithmetic.** In a discrete annual map the low-biomass multiplier is `1+r = 2.935`/yr, i.e. a continuous-equivalent `ln(1+r) = 1.08`/yr — not `1.935`. I compared a discrete-map coefficient against continuous-time intrinsic rates. The estimate is still high, but the sentence as written in v28 is not a valid comparison and must be restated with an explicit convention. |
+| **F24** | **MSY figures are formal curve maxima, not sustainable yields** | gpt 5.7 | Accepted. The paper already states that SSB minus catch is not a closed budget; calling `rK/4` a "biological implication" restores a management reading that caveat removes. Relabel as *implied maxima of the fitted curves*. |
+| **F25** | **"No information about K" is too strong** | gpt 5.6 | Accepted. `∂g/∂K = rS²/K²` is small at low `S/K`, not zero. Replace with "weakly constrain". |
+| **F26** | **Clipping in the equation ≠ clipping in the code** | gpt 3.4 | Accepted. The definition uses `[·]₊`; the implementation clips to `[10⁻³, 10⁶]`. Verified in `step()`. State both, and that fitting uses unclipped increments. |
+| **F27** | **M3/M4 are also deterministic plug-in paths** | gpt 3.5 | Accepted, wording fix: all forecasts are deterministic; M3/M4 additionally propagate a fitted residual state. |
+| **F28** | **Sign-hit convention self-contradiction** | gpt 4.1, grok 1.4 | Accepted and merged with F12. One convention, applied to the training-mean forecast too. |
+| **F29** | **Brier explanation needs target states at first mention** | gpt 4.2 | Accepted. Origins below the LRP are not sufficient; targets must be too. Stated once, correctly. |
+| **F30** | **Turning points are not required to beat persistence** | gpt 10.4 | Accepted — and this corrects text *I* added in v29 (F-E4). Sustained trends or drift suffice. |
+| **F31** | **Age at maturity ≠ generation time** | gpt 10.5 | Accepted, also my v29 text. The five-year/"full generation" gloss goes. |
+| **F32** | **Training-mean catch indexing** | gpt 3.7 | Accepted as a disclosure: a 1995–2007 state window has transitions starting 1995–2006, so a 1995–2007 catch mean includes one catch not attached to a training transition. State the convention. |
+
+### 6.2 Accepted as wording, no new analysis
+
+gpt 2.9, 3.1, 3.2, 3.3, 3.8, 3.9, 4.4, 4.5, 4.6, 4.7, 5.1, 5.2, 5.3, 5.10, 6.1–6.6, 7.1,
+7.2, 7.3, 8.1, 8.2, 8.3, 8.5, 9.1, 9.2, 9.3, 9.4, 10.1, 10.2, 10.6, 10.7, 10.8, 11;
+grok 3.1, 3.3, 3.4, 3.5, 3.6, 4, 6, 7. These are precision repairs — scope qualifiers,
+unstated conventions, leftover scaffolding, and table/caption mismatches. They are folded
+into the v30 pass and itemised in the version record rather than here.
+
+### 6.3 Declined or partial, with reasons
+
+| # | Item | Ruling |
+|---|---|---|
+| **F33** | gpt 8.4 — primary-treatment uncertainty missing | **Valid but delegated.** The DM/bootstrap layer runs on the archived per-origin file, and the coarse-regime pass's per-origin rows were never archived (SI-1). Producing them is a rerun, not a revision. Named as a prerequisite in the version record. |
+| **F34** | grok 3.5 — primary-pass forecasts not archived | Same object as F33. **Delegated, not silenced.** |
+| **F35** | gpt 5.9 — recovery profile may show optimiser error, not flatness | **Partial.** F1 already establishes the optimiser converges to a local point from a fixed start. The honest statement is that flatness and optimiser path are not separated by the present diagnostic — which is weaker than the paper's current claim and weaker than gpt's implication that the flatness is spurious. |
+| **F36** | gpt 12 / grok 8 — programme advice for further ecological work | **Not manuscript items.** Folded into `E1_DEFERRED_ITEMS_RESEARCH_PROGRAMME.md`. |
+
+### 6.4 What this second pass changes about the round-4 verdict
+
+Three of the newly triaged items — **F22 (M4 step count), F23 (rate convention), F30/F31
+(persistence gloss)** — are defects in text *I* wrote, two of them in the ecological
+material added in v28–v29. Combined with F1–F4, the pattern is consistent: **the material
+added in response to round 3 was written faster than it was checked.** The v30 pass is
+therefore a correction pass, not an expansion pass, and no new ecological content should
+be added until these are cleared.

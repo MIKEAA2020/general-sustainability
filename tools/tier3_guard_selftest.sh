@@ -3,7 +3,8 @@
 set -u
 G="python3 /home/user/tools/tier3_guard.py"
 BASE=/home/user/E1_v22.tex
-SI=/tmp/reloc_si.md
+FIX=/home/user/tools/selftest_fixtures
+SI=$FIX/reloc_si.md
 pass=0; fail=0
 chk(){ # name expected_exit cmd...
   local n="$1" e="$2"; shift 2
@@ -13,9 +14,9 @@ chk(){ # name expected_exit cmd...
 }
 echo "tier3_guard self-test"
 chk "T1 identity (base vs base)"        0 $G "$BASE" "$BASE" --si "$SI" --quiet
-chk "T2 results paragraph deleted"      1 $G "$BASE" /tmp/sabotage1.tex --si "$SI" --quiet
-chk "T3 legitimate SI relocation"       0 $G "$BASE" /tmp/reloc.tex --si "$SI" --quiet
-chk "T4 claim silently unscoped"        1 $G "$BASE" /tmp/sabotage2.tex --si "$SI" --quiet
+chk "T2 results paragraph deleted"      1 $G "$BASE" $FIX/sabotage1.tex --si "$SI" --quiet
+chk "T3 legitimate SI relocation"       0 $G "$BASE" $FIX/reloc.tex --si "$SI" --quiet
+chk "T4 claim silently unscoped"        1 $G "$BASE" $FIX/sabotage2.tex --si "$SI" --quiet
 chk "T5 no SI supplied, SI-1 cited"     1 $G "$BASE" "$BASE" --quiet
 echo "  ---- $pass passed, $fail failed"
 [ "$fail" -eq 0 ]
