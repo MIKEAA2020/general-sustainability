@@ -242,6 +242,18 @@ Silence is not a disposition, and neither is diluting the proposal until it fits
 
 ## 6.6 E13 revisited — the predator-pit refit is a real test, and it is now specified
 
+> **CORRECTION (round 4, item F2).** The justification below is **wrong in its central
+> claim** and is retained only so the error is on record. I wrote that the estimator's
+> bound "excludes every threshold that could represent a predator pit". That used the
+> range of the *profile diagnostic* (`[0, min_train S] = [0, 9.68]` kt). The **scored**
+> estimator bounds `𝔰 ∈ (0, max(S0))` — `[0, 81.10]` kt on the recovery window
+> (`run_ladder.py` line 85) — which is *above* most recovery-window states. A high
+> threshold was therefore **not** excluded from the fit that produced the verdict. What
+> suppresses it is the in-objective restriction `0 < 𝔰 < 0.8K` together with the penalty
+> on negative surplus, not the range bound. Ω_pit remains a legitimate object, but its
+> rationale must be restated: the question is why the scored fit, which *could* have
+> placed a high threshold, did not. See `E1_AUDIT_ROUND4_JOINT_EVALUATION.md` §2 F2.
+
 grok's D(1) asks for M1b refitted with the Allee threshold allowed *above* the training
 range, so that a predator pit can be represented. I declined it by pointing at the
 estimator's feasibility restriction. That was bookkeeping, not a scientific answer, and
