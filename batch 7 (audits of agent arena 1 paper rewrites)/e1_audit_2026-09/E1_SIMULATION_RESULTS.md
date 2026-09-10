@@ -1,12 +1,47 @@
 # E1 — Ω_sim results: operating characteristics of the retention rule
 
-**Design:** `SPECIFICATION_v4.md`, locked at commit `d5d9758` (2026-09-10T21:44:18Z)
-**Executed:** 2026-09-10, after the design was committed. No design element was changed
-after execution.
+**Design:** `SPECIFICATION_v4.md`, locked at commit `d5d9758`, 2026-09-10T21:44:18Z
+**Executed:** 2026-09-10, results committed `87b2d13` at 23:03:31Z. **The simulation code
+was written to implement the locked sheet after the lock** (git history above shows the
+spec commit preceding the code commit by 79 minutes), and no code change altered a design
+element. No design element was changed after execution.
 **Output:** `wave_e_cod/results/sim_retention_power.csv` (10,000 rows: 5 DGPs × 2 σ × 200
 replicates × 5 modules)
 **Code:** `tools/sim_retention_power.py`, importing `run_ladder.step`,
 `run_ladder.surplus` and `run_ladder.run_rolling` unmodified.
+
+## 0. Design
+
+### 0.1 Data-generating processes
+
+All series are 33 years (`T = 33`, the Specification A length, 1983–2015). Innovations are
+Gaussian **process** noise entering the state update inside `run_ladder.step` exactly as
+`ε_t` does in Definition 2.1 — there is no observation-error layer and no noise on the
+increment. Parameters are taken from the archived fits in
+`results/fixed_window_scores.csv`.
+
+| DGP | Generating model | r | K (kt) | catch | 𝔰 | empirical source |
+|---|---|---|---|---|---|---|
+| **D1** | M1 autonomous Schaefer | 1.935 | 1032.7 | constant 240 kt | — | collapse-window coarse fit |
+| **D2** | M1 autonomous Schaefer | 0.458 | 500.0 | constant 5 kt | — | recovery-window coarse fit |
+| **D3** | M2 stock-flow | 1.935 | 1032.7 | regime 240/120/5 | — | collapse fit + Specification A regime path |
+| **D4** | M1b depensation | 0.458 | 500.0 | constant 5 kt | **15.0** | recovery fit, with an *identifiable* threshold |
+| **D5** | persistence-true null | — | — | 0 | — | `S_{t+1} = S_t + η_t`, no surplus term |
+
+`σ ∈ {11.8, 33.8}` kt for every DGP: the archived recovery- and collapse-window residual
+standard deviations. Initial states are 900 kt (D1, D3), 30 kt (D2, D4), 300 kt (D5).
+Rolling origins use the same eight-year minimum training length as Specification A, so each
+synthetic series yields the same origin structure as the empirical pass.
+
+**M3 and M4 were not simulated as generating truths.** Only M1 (D1, D2), M2 (D3) and M1b
+(D4) were. This bounds what the study can conclude, and §4 is restricted accordingly.
+
+### 0.2 What "retained" means
+
+A module counts as retained in a replicate if it passes **H1, H2 and H3 at both horizons**,
+exactly as in the empirical rule: it must beat its declared comparator and last-value
+persistence by more than the 5% tie band at `h = 1` and `h = 5`. The tie band and the
+horizon pair were **not** varied; they are fixed at the empirical values.
 
 ---
 
@@ -56,66 +91,81 @@ retained): **0.044**.
 ## 3. What is actually failing — diagnosed, not assumed
 
 Low power could mean the rule's gates are too strict, or that the data cannot identify the
-structure. These are different findings, so I decomposed them. H2 alone is "beats
+structure. These are different findings, so both were measured. H2 alone is "beats
 persistence by more than the 5% band at both horizons", ignoring the H1 comparator gate:
 
-| DGP | truth | passes H2 alone | passes full rule | cost of the H1/H3 gates |
-|---|---|---|---|---|
-| D1 | M1 | 0.975 | 0.975 | **0.000** |
-| D2 | M1 | 0.420 | 0.420 | **0.000** |
-| D3 | M2 | 0.328 | 0.100 | 0.228 |
-| D4 | M1b | 0.180 | 0.010 | 0.170 |
+| DGP | truth | passes H2 alone | passes full rule | gates, absolute | gates, **conditional on H2** |
+|---|---|---|---|---|---|
+| D1 | M1 | 0.975 | 0.975 | 0.000 | **0%** of H2-passers removed |
+| D2 | M1 | 0.420 | 0.420 | 0.000 | **0%** |
+| D3 | M2 | 0.328 | 0.100 | 0.228 | **69%** |
+| D4 | M1b | 0.180 | 0.010 | 0.170 | **94%** |
 
-And, more directly — is the true module even the *best-scoring* structural module on its
-own synthetic data?
+**Both framings are true and both should be reported.** In absolute terms the dominant
+failure is H2: the true module frequently does not out-predict persistence on data it
+generated itself, and no comparator gate is responsible for that. But *conditional on
+clearing H2*, the comparator requirement is a dominant additional filter — it removes 69%
+of surviving D3 replicates and 94% of surviving D4 replicates. That is a genuine property
+of the rule: demanding that a module beat both persistence and its declared comparator is
+far more stringent than demanding it beat persistence alone, wherever the true module is
+only marginally the best.
 
-| DGP | true module has lowest h=1 RMSE in |
-|---|---|
-| D3 (M2 true) | **3.7%** of replicates |
-| D4 (M1b true) | **25.8%** of replicates |
+The identification limit is visible more directly still. With five structural modules,
+random assignment would make the true module the lowest-error one **20%** of the time:
 
-**The dominant failure is not the rule's gates. It is that the true generating module
-frequently does not out-predict persistence — or even its own ladder siblings — on data it
-generated itself.** On D3, M2's mean h=1 RMSE (85.7 kt) is *worse* than M3's (77.9) and
-M1b's (79.9). At T = 33 with these parameters, a wrongly-specified module fits the noise
-about as well as the right one.
+| DGP | true module has lowest h=1 RMSE | versus 20% chance |
+|---|---|---|
+| D1 (M1 true) | 0.627 | far better |
+| D2 (M1 true) | 0.645 | far better |
+| **D3 (M2 true)** | **0.0375** | **worse than chance** |
+| D4 (M1b true) | 0.258 | barely better |
 
-The comparator gates do add cost on D3 and D4 (0.17–0.23), which is a genuine and
-reportable property of the rule: requiring a module to beat both persistence and its
-declared comparator roughly halves retention where the true module is only marginally
-best. But it is the secondary effect, not the primary one.
-
----
+The D3 figure is the sharpest result in the study. When a stock-flow process generates the
+data, the stock-flow module is the best-scoring structural module *less often than if the
+winner were drawn at random* — its mean h=1 error (85.7 kt) is worse than M3's (77.9) and
+M1b's (79.9). At 33 annual observations with these parameters, the correct structure is
+not merely hard to detect; it is actively disadvantaged by estimation noise relative to
+its siblings. That is an identification failure, not a decision-rule failure.
 
 ## 4. What this licenses the manuscript to say — and what it does not
 
 **Licensed:**
 
-1. **The rule is not a rubber stamp.** Specificity is 0.97–0.99; the false-retention rate
-   is 0.044. When persistence is genuinely the best rule, it is retained. A reviewer
-   worried that the negative result is an artefact of an over-strict instrument has the
-   answer: the instrument is strict, but it is also correct under a null.
-2. **The rule has real power where the signal is strong.** D1 — a high-biomass stock under
-   large constant catch, the collapse-window parameterisation — gives 0.965–0.985. The rule
-   detects true structure when the data identify it.
-3. **Power collapses exactly where the cod data sit.** D2 at σ = 33.8 (0.130) and D3/D4
-   (0.005–0.110) are the low-biomass, post-collapse, regime-catch conditions that
-   characterise most of the Specification A window.
+1. **The rule is not a rubber stamp.** Under a persistence-true process it declines to
+   retain structure in 97–99% of replicates. A reviewer worried that the negative result
+   is an artefact of an instrument that rejects everything has the answer: the instrument
+   is strict, but it is also correct under a null.
+2. **The rule has real power where the signal is strong.** D1 gives 0.965–0.985.
+3. **The empirical collapse-window result is informative, not a power failure.** This is
+   the resolution of an apparent contradiction. D1 shows that *if* the collapse window had
+   been generated by an autonomous Schaefer map at the fitted parameters, the rule would
+   have retained M1 in 97–98% of replicates. The empirical collapse window does **not**
+   retain M1. The two together imply the empirical data are inconsistent with that
+   generating process — M1's non-retention is evidence about the stock, not about the
+   instrument.
+4. **Power collapses where the cod recovery data sit.** D2 at σ = 33.8 (0.130) and D3/D4
+   (0.005–0.110) correspond to the low-biomass, post-collapse conditions of most of the
+   Specification A window.
 
 **Not licensed:**
 
-4. The Northern cod non-retention **cannot** be attributed solely to uninformative data.
-   Under the thresholds I fixed in advance, four of eight power cells are below 0.30. The
-   manuscript must state that the rule is **substantially underpowered for three of the
-   four structural alternatives at this sample size**, and that non-retention of M2, M3,
-   M4 and M1b is therefore weak evidence against those structures.
-5. Equally, the result **cannot** be dismissed as pure low power. M1's non-retention on
-   the real collapse window is informative, because D1 shows the rule retains a true M1
-   there 96–98% of the time.
+5. Non-retention of **M2 and M1b** is weak evidence against those structures: the rule
+   would have retained them in at most 11% and 1.5% of replicates respectively had they
+   been true at recovery-window parameters.
+6. **M3 and M4 were not simulated as generating truths**, so this study provides no direct
+   power estimate for them. Their power is plausibly bounded above by M2's, since both add
+   structure to the same stock-flow base map and must clear an additional comparator gate,
+   but that is an inference and is not measured here. The manuscript must not claim a
+   measured power figure for M3 or M4.
+7. The result **cannot** be dismissed as pure low power. D1 and the specificity cells
+   refute that reading.
 
-**This is a more precise conclusion than the paper currently draws in either direction.**
-
----
+**False-retention rate, disambiguated.** Across the four structural DGPs, a non-generating
+module was retained in **0.044 of module-replicate pairs** (per-module rate); the expected
+number of falsely retained modules per replicate is **0.176**. Under the persistence-true
+null the per-module rate is **0.005** and the per-replicate count **0.025**. A per-module
+rate near or below the 5% tie band is what a rule controlling false positives at its
+nominal level should produce, and that is what is observed.
 
 ## 5. Consequence for the abstract
 
@@ -123,36 +173,61 @@ best. But it is the secondary effect, not the primary one.
 in the abstract." Four cells are below 0.30. That clause is triggered.
 
 The honest reading is not that the whole result is underpowered — D1 refutes that — but
-that **the strength of the negative result differs by module**. The abstract must not
-continue to present a uniform "no module is retained" without qualification.
-
-Proposed wording, to be implemented in v39:
+that **the strength of the negative result differs by module**. Wording implemented in
+v40, corrected from the v39 text, which overreached by naming the residual module (never
+simulated) and by attaching "under 15%" to a set that included D2:
 
 > Simulation under known ground truth shows the rule retains a true autonomous module in
-> 97% of replicates at collapse-window parameters but under 15% for the stock-flow,
-> residual and depensation alternatives at recovery-window parameters, so non-retention is
-> strong evidence against the first and weak evidence against the others.
+> 97% of replicates at collapse-window parameters but has power below 15% for the
+> stock-flow and depensation alternatives at recovery-window parameters, so non-retention
+> is informative for the first and weak evidence against the others; the residual and
+> lagged-initialisation modules were not simulated.
 
----
+## 6. Limitations
 
-## 6. Limitations, as disclosed in the locked sheet before running
+**Design.** The processes are members of the ladder's own class, so this measures power
+against **correctly specified** alternatives — the easiest case. Power against
+misspecified truth is lower, and D1 is therefore an **upper bound**. The tie band and the
+horizon pair were held at their empirical values and not varied. M3 and M4 were not
+simulated as generating truths.
 
-- The DGPs are members of the ladder's own class, so this measures power against
-  **correctly specified** alternatives — the easiest case. Real power against misspecified
-  truth is lower, and the adequate-power finding for D1 is an **upper bound**.
-- Synthetic predictands carry no assessment smoothing, so persistence is a **weaker**
-  baseline here than on the real series. This flatters the rule.
-- No observation error, catch-reconstruction error, or assessment revision.
-- Only `T = 33` and `σ ∈ {11.8, 33.8}` were run. `T = 71`, `σ = 0` and `𝔰 ∈ {5, 30}` were
-  declared in §2b as deferred extensions and remain unrun; they cannot revise these
-  thresholds.
-- 200 replicates give ±5.5 pp at p ≈ 0.8. The D1-versus-D3/D4 contrast is far larger than
-  that interval; the D2 σ = 11.8 cell (0.710 ± 0.063) is the only one close to a boundary.
+**Data.** Synthetic predictands carry no assessment smoothing, so persistence is a
+**weaker** baseline here than on the reconstructed series — which flatters the rule. There
+is no observation error, catch-reconstruction error, or assessment revision.
 
----
+**Coverage.** Only `T = 33` (the Specification A length) and `σ ∈ {11.8, 33.8}` were run.
+`T = 71` — the Specification B length, 1954–2024 — together with `σ = 0` and
+`𝔰 ∈ {5, 30}` were declared as deferred extensions in §2b of the locked sheet and remain
+unrun. They cannot revise these thresholds.
 
-## 7. Frozen-spec invariance
+**Precision.** 200 replicates give ±5.5 pp at p ≈ 0.8. The D1-versus-D3/D4 contrast is far
+larger than that interval; D2 at σ = 11.8 (0.710 ± 0.063) is the only cell near a decision
+boundary.
+
+## 7. What would change the conclusion
+
+Stated so that the study's own weak points are visible rather than left for a reader to
+find:
+
+- **If D2 at intermediate σ showed power above 0.5**, recovery-window non-retention would
+  become more informative than §4 currently allows, and item 5 would need softening.
+- **If a misspecified-truth DGP showed power comparable to D1**, the "upper bound" caveat
+  would be unnecessary and the licensed claims would strengthen.
+- **If M3 or M4 were simulated and showed power above 0.30**, the inference in item 6 that
+  their power is bounded by M2's would be falsified.
+- **If the tie band were varied and specificity fell below 0.90 at 0%**, the 5% band would
+  be doing more work than the paper credits.
+
+The two highest-value extensions are a misspecified-truth DGP, which would bound power
+from *below*, and generating DGPs for M3 and M4, which would complete the ladder. Neither
+is required for the present manuscript; both would strengthen a follow-up. Note that D4's
+near-zero power is independently consistent with the empirical M1b result — the fitted
+threshold descends to an unattained infimum on the real data, and the simulation shows the
+rule cannot recover even a genuinely identifiable threshold at these parameters. The two
+lines of evidence agree.
+
+## 8. Frozen-spec invariance
 
 No cod score, table value or retention verdict was recomputed or changed. Ω_sim scores
-synthetic series only. `SPECIFICATION_v2.md` is untouched, and the v37 empirical record
-stands byte-identical.
+synthetic series only. `SPECIFICATION_v2.md` is untouched, and the empirical record stands
+byte-identical.
