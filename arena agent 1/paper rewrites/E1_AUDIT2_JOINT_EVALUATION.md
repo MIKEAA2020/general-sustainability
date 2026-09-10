@@ -189,3 +189,160 @@ C5 matched-baseline tables · sentence splitting · B4 drop aquifer standing com
 Tier 1 + 2 are all confined to prose and two recomputations; none touches the frozen
 scoring core, and **none changes the retention verdict** — persistence still wins
 everywhere. Tier 3 is the desk-rejection risk.
+
+---
+---
+
+# ADDENDUM — Items Not Adjudicated in the First Pass
+
+The first pass resolved the high-severity cluster and swept grok's and gpt's line-level
+material into "Tier 3 / style". That was too coarse: several of those items are
+**correctness** issues, not presentation. Each is verified against `E1_v19.tex` below.
+Numbering continues from the main document.
+
+## G. NEWLY CONFIRMED DEFECTS
+
+### G1. "Most annual increments are positive" is false — it is 7 of 12 (gpt §6)
+**VERIFIED, and this is a real error.** Computed from the V2 series (1995–2007):
+`[+6.37, +4.52, +7.68, +6.34, −0.17, −4.92, −5.63, −1.80, −2.00, +5.11, +15.65, +40.27]`
+⇒ **7 positive, 5 negative.** "Most" is defensible only in the barest 7/12 sense, and the
+window contains **five consecutive declines** (1999–2004) — the very feature the sentence
+is used to wave away when arguing the Allee term should be weakly constrained. gpt told me
+to "verify the exact count before making this statement." I did; the rhetoric outruns it.
+Replace with the explicit count and acknowledge the consecutive-decline run.
+**Missed by grok and qwen; missed by me in the first pass.**
+
+### G2. The profile statistic is a Gaussian likelihood construct that the paper never declares (gpt §1.3)
+**VERIFIED NUMERICALLY — and it implicates my own diagnostic.** gpt conjectures the
+statistic is Λ(𝔰) = n·log{SSE(𝔰)/SSE(𝔰̂)}. Testing that against my reported numbers:
+- coarse: 12·log(135.04/126.50) = **0.784** → paper prints 0.78 ✓
+- annual: 12·log(126.50/122.90) = **0.346** → paper prints 0.35 ✓
+
+Exact reproduction. So the paper fits by **least squares** but reports a **likelihood-ratio**
+statistic against **χ²₁**, without ever stating the Gaussian-iid-homoskedastic assumptions
+that licence the conversion. gpt's four objections to the χ²₁ reference are all individually
+true of this fit: 𝔰̂ is **at the boundary** (2.1e−23), **r is also at its bound** (2.000),
+n = 12, and the "observations" are reconstructed states, not measurements. Boundary cases
+alone break the χ²₁ null.
+
+**This does not overturn the conclusion** — the profile is flat and 𝔰 is unidentified; that
+survives as a *descriptive* result and is corroborated by the r–K compensation path.
+**It does overturn the phrasing.** Drop "settles the identification question directly",
+drop "confidence set = whole admissible interval", and report it as a descriptive profile:
+objective increase plus compensation path. Also declare that `[0, min S_t]` is an
+**estimation bound**, not a mathematical admissibility region (gpt is right that negative
+production above min S is not inadmissible; my own note already flags the s∈[0,40] grid as
+leaving the region — that was a *bound*, not a law).
+
+Standing lesson reinforced: *constants reproducing is not validation.* The number was right;
+the inferential frame around it was not.
+
+### G3. "Except in M3, which carries the fitted residual forward as a state." (gpt §4, qwen §5.3)
+**VERIFIED at L293** — sentence fragment, and it **omits M4**, which inherits M3's residual
+mechanism. Both auditors independently flagged it. Merge into the preceding sentence and
+name M3 *and* M4.
+
+### G4. M3/M4 residual recursion is never written down (gpt §4)
+**VERIFIED: zero matches** for any φ^k recursion in the source. Table 2 alone does not let a
+reader reproduce M3 or M4. Unspecified: whether the AR regression has an intercept; which
+residual is available at issuance; whether residuals are computed pre- or post-clipping;
+how M4 initialises the residual state. This is a **reproducibility defect**, not a style
+point, and it compounds A7 (undeclared bounds). Write the recursion out — but read it off
+`run_ladder.py`, do **not** adopt gpt's guessed indexing, which it explicitly says to check.
+
+### G5. M4 may be a stale-start experiment, not a delayed-information one (gpt §4)
+**Substantively correct and unresolved in the text.** Memory confirms M4 differs from M3
+*only* by `start_idx = i_tr[-1] − delay`; the fitted parameters are M3's. So M4's parameters
+still see S_t through training even though its trajectory starts at S_{t−1}. That makes it
+**stale initialisation**, not a genuinely delayed information set. The paper's §4 delay
+decomposition leans on it. Relabel accurately — this is cheap and honest — and note that a
+true delayed-information variant would require truncating training too. **Do not build that
+variant**: new ladder rung, frozen spec, same objection as B3.
+
+### G6. "byte for byte" claimed without environment qualification (gpt §5, qwen §6.2)
+**VERIFIED at L99 (abstract), L516, L1602.** Data availability elsewhere concedes a fixed
+interpreter/library stack and an environment-sensitive M1b row (±17 kt). The abstract's
+unqualified claim contradicts the paper's own caveat. Add "within the pinned environment".
+Both auditors agree; trivial.
+
+### G7. Direction-score definition is ambiguous (gpt §5)
+Scores of 0.25 and 0.57 imply 4 and 7 comparisons on 5- and 8-year windows, i.e. the first
+origin-to-test transition is excluded. That is never stated. Also unstated: whether 5-year
+RMSE is endpoint or trajectory-average, the log base and floor, and the fixed-window RMSE
+year set. Small, but these are score definitions in a scoring paper.
+
+### G8. Brier is a misclassification rate under 0/1 forecasts (gpt §5)
+Correct. With hard 0/1 forecasts the Brier score is numerically the misclassification rate;
+calling it a Brier score implies probability forecasts that do not exist here. Rename
+"threshold misclassification rate (equivalently, Brier for deterministic binary forecasts)".
+This *strengthens* the existing degeneracy disclosure rather than weakening it.
+
+### G9. Persistence direction score printed as 0 should be NA (gpt §5)
+If persistence is excluded from the direction score by construction, printing 0.00 reads as
+an observed 0% hit rate. Print NA.
+
+## H. NEWLY REJECTED
+
+### H1. gpt §1.2: "prose and Table 10 reverse the catch-treatment labels" — **FALSE**
+**REFUTED at L774–780.** The prose reads: *"r = 0.458 with K resting at the multi-start
+initialiser of 500.0 kt … against r = 0.370 with K at its upper bound, 5000.0 kt"*, in a
+sentence whose subject is the coarse→annual contrast, and *"K = 105.8 against 129.8"* in the
+same order. Table 10 (L1206–1217) assigns coarse→{0.458, 500.0}, {105.8}; annual→{0.370,
+5000.0}, {129.8}. **They agree.** gpt ranked this its #1 resubmission blocker and hedged
+correctly ("only if Table 10 is confirmed") — it is not a defect. My own profile run
+independently associates ~106 kt with coarse and 129.8 with annual, which gpt itself noted
+agrees with Table 10.
+
+**No action.** Worth recording because acting on it would have *introduced* an error — the
+same failure the v18 companion-reference incident produced.
+
+### H2. gpt §6: "34% / above the new LRP mixes years and versions" — **already correct**
+L551 states 2015 SSB = 33.8% of the 2016 LRP (matching the advisory 34%); L819 gives
+2024/LRP = 1.24 for xteNCAM. Dates and reconstructions are attached. Optional tightening at
+L823 only.
+
+### H3. grok: "say 'in review' once in references" — **contradicts standing policy**
+grok recommends retaining "in review" for Rose (2026) / Abaee (2026a,b). v19 has **zero**
+occurrences and all companions carry Zenodo DOIs. Further confirmation grok is reading a
+pre-v19 draft. **Ignore.**
+
+### H4. gpt §3: "a retention outcome cannot transfer because the LRP differs" is a must-fix
+gpt is right that the LRP does not enter primary RMSE, so it cannot drive non-transfer.
+But the paper's no-pooling rule is a **frozen-spec commitment**, not an inference from the
+LRP. Fix the *stated reason* (trajectories, formulation, coverage, catch spec differ; LRP
+touches only the secondary diagnostic) — do **not** weaken the no-pooling rule itself.
+
+## I. ADDITIONAL CONFIRMATIONS OF EXISTING ITEMS
+
+- **gpt §5 and §8 independently reach A1** ("five of the thirty-two"). Neither gpt nor qwen
+  rechecked the numerator; A2 stands as the only source for "four".
+- **gpt §5 reaches C4** (H2 alone → H2 and H3) independently of qwen §4.2.
+- **gpt §9 "held in the archive rather than invented"**: phrase **not present** in v19 —
+  already removed. Stale-draft artifact, like H3.
+- **gpt §6 "driven hard against the upper bound"**, **"evidence against a catch-regime
+  reading"**, **"which is what the scored comparison then confirms"**, **"that the optimiser
+  does not move K is itself a measure"** (verified present at L777–778): all four are
+  overclaim-by-verb, all fold into the Tier-3 register pass. The optimiser one is the
+  strongest — a stationary iterate is not a measurement of flatness; the *profile* is.
+- **gpt §10 "Slack near zero by construction"**: correct that a mean-based threshold forces
+  the *mean* deviation to zero, not the annual ones. Wording fix.
+- **gpt §8 "block-length sensitivity shown for M1 only"**: correct; the robustness claim
+  should be scoped to the M1 comparison actually tested.
+- **gpt §8 "rerun and archive the coarse-regime per-origin files"**: legitimate and the
+  cleanest resolution of the Table 9 Spec A footnote — the scoring stack is deterministic,
+  so regeneration should be feasible. Flag as optional but valuable; if regeneration does
+  not reproduce Table 4, that must be resolved before submission.
+
+## J. REVISED FIX ORDER
+
+**Tier 1 (correctness) — add:** G2 profile-likelihood reframing · G1 the 7-of-12 count
+**Tier 2 (completeness) — add:** G4 M3/M4 recursions · G5 relabel M4 · G3 fragment+M4 ·
+G6 environment qualifier · G7 score definitions · G8 Brier rename · G9 NA · H4 restate
+no-pooling reason
+**Tier 3 — add:** gpt's four overclaim verbs · slack wording · block-length scoping
+
+**Do not act on:** H1 (false), H2 (already correct), H3 (policy violation), B1–B4, and any
+grok item quoting text absent from v19.
+
+Still no change to the retention verdict. G2 is the only addendum item that touches a
+*result* — and it changes how the Allee finding is licensed, not what it says.
