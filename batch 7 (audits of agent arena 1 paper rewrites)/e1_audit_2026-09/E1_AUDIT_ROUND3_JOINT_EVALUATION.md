@@ -39,14 +39,21 @@ are excellent ideas that still must be declined.
 | **E8** | (r,K) ridge: pre-collapse cannot identify r, post-collapse cannot identify K | grok §1 | **ACCEPT with correction** | 2 |
 | **E9** | Regime-split RMSE (pre-1991 / 1991–95 / 96–2012 / 2013–24) | grok F, qwen 3.4 | **DEFER — attractive, out of frozen spec** | — |
 | **E10** | Apparent-production figure P_t vs S_t with fitted curves | grok A, qwen 3.3 | **DEFER** | — |
-| **E11** | Age-structured / cohort benchmark; ΔSSB decomposition | qwen 3.2/3.3, gpt §3, grok G | **DECLINE — data not available** | — |
-| **E12** | Lagged capelin scan; recruitment depensation; seal-predation module | grok E, qwen 3.6–3.8, gpt §4 | **DECLINE — new model class** | — |
+| **E11** | Age-structured / cohort benchmark; ΔSSB decomposition | qwen 3.2/3.3, gpt §3, grok G | **REVISED → PARTLY FEASIBLE** (see §6) | 3 |
+| **E12** | Lagged capelin scan; recruitment depensation; seal-predation module | grok E, qwen 3.6–3.8, gpt §4 | **REVISED → lag scan FEASIBLE** (see §6) | 3 |
 | **E13** | Refit M1b with 𝔰 above max training S | grok D(1) | **DECLINE — take D(2) instead** | — |
 | **E14** | Time-varying / random-walk productivity module | qwen 3.5 | **DECLINE — frozen spec** | — |
 | **E15** | Management strategy evaluation | qwen 3.13 | **DECLINE — different paper** | — |
 | **E16** | Drop Prop 4.1, "canonical", aquifer from introduction | grok §6 | **PARTIAL — already done in v24** | — |
 
-**Tier 1: 1 item. Tier 2: 6 items. Deferred: 2. Declined: 6. Partial: 1.**
+**Tier 1: 1 item. Tier 2: 6 items. Tier 3: 2 items (E11, E12 — revised after data search).
+Deferred: 2. Declined: 4. Partial: 1.**
+
+> **Revision note (see §6).** E11 and E12 were originally declined on the ground that the
+> required data do not exist. A web search of the primary assessment literature showed
+> that ruling was **partly wrong**: the NCAM weight-at-age and maturity-at-age schedule is
+> published, and a recruitment series is already in this repository. The declines are
+> narrowed accordingly.
 
 ---
 
@@ -233,3 +240,112 @@ into the round-2 evaluation, and survived as a live contradiction in v19–v21 u
 caught during Tier 3 planning. Accordingly, every numbered section of all three audits in
 this file has been assigned a verdict in the table above, including the ones I decline.
 Nothing in the source is left untriaged.
+
+---
+
+## 6. Revision: E11 and E12 re-examined after a data search
+
+The original declines rested on one sentence: *"There are no numbers-at-age, no
+weight-at-age, no maturity-at-age."* That was an inference from the two CSVs in this
+repository. It was **not** a search of the literature, and it was partly wrong.
+
+### 6.1 What the search found
+
+**Cadigan, N.G. (2016), "A state-space stock assessment model for northern cod, including
+under-reported catches and variable natural mortality rates", *Can. J. Fish. Aquat. Sci.***
+— the primary NCAM methods paper — publishes the projection input schedule. Stock ages
+2–12, beginning-of-year stock weights and proportions mature:
+
+| stock age | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| weight (kg) | 0.10 | 0.28 | 0.60 | 1.03 | 1.57 | 2.29 | 3.16 | 4.14 | 5.14 | 6.31 |
+| proportion mature | 0.00 | 0.00 | 0.05 | 0.35 | 0.79 | 0.97 | 1.00 | 1.00 | 1.00 | 1.00 |
+
+The model is the cohort recursion `N_{a,y} = N_{a-1,y-1}·exp(−Z_{a-1,y-1})` with
+`Z = F + M`, ages 2–12, years 1983–2012, and it estimates `M` as a random effect —
+which is why `M_age5_14` appears in Table A2 at all.
+
+**The repository already holds the recruitment series.** `ncam_2016_table_a2.csv` carries
+`age2_millions` for all 33 years: this is NCAM's estimated number at age 2, i.e. the
+recruitment series plotted in the assessment's Figure 8. I had read that column as an
+incidental diagnostic. It is the entry point of the cohort model.
+
+So the correct statement is not "no age data exist". It is:
+
+- **numbers-at-age by year (the full N matrix): still not available** — the assessment
+  publishes figures, not the matrix. qwen's full projection
+  `Ŝ_{t+1} = Σ_a N_{a,t}e^{−Z}w_{a+1}m_{a+1} + R̂w₀m₀` remains **not buildable**, and
+  gpt's four-way ΔSSB decomposition into survival/growth/maturity/recruitment remains
+  **not buildable**. Those declines stand.
+- **the maturity ogive, the weight schedule, a recruitment series and a mortality series:
+  all available.** A *reduced* demographic test is therefore buildable, and the original
+  blanket decline was too broad.
+
+### 6.2 The reduced test that is now available
+
+The ogive does the work. Ages 2–4 contribute essentially nothing to SSB (m ≤ 0.05); A50
+falls between ages 5 and 6. A cohort recruiting at age 2 therefore enters the spawning
+stock about **4–5 years later**. That is a quantitative, externally sourced prediction —
+not a fitted lag — and it is exactly the recruitment delay grok §4 says the ladder never
+tests.
+
+I tested it on the repository's own series. Raw correlations are misleading here: over
+1983–2015 recruits and SSB share the collapse trend, giving a spurious +0.77 at lag 3,
+and against ΔSSB the raw signs are *negative*, which is the wrong sign for a recruitment
+mechanism. Restricting to the post-collapse period and working in logs to remove the
+level:
+
+| lag (yr) | corr(log R_t, Δlog SSB_{t+lag}), 1995+ | n |
+|---|---|---|
+| 3 | +0.468 | 17 |
+| **4** | **+0.740** | 16 |
+| **5** | **+0.753** | 15 |
+| 6 | +0.425 | 14 |
+| 7 | −0.039 | 13 |
+
+**The signal peaks at lags 4–5, where the published maturity ogive says it must.** The
+agreement between an externally specified ogive and an internally measured lag profile is
+the substantive finding, and it is stronger evidence than either piece alone.
+
+**These are correlations on 15–17 points and are not forecast skill.** They establish
+feasibility and a predeclared lag, nothing more.
+
+### 6.3 The capelin lag scan (E12)
+
+Also feasible, and cheaper than I implied. `capelin_acoustic_observed.csv` has 30 observed
+years, 25 overlapping the NCAM window; a lag-5 scan leaves **20 usable origins**. grok's
+item E — scale `g(S_t)` by capelin at lags 0,1,2,5,6,7 with the index known at origin —
+can be run on existing data. Its value is the *lag profile* of RMSE, not retention of any
+module. Note the ogive now supplies a biological reason to expect lags 5–7 to matter for
+the recruitment pathway and lag 0–1 for the condition pathway, so the scan is a test of a
+stated hypothesis rather than a fishing expedition.
+
+**Still declined within E12:** recruitment depensation `R_t = f(S_t)` with a threshold,
+and the seal-predation module. The first needs a stock–recruit model this paper does not
+have; the second needs a harp seal index that is not in the repository and would be
+severely collinear with capelin.
+
+### 6.4 What this does and does not authorise
+
+Everything in §6.2–6.3 adds *rungs to a frozen ladder*. Under the standing frozen-spec
+discipline that requires a justified `SPECIFICATION_v3.md`; it cannot ride inside a
+presentation revision, and it cannot alter the retention verdicts already recorded.
+
+The honest position for the current manuscript is therefore:
+
+- **v27 (prose, no new runs):** state the recruitment-lag argument as a *specification*
+  limitation with the published ogive as its warrant — the ladder's modules act at lag 0–1
+  while the maturity schedule puts the dominant recruitment pathway at 4–5 years, so the
+  tested structures are mis-timed for the mechanism they are meant to represent. This is
+  E3/E5 sharpened by external evidence, and it needs no new score.
+- **A declared additional pass (SPECIFICATION_v3.md):** the age-2 recruitment covariate at
+  predeclared lag 4–5, and the capelin lag scan. Both are now known to be runnable.
+
+### 6.5 Correction to my own record
+
+My §2 statement "the age-structured proposals are not feasible" was too strong and was
+reached without searching. The reviewers were more right than I credited: gpt §3 called
+this "probably the highest-value enhancement requiring additional biological data", and
+the additional data are, in part, published and citable. What survives of the decline is
+narrower and better supported — the full N-matrix decomposition is genuinely unavailable,
+and that is now stated as the specific gap rather than as a blanket absence of age data.
