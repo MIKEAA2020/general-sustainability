@@ -132,25 +132,85 @@ is a data-acquisition project with its own provenance and admission requirements
 **Disposition: separate project. Prerequisite is the N matrix; without it the
 decomposition cannot be attempted and should not be promised.**
 
-### 5.3 E12 remainder — recruitment depensation and seal predation
+### 5.3 E12 remainder — recruitment depensation and seal predation — **PARTLY REVISED**
 
-Recruitment depensation `R_t = f(S_t)` with a threshold needs a stock–recruit model this
-paper does not build. The seal module needs a harp seal abundance index that is not in the
-repository and would be severely collinear with capelin. Both are plausible ecology and
-neither is testable here.
+**Recruitment depensation** `R_t = f(S_t)` with a threshold: the ingredients exist — the
+repository holds NCAM's age-2 recruitment series and SSB — so a depensatory
+stock–recruit fit is buildable. It is nonetheless a **different object**: it forecasts
+recruits, not SSB, so it cannot be scored against this paper's predictand or its retention
+rule without a cohort projection to carry recruits into spawning biomass, and that
+projection needs the N matrix (§5.2). **Delegated unaltered to the ecosystem/recruitment
+successor, with the N-matrix requirement named as its prerequisite.**
 
-**Disposition: declined for E1; recorded as candidate content for an ecosystem-driver
-paper that would need new data.**
+**Seal predation.** My stated reason — "needs a harp seal index that is not in the
+repository" — is half right and was, again, asserted rather than checked. A search shows
+DFO publishes a **modelled annual abundance series** for Northwest Atlantic harp seals
+(2024 assessment: 4.4 million, 95% CrI 3.65–5.35; peak 7.5 million in 1998; the
+Wiley/ESA population model gives annual estimates 1951–2019 with intervals). The series is
+obtainable and covers the study period. It is *not in this repository*, which is a
+data-acquisition statement, not an impossibility.
 
-### 5.4 E6 redesign — ecological threshold metrics *(qwen 3.10)*
+The substantive objection survives and is the one that should have been given first:
+harp seal abundance rose monotonically through the 1970s–1990s and fell after 1998, so on
+33 annual observations it is close to a smooth trend, and it is **collinear with both the
+capelin collapse and the productivity decline the paper already documents**. Fitted as an
+additive mortality term it would absorb the same variance as the implied-productivity
+signal in v28 §3.2 without identifying a mechanism. That is a reason grounded in the data,
+not in the specification.
+
+**Disposition: delegated unaltered to an ecosystem-driver paper, where a predator index
+can be fitted jointly with prey and temperature and the collinearity addressed by design
+rather than ignored. Data acquisition is a named prerequisite, not a barrier.**
+
+### 5.4 E6 redesign — ecological threshold metrics *(qwen 3.10)* — **RULING REVISED**
 
 The **diagnosis** is accepted and implemented (Brier is degenerate on Specification A:
-0 of 26 origins lie at or above the 884.6 kt LRP — verified). The **redesign** —
-P(S_{t+h} < S_t), rebuilding risk, CRPS, asymmetric loss — replaces the scoring rule,
-which is a frozen element. It also requires predictive distributions the deterministic
-forecast convention does not produce.
+0 of 26 origins lie at or above the 884.6 kt LRP — verified).
 
-**Disposition: diagnosis in E1; redesign belongs to a probabilistic-scoring study.**
+My original ground for declining the **redesign** was that it "requires predictive
+distributions the deterministic forecast convention does not produce." **A web search of
+the assessment literature shows that ruling was wrong**, and wrong in the same way as the
+E11/E12 decline: I inferred unavailability instead of checking.
+
+DFO's Northern cod assessments publish **95% confidence intervals on SSB in every
+reporting year** — the 2024 assessment gives SSB = 342 kt (95% CI 246–475 kt), and the
+2016 assessment gives 300 kt (95% CI 246–362 kt). More to the point, those bounds are
+**already committed in this repository**: `data/xtencam_table17_ssb.csv` carries
+`ssb_lo` and `ssb_hi` for all **71** years, with a median relative CI width of 0.44. I had
+been reading that file for months and using only the point column.
+
+So an uncertainty band on the *predictand* exists. That does not by itself make the
+ladder's forecasts probabilistic — the forecast convention is still deterministic — but it
+makes a genuine probabilistic diagnostic available immediately: score the deterministic
+forecasts against the assessment's own uncertainty at the target year. Computed on the
+archived per-origin file, h = 1, Specification B, n = 59, taking
+σ = (hi − lo)/(2 × 1.96) at each target year:
+
+| forecast | truth within ±1.96σ of the forecast | nominal |
+|---|---|---|
+| persistence | **33/59 = 56%** | 95% |
+| M1 | **21/59 = 36%** | 95% |
+
+Both badly under-cover, and persistence under-covers substantially less than M1. This says
+something neither RMSE nor the degenerate Brier says: the ladder's errors are large
+**relative to the assessment's own stated uncertainty**, so the forecast failure is not
+hidden inside assessment noise. It is also the ecologically meaningful version of what
+qwen asked for, and it needs no new model and no scoring-rule change.
+
+**Revised disposition.**
+- **Implementable now, and not a scoring-rule change:** coverage of the deterministic
+  forecasts against the published assessment CI, reported as a diagnostic alongside RMSE.
+  This does not replace the retention score and cannot alter a verdict.
+- **Requires a new object (soften the rule via v3, not the proposal):** the full redesign
+  qwen specifies — P(S_{t+h} < S_t), rebuilding risk, CRPS, asymmetric loss — needs
+  *forecast* distributions, not just predictand uncertainty. That means residual-bootstrap
+  or state-space predictive intervals, which is a genuine change to the forecast
+  convention and therefore belongs in a pre-registered object. The proposal is not
+  weakened; the rule is what gives way.
+
+**Correction to my own record:** "requires predictive distributions" was a real
+constraint for the *full* redesign and a false one for the coverage diagnostic. Stating
+them as one thing let a feasible item ride out on an infeasible item's justification.
 
 ---
 
@@ -159,10 +219,18 @@ forecast convention does not produce.
 **Standard applied.** "It is outside the frozen specification" is a statement about
 bookkeeping, not about science, and it is not on its own a reason to decline anything. A
 frozen specification exists to stop a preregistered negative result being rewritten after
-the fact; it does not exist to protect the paper from valid criticism. So each item below
-is judged on whether the *proposal is valid*, and only then on where it belongs. Where a
-proposal is valid, the disposition must be either soften the specification, or delegate to
-a named successor object — never silence.
+the fact; it does not exist to protect the paper from valid criticism.
+
+Each item is therefore judged first on whether **the proposal is valid**. A valid proposal
+is never weakened, trimmed, or reinterpreted to fit the specification — the proposal
+stands as its author made it. What is adjustable is the *rule*, not the science. So a
+valid proposal has exactly two admissible dispositions:
+
+1. **Soften the frozen-specification rule** so the proposal can be implemented as stated,
+   in a new pre-registered object that leaves v2's verdicts intact; or
+2. **Delegate the proposal, unaltered, to another paper** with a named destination.
+
+Silence is not a disposition, and neither is diluting the proposal until it fits.
 
 | Item | Ruling |
 |---|---|
@@ -242,10 +310,12 @@ than a free state.**
 | E11/E12 lag argument (prose) | **implement** | E1 v27, specification limitation |
 | E11/E12 lag scan (scored) | additional pass | `SPECIFICATION_v3.md` |
 | E6 diagnosis | implemented | E1 v27 |
-| E6 redesign | different study | probabilistic scoring |
+| E6 coverage diagnostic | **implementable now (was declined)** | E1, alongside RMSE |
+| E6 full probabilistic redesign | soften rule via new object | `SPECIFICATION_v3.md` |
 | E15 MSE | different paper | E2 line |
 | E11 full decomposition | different project | needs N matrix |
-| E12 seal / recruitment depensation | declined | needs new data |
+| E12 recruitment depensation | delegated unaltered | recruitment successor (needs N matrix) |
+| E12 seal predation | delegated unaltered (data exists, collinearity is the issue) | ecosystem-driver paper |
 | E13 predator-pit refit | **delegated (was declined)** | `SPECIFICATION_v3.md` object Ω_pit |
 | E14 time-varying productivity | diagnosis implemented; module delegated | E1 v28 §3.2; regime companion |
 | E16 | already done in v24 | — |
