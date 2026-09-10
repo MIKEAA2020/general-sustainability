@@ -1,0 +1,28 @@
+name: manuscript style
+
+on:
+  push:
+    paths: ['**/*.tex', 'tools/manuscript_style_scan.py']
+  pull_request:
+    paths: ['**/*.tex']
+  workflow_dispatch:
+
+jobs:
+  style:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Scan manuscripts for changelog / diary / over-hedging register
+        run: |
+          shopt -s globstar nullglob
+          files=(**/*.tex)
+          if [ ${#files[@]} -eq 0 ]; then echo "no .tex files"; exit 0; fi
+          python3 tools/manuscript_style_scan.py "${files[@]}" --json style_report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: manuscript-style-report
+          path: style_report.json
