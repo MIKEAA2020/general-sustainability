@@ -206,7 +206,7 @@ appropriate next action on E1 itself is submission, not another tier.
 
 | Tier | Item | Status |
 |---|---|---|
-| A1 | Rule comparison from archived replicates | **done, v42** |
+| A1 | Rule comparison from archived replicates | **v42 partial, completed v44** — see §3.4 |
 | A2 | Power map figure | **done, v43** |
 | A3 | Algorithm box | **done, v43** |
 | A4 | Table 2b proposed as a reporting template | **done, v43** |
@@ -218,3 +218,36 @@ appropriate next action on E1 itself is submission, not another tier.
 | C2 | Retitle | not before B1, B2, C1 |
 
 **Tier A is now genuinely complete.** Tier B and C belong to the successor paper.
+
+
+### 3.4 A third error, found on the same re-check
+
+**E-3. A1 shipped two of the four comparators it promised.** The plan specified "AIC-based
+selection, MASE alone, a bare beat-persistence rule, and 0%/10% tie-band variants". v42
+delivered the tie-band variants and beat-persistence; **the AIC and MASE comparators were
+never computed.** A grep for "MASE" appeared to pass only because the term occurs in the
+introduction's literature discussion — a false positive from checking the whole document
+rather than the table.
+
+Both are now computed on the same archived replicates and added in v44:
+
+| rule | power | specificity |
+|---|---|---|
+| adopted retention rule | 0.376 | 0.978 |
+| MASE < 1 against the naive benchmark | 0.651 | **0.675** |
+| information criterion, `n·log MSE + 2k` | **0.509** | **0.992** |
+
+**This is the most consequential finding of the whole comparison, and it is unfavourable
+to the paper's own rule.** An information criterion penalising free parameters dominates
+the adopted rule on *both* axes — more power and better specificity. MASE alone buys power
+by surrendering specificity, retaining structure in a third of persistence-true replicates.
+
+The manuscript now states this plainly: the comparison does not vindicate the rule used
+here, and a reader selecting an instrument for new work should prefer the parameter-
+penalising criterion. The rule stands as the pre-registered instrument that produced the
+empirical result, not as a recommendation.
+
+**Method lesson (extends I-1).** Verifying by grep over the *document* is not the same as
+verifying over the *object that was supposed to change*. E-3 survived a check that E-1 was
+designed to catch, because the search space was too wide. Checks must be scoped to the
+table, section or figure the item promised to alter.
