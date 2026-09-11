@@ -139,3 +139,82 @@ rolling pass of Section 3.2).
 
 The raw-RMSE column, not the log column, is the retention score, so these counts qualify
 a reported diagnostic rather than the verdict.
+
+---
+
+## SI-5 Retention-rule operating characteristics: full decomposition
+
+Design and results are archived in full as `E1_SIMULATION_RESULTS.md`, with the
+pre-registration at `wave_e_cod/SPECIFICATION_v4.md` (locked before execution) and the
+per-replicate output at `wave_e_cod/results/sim_retention_power.csv` (10,000 rows). This
+section records the detail condensed out of Section 3.7.
+
+### SI-5.1 Where the power is lost
+
+H2 alone is "beats persistence by more than the 5% band at both horizons", ignoring the
+comparator gate.
+
+| DGP | truth | passes H2 alone | passes full rule | gates, absolute | gates, conditional on H2 |
+|---|---|---|---|---|---|
+| D1 | M1 | 0.975 | 0.975 | 0.000 | 0% removed |
+| D2 | M1 | 0.420 | 0.420 | 0.000 | 0% |
+| D3 | M2 | 0.328 | 0.100 | 0.228 | 69% |
+| D4 | M1b | 0.180 | 0.010 | 0.170 | 94% |
+
+The absolute cost of the comparator gates is therefore 0.17–0.23 of the shortfall on the
+two cells where they bind.
+
+Both framings hold. In absolute terms the dominant failure is H2 — the true module often
+does not out-predict persistence on data it generated. Conditional on clearing H2, the
+comparator requirement is a dominant further filter.
+
+### SI-5.2 The chance baseline
+
+With five structural modules, random assignment would place the generating module first
+20% of the time.
+
+| DGP | true module has lowest h=1 RMSE | versus chance |
+|---|---|---|
+| D1 (M1 true) | 0.627 (62.7%) | far better |
+| D2 (M1 true) | 0.645 (64.5%) | far better |
+| **D3 (M2 true)** | **0.0375** | **worse than chance** |
+| D4 (M1b true) | 0.258 (25.8%) | barely better |
+
+On D3 the stock-flow module's mean one-year error (85.7 kt) exceeds that of the residual
+(77.9 kt) and Allee (79.9 kt) modules. Estimation noise actively disadvantages the correct
+structure relative to its siblings at this sample size.
+
+### SI-5.3 Alternative decision rules
+
+Computed on the same archived replicates, no refitting.
+
+| Decision rule | mean power | specificity |
+|---|---|---|
+| Retention rule as adopted (H1–H3, 5% band) | 0.376 | 0.978 |
+| Without the comparator gate (H2, H3 only) | 0.476 | 0.972 |
+| Persistence only, h=1, 5% band | 0.562 | 0.955 |
+| Persistence only, any margin | 0.542 | 0.765 |
+| Full rule, no tie band | 0.436 | 0.772 |
+| Full rule, 10% band | 0.337 | 0.998 |
+| MASE < 1 against the naive benchmark | 0.651 | 0.675 |
+| Information criterion, `n·log MSE + 2k` | 0.509 | 0.992 |
+
+False-retention across the four structural DGPs is 0.044 per module-replicate pair, or
+0.176 falsely retained modules per replicate; under the persistence-true null the
+per-module rate is 0.005.
+
+### SI-5.4 Two failed pre-check candidates
+
+A diagnostic that told an analyst in advance whether the rule has power on a given series
+would be more valuable than any rule variant. Two were examined and neither works.
+
+1. **Dispersion of scores across modules.** Median coefficient of variation against
+   true-module power: Spearman ρ = 0.52. Too weak to license a protocol.
+2. **Margin of the best-scoring module over persistence.** Spearman ρ = 0.88, Pearson
+   r = 0.94 — strongly predictive, but it fails on two grounds. It is computed from the
+   same out-of-sample scores the retention rule consumes, so it cannot gate the decision;
+   and thresholding it at the tie band misclassifies both D3 cells, flagging "apply" where
+   the generating module wins less often than chance.
+
+Identifying when the rule has power therefore remains an open problem, and the manuscript
+states it as one rather than proposing a diagnostic that fails on its own simulation.
