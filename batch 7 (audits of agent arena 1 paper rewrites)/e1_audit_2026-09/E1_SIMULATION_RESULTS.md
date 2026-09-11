@@ -231,3 +231,71 @@ lines of evidence agree.
 No cod score, table value or retention verdict was recomputed or changed. Ω_sim scores
 synthetic series only. `SPECIFICATION_v2.md` is untouched, and the empirical record stands
 byte-identical.
+
+---
+
+## 9. Amendment 1 results: misspecified truth
+
+**Design:** `SPECIFICATION_v4.md` Amendment 1, locked at commit `bd0008f`
+(2026-09-11T01:56:22Z), executed afterwards. **Output:**
+`wave_e_cod/results/sim_misspecified_D6D7.csv`, 4,000 rows (2 DGPs × 2 σ × 200 replicates
+× 5 modules).
+
+### 9.1 The pre-declared threshold is breached
+
+Amendment §A1.5 fixed the criterion in advance: *if false retention under D6 or D7 exceeds
+0.10, the rule retains structure that is not there when the truth is outside its class,
+and the core specificity figure is not transferable to misspecified settings. This must be
+reported in the abstract.*
+
+| DGP | truth | σ | false retention | threshold |
+|---|---|---|---|---|
+| D6 time-varying productivity | outside class | 11.8 | **0.680** | exceeds 0.10 |
+| D6 time-varying productivity | outside class | 33.8 | **0.760** | exceeds 0.10 |
+| D7 observation error only | outside class | 11.8 | **0.975** | exceeds 0.10 |
+| D7 observation error only | outside class | 33.8 | **0.925** | exceeds 0.10 |
+
+All four cells breach it, by margins of six to ten times the bar.
+
+### 9.2 The contrast is the finding
+
+| null | false retention |
+|---|---|
+| D5 persistence-true, **inside** the ladder's class | 0.015 / 0.030 |
+| D6, D7, **outside** the class | 0.680 – 0.975 |
+
+**Specificity is not a property of the rule; it is a property of the rule applied to
+in-class data.** Against a persistence-true process the rule almost never retains
+structure. Against a process the ladder cannot represent — productivity that drifts, or a
+deterministic state observed with error — it retains structure in most replicates.
+
+The module falsely retained is overwhelmingly **M1**, the autonomous Schaefer map: 134 and
+151 replicates under D6, 195 and 185 under D7. When the truth is a smoothly declining
+productivity or a smooth trajectory seen through noise, a constant-productivity map
+out-predicts persistence often enough to clear both gates.
+
+### 9.3 Consequence for the manuscript's claims
+
+This bounds the earlier results from below and qualifies one of them.
+
+1. **The power figures stand as upper bounds**, as already disclosed.
+2. **The specificity figure of 0.97–0.99 must now be scoped explicitly to in-class truth.**
+   Stating it unqualified would imply a property the rule does not have.
+3. **The empirical non-retention result is unaffected and is, if anything, strengthened.**
+   The failure mode exposed here is *false retention* — the rule keeping a module when the
+   truth is outside its class. On both cod and Edwards the rule retained nothing. A rule
+   that over-retains under misspecification, and still retained nothing on the observed
+   series, gives no reason to suspect the empirical verdict is an artefact of leniency.
+4. **The reading of M1's non-retention on the collapse window tightens.** D1 showed the
+   rule recovers a true M1 in 97% of replicates; D6 and D7 now show it also retains M1
+   when M1 is *false*. So M1's non-retention on the observed data is informative in both
+   directions: the rule finds M1 when present and is inclined to find it when absent, and
+   it still did not find it.
+
+### 9.4 Not completed
+
+`T = 71` for D1 and D5, also registered in Amendment 1, was started and **abandoned as
+infeasible**: a single rolling pass at T = 71 costs 45.6 s against 7 s at T = 33, giving
+about 10 h for the 800 remaining passes. It is not reported, and no length-sensitivity
+claim is made. Condition 3's series-length limb therefore remains unmet; its
+misspecified-truth limb is now met.
