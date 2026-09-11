@@ -197,3 +197,71 @@ The manuscript as it stands (v37) makes no claim this sheet would contradict. Ex
 Ω_sim is what would justify the methods reframing proposed in the round-8 review — and,
 with it, the retitling that is currently held under the standing title lock. Until it is
 run, the paper remains a case study with a stated protocol, which is what its title says.
+
+---
+
+# Amendment 1 — misspecified truth and a second series length
+
+**Issued 10 Sep 2026, before any run under this amendment.** Nothing below has been
+executed. This amendment adds design elements that §2b did **not** cover: §2b declared
+`T = 71`, `σ = 0` and `𝔰 ∈ {5, 30}`, all of which remain members of the ladder's own
+class. A truth outside that class is a new element and is registered here rather than
+appended silently to the original sheet.
+
+## A1.1 Why
+
+The core design measures power against **correctly specified** alternatives only, so every
+power figure is an upper bound. Two questions cannot be answered from it:
+
+1. Does the rule retain structure when the generating process is outside the ladder's
+   class — that is, is there a **lower** bound on power?
+2. Do the operating characteristics hold at a second series length?
+
+## A1.2 New data-generating processes
+
+Both use `run_ladder.step` unmodified and were calibrated so the series remains inside the
+observed biomass range. A naive regime-switch candidate was rejected at design time: it
+drives the state to the numerical floor within four steps and would measure floor
+behaviour rather than power.
+
+| DGP | Truth | Why it is outside the ladder's class |
+|---|---|---|
+| **D6** | Time-varying productivity: `r_t = 1.935·exp(−0.05t) + 0.35`, `K = 1032.7`, catch set to 55% of instantaneous `rK/4` | No ladder member has a time-varying `r`; every member holds productivity constant |
+| **D7** | Observation error only: state evolves noise-free at `r = 0.9`, `K = 1032.7`, `C = 180`; the scored series is that state plus Gaussian noise | The ladder treats all deviation as process noise entering the state update; here the state is deterministic and the noise is in the measurement |
+
+Calibration check at design time: both give 8 of 8 usable replicates at `σ = 33.8`, with
+series minima above 5 kt and terminal values above 20 kt.
+
+## A1.3 Second series length
+
+`T = 71`, matching Specification B (1954–2024), applied to **D1 and D5** — the strongest
+in-class process and the persistence-true null. This tests length sensitivity for both
+power and specificity without re-running every cell.
+
+## A1.4 Replicates and scoring
+
+200 seeded replicates per cell, as in the core design. `σ ∈ {11.8, 33.8}`. The retention
+rule is applied unchanged. Cells added: D6 × 2σ, D7 × 2σ, D1 at T=71 × 2σ, D5 at T=71 × 2σ
+— eight cells, 1,600 rolling-ladder passes.
+
+## A1.5 Declared interpretation, fixed before execution
+
+- **Lower bound.** True-module retention is undefined for D6 and D7, since no ladder member
+  generated the data. The measure is therefore the **false-retention rate**: the proportion
+  of replicates in which any structural module is retained. Under a misspecified truth a
+  retention is a false positive.
+- If false retention under D6 or D7 **exceeds 0.10**, the rule retains structure that is not
+  there when the truth is outside its class, and the core specificity figure of 0.97–0.99
+  is not transferable to misspecified settings. This must be reported in the abstract.
+- If false retention is **at or below 0.10**, the rule's specificity extends to
+  out-of-class truth, and the power figures of the core design may be described as bounded
+  above by the in-class result and below by nothing weaker than this.
+- **Length sensitivity.** If D1 power at `T = 71` differs from `T = 33` by more than 0.15,
+  the operating characteristics are length-dependent and every power figure must carry its
+  series length.
+
+These thresholds may not be adjusted after seeing results.
+
+## A1.6 Status
+
+**Written and locked. Not executed.**
