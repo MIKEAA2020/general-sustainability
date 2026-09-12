@@ -269,7 +269,7 @@ Predictand: J-17 annual-mean head, San Antonio Pool, 1934–2023. Ladder: autore
 | M1 | 1 | 12.84 | 13.23 | 12.57 | FAIL | — | — | — |
 | M1 | 5 | 21.25 | 21.11 | 20.05 | FAIL | — | — | — |
 
-M1 fails H2 both horizons. M2m passes H2 both horizons but fails H1 at h=1. Companion declines M2m on class grounds, since collapses to AR(1) under constant fluxes. Six margins inside 5% band: M1 h=1 2.96%, M2m h=1 4.33%, M3 h=1 1.63%, M4 h=1 1.13%, M3 h=5 0.08%, M4 h=5 0.21%.
+M1 fails H2 both horizons. M2m passes H2 both horizons but fails H1 at h=1. Companion declines M2m on class grounds, since collapses to AR(1) under constant fluxes. Six margins inside 5% band: M1 h=1 2.96%, M2m h=1 4.33%, M3 h=1 1.63%, M4 h=1 1.13%, M3 h=5 0.08%, M4 h=5 0.21%. Applying the 5% band to the groundwater analysis is a post-hoc application to a pre-registered rule without a band; no outcome changes.
 
 **Uncertainty layer:** AR(1) 0.39 ft margin interval covers zero, MAE tie, 5-year loss — coin-flip retention recorded by point-RMSE rule, not skill claim. Training mean 16.80 versus 21.11 ft interval excluding zero at h=5. Clip-binding statement reproduces both fixed-window M2 RMSEs (18.11 and 55.32 ft) exactly. Post-freeze uncertainty layer produced by seeded deterministic DM HAC + block bootstrap, independent replication deterministically reproduced, every load-bearing conclusion unchanged.
 
