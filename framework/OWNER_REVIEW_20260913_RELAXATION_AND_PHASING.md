@@ -109,7 +109,7 @@ characteristics** — and there the calibration the audits demand was executed
 (Phase K, cod): no band attains power ≥ 0.80 ∧ specificity ≥ 0.90; the frontier
 runs 0.4437/0.760 at 0% → 0.3731/0.9725 at 5% → 0.3119/1.000 at 15%; §8 reports
 it, so GPT 5's "silent retention" charge is contradicted by the paper itself.
-Edwards remains the prospective DRAFT (one owner decision pending, §4.4).
+Edwards remains the prospective DRAFT (one owner decision pending, §3.8).
 
 **Honesty completion (added to O29):** state the reported-verdict
 band-invariance explicitly, tied to the frontier — the calibration governs the
