@@ -83,3 +83,18 @@ Findings from scanning these: `JOINT_EVALUATION_TWO_AUDITS_v13.md` §5 (N1–N6)
 ## Verification
 
 SHA-256 of every extracted file was recorded at clone time (see file list above for size checks). The papers' newest-version numbers were cross-checked against the repo's `main` branch and the release tag's full tree: no newer F1/E1/E3 versions exist anywhere.
+
+---
+
+## 6. Second fetch (2026-09-13, on owner directive) + push
+
+**Pulled (newest-only, 112 files, every one verified against the repo's git blob shas; ~60 more skipped as byte-duplicates of files already here; nothing in the repo was modified):**
+- `batch 2/` E1_LANGUAGE_COMPLETENESS, E3_CLASSIFICATION_THEOREMS, WAVE_E_UPDATE; `batch 4/` E3_C63_REPAIRED, WAVE_E_RERUN, WAVE_E_SPEC_MATCH + verify scripts; `batch 5/glm/review_report_wave_e.md`; `reaudit/` verify scripts.
+- `batch 7 …/` root (JOINT_AUDIT_EVALUATION, WAVE2_IMPLEMENTATION, E2_V17_E3_V12_VERIFICATION, apply scripts), `e1_audit_2026-09/` (ROUND1–9 evaluations, V16/V17/V30–V37 changelogs, BAND_CHECK, LINE_LEVEL, MERGE_DECISION, METHODS_FRAMING, SIMULATION_RESULTS, DEFERRED_ITEMS, E2_E4_IMPORT), `source_audits/` (e1 rounds 1–9 sources, deepseek e3/e4 ×4, grok-claude e1/e3, 4 audits_v33, grok gemini upgrade), `results/e3_dm_uncertainty.csv`, waves 4–13 E1/E3 items (records, apply scripts, build_latex, logs).
+- `arena agent1/audits/` gpt+grok audit e1/e3; `arena agent 1/other documents/` WRITING_PLAN, stage_code_recovery_report; `arena agent 1/paper rewrites/` E3_E4_strengthening (IMPLEMENTED + REPORT), submission zips E1 v15 / E3 v16, aug08 survey (byte-identical to the analysis README).
+- `wave_e_cod/` admission kernel + manuscript v2 + figs; `wave_e_edwards/` data (6), readiness, manuscript v2 + figs, full `exploratory_second_pool/` (J-27 second pool: 3 records + 6 data + 9 results + 8 src).
+- `revised_articles/A014_northern_cod_revised.md`, `research_program/` A014 records ×2, repo `README.md` + `RELEASE_NOTES.md`, `tools/selftest_fixtures/sabotage1.tex`, agent-2 framework-named docs ×2.
+
+**Verified repo-wide newest:** F1 v13 (release branch only — no paperF1 on main), E1 v49, E3 v16. All shared files byte-identical to main (173 paths, 0 diffs).
+
+**Pushed:** new branch `edwards-framework-e1-audit-implementation` (HEAD `3b71317`, = main + 10 new files, nothing modified): framework v14 + apply script + changelog + register + extended joint evaluation + v13 wrappers, `wave_e_edwards/results/e3_audit_uncertainty_add_M2m_h5.json`, root MANIFEST + `AUDIT_IMPLEMENTATION_README.md`. Re-run `push_to_github.sh` after each phase (append new artifacts to its FILES list).
