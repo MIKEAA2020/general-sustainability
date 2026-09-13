@@ -101,3 +101,4 @@ SHA-256 of every extracted file was recorded at clone time (see file list above 
 - 2026-09-13 (Phase C, intermediate): pushed @ 050497a — Phase C harness (10 scripts + PHASE_C_RESULTS.md + Edwards rerun JSON); branch edwards-framework-e1-audit-implementation; main untouched.
 - 2026-09-13 (Phase C, final): pushed @ 5074700 — F1 v16 + apply_phaseC + PHASE_C_CHANGELOG + 10 campaign scripts + 24 results files (all provenance-archived); branch edwards-framework-e1-audit-implementation (4,045 blobs = main + 48); main untouched (3,997 blobs).
 - 2026-09-13 (Phase E, journal formalization): v17 written (75 asserted rules); single pinned-seed number set; journal_formalization_scan.py + content_coverage_scan.py added (0 flags); no earlier-version references in the manuscript.
+- 2026-09-13 (Phase D): v18 (22 asserted rules) — remnant/redundancy scan 91→0 (redundancy_scan.py; §6 table synced), §4.7 Prospective registration; register phases A–E all DONE.
