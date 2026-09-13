@@ -42,6 +42,9 @@ UPDATES = {
     "288.6": "288.58", "119.5": "119.47", "36.3%": "36.30%", "87.6": "87.65",
     "317.7": "317.71", "35.9%": "35.94%", "431.9": "431.90",
     "0.0358": "0.0359", "200×": "× 200", "4000": "4,000",
+    # cross-reference tokens: the groundwater section was renumbered in the
+    # restructured version (Phase J); not scientific claims
+    "5.2": "Section 4",
 }
 
 TERMS = [
@@ -60,6 +63,8 @@ def sentences(text):
     out = []
     for p in parts:
         p = p.strip()
+        if p.startswith("#"):
+            continue  # section headers: their numbering is not a numeric claim
         if p and re.search(r"\d", p):
             out.append(p)
     return out
