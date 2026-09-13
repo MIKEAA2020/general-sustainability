@@ -28,7 +28,7 @@ scanners enforce this: `journal_style_automated_scan.py`,
 | V6 | Owner interactive decisions (Phase B) | `PHASE_B_ROOT_CAUSE_DECISION_MEMO.md` | binding: AD6 adopt fully; AD2 option (a); AD4 option (b) |
 | V7 | Phase C computational campaigns | `phase_c/PHASE_C_RESULTS.md`, `PHASE_C_CHANGELOG_v15_to_v16.md` | data source for the single number set |
 | V8 | Companion-paper audits (E1/E3) | `audits_E1_E3/`, `batch 7/`, `arena agent 1/…` | no F1 edits; feed the forward cross-check (O7) |
-| V9 | **Qwen — framework journal fit** | `uploads/qwen framework journal fit.txt` | **arrived empty (0 bytes); content pending. Nothing incorporated or adjudicated from it yet — merge pipeline ready (§5).** |
+| V9 | **Qwen — framework journal fit** | `uploads/qwen framework journal fit.txt` | **received 2026-09-13 (10.5 KB), fully processed through the merge pipeline: journal targeting (IJF first, EMS second) recorded as submission strategy; 9 content items classified (below); 1 contradiction adjudicated (NEW-1); 2 owner-gated structural proposals recorded (NEW-2).** |
 
 ---
 
@@ -108,13 +108,29 @@ prospective band, Amendment procedure); remnant/redundancy scan 91 → 0 finding
 | O5 | Full registered designs: T=71 at 200 replicates; Amendment-1 eight cells × 200 (measured ≈25 CPU-hours) | Amendment 1 / §4.2 | G | computational, hardware-gated |
 | O6 | Execute the §4.7 prospective-band calibration at the first future application (Edwards 2024–2033 origins; cod Spec B 2025+ vintages) | claude 4.2 / AD4 | H | event-triggered, by design |
 | O7 | Companion cross-check when E1/E3 are finalized: every number F1 cites from them (Tables 2–5, the 32-row DM universe vs E1's 28, titles/DOIs, "Table 8 of companion" references) | V8 venues | H | event-triggered consistency pass |
+| O8 | Elevate the information-criterion result from a §4.5 table row to its own subsection with stated implications (kept within the AD4 posture: the rule is the pre-registered instrument, the band the prospective replacement) | V9-D | F2 | text, from existing numbers |
+| O9 | Co-primary IC check: re-score the archived replicates with the information criterion as a co-primary rule and report whether any verdict changes (context diagnostic, never a gate input — AD5 posture; needs the archived IC-rule definition) | V9-D (option 2) | G | computation, zero new ladder cost |
+| O10 | Class-grounds accessibility: state the general principle early (§1) and add a travelling gloss ("structural redundancy" — a module that reduces to a simpler member adds no information regardless of its score); keep the pre-registered output name "declined on class grounds" | V9-E | F | text |
+| O11 | Problem-first lead: open the abstract/§1 with the three-sentence framing (module doesn't beat the benchmark — useless module or weak test?); state the standard in one consolidated page separating standard / demonstration / simulation | V9-B, V9-C | F | text (AD6 remainder) |
+| O12 | Unpack parenthetical density: move number-dense prose into the existing tables/appendix and narrate findings in plain sentences (e.g., the Spec B deficit chains, §8's summary) | V9-F | F2 | text |
+| O13 | Reproducibility-discourse paragraph: connect pre-registration, pinned seeds, archived forecasts and §4.7 to the registered-report / pre-registration literature and M-competition protocols (citations verified at edit time) | V9-G | F | text |
+| O14 | Consolidated limitations paragraph in §7 (series length, upper bounds, two domains, M3/M4, in-class specificity) — gather the scattered caveats into one formal statement | V9-I | F | text (mostly consolidation of existing sentences) |
+| O15 | Journal targeting (submission strategy): IJF first choice, EMS second, per V9 §1; owner's decision at submission time — no manuscript edit implied | V9-J | — | strategy note |
 
-### 2.3 PENDING INPUT
+### 2.3 V9 processing record (qwen framework journal fit, received)
 
-- **V9 (qwen framework journal fit)** — file arrived empty. Merge pipeline in §5;
-  expected to map mostly onto Phase F-style items (presentation, journal conventions,
-  structure); any computational or verdict-level claim will be adjudicated before
-  implementation, exactly like AD1–AD8.
+Nine content items, classified per the §5 pipeline:
+
+- **Duplicates (already implemented):** the AD6 reframe covers most of V9-C's
+  "standard vs demonstration" separation and V9-B's problem-first lead; §4.7 covers
+  the prospective-registration point V9-G builds on; §7's "Not licensed" block covers
+  most of V9-I. These map to remainder items (O11, O13, O14), not new work.
+- **Compatible text items:** V9-E (O10), V9-F (O12), V9-G (O13), V9-I (O14).
+- **Contradiction (adjudicated NEW-1):** V9-D option 1 conflicts with the AD4 owner
+  decision; option 2 adopted (O8/O9).
+- **Owner-gated structural proposals (NEW-2):** V9-A (compression), V9-H (reorder),
+  V9-C remainder (one-page standard statement) — pending the owner's decision.
+- **Submission strategy (O15):** IJF first choice, EMS second; no manuscript edit.
 
 ---
 
@@ -138,6 +154,8 @@ prospective band, Amendment procedure); remnant/redundancy scan 91 → 0 finding
 | identification | 62.7/64.5, 25.8, 3.8 vs 61, 37/18, 1/11 | archive vs Phase C | v18 uses pinned-seed values in prose and tables | closed |
 | D6/D7, T=71 | published vs fresh values / "not executed" | archive vs Phase C | v18 carries fresh values; T=71 reported as executed | closed |
 | DM count | "5 of 32" vs E1 "four of the twenty-eight" | V5 vs E1 | N4: 24 primary + 4 comparisons = 28 | closed |
+| NEW-1 | V9-D option 1 ("present the IC as the recommended instrument for future applications") vs AD4 (owner decision: the simulation-calibrated band is the registered prospective replacement) | V9 vs owner | AD4 binds — the prospective replacement remains the band; the IC recommendation is rejected as stated. V9-D option 2 (co-primary IC check, context diagnostic) is compatible with AD5 and adopted as O8/O9 | adjudicated |
+| NEW-2 | V9-A/H/C (compress to 8–10k + supplement; reorder demonstration-before-simulation; separate standard/demonstration/simulation layers) vs the AD6 one-coordinated-rewrite rule and the no-content-loss policy | V9 vs AD6/coverage policy | not content contradictions — owner-gated structural proposals; if approved they form one coordinated structural phase (Phase J) with a supplement vehicle, guarded by the content-coverage scanner; if declined, only the text-level items (O10–O14) proceed | owner-gated |
 
 **Rule that made this possible:** every conflict was adjudicated once, recorded, and
 implemented in a single phase pass; no venue ever edited another venue's fix.
@@ -179,29 +197,37 @@ For each suggestion in a new venue:
 
 ## 6. Remaining work plan
 
-- **Phase F — text consolidation pass** (O1, O2, O3; candidate for the next version,
-  v19, whenever the owner approves; all three are text/table-only, no new computation,
-  no verdict contact):
-  - O1: one clause in the Abstract after the IC-dominance sentence: "although the
-    criterion does not encode the requirement that a module beat persistence at the
-    multi-year horizon" (mirrors §4.5).
-  - O2: replace "not second fibre of this specification" with "outside this
-    specification".
-  - O3: a climate-module table in §5.2 (module, h, RMSE vs AR(1) vs climatological
-    flux; values from the archived per-origin files; the companion's Table 8
-    reference stays).
-- **Phase G — optional computation** (O4, O5): M3/M4-as-truth cells and the full
-  200-replicate T=71 / 8×200 designs; hardware-gated (≈25 CPU-hours measured);
-  results would refine, never reverse, the reported verdicts (pre-registered
-  thresholds already stated).
-- **Phase H — event-triggered** (O6, O7): run the §4.7 calibration at the first
-  future application; run the companion cross-check when E1/E3 are finalized.
+- **Phase F — text consolidation pass → v19** (O1, O2, O3, O10, O11, O13, O14):
+  abstract IC caveat; "fibre" fix; climate-module table; class-grounds principle +
+  travelling gloss; problem-first opening + one-page standard statement;
+  reproducibility paragraph; consolidated limitations. All text/table, no verdict
+  contact, no new computation.
+- **Phase F2 — text pass → v20** (O8, O12): the IC subsection (from existing numbers;
+  written with O9's co-primary result if available) and the parenthetical-density
+  unpacking.
+- **Phase G — optional computation** (O4, O5, O9): M3/M4-as-truth cells; the full
+  200-replicate T=71 and 8×200 Amendment-1 designs (≈25 CPU-hours measured); the
+  co-primary IC check. Results refine, never reverse, the reported verdicts.
+- **Phase H — event-triggered** (O6, O7): §4.7 calibration at the first future
+  application; companion cross-check when E1/E3 finalize.
+- **Phase J — journal-fit structural pass (owner-gated, NEW-2):** if approved, ONE
+  coordinated pass applying V9-A (compress to 8–10k words, remainder to a
+  supplement), V9-H (worked examples before simulation), and the V9-C remainder;
+  guarded by the content-coverage scanner (nothing lost, only moved). Never
+  incremental patches.
 - **Perpetual guardrails:** every version passes the four scanners; register §5 and
   MANIFEST updated per phase; all artifacts pushed to
   `edwards-framework-e1-audit-implementation`; main never modified.
 
----
+## 7. Status summary
 
+Phases A–E **DONE** (v14 → v18); venues V1–V9 **all received and processed**;
+contradiction count across all venues: **27 adjudicated, zero outstanding**
+(25 earlier + NEW-1 + NEW-2, the latter owner-gated with a recorded recommendation);
+open items: **15** (O1–O15) — O1–O3, O10, O11, O13, O14 form the small text pass
+(Phase F, v19); O8, O12 a second text pass; O4, O5, O9 optional computation; O6, O7
+event-triggered; O15 submission strategy; Phase J structural work awaits the owner's
+decision on NEW-2. Nothing in V9 re-opens any reported verdict or any frozen element.
 ## 7. Status summary
 
 Phases A–E **DONE** (v14 → v18); venues V1–V8 **fully incorporated**; contradiction
