@@ -106,7 +106,7 @@ prospective band, Amendment procedure); remnant/redundancy scan 91 → 0 finding
 | O3 | Climate-module table in §5.2 (margins per module per horizon; data archived) | claude 2.3 / register item 8 (remainder) | F | **CLOSED — Phase F (v19; NEW-3)** |
 | O4 | M3/M4-as-truth operating-characteristic cells (optional in the original plan, never executed) | register §5 (optional) | G | computational, optional |
 | O5 | Full registered designs: T=71 at 200 replicates; Amendment-1 eight cells × 200 (measured ≈25 CPU-hours) | Amendment 1 / §4.2 | G | computational, hardware-gated |
-| O6 | Execute the §4.7 prospective-band calibration at the first future application (Edwards 2024–2033 origins; cod Spec B 2025+ vintages) | claude 4.2 / AD4 | H | event-triggered, by design |
+| Execute the §4.7 prospective-band calibration at the first future application (Edwards 2024–2033 origins; cod Spec B 2025+ vintages) | claude 4.2 / AD4 | H | **DATA FOUND 2026-09-13 (web search) — execution requirements recorded: Edwards: EAA Environmental Data Portal (data.edwardsaquifer.org) serves continuous J-17 levels + recharge/pumpage; 2024 annual recharge totals available since early 2026 (edwardsaquifer.net). Cod: DFO's 2026 2J3KL assessment (1 Apr 2026) published the new xteNCAM vintage — SSB ≈ 540 kt (420–700), healthy zone, quotas 18k→38k t. Execution needs: data extraction + pipeline extension + an Edwards-ladder simulator for the §8 band calibration; remains a future-application event per the registration** |
 | Companion cross-check when E1/E3 are finalized: every number F1 cites from them (Tables 2–5, the 32-row DM universe vs E1's 28, titles/DOIs, "Table 8 of companion" references) | V8 venues | H | **CLOSED — 2026-09-13 as-of current companions (E1 v49 / E3 v16 + cited archives): COMPANION_CROSSCHECK_20260913.md; NEW-4a (M1 point-rule reconciliation → v22) and NEW-4b (O9 M3/M4 archive fix) adjudicated; re-runs at E1/E3 finalization** |
 | O8 | Elevate the information-criterion result from a §4.5 table row to its own subsection with stated implications (kept within the AD4 posture: the rule is the pre-registered instrument, the band the prospective replacement) | V9-D | F2 | **CLOSED — Phase F2 (v20; written from the archived O9 result)** |
 | O9 | Co-primary IC check: re-score the archived replicates with the information criterion as a co-primary rule and report whether any verdict changes (context diagnostic, never a gate input — AD5 posture; needs the archived IC-rule definition) | V9-D (option 2) | G | **CLOSED — Phase G (2026-09-13): archived o9_ic_coprimary_20260913.json; instrument validated cell-by-cell vs identification_limit_20260913.json; cod agrees, Edwards selects M2m — the gates are load-bearing against the IC** |
@@ -117,6 +117,7 @@ prospective band, Amendment procedure); remnant/redundancy scan 91 → 0 finding
 | O14 | Consolidated limitations paragraph in §7 (series length, upper bounds, two domains, M3/M4, in-class specificity) — gather the scattered caveats into one formal statement | V9-I | F | **CLOSED — Phase F (v19)** |
 | O15 | Journal targeting (submission strategy): IJF first choice, EMS second, per V9 §1; owner's decision at submission time — no manuscript edit implied | V9-J | — | strategy note |
 | O16 | Deeper V9-A compression (main text 10.7k → 8–10k words by further movement to the supplement) | V9-A remainder | — | optional, owner-gated |
+| O17 | V9-G remainder: name the M4/M5 competition protocols in the reproducibility paragraph + M5 reference | V9-G | F | **CLOSED — Phase O17 (v23, 2 rules)** |
 
 ### 2.3 V9 processing record (qwen framework journal fit, received)
 
@@ -132,6 +133,21 @@ Nine content items, classified per the §5 pipeline:
 - **Owner-gated structural proposals (NEW-2):** V9-A (compression), V9-H (reorder),
   V9-C remainder (one-page standard statement) — pending the owner's decision.
 - **Submission strategy (O15):** IJF first choice, EMS second; no manuscript edit.
+
+**V9 final disposition (2026-09-13).** All nine content items closed. O17
+(M4/M5 protocols) implemented in v23. Three V9-A sub-proposals are **declined
+with recorded reasons**, not open items: (1) moving the simulation to a
+supplement — contradicts the paper's own structure, where the
+operating-characteristic study is the standard's third mandatory component and
+Section 6 is its report; (2) compressing the cod domain to the comparison
+table alone — the cod worked example is already short and is the standard's
+demonstration on a second domain; (3) the residual 8–10k-word compression —
+owner-gated O16, excluded by owner direction 2026-09-13. V9-D's prediction
+("verdicts likely unchanged under the co-primary IC") was tested empirically:
+unchanged on both cod objects, but on Edwards the IC would retain the
+class-grounds-declined M2m — the divergence lands exactly where Section 4
+shows the gates to be load-bearing, which strengthens the standard more deeply
+than V9 anticipated.
 
 ---
 
@@ -232,7 +248,7 @@ For each suggestion in a new venue:
 Phases A–E **DONE** (v14 → v18); venues V1–V9 **all received and processed**;
 contradiction count across all venues: **27 adjudicated, zero outstanding**
 (25 earlier + NEW-1 + NEW-2, the latter owner-gated with a recorded recommendation);
-open items: **15** (O1–O15) — O1–O3, O10, O11, O13, O14 form the small text pass
+open items: **17 recorded** (O1–O17), of which 16 closed; only O4/O5 (owner-excluded, hardware-gated), O6 (data found, execution is a future-application event), and O16 (owner-excluded) remain non-closed — O1–O3, O10, O11, O13, O14 form the small text pass
 (Phase F, v19); O8, O12 a second text pass; O4, O5, O9 optional computation; O6, O7
 event-triggered; O15 submission strategy; Phase J structural work awaits the owner's
 decision on NEW-2. Nothing in V9 re-opens any reported verdict or any frozen element.
