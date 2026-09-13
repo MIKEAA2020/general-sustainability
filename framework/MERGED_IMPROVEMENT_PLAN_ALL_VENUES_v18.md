@@ -351,3 +351,27 @@ adopted as an adoption ladder consistent with the mandatory-OC component
 (NEW-14); Phase J structure stands, further compression = O16 (NEW-15); "power"
 keeps its defined usage (NEW-16); DM-to-supplement = O16 remainder (NEW-17).
 Contradiction count: 43 adjudicated, 0 outstanding.
+
+### Owner review 2026-09-13 (NEW-18, NEW-19) — see OWNER_REVIEW_20260913_RELAXATION_AND_PHASING.md
+
+- **NEW-18 (owner):** restructuring to supplementary is approved when merited.
+  Unblocks the merited subset of NEW-17/O16: DM mechanics of the §4/§5
+  uncertainty layers move to S1 (new S1.4); main text keeps the descriptive
+  label, the "verdicts do not rest on DM statistics" sentence, and the one
+  decision-relevant statement per domain (§4: 4.33% gate vs 3.8% environment
+  sensitivity; §5: one-line label). O16's full 8–10k compression recorded
+  not-merited (would cut decision-relevant evidence). §6.5 IC co-primary block,
+  §3 Table 2b template, §7 table, §8 frontier stay. O36 (abstract compression)
+  remains owner-gated with a concrete proposal in the memo.
+- **NEW-19 (review record):** relaxation test of every frozen pre-registration
+  and spec rule, criteria = honesty + root cause. Verdict: none merits relaxing
+  (5% band: verdicts band-invariant per §1/§4/§5, calibration executed for cod,
+  frontier disclosed; output vocabulary: O27 guide inside frozen labels; ladder:
+  O24 scopes interpretation; class grounds: prospective criterion proposed;
+  "power": O39 disambiguation; executed calibration: no surviving flaw claim).
+  O29 extended: reported-verdict band-invariance statement + decision-based
+  margin as admissible alternative ("practical-equivalence margin" umbrella, no
+  component rename). O19 gained a concrete prospective criterion proposal
+  (owner approval pending; mirrors the AD4 machinery). One pending owner
+  decision on the Edwards DRAFT: E2m class-grounds convention (with-decline
+  proposed). Contradiction count unchanged: 43 adjudicated, 0 outstanding.
