@@ -109,3 +109,4 @@ SHA-256 of every extracted file was recorded at clone time (see file list above 
 - 2026-09-13 (O7): companion cross-check (COMPANION_CROSSCHECK_20260913.md) → v22_restructured (NEW-4a M1 reconciliation) + O9 archive fix (NEW-4b). E1/E3 finalization re-run trigger registered. v21 frozen.
 - 2026-09-13 (O17): v23 (M4/M5 protocols + M5 ref; V9 fully closed). O6 data-availability recorded from web search (EAA portal; DFO 2026 assessment). v22 frozen.
 - 2026-09-13 (Phase K): O6 executed — cod band calibration (no band attains both targets; 5% retained; v24 §8); Edwards calibration DRAFT sheet (owner-gated); companion venues V10 (CV1–CV5). v23 frozen.
+- 2026-09-13 (V11): joint evaluation of humanized rewrites (JOINT_EVALUATION_HUMANIZED_REWRITES_V11.md) → v25_restructured; M4 citation fixed (61 methods); Gemini unarchived numbers and fabricated refs rejected. v24 frozen.

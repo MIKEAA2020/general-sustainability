@@ -279,3 +279,30 @@ frozen element, and none re-opens a reported verdict.
 No contradiction check failures: CV1 uses the same origin-matched convention F1
 already reports; CV2/CV3 are E1-internal; CV4/CV5 are governance/open-list
 records. When E1/E3 are finalized, O7 re-runs and this section updates.
+
+---
+
+## 9. Venue V11 — humanized rewrites (Grok + Gemini), 2026-09-13
+
+Received two full humanized rewrites of v24. Drift-audited before adoption:
+Grok — 0 fabricated numeric tokens, all 20 content headers, all adjudicated
+strings → **adopted as the v25 base** (frozen `v25_source_grok_rewrite.md`).
+Gemini — 28 unarchived/invented numbers, fabricated companion titles and
+swapped Zenodo labels, reference swaps, table renumbering → harvested
+selectively, everything else rejected.
+
+| ID | Adjudication |
+|---|---|
+| V11-adopt | Base = Grok rewrite; §6.4 bolded topic sentences; sentence-level humanization throughout |
+| V11-adopt | Gemini abstract forward-reference: the criterion applied alone would retain the structurally redundant module the standard withholds (O9-consistent) |
+| V11-adopt | Gemini §2.3 derivation: constant training-mean fluxes fold into a single intercept, leaving an affine autoregression |
+| NEW-5 | **Fixed:** M4 reference "54 methods" → "61 forecasting methods" (published IJF 36(1) title, verified against the publisher record) |
+| NEW-6 | **Rejected:** Gemini's fabricated companion titles and E1/E3 Zenodo label swap — O7-verified titles/DOIs stand |
+| NEW-7 | **Rejected:** Gemini's unarchived numbers (M1 CI [−0.954, +0.180]; oracle 10.865; 612.5 ft) — no unarchived number enters the paper |
+| NEW-8 | **Rejected:** Gemini's Carvalho/Kell reference swaps (different real papers) |
+| NEW-9 | **Rejected:** Gemini's M5 title ("Background, organization, and results") — cited paper is "M5 accuracy competition: results, findings, and conclusions", IJF 38(4), 1346–1364 |
+| V11-fix | Grok-base regressions caught by the scanners and fixed in v25: verbatim repetition reintroduced (§9 sentences), ≈ spacing, Diebold–Mariano hyphen |
+
+Result: v25_restructured (8 asserted rules over the frozen base); numeric drift
+v24→v25 = none (386 = 386 tokens); all scanners green; coverage clean.
+Evaluation: `JOINT_EVALUATION_HUMANIZED_REWRITES_V11.md`.
