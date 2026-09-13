@@ -11,6 +11,10 @@ fresh CSVs and replace or disclose any that fail to reproduce (register item N1)
 - **Estimator/map/scorer are imported, never reimplemented.** All campaigns import
   `run_ladder` from `wave_e_cod/src/run_ladder.py` (the frozen registered code) — same module the
   author's `tools/sim_retention_power.py` imports.
+- **Repo cross-reference.** The workspace copies of every imported file (both `run_ladder.py`
+  modules, `e3_audit_uncertainty.py`, both `sim_*.py` generators — all 29 `src` files) are
+  byte-identical to the files on the repository: git blob shas match on `main`, on the release
+  branch and on the implementation branch. Mapping table: `PROVENANCE_REPO_CROSSREF.md`.
 - **Pinned randomness.** Every campaign runs under `PYTHONHASHSEED=0` and seeds each replicate
   with the author's original scheme `abs(hash((dgp, sigma, rep))) % 2**31`. The published and
   zip-CSV runs used process-salted hash seeds (unknown PYTHONHASHSEED); this run is reproducible
