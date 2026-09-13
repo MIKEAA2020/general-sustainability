@@ -118,16 +118,19 @@ def run_cell(dname, dgp, sigma, reps):
 
 def main():
     t_start = time.time()
-    all_rows, times = [], {}
+    times = {}
+    written = False
     for dname, dgp in DGPS.items():
         for sigma in SIGMAS:
             reps = REPS.get(dname, 100)
             rows, dt = run_cell(dname, dgp, sigma, reps)
-            all_rows += rows
+            part = pd.DataFrame(rows)
+            part.to_csv(OUT, index=False, mode="w" if not written else "a",
+                        header=not written)
+            written = True
             times[f"{dname}_s{sigma}"] = dict(reps=len({r['rep'] for r in rows}), wall_s=round(dt, 1))
             print(f"  done {dname} sigma={sigma} n={len({r['rep'] for r in rows})} {dt:.0f}s", flush=True)
-    df = pd.DataFrame(all_rows)
-    df.to_csv(OUT, index=False)
+    df = pd.read_csv(OUT)
     prov = {
         "campaign": "sim_retention_power", "run": "20260913", "pyhashseed": os.environ.get("PYTHONHASHSEED"),
         "started_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),

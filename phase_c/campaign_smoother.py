@@ -26,7 +26,10 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import campaign_power as cp  # noqa: E402
 
 OUT = os.path.join(WS, "phase_c", "results", "smoother_test_20260913.csv")
-REPS = 100
+# Phase C scaling: 30 reps/arm (D1-like ladder passes measured at 14.6-16.7 s/pass
+# under dual load; the 100-rep first attempt was killed at the smoother stage to
+# keep the campaign within budget). Binomial CIs disclosed with every rate.
+REPS = 30
 T = 33
 DGP_NAME = "D1_M1_collapse"
 DGP = cp.DGPS[DGP_NAME]
@@ -55,6 +58,7 @@ def score_series(years, S, C):
 def main():
     t_start = time.time()
     all_rows = []
+    written = False
     for sigma in (11.8, 33.8):
         for rep in range(REPS):
             seed = abs(hash((DGP_NAME, sigma, rep))) % (2 ** 31)
@@ -75,8 +79,12 @@ def main():
                                          persist_h1=persist[1], persist_h5=persist[5],
                                          retained=cp.retained(scores, persist, m)))
         print(f"  done smoother sigma={sigma}", flush=True)
-    df = pd.DataFrame(all_rows)
-    df.to_csv(OUT, index=False)
+        part = pd.DataFrame(all_rows)
+        part.to_csv(OUT, index=False, mode="w" if not written else "a",
+                    header=not written)
+        written = True
+        all_rows = []
+    df = pd.read_csv(OUT)
     prov = {
         "campaign": "smoother_test", "run": "20260913", "reps": REPS,
         "pyhashseed": os.environ.get("PYTHONHASHSEED"),

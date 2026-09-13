@@ -23,8 +23,13 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import campaign_power as cp  # noqa: E402  (MODULES, COMPARATOR, TIE, HORIZONS, persistence_rmse, retained)
 
 OUT = os.path.join(WS, "phase_c", "results", "sim_misspecified_20260913.csv")
-REPS_D67 = 100
-REPS_T71 = 50
+# Phase C scaling (trimmed after timing measurement): D6/D7 @30, T71 @10 reps.
+# Measured contended per-pass costs: D6 ~19-29 s, D7 ~17-21 s, D1_T71 ~95-99 s,
+# D5_T71 ~13-25 s (the author's published 45.6 s/pass T=71 benchmark is optimistic
+# for these series). First attempt (D6/D7 @100, T71 @50) was killed after 2.5 h with
+# D6+D7 complete but unwritten; rates below carry honest binomial CIs.
+REPS_D67 = 30
+REPS_T71 = 10
 
 
 def gen_D6(rng, T, sigma):
@@ -95,14 +100,16 @@ def run_cell(name, gen, T, truth, reps):
 
 def main():
     t_start = time.time()
-    all_rows, times = [], {}
+    written_cols = False
     for name, gen, T, truth, reps in CELLS:
         rows, dt = run_cell(name, gen, T, truth, reps)
-        all_rows += rows
-        times[name] = dict(wall_s=round(dt, 1))
-        print(f"  done {name} T={T} {dt:.0f}s", flush=True)
-    df = pd.DataFrame(all_rows)
-    df.to_csv(OUT, index=False)
+        part = pd.DataFrame(rows)
+        # incremental flush: no progress is ever lost to a kill again
+        part.to_csv(OUT, index=False, mode="w" if not written_cols else "a",
+                    header=not written_cols)
+        written_cols = True
+        print(f"  done {name} T={T} {dt:.0f}s -> {len(part)} rows appended", flush=True)
+    df = pd.read_csv(OUT)
     prov = {
         "campaign": "sim_misspecified", "run": "20260913",
         "pyhashseed": os.environ.get("PYTHONHASHSEED"),

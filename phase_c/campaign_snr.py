@@ -22,7 +22,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import campaign_power as cp  # noqa: E402
 
 OUT = os.path.join(WS, "phase_c", "results", "sim_snr_sweep_20260913.csv")
-REPS = 60
+# Phase C scaling: 25 reps/cell (disclosed; CI halfwidth ~0.20)
+REPS = 25
 SWEEP = [("D1_M1_collapse", (5.0, 20.0, 45.0)),
          ("D3_M2_stockflow", (5.0,)),
          ("D4_M1b_depens", (5.0,))]
@@ -31,7 +32,9 @@ SWEEP = [("D1_M1_collapse", (5.0, 20.0, 45.0)),
 def main():
     t_start = time.time()
     years = np.arange(1983, 1983 + 33)
-    rows, times = [], {}
+    rows = []
+    times = {}
+    written = False
     for dname, sigmas in SWEEP:
         dgp = cp.DGPS[dname]
         for sigma in sigmas:
@@ -58,8 +61,12 @@ def main():
                                      retained=cp.retained(scores, persist, m)))
             times[f"{dname}_s{sigma}"] = round(time.time() - t0, 1)
             print(f"  done snr {dname} sigma={sigma} {time.time() - t0:.0f}s", flush=True)
-    df = pd.DataFrame(rows)
-    df.to_csv(OUT, index=False)
+            part = pd.DataFrame(rows)
+            part.to_csv(OUT, index=False, mode="w" if not written else "a",
+                        header=not written)
+            written = True
+            rows = []
+    df = pd.read_csv(OUT)
     prov = {
         "campaign": "sim_snr_sweep", "run": "20260913", "reps": REPS,
         "pyhashseed": os.environ.get("PYTHONHASHSEED"),

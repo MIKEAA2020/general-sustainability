@@ -27,7 +27,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import campaign_power as cp  # noqa: E402
 
 OUT = os.path.join(WS, "phase_c", "results", "sim_origins_20260913.csv")
-REPS = 40
+# Phase C scaling: 25 reps/cell (binomial CI halfwidth ~0.20 for rates near 0.5,
+# ~0.10 near 0.1/0.9); full 200-rep design registered for larger hardware.
+REPS = 25
 CELLS = ["D1_M1_collapse", "D2_M1_recovery", "D3_M2_stockflow", "D4_M1b_depens",
          "D5_persist_null"]
 
@@ -36,6 +38,7 @@ def main():
     t_start = time.time()
     rows = []
     times = {}
+    written = False
     for dname in CELLS:
         dgp = cp.DGPS[dname]
         for sigma in (11.8, 33.8):
@@ -74,8 +77,12 @@ def main():
                                          band_retained=False))
             times[f"{dname}_s{sigma}"] = round(time.time() - t0, 1)
             print(f"  done origins {dname} sigma={sigma} {time.time() - t0:.0f}s", flush=True)
-    out_df = pd.DataFrame(rows)
-    out_df.to_csv(OUT, index=False)
+            part = pd.DataFrame(rows)
+            part.to_csv(OUT, index=False, mode="w" if not written else "a",
+                        header=not written)
+            written = True
+            rows = []
+    out_df = pd.read_csv(OUT)
     prov = {
         "campaign": "sim_origins", "run": "20260913", "reps": REPS,
         "pyhashseed": os.environ.get("PYTHONHASHSEED"),

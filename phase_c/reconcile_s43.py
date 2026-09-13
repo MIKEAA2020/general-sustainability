@@ -46,7 +46,10 @@ PUB = {
 
 
 def fresh_power_df():
-    df = pd.read_csv(os.path.join(R, "sim_retention_power_20260913.csv"))
+    path = os.path.join(R, "sim_retention_power_20260913.csv")
+    if not os.path.exists(path):
+        return {}
+    df = pd.read_csv(path)
     out = {}
     for (d, s), g in df.groupby(["dgp", "sigma"]):
         truth = g.truth.iloc[0]
@@ -57,7 +60,10 @@ def fresh_power_df():
 
 
 def fresh_miss_df():
-    df = pd.read_csv(os.path.join(R, "sim_misspecified_20260913.csv"))
+    path = os.path.join(R, "sim_misspecified_20260913.csv")
+    if not os.path.exists(path):
+        return {}
+    df = pd.read_csv(path)
     out = {}
     for (c, s), g in df.groupby(["cell", "sigma"]):
         truth = g.truth.iloc[0]

@@ -98,3 +98,4 @@ SHA-256 of every extracted file was recorded at clone time (see file list above 
 **Verified repo-wide newest:** F1 v13 (release branch only — no paperF1 on main), E1 v49, E3 v16. All shared files byte-identical to main (173 paths, 0 diffs).
 
 **Pushed:** new branch `edwards-framework-e1-audit-implementation` (HEAD `3b71317`, = main + 10 new files, nothing modified): framework v14 + apply script + changelog + register + extended joint evaluation + v13 wrappers, `wave_e_edwards/results/e3_audit_uncertainty_add_M2m_h5.json`, root MANIFEST + `AUDIT_IMPLEMENTATION_README.md`. Re-run `push_to_github.sh` after each phase (append new artifacts to its FILES list).
+- 2026-09-13 (Phase C, intermediate): pushed @ 050497a — Phase C harness (10 scripts + PHASE_C_RESULTS.md + Edwards rerun JSON); branch edwards-framework-e1-audit-implementation; main untouched.

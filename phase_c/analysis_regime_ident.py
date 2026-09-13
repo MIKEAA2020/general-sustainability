@@ -107,7 +107,11 @@ def main():
     print(json.dumps(ident, indent=2))
 
     # ---- 3. training-window profile ----
-    orig = pd.read_csv(os.path.join(R, "sim_origins_20260913.csv"))
+    orig_path = os.path.join(R, "sim_origins_20260913.csv")
+    if not os.path.exists(orig_path):
+        print("\n=== training-window profile: sim_origins CSV not ready yet — skipped ===")
+        return
+    orig = pd.read_csv(orig_path)
     prof = []
     for dname in ["D1_M1_collapse", "D3_M2_stockflow"]:
         for sigma in (11.8, 33.8):
