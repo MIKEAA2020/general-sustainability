@@ -81,7 +81,7 @@ objects = [
     ("edwards_J17", 90, [
         ("persistence", 0, 13.230), ("M1_AR_affine", 2, 12.839),
         ("M2_stockflow", 2, 14.698), ("M2m_climatological-flux_map", 2, 12.283),
-        ("M3_residual", 3, 12.483), ("M4_delay", 3, 12.624)]),
+                ("M3_residual", 3, 14.46), ("M4_delay", 3, 14.30)]),
 ]
 for name, n, mods in objects:
     vals = {m: n * math.log(max(rmse, 1e-6) ** 2) + 2 * k for m, k, rmse in mods}
@@ -96,10 +96,11 @@ out = {"part1_simulation": part1, "part2_scored_objects": part2,
                 "validation against identification_limit_20260913.json); D5 false "
                 "identification = a structural module's IC beats persistence under "
                 "persistence truth. Part 2 uses the paper's published rolling h=1 "
-                "RMSEs (Section 5) and origin counts (33/71/90). Cod Spec A M1b "
+                "RMSEs (Sections 4 and 5) and origin counts (33/71/90). Cod Spec A M1b "
                 "114.80 is the closest structural module; the others are strictly "
-                "worse, so the check is decisive. Edwards M3/M4 RMSEs derived from "
-                "the paper's comparator margins (+1.63%, +1.13%).")}
+                "worse, so the check is decisive. Edwards M3/M4 RMSEs from the "
+                "companion's Table 4 (14.46/14.30; the paper's 1.63%/1.13% margins "
+                "are versus M2/M3).")}
 json.dump(out, open("phase_c/results/o9_ic_coprimary_20260913.json", "w"),
           indent=1)
 
