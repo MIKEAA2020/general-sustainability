@@ -319,28 +319,28 @@ claim verified against v25 and the archives; 8 contradictions adjudicated
 
 | ID | Item | Origin | Phase | Feasibility |
 |---|---|---|---|---|
-| O18 | Standalone two-page specification + checklist (the deliverable, not a summary) | qwen 3.1 / gpt 1,3 | L | text/artifact, now |
+| O18 | Standalone two-page specification + checklist (the deliverable, not a summary) | qwen 3.1 / gpt 1,3 | L | **CLOSED — Phase L (v26)** |
 | O19 | Formal class-grounds criterion — prospective only (pre-registration keeps the declared judgement for reported verdicts; NEW-13) | qwen 3.2 | owner | prospective |
 | O20 | IC instruments on the existing archive: IC at h=5; multi-horizon penalised criterion; IC-ranking + rule-gates hybrid (both audits' #1 technical item) | qwen 3.3 / gpt 4 | M | archive computation, now |
 | O21 | Additional out-of-class DGPs (threshold / regime switch / non-stationary mean) | qwen 3.4 / gpt 2.3 | G | computational, owner-gated |
-| O22 | Register the third-domain requirements prospectively in §8 (what it must look like; not executed here) | qwen 3.5 | L | text, now |
+| O22 | Register the third-domain requirements prospectively in §8 (what it must look like; not executed here) | qwen 3.5 | L | **CLOSED — Phase L (v26)** |
 | O23 | Forecast-comparison and multiple-testing literature: paragraph + framework comparison table (White 2000; Hansen 2005; Hansen–Lunde–Nason 2011; Giacomini–White 2006; Clark–West 2007; equivalence testing; FDR) — citations verified at edit time | qwen 3.6 / gpt 7 | O | text, after citation verification |
-| O24 | Negative-certificate scoping: N0–N3 claim-strength taxonomy, expiry/invalidation conditions, combining rules | qwen 3.7 / gpt 3 | L | text, now |
-| O25 | Decision-context paragraph per domain (who decides, what a non-retention implies operationally) | qwen 3.9 | L | text, now |
+| O24 | Negative-certificate scoping: N0–N3 claim-strength taxonomy, expiry/invalidation conditions, combining rules | qwen 3.7 / gpt 3 | L | **CLOSED — Phase L (v26)** |
+| O25 | Decision-context paragraph per domain (who decides, what a non-retention implies operationally) | qwen 3.9 | L | **CLOSED — Phase L (v26)** |
 | O26 | Minimal reproduction package (one script: archived data → rule → gate decomposition + 20 D1/D5 replicates, runs in under an hour) | qwen 3.10 / gpt 9 | N | artifact, now |
-| O27 | Two-axis reading guide (predictive result × structural interpretation; NEW-11) + clarifying sentence: the M2m decline is a ladder-membership verdict, its predictive margin remains reported | gpt 2 | L | text, now |
+| O27 | Two-axis reading guide (predictive result × structural interpretation; NEW-11) + clarifying sentence: the M2m decline is a ladder-membership verdict, its predictive margin remains reported | gpt 2 | L | **CLOSED — Phase L (v26)** |
 | O28 | Reference implementation of the gates (stable interface, gate decomposition, certificate output) + YAML negative-certificate schema | gpt 3 | N | artifact, now |
-| O29 | §6.4/§8 epistemic-consequence sentence ("non-retention descriptive rather than evidential for the affected classes") + decision-based margin as an admissible alternative basis (NEW-10; AD4 stands) | gpt 5 | L | text, now |
+| O29 | §6.4/§8 epistemic-consequence sentence ("non-retention descriptive rather than evidential for the affected classes") + decision-based margin as an admissible alternative basis (NEW-10; AD4 stands) | gpt 5 | L | **CLOSED — Phase L (v26)** |
 | O30 | Exact counts + binomial (Wilson) intervals for every published power/specificity/misattribution rate | gpt 2.2 | M | archive computation, now |
 | O31 | More misspecification DGPs (merged with O21) | gpt 2.3 | G | computational |
 | O32 | Formal identification decomposition P(retain truth) = P(rank 1) × P(baseline|rank 1) × P(gates|…) from archived components; plus regret/false-attribution metrics | gpt 2.4 | M | archive computation, now |
-| O33 | Tiered adoption guidance (core / evidential / strong non-retention; NEW-14) in §9 | gpt 4.1 | L | text, now |
+| O33 | Tiered adoption guidance (core / evidential / strong non-retention; NEW-14) in §9 | gpt 4.1 | L | **CLOSED — Phase L (v26)** |
 | O34 | Independent third-party application + usability study (post-release) | gpt 4.2 / qwen 3.5 | H | event |
 | O35 | "Proposed" in the title (abstract already says "proposes"; title tweak only) | gpt 4.3 | owner | owner-gated |
 | O36 | Abstract compression (full-findings abstract is a lineage design choice) | gpt 6 | owner | owner-gated (NEW-15) |
-| O37 | "Portable and domain-free" → moderated phrasing for the obligations | gpt 8 | L | text, now |
-| O38 | Abstract "worked unchanged" parenthetical pointing to the §4 rule-version disclosure | gpt 8 | L | text, now |
-| O39 | Three-quantity terminology sentence (model-class identification / predictive selection / mechanism attribution; "power" keeps its §6.1 definition — NEW-16) | gpt 8 | L | text, now |
+| O37 | "Portable and domain-free" → moderated phrasing for the obligations | gpt 8 | L | **CLOSED — Phase L (v26)** |
+| O38 | Abstract "worked unchanged" parenthetical pointing to the §4 rule-version disclosure | gpt 8 | L | **CLOSED — Phase L (v26)** |
+| O39 | Three-quantity terminology sentence (model-class identification / predictive selection / mechanism attribution; "power" keeps its §6.1 definition — NEW-16) | gpt 8 | L | **CLOSED — Phase L (v26)** |
 
 ### NEW-10…NEW-17 (adjudicated)
 
@@ -375,3 +375,6 @@ Contradiction count: 43 adjudicated, 0 outstanding.
   (owner approval pending; mirrors the AD4 machinery). One pending owner
   decision on the Edwards DRAFT: E2m class-grounds convention (with-decline
   proposed). Contradiction count unchanged: 43 adjudicated, 0 outstanding.
+
+
+**Phase L executed 2026-09-13 → v26_restructured** (apply_phaseL_v25_to_v26.py, 16 rules; PHASE_L_CHANGELOG_v25_to_v26.md): O18 (S2 two-page specification + checklist), O22 (§8 third-domain registration), O24 (§2.2 N0–N3 + expiry/combining), O25 (§4/§5 decision-context paragraphs), O27 (§6.4 two-axis reading guide + §4 M2m sentence), O29 (+NEW-19 band-invariance and decision-based margin), O33 (§9 adoption tiers), O37/O38/O39 wording, NEW-18 (DM mechanics → S1.4). Numeric accounting: 0 added, 13 removed = exactly the moved DM tokens (all in S1.4). Scanners green; coverage pair clean vs v0/v13. v25 frozen. Remaining: O19 (owner approval), O20/O30/O32 (M), O26/O28 (N), O23 (O).
