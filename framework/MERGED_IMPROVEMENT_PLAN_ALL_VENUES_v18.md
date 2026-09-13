@@ -106,7 +106,7 @@ prospective band, Amendment procedure); remnant/redundancy scan 91 → 0 finding
 | O3 | Climate-module table in §5.2 (margins per module per horizon; data archived) | claude 2.3 / register item 8 (remainder) | F | **CLOSED — Phase F (v19; NEW-3)** |
 | O4 | M3/M4-as-truth operating-characteristic cells (optional in the original plan, never executed) | register §5 (optional) | G | computational, optional |
 | O5 | Full registered designs: T=71 at 200 replicates; Amendment-1 eight cells × 200 (measured ≈25 CPU-hours) | Amendment 1 / §4.2 | G | computational, hardware-gated |
-| Execute the §4.7 prospective-band calibration at the first future application (Edwards 2024–2033 origins; cod Spec B 2025+ vintages) | claude 4.2 / AD4 | H | **DATA FOUND 2026-09-13 (web search) — execution requirements recorded: Edwards: EAA Environmental Data Portal (data.edwardsaquifer.org) serves continuous J-17 levels + recharge/pumpage; 2024 annual recharge totals available since early 2026 (edwardsaquifer.net). Cod: DFO's 2026 2J3KL assessment (1 Apr 2026) published the new xteNCAM vintage — SSB ≈ 540 kt (420–700), healthy zone, quotas 18k→38k t. Execution needs: data extraction + pipeline extension + an Edwards-ladder simulator for the §8 band calibration; remains a future-application event per the registration** |
+| O6 | Execute the prospective-band calibration at the first future application (Edwards 2024–2033 origins; cod Spec B 2025+ vintages) | claude 4.2 / AD4 | H | **EXECUTED 2026-09-13 (Phase K) — cod calibration on the pinned-seed archive: no band attains power≥0.80 and specificity≥0.90 (power identification-limited: 0.444→0.312 over 0–15%) → frontier reported, 5% band retained (v24 §8; o6_cod_band_calibration_20260913.json). Edwards: draft calibration sheet registered (owner-gated; no runs until approval); origin-2024 inputs archived (2024/2025 panel). Cod Spec B: origin 2025 scores at the 2027 vintage. Full 200-rep T=71 frontier remains O5.** |
 | Companion cross-check when E1/E3 are finalized: every number F1 cites from them (Tables 2–5, the 32-row DM universe vs E1's 28, titles/DOIs, "Table 8 of companion" references) | V8 venues | H | **CLOSED — 2026-09-13 as-of current companions (E1 v49 / E3 v16 + cited archives): COMPANION_CROSSCHECK_20260913.md; NEW-4a (M1 point-rule reconciliation → v22) and NEW-4b (O9 M3/M4 archive fix) adjudicated; re-runs at E1/E3 finalization** |
 | O8 | Elevate the information-criterion result from a §4.5 table row to its own subsection with stated implications (kept within the AD4 posture: the rule is the pre-registered instrument, the band the prospective replacement) | V9-D | F2 | **CLOSED — Phase F2 (v20; written from the archived O9 result)** |
 | O9 | Co-primary IC check: re-score the archived replicates with the information criterion as a co-primary rule and report whether any verdict changes (context diagnostic, never a gate input — AD5 posture; needs the archived IC-rule definition) | V9-D (option 2) | G | **CLOSED — Phase G (2026-09-13): archived o9_ic_coprimary_20260913.json; instrument validated cell-by-cell vs identification_limit_20260913.json; cod agrees, Edwards selects M2m — the gates are load-bearing against the IC** |
@@ -248,7 +248,7 @@ For each suggestion in a new venue:
 Phases A–E **DONE** (v14 → v18); venues V1–V9 **all received and processed**;
 contradiction count across all venues: **27 adjudicated, zero outstanding**
 (25 earlier + NEW-1 + NEW-2, the latter owner-gated with a recorded recommendation);
-open items: **17 recorded** (O1–O17), of which 16 closed; only O4/O5 (owner-excluded, hardware-gated), O6 (data found, execution is a future-application event), and O16 (owner-excluded) remain non-closed — O1–O3, O10, O11, O13, O14 form the small text pass
+open items: **17 recorded** (O1–O17), of which 16 closed; O4/O5 and O16 remain owner-excluded, and O6 is executed for cod with the Edwards calibration sheet owner-gated and Spec B origin 2025 pending the 2027 vintage — O1–O3, O10, O11, O13, O14 form the small text pass
 (Phase F, v19); O8, O12 a second text pass; O4, O5, O9 optional computation; O6, O7
 event-triggered; O15 submission strategy; Phase J structural work awaits the owner's
 decision on NEW-2. Nothing in V9 re-opens any reported verdict or any frozen element.
@@ -259,3 +259,23 @@ count across all venues: **25 adjudicated, zero outstanding**; open items: **7**
 (O1–O7), of which O1–O3 are a small optional text pass, O4–O5 optional computation,
 O6–O7 event-triggered. Venue V9 (qwen framework journal fit) is **pending content** —
 the pipeline above folds it in without re-opening anything.
+
+---
+
+## 8. Companion venues (V10) — remaining points, adjudicated (2026-09-13)
+
+Scan of the E1/E3 companion venues for remaining improvement points. All are
+companion-side or governance items — none contradicts any F1 adjudication or
+frozen element, and none re-opens a reported verdict.
+
+| ID | Point | Source | Adjudication |
+|---|---|---|---|
+| CV1 | Promote origin-matched persistence into E1 Tables 6–8 as the primary column; demote all-origin baselines to an audit table (T8, marked "Remaining"; values from rolling_forecasts.csv / xte_rolling_forecasts.csv, never retyped) | E1_TIER3_RESTRUCTURING_PLAN.md | owner-gated E1 edit; **aligns with F1** (F1's Tables 2/3 already carry origin-matched as primary) — no contradiction |
+| CV2 | E1 Tier-3 deliberate one-pass restructure (T1 highlights block, T8, etc.) | E1_TIER3_RESTRUCTURING_PLAN.md | owner-gated; E1's own plan defers it to a single pass; F1's O7 cross-check re-runs at E1 finalization |
+| CV3 | E1 v49 DM table row A h1 M4vM3 prints z=1.21, [4.4, 134.4] (coarse-regime pass, M4 195.6) while the annual-landings replication archives z=0.99, [4.7, 144.7] (M4 206.3); F1's numbers match the cited replication | COMPANION_CROSSCHECK_20260913.md (O7) | companion-side reconciliation at E1 finalization; F1 verified against its cited archive — no F1 edit |
+| CV4 | TCS-1.1 migration — registered as an open Wave-0 obligation with checklist; deliberately not executed (scoping decision recorded) | TRANSFER_AUDIT_RESPONSE.md | governance item; record only — not paper content |
+| CV5 | Per-paper DEFERRED open lists (e.g., U4 belief-space kernel; each paper's declared open list) | joint_assessment_wave5.md | stay on their declared lists; none is F1-relevant |
+
+No contradiction check failures: CV1 uses the same origin-matched convention F1
+already reports; CV2/CV3 are E1-internal; CV4/CV5 are governance/open-list
+records. When E1/E3 are finalized, O7 re-runs and this section updates.
