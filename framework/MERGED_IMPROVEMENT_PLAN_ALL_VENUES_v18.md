@@ -306,3 +306,48 @@ selectively, everything else rejected.
 Result: v25_restructured (8 asserted rules over the frozen base); numeric drift
 v24→v25 = none (386 = 386 tokens); all scanners green; coverage clean.
 Evaluation: `JOINT_EVALUATION_HUMANIZED_REWRITES_V11.md`.
+
+---
+
+## 10. Venue V12 — novelty/impact audits (Qwen + GPT), 2026-09-13
+
+Joint evaluation + verification: `JOINT_EVALUATION_IMPACT_AUDITS_V12.md`. Every
+claim verified against v25 and the archives; 8 contradictions adjudicated
+(NEW-10…NEW-17); the implementable remainder opened as O18–O39.
+
+### New open items
+
+| ID | Item | Origin | Phase | Feasibility |
+|---|---|---|---|---|
+| O18 | Standalone two-page specification + checklist (the deliverable, not a summary) | qwen 3.1 / gpt 1,3 | L | text/artifact, now |
+| O19 | Formal class-grounds criterion — prospective only (pre-registration keeps the declared judgement for reported verdicts; NEW-13) | qwen 3.2 | owner | prospective |
+| O20 | IC instruments on the existing archive: IC at h=5; multi-horizon penalised criterion; IC-ranking + rule-gates hybrid (both audits' #1 technical item) | qwen 3.3 / gpt 4 | M | archive computation, now |
+| O21 | Additional out-of-class DGPs (threshold / regime switch / non-stationary mean) | qwen 3.4 / gpt 2.3 | G | computational, owner-gated |
+| O22 | Register the third-domain requirements prospectively in §8 (what it must look like; not executed here) | qwen 3.5 | L | text, now |
+| O23 | Forecast-comparison and multiple-testing literature: paragraph + framework comparison table (White 2000; Hansen 2005; Hansen–Lunde–Nason 2011; Giacomini–White 2006; Clark–West 2007; equivalence testing; FDR) — citations verified at edit time | qwen 3.6 / gpt 7 | O | text, after citation verification |
+| O24 | Negative-certificate scoping: N0–N3 claim-strength taxonomy, expiry/invalidation conditions, combining rules | qwen 3.7 / gpt 3 | L | text, now |
+| O25 | Decision-context paragraph per domain (who decides, what a non-retention implies operationally) | qwen 3.9 | L | text, now |
+| O26 | Minimal reproduction package (one script: archived data → rule → gate decomposition + 20 D1/D5 replicates, runs in under an hour) | qwen 3.10 / gpt 9 | N | artifact, now |
+| O27 | Two-axis reading guide (predictive result × structural interpretation; NEW-11) + clarifying sentence: the M2m decline is a ladder-membership verdict, its predictive margin remains reported | gpt 2 | L | text, now |
+| O28 | Reference implementation of the gates (stable interface, gate decomposition, certificate output) + YAML negative-certificate schema | gpt 3 | N | artifact, now |
+| O29 | §6.4/§8 epistemic-consequence sentence ("non-retention descriptive rather than evidential for the affected classes") + decision-based margin as an admissible alternative basis (NEW-10; AD4 stands) | gpt 5 | L | text, now |
+| O30 | Exact counts + binomial (Wilson) intervals for every published power/specificity/misattribution rate | gpt 2.2 | M | archive computation, now |
+| O31 | More misspecification DGPs (merged with O21) | gpt 2.3 | G | computational |
+| O32 | Formal identification decomposition P(retain truth) = P(rank 1) × P(baseline|rank 1) × P(gates|…) from archived components; plus regret/false-attribution metrics | gpt 2.4 | M | archive computation, now |
+| O33 | Tiered adoption guidance (core / evidential / strong non-retention; NEW-14) in §9 | gpt 4.1 | L | text, now |
+| O34 | Independent third-party application + usability study (post-release) | gpt 4.2 / qwen 3.5 | H | event |
+| O35 | "Proposed" in the title (abstract already says "proposes"; title tweak only) | gpt 4.3 | owner | owner-gated |
+| O36 | Abstract compression (full-findings abstract is a lineage design choice) | gpt 6 | owner | owner-gated (NEW-15) |
+| O37 | "Portable and domain-free" → moderated phrasing for the obligations | gpt 8 | L | text, now |
+| O38 | Abstract "worked unchanged" parenthetical pointing to the §4 rule-version disclosure | gpt 8 | L | text, now |
+| O39 | Three-quantity terminology sentence (model-class identification / predictive selection / mechanism attribution; "power" keeps its §6.1 definition — NEW-16) | gpt 8 | L | text, now |
+
+### NEW-10…NEW-17 (adjudicated)
+
+AD4/Phase K binds over any band replacement (NEW-10); frozen output labels over
+the two-axis redesign (NEW-11); frozen ladder over M3/M4 removal (NEW-12);
+pre-registration over a retrofitted class-grounds criterion (NEW-13); tiers
+adopted as an adoption ladder consistent with the mandatory-OC component
+(NEW-14); Phase J structure stands, further compression = O16 (NEW-15); "power"
+keeps its defined usage (NEW-16); DM-to-supplement = O16 remainder (NEW-17).
+Contradiction count: 43 adjudicated, 0 outstanding.
