@@ -49,9 +49,21 @@ def load_recharge() -> pd.DataFrame:
 def load_pumpage() -> pd.DataFrame:
     p = pd.read_csv(DATA / "eaa_table1_discharge_1934_2023.csv")
     p["year"] = p["year"].astype(int)
-    return p.rename(columns={"wells_kaf": "P_wells", "springs_kaf": "Q_springs_total"})[
+    p = p.rename(columns={"wells_kaf": "P_wells", "springs_kaf": "Q_springs_total"})[
         ["year", "P_wells", "Q_springs_total"]
     ]
+    # sidecar extension (2026-09-16): rows deferred in the archived CSV are merged here
+    sidecar = DATA / "pumpage_2024_sidecar.json"
+    if sidecar.exists():
+        import json as _json
+        sc = _json.loads(sidecar.read_text())
+        if sc.get("status") == "FILLED":
+            for col in ("P_wells", "Q_springs_total"):
+                if sc.get(col) is not None and int(sc["row"]) not in p["year"].values:
+                    p = pd.concat([p, pd.DataFrame(
+                        {"year": [int(sc["row"])], col: [float(sc[col])]})], ignore_index=True)
+            p = p.sort_values("year").reset_index(drop=True)
+    return p
 
 
 def load_comal() -> pd.DataFrame:
