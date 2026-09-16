@@ -96,3 +96,40 @@ Figure-digitized rows in the fetched text were NOT transcribed (not typeset data
 - Remaining input for catch-supplied module scoring: annual reported landings /
   removals for 2024–2025 (SAR tabulates neither; authorized removals 2025 =
   42,867 t is official). Pending its own provenance entry before use as a driver.
+
+## DFO 2026 vintage -- catch driver (owner-gated ingestion 2026-09-16)
+
+Source: Regular, P.M., Skanes, K., Kumar, R., Rideout, R.M., Novaczek, E., Trueman, S.,
+Gregory, R.S., Koen-Alonso, M., and Dwyer, K.S. 2026. Assessment of the Northern Cod
+(Gadus morhua) Stock in NAFO Divisions 2J3KL in 2025. DFO Can. Sci. Advis. Sec. Res.
+Doc. 2026/026. v + 101 p. (2026-vintage full assessment; the March 24-27, 2026 RPR
+document behind SAR handle 123456789/4756.)
+- Handle: 123456789/4385 (open-science.canada.ca); item uuid 93252a9d-562c-4f7d-85f4-2a932affe7d9
+- PDF bitstream uuid a265b88b-9dcb-47d4-aec5-5d0a859d6bb7; MD5 d25ede381c5ebf2ad4c725801658919c; 14,218,318 bytes
+- Transcribed to: dfo_2026_resdoc026_reported_landings_2020_2024.csv (typeset Table 1
+  + REPORTED LANDINGS prose only; chart-digitized rows rejected)
+- Status of catch-driver series (calendar year, per the ResDoc: management year is
+  Apr 1-Mar 31 but catch statistics are reported in calendar year):
+  * Landings series officially updated through 2024 (Table 1: "2016-24 were added").
+    2020-2023 rows rounding-consistent with the archived 2025-vintage file
+    (dfo_2025_table1_landings.csv) -> NO tail revision of the catch series; do-not-pool
+    honored anyway (this new file is separate; archived file untouched).
+  * 2024 = 15,661 t (provisional, prose) = 15.7 kt (Table 1). NOW OFFICIAL catch driver
+    for origin-2024 catch-supplied modules.
+  * 2025 calendar-year landings are NOT in the science series yet (ResDoc data end 2024;
+    assessment used landings through 2025 without tabulating). NOT archived.
+
+User-supplied leads (2026-09-16) and their official disposition:
+- "32,700 t landings in 2025": traces to DFO communications backgrounder "Northern Cod:
+  Socio-Economic Performance" (canada.ca, 2026-06-12), echoed by newfoundnews.ca.
+  Official-communications grade, NOT a CSAS science table -> SECONDARY RECORD ONLY,
+  never data (rule unchanged). Await the next CSAS vintage for schedule-type tabulation.
+- "21,317 t for the 2024-25 management season": identified in ResDoc 2026/026 Table 1
+  MAH/TAC column (calendar 2024 = 21.3 kt) as the AUTHORIZED allocation, i.e., a quota,
+  NOT landings. Recorded in the new CSV as MAH_TAC_authorized; must not be used as the
+  catch driver (frozen spec used reported landings).
+- "4X5Y cod 466 mt": different stock (4X5Y Atlantic cod), out of scope for 2J3KL; excluded.
+
+Also located in ResDoc 2026/026: Table 17 (pp. 46-47), full xteNCAM SSB series with 95%
+CIs through 2025 (2026 vintage, tagging-excluded) -- owner-gated candidate for a future
+2026-vintage carrier for new-origin work; NOT transcribed yet (vintage rules).
