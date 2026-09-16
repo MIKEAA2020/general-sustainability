@@ -42,6 +42,10 @@ NEW-4b archive fix), everything else verified consistent.
   (its coarse-regime pass; M4 195.6 vs the replication's annual-landings 206.3).
   Companion-side difference; F1's cited source matches F1. Flagged for the
   E1 finalization pass; no F1 edit.
+  **[RESOLVED 2026-09-17]** E1 finalization applied: explanatory row note inserted
+  directly under the DM longtable in e1/paperE1_cod_forecast_ladder_v49.tex (no numbers
+  changed; note states coarse-regime vs replication values, identical classification,
+  verdict-neutral). Changelog: audits_E1_E3/e1_audit_2026-09/E1_V49_DM_ROW_NOTE_CHANGELOG_20260917.md.
 - E1 v49's "four of the twenty-eight" wording is consistent with F1's
   "companion's 28-row subset excludes" the four alternative-comparator rows. ✓
 
