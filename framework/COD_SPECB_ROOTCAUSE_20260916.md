@@ -84,3 +84,45 @@ tidy, it is cheap, and it is wrong — the band would belong to a different
 regime, the D2 question would stay open underneath the headline, and the
 verdict would carry N-levels computed against a window the sheet declined to
 score. None of that serves the paper, the reviewers, or the record.
+
+---
+
+## Corrective addendum, 2026-09-16 (owner question: "is the missing data on the repo?")
+
+**Correction.** This memo's phrase "the Spec-B input is not archived" was wrong in an
+important way, and is put right here:
+
+- **Spec-B's historical series IS archived**: `wave_e_cod/data/xtencam_table17_ssb.csv`
+  — years **1954–2024 (n = 71)**, transcribed from Regular et al. 2025, Table 17
+  (DFO CSAS ResDocs 2025_048), checkpoint-verified (2005 = 26, 2017 = 451,
+  2024 = 342 kt), provenance locked in `wave_e_cod/data/SOURCES.md`. The frozen
+  Spec-B figures in the manuscript were computed on exactly this file.
+- What is NOT archived is only the **tail** the new origins need: `SSB_2025`
+  (last training value for origin 2025; h=1 target for origin 2024), `SSB_2026`
+  (h=1 target for origin 2025, per the sheet's "vintage following the 2026
+  assessment" rule), plus 2024+ official landings if the ladder requires them.
+- Public evidence that these values exist: the 2025 assessment coverage
+  (atlanticgroundfishcouncil.ca, 2025-04-03: SSB ≈ 524 kt, "double the LRP")
+  and the 2026 assessment coverage (saltwire.com, 2026-04-02: SSB ≈ 540 kt,
+  range 420–700, quotas 18,000 → 38,000 t). Single numbers in the news, **not**
+  the full published table — the archive ingests official tables with
+  provenance (SOURCES.md pattern), never news numbers.
+- Why they were not archived: the archive was built by transcribing official
+  tables at companion-build time (the 2025 assessment, table ends 2024); the
+  2026 assessment arrived after. New data enters only via the owner-gated
+  ingestion pattern (cf. the Edwards `pumpage_2024_sidecar.json`), because
+  SOURCES.md forbids pooling SSB vintages — a silent hand-edit could rewrite
+  the series.
+- Root cause of the misstatement: the memo answered "what does the ladder's
+  default loader read" (`ncam_2016_table_a2.csv`, Spec A, 1983–2015) instead of
+  "what does Spec B need" — a carrier-file answer, not a data-availability
+  answer. The Spec-B campaign and the scoring sequence in this memo are
+  unaffected; only the input-gap description is narrowed as above.
+
+**What is needed to unlock origin-2024/2025 scoring, concretely:** a transcription
+of the official 2026 DFO CSAS research-document tables for Northern cod 2J3KL —
+(year × SSB) through the terminal year, official landings 2024→, and checkpoint
+values — archived under the SOURCES.md provenance discipline (new file, never a
+hand-edit of an existing one). That is owner-gated data ingestion; once the
+owner supplies or authorizes it, both origins score mechanically per the frozen
+sheet.
