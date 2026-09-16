@@ -1736,3 +1736,14 @@ Stage Summary:
 - P4 v31 delivered as a new version (v30 untouched): the journal-fit audit's best cross-venue suggestions implemented jointly with breadth and generality as the organizing axis - broad-lead corrected abstract, first-use glosses, stock-agnostic breadth statements (abstract, introduction, new Discussion 11.3, conclusion, keywords), the management-language translation table, and the generalised discretisation-artefact caution - with every frozen scientific value machine-verified verbatim-surviving at both md and tex level, byte-reproducible builds, and VLM-verified rendering.
 - The evaluation record (JOURNAL_FIT_RESPONSE_p4.md) documents the verification of Qwen's audit (including its one substantive inaccuracy, corrected), the joint selection criteria, the deliberately-not-implemented suggestions with reasons (empirical case material blocked on owner input for the sustainability-venue path), and an evaluated venue/title menu for submission-time decisions.
 - Committed locally; push follows with the owner's PAT (in-memory only, redacted from all output; the user should revoke/rotate it since it was pasted into chat).
+---
+Task ID: 86 (push record)
+Agent: main (Z.ai Code)
+Task: Push the wave-14 P4 journal-fit joint-strengthening commit (Task 86) to GitHub using the owner's fine-grained PAT.
+
+Work Log:
+- Committed wave 14 as c786fc8 (paper4_delay_dynamics_v31.{md,tex,pdf}; wave14/{make_v31.py, build_latex_v14.py, logs/} incl. the four VLM verification page renders; journal fit audits/p4/JOURNAL_FIT_RESPONSE_p4.md; worklog Task 86) on top of the owner's 45eab9c and pushed 45eab9c..c786fc8 main -> main successfully with the owner's PAT (exit 0); re-verified via git ls-remote (remote main now at c786fc8a619); local tracking ref synced with git fetch; working tree clean.
+- Security: the PAT was used in-memory only (shell variable, unset immediately after use; redacted from all command output; the clone earlier in this task also used it transiently with the token scrubbed from .git/config immediately and a grep-verified no-token-remains check); never written to any file, commit, config, or worklog. The user should revoke/rotate it since it was pasted into chat.
+
+Stage Summary:
+- P4 v31 (the journal-fit joint strengthening with breadth and generality) and its evaluation record JOURNAL_FIT_RESPONSE_p4.md are fully published: remote main at c786fc8; v30 untouched on disk and in history; the sandbox's fresh clone now carries the complete wave-14 records.
