@@ -321,7 +321,7 @@ claim verified against v25 and the archives; 8 contradictions adjudicated
 |---|---|---|---|---|
 | O18 | Standalone two-page specification + checklist (the deliverable, not a summary) | qwen 3.1 / gpt 1,3 | L | **CLOSED — Phase L (v26)** |
 | O19 | Formal class-grounds criterion — prospective only (pre-registration keeps the declared judgement for reported verdicts; NEW-13) | qwen 3.2 | owner | prospective |
-| O20 | IC instruments on the existing archive: IC at h=5; multi-horizon penalised criterion; IC-ranking + rule-gates hybrid (both audits' #1 technical item) | qwen 3.3 / gpt 4 | M | archive computation, now |
+| O20 | IC instruments on the existing archive: IC at h=5; multi-horizon penalised criterion; IC-ranking + rule-gates hybrid (both audits' #1 technical item) | qwen 3.3 / gpt 4 | M | **CLOSED — Phase M (S1.5)** |
 | O21 | Additional out-of-class DGPs (threshold / regime switch / non-stationary mean) | qwen 3.4 / gpt 2.3 | G | computational, owner-gated |
 | O22 | Register the third-domain requirements prospectively in §8 (what it must look like; not executed here) | qwen 3.5 | L | **CLOSED — Phase L (v26)** |
 | O23 | Forecast-comparison and multiple-testing literature: paragraph + framework comparison table (White 2000; Hansen 2005; Hansen–Lunde–Nason 2011; Giacomini–White 2006; Clark–West 2007; equivalence testing; FDR) — citations verified at edit time | qwen 3.6 / gpt 7 | O | text, after citation verification |
@@ -331,9 +331,9 @@ claim verified against v25 and the archives; 8 contradictions adjudicated
 | O27 | Two-axis reading guide (predictive result × structural interpretation; NEW-11) + clarifying sentence: the M2m decline is a ladder-membership verdict, its predictive margin remains reported | gpt 2 | L | **CLOSED — Phase L (v26)** |
 | O28 | Reference implementation of the gates (stable interface, gate decomposition, certificate output) + YAML negative-certificate schema | gpt 3 | N | artifact, now |
 | O29 | §6.4/§8 epistemic-consequence sentence ("non-retention descriptive rather than evidential for the affected classes") + decision-based margin as an admissible alternative basis (NEW-10; AD4 stands) | gpt 5 | L | **CLOSED — Phase L (v26)** |
-| O30 | Exact counts + binomial (Wilson) intervals for every published power/specificity/misattribution rate | gpt 2.2 | M | archive computation, now |
+| O30 | Exact counts + binomial (Wilson) intervals for every published power/specificity/misattribution rate | gpt 2.2 | M | **CLOSED — Phase M (S1.5)** |
 | O31 | More misspecification DGPs (merged with O21) | gpt 2.3 | G | computational |
-| O32 | Formal identification decomposition P(retain truth) = P(rank 1) × P(baseline|rank 1) × P(gates|…) from archived components; plus regret/false-attribution metrics | gpt 2.4 | M | archive computation, now |
+| O32 | Formal identification decomposition P(retain truth) = P(rank 1) × P(baseline|rank 1) × P(gates|…) from archived components; plus regret/false-attribution metrics | gpt 2.4 | M | **CLOSED — Phase M (S1.5)** |
 | O33 | Tiered adoption guidance (core / evidential / strong non-retention; NEW-14) in §9 | gpt 4.1 | L | **CLOSED — Phase L (v26)** |
 | O34 | Independent third-party application + usability study (post-release) | gpt 4.2 / qwen 3.5 | H | event |
 | O35 | "Proposed" in the title (abstract already says "proposes"; title tweak only) | gpt 4.3 | owner | owner-gated |
@@ -378,3 +378,7 @@ Contradiction count: 43 adjudicated, 0 outstanding.
 
 
 **Phase L executed 2026-09-13 → v26_restructured** (apply_phaseL_v25_to_v26.py, 16 rules; PHASE_L_CHANGELOG_v25_to_v26.md): O18 (S2 two-page specification + checklist), O22 (§8 third-domain registration), O24 (§2.2 N0–N3 + expiry/combining), O25 (§4/§5 decision-context paragraphs), O27 (§6.4 two-axis reading guide + §4 M2m sentence), O29 (+NEW-19 band-invariance and decision-based margin), O33 (§9 adoption tiers), O37/O38/O39 wording, NEW-18 (DM mechanics → S1.4). Numeric accounting: 0 added, 13 removed = exactly the moved DM tokens (all in S1.4). Scanners green; coverage pair clean vs v0/v13. v25 frozen. Remaining: O19 (owner approval), O20/O30/O32 (M), O26/O28 (N), O23 (O).
+**V12 sweep addendum 2026-09-13:** full-read sweep of both impact-audit transcripts (all 653 lines): every item maps to O18–O39, CV4, or a declined V12 point; no additional open items. NEW-20 (audit N-level semantics vs cumulative implementation — optional refinement, deferred), NEW-21 (redistributive restructuring = §3.5 precedent, declined), NEW-22 (extended instrument-comparison grid — deferred pending Phase M results). 46 adjudicated owner-decision records in total (43 + NEW-18/19), 0 outstanding contradictions.
+
+
+**Phase M executed 2026-09-13 → S1.5 supplement** (PHASE_M_CHANGELOG_archive_20260913.md): O20 instrument comparison (stated rule / IC-h1 / IC-h5 / hybrid — no dominance, gate = price of specificity), O30 exact counts + Wilson intervals (collision-safe subset), O32 identification decomposition (D2 = inference-limited inside an identification-limited study). Deliverables in `paperF1_retention_framework_v26_supplement.md` §S1.5; frozen JSON `phase_c/results/phaseM_archive_computations_20260913.json`. Zero new simulation; v26 main text untouched (Data-Availability bullet only). Remaining: Phase N (O26/O28), Phase O (O23).

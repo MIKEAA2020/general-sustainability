@@ -218,3 +218,37 @@ supplement moves folded in: O18, O22, O24, O25, O27, O29 (+ band-invariance),
 O33, O37, O38, O39, plus the S1 DM-mechanics move — one pass, idempotent apply
 script, scanner battery, changelog, push. Phase M (O20/O30/O32), Phase N
 (O26/O28), and Phase O (O23) follow unchanged.
+
+---
+
+## 5. Sweep addendum, 2026-09-13 (full-read sweep of both impact audits)
+
+After Phase L, every claim in both audits was read end-to-end (not grep-sampled)
+and cross-checked against V12 and the merged plan. Coverage: all audit items map
+onto O18–O39, CV4, or explicitly declined V12 points; the two transcripts propose
+nothing beyond the 22 registered items. Three records:
+
+**NEW-20 — N-level semantic gap.** The audits define the certificate levels
+semantically (N0 descriptive / N1 inconclusive — low or uncertain sensitivity /
+N2 informative — demonstrated sensitivity / N3 operationally informative) and
+enumerate expiry triggers; Phase L's §2.2/S2 implement them cumulatively by
+evidence package. Both readings are consistent with the four-tier numbering, but
+the audit's *language* (descriptive/inconclusive/informative) and the expiry
+enumeration are recorded here as an optional refinement to be folded if the
+certificate is ever formalised (NEW-21 dependent). No freeze implicated.
+
+**NEW-21 — redistributive structure confirmation.** The audits' recommended
+methods-paper structure redistributes existing content among main text, S1, and
+S2 — it is exactly the long-section redistribution Phase J declined (§3.5), and
+would renumber sections and reopen validated anchors. Phase J's adjudication:
+changes confined to existing sections; new material appended as new supplement
+sections only. S1.4 and S2 were built under that rule, and it stands. The
+audits' content asks (specification, checklist, tiers) were all delivered within
+the constraint; only the renumbering itself is declined.
+
+**NEW-22 — extended instrument-comparison grid.** The audit's wider IC-family
+comparison (4+ candidate instruments, class-ranks-first probabilities,
+conditional gate-pass rates, regret, false-attribution rate) generalises the
+three-instrument Phase M grid now executed (O20). Recorded as a potential
+follow-up after the Phase M results are in front of the owner; no new
+simulation — the grid is archive-only until the owner expands scope.

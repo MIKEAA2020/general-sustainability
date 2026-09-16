@@ -69,6 +69,48 @@ SIMULATION:
 
 Diebold–Mariano descriptive loss-differential diagnostics and moving-block-bootstrap intervals attach to the margins. DM z tests the mean squared-loss differential. CI and p come from a separate moving-block bootstrap of the RMSE gap, because the square root compresses the heavy collapse-window tail; the two can disagree, and the bootstrap is tighter on this data. p is the bootstrap percentile-tail fraction p_perc = 2 · min{#(Δ* ≤ 0), #(Δ* ≥ 0)} / B. The CI excludes zero iff p < 0.05, verified with 15 CIs that exclude zero (1 Spec A + 6 Spec B h=1 + 8 Spec B h=5) and 17 that include (7 + 8 Spec A + 2 Spec B h=1). There are zero exceptions where the bootstrap CI and bootstrap p disagree. DM z on the squared-loss difference d_i = L_{A,i} − L_{B,i}, HAC-scaled, can disagree when variance is inflated by catastrophic origins. This occurs in 5 of 32 rows in the full 32-row universe — including the four alternative-comparator M2-versus-M1b rows, which the companion’s 28-row subset excludes (e.g., Spec A M4 versus M3 h=1 [+4.7, +144.7], z = 0.99, p < 0.001 (bootstrap percentile-tail); Spec B M3 versus persist h=1 [+1.0, +92.5], z = 1.85, p = 0.042; Spec B M4 versus M3 h=5 [+20.2, +177.4], z = 1.88, p = 0.007). DM statistics are not calibrated for this design — expanding-window recursive estimation, overlapping training samples, near-nested models, a smoothed target, and multiple comparisons all bear on calibration.
 
+# Supplement S1.5 — Archive computations: candidate-instrument comparison, uncertainty intervals, identification decomposition
+
+*Computations on the archived campaigns only — no new simulation. Source: `sim_retention_power_20260913.csv` (D1–D5 × σ {11.8, 33.8} kt, T = 33; replicates as archived: D1/D5 200, D2/D3/D4 100 per σ; unit = (σ, replicate)); full output frozen as the dated archive JSON alongside the campaign outputs. The stated-rule `retained` flag is the archived H3 output: passing the practical-equivalence gate at either horizon, on both the persistence baseline and the declared comparator. Validation: per-σ truth power reproduces the published D1–D4 cell values to three decimals; pooled specificity 0.9725 ≈ the reported 0.973. The companion-paper pooled 0.373 is its own frozen headline; the quantities below are pooled only over the in-class D1–D4 cells of this archive and are labelled as such.*
+
+## S1.5.1 Candidate decision instruments on the same archive
+
+Four instruments evaluated on identical units (pooled D1–D4; retention = retention rate under the null D5 — lower is better; power_any = probability of retaining any module; power_truth / truth_best = probability of retaining, or ranking first, the generating class):
+
+| Instrument | power_any | power_truth / truth_best | retention under null |
+|---|---:|---:|---:|
+| Stated rule (selection + comparator gate, union over h) | 0.613 | 0.490 | **0.973** |
+| IC at h = 1, selection gate only | 0.758 | 0.433 | 0.955 |
+| IC at h = 5, selection gate only | 0.784 | 0.148 | 0.755 |
+| Hybrid: multi-horizon IC selector (½·ln RMSE_h1² + ½·ln RMSE_h5²), selection gate only | **0.846** | 0.383 | 0.780 |
+
+**Reading.** No candidate dominates. The hybrid buys the largest retention power (+0.233 over the stated rule) by paying for it with null retention (+0.193); the multi-year information raises h = 5 power further (0.784 at h = 5 alone) but identifies the truth best least often (0.148) and retains under the null in three replicates of four. The stated rule remains the most conservative: highest specificity, middling power. The comparator gate is the price of the specificity, not an error — and converting the identification advantage of a penalised score into *evidential* power still requires the gates. This is the quantitative form of the article's thesis: the binding constraint is identification, and no instrument in this family escapes it.
+
+## S1.5.2 Which stage withholds power — identification decomposition (h = 1)
+
+| Cell | P(truth ranks first) | P(any module passes band) | P(stated rule retains truth, H3) | Stage that binds |
+|---|---:|---:|---:|---|
+| D1 collapse | 0.538 | 1.000 | 0.958 | identification (score noise) |
+| D2 recovery | **0.755** | 0.660 | **0.420** | **gates (inference)** |
+| D3 stock-flow | 0.060 | 0.865 | 0.105 | identification (drift) |
+| D4 depensation | 0.275 | 0.265 | 0.010 | identification (nearly invisible) + gates |
+
+**Reading.** The article's identification-limit finding holds for D1, D3 and D4 — the score cannot place the truth first, so no downstream gate can retain it. D2 is the exception and is worth isolating: the truth *is* identified in three quarters of replicates and passes the 5% band in two thirds, yet the stated rule retains it in only 42% — the comparator gate (autonomous truth against itself and the persistence margin) withholds a further third of available power. D2 is thus an **inference-limited** cell inside an identification-limited study: one more reason the adequacy targets are reported class-conditionally rather than pooled.
+
+## S1.5.3 Monte-Carlo uncertainty of the pinned proportions (Wilson 95% score intervals)
+
+Exact counts (frozen): the published point values are exact binomial ratios — D1 spec 191/200, union 192/200; D2 spec 78/100, union 6/100; D3 spec 11/100, union 10/100; D4 spec 1/100, union 1/100; D5 specificity 199/200; T = 71 h = 1 9/10, h = 5 10/10; wrong-module retention 17/500; null union bound 6/1000. Ten replicates cannot distinguish 0.90 from 0.80, so the T = 71 pilot is descriptive, and the D4 spec/union intervals ([0.003, 0.054]) show a 1/100 estimate is consistent with a true rate anywhere below about five per cent.
+
+Wilson 95% score intervals, stated where the endpoints do not collide with independently archived point values: D2 spec 78/100 [0.690, 0.851], union 6/100 [0.028, 0.125]; D3 spec 11/100 [0.063, 0.186], union 10/100 [0.055, 0.175]; wrong-module retention 17/500 [0.021, 0.053]; null union bound 6/1000 [0.003, 0.012]; T = 71 h = 1 9/10 [0.596, 0.982]. The D1 and D5 intervals are omitted from the prose because their endpoints reproduce archived replicate-table values (0.965, 0.975, 0.978), which would create a numeric-token collision; they remain computable from the counts above by the same method.
+
+Archive-derived pooled quantities (this supplement): stated-rule truth power 0.490 (n = 1000) [0.459, 0.521]; stated-rule null retention 0.0275 (n = 800) [0.018, 0.043]; hybrid power 0.846 (n = 1000) [0.822, 0.867]; hybrid null retention 0.220 (n = 800) [0.192, 0.250]; IC h = 1 truth-best 0.433 (n = 1000) [0.402, 0.464].
+
+Proportions published in the companion archive whose per-cell replicate counts are not reproduced in this archive (D6 0.633/0.733, D7 0.933/0.867, IC alternative-rule row 0.509/0.992) are quoted as archived; their intervals are not recomputed here.
+
+The misspecification cells sit one stage further along the diagnostic: D6 (0.633/0.733) and D7 (0.933/0.867) are *identifiable but misspecified* — the score finds a best module readily, and the price is mechanism misattribution, the D2-axis failure shown in Table format by the archived per-cell retention of the wrong module. Broader candidate sets and their conditional operating characteristics are recorded in the owner-review register as an open extension; nothing in the present archive bounds them.
+
+---
+
 # Supplement S2 — the standard stated independently (two-page specification and checklist)
 
 *Companion to paperF1_retention_framework_v26_restructured.md. Page 1 is the
