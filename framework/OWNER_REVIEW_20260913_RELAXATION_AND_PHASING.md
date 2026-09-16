@@ -252,3 +252,32 @@ conditional gate-pass rates, regret, false-attribution rate) generalises the
 three-instrument Phase M grid now executed (O20). Recorded as a potential
 follow-up after the Phase M results are in front of the owner; no new
 simulation — the grid is archive-only until the owner expands scope.
+
+---
+
+## 6. Review close, 2026-09-16 (NEW-20 and NEW-22 — this file is complete)
+
+The two items left open in §5 are settled as **bequeathals**, not further text:
+the framework's review corpus is now complete; both are optional future
+refinements with a documented home, and neither is a defect in this version.
+
+**NEW-20 — certificate-level semantics (descriptive / inconclusive / informative /
+operationally-informative) and the trigger list.** S3's verdict record already
+carries `certificate_level` and `expiry` as fields, so the semantic reading is
+usable in S3 form today. Folding those exact words into §2.2's cumulative
+definitions is a *prose refinement* — it would strengthen the paper but does not
+change any level assignment and would re-open validated §2.2 anchors.
+**Bequeathed to the first submission/revision pass of the certificate
+formalisation (NEW-21 dependent).** Closed as filed-with-home.
+
+**NEW-22 — extended instrument-comparison grid.** S1.5.1 already executes the
+three-instrument grid on the existing archive and reaches a stable verdict (no
+dominance; the comparator gate is the price of specificity). A wider candidate
+set would need either a new registered campaign or new DGPs — both outside the
+newest-only / archive-only scope of this whole effort, and both bequeathed to a
+future campaign. **Closed as bequeathed to the next registered simulation
+campaign.**
+
+With NEW-18/19 executed (Phase L), NEW-20/22 filed, and O19/E2m decided in-sheet
+(2026-09-16), this review has **no remaining actionable item**. Any further
+question belongs to the submission/revision cycle, not this document.

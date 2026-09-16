@@ -1,11 +1,17 @@
-# Specification — Prospective band calibration, Edwards J-17 ladder (DRAFT for approval)
+# Specification — Prospective band calibration, Edwards J-17 ladder (FROZEN 2026-09-16)
 
-**Status:** FINALISATION-GATED (2026-09-16). Both previously-open choices are
-now resolved in-sheet: the prospective class-grounds criterion (§3a) and the
-E2m convention (§4 — with-decline, mirroring the frozen protocol). No design
-element remains open. Once finalised (this sheet, dated 2026-09-16), it is
-frozen and the campaign runs under PYTHONHASHSEED=0 with seeds pinned and
-archived (the Phase C convention).
+**Status:** FROZEN (2026-09-16). Both previously-open choices are resolved
+in-sheet: the prospective class-grounds criterion (§3a) and the E2m convention
+(§4 — with-decline, mirroring the frozen protocol). No design element remains
+open. The sheet is frozen as of this date; the campaign runs under
+PYTHONHASHSEED=0 with seeds pinned and archived (the Phase C convention).
+Harness: `framework/campaign_edwards_band_calibration.py` — same design as the
+cod calibration (band sweep on shared replicates, no refitting per band),
+estimators IMPORTED from `wave_e_edwards/src/run_ladder.py` (never
+reimplemented), and an E2m-collapse **self-test as the first gate** that mirrors
+the frozen protocol's decline (E2m-row power = 0 at every band, disclosed, the
+with-decline convention). The campaign runs after the dry-run harness output is
+inspected; the registered campaign is 100 replicates per cell.
 Purpose: the Section 8 procedure of the framework paper — before the first new
 Edwards origin (2024) is scored, the object's own ladder is simulated at its
 own series length and noise scale, and the smallest band attaining power ≥ 0.80
@@ -111,14 +117,17 @@ counterfactual.
 
 ## 6. Sequence and data
 
-1. Approval → sheet frozen (dated; supersedes this draft by a new sheet, never
-   an edit).
-2. Campaign runs; provenance JSON archived with the results.
+1. Sheet frozen (this sheet, 2026-09-16).
+2. Dry-run harness inspected (`campaign_edwards_band_calibration.py`, 3
+   replicates per cell; E2m-collapse self-test as first gate), then the
+   registered 100-replicate-per-cell campaign runs; provenance JSON archived
+   with the results.
 3. Band adopted (or frontier + 5%) → first new origin (2024) scored: h=1
-   scored now (2025 actual archived: H 629.77 ft, provisional); h=5 at the 2029
-   actual; the verdict needs both horizons (H3). M2's persisted-flux score for
-   origin 2024 waits on the 2024 pumpage value (P_2024 currently unarchived);
-   M1/M2m/M3/M4 score with the archived inputs.
+   scored once the campaign delivers the band (the 2025 actual is archived:
+   H 629.77 ft, provisional); h=5 at the 2029 actual; the verdict needs both
+   horizons (H3). M2's persisted-flux score for origin 2024 waits on the 2024
+   pumpage value (P_2024 currently unarchived); M1/M2m/M3/M4 score with the
+   archived inputs.
 4. The 2024–2025 panel rows are already archived (`wave_e_edwards/data/annual_panel.csv`).
 
 ## 7. Cod side (for completeness)
@@ -126,6 +135,5 @@ counterfactual.
 Cod calibration executed on the pinned-seed T=33 archive — no band attains both
 targets; the 5% band is retained and the frontier is reported (Section 8 of the
 framework paper; `phase_c/results/o6_cod_band_calibration_20260913.json`).
-Specification B's own T=71 frontier awaits the registered 200-replicate
-campaign; the first Spec B origin (2025) is scored once the vintage following
-the 2026 assessment is published.
+Specification B's own T=71 frontier and the first Spec B origin (2025) are
+registered separately (owner-gated) and are untouched by this calibration.
