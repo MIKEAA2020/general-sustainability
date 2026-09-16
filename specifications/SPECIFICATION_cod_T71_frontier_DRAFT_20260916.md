@@ -123,3 +123,35 @@ FROZEN 2026-09-16 — executed, band adopted 0, origin 2024 scored provisionally
 Both implement the same §8 prospective procedure at their own object's own
 length; this one is the cod/Spec-B instance. No element of either frozen sheet
 is edited by the other.
+
+## 6. Declared space (pre-registered contingencies, no drift)
+
+The sheet's disclosure discipline is that force fields are named *before*
+execution so later results are read against declared orderings, never against
+hindsight:
+
+1. **The D2/D4 cross-over question (registered, not executed).** v4's entire
+   T = 71 addendum D1/D5. Phase M's identification decomposition named **D2
+   the inference-limited cell** (truth ranks h1-first in 75.5% of replicates
+   at T = 33, yet the comparator gate retains it only 42%): whether T = 71
+   *resolves* that inference lag is a different, and sharper, question than
+   the D1/D5 length check v4 poses. This is deliberately **not** a frozen
+   element — v4 froze the scope at D1/D5, and widening it silently would be
+   priority drift. Declared instead as the **first candidate for the next
+   registered amendment**: if this campaign's D1/D5 frontier shows power
+   returning at T = 71 (i.e. length helps identification already), a D2/D4
+   sweep at equal rep count is the registered follow-up, because the
+   "inference-limited inside identification-limited" story then has a
+   length-dependent *boundary* to measure, not just a connection to note.
+2. **Deferred-element resolution (registered, not adopted).** v4 §96 leaves
+   `σ = 0` and `𝔰 ∈ {5, 30}` deferred indefinitely and says nothing more.
+   This sheet now declares the trigger: those elements are lifted only if a
+   later owner-approved amendment expressly calls for them, in their own
+   sheet — the exact pattern this sheet uses to lift T = 71. They are not
+   silently added to this one, because silent addition is how deferred
+   elements drift in.
+3. **Frozen bounds, restated.** Nothing in this section re-opens v4's frozen
+   cells, comparators, output vocabulary, replicates, or reported verdicts.
+   The two items above are *contingency labels for future sheets*, so this
+   sheet can be frozen with its boundaries known in advance rather than
+   argued over afterwards.
