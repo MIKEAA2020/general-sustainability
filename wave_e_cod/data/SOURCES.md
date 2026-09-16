@@ -70,3 +70,29 @@ Computed from Table A2 years 1983–1989 (complete 1980s years in the table) = 8
 SAR states 2015 SSB was 34% of LRP; 298.65 / 884.58 = 0.338. Consistent.
 
 The 2023/24 LRP (40% BMSY under xteNCAM) is a **different specification** and is not used.
+
+## xteNCAM 2026 vintage (DFO 2026 SAR — "Stock Assessment to 2026")
+
+**Source:** DFO. 2026. NAFO Divisions 2J3KL Northern Cod (Gadus morhua) Stock Assessment to 2026.
+Fisheries Science Advisory Report; regional peer review March 24–27, 2026. Posted
+open-science.canada.ca, handle 123456789/4756, accessioned 2026-08-11;
+bitstream `NAFODivisions-2J3KL-NorthernCodStockAssessment-2026-4133775x.pdf`
+(MD5 1cdc8ac181a82e9148429ff9d3f444df), fetched 2026-09-16.
+
+**File:** `dfo_2026_sar_published_points.csv` — transcribed verbatim from the typeset
+Table 1 (SSB, SSB/LRP, recruits, M, F for 2022–2026) and the Science-Advice bullets.
+Figure-digitized rows in the fetched text were NOT transcribed (not typeset data).
+
+**Provenance notes:**
+- **Model revision:** tagging data excluded from 2020 onward (retrospective-instability
+  fix) — the tail of the series is revised relative to the archived 2025 vintage
+  (ResDoc 2025/048): 2024 SSB 338 kt here versus 342 kt archived. **Do not pool.**
+- The archived `xtencam_table17_ssb.csv` (2025 vintage, through 2024) stays
+  authoritative for the reported frozen verdicts; the 2026 vintage points are for
+  new-origin scoring only.
+- Origin targets: SSB_2025 = 449 kt (363–554) for origin 2024 h=1; SSB_2026 =
+  542 kt (423–696) for origin 2025 h=1. Published 2026-08-11 — earlier than the
+  sheet's anticipated "vintage following the 2026 assessment".
+- Remaining input for catch-supplied module scoring: annual reported landings /
+  removals for 2024–2025 (SAR tabulates neither; authorized removals 2025 =
+  42,867 t is official). Pending its own provenance entry before use as a driver.

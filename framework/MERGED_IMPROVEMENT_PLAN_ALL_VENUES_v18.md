@@ -398,3 +398,5 @@ Contradiction count: 43 adjudicated, 0 outstanding.
 **2026-09-16 (Cod Spec-B sheet improved while parked):** five root-cause integrity fixes recorded in-manifest; frozen v4 cells/rule/replicates untouched. Owner freeze gate stands.
 
 **Correction 2026-09-16:** Spec-B's series IS archived (xtencam_table17_ssb.csv 1954–2024); the input gap for new origins is only SSB_2025/SSB_2026 (+2024+ landings), to be ingested owner-gated from the official 2026 CSAS table. See corrective addendum in COD_SPECB_ROOTCAUSE_20260916.md.
+
+**2026-09-16 (Spec-B origins data unblocked):** official DFO 2026 SAR fetched+transcribed (`wave_e_cod/data/dfo_2026_sar_published_points.csv`, SOURCES.md provenance appended): SSB_2025=449 (363–554), SSB_2026=542 (423–696); 2024 tail revised to 338 under the 2026 vintage (tagging exclusion; do-not-pool honored). Origin-2024/2025 h=1 targets official; catch-driver 2024–2025 landings = last pending input for catch-supplied modules.
