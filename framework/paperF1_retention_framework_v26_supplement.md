@@ -191,3 +191,124 @@ seed maps, every score and forecast file).
 
 The checklist is the required reporting form for every future application
 registered in Section 8 of the main text.
+---
+
+# Supplement S3 — fillable instruments: the information-set audit canvas and the verdict record
+
+*S3 is the fillable layer of Supplements S1–S2 of this supplement: the audit table an analyst fills in before
+scoring, and the verdict record the rule outputs at the end. Both are empty by
+design: they are filled per application, never pre-filled.*
+
+## S3.1 Information-set audit canvas (one row per driver quantity)
+
+The columns of Section 3 of the main text, restated as a form. Classify each
+quantity at each origin: **available** (dated at or before the origin),
+**supplied** (dated after, provided regardless), or **revised** (dated before,
+published only in a later vintage). The supplied-driver row determines whether
+the exercise is an operational forecast or a conditional hindcast.
+
+| Quantity | Role | Dated at origin? | Published by origin? | Classification | Modules receiving it | Source / vintage note |
+|---|---|---|---|---|---|---|
+| | | | | | | |
+| | | | | | | |
+| | | | | | | |
+| | | | | | | |
+| | | | | | | |
+| | | | | | | |
+
+Reading of the filled table:
+- a **supplied** driver with `role: driver` converts a forecast into a
+  conditional hindcast *by record*, not by inference;
+- a **revised** predictand/expiry row triggers the certificate's vintage-expiry
+  condition (Section 2.2 N-level expiry);
+- any module receiving a post-origin quantity is excluded from the operational
+  comparison and reported separately.
+
+## S3.2 Verdict record (the negative certificate, human-fillable and machine-readable)
+
+Fill at the close of an application. The same record serialises to the JSON
+schema of S3.3.
+
+- `predictand` — the quantity forecast (units).
+- `data_vintage` — the assessment/record vintage used.
+- `forecast_origins` — list of origins; count n.
+- `ladder` — forward-ordered ladder rungs (frozen labels where applicable).
+- `rule_version` — the pre-registered rule identifier (R2 for the worked rule).
+- `band` and `band_basis` — the practical-equivalence margin and its basis
+  (pre-registered / simulation-calibrated / decision-based, Section 8).
+- `benchmark` — the baseline(s).
+- `comparators` — the comparator map (next-simpler rung per module).
+- `horizons` — the horizon set.
+- `loss` — the scoring loss.
+- `information_set` — pointer to the filled S3.1 canvas.
+- `verdicts` — one per module, drawn from {retained, not retained, declined on
+  class grounds}; each with its margins, gate decomposition, and — if declined —
+  the §3a class-grounds reason.
+- `operating_characteristics` — the class-conditional power under its own
+  generating truth and the null specificity, with Monte-Carlo intervals (S1.5).
+- `certificate_level` — N0 / N1 / N2 / N3 (Section 2.2).
+- `expiry` — the trigger conditions (new vintage, re-scored origin, amended
+  rule); a combined claim carries the lowest level of its parts.
+- `archives` — data, scores, scripts, seed maps, commit/DOI.
+- `analyst`, `date`, `sign-off`.
+
+## S3.3 Machine-readable schema
+
+The record of S3.2 serialises to JSON (YAML-compatible). The companion script
+`certificate_schema_S3.py` (this folder) validates a filled record with the
+standard library only: required fields, the frozen verdict vocabulary, the
+band-basis vocabulary, the N0–N3 levels, and the rule that a declined module
+must carry its class-grounds reason. A blank template is printed with
+`--example`. The validator checks the form of a claim, not its truth.
+
+---
+
+# Supplement S4 — positioning against the forecast-comparison and reporting literature
+
+*What each neighbouring framework provides, and the three reporting obligations this
+article adds on top. Descriptive, not evaluative: the columns mark what a
+framework asks for, not whether it is "better".*
+
+| Framework | What it tests / provides | Information-set audit | Equivalence margin | Class operating characteristics |
+|---|---|---|---|---|
+| Diebold–Mariano (1995) | equal predictive accuracy, pair | – | – | – |
+| White (2000), *Econometrica* 68(5): 1097–1126 [1] | reality check over a searched model universe (data-snooping control) | – | – | – |
+| Hansen (2005), *JBES* 23: 365–380 [2] | superior predictive ability over a universe | – | – | – |
+| Hansen, Lunde & Nason (2011), *Econometrica* 79(2): 453–497 [3] | model confidence set — the set containing the best with given confidence | – | – | – |
+| Giacomini & White (2006), *Econometrica* 74(6): 1545–1578 [4] | conditional predictive ability, rolling windows | – | – | – |
+| Clark & West (2007), *J. Econometrics* 138(1): 291–311 [5] | equal accuracy for nested models | – | – | – |
+| Equivalence / non-inferiority testing, Wellek (2010), 2nd ed., Chapman & Hall/CRC [6] | equivalence within a pre-set margin | – | margin = inferential null | – |
+| Accuracy measures, Hyndman & Koehler (2006), *IJF* 22(4): 679–688 [7] | scaled error measures (MASE) | – | – | – |
+| **This article, R2** | (nothing new to estimate) | **typed available/supplied/revised audit** | **practical-equivalence margin on the decision** | **class-conditional power + null specificity** |
+
+## Reading the table
+
+The right-hand columns are the three obligations of Section 2. The multiple-
+comparison literature (White, Hansen, Hansen–Lunde–Nason) corrects the
+*selection* problem the rule runs into when many modules are scored — the
+reality check and the model confidence set quantify how much of a "winner" is
+search. The nested-model test (Clark–West) is exactly the comparator-gate
+problem stated as inference rather than decision. The equivalence-testing
+literature (Wellek) supplies the inferential form of the practical-equivalence
+margin this article uses as a decision margin. None of them asks what a
+forecast was allowed to see (the audit), treats the margin as an input to the
+decision rule rather than the null itself, or asks whether the procedure could
+have detected the rejected class (the operating characteristics). Those three
+gaps are the article's only claims of novelty; the rest is assembly.
+
+**Relationship, not replacement.** The rule's multiple-testing behaviour is
+*descriptive here* — the comparison is over a declared ladder, not a searched
+universe — but a reader porting the standard to a wide model search should
+pair it with a reality-check or model-confidence-set correction. That pairing
+is a stated route to endorsement, not a defect of neighbouring work.
+
+## Sources
+
+1. White, H. (2000). A reality check for data snooping. *Econometrica*, 68(5), 1097–1126.
+2. Hansen, P. R. (2005). A test for superior predictive ability. *Journal of Business & Economic Statistics*, 23, 365–380. doi:10.1198/073500105000000063
+3. Hansen, P. R., Lunde, A., & Nason, J. M. (2011). The model confidence set. *Econometrica*, 79(2), 453–497. doi:10.3982/ECTA5771
+4. Giacomini, R., & White, H. (2006). Tests of conditional predictive ability. *Econometrica*, 74(6), 1545–1578. doi:10.1111/j.1468-0262.2006.00718.x
+5. Clark, T. E., & West, K. D. (2007). Approximately normal tests for equal predictive accuracy in nested models. *Journal of Econometrics*, 138(1), 291–311.
+6. Wellek, S. (2010). *Testing statistical hypotheses of equivalence and noninferiority* (2nd ed.). Chapman & Hall/CRC. ISBN 978-1439808184.
+7. Hyndman, R. J., & Koehler, A. B. (2006). Another look at measures of forecast accuracy. *International Journal of Forecasting*, 22(4), 679–688. doi:10.1016/j.ijforecast.2006.03.001
+

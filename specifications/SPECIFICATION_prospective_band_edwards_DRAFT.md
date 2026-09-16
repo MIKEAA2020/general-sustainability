@@ -1,8 +1,11 @@
 # Specification — Prospective band calibration, Edwards J-17 ladder (DRAFT for approval)
 
-**Status:** DRAFT (2026-09-13). No simulation is run until the owner approves
-this sheet. Once approved, it is frozen, dated, and the campaign runs under
-PYTHONHASHSEED=0 with seeds pinned and archived (the Phase C convention).
+**Status:** FINALISATION-GATED (2026-09-16). Both previously-open choices are
+now resolved in-sheet: the prospective class-grounds criterion (§3a) and the
+E2m convention (§4 — with-decline, mirroring the frozen protocol). No design
+element remains open. Once finalised (this sheet, dated 2026-09-16), it is
+frozen and the campaign runs under PYTHONHASHSEED=0 with seeds pinned and
+archived (the Phase C convention).
 Purpose: the Section 8 procedure of the framework paper — before the first new
 Edwards origin (2024) is scored, the object's own ladder is simulated at its
 own series length and noise scale, and the smallest band attaining power ≥ 0.80
@@ -39,13 +42,61 @@ the cod archive method.
 | E3 | M2 + AR(1) residual | fitted map + persisted residual (φ_r fitted) |
 | E4 | delayed information | E3 with lag-1 start state |
 
-## 4. Class-grounds handling (owner-gated choice, proposed: mirror the protocol)
+## 3a. Prospective class-grounds criterion (O19)
 
-The frozen protocol declines M2m on class grounds (collapses to AR(1) under
-constant fluxes). In simulation the decline applies mechanically to the fitted
-M2m. Power for E2m-truth is reported **both** with and without the decline; the
-adopted convention mirrors the frozen protocol (with decline). The owner may
-choose the without-decline convention instead before the sheet is frozen.
+The class-grounds check is a pre-gate: it is evaluated before any scoring, is
+declared with reasons, and once declared it is not re-opened by the scores.
+This section registers the concrete criterion in advance.
+
+For each candidate module, before any replicate is generated:
+
+1. **As-implemented reduction.** Simulate the module's fitted map under its
+   *as-implemented* driver conditions. If it is mathematically equivalent to a
+   forward-simpler ladder member under those conditions — M2m with
+   climatological (constant) fluxes collapses to an affine AR(1), i.e. to M1 —
+   the module is declined on class grounds for every scoring under those
+   conditions.
+2. **s → 0 boundary check.** A module whose distinguishing parameter may sit
+   at its boundary under the generating truth (M1b's depensation threshold
+   s → 0 reduces the Allee branch to the Schaefer branch) is checked at the
+   boundary; if the boundary form is the simpler member, the module is not
+   evidence for the mechanism it names.
+3. **Declaration.** The outcome for every candidate is written into the
+   run-log before step 4 (generation). The frozen output vocabulary
+   {retained, not retained, declined on class grounds} is unchanged; the
+   criterion only makes the third output's trigger explicit and auditable.
+
+Approximate collapse — a flux variance small but nonzero, a threshold near but
+not at zero — is not a class-grounds basis: it is an operating-
+characteristic question and is measured, not vetoed.
+
+## 4. Class-grounds handling (convention DECIDED 2026-09-16: mirror the protocol)
+
+**Decision (2026-09-16): with-decline — mirror the frozen protocol.** The frozen
+protocol declines M2m on class grounds (collapses to AR(1) under constant
+fluxes). In simulation the decline applies mechanically to the fitted M2m.
+Power for E2m-truth is reported **both** with and without the decline (the
+without-decline number stays visible), and the **primary** number — the one the
+adequacy targets and the power ≥ 0.80 mean are computed against — is the
+with-decline.
+
+**Root cause.** The question is what "power for E2m-truth" is power *for*. The
+class-grounds decline is an analytical reduction, not a scoring event: under
+constant fluxes the fitted M2m *is* an AR(1), so its parameters carry no
+structure beyond the simpler member regardless of its RMSE. The instrument can
+never "retain" M2m — measuring its power without the decline measures a cell
+that cannot occur under the protocol, and would misstate the very quantity the
+calibration exists to report (the protocol's evidential reach). The
+without-decline number is informative as a sensitivity — it says what the rule
+*would* see if the decline were dropped — so it is kept alongside, not deleted.
+
+**What was rejected.** Setting the decline aside once, "to see both fairly",
+would let the simulation silently redefine the target cell post-hoc — the E2m
+cell's power would no longer describe the frozen protocol it calibrates, and the
+adequacy verdict (smallest band attaining the targets) would be computed against
+a different object than the one Section 4 freezes. That is the quick fix; the
+honest fix is to keep the decline where the protocol puts it and disclose the
+counterfactual.
 
 ## 5. Design parameters
 

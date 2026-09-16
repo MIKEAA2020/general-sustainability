@@ -327,9 +327,9 @@ claim verified against v25 and the archives; 8 contradictions adjudicated
 | O23 | Forecast-comparison and multiple-testing literature: paragraph + framework comparison table (White 2000; Hansen 2005; Hansen–Lunde–Nason 2011; Giacomini–White 2006; Clark–West 2007; equivalence testing; FDR) — citations verified at edit time | qwen 3.6 / gpt 7 | O | text, after citation verification |
 | O24 | Negative-certificate scoping: N0–N3 claim-strength taxonomy, expiry/invalidation conditions, combining rules | qwen 3.7 / gpt 3 | L | **CLOSED — Phase L (v26)** |
 | O25 | Decision-context paragraph per domain (who decides, what a non-retention implies operationally) | qwen 3.9 | L | **CLOSED — Phase L (v26)** |
-| O26 | Minimal reproduction package (one script: archived data → rule → gate decomposition + 20 D1/D5 replicates, runs in under an hour) | qwen 3.10 / gpt 9 | N | artifact, now |
+| O26 | Minimal reproduction package (one script: archived data → rule → gate decomposition + 20 D1/D5 replicates, runs in under an hour) | qwen 3.10 / gpt 9 | N | **CLOSED — Phase N (S3)** |
 | O27 | Two-axis reading guide (predictive result × structural interpretation; NEW-11) + clarifying sentence: the M2m decline is a ladder-membership verdict, its predictive margin remains reported | gpt 2 | L | **CLOSED — Phase L (v26)** |
-| O28 | Reference implementation of the gates (stable interface, gate decomposition, certificate output) + YAML negative-certificate schema | gpt 3 | N | artifact, now |
+| O28 | Reference implementation of the gates (stable interface, gate decomposition, certificate output) + YAML negative-certificate schema | gpt 3 | N | **CLOSED — Phase N (S3)** |
 | O29 | §6.4/§8 epistemic-consequence sentence ("non-retention descriptive rather than evidential for the affected classes") + decision-based margin as an admissible alternative basis (NEW-10; AD4 stands) | gpt 5 | L | **CLOSED — Phase L (v26)** |
 | O30 | Exact counts + binomial (Wilson) intervals for every published power/specificity/misattribution rate | gpt 2.2 | M | **CLOSED — Phase M (S1.5)** |
 | O31 | More misspecification DGPs (merged with O21) | gpt 2.3 | G | computational |
@@ -382,3 +382,5 @@ Contradiction count: 43 adjudicated, 0 outstanding.
 
 
 **Phase M executed 2026-09-13 → S1.5 supplement** (PHASE_M_CHANGELOG_archive_20260913.md): O20 instrument comparison (stated rule / IC-h1 / IC-h5 / hybrid — no dominance, gate = price of specificity), O30 exact counts + Wilson intervals (collision-safe subset), O32 identification decomposition (D2 = inference-limited inside an identification-limited study). Deliverables in `paperF1_retention_framework_v26_supplement.md` §S1.5; frozen JSON `phase_c/results/phaseM_archive_computations_20260913.json`. Zero new simulation; v26 main text untouched (Data-Availability bullet only). Remaining: Phase N (O26/O28), Phase O (O23).
+
+**Phase N+O executed 2026-09-16 → S3+S4 supplement + DRAFT decisions**: O28 (S3.1 fillable audit canvas), O26 (S3.2 record + S3.3 validator `certificate_schema_S3.py`), O23 (S4 verified literature table). Edwards DRAFT: O19 prospective class-grounds criterion (§3a) + E2m convention DECIDED with-decline (§4, root-cause); status line finalisation-gated 2026-09-16. Zero contact with frozen numbers; v26 main text untouched. Remaining: owner-review items NEW-20/NEW-22 (optional), long-term O34/O35.
