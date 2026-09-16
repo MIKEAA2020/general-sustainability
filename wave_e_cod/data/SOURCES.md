@@ -133,3 +133,28 @@ User-supplied leads (2026-09-16) and their official disposition:
 Also located in ResDoc 2026/026: Table 17 (pp. 46-47), full xteNCAM SSB series with 95%
 CIs through 2025 (2026 vintage, tagging-excluded) -- owner-gated candidate for a future
 2026-vintage carrier for new-origin work; NOT transcribed yet (vintage rules).
+
+## Conduits checked for calendar-2025 landings (2026-09-16; checked and REJECTED as driver source)
+
+Owner question: who owns calendar-2025 2J3KL reported landings? Answer: DFO (upstream =
+NL Region fisheries statistics databases feeding CSAS Table 1); not present in this repo's
+data files (grep-verified: the 32,700 t figure appears only in provenance notes).
+
+Checked, official but NOT the spec driver (do not use; documented to prevent re-search):
+- DFO NL Species Quota Report, 2025-26 quota cycle, as of 2026-08-05 (inter-w02.dfo-mpo.gc.ca,
+  preliminary, subject to revision): total catch 33,543 t across NAFO-area rows. Quota-cycle
+  (Apr-Mar), landings-against-quota compilation -> different measurable than calendar-year
+  science 'reported landings' (which add sentinel/recreational/foreign components and
+  reconciliation). REJECTED.
+- DFO NL 'Landings and Landed Value by Species' portal (2025, updated 2026-05-25): vessel-
+  category aggregates only (e.g., inshore 0-10.6 m cod 11,833 t); no science-series total. REJECTED.
+- NAFO SCS Doc 25/11 (June 2025): 2J3KL catches through 2024 = 15,517 t vs DFO science
+  15,661 t for the same year (~144 t definitional gap) -> NAFO conduit is not the frozen-spec
+  conduit even once 2025 posts (expected via June-2026 SCS docs / STATLANT 21A-21B). REJECTED
+  pending owner decision to change the driver vintage definition.
+- canada.ca communications (32,700 t, 2026-06-12): secondary record only. REJECTED as data.
+
+Status unchanged: calendar-2025 'reported landings' (science-series measurable) will first
+appear in the next CSAS science tabulation (expected ~2027 vintage). Origin-2025 catch-
+supplied modules remain blocked until then OR until the owner approves an alternate conduit
+as a documented re-definition of the driver.
