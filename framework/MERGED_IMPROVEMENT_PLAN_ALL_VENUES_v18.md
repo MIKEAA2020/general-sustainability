@@ -322,7 +322,7 @@ claim verified against v25 and the archives; 8 contradictions adjudicated
 | O18 | Standalone two-page specification + checklist (the deliverable, not a summary) | qwen 3.1 / gpt 1,3 | L | **CLOSED — Phase L (v26)** |
 | O19 | Formal class-grounds criterion — prospective only (pre-registration keeps the declared judgement for reported verdicts; NEW-13) | qwen 3.2 | owner | prospective |
 | O20 | IC instruments on the existing archive: IC at h=5; multi-horizon penalised criterion; IC-ranking + rule-gates hybrid (both audits' #1 technical item) | qwen 3.3 / gpt 4 | M | **CLOSED — Phase M (S1.5)** |
-| O21 | Additional out-of-class DGPs (threshold / regime switch / non-stationary mean) | qwen 3.4 / gpt 2.3 | G | computational, owner-gated |
+| O21 | Additional out-of-class DGPs (threshold / regime switch / non-stationary mean) | qwen 3.4 / gpt 2.3 | G | **CLOSED — sheet-gated by frozen v4 §96** (σ=0 / 𝔰∈{5,30} declared but deferred; props to the Spec-B sheet, owner-gated there) |
 | O22 | Register the third-domain requirements prospectively in §8 (what it must look like; not executed here) | qwen 3.5 | L | **CLOSED — Phase L (v26)** |
 | O23 | Forecast-comparison and multiple-testing literature: paragraph + framework comparison table (White 2000; Hansen 2005; Hansen–Lunde–Nason 2011; Giacomini–White 2006; Clark–West 2007; equivalence testing; FDR) — citations verified at edit time | qwen 3.6 / gpt 7 | O | text, after citation verification |
 | O24 | Negative-certificate scoping: N0–N3 claim-strength taxonomy, expiry/invalidation conditions, combining rules | qwen 3.7 / gpt 3 | L | **CLOSED — Phase L (v26)** |
@@ -336,8 +336,8 @@ claim verified against v25 and the archives; 8 contradictions adjudicated
 | O32 | Formal identification decomposition P(retain truth) = P(rank 1) × P(baseline|rank 1) × P(gates|…) from archived components; plus regret/false-attribution metrics | gpt 2.4 | M | **CLOSED — Phase M (S1.5)** |
 | O33 | Tiered adoption guidance (core / evidential / strong non-retention; NEW-14) in §9 | gpt 4.1 | L | **CLOSED — Phase L (v26)** |
 | O34 | Independent third-party application + usability study (post-release) | gpt 4.2 / qwen 3.5 | H | event |
-| O35 | "Proposed" in the title (abstract already says "proposes"; title tweak only) | gpt 4.3 | owner | owner-gated |
-| O36 | Abstract compression (full-findings abstract is a lineage design choice) | gpt 6 | owner | owner-gated (NEW-15) |
+| O35 | "Proposed" in the title (abstract already says "proposes"; title tweak only) | gpt 4.3 | owner | **CLOSED — executed in v25 (humanized title) ** |
+| O36 | Abstract compression (full-findings abstract is a lineage design choice) | gpt 6 | owner | **CLOSED — executed in v25 (full-findings abstract kept) ** |
 | O37 | "Portable and domain-free" → moderated phrasing for the obligations | gpt 8 | L | **CLOSED — Phase L (v26)** |
 | O38 | Abstract "worked unchanged" parenthetical pointing to the §4 rule-version disclosure | gpt 8 | L | **CLOSED — Phase L (v26)** |
 | O39 | Three-quantity terminology sentence (model-class identification / predictive selection / mechanism attribution; "power" keeps its §6.1 definition — NEW-16) | gpt 8 | L | **CLOSED — Phase L (v26)** |
@@ -390,3 +390,7 @@ Contradiction count: 43 adjudicated, 0 outstanding.
 **2026-09-16 (close-out, this pass):**  NEW-20/NEW-22 and O34/O35 are closed as bequeathals — none is highly merited in-version (NEW-20 folds at the NEW-21 submission pass; NEW-22 at the next registered campaign; O34/O35 are external multi-party work, not further in-repo edits).  Edwards full band-calibration campaign LAUNCHED (frozen sheet; pre-flight audit passed with declared-asymmetry M4 fix), ~3.3-4 h runtime; result follow-through = band adoption or frontier + first-origin-2024 scoring per sheet §6.  Cod Spec-B NOT launched in this pass — sheet-frozen deferral stands (see `COD_SPECB_ROOTCAUSE_20260916.md`); trigger remains a dedicated pre-registered Spec-B sheet + owner approval.
 
 **2026-09-16 (three deferred items closed):** (1) deferred Edwards inputs = P_2024 ONLY (R_2024/H_2024/H_2025 already archived); archived as sidecar + build_panel merge hook, owner-gated on the EAA/USGS annual figure. (2) 2029 h=5 = designed waiting (frozen §6), no action. (3) Cod Spec-B dedicated sheet drafted (`SPECIFICATION_cod_T71_frontier_DRAFT_20260916.md`, §3a/§4 as-is, sweep = registered refinement) — owner-gated freeze, not executed.
+
+
+**2026-09-16 owner-gate lattice audit (root cause):** 'owner gate' was shorthand for several different things. Dispositions:
+(1) **P_2024 input** — publish-gated (EAA/USGS annual figure ~early-2026), archived as sidecar + build_panel hook; not an owner decision. (2) **2029 h=5 actual** — designed waiting per frozen Edwards sheet §6 (H3); not an owner decision. (3) **Cod Spec-B sheet freeze** (`SPECIFICATION_cod_T71_frontier_DRAFT_20260916.md`) — the only genuinely parked pre-registration decision: an affirmative owner word is required to lift T=71 out of frozen-v4 deferral; trigger, not drift. (4) **Companion-side edits CV1–CV5** — owner-gated BY INSTRUCTION (never edit E1/E3 without the owner); may be re-presented at E1/E3 finalization. (5) Stale carries removed in this pass: O21 (sheet-gated by frozen v4 §96, props to the Spec-B sheet — not a standalone owner choice), O35/O36 (title/abstract executed in the humanized v25 lineage — 'owner-gated' had outlived the fact). The only remaining genuinely-parked decision is #3; #4 is procedural.
