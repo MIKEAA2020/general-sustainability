@@ -25,3 +25,18 @@ added, none subtracted except process notes.
 BASE POLICY recorded (same edict): F1 companion v26 is the live base for
 future revisions (v27 reader draft deprecated as base). E1 frozen base: v50.
 v54 supersedes v53 as the humanized/formal carrier; v53 archived untouched.
+
+
+## v54 -> v55 append (owner correction, same day)
+
+Owner split F/G as distinct categories and directed a wider scan. Removed:
+abstract banner "Three elements of that rule condition the interpretation of
+the results." (navigation; numbered elements stand alone); "A scope element
+is relevant to the collapse years." (navigation); "One case requires
+emphasis:" (navigation); "Constructively," (internal dialogue/voice);
+"Uncertainty statements are descriptive." (internal dialogue about the
+paper's own reporting; facts stand alone); "approximately 86/12" ->
+"86/12" (over-hedge around exact archived decomposition numerals); "The
+claim is scoped to" -> "The conclusion is limited to" ("scoped" = register
+slip). "approximately 97%" kept: source value is "~97%"; hedge is warranted
+by evidence class (not over-hedging). E1 carrier is now v55.

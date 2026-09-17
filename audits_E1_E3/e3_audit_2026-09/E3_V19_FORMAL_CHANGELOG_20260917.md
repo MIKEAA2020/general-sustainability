@@ -26,3 +26,17 @@ subtracted except process notes.
 
 BASE POLICY: E3 frozen base v16; v19 supersedes v18 as formal carrier; v18
 archived untouched. F1 v26 live base for future companion revisions.
+
+
+## v19 -> v20 append (owner correction, same day)
+
+Removed: "The results comprise two findings." + "First/Second half" scaffold
+(navigation) -> abstract states the two findings directly; "The mechanism is
+visible in the record." (self-praise); "is therefore bounded by what is
+known" retained as logical connective; "which is where the evidence directs
+investment" -> "quantifies the value of measuring current recharge rather
+than elaborating model structure"; Discussion opener "The contrast between
+forecasting and nowcasting organizes the results." (navigation) deleted;
+"The rule-version comparison is stated once:" (internal dialogue) deleted —
+the definitional sentence stands on its own; "as illustrated by the record
+itself" -> "For example,". E3 carrier is now v20.
