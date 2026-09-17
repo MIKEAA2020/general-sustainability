@@ -10,9 +10,8 @@ read. Three elements of that rule condition the interpretation of the
 results. (1) The benchmark is persistence: next year's spawning biomass
 equals this year's. (2) Retention requires a model to beat persistence and
 the next-simpler model by more than a 5% margin at both the one-year and
-five-year horizons, on error pooled over rolling forecast origins. (3)
-Information availability is audited for every input: the paper records
-whether each quantity a model uses was knowable at the forecast origin. The
+five-year horizons, on error pooled over rolling forecast origins. (3) Information availability at the forecast
+origin is documented for every quantity each model uses. The
 target series is a modern assessment reconstruction whose earlier values
 embed information produced after the nominal forecast dates, and three
 models receive realized catches over the forecast horizon. Both features
@@ -74,8 +73,8 @@ horizon on the short series) are assigned 0.00 by convention.
 
 ### 2.3 Information availability at the forecast origin
 
-For every quantity entering each model, the paper records whether it was
-knowable at the forecast origin. One case requires emphasis: in the collapse
+For every quantity entering each model, availability at the forecast origin
+is documented. One case requires emphasis: in the collapse
 window, supplying the 1992 catch reduction to a constant-productivity map
 renders the run a policy-as-exogenous counterfactual, not a retention
 candidate on that window.
