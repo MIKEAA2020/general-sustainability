@@ -160,3 +160,4 @@ SHA-256 of every extracted file was recorded at clone time (see file list above 
 - framework/paperF1_retention_framework_v30_supplement.md/.tex/.pdf (11pp) — aligned to v30 + S1.4 reproducibility package (18 scripts incl. phase_c stack).
 - batch 7/campaign_e3_dm_uncertainty.py restored to the working checkout (NB=20000/seed 0 archived constants verified).
 - e3/COVER_LETTER_paperE3_JoH_v1_20260918.md/.tex/.pdf — cover letter for J. Hydrology (claims byte-consistent with v24 frozen values).
+- framework/COVER_LETTER_paperF1_PLOSONE_v1_20260918.md/.tex/.pdf — cover letter for PLOS ONE (claims byte-consistent with v30 frozen values).
