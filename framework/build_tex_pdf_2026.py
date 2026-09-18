@@ -210,11 +210,78 @@ def md_preprocess(md):
     lines = md.split('\n')
     return '\n'.join(_md_preprocess_core(lines))
 
+def _grid_tables_to_pipes(lines):
+    """Convert pandoc grid tables (+---+, +:====+, with ::: minipage junk
+    inside cells) into clean pipe tables. Each logical row may span
+    several physical lines; cells are joined across the lines of a group."""
+    BORDER = set('+-=: \u2013\u2014')
+    def is_border(x):
+        st = x.strip()
+        return len(st) > 2 and set(st) <= BORDER and st.count('+') >= 2
+    out = []
+    i, n = 0, len(lines)
+    while i < n:
+        if is_border(lines[i]):
+            groups, cur = [], []
+            eq_border_pos = -1
+            j, k = i, 0
+            while j < n and (is_border(lines[j]) or (lines[j].strip().startswith('|') and lines[j].strip().endswith('|'))):
+                if is_border(lines[j]):
+                    if cur:
+                        groups.append(cur); cur = []
+                    if '=' in lines[j]:
+                        eq_border_pos = len(groups) - 1
+                else:
+                    cur.append(lines[j].strip())
+                j += 1
+                k += 1
+            if cur:
+                groups.append(cur)
+            # cell text extraction: for each group, split each physical line on '|'
+            rows = []
+            for grp in groups:
+                cells = []
+                for ln in grp:
+                    parts = [p.strip() for p in ln.strip('|').split('|')]
+                    while len(cells) < len(parts):
+                        cells.append([])
+                    for ci, p in enumerate(parts):
+                        if p and 'minipage' not in p and set(p) - set(': ') :
+                            cells[ci].append(p)
+                row = [' '.join(x) for x in cells]
+                row = [x for x in row]
+                # drop ::: minipage junk cells
+                row = [('' if (':::' in x or set(x) <= set(': ')) else ('; '.join(c for c in x.split(':::') if c.strip() and 'minipage' not in c))) for x in row]
+                row = [re.sub(r'^::+', '', x).strip() for x in row]
+                keep = [x for x in row if x]
+                rows.append(keep)
+            rows = [r for r in rows if r]
+            if rows:
+                ncol = max(len(r) for r in rows)
+                rows = [r + [''] * (ncol - len(r)) for r in rows]
+                header_idx = eq_border_pos if eq_border_pos >= 0 else 0
+                pipes = []
+                for ri, r in enumerate(rows):
+                    pipes.append('| ' + ' | '.join(r) + ' |')
+                    if ri == header_idx:
+                        pipes.append('| ' + ' | '.join(['---'] * ncol) + ' |')
+                out.extend(pipes)
+                i = j
+                continue
+            i = j
+            continue
+        out.append(lines[i])
+        i += 1
+    return out
+
+
 def _md_preprocess_core(lines):
+    lines = _grid_tables_to_pipes(lines)
     res = []
     i = 0
     n = len(lines)
     while i < n:
+        line = lines[i]
         line = lines[i]
         # ---- pipe table block with ::: junk / continuation rows ----
         if line.strip().startswith(':::') or ('minipage' in line and line.strip().startswith('|')):
