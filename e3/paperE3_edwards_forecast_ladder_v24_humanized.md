@@ -1,0 +1,424 @@
+# Does a One-Pool Water-Balance Model Improve Forecasts of Edwards Aquifer Head? A Scored Test at J-17
+
+
+**Prepared in the format of Water Resources Research.**
+
+## Highlights
+
+* One-pool persistence-recharge balance loses to naive persistence at one year: 14.70 ft versus 13.23 ft
+* Univariate AR(1) gains 0.39 ft at h = 1 — a margin within noise (MAE tie; five-year loss; bootstrap interval covering zero)
+* Climatological-flux affine map: best one-step score (12.28 ft), declined by a protocol class clause
+* Given realized fluxes the same balance nowcasts (7.55 ft); climate modules gain at most 0.13 ft; none retained
+* At five years, training-mean climatology beats persistence robustly: 16.80 versus 21.11 ft
+
+## Abstract
+
+**Problem.** Operational groundwater management frequently relies on multi-month to multi-year index-well water-level forecasts to trigger drought stages, enforce critical-period pumping reductions, and maintain environmental springflows. While modern research has prioritized increasingly complex data-driven and machine-learning architectures, simple, lumped process-based water-balance models remain widely used in conceptual planning. Crucially, such models are rarely evaluated against naive statistical baselines under a formally frozen model-retention protocol.
+
+**Approach.** Using the 90-year annual record (1934–2023) of water levels at index well J-17 in the San Antonio Pool of the Edwards (Balcones Fault Zone) Aquifer, Texas, we evaluate a forward-ordered ladder of discrete-time models using both fixed-window and rolling-origin out-of-sample root mean squared error (RMSE). The ladder comprises naive persistence, training-mean climatology, a univariate autoregression (AR(1)), a one-pool stock-flow water balance, residual autoregressive and delay formulations, and climate-informed recharge modules. A causal module is retained if and only if it reduces RMSE relative to both last-value persistence and the next-simpler causal model under an evaluation protocol locked prior to scoring.
+
+**Results.** The one-pool stock-flow model that persists preceding-year recharge fails to beat naive persistence at the one-year horizon ($14.70\text{ ft}$ vs. $13.23\text{ ft}$), because annual recharge is essentially temporally uncorrelated ($\operatorname{corr}(R_t, R_{t-1}) = 0.17$), whereas annual head increments strongly reflect contemporaneous recharge ($\operatorname{corr}(\Delta H_t, R_t) = 0.74$). The univariate AR(1) achieves a marginal one-year RMSE reduction of $0.39\text{ ft}$ ($12.84\text{ ft}$), but this advantage is statistically indistinguishable from zero (mean absolute error is tied at $10.7\text{ ft}$, persistence wins at five years, and the 95% moving-block bootstrap confidence interval spans zero: [$-1.51, +0.71$] ft). A water-balance model driven by climatological mean fluxes achieves the lowest one-step error ($12.28\text{ ft}$), but represents an affine AR(1) mapping and is declined on class grounds by a pre-specified protocol clause. When provided with realized future fluxes, the one-pool balance achieves a nowcast RMSE of $7.55\text{ ft}$. Pre-season climate predictors (ENSO indices and division precipitation) improve one-year head RMSE by at most $0.13\text{ ft}$, failing to warrant retention. At a five-year horizon, training-mean climatology decisively outperforms persistence ($16.80\text{ ft}$ vs. $21.11\text{ ft}$).
+
+**Implications.** For annual water-level forecasting at J-17, naive persistence and simple univariate autoregression represent exceptionally demanding benchmarks. Given realized fluxes, the lumped water balance functions effectively as an annual nowcast rather than an operational forecast. For multi-year strategic planning, long-term historical climatology provides a substantially more reliable baseline than dynamic water balances forced by persisted recharge.
+
+**Keywords:** Edwards Aquifer, J-17 index well, groundwater level forecasting, water balance, forecast evaluation, persistence benchmark, prediction skill
+
+**Article Impact Statement:** Deliberately simple process-based water-balance models must justify their complexity against naive baselines; at J-17, annual recharge is near-white, causing stock-flow forecasts to lose to persistence unless future fluxes are already known.
+
+---
+
+## 1. Introduction
+
+Forecasting groundwater elevations at designated index wells is a foundational requirement for operational water resources management. In heavily utilized regional aquifer systems, statutory drought-stage declarations, mandatory irrigation cutbacks, municipal conservation rules, and environmental springflow protections are triggered directly by threshold water-level crossings at representative monitoring locations. The hydrogeological literature has responded with an extensive catalog of predictive methodologies, spanning analytical water balances, lumped conceptual reservoirs, spatially distributed numerical models, and data-driven formulations, including artificial neural networks (ANNs) and wavelet-conjunction models (Daliakopoulos et al., 2005; Adamowski & Chan, 2011). 
+
+Concurrently, the groundwater discipline has begun adopting standardized benchmark cultures. For instance, the GEMS-GER initiative established a large-scale machine-learning benchmark dataset spanning 32 years of weekly observations across 3,207 monitoring wells in Germany, pairing observational records with three reference models of increasing sophistication (Ohmer et al., 2026). Similarly, comprehensive benchmarking across karst catchments has evaluated up to nine machine-learning and deep-learning architectures against empirical hydrological indices (Zhu et al., 2026).
+
+When interpreting an index-well record, three distinct hydrogeological entities must be conceptually separated:
+1. **The Observation Head ($H$):** A local piezometric measurement taken at an access point (the index well).
+2. **The Aquifer Storage ($S$):** The regional volume of groundwater stored in the porous and karstified rock matrix, which constitutes the actual resource.
+3. **The Boundary Fluxes ($R, P, Q$):** The recharge pulses, anthropogenic well withdrawals, and natural spring outflows that drive storage changes.
+
+A lumped, one-pool water-balance model seeks to link these domains by approximating the dynamic mass balance through an increment structure: annual head change is modeled as a weighted linear combination of surface boundary fluxes and a linear regional drainage term. We use the term *water balance* strictly in this increment-structure sense. The formulation stores historical spring discharge but deliberately excludes it as an exogenous predictor in forward forecasting equations, while enforcing an empirical water-level clipping window ([610, 710] ft) as a proxy for physical storage limits. Crucially, this representation does not constitute a fully closed, conservative physical mass balance; it is a discrete-time lumped approximation whose operational forecast utility must be established empirically.
+
+Whether structural elaboration improves genuine *out-of-sample* predictive skill—as opposed to merely optimizing in-sample mathematical fit—is a distinct and testable empirical question. In the broader forecasting discipline, the necessity of rigorous baseline benchmarks has been repeatedly confirmed. Across the 100,000 empirical time series analyzed in the landmark M4 competition, complex predictive algorithms failed to uniformly outperform basic statistical benchmarks (Makridakis et al., 2020). 
+
+Consequently, the minimal performance threshold for any proposed predictive module is whether it can beat naive last-value persistence (the forecast of zero change) and long-term training-mean climatology. Contemporary groundwater benchmarking frameworks typically compare advanced algorithmic families against one another without subjecting each intermediate physical mechanism to a pre-registered model-retention gate scored against naive baselines. 
+
+This study provides that missing test. We deploy a formal model-ablation protocol to evaluate an incrementally structured ladder of lumped water-balance models against naive baselines, retaining mathematical complexity if and only if it yields demonstrable out-of-sample error reductions on the predictand itself.
+
+The San Antonio Pool of the Edwards (Balcones Fault Zone) Aquifer, Texas, monitored at index well J-17, serves as an ideal test bed (Figure 1). Spanning from 1934 to 2023, the J-17 daily water-level record represents one of the longest continuous, managed groundwater observation series in North America. The system features explicit, legally codified regulatory thresholds (the 660-ft Stage I drought trigger defined by the Edwards Aquifer Authority, EAA) as well as critical physical tipping points (the approximately 618-ft head level at which Comal Springs, the largest freshwater discharge point in the southwestern United States, approaches total cessation). Furthermore, continuous historical estimates of annual regional recharge and groundwater withdrawals are available, constructed independently of the water-level record. 
+
+Because regional flow through this prolific karst system has historically been modeled using both equivalent porous media (EPM) approximations and lumped multi-compartment schemes (Scanlon et al., 2003), evaluating the empirical forecast limits of a single-pool water-balance mapping addresses a long-standing hydrogeological debate.
+
+This investigation tests whether dynamic stock-flow, autoregressive error, observational delay, or teleconnection-informed climate modules systematically reduce forecast errors for annual-mean J-17 water levels relative to naive persistence and a univariate AR(1) baseline. Climate-informed recharge variants are evaluated because large-scale modes of atmospheric variability—specifically the El Niño/Southern Oscillation (ENSO)—are known to modulate cool-season precipitation across the southern United States (Ropelewski & Halpert, 1986). Pre-season indices, such as the September–November Niño 3.4 sea-surface temperature anomaly and antecedent Texas climate-division precipitation, represent operational signals available at the start of a calendar-year forecast. 
+
+A companion study evaluates this identical model-ablation protocol on a long-lived marine fishery (Northern cod, NAFO Divs. 2J3KL; Abaee, 2026), testing how structural models behave when dynamic environmental forcing exhibits low temporal persistence across forecast origins. The evaluations are kept strictly independent: data are never pooled, and retention outcomes are not transferred between domains.
+
+---
+
+## 2. Data and System Specification
+
+To eliminate ambiguity regarding data inputs, statistical constructs, predictive models, and regulatory standards, all components are formally categorized within the San Antonio Pool specification (Table 1).
+
+### Table 1. System specification for the San Antonio Pool of the Edwards Aquifer and the J-17 index well (1934–2023).
+| Specification Field | Description and Archival Source | Variable Type |
+| :--- | :--- | :---: |
+| **Physical System** | Edwards (Balcones Fault Zone) Aquifer, San Antonio Pool, indexed by monitoring well J-17 | Data ($\mathrm{D}$) |
+| **Target Predictand ($H_t$)** | Calendar-year mean of daily maximum groundwater elevations (ft above mean sea level, AMSL) | Data ($\mathrm{D}$) |
+| **Observation Point** | TWDB State Well 68-37-203 / EAA Well AY-68-37-203, Bexar County, Texas | Data ($\mathrm{D}$) |
+| **Spatial / Temporal Domain**| San Antonio Pool; continuous calendar-year series covering 1934–2023 ($N = 90\text{ years}$) | Data ($\mathrm{D}$) |
+| **Physical Service Boundary** | Hydraulic head sufficient to sustain perennial discharge at Comal Springs ($\approx 618\text{ ft}$; 1956 daily minimum: $612.51\text{ ft}$) | Normative / Empirical ($\mathrm{N / E}$) |
+| **Regulatory Boundary** | Statutory Stage I Critical Period Trigger: 10-day running mean at J-17 $< 660\text{ ft}$ AMSL | Normative ($\mathrm{N}$) |
+| **Stochastic Disturbance** | High-magnitude unconfined recharge pulses; conduit-matrix exchanges; unmeasured Uvalde Pool inter-pool transfer | Model ($\mathrm{M}$) |
+| **Groundwater Extraction ($P_t$)**| Total annual regional well withdrawals: pre-regulatory agricultural/municipal pumping and post-1996 EAA-permitted withdrawals | Empirical ($\mathrm{E}$) |
+| **Ecological Service Record** | USGS Station 08168710 Comal Springs at New Braunfels, Texas, annual mean discharge ($\text{cfs}$) | Data ($\mathrm{D}$) |
+
+*Note to Table 1:* Field typing distinguishes direct observations ($\mathrm{D}$), empirical constructs derived from regional balances ($\mathrm{E}$), structural model assumptions ($\mathrm{M}$), and normative regulatory or physical thresholds ($\mathrm{N}$).
+
+The target predictand $H_t$ is the calendar-year arithmetic mean of daily high water-level elevations recorded at J-17. The series is derived from continuous automated recordings maintained by the Texas Water Development Board (TWDB) and the EAA. The historical record includes the pre-continuous Beverly Lodges measurement composite spanning 1934–1962, which is incorporated as officially published. 
+
+To maintain sampling consistency across the 90-year panel, years with fewer than 240 valid daily observations are excluded. This threshold never binds on the analyzed series: the lowest observation counts occur in 1939 ($n = 242$) and 1935 ($n = 258$), both of which are retained without synthetic daily interpolation. The terminal year (2023) reflects provisional TWDB status. Evaluating the mean of daily highs provides a stable annual index; choosing a daily-mean convention would shift the baseline slightly downward, which is relevant primarily when interpreting trajectories near the 660-ft regulatory trigger and the 618-ft physical springflow cessation limit.
+
+Historical recharge ($R_t$) represents total annual estimated recharge for the San Antonio Pool ($10^3\text{ acre-ft}\cdot\text{yr}^{-1}$), calculated by the U.S. Geological Survey (USGS) using the stream-loss water-budget methodology (Puente, 1978; Umphres & Choi, 2025). This estimate is constructed from basin precipitation, runoff modeling, and upstream/downstream streamflow gauging on nine major catchment streams crossing the Edwards Aquifer recharge zone, entirely independent of water-level observations at J-17. 
+
+Historical groundwater extraction ($P_t$) is total annual well discharge ($10^3\text{ acre-ft}\cdot\text{yr}^{-1}$) compiled in EAA historical summary tables (Edwards Aquifer Authority, 2024/25). Annual discharge from Comal Springs ($Q_t$, in cubic feet per second, $\text{cfs}$) is obtained from USGS Station 08168710; it is held as a secondary service series and deliberately excluded as an input to the predictive head equations. 
+
+Antecedent climate variables comprise:
+* The September–November average sea-surface temperature anomaly in the Niño 3.4 region ($5^\circ\text{N}–5^\circ\text{S}, 170^\circ\text{W}–120^\circ\text{W}$) from the HadISST dataset, calculated relative to a 1991–2020 climatology.
+* Total calendar-year precipitation across Texas Climate Divisions 06 (Edwards Plateau) and 07 (South Central) derived from the NOAA NCEI nClimDiv database.
+
+---
+
+## 3. Forecast Models
+
+The evaluated models form a forward-ordered structural ladder (Table 2). Each structural rung adds a specific hydrogeological mechanism to the preceding configuration, moving from naive statistical rules to dynamic stock-flow equations, residual autoregressions, and climate-informed teleconnections.
+
+### Definition 3.1 (Lumped One-Pool Water-Balance Map)
+Let $H_t$ denote the annual-mean water level at index well J-17 at the end of calendar year $t$. The discrete-time one-pool water-balance mapping is defined as:
+$$H_{t+1} = \Big[ H_t + \alpha + \beta \tilde{R}_{t+1} + \gamma \tilde{P}_{t+1} + \delta H_t \Big]_{\mathrm{clip}}$$
+where $[\,\cdot\,]_{\mathrm{clip}} = \min(\max(\,\cdot\,, 610), 710)\text{ ft AMSL}$, and $\tilde{R}_{t+1}$ and $\tilde{P}_{t+1}$ denote the proxy flux values substituted for the unknown future recharge and extraction occurring across year $t+1$. 
+
+The model coefficients are estimated via ordinary least squares (OLS) over the available training window:
+* $\alpha$ represents an intercept term;
+* $\beta$ represents head response per unit of regional recharge;
+* $\gamma$ represents head drawdown per unit of well extraction;
+* $\delta$ represents a linear regional drainage coefficient governing self-decay and baseflow discharge.
+
+### Table 2. Forward-ordered model ladder and structural specifications.
+| Model ID | Structural Class | Projected Flux Assumptions ($\tilde{R}_{t+h}, \tilde{P}_{t+h}$) | Operational Role in Evaluation |
+| :--- | :--- | :--- | :--- |
+| **persist** | Naive Baseline | None | $\hat{H}_{t+h} = H_t$ |
+| **mean** | Climatological Baseline | None | $\hat{H}_{t+h} = \bar{H}_{\mathrm{train}}$ |
+| **M1** | Autonomous AR(1) | None | $\hat{H}_{t+1} = a + \varphi H_t$ |
+| **M2** | Causal Stock-Flow | Persisted prior-year fluxes: $\tilde{R}_{t+h} = R_t$, $\tilde{P}_{t+h} = P_t$ | Candidate structural model |
+| **M2m** | Climatological Stock-Flow | Training-window mean fluxes: $\tilde{R}_{t+h} = \bar{R}$, $\tilde{P}_{t+h} = \bar{P}$ | Structurally affine AR(1) |
+| **M3** | Residual Autoregressive | Persisted fluxes; residual correction: $\hat{e}_{t+k} = \hat{\theta}^k e_t$ | AR(1) tracking on head errors |
+| **M4** | Lagged Initialization | Persisted fluxes; initiated from stale state: $\hat{H}_{t+1 \mid t} = f(H_{t-1})$ | Theoretical information-lag control |
+| **M2_oracle** | Diagnostic Ceiling | Realized future fluxes: $\tilde{R}_{t+h} = R_{t+h}$, $\tilde{P}_{t+h} = P_{t+h}$ | Benchmark ceiling (excluded from retention) |
+
+*Role note.* The delay-module M4 is retained as a symmetry control with the companion fisheries evaluation (Abaee 2026b), not as a monitoring constraint of this system; in the ladder mapping, M4 inherits the flux regime of M2 ("as M2") by construction.
+
+
+Covariates enter each structural rung on a last-observation-carried-forward convention: the most recent observation at or before the forecast origin is used, and no covariate value dated after the origin enters any fitted transition.
+
+
+
+### Remark 3.1 (Class Reduction of Model M2m)
+Under stationary, climatological flux assumptions ($\tilde{R}_{t+1} = \bar{R}$ and $\tilde{P}_{t+1} = \bar{P}$), the dynamic one-pool balance simplifies algebraically to:
+$$H_{t+1} = (1 + \delta) H_t + (\alpha + \beta \bar{R} + \gamma \bar{P})$$
+Defining $\varphi = 1 + \delta$ and $a = \alpha + \beta \bar{R} + \gamma \bar{P}$, Model M2m reduces functionally to the identical mathematical class as the autonomous autoregressive model M1 ($H_{t+1} = \varphi H_t + a$). However, M2m uses a distinct estimator: rather than fitting a univariate regression directly on historical head levels, it pins its intercept using in-sample flux averages and least-squares response coefficients. 
+
+As detailed in Section 4.1, M2m is formally declined within our protocol based on this structural equivalence, rather than being certified as a distinct causal stock-flow innovation.
+
+In auxiliary climate-informed variants (Section 5.4), persisted recharge $\tilde{R}_{t+1} = R_t$ is replaced by an out-of-sample statistical prediction $\hat{R}_{t+1}$ generated from information available at the December 31 forecast origin:
+* **M2_Rar:** First-order autoregression fit to the historical recharge series;
+* **M2_Renso:** Linear regression forced by antecedent autumn Niño 3.4 SST anomalies;
+* **M2_Rprecip:** Linear regression forced by contemporaneous calendar-year Texas Division 06 and 07 precipitation;
+* **M2_combo:** Multivariate regression combining antecedent recharge, Niño 3.4 anomalies, and division precipitation.
+
+---
+
+## 4. Evaluation Design
+
+To eliminate retrospective selection bias, the quantitative evaluation protocol and retention gates were formally locked prior to generating predictive scores.
+
+### Definition 4.1 (Primary and Secondary Evaluation Metrics)
+The primary evaluation metric is the out-of-sample Root Mean Squared Error (RMSE) of annual-mean J-17 elevations, expressed in feet:
+$$\mathrm{RMSE}_h = \sqrt{\frac{1}{n} \sum_{i=1}^n \left( \hat{H}_{t_i+h \mid t_i} - H_{t_i+h} \right)^2}$$
+Secondary diagnostic metrics comprise:
+* **Mean Absolute Error (MAE):** Expressed in feet.
+* **Brier Score on Regulatory Compliance:** The mean squared error of the deterministic threshold indicator $\mathbf{1}\{\hat{H}_{t+h} < 660\text{ ft}\}$, evaluated over the post-2007 regulatory period.
+
+### Definition 4.2 (The Frozen Retention Rule)
+Let $\mathrm{RMSE}(M)$ denote the primary rolling-origin RMSE for candidate model $M$ at forecast horizon $h=1$. A candidate causal module $M$ from the structural ladder is retained if and only if it satisfies two conditions:
+1. **Hypothesis 1 (Baseline Superiority, H1):** $\mathrm{RMSE}(M) < \mathrm{RMSE}(\text{persist})$.
+2. **Hypothesis 2 (Parsimony Progression, H2):** $\mathrm{RMSE}(M) < \mathrm{RMSE}(M_{\text{next-simpler causal}})$.
+
+Retention is determined strictly at the one-year-ahead horizon ($h=1$) based on the point-RMSE ranking without an initial tie tolerance. Diagnostic oracles (M2_oracle) and the auxiliary Comal Springs discharge series are barred from the retention competition.
+
+### 4.1 Protocol Record and Pre-Declared Deviations
+
+The primary evaluation protocol was frozen and archived on 2026-08-25 prior to executing model scoring. Three procedural deviations from the baseline text of Definition 4.2 are documented:
+1. **The M2m Class Exclusion:** Model M2m satisfies both (H1) and (H2) at $h=1$ on empirical point scores. However, because it collapses algebraically to an affine AR(1) process (Remark 3.1), an explicit protocol clause excludes it from retention as an independent causal stock-flow model.
+2. **The Climate-Rung Comparator:** The protocol specification for Pass 2 evaluates whether climate-informed recharge predictions improve head forecasts relative to persistence and relative to the retained model M1. Using the declined M2m model as the causal comparator for the climate rungs would be circular; we therefore evaluate the climate models against both M1 and persistence, retaining M2m as a nested reference benchmark.
+3. **Directional Sign-Hit Metric:** A sign-hit rate metric for annual increments ($\Delta H$) included in initial exploratory outlines was struck prior to scoring because persistence generates $\Delta H = 0$ (rendering directional comparisons mathematically undefined).
+
+Fixed evaluation windows are designed around major historical climate and regulatory transitions:
+* **Drought-of-Record Drawdown:** Training 1934–1950 ($n=16$ transitions), testing 1951–1956 ($n=6$ years).
+* **Drought-of-Record Recovery:** Training 1934–1956 ($n=22$ transitions), testing 1957–1961 ($n=5$ years).
+* **Pre-Permit Wet Era:** Training 1980–1990 ($n=10$ transitions), testing 1991–1995 ($n=5$ years).
+* **Modern Critical-Period Management:** Training 1997–2014 ($n=17$ transitions), testing 2015–2023 ($n=9$ years).
+
+The rolling-origin cross-validation uses an expanding training window with a minimum threshold of 15 years ($n=14$ transitions). Scoring across the 1934–2023 domain yields $n = 75$ origins for the one-year-ahead horizon ($h=1$, origins 1948–2022) and $n = 71$ origins for the five-year-ahead horizon ($h=5$, origins 1948–2018).
+
+---
+
+## 5. Results
+
+### 5.1 Historical Water-Level Dynamics at J-17
+
+![Figure 1. Annual-mean groundwater elevations at index well J-17 across the 1934–2023 observation period. The 1956 drought-of-record minimum reached an annual mean of $623.15\text{ ft}$ (daily minimum $612.51\text{ ft}$); the 1992 pluvial maximum reached an annual mean of $691.96\text{ ft}$ (daily maximum $703.31\text{ ft}$). Across the 90-year panel, the annual mean falls below the 660-ft regulatory trigger in 31 years.* --- ### 5.2 Out-of-Sample Performance on Fixed Historical Windows Multi-step forward trajectories across the four diagnostic windows highlight fundamental behavioral differences between the models (Table 3 and Figure 2). ### Table 3. Out-of-sample forecast RMSE (ft) across fixed historical evaluation windows. *Note: Bold font denotes the best performance among candidate predictive models within each window. The diagnostic oracle (M2_oracle) is shown for reference.* | Historical Evaluation Window | persist | mean | M1 | M2 | M2m | M3 | M4 | M2_oracle | | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | | **Drawdown (1951–1956)** | 23.75 | 35.19 | 30.94 | **18.11** | 27.44 | 18.12 | 18.23 | 19.69 | | **Recovery (1957–1961)** | 43.62 | 14.07 | 56.24 | 55.32 | 37.74 | 55.28 | 55.12 | **12.26** | | **Pre-Permit Wet (1991–1995)** | 30.13 | 18.24 | 20.02 | 16.67 | 23.47 | 16.41 | **15.26** | **7.18** | | **Critical-Period (2015–2023)** | 27.41 | 14.77 | 15.62 | 23.37 | 14.79 | 22.84 | 22.17 | **8.70** |
+
+![Figure 2. Forecast trajectories across historical drought and recovery phases. Persisting drought recharge causes M2 to collapse into the lower clipping boundary ($610\text{ ft}$) during the 1957–1961 recovery.](figs/fig1_series.png) On the 1951–1956 drought-of-record drawdown window, Model M2 achieves the lowest predictive error ($18.11\text{ ft}$). However, this apparent predictive success is an artifact of continuing drought persistence rather than hydrogeological realism. Fitting the four-parameter balance on the brief 1934–1950 baseline ($n=16$ transitions) yields a positive extraction coefficient ($\hat{\gamma} = +0.021\text{ ft}\cdot(10^3\text{ acre-ft})^{-1}$), which violates mass-conservation principles. As the historical drought developed, regional agricultural and municipal pumping surged in response to diminished rainfall. Ordinary least squares aliases this human behavioral response directly into the state equation—an example of simultaneity bias compounded by small-sample limitations. Because the terminal training year (1950) was already characterized by depressed recharge, persisting that low recharge value through the test window happens to project a continuing decline, outperforming even the diagnostic oracle ($19.69\text{ ft}$). Conversely, Model M2 fails completely during the 1957–1961 post-drought recovery. The terminal drought year (1956) saw regional recharge collapse to $43.7 \times 10^3\text{ acre-ft}$, followed by a major pluvial shift in 1957 ($1,143 \times 10^3\text{ acre-ft}$). Persisting the dry 1956 flux causes M2 to project an escalating collapse: projected head drops from $617.1\text{ ft}$ to $611.6\text{ ft}$, $606.8\text{ ft}$, and ultimately saturates against the artificial lower boundary clip at $610.0\text{ ft}$ from 1959 onward, generating an RMSE of $55.32\text{ ft}$. Naive persistence performs nearly as poorly ($43.62\text{ ft}$) by freezing the depleted 1956 head level ($623.15\text{ ft}$). In contrast, the diagnostic oracle (M2_oracle), which receives the realized 1957 flood recharge, tracks the water-level surge ($12.26\text{ ft}$). During rapid pluvial recoveries, long-term training climatology provides the best non-oracle forecast ($14.07\text{ ft}$), demonstrating the strong mean-reverting behavior of this karst aquifer. --- ### 5.3 Rolling-Origin Forecast Evaluation Across 75 expanding rolling origins, naive persistence achieves an RMSE of $13.23\text{ ft}$ at $h=1$ and $21.11\text{ ft}$ at $h=5$ (Tables 4 and 5, Figure 3). ### Table 4. Rolling-origin forecast performance across the 1934–2023 panel (ft).](figs/fig2_windows.png)
+
+Note: Evaluated across identical origin sets ($n=75$ for $h=1$; $n=71$ for $h=5$). Bold font indicates the best non-oracle forecast.*
+| Model ID | One-Year RMSE ($h=1$) | One-Year MAE ($h=1$) | Five-Year RMSE ($h=5$) |
+| :--- | :---: | :---: | :---: |
+| **persist** | 13.23 | 10.73 | 21.11 |
+| **mean** | 16.17 | 13.17 | **16.80** |
+| **M1** | 12.84 | 10.72 | 21.25 |
+| **M2** | 14.70 | 11.45 | 33.49 |
+| **M2m** | **12.28** | **10.22** | 17.44 |
+| **M3** | 14.46 | 11.12 | 33.46 |
+| **M4** | 14.30 | 11.17 | 33.39 |
+| **M2_oracle** | 7.55 | 5.79 | 10.87 |
+
+### Table 5. Formal retention evaluation on primary rolling-origin RMSE at $h=1$.
+| Model ID | Margin vs. Persistence (ft) | Margin vs. Simpler Comparator (ft) | Distinct Structural Class? | Protocol Retention Verdict |
+| :--- | :---: | :---: | :---: | :--- |
+| **M1** | $-0.39$ ($12.84 < 13.23$) | None (Base model) | Output-only linear AR(1) | **Retained** (Point rule; margin within noise) |
+| **M2** | $+1.47$ ($14.70 > 13.23$) | $+1.86$ vs. M1 | Dynamic stock-flow | **Rejected** (Fails H1) |
+| **M2m** | $-0.95$ ($12.28 < 13.23$) | $-0.56$ vs. M1 | No (Collapses to affine AR(1)) | **Declined** (Excluded by protocol class clause) |
+| **M3** | $+1.23$ ($14.46 > 13.23$) | $-0.24$ vs. M2 | Residual autoregression | **Rejected** (Fails H1) |
+| **M4** | $+1.07$ ($14.30 > 13.23$) | $-0.16$ vs. M3 | Lagged state update | **Rejected** (Fails H1) |
+| **M2_oracle**| $-5.68$ ($7.55 < 13.23$) | None | Requires realized future fluxes | **Excluded** (Diagnostic benchmark ceiling) |
+
+![Figure 3. Out-of-sample RMSE for candidate models at one-year and five-year forecast horizons. At $h=1$, M2m and M1 edge out persistence; at $h=5$, climatological mean baselines decisively outperform all dynamic models.* Applying the frozen retention rule (Definition 4.2) at $h=1$: * **Model M1** yields an RMSE of $12.84\text{ ft}$, beating persistence by $0.39\text{ ft}$. Because M1 represents the initial autonomous baseline, Condition (H2) is vacuous, and M1 is retained under the point rule. * **Model M2** yields an RMSE of $14.70\text{ ft}$, failing Condition (H1) by $+1.47\text{ ft}$ relative to persistence and trailing M1 by $+1.86\text{ ft}$. * **Models M3 and M4** achieve minor reductions relative to M2 ($14.46\text{ ft}$ and $14.30\text{ ft}$), but remain inferior to naive persistence, failing Condition (H1). * **Model M2m** achieves the lowest one-step error ($12.28\text{ ft}$), outperforming persistence by $0.95\text{ ft}$ and beating M1 by $0.56\text{ ft}$. However, as established in Remark 3.1, M2m collapses to an affine AR(1) state equation and is declined under the pre-declared protocol clause. The formal verdict that "no stock-flow module is retained" is partly a consequence of this class exclusion: the water-balance formulation forced by climatological mean fluxes is the best one-step forecaster evaluated. The primary operational failure lies in persisting last year's recharge: doing so inflates the one-year error of M2 by $+2.42\text{ ft}$ relative to M2m. In multi-step projections ($h=5$), this dynamic error compounds severely: M2, M3, and M4 diverge, posting errors of approximately $33.5\text{ ft}$, while training-mean climatology achieves the lowest RMSE ($16.80\text{ ft}$), outperforming persistence ($21.11\text{ ft}$) by $4.31\text{ ft}$. #### Secondary Regulatory Performance (Post-2007 Era) Over the post-2007 regulatory period ($n=16$ origins at $h=1$), the Brier misclassification score for the 660-ft Stage I drought trigger is $0.31$ for persistence, $0.25$ for M1, and $0.19$ for M2_oracle. At this one-year horizon, the model ranking is preserved: persistence posts an RMSE of $13.09\text{ ft}$, M1 achieves $12.16\text{ ft}$, M2 yields $13.31\text{ ft}$, and the oracle records $8.03\text{ ft}$. At $h=5$ ($n=12$ origins), the relative ordering between M1 and persistence reverses on this subset ($17.16\text{ ft}$ vs. $25.10\text{ ft}$). These calculations evaluate an annual-mean proxy against a statutory 10-day trigger on a small subsample, confirming that the primary point-RMSE findings are not contradicted by threshold metrics. --- ### 5.3.1 Statistical Uncertainty Across Model Retention Margins To assess whether the small performance margins represent statistically significant improvements, we compute Diebold–Mariano loss-differential tests (Diebold & Mariano, 1995) using Newey–West heteroskedasticity- and autocorrelation-consistent (HAC) standard errors (lag $h-1$) paired with moving-block bootstrap confidence intervals (Künsch, 1989; 10,000 replications, block length $L = 8$; Table 6). ### Table 6. Statistical evaluation of primary model retention margins. *Note: Evaluated across rolling origins ($n=75$ for $h=1$; $n=71$ for $h=5$). Block bootstrap uses 10,000 replications with block length $L=8$. Bold text denotes margins whose 95% confidence intervals exclude zero.* | Candidate Comparison Model | Horizon ($h$) | RMSE Margin (ft) | Diebold–Mariano ($z$) | DM $p$-value | 95% Moving-Block Bootstrap CI (ft) | Separates from Zero? | | :--- | :---: | :---: | :---: | :---: | :---: | :---: | | **M1 $-$ persist** | 1 | $-0.39$ | $-0.85$ | 0.40 | [$-1.51, +0.71$] | No | | **M2m $-$ persist** | 1 | $-0.95$ | $-3.07$ | 0.003 | [**$-1.45, -0.68$**] | **Yes** | | **M2m $-$ M1** | 1 | $-0.56$ | $-1. The M2 minus persistence margin of $+1.47\text{ ft}$ remains within noise under the post-freeze layer (DM statistic $+1.27$, $p = 0.21$, 95% block-bootstrap CI $[-0.02, +3.40]\text{ ft}$).61$ | 0.11 | [$-1.53, +0.13$] | No | | **M2 $-$ persist** | 1 | $+1.47$ | $+1.27$ | 0.21 | [$-0.02, +3.40$] | No (Borderline) | | **mean $-$ persist** | 5 | $-4.30$ | $-1.65$ | 0.10 | [**$-9.72, -2.09$**] | **Yes** | | **M1 $-$ persist** | 5 | $+0.15$ | $+0.06$ | 0.95 | [$-5.57, +4.94$] | No | | **M2_combo $-$ M1** | 1 | $-0.13$ | $-0.21$ | 0.83 | [$-1.37, +1.31$] | No | | **M2_combo $-$ M2m** | 1 | $+0.43$ | $+0.74$ | 0.46 | [$-0.56, +1.57$] | No | The uncertainty analysis provides three key insights: 1. **The M1 Retention Margin is Within Noise:** The $0.39\text{ ft}$ error reduction achieved by M1 over persistence yields a Diebold–Mariano statistic of $z = -0.85$ ($p = 0.40$), and its 95% bootstrap confidence interval ([$-1.51, +0.71$] ft) spans zero. The mean absolute errors of the two rules are essentially identical ($10.72\text{ ft}$ vs. $10.73\text{ ft}$). Retaining M1 under the point rule simply captures a slight empirical mean reversion in head levels, rather than a decisive predictive advantage. 2. **M2m is the Sole Statistically Separable One-Step Model:** The $0.95\text{ ft}$ advantage of M2m over persistence is highly statistically significant ($z = -3.07$, $p = 0.003$; 95% bootstrap CI: [$-1.45, -0.68$] ft). However, the $0.56\text{ ft}$ increment between M2m and M1 is not statistically distinguishable from zero ($p = 0.11$, CI: [$-1.53, +0.13$] ft). The estimator-level benefit of incorporating mean fluxes is observable in point estimates, but remains within sampling uncertainty at this sample size. 3. **Climatology Decisively Beats Persistence at Long Horizons:** At $h=5$, the training mean's $-4.30\text{ ft}$ advantage over persistence yields a bootstrap interval that strictly excludes zero ([$-9.72, -2.09$] ft). While the multi-step Diebold–Mariano test exhibits reduced power due to overlapping prediction horizons ($p = 0.10$), the bootstrap distribution confirms that climatological mean reversion reliably outperforms persistence over multi-year spans. An independent computational audit of these calculations (using an unweighted truncation scheme, population variance scaling, block length $L=h$, independent seeds, and alternative HAC conventions) confirmed every empirical finding: M1 vs. persistence yielded $z = -0.86$ (bootstrap CI: [$-1.22, +0.56$] ft; $p = 0.38$), M2m vs. persistence yielded $p = 0.001$, and the five-year climatology advantage remained significant ($p = 0.035$). --- ### 5.4 Climate-Informed Recharge Predictions We next evaluate whether coupling the one-pool balance to pre-season climate teleconnections can overcome the timing errors inherent in persisted recharge (Table 7). ### Table 7. Rolling-origin forecast skill for climate-informed recharge modules. *Note: Evaluated across rolling origins ($n=75$ for $h=1$; $n=71$ for $h=5$). The precipitation oracle uses realized year $t+h$ climate-division precipitation and is excluded from retention.* | Model ID | Projected Recharge Input Formulation ($\tilde{R}_{t+1}$) | Head RMSE $h=1$ (ft) | Head Margin vs. M1 (ft) | Head RMSE $h=5$ (ft) | Recharge Target RMSE ($10^3\text{ acre-ft}$) | | :--- | :--- | :---: | :---: | :---: | :---: | | **persist** | Persisted head / Persisted recharge ($R_t$) | 13.23 | $+0.39$ | **21.11** | 702 | | **M1** | None (Autonomous linear AR(1)) | 12.84 | --- | 21.25 | --- | | **M2_Rar** | Univariate AR(1) on historical recharge | 13.25 | $+0.41$ | 25.38 | 561 | | **M2_Renso** | Antecedent Sep–Nov Niño 3.4 SST anomaly | 12.82 | $-0.02$ | 24.42 | 528 | | **M2_Rprecip** | Prior-year Texas Div 06/07 precipitation | 12.80 | $-0.04$ | 25.38 | 545 | | **M2_combo** | Multivariate: AR(1) + Niño 3.4 + Precip | 12.71 | $-0.13$ | 26.88 | 538 | | **M2m** | Climatological mean recharge ($\bar{R}_{\mathrm{train}}$) | **12.28** | **$-0.56$** | 17.44 | 556 | | **rain_oracle** | Realized year $t+1$ Div 06/07 precipitation | 10.56 | $-2.28$ | 16.91 | **354** | Contemporaneous precipitation is strongly correlated with annual recharge ($\operatorname{corr}(R_t, \text{Precip}_t) = 0.78$). Consequently, if an analyst had perfect foreknowledge of annual rainfall (the rain_oracle), head RMSE would drop to $10.56\text{ ft}$. However, this still trails the full diagnostic oracle M2_oracle ($7.55\text{ ft}$) because a linear rainfall-recharge relationship fails to capture the extreme non-linear runoff generation observed during major pluvials such as 1957. Antecedent climate variables known at the forecast origin (December 31) demonstrate modest predictive skill for next-year recharge relative to a persistence baseline: M2_Renso, M2_Rprecip, and M2_combo achieve recharge RMSEs of $528\text{--}545 \times 10^3\text{ acre-ft}$, outperforming persisted recharge ($702 \times 10^3\text{ acre-ft}$) and training-mean climatology ($556 \times 10^3\text{ acre-ft}$). However, this modest improvement in recharge estimation fails to translate into meaningful predictive skill for index-well head: * The climate modules yield minimal head RMSE reductions over M1 ($0.02\text{ ft}$ for M2_Renso, $0.04\text{ ft}$ for M2_Rprecip, and $0.13\text{ ft}$ for M2_combo). As demonstrated in Table 6, these margins are within sampling noise (for M2_combo vs. M1, 95% bootstrap CI: [$-1.37, +1.31$] ft). * When evaluated against the nested climatological baseline M2m ($12.28\text{ ft}$), the climate variants perform worse by $+0.43\text{ to } +0.54\text{ ft}$. * In multi-step projections ($h=5$), freezing the one-step climate recharge forecast causes head RMSE to inflate to $24.42\text{--}26.88\text{ ft}$, falling far behind both persistence ($21.11\text{ ft}$) and climatology ($16.80\text{ ft}$). * An autoregressive model on recharge itself (M2_Rar) degrades head forecasts ($13.25\text{ ft}$ at $h=1$), confirming that fitting an AR(1) process to near-white recharge noise introduces spurious parameter variance. On fixed historical windows, antecedent climate signals fail to anticipate abrupt hydrologic transitions. For example, September–November 1956 is La Niña ($-0.92$) and does not announce $R_{1957} = 1143 \times 10^3\text{ acre-ft}$: the teleconnection carried no forecast value for the record pluvial that ended the drought. Consequently, all causal climate-informed models generated large errors across the recovery window (RMSEs of $48.8\text{--}55.0\text{ ft}$), trailing naive persistence ($43.62\text{ ft}$) and the rain oracle ($33.72\text{ ft}$). --- ![Figure 4. Rolling RMSE on J-17 for climate-informed recharge. The precipitation oracle uses year t+h precipitation and cannot be retained.](figs/fig4_pass2.png)
+
+### 5.5 Hydrological Redundancy of the Comal Springs Service Series
+
+![Figure 5. Contemporaneous annual Comal Springs discharge ($Q_t$) plotted against J-17 water levels ($H_t$) over 1934–2023 ($\operatorname{corr}(H_t, Q_t) = 0.986$). The linear rating curve fit to 1934–1950 data ($Q = -2876 + 4.77H$) incorrectly predicts positive discharge ($97\text{ cfs}$) during the 1956 drought of record.](figs/fig3_rmse.png) A linear rating curve fit to 1934–1950 data: $$Q_t = -2876 + 4.77 H_t$$ accurately characterizes ordinary operating conditions, reflecting the high contemporaneous correlation between J-17 water levels and Comal Springs discharge ($r = 0.986$; Figure 4). Scoring our model ladder directly on the Comal Springs series over the 75 rolling origins yields a performance ranking that mirrors the J-17 head evaluation:](figs/fig5_fibre.png)
+
+ **persist:** $71.9\text{ cfs}$
+* **M1:** $69.0\text{ cfs}$
+* **M2m:** $68.7\text{ cfs}$
+* **M4:** $73.4\text{ cfs}$
+* **M3:** $73.8\text{ cfs}$
+* **M2:** $74.8\text{ cfs}$
+* **mean:** $89.7\text{ cfs}$
+* **M2_oracle:** $45.3\text{ cfs}$
+
+Crucially, this linear relationship breaks down during severe droughts. In 1956, when annual-mean J-17 elevation dropped to $623.15\text{ ft}$ (with daily levels reaching $612.51\text{ ft}$), the linear equation predicts an annual mean discharge of $\approx 97\text{ cfs}$, whereas the spring system actually experienced unprecedented drying (annual mean of $32\text{ cfs}$, including complete cessation from June to November 1956). 
+
+The zero-discharge intercept of this empirical rating curve occurs at:
+$$H_0 = \frac{2876}{4.77} \approx 602.9\text{ ft AMSL}$$
+which lies well below any recorded water level at J-17. Because springflow is roughly a linear transformation of piezometric head under normal conditions, monitoring spring discharge provides no independent dynamic information for forecasting J-17, yet simple linear representations fail to capture the localized non-linearities and threshold transitions that govern environmental spring drying.
+
+---
+
+### 5.6 Pumpage Policy Counterfactuals
+
+To evaluate the operational impact of regulatory extraction controls relative to natural climatic variability, we simulate four counterfactual pumping scenarios across the post-1990 period (1991–2023). 
+
+Simulations are executed by passing counterfactual pumping paths through the pre-permitting stock-flow map (fit to 1980–1990 data; $\hat{\beta} = 0.0175$, $\hat{\gamma} = -0.0284\text{ ft}\cdot(10^3\text{ acre-ft})^{-1}$, $\hat{\delta} = -0.254$) forced with realized historical recharge, initialized from the observed 1990 head ($645.8\text{ ft}$; Table 8).
+
+### Table 8. Counterfactual pumping scenarios evaluated across 1991–2023 using the pre-permit model.
+*Note: Observed terminal 2023 J-17 elevation is $635.68\text{ ft}$. The 1980–1990 training model exhibits an OLS simultaneity bias, which must be considered when interpreting scenario trajectories.*
+| Counterfactual Pumping Scenario | Mean Annual Pumping ($10^3\text{ acre-ft}\cdot\text{yr}^{-1}$) | Projected 2023 Head (ft) | Simulated Period Minimum Head (ft) | RMSE vs. Realized Heads (ft) |
+| :--- | :---: | :---: | :---: | :---: |
+| **Realized Historical Pumping** | 382.1 | 641.6 | 640.2 | 8.56 |
+| **Pumping Frozen at 1990 Peak** | 489.4 | 630.9 | 630.5 | 14.22 |
+| **Pre-Permit Mean Pumping** | 469.8 | 632.4 | 632.0 | 13.02 |
+| **Mandatory 20% Pumping Cut** | 305.7 | 646.8 | 645.5 | **7.19** |
+
+These counterfactual simulations illustrate four key dynamics:
+1. **Pumping Operates as a Secondary Control:** Across the full range of policy scenarios—from an aggressive 20% demand reduction up to freezing extractions at the historical 1990 peak—projected 2023 head levels span a range of $15.9\text{ ft}$ ($630.9\text{ to } 646.8\text{ ft}$). This policy spread is of the same magnitude as the model's own out-of-sample error band ($7.19\text{ to } 14.22\text{ ft}$).
+2. **Recharge Variability Dominates Piezometric Head:** While the extraction coefficient ($\hat{\gamma} = -0.0284$) is larger in magnitude than the recharge coefficient ($\hat{\beta} = 0.0175$), natural recharge varies over a vastly wider range ($44\text{ to } 2,486 \times 10^3\text{ acre-ft}\cdot\text{yr}^{-1}$, a span of nearly $2,440 \times 10^3\text{ acre-ft}$) than regional pumping ($300\text{ to } 540 \times 10^3\text{ acre-ft}\cdot\text{yr}^{-1}$, a span of $240 \times 10^3\text{ acre-ft}$). An extreme recharge event of $1,000 \times 10^3\text{ acre-ft}$ shifts J-17 water levels by $17.5\text{ ft}$, dwarfing the marginal impact of annual regulatory pumping adjustments.
+3. **Apparent Accuracy Gains from Policy Reductions Reflect Model Bias:** Simulating a 20% pumping cut yields the lowest RMSE against observed heads ($7.19\text{ ft}$ vs. $8.56\text{ ft}$). Rather than indicating that historical pumping was suboptimal, this outcome occurs because the pre-permitting model has an intrinsic positive head bias (projecting a 2023 head of $641.6\text{ ft}$ under realized pumping vs. the observed $635.68\text{ ft}$). Imposing artificial pumping cuts shifts the baseline trajectory, masking structural over-prediction.
+4. **Estimated Regulatory Effects are Modest:** A permanent 20% extraction reduction increases simulated 2023 water levels by $5.2\text{ ft}$ ($646.8\text{ ft}$ vs. $641.6\text{ ft}$; the actual-pumpage path itself ends $5.9\text{ ft}$ above the observed 2023 head of $635.68\text{ ft}$). While hydrologically meaningful during drought emergencies, this increment is smaller than the model's single-year prediction error, demonstrating that regulatory demand management cannot substitute for predictive skill in operational planning.
+
+---
+
+The full-sample coefficients $(\hat{\beta}, \hat{\gamma}) = (0.017, -0.026)$ differ from the pre-permit window pair because the windows differ; the magnitude ordering, not the signed pair, carries readings 1–4 above.
+
+## 6. Discussion
+
+### 6.1 The Timing Bottleneck: Forecasting vs. Nowcasting
+
+The primary empirical finding of this study is that dynamic stock-flow water-balance models forced by persisted fluxes fail to beat naive persistence for annual-mean groundwater levels. This failure is rooted in an environmental timing mismatch:
+
+$$\operatorname{corr}(R_t, R_{t-1}) = 0.17 \quad \text{versus} \quad \operatorname{corr}(\Delta H_t, R_t) = 0.74$$
+
+Annual recharge across the Edwards Aquifer recharge zone behaves essentially as a temporally uncorrelated, near-white noise process. In contrast, annual water-level increments at J-17 are strongly coupled to contemporaneous annual recharge. 
+
+When a stock-flow model persists antecedent recharge ($\tilde{R}_{t+1} = R_t$), it projects water levels using an environmental driver that shares less than 3% of its variance with next year's actual flux. The model incorporates obsolete boundary forcing, degrading performance below that of a naive rule that assumes no change.
+
+When realized fluxes are provided exogenously (M2_oracle), the one-pool balance achieves an RMSE of $7.55\text{ ft}$—a 43% reduction in error relative to persistence ($13.23\text{ ft}$) and a 53% reduction at $h=5$ ($10.87\text{ ft}$ vs. $21.11\text{ ft}$). 
+
+This contrast defines the operational boundary of lumped water balances in rapidly responsive aquifers:
+* Provided with contemporaneous boundary fluxes, the one-pool water balance functions as an accurate **annual nowcast**.
+* Deployed at a forecast origin with unknown future fluxes, the identical map fails as an **operational forecast**.
+
+This same structural limitation appears in the companion evaluation of Northern cod (Abaee, 2026). In that marine system, supplying reconstructed annual fisheries removals fails to improve multi-step biomass forecasts under a stationary surplus-production model, because the underlying demographic driver—an abrupt escalation in natural mortality—is absent from the predictive equation. 
+
+In both systems, structural elaboration fails out-of-sample because the dominant physical driver cannot be reliably projected using information available at the forecast origin.
+
+---
+
+### 6.2 Autocorrelation Mechanics and the Baseline AR(1)
+
+The marginal performance of the autonomous AR(1) model (M1), which improves one-year RMSE over persistence by only $0.39\text{ ft}$, can be explained through the time-series properties of index-well water levels. 
+
+An estimated AR(1) process:
+$$H_{t+1} = a + \varphi H_t$$
+nests naive persistence as a parametric special case when $\varphi = 1$ and $a = 0$. As the true autocorrelation of a time series approaches unity, the estimated autoregression converges toward persistence, and any theoretical performance advantage is dwarfed by the parameter estimation error of $\hat{\varphi}$.
+
+At J-17, the annual head record exhibits moderate persistence, but remains far from an integrated unit-root process: the full-sample lag-1 autocorrelation is $\operatorname{corr}(H_t, H_{t-1}) = 0.64$, and rolling-origin regressions yield a mean coefficient of $\hat{\varphi} = 0.66$. 
+
+This moderate autocorrelation creates a narrow window where an unforced AR(1) model can capture slight mean-reverting tendencies without overfitting. However, because the true series is regularly perturbed by high-variance recharge shocks, this advantage remains small ($0.39\text{ ft}$) and statistically indistinguishable from zero (bootstrap CI: [$-1.51, +0.71$] ft).
+
+This mechanism leads to a clear, testable hydrogeological hypothesis: across regional aquifers, as the temporal persistence of the head record increases (e.g., in systems with thick unconfined vadose zones or high matrix storage), the performance margin of an AR(1) over naive persistence should shrink toward zero and eventually turn negative as estimation noise dominates. 
+
+An exploratory test on index well J-27 in the neighboring Uvalde Pool of the Edwards Aquifer, where annual water levels are more strongly autocorrelated ($\operatorname{AC}(1) = 0.84$), confirms this expectation: there, the AR(1) model loses to naive persistence by $+0.13\text{ ft}$. 
+
+Thus, the retention of M1 at J-17 is a consequence of moderate autocorrelation in a dynamic karst system, and should not be interpreted as evidence that unforced statistical models are universally superior.
+
+---
+
+### 6.3 Benchmark Discipline in Hydrogeological Forecasting
+
+These results offer an important perspective on the growing groundwater benchmarking literature. Contemporary benchmarking initiatives, such as the GEMS-GER machine-learning evaluation (Ohmer et al., 2026) and regional karst deep-learning comparisons (Zhu et al., 2026), have advanced the discipline by standardizing large-scale multi-model evaluations. 
+
+However, these frameworks typically evaluate models using metrics such as the Nash–Sutcliffe Efficiency ($\mathrm{NSE} > 0.5$) or comparative $R^2$, without testing whether candidate architectures outperform naive persistence under pre-registered retention rules.
+
+When evaluated under an out-of-sample retention gate, structural complexity must earn its place by demonstrably outperforming the baseline prediction that hydrological conditions remain unchanged. In the Edwards Aquifer, dynamic stock-flow equations, residual tracking, and antecedent climate predictors all fail this basic test at an annual horizon. 
+
+Furthermore, our multi-step results challenge standard modeling assumptions: over five-year planning horizons, long-term historical climatology ($16.80\text{ ft}$) decisively outperforms both persistence ($21.11\text{ ft}$) and dynamic water balances ($33.49\text{ ft}$). 
+
+In rapidly recharged, regulated karst basins, multi-year water-level expectations are bounded by environmental mean reversion. Dynamic models that persist transient drought or pluvial conditions compound error over time, diverging from observed dynamics.
+
+---
+
+### 6.4 Hydrogeological Interpretations of the Lumped Model
+
+The empirical failure of the one-pool balance out-of-sample does not imply that regional groundwater dynamics are non-physical. Instead, it reflects the difficulty of capturing complex karst hydrogeology within a discrete-time scalar mapping:
+* **Drainage Mechanics:** The autonomous AR(1) model M1 can be interpreted physically. Regional spring discharge from the Edwards Aquifer approximately follows Darcy's law, scaling linearly with piezometric head above local spring orifices ($H_s$). The analytical solution for unforced aquifer drainage yields an affine autoregressive relationship:
+  $$H_{t+1} \approx (1 - k) H_t + k H_s$$
+  where $k$ represents an annual aquifer drainage constant. The empirical autoregressive slope ($\hat{\varphi} = 0.66$) corresponds to a drainage decay rate of:
+  $$\hat{k} = 1 - \hat{\varphi} \approx 0.34\text{ yr}^{-1}$$
+  This indicates that M1 performs well not because it is an abstract statistical curve, but because it captures the natural free-drainage recession of the aquifer when boundary recharge is absent.
+* **Unresolved Karst Geometry:** The one-pool model inevitably aggregates diverse hydrogeological processes into a single equation. Localized conduit flow, rapid unconfined recharge through sinking streams, delayed diffuse infiltration through the unsaturated zone, cross-fault transfers across the Balcones Fault Zone, and pressure-wave propagation across the confined zone are all relegated to the residual term $\varepsilon_t$. 
+
+While distributed numerical models (e.g., MODFLOW) attempt to resolve this spatial heterogeneity directly, they require extensive boundary inputs and calibration. Our results demonstrate that simplified, lumped conceptual representations cannot overcome the timing bottleneck: without reliable predictions of future boundary fluxes, adding lumped physical equations fails to improve out-of-sample forecasts.
+
+---
+
+### 6.5 Methodological Limitations
+
+To support balanced application of these conclusions, several limitations of the evaluation design must be highlighted:
+1. **Flux Aggregation Across Sub-Pools:** Reconstructed recharge ($R_t$) and extraction ($P_t$) represent totals across the wider San Antonio and Uvalde basins. While J-17 serves as the index well for the San Antonio Pool, inter-pool transfers across the Knippa Gap divide introduce unmodeled boundary fluxes that can distort local mass balances.
+2. **Estimation Uncertainty in Historical Fluxes:** Recharge estimates derived from the Puente stream-loss method are subject to unquantified streamflow gauging and catchment runoff errors. Similarly, reported well extractions exclude unmetered domestic, livestock, and historical federal withdrawals.
+3. **Temporal Resolution Constraints:** This evaluation operated strictly at an annual time step. While well suited for annual water-budget planning and multi-year drought management, this temporal resolution aggregates high-frequency recharge pulses and localized summer drawdown spikes. Testing whether sub-annual (e.g., monthly or seasonal) water balances demonstrate skill requires an independent, sub-annual evaluation protocol.
+4. **Information Latency vs. Operational Monitoring:** Module M4 evaluated a theoretical one-year lag in initial head observations, matching the structure of our companion marine assessment. In practice, J-17 is a modern telemetered monitoring well with real-time daily data availability. Consequently, M4 quantifies the mathematical cost of stale initial conditions rather than a real-world constraint of the Edwards monitoring network.
+
+---
+
+## 7. Conclusions
+
+Evaluating a ladder of discrete-time water-balance models against 90 years of annual water-level observations at index well J-17 yields four main conclusions:
+1. **Dynamic Stock-Flow Models Fail to Beat Persistence:** A lumped one-pool water-balance model that persists prior-year recharge fails to outperform naive last-value persistence at a one-year forecast horizon ($14.70\text{ ft}$ vs. $13.23\text{ ft}$). Annual recharge across the Edwards Aquifer behaves as near-white noise ($\operatorname{corr}(R_t, R_{t-1}) = 0.17$), so forcing forward predictions with persisted fluxes introduces substantial error into the state equation.
+2. **Univariate Autoregression Provides a Marginal, Statistically Fragile Baseline:** An unforced linear AR(1) model achieves a minor one-year RMSE reduction of $0.39\text{ ft}$ ($12.84\text{ ft}$), which clears the frozen point-retention rule. However, this margin is statistically indistinguishable from zero (mean absolute error is tied at $10.7\text{ ft}$, and the 95% moving-block bootstrap confidence interval spans zero: [$-1.51, +0.71$] ft). This performance captures moderate empirical autocorrelation ($\hat{\varphi} \approx 0.66$) reflecting natural baseflow recession, rather than an underlying stock-flow dynamic.
+3. **Water Balances Function as Nowcasts Rather than Operational Forecasts:** Provided with realized boundary fluxes, the one-pool balance achieves an RMSE of $7.55\text{ ft}$ (a 43% error reduction over persistence). At an annual time step, the lumped model functions effectively as an environmental nowcast. However, antecedent climate indices (ENSO SST anomalies and division rainfall) improve one-year head RMSE by at most $0.13\text{ ft}$, failing to bridge the gap between nowcasting and operational forecasting.
+4. **Historical Climatology is the Robust Benchmark for Multi-Year Planning:** Over five-year horizons, long-term training-mean climatology decisively outperforms both naive persistence ($16.80\text{ ft}$ vs. $21.11\text{ ft}$; bootstrap interval strictly excludes zero) and dynamic models forced by persisted fluxes ($33.49\text{ ft}$). In rapidly recharged karst aquifers, multi-year expectations are bounded by environmental mean reversion.
+
+### Practical Recommendations for Groundwater Managers
+* **Exercise Caution with Persisted-Flux Predictions:** At annual decision origins, water managers should avoid using lumped water-balance forecasts forced by persisted hydrologic conditions. Without reliable forward predictions of regional recharge, these models perform worse than simple last-value persistence.
+* **Adopt Climatological Defaults for Multi-Year Planning:** For medium-term (3- to 5-year) drought-mitigation and water-supply planning, managers should rely on long-term historical climatological baselines rather than forward projections from dynamic balances forced by recent dry conditions, which tend to project unrealistically severe, persistent drawdowns.
+* **Recognize the Limits of Pumping Adjustments:** While regulatory extraction controls remain critical for mitigating extreme drawdowns during severe droughts, counterfactual simulations demonstrate that regional pumping is a secondary lever compared to natural recharge variability. Expected water-level shifts from demand management fall within the predictive uncertainty of annual models.
+
+### Scope and Transferability
+These findings apply directly to shallow, rapidly recharged, institutionally managed regional aquifers characterized by high hydrologic conductivity and responsive boundary fluxes. They do not apply to deep, non-stationary fossil aquifer systems undergoing continuous, unreplenished depletion, where water levels follow monotonic trends and naive persistence fails. 
+
+Ultimately, this study demonstrates the value of benchmark discipline: before adopting complex predictive models for operational water resources management, their structural additions must be quantitatively justified against simple persistence and climatological baselines using locked, out-of-sample evaluation protocols.
+
+---
+
+## Data and Code Availability
+
+All hydrologic observation series, protocol documentation, model execution scripts, and statistical replication codes are open-source and archived in public repositories to ensure computational reproducibility:
+1. **Primary Observation Records:** J-17 daily water levels are available from the Texas Water Development Board Groundwater Database (Well 68-37-203). Annual regional recharge and pumping compilations are maintained by the Edwards Aquifer Authority and the U.S. Geological Survey. Climate teleconnection indices are archived by NOAA CPC (Niño 3.4) and NOAA NCEI (nClimDiv).
+2. **Computational Scripts:** The complete evaluation pipeline, parameter estimation routines, Diebold–Mariano tests, and moving-block bootstrap routines are permanently archived under repository tag `wave_e_edwards` (with independent replication code in `campaign_e3_dm_uncertainty.py`).
+
+---
+
+## References
+
+* Adamowski, J., and Chan, H.F. 2011. A wavelet neural network conjunction model for groundwater level forecasting. *Journal of Hydrology* 407: 28–40. https://doi.org/10.1016/j.jhydrol.2011.06.013
+
+* Abaee, A. 2026. Does a surplus-production ladder improve forecasts of Northern cod? A scored test on NAFO 2J3KL. Zenodo. https://doi.org/10.5281/zenodo.22553609. Companion forecast-evaluation study (Northern cod, NAFO 2J3KL).
+
+* Daliakopoulos, I.N., Coulibaly, P., and Tsanis, I.K. 2005. Groundwater level forecasting using artificial neural networks. *Journal of Hydrology* 309: 229–240. https://doi.org/10.1016/j.jhydrol.2004.12.001
+
+* Diebold, F.X., and Mariano, R.S. 1995. Comparing predictive accuracy. *Journal of Business & Economic Statistics* 13: 253–263. https://doi.org/10.1080/07350015.1995.10524599
+
+* Edwards Aquifer Authority. 2024/25. *2023 Groundwater Discharge and Usage*, Table 1 (after USGS letter report, 5 April 2024). https://www.edwardsaquifer.org/wp-content/uploads/2025/05/2023-Groundwater-Discharge-and-Usage.pdf
+
+* Edwards Aquifer Authority. Critical Period / Drought Management. https://www.edwardsaquifer.org/groundwater-users/critical-period-drought-management/
+
+* Künsch, H.R. 1989. The jackknife and the bootstrap for general stationary observations. *Annals of Statistics* 17: 1217–1241. https://doi.org/10.1214/aos/1176347265
+
+* Makridakis, S., Spiliotis, E., and Assimakopoulos, V. 2020. The M4 Competition: 100,000 time series and 61 forecasting methods. *International Journal of Forecasting* 36: 54–74.
+
+* NOAA National Centers for Environmental Information. nClimDiv precipitation (climdiv-pcpndv-v1.0.0). https://www.ncei.noaa.gov/pub/data/cirs/climdiv/
+
+* NOAA Physical Sciences Laboratory. Niño 3.4 monthly SST (HadISST). https://psl.noaa.gov/data/timeseries/month/data/nino34.long.data
+
+* Ohmer, M., Liesch, T., Habbel, B., Heudorfer, B., Gomez, M., Clos, P., Nölscher, M., and Broda, S. 2026. GEMS-GER: A machine learning benchmark dataset of long-term groundwater levels in Germany with meteorological forcings and site-specific environmental features. *Earth System Science Data* 18, 77.
+
+* Puente, C. 1978. *Method of estimating natural recharge to the Edwards Aquifer in the San Antonio area, Texas.* U.S. Geological Survey, Austin, Texas.
+
+* Ropelewski, C.F., and Halpert, M.S. 1986. North American precipitation and temperature patterns associated with the El Niño/Southern Oscillation (ENSO). *Monthly Weather Review* 114: 2352–2362.
+
+* Scanlon, B.R., Mace, R.E., Barrett, M.E., and Smith, B. 2003. Can we simulate regional groundwater flow in a karst system using equivalent porous media models? Case study, Barton Springs Edwards aquifer, USA. *Journal of Hydrology* 276: 137–158.
+
+* Texas Water Development Board. Water Data for Texas, well 6837203 (J-17). https://waterdatafortexas.org/groundwater/well/6837203
+
+* Umphres, G.D., and Choi, N.J. 2025. Estimated Annual Recharge to the Edwards Aquifer in the San Antonio Area, by Stream Basin or Ungaged Area, 1934–2024. U.S. Geological Survey data release. https://doi.org/10.5066/P1BI62NY
+
+* U.S. Geological Survey. National Water Information System, site 08168710, Comal Springs at New Braunfels, Texas.
+
+* Zhu, Q., Zhu, Y., Niu, J., Huang, J., Huang, F., Zhou, X., Liu, D., and Hu, B.X. 2026. Benchmarking machine learning and deep learning models for groundwater level prediction in karst aquifers: The dominant role of hydrogeological complexity. *Water* 18, no. 8: 939.
+
+## Declarations
+
+### Data availability
+
+All input data, analysis scripts, and result files are archived in the public repository at https://github.com/MIKEAA2020/general-sustainability, together with the frozen scoring protocols (dated 2026-08-25, locked before any score was generated). J-17 daily highs: Texas Water Development Board well 6837203. Recharge: Umphres and Choi (2025), USGS data release, https://doi.org/10.5066/P1BI62NY. Pumpage: Edwards Aquifer Authority Table 1. Comal Springs: USGS 08168710. Niño 3.4: NOAA PSL HadISST (raw file registered with the repository). Precipitation: NCEI nClimDiv — the raw file is not distributed with the repository (provenance URL archived in the sources index), so the three precipitation columns of the fixed panel are not reproducible from the registered code alone, while the two Niño columns rebuild from the registered file to machine precision; scoring from the registered analysis panel does not require the nClimDiv file. The registered twenty-column analysis panel is the dataset of record for all scored analyses. All computations are deterministic: re-executing the registered scripts in a fresh environment regenerated every archived result file byte for byte, and all scored rows recompute from the per-observation forecast files and the registered series. The pumpage counterfactual layer (Section 5.6) is produced by `rerun_campaigns/campaign_e3_pumpage_scenarios.py`, archived alongside its outputs, and regenerates them exactly. The post-freeze uncertainty layer (Section 5.3.1) is produced by `wave_e_edwards/src/e3_audit_uncertainty.py` (seeded, deterministic; Diebold–Mariano with Newey–West HAC and moving-block bootstrap on the archived per-origin forecast files), with its outputs archived as `wave_e_edwards/results/e3_audit_uncertainty.json`; the clip-binding statement of Section 5.2 is computed there from the registered panel and reproduces both fixed-window M2 RMSEs (18.11 and 55.32 ft) exactly. The independent replication of the post-freeze uncertainty layer is registered as `batch 7 (audits of agent arena 1 paper rewrites)/campaign_e3_dm_uncertainty.py` (archived), with its deterministically reproduced output archived alongside it at `batch 7 (audits of agent arena 1 paper rewrites)/results/e3_dm_uncertainty.csv`; it recomputes the Diebold–Mariano and moving-block-bootstrap table from the same registered per-origin forecast file under different seeds, block lengths, and HAC conventions, and every load-bearing conclusion of Section 5.3.1 is unchanged under either implementation.
+
+### Declaration of competing interests
+
+None declared.
+
+### Funding
+
+No funding was received for this work.
+
+### CRediT authorship contribution statement
+
+Amin Abaee: conceptualization, data curation, formal analysis, investigation, methodology, software, validation, visualization, writing — original draft, writing — review and editing.
+
+### Statement on the use of generative artificial intelligence
+
+
+Generative-AI tools were used for language editing, register smoothing, and token-level drift checks of this manuscript. All scientific statements, numbers, protocol events, and conclusions are the author's; all AI-produced phrasing was verified against the frozen sources and archives before release.
+
