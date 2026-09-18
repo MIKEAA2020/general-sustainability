@@ -201,6 +201,8 @@ def md_preprocess(md):
     md = _html_tables_to_pipes(md)
     md = re.sub(r'\$\$(.+?)\$\$', lambda m: ' ' + demath(m.group(1)) + ' ', md, flags=re.S)
     md = re.sub(r'\$([^$]{1,500}?)\$', lambda m: ' ' + demath(m.group(1)) + ' ', md, flags=re.S)
+    md = re.sub(r'\\\((.{1,500}?)\\\)', lambda m: ' ' + demath(m.group(1)) + ' ', md, flags=re.S)
+    md = re.sub(r'\\\[(.{1,500}?)\\\]', lambda m: '\n' + demath(m.group(1)) + '\n', md, flags=re.S)
     md = _join_images(md)
     """Clean pandoc-latex-conversion artefacts: minipage multi-row pipe
     tables (merge continuation rows, drop ::: junk), fixed-width columnar
