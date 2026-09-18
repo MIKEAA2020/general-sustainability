@@ -17,6 +17,13 @@ AUTHOR = ("Amin Abaee", "Independent Researcher",
           "0000-0002-0019-1842", "amin_abaee@ut.ac.ir")
 DATE = "September 18, 2026"
 ORCID_URL = "https://orcid.org/" + AUTHOR[2]
+try:
+    BUILD_TAG = (os.environ.get('BUILD_TAG')
+                 or subprocess.run(['git', 'rev-parse', '--short', 'HEAD'],
+                                   capture_output=True, text=True, cwd=ROOT).stdout.strip()[:7]
+                 or 'local')
+except Exception:
+    BUILD_TAG = os.environ.get('BUILD_TAG', 'local')
 
 # ---------------- TeX build ----------------
 PREAMBLE = r"""\documentclass[11pt]{article}
@@ -43,8 +50,11 @@ def build_tex(md_path, out_tex, title):
     print('tex:', out_tex)
 
 # ---------------- markdown -> tolerant text for PDF ----------------
-GREEK = {'alpha': 'α', 'beta': 'β', 'gamma': 'γ', 'delta': 'δ', 'varphi': 'φ', 'phi': 'φ',
-         'sigma': 'σ', 'rho': 'ρ', 'eta': 'η', 'chi': 'χ', 'varepsilon': 'ε', 'qquad': '', 'quad': '', 'bar': '', 'tilde': ''}
+GREEK = {'alpha': 'α', 'beta': 'β', 'gamma': 'γ', 'delta': 'δ', 'epsilon': 'ε', 'zeta': 'ζ',
+         'eta': 'η', 'theta': 'θ', 'iota': 'ι', 'kappa': 'κ', 'lambda': 'λ', 'mu': 'μ',
+         'nu': 'ν', 'xi': 'ξ', 'pi': 'π', 'rho': 'ρ', 'sigma': 'σ', 'tau': 'τ',
+         'upsilon': 'υ', 'phi': 'φ', 'varphi': 'φ', 'chi': 'χ', 'psi': 'ψ', 'omega': 'ω',
+         'varepsilon': 'ε', 'vartheta': 'θ', 'qquad': '', 'quad': '', 'bar': '', 'tilde': ''}
 def demath(s):
     s = re.sub(r'\\(begin|end)\{[^}]*\}', ' ', s)
     s = re.sub(r'\b(begin|end)\{[^}]*\}', ' ', s)
@@ -53,9 +63,11 @@ def demath(s):
     s = re.sub(r'(?<!\w)(begin|end)(?=\s|$)', ' ', s)
     s = re.sub(r'\\q?qu?a?d\b', ' ', s)
     s = s.replace('\\qquad', ' ')
+    s = s.replace('\\[2pt]', '; ').replace('[2pt]', ' ')
     s = re.sub(r'\\(mathrm|mathbf|text|operatorname)\{([^}]*)\}', r'\2', s)
     for k, v in GREEK.items():
         s = re.sub(r'\\%s(?![A-Za-z]) ?\{?([A-Za-z])?\}?' % k, lambda m: v + (m.group(1) or ''), s)
+    s = s.replace('\\hat', '')
     for cmd, rep in [('times', '×'), ('to', '→'), ('rightarrow', '→'), ('pm', '±'), ('approx', '≈'),
                      ('le', '≤'), ('leq', '≤'), ('ge', '≥'), ('geq', '≥'), ('in', '∈'), ('log', 'log'),
                      ('exp', 'exp'), ('min', 'min'), ('max', 'max'), ('cdot', '·'), ('ldots', '…'),
@@ -370,6 +382,7 @@ def render_pdf(md, out_pdf, title, is_supp=False):
     pdf.write(5, t2, link='mailto:' + AUTHOR[3])
     pdf.ln(6)
     para(pdf, DATE, sz=10, center=True)
+    para(pdf, 'typesetting build: ' + BUILD_TAG, sz=7.5, center=True)
     pdf.ln(3)
 
     in_code = False
