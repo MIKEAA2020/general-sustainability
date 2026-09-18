@@ -151,3 +151,11 @@ SHA-256 of every extracted file was recorded at clone time (see file list above 
 - e3/paperE3_edwards_forecast_ladder_v23_humanized.md/.tex/.pdf (+ _build-se23-c1375ed cache copy) — hybrid humanized E3 carrier v23; gemini register spine re-anchored to frozen strings; 2 drift fixes, 2 La Niña/Definition grafts; battery-clean.
 - framework/paperF1_retention_framework_v29_humanized.md/.tex/.pdf (+ _build-se29-c1375ed cache copy) — hybrid humanized F1 carrier v29; gemini register spine; v28 numeric instrumentation grafted section-wise; provenance fabrications zero.
 - audits_E1_E3/E3_V23_HUMANIZED_CHANGELOG_20260918.md; audits_E1_E3/F1_V29_HUMANIZED_CHANGELOG_20260918.md.
+
+## 2026-09-18 additions (QA round: lost-table restoration + supplements)
+- e3/paperE3_edwards_forecast_ladder_v24_humanized.md/.tex/.pdf (18pp, se24) — restores M4 symmetry-control role note, LOCF covariate convention, archived M2−persist block-bootstrap CI [−0.02, +3.40]; supersedes v23 (kept).
+- framework/paperF1_retention_framework_v30_humanized.md/.tex/.pdf (22pp, se30) — restores four frozen protocol tables (rung inventory = Table 1a, full information-set audit = Table 2b, DGP parameter block = Table 6a, cross-domain record = Table 8a) + deduplicates one graft-induced repeated sentence; supersedes v29 (kept).
+- e1/E1_SUPPLEMENTARY_V3.md/.tex/.pdf (6pp) — v3 aligned to v56 + SI-6 reproducibility package (8 scripts, md5-pinned).
+- e3/paperE3_supplement_v2.md/.tex/.pdf (2pp) — aligned to v24 + S3 reproducibility package (7 scripts).
+- framework/paperF1_retention_framework_v30_supplement.md/.tex/.pdf (11pp) — aligned to v30 + S1.4 reproducibility package (18 scripts incl. phase_c stack).
+- batch 7/campaign_e3_dm_uncertainty.py restored to the working checkout (NB=20000/seed 0 archived constants verified).
