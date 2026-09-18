@@ -44,11 +44,18 @@ def build_tex(md_path, out_tex, title):
 
 # ---------------- markdown -> tolerant text for PDF ----------------
 GREEK = {'alpha': 'α', 'beta': 'β', 'gamma': 'γ', 'delta': 'δ', 'varphi': 'φ', 'phi': 'φ',
-         'sigma': 'σ', 'rho': 'ρ', 'eta': 'η', 'chi': 'χ', 'bar': '', 'tilde': ''}
+         'sigma': 'σ', 'rho': 'ρ', 'eta': 'η', 'chi': 'χ', 'varepsilon': 'ε', 'qquad': '', 'quad': '', 'bar': '', 'tilde': ''}
 def demath(s):
+    s = re.sub(r'\\(begin|end)\{[^}]*\}', ' ', s)
+    s = re.sub(r'\b(begin|end)\{[^}]*\}', ' ', s)
+    s = re.sub(r'\\(d?frac)\{([^}]*)\}\{([^}]*)\}', r'\2/\3', s)
+    s = re.sub(r'\\text\{([^}]*)\}', r'\1', s)
+    s = re.sub(r'(?<!\w)(begin|end)(?=\s|$)', ' ', s)
+    s = re.sub(r'\\q?qu?a?d\b', ' ', s)
+    s = s.replace('\\qquad', ' ')
     s = re.sub(r'\\(mathrm|mathbf|text|operatorname)\{([^}]*)\}', r'\2', s)
     for k, v in GREEK.items():
-        s = re.sub(r'\\%s\b ?\{?([A-Za-z])?\}?' % k, lambda m: v + (m.group(1) or ''), s)
+        s = re.sub(r'\\%s(?![A-Za-z]) ?\{?([A-Za-z])?\}?' % k, lambda m: v + (m.group(1) or ''), s)
     for cmd, rep in [('times', '×'), ('to', '→'), ('rightarrow', '→'), ('pm', '±'), ('approx', '≈'),
                      ('le', '≤'), ('leq', '≤'), ('ge', '≥'), ('geq', '≥'), ('in', '∈'), ('log', 'log'),
                      ('exp', 'exp'), ('min', 'min'), ('max', 'max'), ('cdot', '·'), ('ldots', '…'),
@@ -56,14 +63,16 @@ def demath(s):
                      ('bar', ''), ('hat', ''), ('tilde', ''), ('frac', '/'), ('sqrt', '√'),
                      ('mathbf 1', '1'), ('mathrm{clip}', 'clip')]:
         s = re.sub(r'\\%s\b ?' % cmd, rep, s)
+    s = s.replace('$', ' ')
     s = s.replace('_{t+1}', 'ₜ₊₁').replace('_{t−1}', 'ₜ₋₁').replace('_{t-1}', 'ₜ₋₁')
     s = re.sub(r'_\{([^}]*)\}', r'[\1]', s)
     s = re.sub(r'\^\{([^}]*)\}', r'^(\1)', s)
-    for k,v in {'Delta':'Δ','mathbf 1':'1','mathrm{LRP}':'LRP','mathrm{clip}':'clip','mathrm{log}':'log','leq':'≤','geq':'≥','neq':'≠','left{':'','right{':''}.items():
+    for k,v in {'Delta':'Δ','mathbf 1':'1','mathrm{LRP}':'LRP','mathrm{clip}':'clip','mathrm{log}':'log','leq':'≤','geq':'≥','neq':'≠','left{':'','right{':'','mathfrak':'','mathsf':'','mathcal':''}.items():
         s=s.replace('\\'+k,v)
     s=re.sub(r'\\([A-Za-z]+)', r'\1', s)   # residual \command -> command
     s = re.sub(r'[{}]', '', s)
     s = s.replace('\\\\',' ').replace('\\','')
+    s = s.replace('\\[','[').replace('\\]',']')
     return re.sub(r'\s+', ' ', s).strip()
 
 def strip_inline(t):
@@ -145,6 +154,42 @@ def table_block(pdf, rows):
         pdf.set_xy(x0, y0 + hrow)
     pdf.ln(2.5)
 
+def _html_tables_to_pipes(md):
+    """Convert raw <table>…</table> blocks (pandoc html passthrough) into
+    pipe tables; strip residual inline tags and heading/image attribute
+    braces."""
+    import html as _htmlmod
+    def strip_tags(x):
+        x = re.sub(r'<[^>]+>', ' ', x)
+        x = _htmlmod.unescape(x)
+        x = re.sub(r'\s+', ' ', x)
+        x = demath(x).strip()
+        x = re.sub(r' +', ' ', x)
+        x = re.sub(r'\s*([\[\],;:+\-–])', r'\1', x)
+        return x
+    def conv(m):
+        body = m.group(0)
+        rows = []
+        for row in re.split(r'<tr[^>]*>', body, flags=re.S)[1:]:
+            cells = re.findall(r'<t[hd][^>]*>(.*?)</t[hd]>', row, flags=re.S)
+            if cells:
+                rows.append(' | '.join(strip_tags(c) for c in cells))
+        if not rows:
+            return '\n'
+        pipes = ['| ' + r + ' |' for r in rows]
+        ncol = pipes[0].count('|') - 1
+        sep = '| ' + ' | '.join(['---'] * ncol) + ' |'
+        return '\n' + '\n'.join([pipes[0], sep] + pipes[1:]) + '\n'
+    md = re.sub(r'<table[^>]*>.*?</table>', conv, md, flags=re.S)
+    md = re.sub(r'<!--.*?-->', '', md, flags=re.S)
+    md = md.replace('{=html}', '')
+    md = re.sub(r'<span[^>]*>(.*?)</span>', r'\1', md, flags=re.S)
+    md = re.sub(r'<div[^>]*>(.*?)</div>', r'\1', md, flags=re.S)
+    md = re.sub(r'<p[^>]*>(.*?)</p>', r'\1', md, flags=re.S)
+    md = re.sub(r'(?m)(\S)[ \t]*\{(?!gathered|aligned|array|eqnarray|cases|dcases|split|matrix|pmatrix|bmatrix|vmatrix|center|tabular|align)[#!.\w][^}\n]*\}[ \t]*$', r'\1', md)
+    md = re.sub(r'(?m)^\s*\{[#!.\w][^}\n]*\}\s*$', '\n', md)
+    return md
+
 def _join_images(md):
     pat = re.compile(r'!\[((?:[^\[\]]|\[[^\]]*\])*?)\]\(([^)\s]+)\)(?:\{[^}]*\})?[ \n]', re.S)
     def rep(m):
@@ -153,6 +198,9 @@ def _join_images(md):
     return pat.sub(rep, md)
 
 def md_preprocess(md):
+    md = _html_tables_to_pipes(md)
+    md = re.sub(r'\$\$(.+?)\$\$', lambda m: ' ' + demath(m.group(1)) + ' ', md, flags=re.S)
+    md = re.sub(r'\$([^$]{1,500}?)\$', lambda m: ' ' + demath(m.group(1)) + ' ', md, flags=re.S)
     md = _join_images(md)
     """Clean pandoc-latex-conversion artefacts: minipage multi-row pipe
     tables (merge continuation rows, drop ::: junk), fixed-width columnar
@@ -275,7 +323,8 @@ def render_pdf(md, out_pdf, title, is_supp=False):
             in_code = not in_code
             continue
         if in_code:
-            para(pdf, line, sz=7.6, font='Mono', h=7.6)
+            cleaned = strip_inline(line) if ('$' in line or '\\' in line) else line
+            para(pdf, cleaned, sz=7.6, font='Mono', h=7.6)
             continue
         if line.strip().startswith('|') and line.strip().endswith('|'):
             cells = [c for c in line.strip().strip('|').split('|')]
