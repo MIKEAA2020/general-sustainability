@@ -162,3 +162,6 @@ SHA-256 of every extracted file was recorded at clone time (see file list above 
 - e3/COVER_LETTER_paperE3_JoH_v1_20260918.md/.tex/.pdf — cover letter for J. Hydrology (claims byte-consistent with v24 frozen values).
 - framework/COVER_LETTER_paperF1_PLOSONE_v1_20260918.md/.tex/.pdf — cover letter for PLOS ONE (claims byte-consistent with v30 frozen values).
 - framework/ABSTRACT_SHORT_paperF1_v1_20260918.md/.tex/.pdf — shortened F1 abstract (≈230 words; frozen values only).
+
+## 2026-09-18 additions (rejection response v57)
+- e1/paperE1_cod_forecast_ladder_v57_humanized.md/.tex/.pdf (24pp, hu57) — response to desk rejection: §1 "Scope clarifications" paragraph (not a new assessment method; why the reconstruction is the scoreboard; monitoring-data roles + survey-index scoring reserved as follow-up), abstract scope clause, NEW Appendix A (A.1–A.7 technical + computational specification: map equations, per-window estimation mechanics incl. bounds/multi-start/φ rule/catch handling, origin machinery & metrics, executable retention rule, DM/bootstrap audit layer 20,000 reps seed 0, reproducibility map pointer to SI-6). Zero numerals lost vs v56; no new claims asserted.
