@@ -356,6 +356,50 @@ def _merge_pipe_continuations(block):
             merged.append(ln)
     return merged
 
+
+def _typst_header(title, tag):
+    t = title.replace('[', '(').replace(']', ')')
+    mail = AUTHOR[3]
+    return ('#set page(paper: "a4", margin: (x: 22mm, y: 24mm), '
+            'footer: align(center)[#text(9pt, fill: rgb("#555"))[#context counter(page).display()]])\n'
+            '#set text(font: "Libertinus Serif", size: 10.5pt, lang: "en")\n'
+            '#set par(justify: true, leading: 0.62em)\n'
+            '#set document(title: [' + t + '])\n'
+            '#let horizontalrule = line.with(length: 100%, stroke: 0.4pt + rgb("#888888"))\n'
+            '#align(center)[\n'
+            '  #text(15pt, weight: "bold")[' + t + '] \\\n'
+            '  #v(3mm)\n'
+            '  #text(12pt, weight: "bold")[' + AUTHOR[0] + '] \\\n'
+            '  ' + AUTHOR[1] + ' \\\n'
+            '  ORCID: #link("' + ORCID_URL + '")[' + AUTHOR[2] + '] #h(1em) Email: #link("mailto:' + mail + '")[' + mail.replace('@', '\\@') + '] \\\n'
+            '  ' + DATE + ' \\\n'
+            '  #text(8pt, style: "italic")[typesetting build: ' + tag + ']\n'
+            ']\n#v(3mm)\n')
+
+def render_pdf_typst(src_path, out_pdf, title, is_tex):
+    import typst
+    fmt = 'latex' if is_tex else 'markdown+pipe_tables'
+    if not is_tex:
+        _mdsrc = open(src_path).read()
+        _fl = _mdsrc.split('\n')
+        if _fl and _fl[0].lstrip().startswith('# '):
+            _fl = _fl[1:]
+        while _fl and (not _fl[0].strip() or any(x in _fl[0] for x in ['Amin Abaee','Independent Researcher','ORCID','@ut.ac.ir','2026']) and len(_fl[0]) < 120):
+            _fl = _fl[1:]
+        _src_clean = '\n'.join(_fl)
+        body = pypandoc.convert_text(_src_clean, 'typst', format='markdown+pipe_tables')
+    else:
+        body = pypandoc.convert_file(src_path, 'typst', format='latex')
+    body = re.sub(r'figs_\w+/', 'figs/', body)
+    header = _typst_header(title, BUILD_TAG)
+    base = os.path.dirname(os.path.abspath(out_pdf)) or '.'
+    tmp = os.path.join(base, '.build_' + os.path.basename(out_pdf) + '.typ')
+    with open(tmp, 'w') as f:
+        f.write(header + body)
+    typst.compile(tmp, output=out_pdf, root=os.getcwd())
+    os.remove(tmp)
+    print('pdf(typst):', out_pdf)
+
 def render_pdf(md, out_pdf, title, is_supp=False):
     md = md_preprocess(md)
     pdf = Doc(title)
@@ -477,10 +521,14 @@ if __name__ == '__main__':
     if '--tex-source' in sys.argv:
         src_tex = sys.argv[sys.argv.index('--tex-source') + 1]
     if src_tex:
-        body_md = pypandoc.convert_file(src_tex, 'markdown+pipe_tables', format='latex')
         t = sys.argv[3] if len(sys.argv) > 3 and not sys.argv[3].startswith('-') else 'Manuscript'
         md_path_current = src_tex
-        render_pdf(body_md, out_base + '.pdf', t)
+        try:
+            render_pdf_typst(src_tex, out_base + '.pdf', t, is_tex=True)
+        except Exception as e:
+            print('typst fallback to fpdf:', e)
+            body_md = pypandoc.convert_file(src_tex, 'markdown+pipe_tables', format='latex')
+            render_pdf(body_md, out_base + '.pdf', t)
         tex_out = out_base + '.tex'
         if os.path.abspath(src_tex) != os.path.abspath(tex_out) and not os.path.exists(tex_out):
             import shutil as sh
@@ -490,4 +538,8 @@ if __name__ == '__main__':
         t = sys.argv[3] if len(sys.argv) > 3 and not sys.argv[3].startswith('-') else title_of(md)
         md_path_current = md_in
         build_tex(md_in, out_base + '.tex', t.replace(' (v2)', '').replace(' (v1)', ''))
-        render_pdf(md, out_base + '.pdf', t)
+        try:
+            render_pdf_typst(md_in, out_base + '.pdf', t, is_tex=False)
+        except Exception as e:
+            print('typst fallback to fpdf:', e)
+            render_pdf(md, out_base + '.pdf', t)
