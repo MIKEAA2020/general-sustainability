@@ -161,3 +161,4 @@ SHA-256 of every extracted file was recorded at clone time (see file list above 
 - batch 7/campaign_e3_dm_uncertainty.py restored to the working checkout (NB=20000/seed 0 archived constants verified).
 - e3/COVER_LETTER_paperE3_JoH_v1_20260918.md/.tex/.pdf — cover letter for J. Hydrology (claims byte-consistent with v24 frozen values).
 - framework/COVER_LETTER_paperF1_PLOSONE_v1_20260918.md/.tex/.pdf — cover letter for PLOS ONE (claims byte-consistent with v30 frozen values).
+- framework/ABSTRACT_SHORT_paperF1_v1_20260918.md/.tex/.pdf — shortened F1 abstract (≈230 words; frozen values only).
