@@ -1988,3 +1988,18 @@ Stage Summary:
 - The DOI question answered precisely: which DOIs (the 16 journal-article DOIs, Crossref-pinnable), are they on repo (no; the Zenodo record is the paper's own v30-era deposit, stale, DOI uncited in the manuscript - refresh recommended before citing).
 - Standing owner-level items after this round: the DOI round paths (paste / commission / leave), the Zenodo deposit refresh, and the abstract-phrase decision (Task 97's flag). The retitle - previously a standing owner item - is now RESOLVED.
 - v38 and all prior versions and the v5/v6/v7 supplements untouched on disk and in history; the v7 zip retained alongside the v8 zip.
+
+---
+Task ID: 98 (push record)
+Agent: main (Z.ai Code)
+Task: Push record for the Task 98 commit (the v39 retitle round + the DOI question answered).
+
+Work Log:
+- The PAT as pasted in the owner message carried a stray trailing ".1" suffix; that exact form authenticates 401 (verified via the GitHub API before any push attempt; the pre-push git ls-remote succeeded only because the repository is publicly readable - an anonymous read, not an authenticated one).
+- The token WITHOUT the ".1" suffix verified 200 against the GitHub API with admin/maintain/push/pull permissions on MIKEAA2020/general-sustainability; the push used that corrected form, in-memory only (transient shell variable; redacted from every file, log and command echo; unset immediately after use).
+- Pushed: remote main 4568560 -> bdf7765 (the Task 98 round commit). Verified post-push via git ls-remote (bdf77651a1ba0dff3d7027d5479287e0eee330c7); working tree clean after this push-record commit.
+- No-residue scan: the raw token appears nowhere under the repository or .git (config/logs/reflog clean); the only "github_pat_" strings on disk are the standing redacted forms (worklog.md line 383's "github_pat_…", the reading-log's "github_pat_...") - all pre-existing redactions, none from this round.
+- Rotation advised for the pasted PAT regardless (it transited the chat channel; and the paste artifact suggests a display/copy path that may surface again).
+
+Stage Summary:
+- Task 98 fully closed: v39 round pushed (bdf7765), remote main == local main, tree clean. The retitle standing item is resolved; the DOI question is answered with the three paths open to the owner; the Zenodo deposit refresh remains the recommended owner-side action before citing the paper's own DOI.
