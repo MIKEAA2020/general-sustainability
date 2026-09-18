@@ -40,3 +40,24 @@ forecasting and nowcasting organizes the results." (navigation) deleted;
 "The rule-version comparison is stated once:" (internal dialogue) deleted —
 the definitional sentence stands on its own; "as illustrated by the record
 itself" -> "For example,". E3 carrier is now v20.
+
+
+## v20 -> v21 append (owner: "your e3 version is so short" + frozen-base fix)
+
+v18-v20 were prose carriers only; v21 is the COMPLETE formal manuscript:
+full v16 body (Sections 1-7, Tables 1-8, Figures 1-5, data at availability,
+references) with register fixes applied and the process banner removed.
+Fixes: banner HTML block (version-diary, moved here); Groundwater-format
+line (journal-target note); "coin-flip retention" (3x -> provisional/within
+noise); "straw man" term -> removed; "stated here once and travels with the
+term" -> clause deleted (def. stands alone); "in one place" deleted; "the
+word 'certificate' is retired for both" -> "closes the argument"; "The
+rejection is therefore honest with both readings visible" -> "Both readings
+accompany the rejection:"; "worth recording" lead-in -> content lead;
+"doing work exactly there" -> "operative precisely there"; in-prose
+"(in the batch-7 audit directory)" deleted (exact path retained only in
+Data Availability, where reproducibility requires it); "deliberately
+excluded" -> "excluded by design"; "'pre-registered' is avoided" ->
+"is not used". 48.9 kB, 314 lines; every frozen numeral, table, figure
+reference, and reference string preserved (diff-verified: 14 phrase edits
+plus banner removal).

@@ -40,3 +40,16 @@ paper's own reporting; facts stand alone); "approximately 86/12" ->
 claim is scoped to" -> "The conclusion is limited to" ("scoped" = register
 slip). "approximately 97%" kept: source value is "~97%"; hedge is warranted
 by evidence class (not over-hedging). E1 carrier is now v55.
+
+
+## E1 frozen-base fix -> v51.tex (owner: fix frozen-base flags; Q3 audit)
+
+Carriers v51-v55 .md were prose cores; the COMPLETE E1 manuscript remains
+the LaTeX source. New revision e1/paperE1_cod_forecast_ladder_v51.tex =
+v50.tex with: (1) line-1-4 diary comment block replaced by "% Manuscript
+LaTeX source." (banner mentioned build tools, wave passage, and the v49
+in-place edit history); (2) Sec 3.6 "This section collects in one place..."
+-> "Every fitted-parameter value the article prints is tabulated below...
+Values are transcribed from the preceding sections; nothing is recomputed."
+Diff-verified (7 lines changed, nothing else). Q3 cross-check: v50 prose
+115-196 kt confirmed unchanged; prey band 196-206 kt unchanged.
