@@ -53,3 +53,12 @@ in-place edit history); (2) Sec 3.6 "This section collects in one place..."
 Values are transcribed from the preceding sections; nothing is recomputed."
 Diff-verified (7 lines changed, nothing else). Q3 cross-check: v50 prose
 115-196 kt confirmed unchanged; prey band 196-206 kt unchanged.
+
+
+## Publication artifacts 2026-09-18
+
+E1_SUPPLEMENTARY_V2.md/.tex/.pdf (register-fixed: internal dialogue, reader-
+address editorial, repo-jargon path parenthetical removed). v51.pdf built
+from the v51.tex via pandoc tex->md->pdf (62 pp; 6 includegraphics carried).
+Front matter: clickable ORCID/email + September 18, 2026. Ledger: framework/
+COMPLETENESS_LEDGER_20260918.md.

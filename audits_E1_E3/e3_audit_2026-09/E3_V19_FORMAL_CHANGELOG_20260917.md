@@ -61,3 +61,18 @@ excluded" -> "excluded by design"; "'pre-registered' is avoided" ->
 "is not used". 48.9 kB, 314 lines; every frozen numeral, table, figure
 reference, and reference string preserved (diff-verified: 14 phrase edits
 plus banner removal).
+
+
+## v21 -> v22 append + publication artifacts (2026-09-18)
+
+Owner: 3-format policy + delegation + completeness. v22 = v21 with two blocks
+delegated to the NEW supplement (e3/paperE3_supplement_v1): independent
+DM/bootstrap replication paragraph -> S1 (main text closes with a formal
+pointer sentence); climate remaining-fixed-window record -> S2 (main text
+keeps the 2015-23 conclusion sentence + pointer). Numeric-token audit
+v22+supp vs v21: no missing token. Figure paths normalized figs_e3/ -> figs/
+(v16's stale path; figures live in e3/figs/). Built: v22.tex (pandoc LaTeX),
+v22.pdf (19 pp, 5 figures embedded), supplement tex+pdf. Date/clickable
+ORCID/email front matter per STYLE policy. Caveat recorded in
+framework/COMPLETENESS_LEDGER_20260918.md (no TeX engine in sandbox; .tex is
+authoritative).
