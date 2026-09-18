@@ -59,7 +59,11 @@ def demath(s):
     s = s.replace('_{t+1}', 'ₜ₊₁').replace('_{t−1}', 'ₜ₋₁').replace('_{t-1}', 'ₜ₋₁')
     s = re.sub(r'_\{([^}]*)\}', r'[\1]', s)
     s = re.sub(r'\^\{([^}]*)\}', r'^(\1)', s)
+    for k,v in {'Delta':'Δ','mathbf 1':'1','mathrm{LRP}':'LRP','mathrm{clip}':'clip','mathrm{log}':'log','leq':'≤','geq':'≥','neq':'≠','left{':'','right{':''}.items():
+        s=s.replace('\\'+k,v)
+    s=re.sub(r'\\([A-Za-z]+)', r'\1', s)   # residual \command -> command
     s = re.sub(r'[{}]', '', s)
+    s = s.replace('\\\\',' ').replace('\\','')
     return re.sub(r'\s+', ' ', s).strip()
 
 def strip_inline(t):
@@ -73,6 +77,7 @@ def strip_inline(t):
         t = t2
     t = re.sub(r'\$\$([^$]*)\$\$', lambda m: demath(m.group(1)), t)
     t = re.sub(r'\$([^$\n]{1,200}?)\$', lambda m: demath(m.group(1)), t)
+    t = t.replace('---', '\u2014').replace('--', '\u2013')
     t = t.replace('**', '').replace('\\(', '(').replace('\\)', ')').replace('\\_', '_')
     t = re.sub(r'(?<![\w' + "'" + r'])_([^_]+)_', r'\1', t)
     t = t.replace('`', '')
@@ -140,7 +145,90 @@ def table_block(pdf, rows):
         pdf.set_xy(x0, y0 + hrow)
     pdf.ln(2.5)
 
+def _join_images(md):
+    pat = re.compile(r'!\[((?:[^\[\]]|\[[^\]]*\])*?)\]\(([^)\s]+)\)(?:\{[^}]*\})?[ \n]', re.S)
+    def rep(m):
+        alt = re.sub(r'\s+', ' ', m.group(1)).strip()
+        return '\n![' + alt + '](' + m.group(2) + ')\n'
+    return pat.sub(rep, md)
+
+def md_preprocess(md):
+    md = _join_images(md)
+    """Clean pandoc-latex-conversion artefacts: minipage multi-row pipe
+    tables (merge continuation rows, drop ::: junk), fixed-width columnar
+    blocks (wrap into code fences), -- -> en-dash in prose."""
+    lines = md.split('\n')
+    return '\n'.join(_md_preprocess_core(lines))
+
+def _md_preprocess_core(lines):
+    res = []
+    i = 0
+    n = len(lines)
+    while i < n:
+        line = lines[i]
+        # ---- pipe table block with ::: junk / continuation rows ----
+        if line.strip().startswith(':::') or ('minipage' in line and line.strip().startswith('|')):
+            i += 1
+            continue
+        if line.strip().startswith('|'):
+            block = []
+            while i < n and lines[i].strip().startswith('|'):
+                if ':::' in lines[i]:
+                    i += 1
+                    continue
+                block.append(lines[i])
+                i += 1
+            if block:
+                res.extend(_merge_pipe_continuations(block))
+            continue
+        # ---- fixed-width columnar block (>=3 consecutive aligned lines) ----
+        if line.startswith(' ') and len(line.strip()) > 0 and not line.lstrip().startswith(('$$', '|', '-', '*')):
+            blk = []
+            while i < n and lines[i].startswith(' ') and lines[i].strip() and not lines[i].lstrip().startswith(('|', '- ', '* ')):
+                blk.append(lines[i])
+                i += 1
+            if len(blk) >= 3 and sum(1 for b in blk if re.search(r'\S\s{4,}\S', b)) >= 2:
+                res.append('```')
+                res.extend(blk)
+                res.append('```')
+                continue
+            res.extend(line.replace('--', '\u2013') for line in blk)
+            continue
+        res.append(line)
+        i += 1
+    out=[]
+    incode=False
+    for ln in res:
+        if ln.strip().startswith('```'):
+            incode=not incode; out.append(ln); continue
+        out.append(ln if incode else ln.replace('---', '\u2014').replace('--', '\u2013'))
+    return out
+
+def _merge_pipe_continuations(block):
+    """Minipage tables: each logical row spans several physical rows, with
+    continuation cells in later rows; merge them."""
+    merged = []
+    for ln in block:
+        cells = ln.strip().strip('|').split('|')
+        if all(set(c.strip()) <= set('-: ') for c in cells):
+            continue
+        if merged and (cells[0].strip() == '' ):
+            prev = merged[-1]
+            trgt = prev.split('|')
+            trgt = trgt[1:-1]
+            for k, c in enumerate(cells):
+                c = c.strip()
+                if c and k < len(trgt):
+                    trgt[k] = (trgt[k].strip() + ' ' + c).strip()
+                elif c:
+                    trgt.append(c)
+            merged[-1] = '| ' + ' | '.join(t.strip() for t in trgt) + ' |'
+        else:
+            merged.append(ln)
+    return merged
+
 def render_pdf(md, out_pdf, title, is_supp=False):
+    md = md_preprocess(md)
     pdf = Doc(title)
     pdf.set_title(title)
     lines = md.split('\n')
@@ -207,17 +295,24 @@ def render_pdf(md, out_pdf, title, is_supp=False):
             lvl = len(m.group(1))
             para(pdf, m.group(2), sz={1: 14, 2: 12.5, 3: 11.5, 4: 11}.get(lvl, 11), font='SerifB')
             continue
-        im = re.match(r'^!\[([^\]]*)\]\(([^)]+)\)$', s)
+        im = re.match(r'^!\[([^\]]*)\]\(([^)\s]+)\)(?:\{[^}]*\})?\s*$', s)
         if im:
-            imgpath = os.path.join(doc_dir, im.group(2))
-            if os.path.exists(imgpath):
+            rel = im.group(2)
+            cands = [os.path.join(doc_dir, rel),
+                     os.path.join(doc_dir, re.sub(r'^figs_\w+/', 'figs/', rel)),
+                     os.path.join(doc_dir, 'figs', os.path.basename(rel))]
+            imgpath = next((c for c in cands if os.path.exists(c)), None)
+            if imgpath:
                 try:
                     pdf.image(imgpath, w=pdf.w - 2 * pdf.l_margin - 10)
-                    pdf.ln(1.5)
+                    pdf.ln(1.0)
+                    if im.group(1).strip():
+                        cap = strip_inline(im.group(1)).replace('\n', ' ')
+                        para(pdf, cap[:400], sz=8.6, center=True)
                 except Exception:
-                    para(pdf, '[figure: ' + im.group(2) + ']', sz=8.5, center=True)
+                    para(pdf, '[figure: ' + rel + ']', sz=8.5, center=True)
             else:
-                para(pdf, '[figure: ' + im.group(2) + ']', sz=8.5, center=True)
+                para(pdf, '[figure: ' + rel + ']', sz=8.5, center=True)
             continue
         if s.startswith('$$') and s.endswith('$$') and len(s) > 4:
             para(pdf, demath(s.strip('$')), sz=10, center=True)
