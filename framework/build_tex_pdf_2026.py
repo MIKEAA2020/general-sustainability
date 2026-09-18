@@ -222,6 +222,12 @@ def md_preprocess(md):
     lines = md.split('\n')
     return '\n'.join(_md_preprocess_core(lines))
 
+
+def _latex_abstract_fix(fragment):
+    return re.sub(r'\\begin{abstract}(.*?)\\end{abstract}',
+                  lambda m: chr(10) + '\\section*{Abstract}' + chr(10) + m.group(1) + chr(10),
+                  fragment, flags=re.S)
+
 def _grid_tables_to_pipes(lines):
     """Convert pandoc grid tables (+---+, +:====+, with ::: minipage junk
     inside cells) into clean pipe tables. Each logical row may span
@@ -358,24 +364,33 @@ def _merge_pipe_continuations(block):
 
 
 def _typst_header(title, tag):
+    BS = chr(92)
     t = title.replace('[', '(').replace(']', ')')
     mail = AUTHOR[3]
-    return ('#set page(paper: "a4", margin: (x: 22mm, y: 24mm), '
-            'footer: align(center)[#text(9pt, fill: rgb("#555"))[#context counter(page).display()]])\n'
-            '#set text(font: "Libertinus Serif", size: 10.5pt, lang: "en")\n'
-            '#set par(justify: true, leading: 0.62em)\n'
-            '#set document(title: [' + t + '])\n'
-            '#let horizontalrule = line.with(length: 100%, stroke: 0.4pt + rgb("#888888"))\n'
-            '#align(center)[\n'
-            '  #text(15pt, weight: "bold")[' + t + '] \\\n'
-            '  #v(3mm)\n'
-            '  #text(12pt, weight: "bold")[' + AUTHOR[0] + '] \\\n'
-            '  ' + AUTHOR[1] + ' \\\n'
-            '  ORCID: #link("' + ORCID_URL + '")[' + AUTHOR[2] + '] #h(1em) Email: #link("mailto:' + mail + '")[' + mail.replace('@', '\\@') + '] \\\n'
-            '  ' + DATE + ' \\\n'
-            '  #text(8pt, style: "italic")[typesetting build: ' + tag + ']\n'
-            ']\n#v(3mm)\n')
-
+    mail_t = mail.replace('@', BS + '@')
+    f1 = chr(10)
+    f2 = chr(10) + chr(10)
+    h = []
+    h.append('#set page(paper: "a4", margin: (x: 22mm, y: 24mm), footer: align(center)[#text(9pt, fill: rgb("#555"))[#context counter(page).display()]])')
+    h.append('#set text(font: "Libertinus Serif", size: 10.5pt, lang: "en")')
+    h.append('#set par(justify: true, leading: 0.62em)')
+    h.append('#set document(title: [' + t + '])')
+    h.append('#let horizontalrule = line(length: 100%, stroke: 0.4pt + rgb("#888888"))')
+    h.append('#align(center)[')
+    h.append('  #text(15pt, weight: "bold")[' + t + ']')
+    h.append('')
+    h.append('  #text(12pt, weight: "bold")[' + AUTHOR[0] + ']')
+    h.append('')
+    h.append('  ' + AUTHOR[1])
+    h.append('')
+    h.append('  ORCID: #link("' + ORCID_URL + '")[#text(fill: rgb("#0645ad"))[#underline[' + AUTHOR[2] + ']]] #h(1em) Email: #link("mailto:' + mail + '")[#text(fill: rgb("#0645ad"))[#underline[' + mail_t + ']]]')
+    h.append('')
+    h.append('  ' + DATE)
+    h.append('')
+    h.append('  #text(8pt, style: "italic")[typesetting build: ' + tag + ']')
+    h.append(']')
+    h.append('#v(4mm)')
+    return f1.join(h) + f2
 def render_pdf_typst(src_path, out_pdf, title, is_tex):
     import typst
     fmt = 'latex' if is_tex else 'markdown+pipe_tables'
@@ -389,7 +404,7 @@ def render_pdf_typst(src_path, out_pdf, title, is_tex):
         _src_clean = '\n'.join(_fl)
         body = pypandoc.convert_text(_src_clean, 'typst', format='markdown+pipe_tables')
     else:
-        body = pypandoc.convert_file(src_path, 'typst', format='latex')
+        body = pypandoc.convert_text(_latex_abstract_fix(open(src_path).read()), 'typst', format='latex')
     body = re.sub(r'figs_\w+/', 'figs/', body)
     header = _typst_header(title, BUILD_TAG)
     base = os.path.dirname(os.path.abspath(out_pdf)) or '.'
@@ -527,7 +542,7 @@ if __name__ == '__main__':
             render_pdf_typst(src_tex, out_base + '.pdf', t, is_tex=True)
         except Exception as e:
             print('typst fallback to fpdf:', e)
-            body_md = pypandoc.convert_file(src_tex, 'markdown+pipe_tables', format='latex')
+            body_md = pypandoc.convert_text(_latex_abstract_fix(open(src_tex).read()), 'markdown+pipe_tables', format='latex')
             render_pdf(body_md, out_base + '.pdf', t)
         tex_out = out_base + '.tex'
         if os.path.abspath(src_tex) != os.path.abspath(tex_out) and not os.path.exists(tex_out):

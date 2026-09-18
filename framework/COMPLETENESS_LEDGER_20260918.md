@@ -48,3 +48,5 @@ authoritative journal source and compiles under any standard LaTeX
 installation; when a local TeX toolchain becomes available, recompile from
 .tex for the final typeset. Verifier: pypdf extraction + per-page XObject
 inventory + manual page inspection (figures embedded, tables aligned).
+
+- E1 v56 humanized (gemini register; v51-equivalent science): md+tex+pdf issued 2026-09-18; abstract present; links=2; stamp hu-c1375ed.
