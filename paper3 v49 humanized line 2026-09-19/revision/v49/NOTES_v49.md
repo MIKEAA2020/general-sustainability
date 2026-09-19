@@ -406,12 +406,10 @@ v49_front_matter_edits.json`.
 6. The reference list gives DOIs for 8 entries but omits Martinez-Alier, Munda & O'Neill (1998),
    `10.1016/S0921-8009(97)00120-1`. House style, one entry.
 
-Package v10: 84 records. Its byte count and digest are deliberately NOT recorded here - they are in
-`paper3_supplementary_package_v10.sha256` beside the zip, because a number quoted in a file inside the zip
-goes stale the moment re-packaging changes it, which happened twice in this round before the point was taken.: the digest of a zip
-cannot live inside the zip without the copy in it going stale one line behind, which is a loop rather than a
-record. It is in `paper3_supplementary_package_v10.sha256` beside the zip and in the push commit message, and
-v9 (afa993932828d8f81b09b6afdda22225dcd7358dd73ac5fd13f3c9582f93a26b) is superseded by it.
+Package v10: 84 records. Its byte count and digest are deliberately kept in
+`paper3_supplementary_package_v10.sha256` beside the zip and in the archive commit message, not in NOTES or
+inside the zip. Writing a digest into the object it describes makes the copy in that object stale, so it is a
+loop rather than a record. v9 (`afa993932828d8f81b09b6afdda22225dcd7358dd73ac5fd13f3c9582f93a26b`) is superseded.
 
 ### 8. Round-7 close-out
 
@@ -419,7 +417,8 @@ v9 (afa993932828d8f81b09b6afdda22225dcd7358dd73ac5fd13f3c9582f93a26b) is superse
 the package by filename (a name in a tree proves nothing about bytes) and picked `sorted(...)[-1]`, which is
 `v9`, so it printed a verdict about the wrong zip; and its v7 glob was `*_v49.*` only, so the supplementary and
 the two companions were archived at whatever bytes an earlier round pushed while all four PDFs are rewritten by
-every 4-document compile. Both fixed: the selection sorts by the version number, the check compares the git
-blob SHA-1 of the local file against the tree entry at an exact path, and the push now carries md/tex/pdf for
-all four documents. Verified after the push: 20/20 workspace files byte-identical in the tree, head
-`c2ad651e4c72`, 772 entries.
+every 4-document compile. Both are fixed: version selection sorts numerically, the check compares the git
+blob SHA-1 of the local file against the tree entry at an exact path, and the push carries md/tex/pdf for all
+four documents. The final exact-path check compared 19/19 listed workspace files byte-for-byte, with 772 tree
+entries and 250 entries under the v49 folder. The archive commit id is kept in the push record and commit
+message rather than embedded here, so updating this note cannot make its own history stale.

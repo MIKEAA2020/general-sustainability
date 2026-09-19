@@ -3,7 +3,7 @@
 | file | bytes | sha256 |
 |---|---|---|
 | `ERRATA_v48.md` | 8893 | 03559186e74f41fc3bd06404c6f725a1975a12cc1624b8e521619bd08d7d89aa |
-| `NOTES_v49.md` | 33410 | decb4c7442ef266982658c274b90ca05bf6ba2d24f4195197d2f7b9bf27906c8 |
+| `NOTES_v49.md` | 33347 | 1d0c86daa5c507e96c5b94f45627d48bc74f9e88d325dab48582f9020b6d8a1d |
 | `README.md` | 2891 | f1495e543c8c1eec68f6c428bff122c9a1f2a1083bf084b4b1c0149d5372c436 |
 | `builders/audit_v49_lines_v1.py` | 35603 | 02f0107bd9ba844a61d8f55e9d92b5a5d82a7888e7491df15cbe01ba37e09312 |
 | `builders/build_companions_v1.py` | 12053 | c61310356d73b6b5153e1eeaabbff05db6822625780e7c8f3c483a68a1011867 |
@@ -69,7 +69,7 @@
 | `disclosure/v49_line_audit.json` | 3690 | 1c2f2cb28983ba359cb1ce5bf8ddf819b4b147d896e1a51a472709f62bb84a6b |
 | `disclosure/v49_required_restores.json` | 3988 | 4bf25fb2d4109d708377a976c556d10efc76374863d56b5456cdccd90c144da0 |
 | `disclosure/v49_restores_v2.json` | 583 | 1e90fc789a410ddd36d7a79c8d61ee717299aaa4b36c032c8d8693922b887512 |
-| `disclosure/v49_verification.json` | 5349 | 465825e58632ba50d801a4c21053e99118148eb91a0799e31bf4e55852f33715 |
+| `disclosure/v49_verification.json` | 5349 | 3138c68797071feb9e5826813876cb59dce55d936cbe0f2f3f20ddfb698bf502 |
 | `disclosure/waiver_scope_v1.json` | 5476 | 9d6edeba9769b2ff60678b9d8c1bffc8339466c03e80461c0f20f7d583b26cf7 |
 | `manuscript/companionA_certification_procedure_v9.md` | 31254 | 2bccc4da4582abe2ec8e1bf45b6f2fae5d912f6f6daa3b03ca419cbd0ba77a82 |
 | `manuscript/companionA_certification_procedure_v9.pdf` | 94163 | bbd1e6c216d3f99ec8a15fbed05419ac92697fda7f90c4c6c4c58c47f8e44d90 |
