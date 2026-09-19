@@ -63,7 +63,11 @@ sentence asserts. The author's adaptation does not carry that passage, so v49's 
 unsupported assertion: **E4's substance is gone**, and it is gone because the base changed, not because
 anything was argued into the text. What remains is a loose end of the same coin: the entries
 `United Nations, 2014` and `United Nations, 2025` are now cited by nobody in the article (`SEEA` and
-`United Nations` appear 0 times in v49's body). The line audit reports them separately from the two entries
-that were uncited in v42 and v48 as well (`Baez 2023`, `Illakwahhi 2024`), and the fix is an author's
-decision — drop the two entries, or restore the passage they supported. This file does not record either
-choice as made.
+`United Nations` appear 0 times in v49's body). The line audit reports them separately from the one entry that was
+uncited in v42 and v48 as well (`Baez 2023`). `Illakwahhi 2024` was reported with them by a matcher that
+could not read a three-author first mention — `Illakwahhi, Vegi and Srivastava (2024)` is correct APA for
+the entry as written — so the citation was fine and the instrument was wrong; the matcher was fixed, not
+the text. Nothing here recommends a resolution, because the choice depends on whether the SEEA
+inconsistency is a claim this paper is to make: if it is, the fix is a new sentence with a verified source,
+written by the author; if it is not, the two entries are dead weight and go at submission. Restoring v48's
+sentences is not a resolution — those sentences are E4's substance — and the pipeline drafts nothing.

@@ -168,8 +168,11 @@ blank line before it, legal in markdown and typeset correctly), 0 PDF findings.
   which standardised the definition and recording of depletion) and `United Nations, 2025` (the System of
   National Accounts treatment). Both were cited only in the §1 passage the adaptation does not carry —
   the passage is *not* in the deposited article, so it is the previous line's own addition, and this build
-  will not silently re-insert or silently delete it. `Baez 2023` and `Illakwahhi 2024` were uncited in v42
-  and v48 too, and are recorded as house-style items for the author rather than defects introduced here.
+  will not silently re-insert or silently delete it. `Baez 2023` was uncited in v42 and v48 too and is
+  recorded as a house-style item for the author rather than a defect introduced here. `Illakwahhi 2024`
+  is **not** an orphan: the entry is cited as `Illakwahhi, Vegi and Srivastava (2024)`, which is the correct
+  three-author first mention, and it was flagged only because the matcher read surnames by requiring the
+  year immediately after the first one. The matcher was fixed; the citation was left alone.
 
 ### Instruments corrected while doing this
 
@@ -236,3 +239,38 @@ on the page; gate `flag_count: 0`; audit 2 findings, both the UN author decision
 **Open for the author, unchanged:** whether to drop reference entries `United 2014` and `United 2025` or
 restore v48's two §1.1 sentences that cited them (the passage they supported is not in the deposited
 article, so this build cannot legitimately absorb it).
+
+## Round 6 — the citation matcher, corrected in the instrument's favour
+
+The audit's `orphans_introduced_by_this_base_swap` list was reporting `Illakwahhi 2024` as an uncited
+entry. It is cited; the old matcher searched `Lead` within 80 characters of the year **without crossing a
+parenthesis**, so `Illakwahhi, Vegi and Srivastava (2024)` — correct APA for a three-author work on first
+mention — read as a different lead name. Editing that citation to satisfy the check would have been the
+exact inversion this line keeps being about, so the check changed: an entry counts as cited when any name
+it is addressed by sits near its year, and an in-text cite is unresolved only when no name in it
+addresses any entry of that year. No canonical key is computed, so `and`, `&`, `et al.`, initials and
+institution strings cannot trip it.
+
+An intermediate attempt that canonicalised every cite into a `lead + year` key went the other way and
+invented three phantom cites (`GRACE`, `Zenodo`, `Geological Survey` were read as authors) and orphaned
+`Tapley 2004`, `Tilton 2003/2007`, `Ricard 2012`, `Smith 1995`, `Wackernagel 2019`. Two further faults
+found while checking that output: `et al.` modelled as a *connector* between names instead of a suffix,
+and lower-cased tokens searched case-sensitively against a capitalised body. `FINDINGS` is now 3, all
+real, and the phantom is recorded on the report as `phantoms_the_old_matcher_invented_and_this_one_clears`
+so nobody spends another hour re-deriving that the entry is fine.
+
+The three classes are kept apart in the data, because only one of them needs the author and only one of
+them needs a code change:
+
+| class | entries | who acts |
+|---|---|---|
+| uncited already in v42 and v48 | `baez 2023` | author, at submission |
+| uncited by a removal the errata records | `united 2014`, `united 2025` | author, at submission — and this is E4, the same defect as the removed §1.1 passage, not a second item |
+| unexplained, introduced by this base swap | **none** | the verifier asserts this class stays empty |
+
+A class-2 label is not available on request: the errata must name the entry, speak of v49, and say the
+cite went, so an unexplained loss cannot borrow the standing of an explained one. The open item in
+`humanize/open_items_v48.md` states the facts and recommends nothing — if the SEEA inconsistency is a
+claim the paper is to make, the fix is a new sentence with a verified source written by the author; if
+not, the entries are dead weight. Restoring v48's wording is not a resolution, since that wording is
+what E4 objected to, and the pipeline drafts no substitute.

@@ -264,17 +264,27 @@ _lost = sorted(_a48 - _a49)
 out['section1_citation_anchors_vs_v48'] = {'in_v48_section_1': len(_a48), 'in_v49_section_1': len(_a49),
                                           'anchors_v48_section_1_carried_that_v49_section_1_does_not': _lost,
                                           'new_in_v49_section_1': sorted(_a49 - _a48),
-                                          'key': 'lead author of the cite + year; institutions on two words',
+                                          'key': 'the lead token of the author run plus the year, taken the same way on both surfaces',
                                           'note': ('section 1 is the author\'s base and this build never edits it; the '
                                                    'list is disclosure so a dropped source cannot hide behind that'),
                                           'occurrences_of_the_leading_author_name_anywhere_in_v49':
                                               {x: md49_txt.lower().count(x.split()[0]) for x in _lost}}
 _audit = json.loads(_ap.read_text())
-_pending = _audit['citations']['orphans_introduced_by_this_base_swap']
-_other = _audit['FINDINGS'] - len(_pending)
+# three orphan classes, kept apart on purpose: an entry v42 and v48 already left uncited, an entry
+# whose cite went with a removal the errata records (E4), and - the one that would be a defect here -
+# a cite that vanished with no record anywhere. Only the third class can this build be blamed for.
+_disclosed = _audit['citations']['real_orphans_disclosed']
+_unexplained = _audit['citations']['class_3_introduced_by_this_base_swap_unexplained']
+assert not _unexplained, 'the base swap dropped a cite with nothing on record: ' + ', '.join(_unexplained)
+_other = _audit['FINDINGS'] - len(_disclosed)
 out['line_audit'] = {'findings_total': _audit['FINDINGS'],
-                     'findings_other_than_the_pending_author_decision': _other,
-                     'pending_author_decision_uncited_entries': _pending,
+                     'findings_other_than_the_disclosed_orphans': _other,
+                     'disclosed_uncited_entries': _disclosed,
+                     'orphan_classes': {
+                         'uncited_already_in_v42_and_v48': _audit['citations']['class_1_uncited_already_in_v42_and_v48'],
+                         'uncited_by_a_removal_the_errata_records': _audit['citations']['class_2_uncited_by_a_removal_the_errata_records'],
+                         'unexplained': _unexplained},
+                     'phantoms_a_previous_matcher_invented': _audit['citations']['phantoms_the_old_matcher_invented_and_this_one_clears'],
                      'provenance': _audit['provenance_of_every_line'],
                      'maths_unsupported': _audit['maths']['count'],
                      'numerals_unsupported': _audit['numerals']['count'],
@@ -283,6 +293,7 @@ out['line_audit'] = {'findings_total': _audit['FINDINGS'],
                      'pdf_findings': _audit['pdf']}
 _audit_pending = []
 if _other: _audit_pending.append('the line-level read found a flaw this build introduced')
+if _audit['citations']['in_text_cites_with_no_entry']: _audit_pending.append('an in-text cite resolves to no entry')
 if _audit['maths']['count'] or _audit['numerals']['count']: _audit_pending.append('an unsupported numeral or formula')
 if _audit['formatting_count']: _audit_pending.append('a formatting flaw in the shipped markdown')
 if _audit['pdf']: _audit_pending.append('the rendered PDF does not match what was intended')

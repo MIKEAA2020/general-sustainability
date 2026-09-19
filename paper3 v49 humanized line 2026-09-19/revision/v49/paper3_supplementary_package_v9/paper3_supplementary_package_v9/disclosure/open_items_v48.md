@@ -169,3 +169,33 @@ held pending the author's next prompt.
 sha256 3ad72c04…564fa7 — because the decision was that no v8.1 patch ships unless v48 ships alone.
 Open for the author in v49: the four status labels (a content call, disclosed not absorbed), the two `watch`
 terms kept as the adaptation wrote them, and the small duplication where the two-senses carry-over landed.
+
+---
+
+## Open item — three uncited reference entries, one of them a matcher's fault (recorded 2026-09-19, v49)
+
+**The facts.** v49's reference list carries three entries with no in-text cite anywhere in the article:
+`United Nations, 2014` and `United Nations, 2025`, whose only citations in v48 were the two §1.1 sentences
+on the SEEA consistency-score passage, and `Baez 2023`, uncited since v42.
+
+**The two UN entries and erratum E4 are the same defect, seen twice** — once in the body, once in the
+list. E4 recorded that the §1.1 passage asserted `2008 SNA` / `SEEA 2014` / `(United Nations, 2014)` with
+nothing in the deposit behind it (`2008` dep 0, `United Nations` dep 0 / v48 4, `SEEA` dep 0 / v48 2).
+v49's base does not carry that passage, so the unsupported assertion is gone from the body and the entries
+it supported are left dangling. They should not be treated as two separate items.
+
+**`Illakwahhi 2024` is not an orphan.** It is cited as `Illakwahhi, Vegi and Srivastava (2024)`, the
+correct three-author first-mention form for that entry. An earlier version of the line audit required the
+year immediately after the surname and would not cross a parenthesis, so it reported this entry as
+uncited; that was a matcher bug, it has been fixed in the matcher, and the citation was left alone. The
+audit now records such cases apart from real orphans (`phantoms_the_old_matcher_invented_and_this_one_clears`)
+so nobody re-derives the same conclusion. Editing the citation to satisfy the old matcher would have been
+editing correct text to appease a broken instrument.
+
+**Status: no pipeline action, no recommendation.** Which way these three go depends on whether the SEEA
+inconsistency is a claim this paper is to make, and that is not the pipeline's judgement. If it is, the
+fix is a new sentence with a verified source, written by the author. If it is not, the entries are dead
+weight. Restoring v48's two §1.1 sentences is *not* a resolution — those sentences are exactly what E4
+objected to — and the pipeline will not draft replacements for them. Disclose specifically, settle at
+submission. What the build guarantees meanwhile: the audit separates "inherited from an earlier line" from
+"lost with no record", and the verifier fails the build if that third class is ever non-empty.

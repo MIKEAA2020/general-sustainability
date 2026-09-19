@@ -363,49 +363,176 @@ for bi, blk in enumerate(re.split(r'\n[ \t]*\n', md49), 1):
 findings += [{'kind': 'formatting flaw', **f} for f in fmt]
 
 # --------------------------------------------------------------- citation integrity
+# The matcher, not the manuscript. The first version of this check asked whether `Illakwahhi`
+# appeared within 80 characters of `2024` WITHOUT CROSSING A PARENTHESIS, so the correct APA first
+# mention of a three-author work - `Illakwahhi, Vegi and Srivastava (2024)` - read as an uncited
+# entry, and v48 carried the same phantom. An attempt to "fix" it by canonicalising every cite into
+# one key then invented new errors (it read `GRACE ... Tapley et al., 2004` as a cite by GRACE). So
+# neither: an entry is cited if any name it is addressed by sits near its year in the body, and a
+# cite is unresolved only if NO name in it addresses any entry of that year. No canonical key, so
+# `and`, `&`, `et al.`, initials and institution strings cannot trip it; the permissive direction can
+# only clear an entry, never flag one, and every clearing records which names did it.
 bi = md49.find('## References')
 body, refs = md49[:bi], md49[bi:]
-orphan, uncited = [], []
-for e in [x.strip() for x in refs.split('\n') if x.strip() and not x.strip().startswith('#')]:
-    m = re.match(r'^([A-Z][A-Za-z\-\u2019\' ]+?)[,.]\s+.*?((?:1[89]|20)\d\d)', e)
+BODY_FLAT = ' '.join(body.split())
+_MONTH = r'(?:January|February|March|April|May|June|July|August|September|October|November|December)'
+_STOP = {'the', 'and', 'for', 'from', 'this', 'that', 'with', 'into', 'note', 'notes', 'ibid',
+         'section', 'sections', 'table', 'tables', 'figure', 'figures', 'appendix', 'versus',
+         'both', 'while', 'whereas', 'where', 'when', 'then', 'than', 'after', 'before',
+         'above', 'below', 'example', 'examples', 'equation', 'equations', 'here', 'there',
+         'these', 'those', 'such', 'also', 'thus', 'hence', 'because', 'although', 'comment'}
+
+
+def _entry_names(line):
+    """the name tokens a reference entry can be addressed by (author run, or institution words)"""
+    s = ' '.join(line.strip().lstrip('-* ').split())
+    if len(s) < 12 or s.startswith('#'):
+        return None, None
+    m = re.match(r'((?:[A-Z][A-Za-z\-\u2019\.]{1,28})(?:[,.]?\s+(?:and\s+)?[A-Z][A-Za-z\-\u2019\.]{1,28}){0,3})[,.]\s*((?:1[89]|20)\d\d)[a-z]?[,.]', s)
     if not m:
+        m2 = re.match(r'((?:[A-Z][A-Za-z\-\u2019\.]{1,28})(?:\s+[A-Z][A-Za-z\-\u2019\.]{1,28}){0,3})[,.]', s)
+        ym = re.search(r'((?:1[89]|20)\d\d)[a-z]?', s)
+        if not (m2 and ym):
+            return None, None
+        return m2.group(1), ym.group(1)
+    return m.group(1), m.group(2)
+
+
+def _tokens(namestr):
+    return [x.lower().strip(',.') for x in namestr.split()
+            if len(x.strip(',.')) >= 4 and x.lower().strip(',.') not in _STOP]
+
+
+def _cited_by(lead_tokens, yr):
+    """which of the entry's own name tokens sits near the year in the body, and how"""
+    hits = []
+    for tok in lead_tokens:
+        # case-insensitive: the tokens are lower-cased for the key, and `tilton` never matches `Tilton`
+        m = re.search(r'\b' + re.escape(tok) + r'\b[^)\n]{0,90}?\b' + yr + r'[a-z]?\b', BODY_FLAT, re.I)
+        if m:
+            hits.append({'token': tok, 'context': ' '.join(m.group(0).split())[:110]})
+    return hits
+
+
+entries, orphan, resolved_keys, weak_cleared = {}, [], {}, []
+for e in refs.split('\n'):
+    names, yr = _entry_names(e)
+    if not names or not yr:
         continue
-    lead, yr = m.group(1).split()[0], m.group(2)
-    if not re.search(re.escape(lead) + r'[^()\n]{0,80}?' + yr, body):
-        orphan.append(f'{lead} {yr}')
-# every (Author, Year) in-text cite must resolve to an entry
-entries = {}
-for e in [x.strip() for x in refs.split('\n') if x.strip()]:
-    for m in re.finditer(r'([A-Z][A-Za-z\-\u2019\' ]+?)[,.]', e):
-        entries.setdefault(m.group(1).split()[0].lower(), set()).add(re.findall(r'(?:1[89]|20)\d\d', e)[0] if re.findall(r'(?:1[89]|20)\d\d', e) else '')
-for m in re.finditer(r'\(([^)]{3,180})\)', body):
+    toks = _tokens(names)
+    if not toks:
+        continue
+    k = toks[0] + ' ' + yr
+    # 'entry' is a display string and is cut short; 'name' is what logic reads. Keeping the two
+    # separate is the point: the multi-agency 2014 line puts its year past any useful preview, and
+    # re-parsing the preview is what mis-classified it as an unexplained loss for a run.
+    entries[k] = {'entry': ' '.join(e.split())[:120], 'name': ' '.join(names.split()),
+                  'tokens': toks, 'year': yr}
+    h = _cited_by(toks, yr)
+    if h:
+        resolved_keys[k] = h[0]
+        # the window is deliberately permissive, so its shadow side gets listed rather than hidden: an
+        # entry cleared by a co-author name or by prose that merely names the same words near the year
+        if h[0]['token'] != toks[0]:
+            weak_cleared.append({'entry': k, 'cleared_by': h[0]['token'], 'context': h[0]['context']})
+    else:
+        orphan.append(k)
+
+# the reverse direction: every parenthetical cite has to address some entry of that year
+_name_of = {}
+for k, v in entries.items():
+    for t2 in v['tokens']:
+        _name_of.setdefault(t2, set()).add(k.split()[-1])
+uncited = []
+for m in re.finditer(r'\(([^)]{3,200})\)', body):
     for part in m.group(1).split(';'):
-        mm = re.search(r'([A-Z][A-Za-z\-\u2019\' ]+?)(?:,| and | & | et al\.)\s*((?:1[89]|20)\d\d)?[a-z]?', part.strip())
-        if not mm:
+        p2 = ' '.join(part.split())
+        mm = re.search(r'\b((?:1[89]|20)\d\d)[a-z]?\s*$', p2)
+        if not mm or re.search(r'\b' + _MONTH + r'\s+' + mm.group(1) + r'$', p2):
+            continue                      # a date, not a citation
+        if re.search(r'[\d\s,]{6,}' + mm.group(1) + r'$', p2):
+            continue                      # an identifier or a list of numbers ending in a year
+        names = [x.lower().strip(',.') for x in re.findall(r"[A-Z][A-Za-z\-\u2019]{2,}", p2)]
+        names = [x for x in names if x not in _STOP and len(x) >= 4]
+        if not names:
             continue
-        lead = mm.group(1).split()[0].lower()
-        yr = mm.group(2)
-        if len(lead) < 3 or lead in ('the', 'section', 'table', 'figure', 'both', 'while', 'whereas', 'e.g'):
-            continue
-        if yr and yr not in entries.get(lead, set()):
-            uncited.append({'text': part.strip()[:80], 'lead': lead, 'year': yr})
-_orph48 = set()
+        if not any(mm.group(1) in _name_of.get(x, set()) for x in names):
+            uncited.append({'text': p2[:80], 'names': names[:4], 'year': mm.group(1)})
+_seen, uncited2 = set(), []
+for u in uncited:
+    if (u['year'], u['text']) not in _seen:
+        _seen.add((u['year'], u['text']))
+        uncited2.append(u)
+uncited = uncited2
+
+# and what the pre-fix matcher flagged, so a phantom it invented is not mistaken for an editorial item
+def _legacy_orphans(txt, reftxt):
+    out3 = []
+    for e in [x.strip() for x in reftxt.split('\n') if x.strip() and not x.strip().startswith('#')]:
+        mm = re.match(r'^([A-Z][A-Za-z\-\u2019\' ]+?)[,.]\s+.*?((?:1[89]|20)\d\d)', e)
+        if mm and not re.search(re.escape(mm.group(1).split()[0]) + r'[^()\n]{0,80}?' + mm.group(2), txt):
+            out3.append(f'{mm.group(1).split()[0].lower()} {mm.group(2)}')
+    return out3
+
+
+_formerly_flagged = set(_legacy_orphans(body, refs))
+cited48 = None
 _r48 = md48[md48.index('## References'):]
-_b48 = md48[:md48.index('## References')]
-for e in [x.strip() for x in _r48.split('\n') if x.strip() and not x.strip().startswith('#')]:
-    m = re.match(r'^([A-Z][A-Za-z\-\u2019\' ]+?)[,.]\s+.*?((?:1[89]|20)\d\d)', e)
-    if m and not re.search(re.escape(m.group(1).split()[0]) + r'[^()\n]{0,80}?' + m.group(2), _b48):
-        _orph48.add(f'{m.group(1).split()[0]} {m.group(2)}')
-_new_orphans = sorted(set(orphan) - _orph48)
-log_orphans = sorted(set(orphan) & _orph48)
-_fm49 = md49[:md49.index('\n## 2. ')]
-for _a in abolish:
-    if _a in _fm49:
-        findings.append({'kind': 'an abolished adaptation label survived into the shipped front matter',
-                         'alias': _a, 'count_in_front_matter': _fm49.count(_a)})
-findings += [{'kind': 'reference entry the swap left uncited (fix: cite it or drop it)', 'entry': o}
-             for o in _new_orphans]
-# these two were uncited in v42 and v48 too: an author-side house-style item, not a defect of this build
+_b48 = ' '.join(md48[:md48.index('## References')].split())
+orph48 = set()
+for e in _r48.split('\n'):
+    names, yr = _entry_names(e)
+    if not names or not yr:
+        continue
+    toks = _tokens(names)
+    if toks and not any(re.search(r'\b' + re.escape(t3) + r'\b[^)\n]{0,90}?\b' + yr + r'[a-z]?\b',
+                                _b48, re.I) for t3 in toks):
+        orph48.add(toks[0] + ' ' + yr)
+inherited = sorted(set(orphan) & orph48)
+
+
+# the second class has to be a removal the project already recorded as a decision: the erratum must
+# name the entry, speak of v49, and say the cite went - so an unexplained loss cannot borrow the
+# standing of an explained one
+_err = pathlib.Path('/home/user/revision/v48/ERRATA_v48.md')
+_err_txt = _err.read_text() if _err.exists() else ''
+
+
+def _logged_removal_cause(key):
+    """the erratum sentence that records THIS entry going uncited in v49, or '' if none does.
+    Name and year have to sit in the same sentence as the statement that the cite went, because a
+    paragraph that merely mentions `Baez 2023` while discussing another entry is not a record of a
+    decision about Baez - and a soft rule here would let any unexplained loss borrow class 2."""
+    name = ' '.join(entries.get(key, {}).get('name', key).split()[:3]).strip(',.')
+    yr = key.rsplit(' ', 1)[1]
+    if not name:
+        return ''
+    for para in _err_txt.split('\n\n'):
+        if 'v49' not in para:
+            continue
+        for sent in re.split(r'(?<=[.!?])\s+(?=[A-Z`*])', para):
+            # 40 characters, not 14: the errata lists the two UN entries in one sentence, so the second
+            # name sits 15 characters from its year and a tight window classified it as unexplained
+            if re.search(re.escape(name) + r'[^.!?]{0,40}?' + yr, sent, re.I) and \
+               re.search(r'uncited|cited by nobody|no longer makes', sent, re.I):
+                return ' '.join(sent.split())[:400]
+    return ''
+
+
+recorded, _unexplained = [], []
+for o in sorted(set(orphan) - orph48):
+    _cause = _logged_removal_cause(o)
+    (recorded if _cause else _unexplained).append({'entry': o, 'recorded_in_errata': _cause} if _cause else o)
+created_by_a_logged_removal = [r['entry'] for r in recorded]
+_new_orphans = _unexplained
+
+findings += [{'kind': 'reference entry with no in-text cite anywhere in v49', 'entry': o,
+              'class': ('already uncited in v42 and v48' if o in inherited
+                        else 'uncited by a removal the errata records' if o in created_by_a_logged_removal
+                        else 'NOT ACCOUNTED FOR - unexplained loss of a cite'),
+              'note': 'disclosed on the open items; whether the paper should make this claim is the '
+                      "author's call at submission, and this audit takes no position on it"}
+             for o in sorted(set(orphan))]
 findings += [{'kind': 'in-text cite with no reference entry', **u} for u in uncited]
 
 # --------------------------------------------------------------- the rendered PDF
@@ -466,11 +593,22 @@ rep = {'provenance_of_every_line': prov, 'lines_total': len(L), 'unexplained': u
        'numerals': {'without_source': num_bad[:20], 'count': len(num_bad)},
        'formatting': fmt[:40], 'formatting_count': len(fmt),
        'formatting_inherited_from_v48_unchanged': {'count': len(inherited), 'examples': inherited[:6]},
-       'citations': {'orphan_reference_entries': sorted(set(orphan)),
-                     'orphans_pre_existing_in_v48': log_orphans,
-                     'orphans_introduced_by_this_base_swap': _new_orphans,
+       'citations': {
+                     'reference_entries': len(entries),
+                     'real_orphans_disclosed': sorted(set(orphan)),
+                     'class_1_uncited_already_in_v42_and_v48': inherited,
+                     'class_2_uncited_by_a_removal_the_errata_records': created_by_a_logged_removal,
+                     'class_2_evidence': {r['entry']: r['recorded_in_errata'] for r in recorded},
+                     'class_3_introduced_by_this_base_swap_unexplained': _new_orphans,
+                     'phantoms_the_old_matcher_invented_and_this_one_clears':
+                         sorted(_formerly_flagged - set(orphan)),
+                     'cleared_by_a_name_that_is_not_the_lead': weak_cleared,
                      'in_text_cites_with_no_entry': uncited[:20],
-                     'orphan_count_v49': len(set(orphan))},
+                     'open_item': 'humanize/open_items_v48.md - three uncited entries, disclosed, no fix applied',
+                     'orphan_count_v49': len(set(orphan)),
+                     'rule': ('an entry is cited when a name it is addressed by sits near its year in '
+                              'the body; a class-2 entry needs the erratum to name it and to say the '
+                              'cite went, so an unexplained loss cannot borrow an explained one')},
        'pdf': pdf_findings,
        'FINDINGS': len(findings), 'findings': findings[:120]}
 (D / 'v49_line_audit.json').write_text(json.dumps(rep, indent=1) + '\n')
