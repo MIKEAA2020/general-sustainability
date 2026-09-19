@@ -180,3 +180,6 @@ SHA-256 of every extracted file was recorded at clone time (see file list above 
 - e1/E1_SUPPLEMENTARY_V6.md/.tex/.pdf — submission SI: meta/journal notes removed; content parity with V5 proven by numeral battery.
 - e1/E1_REPRODUCIBILITY_PACKAGE_v62_20260918.zip (+.sha256) — self-verifying reproducibility package; sandbox VERIFY OK (byte-identical).
 - framework/build_tex_pdf_2026.py — additive BUILD_TAG=none stamp suppression.
+
+## 2026-09-18 additions (v63)
+- e1/paperE1_cod_forecast_ladder_v63_humanized.md/.tex/.pdf + _build-hu63-c1375ed + _submission.pdf — restores the Keywords line dropped at v58 (only loss found in full-chain audit; delta = 1 line). Archive + stamp-free submission carriers.
