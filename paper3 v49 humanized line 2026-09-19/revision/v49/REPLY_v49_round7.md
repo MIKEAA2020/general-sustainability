@@ -88,5 +88,8 @@ compile 54/19/10/8 pp with overfull ≥6 pt 0 and `??` 0, pdf_flow 203/203 parag
 (8 disclosures), audit FINDINGS 3 (the three disclosed orphans and nothing else), pin 290 ruled rows / 145
 verbatim-protected outside §1, verifier `*** v49 verified ***`, FAILURES: none.
 
-The package is `paper3_supplementary_package_v10.zip`; its sha256 is in `NOTES_v49.md` and in the push
-message.
+The package is `paper3_supplementary_package_v10.zip` (84 records). Its digest is not quoted in a file that
+travels inside it - that would make the copy in the zip stale the moment the digest was written down - so it
+is in `paper3_supplementary_package_v10.sha256` next to the zip and in the archive commit message. The
+branch `archive/paper3-v48-workspace` head carries every document, and the push now checks each archived
+blob against the workspace bytes rather than trusting a filename.
