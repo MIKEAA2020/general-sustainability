@@ -406,7 +406,9 @@ v49_front_matter_edits.json`.
 6. The reference list gives DOIs for 8 entries but omits Martinez-Alier, Munda & O'Neill (1998),
    `10.1016/S0921-8009(97)00120-1`. House style, one entry.
 
-Package v10: 84 records, 2,139,744 bytes. Its digest is deliberately NOT recorded here: the digest of a zip
+Package v10: 84 records. Its byte count and digest are deliberately NOT recorded here - they are in
+`paper3_supplementary_package_v10.sha256` beside the zip, because a number quoted in a file inside the zip
+goes stale the moment re-packaging changes it, which happened twice in this round before the point was taken.: the digest of a zip
 cannot live inside the zip without the copy in it going stale one line behind, which is a loop rather than a
 record. It is in `paper3_supplementary_package_v10.sha256` beside the zip and in the push commit message, and
 v9 (afa993932828d8f81b09b6afdda22225dcd7358dd73ac5fd13f3c9582f93a26b) is superseded by it.
