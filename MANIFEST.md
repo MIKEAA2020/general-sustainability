@@ -183,3 +183,7 @@ SHA-256 of every extracted file was recorded at clone time (see file list above 
 
 ## 2026-09-18 additions (v63)
 - e1/paperE1_cod_forecast_ladder_v63_humanized.md/.tex/.pdf + _build-hu63-c1375ed + _submission.pdf — restores the Keywords line dropped at v58 (only loss found in full-chain audit; delta = 1 line). Archive + stamp-free submission carriers.
+
+## 2026-09-18 additions (v64 + lineage audit)
+- e1/paperE1_cod_forecast_ladder_v64_humanized.md/.tex/.pdf + _build-hu64 + _submission — declarations completed (owner text), competing-interest bold, A.7 code block restored; 4-line delta.
+- audits_E1_E3/E1_CONTENT_AUDIT_V49_V63_20260918.md — per-chapter census + 26-motif substance matrix + restoration menu.
