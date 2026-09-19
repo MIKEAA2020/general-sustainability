@@ -1,40 +1,26 @@
 # Paper 3 latest deliverables — 2026-09-19
 
-This directory is the re-cloneable snapshot of the latest Paper 3 work from the workspace.
-It contains the v49 full-length line, both target-specific journal cuts, the Route C prototype,
-and the two deposit archives.
+This directory is the re-cloneable snapshot of the latest Paper 3 work. It contains the article sources, target-specific journal cuts, supplementary material, figure assets, validation records and deposit archives.
 
 ## Contents
 
-- `manuscript/`: the latest full-length article, supplementary material and Companions A and B.
-- `journal_variants/`: JIE and Ecological Economics cuts, rendered PDFs, figure assets, validation and Route C sources.
-- `deposit/`: the full-length Figshare-ready deposit and v49 supplementary package, each with a sidecar checksum.
-- `audit/`: the evaluation, v49 notes/reply and final verification reports.
-- `v49/`: the v49 verification/package/push scripts.
-- `build/`: the reproducible Figshare staging/build script.
+- `manuscript/`: the article source and the related methods, accounting-standards and supplementary records.
+- `journal_variants/`: the Journal of Industrial Ecology and Ecological Economics cuts, rendered PDFs, figure assets, validation records and ancillary source checks.
+- `deposit/`: the public-record package archives and their sidecar checksums.
+- `audit/`: validation and evidence-status records.
+- `build/` and the verification utilities: reproducible staging and checks for the archived source records.
 
-The v49 archive branch remains separate at
-`archive/paper3-v48-workspace`, under `paper3 v49 humanized line 2026-09-19/`.
-It is an archive branch, not `main`.
+The Journal of Industrial Ecology package identifies the three linked public records explicitly. The main article record is `https://doi.org/10.6084/m9.figshare.33942451`; the methods record is `https://doi.org/10.6084/m9.figshare.33942469`; and the accounting-standards record is `https://doi.org/10.6084/m9.figshare.33942487`. The expanded local package is not represented as an externally uploaded or newly assigned DOI record.
 
 ## Verification state
 
-- JIE: 4,206/6,000 local body words; rendered PDF: 11 pages.
-- Ecological Economics: 4,245/8,000 local body words; rendered PDF: 11 pages.
-- Both journal PDFs pass the current validation, page, unresolved-reference and overfull-box checks.
-- Route C prototype: four tests passing; it is not a supported EMS software contribution.
-- v49 verifier: `FAILURES: none`.
-- An author-supplied public Figshare preprint record is available at https://doi.org/10.6084/m9.figshare.33942451; the expanded 49-record package here is separately checksummed and should not be conflated with that record without version matching.
+- JIE: 4,262 body words under the 6,000-word local math-excluding count; rendered PDF: 11 pages.
+- Ecological Economics: 4,245 body words under the 8,000-word local count; rendered PDF: 11 pages.
+- The JIE supplement and cover letter compile successfully; the JIE figure asset is checked against the source references.
+- No credentials are included in this directory.
 
 ## Rebuild/check commands
 
-The journal-cut renderer and validator are under `journal_variants/`. The full-length v49 package
-builders are under `v49/` and expect the historical workspace layout if used as builders rather than
-as archival source. `tools/tectonic` is intentionally not included because of its size.
+The journal-cut validator is under `journal_variants/`. The TeX sources and PDFs are under `journal_variants/rendered/`. The article and supplementary sources are independent of the build utilities and can be inspected directly.
 
-## Licence and credentials
-
-The repository contains no credential. In particular, `github_pat.txt` was deliberately excluded
-from the commit and must never be committed, copied into a package, or printed in a log.
-
-The 16 MB third-party GFN NFA source tables remain outside this snapshot and outside the v49 package.
+The third-party source tables used by selected analyses remain outside this snapshot and are referenced through their respective evidence records.

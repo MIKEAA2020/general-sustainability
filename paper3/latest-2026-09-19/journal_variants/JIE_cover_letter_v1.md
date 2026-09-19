@@ -1,22 +1,22 @@
+# Cover letter
+
 19 September 2026
 
-Editor
-*Journal of Industrial Ecology*
-
-Dear Editor,
+Dear Editors,
 
 Please consider the manuscript **“Typed material-flow ledgers for componentwise sustainability diagnostics”** for publication in the *Journal of Industrial Ecology*.
 
-The manuscript develops a typed stock–flow framework for material-flow accounting in which substance classes, units, conversions, donor limitations and boundary flows are explicit. It establishes separate accounting, conservation and barrier-safety predicates; proves the obstruction to componentwise certification by a compensating scalar; and classifies groundwater anomaly persistence, phosphate reserve-life arithmetic and fisheries removals-only pressure times as distinct descriptive objects. The framework is intended to prevent the promotion of throughput, economic reserve ratios or statistical indices into unsupported physical depletion forecasts.
+The manuscript develops a typed stock–flow ledger in which material types, conversion routes, conserved moieties, support-pool drawdown and service readouts are distinguished formally. It establishes the componentwise limitation of compensatory aggregation and classifies groundwater anomaly persistence, phosphate reserve-life arithmetic and fisheries removals-only pressure times as distinct descriptive quantities rather than interchangeable depletion forecasts. The accompanying supplementary material provides the theorem inventory, delay-dynamics interface, application tables and operational weak- and strong-sustainability definitions.
 
-The submission is accompanied by two formally distinct related papers:
+The manuscript is part of a linked set of three papers:
 
-1. **Abaee, A. (2026), “Certifying a Typed Ledger: The Predicates, the Programmes, the Vintages, and the Reproduction Bundle.”** Methods companion: [https://doi.org/10.6084/m9.figshare.33942469](https://doi.org/10.6084/m9.figshare.33942469)
-2. **Abaee, A. (2026), “What the Accounts Settle, and What They Leave Open: Depletion as a Cost of Production, and the Missing Step from a Rate to a Horizon.”** Standards commentary: [https://doi.org/10.6084/m9.figshare.33942487](https://doi.org/10.6084/m9.figshare.33942487)
+1. **Main article:** “Typed material-flow ledgers for componentwise sustainability diagnostics.” Public record: [https://doi.org/10.6084/m9.figshare.33942451](https://doi.org/10.6084/m9.figshare.33942451).
+2. **Methods companion:** Abaee, A. (2026), “Certifying a Typed Ledger: The Predicates, the Programmes, the Vintages, and the Reproduction Bundle.” [https://doi.org/10.6084/m9.figshare.33942469](https://doi.org/10.6084/m9.figshare.33942469).
+3. **Accounting-standards companion:** Abaee, A. (2026), “What the Accounts Settle, and What They Leave Open: Depletion as a Cost of Production, and the Missing Step from a Rate to a Horizon.” [https://doi.org/10.6084/m9.figshare.33942487](https://doi.org/10.6084/m9.figshare.33942487).
 
-The principal article record is available at [https://doi.org/10.6084/m9.figshare.33942451](https://doi.org/10.6084/m9.figshare.33942451). The three papers have distinct purposes: the submitted article presents the framework and applications, the methods paper specifies the certification and reproduction procedures, and the commentary addresses the accounting treatment of depletion and the interpretation of horizon claims.
+The related papers have distinct scopes: the submitted manuscript presents the industrial-ecology framework and findings; the methods companion specifies the certification procedures and reproduction protocol; and the accounting-standards companion examines the distinction between recording depletion flows and inferring horizons.
 
-This manuscript is original, is not under consideration elsewhere, and is submitted for exclusive consideration by the *Journal of Industrial Ecology*. The author declares no competing interests and no funding.
+The author declares no competing interests. The work received no funding.
 
 Thank you for your consideration.
 

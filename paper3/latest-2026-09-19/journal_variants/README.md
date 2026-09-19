@@ -1,22 +1,17 @@
-# Journal-specific submission variants
+# Journal of Industrial Ecology submission package
 
-These are new working surfaces derived from the immutable v49 full-length line. They do not alter `revision/v49/`'s shipped article, package or archive branch.
+This directory contains the Journal of Industrial Ecology article, its standalone supplementary material, the cover letter, figure assets and validation records.
 
-## Contents
+- `paper3_JIE_submission_v1.md` and `rendered/paper3_JIE_submission_v1.tex` are synchronized article sources. The compiled article is in `rendered/paper3_JIE_submission_v1.pdf`.
+- `rendered/paper3_JIE_supplement_v1.tex` is the separate supplementary source, with its compiled PDF and TeX log.
+- `JIE_cover_letter_v1.md` and `rendered/JIE_cover_letter_v1.pdf` are the submission cover letter and PDF version.
+- `assets/typed_ledger_readout.svg` and `.png` are the Figure 1 assets.
+- `audit/` and `paper3_JIE_supplement_v1_validation.md` record word-count, source, asset and build checks.
 
-- `paper3_JIE_submission_v1.md` — Journal of Industrial Ecology cut, checked against a 6,000-word body limit. It leads with MFA, typed material stocks/flows, closure, double-counting and application classifications. Proofs are provided in `rendered/paper3_JIE_supplement_v1.tex`.
-- `paper3_EE_submission_v1.md` — Ecological Economics cut, checked against an 8,000-word body limit. It leads with weak/strong sustainability, weak comparability, noncompensatory aggregation, natural-capital drawdown and policy meaning. It deliberately does not promote the regime interpretation to a theorem.
-- `rendered/paper3_JIE_supplement_v1.tex`, `.pdf` and `.log` — standalone JIE Supplementary Information with the extended theorem inventory, institutional-delay interface, application tables and operational sustainability regimes.
-- `paper3_JIE_supplement_v1_validation.md` — validation record for the Supplementary Information.
-- `JIE_cover_letter_v1.md` and `rendered/JIE_cover_letter_v1.pdf` — formal submission cover letter listing the three related papers and DOI links.
-- `assets/typed_ledger_readout.svg` and `.png` — the new restrained framework/productivity-illusion figure used by both cuts.
-- `route_c_prototype/` — a dependency-free, tested core declaration prototype for a possible Environmental Modelling & Software route. It is explicitly not yet a supported package.
-- `validate_journal_variants.py` and `journal_variants_validation.json` — word-limit/content/asset gate.
+The main article is below the 6,000-word body limit; supplementary material is separate. The methods paper and accounting-standards paper are cited as intended publications by their public records:
 
-## Count rule
+- Main article: [10.6084/m9.figshare.33942451](https://doi.org/10.6084/m9.figshare.33942451)
+- Methods paper: [10.6084/m9.figshare.33942469](https://doi.org/10.6084/m9.figshare.33942469)
+- Accounting-standards paper: [10.6084/m9.figshare.33942487](https://doi.org/10.6084/m9.figshare.33942487)
 
-The validator removes inline and display math and counts word-like tokens before `## References`. This is a working gate, not a journal's final copy-editor count. It reports both cuts below their requested ceilings; references, figure captions and supplementary material are separate.
-
-## Full-length deposit route
-
-The authoritative full-length manuscript remains the v49 four-document set under `revision/v7/` and the validated v10 archive. The Figshare-ready deposit should include that full-length set, the full technical supplementary, the target-specific cuts, the figure assets, the code and analysis records under `revision/v7/code/` and `revision/v7/analysis/`, and the metadata/checksum file generated for the deposit. An author-supplied public Figshare preprint record is available at https://doi.org/10.6084/m9.figshare.33942451. The expanded 49-record package is maintained separately with its own sidecar checksum and should be version-matched before being described as the public record.
+The main record is contextual. The expanded local package is not represented as an externally uploaded or newly assigned DOI record.
