@@ -387,7 +387,8 @@ def _typst_header(title, tag):
     h.append('')
     h.append('  ' + DATE)
     h.append('')
-    h.append('  #text(8pt, style: "italic")[typesetting build: ' + tag + ']')
+    if tag not in ('', 'none', None):
+        h.append('  #text(8pt, style: "italic")[typesetting build: ' + tag + ']')
     h.append(']')
     h.append('#v(4mm)')
     return f1.join(h) + f2

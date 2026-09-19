@@ -174,3 +174,9 @@ SHA-256 of every extracted file was recorded at clone time (see file list above 
 - e1/E1_SUPPLEMENTARY_V4/V5.* — SI-7 campaign companion; V5 corrects the q# invariance claim and adds the sensitivity table.
 - batch 7/SPEC_E1_SURVEY_TARGET_20260918.md (pre-registered Spec C), campaign_e1_survey_target.py, campaign_e1_survey_qsensitivity.py; results/e1_survey_target_*.csv, e1_survey_dm_uncertainty.csv, e1_survey_qsensitivity.csv (all deterministic).
 - e1/COVER_LETTER_paperE1_cod_forecast_ladder_FR_v3_20260918.md/.tex/.pdf — resubmission letter to Fisheries Research: intentions; responses to the three desk-rejection concerns (Appendix A specification; scope/status; scoreboard target answered empirically); every claim byte-consistent with v61.
+
+## 2026-09-18 additions (cleanse + package)
+- e1/paperE1_cod_forecast_ladder_v62_humanized.* — meta-cleanse (two cross-paper self-references rewritten to archived-here); archive + stamp-free submission carriers.
+- e1/E1_SUPPLEMENTARY_V6.md/.tex/.pdf — submission SI: meta/journal notes removed; content parity with V5 proven by numeral battery.
+- e1/E1_REPRODUCIBILITY_PACKAGE_v62_20260918.zip (+.sha256) — self-verifying reproducibility package; sandbox VERIFY OK (byte-identical).
+- framework/build_tex_pdf_2026.py — additive BUILD_TAG=none stamp suppression.
