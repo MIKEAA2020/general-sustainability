@@ -2146,3 +2146,18 @@ Stage Summary:
 - The systemic figure-path class is CLOSED: every current version of every paper now compiles standalone (tex + its figs_* folder(s)); plain ../-fallback paths 30 -> 0; the shipped PDFs and all frozen artifacts untouched (additive-only git delta: 35 figure assets + the wave25 scripts/logs + the V44 record + this worklog).
 - The reported v41 error: reproduced, diagnosed (the owner's compile folder lacked figs_p4/), and closed (repo + submission zip already carried the PNG; remedies documented).
 - Open owner-level items: the 3-line tex edit for the 3 explicit ../figs_p5 paths (superseded P5 versions), the E3 v16 shipped-PDF rebuild, the Zenodo refresh, submission-time guideline/masthead checks.
+
+---
+Task ID: 103-push
+Agent: main (Z.ai Code)
+Task: Push record for the Task 103 commit (the systemic figure-path fix round).
+
+Work Log:
+- The pasted PAT again carries the stray trailing '.1' suffix (fifth occurrence, Tasks 98/99/101/102/103): as pasted it 401s against the GitHub API; the corrected form (suffix stripped) verified 200 as MIKEAA2020. Used in-memory only (a chmod-600 temp file outside the repo, deleted immediately after; push by explicit URL so nothing persists in .git/config; output redacted).
+- Pushed: remote main 856b73e -> 7256a50 (publishing Task 103's full round: the 35 figure assets inside latex/ - figs_e1/e2/e3/e4/p5 complete folders + the 4 older figs_p1 files; the wave25 pipeline + logs; the V44 round record; and the worklog Task 103 entry).
+- Post-push verification: git ls-remote main == local main == 7256a50771f1713969c02c1a49cb2ecb2f7c6c2e; tree clean; zero raw-token occurrences under .git; origin remote URL remains the clean anonymous form; the temp PAT file removed.
+- Rotation advised for the pasted PAT regardless (it transited the chat channel; the same stray-suffix paste artifact has now appeared five times).
+
+Stage Summary:
+- Task 103 published on main (7256a50); remote == local; tree clean; no token residue.
+- Every current version of every paper now compiles standalone from its latex/ folder; the owner-facing record is "humanizing audits/V44_SYSTEMIC_FIGURE_PATH_FIX_ALL_PAPERS.md" and the verification logs sit at "batch 7 (audits of agent arena 1 paper rewrites)/wave25/logs/".
