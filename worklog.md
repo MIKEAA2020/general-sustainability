@@ -2076,3 +2076,18 @@ Stage Summary:
 - Residual caveat: a truly standalone compile (tex alone, no figs_p4 next to it) still needs the folder placed alongside - documented in V42 Part I.
 - The 31-path systemic finding flagged for the owner (V42 Part III); Zenodo refresh and the Task-97 abstract-phrase decision unchanged.
 - Push: Task 100 (539563f, the TE cover letter + the verified 16-DOI list) and Task 101 (this fix) both pushed to main; repo paths provided to the owner in the session reply.
+
+---
+Task ID: 101 (push record)
+Agent: main (Z.ai Code)
+Task: Push record for the Task 101 commit + the Task 100 commit (the figure-path fix + the TE cover letter and verified DOI list).
+
+Work Log:
+- The pasted PAT again carries the stray trailing '.1' suffix (third occurrence, Tasks 98/99/101): as pasted it 401s against the GitHub API; the corrected form (suffix stripped) verified 200 as MIKEAA2020 with admin/maintain/push/triage/pull on MIKEAA2020/general-sustainability. Used in-memory only (transient shell variable read from a chmod-600 temp file OUTSIDE the repository, deleted immediately after use; never in any repo file, log, or the .git directory; push by explicit URL so nothing persists in .git/config; output redacted).
+- Pushed: remote main 4a3884b -> 4484745 (publishing Task 100's 539563f - the Theoretical Ecology cover letter + the V41 verified-DOI record - and Task 101's 4484745 - the latex/figs_p4 asset fix + the V42 round record). Note: the remote had already advanced to 4a3884b (Task 99's push-record commit) since Task 99's c5c1a36, so this push carried exactly the two new commits.
+- Post-push verification: git ls-remote main == local main == 4484745281453b3870db01a0e159f32010a80841; full .git residue scan: ZERO occurrences of the raw token anywhere under .git (config, logs, reflog, packed-refs); origin remote URL remains the clean anonymous form; the token temp file deleted and confirmed absent.
+- Rotation advised for the pasted PAT regardless (it transited the chat channel; the same stray-suffix paste artifact has now appeared three times).
+
+Stage Summary:
+- Both rounds published: Task 100 (539563f) and Task 101 (4484745) on main; remote == local; tree clean; no token residue.
+- Repo paths delivered to the owner: the cover letter at "arena agent 1/paper rewrites/latex/COVER_LETTER_paper4_delay_dynamics_TE.md"; the verified-DOI round record at "humanizing audits/V41_COVER_LETTER_AND_VERIFIED_DOI_LIST.md"; the figure-fix round record at "humanizing audits/V42_FIGURE_PATH_FIX_AND_PUSH.md"; the fixed figure asset at "arena agent 1/paper rewrites/latex/figs_p4/fig2_five_regime_topology_v2.png".
