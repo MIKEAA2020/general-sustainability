@@ -122,10 +122,36 @@ appended, unplaced = [], []
 for rec in rest:
     if not rec['placed'].startswith('body line'):
         continue
-    sent = rec['sentence']
+    sent = rec.get('inserted') or rec.get('sentence', '')
+    _mode = rec.get('mode', 'append-sentence')
     if rec['phrase'] in re.sub(r'\s+', ' ', tx):
         appended.append({'phrase': rec['phrase'], 'tex': 'already in the tex'}); continue
     ln = int(rec['placed'].split()[2]) - 1
+    if _mode == 'extend-final-sentence':
+        # the clause belongs inside one specific sentence, not at the end of the paragraph, so the
+        # anchor is the sentence's own wording rather than a tail word match
+        pr = rec.get('target_probe') or rec['phrase']
+        occ = [m.start() for m in re.finditer(re.escape(pr), tx) if m.start() > i_s2]
+        if not occ:
+            appended.append({'phrase': rec['phrase'], 'tex': 'PROBE NOT FOUND, falling back'}); 
+        elif len(occ) >= 1:
+            q = occ[0]
+            e = tx.find('.', q + len(pr))
+            assert e > 0 and tx.count(pr) == len(occ), f"{rec['phrase']}: probe is not a single sentence here"
+            # step past a closing brace of \textbf{...} before the full stop
+            seg = tx[q:e]
+            at = e
+            ins = sent.strip()
+            if ins[0] in ':;,':
+                at = e
+            else:
+                at = e + 1
+                ins = ' ' + ins
+            tx = tx[:at] + ins + tx[at:]
+            appended.append({'phrase': rec['phrase'], 'tex': f'clause inserted at tex offset {at} '
+                                                              f'(inside the sentence holding {pr!r})',
+                             'tex_text': ins})
+            continue
     body48 = md48[md48.index('\n## 2. ') + 1:].split('\n')
     mdline = body48[ln] if ln < len(body48) else ''
     tail = [w for w in re.sub(r'\$[^$]*\$', ' ', mdline).split() if re.search(r'[A-Za-z]', w)][-6:]
@@ -155,8 +181,12 @@ for rec in rest:
             unplaced.append({'phrase': rec['phrase'], 'matches': len(ms), 'mdline_head': mdline[:70]}); continue
     if at is None:
         unplaced.append({'phrase': rec['phrase'], 'matches': len(ms)}); continue
-    tx = tx[:at] + ' ' + to_tex(sent) + tx[at:]
-    appended.append({'phrase': rec['phrase'], 'tex': f'inserted at tex offset {at}' + (f' ({appended_note})' if 'appended_note' in dir() else '')})
+    _ins = ' ' + to_tex(sent)
+    if _ins.strip().startswith((':', ';', ',')):
+        _ins = _ins.strip()                      # a clause that continues the sentence is glued, not spaced
+    tx = tx[:at] + _ins + tx[at:]
+    appended.append({'phrase': rec['phrase'], 'tex_text': _ins,
+                     'tex': f'inserted at tex offset {at}' + (f' ({appended_note})' if 'appended_note' in dir() else '')})
     appended_note = None
 print(f'  front matter replaced ({len(old_front)} B out, {len(new_front)} B in) | '
       f'body sentences into the tex: {len(appended)} of {len([r for r in rest if r["placed"].startswith("body line")])}')
@@ -169,7 +199,10 @@ probe = tx[j_new:]
 n_app = 0
 for a in appended:
     if 'inserted at' in a.get('tex', ''):
-        s = ' ' + to_tex(next(r['sentence'] for r in rest if r['phrase'] == a['phrase']))
+        r = next(x for x in rest if x['phrase'] == a['phrase'])
+        s = a.get('tex_text')
+        if s is None:
+            s = ' ' + to_tex(r.get('inserted') or r.get('sentence', ''))
         assert s in probe, f'the tex insertion for {a["phrase"]} cannot be found to undo it'
         probe = probe.replace(s, '', 1); n_app += 1
 same_after = (probe == tx48[i_s2:])
@@ -193,7 +226,7 @@ fm_md_spans, new_front_spans = mspans(fm_md), mspans(new_front)
 sent_spans = collections.Counter()
 for r_ in rest:
     if r_['placed'].startswith('body line'):
-        sent_spans += mspans(r_['sentence'])
+        sent_spans += mspans((r_.get('inserted') or r_.get('sentence','')))
 missing_front = sorted(x for x in fm_md_spans if new_front_spans[x] < fm_md_spans[x])
 print(f'  front-matter maths: {sum(fm_md_spans.values())} spans in the markdown, {sum(new_front_spans.values())} in the new tex region, '
       f'{len(missing_front)} not carried')
@@ -256,6 +289,11 @@ for base in (ART,) + CARRIED:
     if os.path.exists(p):
         open(f'{R}/{base}.pdf', 'wb').write(open(p, 'rb').read())
     pages, right, left2, worst = texkit.overhang(f'{R}/{base}.pdf')
+    # a zero here does not mean "no overflow", it means "nothing was measured": texkit reports an
+    # empty geometry when PyMuPDF is unavailable, and a clean-looking 0 would have passed silently
+    # through the whole compile gate once already. Measure or stop.
+    assert pages > 0, (f'{base}: no page geometry (PyMuPDF missing?); refusing to record 0 overfull '
+                       'for an unmeasured document')
     rep['docs'][base] = {'rc': rc, 'pages': pages, 'overfull_ge_6pt': len([x for x in ov if x >= 6.0]),
                          'worst_pt': round(max(ov), 1) if ov else 0.0, 'right_pt': round(right, 1),
                          'left_pt': round(left2, 1), 'log_qmark': (log or '').count('??'),
@@ -263,9 +301,22 @@ for base in (ART,) + CARRIED:
     print(f'  {base:44s} rc={rc} pages={pages:3d} overfull>=6pt={rep["docs"][base]["overfull_ge_6pt"]} '
           f'worst={rep["docs"][base]["worst_pt"]:5.1f}pt ??={rep["docs"][base]["log_qmark"]}')
 
+# the rendered front matter, digits kept: MT.page_text letters-only view cannot show an ORCID or a
+# date, and "the byline moved to the header" is only evidence if the header's digits can be read back
+import pymupdf as _fitz
+_d0 = _fitz.open(f'{R}/{ART}.pdf')
+open('/home/user/revision/v49/v49_pdf_front_pages.txt', 'w').write(
+    '\n'.join(_d0[i].get_text() for i in range(min(2, _d0.page_count))))
+
 P = MT.page_text(f'{R}/{ART}.pdf')
 flow = MT.md_flow(md49)
 absent = [' '.join(b.split())[:70] for b in flow if not MT.covers(P, b)]
+# a heading whose argument runs to a paragraph is the signature of a heading that swallowed its
+# body text at build time, which is how the introduction lost its spacing in this build
+_swallowed = [(len(a), a[:70]) for a in re.findall(r'\\(?:section|subsection|subsubsection)\*\{([^}]*)\}', tx) if len(a) > 200]
+rep['overlong_heading_arguments'] = [{'chars': n, 'starts': s} for n, s in _swallowed]
+assert not _swallowed, f'a heading argument is carrying body text: {_swallowed[0]}'
+
 rep['pdf_flow'] = {'blocks': len(flow), 'absent': len(absent), 'examples': absent[:6]}
 print(f'  compiled article carries {len(flow) - len(absent)}/{len(flow)} flowing markdown paragraphs')
 for x in absent[:4]: print('     absent:', x)

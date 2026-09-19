@@ -29,7 +29,7 @@ SRC = ROOT / 'uploads/p3 humanized.txt'; DEPO = ROOT / 'work/paper3.txt'
 OUT = V7 / 'paper3_material_ledgers_v49.md'
 ADAPT_LO, ADAPT_HI = 2, 117
 NUM = re.compile(r'(?<![\w.])(\d+\.\d+|\d{3,})(?![\w.])')
-CUT_CLAUSES = [r'\s*The illusion operates on two levels:\s*']      # the two-level framing, cut with its labels
+CUT_CLAUSES = [r'[ \t]*The illusion operates on two levels:[ \t]*']      # the two-level framing, cut with its labels
 DROP_SENTENCES = ['approximately 5%', '1/0.130', 'instantaneous statistic vs', 'engineered to capture',
                   'artificially thresholded', 'satellite-derived masks', 'Routing is determined by']
 
@@ -86,7 +86,9 @@ def read_rules(path):
 
 # ---------------------------------------------------------------- front matter
 log = collections.defaultdict(list)
+
 fm = '\n'.join(SRC.read_text().split('\n')[ADAPT_LO - 1:ADAPT_HI])
+ADAPT_RAW_FM = fm      # the adaptation as written, before any repair touches it
 fm = re.sub(r'\\\[(.+?)\\\]', lambda m: '$$\n' + m.group(1).strip() + '\n$$', fm, flags=re.S)
 fm = fm.replace('\\(', '$').replace('\\)', '$')
 fm = re.sub(r'^\s*On it[.:].*$', '', fm, flags=re.M)
@@ -95,11 +97,13 @@ fm = re.sub(r'^\s*On it[.:].*$', '', fm, flags=re.M)
 # heading; the ruling cuts the label and keeps the sentence, because the sentences describe
 # the two failures the deposit names in its own words
 for h in CUT_CLAUSES + [r'^###\s*Arithmetic Level\s*$', r'^###\s*Dynamical Level[^\n]*$',
-          r'\*\s*\*\*The Arithmetic Level:\*\*\s*', r'\*\s*\*\*The Dynamical Level \(Yield Inflation\):\*\*\s*']:
+          r'\*\*The Arithmetic Level:\*\*[ \t]*', r'\*\*The Dynamical Level \(Yield Inflation\):\*\*[ \t]*']:
     m = re.search(h, fm, re.M)
     if m:
         log['headings_cut'].append(m.group(0).strip())
-        fm = fm[:m.start()] + ('* ' if m.group(0).lstrip().startswith('*') else '') + fm[m.end():]
+        # only the label is deleted; the item's own `* ` marker stays, so the author's two-item
+        # list survives as a list instead of becoming two prose lines glued together
+        fm = fm[:m.start()] + fm[m.end():]
 
 rules = read_rules(D / 'adaptation_term_revert_v1.csv')
 for r in rules:
@@ -110,6 +114,95 @@ for r in rules:
             log['term_edits'].append({'alias': r['alias'], 'to': r['replacement'], 'n': n, 'scope': r['scope']})
 watch = [r for r in rules if r['scope'] == 'watch' and r['alias'] in fm]
 log['watch_only'] = [{'alias': r['alias'], 'would_have_been': r['replacement']} for r in watch]
+
+# ------------------------------------------------------------------ 1a. house-form the adaptation's front matter
+# Three formatting facts about the manuscript of this line, all read off v48 rather than invented: the
+# title/author/ORCID/date block is not in the markdown (it lives in the .tex header), a heading has a
+# blank line on both sides of it, and `## Abstract` is the abstract heading's level. The adaptation's
+# file violates all three, and the first violation is not cosmetic: with a heading glued to the
+# paragraph under it, a block splitter takes the pair as one heading block - which is how five
+# paragraphs, the numbered contributions list among them, ended up inside a \subsection*{} argument
+# and were typeset as a heading with no spacing.
+def house_form(fm, log):
+    L = fm.split('\n')
+    rep = {'rules': 0, 'level_changes': 0, 'dropped_full': []}
+    first_head = next((k for k, x in enumerate(L) if re.match(r'^#{2,4}\s', x)), None)
+    if first_head:
+        dropped = [x.strip() for x in L[:first_head]
+                   if not re.match(r'^#\s', x) and x.strip() not in ('', '---')]
+        if dropped:
+            rep['dropped_full'] = dropped
+            log['preamble_dropped'] = [x[:70] for x in dropped]
+            # a rule sitting inside the dropped preamble vanishes with it; count it too, or the
+            # character proof below would be missing three characters and would fail for the wrong reason
+            rep['rules'] += sum(1 for x in L[:first_head] if x.strip() == '---')
+            L = [L[0]] + L[first_head:]
+    rep['rules'] = sum(1 for x in L if x.strip() == '---')
+    L = [x for x in L if x.strip() != '---']
+    L = [x.rstrip() for x in L]
+    _lvl_edits = []
+    def _lvl(m):
+        _lvl_edits.append((m.group(0).strip(), '## Abstract'))
+        return '## Abstract'
+    L = [re.sub(r'^#{3,4}(\s*Abstract\s*)$', _lvl, x) for x in L]
+    rep['level_changes'] = len(_lvl_edits)
+    rep['level_edits'] = _lvl_edits
+    def is_head(x): return bool(re.match(r'^#{1,6}\s', x))
+    def is_list(x): return bool(re.match(r'^\s*([-*]|\d+\.)\s+\S', x))
+    def is_disp(x): return x.strip().startswith('$$')
+    out = []
+    for x in L:
+        if out and x.strip() and out[-1].strip():
+            if (is_head(x) or is_head(out[-1]) or is_disp(x) or is_disp(out[-1])
+                    or (is_list(x) and not is_list(out[-1])) or (is_list(out[-1]) and not is_list(x))):
+                out.append('')
+        out.append(x.rstrip())
+    return re.sub(r'\n{3,}', '\n\n', '\n'.join(out)).strip(), rep
+
+# The proof is whole-line, not character-counting: what house-forming is allowed to do is drop the
+# logged lines, insert blank lines, and change the abstract heading's level - nothing else, and not
+# in a different order. A character-compression proof was tried first and was wrong in both
+# directions (it counted `---` inside table rules as a dropped rule, and it removed the title's `#`
+# instead of the abstract's, because str.replace hits the first match).
+_before_lines = fm.split('\n')
+fm, _rep = house_form(fm, log)
+_after_lines = fm.split('\n')
+_dropped = set(x.strip() for x in _rep['dropped_full'])
+_exp = []
+for _x in _before_lines:
+    _s = _x.strip()
+    if not _s or _s == '---' or _s in _dropped:
+        continue
+    _s = re.sub(r'^#{3,4}(\s*Abstract\s*)$', '## Abstract', _s)
+    _exp.append(_s)
+_got = [x.strip() for x in _after_lines if x.strip()]
+log['house_form_proof'] = {
+    'lines_before': len([x for x in _before_lines if x.strip()]), 'lines_after': len(_got),
+    'byline_lines_removed': _rep['dropped_full'], 'rules_removed': _rep['rules'],
+    'abstract_heading_level_changes': _rep['level_changes'],
+    'only_logged_changes': _exp == _got, 'order_preserved': _exp == _got}
+if not log['house_form_proof']['only_logged_changes']:
+    _bad = next((i for i, (a_, b_) in enumerate(zip(_exp, _got)) if a_ != b_), min(len(_exp), len(_got)))
+    log['house_form_proof']['first_difference'] = {'at_line': _bad, 'expected': _exp[_bad][:200] if _bad < len(_exp) else None,
+                                                    'actual': _got[_bad][:200] if _bad < len(_got) else None}
+    (D / 'v49_house_form_mismatch.json').write_text(json.dumps(log['house_form_proof'], indent=2))
+    raise SystemExit('house-forming changed more than the logged lines -> '
+                     'revision/v49/v49_house_form_mismatch.json')
+(D / 'v49_house_form_mismatch.json').unlink(missing_ok=True)
+
+# ------------------------------------------------------------------ 1b. the first line of the abstract, as instructed
+FIRST = 'Depletion indicators can carry similar units while built to inform distinct questions.'
+_m = re.search(r'(^## Abstract[ \t]*\n+[ \t]*)([^\n]+)', fm, re.M)
+if _m and not _m.group(2).strip().startswith(FIRST):
+    _ss = sentences(_m.group(2)) or [_m.group(2)]
+    _rest = ' '.join(_ss[1:]).strip() if len(_ss) > 1 else ''
+    fm = fm[:_m.start(2)] + (FIRST + (' ' + _rest if _rest else '')) + fm[_m.end(2):]
+    log['first_line'] = {'now_first': FIRST, 'removed_as_duplicate': _ss[0][:240],
+                         'note': 'the adaptation opened the abstract on the same point in its own words; the '
+                                 'instruction keeps the deposited article\'s sentence as the first line, so the '
+                                 'paraphrase is removed rather than left to repeat it'}
+else:
+    log['first_line'] = {'now_first': FIRST if _m else 'NO ABSTRACT HEADING FOUND', 'removed_as_duplicate': ''}
 
 kept, disp = [], False
 # A line is rewritten only when a sentence is actually deleted from it, and then by
@@ -176,7 +269,7 @@ if carry_path.exists():
         if k < 0:
             log['carry_over'].append({'id': rule['id'], 'placed': 'NOT PLACED (anchor absent from the front matter)'}); continue
         eol = fm.find('\n', k)
-        fm = fm[:eol] + ' ' + passage + fm[eol:]
+        fm = fm[:eol].rstrip() + '\n\n' + passage + '\n\n' + fm[eol:].lstrip('\n')
         log['carry_over'].append({'id': rule['id'], 'placed': 'appended to the anchored front-matter paragraph',
                                   'chars': len(passage), 'text': passage[:300], 'why': rule['why']})
 
@@ -218,41 +311,143 @@ def section_bounds(sec):
 
 restores = json.loads((D / 'v49_required_restores.json').read_text())
 v42_lines = v42[v42.index('\n## 2. '):].split('\n')
+V42_ALL = v42.split('\n')
 placed_rows = []
+def _sents(s):
+    masked = re.sub(r'\$\$.*?\$\$|\$[^$]*\$', lambda m: '\x00' * len(m.group(0)), s, flags=re.S)
+    return [x for x in re.split(r'(?<=[.!?])\s+(?=[A-Z*(])', masked) if x.strip()]
+
 for rec in restores:
     ph = rec['phrase']
     if ph.lower() in flat(body).lower():
         log['restored'].append({'phrase': ph, 'row': rec['row'], 'placed': 'already present, skipped'}); continue
+    # the text to insert is re-read from the donor line now, not trusted from the rule file: a rule
+    # file that has drifted from its source would otherwise ship the drift
+    dl = V42_ALL[rec['donor_line'] - 1]
+    ins = rec.get('clause') or rec['donor_sentence']
+    assert ins in dl, (f"{rec['row']}: the inserted text is not verbatim in the v42 donor line "
+                       f"({rec['donor_line']}); it would be a rewording, not a carry-over")
+    assert ins.count('$') % 2 == 0, f"{rec['row']}: the insert has unbalanced $, so a formula was clipped"
+    assert not re.search(r'#{2,4}\s|^\s*---\s*$|\n', ins), f"{rec['row']}: the insert crosses a heading or rule"
     i = next((k for k, x in enumerate(a42) if ph.lower() in x.lower()), None)
     tgt = v48_row_for(i - 1) if i is not None else None
     how = ''
-    if tgt is not None and tgt + 1 < len(blines) and len(blines[tgt + 1].strip()) > 0 and not blines[tgt + 1].lstrip().startswith(('#', '|', '$')):
-        row = tgt + 1; how = 'after the aligned v42 predecessor line'
+    if rec['mode'] == 'extend-final-sentence':
+        cand = [k for k, x in enumerate(blines) if rec['target_probe'] in x]
+        assert len(cand) == 1, f"{rec['row']}: target probe {rec['target_probe']!r} matched {len(cand)} body lines"
+        row = cand[0]; how = 'extended the sentence carrying ' + repr(rec['target_probe'])
+        line = blines[row]
+        # insert the clause before the full stop that ends the probed sentence, so the article's own
+        # sentence grows instead of a second sentence saying it twice
+        k = line.find(rec['target_probe'])
+        stop = line.find('.', k + len(rec['target_probe']))
+        assert stop > 0, f"{rec['row']}: no sentence end found after the probe"
+        _ins = ins.strip()
+        # the donor's own connector (": " or "; ") belongs to the sentence it continues, so a clause
+        # opening with it is glued rather than given a space - `resource :` is not house style
+        _join = '' if _ins[0] in ':;,' else ' '
+        new_line = line[:stop] + _join + _ins + line[stop:]
+        rec_raw = _join + _ins
+        assert not re.search(r'\s[:;,.](?=\s|$)', new_line.replace(' .', '.')), \
+            f"{rec['row']}: the insertion left a space before punctuation"
     else:
-        row = None
-        sb = section_bounds(rec['sec'])
-        if sb:
-            for j in range(sb[1], sb[0], -1):
-                if len(blines[j].strip()) > 40 and not blines[j].lstrip().startswith(('#', '|', '$$', '-')):
-                    row = j; how = 'end of section ' + rec['sec']; break
-    if row is None:
-        log['restored'].append({'phrase': ph, 'row': rec['row'], 'placed': 'NOT PLACED'}); continue
-    donor = rec['donor_v47']
-    donor = re.sub(r'\s*#{2,3}\s.*$', '', donor).strip()
-    donor = re.sub(r'\s+', ' ', donor)
-    if donor.lower().count(ph.lower()) == 0:      # donor lost its content to the splitter: take the v42 line
-        donor = re.sub(r'^\s*[-*]\s*', '', v42_lines[i]).strip()
-    blines[row] = blines[row].rstrip() + ' ' + donor
+        if tgt is not None and tgt + 1 < len(blines) and len(blines[tgt + 1].strip()) > 0 \
+                and not blines[tgt + 1].lstrip().startswith(('#', '|', '$')):
+            row = tgt + 1; how = 'after the aligned v42 predecessor line'
+        else:
+            row = None
+            sb = section_bounds(rec['sec'])
+            if sb:
+                for j in range(sb[1], sb[0], -1):
+                    if len(blines[j].strip()) > 40 and not blines[j].lstrip().startswith(('#', '|', '$$', '-')):
+                        row = j; how = 'end of section ' + rec['sec']; break
+        if row is None:
+            log['restored'].append({'phrase': ph, 'row': rec['row'], 'placed': 'NOT PLACED'}); continue
+        new_line = blines[row].rstrip() + ' ' + ins.strip()
+        rec_raw = ' ' + ins.strip()
+    # the guard that was missing when this shipped the first time: an insertion must not repeat a
+    # sentence the target line already carries, and must be the only change to that line
+    for s0 in _sents(blines[row]):
+        sim = difflib.SequenceMatcher(None, ' '.join(s0.split()), ' '.join(ins.split())).ratio()
+        assert sim < 0.62, (f"{rec['row']}: the insert repeats the target line's own sentence "
+                             f'(similarity {sim:.2f}); extend it instead of appending a twin: '
+                             + ' '.join(s0.split())[:120])
+    ops = [o for o in difflib.SequenceMatcher(None, blines[row], new_line).get_opcodes() if o[0] != 'equal']
+    assert len(ops) == 1 and ops[0][0] == 'insert', \
+        f"{rec['row']}: the edit to body line {row + 1} is not a single insertion ({[o[0] for o in ops]})"
+    blines[row] = new_line
     placed_rows.append((row, ph))
     log['restored'].append({'phrase': ph, 'row': rec['row'], 'placed': f'body line {row + 1}', 'how': how,
-                            'sentence': donor[:300]})
+                            'mode': rec['mode'], 'oracle': rec['oracle'], 'inserted': ins,
+                            'target_probe': rec.get('target_probe', ''),
+                            'inserted_raw': rec_raw})
+
+# ------------------------------------------------------------------ 1c. one body repair, from the read
+# v48's own repair pass left a sentence in the body twice, once plain and once bolded. Deleting the
+# bolded twin is provably content-preserving - the two are the same words - so it is applied here and
+# recorded as erratum E10 rather than inherited silently into a new revision.
+_rep_path = D / 'v49_body_repairs.json'
+log['body_repairs'] = []
+if _rep_path.exists():
+    for rp in json.loads(_rep_path.read_text()):
+        idx = [k for k, x in enumerate(blines) if rp['line_probe'] in x]
+        if len(idx) != 1:
+            log['body_repairs'].append({'kind': rp['kind'], 'result': f'probe matched {len(idx)} lines, skipped'})
+            continue
+        k = idx[0]
+        # delete the twin together with the single space that joined it, so the line's only change
+        # is one contiguous deletion and the paragraph spacing does not have to be cleaned up after
+        old_l = blines[k]
+        new_l = blines[k].replace(' ' + rp['remove'], '', 1)
+        if new_l == old_l:
+            new_l = blines[k].replace(rp['remove'], '', 1)
+        if rp['remove'] not in blines[k]:
+            log['body_repairs'].append({'kind': rp['kind'], 'result': 'the duplicated run is not on that line, skipped'})
+            continue
+        assert old_l.count(rp['keep']) == 2, f"{rp['kind']}: the sentence does not occur twice, so this is not a duplicate"
+        assert new_l.count(rp['keep'].strip('*')) == 1, f"{rp['kind']}: the survivor count is wrong after the deletion"
+        blines[k] = new_l
+        log['body_repairs'].append({'kind': rp['kind'], 'line': k + 1, 'removed': rp['remove'],
+                                    'kept': rp['keep'], 'result': 'the bolded twin deleted, the sentence kept once'})
+
 body_new = '\n'.join(blines)
 
 # the body must be v48's body plus those insertions and nothing else
 # raw line containment: flat() mis-pairs $$ across multi-line displays, and an
 # instrument that reports a loss the file does not have is worse than no instrument
-removed = [l for l in body.split('\n') if l.strip() and l.strip() not in body_new]
-log['body_inclusion'] = {'v48_body_lines_absent_from_v49': len(removed), 'examples': removed[:6]}
+# every v48 body line must survive as itself or as itself plus one contiguous insertion; the
+# three extended sentences ship a clause inside a v48 line, so verbatim containment is the wrong
+# test and used to report three losses that were not losses
+_olds = body.split('\n')
+_news = body_new.split('\n')
+assert len(_olds) == len(_news), 'the body changed line count, so a paragraph boundary moved'
+# every logged insertion and the one logged deletion, in the shapes the pass actually wrote them
+_INS = {' ' + r['inserted'].strip() for r in log['restored'] if 'inserted' in r} | \
+       {r['inserted'].strip() for r in log['restored'] if 'inserted' in r}
+_DEL = {' ' + r['removed'] for r in log['body_repairs'] if 'removed' in r} | \
+       {r['removed'] for r in log['body_repairs'] if 'removed' in r}
+removed, extended = [], []
+for _o, _n, _k in zip(_olds, _news, range(len(_olds))):
+    if not _o.strip():
+        continue
+    if _o == _n or _o in _news:
+        continue
+    _ops = [x for x in difflib.SequenceMatcher(None, _o, _n).get_opcodes() if x[0] != 'equal']
+    _ok = all((x[0] == 'insert' and _n[x[3]:x[4]] in _INS) or (x[0] == 'delete' and _o[x[1]:x[2]] in _DEL)
+              for x in _ops)
+    if _ok:
+        extended.append({'line': _k + 1,
+                         'edits': [f'{x[0]}:{len(_n[x[3]:x[4]] or _o[x[1]:x[2]])} chars' for x in _ops]})
+    else:
+        removed.append({'line': _k + 1, 'text': _o[:110],
+                        'unexplained_edits': [f"{x[0]} {(_n[x[3]:x[4]] or _o[x[1]:x[2]])[:70]!r}"
+                                              for x in _ops if not (
+                                                  (x[0] == 'insert' and _n[x[3]:x[4]] in _INS) or
+                                                  (x[0] == 'delete' and _o[x[1]:x[2]] in _DEL))]})
+log['body_inclusion'] = {'v48_body_lines_absent_from_v49': len(removed), 'examples': removed[:6],
+                         'v48_lines_carried_by_logged_edits_only': len(extended),
+                         'edited_lines': extended,
+                         'rule': 'a v48 body line may change only by a logged insertion or the one logged deletion'}
 log['landing_sections'] = []
 for row, ph in placed_rows:
     heads = [m for m in re.finditer(r'^#{2,3}\s+(\d+(?:\.\d+)*)', body_new, re.M)]
@@ -267,6 +462,19 @@ for row, ph in placed_rows:
 
 final = fm + '\n\n---\n\n' + body_new
 OUT.write_text(final)
+
+# ------------------------------------------------------------------ gate extracts, written every build
+# The waiver gate reads three surfaces: the adaptation's raw front matter (the base as adopted, before
+# repair), this build's front matter, and the previous line's. They were made by a scratch step once, and
+# after the front matter changed under them the gate reported flag_count 0 about a file that was no
+# longer the one being shipped. They are outputs of this build now, and the verifier checks the middle one
+# against the shipped markdown before it believes the gate.
+_cut = lambda s: s[:s.index('\n## 2. ')] if '\n## 2. ' in s else s
+(D / 'v49_base_front_matter.md').write_text(ADAPT_RAW_FM)
+(D / 'v49_front_matter.md').write_text(fm)
+(D / 'v48_front_matter.md').write_text(_cut(v48))
+log['gate_extract_bytes'] = {'base_as_adopted': len(ADAPT_RAW_FM), 'built': len(fm),
+                             'previous_line': len(_cut(v48))}
 log['summary'] = {'bytes': OUT.stat().st_size, 'lines': final.count('\n') + 1,
                   'front_matter_lines': len(fm.split('\n')), 'body_lines': len(body_new.split('\n')),
                   'term_edits': len(log['term_edits']), 'sentences_deleted': len(log['sentences_deleted']),

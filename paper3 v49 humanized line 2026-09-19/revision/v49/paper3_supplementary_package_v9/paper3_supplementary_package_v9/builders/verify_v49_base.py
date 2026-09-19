@@ -5,7 +5,7 @@ Written against the ruling and the read that preceded the build. Each check stat
 number it computed, so a reader can disagree with a specific figure rather than with a
 narrative. Blocking unless marked disclose.
 """
-import json, re, pathlib, collections, hashlib, csv
+import json, re, pathlib, collections, hashlib, csv, subprocess
 
 ROOT = pathlib.Path('/home/user'); V7 = ROOT / 'revision/v7'; D = ROOT / 'revision/v49'
 md48 = (V7 / 'paper3_material_ledgers_v48.md').read_text()
@@ -38,11 +38,39 @@ n48body = flat2(md48[md48.index('\n## 2. '):]).lower()
 n48front = flat2(v48fm).lower()
 in_body = [i for i in prot if i in want and flat2(want[i]).lower() in n48body]
 in_front = [i for i in prot if i not in set(in_body) and i in want and flat2(want[i]).lower() in n48front]
-ok = [i for i in in_body if flat2(want[i]).lower() in nb]
+# A protected row is verbatim unless this build inserted logged donor text *inside* the sentence it
+# pins - three rows are extended that way, and the extension is disclosed in the rule file, so the
+# test is verbatim-OR-verbatim-once-the-logged-insertion-is-undone. An unexplained rewording still
+# fails, because only the insertions listed in the log are ever undone.
+_edits = json.loads((D / 'v49_front_matter_edits.json').read_text())
+# normalise the logged insertions with the SAME function used on the body, or the undo searches a
+# string that was never produced by the normalisation it is compared against
+_ins = [r['inserted_raw'] for r in _edits.get('restored', []) if r.get('inserted_raw')]
+_ins = [s for s in _ins if s]
+# undo on the RAW body first: the insertion and its joiner are known exactly, so removing them
+# returns v48's line byte for byte; only then is the same normalisation applied to both sides
+body_x = body49 if 'body49' in dir() else None
+_body_raw = md49[md49.index('\n## 2. ') + 1:] if '\n## 2. ' in md49 else md49
+for s in _ins:
+    _body_raw = _body_raw.replace(s, '', 1)
+nb_x = flat2(_body_raw).lower()
+_plain = [i for i in in_body if flat2(want[i]).lower() in nb]
+ok = [i for i in in_body if flat2(want[i]).lower() in nb or flat2(want[i]).lower() in nb_x]
+out['protected_rows_grown_by_a_logged_insertion'] = sorted(set(ok) - set(_plain))
+if set(in_body) - set(ok):
+    out_protected_debug = {}
+    for i in sorted(set(in_body) - set(ok))[:4]:
+        _w = flat2(want[i]).lower()
+        _k = nb_x.find(' '.join(_w.split())[:50])
+        out_protected_debug[i] = {'row': _w[:150], 'de_inserted_body': nb_x[max(0, _k - 60):_k + 150] if _k >= 0 else 'row head not found after undo'}
+    (D / 'v49_protected_row_debug.json').write_text(json.dumps(out_protected_debug, indent=1))
 out['protected_rows_outside_waived_region'] = {
     'total_ids_in_the_pin': len(prot), 'located_in_v48_body': len(in_body),
     'located_in_the_waived_region_and_so_freed': len(in_front), 'ids_freed_this_way': sorted(in_front),
-    'verbatim_in_v49_body': len(ok), 'missing': sorted(set(in_body) - set(ok))}
+    'verbatim_in_v49_body': len(_plain),
+    'present_once_the_logged_insertion_is_undone': len(ok) - len(_plain),
+    'missing': sorted(set(in_body) - set(ok)),
+    'rule': 'verbatim, or verbatim after undoing only the insertions this build logged'}
 
 # 2. the errata the read produced, closed in this build
 ITEMS = {
@@ -133,11 +161,131 @@ out['tex'] = {'body_byte_identical_after_undoing_the_six_insertions': crep['body
 # a build note is worthless if it describes a document that is not on disk: the artefacts have to
 # be at least as new as the markdown they were made from
 _mt = lambda f: (V7 / f).stat().st_mtime
+_rep_mt = (D / 'v49_compile_report.json').stat().st_mtime   # a report older than the markdown is not evidence
 out['freshness'] = {'md': _mt('paper3_material_ledgers_v49.md'), 'tex': _mt('paper3_material_ledgers_v49.tex'),
-                    'pdf': _mt('paper3_material_ledgers_v49.pdf')}
+                    'pdf': _mt('paper3_material_ledgers_v49.pdf'), 'compile_report': _rep_mt}
 assert _mt('paper3_material_ledgers_v49.tex') >= _mt('paper3_material_ledgers_v49.md') - 1, 'the .tex is older than the .md'
 assert _mt('paper3_material_ledgers_v49.pdf') >= _mt('paper3_material_ledgers_v49.tex') - 1, 'the .pdf is older than the .tex'
+# the compile report is where the flow coverage and the overfull counts come from, so a report left
+# over from an earlier compile reads as clean for a document that no longer exists
+assert _rep_mt >= _mt('paper3_material_ledgers_v49.md') - 1, 'v49_compile_report.json is older than the markdown it describes'
+# the gate report and the line-level audit are reports too, and a stale one certifies a document
+# that no longer exists - the failure that let a superseded front-matter surface pass three rounds
+for _f, _lbl in (('v49_gate_report.json', 'gate'), ('v49_line_audit.json', 'line_audit')):
+    _xmt = (D / _f).stat().st_mtime
+    assert _xmt >= _mt('paper3_material_ledgers_v49.md') - 1, _f + ' describes a superseded markdown'
+    out['freshness'][_lbl] = _xmt
+# and the gate's input must be the shipped front matter, not a hand-made cut of an older build
+_fm_lines = (V7 / 'paper3_material_ledgers_v49.md').read_text().split('\n')
+# the SAME rule build_v49_base.py uses to cut the extract (the last rule within the first 200
+# lines): a wider window here would grab the end-of-section-1 rule and report inequality
+_fm_end = max(i for i, _l in enumerate(_fm_lines[:201]) if _l.strip() == '---')
+_gb = (D / 'v49_front_matter.md').read_text()
+out['gate_input_is_the_shipped_file'] = {
+    'built_extract': 'v49_front_matter.md',
+    'equal_to_the_shipped_front_matter': (' '.join(_gb.split())
+                                          == ' '.join(' '.join(_fm_lines[:_fm_end]).split())),
+    'built_extract_bytes': len(_gb.encode()),
+    'shipped_front_matter_bytes': len('\n'.join(_fm_lines[:_fm_end]).encode())}
+assert out['gate_input_is_the_shipped_file']['equal_to_the_shipped_front_matter'], \
+    'v49_front_matter.md is not the shipped front matter - rebuild build_v49_base.py before gating'
+
+# the gate is only evidence about THIS document if it ran on it, so both its age and its input are
+# checked before its flag count is believed
 gate = json.loads((D / 'v49_gate_report.json').read_text())
+assert (D / 'v49_gate_report.json').stat().st_mtime >= _mt('paper3_material_ledgers_v49.md') - 1, \
+    'v49_gate_report.json is older than the markdown it should describe'
+_gbuilt = (D / 'v49_front_matter.md').read_text()
+_ship = (V7 / 'paper3_material_ledgers_v49.md').read_text()
+_sfront = _ship[:_ship.index('\n## 2. ')] if '\n## 2. ' in _ship else _ship
+# the shipped file carries the one rule that separates front matter from body, which the extract of
+# the region does not - strip it from both sides or the comparison measures the separator
+_strip = lambda s: ' '.join(re.sub(r'\s*-{3,}\s*$', '', s).split())
+# Did the swap drop a source anchor from §1? The gate proves every cite present resolves; nothing
+# proved that v48's §1 anchors survived into it, and one of them (the SEEA / UN passage) was the only
+# citation of two reference entries. Reported, since §1's text is the author's chosen base - but it
+# must be reported, or a rewording is silently allowed to unsource a claim.
+def _s1(p):
+    _t = p.read_text()
+    _r = _t[_t.index('## 1.'):(_t.index('## 2.', _t.index('## 1.')))]
+    # collapse line breaks first: v48 wraps a sentence so that an author's name straddles two
+    # source lines, and a key taken from the fragment after the break reports a real cite as lost
+    return ' '.join(_r.split())
+NAME = r"[A-Z][A-Za-z\-\u2019']{2,}"
+CONN = r"(?:,\s*(?:and\s+)?|\s*(?:and|&)\s*)"
+
+def _anchors(s):
+    """(lead author, year) for every in-text cite in a region, parenthetical or narrative. Keyed on
+    the LEAD author, widened over `and`, `&` and comma-separated name runs: `Brunner & Rechberger,
+    2004` and `Brunner and Rechberger, 2004` are one anchor, and a key taken from the fragment
+    after a separator (or from a name split by a line wrap) reports a surviving cite as lost.
+    Institutions key on their first two words, so `United Nations` and `United States` differ."""
+    out2 = set()
+    _NAME = r"[A-Z][A-Za-z\-\u2019']{2,}"
+    _RUN = r"([A-Z][A-Za-z\-\u2019']{2,}(?:(?:,\s*(?:and\s+)?|\s*(?:and|&)\s*)[A-Z][A-Za-z\-\u2019']{2,})*)"          # (lead(?:conn name)*)
+    _YR = r"((?:1[89]|20)\d\d)[a-z]?"
+
+    def _key(namestr, yr):
+        _w = [x.strip(',.;') for x in namestr.split()]
+        if _w and _w[0].lower() in ('united', 'national', 'royal', 'bank', 'fund', 'office',
+                                   'commission', 'ministry', 'department', 'institute', 'centre',
+                                   'center', 'world', 'european', 'american'):
+            _lead = ' '.join(x for x in _w[:2] if x).lower()
+        else:
+            _lead = _w[0].lower() if _w else ''
+        return (_lead + ' ' + yr) if _lead else None
+
+    for m in re.finditer(r'\(([^)]{3,200})\)', s):
+        for part in m.group(1).split(';'):
+            mm = re.search(_RUN + r"[^()]*?\b" + _YR + r"\s*$", part.strip())
+            if mm:
+                _k = _key(mm.group(1), mm.group(2))
+                if _k:
+                    out2.add(_k)
+    for mm in re.finditer(_RUN + r"\s*\(\s*" + _YR + r"\s*\)", s):
+        _k = _key(mm.group(1), mm.group(2))
+        if _k:
+            out2.add(_k)
+    return out2
+
+# ---- section 1 citations: did the base swap silently drop a source the section relied on? ----
+_ap = pathlib.Path('/home/user/revision/v49/v49_line_audit.json')
+if not _ap.exists():
+    print('  running the line-level audit first: ' + str(_ap))
+    _r = subprocess.run(['python3', '/home/user/revision/v49/audit_v49_lines_v1.py'],
+                        capture_output=True, text=True)
+    print(_r.stdout[-400:])
+md49_txt = (V7 / 'paper3_material_ledgers_v49.md').read_text()
+_p48 = pathlib.Path('/home/user/revision/v7/paper3_material_ledgers_v48.md')
+_p49 = pathlib.Path('/home/user/revision/v7/paper3_material_ledgers_v49.md')
+_a48 = _anchors(_s1(_p48))
+_a49 = _anchors(_s1(_p49))
+_lost = sorted(_a48 - _a49)
+out['section1_citation_anchors_vs_v48'] = {'in_v48_section_1': len(_a48), 'in_v49_section_1': len(_a49),
+                                          'anchors_v48_section_1_carried_that_v49_section_1_does_not': _lost,
+                                          'new_in_v49_section_1': sorted(_a49 - _a48),
+                                          'key': 'lead author of the cite + year; institutions on two words',
+                                          'note': ('section 1 is the author\'s base and this build never edits it; the '
+                                                   'list is disclosure so a dropped source cannot hide behind that'),
+                                          'occurrences_of_the_leading_author_name_anywhere_in_v49':
+                                              {x: md49_txt.lower().count(x.split()[0]) for x in _lost}}
+_audit = json.loads(_ap.read_text())
+_pending = _audit['citations']['orphans_introduced_by_this_base_swap']
+_other = _audit['FINDINGS'] - len(_pending)
+out['line_audit'] = {'findings_total': _audit['FINDINGS'],
+                     'findings_other_than_the_pending_author_decision': _other,
+                     'pending_author_decision_uncited_entries': _pending,
+                     'provenance': _audit['provenance_of_every_line'],
+                     'maths_unsupported': _audit['maths']['count'],
+                     'numerals_unsupported': _audit['numerals']['count'],
+                     'formatting_flaws_new': _audit['formatting_count'],
+                     'formatting_flaws_inherited_from_v48': _audit['formatting_inherited_from_v48_unchanged']['count'],
+                     'pdf_findings': _audit['pdf']}
+_audit_pending = []
+if _other: _audit_pending.append('the line-level read found a flaw this build introduced')
+if _audit['maths']['count'] or _audit['numerals']['count']: _audit_pending.append('an unsupported numeral or formula')
+if _audit['formatting_count']: _audit_pending.append('a formatting flaw in the shipped markdown')
+if _audit['pdf']: _audit_pending.append('the rendered PDF does not match what was intended')
 out['waiver_gate'] = {'flag_count': gate['flag_count'], 'disclosure_count': gate['disclosure_count'],
                       'ledger_rows_in_section_1': gate['ledger_rows_in_section_1'],
                       'G1b_disclosed_vocabulary': [x['term'] for x in gate.get('G1b_previous_line_vocabulary', [])]}
@@ -150,7 +298,7 @@ out['status_labels'] = {'in_v49_whole_document': {l: flat2(md49).lower().count(l
                         'reading': 'the classifications the labels state are present in the adaptation\'s reworded '
                                    'abstract, so no claim is lost; the compact labels of the line of record are not, '
                                    'and restoring them is a content call the build does not make'}
-fail = []
+fail = list(_audit_pending)
 if len(ok) != len(in_body): fail.append('a verbatim-protected row is not in the body')
 if not all(out['errata_closed'].values()): fail.append('an errata item is still open: ' + ', '.join(k for k, v in out['errata_closed'].items() if not v))
 if out['term_revert']['aliases_surviving_in_the_waived_region']: fail.append('an alias survived the revert')

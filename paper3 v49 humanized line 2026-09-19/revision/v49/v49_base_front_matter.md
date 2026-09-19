@@ -113,4 +113,3 @@ To quantify this drift, we construct scenario-conditioned hitting times (Section
 Section 2 formulates the typed ledger, its constitutive laws, and its limiting properties. Section 3 formalizes the three certification layers and proves the core accounting theorems. Section 4 establishes the theorem set for the closed finite-donor ledger. Section 5 constructs the service readout layer and defines the componentwise deficit. Section 6 develops depletion arithmetic, proves the uniform-drift brackets, and classifies empirical indicators. Section 7 details first-passage semantics and its analytical boundaries. Section 8 details domain templates for phosphorus, groundwater, and bioeconomic harvesting. Section 9 proves the non-reduction interface with institutional delay models. Section 10 outlines analytical boundaries, the failure of weighted aggregation, and double-counting safeguards. Section 11 concludes.
 
 ---
-

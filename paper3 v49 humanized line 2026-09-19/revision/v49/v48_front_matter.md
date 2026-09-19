@@ -103,4 +103,3 @@ The objects proved about are the ledger's own.
 Section 2 defines the typed ledger. Section 3 develops the certification layers and the accounting theorems. Section 4 proves the closed-ledger theorem set. Section 5 adds the service layer and the componentwise deficit. Section 6 develops the depletion taxonomy, the uniform-drift bounds, and the application classifications. Section 7 supplies first-passage semantics. Section 8 records the domain templates at registered status. Section 9 fixes the interface with delay dynamics. Section 10 states what the ledger does not support, and Section 11 concludes.
 
 ---
-

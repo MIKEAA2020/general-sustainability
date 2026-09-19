@@ -37,14 +37,18 @@ DISC = ['v49_front_matter_edits.json', 'v49_gate_report.json', 'v49_verification
         'v49_required_restores.json', 'v49_carry_over.json', 'v49_base_front_matter.md', 'v49_front_matter.md',
         'v48_front_matter.md', 'waiver_scope_v1.json', 'protected_locations.json', 'protected_vs_v47.json',
         'disposition_v49.json', 'read_32.json', 'read_32_material.txt', 'v48_loss_set.json', 'v47_vs_v48_diff.json',
-        'adaptation_term_revert_v1.csv', 'term_revert_candidates.json', 'v49_adaptation_first_brief.md',
+        'adaptation_term_revert_v1.csv', 'term_revert_candidates.json', 'v49_line_audit.json',
+        'v49_restores_v2.json', 'v49_body_repairs.json', 'v49_house_form_mismatch.json',
+        'v49_adaptation_first_brief.md', 'open_items_v49.md',
         'open_items_v48.md', 'open_items_v47.md', 'register_notes.md']
 for f in DISC:
-    src = (H / f) if f in ('v49_adaptation_first_brief.md', 'open_items_v48.md', 'open_items_v47.md', 'register_notes.md') else D / f
+    src = (H / f) if f in ('v49_adaptation_first_brief.md', 'open_items_v48.md', 'open_items_v47.md',
+                            'open_items_v49.md', 'register_notes.md') else D / f
     if src.exists():
         shutil.copy(src, PKG / NAME / 'disclosure' / src.name)
 BUILD = ['build_v49_base.py', 'build_v49_tex.py', 'verify_v49_base.py', 'v49_waiver_gate_v1.py',
-         'pin_waiver_scope_v1.py', 'dispose_the_82_v1.py', 'package_v49.py']
+         'pin_waiver_scope_v1.py', 'dispose_the_82_v1.py', 'package_v49.py',
+         'make_restores_v2.py', 'audit_v49_lines_v1.py']
 for f in BUILD:
     shutil.copy(D / f, PKG / NAME / 'builders' / f)
 for f in ('build_v48_base.py', 'verify_v48_base.py', 'claim_ledger_v1.py', 'claim_ledger_v1.json', 'claim_ledger_v1.csv',

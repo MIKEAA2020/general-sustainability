@@ -27,6 +27,7 @@ exit code is the flag count, so a build that fails a guardrail fails the run.
 import argparse
 import json
 import os
+import pathlib
 import re
 import sys
 
@@ -134,7 +135,7 @@ def numset(t):
     """numerals as canonical values, so a PDF line break inside '600,000' cannot look like an invented number."""
     n = norm(t)
     out = set()
-    for m in re.finditer(r'\d{1,3}(?:,\s?\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?', n):
+    for m in re.finditer(r'\d{1,3}(?:,\s?\d{3}(?!\d))+(?:\.\d+)?|\d+(?:\.\d+)?', n):
         c = canon_num(m.group(0))
         if c:
             out.add(c)
@@ -248,7 +249,7 @@ def g2(built, dep_txt, ledger, sec='1.'):
     return out, len(sents(built)), len(rows)
 
 
-def g3(base, built, dep_txt, ba=None, bb=None, da=None):
+def g3(base, built, dep_txt, ba=None, bb=None, da=None, absorbed='', ruling=()):
     a, b = ba or atoms(base), bb or atoms(built)
     d = da or atoms(dep_txt)
     depn, depc, depname = set(d['nums']), {norm(c) for c in d['cites']}, {norm(x) for x in d['named']}
@@ -280,6 +281,27 @@ def g3(base, built, dep_txt, ba=None, bb=None, da=None):
         if unbacked:
             out.append({'check': 'G3', 'severity': sev, 'kind': f'{kind} in the build, not in the base and not in the deposit',
                         'items': unbacked[:10], 'n': len(unbacked)})
+        if dropped and ruling:
+            # an item that vanished because the author's own ruling removed the line it lived on is
+            # disclosed, not blocked - and the disclosure is checked against the rendered document,
+            # so "it moved to the header" is only an excuse when the header actually shows it
+            # compare digit strings: a dropped line's digits are what a numeral on it was made of,
+            # and norm() keeps the separators that made the two views fail to match
+            _rdig = [re.sub(r'\D', '', y) for y in ruling]
+            # read the page with the SAME extractor the base and the build were read with, or the
+            # comparison is between two different ideas of what a numeral is (an earlier version
+            # squeezed "September 17, 2026" into one run and reported 2026 as not retained)
+            _dig = set(numset(absorbed or ''))
+            _exc = [x for x in dropped if re.sub(r'\D', '', x) and any(re.sub(r'\D', '', x) in r for r in _rdig)]
+            if _exc:
+                _ret = [x for x in _exc if x in _dig or re.sub(r'\D', '', x) in _dig]
+                out.append({'check': 'G3', 'severity': 'disclose',
+                            'kind': f'{kind} the front matter no longer carries because the byline moved to the .tex header',
+                            'items': sorted(_exc), 'verified_on_the_rendered_page': sorted(_ret),
+                            'not_retained_by_the_header': sorted(set(_exc) - set(_ret)),
+                            'note': 'an identifier excused here was checked against the rendered page; '
+                                    'one the header does not show is listed as superseded, not hidden'})
+            dropped = [x for x in dropped if x not in _exc]
         if dropped:
             out.append({'check': 'G3', 'severity': sev, 'kind': f'{kind} the base carries and the build loses',
                         'items': dropped[:10], 'n': len(dropped)})
@@ -395,12 +417,15 @@ def g1b(base, built, prev, dep_txt):
     return out
 
 
-def run(base_txt, built_txt, label, dep_txt=None, prev_txt=None):
+def run(base_txt, built_txt, label, dep_txt=None, prev_txt=None, absorbed='', ruling=()):
     dep_txt = dep_txt if dep_txt is not None else open(DEP).read()
     ba, bb, da = atoms(base_txt), atoms(built_txt), atoms(dep_txt)
     f1 = g1(base_txt, built_txt, ba, bb, dep_txt)
     f2, ns, nrow = g2(built_txt, dep_txt, LEDGER)
-    f3 = g3(base_txt, built_txt, dep_txt, ba, bb, da)
+    f3 = g3(base_txt, built_txt, dep_txt, ba, bb, da, absorbed, ruling)
+    if ruling:
+        print(f'  G3: {len(absorbed)} chars of rendered front matter read as the absorbing surface; '
+              f'{len(ruling)} logged byline lines may excuse a numeral, only if the page shows it')
     f0 = g0(built_txt)
     f4 = [x for x in g4(built_txt, base_txt) if x['severity'] != 'info']
     f4i = [x for x in f4 if x['severity'] == 'info']
@@ -460,6 +485,10 @@ def main():
     ap.add_argument('--prev', help='the previous line of record for the same region, for G1b')
     ap.add_argument('--region', default='front', help='front (to §2) or whole')
     ap.add_argument('--control', action='store_true')
+    ap.add_argument('--allow_other_target', action='store_true',
+                    help='audit a surface other than the shipped v49 front matter, knowingly')
+    ap.add_argument('--absorbed', help='text the shipped document carries outside the markdown front matter')
+    ap.add_argument('--ruling-log', help='v49_front_matter_edits.json: whose byline_lines_removed excuses a dropped line')
     a = ap.parse_args()
     if a.control:
         control()           # a demonstration that the checks bite; not a verdict on any build
@@ -474,7 +503,34 @@ def main():
         prev = open(a.prev).read()
         if a.region != 'whole':
             prev = front(prev)
-    rep = run(bt, bu, f'{a.base} -> {a.built}', prev_txt=prev)
+    # --region whole means "the whole of each file as given"; when the files are full documents the
+    # gate cuts the same region the build wrote, so a hand-cut extract can never be read as current
+    if a.region == 'whole-doc':
+        cut = lambda s: s[:s.index('\n## 2. ')] + '\n' if '\n## 2. ' in s else s
+        bt, bu, prev = cut(bt), cut(bu), cut(prev) if prev else prev
+    _abs = open(a.absorbed).read() if a.absorbed and pathlib.Path(a.absorbed).exists() else ''
+    if a.absorbed and not _abs:
+        raise SystemExit(f'--absorbed {a.absorbed}: no such file - refusing to run G3 without the surface it was told to read')
+    _rul = []
+    if a.ruling_log and pathlib.Path(a.ruling_log).exists():
+        _rul = json.loads(pathlib.Path(a.ruling_log).read_text()).get(
+            'house_form_proof', {}).get('byline_lines_removed', [])
+    # a gate reading a hand-cut extract is a gate auditing a document that may no longer exist, and
+    # this line has been burned by exactly that twice. Refuse unless the `built` surface is the shipped
+    # file - whole, or cut at Section 2 - or the operator says plainly that another target is intended.
+    _ship = f'{V7}/paper3_material_ledgers_v49.md'
+    if not a.allow_other_target and pathlib.Path(_ship).exists():
+        _s = open(_ship).read()
+        _sf = _s[:_s.index('\n## 2. ')] if '\n## 2. ' in _s else _s
+        _clip = lambda s: ' '.join(re.sub(r'\s*-{3,}\s*$', '', s).split())
+        _sq = _clip(_s); _bq = _clip(bu); _fq = _clip(_sf)
+        if _bq not in (_sq, _fq) and not (_bq and (_bq in _sq or _sq in _bq or _fq.startswith(_bq[:200]))):
+            raise SystemExit('the --built surface is not the shipped v49 front matter (its first 200 '
+                             'characters disagree). Re-run the build so the gate extracts are current, '
+                             'or pass --allow_other_target if you are auditing something else on purpose.')
+        print('  G0: the built surface is the shipped file (verified against '
+              f'{pathlib.Path(_ship).name}, {len(_s)} bytes)')
+    rep = run(bt, bu, f'{a.base} -> {a.built}', prev_txt=prev, absorbed=_abs, ruling=_rul)
     txt = json.dumps(rep, indent=1)
     if a.out:
         open(a.out, 'w').write(txt)

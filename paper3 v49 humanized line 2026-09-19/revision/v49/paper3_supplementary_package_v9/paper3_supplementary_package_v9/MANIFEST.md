@@ -2,20 +2,22 @@
 
 | file | bytes | sha256 |
 |---|---|---|
-| `ERRATA_v48.md` | 7028 | b58f9a0248fe2a907806d653a3827e9160e429f014d6c73f4f0b760abb7c1c56 |
-| `NOTES_v49.md` | 7482 | 8e0333ab065ff4a5691019bfa762979a0b65ee04a5227d3ace2221e92e50afd3 |
-| `README.md` | 2892 | fa964479c41bee59542b1ecf2e4860e1db707138bf8e5aefa372f8b95aff0120 |
+| `ERRATA_v48.md` | 8375 | 46ac2cef4274f7a7dc9fa7d0e0934f3cb7fa433b7b1be0565e4d87cbe24083ae |
+| `NOTES_v49.md` | 19007 | 403adba3f1e1c1f3ac6402a69b5363dc8c3737ad565fb9b34b0c0cb23c16efea |
+| `README.md` | 2892 | 4f380e1ca5ec1ebde926406d03981748ee98cb9737789599e087d27fe513462b |
+| `builders/audit_v49_lines_v1.py` | 24898 | 684eccd64e5dab33f2f0a3799527c1c7407317d183e909885a342ccb041a884f |
 | `builders/build_companions_v1.py` | 12053 | c61310356d73b6b5153e1eeaabbff05db6822625780e7c8f3c483a68a1011867 |
 | `builders/build_supp_tex_v1.py` | 7094 | 2b3c32b1b27a5137e3599c4dd7fddd30a833eb0f963037d01189ae4793460470 |
 | `builders/build_v48_base.py` | 68600 | 5e64af8e0e21f9f3979203a9130c1749b8fb43773826c7c8b415f3e37a80d464 |
-| `builders/build_v49_base.py` | 14648 | 37ba4b6c06cc7ec088ec070678295520d4b9eec9bc4b80b75fab8651eb1ebabd |
-| `builders/build_v49_tex.py` | 16221 | 96a948ec5e894cc8aa803d40500dbde1454d994e927970e355637b811b18173f |
+| `builders/build_v49_base.py` | 28100 | 851a57248bbf5a88bbaca9a0f9f35fe2fd8ab06219fb81f23b98745dc3cb31fb |
+| `builders/build_v49_tex.py` | 19223 | 7d96e9d7a19c50072edf54220d7352ce1b259ee80d4ccf4d2cca2e92af0e0352 |
 | `builders/claim_ledger_v1.csv` | 301748 | ba820f76144e92ca160e45c141d1029b3d638dd3774ab89bfb0254e8887ed3c3 |
 | `builders/claim_ledger_v1.json` | 968025 | 354aad6067569549c522865435ef20ae133480aa1662f87b6f03af34d84a67f2 |
 | `builders/claim_ledger_v1.py` | 53047 | 57e958c0b5733a31afac08ff776e429f6599f19b695f2722e53aaae5a503d595 |
 | `builders/dispose_the_82_v1.py` | 11613 | 668711178146c3f84a5c0f7f18b865c3c450ee645129c65b20575059a2221131 |
+| `builders/make_restores_v2.py` | 6902 | b3bb131ce0631f705b8e9f5af9c08dee740f2e14aa7ffa9d4740c641ad13d314 |
 | `builders/mdtex_v1.py` | 13989 | 5417f51e42d5a000a4402f0f09f754b9bc52373629b1202953583ee1d7bcf184 |
-| `builders/package_v49.py` | 9734 | f1da44b65400f842569909f27169858a974fcacc4e70d81a6bbc6ad72825d28c |
+| `builders/package_v49.py` | 9981 | bf3545267692a9d77a587ebe6e103b8fdabd8361f2cf6615a9d7d577dc15c869 |
 | `builders/paper3_material_ledgers_v42.md` | 224482 | 0a0afc176e428c2cc4ef6fee293303374a7279f4a4e68a0d2a2244befeaf679d |
 | `builders/paper3_material_ledgers_v47.md` | 251523 | dc7520fb83bbc070c7c02445858f119c639df439021d87519118beaf74d1d476 |
 | `builders/paper3_material_ledgers_v48_prebaseline.md` | 225299 | 1598fe112ce1236602696fbf1fd1e130670472ca2d4c1d04570e4284215e6298 |
@@ -39,13 +41,14 @@
 | `builders/v48_reuse_split_v1.py` | 13669 | 88bbb3b5d0990ebe76d7e8af7dade70747a67f92be3a4637b927683191885393 |
 | `builders/v48_splice_log.json` | 63875 | c2cd8493444afd050b90e63df18f39d7dd30d2c3fb620af1297cbeff7e013af8 |
 | `builders/v48_splice_v1.py` | 18011 | 521209a9c6ebbb75c8825f91ec21646a4de9bfa884b6cee3e08af995bd42463e |
-| `builders/v49_waiver_gate_v1.py` | 25093 | 882a930af746b9de9e6c1fe3481f280ee34e2f3c2b7b20c2afccbaff6be39ccf |
+| `builders/v49_waiver_gate_v1.py` | 29666 | facd6c99edca9af6c8f4de4a03156be742f97851fd1db17a9ddd1f373e02d48e |
 | `builders/verify_v48_base.py` | 19956 | 6f0974923dd2c5c8626a54680c671569f96b46b79fa3ed230bf8e5065a2fc840 |
-| `builders/verify_v49_base.py` | 11603 | 12efbca7375822362688b7d9d377c5ef7bc2e1d6930b7194a0efe46aab8a64bf |
+| `builders/verify_v49_base.py` | 21605 | 69229c97f68fab6cb9750aeb1d7941a32ccc9f41240ed23faea0012eea55987a |
 | `disclosure/adaptation_term_revert_v1.csv` | 2426 | 3539bcc7e15d2b83594a714babe111b89ee0e4ccc16a94517b9840182f746dbb |
 | `disclosure/disposition_v49.json` | 32154 | 4b184bbc024997b417cb95479b12599382bd260281bc1b180bdc1916b72a8278 |
 | `disclosure/open_items_v47.md` | 5082 | 24291694a435b9cc1d299fe60e79388c2cf0f04e8697ec16733c8b83b746f37e |
 | `disclosure/open_items_v48.md` | 13458 | 69cd7099f11db68497a7b3b5067416364e651e606754b982966f6c45c356c421 |
+| `disclosure/open_items_v49.md` | 2585 | 9957b00f231bec9a1bc73703984ab5936d73991998443e84d5cd1cf30658f219 |
 | `disclosure/protected_locations.json` | 155 | 9c1bd0c92f6fddf31e470a6e2f42ebcdd10429e2cf999af61110f3d000c0a9ec |
 | `disclosure/protected_vs_v47.json` | 24772 | a450748a4ea2a6a48429f51bb9329af4a097a92e2e06ad00f5c2e622af4d89a3 |
 | `disclosure/read_32.json` | 20831 | 6b57cc39527a76c7cbc9bd8586693b8a977408b1f08492dae9ce44f630da1e78 |
@@ -53,33 +56,36 @@
 | `disclosure/register_notes.md` | 14947 | 7cd6632eec120a3b7cb9a9d39b8a9bebe28bc7e9c463c94d2bfb9a5784f5d574 |
 | `disclosure/term_revert_candidates.json` | 1131 | 607e6fed4643331f6b1941d95617c3e5287f1c60f8bfe7369ed07d555e5d22cf |
 | `disclosure/v47_vs_v48_diff.json` | 102076 | da7f951a06b292a185b49733f4d33a755432460817fb28abe65c974a2e8dc57f |
-| `disclosure/v48_front_matter.md` | 23906 | de2d56cc66c3ffa033203ba4909bf0319d9d19928ef8b4535e8c5828db518a30 |
+| `disclosure/v48_front_matter.md` | 23905 | e6493facac45534257b81a16b6024b6617293edb4c9b2bf22c42ea826b733fb2 |
 | `disclosure/v48_loss_set.json` | 20791 | 51f384ba1d0502fab68afef31537501e6afb4915f4b749259c7aa4d98bab886a |
-| `disclosure/v49_adaptation_first_brief.md` | 21981 | 148b0ecbdb2b8296059b97cf63b66eaa69b99edb7d85d85a34badb642e2b8b79 |
-| `disclosure/v49_base_front_matter.md` | 19721 | 1027b50dfc436701af66330a891ae11c50c8e2b94bf485fdbc754d071089d749 |
+| `disclosure/v49_adaptation_first_brief.md` | 22142 | 51b03a2df5f957b124956b9da49f2e126633bc67b61a1457f6b3ca87d3ef4cd8 |
+| `disclosure/v49_base_front_matter.md` | 19720 | 7216714beacf6e4b5d1e25ea24529214ae250db56461d3639c67a61768c7dc8a |
+| `disclosure/v49_body_repairs.json` | 409 | 22c96f985713ee4ae913bfd67c8e12cd2445fc921594cde30e7f663190d8d736 |
 | `disclosure/v49_carry_over.json` | 502 | d353c5cf7b9a26d9b7b722a383b3509dc07fce41a536faf5bc83e55b3ff1e597 |
-| `disclosure/v49_compile_report.json` | 2686 | 22dfb29d3cd67784b141f17231e848099c8eb088c2ae87ab8dd5a2a761375ed0 |
-| `disclosure/v49_front_matter.md` | 20272 | 6e317b7a215ed92d3f23787b17549984f0ed98c19c4543c2c897d2f0e63633e8 |
-| `disclosure/v49_front_matter_edits.json` | 4789 | 62dfd3148f11ce4205d356b758891651330fb3b8e8fdabb67a2dcc2560822426 |
-| `disclosure/v49_gate_report.json` | 5464 | f9a119c830a4b92a8eff1e57e8fb83947eb3e33315db7a8dadadf7edadc9cc7c |
-| `disclosure/v49_required_restores.json` | 4674 | 9ba62680cfc3cf99f4499548eaffe62cdb7a6c021254b1d5a48e3a1844cf5619 |
-| `disclosure/v49_verification.json` | 3447 | 09b14ca8a4b64c8da358b538ee0075f6db8a8456fa70d1dbf1b4f45b57e7b038 |
+| `disclosure/v49_compile_report.json` | 3891 | 649f79ee77257d3f7e1bd92e1d486b7c7ee3e316da1ebc77ab06e5843a1f36c8 |
+| `disclosure/v49_front_matter.md` | 20052 | b4e172568aa5efa332fd80cca859d1dcdf999e16a35a98e7e13ee37e12098d55 |
+| `disclosure/v49_front_matter_edits.json` | 8807 | fbb8c0376ba4d17c12a656d6277620957ba666d56c7cd83a17eb15dbed2c682a |
+| `disclosure/v49_gate_report.json` | 6030 | db89e897732fc1fadf132577d95c8c6ea83b9fde34425f3bd07db512f0d38bfc |
+| `disclosure/v49_line_audit.json` | 1835 | 9cd38aa3c269fd84c3995edeb3115478637dfa6390a01051a2483e60d9fb7e51 |
+| `disclosure/v49_required_restores.json` | 3988 | 4bf25fb2d4109d708377a976c556d10efc76374863d56b5456cdccd90c144da0 |
+| `disclosure/v49_restores_v2.json` | 583 | 1e90fc789a410ddd36d7a79c8d61ee717299aaa4b36c032c8d8693922b887512 |
+| `disclosure/v49_verification.json` | 5233 | cef30e0033bee18815d5f2faea6a0d59467591cbe25d58a1e1e3b4af9a83b86b |
 | `disclosure/waiver_scope_v1.json` | 5476 | 9d6edeba9769b2ff60678b9d8c1bffc8339466c03e80461c0f20f7d583b26cf7 |
 | `manuscript/companionA_certification_procedure_v9.md` | 31254 | 2bccc4da4582abe2ec8e1bf45b6f2fae5d912f6f6daa3b03ca419cbd0ba77a82 |
-| `manuscript/companionA_certification_procedure_v9.pdf` | 94163 | 5ea3007cbeb2af44ba811f4a0d15a786ad4f88a331d4b8f4dafa692620442dbb |
+| `manuscript/companionA_certification_procedure_v9.pdf` | 94163 | aafc762653668f43df264ffce04ae0ff576b4fcbfe56cc046989238f47e83802 |
 | `manuscript/companionA_certification_procedure_v9.tex` | 38645 | 1fc97b6954a04ccc9a0077a01c26b848495b58739a0b9f3760f26ef4846f7360 |
 | `manuscript/companionB_standards_horizon_v9.md` | 27190 | 41cb65373848ab4ecd05d1783f8810a8b1af6daf12373500ee3557d37dd36a77 |
-| `manuscript/companionB_standards_horizon_v9.pdf` | 89433 | 9294142cbfb95830e6b077341dbdb64f3a93a39da809562ccfd7f4c79dda0619 |
+| `manuscript/companionB_standards_horizon_v9.pdf` | 89433 | c0b049ea3e68636c9a99bed55142d9b4f06013a50efb6be9b60992a838434e85 |
 | `manuscript/companionB_standards_horizon_v9.tex` | 30405 | bffe6669039c510ecb1ef893a6896ac67d63bdbb1ae78fb9ca95fcc3c2e29c58 |
-| `manuscript/paper3_material_ledgers_v49.md` | 215262 | 9b6f729eb657f77dcdd45af1a8347b7e1607e3b85f5733448a413d31150974c1 |
-| `manuscript/paper3_material_ledgers_v49.pdf` | 391879 | a6935292a502a03854fe42eea8e2c5246c1bc864a706fdfe03bb36eadd524f75 |
-| `manuscript/paper3_material_ledgers_v49.tex` | 234075 | b2d8cde77dfc80a75df4f32e5547a5eab6064ec5bf9e076fe810d47438e51bcc |
+| `manuscript/paper3_material_ledgers_v49.md` | 215028 | 87a73aef6df80938da6e81d5eaea9cfd3e19fdcf304c418213b4b25eb2b4c96d |
+| `manuscript/paper3_material_ledgers_v49.pdf` | 391470 | e9162c856de1925dd8a8e1a53f6436178764834e6577fc6ae8f259562c060391 |
+| `manuscript/paper3_material_ledgers_v49.tex` | 233829 | a10e88daad6f1c504d75ef79912c6c8873c4a953b69493d635bc08bbe70c2eef |
 | `manuscript/paper3_supplementary_v18.ascii.md` | 59955 | d94bc2695e90a1e2a32a7592b48199c13b969b012018e9be0ea62c912402f50d |
 | `manuscript/paper3_supplementary_v18.md` | 59801 | a9ec5cd93f734fc9aefa8aa60595395b2830915be8805374aaade2b59b704630 |
-| `manuscript/paper3_supplementary_v18.pdf` | 175746 | 7900d3270ddb1bef3f900d94ce26f8265433cbf38e1d4b758346e32b432c2586 |
+| `manuscript/paper3_supplementary_v18.pdf` | 175746 | baf077011a3d00b68c040686668e2c2ed41a773559d486752195f6a93e13c779 |
 | `manuscript/paper3_supplementary_v18.tex` | 73881 | 8c49d14831b912161f3beb36fc24c5e80dab04ea266d00ea57085a257414ecd3 |
 
-76 files.
+82 files.
 
 No line of the manifest contains a workspace path. The builders are shipped so that the
 transpile, the fit loop and the gates can be re-run and re-read; they assume the workspace

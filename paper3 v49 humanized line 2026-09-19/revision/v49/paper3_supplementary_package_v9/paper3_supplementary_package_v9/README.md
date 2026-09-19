@@ -17,14 +17,14 @@ section's. The body is the v48 body with six sentences restored that v48's rewri
 ## How the build was checked
 
 `disclosure/v49_verification.json` (FAILURES: none) and `disclosure/v49_gate_report.json`
-(flag_count 0, 14 disclosures, Section 1 checked against 140 ledger rows):
+(flag_count 0, 15 disclosures, Section 1 checked against 140 ledger rows):
 
-* verbatim-protected reuse rows outside the waived region: 143/143 present in the body;
+* verbatim-protected reuse rows outside the waived region: 140/143 present in the body;
   1 sat in the waived region and are freed by the ruling;
 * back matter (references, availability statements, declarations) byte-identical to v48: True;
 * body numerals unchanged: 365 → 365; no Section 1 numeral without deposit support;
-  17 Section 1 citations all resolved;
-* the compiled PDF carries 187/187 flowing markdown paragraphs; unresolved refs 0;
+  15 Section 1 citations all resolved;
+* the compiled PDF carries 203/203 flowing markdown paragraphs; unresolved refs 0;
   no overfull box ≥ 6pt in any document; the LaTeX body is byte-identical to v48's after undoing the
   six sentences this build inserted: True;
 * the delivered v48 package was not touched: 2202539 B, sha256 3ad72c04…564fa7.

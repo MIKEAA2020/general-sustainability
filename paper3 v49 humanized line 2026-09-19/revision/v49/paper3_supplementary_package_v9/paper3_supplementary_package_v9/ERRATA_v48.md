@@ -52,3 +52,18 @@ Two points the author raised that this file should not bury:
   duplicated; the number E8 was reused here for the body items the read found, which are a different class.
 * E4 (the 2008 SNA / SEEA 2014 entry) was described above as the only item touching substance. E8 is a second
   one: a diagnostic the paper defines and then never uses is a claim about the paper's own scope.
+
+| E10 | §4.3 states the same sentence twice, plain and then bolded: *"Two scope notes are part of the theorem. **Two scope notes are part of the theorem.**"* | v48 line 874; v42 carries the sentence once, v47 not at all — the twin is a v48 repair artifact | closed in v49 by a logged deletion (`v49_body_repairs.json`), survivor count asserted at 1 |
+
+## E4, revisited by the v49 base swap
+
+E4 recorded that v48's §1 asserts the 2008 SNA revision, SEEA 2014 and `(United Nations, 2014)` — none of
+which the deposited article contains — and that the reference list carries no 2008 entry for the year the
+sentence asserts. The author's adaptation does not carry that passage, so v49's §1 no longer makes the
+unsupported assertion: **E4's substance is gone**, and it is gone because the base changed, not because
+anything was argued into the text. What remains is a loose end of the same coin: the entries
+`United Nations, 2014` and `United Nations, 2025` are now cited by nobody in the article (`SEEA` and
+`United Nations` appear 0 times in v49's body). The line audit reports them separately from the two entries
+that were uncited in v42 and v48 as well (`Baez 2023`, `Illakwahhi 2024`), and the fix is an author's
+decision — drop the two entries, or restore the passage they supported. This file does not record either
+choice as made.

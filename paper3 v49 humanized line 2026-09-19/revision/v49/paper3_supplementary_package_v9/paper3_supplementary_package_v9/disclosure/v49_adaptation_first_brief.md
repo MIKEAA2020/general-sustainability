@@ -226,7 +226,9 @@ the delivered line is `revision/v48/ERRATA_v48.md`.
 
 Built as ruled: front matter + §1 from the adaptation (repaired *before* adoption), body = v48's body plus the
 six sentences the read proved were lost. Deliverable: `revision/v49/paper3_supplementary_package_v9.zip`
-(78 records, 2,094,033 B, sha256 `6c365b9e…d07f`); manuscript at
+(78 records, 2,096,133 B, sha256 `c1d92dde…f925` — rebuilt after the
+sentences were re-verified against the fixed markdown, and the verifier now refuses to pass a `.tex` older than the
+`.md` it was made from); manuscript at
 `revision/v7/paper3_material_ledgers_v49.{md,tex,pdf}`, 54 pp, companions/supplementary carried unchanged from
 v48 (hashed, not recompiled).
 
