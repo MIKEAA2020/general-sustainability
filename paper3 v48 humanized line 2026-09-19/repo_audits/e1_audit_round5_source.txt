@@ -1,0 +1,1306 @@
+gpt:
+**There are still submission-blocking inconsistencies.** The latest revision fixes the interpretation of the assessment-interval diagnostic and some productivity calculations, but several earlier problems remain verbatim. More importantly, the revised text exposes **a new inconsistency in the acoustic-index origin counts** and does not yet resolve which observations determine the Allee parameter bounds.
+
+The central empirical result may survive these corrections. However, **“the retention verdict is unchanged” cannot substitute for establishing that the scored implementations, dates, bounds, and diagnostics are correctly described.**
+
+I distinguish below:
+
+- **Definite:** a contradiction or mathematical error visible in the supplied text.
+- **Verify:** requires the code, forecast records, or source publications.
+- **Interpretation:** the claim exceeds what the stated analysis establishes.
+
+# 1. Critical issues to resolve first
+
+## 1.1 Acoustic-index origin counts contradict the stated eligibility rule
+
+**Definite inconsistency unless an unstated exception exists.**
+
+You state:
+
+> “if no observation exists in \([1991,t]\) the module is not evaluated at that origin”
+
+and report for Specification B:
+
+\[
+n=36\quad(h=1),\qquad n=32\quad(h=5).
+\]
+
+But the series ends in 2024. If origins cannot precede 1991, the maximum possible counts are:
+
+- \(h=1\): origins 1991–2023, **33 origins**;
+- \(h=5\): origins 1991–2019, **29 origins**.
+
+The reported counts exceed both maxima by three.
+
+Possible explanations include:
+
+- pre-1991 origins are actually evaluated;
+- the rule applies only to some prediction steps;
+- the index count comes from a different implementation;
+- origin and target years are confused.
+
+**Required action:** print an explicit origin list for each index experiment and reconcile it with the implemented eligibility rule. Recompute matched baselines if the origin sets change.
+
+### A related training-data problem
+
+You also say:
+
+> “training transitions with no eligible index value are dropped”
+
+If the post-1991 restriction applies to training as well as forecasting, the first eligible Specification A origin, 1991, has **no completed training transition starting in or after 1991**. It therefore cannot fit \(r,K,b\) from those transitions.
+
+Distinguish:
+
+1. whether pre-1991 index observations are allowed in training;
+2. whether they are allowed as forecast inputs;
+3. the minimum number of **index-eligible transitions**, not merely SSB years;
+4. the fallback when too few eligible transitions remain.
+
+This could affect the entire interpretation of the prey-module comparison.
+
+---
+
+## 1.2 The Allee-bound correction still contradicts the training-maximum definition
+
+Section 2.2 defines \(\max_{\mathrm{train}}S_t\) over **predictor states**, excluding the terminal state.
+
+Section 3.6 specifies that this maximum is:
+
+\[
+\max_{1995\text{--}2006}S_t=40.8\ \mathrm{kt}.
+\]
+
+Yet Section 3.1 now says:
+
+> “the scored fit … bounds \(\mathfrak s\) on \((0,\max_{\mathrm{train}}S_t]\)—\([0,81.10]\) kt on this window”
+
+That uses the terminal 2007 state instead.
+
+You may legitimately use different maxima for \(K\) and \(\mathfrak s\), but you must give them different definitions:
+
+\[
+S_{\max}^{\mathrm{pred}}
+=\max_{u=a,\ldots,t-1}S_u,
+\qquad
+S_{\max}^{\mathrm{all}}
+=\max_{u=a,\ldots,t}S_u.
+\]
+
+Then state exactly which bound each uses.
+
+### Additional inconsistencies in the same paragraph
+
+- It first says the profile “spans the estimation range,” then explains that it does not.
+- It describes \((0,\max S]\) as \([0,81.10]\), changing the openness at zero.
+- It cites the scored fit to Section 2.3, although the estimator is primarily described in Section 2.2.
+- The discussion of \(\mathfrak s=50\) evaluates 13 states, whereas the objective contains 12 predictor-state transitions. On the stated predictor range, all 12 predictors are below 50.
+
+**Required action:** replace this paragraph with an exact bounds table rather than another explanatory qualification.
+
+---
+
+## 1.3 The Brier baseline remains numerically incompatible with 59 matched origins
+
+Specification B’s one-year persistence misclassification rate remains **0.06**.
+
+For a deterministic binary forecast over 59 equally weighted cases, the score must be \(k/59\). Under ordinary rounding:
+
+\[
+3/59=0.0508\rightarrow0.05,
+\qquad
+4/59=0.0678\rightarrow0.07.
+\]
+
+It cannot round to 0.06.
+
+By contrast,
+
+\[
+4/63=0.0635\rightarrow0.06,
+\]
+
+which is compatible with the old unmatched baseline count.
+
+This is strong evidence of an origin-matching or reporting problem, although the code is needed to determine which.
+
+**Required action:** report misclassification counts and denominators for every secondary-score comparison. Matching only the primary RMSE baselines is insufficient.
+
+---
+
+## 1.4 The abstract still makes a false protocol claim
+
+> “under a retention rule fixed before scoring”
+
+This contradicts Section 4:
+
+> “the 5% tie band and the comparator declarations … were formalised after the scores …”
+
+The introduction repeats the same contradiction:
+
+> “retention rule, coded … and applied unchanged”
+
+Use one consistent statement:
+
+> The core RMSE evaluation and persistence comparison were implemented before scoring. The improvement threshold and specified comparator details were formalized subsequently and do not change the reported pooled retention outcomes.
+
+You can shorten that in the abstract or omit protocol chronology there. You cannot accurately call the entire final rule prespecified.
+
+---
+
+## 1.5 The main uncertainty analysis still does not cover the primary catch treatment
+
+The abstract says:
+
+> “On Specification A the margins are … within bootstrap noise”
+
+But Table 9 evaluates Specification A’s **annual-landings pass**, not its primary coarse-regime pass.
+
+Agreement of point rankings does not establish agreement of uncertainty intervals.
+
+Furthermore:
+
+> “intervals excluding zero only on Specification B”
+
+is false without specifying **comparisons against persistence**. Table 9 has an A, \(h=1\), M4–M3 interval of \([4.7,144.7]\), excluding zero.
+
+**Required action:**
+
+- Regenerate the primary coarse-regime per-origin forecasts.
+- Apply uncertainty analysis to them.
+- Until then, explicitly name the annual-landings treatment.
+- Restrict the abstract’s interval statement to model–persistence differences.
+
+# 2. Abstract: remaining line-level problems
+
+| Text | Problem | Correction |
+|---|---|---|
+| “against the next-simpler module” | Not the actual comparator for every model; M1 has no simpler structural comparator. | “against persistence and designated structural comparators” |
+| “these two unpooled series” | Only one SSB series has been introduced at that point; two catch treatments could be mistaken for two series. | Introduce both reconstructions before reporting results. |
+| “one-year …115–206 … five-year …289–488” | These ranges are Specification A values, not ranges across both reconstructions. | Explicitly label Specification A. |
+| “694–819 kt” | Coarse-regime fixed-window range; annual-landings M2–M4 are approximately 821 kt. | Identify treatment or use the appropriate combined range. |
+| “constant productivity … cannot reproduce it” | Can sound like a class-level impossibility claim. | “the fitted constant-productivity models did not reproduce it” |
+| “a delay” | M4 is not a genuine delayed-information model. | “stale initialization” |
+| “all six rolling comparisons” | Correct as a count across three specification/treatment combinations and two horizons, but opaque. | Name those combinations in the body; shorten in the abstract. |
+| “within bootstrap noise” | Vague and potentially read as equivalence. | “bootstrap intervals for model–persistence differences included zero” |
+
+The abstract also says the period ordering is nonuniform without reporting the principal example. A short comparison—rolling collapse-period M1b versus persistence—would be more informative than several repeated non-retention statements.
+
+# 3. Introduction
+
+## 3.1 The MASE claim is still wrong as a general statement
+
+> “a value above one means the model predicts less accurately than assuming no change”
+
+For standard nonseasonal MASE:
+
+\[
+\mathrm{MASE}
+=
+\frac{\mathrm{MAE}_{\mathrm{test}}}
+{\frac{1}{T-1}\sum_{t=2}^{T}|y_t-y_{t-1}|}.
+\]
+
+The denominator is a training-sample naive-error scale. It is not necessarily the persistence error on identical test origins and horizons.
+
+**Replace with:**
+
+> MASE scales test absolute error by the mean absolute one-step change in the training series. The present study instead compares models directly with persistence on matched test origins.
+
+Verify the exact implementation in the fisheries references before asserting their equivalence with your procedure.
+
+---
+
+## 3.2 The literature-gap claims remain unsupported
+
+> “MASE is almost always computed…”
+
+> “the diagnostic is applied to certify a single accepted assessment…”
+
+> “What is missing…”
+
+These are broad claims about a literature, not findings established by the few references shown.
+
+There is also a conceptual gap: predicting a smoothed assessment output does not independently validate that output as biomass truth.
+
+**Safer framing:**
+
+> This study complements index-based diagnostics by comparing simplified forecasts of two assessment-derived SSB reconstructions.
+
+That states what you do without claiming an unverified first or a superior validation target.
+
+---
+
+## 3.3 “Measured quantity” still conflicts with “reconstructed predictand”
+
+Replace:
+
+> “The measured quantity throughout is the condition of the productive stock”
+
+with:
+
+> “The predictand is assessment-derived spawning-stock biomass.”
+
+The stock-versus-catch distinction is useful, but the actual difficulty is their incompatible accounting roles, not simply that biomass and catch are different quantities.
+
+---
+
+## 3.4 The structural-bar paragraph is still overstated
+
+> “under constant catch such a map has a repelling lower equilibrium”
+
+For the Schaefer map, two distinct positive equilibria require:
+
+\[
+0<C<rK/4.
+\]
+
+This is not a generic property of every constant-catch surplus-production map.
+
+Also:
+
+- a fitted-parameter result is not “a priori”;
+- the observed path is compared with a threshold calculated under sustained pre-collapse catch;
+- the later discussion correctly says that threshold does not explain post-moratorium non-recovery;
+- forecast scoring does not isolate the penalty caused by this equilibrium geometry.
+
+Delete:
+
+> “The scored test measures how severely that bar penalizes…”
+
+Move the specific equilibrium interpretation to the discussion.
+
+---
+
+## 3.5 The ladder description still contains four classification errors
+
+1. **M1 is not output-only:** it uses catch.
+2. **M1b is not nested in M1:** your own zero-threshold calculation establishes this.
+3. **Survey initialization is in Section 3.2**, not Section 3.4.
+4. **The prey index modifies production**, not the observation equation.
+
+Use:
+
+> Five structural implementations differ in production function, catch treatment, residual dynamics, and initialization. Survey-based initialization and prey-informed production are evaluated as additional variants.
+
+---
+
+## 3.6 “Does not estimate an Allee threshold”
+
+You estimate a parameter intended to represent one.
+
+Replace with:
+
+> The fitted depensation parameter is not interpreted as an identified biological Allee threshold.
+
+---
+
+## 3.7 Unevaluated objectives should not be called secondary objectives
+
+> “Early-warning and intervention-selection criteria are secondary objectives; neither is operationalised”
+
+Remove them as objectives. Say they are outside the study’s scope.
+
+# 4. Data and model definitions
+
+## 4.1 The general transition is not autonomous
+
+Definition 2.1 includes time-varying \(C_t\) and a disturbance. Call it an **annual transition model**.
+
+An autonomous map is a specific constant-catch, fixed-parameter, zero-innovation case.
+
+---
+
+## 4.2 The equation and implementation are different maps
+
+The equation uses \([x]_+\), conventionally \(\max(0,x)\). The code clips to:
+
+\[
+[10^{-3},10^6].
+\]
+
+State the implemented operator explicitly:
+
+\[
+\Pi(x)=\min\{10^6,\max(10^{-3},x)\}.
+\]
+
+Then distinguish conceptual zero-clipping from implementation. This matters to:
+
+- floor behavior;
+- equilibrium counting;
+- Proposition 4.1;
+- raw RMSE, not only log-RMSE.
+
+Also specify whether all modules use the same clipping and whether the upper cap ever binds.
+
+---
+
+## 4.3 M3 and M4 are also deterministic plug-in forecasts
+
+> “deterministic plug-in path … except in M3 and M4”
+
+Incorrect distinction. Their residual propagation is deterministic too.
+
+Use:
+
+> All forecasts are deterministic plug-in trajectories; M3 and M4 additionally propagate a fitted residual state, with future innovations set to zero.
+
+---
+
+## 4.4 Catch timing remains insufficiently anchored to the assessment
+
+You specify the interval convention, but not the date within a year represented by SSB.
+
+Verify whether the source state is beginning-of-year, spawning-time, or another quantity. Then explain how calendar-year landings align with it.
+
+Two further questions remain:
+
+- The 1995–2007 training mean includes 13 catch years but only 12 training transitions. Is that intentional?
+- Under \(C_t\) for \(S_t\rightarrow S_{t+1}\), forecasts ending in 2024 ordinarily use catches through 2023. Why is persisted **2024 catch** needed?
+
+These may reveal an off-by-one discrepancy between the prose and code.
+
+---
+
+## 4.5 Catch-source “immateriality” is unproven
+
+> “the residual exposure is immaterial, since Schijns records…”
+
+Small catches in one source do not demonstrate small disagreement with an unchecked source.
+
+Verify the relevant final input year directly or report the source-match period without claiming to have closed the remaining sensitivity.
+
+---
+
+## 4.6 Optimization is still not reproducibly specified in the manuscript
+
+“Multi-start” requires:
+
+- optimizer and version;
+- actual objective;
+- starting points;
+- parameter scaling or transformations;
+- tolerances;
+- feasibility handling;
+- convergence checks;
+- selection among solutions.
+
+The persistent \(K=500\) fit and cross-environment M1b variation make these details central rather than supplementary decoration.
+
+If the lower bound exceeds 500, explain how the initial value is made feasible.
+
+---
+
+## 4.7 The index model’s effective training sample is missing
+
+“Eight training years” is not the relevant information count if index-ineligible transitions are removed.
+
+Report the minimum and distribution of:
+
+\[
+n_{\mathrm{eligible\ transitions}}.
+\]
+
+A three-parameter model fitted to zero, one, or two eligible transitions is fundamentally different from one fitted to seven.
+
+---
+
+## 4.8 Units need one explicit annual-step convention
+
+You add \(S\) in kt to production and catch described as rates.
+
+Either include \(\Delta t=1\) yr or define \(g\) and \(C\) as biomass increments over the annual step. Use that convention for the reported curve maxima too.
+
+# 5. Evaluation design and score definitions
+
+## 5.1 Directional scoring remains contradictory in the prose
+
+Table 3 now correctly reports NA for persistence and the training mean.
+
+But Section 2.3 still says:
+
+> “sign-hit rate is conventionally 0.00 for persistence”
+
+Delete that sentence.
+
+Also specify how structural forecasts with exactly zero adjacent change are treated.
+
+---
+
+## 5.2 The first Brier explanation still omits target states
+
+Origins below the LRP do not alone guarantee zero persistence error. Both origins and targets must be below it.
+
+You correctly explain this later. State it once correctly and delete the extended repetition.
+
+---
+
+## 5.3 The corrected assessment-width diagnostic is much better—but overexplained
+
+The substantive correction is now sound: you no longer call it coverage or ranking robustness.
+
+Remaining issues:
+
+- `**not**` is Markdown, not LaTeX. Use `\textbf{not}`.
+- Define “relative width”: presumably \((\mathrm{hi}-\mathrm{lo})/S\), but this is unstated.
+- Define the asymmetry measure behind “more than 10%.”
+- State which years determine the median width.
+- Results belong in Results, not the design subsection.
+- “Same order as” is not established by the fraction below one threshold alone.
+
+A short descriptive presentation is enough. The multiple paragraphs rebutting an interpretation you no longer make should be reduced.
+
+---
+
+## 5.4 Retention criteria are not hypotheses
+
+Rename H1–H3 as C1–C3 or R1–R3.
+
+Also fix M1b’s “nested” designation.
+
+---
+
+## 5.5 “Weaker than a statistical null result” is still inappropriate
+
+Remove this throughout.
+
+Use:
+
+> Non-retention is an empirical selection outcome under the declared score, not a test of equivalence or a rejection of the underlying model class.
+
+---
+
+## 5.6 The claim that all comparator readings preserve H1 is unnecessary
+
+You need only establish:
+
+> No implementation beats matched persistence on the pooled primary scores, so neither the comparator choice nor the 5% threshold changes non-retention.
+
+This is more precise than claiming every H1 comparison is unchanged.
+
+---
+
+## 5.7 The “3.6 kt” origin effect still mixes precision levels
+
+Do not subtract unrounded 84.4 from rounded 88 and present the difference as exact.
+
+Use the two unrounded values or “approximately 4 kt.”
+
+# 6. Recovery-window identification analysis
+
+## 6.1 The bound discussion now needs a full-range profile
+
+Once you clarify that the fit permits thresholds above the observed minimum, a profile limited to \([0,9.68]\) establishes weak constraint only **within that subrange**.
+
+It does not establish the behavior of the objective across the complete scored domain.
+
+If you want to say the objective declines to place a high threshold, show the full-domain profile, with the \(0.8K\) feasibility restriction enforced consistently.
+
+Otherwise write:
+
+> The restricted profile shows weak constraint among low threshold values; it does not characterize support across the full scored parameter domain.
+
+---
+
+## 6.2 “The objective declining to place a threshold” overstates numerical evidence
+
+Your reported estimate is the result found by an optimizer. With acknowledged environment sensitivity and incomplete convergence reporting, you have not yet demonstrated the global objective’s preference over all feasible thresholds.
+
+Use “the reported fit approaches zero,” then show diagnostics.
+
+---
+
+## 6.3 \(C\) cannot compensate as a fitted parameter within these fits
+
+You still list:
+
+> “\(r,K,\mathfrak s\) and \(C\) can compensate”
+
+But \(C\) is fixed within each treatment. Remove it from the within-fit compensation claim.
+
+---
+
+## 6.4 “\(K\) collapses to the training range” remains inaccurate
+
+The fitted M1b values, 105.8 and 129.8 kt, exceed:
+
+- predictor maximum: 40.8 kt;
+- terminal SSB: 81.1 kt.
+
+Say “closer to the observed biomass range” rather than “to the training range.”
+
+---
+
+## 6.5 The profile does not by itself establish pointwise production invariance
+
+A small change in average squared error does not prove:
+
+> “The product … is nearly invariant along this path”
+
+Compare the predicted production curves directly, preferably over the predictor-state range and over the forecast range separately.
+
+---
+
+## 6.6 “Any one … would compromise a \(\chi^2_1\) reference” is too categorical
+
+Small samples and reconstructed states are reasons for caution, not universal mathematical disqualifiers.
+
+Say:
+
+> These features make a conventional \(\chi^2_1\) approximation insufficiently justified here.
+
+The decision to report the profile descriptively is appropriate.
+
+# 7. Production reconstruction and fitting diagnostics
+
+## 7.1 The apparent-production sentence still has the wrong sign
+
+> “even after subtracting reconstructed catch”
+
+Your expression **adds** catch to the SSB increment.
+
+Replace with:
+
+> Apparent production, calculated as the SSB increment plus recorded landings, was negative…
+
+---
+
+## 7.2 “Makes non-stationarity explicit” overstates the inversion
+
+The identity
+
+\[
+\widehat r_t(K)=\frac{P_t}{S_t(1-S_t/K)}
+\]
+
+is a year-specific effective coefficient that forces exact agreement with each observed transition.
+
+Its variability can reflect:
+
+- genuine changes in productive processes;
+- omitted age composition;
+- catch error;
+- assessment reconstruction error;
+- residual variability;
+- unsuitable \(K\).
+
+A sign change proves failure of an **exact, positive-production deterministic accounting** over states below \(K\). It does not alone distinguish nonstationarity from a constant-\(r\) model with residual variation.
+
+Use:
+
+> The effective coefficient required to reproduce each observed transition changes sign for the examined values of \(K\).
+
+---
+
+## 7.3 The “post-collapse mean” label is too vague
+
+The ratios 0.20 and 1.12 compare **1995–2007**, not all post-collapse transitions.
+
+Say so explicitly.
+
+Also, the 1983–1990 production group includes the transition into 1991. It is therefore not the same transition set as the model trained on states 1983–1990.
+
+Likewise, the 1995–2007 production group includes the transition into 2008, outside the recovery training transitions.
+
+These descriptive groups are permissible, but do not equate their means with fitted training-window productivity.
+
+---
+
+## 7.4 The \(S>K\) interpretation is still too strong
+
+> “its denominator is negative, so the reading as a positive productivity fails”
+
+A negative denominator and negative \(P_t\) yield a positive ratio. The algebra is consistent with a positive-\(r\) logistic model experiencing negative surplus above \(K\).
+
+The restriction is interpretive: if \(K=500\) is a recovery-window effective parameter, applying it to the pre-collapse stock is an unsupported cross-regime extrapolation.
+
+Do not claim that a negative denominator alone invalidates positive \(r\).
+
+---
+
+## 7.5 The production-figure caption needs a restricted domain
+
+> “almost indistinguishable over the observed range of \(S_t\)”
+
+If this means the whole 1983–2015 SSB range, it is implausible for \(K=500\) and \(K=5000\): one curve becomes negative above 500 while the other remains positive below 5000.
+
+Specify:
+
+> over the recovery-window predictor-state range
+
+if that is what the figure actually shows.
+
+Also distinguish plotted production \(g(S)\) from increments \(g(S)-C\). Similar fitted increments under different catches do not imply identical production curves.
+
+---
+
+## 7.6 The recovery profile may outperform the nominal optimum
+
+You report:
+
+- nominal coarse-fit MSE: 128.35;
+- profile minimum: 127.4.
+
+If they share data, catch, bounds, and objective, the nominal fit is not the best solution found.
+
+That may be a small numerical improvement with large forecast implications—the very issue worth investigating—but it should not be called an established least-squares optimum.
+
+**Required action:** reconcile achieved fits with the profile minima and score the better solution in a declared numerical-robustness analysis.
+
+---
+
+## 7.7 The \(r\)-range in the recovery sweep needs a treatment label
+
+The sweep gives:
+
+\[
+r\in[0.435,0.773],
+\]
+
+but the annual-landings nominal fit has \(r=0.370\) at \(K=5000\).
+
+This is compatible only if the sweep uses another catch treatment or objective. State which.
+
+---
+
+## 7.8 The revised collapse profile no longer establishes severe weak identification
+
+The updated RMSE values, 31.3, 56.3, and 67.0 kt, show substantial deterioration.
+
+You acknowledge this, correctly. But then conclude:
+
+> “does not … pin the pair tightly enough…”
+
+That requires a criterion for “tightly enough,” not merely alternative fits with much worse objectives.
+
+Report the sensitivity neutrally unless you provide parameter uncertainty or a defined near-optimal set.
+
+Also, the phrase:
+
+> “the density-dependent term \(\partial g/\partial K\)”
+
+is mathematically imprecise. The density-dependent term is \(-rS^2/K\); the derivative \(rS^2/K^2\) is sensitivity to \(K\).
+
+---
+
+## 7.9 The low-biomass multiplier requires zero catch
+
+For the Schaefer model, \(1+r\) is the low-biomass multiplier of the **unharvested production map**.
+
+With positive constant catch,
+
+\[
+\frac{S_{t+1}}{S_t}
+\approx 1+r-\frac{C}{S_t},
+\]
+
+before clipping.
+
+Explicitly state “without catch.” Otherwise this interpretation is inconsistent with the harvest-threshold discussion.
+
+---
+
+## 7.10 The flat-valley explanation still overclaims
+
+> “a constant catch shifts … without moving the objective, so the rolling … scores … are insensitive”
+
+Neither implication is established:
+
+- changing catch changes the objective;
+- similar minima do not imply similar parameters;
+- equal rounded pooled scores do not imply similar per-origin predictions;
+- one recovery-window profile cannot explain all rolling-origin results.
+
+Replace with:
+
+> Despite the fixed-window sensitivity, the pooled rolling scores agree to the nearest kilotonne. Per-origin differences are needed to determine whether this reflects similar forecasts or offsetting error changes.
+
+# 8. Specification B and prey results
+
+## 8.1 “Official landings worsen the crash forecast” is not the clean comparison
+
+Both M1 and M2 may use official landings, one as a training mean and the other as a time-varying path.
+
+Say:
+
+> M2’s fixed-origin collapse RMSE exceeded M1’s under Specification B.
+
+---
+
+## 8.2 LRP still appears as a reason for primary non-retention
+
+> “The longer series and the revised LRP do not justify…”
+
+The LRP does not enter RMSE. Remove it from this sentence.
+
+---
+
+## 8.3 The late-period biomass comparison still mixes years and reconstructions
+
+> “The same late-period biomass is 34% … and above the new one after 2016”
+
+Replace with separate dated statements. The 2015 NCAM estimate and 2024 xteNCAM estimate are not “the same biomass.”
+
+---
+
+## 8.4 Table 7 is corrected, but the following sentence is stale
+
+> “the 88 of Table 7 is the all-origins value”
+
+The main row now contains 84; 88 appears only in the caption.
+
+This is minor, but delete obsolete comparison-history prose rather than preserve every earlier table version.
+
+---
+
+## 8.5 The two-regime model is still underspecified
+
+You need an equation and an estimation description:
+
+- Are two \(r\) values fitted?
+- Is one a fixed multiple of the other?
+- Is the 1991 break known prospectively or imposed retrospectively?
+- Does regime assignment depend on the forecast origin or the year reached along the trajectory?
+- What is done when a training window contains only one regime?
+
+Without this, Table 7 is not a reproducible model comparison.
+
+---
+
+## 8.6 Positive prey scaling does not prohibit net stock loss
+
+The sentence remains:
+
+> “food limitation severe enough to drive a net loss lies outside…”
+
+Correct it to:
+
+> The positive multiplier cannot change a positive production term into a negative one. It can nevertheless reduce production below catch, producing a negative biomass increment.
+
+Also, forecasts can move above \(K\), where the base Schaefer term is negative.
+
+---
+
+## 8.7 Unbounded \(b\) permits the opposite ecological response
+
+If \(b<0\), lower capelin index increases modeled production.
+
+Report:
+
+- fitted \(b\) values or distributions;
+- zero-index handling;
+- overflow/nonfinite handling;
+- whether a sign-constrained alternative was examined.
+
+Do not call the module a food-limitation model without showing that the fitted response has that interpretation.
+
+---
+
+## 8.8 Table 8 still emphasizes the invalid comparison
+
+The caption and bolding remain unchanged. Bold the matched baselines, not the mixed-origin values.
+
+Prefer removing the mixed-origin rows entirely from the main table.
+
+---
+
+## 8.9 The prey-timing interpretation contradicts supplied future observations
+
+> “prey information available at the origin”
+
+Earlier you supply future index observations along the hindcast.
+
+Use “the supplied historical index path.”
+
+The recruitment-lag claim also needs qualification:
+
+- age at 50% maturity is not necessarily the lag from the assessment’s recruitment age;
+- maturation is distributed;
+- prey can affect adult growth and survival immediately;
+- recursive contemporaneous forcing can have persistent effects.
+
+The defensible limitation is absence of **explicit cohort-mediated recruitment-to-maturity dynamics**, not absence of all delayed effects.
+
+# 9. Uncertainty and period-specific analysis
+
+## 9.1 “Monotonically related” remains incorrect across varying comparisons
+
+The MSE-gap/RMSE-gap identity establishes equal sign and a shared zero null, not a universal ordering across pairs with different denominators.
+
+Use “sign-equivalent.”
+
+---
+
+## 9.2 The interval-derived \(p\) remains undefined operationally
+
+“Inverting the percentile interval” is insufficient to reproduce the column.
+
+Give its formula, including tails and finite-bootstrap treatment, or remove it. Since it is not a calibrated test, labelling it simply \(p\) invites exactly the interpretation the text warns against.
+
+---
+
+## 9.3 Zero-gap intervals are not the actual 5% retention margins
+
+The retention boundary is:
+
+\[
+\mathrm{RMSE}_M<0.95\,\mathrm{RMSE}_{C}.
+\]
+
+Table 9 instead reports uncertainty around \(\mathrm{RMSE}_M-\mathrm{RMSE}_{C}=0\).
+
+That is a legitimate comparative-error diagnostic, but call it such. It is not directly uncertainty around the rule’s boundary.
+
+---
+
+## 9.4 The period-specific paragraph still contains the same unresolved problems
+
+### Origin versus target years
+
+The counts match origin bands. State this explicitly. A 1991–1995 origin band at \(h=1\) predicts targets 1992–1996.
+
+### Incomplete model comparison
+
+Selected competitors in each band do not establish which forecast is best overall. Provide a complete model-by-period table.
+
+### “Two quiescent bands”
+
+Identify which two; M3 has a lower point score in 1996–2012.
+
+### “Five origins remain too few to score”
+
+You have scored them. They are too few for precise generalization.
+
+### “One sub-band advantage falls inside…”
+
+Only the small M3 advantage does. The M1/M1b collapse advantages do not.
+
+### Correct reason retention does not change
+
+> Period-specific diagnostics are not part of the pooled, two-horizon retention criterion.
+
+That is sufficient.
+
+### Missing interpretation
+
+Explicitly distinguish:
+
+> Failure to project collapse from a pre-collapse origin versus improved tracking after collapse observations enter rolling training windows.
+
+This is more informative than repeating that pooled retention is unchanged.
+
+# 10. Proposition, stale initialization, and discussion
+
+## 10.1 Proposition 4.1 still conflates zero clipping and positive-floor clipping
+
+With the implemented floor \(\epsilon=10^{-3}\),
+
+\[
+F(0)=\epsilon>0.
+\]
+
+Thus strict decline does not hold throughout \([0,S_-)\). The floor can itself be an additional positive equilibrium.
+
+Formulate either:
+
+- the theoretical zero-clipped map with \(F(0)=0\); or
+- the implemented map on \([\epsilon,S_-)\), with \(F(\epsilon)=\epsilon\) and strict decline above the floor.
+
+Do not use the numerical implementation as justification for a proof written for another map.
+
+---
+
+## 10.2 Remove the unspecified single-equilibrium “special case”
+
+A theorem requiring \(S_-\) cannot include a case without \(S_-\) unless separately formulated.
+
+---
+
+## 10.3 A stale state does not make a map nonautonomous
+
+M4’s non-scalar/time-dependent behavior comes from its inherited residual state and catch path—not the age of its initial condition.
+
+---
+
+## 10.4 The theorem still does not explain the collapse score
+
+Delete:
+
+> “finite-sample face”
+
+The theorem concerns exact reproduction of a collapse-and-recovery path under sustained fixed catch. The fixed forecast score does not isolate that obstruction.
+
+The harvest-induced-threshold paragraph is the useful result. Let it stand as a specific model interpretation.
+
+---
+
+## 10.5 M4’s new \(h+1\) statement needs code verification and residual alignment
+
+The new text says M4 takes \(h+1\) updates. Confirm that the archived predictions actually used this, rather than merely adding it to the description.
+
+There is a deeper issue: the last training residual \(e_{t-1}\) belongs to the transition \(S_{t-1}\rightarrow S_t\). If M4 restarts from \(S_{t-1}\), its first update revisits that transition.
+
+Specify whether the first residual is:
+
+- \(e_{t-1}\);
+- \(\phi e_{t-1}\);
+- a projection based on \(e_{t-2}\).
+
+These are different experiments. “Indexed from the earlier start” does not resolve it.
+
+---
+
+## 10.6 The policy-value conclusion still contradicts the stated scope
+
+You deny causal decomposition, then say:
+
+> “mostly attributable”
+
+and:
+
+> “the value of a timely assessment exceeds the value of any structure tested”
+
+Remove that policy inference. Differences among retrospective forecast rules do not estimate operational assessment value.
+
+The arithmetic can be presented as descriptive RMSE contrasts without assigning causal shares.
+
+---
+
+## 10.7 The sign-score timing claim is unsupported
+
+A window-average sign-hit rate does not establish errors “exactly when” catch falls. Show year-specific increments or remove that phrase.
+
+---
+
+## 10.8 Mortality attribution and scalar misspecification remain conflated
+
+An assessment’s \(M\approx2.5\) does not by itself establish a particular \(r\)-model’s misspecification. Nor does failure under two catch treatments identify the collapse mechanism.
+
+Use:
+
+> The tested production and catch representations failed to reproduce the fixed-origin decline.
+
+Keep ecological attribution separate and sourced.
+
+---
+
+## 10.9 Reconstruction corroboration remains an analogy, not verification
+
+The following claims still need removal or direct evidence:
+
+- a below-historical-biomass stall is “precisely” impossible for constant productivity;
+- reconstruction disagreement is the “twin” of your parameter ridge;
+- the same extrapolation drives both;
+- LRP changes are why the SSB columns cannot be pooled.
+
+A constant-parameter curve can stall near its fitted equilibrium. Whether it fits this stock’s stall is an empirical question.
+
+Use the external reconstructions as context, not proof of your diagnostic explanation.
+
+---
+
+## 10.10 Conclusions are still broader than the corrected introduction
+
+The conclusion again says persistence “is more accurate” without identifying the pooled score, and:
+
+> “post-2015 stall period fails in the same way the reconstructions stall”
+
+No analysis establishes “the same way.”
+
+A defensible conclusion would be:
+
+> None of the tested structural implementations outperformed matched persistence on pooled rolling-origin RMSE at either evaluated horizon. Performance varied across periods and fixed origins, including lower errors for some implementations during rolling collapse-period evaluation and selected recovery forecasts. The results therefore establish non-retention under the pooled criterion, not uniform inferiority across ecological phases.
+
+# 11. Editorial cleanup that should accompany the substantive corrections
+
+- Delete “rather than invented.”
+- Replace “every fitted-parameter value” with “selected fitted parameters” unless Table 10 is genuinely exhaustive.
+- Correct Table 10’s “Rolling” label for the isolated \(\phi=0.95\) value if it belongs to a fixed recovery fit.
+- Remove the claim that an unchanged optimizer initializer is a “sharper symptom” of weak identification than an active bound.
+- Remove duplicate sentences announcing M1–M2 coincidence.
+- Move numerical results out of Methods.
+- Replace “within noise” with explicit interval language.
+- Use “assessment-derived state” consistently rather than alternating “measured,” “filtered,” and “smoothed” without distinction.
+- Use “stale initialization” consistently rather than reverting to “information delay.”
+- Replace repeated claims that results do not transfer with one clear scope paragraph.
+- Remove irrelevant framework and companion-study references unless they contribute directly to the methods or interpretation.
+
+# Recommended next step
+
+**Do not add another interpretive layer yet.** Produce three audit outputs first:
+
+1. **A per-model specification ledger:** exact bounds, state sets, transition sets, catch years, initialization, clipping, and residual indexing.
+2. **An origin ledger:** every evaluated origin and target, especially for the acoustic-index models and secondary scores.
+3. **A numerical reconciliation table:** nominal fit versus profile optimum, parameter values, training objective, and corresponding forecast-file checksum.
+
+The most important unresolved question is now **whether all the prose and tables describe the same computations**. Once that is settled, the paper can be substantially shorter and stronger: a clear pooled forecast comparison, a qualified phase-specific result, and carefully bounded diagnostics of production-curve and initialization behavior.
+grok:
+the introduction still asserts a theorem the discussion retracts; Tables 7 and 8 plus the surrounding prose do not agree; the Allee bound is still specified two ways; and the conclusions ignore the regime split the abstract now admits.
+
+I cannot check code or source tables. Comments below are internal to this text.
+
+# 1. Contradictions that a reviewer will catch immediately
+
+## 1.1 The introduction still sells a bar that Section 4 dismantles
+
+Introduction:
+
+> under constant catch such a map has a repelling lower equilibrium below which no path can recover, and the observed path falls below it. Proposition 4.1 states the condition and the fitted values.
+
+Section 4:
+
+> the repeller is a function of catch: … \(144\) kt under \(C=240\), … \(2.6\) kt under … \(C=5\) … The 1995 SSB of \(9.7\) kt is far below the first of these and above the last. The obstruction … does not explain non-recovery after catches fell.
+
+Those cannot both be lead claims. The fitted map with **pre-collapse catch held forever** cannot recover from \(9.7\) kt. The forecasts that actually failed used a **1992 catch drop**. Under moratorium catch the same algebra puts the repeller below the observed 1995 state.
+
+**Delete the equilibrium paragraph from the introduction.** If Proposition 4.1 remains, keep it only in the discussion, and do not call the scored collapse error its “finite-sample face.” The collapse forecasts fail because stationary production plus a catch drop raises biomass; they do not fail because the stock crossed a catch-dependent repeller computed at \(C=240\).
+
+## 1.2 Table 7 and the Table 7 prose disagree
+
+Table 7 now reports origin-matched Specification B persistence as **\(84/300\)**.
+
+The next sentence still says:
+
+> the \(88\) of Table 7 is the all-origins value
+
+There is no \(88\) in Table 7. That number now lives only in the Table 6 caption.
+
+Section 2.3 also pre-announces Table 7’s post-break control. Results do not belong in Methods.
+
+## 1.3 Table 8 still ranks the invalid baseline
+
+Caption:
+
+> Bold marks the best mixed-origin baseline in each column.
+
+The table still bolds mixed-origin persistence (\(98\), \(88\), \(318\)) and leaves the matched baselines unbolded. At Specification A, \(h=5\), the module (\(262\)) is then visually compared with \(265\) rather than with the matched \(193\).
+
+You already know the matched comparison is the valid one. Put **only** matched persistence in the table. Move mixed-origin numbers to a footnote.
+
+## 1.4 Three remaining persistence/NA leftovers
+
+Section 2.3, same paragraph:
+
+> reported as NA where a rule supplies no directional prediction
+>
+> The sign-hit rate is conventionally \(0.00\) for persistence
+
+Table 3 now correctly prints NA. Delete the “conventionally \(0.00\)” sentence.
+
+Section 4 still writes “sign-hit rates of \(\Delta S\) (\(0.00\)--\(0.50\) on collapse; Table 3)” — that range is now NA, \(0.50\), \(0.00\), \(0.25\).
+
+## 1.5 The Allee domain is still not one domain
+
+| Place | Bound |
+|---|---|
+| §2.2 | \(\mathfrak s\in[0,\max_{\mathrm{train}}S_t]\), and \(0<\mathfrak s<0.8K\) |
+| §2.2 | profile further restricted to \([0,\min S_t]\) |
+| §3.2 scored fit | \((0,\max_{\mathrm{train}}S_t]=[0,81.10]\) on the recovery window, attributed to “Section 2.3” (the bounds are in 2.2) |
+| §3.6 | predictor states for \(K\) are 1995–2006, maximum \(40.8\) kt |
+
+If \(K\) is bounded using predictor states that exclude 2007, \(\mathfrak s\) cannot be bounded by \(81.10\) kt (the 2007 response) unless you say so explicitly. Under the predictor-state convention the recovery-window maximum is \(40.8\) kt, so \(\mathfrak s=50\) is **outside** the scored range, and the sentence “a high threshold was therefore not excluded from the scored estimation by its range bound” is false.
+
+Also still present:
+
+> \(r\), \(K\), \(\mathfrak s\) and \(C\) can compensate
+
+For M1b, \(C\) is plugged. The profile re-optimises only \(r\) and \(K\).
+
+The predator-pit discussion now depends on which bound is real. Resolve the domain first; then say what was and was not testable.
+
+## 1.6 Abstract vs conclusions vs Section 3.5
+
+Abstract: pooled non-retention, **ordering not uniform by period**.
+
+Section 3.5: on Specification B, \(h=1\), structural models beat persistence in 1991–1995 (\(n=5\)).
+
+Conclusions:
+
+> last-value persistence is more accurate than surplus production…
+
+with no pooled/split qualifier, and still:
+
+> The crash is not a catch-drop event in this accounting.
+
+The paper now contains two collapse experiments that answer different questions:
+
+| Experiment | What is being asked | Result |
+|---|---|---|
+| Fixed origin, train 1983–1990, test 1991–1995 | Can a pre-collapse fit anticipate the crash? | No. All models miss. |
+| Rolling \(h=1\) origins **during** 1991–1995 | Given a state already in the collapse, is next year’s SSB closer to the model or to persistence? | Some models win on five origins. |
+
+Those are compatible. The text never says they are different. The abstract juxtaposes them as if they were one finding. A one-step forecast issued in 1993 from an already-collapsed \(S_t\) is not evidence that the model “predicted the collapse.”
+
+# 2. Claims the paper still makes and also retracts
+
+## 2.1 Catch attribution
+
+After the correct caveat (“a misspecified module need not improve…”), Section 4 still says:
+
+> Collapse on these specifications is a productivity, unallocated-mortality, or observation event, not a surplus-production response to the catch drop.
+
+Conclusions repeat the event-type claim. Keep only:
+
+> neither prescribed catch treatment reproduced the reconstructed decline in these implementations.
+
+## 2.2 Delay / “value of a timely assessment”
+
+You now state, correctly, that M4 is a stale **initialization** using M3’s coefficients fitted through \(S_t\), and that the comparison is not a causal estimate of assessment timeliness.
+
+The same paragraph then says:
+
+> M4’s error is mostly attributable to the information delay
+>
+> the value of a timely assessment exceeds the value of any structure tested
+
+Delete the second block. A table of current persistence, stale persistence, and M4 is enough.
+
+## 2.3 Rose (2026)
+
+Still present:
+
+- post-2015 stall is “precisely” what constant \(r\) cannot reproduce
+- reconstruction disagreement is “the assessment-level twin” of the \(K\) valley
+- LRP revisions are “the reason” the columns cannot be pooled
+- post-2015 capelin/seal inference “matches” the 1990s catch-treatment result
+
+The series cannot be pooled because they are different reconstructions. Post-2015 ecology does not identify 1991–1994.
+
+## 2.4 Opening slogan vs scoped result
+
+> In the surplus-production implementations evaluated here, that structure does not pay for itself
+
+then immediately: pooled result, not uniform by period, scoped, conditional hindcast.
+
+Start with the scoped result. Do not announce a general verdict and then spend the paragraph taking it back.
+
+# 3. Specification gaps that still block reproduction
+
+## 3.1 Two-regime capelin model
+
+Still only:
+
+> A two-regime \(r\) with break 1991 uses the high regime only for forecasts issued before 1991.
+
+Missing: whether one or two \(r\)’s are estimated; whether \(K\) is shared; how an \(h=5\) path issued in 1989 is treated as it crosses 1991; whether the break is known at issuance. Table 7 cannot be interpreted without this.
+
+## 3.2 M4 vs Table 2
+
+Table 2: “forecast starts from \(S_{t-1}\).”
+
+Section 4: parameters are M3’s, fitted through transitions ending at \(S_t\); reaching calendar time \(t+h\) takes \(h+1\) updates.
+
+Relabel the table row “stale-start initialization.” State how the carried residual is defined when the start state is \(S_{t-1}\).
+
+## 3.3 Orphan SI-2
+
+> Section SI-2 gives the statement and proof.
+
+There is no lemma left in this section.
+
+## 3.4 Primary-pass forecasts still missing
+
+Specification A uncertainty is still the annual-landings pass. If the stack is reproducible, regenerate and archive the coarse-regime per-origin files. Do not treat “verdicts coincide” as a substitute for intervals on the frozen scores.
+
+## 3.5 \(K=500\) still treated as a curvature proof
+
+Section 2.2 and 3.6 still say the optimiser remained at the start value “because the objective is flat,” and that this is “a sharper symptom” than an active bound. You already have a profile. Use the profile; delete the optimiser folklore.
+
+## 3.6 Unbounded \(b\)
+
+The index exponent is still fitted with no bounds on as few as seven transitions. That is a specification, not just a degrees-of-freedom remark. Report the fitted \(b\) range or bound it.
+
+# 4. Methods/results and leftover scaffolding
+
+**Still in the introduction, should go or shrink**
+
+- “canonical demanding case / canonical post-mortems”
+- “non-recovery … three decades” beside partial rebuilding; a 1999 paper cannot document the later debate
+- “measured quantity … productive stock” (it is reconstructed SSB)
+- “Any model family … must beat persistence” (only for this task)
+- “a priori structural bar” (fitted, and catch-dependent)
+- “output-only” (M1 uses catch)
+- “prey- and index-informed **observation** variants … Section 3.4” (survey-start is 3.2; prey scales production)
+- “does not estimate an Allee threshold” (it estimates \(\mathfrak s\))
+- early-warning / intervention as “secondary objectives”
+- aquifer / Abaee (2026a,c)
+- “coded … applied unchanged,” which conflicts with the later tie-band disclosure
+- roadmap that omits the production figure and the regime split
+
+**Table 1 (D/E/M/N)** still spends a page on fields that do not enter RMSE. Replace with an A vs B comparison.
+
+**“State equation … start year 1954 versus 1983”** — a start year is not a state equation.
+
+**“The longer series and the revised LRP do not justify retaining…”** — the LRP does not enter primary RMSE.
+
+**“The same late-period biomass is 34% of the old LRP and above the new one after 2016”** — still mixes 2015 NCAM, 2024 xteNCAM, and two thresholds.
+
+**MASE literature hook vs RMSE scores.** You criticise MASE-on-indices and then never report \(\mathrm{RMSE}/\mathrm{RMSE}_{\mathrm{persist}}\). One extra column would connect the paper to the practice you cite.
+
+**H1 still calls M1b-vs-M1 nested.** You also say \(\mathfrak s\to 0\) is not Schaefer. Pick one.
+
+**“No (H1) comparison in Tables 3–8 reverses.”** Those tables mix fixed windows, unmatched origins, and non-retention scores. The only needed sentence: every matched rolling comparison against persistence is a deficit, so comparator coding does not affect non-retention.
+
+**“Weaker than a statistical null result”** still in §2.3 and §3.3.
+
+**Results dumped into §2.3:** Spec B matched scores, origin-mix \(3.6\) kt, index-origin baselines, coverage rates.
+
+**\(88-84.4=3.6\).** Do not subtract an unrounded value from a rounded one.
+
+**Figure 3 caption:** “Persistence is the best one-year and five-year point forecast” — true of the **pooled** figure, not of the collapse band in 3.5.
+
+**Table 10:** still “every fitted-parameter value”; still “rather than invented”; still cites §1/§4 for a fit that belongs in Results; \(\phi=0.95\) still labelled “Rolling” while §3.1 discusses it as a recovery-window failure; implied-\(r\), re-optimised \(r(K)\), and curve maxima are printed in the text and absent from the table.
+
+**Abstract LRP.** The LRP does not enter the primary score; putting \(884.6\) kt in the opening predictand sentence invites the opposite reading.
+
+# 5. Ecological material: keep vs trim
+
+**Keep**
+
+- complementary identification (recovery-window \(K\)-valley vs weaker high-biomass constraint), now that you have withdrawn the false “flat ridge” at \(K=1032.7\)
+- curve maxima as **formal maxima of fitted scalar curves**, not MSY
+- \(1+r\) vs a continuous-time intrinsic rate
+- index multiplier cannot produce negative production
+- contemporaneous prey scaling is the wrong lag for SSB
+- catch-dependent repeller, **in the discussion only**
+- production scatter as a diagnostic, if the caption’s discipline is kept in the body
+- regime split, if presented as a full table rather than selected comparators (M1 in some bands, M3 in others, M1b only in collapse)
+
+**Fix**
+
+**“even after subtracting reconstructed catch.”** \(P_t=\Delta S+C_t\) **adds** catch. Write “after adding recorded landings” or “after accounting for recorded landings.”
+
+**\(\hat r_t=P_t/[S_t(1-S_t/K)]\).** \(P_t\) is not Schaefer production. Sign changes are usable; the numerical \(\hat r_t\) path is not an estimate of biological \(r_t\). “No constant \(r\) reproduces a sequence that changes sign” is a statement about this inversion, not about every surplus law.
+
+**“Product … nearly invariant.”** A small change in total SSE does not prove pointwise invariance of \(g(S)\). Point to Figure 4.
+
+**“12 of the 13 recovery-window states” at \(\mathfrak s=50\).** Align this with the predictor-state convention used for \(K\) (12 transitions, 1995–2006, max \(40.8\) kt) or explain why 2007 is included for \(\mathfrak s\) but not for \(K\).
+
+**Regime-split design.** “Computed … with no refit” means you sliced pooled rolling errors by target year. Say that. Do not imply new models were fitted inside each band. Report all modules, not the best structural model in each band. \(n=5\) with leave-one-out is a sensitivity note, not a scoring result.
+
+**Coverage diagnostic.** The rewrite is much better. It still sits in Methods. Move it to Results or SI. It is not needed to “make RMSE interpretable.”
+
+# 6. Proposition 4.1, if you keep it
+
+Unused hypotheses remain: “at most two positive equilibria,” “monotone below its maximum.” The catch-dependent algebra does not need them.
+
+“Decreases toward the floor” is stronger than invariance of \([0,S_-)\). Clipping at \(10^{-3}\) already stops the state at the floor; the relevant claim is that the trajectory cannot recross \(S_-\).
+
+Do not apply the proposition to M1b without checking that fit’s equilibria. Do not call M2’s failure a corollary.
+
+# 7. What the paper can now honestly claim
+
+After the diagnostics you added, the defensible result is:
+
+> On pooled rolling RMSE, none of these implementations beat origin-matched persistence at both horizons, on either reconstruction. That pooled ranking is not a ranking inside every period: in a five-origin collapse band some one-step structural errors are smaller than persistence, while pre-collapse fixed-origin forecasts all miss the crash. Short-window Schaefer fits do not determine \((r,K)\) well enough for curve maxima to be stable; contemporaneous catch and capelin attachments do not reproduce the decline; the fitted low-biomass Allee term is a boundary estimate, not a test of a high depensation threshold. The experiment is a retrospective, conditional hindcast of reconstructed SSB.
+
+That can be an abstract. It cannot coexist with:
+
+- an a priori no-recovery bar in the introduction,
+- “the crash is not a catch-drop event” in the conclusions,
+- unmatched boldface in Table 8,
+- a Table 7 prose sentence that cites a number no longer in Table 7,
+- two different Allee domains,
+- a policy claim about timely assessments.
+
+**Highest-priority repairs:** (1) remove Proposition 4.1 from the introduction; (2) make Tables 7–8 and their captions match the matched-origin rule; (3) one Allee bound, aligned with predictor states; (4) explain fixed-origin collapse vs rolling collapse-band; (5) align conclusions with the pooled/split distinction; (6) delete catch-event attribution and the timely-assessment policy sentence.

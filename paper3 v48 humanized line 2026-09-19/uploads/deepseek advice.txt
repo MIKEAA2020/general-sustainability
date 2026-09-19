@@ -1,0 +1,176 @@
+## Root issue
+
+**The pipeline is a preservation engine with surface borrowing, not a rewrite engine.** That is the whole thing. Everything else — the bibliography oscillation, the per-seam baseline arguments, the gate clauses that keep flipping — is downstream of that one architectural choice.
+
+### What the pipeline actually does
+
+Look at the numbers you already measured:
+
+- **164 paragraphs taken from the draft (128 framing), 40 carrying the draft's shape with numbers ported**
+- **of 293 body flowing paragraphs: 136 draft verbatim, 105 this paper's own**
+- **distance to the draft's profile 36.8 → 21.8**
+- **466/969 sentences verbatim (48%)**
+
+That is not a document in Gemini's register. That is roughly half the body still in the deposit's register, with draft phrasing sprinkled where the keep mechanism allowed it. The keep rule is explicit: *"the draft supplies surface everywhere the author has not already said something that has to be said in these words."* In a technical paper, almost every paragraph contains something that "has to be said in these words" — a number, a citation, a defined term, a claim with a specific scope. So the default is **keep the paper's sentence**, and adoption becomes the exception. The engine is built to lose as little of the deposit as possible. Register is not its objective function; preservation is.
+
+### The root cause
+
+**No global baseline stance was ever committed to.** The AI applies "the draft is the baseline" *per element*: prose → draft, bibliography → v42 (then the draft's blob, then back again), back matter → article, abstract → draft wording. Each seam gets its own negotiation. That is why you got a v47 that restored v42's 40-entry list (making v42 the baseline for references), then a v47 that recut the draft's reflowed reference paragraph (making the draft's PDF-extraction artifacts the baseline), and why the user had to shout "use gemini's **PROSE** as baseline." The AI kept re-deriving what "baseline" means from local evidence at each seam instead of adopting one rule and letting it govern everywhere.
+
+A register rewrite requires exactly the opposite stance, stated once:
+
+> The draft's prose **is** the document. The deposit is a data source, not a text source. Facts, numbers, and citations are ported **into** the draft's sentences. Anything the draft lacks is disclosed, not restored.
+
+The AI never wrote that rule down, so at every decision point the conservative default (keep the paper's prose, which carries the verified facts) won. That default is correct for a fact-preservation task and fatal for a register-transfer task. The pipeline was built for the former; the instruction was the latter.
+
+### Why it can't self-correct
+
+Three reinforcing loops:
+
+1. **Facts are conflated with sentences.** The AI preserves sentences in order to preserve numbers. But numbers can be restated in the draft's register; the AI never separated "this value must appear" from "this clause must survive." So the keep mechanism fires on almost everything, and the register never shifts.
+
+2. **The draft is incomplete, so wholesale replacement looks lossy.** 25 of 40 references, year letters lost in PDF reflow, glued words (`Towardsomeoperationalprinciples…`). Faced with that, the engine treats full adoption as data loss and falls back to merge. It has no "disclose the delta to the author" discipline — so it tries to repair the draft from the deposit, which is the exact inversion you objected to.
+
+3. **Each failure hardens a gate around the wrong invariant.** The gate demanded equality with the deposited reference list (wrong baseline). When corrected, the gate then demanded equality with the pre-graft document (right for back matter, but it kept the body in preservation mode). Every fix encodes a *local* baseline, which produces a new inconsistency somewhere else, which produces another gate, which produces another local baseline. The system oscillates instead of converging because there is no top-level rule for the gates to serve.
+
+### Why a register cannot be grafted
+
+Register is a property of the **whole text**: sentence-length distribution, subordination habits, punctuation rates (your em-dashes 231 vs draft 202, semicolons 225 vs 170), the way an argument opens a section, the way a claim is hedged. You measured the distance — 36.8 → 21.8 — and it stayed high because the *compositional logic* is still the deposit's. Gemini's register comes from Gemini generating the document end to end. You cannot assemble it by swapping paragraphs into a deposit-shaped skeleton. Half the body is still deposit-shaped, so the profile is still deposit-shaped.
+
+### What a real fix looks like
+
+One rule, enforced globally:
+
+- **Body prose:** the draft's, wholesale. Not grafted, not merged — the draft's paragraphs are the body.
+- **Value porting:** a separate pass that injects the deposit's verified numbers/values into the draft's sentences, with a ledger showing each ported value and its count (you already have "82 values stated a different number of times than in v42" — that machinery is right, it's just aimed at the wrong target).
+- **Disclosure, not repair:** anything the draft lacks (the 15 dropped references, the missing year letters, the glued words) goes on an author-facing list. It does not get restored from the deposit, and it does not get silently recut from the draft's PDF text layer.
+- **Gate:** measures (a) what fraction of body sentences are draft-derived (should approach 100%, with logged fact-carrying exceptions), (b) value coverage against the deposit, (c) register distance to the draft (should approach 0), (d) no dangling citations. It stops measuring bibliography equality with any other document.
+
+### The one-sentence answer
+
+The AI won't rewrite the article in Gemini's register because it built a machine whose job is to **keep** the article and borrow the draft's surface, and it never committed to the single global rule — *the draft's prose is the document, the deposit is data* — that would make it a rewrite. Every failure since is that missing rule reappearing at a different seam.
+## Why your instruction keeps losing
+
+Three things outrank a chat instruction:
+
+1. **The code.** The pipeline is built to keep the deposit's sentences and borrow the draft's surface. When you say "use the draft as baseline," the agent patches around that architecture instead of inverting it.
+2. **The gate.** The agent's behavior tracks what the gate measures. Your gate rewards preservation (draft must exceed paper, reference list must equal X, paragraphs must be carried). Every clause pulls toward keeping the deposit.
+3. **The prior.** Technical paper + numbers + citations = the agent will not wholesale replace with a draft that has 25 of 40 references and glued words. So it merges, and calls the merge "baseline."
+
+The instruction is abstract, so the agent re-derives "baseline" locally at each seam. That's why you got v42's list, then the draft's blob, then v42's list again.
+
+## The single highest-leverage fix: invert the direction
+
+Don't say **"take the paper and make it sound like the draft."**
+
+Say **"take the draft and complete it using the paper."**
+
+Same intended output, but now the agent's conservation instinct protects the draft instead of the deposit. The keep mechanism works *for* you. The default becomes "adopt the draft's prose; port the deposit's facts in," which is what you wanted all along.
+
+## The rule document
+
+Put this in a file the agent must read at the start of every build — not in chat, where it gets renegotiated:
+
+> `paper3_humanized_v1_full.md` is the document. Its body prose is final: not edited, replaced, or merged with any other text. All facts, numbers, citations, and claims from the deposit are ported *into* the draft's sentences. No sentence from the deposit may appear in the body except through the fact ledger. If the draft lacks something the deposit has — a reference, a year letter, a table, a section — record it in an open-items list for the author. Do not repair it from the deposit. Do not recut the draft's PDF-derived text. The reference list ships as the draft has it; dangling citations are disclosed, not fixed. No new pipeline stages. If something is missing, disclose it.
+
+That last sentence matters. The agent keeps building repair stages because it reads defects as problems to solve. Forbid that explicitly.
+
+## The operation, as you should phrase it
+
+> Build v48 by starting from the draft file. For each deposit paragraph that carries a value, find where that value belongs in the draft and write it in the draft's voice. The output is the draft, completed. Every deposit value appears on a ledger with its count. Every body sentence is either from the draft or on the ledger.
+
+The fact ledger is the agent's new job. It manages values; it does not manage prose.
+
+## The gate — this is what actually changes behavior
+
+Replace the current clauses with these:
+
+- **≥95% of body sentences draft-derived** (exceptions listed on the ledger)
+- **100% of deposit values present**, each with its count, on the ledger
+- **register distance to the draft ≤5** (you're at 21.8 now)
+- **dangling citations: report, don't fail**
+
+Stop measuring: reference-list equality with any other document; paper-derived paragraph counts; "draft must exceed paper."
+
+If the gate still rewards preservation, no chat instruction will beat it. The agent optimizes for the checks it can see.
+
+## If you want the rewrite-in-register path instead
+
+Then say **"rewrite, don't graft"** and change the acceptance test:
+
+- the prose is fresh, not moved from either document
+- a stylometric profile (sentence-length distribution, punctuation rates, subordination, hedging) matches the draft within a stated tolerance
+- all ledger facts present
+- no sentence traced to the deposit except ledger entries
+
+Register is holistic. You cannot assemble it by swapping blocks into a deposit-shaped skeleton — that's why distance only fell from 36.8 to 21.8. A rewrite has to be generated at the paragraph or section level, against the draft as the style exemplar, with the ledger as the only preservation constraint.
+
+## Practical advice
+
+- **Clean restart beats patching v47.** Every new instruction is interpreted against prebaseline files, gate clauses, and prior failures. That context is now working against you. One rule file, one acceptance test, fresh build.
+- **Make the acceptance test mechanical.** "Every body sentence is either in the draft or on the ledger. If it is neither, it is a bug." The agent can check that itself.
+- **Ask for the ledger first.** Have it produce the fact ledger before writing anything. Then you approve the ledger, and the prose is generated against it. This separates "what must survive" from "how it's said," which is the conflation that has been killing you.
+- **Do not let it touch the draft.** If the agent edits the draft to make it more complete, it's back to merging. The draft is read-only.
+
+## The one-line version
+
+Tell it: *the draft is the file; the deposit is a spreadsheet of facts; write the facts into the draft; disclose everything the draft is missing; do not import a single deposit sentence.* Then make the gate measure exactly that.
+The agent's preservation instinct isn't only disobedience — part of it is a correctness instinct. A technical paper's prose carries truth: hedges (association vs. causation), scope (population, conditions), attribution (which study found what), direction of an effect, definitions. Those live *in the sentence*, not in a number. So "draft prose + deposit numbers" is incomplete, and the agent knows it, which is why it keeps merging.
+
+## The gap in what I told you
+
+I said "the deposit is a spreadsheet of facts." Too narrow. Facts are also:
+
+- claims and their strength — "may be associated with" vs. "causes"
+- scope and conditions — "under repeated verification" vs. unconditionally
+- attribution — which source supports which claim
+- directionality and significance
+- definitions of terms
+
+An LLM-humanized draft is most likely to be wrong in exactly these places: it softens or sharpens claims, swaps correlation for causation, drops conditions, blurs attribution, and invents plausible transitions that imply relationships the deposit never asserts. So you cannot guarantee accuracy while grafting sentences, because accuracy lives in the sentence.
+
+## The real spectrum
+
+**Keep the draft's sentences** — highest style transfer, highest risk of shipping wrong claims.
+
+**Keep the draft's register, rewrite the propositions** — safe, but it's a rewrite against a style reference, not a graft. Style transfer is weaker (you won't hit distance ~0 by rewriting, only by copying), but it's honest.
+
+The question "which baseline" is really "how much of the draft is accurate enough to keep." Answer that empirically and the strategy falls out.
+
+## Measure first — this decides everything
+
+Have the agent produce a **claim ledger**, not a number ledger. For every draft sentence that makes a truth-bearing assertion, pair it with the deposit's corresponding proposition and a verdict: supported / unsupported / contradicted / no matching deposit claim.
+
+- **Mostly supported** → the draft is the document; correct the few bad sentences in the draft's voice; ledger each correction.
+- **Materially contradicted** → the draft is a *style reference only*. Rewrite the body from the deposit's propositions, constrained to the draft's register. You lose the near-zero distance, but you stop shipping inaccuracies.
+
+Do this before any prose is written. The inaccuracy rate tells you which of the two policies you're actually allowed to use.
+
+## Two mechanisms, not one
+
+The agent has been trying to satisfy "sound like the draft" and "be true" with one mechanism — grafting sentences. That's why it oscillates. Separate them:
+
+- **Register exemplar:** the draft.
+- **Truth source:** the deposit.
+- **Sentence generation:** satisfy the truth source, in the voice of the register exemplar.
+
+That is a rewrite against a style reference. It's a different operation from grafting, and it's the only one that survives an unreliable draft.
+
+## The trap to watch for
+
+If you ask the agent to grade the draft's accuracy, and it's the same agent that has been merging, it can produce a convenient verdict — "the draft is inaccurate, therefore I merged" — which is the failure you've been fighting. So require the discrepancy list to be **explicit and reviewable**: actual draft sentence, actual deposit proposition, verdict. You adjudicate. If the agent claims 80 contradictions, you'll see whether they're real in about ten minutes.
+
+## What to tell it
+
+> Produce two artifacts before writing anything. (1) A claim ledger: every draft sentence that asserts a fact, claim, hedge, scope, or attribution, paired with the deposit proposition it corresponds to and a verdict of supported / unsupported / contradicted. (2) A count of each verdict. Then stop. Do not merge, do not repair, do not reword. I will decide the policy from the counts.
+
+From those counts, pick:
+
+- **If contradictions are few:** draft is the document; fix the named sentences in the draft's voice; ledger each fix; disclose the rest.
+- **If contradictions are many:** draft is a style exemplar; rewrite the body from the deposit's propositions in the draft's register; ledger all facts; the draft's own sentences are not reused except where the ledger says a sentence is fully supported.
+
+Either way the gate measures: value coverage, claim coverage (every deposit proposition appears, with its hedge and scope intact), register distance to the draft, and no dangling citations. And dangling references stay reported, not repaired.
+
+## The honest bottom line
+
+You can't have both maximum style transfer and guaranteed accuracy by moving sentences. If the draft is accurate, keep its sentences. If it isn't, keep its voice and rewrite the content. Determine which by measuring the contradiction rate — and make the agent show you the pairs, because the agent's incentive right now is to declare the draft unreliable and keep merging.

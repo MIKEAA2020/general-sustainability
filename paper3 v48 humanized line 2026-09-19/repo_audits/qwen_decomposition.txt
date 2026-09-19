@@ -1,0 +1,1002 @@
+Yes — the pasted paper makes the missing empirical object very clear. The World NFA file gives you only the aggregate identity:
+
+\[
+B_t,\quad E_t,\quad P_t,\quad R_{B,t}=E_t/B_t,
+\]
+
+and therefore supports the per-capita/population decomposition
+
+\[
+d\ln B=d\ln(B/P)+d\ln P.
+\]
+
+But it does **not** support the two-book composition decomposition because the public World file does not contain:
+
+1. the split between fast provisioning land \(A_f\) and ecological-capital land \(A_c\);  
+2. the split between yield/area inside global-hectare biocapacity;  
+3. independent proxies for \(b_f\), \(b_c\), or \(b_{G,c}G_c\).
+
+So the empirical programme needs an **external observation operator**. The minimal missing series are:
+
+\[
+A_f(t),\quad A_c(t),\quad b_f(t)
+\]
+
+and, if possible,
+
+\[
+b_c(t),\quad G_c(t),\quad b_{G,c}.
+\]
+
+Below is the practical way to find and construct them.
+
+---
+
+# 1. What the paper actually needs to identify
+
+Your model has
+
+\[
+B=b_fA_f+b_cA_c+b_{G,c}G_c(A_c).
+\]
+
+The NFA World file gives only \(B\). To decompose \(B\), you need independent measures of:
+
+| Model object | Meaning | Empirical object needed |
+|---|---|---|
+| \(A_f\) | fast provisioning land | cropland / intensive agricultural area |
+| \(A_c\) | ecological capital land | forest, wetland, natural land, regenerative land |
+| \(b_f\) | fast-land flow yield | crop output per provisioning hectare |
+| \(b_c\) | direct capital-land yield | forest/non-timber product yield per capital hectare |
+| \(b_{G,c}G_c(A_c)\) | regeneration value | forest growth/increment, ecological capital regeneration proxy |
+
+The first three are the essential missing proxies. The last two are much harder and may have to be treated as residual or scenario parameters unless you bring in forest inventory/ecological data.
+
+---
+
+# 2. Minimum viable proxy set for the world, 1961–2022
+
+For the paper’s empirical period, the most defensible minimal proxy set is:
+
+## Fast provisioning land \(A_f\)
+
+Use **FAOSTAT land use**:
+
+\[
+A_f \approx \text{Arable land} + \text{Permanent crops}.
+\]
+
+If you want to include intensive grazing in the fast book, optionally add:
+
+\[
++ \text{Permanent meadows and pastures},
+\]
+
+but then you must say explicitly that the fast book includes improved/intensive grassland. The cleanest two-book mapping is:
+
+\[
+A_f = \text{cropland only}.
+\]
+
+Source:
+
+- FAOSTAT, Land Use domain  
+  https://www.fao.org/faostat/en/#data/RL
+
+Variables to download:
+
+- `Arable land`
+- `Permanent crops`
+- `Permanent meadows and pastures`
+- `Forest area`
+- `Other land`
+- `Total land area`
+
+Coverage:
+
+- 1961 onward for many land-use items.
+- Forest area is more limited in FAOSTAT; see below.
+
+---
+
+## Ecological capital land \(A_c\)
+
+The most consistent observable capital-land proxy is **forest area**, because forest is the largest measured ecological-capital land class.
+
+Use:
+
+\[
+A_c \approx \text{Forest area} + \text{other natural land},
+\]
+
+or, as a sentinel proxy,
+
+\[
+A_c \approx \text{Forest area}.
+\]
+
+For 1990 onward, use:
+
+- FAOSTAT Forest area  
+  https://www.fao.org/faostat/en/#data/RL
+
+or:
+
+- FAO Global Forest Resources Assessment, FRA  
+  https://www.fao.org/forestry/en/database/fra/
+
+For 1961–1990, FAO statistical forest area is less consistent. You need a historical land-use reconstruction. Use one of:
+
+### LUH2
+
+- Land-Use Harmonization version 2  
+- annual, 850–2015, 0.25°
+- cropland, pasture, primary/secondary land, forest states
+
+https://luh.umd.edu/
+
+Use LUH2 forest/primary/secondary natural land as the pre-1990 capital-land proxy, then calibrate or scale it to FAO/FRA forest area where they overlap.
+
+### HYDE 3.2
+
+- History Database of the Global Environment
+- long-run cropland, pasture, built-up, unmanaged land
+- useful for pre-industrial and 20th-century land-use history
+
+https://www.pbl.nl/en/image/hyde
+
+Citation:
+
+- Klein Goldewijk et al., 2017, *Anthropogenic land use estimates for the last 12,000 years – HYDE 3.2*, Earth System Science Data.
+
+### Recommended capital-land construction
+
+For a world series 1961–2022:
+
+\[
+A_c(t) =
+\begin{cases}
+\text{LUH2 or HYDE natural/forest land, scaled to FRA/FAO forest area}, & 1961\text{–}1990,\\
+\text{FAO/FRA forest area}, & 1990\text{–}2022.
+\end{cases}
+\]
+
+If you want a broader ecological-capital book, add land-cover classes such as wetland, shrubland, and natural grassland from ESA CCI or Copernicus for the satellite era.
+
+---
+
+## Fast-land yield \(b_f\)
+
+The best FAO-yield proxy for the fast book is:
+
+\[
+b_f(t) \approx \frac{\text{crop production}}{\text{arable land + permanent crops}}.
+\]
+
+You can construct this from FAOSTAT:
+
+- FAOSTAT Crops and Livestock Products  
+  https://www.fao.org/faostat/en/#data/QCL
+
+Download:
+
+- `Production`
+- `Area harvested`
+- `Yield`
+
+for crop items.
+
+The simplest robust proxy is:
+
+\[
+b_f(t)=\text{cereals yield}_{FAOSTAT}(t).
+\]
+
+This is easy, transparent, and replicable. But cereals are not the whole fast book.
+
+A better proxy is an aggregate crop productivity index:
+
+\[
+\tilde b_f(t)=
+\frac{\sum_i Q_i(t)}{\text{Arable land}(t)+\text{Permanent crops}(t)},
+\]
+
+where \(Q_i(t)\) is production of crop \(i\) in a common physical unit.
+
+Because FAOSTAT production is reported in tonnes by commodity, you should convert to a common productivity metric if possible. The best options are:
+
+1. **calories per hectare**, using FAO food-balance conversion factors;
+2. **dry matter per hectare**;
+3. **crop production index per hectare**;
+4. **cereal yield per hectare** as a simple sentinel.
+
+For a paper whose main claim is identifiability rather than calibration, a normalized index is acceptable:
+
+\[
+b_f(t)=b_f(t_0)\frac{\tilde b_f(t)}{\tilde b_f(t_0)}.
+\]
+
+Set \(t_0=1961\) or another base year.
+
+---
+
+# 3. First-best source: NFA land-type files, if obtainable
+
+Before using external proxies, check whether the National Footprint and Biocapacity Accounts release contains land-type biocapacity, not just the World aggregate.
+
+The Global Footprint Network data portal is:
+
+- https://data.footprintnetwork.org/
+
+or:
+
+- https://www.footprintnetwork.org/resources/data/
+
+In NFA files, look for variables or sheets named:
+
+- `Biocapacity by land type`
+- `BC`
+- `Biocapacity cropland`
+- `Biocapacity grazing land`
+- `Biocapacity forest land`
+- `Biocapacity fishing grounds`
+- `Biocapacity built-up land`
+- `Yield factor`
+- `Equivalence factor`
+- `YF`
+- `EQ`
+
+If you can obtain country-level NFA land-type biocapacity, then you can map land types to books:
+
+| NFA land type | Possible book mapping |
+|---|---|
+| cropland | fast provisioning \(A_f\) |
+| grazing land | fast provisioning if intensive; capital if low-intensity |
+| forest land | ecological capital \(A_c\), partly fast if harvested rotation forest |
+| fishing grounds | outside the two-land model or separate marine book |
+| built-up land | separate non-productive/infrastructure class |
+
+This is preferable because it stays inside the NFA accounting universe. But even the NFA land-type biocapacity series is still in global hectares, so it does not by itself separate physical area from yield unless you also have physical area and yield factors.
+
+Thus the empirical hierarchy should be:
+
+1. **NFA land-type biocapacity plus physical area/yield factors**, if available.  
+2. **FAOSTAT land-use area plus FAOSTAT yields**, as independent external proxies.  
+3. **Remote-sensing/historical land cover plus EarthStat/MapSPAM/GAEZ yield proxies**, for validation or extension.
+
+---
+
+# 4. Land-cover sources for \(A_f\) and \(A_c\)
+
+For the model’s two books, you need land classes, not just greenness. The best candidates are below.
+
+## Modern satellite land cover
+
+### ESA Climate Change Initiative Land Cover
+
+- 1992–2020
+- global
+- ~300 m
+- classes include cropland, forest, shrub, grassland, wetland, urban, water
+
+https://cds.climate.copernicus.eu/datasets/satellite-land-cover
+
+Use for:
+
+- validating FAO statistical cropland/forest;
+- splitting natural land into forest, shrub, grassland, wetland;
+- post-1992 ecological-capital composition.
+
+### Copernicus Global Land Cover LC100
+
+- 1992–2019
+- global
+- ~100 m
+
+https://land.copernicus.eu/global/products/lc
+
+Use similarly to ESA CCI.
+
+### ESA WorldCover
+
+- 2020/2021
+- 10 m
+- very high resolution
+
+https://esa-worldcover.org/en
+
+Useful for recent high-resolution validation, not for the full 1961–2022 series.
+
+### MODIS Land Cover Type MCD12Q1
+
+- 2001–present
+- 500 m
+- annual
+
+https://lpdaac.usgs.gov/products/mcd12q1v061/
+
+Useful for annual post-2001 land-cover dynamics.
+
+---
+
+## Historical land-use reconstruction
+
+### LUH2
+
+- 850–2015
+- annual
+- 0.25°
+- harmonized land-use states and transitions
+
+https://luh.umd.edu/
+
+Use for:
+
+- pre-1990 cropland;
+- pre-1990 pasture;
+- forest/natural land;
+- global long-run land-use shares.
+
+### HYDE 3.2
+
+- 10,000 BC to present
+- ~5 arc-minute
+- historical cropland, pasture, built-up, unmanaged land
+
+https://www.pbl.nl/en/image/hyde
+
+Use for:
+
+- long-run capital-land proxy;
+- pre-1960 historical checks;
+- sensitivity to historical land-use reconstructions.
+
+---
+
+# 5. FAO-yield sources for \(b_f\)
+
+## FAOSTAT crop yields
+
+Primary source:
+
+- FAOSTAT Crops and Livestock Products  
+  https://www.fao.org/faostat/en/#data/QCL
+
+Elements:
+
+- `Production`
+- `Area harvested`
+- `Yield`
+
+Possible yield proxies:
+
+### Simple sentinel yield
+
+\[
+b_f(t)=\text{FAOSTAT cereals yield}(t).
+\]
+
+Pros:
+
+- simple;
+- transparent;
+- available 1961 onward;
+- globally comparable.
+
+Cons:
+
+- cereals are only part of cropland;
+- does not capture all fast-book production.
+
+### Aggregate crop yield
+
+\[
+b_f(t)=\frac{\sum_i \text{crop production}_i(t)}{\text{arable land}(t)+\text{permanent crops}(t)}.
+\]
+
+Pros:
+
+- broader representation of cropland productivity.
+
+Cons:
+
+- requires commodity aggregation;
+- physical tonnes are not homogeneous;
+- calories or dry matter are better but require conversion.
+
+### Calorie-based yield
+
+Construct:
+
+\[
+b_f(t)=
+\frac{\sum_i \text{kcal production}_i(t)}
+{\text{arable land}(t)+\text{permanent crops}(t)}.
+\]
+
+This is probably the most biocapacity-consistent physical yield proxy because global hectares are productivity-weighted, not price-weighted.
+
+Use FAO food balance sheets or FAO conversion factors to convert commodity tonnes to kcal.
+
+FAOSTAT Food Balances:
+
+- https://www.fao.org/faostat/en/#data/FBS
+
+---
+
+# 6. Yield proxies for grazing and forest books
+
+If your fast book includes grazing land, you need a pasture productivity proxy.
+
+## Grazing yield proxy
+
+\[
+b_{\text{grass}}(t)
+\approx
+\frac{\text{livestock product output}}{\text{permanent meadows and pastures}}.
+\]
+
+Possible livestock outputs:
+
+- meat;
+- milk;
+- wool;
+- livestock primary production.
+
+FAOSTAT livestock data:
+
+- https://www.fao.org/faostat/en/#data/QCL
+
+Land area:
+
+- `Permanent meadows and pastures` in FAOSTAT Land Use.
+
+But livestock output is not purely land-driven; feed, capital, and technology matter. So this is a weak proxy unless carefully documented.
+
+---
+
+## Forest direct yield \(b_c\)
+
+For capital-land direct yield, use forest product removals per forest area:
+
+\[
+b_c(t)
+\approx
+\frac{\text{forest product removals}}{\text{forest area}}.
+\]
+
+Use:
+
+- FAOSTAT Forestry production and trade  
+  https://www.fao.org/faostat/en/#data/FO
+
+Variables:
+
+- industrial roundwood;
+- fuelwood;
+- other wood products.
+
+This gives you a timber-channel proxy, not the full ecological-capital service value.
+
+---
+
+## Regeneration proxy \(G_c\) or \(b_{G,c}G_c\)
+
+This is the hardest part. The model’s \(b_{G,c}G_c(A_c)\) is not directly observed in the NFA.
+
+Possible proxies:
+
+### FAO forest growing stock and net annual increment
+
+Use FAO Global Forest Resources Assessment:
+
+- https://www.fao.org/forestry/en/database/fra/
+
+FRA variables include:
+
+- forest area;
+- growing stock;
+- annual net increment;
+- biomass;
+- carbon stock.
+
+Net annual increment is the closest empirical analogue to a regeneration flow.
+
+Limitation:
+
+- FRA detailed forest inventory variables are not annual for the full 1961–2022 period.
+
+### GAEZ potential productivity
+
+FAO/IIASA GAEZ provides agro-ecological potential productivity and suitability.
+
+- https://gaez.fao.org/
+
+Use if you need a spatial potential-yield proxy rather than observed FAOSTAT yields.
+
+### EarthStat and MapSPAM
+
+For around 2000 crop-specific harvested area and yields:
+
+- EarthStat  
+  https://www.earthstat.org/
+
+- MapSPAM  
+  https://www.mapspam.info/
+
+These are useful for crop composition but not for the full 1961–2022 annual world series.
+
+---
+
+# 7. Recommended empirical mapping for the paper
+
+For a clean, honest empirical programme, I would use the following mapping.
+
+## Fast book
+
+\[
+A_f(t)=\text{FAOSTAT Arable land}(t)+\text{FAOSTAT Permanent crops}(t).
+\]
+
+Yield proxy:
+
+\[
+\tilde b_f(t)=
+\frac{\text{FAOSTAT aggregate crop production}(t)}
+{A_f(t)}.
+\]
+
+Normalize:
+
+\[
+b_f(t)=b_f(t_0)\frac{\tilde b_f(t)}{\tilde b_f(t_0)}.
+\]
+
+If NFA cropland biocapacity is available, calibrate:
+
+\[
+b_f(t_0)=\frac{B_{\text{cropland,NFA}}(t_0)}{A_f(t_0)}.
+\]
+
+Then \(b_f(t)\) is in gha/ha/yr at the base year and grows with the FAO yield index.
+
+---
+
+## Capital book
+
+First-order proxy:
+
+\[
+A_c(t)=\text{Forest area}(t).
+\]
+
+Better proxy:
+
+\[
+A_c(t)=\text{Forest area}(t)+\text{natural grassland/shrub/wetland proxy}(t).
+\]
+
+For 1961–1990, use LUH2 or HYDE natural/forest land scaled to FRA forest area. For 1990–2022, use FAO/FRA forest area.
+
+Capital yield/regeneration:
+
+\[
+B_c(t)=b_cA_c+b_{G,c}G_c(A_c)
+\]
+
+can be treated as residual if you have \(B(t)\), \(A_f(t)\), and \(b_f(t)\):
+
+\[
+B_c^{\text{res}}(t)=B_{\text{NFA}}(t)-b_f(t)A_f(t).
+\]
+
+But this residual must be interpreted carefully because of units, equivalence factors, and missing land types. It is better to say:
+
+> The capital-book contribution is not directly identified; we report a residual capital-book component after removing the proxy fast-book component.
+
+That is consistent with the paper’s identifiability claim.
+
+---
+
+# 8. Direct download checklist
+
+For the empirical reconstruction, download these files.
+
+## A. National Footprint and Biocapacity Accounts
+
+From Global Footprint Network:
+
+- https://data.footprintnetwork.org/
+- https://www.footprintnetwork.org/resources/data/
+
+Look for:
+
+- World aggregate biocapacity: \(B\)
+- World aggregate footprint: \(E\)
+- Population: \(P\)
+- biocapacity by land type, if available
+- yield factors, if available
+- equivalence factors, if available
+
+If only the World aggregate is available, you cannot split books internally.
+
+---
+
+## B. FAOSTAT land use
+
+Link:
+
+- https://www.fao.org/faostat/en/#data/RL
+
+Bulk download:
+
+- `Land_Use_E_All_Data_(Normalized).zip`
+
+Keep:
+
+- `Arable land`
+- `Permanent crops`
+- `Permanent meadows and pastures`
+- `Forest area`
+- `Other land`
+
+Use:
+
+- element `Area`
+- area `World` or sum countries
+- years 1961–2022
+
+---
+
+## C. FAOSTAT crop production and yields
+
+Link:
+
+- https://www.fao.org/faostat/en/#data/QCL
+
+Bulk download:
+
+- `Crops_Livestock_Products_E_All_Data_(Normalized).zip`
+
+Keep elements:
+
+- `Production`
+- `Area harvested`
+- `Yield`
+
+Possible items:
+
+- `Cereals, primary`
+- `Wheat`
+- `Rice`
+- `Maize`
+- `Barley`
+- `Potatoes`
+- crop aggregates
+
+For a simple proxy, use cereals yield. For a better proxy, build aggregate crop production per arable hectare.
+
+---
+
+## D. FAO forest data
+
+For forest area and forest capital:
+
+- FAOSTAT Land Use forest area  
+  https://www.fao.org/faostat/en/#data/RL
+
+- FAO Global Forest Resources Assessment  
+  https://www.fao.org/forestry/en/database/fra/
+
+For wood removals:
+
+- FAOSTAT Forestry production and trade  
+  https://www.fao.org/faostat/en/#data/FO
+
+---
+
+## E. Historical land cover/use
+
+For pre-satellite capital land:
+
+- LUH2  
+  https://luh.umd.edu/
+
+- HYDE 3.2  
+  https://www.pbl.nl/en/image/hyde
+
+For satellite-era validation:
+
+- ESA CCI Land Cover  
+  https://cds.climate.copernicus.eu/datasets/satellite-land-cover
+
+- Copernicus Global Land Cover  
+  https://land.copernicus.eu/global/products/lc
+
+---
+
+# 9. How to construct the empirical decomposition
+
+Let:
+
+\[
+B_t = \text{NFA world biocapacity}.
+\]
+
+Let:
+
+\[
+A_{f,t} = \text{FAOSTAT arable land + permanent crops}.
+\]
+
+Let:
+
+\[
+\tilde b_{f,t} = \frac{\text{FAOSTAT crop production}}{A_{f,t}}.
+\]
+
+Normalize:
+
+\[
+b_{f,t}=b_{f,0}\frac{\tilde b_{f,t}}{\tilde b_{f,0}}.
+\]
+
+Then define a proxy fast-book biocapacity:
+
+\[
+B_{f,t}^{\text{proxy}}=b_{f,t}A_{f,t}.
+\]
+
+The residual capital-book component is:
+
+\[
+B_{c,t}^{\text{res}}=B_t-B_{f,t}^{\text{proxy}}.
+\]
+
+This gives a partial two-book decomposition:
+
+\[
+B_t \approx B_{f,t}^{\text{proxy}}+B_{c,t}^{\text{res}}.
+\]
+
+But you should state that this is a **proxy reconstruction**, not full structural identification.
+
+A more honest growth decomposition is:
+
+\[
+d\ln B_t
+=
+d\ln A_t
++
+d\ln Y_t
++
+d\ln \text{composition}_t
++
+\varepsilon_t,
+\]
+
+where:
+
+- \(A_t\) is land area from FAOSTAT/land cover;
+- \(Y_t\) is yield from FAOSTAT;
+- composition captures shifts between fast and capital land;
+- \(\varepsilon_t\) captures equivalence-factor and residual-capital effects.
+
+---
+
+# 10. Suggested wording for the paper
+
+You could add something like this in the identifiability/empirical-programme section:
+
+> To implement the two-book composition decomposition, independent proxies are required because the public World NFA file reports only aggregate biocapacity, footprint, and population. We proxy the fast provisioning book \(A_f\) by FAOSTAT arable land plus permanent crops, and the ecological capital book \(A_c\) by FAO forest area, extended before 1990 using LUH2 or HYDE historical land-use reconstructions. The fast-book yield \(b_f\) is proxied by an aggregate FAOSTAT crop-yield index, measured as crop production per unit arable and permanent-crop area and normalized to the base year. Where NFA land-type biocapacity is unavailable, the capital-book contribution is treated as a residual and is not structurally identified. This preserves the paper’s central identifiability claim: the aggregate global-hectare series cannot separate yield, area, and book composition without an external observation operator.
+
+That wording is consistent with your abstract and limitations.
+
+---
+
+# 11. Strongest minimal citation set
+
+For the empirical proxies, cite:
+
+## NFA accounts
+
+- Global Footprint Network. *National Footprint and Biocapacity Accounts*, 2025 edition.
+- Borucke et al., 2013.
+- Lin et al., 2018.
+
+## FAOSTAT land use and yields
+
+- FAO. *FAOSTAT: Land Use*. Rome.
+- FAO. *FAOSTAT: Crops and Livestock Products*. Rome.
+
+## Forest capital
+
+- FAO. *Global Forest Resources Assessment*.
+- FAOSTAT Forest area, if used.
+
+## Historical land use
+
+- Hurtt et al., 2011, LUH2, *Geoscientific Model Development*.
+- Klein Goldewijk et al., 2017, HYDE 3.2, *Earth System Science Data*.
+
+## Satellite land cover, if used
+
+- ESA Land Cover CCI.
+- Copernicus Global Land Cover LC100.
+
+## Crop area/yield maps, if used
+
+- Monfreda et al., 2008, EarthStat crop area.
+- Ray et al., EarthStat/Global crop statistics.
+- MapSPAM / IFPRI.
+
+---
+
+# 12. Important caveats to state explicitly
+
+## 1. Forest area is not all ecological capital
+
+The model’s \(A_c\) includes forest, soil, wetland, long-rotation and regenerative systems. Empirically, forest area is the most available sentinel proxy, but it is incomplete.
+
+Say:
+
+> Forest area is used as a sentinel proxy for the ecological-capital book; it does not measure soil carbon, wetland capital, fishery capital, or non-forest regenerative systems.
+
+---
+
+## 2. FAO yields are national statistical yields, not gha yields
+
+FAOSTAT yields are physical output per hectare, not global hectares per hectare. To compare with NFA \(B\), you must either:
+
+- normalize the FAO yield index and use it for growth decomposition; or
+- calibrate it to NFA land-type biocapacity if available.
+
+Do not claim absolute \(b_f\) in gha/ha unless calibrated.
+
+---
+
+## 3. The NFA equivalence/yield factors are inside the unit
+
+This is your central point. Even with land areas and FAO yields, full identification of \(b_c\), \(b_{G,c}\), and \(\rho_c\) is not possible without ecological valuation and regeneration data.
+
+The externally observable combinations are closer to:
+
+\[
+b_fA_f,
+\quad
+b_{c,\text{eff}}A_c,
+\quad
+b_{G,c}G_c,
+\]
+
+not the separate structural parameters.
+
+---
+
+## 4. The full two-book decomposition is partially identified at best
+
+The strongest honest empirical claim is:
+
+> Aggregate biocapacity rose while independent ecological-capital proxies fell, but the exact split of biocapacity into yield, area, and book composition is only partially identified.
+
+That is stronger than pretending the proxies solve everything.
+
+---
+
+# 13. Concrete answer: the missing proxies to fetch
+
+For the paper’s empirical programme, fetch these exact series:
+
+## Fast provisioning land
+
+\[
+A_f =
+\text{FAOSTAT Arable land}
++
+\text{FAOSTAT Permanent crops}.
+\]
+
+Source:
+
+- FAOSTAT Land Use  
+  https://www.fao.org/faostat/en/#data/RL
+
+---
+
+## Ecological capital land
+
+First-order:
+
+\[
+A_c =
+\text{FAO forest area}.
+\]
+
+Sources:
+
+- FAOSTAT Forest area  
+  https://www.fao.org/faostat/en/#data/RL
+
+- FAO FRA  
+  https://www.fao.org/forestry/en/database/fra/
+
+For 1961–1990:
+
+- LUH2  
+  https://luh.umd.edu/
+
+or:
+
+- HYDE 3.2  
+  https://www.pbl.nl/en/image/hyde
+
+---
+
+## Fast-book yield
+
+Simple version:
+
+\[
+b_f =
+\text{FAOSTAT cereals yield}.
+\]
+
+Better version:
+
+\[
+b_f =
+\frac{\text{FAOSTAT aggregate crop production}}
+{\text{FAOSTAT arable land + permanent crops}}.
+\]
+
+Source:
+
+- FAOSTAT Crops and Livestock Products  
+  https://www.fao.org/faostat/en/#data/QCL
+
+---
+
+## Optional capital-yield/regeneration proxies
+
+Forest removals:
+
+- FAOSTAT Forestry production and trade  
+  https://www.fao.org/faostat/en/#data/FO
+
+Forest increment/growing stock:
+
+- FAO FRA  
+  https://www.fao.org/forestry/en/database/fra/
+
+Potential productivity:
+
+- FAO GAEZ  
+  https://gaez.fao.org/
+
+---
+
+# 14. Bottom line
+
+The missing empirical objects are not hidden in the World NFA file. They must be built from independent sources.
+
+The minimal empirical stack for your paper is:
+
+\[
+\boxed{
+A_f = \text{FAOSTAT arable land + permanent crops}
+}
+\]
+
+\[
+\boxed{
+A_c = \text{FAO forest area, with LUH2/HYDE backcast}
+}
+\]
+
+\[
+\boxed{
+b_f = \text{FAOSTAT crop yield index, normalized or calibrated}
+}
+\]
+
+With those, you can construct a proxy two-book decomposition and honestly state that the composition step is only partially identified. Without them, the World file supports only the population/per-capita aggregation identity, not the full two-book composition programme.

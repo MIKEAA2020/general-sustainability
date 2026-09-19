@@ -1,0 +1,1515 @@
+# Typed Flux Ledgers and Depletion Arithmetic: Conservation, Componentwise Diagnostics, and the Semantics of Depletion Horizons
+
+**Amin Abaee**  
+Independent Researcher  
+ORCID: 0000-0002-0019-1842 | amin_abaee@ut.ac.ir
+
+---
+
+## Abstract
+
+Depletion indicators can carry the same units while addressing distinct questions. A reserve-life ratio divides an economic inventory by current production. A groundwater anomaly-persistence index divides a fitted distance to a historical minimum by a fitted trend. A fisheries removals-only pressure scale divides a biomass margin by a removal rate. These quantities share a unit, but they do not share a measurand. The same problem appears in aggregate sustainability accounting: heterogeneous stocks and service flows are compressed into scalar indices, and a deficit in one component can be hidden behind a positive aggregate.
+
+This paper constructs a typed stock–flow accounting layer that separates these objects. Conservation follows from the incidence structure of the compartment–flux network. Positivity follows from donor limitation. Services are readouts, not conserved mass. Three certification layers are separated: accounting consistency, conservation consistency, and barrier safety. A flux-reconstruction identity, a conservation-law reduction, and a flux-bounding envelope theorem provide the auditing machinery. For the closed finite-donor ledger, we prove the natural-block mass identity, orthant invariance, absence of interior rest at positive effort, the vanishing-extraction rest set, and extraction integrability. Depletion time is separated into three non-interchangeable quantities: gross turnover intensity, a frozen-rate ratio, and a scenario-conditioned hitting time. A universal noncompensation theorem proves that no nonnegative weighting certifies componentwise adequacy. Three public-data applications are classified at their exact evidentiary status. An interface contract fixes the shared object with delay-based institutional dynamics and proves the non-reduction boundary.
+
+The result is a formal grammar for material depletion claims: each claim carries the predicate it actually establishes, and no claim is promoted beyond that predicate.
+
+**Keywords:** material flow accounting; stock–flow ledger; depletion indicators; conservation laws; composite indicators; noncompensation; reserve life
+
+---
+
+## 1. Introduction
+
+### 1.1 Two representation failures
+
+Sustainability accounting fails in two characteristic ways.
+
+The first is **compensatory aggregation**. Heterogeneous physical stocks and service flows are summarized by scalar indices whose cross-component trades are never declared as mathematics. A severe deficit in one component can coexist with a positive aggregate. Composite indicators and aggregated overshoot dates illustrate the problem: component flows are carried into one scalar, and the scalar becomes the object of debate rather than the componentwise balances behind it.
+
+The second is **classification drift**. Quantities with units of time circulate under a common label—“time to depletion”—while answering different questions. A reserve-life ratio divides a reserve figure by current production. A groundwater anomaly index divides the fitted distance to a historical minimum by a fitted trend. A fisheries pressure indicator divides a biomass margin by a removal rate. Each construction is exact for the question it poses. The problem is promotion: an answer to one question is read as an answer to another.
+
+The issue is not the unit. All three quantities have the dimension of time. The issue is the measurand. Same dimension does not imply same quantity. Period, half-life, residence time, and time constant all have units of seconds, but they are not interchangeable. Work and torque both have units of N·m, yet they are different objects. The category error that could occur is inferential: it arises when indicators that belong to different categories are equated, or when one indicator is read as establishing the predicate of another.
+
+The vulnerability is documented in specific public cases. Reserve-life ratios have been central to mineral depletion debates, and mineral economists have repeatedly emphasized that reserves are economic classifications rather than fixed physical stocks. Satellite groundwater anomaly products provide anomalies relative to a reference period, not absolute aquifer volumes; yet anomaly-based trend indices can be communicated as if they were physical exhaustion horizons. Fisheries removals-only pressure scales can be read as collapse forecasts even though they omit recruitment, growth, natural mortality, and future management. These cases show the structural risk: a shared unit invites a shared interpretation that the mathematics does not support.
+
+### 1.2 The productivity illusion
+
+A related failure is the **productivity illusion**: a system appears productive while the base that sustains production is being drawn down.
+
+Its arithmetic form is compensatory aggregation: a positive aggregate masks a deficit in one component. Its dynamical form is yield inflation: measured yield exceeds sustainable yield because it is maintained by liquidating a support pool—groundwater, soil carbon, bioavailable nutrients—rather than by that pool’s regeneration.
+
+The decisive quantity is the renewal rate of the pool relative to the rate of use. A use that falls on regeneration is sustained. A use that falls on the pool itself is liquidation. The size of the pool is a property of the resource; whether drawdown is recoverable is a property of the rate.
+
+The two-pool logic of this paper exists to make that distinction visible. Depletion horizons are reported component by component, each beside the pool it draws on, and never summed into a scalar date.
+
+### 1.3 Weak and strong sustainability as two regimes of one ledger
+
+Weak and strong sustainability are not rival hypotheses. They are two regimes of one material system, distinguished by whether the material cycle closes at the rate of use.
+
+Weak sustainability is the idealized regime in which substitution and regeneration together close the cycle: matter is returned, redistributed, or replaced as it is used. Strong sustainability is the regime in which closure fails—either because no identified physical pathway re-routes the extracted matter, or because depletion outruns deployment of such a pathway.
+
+In ledger terms, substitution is admissible only where an identified physical pathway exists and does not draw down another critical stock. A substitute is either a recycled or recovered flux returned to a regenerating pool, or a drawdown on a second compartment. These are different ledger entries with different statuses.
+
+### 1.4 Contributions
+
+This paper builds the accounting layer that makes the two representation failures explicit and auditable.
+
+1. **A typed primitive-flux ledger.** Compartments carry a material identity, a boundary, and a unit. Nonnegative primitive fluxes connect them through a signed incidence matrix. Conservation follows from incidence structure. Positivity follows from donor limitation. Services are readouts, not conserved mass.
+
+2. **Three certification layers.** Accounting consistency, conservation consistency, and barrier safety are distinct predicates with distinct proof obligations. The paper proves their relationships through a flux-reconstruction identity, a conservation-law reduction, and a flux-bounding envelope theorem.
+
+3. **The closed finite-donor theorem set.** For the closed ledger in which the geological donor is an internal state, the paper proves the natural-block mass identity, orthant invariance, absence of interior rest at positive effort, the vanishing-extraction rest set, and extraction integrability.
+
+4. **Depletion arithmetic.** Depletion time is separated into three non-interchangeable quantities: gross turnover intensity, a frozen-rate ratio, and a scenario-conditioned hitting time. Uniform-drift bounds and a maintainability terminal condition make the hierarchy operational.
+
+5. **Universal noncompensation.** No nonnegative weighting of component balances certifies componentwise adequacy. The failure is constructive and universal.
+
+6. **Application classifications at exact status.** The G3P anomaly-persistence index, the phosphate reserve-life ratio, and the fisheries removals-only pressure time are classified as statistical index, arithmetic ratio, and pressure scale, respectively.
+
+7. **Interface with institutional dynamics.** The exact shared object with delay-based institutional models is the single-resource deficit identity \(qEN - R = -\dot N\). The boundary is a non-reduction theorem: the closed physical ledger does not dynamically reduce to the open working institutional system.
+
+### 1.5 Scope
+
+The framework establishes relations among declared objects: compartments, fluxes, barriers, scenarios, and readouts. It does not by itself estimate unobserved fluxes, choose ecological thresholds, or identify physical failure barriers. Those remain empirical and institutional tasks. The contribution is the accounting grammar that keeps those tasks separate.
+
+---
+
+## 2. The Typed Primitive Ledger
+
+### 2.1 Four concepts, separated
+
+Material flow accounting begins with distinctions that practice often merges.
+
+A **moiety** is a conserved substance class—an element or a declared conserved combination. It is the only object to which a conservation law attaches.
+
+A **species** is a chemical or biological form of a moiety.
+
+A **compartment** is a spatial or functional location holding a stock.
+
+A **stock** is a compartment’s current amount of a species, with a physical unit.
+
+“Carbon in the atmosphere” is a location-specific stock, not a moiety. Carbon is the moiety; the atmosphere is a compartment. Conservation laws are stated per moiety. Nothing is conserved merely by being a compartment.
+
+### 2.2 Incidence structure and typed balance law
+
+A ledger state \(x \in \mathbb{R}^n_+\) collects compartments. Each entry carries a material identity, spatial support, and physical unit. Internal dynamics use nonnegative primitive fluxes:
+
+\[
+\dot{x} = S_T v(x,y,\theta) + B_T u_\partial(t) + d_x(t), \qquad v \ge 0,
+\tag{1}
+\]
+
+where:
+
+- \(S_T\) is the typed stoichiometric, or incidence, operator;
+- \(y\) collects declared boundary states external to the ledger;
+- \(\theta\) is the declared constitutive parameter vector;
+- \(B_T u_\partial\) collects declared boundary transfers;
+- \(d_x\) belongs to a stated disturbance class.
+
+The incidence discipline is load-bearing. Entries are added within a row only when their types and units agree. A conversion between types appears as an explicit stoichiometric coefficient, never as an implicit sum.
+
+If \(L^\top S_T = 0\), then
+
+\[
+\frac{d}{dt}(L^\top x) = L^\top B_T u_\partial + L^\top d_x.
+\]
+
+This gives one conservation law per conserved moiety and boundary. The identity does not create a scalar sustainability mass across incommensurable systems.
+
+Three clarifications are part of the statement.
+
+First, \(d_x\) must itself be typed. A physical disturbance on represented material is a different object from a structural discrepancy term.
+
+Second, \(S_T\) may contain signed entries even though \(v \ge 0\). The sign pattern of the incidence matrix and the nonnegativity of the primitives are separate declarations.
+
+Third, forward invariance is a separate requirement. Every primitive outflow must vanish or be limited when its donor compartment is empty. Donor limitation is the exact condition that keeps the orthant physically meaningful.
+
+### 2.3 The closed finite-donor ledger
+
+The closed ledger of this paper is the finite-donor primitive system. Let
+
+\[
+x_L = (N, A_{\text{act}}, A_{\text{geo}}, U),
+\]
+
+with:
+
+- \(N\): living stock;
+- \(A_{\text{act}}\): active abiotic pool;
+- \(A_{\text{geo}}\): geological donor;
+- \(U\): detritus compartment.
+
+Define the support factor and donor fraction:
+
+\[
+s = \frac{A_{\text{act}}}{A_{\text{act}} + A_0},
+\qquad
+\sigma = \frac{A_{\text{geo}}}{A_{\text{geo}} + A_{g0}},
+\]
+
+with \(A_0 > 0\), \(A_{g0} > 0\).
+
+Net regeneration and gross uptake are:
+
+\[
+R(N,A_{\text{act}}) = rN\left(1 - \frac{N}{K}\right)s,
+\]
+
+\[
+T = \kappa_A N s,
+\]
+
+\[
+B = R + T.
+\]
+
+The donor-limited geo-interface primitives are:
+
+\[
+e_{GA} = \omega_A A_{\text{eq,intrinsic}} \sigma,
+\]
+
+\[
+e_{AG} = \omega_A A_{\text{act}},
+\]
+
+\[
+C_{A,\lim} = C_A \sigma,
+\]
+
+together with detritus return \(\gamma_U U\).
+
+Under the institutional-failure specialization,
+
+\[
+\mu = \nu = \rho = 0,
+\qquad
+C_A = 0,
+\]
+
+the closed natural block is:
+
+\[
+\dot N = R - qEN,
+\tag{2a}
+\]
+
+\[
+\dot A_{\text{act}} = -B + e_{GA} - e_{AG} + \gamma_U U,
+\tag{2b}
+\]
+
+\[
+\dot A_{\text{geo}} = -e_{GA} + e_{AG},
+\tag{2c}
+\]
+
+\[
+\dot U = T - \gamma_U U.
+\tag{2d}
+\]
+
+The geological donor is an internal state throughout. No infinite reservoir is declared. Recharge is donor-limited and cannot run backward: at \(A_{\text{geo}}=0\), \(e_{GA}=0\).
+
+The four-row block incidence is:
+
+\[
+S_{\text{block}} =
+\begin{pmatrix}
+1 & -1 & -1 & 0 & 0 & 0 & 0 & 0 \\
+0 & -1 & 1 & 1 & -1 & 0 & 0 & 0 \\
+0 & 0 & 0 & -1 & 1 & -1 & 0 & 0 \\
+0 & 0 & 0 & 1 & -1 & 0 & 1 & -1
+\end{pmatrix}.
+\]
+
+Every column is a two-compartment transfer or a block-boundary export. The internal columns sum to zero. The export columns—harvest and, when restored, mining—carry column sums \(-1\). Summing the rows reads off the mass identity directly:
+
+\[
+\dot M = -qEN - C_{A,\lim}.
+\]
+
+This is not an assumption. It is a column-sum property of the incidence matrix.
+
+---
+
+## 3. Certification Layers
+
+### 3.1 Three predicates, separated
+
+The ledger supports three distinct predicates.
+
+**Layer 1: Accounting consistency.**  
+The balance law (1) holds almost everywhere on \([0,T]\).
+
+**Layer 2: Conservation consistency.**  
+For every declared conserved quantity \(\ell\),
+
+\[
+\ell^\top S_T = 0.
+\]
+
+**Layer 3: Barrier safety.**  
+For declared lower and upper barriers,
+
+\[
+\underline{B}_m(t) \le S_m(t) \le \overline{B}_m(t)
+\]
+
+for every component \(m\) and every \(t \in [0,T]\), where \(S = Cx\) is the moiety-composition readout.
+
+Layer 2 is structural: it concerns the incidence operator alone. Layers 1 and 3 are trajectory-level: they concern a particular solution \((x,v,b)\).
+
+The logical relations are the content of the next two propositions.
+
+### 3.2 Conservation implies accounting consistency for conserved quantities
+
+**Proposition 1.** If \(\ell^\top S_T = 0\), then
+
+\[
+\frac{d}{dt}(\ell^\top x) = \ell^\top b,
+\]
+
+and in a closed system, \(b=0\), \(\ell^\top x\) is invariant.
+
+*Proof.*
+
+\[
+\frac{d}{dt}(\ell^\top x)
+= \ell^\top \dot{x}
+= \ell^\top(S_T v + b)
+= (\ell^\top S_T)v + \ell^\top b
+= \ell^\top b.
+\]
+
+\(\square\)
+
+### 3.3 Barrier safety is independent
+
+**Proposition 2.** Barrier safety does not follow from accounting consistency. A trajectory can be perfectly mass-balanced while violating a declared barrier. Conversely, a trajectory can satisfy declared barriers while violating a conservation law or stoichiometric constraint.
+
+*Proof.* On the closed ledger (2), extraction exceeding regeneration is exactly mass-balanced but drives the living stock through any positive lower barrier in finite time. Conversely, a trajectory may remain inside declared barriers while its flux decomposition violates stoichiometric constraints or silently drops a moiety through a yield-routing omission. \(\square\)
+
+The implication for measurement is direct. Mass-balance closure, stoichiometric consistency, and barrier compliance must each be audited separately. An assessment that reports only one of them declares less than it appears to.
+
+### 3.4 Flux-reconstruction identity
+
+**Lemma 3 (Flux reconstruction).** Let \(x:[0,T]\to \mathbb{R}^n_+\) be absolutely continuous with
+
+\[
+\dot{x}(t) = S_T v(t) + b(t)
+\]
+
+almost everywhere, \(v \in L^1([0,T];\mathbb{R}^J_+)\), \(b \in L^1([0,T];\mathbb{R}^n)\), and \(S = Cx\). Then
+
+\[
+S(t) = S(0) + \int_0^t \left(CS_T v(\tau) + Cb(\tau)\right)d\tau.
+\]
+
+For continuous barriers, the trajectory satisfies
+
+\[
+\underline{B}_m(t) \le S_m(t) \le \overline{B}_m(t)
+\]
+
+for all \(t\) if and only if the corresponding integrated inequalities hold.
+
+*Proof.* Integrate
+
+\[
+\dot S = C\dot x = C(S_T v + b).
+\]
+
+Because \(S_m\) and the barriers are continuous, a pointwise violation is an integrated violation at the same time. \(\square\)
+
+Two cases are distinguished.
+
+If fluxes are prescribed or observed, stock balances are reconstructed by integration without solving the internal constitutive dynamics. This is the simple auditing case.
+
+If fluxes are endogenous, \(v = v(x,u,d)\), flux-only auditing is not generally possible without solving, estimating, or bounding the coupled system. The identity still holds, but the integral cannot be evaluated without determining \(v(t)\).
+
+In both cases, barriers are declared, not computed. Flux data do not derive ecological thresholds, aquifer collapse floors, or concentration limits. The theorem establishes compliance with declared barriers, not derivation of the barriers themselves.
+
+### 3.5 Conservation-law reduction
+
+**Proposition 4 (Conservation-law reduction).** If \(\ell^\top S_T = 0\), then
+
+\[
+\ell^\top x(t)
+=
+\ell^\top x(0)
++
+\int_0^t \ell^\top b(\tau)d\tau.
+\]
+
+In a closed system, \(\ell^\top x\) is invariant.
+
+*Proof.* Integrate Proposition 1. \(\square\)
+
+A conservation law alone does not imply barrier safety. The set
+
+\[
+\{x \ge 0 : \ell^\top x = \ell^\top x(0),\; \underline{B} \le Cx \le \overline{B}\}
+\]
+
+may be empty even though each object is separately well-defined. Barrier–conservation compatibility is a feasibility problem, not a slogan.
+
+### 3.6 Flux-bounding envelope theorem
+
+**Theorem 5 (Flux-bounding envelopes).** Assume primitive fluxes and boundary transfers satisfy componentwise bounds:
+
+\[
+\underline{v}(t) \le v(t) \le \overline{v}(t),
+\qquad
+\underline{b}(t) \le b(t) \le \overline{b}(t),
+\]
+
+for all \(t \in [0,T]\). For any matrix \(A\), write \(A^+ = \max\{A,0\}\) and \(A^- = \max\{-A,0\}\) entrywise. For each moiety \(m\), define
+
+\[
+\varphi_m(\tau)
+=
+(CS_T)^+_m \underline{v}(\tau)
+-
+(CS_T)^-_m \overline{v}(\tau)
++
+C^+_m \underline{b}(\tau)
+-
+C^-_m \overline{b}(\tau),
+\]
+
+\[
+\psi_m(\tau)
+=
+(CS_T)^+_m \overline{v}(\tau)
+-
+(CS_T)^-_m \underline{v}(\tau)
++
+C^+_m \overline{b}(\tau)
+-
+C^-_m \underline{b}(\tau).
+\]
+
+Define the envelopes
+
+\[
+\underline{S}_m(t)
+=
+S_m(0)
++
+\int_0^t \varphi_m(\tau)d\tau,
+\]
+
+\[
+\overline{S}_m(t)
+=
+S_m(0)
++
+\int_0^t \psi_m(\tau)d\tau.
+\]
+
+Then
+
+\[
+S_m(t) \in [\underline{S}_m(t), \overline{S}_m(t)]
+\]
+
+for all \(t \in [0,T]\) and all \(m\).
+
+*Proof.* By Lemma 3,
+
+\[
+\dot S_m = (CS_T v + Cb)_m.
+\]
+
+For each row \(m\) and time \(\tau\), the expression \((CS_T)_m v\) is linear in \(v\). Over the box \([\underline{v},\overline{v}]\), its minimum and maximum are attained at the box extremes, giving
+
+\[
+(CS_T)^+_m \underline{v}
+-
+(CS_T)^-_m \overline{v}
+\le
+(CS_T)_m v
+\le
+(CS_T)^+_m \overline{v}
+-
+(CS_T)^-_m \underline{v}.
+\]
+
+The same argument applies to \(C_m b\). Adding gives
+
+\[
+\varphi_m(\tau) \le \dot S_m(\tau) \le \psi_m(\tau).
+\]
+
+Integrating over \([0,t]\) gives the envelope. \(\square\)
+
+**Corollary (Flux-derived barrier certificate).** If
+
+\[
+\underline{S}_m(t) \ge \underline{B}_m(t),
+\qquad
+\overline{S}_m(t) \le \overline{B}_m(t),
+\]
+
+for all \(t\) and all \(m\), then every trajectory compatible with the flux bounds is barrier-safe on \([0,T]\).
+
+*Proof.* By Theorem 5, every compatible trajectory satisfies
+
+\[
+\underline{S}_m \le S_m \le \overline{S}_m.
+\]
+
+The certificate conditions sandwich \(S_m\) between the barriers. \(\square\)
+
+Two qualifications belong to the theorem.
+
+The bounds are conservative. They hold for all flux selections in the declared boxes, including selections not jointly realizable by the coupled dynamics.
+
+The envelope is an interval computation on flux data, not a forecast. It says nothing about what the fluxes will be. It says what every admissible flux path implies for the stock.
+
+Stoichiometric and donor-limit constraints make the jointly admissible flux selections a polytope rather than a box. The tight certificate is the linear programme over that polytope. The box envelope is its auditing relaxation.
+
+### 3.7 Finite exhaustion under uniform drift
+
+**Proposition 6.** Assume \(S\) is absolutely continuous, \(S(0) > \underline{B}\), and
+
+\[
+\dot S(t) \le -\varepsilon < 0
+\]
+
+whenever \(S(t) > \underline{B}\), with \(\varepsilon > 0\). Then the first hitting time satisfies
+
+\[
+\tau_{\underline{B}}
+=
+\inf\{t \ge 0 : S(t) \le \underline{B}\}
+\le
+\frac{S(0) - \underline{B}}{\varepsilon}.
+\]
+
+*Proof.* While \(S(t) > \underline{B}\), integration gives
+
+\[
+S(t) \le S(0) - \varepsilon t.
+\]
+
+The right-hand side reaches \(\underline{B}\) at \(t = (S(0)-\underline{B})/\varepsilon\). By continuity, the crossing occurs no later. \(\square\)
+
+The uniform-margin assumption is essential.
+
+**Counterexample (proportional extraction).** For
+
+\[
+\dot S = -kS,
+\qquad k > 0,
+\qquad S(0)>0,
+\]
+
+the solution is
+
+\[
+S(t) = S(0)e^{-kt} > 0
+\]
+
+for every finite \(t\). The stock approaches zero asymptotically and is never exhausted in finite time. The claim that positive extraction implies finite exhaustion is therefore false.
+
+**Proposition (Depletion is compartmental).** On a closed typed ledger, the total mass of each conserved moiety is invariant along trajectories. Every finite hitting time of a zero readout is the hitting time of a compartment or of a barrier on a readout, never of total mass.
+
+This fixes the boundary discipline: depletion is not loss of matter. It is loss of access to matter in the form and place that supports the service in question.
+
+---
+
+## 4. The Closed Finite-Donor Ledger
+
+The closed finite-donor ledger satisfies a complete qualitative portrait. The theorem set is stated here in sequence.
+
+### 4.1 Natural-block mass identity
+
+**Theorem 7.** Let
+
+\[
+M = N + A_{\text{act}} + A_{\text{geo}} + U.
+\]
+
+Along every trajectory of the closed natural block (2), with optional mining restored,
+
+\[
+\dot M = -qEN - C_{A,\lim}.
+\]
+
+Under the institutional-failure specialization, \(C_A = 0\),
+
+\[
+\dot M = -qEN.
+\]
+
+*Proof.* Sum the four equations of (2):
+
+\[
+\dot M
+=
+(R-qEN)
++
+(-B+e_{GA}-e_{AG}+\gamma_U U)
++
+(-e_{GA}+e_{AG}-C_{A,\lim})
++
+(T-\gamma_U U).
+\]
+
+Internal terms cancel:
+
+\[
+R - B + T = R - (R+T) + T = 0.
+\]
+
+What remains is
+
+\[
+\dot M = -qEN - C_{A,\lim}.
+\]
+
+\(\square\)
+
+### 4.2 Stoichiometric conservation
+
+**Theorem 8.** Let \(X\) collect the mass compartments of one resource system and let \(S_T\) be the incidence matrix of its flux ledger. Under unit-sum routing constraints,
+
+\[
+\dot X = S_T F(X),
+\]
+
+and
+
+\[
+\frac{d}{dt}\mathbf{1}^\top X = 0.
+\]
+
+*Proof.* Every primitive is a transfer between two compartments, or a pair of opposite primitives implementing a two-way exchange. The corresponding column of \(S_T\) has entries \(+1\) and \(-1\) in the receiving and donating rows and zeros elsewhere. Routing tensors are column-stochastic by construction. Hence
+
+\[
+\mathbf{1}^\top S_T = 0,
+\]
+
+and therefore
+
+\[
+\mathbf{1}^\top \dot X = \mathbf{1}^\top S_T F = 0.
+\]
+
+\(\square\)
+
+Conservation is structural. It is read from the columns of the incidence matrix.
+
+### 4.3 Orthant invariance
+
+**Theorem 10.** The nonnegative orthant in \((N,A_{\text{act}},A_{\text{geo}},U)\) is forward invariant for the closed natural block (2).
+
+*Proof.* The right-hand side is locally Lipschitz on a neighbourhood of the closed orthant. Check each face.
+
+On \(A_{\text{geo}}=0\), \(\sigma=0\), hence \(e_{GA}=0\), and
+
+\[
+\dot A_{\text{geo}} = e_{AG} = \omega_A A_{\text{act}} \ge 0.
+\]
+
+On \(A_{\text{act}}=0\), \(s=0\), so
+
+\[
+R = B = T = e_{AG} = 0,
+\]
+
+and
+
+\[
+\dot A_{\text{act}} = e_{GA} + \gamma_U U \ge 0.
+\]
+
+On \(N=0\), extraction and uptake vanish and \(\dot N = 0\).
+
+On \(U=0\),
+
+\[
+\dot U = T \ge 0.
+\]
+
+By Nagumo’s inward-pointing criterion, the orthant is forward invariant. \(\square\)
+
+The donor-limitation condition is the exact sufficiency requirement. Algebraic cancellation alone does not establish invariance.
+
+### 4.4 No interior rest at positive effort
+
+**Theorem 12.** Assume \(E \equiv E^* > 0\) is constant. Then a rest point of the closed natural block satisfies
+
+\[
+R + C_{A,\lim} = 0.
+\]
+
+With \(C_A = 0\), this is \(R=0\), hence
+
+\[
+N=0, \quad \text{or} \quad N=K, \quad \text{or} \quad A_{\text{act}}=0.
+\]
+
+None of these is compatible with \(E^*>0\) and \(N^*>0\).
+
+*Proof.* At a rest point, \(\dot U=0\) forces
+
+\[
+\gamma_U U = T.
+\]
+
+Adding \(\dot A_{\text{act}} + \dot A_{\text{geo}}\) gives
+
+\[
+-B + \gamma_U U - C_{A,\lim} = 0.
+\]
+
+With \(\gamma_U U = T\) and \(B=R+T\), this becomes
+
+\[
+R + C_{A,\lim} = 0.
+\]
+
+With \(C_A=0\), \(R=0\). From
+
+\[
+R = rN\left(1-\frac{N}{K}\right)s,
+\]
+
+this implies \(N=0\), \(N=K\), or \(s=0\), i.e. \(A_{\text{act}}=0\).
+
+Each branch is excluded at positive effort:
+
+- If \(N=K\) and \(E^*>0\), then \(\dot N = -qE^*K < 0\).
+- If \(A_{\text{act}}=0\) and \(A_{\text{geo}}>0\), then \(\dot A_{\text{act}} > 0\).
+- If \(N=0\), then \(R=T=0\), reducing to the extinction family.
+
+Thus no interior rest point exists at positive effort. \(\square\)
+
+### 4.5 Vanishing-extraction rest set
+
+**Theorem 13.** With \(E \equiv 0\), the rest points of the closed natural block are exactly three sets:
+
+1. the extinction family \(\mathcal{R}_{\text{ext}}\);
+2. the carrying-capacity family \(\mathcal{R}_K\);
+3. the frozen-biomass face \(\mathcal{R}_{\text{frozen}}\).
+
+They are:
+
+\[
+\mathcal{R}_{\text{ext}}
+=
+\{N=0,\; U=0,\; A_{\text{act}} = A_{\text{eq,intrinsic}}\sigma(A_{\text{geo}}),\; A_{\text{geo}} \ge 0\},
+\]
+
+\[
+\mathcal{R}_K
+=
+\{N=K,\; U = \kappa_A K s/\gamma_U,\; A_{\text{act}} = A_{\text{eq,intrinsic}}\sigma(A_{\text{geo}})\},
+\]
+
+and
+
+\[
+\mathcal{R}_{\text{frozen}}
+=
+\{(N,0,0,0): N \ge 0\}.
+\]
+
+*Proof.* With \(E=0\), set the four derivatives to zero.
+
+From \(\dot A_{\text{geo}}=0\),
+
+\[
+e_{GA}=e_{AG},
+\]
+
+so
+
+\[
+A_{\text{act}} = A_{\text{eq,intrinsic}}\sigma.
+\]
+
+From \(\dot N = R = 0\),
+
+\[
+rN\left(1-\frac{N}{K}\right)s = 0.
+\]
+
+If \(A_{\text{geo}}>0\), then \(A_{\text{act}}>0\), so \(s>0\), and \(N=0\) or \(N=K\).
+
+At the boundary \(A_{\text{geo}}=0\), the geo-balance forces \(A_{\text{act}}=0\), hence \(s=0\), and \(\dot N=0\) for every \(N \ge 0\). With \(U=0\), the remaining equations vanish. This is the frozen-biomass face.
+
+From \(\dot U=0\),
+
+\[
+U = T/\gamma_U.
+\]
+
+This vanishes in the \(N=0\) branch and is positive in the \(N=K\) branch. The three families are exactly the stated rest set. \(\square\)
+
+### 4.6 Extraction integrability
+
+**Theorem 14.** Assume \(E(s) \ge 0\) along the trajectory. Let
+
+\[
+M = N + A_{\text{act}} + A_{\text{geo}} + U.
+\]
+
+Then
+
+\[
+M(t)
+=
+M(0)
+-
+\int_0^t qE(s)N(s)\,ds
+\ge 0.
+\]
+
+Therefore
+
+\[
+\int_0^\infty qE(s)N(s)\,ds \le M(0) < \infty.
+\]
+
+In particular,
+
+\[
+qEN \in L^1(0,\infty).
+\]
+
+*Proof.* By Theorem 7,
+
+\[
+M(t) = M(0) - \int_0^t qE(s)N(s)\,ds.
+\]
+
+By Theorem 10, \(M(t)\ge 0\). Hence the improper integral is bounded above by \(M(0)\). \(\square\)
+
+This is the depletion-horizon semantics of the closed ledger in its strongest form. The donor budget is finite, and extraction is integrable against it.
+
+A constant extraction flux \(c>0\) exhausts the budget in finite time. Proportional extraction \(qEN\) need not drive \(M\) to zero in finite time. The integral bound is the whole statement.
+
+---
+
+## 5. Service Readouts and the Componentwise Deficit
+
+Services are observations or feasible outputs of the physical state. They are not additional conserved mass.
+
+### 5.1 Service readout and contemporaneous balance
+
+For services indexed by \(i=1,\ldots,n\), write
+
+\[
+s_i(t) = O_i(x(t),u(t),\theta),
+\]
+
+where \(u\) denotes admissible operating or extraction choices. The service \(s_i\) and the demand \(d_i\) share service-specific units.
+
+The contemporaneous component balance is
+
+\[
+b_i(t) = s_i(t) - d_i(t).
+\]
+
+The condition \(b_i(t)\ge 0\) means measured supply meets measured demand for component \(i\) at that instant.
+
+It does not by itself imply sustainability. A stock can meet current demand while declining toward a threshold. A stock below a desired level can have a positive current balance while recovering.
+
+### 5.2 Feasible balance domain
+
+**Definition 1.** For an admissible operating set \(\mathcal{U}(x,t)\) and a declared demand set \(\mathcal{D}(t)\), the feasible balance domain is
+
+\[
+\mathcal{B}(x,t)
+=
+\{O(x,u,\theta)-d : u \in \mathcal{U}(x,t),\; d \in \mathcal{D}(t)\}.
+\]
+
+The geometry of \(\mathcal{B}(x,t)\) is state-dependent. No unrestricted scalar argument can replace an application-specific analysis of this domain.
+
+### 5.3 Support provenance
+
+Current service adequacy and regenerative feasibility are different claims.
+
+Let \(\Gamma_{\text{all}}(x,t)\) contain service vectors feasible through all admitted pathways. Let \(\Gamma_{\text{reg}}(x,t)\subseteq \Gamma_{\text{all}}(x,t)\) be the feasible set after imposing declared regenerative-flow, boundary, material-quality, and energy or capacity restrictions.
+
+**Definition 2.** Assume \(0 \in \Gamma_{\text{reg}}(x,t)\). For a nonzero service direction \(\bar{s}\ge 0\), define
+
+\[
+\alpha_{\text{reg}}(\bar{s};x,t)
+=
+\sup\{\alpha \in [0,1] : \alpha \bar{s} \in \Gamma_{\text{reg}}(x,t)\}.
+\]
+
+The vector
+
+\[
+(1-\alpha_{\text{reg}})\bar{s}
+\]
+
+is the directional support gap, measured in the same service units as \(\bar{s}\).
+
+A realized service \(s \in \Gamma_{\text{all}}\setminus \Gamma_{\text{reg}}\) is support-dependent under that declaration even when \(s \ge d\).
+
+### 5.4 Specialization identity
+
+On the single-resource specialization,
+
+\[
+\dot N = R(N,A) - qEN.
+\]
+
+Therefore
+
+\[
+qEN - R(N,A) = -\dot N,
+\]
+
+and
+
+\[
+\Lambda(t) := [qEN - R]_+ = [-\dot N]_+.
+\]
+
+This identity is the exact shared object used in the interface with institutional delay dynamics.
+
+---
+
+## 6. Depletion Arithmetic
+
+The ledger supplies the net derivative needed to distinguish gross throughput from net decline and from a model-conditioned threshold time. The distinction matters because “time to depletion” is used publicly as if all three quantities were one. They are not.
+
+Let \(A_{\min}\) be a declared threshold for the active pool, with \(A > A_{\min}\).
+
+### 6.1 Three non-interchangeable quantities
+
+**Definition 3 (Gross turnover intensity).** With assimilation \(g(X,A)>0\), define
+
+\[
+J_A^{\text{gross}} = \frac{g(X,A)}{A},
+\]
+
+and the gross support-coverage ratio
+
+\[
+H_A^{\text{gross}} = \frac{A-A_{\min}}{g(X,A)}.
+\]
+
+Neither is a time to depletion. The implication
+
+\[
+g>0 \Rightarrow \dot A < 0
+\]
+
+is false in general. At an interior steady state, \(g\) can be positive while decomposition and geological transfer balance it exactly, giving \(\dot A=0\). Gross uptake measures throughput or dependency. Net depletion is a balance property.
+
+**Definition 4 (Local net-depletion ratio).**
+
+\[
+H_A^{\text{loc}}(t)
+=
+\frac{A(t)-A_{\min}}{[-\dot A(t)]_+},
+\]
+
+with the convention
+
+\[
+H_A^{\text{loc}} = +\infty
+\]
+
+when \(\dot A \ge 0\).
+
+This ratio freezes the current net rate. If fluxes change with \(A\), policy, climate, prices, or other states, the realized threshold time can differ substantially.
+
+**Definition 5 (Scenario-conditioned hitting time).** For a fully specified dynamical model, policy or scenario \(\pi\), disturbance history \(d\), and initial state \(x_0\),
+
+\[
+T_A(x_0;\pi,d)
+=
+\inf\{t \ge 0 : A_{\pi,d}(t;x_0) \le A_{\min}\},
+\]
+
+with \(T_A=+\infty\) if the threshold is never reached.
+
+The three quantities answer different questions:
+
+| Quantity | Question answered |
+|---|---|
+| \(J_A^{\text{gross}}, H_A^{\text{gross}}\) | How strongly does the system depend on the pool at the current gross rate? |
+| \(H_A^{\text{loc}}\) | If the current net decline were frozen, what is the local stock-to-rate ratio? |
+| \(T_A\) | Under a stated model, policy, and scenario, when is the threshold first reached? |
+
+They share units. They do not share a measurand.
+
+### 6.2 Uniform-drift bounds
+
+**Proposition 17.** Assume \(A:[0,T]\to \mathbb{R}\) is absolutely continuous with \(A(0)>A_{\min}\). Let \(v_0>0\), \(0<\varepsilon<1\), and
+
+\[
+H_0 = \frac{A(0)-A_{\min}}{v_0}.
+\]
+
+Assume
+
+\[
+T \ge \frac{H_0}{1-\varepsilon},
+\]
+
+and
+
+\[
+(1-\varepsilon)v_0 \le -\dot A(t) \le (1+\varepsilon)v_0
+\]
+
+for almost every \(t\) while \(A\) remains above \(A_{\min}\). Then a first crossing time \(H\) exists no later than \(H_0/(1-\varepsilon)\), and
+
+\[
+\frac{H_0}{1+\varepsilon}
+\le
+H
+\le
+\frac{H_0}{1-\varepsilon}.
+\]
+
+Moreover,
+
+\[
+|H-H_0|
+\le
+\frac{\varepsilon}{1-\varepsilon}H_0.
+\]
+
+*Proof.* If no crossing occurs before
+
+\[
+t^* = \frac{H_0}{1-\varepsilon},
+\]
+
+then
+
+\[
+A(t^*) \le A(0) - (1-\varepsilon)v_0 t^* = A_{\min},
+\]
+
+a contradiction. Hence \(H \le t^*\). Integrating both rate bounds over \([0,H]\) and using
+
+\[
+A(0)-A(H)=v_0H_0
+\]
+
+gives the two-sided bracket. \(\square\)
+
+This is a local diagnostic. It fails when depletion reverses, when the rate approaches zero, or when feedback moves the trajectory outside the declared rate bounds.
+
+### 6.3 Upper barriers, exit times, and maintainability
+
+For each moiety \(m\), define lower and upper exit times:
+
+\[
+\tau_m^- = \inf\{t \ge 0 : S_m(t) \le \underline{B}_m(t)\},
+\]
+
+\[
+\tau_m^+ = \inf\{t \ge 0 : S_m(t) \ge \overline{B}_m(t)\},
+\]
+
+with \(\inf \emptyset = \infty\). The overall admissibility exit time is
+
+\[
+\tau_{\text{exit}} = \min_m\{\tau_m^-,\tau_m^+\}.
+\]
+
+Horizon safety on \([0,T]\) is
+
+\[
+\tau_{\text{exit}} > T.
+\]
+
+Upper-barrier violations matter symmetrically. Atmospheric CO₂ accumulation violates an upper concentration barrier while fossil carbon stocks decline. A depletion diagnostic must check both barriers.
+
+Finite-horizon safety is not sustainability. A stock can remain above a barrier until an assessment horizon \(T\) and still be unsustainable thereafter. A sustainability certificate requires a terminal condition:
+
+\[
+x(T) \in K_{\text{maint}},
+\]
+
+where
+
+\[
+K_{\text{maint}}
+=
+\{x : \exists \text{ an admissible continuation satisfying all barriers for } t \ge T\}.
+\]
+
+This is the viability kernel of the barrier set under the admissible controls. The finite-horizon diagnostic is necessary but not sufficient. The full certificate requires the terminal state to lie in the maintainability set.
+
+---
+
+## 7. Noncompensation and Double Counting
+
+### 7.1 No weighted certification
+
+**Proposition (No weighted certification).** Let \(\mathcal{B}(x,t)\) be the feasible balance domain. If \(\mathcal{B}(x,t)\) contains a vector with
+
+\[
+b_i < 0
+\]
+
+and
+
+\[
+w^\top b > 0
+\]
+
+for a fixed \(w \ge 0\), then the certificate
+
+\[
+w^\top b \ge 0
+\]
+
+does not imply
+
+\[
+b \ge 0.
+\]
+
+*Proof.* On the exhibited vector, the componentwise predicate fails while the weighted predicate holds. The two predicates differ on \(\mathcal{B}(x,t)\). \(\square\)
+
+The failure is not an accident of a particular domain. The compensating pattern is constructible against any weight.
+
+### 7.2 Universal failure of weighted certification
+
+**Theorem (Universal failure of weighted certification).** Let the ledger have \(m \ge 2\) components. For every weight vector
+
+\[
+w \in \mathbb{R}^m_+,
+\qquad
+w \ne 0,
+\]
+
+there exist a typed ledger, a demand vector \(d\), and an admissible state–operation pair whose attainable balance \(b\) satisfies
+
+\[
+w^\top b \ge 0
+\]
+
+while
+
+\[
+b_m < 0
+\]
+
+for some component \(m\). No nonnegative weighting is therefore a valid componentwise certificate in general.
+
+*Proof.* Take the two-compartment ledger with stock
+
+\[
+x = (x_1,x_2) \in \mathbb{R}^2_+,
+\]
+
+one donor-limited transfer flux
+
+\[
+f = kx_1
+\]
+
+from compartment 1 to compartment 2, identity readout
+
+\[
+O(x,u,\theta)=x,
+\]
+
+and demands \(d=(d_1,d_2)\). Every nonnegative state is admissible under the declared flux, because donor limitation holds: \(f=0\) at \(x_1=0\). Thus the balance
+
+\[
+b=x-d
+\]
+
+is attainable for every \(x \in \mathbb{R}^2_+\).
+
+Fix \(w\). Let \(j\) be an index with \(w_j>0\).
+
+If some \(m \ne j\) has \(w_m=0\), place the deficit there: choose
+
+\[
+x_m < d_m,
+\qquad
+x_j \ge d_j.
+\]
+
+Then
+
+\[
+w^\top b = w_j(x_j-d_j) \ge 0,
+\]
+
+while \(b_m<0\).
+
+Otherwise \(w_m>0\) for every \(m \ne j\). Choose any \(m \ne j\) with \(x_m<d_m\), and choose
+
+\[
+x_j \ge d_j + \frac{w_m(d_m-x_m)+\varepsilon}{w_j}
+\]
+
+for any \(\varepsilon>0\). Then
+
+\[
+w^\top b
+=
+w_m(x_m-d_m)
++
+w_j(x_j-d_j)
+\ge
+\varepsilon
+\ge 0,
+\]
+
+while
+
+\[
+b_m = x_m-d_m < 0.
+\]
+
+The pair \((x,d)\) is the witness for \(w\). \(\square\)
+
+The construction does not use the dynamics. The failure is a property of nonnegative weightings over mixed-sign balances.
+
+A scalar summary may rank. It may communicate. It cannot certify componentwise adequacy.
+
+### 7.3 The double-counting discipline
+
+Five rules prevent double counting and phantom mass.
+
+1. **One balance per moiety.** Conservation laws attach to declared moieties. Adding unlike units—biomass, money, biodiversity indices, exergy—into one conserved scalar is not authorized by any conservation theorem.
+
+2. **Explicit stoichiometry.** Entries are added within an incidence row only when their types and units agree. Every conversion is an explicit coefficient in \(S_T\), never an implicit sum.
+
+3. **Yield routing.** A transformation represented with yield below one must route the omitted fraction to a represented compartment or a declared boundary flow. Otherwise the moiety balance holds only after silently dropping the moiety.
+
+4. **No ghost sinks.** Every primitive with an outflow from some compartment must have its routed inflow represented, and every inflow its source.
+
+5. **Classification labels stay out of the columns.** Reserve-life and resource-threshold quantities answer different questions. They share a column only under an explicit convention label. Diagnostic labels never determine material routing.
+
+Every unit of mass is routed once. A flux omitted from the ledger is not thereby conserved. A recovery claimed in a quality-neutral loop is not thereby real. Double counting is a representation error, and the representation that prevents it is the contribution.
+
+---
+
+## 8. Application Classifications at Exact Status
+
+The classification matrix records what each application computes.
+
+| Time-like quantity | Question answered | G3P | Phosphate | Fisheries |
+|---|---|---|---|---|
+| \(J_A^{\text{gross}}, H_A^{\text{gross}}\) | turnover/dependency | no | no | gross-loss analogue only |
+| \(H_A^{\text{loc}}\) | frozen net-rate ratio | no: anomaly, not stock | no: classification, not stock | no: no net \(\dot B\) |
+| \(T_A\) | scenario hitting time | no | no | no |
+| What it is | — | record-relative statistical index | arithmetic ratio of an economic class | removals-only pressure scale |
+
+The point is not that these quantities are invalid. The point is that each is complete for one question and incomplete for another.
+
+### 8.1 Groundwater anomaly-persistence indices
+
+The Global Gravity-based Groundwater Product provides monthly groundwater-storage anomalies relative to a reference period rather than absolute aquifer volumes.
+
+For a basin-mean anomaly series, the linear-trend anomaly persistence index is
+
+\[
+L_{\text{anom}}^{\text{hist}}
+=
+\frac{a_{\text{latest}} - a_{\text{hist,min}}}{[-\hat{a}']_+}.
+\]
+
+This is the fitted distance to the series’ own historical minimum divided by the fitted decline rate.
+
+**Classification.** A statistical anomaly index with units of time. It is not the physical stock ratio \(H_A^{\text{loc}}\). It is not a forecast of aquifer exhaustion. Its value depends on the product window, basin mask, anomaly reference, and trend convention. A physical \(H_A^{\text{loc}}\) requires an absolute stock estimate and a net stock derivative, not an anomaly series alone.
+
+The access structure also matters. A well is infrastructure, not the resource. It draws on stored water, which is replenished by recharge. An anomaly series measures stored stock changes as observed from gravity; it does not measure access infrastructure, recharge, or the physical bottom of the aquifer.
+
+### 8.2 The phosphate reserve-life ratio
+
+At constant current production \(C_G\), the reserve-life ratio is
+
+\[
+T_{\text{reserve}}
+=
+\frac{G_{\text{reserve}}}{C_G}.
+\]
+
+At approximately \(74{,}000{,}000\) kt of world reserves and \(240{,}000\) kt/yr of production, this is approximately 309 years.
+
+**Classification.** The arithmetic is internally consistent as a reserve-life ratio to zero. It is not a physical exhaustion forecast, because reserve classification changes with prices, technology, exploration, and regulation.
+
+The reserves/resources distinction is central. A resource-threshold calculation,
+
+\[
+T_{\text{resource},10\%}
+=
+\frac{0.9 G_{\text{resource}}}{C_G},
+\]
+
+answers a different question. It must not share a column with the reserve-life ratio without an explicit convention label.
+
+The phosphate case illustrates the classification problem cleanly. The reserve classification is economic. An exhaustion-horizon estimate built on a reserve figure carries the substitution and technology premises of that classification, not a physical forecast.
+
+### 8.3 The fisheries removals-only pressure time
+
+When
+
+\[
+SSB_{\text{now}} > B_{\lim} > 0,
+\qquad
+F_{\text{now}} > 0,
+\]
+
+define
+
+\[
+R_B = \log\left(\frac{SSB_{\text{now}}}{B_{\lim}}\right),
+\]
+
+and
+
+\[
+\Theta_F = \frac{R_B}{F_{\text{now}}}.
+\]
+
+This is the crossing time of the deliberately incomplete comparison process
+
+\[
+\dot B = -F_{\text{now}}B.
+\]
+
+**Classification.** A removals-only pressure scale. The time unit comes from rescaling a stock-reference margin by one isolated gross-loss rate.
+
+Because recruitment, somatic growth, maturation, natural mortality, density dependence, environmental forcing, and future policy are omitted, \(\Theta_F\) is not a net biomass depletion diagnostic. It is not a demographic hitting-time estimate. It is not a member of the \(J^{\text{gross}}\)–\(H^{\text{loc}}\)–\(T_A\) hierarchy.
+
+The collective implication is direct. The three published “depletion time” numbers answer three distinct questions at three distinct evidentiary levels.
+
+---
+
+## 9. First-Passage Semantics on Declared Surrogates
+
+### 9.1 Two objects, not one
+
+The ledger’s own first-passage object is the model hitting time of Definition 5. The public-data quantities of Section 8 are constructed proxies on observed series.
+
+The surrogates below do not compute the ledger’s hitting time. They do not stochastically complete the ledger. They do not identify physical failure thresholds.
+
+### 9.2 Observed-drift Brownian surrogate
+
+Let \(A_0\) be the latest observed anomaly and \(\mu = \hat{\mu}<0\) the fitted drawdown rate. Define
+
+\[
+A(t) = A_0 + \mu t + \varsigma W_t,
+\]
+
+stopped at first reaching the record-relative barrier \(A_{\text{win}}^{\min}\).
+
+This is a statistical surrogate for the empirical trend extrapolation. It is not a hydrological constitutive law. It is not mass-conserving. It is not a stochastic completion of the ledger.
+
+### 9.3 Inverse-Gaussian groundwater first passage
+
+**Proposition 18.** Let
+
+\[
+T_{\text{GW}}
+=
+\inf\{t>0 : A(t) \le A_{\text{win}}^{\min}\},
+\]
+
+and let
+
+\[
+d = A_0 - A_{\text{win}}^{\min} > 0.
+\]
+
+Conditional on treating \(\mu\) and the barrier as fixed,
+
+\[
+T_{\text{GW}} \sim IG(\nu,\lambda),
+\]
+
+with
+
+\[
+\nu = \frac{d}{|\mu|},
+\qquad
+\lambda = \frac{d^2}{\varsigma^2}.
+\]
+
+In particular,
+
+\[
+\mathbb{E}[T_{\text{GW}}]
+=
+\nu
+=
+\frac{d}{|\mu|}.
+\]
+
+*Proof.* The first-passage time of Brownian motion with constant negative drift to a lower barrier is inverse Gaussian. \(\square\)
+
+The mean of the stochastic surrogate equals the deterministic trend-to-window-minimum ratio. That equality is the precise sense in which the groundwater numbers are first-passage means of a declared surrogate.
+
+### 9.4 Record-relative barrier discipline
+
+The barrier \(A_{\text{win}}^{\min}\) is selected from the same finite observation window used to estimate \(\hat{\mu}\). It is therefore path-dependent and record-relative. It is not an independently identified hydrological failure floor.
+
+Future passage below it represents a record-breaking stress event under the surrogate, not physical exhaustion.
+
+### 9.5 Geometric-Brownian fisheries first passage
+
+**Proposition 20.** Let
+
+\[
+dB_t = -hB_t dt + \varsigma B_t dW_t
+\]
+
+under the Itô convention, with \(h>0\) and
+
+\[
+0 < B_{\min} < B_0.
+\]
+
+Let
+
+\[
+T_{\text{fish}}
+=
+\inf\{t>0 : B_t \le B_{\min}\}.
+\]
+
+Then
+
+\[
+T_{\text{fish}} \sim IG(\nu_F,\lambda_F),
+\]
+
+with
+
+\[
+\nu_F
+=
+\frac{\log(B_0/B_{\min})}{h+\varsigma^2/2},
+\]
+
+\[
+\lambda_F
+=
+\frac{\log(B_0/B_{\min})^2}{\varsigma^2}.
+\]
+
+Thus
+
+\[
+\mathbb{E}[T_{\text{fish}}]
+=
+\frac{\log(B_0/B_{\min})}{h+\varsigma^2/2}.
+\]
+
+*Proof.* Itô’s lemma gives
+
+\[
+d\log B_t = -(h+\varsigma^2/2)dt + \varsigma dW_t.
+\]
+
+The logarithmic threshold is therefore a Brownian first-passage problem. Proposition 18 applies. \(\square\)
+
+For fixed arithmetic drift and the Itô parameterization, the finite-noise mean is strictly shorter than the deterministic horizon. This is a property of the chosen surrogate parameterization. It is not a universal claim that environmental variability accelerates physical biomass loss.
+
+### 9.6 Scope of the first-passage section
+
+The first-passage results are distributional statements about declared surrogates. They are not corrections to the tabled years. They do not show that physical water mass or fish biomass is depleted faster. They do not supply calibrated forecasts unless the drift, barrier, and noise inputs are separately identified.
+
+---
+
+## 10. Interface with Institutional Delay Dynamics
+
+### 10.1 The exact shared object
+
+Under the single-resource specialization,
+
+\[
+\dot N = R(N,A) - qEN.
+\]
+
+The deficit identity is
+
+\[
+D(t)
+:=
+qE(t)N(t) - R(N(t),A(t))
+=
+-\dot N(t),
+\]
+
+and its positive part is
+
+\[
+\Lambda(t)
+:=
+[D(t)]_+
+=
+[-\dot N(t)]_+.
+\]
+
+This identity holds for every trajectory of either the specialized ledger or the reduced institutional core. It is the one object both analyses may use without duplication.
+
+### 10.2 The non-reduction boundary
+
+There is no exact dynamic reduction from the closed primitive finite-donor ledger to the open working institutional system.
+
+The reasons are mathematical.
+
+1. **Different targets.** The primitive ledger uses the intrinsic donor-limited target \(A_{\text{eq,intrinsic}}\). The working system uses a derived target of the form
+
+   \[
+   A_{\text{eq,W}}
+   =
+   A_{\text{eq,intrinsic}}
+   +
+   \frac{\kappa_A K}{\omega_A}.
+   \]
+
+   The two targets are different objects.
+
+2. **Different vector fields at the same state.** At the working equilibrium, the active-pool vector fields of the two systems differ by an \(O(1)\) amount. The difference is not a small residual.
+
+3. **The working point is not a rest point of the closed ledger.** The working point requires continuing geological support. The closed finite-donor system admits no interior rest at positive effort (Theorem 12).
+
+4. **The donor-draw diagnostic is not a tracking error.** The cumulative donor-draw quantity is a diagnostic of the derived-target completion. It is not a finite-time tracking metric between the two fields.
+
+5. **Extraction integrability.** The closed primitive system makes sustained extraction integrable (Theorem 14). It therefore cannot possess the working positive-flux rest indefinitely.
+
+**Theorem (Non-reduction).** There is no exact dynamic reduction, no regular perturbation, and no finite-time tracking correspondence from the closed primitive ledger to the open working system.
+
+The permitted relation is analogy for shared mechanism language plus diagnostic reconstruction of omitted mass flows. A closed physical ledger and an open working system can share one diagnostic identity without sharing a dynamics.
+
+---
+
+## 11. Conclusion
+
+The two failure modes of the introduction—compensatory aggregation and classification drift—are representation errors. The representation that prevents them is this paper’s content.
+
+Conservation is proved from the incidence structure, not assumed. Positivity is proved from donor limitation, not asserted. Services are readouts, not mass. Depletion time is three quantities, not one.
+
+The closed finite-donor ledger carries its complete theorem set: mass identity, orthant invariance, no interior rest at positive effort, the vanishing-extraction rest set, and extraction integrability. The non-reduction boundary records why the closed ledger and the open working systems of institutional dynamics are different completions sharing one exact object.
+
+The applied depletion numbers answer exactly the questions their constructions pose. The groundwater anomaly index is a record-relative statistical index. The phosphate reserve-life ratio is arithmetic on an economic classification. The fisheries removals-only time is a pressure scale. Stating them with those questions is what makes them usable. Collapsing them into one “time to depletion” is what makes them false.
+
+No nonnegative weighting certifies componentwise adequacy. Scalar summaries may rank and communicate. Certification requires the vector.
+
+---
+
+## Declarations
+
+**Data availability.** The application classifications are descriptive arithmetic on public data products: the G3P groundwater anomaly product, the U.S. Geological Survey Mineral Commodity Summaries, and the RAM Legacy Stock Assessment Database. The parameter tables are declared parameterizations.
+
+**Declaration of competing interest.** None.
+
+**AI declaration.** GLM, Qwen, and DeepSeek AI assisted with drafting and iterative review.

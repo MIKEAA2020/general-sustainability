@@ -1,0 +1,1332 @@
+### 1. Automated line-level mapping → **semantic matching + confidence scores**
+Instead of relying only on exact ID matches, augment with:
+- **Sentence embeddings** (e.g., `sentence-transformers`) to match master items to revision paragraphs even when wording differs.
+- **Confidence scores** for each match; low-confidence matches flagged for human review.
+- **Overlap detection** to catch one master item mapped to multiple revision sections (or vice versa).
+
+### 2. Traceability matrix → **auto-generated, hyperlinked, status-inferred**
+Augment by:
+- Automatically inferring status: *covered* (high similarity + presence), *superseded* (explicit “superseded” marker or contradiction), *missing* (no match).
+- Embedding **hyperlinks** from each matrix cell to the exact line/paragraph in the revision.
+- Exporting the matrix as a CSV/HTML that can be diffed across versions.
+
+### 3. Separate actionable vs informational → **rule-based + ML classification**
+Augment with:
+- A **keyword/rule-based classifier** (e.g., “must”, “should”, “verify”, “demonstrate”, “run”, “check”) to label items.
+- Optionally fine-tune a small **BERT classifier** on a few hand-labelled examples from the master.
+- Different **verification pipelines** for each type: actionable items require actual execution logs; informational items only require presence and consistency.
+
+### 4. Numerical claim verification → **automated re-computation harness**
+Augment the “run the model” idea with:
+- A **script that extracts all numbers** from both documents (regex for patterns like `0.5→0.618`, `118 sets`, `deficit = 0.06`).
+- Automatically **runs the corresponding model scenario** and compares output within tolerance.
+- Integrate into **CI/CD** so every future revision triggers a numerical audit report.
+
+### 5. Regression tests → **property-based and parameter-sweep tests**
+Augment by:
+- Turning each key master claim into a **unit test** (e.g., `test_masking_window_exists_for_small_deficit`).
+- Adding **property-based tests** (e.g., using `hypothesis`) over parameter ranges to ensure claims hold across plausible inputs, not just single cases.
+- Running **sensitivity analyses** automatically and flagging when a result becomes unstable.
+
+### 6. Self-consistency pass → **contradiction detection via NLI**
+Augment with:
+- **Natural language inference (NLI)** models (e.g., RoBERTa-MNLI) to check whether two statements in the revision contradict each other.
+- Scanning for **negation patterns** (“no masking” vs “narrow masking”) and flagging them for manual adjudication.
+
+### 7. Risk register → **scored, prioritised gaps**
+Augment by:
+- Automatically computing a **risk score** for each open gap based on: severity of claim, uncertainty in match, and whether it is actionable or informational.
+- Producing a **prioritised list** for the next revision, rather than a flat list.
+
+### 8. Version-control diff → **semantic diff of extracted statements**
+Augment by:
+- Extracting **structured statements** (ID, claim, status) from each version and diffing those, not just raw text.
+- Highlighting **semantic changes** (e.g., “masking is absent” → “masking is deficit-bounded”) that textual diff would miss.
+
+### 9. Peer review → **automated LLM review with structured rubric**
+Augment by:
+- Using an LLM (e.g., GPT‑4) with a **structured prompt** that gives it the master, the revision, and a checklist of gap categories, then asks it to produce a coverage report.
+- Running **multiple LLM passes** with different prompts (e.g., one for numerical claims, one for consistency, one for missing sections) to reduce bias.
+
+### 10. Document the process → **machine-readable, replayable scan log**
+Augment by:
+- Storing the entire scan as a **JSON/YAML pipeline** (steps, parameters, outputs, timestamps).
+- Making it **replayable** so anyone can re-run the scan on a new revision and get the same report.
+- Including **provenance metadata** for every claim (which script, which commit, which parameters).
+
+---
+
+### Augmentation caveat
+These augmentations do not replace human judgment; they reduce manual effort and surface issues more reliably. The final sign‑off should still be a human (or a domain expert) reviewing the auto‑generated report, especially for scientific interpretation.
+
+Below is a concrete tool stack and pipeline design for turning the manual gap-scan into a repeatable, auditable, semi-automated system.
+
+## 1. Overview
+
+A Python CLI called `scan_revision` that:
+
+- Parses the master and revision markdown.
+- Extracts numbered, actionable claims.
+- Matches claims semantically and by ID.
+- Verifies numerical claims by re-running the model.
+- Checks internal consistency (self-contradiction).
+- Produces a traceability matrix (HTML/JSON) and a risk register.
+- Runs in CI to gate future revisions.
+
+## 2. Repository layout
+
+```
+scan/
+├── pyproject.toml
+├── config.yaml                 # thresholds, paths, weights
+├── src/scan_revision/
+│   ├── __init__.py
+│   ├── cli.py                  # Typer entrypoint
+│   ├── models.py               # Pydantic data models
+│   ├── parser.py               # Markdown → Claim list
+│   ├── classifier.py           # actionable vs informational
+│   ├── matcher.py              # ID + semantic matching
+│   ├── numeric.py              # Numerical claim registry & verification
+│   ├── consistency.py          # NLI contradiction detection
+│   ├── risk.py                 # Risk scoring
+│   ├── report.py               # HTML/JSON traceability matrix
+│   └── utils.py
+├── tests/
+│   ├── test_parser.py
+│   ├── test_matcher.py
+│   └── test_numeric.py
+└── .github/workflows/scan.yml
+```
+
+## 3. Core libraries
+
+| Purpose | Library | Notes |
+|---|---|---|
+| Python | ≥3.11 | |
+| CLI | `typer` | Clean command-line interface |
+| Terminal output | `rich` | Progress bars, tables, coloured statuses |
+| Data models | `pydantic` v2 | `Claim`, `Match`, `Report`, `RiskItem` |
+| Markdown parsing | `markdown-it-py` | Preserve source line numbers for hyperlinking |
+| NLP / sentence segmentation | `spacy` + `en_core_web_trf` | Robust sentence splitting, rule-based matching |
+| Semantic matching | `sentence-transformers` (`all-MiniLM-L6-v2`) | Embeddings + cosine similarity |
+| Fuzzy ID matching | `rapidfuzz` | Handle typos in IDs like `12G.7` vs `12G7` |
+| Numerical extraction | `regex` | Patterns for `0.5→0.618`, `deficit = 0.06`, `118 sets` |
+| Numerical verification | `numpy`, `pandas`, `scipy` | Compare model output within tolerance |
+| Property-based testing | `hypothesis` | Sweep parameter ranges for regression checks |
+| NLI contradiction detection | `transformers` + `facebook/bart-large-mnli` | Classify sentence pairs as entail/contradict/neutral |
+| Reporting | `jinja2`, `weasyprint` or `pandas.to_html` | HTML traceability matrix |
+| Caching embeddings | `joblib` or `diskcache` | Avoid recomputing embeddings every run |
+| Optional LLM reviewer | `litellm` | Structured prompts for extra coverage |
+
+## 4. Pipeline stages
+
+### Stage 0 — Parse and normalise
+
+Use `markdown-it-py` with source mapping. Split documents into sections (`##`, `###`) and numbered items via regex:
+
+```python
+ITEM_RE = re.compile(r"^(?P<id>\d+[A-Z]?\.\d+)\s+(?P<text>.+)$", re.MULTILINE)
+```
+
+Each `Claim` stores:
+
+```python
+class Claim(BaseModel):
+    id: str
+    text: str
+    source_file: str
+    line_number: int
+    section: str
+    type: Literal["actionable", "informational"] = "informational"
+```
+
+### Stage 1 — Classify actionable vs informational
+
+Use spaCy rule-based matcher:
+
+- Actionable patterns: `must`, `should`, `verify`, `demonstrate`, `run`, `check`, `confirm`, `recompute`, `test`
+- Informational: descriptive sentences, references to prior work
+
+Optionally fine-tune a small classifier on 100–200 hand-labelled examples if rules are insufficient.
+
+### Stage 2 — Match master claims to revision text
+
+Two-step:
+
+1. **Exact ID match**: if revision contains same ID string, mark as `matched_id`.
+2. **Semantic match**: embed all claim texts and revision paragraphs with `all-MiniLM-L6-v2`; compute cosine similarity. Use threshold `0.75` for `covered`, `0.55–0.75` for `partial`, below `0.55` for `missing`.
+
+Output:
+
+```python
+class Match(BaseModel):
+    master_claim: Claim
+    revision_claim: Claim | None
+    method: Literal["id", "semantic", "none"]
+    score: float
+    status: Literal["covered", "partial", "superseded", "missing", "ambiguous"]
+```
+
+“Superseded” is flagged if the matched revision text contains explicit markers (`superseded`, `does not carry over`, `withdrawn`) or if a numerical verification fails while the old claim existed.
+
+### Stage 3 — Numerical claim verification
+
+Define a registry of numerical claims with associated model functions:
+
+```python
+# scan/src/scan_revision/numeric.py
+
+from typing import Callable
+from pydantic import BaseModel
+
+class NumericClaim(BaseModel):
+    id: str
+    function: Callable[[], dict]   # returns computed values
+    expected: dict                 # from master, e.g. {"B_final": 0.618, "M_final": 0.847}
+    tolerance: float = 0.02
+
+REGISTRY: dict[str, NumericClaim] = {}
+
+def register(id, tolerance=0.02):
+    def decorator(func):
+        REGISTRY[id] = NumericClaim(id=id, function=func, expected={}, tolerance=tolerance)
+        return func
+    return decorator
+```
+
+Example registration for masking:
+
+```python
+@register("12A.1", tolerance=0.01)
+def verify_masking_original():
+    # run the original gross-depletion model, not corrected
+    from legacy_model import run_masking
+    return run_masking(deficit=0.06)
+```
+
+When running the scan, for each master numeric claim:
+- Extract expected numbers using regex.
+- Run the registered function (or generic runner if no function).
+- Compare with `np.isclose(..., rtol=tolerance)`.
+- If mismatch and claim is from original model, mark `superseded`; if from corrected model, mark `failed` and raise in CI.
+
+### Stage 4 — Self-consistency check (revision vs itself)
+
+Use NLI model to find contradictions:
+
+- Split revision into sentences.
+- Focus on sentences containing the same key terms (`masking`, `deficit`, `A`, `B`, `threshold`, `collapse`).
+- For each pair, run `facebook/bart-large-mnli` with premise/hypothesis.
+- If `contradiction` score > 0.8, flag for manual review.
+
+Example contradiction pair:
+
+- “No masking window exists in the corrected model.”
+- “A genuine, converged masking window exists for small deficits.”
+
+### Stage 5 — Risk scoring
+
+Compute risk score for each unmatched or partially matched master item:
+
+```
+risk_score = w1 * (1 - match_score) + w2 * is_actionable + w3 * criticality
+```
+
+Criticality can be manually assigned in config (e.g., masking demonstration = high). Output sorted list.
+
+### Stage 6 — Report generation
+
+Produce:
+
+- `traceability.html`: interactive table with columns Master ID, Master text, Revision location (hyperlinked to line), Status, Match score, Numerical verification result.
+- `risk_register.json`: prioritised gaps.
+- `scan_summary.md`: human-readable summary.
+
+Use Jinja2 template and embed CSS for colour coding (green covered, yellow partial, red missing, grey superseded).
+
+### Stage 7 — CI integration
+
+`.github/workflows/scan.yml`:
+
+```yaml
+name: Master-Revision Gap Scan
+on: [push, pull_request]
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          pip install -e scan/
+      - name: Run scan
+        run: |
+          scan_revision --master MASTER.md --revision IMPLEMENTED_revision_ECOMOD.md \
+            --config scan/config.yaml --report-dir reports/
+      - name: Fail on critical gaps
+        run: |
+          python -m scan_revision.check_critical --report reports/risk_register.json
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: scan-report
+          path: reports/
+```
+
+`check_critical` exits non-zero if any actionable item with status `missing` and criticality `high` exists.
+
+## 5. Example `config.yaml`
+
+```yaml
+paths:
+  master: MASTER.md
+  revision: IMPLEMENTED_revision_ECOMOD.md
+
+matching:
+  semantic_threshold: 0.75
+  partial_threshold: 0.55
+  embedding_model: all-MiniLM-L6-v2
+
+numeric:
+  tolerance_default: 0.02
+  registry: scan.src.scan_revision.numeric
+
+consistency:
+  nli_model: facebook/bart-large-mnli
+  contradiction_threshold: 0.8
+  key_terms: ["masking", "deficit", "threshold", "collapse", "A", "B"]
+
+risk:
+  weights:
+    match_gap: 0.5
+    actionable: 0.3
+    criticality: 0.2
+  criticality_map:
+    "12A.1": high
+    "12G.7": high
+    "12G.3": medium
+    # ...
+```
+
+## 6. Integration with existing model scripts
+
+The numerical registry imports from the existing solver scripts:
+
+```python
+# scan/src/scan_revision/numeric.py
+from pathlib import Path
+import sys
+sys.path.append(str(Path(__file__).parent.parent.parent / "model"))
+
+@register("12A.1")
+def verify_masking_original():
+    from legacy_model import run_masking
+    return run_masking(deficit=0.06)
+
+@register("12G.2")
+def verify_basin_shrinkage():
+    from mask_rk4 import run_basin_shrinkage
+    return run_basin_shrinkage()
+```
+
+Each function returns a dict with keys matching the expected quantities (e.g., `{"B_final": 0.618, "M_final": 0.847}`).
+
+## 7. Optional LLM reviewer
+
+If deterministic checks miss nuanced gaps, add an LLM pass using `litellm`:
+
+```python
+from litellm import completion
+
+prompt = f"""
+You are reviewing a scientific revision against a master checklist.
+Master item: {master_text}
+Revision context: {revision_context}
+Does the revision address this item? Answer with: COVERED, PARTIAL, MISSING, SUPERSEDED.
+Give a one-sentence justification.
+"""
+response = completion(model="gpt-4o", messages=[{"role": "user", "content": prompt}])
+```
+
+Run multiple passes with different prompts (numerical focus, consistency focus, missing sections) and combine results by voting.
+
+## 8. Testing the scan itself
+
+Write unit tests:
+
+- `test_parser.py`: ensures numbered items are extracted correctly.
+- `test_matcher.py`: uses golden pairs to validate semantic matching thresholds.
+- `test_numeric.py`: runs each registry function and checks tolerance.
+- `test_consistency.py`: feeds known contradictions and expects flags.
+
+Use `pytest` and `hypothesis` for property-based tests:
+
+```python
+from hypothesis import given, strategies as st
+
+@given(st.floats(0.05, 0.2))
+def test_masking_window_vanishes_above_threshold(deficit):
+    result = run_masking(deficit=deficit)
+    if deficit > 0.075:
+        assert result["window_width"] == 0
+```
+
+## 9. How to run
+
+```bash
+# Install
+cd scan
+pip install -e .
+
+# Run full scan
+scan_revision --master ../MASTER.md --revision ../IMPLEMENTED_revision_ECOMOD.md \
+  --config config.yaml --report-dir ../reports
+
+# Run only matching, skip numerics
+scan_revision --master ../MASTER.md --revision ../IMPLEMENTED_revision_ECOMOD.md \
+  --skip-numeric --skip-consistency
+```
+
+---
+
+the scan can be augmented significantly beyond the automated pipeline already described. Below are further enhancements, grouped by purpose. They add layers of **formal verification**, **adversarial intelligence**, **provenance tracking**, and **causal analysis**, making the scan not just a one-time gap check but a living, self-improving verification system.
+
+---
+
+## 1. Formal and mathematical augmentation
+
+### 1.1 Symbolic model checking
+Instead of relying only on numerical sampling, parse the model equations and use **SMT solvers** (e.g., Z3, dReal) or **interval arithmetic** to prove or disprove claims over continuous parameter ranges.  
+*Example*: Prove that for all deficits `δ > 0.075`, no masking window exists, rather than showing it for a finite set of runs.
+
+### 1.2 Stability and bifurcation analysis
+Automatically compute equilibria and their stability (via Jacobian eigenvalues) for the model across parameter space. Link master claims about “collapse,” “thresholds,” or “windows” to formal bifurcation points.  
+*Tool*: SymPy + numerical continuation (AUTO, PyDSTool).
+
+### 1.3 Reachability analysis
+For claims about transient behavior (e.g., “B rises while A falls for 5.4 years”), use **reachability tools** (e.g., CORA, Flow*) to compute guaranteed reachable sets, not just sampled trajectories.
+
+### 1.4 Theorem extraction and proof checking
+Parse mathematical statements in the master (e.g., inequalities, bounds) and attempt to verify them using **automated theorem provers** (Lean, Coq) or computer algebra (SymPy). Flag any claim that cannot be proven.
+
+---
+
+## 2. Adversarial intelligence augmentation
+
+### 2.1 Counterexample search via optimisation
+Use **Bayesian optimisation** or **genetic algorithms** to actively search for parameter combinations that violate a master claim (e.g., find a deficit where a mask appears unexpectedly). This turns the scan from passive checking into active falsification.
+
+### 2.2 Multi‑agent adversarial review
+Deploy several LLM agents with different roles:
+- **Claim‑hunter** — extracts all implicit assumptions in the master.
+- **Contradictor** — tries to find revision text that contradicts each assumption.
+- **Verifier** — re‑runs model code to test contradictions.
+- **Summariser** — compiles unresolved disputes for human arbitration.
+
+Agents can use tools (model execution, web search) and iterate until consensus or disagreement is logged.
+
+### 2.3 Red‑team simulation
+Simulate a hostile reviewer who intentionally misreads the revision or uses edge‑case interpretations. The scan then flags any wording that could be misinterpreted, improving robustness of the document itself.
+
+---
+
+## 3. Provenance and knowledge‑graph augmentation
+
+### 3.1 Full provenance chain for every claim
+Store, for each revision claim:
+- Which master item it addresses.
+- Which model version and commit hash produced the numbers.
+- Which scripts and parameter files were used.
+- The timestamp and environment (Python version, library versions).
+
+This allows **bit‑level reproducibility** and auditability.
+
+### 3.2 Semantic knowledge graph
+Build a graph where nodes are concepts (A, B, deficit, masking, threshold), claims, model runs, and documents. Edges represent “supports,” “contradicts,” “derived_from,” “supersedes.” Run **graph queries** to find transitive gaps (e.g., a claim that supports another missing claim) and circular reasoning.
+
+### 3.3 Version‑aware claim tracking
+Assign each claim a semantic version (`v1.0`, `v1.1`). When a master claim is superseded, the revision records not only that it changed but **why** and **what evidence** motivated the change. This enables diffing claims across revisions, similar to code.
+
+---
+
+## 4. Uncertainty and robustness augmentation
+
+### 4.1 Stochastic simulation and distributional claims
+Many model parameters are uncertain. Instead of single‑point runs, run **Monte Carlo ensembles** and convert master claims into probabilistic statements (e.g., “masking window > 4 yr with 95% probability for deficit < 0.07”). The scan then checks whether the revision’s claims match the distributions, not just means.
+
+### 4.2 Sensitivity auditing
+Automatically compute **Sobol indices** or use **automatic differentiation** to determine which parameters most influence each key claim. Flag claims that are highly sensitive to untested parameters, suggesting the revision should discuss robustness.
+
+### 4.3 Model‑form uncertainty
+Compare the corrected model `(1‴)` with the original gross‑depletion model under the same scenarios. The scan can quantify **model‑form uncertainty** and report it separately from parameter uncertainty, making clear which conclusions are model‑specific.
+
+---
+
+## 5. Explainability and trust augmentation
+
+### 5.1 Explainable matching (XAI)
+When the semantic matcher links a master item to a revision paragraph, provide a **saliency explanation**: highlight which words or phrases drove the match. This lets humans quickly verify whether the match is semantically correct or superficial.
+
+### 5.2 Evidence strength scoring
+For each verified numerical claim, compute a confidence score based on:
+- Convergence with smaller timesteps.
+- Agreement across multiple solvers.
+- Smoothness of parameter sweeps.
+- Residual error in numerical integration.
+
+Claims with low evidence strength are flagged as “needs further verification.”
+
+### 5.3 Audit trail for human decisions
+Every time a human overrides an automatic status (e.g., marks a missing item as “superseded”), the system records the decision, rationale, and timestamp. Over time, this builds a training set to improve the automatic classifier.
+
+---
+
+## 6. Process and lifecycle augmentation
+
+### 6.1 Continuous monitoring and drift detection
+Set up a **scheduled CI job** that re‑runs the scan whenever the model code, master, or revision changes. If a previously verified claim starts failing, the system sends an alert and creates an issue automatically.
+
+### 6.2 Benchmark dataset and leaderboard
+Maintain a dataset of manually curated master–revision claim pairs with gold labels (covered/superseded/etc.). Use it to evaluate and improve the matcher, and to compare different embedding models or classifiers.
+
+### 6.3 Active learning loop
+When the matcher is uncertain about a claim (similarity near threshold), the system **asks a human** to label it. The label is added to the training set, improving future scans.
+
+### 6.4 Report customisation for stakeholders
+Generate different views of the traceability matrix:
+- For scientists: full numerical evidence, convergence plots.
+- For managers: risk register and summary of open gaps.
+- For auditors: raw provenance and reproducibility logs.
+
+---
+
+## 7. Integration with external knowledge
+
+### 7.1 Citation and literature cross‑check
+For claims that reference external literature (e.g., “this resembles a Jevons rebound”), automatically search a citation database or use an LLM to verify that the cited concept is used correctly in the revision.
+
+### 7.2 Cross‑model comparison
+If there are alternative models of the same phenomenon (e.g., other ECOMOD variants), run the same master claims against them and report whether conclusions are robust across models. This goes beyond the current single‑model scan.
+
+### 7.3 Policy‑relevance assessment
+For each closed gap, classify whether it has policy implications (e.g., “extinction threshold,” “masking illusion”). Automatically generate a plain‑language summary of what changed and why it matters for decision‑makers.
+
+---
+
+## Caveat
+
+Many of these augmentations add complexity and computational cost. A practical implementation would **layer** them: start with the deterministic, low‑cost checks (parser, numeric verification, NLI contradiction), then add adversarial search, formal methods, and knowledge graphs as the system matures. The goal is not to replace human judgment but to **amplify** it by surfacing subtle issues and providing rigorous evidence for every claim.
+
+Below is a complete, functional Python implementation of the scan pipeline described earlier. It is modular, uses modern libraries, and can be run as a CLI. The code is provided as separate files; create the directory structure as shown and install with `pip install -e .`.
+
+---
+
+## Project structure
+
+```
+scan_revision/
+├── pyproject.toml
+├── config.yaml
+├── src/
+│   └── scan_revision/
+│       ├── __init__.py
+│       ├── cli.py
+│       ├── models.py
+│       ├── parser.py
+│       ├── classifier.py
+│       ├── matcher.py
+│       ├── numeric.py
+│       ├── consistency.py
+│       ├── risk.py
+│       ├── report.py
+│       └── utils.py
+├── tests/
+│   └── test_parser.py
+└── .github/workflows/scan.yml
+```
+
+---
+
+## File: `pyproject.toml`
+
+```toml
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scan-revision"
+version = "0.1.0"
+description = "Automated gap scan between master checklist and revision document"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "typer",
+    "rich",
+    "pydantic>=2",
+    "markdown-it-py",
+    "spacy",
+    "sentence-transformers",
+    "rapidfuzz",
+    "regex",
+    "numpy",
+    "pandas",
+    "transformers",
+    "jinja2",
+    "pyyaml",
+    "joblib",
+    "litellm",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "hypothesis"]
+```
+
+---
+
+## File: `config.yaml`
+
+```yaml
+paths:
+  master: "MASTER.md"
+  revision: "IMPLEMENTED_revision_ECOMOD.md"
+
+matching:
+  semantic_threshold: 0.75
+  partial_threshold: 0.55
+  embedding_model: "all-MiniLM-L6-v2"
+
+numeric:
+  tolerance_default: 0.02
+  registry: "scan_revision.numeric"
+
+consistency:
+  nli_model: "facebook/bart-large-mnli"
+  contradiction_threshold: 0.8
+  key_terms: ["masking", "deficit", "threshold", "collapse", "A", "B"]
+
+risk:
+  weights:
+    match_gap: 0.5
+    actionable: 0.3
+    criticality: 0.2
+  criticality_map:
+    "12A.1": high
+    "12G.7": high
+    "12G.3": medium
+```
+
+---
+
+## File: `src/scan_revision/__init__.py`
+
+```python
+"""Automated gap scan between master checklist and revision document."""
+__version__ = "0.1.0"
+```
+
+---
+
+## File: `src/scan_revision/models.py`
+
+```python
+from pydantic import BaseModel, Field
+from typing import Literal, Optional, List, Dict, Any
+
+class Claim(BaseModel):
+    id: str
+    text: str
+    source_file: str
+    line_number: int
+    section: str
+    type: Literal["actionable", "informational"] = "informational"
+
+class Match(BaseModel):
+    master_claim: Claim
+    revision_claim: Optional[Claim] = None
+    method: Literal["id", "semantic", "none"] = "none"
+    score: float = 0.0
+    status: Literal["covered", "partial", "superseded", "missing", "ambiguous"] = "missing"
+
+class NumericVerification(BaseModel):
+    claim_id: str
+    expected: Dict[str, float]
+    computed: Optional[Dict[str, float]] = None
+    passed: bool = False
+    error: Optional[str] = None
+
+class ConsistencyIssue(BaseModel):
+    sentence1: str
+    sentence2: str
+    relation: Literal["contradiction", "entailment", "neutral"]
+    score: float
+    line1: int
+    line2: int
+
+class RiskItem(BaseModel):
+    claim_id: str
+    risk_score: float
+    status: str
+    criticality: str
+    reason: str
+
+class ScanReport(BaseModel):
+    matches: List[Match]
+    numeric: List[NumericVerification]
+    consistency: List[ConsistencyIssue]
+    risk: List[RiskItem]
+    config: Dict[str, Any]
+```
+
+---
+
+## File: `src/scan_revision/utils.py`
+
+```python
+import yaml
+import re
+import logging
+from pathlib import Path
+from typing import Any, Dict
+
+logger = logging.getLogger(__name__)
+
+def load_config(path: str) -> Dict[str, Any]:
+    with open(path, 'r') as f:
+        return yaml.safe_load(f)
+
+def extract_numbered_items(text: str, source_file: str) -> list[dict]:
+    """Extract numbered items from markdown text."""
+    items = []
+    # Regex for patterns like "12A.1", "12G.7", "1.2.3", etc.
+    pattern = re.compile(r'^(?P<id>\d+[A-Z]?\.\d+(?:\.\d+)?)\s+(?P<text>.+)$', re.MULTILINE)
+    lines = text.splitlines()
+    current_section = ""
+    for i, line in enumerate(lines, start=1):
+        # Track markdown headers for section context
+        header_match = re.match(r'^(#{1,6})\s+(.*)', line)
+        if header_match:
+            current_section = header_match.group(2)
+            continue
+        m = pattern.match(line.strip())
+        if m:
+            items.append({
+                "id": m.group("id"),
+                "text": m.group("text").strip(),
+                "source_file": source_file,
+                "line_number": i,
+                "section": current_section
+            })
+    return items
+
+def ensure_dir(path: str) -> None:
+    Path(path).mkdir(parents=True, exist_ok=True)
+```
+
+---
+
+## File: `src/scan_revision/parser.py`
+
+```python
+import markdown_it
+from markdown_it.token import Token
+from typing import List
+from .models import Claim
+from .utils import extract_numbered_items
+
+def parse_markdown_file(file_path: str) -> List[Claim]:
+    """Parse markdown file and return list of numbered claims."""
+    with open(file_path, 'r', encoding='utf-8') as f:
+        text = f.read()
+    # Use markdown-it to get line numbers? Simpler: use regex on raw text
+    raw_items = extract_numbered_items(text, file_path)
+    claims = []
+    for item in raw_items:
+        claims.append(Claim(
+            id=item["id"],
+            text=item["text"],
+            source_file=item["source_file"],
+            line_number=item["line_number"],
+            section=item["section"],
+            type="informational"  # will be updated later
+        ))
+    return claims
+```
+
+---
+
+## File: `src/scan_revision/classifier.py`
+
+```python
+import spacy
+from typing import List
+from .models import Claim
+
+# Load spaCy model (assumes en_core_web_trf is installed)
+try:
+    nlp = spacy.load("en_core_web_trf")
+except:
+    nlp = spacy.load("en_core_web_sm")  # fallback
+
+ACTIONABLE_PATTERNS = [
+    "must", "should", "shall", "verify", "demonstrate", "run", "check",
+    "confirm", "recompute", "test", "validate", "ensure", "require"
+]
+
+def classify_claim_type(claim: Claim) -> Claim:
+    """Classify a claim as actionable or informational based on keyword rules."""
+    text_lower = claim.text.lower()
+    if any(word in text_lower for word in ACTIONABLE_PATTERNS):
+        claim.type = "actionable"
+    else:
+        claim.type = "informational"
+    return claim
+
+def classify_all(claims: List[Claim]) -> List[Claim]:
+    return [classify_claim_type(c) for c in claims]
+```
+
+---
+
+## File: `src/scan_revision/matcher.py`
+
+```python
+from typing import List, Tuple, Optional
+import logging
+from sentence_transformers import SentenceTransformer, util
+import numpy as np
+from rapidfuzz import fuzz
+from .models import Claim, Match
+
+logger = logging.getLogger(__name__)
+
+class SemanticMatcher:
+    def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
+        self.model = SentenceTransformer(model_name)
+        self.semantic_threshold = 0.75
+        self.partial_threshold = 0.55
+
+    def embed(self, texts: List[str]) -> np.ndarray:
+        return self.model.encode(texts, convert_to_tensor=True)
+
+    def match_claims(self, master_claims: List[Claim], revision_claims: List[Claim]) -> List[Match]:
+        # Try exact ID match first
+        matches = []
+        revision_by_id = {c.id: c for c in revision_claims}
+        master_unmatched = []
+        used_revision_ids = set()
+
+        for mc in master_claims:
+            if mc.id in revision_by_id:
+                rc = revision_by_id[mc.id]
+                status = "covered" if self._is_covered(mc, rc) else "partial"
+                matches.append(Match(
+                    master_claim=mc,
+                    revision_claim=rc,
+                    method="id",
+                    score=1.0,
+                    status=status
+                ))
+                used_revision_ids.add(mc.id)
+            else:
+                master_unmatched.append(mc)
+
+        # Semantic matching for remaining
+        if master_unmatched:
+            revision_unmatched = [c for c in revision_claims if c.id not in used_revision_ids]
+            if revision_unmatched:
+                master_texts = [c.text for c in master_unmatched]
+                revision_texts = [c.text for c in revision_unmatched]
+                master_emb = self.embed(master_texts)
+                revision_emb = self.embed(revision_texts)
+                cos_scores = util.cos_sim(master_emb, revision_emb).cpu().numpy()
+                for i, mc in enumerate(master_unmatched):
+                    best_idx = int(np.argmax(cos_scores[i]))
+                    best_score = float(cos_scores[i][best_idx])
+                    if best_score >= self.semantic_threshold:
+                        status = "covered"
+                    elif best_score >= self.partial_threshold:
+                        status = "partial"
+                    else:
+                        status = "missing"
+                    rc = revision_unmatched[best_idx]
+                    matches.append(Match(
+                        master_claim=mc,
+                        revision_claim=rc,
+                        method="semantic",
+                        score=best_score,
+                        status=status
+                    ))
+                # Mark remaining revision claims as unused (they don't correspond to master)
+            else:
+                for mc in master_unmatched:
+                    matches.append(Match(
+                        master_claim=mc,
+                        method="none",
+                        score=0.0,
+                        status="missing"
+                    ))
+        return matches
+
+    def _is_covered(self, master: Claim, revision: Claim) -> bool:
+        # Simple heuristic: if revision text length is very short, maybe partial
+        if len(revision.text) < 5:
+            return False
+        return True
+```
+
+---
+
+## File: `src/scan_revision/numeric.py`
+
+```python
+import re
+import importlib
+from typing import Dict, Any, Callable, Optional
+from .models import NumericVerification
+
+# Registry of numerical claim verifiers
+REGISTRY: Dict[str, Callable[[], Dict[str, float]]] = {}
+
+def register(claim_id: str):
+    """Decorator to register a numerical claim verification function."""
+    def decorator(func):
+        REGISTRY[claim_id] = func
+        return func
+    return decorator
+
+def extract_expected_numbers(text: str) -> Dict[str, float]:
+    """Extract numbers from a claim text, e.g., 'B 0.5→0.618' returns {'B_start':0.5, 'B_end':0.618}."""
+    # This is simplistic; can be improved with more patterns
+    numbers = {}
+    # Pattern for "X start→end"
+    m = re.search(r'(\w+)\s+([\d.]+)→([\d.]+)', text)
+    if m:
+        numbers[f"{m.group(1)}_start"] = float(m.group(2))
+        numbers[f"{m.group(1)}_end"] = float(m.group(3))
+    # Pattern for "X = value"
+    m = re.findall(r'(\w+)\s*=\s*([\d.]+)', text)
+    for key, val in m:
+        numbers[key] = float(val)
+    return numbers
+
+def verify_numeric_claim(claim_id: str, master_text: str, tolerance: float = 0.02) -> Optional[NumericVerification]:
+    """Run registered verifier for a claim and compare with expected numbers."""
+    if claim_id not in REGISTRY:
+        return None
+    expected = extract_expected_numbers(master_text)
+    if not expected:
+        return NumericVerification(claim_id=claim_id, expected={}, computed=None, passed=False, error="No expected numbers found in claim")
+    try:
+        func = REGISTRY[claim_id]
+        computed = func()
+    except Exception as e:
+        return NumericVerification(claim_id=claim_id, expected=expected, computed=None, passed=False, error=str(e))
+    passed = True
+    for key, exp_val in expected.items():
+        if key not in computed:
+            passed = False
+            break
+        if abs(computed[key] - exp_val) > tolerance * max(1.0, abs(exp_val)):
+            passed = False
+            break
+    return NumericVerification(claim_id=claim_id, expected=expected, computed=computed, passed=passed, error=None)
+
+def run_all_numeric_checks(master_claims, config) -> list[NumericVerification]:
+    results = []
+    for claim in master_claims:
+        if claim.id in REGISTRY:
+            tol = config["numeric"].get("tolerance_default", 0.02)
+            res = verify_numeric_claim(claim.id, claim.text, tol)
+            if res:
+                results.append(res)
+    return results
+```
+
+---
+
+## File: `src/scan_revision/consistency.py`
+
+```python
+from transformers import pipeline
+import logging
+from typing import List, Tuple
+from .models import ConsistencyIssue
+
+logger = logging.getLogger(__name__)
+
+class ConsistencyChecker:
+    def __init__(self, model_name: str = "facebook/bart-large-mnli"):
+        self.classifier = pipeline("zero-shot-classification", model=model_name)
+        self.threshold = 0.8
+
+    def find_contradictions(self, sentences: List[str], key_terms: List[str]) -> List[ConsistencyIssue]:
+        issues = []
+        # Only consider sentences containing key terms
+        filtered = [(i, s) for i, s in enumerate(sentences) if any(term.lower() in s.lower() for term in key_terms)]
+        for idx1 in range(len(filtered)):
+            for idx2 in range(idx1+1, len(filtered)):
+                sent1 = filtered[idx1][1]
+                sent2 = filtered[idx2][1]
+                result = self.classifier(f"{sent1} [SEP] {sent2}", candidate_labels=["contradiction", "entailment", "neutral"])
+                if result['labels'][0] == "contradiction" and result['scores'][0] >= self.threshold:
+                    issues.append(ConsistencyIssue(
+                        sentence1=sent1,
+                        sentence2=sent2,
+                        relation="contradiction",
+                        score=result['scores'][0],
+                        line1=filtered[idx1][0]+1,
+                        line2=filtered[idx2][0]+1
+                    ))
+        return issues
+```
+
+---
+
+## File: `src/scan_revision/risk.py`
+
+```python
+from typing import List
+from .models import Match, RiskItem
+
+def compute_risk(matches: List[Match], config: dict) -> List[RiskItem]:
+    weights = config["risk"]["weights"]
+    criticality_map = config["risk"].get("criticality_map", {})
+    risk_items = []
+    for match in matches:
+        if match.status == "missing":
+            # High risk
+            gap = 1.0
+        elif match.status == "partial":
+            gap = 1.0 - match.score
+        else:
+            continue
+        actionable = 1.0 if match.master_claim.type == "actionable" else 0.0
+        criticality = criticality_map.get(match.master_claim.id, "low")
+        if criticality == "high":
+            crit_val = 1.0
+        elif criticality == "medium":
+            crit_val = 0.5
+        else:
+            crit_val = 0.1
+        score = weights["match_gap"] * gap + weights["actionable"] * actionable + weights["criticality"] * crit_val
+        risk_items.append(RiskItem(
+            claim_id=match.master_claim.id,
+            risk_score=score,
+            status=match.status,
+            criticality=criticality,
+            reason=f"Match status: {match.status}, score: {match.score}"
+        ))
+    risk_items.sort(key=lambda x: x.risk_score, reverse=True)
+    return risk_items
+```
+
+---
+
+## File: `src/scan_revision/report.py`
+
+```python
+import json
+from pathlib import Path
+from typing import List
+import pandas as pd
+from jinja2 import Template
+from .models import Match, NumericVerification, ConsistencyIssue, RiskItem, ScanReport
+
+def generate_html_report(report: ScanReport, output_path: str):
+    """Generate interactive HTML report using a template."""
+    template_str = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Master-Revision Gap Scan Report</title>
+        <style>
+            body { font-family: sans-serif; margin: 20px; }
+            table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+            th { background-color: #f2f2f2; }
+            .covered { background-color: #d4edda; }
+            .partial { background-color: #fff3cd; }
+            .missing { background-color: #f8d7da; }
+            .superseded { background-color: #e2e3e5; }
+        </style>
+    </head>
+    <body>
+        <h1>Master-Revision Gap Scan Report</h1>
+        <h2>Summary</h2>
+        <p>Total master claims: {{ matches|length }}</p>
+        <p>Covered: {{ matches|selectattr('status','equalto','covered')|list|length }}</p>
+        <p>Partial: {{ matches|selectattr('status','equalto','partial')|list|length }}</p>
+        <p>Missing: {{ matches|selectattr('status','equalto','missing')|list|length }}</p>
+        <p>Superseded: {{ matches|selectattr('status','equalto','superseded')|list|length }}</p>
+        
+        <h2>Traceability Matrix</h2>
+        <table>
+            <tr>
+                <th>Master ID</th>
+                <th>Master Text</th>
+                <th>Revision Location</th>
+                <th>Status</th>
+                <th>Match Score</th>
+                <th>Method</th>
+            </tr>
+            {% for m in matches %}
+            <tr class="{{ m.status }}">
+                <td>{{ m.master_claim.id }}</td>
+                <td>{{ m.master_claim.text }}</td>
+                <td>{{ m.revision_claim.source_file }}:{{ m.revision_claim.line_number }} (section: {{ m.revision_claim.section }})</td>
+                <td>{{ m.status }}</td>
+                <td>{{ "%.2f"|format(m.score) }}</td>
+                <td>{{ m.method }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h2>Numerical Verifications</h2>
+        <table>
+            <tr><th>Claim ID</th><th>Passed</th><th>Error</th></tr>
+            {% for nv in report.numeric %}
+            <tr><td>{{ nv.claim_id }}</td><td>{{ nv.passed }}</td><td>{{ nv.error }}</td></tr>
+            {% endfor %}
+        </table>
+
+        <h2>Consistency Issues</h2>
+        <ul>
+            {% for ci in report.consistency %}
+            <li>Line {{ ci.line1 }}: "{{ ci.sentence1 }}" <b>{{ ci.relation }}</b> Line {{ ci.line2 }}: "{{ ci.sentence2 }}" (score {{ ci.score }})</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Risk Register</h2>
+        <table>
+            <tr><th>Claim ID</th><th>Risk Score</th><th>Status</th><th>Criticality</th><th>Reason</th></tr>
+            {% for r in report.risk %}
+            <tr><td>{{ r.claim_id }}</td><td>{{ "%.2f"|format(r.risk_score) }}</td><td>{{ r.status }}</td><td>{{ r.criticality }}</td><td>{{ r.reason }}</td></tr>
+            {% endfor %}
+        </table>
+    </body>
+    </html>
+    """
+    template = Template(template_str)
+    html = template.render(matches=report.matches, report=report)
+    Path(output_path).write_text(html, encoding='utf-8')
+
+def generate_json_report(report: ScanReport, output_path: str):
+    """Save report as JSON."""
+    # Convert to dict for JSON serialization
+    data = {
+        "matches": [
+            {
+                "master_id": m.master_claim.id,
+                "master_text": m.master_claim.text,
+                "revision_id": m.revision_claim.id if m.revision_claim else None,
+                "revision_text": m.revision_claim.text if m.revision_claim else None,
+                "revision_line": m.revision_claim.line_number if m.revision_claim else None,
+                "status": m.status,
+                "score": m.score,
+                "method": m.method
+            } for m in report.matches
+        ],
+        "numeric": [nv.dict() for nv in report.numeric],
+        "consistency": [ci.dict() for ci in report.consistency],
+        "risk": [r.dict() for r in report.risk],
+    }
+    with open(output_path, 'w') as f:
+        json.dump(data, f, indent=2)
+```
+
+---
+
+## File: `src/scan_revision/cli.py`
+
+```python
+import typer
+from rich.console import Console
+from rich.progress import Progress, SpinnerColumn, TextColumn
+from pathlib import Path
+import logging
+from typing import Optional
+
+from .parser import parse_markdown_file
+from .classifier import classify_all
+from .matcher import SemanticMatcher
+from .numeric import run_all_numeric_checks, REGISTRY
+from .consistency import ConsistencyChecker
+from .risk import compute_risk
+from .report import generate_html_report, generate_json_report
+from .models import ScanReport, Claim, Match
+from .utils import load_config, ensure_dir
+
+app = typer.Typer()
+console = Console()
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+@app.command()
+def scan(
+    master: str = typer.Option(..., help="Path to master checklist markdown"),
+    revision: str = typer.Option(..., help="Path to revision markdown"),
+    config: str = typer.Option("config.yaml", help="Path to config YAML"),
+    report_dir: str = typer.Option("reports", help="Directory for output reports"),
+    skip_numeric: bool = typer.Option(False, help="Skip numerical verification"),
+    skip_consistency: bool = typer.Option(False, help="Skip consistency check"),
+):
+    """Run the master-revision gap scan."""
+    cfg = load_config(config)
+    ensure_dir(report_dir)
+
+    console.print("[bold]Parsing master checklist...[/bold]")
+    master_claims = parse_markdown_file(master)
+    console.print(f"Found {len(master_claims)} numbered items in master.")
+
+    console.print("[bold]Parsing revision document...[/bold]")
+    revision_claims = parse_markdown_file(revision)
+    console.print(f"Found {len(revision_claims)} numbered items in revision.")
+
+    # Classify actionable/informational
+    master_claims = classify_all(master_claims)
+    revision_claims = classify_all(revision_claims)
+
+    console.print("[bold]Matching claims...[/bold]")
+    matcher = SemanticMatcher(model_name=cfg["matching"]["embedding_model"])
+    matcher.semantic_threshold = cfg["matching"]["semantic_threshold"]
+    matcher.partial_threshold = cfg["matching"]["partial_threshold"]
+    matches = matcher.match_claims(master_claims, revision_claims)
+    console.print(f"Matched {len(matches)} master claims.")
+
+    # Numerical verification
+    numeric_results = []
+    if not skip_numeric:
+        console.print("[bold]Verifying numerical claims...[/bold]")
+        # Import numeric registry functions
+        # The registry functions should be registered before this call
+        numeric_results = run_all_numeric_checks(master_claims, cfg)
+        console.print(f"Verified {len(numeric_results)} numerical claims.")
+    else:
+        console.print("[yellow]Skipping numerical verification.[/yellow]")
+
+    # Consistency check
+    consistency_issues = []
+    if not skip_consistency:
+        console.print("[bold]Checking internal consistency...[/bold]")
+        checker = ConsistencyChecker(model_name=cfg["consistency"]["nli_model"])
+        # Extract all sentences from revision
+        with open(revision, 'r') as f:
+            revision_text = f.read()
+        sentences = [s.strip() for s in revision_text.replace('\n', ' ').split('. ') if s.strip()]
+        consistency_issues = checker.find_contradictions(sentences, cfg["consistency"]["key_terms"])
+        console.print(f"Found {len(consistency_issues)} potential contradictions.")
+    else:
+        console.print("[yellow]Skipping consistency check.[/yellow]")
+
+    # Risk computation
+    console.print("[bold]Computing risk register...[/bold]")
+    risk_items = compute_risk(matches, cfg)
+    console.print(f"Identified {len(risk_items)} risk items.")
+
+    # Build report
+    report = ScanReport(
+        matches=matches,
+        numeric=numeric_results,
+        consistency=consistency_issues,
+        risk=risk_items,
+        config=cfg
+    )
+
+    # Generate outputs
+    html_path = Path(report_dir) / "traceability.html"
+    json_path = Path(report_dir) / "scan_report.json"
+    console.print(f"[bold]Generating reports to {report_dir}...[/bold]")
+    generate_html_report(report, str(html_path))
+    generate_json_report(report, str(json_path))
+
+    # Summary
+    covered = sum(1 for m in matches if m.status == "covered")
+    partial = sum(1 for m in matches if m.status == "partial")
+    missing = sum(1 for m in matches if m.status == "missing")
+    superseded = sum(1 for m in matches if m.status == "superseded")
+    console.print(f"[green]Covered: {covered}[/green]")
+    console.print(f"[yellow]Partial: {partial}[/yellow]")
+    console.print(f"[red]Missing: {missing}[/red]")
+    console.print(f"[grey]Superseded: {superseded}[/grey]")
+
+if __name__ == "__main__":
+    app()
+```
+
+---
+
+## File: `.github/workflows/scan.yml`
+
+```yaml
+name: Master-Revision Gap Scan
+on: [push, pull_request]
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          pip install -e scan_revision/
+      - name: Run scan
+        run: |
+          scan_revision scan --master MASTER.md --revision IMPLEMENTED_revision_ECOMOD.md \
+            --config config.yaml --report-dir reports/
+      - name: Fail on critical gaps
+        run: |
+          python -c "
+          import json
+          with open('reports/scan_report.json') as f:
+              data = json.load(f)
+          critical = [r for r in data['risk'] if r['criticality']=='high' and r['status']=='missing']
+          if critical:
+              raise SystemExit(f'Critical gaps found: {critical}')
+          "
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: scan-report
+          path: reports/
+```
+
+---
+
+## Example: Registering numerical verifiers
+
+You would have a separate module, e.g., `scan_revision/numeric_registry.py`, or you can add registrations in `numeric.py` directly. Here's an example:
+
+```python
+# File: src/scan_revision/numeric_registry.py
+from scan_revision.numeric import register
+
+@register("12A.1")
+def verify_masking_original():
+    # This would call your actual model
+    # Placeholder:
+    return {"B_start": 0.5, "B_end": 0.618, "M_end": 0.847}
+```
+
+Then in `cli.py`, before running numeric checks, import `scan_revision.numeric_registry` to populate the registry.
+
+---
+
+## Running the scan
+
+After installing dependencies and setting up the folder, run:
+
+```bash
+scan_revision scan --master MASTER.md --revision IMPLEMENTED_revision_ECOMOD.md --config config.yaml
+```
+
+This will produce `traceability.html` and `scan_report.json` in the `reports/` directory.
+
+---
+
+This code provides the full pipeline: parsing, classification, semantic matching, numerical verification, consistency checking, risk scoring, and report generation. It is extensible and can be integrated into CI/CD.

@@ -1,0 +1,76 @@
+# exhibit bundle v2 - loci restated against article v39 and supplementary v10
+# generated 2026-09-17T03:09:25Z | Python 3.13.14 | numpy 2.3.5 | scipy 1.17.1
+# the printed values are unchanged from the v5 bundle; only the section labels moved
+
+######## certification_lp.py ########
+Section 10.1 and supplementary S8 exhibit - a two-component aggregate on declared bounds
+  published aggregate z =  0.0 :  displayed split [0.0, 0.0] -> premium Pi =  0.00 ; concealed deficits delta*_1 = 4.00 , delta*_2 = 4.00   (scipy.linprog(highs))
+  published aggregate z =  1.0 :  displayed split [2.0, 0.0] -> premium Pi =  1.00 ; concealed deficits delta*_1 = 4.00 , delta*_2 = 4.00   (scipy.linprog(highs))
+  published aggregate z =  3.0 :  displayed split [6.0, 0.0] -> premium Pi =  3.00 ; concealed deficits delta*_1 = 4.00 , delta*_2 = 4.00   (scipy.linprog(highs))
+  Read: the aggregate value is compatible with a deficit of that size in either component,
+  so no published aggregate certifies componentwise adequacy; it can only refute or alarm.
+
+Proposition 31 - aggregate dynamics do not transport component event times (k = 1)
+  start (2, 98)   aggregate Z(t) = 100x e^{-t}; component barrier crossings at 0.6931, 4.5850; first exit 0.6931
+  start (50, 50)  aggregate Z(t) = 100x e^{-t}; component barrier crossings at 3.9120, 3.9120; first exit 3.9120
+  log(2) = 0.6931 and log(50) = 3.9120 : identical aggregate trajectory, different event times.
+
+Section 3.1 certification state, evaluated on the three classified indicators
+  (Balanced = the accounting identity holds as arithmetic; the remaining entries require
+   compartments, barriers and production relations that these products do not declare.)
+indicator                                          Typed  Balanced Conserved  Positive Admissibl      Safe Adequate     Closed
+G3P anomaly-persistence index (main text 6.5.1)        no       yes       n/a       n/a       n/a       n/a       n/a       n/a
+phosphate reserve-life ratio (main text 6.5.2)        no       yes       n/a       n/a       n/a       n/a       n/a       n/a
+fisheries removals-only pressure time (main text 6.5.3)        no       yes       n/a       n/a       n/a        no       n/a       n/a
+
+No entry is scored as refuted: an undeclared obligation is reported as not established, and a
+predicate the object cannot state is reported as not applicable (Section 3.1).
+
+######## curvature_and_crossover.py ########
+Proposition 27 - curvature number on phi(u) = c u^p, with c = 1, u0 = 1, barrier at u = 0
+     p      kappa          H_loc        T exact      T / H_loc
+  0.00       0.00         1.0000         1.0000         1.0000
+  0.50       0.50         1.0000         2.0000         2.0000
+  0.75       0.75         1.0000         4.0000         4.0000
+  1.00       1.00         1.0000            inf            inf
+  1.50       1.50         1.0000            inf            inf
+ -0.50      -0.50         1.0000         0.6667         0.6667
+
+Closed form check, T = H_loc/(1-kappa) for kappa<1:
+   p =  0.00 : T = 1.000000, H_loc/(1-kappa) = 1.000000, match: True
+   p =  0.50 : T = 2.000000, H_loc/(1-kappa) = 2.000000, match: True
+   p =  0.75 : T = 4.000000, H_loc/(1-kappa) = 4.000000, match: True
+   p = -0.50 : T = 0.666667, H_loc/(1-kappa) = 0.666667, match: True
+For kappa>=1 the integral diverges at the barrier; the frozen-rate ratio understates by an unbounded factor.
+
+Proposition 28 - reserve-life crossover on the pinned record
+reserves = 74,000,000 kt, production = 240,000 kt/yr -> tau = 308.33 yr (tabulated as ~309 yr)
+first-order threshold eta >= g*tau/2 = 4.625  (admissible elasticities obey 0 <= eta <= 1)
+     eta           T (yr)            T/tau        T - tau
+    0.00            77.58           0.2516        -230.76
+    0.25            86.34           0.2800        -221.99
+    0.50            99.01           0.3211        -209.32
+    0.75           121.25           0.3933        -187.08
+    0.90           151.27           0.4906        -157.07
+    0.99           227.70           0.7385         -80.64
+
+The ratio exceeds the horizon computed with growth at every admissible eta, and the
+condition that would make it conservative requires eta > 1, i.e. reclassification larger
+than extraction itself. The reserve-life number is therefore optimistic in a fixed direction.
+
+Proposition 26 - sign of the frozen-rate error, on three declared laws (A0=1, Amin=1e-6)
+  proportional  phi(A)=qA    T ~    276.310 yr   H_loc =     20.000 yr   T>=H_loc: True
+  constant      phi(A)=c     T ~   1999.998 yr   H_loc =   1999.998 yr   T>=H_loc: False
+  accelerating  phi(A)=cA^0.4 T ~     83.312 yr   H_loc =     50.000 yr   T>=H_loc: True
+
+######## persistence_index_simulation.py ########
+beta = 1, sigma = 1, 400 replicates per length, seed 7
+       n   index median     index mean      index q90     stock drop     n usable
+     100          0.000          0.211          0.812           98.9          400
+    1000          0.000          0.247          0.835          998.9          400
+   10000          0.000          0.206          0.953         9999.1          400
+  100000          0.000          0.246          0.999        99999.0          400
+
+The index stays at the noise-to-trend scale (sigma/beta = 1) while the stock implied by
+the same series falls by five orders of magnitude across these record lengths: the
+statistic is a trend-detection quantity expressed in years, not a horizon.
