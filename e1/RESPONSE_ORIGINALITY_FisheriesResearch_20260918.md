@@ -1,0 +1,47 @@
+# Response to the editorial originality query — manuscript "Forecasting biomass under structural non-stationarity" (Northern cod)
+
+**To:** The Editor, *Fisheries Research*
+**From:** Amin Abaee (sole author; Independent Researcher; ORCID 0000-0002-0019-1842; amin_abaee@ut.ac.ir)
+**Date:** September 18, 2026
+**Re:** Editorial notification of textual overlap detected by Crossref Similarity Check (iThenticate)
+
+---
+
+Dear Editor,
+
+Thank you for the notification and for leaving the door open to a legitimate explanation ("Unless a legitimate explanation is received … this manuscript will not be reconsidered"). This letter provides that explanation, with documentary evidence.
+
+## 1. The explanation
+
+The works against which the submitted manuscript overlaps are **my own earlier public deposits of this same study** — not the copyrighted work of any third party. The overlap is self-overlap by a sole author revising his own manuscript, amplified by two public archiving habits:
+
+1. **A public working-paper/record habit.** An earlier working version of this same study, under the title *"Does a surplus-production ladder improve forecasts of Northern cod? A scored test on NAFO 2J3KL"* was publicly deposited with a DOI (**10.5281/zenodo.22553609**). Same author, same ORCID, same data, same estimator, same series.
+2. **A public reproducibility-repository habit.** All my working materials — including successive *draft carriers of this very manuscript* (markdown/LaTeX files named `paperE1_cod_forecast_ladder_v49` … `v58` and later) — sit openly in the repository **https://github.com/MIKEAA2020/general-sustainability**, because the paper's reproducibility commitments require the code, data, and carrier history to be public. Successive drafts of one study by one author naturally share very large stretches of text.
+
+No third-party work is reproduced anywhere in the manuscript without attribution. Every external source is cited in the reference list (51 entries), and no passage of another person's writing appears as my own.
+
+## 2. Evidence the flagged sources are this study's own deposits
+
+| Likely flagged item | Identity | Relationship to submitted manuscript |
+| --- | --- | --- |
+| Zenodo record, DOI 10.5281/zenodo.22553609, "Does a surplus-production ladder improve forecasts of Northern cod? A scored test on NAFO 2J3KL" | My own deposited working version, same sole author and ORCID | Earlier draft of this same manuscript; superseded by the submitted version (new title, new empirical sections) |
+| GitHub repository MIKEAA2020/general-sustainability, path e1/ (carrier files v49–v58 and following) | My own public reproducibility repository | Successive drafts of this same manuscript, same author |
+| Companion works by the same author deposited on Zenodo (10.5281/zenodo.22552680, 10.5281/zenodo.22552060, 10.5281/zenodo.22554297) | Other studies of mine (Edwards Aquifer head; 2J3KL LRP viability; periodic review) | Different studies; shared text is limited to standard declaration/data-availability/reproducibility boilerplate written by me in my own voice across my papers |
+
+As an internal check before submitting this letter, I ran an independent overlapping-segment analysis (13-gram containment) of the submitted manuscript against every candidate source in my own archive. The result is consistent with your report's description and identifies the source unambiguously: **78.8% containment against my own archived v56 draft of this same manuscript and 12.5% against my archived v49 draft** — versus **0.4% and 0.1% against my nearest other studies** (the framework companion and the Edwards Aquifer companion). The overlap is essentially total with my own prior drafts of *this* manuscript and negligible even for my own nearest other works. I can provide this analysis file on request.
+
+## 3. Remediation already implemented
+
+1. The supersession relationship is now declared explicitly inside the manuscript. Its **Data and Code Availability** section now states: *"Earlier working versions of this study—deposited by the same author in the same repository and in record https://doi.org/10.5281/zenodo.22553609 under the working title* Does a surplus-production ladder improve forecasts of Northern cod? A scored test on NAFO 2J3KL*—are superseded by the present version."* (This is the only added sentence; the present resubmission carrier is v65.)
+2. If you judge that deposit visibility continues to inflate similarity scores, I will additionally mark the repository's older draft files with supersession notices at their tops (the archive's pioneering carriers can carry a "superseded by the Fisheries Research version, 2026" banner). I would rather not delete them outright, because the paper's own reproducibility claims rely on the preserved carrier chain — but supersession banners resolve the overlap attribution cleanly.
+
+## 4. What I ask
+
+Please regard the flagged materials as what they are — this author's own earlier public deposits of this same evolving study — verify author and ORCID identity across the records (Amin Abaee, 0000-0002-0019-1842), which in each case are mine, and reconsider the manuscript for the substantive review I continue to seek. I remain happy to implement any further attribution formatting the journal prefers (e.g., an explicit footnote in §1 recording the superseded draft by DOI).
+
+Yours faithfully,
+
+**Amin Abaee**
+Independent Researcher
+ORCID: 0000-0002-0019-1842
+Email: amin_abaee@ut.ac.ir
