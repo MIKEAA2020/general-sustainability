@@ -19,7 +19,7 @@ It is an archive branch, not `main`.
 
 ## Verification state
 
-- JIE: 4,434/6,000 local body words; rendered PDF: 12 pages.
+- JIE: 4,206/6,000 local body words; rendered PDF: 11 pages.
 - Ecological Economics: 4,245/8,000 local body words; rendered PDF: 11 pages.
 - Both journal PDFs pass the current validation, page, unresolved-reference and overfull-box checks.
 - Route C prototype: four tests passing; it is not a supported EMS software contribution.

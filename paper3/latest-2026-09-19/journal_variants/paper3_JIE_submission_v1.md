@@ -1,8 +1,16 @@
+<!--
+Author: Amin Abaee
+Affiliation: Independent Researcher
+ORCID: https://orcid.org/0000-0002-0019-1842
+Email: amin_abaee@ut.ac.ir
+Date: 19 September 2026
+-->
+
 # Typed material-flow ledgers for componentwise sustainability diagnostics
 
 ## Abstract
 
-Material-flow accounting can close a balance while leaving the physical question unresolved: which substance class is conserved, which conversions are declared, and whether a service is being maintained by regeneration or by drawdown of a supporting stock. The same ambiguity appears when reserve-life ratios, anomaly-trend indices and removals-only timescales are all reported as “time to depletion”. We present a typed stock–flow ledger in which compartments carry declared substance types and units, cross-type conversions are explicit routed fluxes, and services are readouts rather than conserved mass. Three separately reportable certification layers—accounting balance, conservation and barrier safety—are joined to donor-limited positivity and an envelope certificate. A non-compensatory result shows why a positive scalar aggregate cannot certify componentwise adequacy on a general feasible balance domain. We then classify three public-data records: G3P groundwater anomaly persistence, the USGS phosphate reserve-life ratio, and a fisheries removals-only pressure time. They have similar units but answer different questions. The framework supplies an auditable route from material-flow declarations to status-labelled diagnostics: what the record establishes, what remains unestablished, and what is not applicable. Formal proofs, extended data-vintage records and executable reproduction exhibits are supplied in the accompanying technical supplement and full-length deposit.
+Material-flow accounting can close a balance while leaving the physical question unresolved: which substance class is conserved, which conversions are declared, and whether a service is being maintained by regeneration or by drawdown of a supporting stock. The same ambiguity appears when reserve-life ratios, anomaly-trend indices and removals-only timescales are all reported as “time to depletion”. We present a typed stock–flow ledger in which compartments carry declared substance types and units, cross-type conversions are explicit routed fluxes, and services are readouts rather than conserved mass. Three separately reportable certification layers—accounting balance, conservation and barrier safety—are joined to donor-limited positivity and an envelope certificate. A non-compensatory result shows why a positive scalar aggregate cannot certify componentwise adequacy on a general feasible balance domain. We then classify three public-data records: G3P groundwater anomaly persistence, the USGS phosphate reserve-life ratio, and a fisheries removals-only pressure time. They have similar units but answer different questions. The framework supplies a status-labelled route from material-flow declarations to diagnostics. Formal proofs and extended data-vintage records are provided in the Supplementary Information.
 
 **Keywords:** material flow analysis; typed ledger; stocks and flows; double counting; componentwise sustainability; depletion indicators; ecological industrial systems
 
@@ -13,8 +21,6 @@ Material-flow analysis (MFA) provides a disciplined language for tracking physic
 A second problem concerns quantities reported in years. A reserve-life ratio divides an economically declared reserve by current production. A groundwater anomaly index extrapolates a fitted trend to a product's historical minimum. A fisheries calculation can divide a logarithmic biomass margin by current fishing mortality while omitting recruitment, growth and future policy. Each is a legitimate descriptive construction when its boundary is stated. None is automatically a physical exhaustion time.
 
 This paper gives a material-accounting framework for keeping those questions separate. It makes four contributions. First, it types compartments and conversions so that unlike substance classes are not added merely because they share a numerical unit. Second, it separates accounting balance, conservation and barrier safety and gives a compact certification state. Third, it proves a non-compensation obstruction: a nonnegative weighted sum cannot, in general, certify that every component meets its threshold. Fourth, it gives a common classification table for three published time-like records and states the question each does—and does not—answer.
-
-The paper is a compressed journal version. Full theorem statements and proofs, the extended application records, parameter-status tables, data-vintage evidence and the executable reproduction exhibits are deposited as the technical supplement and full-length record. The compression changes exposition, not the definitions or the status of the classified records.
 
 ## 2. A typed ledger for material-flow accounting
 
@@ -30,7 +36,7 @@ The practical consequence is a boundary discipline. Every transformation with yi
 
 ### 2.1 Incidence, closure and double counting
 
-The incidence operator makes a material-flow account auditable at the column level. For a transfer within one type class, the source receives $-1$ and the destination $+1$. For a conversion, the source carries the declared coefficient and the product receives its routed unit. A column cannot be both a transfer and a conversion. This prevents a convenient but ambiguous practice in which unlike entries are added first and interpreted later.
+The incidence operator makes a material-flow account auditable at the column level. For a transfer within one type class, the source receives $-1$ and the destination $+1$. For a conversion, the source carries the declared coefficient and the product receives its routed unit. A column cannot be both a transfer and a conversion. This prevents unlike entries from being added before their physical relation is specified.
 
 The same representation supports closure analysis. Let $D$ be a declared demand vector and $P$ the matrix that maps primitive return fluxes to the uses they cover. The closure programme searches for the largest $\lambda$ such that the internal balance closes and $\lambda D\le Pv$. If $\lambda\ge1$, the declared use can be covered by the declared return capacity. If $\lambda<1$, the shortfall is not evidence that the material is intrinsically unrecoverable; it identifies the gap between the declared demand and the declared return network. A dual cut can name the subset of uses whose return capacity is insufficient (Ahuja et al., 1993).
 
@@ -48,7 +54,7 @@ The framework reports a certification vector rather than a single pass score:
 
 $$\mathrm{Cert}=(\mathsf{Typed},\mathsf{Balanced},\mathsf{Conserved},\mathsf{Positive},\mathsf{Admissible},\mathsf{Safe},\mathsf{Adequate\ service},\mathsf{Closed}).$$
 
-The statuses are `established`, `not established` and `not applicable`; an undeclared obligation is not called refuted. The first three layers are the core of the present article:
+The statuses are `established`, `not established` and `not applicable`; an undeclared obligation is not called refuted. The first three layers are:
 
 1. **Accounting consistency:** $\dot x=S_{\mathcal T}v+b$ holds on the declared trajectory.
 2. **Conservation consistency:** every declared conserved covector satisfies $\ell^\top S_{\mathcal T}=0$.
@@ -60,11 +66,11 @@ The central aggregation result is elementary but operationally important. It com
 
 A two-component witness makes the point without a dataset. Let $w=(1/2,1/2)$ and $b=(-2,3)$. The aggregate is $w^\top b=0.5$, yet the first component is below zero. The aggregate has not certified the first component; it has only concealed the deficit behind the second component. The same obstruction survives any nonnegative weights by rescaling the surplus component. A second witness separates aggregate and event times: two states $(2,98)$ and $(50,50)$ both produce $Z(t)=100e^{-t}$ under componentwise decay, but their first threshold crossings at the unit barrier are $\log 2$ and $\log 50$. An aggregate trajectory cannot transport a component event time. These are arithmetic witnesses, not empirical examples, and the executable script in the supplement reproduces them.
 
-This is the accounting form of the double-counting discipline. One balance is written per moiety; conversions are explicit; residuals are routed; and a classification label such as “reserve” is not allowed to determine a material route. The full proof, including the attainable witness and the five routing rules, is in Supplementary Notes S1–S3.
+This is the accounting form of the double-counting discipline. One balance is written per moiety; conversions are explicit; residuals are routed; and a classification label such as “reserve” is not allowed to determine a material route. The proof, including the attainable witness and the routing rules, is provided in the Supplementary Information.
 
-### A reader's route from data to a status-labelled result
+### Certification workflow
 
-A practitioner supplies a compartment table, a flux table, an incidence operator, boundary terms and declarations of types, units, conversions, barriers and horizon. The procedure is:
+Given a compartment table, a flux table, an incidence operator, boundary terms and declarations of types, units, conversions, barriers and horizon, the certification procedure is:
 
 1. construct and type-check $S_{\mathcal T}$;
 2. test the balance and conserved covectors;
@@ -72,27 +78,27 @@ A practitioner supplies a compartment table, a flux table, an incidence operator
 4. solve the closure or envelope programme when its inputs exist;
 5. attach a source vintage and an evidence status to every readout.
 
-Companion A gives the exact input schema, negative-output semantics and solver programmes. The status vocabulary is part of the result: failure to identify a parameter is not the same as a refuted law, and a predicate that is not live for a descriptive record is not a failed predicate.
+The methods companion gives the input schema, negative-output semantics and solver programmes (Abaee, 2026a). The status vocabulary distinguishes failure to identify a parameter from refutation of a law, and distinguishes a non-live predicate from a failed predicate.
 
 ### 3.1 A material-flow audit in five questions
 
 The three layers become practical when asked as five sequential questions. **What is the object?** Is each row a stock, a flow, a service readout, an economic classification or a boundary term? **What is the type?** Do entries share a moiety and unit, or is a conversion coefficient needed? **Where does the material go?** Does every transformation route its yield and residual, including waste and export? **What does the account certify?** Is the result a balance, a conserved quantity, a positivity property, a barrier statement or only a descriptive ratio? **What remains open?** Which stock, rate, barrier or feedback would be needed to promote the result to a stronger claim?
 
-The fifth question is essential for public indicators. A record can be accurately computed and still be unable to identify a parameter or barrier. The status should then say `not established`, not “bad data” and not “forecast”. Conversely, `not applicable` means that the object has no live obligation—for example, a descriptive anomaly index has no declared physical stock equation to which a positivity theorem could apply. This is the same discipline that distinguishes a missing boundary declaration from a failed conservation identity.
+For public indicators, accurate computation does not by itself identify a parameter or barrier. The appropriate status is `not established`, rather than “bad data” or “forecast”. `Not applicable` denotes an object with no live obligation; for example, a descriptive anomaly index has no declared physical stock equation to which a positivity theorem could apply. A missing boundary declaration is therefore distinguished from a failed conservation identity.
 
 The route also supports comparison across studies. Two MFA accounts can be placed on a common audit surface without forcing their substantive boundaries to be identical. The comparison reports which types, conversions, residuals and barriers are common, which differ, and which outputs are only readouts. A disagreement can therefore be located at the declaration, data or inference layer rather than being hidden in one composite number.
 
-### 3.2 What the delegated proofs establish
+### 3.2 Structural results
 
-The proof supplement retains the distinctions that are most useful to an MFA reader. For the closed finite-donor natural block, the natural-block mass $M$ obeys
+For the closed finite-donor natural block, the natural-block mass $M$ obeys
 
 $$\dot M=-qEN-C^{A,\mathrm{lim}}.$$
 
 Thus the only terms that change the natural-block total are the declared extraction and limiting boundary loss. Internal routing cancels column by column. The same incidence and donor conditions give forward invariance of the nonnegative orthant: an outflow cannot carry a coordinate below zero because its primitive rate vanishes on the empty donor face. Positive extraction excludes an interior rest point for the closed natural block; the vanishing-extraction rest set contains the extinction, carrying-capacity and frozen-biomass faces described in the full proof. Finally, extraction is integrable over every finite donor budget. These are not claims that any public-data indicator has supplied a calibrated dynamic model; they are structural results for the declared ledger.
 
-The envelope theorem is likewise a certificate about a declared uncertainty box, not a prediction. Its throughput interpretation is consistent with the ecological-economics distinction between resource depletion and the flow of production (Daly, 1990), but the theorem itself is an accounting result. For each moiety row, the positive and negative parts of $CS_{\mathcal T}$ give lower and upper derivative bounds, which integrate to an interval containing every compatible trajectory. When the box contains combinations that the coupled dynamics cannot jointly realise, the interval is conservative. The tighter object is a linear programme over the admissible flux polytope, and infeasibility has a dual interpretation: a named return-capacity cut is insufficient for the declared demand.
+The envelope theorem is a certificate about a declared uncertainty box. Its throughput interpretation is consistent with the ecological-economics distinction between resource depletion and the flow of production (Daly, 1990), while the theorem itself is an accounting result. For each moiety row, the positive and negative parts of $CS_{\mathcal T}$ give lower and upper derivative bounds, which integrate to an interval containing every compatible trajectory. When the box contains combinations that the coupled dynamics cannot jointly realise, the interval is conservative. The tighter object is a linear programme over the admissible flux polytope, and infeasibility has a dual interpretation: a named return-capacity cut is insufficient for the declared demand.
 
-The extended supplement also proves why an open institutional system cannot be silently substituted for the closed ledger. The shared identity $qEN-R=-\dot N$ is an interface identity, not a reduction theorem. A delay-driven working system can carry an omitted turnover or imposed recharge that is absent from the closed primitive state. Its cycles, equilibria or Hopf crossings therefore do not become properties of the closed mass ledger merely because one output equation has the same symbols. This matters for industrial-ecology models that couple physical stocks to economic controls: the coupling has to declare which flows are physical, which are institutional and which are diagnostic.
+An open institutional system cannot be substituted for the closed ledger. The shared identity $qEN-R=-\dot N$ is an interface identity, not a reduction theorem. A delay-driven working system can carry an omitted turnover or imposed recharge that is absent from the closed primitive state. Its cycles, equilibria or Hopf crossings therefore do not become properties of the closed mass ledger merely because one output equation has the same symbols. Coupled industrial-ecology models must distinguish physical flows, institutional variables and diagnostic readouts.
 
 ## 4. Three depletion readings, one comparison table
 
@@ -152,9 +158,9 @@ where $\tau=R_0/P_0$. On the pinned phosphate record, $\tau\approx309$ years and
 
 These results provide a compact test for future MFA indicators. Before calling a time-like quotient a horizon, the analyst must show the stock, barrier, rate class and feedback assumptions that make the quotient a bound. Otherwise the correct label is gross turnover, local ratio, index or pressure time.
 
-## 5. What the classification changes for industrial ecology
+## 5. Implications for industrial ecology
 
-The practical gain is not another universal indicator. It is a more informative account of what a published number can support.
+The classification determines the physical and inferential content that can be assigned to each record.
 
 **Material-flow studies.** The typed ledger adds a check between a conventional balance and a conservation claim. It asks whether the rows belong to one moiety class, whether a transformation coefficient is declared, and where the residual goes. A material balance can then be reported together with the exact conservation and boundary assumptions that make it meaningful.
 
@@ -166,9 +172,9 @@ The practical gain is not another universal indicator. It is a more informative 
 
 ### 5.1 Relation to established flow-accounting practice
 
-The framework is a formal refinement, not a replacement for economy-wide MFA. Standard MFA supplies classifications, data conventions and aggregation rules for material and energy flows. The typed ledger adds an explicit operator-level question: which rows share a moiety, which columns are transfers or conversions, and which residual or boundary term carries the unreturned material? That question is useful precisely because a published account can be statistically balanced while leaving a physical routing convention implicit.
+The framework complements economy-wide MFA. Standard MFA supplies classifications, data conventions and aggregation rules for material and energy flows. The typed ledger adds an operator-level question: which rows share a moiety, which columns are transfers or conversions, and which residual or boundary term carries the unreturned material? That question is useful precisely because a published account can be statistically balanced while leaving a physical routing convention implicit.
 
-The relation to industrial-ecology work is therefore complementary. A conventional MFA can populate the compartment and flux tables; the typed layer tests the declarations required before conservation, closure or barrier claims are made. A systems-of-production or circular-economy study can use the closure programme to distinguish a return route that covers declared demand from an external draw that merely makes the account look closed. The framework does not decide whether a social or economic trade-off is valuable. It states when a claimed physical substitution has not yet been represented as a conversion with a coefficient and a destination.
+The relation to industrial-ecology work is therefore complementary. A conventional MFA can populate the compartment and flux tables; the typed layer tests the declarations required before conservation, closure or barrier claims are made. A systems-of-production or circular-economy study can use the closure programme to distinguish a return route that covers declared demand from an external draw that merely makes the account look closed. Social and economic valuation remains distinct from the physical substitution represented by a conversion coefficient and destination.
 
 The same boundary applies to environmental services. An account can record a service flow or an ecosystem-asset measure, but the service remains a readout of an underlying state and use process in this framework. It is not added to a conserved material total. This is why a service improvement can coexist with a declining support pool and why a circularity claim must name the returned material, time scale and donor boundary.
 
@@ -176,23 +182,22 @@ The same boundary applies to environmental services. An account can record a ser
 
 The framework distinguishes two statements that are often merged in discussions of resource productivity. The arithmetic statement is that a scalar score can look adequate because one component has a surplus. The dynamical statement is that output can remain high because a support pool is being liquidated. The first requires a componentwise account; the second requires a donor and regeneration account. A footprint or efficiency improvement can be real as a readout and still be accompanied by a decline in a non-replaced support stock.
 
-The distinction changes how a study would report improvement. A study can state that throughput per unit service has fallen, that a return route has increased, or that a waste residual has been reduced. It should not infer from that statement alone that the underlying material stock is safer, that a cycle is closed or that a time-like indicator is a forecast. Those stronger inferences require the type, donor, barrier and closure declarations. In this sense the ledger is not anti-efficiency; it is anti-conflation.
-
+The distinction changes how a study would report improvement. A study can state that throughput per unit service has fallen, that a return route has increased, or that a waste residual has been reduced. It should not infer from that statement alone that the underlying material stock is safer, that a cycle is closed or that a time-like indicator is a forecast. Those stronger inferences require the type, donor, barrier and closure declarations.
 The result also gives an explicit place for institutional variables. Price, technology, legal reserve status, review frequency and management effort can change a classification or readout without being physical fluxes. They belong in $u$ or $\theta$ and in the scenario attached to a hitting time. Keeping them outside the incidence columns prevents an institutional change from being misread as conservation or regeneration.
 
-## 6. Evidence, implementation and scope
+## 6. Evidence and scope
 
-The main article's claims are accompanied by four kinds of evidence: algebraic proofs for the typed ledger, exact arithmetic for the public-data classifications, source-vintage records and executable reproduction exhibits. The code reproduces the persistence-index simulation, curvature and reserve-life arithmetic, aggregation obstruction and certificate vectors. It is a reproduction bundle rather than a supported software package; the full-length deposit records the environment, checksums, source restrictions and run outputs.
+The results are supported by algebraic proofs for the typed ledger, exact arithmetic for the public-data classifications, source-vintage records and computational exhibits. Computational materials and source restrictions are documented in the Supplementary Information.
 
-The applied records are descriptive. The article does not claim that the groundwater two-pool template is empirically identified, that the phosphate calculation is a geological-reserve model, or that the fisheries calculation is a stage-structured model. The stochastic first-passage processes are declared surrogates and do not conserve the ledger's mass compartments. These limits are not qualifications added after the result; they are part of the status-labelled method.
+The applied records are descriptive. The article does not claim that the groundwater two-pool template is empirically identified, that the phosphate calculation is a geological-reserve model, or that the fisheries calculation is a stage-structured model. The stochastic first-passage processes are declared surrogates and do not conserve the ledger's mass compartments. These scope conditions are part of the status-labelled method.
 
 ## 7. Conclusion
 
-A material-flow balance is necessary but not sufficient for a componentwise sustainability claim. Typing makes unlike substance classes and conversions visible; the incidence structure makes conservation checkable; donor limitation makes positivity a structural condition; and barriers remain a separate safety predicate. The same discipline applies to time-like indicators. Gross turnover, a frozen local ratio and a scenario-conditioned hitting time may all be reported in years while answering different questions. A typed ledger does not abolish judgment. It records where the judgment enters, what the data establish, and which claim has not been made.
+A material-flow balance is necessary but not sufficient for a componentwise sustainability claim. Typing makes unlike substance classes and conversions visible; the incidence structure makes conservation checkable; donor limitation makes positivity a structural condition; and barriers remain a separate safety predicate. The same discipline applies to time-like indicators. Gross turnover, a frozen local ratio and a scenario-conditioned hitting time may all be reported in years while answering different questions. The framework identifies where methodological and normative choices enter, what the data establish, and which inferences are unsupported.
 
 ### Data and code availability
 
-The complete mathematical proofs, extended public-data records, source-vintage material, code and analysis records are supplied in the technical supplement and full-length Figshare-ready deposit. The full-length article also has an author-supplied public Figshare preprint record at https://doi.org/10.6084/m9.figshare.33942451. The journal version uses no data beyond the records and sources already pinned in the full-length line.
+The mathematical proofs, extended public-data records, source-vintage documentation and computational materials supporting this article are provided in the Supplementary Information. The methods companion describes the input schema, certification procedures and reproduction protocols (Abaee, 2026a); the standards commentary addresses the accounting treatment of depletion and the interpretation of horizon claims (Abaee, 2026b). The principal article record is available at https://doi.org/10.6084/m9.figshare.33942451.
 
 ## Declaration of generative AI and AI-assisted technologies in the writing process
 
@@ -211,6 +216,10 @@ None.
 Following the CRediT author statement guidance at https://www.elsevier.com/researcher/author/policies-and-guidelines/credit-author-statement, A.A. conceptualized the entire work, wrote the manuscript, and reviewed and edited the manuscript.
 
 ## References
+
+Abaee, A., 2026a. *Certifying a Typed Ledger: The Predicates, the Programmes, the Vintages, and the Reproduction Bundle*. Figshare preprint. https://doi.org/10.6084/m9.figshare.33942469
+
+Abaee, A., 2026b. *What the Accounts Settle, and What They Leave Open: Depletion as a Cost of Production, and the Missing Step from a Rate to a Horizon*. Figshare preprint. https://doi.org/10.6084/m9.figshare.33942487
 
 Ahuja, R.K., Magnanti, T.L., Orlin, J.B., 1993. *Network Flows: Theory, Algorithms, and Applications*. Prentice-Hall.
 
