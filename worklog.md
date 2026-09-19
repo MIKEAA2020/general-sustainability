@@ -2025,3 +2025,17 @@ Stage Summary:
 - Alignment verified: abstract/keywords/sections/supplementary all aligned with v40 (byte-identical frozen blocks; 0 unresolved refs; all eight supplement->paper refs resolve).
 - v39 and all prior versions and the v5/v6/v7 supplements untouched on disk and in history; the v7 zip retained.
 - Open owner-level items: the reference-DOI round (commission or paste), the Zenodo deposit refresh, the abstract-phrase decision (Task 97's flag).
+
+---
+Task ID: 99 (push record)
+Agent: main (Z.ai Code)
+Task: Push record for the Task 99 commit (the v40 cleanup round + the DOI question answered directly + the content-preservation and alignment audits).
+
+Work Log:
+- The pasted PAT carries the same stray trailing ".1" suffix as Task 98's paste: the form AS PASTED authenticates 401 against the GitHub API (both the /user and the repo endpoint); the token WITHOUT the ".1" suffix verified 200 with admin/maintain/push/pull permissions on MIKEAA2020/general-sustainability. The push used the corrected form, in-memory only (transient shell variable; redacted from every file, log and command echo; unset immediately after use).
+- Pushed: remote main a1255b7 -> c5c1a36 (the Task 99 round commit). Verified post-push via git ls-remote (c5c1a36b124b50afe8ce82a8abcbb40836d42bf2); working tree clean after this push-record commit.
+- Residue cleanup this round (a clone-side artifact, caught and fixed by the no-residue scan): the initial re-clone of the repository into the fresh sandbox embedded the token in .git/config's origin URL (the clone command's authenticated URL); the origin URL was reset to the clean anonymous form immediately after the push, and the full .git scan now shows ZERO occurrences of the raw token (config, logs, reflog, packed-refs all clean). The only "github_pat_" strings anywhere on disk are the standing pre-existing redacted forms (worklog line 383's "github_pat_…", the reading-log's classic-token redaction, the scan-work excerpt) - none from this round.
+- Rotation advised for the pasted PAT regardless (it transited the chat channel; the same stray-suffix paste artifact has now appeared twice).
+
+Stage Summary:
+- Task 99 fully closed: v40 round pushed (c5c1a36), remote main == local main, tree clean, no token residue. The final files: paper4_delay_dynamics_v40.md + latex/paper4_delay_dynamics_v40.tex/.pdf (45 pp), paper4_supplementary_v8.md + submission_zips/paper4_supplementary_v8.zip (91 entries, sha256 ed8e99679494e32e106c9af64587ab0ebabdac379c6850ce36b643cf00a776bd). Open owner-level items: the reference-DOI round (commission or paste), the Zenodo deposit refresh, the abstract-phrase decision (Task 97's flag).
