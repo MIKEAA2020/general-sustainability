@@ -66,7 +66,12 @@ assert back == c['sha'], back
 tv = req('GET', '/git/trees/' + c['sha'] + '?recursive=1')['tree']
 mine = [e for e in tv if e['path'].startswith(FOLDER)]
 print('verified: tree now', len(tv), 'entries,', len(mine), 'under the v49 folder')
-z = ROOT / 'revision/v49/paper3_supplementary_package_v9.zip'
-h = hashlib.sha256(z.read_bytes()).hexdigest()
-found = [e for e in mine if e['path'].endswith('paper3_supplementary_package_v9.zip')]
-print('zip in archive:', bool(found), '| local sha256', h[:16] + '…')
+# a filename match proves the name is in the tree, not that the bytes are the ones just shipped, and
+# this line has been read as a freshness proof before. Compare the git blob SHA-1 instead.
+zs = sorted((ROOT / 'revision/v49').glob('paper3_supplementary_package_v*.zip'))
+z = zs[-1]
+raw = z.read_bytes()
+blob = hashlib.sha1(b'blob %d\x00' % len(raw) + raw).hexdigest()
+ent = [e for e in mine if e['path'].endswith(z.name)]
+print(f'{z.name} in archive with identical bytes:', bool(ent) and ent[0]['sha'] == blob,
+      '| git blob', blob[:12] + '…', '| local sha256', hashlib.sha256(raw).hexdigest()[:12] + '…')

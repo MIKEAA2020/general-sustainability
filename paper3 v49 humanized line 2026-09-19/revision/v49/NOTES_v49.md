@@ -274,3 +274,139 @@ cite went, so an unexplained loss cannot borrow the standing of an explained one
 claim the paper is to make, the fix is a new sentence with a verified source written by the author; if
 not, the entries are dead weight. Restoring v48's wording is not a resolution, since that wording is
 what E4 objected to, and the pipeline drafts no substitute.
+
+---
+
+## Round 7 (2026-09-19, evening) — spacing on the page, a content-loss read, and the three documents nobody had read
+
+Three instructions: the introduction *still* had no spacing on the page; read v49 for content lost or
+condensed; look for maths/number/prose errors in places not yet examined.
+
+### 1. The spacing was a `.tex` conversion failure, not the markdown
+
+`v49_section1_v1`-style density checks on the md are useless here: §1 is 37.4 % blank lines, which is
+correct markdown. The cause was in `build_v49_tex.py`'s region loop, which glued whole sections into one
+`\item`: §1.1's items 1–2 fused, the four certification layers rendered as one bullet with the literal
+`2.`/`3.`/`4.` inside it, contributions 6–7 were absorbed into 5, and every line between markers was
+typeset in a single paragraph (page 2 ran from y≈192 to the footer with no break). No words were lost;
+the structure and the numbering were.
+
+Fix: `emit_list` rewritten line-driven (one `\item` per markdown item line), structural blocks split so a
+numbered item starting mid-paragraph begins a new list, and the region gained two proofs — the md↔tex
+word sequence must be equal after `_strip_math` and marker/command removal, and `count(md marker lines) ==
+count(^\s*\item\s)`. The proof fired three times, each time on a bug in the proof itself, not in the
+region. Result on the page: p2 `1. Compensatory Aggregation` / `2. Classification Drift`; p3–4 the four
+layers `1.`–`4.` with their two sub-bullets; p5 contributions 1–5 with sub-bullets; `### 1.2`/`### 1.3`
+heading offsets restored.
+
+### 2. Content loss in §1 — measured with atoms, not similarity
+
+Similarity is blind to paraphrase, and §1 was deliberately rewritten: v48's 134 long §1 sentences score
+**0 verbatim** in v49 (§1 cannot be audited any other way than atom-presence — recorded in
+`read_v49_section1_v1.py`, kept as the record of why it was abandoned). The instrument that works:
+`atoms_v49_section1_v1.py` requires a *distinctive* atom (numeral, cite year, rare content word after a
+crude stem) to be missing **document-wide**, against v48, v42 and the deposit →
+`v49_section1_atoms.json`, then `atoms_v49_readout.py` pairs each candidate with v49's nearest §1
+sentence, and every one was confirmed by reading the §1 lines.
+
+v48 covers 112/134 §1 sentences at ≥½, v42 112/131. **38 candidate sentences lose distinctive atoms;
+after the read, 35 are rewordings** whose proposition is present (e.g. the elevator "diffuse, gradual,
+sudden" line → line 45 "accumulates unseen microscopic strain … catastrophe is instantaneous"; "Each of
+these quantities is informative" → line 24 "Each metric provides specific institutional or descriptive
+information"; "overlapping not exclusive" → lines 67/72; "refills itself" → line 49 "replenishes
+dynamically through new discoveries and shifting economics"). The remaining three are *labels and
+rhetoric*, recorded as one open item: v48's thesis "Waste is a relationship, not a property of a
+substance.", the defined label "registered open gap", and "system moves" — the first and third appear in
+no earlier surface at all, the second is in the deposit once. Nothing numerical was lost: the §1 worked
+figures ($1.0\times10^6$ kt reserves / $6.0\times10^5$ kt extraction) are on line 49 and match the
+deposit's 1,000,000 / 600,000 kt.
+
+**A correction to what I flagged last round.** I recorded line 49 as a semantic regression — "physical
+replenishment asserted for an economic reserve". Read in full the clause is qualified by "and shifting
+economics" in the same sentence, and the following sentence keeps the phosphate demonstration. It is not
+a regression; v48's "any ratio built on it inherits that behaviour" is a framing difference only. My
+earlier read was of a truncated line, which is why the rule "confirm against the rendered line text"
+exists.
+
+### 3. New surfaces: the other three documents, escaping, and numerals on the page
+
+- `deep_read_v49.py` (17 checks + a 54-page census): no dangling reference survives. The `Conditional
+  Theorem 15` "dangle" was my regex — `**Conditional Theorem 15 (Hybrid moiety balance)**` is defined at
+  md line 933, and 71 statements of the md `**Theorem N (**` form all define their numbers. The other
+  reports (dashed ORCID, reference page ranges, `$ ` adjacency inside `(...)`) are artifacts.
+- `read_docs_and_tex_v1.py` on all four documents: `#1` inside `\newcommand` (legitimate),
+  `&`-outside-table (my test matched an already-escaped `\&`), and a `text_brace_imbalance` counter that
+  was arithmetic nonsense — all removed or annotated. **`\allowbreak{}` inside numbers** (`308.\allowbreak{}33`)
+  is why md-vs-tex numeral counts disagree; it is the builder's line-wrap device, and the page shows
+  `308.33`.
+- The check that matters is md ↔ rendered page. First pass reported 90 "lost" numerals; that was my
+  tokenizer: whitespace-stripping merged adjacent table cells into single tokens (`1961` + `43.9%` →
+  `196143.9`). With separators preserved: **supplementary 0 absent, companionA 0, companionB 0**, and
+  v49's only "absent" items are thousands separators (`240` vs the page's `240,000`, `1.0e6` written
+  `1,000,000`) — i.e. every substantive numeral in all four documents is on the page. The three
+  companions' pointers into the article's section numbering resolve (`§6.5.3`, `§4.8`, …): 0 dangling.
+
+### 4. Two prose defects found; one fixed, one refused
+
+* **`an catastrophic deficit`** (v49 line 26) exists in no earlier surface — not v48, not v42, not the
+  deposit, which has zero `an`-before-consonant sites. Repaired mechanically inside `house_form()` as a
+  logged `prose_repairs` rule, so the whole-line proof replays it (`only_logged_changes: True`) and the
+  audit recognises the line as `adapt + logged prose repair` (1) instead of calling it unexplained. This
+  changed the md by one character: 214,262 characters, 215,027 bytes on disk (the gate prints the
+  character count, which earlier rounds recorded as bytes - it is not a byte count).
+* **The -ize/-ise split was not repaired, and the attempt was withdrawn.** A first version of the rule
+  rewrote `### 1.3 Organization` into `Organisation` because the OECD's name sits in the reference list.
+  The premise was wrong anyway: v48's frozen body mixes them (specialization 14, realized 2, authorized 3
+  against normalised 2, mobilised 1), and §1 itself writes `formalize` 7× beside `formalises` 1×. There
+  is no convention for the region to match, and half-aligning it would be worse than the mix. Recorded as
+  an open item with the counts, not as a repair.
+* Rounding in §1's example: `4.0/6.0 = 0.67` rounds while `1.0/1.6 = 0.625` is written `0.62` — one
+  sentence, two conventions. Inherited from v42, so reported, not edited.
+
+### 5. Instruments repaired this round (not the text)
+
+`numset`/tokenizer separators; `deep_read`'s `KIND` now recognises `Conditional Theorem`; `read_docs_and_tex_v1`
+compares against the page, not the wrapped source; the gate's **G1b** was counting vocabulary on the wrong
+surface (`in_previous_line` read the *adaptation*, so every item showed 0) and never said where a term
+went — it now reports `in_v48_region` / `in_the_deposit` / `where_it_is_now`, which converted four of the
+seven disclosures into "the shipped document" (a term that moved into the abstract or the body is not a
+term lost) and left three honest ones. The verifier's report-freshness assert fired twice this round and
+each time was right (the gate and audit reports predated the one-byte md change).
+
+### 6. State of the chain after the rebuild
+
+build: 5 term edits, 6 restores, body absent-from-v49 0. tex: 6/6 placements, body byte-identical after
+undoing the six insertions, front maths 11/11, labels 71 / refs 0 / unresolved 0, region list items md 37
+== tex 37, four documents compile 54/19/10/8 pp with rc=0, overfull ≥6pt 0, `??` 0, pdf_flow 203/203, E6
+lookalikes 0. gate: flag_count 0, disclosure_count 8. audit: FINDINGS 3, all three the disclosed orphans
+(class_1 `baez 2023`; class_2 `united 2014`, `united 2025`; class_3 empty), page-level list findings [].
+pin: 290 ruled rows (208 placed verbatim, 63 freed), 145 verbatim-protected outside §1. verifier:
+`*** v49 verified ***`, FAILURES: none.
+
+The gate's invocation is recorded here because it had never been written down: `python3
+v49_waiver_gate_v1.py --base v49_base_front_matter.md --built v49_front_matter.md --prev
+v48_front_matter.md --out v49_gate_report.json --absorbed v49_pdf_front_pages.txt --ruling-log
+v49_front_matter_edits.json`.
+
+### 7. Open items for the author (recorded, nothing actioned)
+
+1. Three reference entries carry no in-text citation: `baez 2023` (already uncited in v42 and v48) and
+   `united 2014` / `united 2025` (uncited by a removal erratum E4 records). One item, not two.
+2. v48 §1's four status labels, its thesis sentence "Waste is a relationship, not a property of a
+   substance.", and the defined label "registered open gap" are absent from v49. Restoring them means
+   importing v48's §1 wording, which is erratum E4's substance, so it is not done here; a newly drafted
+   replacement would be the author's own claim, so none is drafted.
+3. §1 mixes -ize (formalize 7, recognize, stabilizing, synthesizing, publicized) with -ise (formalises,
+   analyse, normalise, mobilised); v48's body and the deposit mix them too, so the fix is a house-style
+   decision, not a repair.
+4. `1.0/1.6` printed as `0.62` beside `4.0/6.0` printed as `0.67`: truncation and rounding in one
+   sentence. Inherited from v42.
+5. §1.1 states the arithmetic sense of the reserve-life ratio twice (lines 30 and 32/33), with different
+   example lists; a dedup would be authorial because the prose and the bullet carry different material.
+6. The reference list gives DOIs for 8 entries but omits Martinez-Alier, Munda & O'Neill (1998),
+   `10.1016/S0921-8009(97)00120-1`. House style, one entry.
+
+Package v10: 84 records, 2,139,744 bytes, sha256 6453cfe31060a027e0d5015d0403a9ddc24c6c988f400f7fba836058d055cc28 (supersedes v9 afa993932828d8f81b09b6afdda22225dcd7358dd73ac5fd13f3c9582f93a26b). v10 carries the one-byte prose repair, the rebuilt .tex and PDFs of all four documents, the round-7 notes and the open-item list.
+The NOTES entry inside the zip necessarily predates this line - it is the only file in v10 that is not
+byte-identical to the workspace copy; the four documents and the tex are, checked by sha256 of every
+entry against the workspace after zipping.

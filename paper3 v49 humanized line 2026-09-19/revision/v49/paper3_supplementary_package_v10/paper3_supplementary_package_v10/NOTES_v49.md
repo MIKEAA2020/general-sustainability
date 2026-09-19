@@ -1,0 +1,409 @@
+# Notes on the v49 line — what was built, on what authority, and what is left open
+
+Built 2026-09-19 against `humanize/v49_adaptation_first_brief.md`. The line of record for the article text
+is `revision/v7/paper3_material_ledgers_v49.md`: 54 pages compiled, the same four documents as the v48 line.
+
+## What v49 is
+
+* **Base of record for the abstract and Section 1: the author's adaptation** — the `gemini:` half of
+  `uploads/p3 humanized.txt`, lines 2–117 (title through the end of Section 1). The deposited article
+  (`work/paper3.txt`) is the oracle: it decides what is right or wrong, not what is phrased how.
+* **Repaired before adoption, not after.** Four operations, all logged in `v49_front_matter_edits.json`:
+  chat residue stripped; the renamed vocabulary reverted onto the deposit's terms (5 substitutions, 12 rules enforced from `adaptation_term_revert_v1.csv`
+  — `force` and `label` rows applied, `watch` rows reported only: stock-depletion ratio, physical depletion forecast);
+  the four P0 invented assertions and the two-level framing deleted with their sentences; and a display the
+  adaptation left inside a running sentence lifted onto its own lines (house style).
+* **Two headings cut, one passage kept.** `Arithmetic Level` and `Dynamical Level (Yield Inflation)` went,
+  with the adaptation's lead-in clause "The illusion operates on two levels:", because that is the framing
+  the author ruled out. The deposited article's own two-senses passage was carried over verbatim
+  (`v49_carry_over.json`) — see the next section but one.
+* **Body, Section 2 onward: v48's body plus six sentences.** Nothing else moved, and that is asserted:
+  after undoing the six insertions the LaTeX body is byte-identical to v48's.
+
+## Why the body needed six sentences put back
+
+Reading the 32 rows before the build (22 kept + 10 absorbed on atoms alone) showed the atom test was too
+weak in the body as well as in the front matter. Six sentences that the deposited article states, and that
+both v42 and v47 carried, are absent from v48 — each naming a defined object:
+
+| named object | row | section | v42 | v47 | v48 | v49 |
+|---|---|---|---|---|---|---|
+| `monomaterial projection` | D0238 | 2.2 | yes | yes | **no** | yes |
+| `never in the stock` | D0286 | 2.5 | yes | yes | **no** | yes |
+| `differentiated only by` | D0385 | 4.3 | yes | yes | **no** | yes |
+| `replenished by recharge` | D0521 | 6.5.1 | yes | yes | **no** | yes |
+| `two readings of one ledger` | D0719 | 11 | yes | yes | **no** | yes |
+| `not a primitive of the closed natural block` | D0631 | 2.5 | yes | yes | **no** | yes |
+
+These are not waiver effects: all six sit outside Section 1, where the verbatim rule is enforced. The
+mechanism was the `regen` bucket — v48 rewrote a draft sentence that already carried the deposit's wording;
+the replacement kept the claim's atoms and lost the named object. In v49 each sentence is restored verbatim
+from the line that carried it, placed after the aligned v42 predecessor line (log: `v49_front_matter_edits.json`
+→ `restored`). Where exactly a restored sentence sits inside its section is a typographic judgement the
+author may move; that it is present is not.
+
+## The passage v48 had mangled
+
+v48's abstract opened the productivity illusion with "The illusion has two senses, and they are distinct.
+It is the compensatory-aggregation failure above …": the **second sense** and the `aggregation obstruction`
+pointer to Section 10.1 had been dropped from it. v49 carries the deposited article's form over from v42 —
+"It has two senses, and they are distinct. The first is arithmetic … This article formalises this sense as the
+aggregation obstruction of Section 10.1. The second sense is dynamical and is yield inflation. …" — kept
+beside the adaptation's two bullets, which now carry no labels. The result reads slightly doubled; unifying
+it is an author's edit, not a build step.
+
+## Gate state at the build
+
+* `v49_waiver_gate_v1.py`, waived region, oracle = the deposit: **flag_count 0**, disclosure_count 14.
+  Section 1 is checked against all 140 of its ledger rows, not exempted from them.
+* `verify_v49_base.py`: **FAILURES: none** — 143/143 verbatim-protected body rows present;
+  9 of 9 errata items closed; back matter byte-identical to v48's; body numerals unchanged (365 → 365);
+  no unsupported Section 1 numeral; 17 Section 1 citations resolved; the compiled PDF carries
+  187/187 flowing paragraphs; no unresolved reference; no stray list marker in the front matter
+  (the E6 defect); and the delivered v48 package is still frozen at sha256 3ad72c04…564fa7.
+* Four documents: article 54 pp, supplementary 19, companion A 10, companion B 8; overfull ≥6pt 0; `??` 0.
+  The three companions are v48's bytes, hashed rather than recompiled, because v49 changes no companion.
+
+## Open, for the author — not defects of the build
+
+1. **The four status labels.** v48's abstract wrote `statistical index, not a stock ratio`,
+   `arithmetic, not a forecast`, `pressure scale, not a depletion diagnostic`, `readouts of the ledger`.
+   The adaptation's abstract states the same three classifications in its own words and the labels do not
+   appear. No claim is lost. This is the one place where the build deliberately did nothing: restoring the
+   labels would choose the deposit's exposition over the adaptation's, which is a content revision with its
+   own decision. `G1b` in the gate now reports this class of difference (13 disclosed vocabulary items)
+   instead of being blind to it.
+2. **Two `watch` terms kept as the adaptation wrote them**: `stock-depletion ratio`, `physical depletion
+   forecast`, one use each. `watch` was defined as "reported, not applied".
+3. **The duplicated prose** where the carry-over landed.
+4. v48's errata travel with this package (`ERRATA_v48.md`); the delivered v48 bytes were not touched.
+
+## Two instrument failures found while building, and what they taught
+
+1. `_rules()` in the waiver gate parsed the revert table with `len(fields) >= 8`, so it read **2 of 14**
+   rules — every rule whose justification contained no comma was silently skipped, and G4/G5 had been
+   enforcing one substitution. The lesson is that a check must report what it read: G4/G5 now returns "14
+   revert/cut rules read, all satisfied", so a zero that means "nothing was tested" is visible.
+2. My first front-matter pass rebuilt every line from the sentence splitter's output, and that splitter
+   masks `$…$` as a placeholder — so the adaptation's inline mathematics became a literal `M` and its
+   numbered lists lost their numbers. `diff` caught it, no gate did. It is the forbidden act in a new
+   costume: rebuilding prose from a masked view of it. Lines are now byte-identical unless a sentence is
+   actually deleted, and deletion is done on the raw line; the region maths count (11 spans in the markdown,
+   11 in the LaTeX) is what keeps it honest.
+
+A limitation stated rather than hidden: a vocabulary registry is still a list. `G1b` assembles its terms
+from three sources (TERMS, the previous line's emphasised phrases and coinages, and the label list read out
+of `build_v48_base.py`'s `KEEP`), which is why it caught what `G1` alone missed: `G1` compares base→build,
+and where the base *is* the rewrite, that comparison cannot see what the previous line of record carried.
+Whoever extends this line should not trust a hand-curated registry, including the one described here.
+
+## The reader's four points, and what each one turned out to be
+
+The first v49 was packaged, pushed, and then read. Four things were wrong or wanted; all four are
+addressed, and three of them were not the small problems they looked like.
+
+**1. The abstract's first line.** The shipped v49 opened on the adaptation's sentence
+*"Depletion metrics routinely circulate under a single colloquial label while answering fundamentally
+incomplete questions."* It now opens, as instructed, on the deposited article's
+*"Depletion indicators can carry similar units while built to inform distinct questions."* The
+adaptation's opener was removed rather than left in place of honour second: it makes the same point,
+and keeping both would have doubled it. Both strings are recorded in
+`v49_front_matter_edits.json → first_line`, so the removed wording is recoverable.
+
+**2. The introduction had no spacing, because its headings had eaten their paragraphs.** This was a
+build defect, not a style choice, and it had two causes. The adaptation's file glues a paragraph to the
+line under each of five headings (`### Abstract`, `### 1.1`, `### 1.2`, `#### What Is Explicitly Not
+Claimed`, `### 1.3`); and the builder joined the extract's lines while discarding blank lines, so the
+glue became structural. A block dispatcher that classifies a chunk by its first line — `if
+b.startswith('### ')` — then took heading *and* paragraph as one heading, and emitted the lot as the
+argument of `\subsection*{…}`. So `1.1`'s prose, `1.2`'s entire numbered contributions list and `1.3`'s
+organiser sentence were set as heading type. The abstract heading also arrived at the wrong level
+(`### Abstract` reached the LaTeX as a subsection, not the line of record's `\section*{Abstract}`).
+
+The fix is a normalisation pass applied to the adaptation's front matter *before* it is adopted
+(`house_form`), which does exactly three things and proves it: it drops the byline block, puts a blank
+line wherever house style requires one, and raises `Abstract` to `##`. The proof is whole-line, after
+two character-counting attempts that were wrong in opposite directions — one read `---` inside a table
+rule as a dropped horizontal rule, the other deleted the *title's* `#` instead of the abstract's,
+because `str.replace` finds the first match. Result: `every paragraph is now a paragraph` is a
+measurement, not a hope — the compiled article carries **203 of 203** flowing markdown blocks where the
+same check had reported 187, and the five swallowed blocks are the difference.
+
+**3. The author block appeared twice, wide and duplicated.** The five byline lines came from the
+adaptation, and v48's kept header (`\author{…}`, `\date{…}`) set them again. The line of record carries no
+byline in its markdown — that is what the header is for — so those lines are now dropped at the source
+and the block appears once, in the header, with ORCID and affiliation typeset narrow. One conflict is
+disclosed rather than smoothed: the adaptation is dated *September 6, 2026*, the header of this line says
+*September 17, 2026*, and v49 keeps the header's date because v49 is that lineage continuing.
+
+**4. A line-level read of the shipped file.** `audit_v49_lines_v1.py` refuses to let a line of v49 be
+unexplained: every non-empty line must be byte-identical to a v48 line, or to the adaptation's, or be
+reproducible from one by a logged substitution/label cut, or be the instructed first line, the carried-over
+passage, a restore, or the logged body repair. It then tests content per line — every one of the
+**1,486** maths spans against v48 ∪ deposit (∪ v42 where a logged restore carried it), every numeral
+against the same sources, and a list of formatting flaws — and reads the PDF: the abstract's first
+typeset sentence, one appearance of each byline element, no heading-sized line carrying body text.
+Current state: **provenance complete for all 1,694 lines** (1,196 v48-identical, 59 adaptation-identical,
+7 by logged substitution or cut, 1 first line, 1 carried-over passage, 6 restores, 424 blank), maths 0
+unsupported, numerals 0 unsupported, 0 new formatting flaws (2 inherited from v48, both a heading with no
+blank line before it, legal in markdown and typeset correctly), 0 PDF findings.
+
+### What that read caught, which every gate had passed
+
+* **Two of the six restored sentences were badly built.** The restore text had been lifted from a
+  flattened dump of the previous line, and that dump had already (a) turned `$\ell=\mathbf{1}$` into a
+  bare `M`, and (b) run past paragraph boundaries. So one restore re-inserted a *duplicate* of the
+  sentence v48 already carried, in the older wording, and another crossed a horizontal rule into the
+  following paragraph. Both are now re-derived from v42's raw markdown by `make_restores_v2.py`, which
+  refuses any insert that is not a verbatim substring of its donor line, that unbalances `$`, that
+  crosses a heading or rule, or that repeats a sentence already on the target line (similarity ≥ 0.62).
+  Three of the six claims are now carried as `extend-final-sentence` — the donor's own clause grows the
+  sentence v48 kept — and three as whole verbatim sentences. The em-dash clause is joined with a space,
+  a `:` or `;` clause is glued, so no `resource :` crevice is left behind.
+* **v48 had shipped the same sentence twice** at §4.3: *"Two scope notes are part of the theorem."* plain
+  and then bolded. v42 carries it once. The bolded twin is deleted, and the deletion is a logged edit —
+  `v49_body_repairs.json` — with an assertion that the survivor count is exactly one. It is erratum E10
+  of the v48 line.
+* **Two reference entries are now cited by nobody**: `United Nations, 2014` (the SEEA Central Framework,
+  which standardised the definition and recording of depletion) and `United Nations, 2025` (the System of
+  National Accounts treatment). Both were cited only in the §1 passage the adaptation does not carry —
+  the passage is *not* in the deposited article, so it is the previous line's own addition, and this build
+  will not silently re-insert or silently delete it. `Baez 2023` was uncited in v42 and v48 too and is
+  recorded as a house-style item for the author rather than a defect introduced here. `Illakwahhi 2024`
+  is **not** an orphan: the entry is cited as `Illakwahhi, Vegi and Srivastava (2024)`, which is the correct
+  three-author first mention, and it was flagged only because the matcher read surnames by requiring the
+  year immediately after the first one. The matcher was fixed; the citation was left alone.
+
+### Instruments corrected while doing this
+
+`texkit.overhang` reports zero pages when PyMuPDF is unavailable, which had turned "not measured" into
+"0 overfull, 0 undefined" — the compile step now refuses to record a clean result for a document it could
+not measure. The compile report was being read by the verifier while describing a superseded build, so the
+report's own mtime is now part of the freshness assertion. The protected-row pin requires v48's wording
+verbatim; three rows are grown by a logged clause, so the verifier now undoes exactly the insertions this
+build logged, on the raw body, before normalising either side — an unexplained rewording still fails. And
+the audit reads both kinds of revert rule (6 substitutions and 6 abolitions, 12 enforced) rather than
+counting one kind and reporting 12, which is how a control can pass while reading half the file.
+
+---
+
+## Round 5 — point 2 spacing, point 3 byline, and a gate that had been reading a stale page
+
+**The three build defects and their fixes, as before, plus the new ones:**
+
+* A heading that swallows its paragraph: the adaptation emitted 11 lines where a `####` heading
+  carried whole body sentences (`#### 3.2.1 A readout answers a narrower question than an exhaustibility
+  verdict. It asks whether...`). Fixed in the builder: the heading's first sentence stays, the rest becomes
+  its own paragraph, with an assert that no kept heading argument exceeds 190 characters. The renderer's
+  own `\partitle{}` argument (631 characters) was then caught by a *new* check the audit raised as an error
+  (`overlong_heading_arguments` in `build_v49_tex.py`), and a 190-character cap now applies to every
+  heading argument, including `section*`/`subsection*` ones.
+* The byline was present in both markdown and the .tex header. Removed from the markdown; the .tex header
+  keeps the ORCID, and the rendered page still shows name, affiliation, email, date, editor.
+* Punctuation spacing from the flattening step, fixed as before.
+
+**The instrument failures this round found — the ones worth remembering.**
+
+1. **The gate had been reading a stale surface.** The front-matter extracts it audits were hand-cut during
+   an earlier round; after the byline removal they no longer described the shipped file, so `flag_count: 0`
+   certified a document that did not exist. Fixed at both ends: `build_v49_base.py` writes
+   `v49_base_front_matter.md`, `v49_front_matter.md` and `v48_front_matter.md` on every run, and the gate
+   refuses to run unless `--built` matches the shipped front matter (`--allow_stale_built_surface` to
+   override). The verifier re-checks it (`gate_input_is_the_shipped_file`) and asserts the gate and audit
+   reports are newer than the markdown they describe.
+2. **A numeral extractor that invented a number.** `\d{1,3}(?:,\s?\d{3})+` matched `6, 202` inside
+   `September 6, 2026`, so the gate reported a lost numeral `6202`. A `(?!\d)` lookahead bounds the
+   thousands groups.
+3. **An excusal needs a page, not a promise.** Numerals removed with the byline are excused only when the
+   digits come from a logged `byline_lines_removed` line *and* the rendered front pages show them —
+   `--absorbed v49_pdf_front_pages.txt` (written by `build_v49_tex.py`, digits intact, because the audit's
+   normalised text is letters-only). Five items (the four ORCID groups and 2026) are excused this way; an
+   item the header does not show is listed as superseded, never hidden.
+4. **`_anchors` was keyed wrong, and reported surviving cites as lost.** Four rounds of fix:
+   (i) `&`-form cites keyed on the second author; (ii) a name split by a line wrap keyed on a fragment;
+   (iii) the narrative form keyed on the *last* name (`Tilton and Lagos (2007)` → Lagos); (iv) institutions
+   keyed on a bare `United`. All keys are now `lead author of the cite + year`, and a `def _anchors`
+   duplicated three times in the file had to be deleted — the last definition was shadowing the good one.
+   The accurate result: v48 §1 carries 21 anchors, v49 §1 carries 18, and the three that went are
+   `Clark, 1990` (cited twice elsewhere, no orphan) and `United Nations, 2014` / `United Nations, 2025`.
+5. **Re-adding a check after deleting its neighbours failed twice** — first on a front-matter boundary rule
+   that differed from the producer's (grabbing the end-of-section-1 rule at line 321 instead of the
+   front/body rule at 119), then on a variable the deletion had taken with it. A checker's rules must be
+   the producer's rules, verbatim.
+
+**Green state of the whole chain, rebuilt from scratch:** md 1,694 lines (215,028 B),
+`v48_body_lines_lost_by_this_build: 0`, `front_matter_lines: 118`, `restored: 6`, `term_edits: 5`;
+.tex 54 pp / sup 19 / A 10 / B 8, all `rc=0`, overfull ≥ 6 pt 0, `??` 0, 203/203 flowing markdown paragraphs
+on the page; gate `flag_count: 0`; audit 2 findings, both the UN author decision; verifier `*** v49 verified ***`.
+
+**Open for the author, unchanged:** whether to drop reference entries `United 2014` and `United 2025` or
+restore v48's two §1.1 sentences that cited them (the passage they supported is not in the deposited
+article, so this build cannot legitimately absorb it).
+
+## Round 6 — the citation matcher, corrected in the instrument's favour
+
+The audit's `orphans_introduced_by_this_base_swap` list was reporting `Illakwahhi 2024` as an uncited
+entry. It is cited; the old matcher searched `Lead` within 80 characters of the year **without crossing a
+parenthesis**, so `Illakwahhi, Vegi and Srivastava (2024)` — correct APA for a three-author work on first
+mention — read as a different lead name. Editing that citation to satisfy the check would have been the
+exact inversion this line keeps being about, so the check changed: an entry counts as cited when any name
+it is addressed by sits near its year, and an in-text cite is unresolved only when no name in it
+addresses any entry of that year. No canonical key is computed, so `and`, `&`, `et al.`, initials and
+institution strings cannot trip it.
+
+An intermediate attempt that canonicalised every cite into a `lead + year` key went the other way and
+invented three phantom cites (`GRACE`, `Zenodo`, `Geological Survey` were read as authors) and orphaned
+`Tapley 2004`, `Tilton 2003/2007`, `Ricard 2012`, `Smith 1995`, `Wackernagel 2019`. Two further faults
+found while checking that output: `et al.` modelled as a *connector* between names instead of a suffix,
+and lower-cased tokens searched case-sensitively against a capitalised body. `FINDINGS` is now 3, all
+real, and the phantom is recorded on the report as `phantoms_the_old_matcher_invented_and_this_one_clears`
+so nobody spends another hour re-deriving that the entry is fine.
+
+The three classes are kept apart in the data, because only one of them needs the author and only one of
+them needs a code change:
+
+| class | entries | who acts |
+|---|---|---|
+| uncited already in v42 and v48 | `baez 2023` | author, at submission |
+| uncited by a removal the errata records | `united 2014`, `united 2025` | author, at submission — and this is E4, the same defect as the removed §1.1 passage, not a second item |
+| unexplained, introduced by this base swap | **none** | the verifier asserts this class stays empty |
+
+A class-2 label is not available on request: the errata must name the entry, speak of v49, and say the
+cite went, so an unexplained loss cannot borrow the standing of an explained one. The open item in
+`humanize/open_items_v48.md` states the facts and recommends nothing — if the SEEA inconsistency is a
+claim the paper is to make, the fix is a new sentence with a verified source written by the author; if
+not, the entries are dead weight. Restoring v48's wording is not a resolution, since that wording is
+what E4 objected to, and the pipeline drafts no substitute.
+
+---
+
+## Round 7 (2026-09-19, evening) — spacing on the page, a content-loss read, and the three documents nobody had read
+
+Three instructions: the introduction *still* had no spacing on the page; read v49 for content lost or
+condensed; look for maths/number/prose errors in places not yet examined.
+
+### 1. The spacing was a `.tex` conversion failure, not the markdown
+
+`v49_section1_v1`-style density checks on the md are useless here: §1 is 37.4 % blank lines, which is
+correct markdown. The cause was in `build_v49_tex.py`'s region loop, which glued whole sections into one
+`\item`: §1.1's items 1–2 fused, the four certification layers rendered as one bullet with the literal
+`2.`/`3.`/`4.` inside it, contributions 6–7 were absorbed into 5, and every line between markers was
+typeset in a single paragraph (page 2 ran from y≈192 to the footer with no break). No words were lost;
+the structure and the numbering were.
+
+Fix: `emit_list` rewritten line-driven (one `\item` per markdown item line), structural blocks split so a
+numbered item starting mid-paragraph begins a new list, and the region gained two proofs — the md↔tex
+word sequence must be equal after `_strip_math` and marker/command removal, and `count(md marker lines) ==
+count(^\s*\item\s)`. The proof fired three times, each time on a bug in the proof itself, not in the
+region. Result on the page: p2 `1. Compensatory Aggregation` / `2. Classification Drift`; p3–4 the four
+layers `1.`–`4.` with their two sub-bullets; p5 contributions 1–5 with sub-bullets; `### 1.2`/`### 1.3`
+heading offsets restored.
+
+### 2. Content loss in §1 — measured with atoms, not similarity
+
+Similarity is blind to paraphrase, and §1 was deliberately rewritten: v48's 134 long §1 sentences score
+**0 verbatim** in v49 (§1 cannot be audited any other way than atom-presence — recorded in
+`read_v49_section1_v1.py`, kept as the record of why it was abandoned). The instrument that works:
+`atoms_v49_section1_v1.py` requires a *distinctive* atom (numeral, cite year, rare content word after a
+crude stem) to be missing **document-wide**, against v48, v42 and the deposit →
+`v49_section1_atoms.json`, then `atoms_v49_readout.py` pairs each candidate with v49's nearest §1
+sentence, and every one was confirmed by reading the §1 lines.
+
+v48 covers 112/134 §1 sentences at ≥½, v42 112/131. **38 candidate sentences lose distinctive atoms;
+after the read, 35 are rewordings** whose proposition is present (e.g. the elevator "diffuse, gradual,
+sudden" line → line 45 "accumulates unseen microscopic strain … catastrophe is instantaneous"; "Each of
+these quantities is informative" → line 24 "Each metric provides specific institutional or descriptive
+information"; "overlapping not exclusive" → lines 67/72; "refills itself" → line 49 "replenishes
+dynamically through new discoveries and shifting economics"). The remaining three are *labels and
+rhetoric*, recorded as one open item: v48's thesis "Waste is a relationship, not a property of a
+substance.", the defined label "registered open gap", and "system moves" — the first and third appear in
+no earlier surface at all, the second is in the deposit once. Nothing numerical was lost: the §1 worked
+figures ($1.0\times10^6$ kt reserves / $6.0\times10^5$ kt extraction) are on line 49 and match the
+deposit's 1,000,000 / 600,000 kt.
+
+**A correction to what I flagged last round.** I recorded line 49 as a semantic regression — "physical
+replenishment asserted for an economic reserve". Read in full the clause is qualified by "and shifting
+economics" in the same sentence, and the following sentence keeps the phosphate demonstration. It is not
+a regression; v48's "any ratio built on it inherits that behaviour" is a framing difference only. My
+earlier read was of a truncated line, which is why the rule "confirm against the rendered line text"
+exists.
+
+### 3. New surfaces: the other three documents, escaping, and numerals on the page
+
+- `deep_read_v49.py` (17 checks + a 54-page census): no dangling reference survives. The `Conditional
+  Theorem 15` "dangle" was my regex — `**Conditional Theorem 15 (Hybrid moiety balance)**` is defined at
+  md line 933, and 71 statements of the md `**Theorem N (**` form all define their numbers. The other
+  reports (dashed ORCID, reference page ranges, `$ ` adjacency inside `(...)`) are artifacts.
+- `read_docs_and_tex_v1.py` on all four documents: `#1` inside `\newcommand` (legitimate),
+  `&`-outside-table (my test matched an already-escaped `\&`), and a `text_brace_imbalance` counter that
+  was arithmetic nonsense — all removed or annotated. **`\allowbreak{}` inside numbers** (`308.\allowbreak{}33`)
+  is why md-vs-tex numeral counts disagree; it is the builder's line-wrap device, and the page shows
+  `308.33`.
+- The check that matters is md ↔ rendered page. First pass reported 90 "lost" numerals; that was my
+  tokenizer: whitespace-stripping merged adjacent table cells into single tokens (`1961` + `43.9%` →
+  `196143.9`). With separators preserved: **supplementary 0 absent, companionA 0, companionB 0**, and
+  v49's only "absent" items are thousands separators (`240` vs the page's `240,000`, `1.0e6` written
+  `1,000,000`) — i.e. every substantive numeral in all four documents is on the page. The three
+  companions' pointers into the article's section numbering resolve (`§6.5.3`, `§4.8`, …): 0 dangling.
+
+### 4. Two prose defects found; one fixed, one refused
+
+* **`an catastrophic deficit`** (v49 line 26) exists in no earlier surface — not v48, not v42, not the
+  deposit, which has zero `an`-before-consonant sites. Repaired mechanically inside `house_form()` as a
+  logged `prose_repairs` rule, so the whole-line proof replays it (`only_logged_changes: True`) and the
+  audit recognises the line as `adapt + logged prose repair` (1) instead of calling it unexplained. This
+  changed the md by one character: 214,262 characters, 215,027 bytes on disk (the gate prints the
+  character count, which earlier rounds recorded as bytes - it is not a byte count).
+* **The -ize/-ise split was not repaired, and the attempt was withdrawn.** A first version of the rule
+  rewrote `### 1.3 Organization` into `Organisation` because the OECD's name sits in the reference list.
+  The premise was wrong anyway: v48's frozen body mixes them (specialization 14, realized 2, authorized 3
+  against normalised 2, mobilised 1), and §1 itself writes `formalize` 7× beside `formalises` 1×. There
+  is no convention for the region to match, and half-aligning it would be worse than the mix. Recorded as
+  an open item with the counts, not as a repair.
+* Rounding in §1's example: `4.0/6.0 = 0.67` rounds while `1.0/1.6 = 0.625` is written `0.62` — one
+  sentence, two conventions. Inherited from v42, so reported, not edited.
+
+### 5. Instruments repaired this round (not the text)
+
+`numset`/tokenizer separators; `deep_read`'s `KIND` now recognises `Conditional Theorem`; `read_docs_and_tex_v1`
+compares against the page, not the wrapped source; the gate's **G1b** was counting vocabulary on the wrong
+surface (`in_previous_line` read the *adaptation*, so every item showed 0) and never said where a term
+went — it now reports `in_v48_region` / `in_the_deposit` / `where_it_is_now`, which converted four of the
+seven disclosures into "the shipped document" (a term that moved into the abstract or the body is not a
+term lost) and left three honest ones. The verifier's report-freshness assert fired twice this round and
+each time was right (the gate and audit reports predated the one-byte md change).
+
+### 6. State of the chain after the rebuild
+
+build: 5 term edits, 6 restores, body absent-from-v49 0. tex: 6/6 placements, body byte-identical after
+undoing the six insertions, front maths 11/11, labels 71 / refs 0 / unresolved 0, region list items md 37
+== tex 37, four documents compile 54/19/10/8 pp with rc=0, overfull ≥6pt 0, `??` 0, pdf_flow 203/203, E6
+lookalikes 0. gate: flag_count 0, disclosure_count 8. audit: FINDINGS 3, all three the disclosed orphans
+(class_1 `baez 2023`; class_2 `united 2014`, `united 2025`; class_3 empty), page-level list findings [].
+pin: 290 ruled rows (208 placed verbatim, 63 freed), 145 verbatim-protected outside §1. verifier:
+`*** v49 verified ***`, FAILURES: none.
+
+The gate's invocation is recorded here because it had never been written down: `python3
+v49_waiver_gate_v1.py --base v49_base_front_matter.md --built v49_front_matter.md --prev
+v48_front_matter.md --out v49_gate_report.json --absorbed v49_pdf_front_pages.txt --ruling-log
+v49_front_matter_edits.json`.
+
+### 7. Open items for the author (recorded, nothing actioned)
+
+1. Three reference entries carry no in-text citation: `baez 2023` (already uncited in v42 and v48) and
+   `united 2014` / `united 2025` (uncited by a removal erratum E4 records). One item, not two.
+2. v48 §1's four status labels, its thesis sentence "Waste is a relationship, not a property of a
+   substance.", and the defined label "registered open gap" are absent from v49. Restoring them means
+   importing v48's §1 wording, which is erratum E4's substance, so it is not done here; a newly drafted
+   replacement would be the author's own claim, so none is drafted.
+3. §1 mixes -ize (formalize 7, recognize, stabilizing, synthesizing, publicized) with -ise (formalises,
+   analyse, normalise, mobilised); v48's body and the deposit mix them too, so the fix is a house-style
+   decision, not a repair.
+4. `1.0/1.6` printed as `0.62` beside `4.0/6.0` printed as `0.67`: truncation and rounding in one
+   sentence. Inherited from v42.
+5. §1.1 states the arithmetic sense of the reserve-life ratio twice (lines 30 and 32/33), with different
+   example lists; a dedup would be authorial because the prose and the bullet carry different material.
+6. The reference list gives DOIs for 8 entries but omits Martinez-Alier, Munda & O'Neill (1998),
+   `10.1016/S0921-8009(97)00120-1`. House style, one entry.
+
+Package v10: 84 records, 2,139,493 bytes, sha256 506853c369f07159c9f92bf8f9f24daa69efcf6330c61d16e6e980cfc6c17e8f (supersedes v9 afa993932828d8f81b09b6afdda22225dcd7358dd73ac5fd13f3c9582f93a26b). v10 carries the one-byte prose repair, the rebuilt .tex and PDFs of all four documents, the round-7 notes and the open-item list.
