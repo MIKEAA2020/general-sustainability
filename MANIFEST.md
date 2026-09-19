@@ -187,3 +187,6 @@ SHA-256 of every extracted file was recorded at clone time (see file list above 
 ## 2026-09-18 additions (v64 + lineage audit)
 - e1/paperE1_cod_forecast_ladder_v64_humanized.md/.tex/.pdf + _build-hu64 + _submission — declarations completed (owner text), competing-interest bold, A.7 code block restored; 4-line delta.
 - audits_E1_E3/E1_CONTENT_AUDIT_V49_V63_20260918.md — per-chapter census + 26-motif substance matrix + restoration menu.
+
+## 2026-09-18 additions (SI V7)
+- e1/E1_SUPPLEMENTARY_V7.md/.tex/.pdf — SI-8: merit-screened verbatim restorations (fixed-window narratives; depensation boundary + scope limits), all numerals machine-verified incl. engine recomputation; skip rationale for items 1/3/4/5 documented in SI-8 preamble.
