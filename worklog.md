@@ -2112,3 +2112,18 @@ Stage Summary:
 - The submission zip for the Theoretical Ecology portal is BUILT and COMPILE-VERIFIED in both layouts: submission_zips/paper4_delay_dynamics_v41_TE.zip (sha256 231e97bb...); the supplementary package README refreshed to v41 (sha256 f2411508...).
 - v40 and all prior versions untouched on disk and in history; supp v8 document unchanged.
 - Open owner-level items: the Zenodo deposit refresh, the 31-path systemic figs fix (other waves), submission-time guideline/masthead checks.
+
+---
+Task ID: 102-push
+Agent: main (Z.ai Code)
+Task: Push record for the Task 102 commit (the v41 submission round).
+
+Work Log:
+- The pasted PAT again carries the stray trailing '.1' suffix (fourth occurrence, Tasks 98/99/101/102): as pasted it 401s against the GitHub API; the corrected form (suffix stripped) verified 200 as MIKEAA2020 with admin/maintain/push/triage/pull on MIKEAA2020/general-sustainability. Used in-memory only (a transient shell variable; never written to any repo file or log; push by explicit URL so nothing persists in .git/config; output redacted).
+- Pushed: remote main 25f4393 -> e4e5662 (publishing Task 102's full round: the v41 manuscript md/tex/pdf, the submission zip paper4_delay_dynamics_v41_TE.zip, the refreshed paper4_supplementary_v8.zip, the synced cover letter, the wave-24 pipeline + logs, the V43 round record, and the worklog Task 102 entry).
+- Post-push verification: git ls-remote main == local main == e4e566211a41bdeb710fd6b7a0b3f0ef51e3ac8b; tree clean; zero raw-token occurrences under .git (config, logs, reflog, packed-refs); origin remote URL remains the clean anonymous form.
+- Rotation advised for the pasted PAT regardless (it transited the chat channel; the same stray-suffix paste artifact has now appeared four times).
+
+Stage Summary:
+- Task 102 published on main (e4e5662); remote == local; tree clean; no token residue.
+- Repo paths delivered to the owner: the v41 manuscript at "arena agent 1/paper rewrites/paper4_delay_dynamics_v41.md" + "arena agent 1/paper rewrites/latex/paper4_delay_dynamics_v41.tex" / ".pdf"; the portal submission zip at "arena agent 1/paper rewrites/submission_zips/paper4_delay_dynamics_v41_TE.zip"; the refreshed supplementary package at "arena agent 1/paper rewrites/submission_zips/paper4_supplementary_v8.zip"; the synced cover letter at "arena agent 1/paper rewrites/latex/COVER_LETTER_paper4_delay_dynamics_TE.md"; the round record at "humanizing audits/V43_SUBMISSION_ZIP_DOIS_AND_ABSTRACT_HONESTY.md".
