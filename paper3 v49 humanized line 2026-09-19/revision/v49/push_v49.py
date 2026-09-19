@@ -37,8 +37,14 @@ def add(rel):
 for d in sorted((ROOT / 'revision/v49').rglob('*')):
     if d.is_file() and '__pycache__' not in str(d):
         add(str(d.relative_to(ROOT)))
-for f in sorted((ROOT / 'revision/v7').glob('*_v49.*')):
-    add('revision/v7/' + f.name)
+# the four shipped documents travel together: the article is *_v49.*, but the supplementary and the two
+# companions recompile with it (the 4-document compile rewrites all four PDFs), so archiving only the
+# article left the other three PDFs at whatever bytes an earlier round pushed. Every document the zip
+# contains is now pushed loose too, or the archive cannot be used to re-derive the zip.
+for pat in ('*_v49.*', '*_v18.*', 'companionA_*_v9.*', 'companionB_*_v9.*'):
+    for f in sorted((ROOT / 'revision/v7').glob(pat)):
+        if f.suffix in ('.md', '.tex', '.pdf'):
+            add('revision/v7/' + f.name)
 for f in ('revision/v48/ERRATA_v48.md', 'humanize/v49_adaptation_first_brief.md', 'humanize/open_items_v48.md'):
     add(f)
 print(len(files), 'files to push;', round(sum(p.stat().st_size for _, p in files) / 1e6, 1), 'MB')
