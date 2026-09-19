@@ -38,7 +38,18 @@ PREAMBLE = r'''\documentclass[11pt]{article}
 '''
 
 def inline(s):
-    return md2tex(s)
+    # Let hyperref break long bare URLs at punctuation; otherwise a declaration URL can
+    # create an avoidable overfull box in the journal PDF. Keep sentence punctuation
+    # outside the URL target.
+    tex = md2tex(s)
+    def wrap_url(match):
+        raw = match.group(1)
+        trailing = ''
+        while raw and raw[-1] in '.,;:!?)]':
+            trailing = raw[-1] + trailing
+            raw = raw[:-1]
+        return r'\url{' + raw + '}' + trailing
+    return re.sub(r'(?<![\\{])(https?://[^\s}]+)', wrap_url, tex)
 
 def is_table_start(lines, i):
     """Accept only a pipe row followed immediately by a Markdown separator row.

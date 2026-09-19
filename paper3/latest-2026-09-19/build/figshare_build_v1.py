@@ -99,8 +99,10 @@ python3 journal_variants/validate_journal_variants.py
 python3 -m pytest -q journal_variants/route_c_prototype/test_typed_ledger.py
 ```
 
-The zip digest belongs in the Figshare record or the sidecar next to the downloadable zip, not in a file
-inside the zip.
+An author-supplied public Figshare preprint record is available at
+https://doi.org/10.6084/m9.figshare.33942451. The expanded package built here is separately checksummed;
+version-match it before treating the public record as the same file set. The zip digest belongs in the
+Figshare record or the sidecar next to the downloadable zip, not in a file inside the zip.
 '''
 (STAGE/'README.md').write_text(readme)
 meta = {
@@ -111,7 +113,7 @@ meta = {
     'description': 'A typed stock-flow accounting framework separating material conservation, componentwise barriers, service readouts and three non-interchangeable depletion quantities. The deposit includes the full-length article, supplementary and companion documents, executable reproduction records, target-specific journal cuts and a tested route-C reference prototype.',
     'keywords': ['material flow accounting','stock-flow ledger','ecological economics','industrial ecology','depletion indicators','componentwise sustainability','conservation laws','first-passage semantics'],
     'license': {'name': 'Creative Commons Attribution 4.0 International', 'spdx': 'CC-BY-4.0', 'url': 'https://creativecommons.org/licenses/by/4.0/'},
-    'figshare_note': 'Metadata is prepared for deposit; no upload or DOI assignment was attempted in the workspace.',
+    'figshare_note': 'An author-supplied public Figshare preprint record is available at https://doi.org/10.6084/m9.figshare.33942451. The expanded package built here is separately checksummed and requires version matching before the two are treated as identical.',
     'third_party_note': 'GFN National Footprint and Biocapacity Accounts source tables are omitted; source manifest and checksums are retained.',
 }
 (STAGE/'metadata.json').write_text(json.dumps(meta, indent=2, ensure_ascii=False)+'\n')

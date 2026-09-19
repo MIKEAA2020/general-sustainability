@@ -108,7 +108,7 @@ which is a frozen current net-rate ratio; and
 
 $$T_A(x_0;\pi,d)=\inf\{t\ge0:A^{\pi,d}(t;x_0)\le A_{\min}\},$$
 
-which is a scenario-conditioned first-passage time. The third requires a model, policy, disturbance history and barrier. Under a declared uniform drift bracket the local ratio and the hitting time can be bounded relative to one another; without that bracket, the ratio is not a forecast.
+which is a scenario-conditioned first-passage time. The third requires a model, policy, disturbance history and barrier. Under a declared uniform drift bracket the local ratio and the hitting time can be bounded relative to one another; without that bracket, the ratio is not a forecast. Internal transfers do not exhaust a conserved moiety: a finite crossing concerns a declared compartment, barrier or readout, not total mass.
 
 | Public record | Input object | Reported quantity | What it answers | What it does not answer |
 |---|---|---|---|---|
@@ -192,7 +192,23 @@ A material-flow balance is necessary but not sufficient for a componentwise sust
 
 ### Data and code availability
 
-The complete mathematical proofs, extended public-data records, source-vintage material, code and analysis records are supplied in the technical supplement and full-length Figshare-ready deposit. The journal version uses no data beyond the records and sources already pinned in the full-length line.
+The complete mathematical proofs, extended public-data records, source-vintage material, code and analysis records are supplied in the technical supplement and full-length Figshare-ready deposit. The full-length article also has an author-supplied public Figshare preprint record at https://doi.org/10.6084/m9.figshare.33942451. The journal version uses no data beyond the records and sources already pinned in the full-length line.
+
+## Declaration of generative AI and AI-assisted technologies in the writing process
+
+Qwen (Alibaba Cloud) and DeepSeek AI aided with exploratory proof generations and iterative review. The author has reviewed and edited the outputs and takes responsibility for the work.
+
+## Competing interests
+
+The author declares no competing interests.
+
+## Funding
+
+None.
+
+## CRediT author statement
+
+Following the CRediT author statement guidance at https://www.elsevier.com/researcher/author/policies-and-guidelines/credit-author-statement, A.A. conceptualized the entire work, wrote the manuscript, and reviewed and edited the manuscript.
 
 ## References
 
