@@ -6,6 +6,7 @@ and the tree is built on base_tree so the earlier v48 files - including the arch
 are kept. The token is read from uploads/ and never echoed.
 """
 import base64, hashlib, json, os, pathlib, urllib.request, urllib.error
+import re as R_
 
 ROOT = pathlib.Path('/home/user')
 TOK = (ROOT / 'uploads/github_pat.txt').read_text().strip()
@@ -74,7 +75,10 @@ mine = [e for e in tv if e['path'].startswith(FOLDER)]
 print('verified: tree now', len(tv), 'entries,', len(mine), 'under the v49 folder')
 # a filename match proves the name is in the tree, not that the bytes are the ones just shipped, and
 # this line has been read as a freshness proof before. Compare the git blob SHA-1 instead.
-zs = sorted((ROOT / 'revision/v49').glob('paper3_supplementary_package_v*.zip'))
+# sort by the NUMBER: plain sorted() puts v10 before v9, which made this print a verdict
+# about the wrong zip in round 7.
+zs = sorted((ROOT / 'revision/v49').glob('paper3_supplementary_package_v*.zip'),
+          key=lambda x: int(R_.search(r'v(\d+)\.zip$', x.name).group(1)))
 z = zs[-1]
 raw = z.read_bytes()
 blob = hashlib.sha1(b'blob %d\x00' % len(raw) + raw).hexdigest()

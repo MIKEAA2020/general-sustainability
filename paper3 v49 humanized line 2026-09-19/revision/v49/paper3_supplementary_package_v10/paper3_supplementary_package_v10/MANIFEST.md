@@ -3,7 +3,7 @@
 | file | bytes | sha256 |
 |---|---|---|
 | `ERRATA_v48.md` | 8893 | 03559186e74f41fc3bd06404c6f725a1975a12cc1624b8e521619bd08d7d89aa |
-| `NOTES_v49.md` | 32269 | dcabf02873accbb32c669d486d6ec7c3584e92cc8aef8fcf598e568498792793 |
+| `NOTES_v49.md` | 33180 | e5d429c3bbaca6f6bbe84780df91343eeec80ce906f6240004630db25c3f4633 |
 | `README.md` | 2891 | f1495e543c8c1eec68f6c428bff122c9a1f2a1083bf084b4b1c0149d5372c436 |
 | `builders/audit_v49_lines_v1.py` | 35603 | 02f0107bd9ba844a61d8f55e9d92b5a5d82a7888e7491df15cbe01ba37e09312 |
 | `builders/build_companions_v1.py` | 12053 | c61310356d73b6b5153e1eeaabbff05db6822625780e7c8f3c483a68a1011867 |

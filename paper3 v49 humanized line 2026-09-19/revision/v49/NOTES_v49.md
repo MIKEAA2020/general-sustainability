@@ -406,7 +406,18 @@ v49_front_matter_edits.json`.
 6. The reference list gives DOIs for 8 entries but omits Martinez-Alier, Munda & O'Neill (1998),
    `10.1016/S0921-8009(97)00120-1`. House style, one entry.
 
-Package v10: 84 records, 2,139,744 bytes, sha256 6453cfe31060a027e0d5015d0403a9ddc24c6c988f400f7fba836058d055cc28 (supersedes v9 afa993932828d8f81b09b6afdda22225dcd7358dd73ac5fd13f3c9582f93a26b). v10 carries the one-byte prose repair, the rebuilt .tex and PDFs of all four documents, the round-7 notes and the open-item list.
-The NOTES entry inside the zip necessarily predates this line - it is the only file in v10 that is not
-byte-identical to the workspace copy; the four documents and the tex are, checked by sha256 of every
-entry against the workspace after zipping.
+Package v10: 84 records, 2,139,744 bytes. Its digest is deliberately NOT recorded here: the digest of a zip
+cannot live inside the zip without the copy in it going stale one line behind, which is a loop rather than a
+record. It is in `paper3_supplementary_package_v10.sha256` beside the zip and in the push commit message, and
+v9 (afa993932828d8f81b09b6afdda22225dcd7358dd73ac5fd13f3c9582f93a26b) is superseded by it.
+
+### 8. Round-7 close-out
+
+`push_v49.py` had two bugs of the same family as the ones the author has been correcting all round. It verified
+the package by filename (a name in a tree proves nothing about bytes) and picked `sorted(...)[-1]`, which is
+`v9`, so it printed a verdict about the wrong zip; and its v7 glob was `*_v49.*` only, so the supplementary and
+the two companions were archived at whatever bytes an earlier round pushed while all four PDFs are rewritten by
+every 4-document compile. Both fixed: the selection sorts by the version number, the check compares the git
+blob SHA-1 of the local file against the tree entry at an exact path, and the push now carries md/tex/pdf for
+all four documents. Verified after the push: 20/20 workspace files byte-identical in the tree, head
+`c2ad651e4c72`, 772 entries.
