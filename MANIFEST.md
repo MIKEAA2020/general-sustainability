@@ -166,3 +166,11 @@ SHA-256 of every extracted file was recorded at clone time (see file list above 
 ## 2026-09-18 additions (rejection response v57)
 - e1/paperE1_cod_forecast_ladder_v57_humanized.md/.tex/.pdf (24pp, hu57) — response to desk rejection: §1 "Scope clarifications" paragraph (not a new assessment method; why the reconstruction is the scoreboard; monitoring-data roles + survey-index scoring reserved as follow-up), abstract scope clause, NEW Appendix A (A.1–A.7 technical + computational specification: map equations, per-window estimation mechanics incl. bounds/multi-start/φ rule/catch handling, origin machinery & metrics, executable retention rule, DM/bootstrap audit layer 20,000 reps seed 0, reproducibility map pointer to SI-6). Zero numerals lost vs v56; no new claims asserted.
 - e1/paperE1_cod_forecast_ladder_v58_humanized.md/.tex/.pdf (24pp, hu58) — DeepSeek-advice round: positive-register abstract (402w) + §1 object paragraph (scope-para header deleted); all citations and frozen numerals preserved; audits_E1_E3/DEEPSEEK_ADVICE_EVALUATION_20260918.md = evaluation/verification log.
+
+## 2026-09-18 additions (two-target campaign & resubmission packet: v59→v61)
+- e1/paperE1_cod_forecast_ladder_v59_humanized.* — §3.8 Spec C survey target + Table 12b; abstract target-robustness sentence; §4.3 contrast; 25pp hu59.
+- e1/paperE1_cod_forecast_ladder_v60_humanized.* — q# documented + verdict-invariance; §4.3 centerpiece (target smoothness vs target substitution); 26pp hu60.
+- e1/paperE1_cod_forecast_ladder_v61_humanized.md/.tex/.pdf (26pp, hu61) — §1 consistency: survey-index scoring is discharged in §3.8 (residual "reserved for a separate study" sentence updated). Resubmission carrier.
+- e1/E1_SUPPLEMENTARY_V4/V5.* — SI-7 campaign companion; V5 corrects the q# invariance claim and adds the sensitivity table.
+- batch 7/SPEC_E1_SURVEY_TARGET_20260918.md (pre-registered Spec C), campaign_e1_survey_target.py, campaign_e1_survey_qsensitivity.py; results/e1_survey_target_*.csv, e1_survey_dm_uncertainty.csv, e1_survey_qsensitivity.csv (all deterministic).
+- e1/COVER_LETTER_paperE1_cod_forecast_ladder_FR_v3_20260918.md/.tex/.pdf — resubmission letter to Fisheries Research: intentions; responses to the three desk-rejection concerns (Appendix A specification; scope/status; scoreboard target answered empirically); every claim byte-consistent with v61.
