@@ -7,6 +7,8 @@ These are new working surfaces derived from the immutable v49 full-length line. 
 - `paper3_JIE_submission_v1.md` — Journal of Industrial Ecology cut, checked against a 6,000-word body limit. It leads with MFA, typed material stocks/flows, closure, double-counting and application classifications. Proofs are delegated to `technical_supplement_v1.md`.
 - `paper3_EE_submission_v1.md` — Ecological Economics cut, checked against an 8,000-word body limit. It leads with weak/strong sustainability, weak comparability, noncompensatory aggregation, natural-capital drawdown and policy meaning. It deliberately does not promote the regime interpretation to a theorem.
 - `technical_supplement_v1.md` — technical extracts of the full-length article's proof-bearing sections, copied verbatim from the v49 source, plus a map to the full-length sections.
+- `rendered/paper3_JIE_supplement_v1.tex` and its PDF/log — standalone JIE supplement with the extended theorem inventory, delay-dynamics interface, full application tables and operational weak/strong-sustainability formalization; it is separate from the 6,000-word cut.
+- `paper3_JIE_supplement_v1_validation.md` — build, structural, content and credential-scan audit for the standalone supplement.
 - `assets/typed_ledger_readout.svg` and `.png` — the new restrained framework/productivity-illusion figure used by both cuts.
 - `route_c_prototype/` — a dependency-free, tested core declaration prototype for a possible Environmental Modelling & Software route. It is explicitly not yet a supported package.
 - `validate_journal_variants.py` and `journal_variants_validation.json` — word-limit/content/asset gate.
