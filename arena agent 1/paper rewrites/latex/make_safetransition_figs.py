@@ -122,11 +122,13 @@ ax1.text(float(RHO1) - 0.05, 0.94, "$\\rho_1 = 2/3$", color=BLUE, fontsize=10,
          ha="right", va="top")
 ax1.text(float(RHO2) + 0.05, 0.94, "$\\rho_2 = 3/2$", color=GREEN, fontsize=10,
          ha="left", va="top")
-ax1.text(0.30, 0.62, "SLOW licensed\n($r \\leq \\rho_2$)", color="#1e6e42", fontsize=9.5,
+ax1.text(0.30, 0.62, "only SLOW licensed\n($r < \\rho_1$)", color="#1e6e42", fontsize=9.5,
          ha="center")
-ax1.text(2.05, 0.62, "FAST licensed\n($r \\geq \\rho_1$)", color=BLUE, fontsize=9.5,
+ax1.text(2.05, 0.62, "only FAST licensed\n($r > \\rho_2$)", color=BLUE, fontsize=9.5,
          ha="center")
-ax1.text(1.04, 0.32, "$w = (1,1)$:\n$r = 1$", fontsize=8.5, color="#444", ha="left")
+ax1.text(1.02, 0.46, "both licensed for\n$\\rho_1 \\leq r \\leq \\rho_2$", fontsize=8.8,
+         color="#444", ha="center")
+ax1.text(1.04, 0.27, "$w = (1,1)$:\n$r = 1$", fontsize=8.5, color="#444", ha="left")
 ax1.text(1.25, 0.03, "no $r$ licenses a typed-safe plan at the witness "
          "(floors breached path-wise)", fontsize=8.6, color=RED, ha="center")
 ax1.set_xlim(0, 2.5); ax1.set_ylim(0, 1); ax1.set_yticks([])
