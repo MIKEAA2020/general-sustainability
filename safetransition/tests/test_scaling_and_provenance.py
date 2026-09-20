@@ -19,7 +19,7 @@ from safetransition.dashboard import default_provenance, render
 
 PKG_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 STUDY = os.path.join(PKG_ROOT, "benchmarks", "scaling_study.py")
-FIGS = os.path.join(PKG_ROOT, "figs_p3")
+FIGS = os.path.join(PKG_ROOT, "figs_p1")
 
 
 class TestScalingClosedForms(unittest.TestCase):

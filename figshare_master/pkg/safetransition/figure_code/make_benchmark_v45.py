@@ -24,7 +24,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__),
 from safetransition.benchmark import run_benchmark, schedule_data  # noqa: E402
 
 OUT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                   "..", "figs_p3"))
+                                   "..", "figs_p1"))
 os.makedirs(OUT, exist_ok=True)
 
 bench = run_benchmark(verbose=False)

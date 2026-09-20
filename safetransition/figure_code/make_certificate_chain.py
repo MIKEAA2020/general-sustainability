@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch
 
 OUT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                   "..", "figs_p3"))
+                                   "..", "figs_p1"))
 os.makedirs(OUT, exist_ok=True)
 
 fig, ax = plt.subplots(figsize=(13.0, 3.4), dpi=300)

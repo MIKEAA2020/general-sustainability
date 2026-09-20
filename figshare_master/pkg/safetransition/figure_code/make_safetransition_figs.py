@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Figure pipeline for the SafeTransition EMS manuscript (paper 3).
+"""Figure pipeline for the SafeTransition software manuscript
+(paper 1, EMS version).
 
 Generates, from exact rational quantities (floats only in plotting):
-  figs_p3/graphical_abstract.png  -- EMS graphical abstract (1328 x 531 px)
-  figs_p3/fig_readings.png        -- dashboard readings figure (licensing
+  figs_p1/graphical_abstract.png  -- EMS graphical abstract (1328 x 531 px)
+  figs_p1/fig_readings.png        -- dashboard readings figure (licensing
                                      band; rescue threshold)
 Also generates the benchmark figure (invoking make_benchmark_v45.py).
 
@@ -16,7 +17,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch
 import shutil, os, sys
 
-OUT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "figs_p3"))
+OUT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "figs_p1"))
 os.makedirs(OUT, exist_ok=True)
 
 plt.rcParams.update({
