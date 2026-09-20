@@ -16,9 +16,27 @@ the companion manuscript's witness datum with gain vector
 :class:`TransitionDatum`.
 """
 from dataclasses import dataclass
+from enum import Enum
 from fractions import Fraction as Q
 
 from .rational import frac, fmt
+
+class TubeStatus(str, Enum):
+    """Provenance status of a tube.
+
+    EXACT: the tube is the exact visited set of the datum's declared
+    piecewise-linear paths (true by construction for every datum in this
+    package). CONSERVATIVE: the tube is a certified outer enclosure of an
+    underlying nonlinear realization (e.g. the Schaefer benchmark, where
+    monotonicity of the surplus on the certified biomass interval yields the
+    enclosing inequalities). The distinction matters: exact arithmetic on a
+    supplied tube certifies verdicts relative to that tube, and a
+    conservative enclosure transfers them to the realization only with the
+    enclosure certificate attached."""
+
+    EXACT = "EXACT"
+    CONSERVATIVE = "CONSERVATIVE"
+
 
 COORDS = ("x", "s1", "s2")
 BREAKPOINTS = (Q(0), Q(1, 2), Q(1))
