@@ -82,6 +82,8 @@ class CertifyResult:
     status: str                      # "feasible" | "infeasible"
     certificate: FarkasCertificate = None
     eliminations: int = 0
+    rows_generated: int = 0          # FM rows created across all rounds
+    peak_rows: int = 0               # largest working row set
 
     @property
     def infeasible(self):
@@ -100,6 +102,8 @@ def certify_polyhedron(A, b):
     rows = [(A[i], b[i], tuple(Q(1) if k == i else Q(0) for k in range(m)))
             for i in range(m)]
     elims = 0
+    rows_generated = 0
+    peak_rows = len(rows)
     for var in range(n):
         pos = [r for r in rows if r[0][var] > 0]
         neg = [r for r in rows if r[0][var] < 0]
@@ -109,6 +113,7 @@ def certify_polyhedron(A, b):
             cp = p[0][var]
             for q in neg:
                 cn = q[0][var]          # negative
+                rows_generated += 1
                 coeffs = tuple((Q(0) - cn) * p[0][j] + cp * q[0][j] for j in range(n))
                 rhs = (Q(0) - cn) * p[1] + cp * q[1]
                 prov = tuple((Q(0) - cn) * p[2][k] + cp * q[2][k] for k in range(m))
@@ -118,11 +123,12 @@ def certify_polyhedron(A, b):
                         lam = tuple(l / s for l in prov)
                         cert = FarkasCertificate(A=tuple(A), b=tuple(b), lam=lam)
                         assert cert.verify(), "internal: derived certificate failed verification"
-                        return CertifyResult("infeasible", cert, elims)
+                        return CertifyResult("infeasible", cert, elims, rows_generated, peak_rows)
                 else:
                     new.append((coeffs, rhs, prov))
         rows = new
         elims += 1
+        peak_rows = max(peak_rows, len(rows))
     # any remaining all-zero row with negative rhs is a contradiction
     for coeffs, rhs, prov in rows:
         if all(c == 0 for c in coeffs) and rhs < 0:
@@ -130,8 +136,8 @@ def certify_polyhedron(A, b):
             lam = tuple(l / s for l in prov)
             cert = FarkasCertificate(A=tuple(A), b=tuple(b), lam=lam)
             assert cert.verify(), "internal: derived certificate failed verification"
-            return CertifyResult("infeasible", cert, elims)
-    return CertifyResult("feasible", None, elims)
+            return CertifyResult("infeasible", cert, elims, rows_generated, peak_rows)
+    return CertifyResult("feasible", None, elims, rows_generated, peak_rows)
 
 
 def common_action_obstruction(safe_sets):
