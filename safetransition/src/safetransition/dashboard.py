@@ -7,6 +7,11 @@ displayed quantities are rendered from exact rationals via
 """
 from fractions import Fraction as Q
 
+import hashlib
+import json as _json
+import os
+
+from . import __version__
 from .rational import fmt, fmtf
 
 
@@ -153,19 +158,87 @@ code{background:#efece3;padding:1px 5px;border-radius:3px;font-size:12px}
 """
 
 
-def render(readings, benchmark=None, certificates=None, data=None, title=None):
+def default_provenance(certificates_json=None, datum_id=None):
+    """Verification-provenance record for the audit-delivery dashboard.
+
+    Returns a deterministic dictionary embedding: the library version, the
+    independent checker's version and invocation, the datum identifier, and
+    -- for each ``(name, certificate_dict)`` in ``certificates_json`` -- the
+    exact JSON serialization, its SHA-256 hash, and the re-run command for
+    the independent checker. Rendering embeds this record verbatim, so the
+    dashboard is an audit-delivery mechanism tied to the certificate
+    schema, and regenerating it from the same inputs is byte-identical.
+    """
+    if datum_id is None:
+        from .datum import describe_state, witness_state
+        datum_id = "witness datum: " + describe_state(witness_state(1, 2, 2))
+    checker_path = os.path.join(os.path.dirname(os.path.dirname(
+        os.path.abspath(__file__))), "check_safe_transition_cert.py")
+    checker_version = "unknown"
+    if os.path.exists(checker_path):
+        import re
+        m = re.search(r'CHECKER_VERSION\s*=\s*"([^"]+)"',
+                      open(checker_path, encoding="utf-8").read())
+        if m:
+            checker_version = m.group(1)
+    items = []
+    for name, cert in (certificates_json or []):
+        ser = _json.dumps(cert, sort_keys=True, separators=(",", ":"))
+        digest = hashlib.sha256(ser.encode("utf-8")).hexdigest()
+        items.append({"name": name, "sha256": digest, "json": ser})
+    return {
+        "library_version": __version__,
+        "checker_version": checker_version,
+        "checker_command": "python3 check_safe_transition_cert.py cert.json",
+        "datum_id": datum_id,
+        "certificates": items,
+        "arithmetic": "exact rational (fractions.Fraction); floats only in SVG geometry",
+    }
+
+
+def _provenance_html(prov):
+    if not prov:
+        return ""
+    rows = [f"<tr><td>library version</td><td>{prov['library_version']}</td></tr>",
+            f"<tr><td>independent checker</td><td>v{prov['checker_version']}; "
+            f"re-run: <code>{prov['checker_command']}</code></td></tr>",
+            f"<tr><td>datum identifier</td><td>{prov['datum_id']}</td></tr>",
+            f"<tr><td>arithmetic</td><td>{prov['arithmetic']}</td></tr>"]
+    for it in prov["certificates"]:
+        rows.append(f"<tr><td>certificate: {it['name']}</td>"
+                    f"<td>sha256 <code>{it['sha256']}</code></td></tr>")
+    pre = "".join(
+        '<details><summary style="cursor:pointer">' + it["name"]
+        + ' (exact input serialization)</summary><pre style="white-space:pre-wrap;'
+          'font-size:10.5px">' + it["json"] + '</pre></details>'
+        for it in prov["certificates"])
+    return ('<h3 style="font-size:13px;font-family:Helvetica,Arial,sans-serif;'
+            'letter-spacing:.6px;text-transform:uppercase;color:#776">'
+            'Verification provenance</h3>'
+            '<table><tr><th>Field</th><th>Value</th></tr>' + "".join(rows)
+            + '</table>' + pre)
+
+
+def render(readings, benchmark=None, certificates=None, data=None, title=None,
+           provenance=None):
     """Render the dashboard HTML string.
 
     ``readings`` is a :class:`safetransition.indicators.Readings`;
     ``benchmark`` an optional :class:`safetransition.benchmark.BenchmarkResult`;
     ``certificates`` an optional list of ``(name, verdict_str, holds_bool)``;
-    ``data`` the verified schedule values (default: the benchmark module's).
+    ``data`` the verified schedule values (default: the benchmark module's);
+    ``provenance`` an optional provenance record (see
+    :func:`default_provenance`) embedded as a verification-provenance table.
+    Rendering is deterministic: the output is a pure function of the inputs,
+    with no timestamps, so re-rendering from the same inputs is
+    byte-identical and hash-checkable.
     """
     if data is None:
         from .benchmark import schedule_data
         data = schedule_data()
     if title is None:
         title = "SafeTransition — transition-safety dashboard"
+    prov = provenance
     badge = (f'<div class="badges"><span>EXACT RATIONAL ARITHMETIC</span>'
              + (f'<span class="pass">BENCHMARK {benchmark.passed}/{benchmark.total}</span>'
                 if benchmark and benchmark.all_pass else
@@ -225,7 +298,8 @@ at r in [{fmt(readings.rho1)}, {fmt(readings.rho2)}] both. Witness-formula cross
   'text-transform:uppercase;color:#776">Certificates</h3>'
   '<table><tr><th>Certificate</th><th>Detail</th><th>Status</th></tr>' + cert_rows + '</table>')
   if cert_rows else ""}
-<div class="footer"><b>SafeTransition 1.0.0</b> &mdash; exact rational certification of transition
+{_provenance_html(prov)}
+<div class="footer"><b>SafeTransition {__version__}</b> &mdash; exact rational certification of transition
 safety. Mathematical basis: the typed assessment-operator framework and the obstruction-calculus
 certificate family of the companion manuscripts (A. Abaee). Verified values: benchmark deposit
 <a href="https://doi.org/10.6084/m9.figshare.33764023">10.6084/m9.figshare.33764023</a>.
