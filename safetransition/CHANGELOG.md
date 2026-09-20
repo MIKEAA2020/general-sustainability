@@ -1,5 +1,40 @@
 # Changelog
 
+## 1.2.1 — 2026-09-20
+
+Scaling study and audit-provenance release (remaining external-audit
+items):
+
+- **Scaling study** (`benchmarks/scaling_study.py` +
+  committed `scaling_results.json`): five parameterized instance families
+  with answers known by construction and asserted — FM chain (quadratic
+  row growth with the exact closed-form margin (1/5 − (k−1)/4096)/(k+1)
+  verified at every size up to k = 256), dyadic bit growth (exact margins
+  with 321-bit denominators certified at t = 320, where binary floating
+  point has lost the gap), typed recursion to 21,000 states (clean linear
+  time), action menus to 512, and belief spaces with 2^m reachable
+  beliefs (the default 4,096 enumeration bound reached exactly at
+  m = 12 and exceeded at m = 13, raising with no partial results).
+  Recorded: runtime, peak traced memory, eliminator rows generated and
+  peak working rows, certificate sizes and maximal bit lengths,
+  independent-checker runtime.
+- **Dashboard provenance**: the dashboard embeds a verification-provenance
+  table (library version, independent-checker version and re-run command,
+  datum identifier, certificate SHA-256 hashes over the exact serialized
+  JSON, expandable exact input serializations); rendering is deterministic
+  (pure function of inputs, no timestamps), so re-rendering is
+  byte-identical and the embedded hashes are checkable. Footer now
+  reports the package version.
+- **Figure provenance**: `figure_code/make_benchmark_v45.py` regenerates
+  the benchmark figure from the library's verified schedule values
+  (equality asserted against the deposited v44 values), with the fund
+  axis clarified in panel (b) — the fund schedule joins the legend as the
+  right-axis series and the STAGED entry names the plotted quota —
+  resolving the reported fund-axis ambiguity.
+- `certify_polyhedron` exposes eliminator row statistics (`rows_generated`,
+  `peak_rows`) used by the scaling study; checker version constant
+  `CHECKER_VERSION` embedded in provenance records.
+
 ## 1.2.0 — 2026-09-20
 
 Certificate-carrying interface release, implementing the highest-value
