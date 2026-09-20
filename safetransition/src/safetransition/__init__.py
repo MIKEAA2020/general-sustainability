@@ -18,7 +18,7 @@ from .certificates import (FarkasCertificate, CertifyResult, certify_polyhedron,
 from .indicators import Readings, compute, licensing_thresholds
 from .benchmark import run_benchmark, schedule_data, BenchmarkResult
 
-__version__ = "1.1.1"
+__version__ = "1.1.2"
 
 __all__ = [
     "Q", "frac", "fmt", "fmtf",
