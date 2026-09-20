@@ -85,6 +85,25 @@ res = certify_polyhedron([[1], [-1]], [(2, 5), (-3, 5)])
 res.certificate.lam, res.certificate.margin   # -> ((1/2, 1/2), 1/10)
 ```
 
+## Certificate protocol
+
+Every infeasibility verdict ships as a checkable object. Farkas
+certificates serialize to JSON (exact rationals as strings) and are
+re-verified by the repository-root script `check_safe_transition_cert.py`,
+which shares **no code** with the package and re-derives each verdict from
+the certificate's own contents. The `weight_partition` certificate carries
+the complete licensed-set arrangement along the weight ratio (including
+the regime dip > s1 + s2, where the thresholds swap and an unlicensed gap
+opens around r = 1), and `benchmark_certificate` emits the benchmark
+parameters plus eleven derived quantities that the checker re-derives
+independently. Tampered certificates are rejected by design — try it:
+
+```sh
+PYTHONPATH=src python3 -m safetransition.cli certify --outdir certificates
+python3 check_safe_transition_cert.py certificates/*.json
+# then flip any entry in a JSON file and re-run: the checker rejects it
+```
+
 ## The built-in benchmark
 
 `run_benchmark()` re-derives, in exact arithmetic, the twenty-four verified
@@ -105,11 +124,12 @@ archived, with the figure pipeline, in the verification deposit
 | `datum` | typed transition data; the fully specified `WitnessDatum` |
 | `operators` | the five operators, accepted-state sets, `V_weak`, chain check |
 | `recursion` | typed finite-graph recursion; belief-space recursion |
-| `certificates` | Fourier–Motzkin + Farkas; common-action obstruction; fibre criterion |
+| `certificates` | Fourier–Motzkin + Farkas (serializable); common-action obstruction; fibre criterion |
+| `check_safe_transition_cert.py` | independent stdlib-only verifier for serialized certificates (repository root) |
 | `indicators` | licensing thresholds, rescue threshold, blindness alarm |
 | `dashboard` | single-file HTML rendering (inline SVG/CSS) |
 | `benchmark` | the twenty-four exact checks and verified schedule values |
-| `cli` | `verify` / `report` / `demo` |
+| `cli` | `verify` / `report` / `demo` / `certify` |
 
 ## Citation
 
