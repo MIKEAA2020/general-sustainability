@@ -2,7 +2,10 @@
 
 **Author:** Amin Abaee (ORCID 0000-0002-0019-1842)
 **Deposit (figshare):** https://doi.org/10.6084/m9.figshare.33764023
-**Deposited for:** *Aggregate Indices and Transition Safety: A Quantifier-Order Separation Between Scalarized and Coordinate-Wise Feasibility* (manuscript under journal submission). Shared master deposit: the `safetransition/` subtree additionally archives the software-description submission *SafeTransition: exact rational certification of transition safety for sustainability assessment* (Environmental Modelling & Software submission; package 1.3.0).
+**Deposited for:** *Aggregate Indices and Transition Safety: A Quantifier-Order Separation Between Scalarized and Coordinate-Wise Feasibility* (manuscript under journal submission). Shared master deposit: the `safetransition/` subtree additionally archives the software-description submission *SafeTransition: exact rational certification of transition safety for sustainability assessment* (Environmental Modelling & Software submission; package 1.3.0). The
+`manuscripts/` directory holds that submission's venue-agnostic master
+manuscript — the journal-neutral form implementing the best audit
+suggestions across venues, from which venue-specific versions derive.
 
 This is the single, venue-independent master deposit for the article. It
 contains all data and code generated and analysed during the study: the
@@ -44,6 +47,12 @@ SHA256SUMS                                   integrity manifest (SHA-256)
 requirements.txt                             verified library versions
 CITATION.cff                                 citation metadata
 LICENSE.txt                                  CC BY 4.0 notice
+manuscripts/                                venue-agnostic master manuscripts
+  paper1_safetransition_master_v1.pdf/.tex  software description, master version
+                                            (venue-neutral; implements the joint
+                                            audit's verified fixes)
+  paper1_supplementary_v4.md                supplementary material (S1-S11)
+  paper1_joint_audit_verdicts_v1.md         audit verification verdicts report
 safetransition/                             SafeTransition library, v1.3.0
   check_safe_transition_cert.py             independent stdlib-only certificate checker
   src/safetransition/                       9 modules (exact operators, recursions,
@@ -130,6 +139,10 @@ python3 figure_code/make_graphical_abstract_tif.py           # graphical_abstrac
   `figure_code/make_benchmark_v44.py`'s values. Its `run_all.sh` (seven steps:
   tests, benchmark, certificate protocol, examples, quick scaling sweep,
   adversarial exactness instance, figures) reproduces all of it; see its README.
+- `manuscripts/` holds the venue-agnostic master manuscript of the
+  software description (plus supplementary material and the joint-audit
+  verdicts report); venue-specific submission payloads are staged
+  separately and derive from it.
 - `novelty_searches/` documents the systematic searches behind the
   related-work assessment (queries, sources, dates); they are also suitable
   for separate preservation on searchRxiv.
