@@ -464,3 +464,83 @@ pooled-kernel identity. The instance serves as a cross-paper regression
 anchor: the identity is quoted in the companion obstruction-calculus
 manuscript and re-verified in this package's suite, so a regression in
 either artifact's arithmetic surfaces in both.
+
+## S12. The assessment paper's grid verifier: the 25 exact checks
+
+*New in supplementary v5.* The companion manuscript *Aggregate Indices
+and Transition Safety* (S8, third entry) ships its own machine artifact
+— the **grid verifier**
+`verification/typed_false_positive_instantiation.py` in the deposit
+(S8, second entry) — checking the finite rational instance of its
+Proposition 3, Proposition 4, Theorem 5, and Remark 7. This section
+enumerates its 25 checks, which the manuscript cites; the software's
+separate 24-check benchmark suite is enumerated in S4, and the two
+counts index different check lists (25 ≠ 24 is not a disagreement).
+
+**Execution record.** Run 2026-08-28; deterministic; exact integer
+arithmetic throughout (scale 40: dip 3/2 → 60, worst-case dip 2 → 80,
+floor threshold 2 → 80, reset gain 1/4 → 10, rescue cost 1 → 40, grid
+step 0.1 → 4); no floats, no tolerances, no randomness, no outer tube
+approximation. Grid `[0,3]³` at step 0.1 in `(x, s₁, s₂)` = 29,791
+states; runtime ≈ 36 s; **25/25 checks pass**, exit 0; results committed
+as `typed_false_positive_instantiation.json`. The false-positive set
+occupies 1,900 grid states.
+
+**The checks** (labels `[T1]`–`[T10]` are the verifier's internal
+theorem-file groups, mapped to the manuscript's results in the first
+row of each group):
+
+- **[T1] exact-tube machinery** (underlies Propositions 3–4):
+  1. FAST breakpoint table exact (dip at t = 1/2, recovery at t = 1);
+  2. STAGED breakpoint table exact (linear spend/growth);
+  3. per-coordinate exact ranges = breakpoint extremes (piecewise
+     monotonicity asserted);
+  4. worst-case dip constants: benign 3/2, adverse 2, floor
+     threshold 2.
+- **[T2–T4] the three assessment regions** (Theorem 5(1)–(3)):
+  5. machine typed-feasibility = {x ≥ 1} ∪ {s₁ ≥ 2} ∪ {s₂ ≥ 2} on
+     every grid state;
+  6. machine all-weights admissibility = {x ≥ 1} ∪ {s₁ + s₂ ≥ 2} on
+     every grid state (per-weight search over the dense critical set
+     r = k/20, k = 0..40, r = ∞, the exact boundary weights ρ₁, ρ₂,
+     and the adversarial midpoint — all exact integer pairs);
+  7. FAST/SLOW per-weight safety biconditionals (r ≥ ρ₁ / r ≤ ρ₂) on
+     every grid state over the dense weight grid;
+  8. boundary weights exact: FAST safe at r = ρ₁, SLOW safe at r = ρ₂;
+  9. machine endpoint-only feasibility = all of X₀ on every grid state.
+- **[T5] hierarchy** (Theorem 5(4)):
+  10. typed ⇒ all-weights-aggregate ⇒ endpoint-only, no violations on
+      the grid.
+- **[T6–T7] the false-positive set** (Proposition 3 instance):
+  11. false-positive set nonempty on the grid;
+  12. interior witness (1/2, 6/5, 6/5): aggregate-feasible for every
+      critical weight;
+  13. the witness is interior (all ±0.1 neighbours remain in FP);
+  14. endpoint-only witness (1/2, 1/10, 1/10): endpoint-feasible,
+      aggregate-infeasible at w = (1, 1);
+  15. aggregate-vs-typed strictness witness confirmed.
+- **[T8] per-weight licensing at the witness** (Proposition 4
+  instance):
+  16. r = 1/2: SLOW-only (FAST unsafe, SLOW safe);
+  17. r = 1: both plans safe;
+  18. r = 2: FAST-only (SLOW unsafe, FAST safe);
+  19. E_typ = ∩_w E_w = ∅ machine-verified over the full critical
+      weight set.
+- **[T9] the rescue split** (Remark 7 instance):
+  20. R witness (3/2, 6/5, 6/5): typed-transformable via STAGED;
+  21. I witness (1/2, 6/5, 6/5): all four actions rejected, each with
+      its exhibited violated constraint (the negative-certificate
+      form);
+  22. rescue split verified on the whole grid.
+- **[T10] multi-stage propagation** (Remark 7, stages):
+  23. stage-0 hierarchy holds and regions are preserved through two
+      hold intervals;
+  24. the FP strictness witness survives the holds at stage 0;
+  25. the endpoint-only strictness witness survives the holds at
+      stage 0.
+
+**Status discipline.** A machine pass confirms the manuscript's
+closed-form proofs at the exact-integer level stated per check; the
+proofs themselves live in the manuscript. Re-run:
+`python3 verification/typed_false_positive_instantiation.py` from the
+deposit root (stdlib only; ≈ 36 s; exit 0 iff all 25 pass).

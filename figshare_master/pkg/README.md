@@ -37,7 +37,7 @@ figure_code/                                 complete generation pipeline
                                              its figure
 
 figures/                                     the manuscript figures (Figures 1-3 and
-                                             the Section 4.12 benchmark figure)
+                                             the Section 6.3 benchmark figure)
 graphical_abstract/                          graphical abstract (PDF/PNG/TIFF)
 novelty_searches/                            q1..q12: companion manuscript's twelve
                                              preserved search records (the package
@@ -51,8 +51,16 @@ manuscripts/                                venue-agnostic master manuscripts
   paper1_safetransition_master_v1.pdf/.tex  software description, master version
                                             (venue-neutral; implements the joint
                                             audit's verified fixes)
-  paper1_supplementary_v4.md                supplementary material (S1-S11)
-  paper1_joint_audit_verdicts_v1.md         audit verification verdicts report
+  paper1_supplementary_v5.md                supplementary material (S1-S12; v5 adds
+                                            S12: the assessment paper's grid
+                                            verifier and its 25 exact checks)
+  paper1_joint_audit_verdicts_v1.md         audit verification verdicts reports
+  paper1_v47_joint_audit_verdicts_v1.md       three-stream audit of v46 (26 fixed,
+                                            5 refuted)
+  paper1_v48_residual_audit_verdicts_v1.md    residual round (1 new own finding:
+                                            FAST/SLOW exposure swap)
+  paper1_v49_alignment_verdicts_v1.md         alignment round (abstract gap
+                                            language; S12 enumeration)
 safetransition/                             SafeTransition library, v1.3.0
   check_safe_transition_cert.py             independent stdlib-only certificate checker
   src/safetransition/                       9 modules (exact operators, recursions,
