@@ -4,8 +4,7 @@
 **Deposit (figshare):** https://doi.org/10.6084/m9.figshare.33764023
 **Deposited for:** *Aggregate Indices and Transition Safety: A Quantifier-Order Separation Between Scalarized and Coordinate-Wise Feasibility* (manuscript under journal submission). Shared master deposit: the `safetransition/` subtree additionally archives the software-description submission *SafeTransition: exact rational certification of transition safety for sustainability assessment* (Environmental Modelling & Software submission; package 1.3.0). The
 `manuscripts/` directory holds that submission's venue-agnostic master
-manuscript — the journal-neutral form implementing the best audit
-suggestions across venues, from which venue-specific versions derive.
+manuscript, from which venue-specific versions derive.
 
 This is the single, venue-independent master deposit for the article. It
 contains all data and code generated and analysed during the study: the
@@ -27,8 +26,8 @@ verification/                                exact-arithmetic machine artifact
 figure_code/                                 complete generation pipeline
   make_fig1_v40.py                           Figure 1 (floor-margin view)
   make_fig2_v35.py                           Figure 2 (weight-interval view)
-  make_figures_v31.py                        Figure 3 (path view); also contains the
-                                             superseded v31 Figure 2 routine
+  make_figures_v31.py                        Figure 3 (path view); also contains an
+                                             earlier Figure 2 routine retained for provenance
   make_graphical_abstract.py                 graphical abstract (PDF + PNG)
   make_graphical_abstract_tif.py             graphical abstract TIFF (LZW, 300 dpi)
   make_benchmark_v44.py                      resource-transition benchmark: verifies
@@ -48,19 +47,11 @@ requirements.txt                             verified library versions
 CITATION.cff                                 citation metadata
 LICENSE.txt                                  CC BY 4.0 notice
 manuscripts/                                venue-agnostic master manuscripts
-  paper1_safetransition_master_v1.pdf/.tex  software description, master version
-                                            (venue-neutral; implements the joint
-                                            audit's verified fixes)
-  paper1_supplementary_v5.md                supplementary material (S1-S12; v5 adds
-                                            S12: the assessment paper's grid
-                                            verifier and its 25 exact checks)
-  paper1_joint_audit_verdicts_v1.md         audit verification verdicts reports
-  paper1_v47_joint_audit_verdicts_v1.md       three-stream audit of v46 (26 fixed,
-                                            5 refuted)
-  paper1_v48_residual_audit_verdicts_v1.md    residual round (1 new own finding:
-                                            FAST/SLOW exposure swap)
-  paper1_v49_alignment_verdicts_v1.md         alignment round (abstract gap
-                                            language; S12 enumeration)
+  paper1_safetransition_master_v2.pdf/.tex  software description, master version
+                                            (venue-neutral)
+  paper1_supplementary_v6.md                supplementary material (S1-S12, incl.
+                                            the 25 exact grid checks of the
+                                            assessment paper's verifier)
 safetransition/                             SafeTransition library, v1.3.0
   check_safe_transition_cert.py             independent stdlib-only certificate checker
   src/safetransition/                       9 modules (exact operators, recursions,
@@ -92,7 +83,7 @@ Manual equivalents:
 python3 verification/typed_false_positive_instantiation.py   # [25/25 checks passed]
 python3 figure_code/make_fig1_v40.py                         # fig1_witness_v40.png
 python3 figure_code/make_fig2_v35.py                         # fig2_weight_intervals_v35.png
-python3 figure_code/make_figures_v31.py                      # fig2_weight_intervals_v31.png (superseded)
+python3 figure_code/make_figures_v31.py                      # fig2_weight_intervals_v31.png (legacy Figure 2 output)
                                                              # fig3_path_view_v31.png
 python3 figure_code/make_graphical_abstract.py               # graphical_abstract.pdf/.png
 python3 figure_code/make_graphical_abstract_tif.py           # graphical_abstract.tif
@@ -148,9 +139,8 @@ python3 figure_code/make_graphical_abstract_tif.py           # graphical_abstrac
   tests, benchmark, certificate protocol, examples, quick scaling sweep,
   adversarial exactness instance, figures) reproduces all of it; see its README.
 - `manuscripts/` holds the venue-agnostic master manuscript of the
-  software description (plus supplementary material and the joint-audit
-  verdicts report); venue-specific submission payloads are staged
-  separately and derive from it.
+  software description and its supplementary material; venue-specific
+  submission payloads derive from it.
 - `novelty_searches/` documents the systematic searches behind the
   related-work assessment (queries, sources, dates); they are also suitable
   for separate preservation on searchRxiv.

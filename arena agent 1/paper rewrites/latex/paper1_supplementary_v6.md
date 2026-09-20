@@ -2,21 +2,13 @@
 
 *Accompanies:* A. Abaee (2026). *SafeTransition: exact rational
 certification of transition safety for sustainability assessment*
-(manuscript v7, Environmental Modelling & Software submission).
+(Environmental Modelling & Software).
 Verification deposit: <https://doi.org/10.6084/m9.figshare.33764023>.
 
 *Section references of the form "Section n" refer to the accompanying
-manuscript; references S1–S11 are internal to this supplement. Package
+manuscript; references S1–S12 are internal to this supplement. Package
 version 1.3.0; all quantities are exact rationals unless stated as
-rendering floats. Changes from the v3 supplement: S1–S3 aligned with the
-v7 semantics (tube statuses, endpoint reset, operator scope, belief
-quotient semantics, feasibility-honesty, minimum-cardinality
-subfamilies); S5 updated to the 1.3.0 tree (58 tests); S9 extended
-(belief\_failure checker type, one-sided verdict semantics, property
-battery); S10 rewritten for the 1.3.0 study (six families, separated
-numerator/denominator bit metrics, dense stress family with recorded
-practical envelope, platform metadata); S11 added (pooled-kernel
-regression anchor).*
+rendering floats.*
 
 ---
 
@@ -273,8 +265,7 @@ menus, reachability tubes, epistemic viability sets).
 
 - Abaee, A. (2026). *SafeTransition: exact rational certification of
   transition safety for sustainability assessment* (software description;
-  venue-agnostic master v1; Environmental Modelling & Software submission
-  v7).
+  Environmental Modelling & Software).
 - Abaee, A. (2026). *Verification code and figure pipeline for Aggregate
   Indices and Transition Safety* [data set]. figshare.
   <https://doi.org/10.6084/m9.figshare.33764023>
@@ -375,7 +366,7 @@ isolation in the state-wise, one-step, full-information sense. On the
 recourse-failure system both actions fail with post-belief {y12, y4}
 not one-step viable. The object serializes (`failure_certificate`) as a
 `belief_failure` certificate checked as in the table above. Where the
-audit's reference design nests the post-belief's failure certificate
+reference certificate design nests the post-belief failure certificate
 recursively inside the parent object, this implementation achieves the
 same machine-checkability by checker re-derivation (the recursion is
 re-run from the serialized system), so the serialized object stays
@@ -467,7 +458,7 @@ either artifact's arithmetic surfaces in both.
 
 ## S12. The assessment paper's grid verifier: the 25 exact checks
 
-*New in supplementary v5.* The companion manuscript *Aggregate Indices
+The companion manuscript *Aggregate Indices
 and Transition Safety* (S8, third entry) ships its own machine artifact
 — the **grid verifier**
 `verification/typed_false_positive_instantiation.py` in the deposit
