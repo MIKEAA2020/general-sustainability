@@ -16,6 +16,7 @@ Deterministic; no floats in the checks (floats only in rendering).
 from dataclasses import dataclass
 from fractions import Fraction as Q
 
+from .datum import TubeStatus
 from .rational import fmt, fmtf
 
 # model parameters (exact)
@@ -177,3 +178,59 @@ def run_benchmark(verbose=False):
             print(f"  [{'OK' if cond else 'FAIL'}] {label}")
         print(result.summary())
     return result
+
+def tube_certificate():
+    """Tube-provenance certificate distinguishing the two tube statuses.
+
+    The datum's piecewise-linear plan tubes are EXACT by construction (each
+    is the exact visited set of the declared paths). The Schaefer
+    realization of the benchmark is certified as a CONSERVATIVE outer
+    enclosure of the nonlinear trajectories by monotonicity of sigma on the
+    certified biomass interval. The certificate carries that derivation so
+    the conservatism transfer is checkable, not asserted."""
+    return {
+        "type": "tube",
+        "declared_paths": {"status": TubeStatus.EXACT.value,
+                           "statement": "each plan tube equals the exact visited set of its declared piecewise-linear paths"},
+        "realization": {
+            "status": TubeStatus.CONSERVATIVE.value,
+            "biomass_interval": [fmt(B_tr_adverse := Q(6, 5)), fmt(Q(16, 5))],
+            "min_sigma_on_interval": fmt(sigma(Q(6, 5))),
+            "required_recovery_slope": fmt(Q(4)),
+            "derivation": ("sigma(B) = r*B*(1 - B/K) is increasing on (0, K/2); "
+                           "the visited interval [6/5, 16/5] lies in (0, K/2) = (0, 5); "
+                           "hence sigma >= sigma(6/5) = 528/125 >= 4 on the recovery legs, "
+                           "so the piecewise-linear certified tubes enclose the nonlinear "
+                           "trajectories (exact rational inequalities)"),
+        },
+    }
+
+
+def benchmark_certificate():
+    """Certificate carrying the benchmark's parameters and key derived
+    values, for verification by the independent checker (which re-derives
+    every entry from the parameters alone, sharing no code with the
+    package)."""
+    return {
+        "type": "benchmark",
+        "params": {
+            "r": fmt(R), "K": fmt(K), "B_lim": fmt(B_LIM), "H_max": fmt(H_MAX),
+            "delta0": fmt(DELTA0), "T": fmt(T),
+            "witness": {"x": fmt(X), "s1": fmt(S1), "s2": fmt(S2)},
+            "e": [fmt(E), fmt(E)], "c": fmt(C),
+            "dips": [fmt(DIPS[0]), fmt(DIPS[1])],
+        },
+        "values": {
+            "sigma_16_5": fmt(sigma(Q(16, 5))),
+            "sigma_17_10": fmt(sigma(Q(17, 10))),
+            "H_peak": fmt(Q(1463, 125)),
+            "H_sy": fmt(sigma(Q(16, 5))),
+            "staged_quota_min": fmt(sigma(Q(16, 5)) - Q(1, 2)),
+            "staged_quota_max": fmt(sigma(Q(69, 20)) - Q(1, 2)),
+            "rho1": fmt(RHO1), "rho2": fmt(RHO2),
+            "kappa_witness": fmt(Q(1) - X),
+            "index_min_w11": fmt(Q(2, 5)),
+            "floor_min_adverse": fmt(Q(-4, 5)),
+        },
+        "tube": tube_certificate(),
+    }
