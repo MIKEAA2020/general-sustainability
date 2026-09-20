@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.1.0 — 2026-09-20
+
+Deposit-readiness release, adopting the master deposit's reproduction
+patterns:
+
+- `run_all.sh`: one-command fresh reproduction (tests, benchmark checks,
+  examples, optional figure regeneration).
+- `SHA256SUMS`: integrity manifest over the package files.
+- `requirements-figures.txt`: pinned figure-regeneration environment
+  (matplotlib 3.10.9, Pillow 12.3.0); the library itself remains
+  dependency-free.
+- `figure_code/`: figure pipeline and graphical-abstract TIFF export
+  (EMS portal format), mirroring the master deposit's layout.
+
 ## 1.0.0 — 2026-09-20
 
 Initial release.
