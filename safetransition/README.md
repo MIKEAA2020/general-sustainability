@@ -104,6 +104,20 @@ python3 check_safe_transition_cert.py certificates/*.json
 # then flip any entry in a JSON file and re-run: the checker rejects it
 ```
 
+## Scaling study
+
+`benchmarks/scaling_study.py` sweeps five parameterized instance families
+with answers known by construction (asserted at every size): Fourier–Motzkin
+chains with planted infeasibility (exact closed-form margins verified up to
+k = 256 variables), dyadic coefficient growth (exact margins with
+hundreds-of-bits denominators where floating point loses the gap), typed
+recursion to 21,000 states, 512-action menus, and belief spaces with 2^m
+reachable beliefs against the enumeration bound. Runtime, peak memory,
+eliminator row statistics, certificate sizes and bit lengths, and
+independent-checker runtimes are recorded to
+`benchmarks/scaling_results.json` (committed for the released run).
+`--quick` runs a CI-sized sweep.
+
 ## The built-in benchmark
 
 `run_benchmark()` re-derives, in exact arithmetic, the twenty-four verified
