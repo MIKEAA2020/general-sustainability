@@ -7,6 +7,11 @@ Commands
                             datum (default ``safetransition_dashboard.html``).
 ``safetransition demo``     both of the above, plus the certificate
                             demonstrations.
+``safetransition certify``  emit the serializable certificates (Farkas,
+                            weight partition, benchmark, tubes) as JSON
+                            files for the independent checker
+                            ``check_safe_transition_cert.py``, which
+                            shares no code with this package.
 """
 import argparse
 import sys
@@ -58,12 +63,41 @@ def main(argv=None):
     rep.add_argument("--out", default="safetransition_dashboard.html")
     dem = sub.add_parser("demo", help="verify, demonstrate certificates, and write the dashboard")
     dem.add_argument("--out", default="safetransition_dashboard.html")
+    cert = sub.add_parser("certify", help="emit certificates for the independent checker")
+    cert.add_argument("--outdir", default="certificates",
+                      help="directory for the emitted JSON certificates")
     args = p.parse_args(argv)
     if args.cmd in (None, "verify"):
         bench = run_benchmark(verbose=True)
         return 0 if bench.all_pass else 1
     if args.cmd == "report":
         return cmd_report(args.out)
+    if args.cmd == "certify":
+        import json
+        import os
+        from .benchmark import benchmark_certificate
+        from .indicators import weight_partition
+        from .certificates import certify_polyhedron
+        os.makedirs(args.outdir, exist_ok=True)
+        paths = []
+        c = certify_polyhedron([[Q(1)], [Q(-1)]], [Q(2, 5), Q(-3, 5)])
+        pth = os.path.join(args.outdir, "farkas_certificate.json")
+        json.dump(c.certificate.to_dict(), open(pth, "w"), indent=1)
+        paths.append(pth)
+        pth = os.path.join(args.outdir, "weight_partition.json")
+        json.dump(weight_partition(), open(pth, "w"), indent=1)
+        paths.append(pth)
+        pth = os.path.join(args.outdir, "benchmark_certificate.json")
+        json.dump(benchmark_certificate(), open(pth, "w"), indent=1)
+        paths.append(pth)
+        checker = os.path.join(os.path.dirname(os.path.dirname(
+            os.path.dirname(os.path.abspath(__file__)))),
+            "check_safe_transition_cert.py")
+        print("emitted certificates:")
+        for pth in paths:
+            print(f"  {pth}")
+        print(f"independent checker: python3 {checker} {' '.join(paths)}")
+        return 0
     if args.cmd == "demo":
         bench = run_benchmark(verbose=True)
         print("\nCertificate demonstrations (exact):")
