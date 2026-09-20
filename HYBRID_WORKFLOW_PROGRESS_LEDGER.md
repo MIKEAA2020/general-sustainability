@@ -55,3 +55,8 @@
 
 ## 2026-09-18 additions (figshare channel checked per owner prompt)
 - figshare API search ("Amin Abaee"): 7 deposits dated 2026-09-13..18 (F1 framework paper 10.6084/m9.figshare.33922666; Edwards E3 paper+supplement 33916924; obstruction calculus 33716593; aggregate indices 33764023 + deposit zips; 3 math papers). All files downloaded; 13-gram containment vs v64 manuscript: **≤0.3% everywhere**; 0 cod-content. -> figshare exonerated as the E1 similarity source; GitHub carrier drafts (78.8% v56 / 12.5% v49) + Zenodo 22553609 remain the dominant flagged sources. Response letter table extended accordingly (+1 row, 2pp).
+
+## 2026-09-19 additions (owner-ordered deep web hunt for genuine third-party overlap)
+- Exhaustive hunts: exact-phrase probes of distinctive manuscript passages, MASE/Kell formulation search, own-old-title mirror search, Semantic Scholar/OpenAlex/figshare APIs, cited-literature fingerprinting. **Verdict: no third-party source in the scholarly/web index is reproduced at scale by the manuscript; no non-Abaee copy of this text exists.** Class-B sources a similarity index can touch (Hyndman & Koehler 2006; Kell 2016 (in Fisheries Research itself)/2021; Carvalho 2021; Kokkalis 2024; DM 1995; cod post-mortem literature) are all cited in refs; machine citation-orphan check: 14/14 pairs resolve.
+- OpenAlex author footprint: "Abaee Amin" (4 works ≈ the 4 Zenodo records) — matches the response letter's account.
+- Response letter → v2 (RESPONSE_ORIGINALITY_FisheriesResearch_20260919.md/.pdf, 3pp + §5): documents the audit; letter now covers all 4 own-deposit channels + negative third-party findings.
