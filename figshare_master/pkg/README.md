@@ -49,9 +49,7 @@ LICENSE.txt                                  CC BY 4.0 notice
 manuscripts/                                venue-agnostic master manuscripts
   paper1_safetransition_master_v2.pdf/.tex  software description, master version
                                             (venue-neutral)
-  paper1_safetransition_ems_supplementary_v6.md  supplementary material (S1-S12, incl.
-                                            the 25 exact grid checks of the
-                                            assessment paper's verifier)
+  paper1_safetransition_ems_supplementary_v7.md  supplementary material (S1-S11)
 safetransition/                             SafeTransition library, v1.3.0
   check_safe_transition_cert.py             independent stdlib-only certificate checker
   src/safetransition/                       9 modules (exact operators, recursions,
