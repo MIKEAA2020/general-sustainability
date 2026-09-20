@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.2 — 2026-09-20
+
+- Figure pipeline corrected after external audit: the licensing-band panel
+  now labels the exclusive-licensing regions ("only SLOW licensed for
+  r < rho_1", "only FAST licensed for r > rho_2", "both licensed for
+  rho_1 <= r <= rho_2"); rescued FP-witness label placement.
+
 ## 1.1.1 — 2026-09-20
 
 - `novelty_searches/`: preserved related-software search records
