@@ -23,6 +23,7 @@ python3 examples/certificates_demo.py | tail -1
 echo "== 7/7 figure regeneration (optional; see requirements-figures.txt) =="
 if python3 -c "import matplotlib, PIL" 2>/dev/null; then
   python3 figure_code/make_safetransition_figs.py
+  python3 figure_code/make_certificate_chain.py
   python3 figure_code/make_graphical_abstract_tif.py
 else
   echo "skipped: matplotlib/Pillow not installed"

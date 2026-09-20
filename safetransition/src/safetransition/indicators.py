@@ -46,8 +46,10 @@ def licensing_thresholds(s1=None, s2=None, dip=DIP):
     and characteristic dip depth ``dip``: FAST is aggregate-licensed iff
     ``w2/w1 >= (dip - s1)/s2``; SLOW iff ``w2/w1 <= s1/(dip - s2)``. Derived
     directly from the tube geometry (minima of the aggregate along the
-    tube); defaults reproduce the witness values 2/3 and 3/2. Exact for any
-    rational floors and dip with ``0 < s2 < dip``."""
+    tube); defaults reproduce the witness values 2/3 and 3/2. Exact over
+    the admissible family ``0 < s1 < dip`` and ``0 < s2 < dip``; outside
+    it a threshold may vanish or change sign (a plan licensed everywhere),
+    which the partition interface rejects rather than misinterprets."""
     s1 = Q(6, 5) if s1 is None else Q(s1)
     s2 = Q(6, 5) if s2 is None else Q(s2)
     dip = Q(dip)
@@ -59,10 +61,19 @@ def licensing_thresholds(s1=None, s2=None, dip=DIP):
 def weight_partition(state=(0, Q(1, 2), Q(6, 5), Q(6, 5)), dip=DIP):
     """Complete exact partition of the weight-ratio line r = w2/w1 in (0, inf).
 
-    For finite rational plan menus with piecewise-linear tubes, the
-    aggregate admissibility of each plan is a closed condition on r, so the
-    full licensing behaviour is a finite arrangement of rational
-    breakpoints. The arrangement has two regimes: for ``dip < s1 + s2``
+    Scope: the two-floor witness-family menu class — per-plan trough
+    conditions that are affine in r — over weights in the positive cone
+    (the ratio domain is r = w2/w1 in (0, inf); the endpoints 0 and inf
+    appear in the certificate as projective limit closures, where
+    licensing is constant in a neighbourhood of the limit). Richer menus
+    are future work. The arrangement requires the admissible parameter
+    family ``0 < s1 < dip`` and ``0 < s2 < dip`` and raises ``ValueError``
+    outside it (degenerate cases: a threshold at or below zero means a
+    plan licensed at every positive ratio; a nonpositive denominator means
+    the trough never binds). For finite rational plan menus with
+    piecewise-linear tubes, the aggregate admissibility of each plan is a
+    closed condition on r, so the full licensing behaviour is a finite
+    arrangement of rational breakpoints. The arrangement has two regimes: for ``dip < s1 + s2``
     (the benchmark's) the FAST threshold rho1 lies below the SLOW
     threshold rho2 and the partition is [0, rho1) SLOW-only, [rho1, rho2]
     both, (rho2, inf) FAST-only; for ``dip > s1 + s2`` the thresholds swap
@@ -77,6 +88,12 @@ def weight_partition(state=(0, Q(1, 2), Q(6, 5), Q(6, 5)), dip=DIP):
     """
     _, x, s1v, s2v = state
     dip = Q(dip)
+    if not (Q(0) < s1v < dip and Q(0) < s2v < dip):
+        raise ValueError(
+            "weight_partition requires the admissible family "
+            "0 < s1 < dip and 0 < s2 < dip; outside it a plan is licensed "
+            "everywhere or a threshold is nonpositive, and the region "
+            "decomposition below is not the right description")
     rho1, rho2 = licensing_thresholds(s1v, s2v, dip)
     staged_financed = x >= C_RESCUE
     staged = ["STAGED"] if staged_financed else []
@@ -162,7 +179,7 @@ def compute(state=(0, Q(1, 2), Q(6, 5), Q(6, 5)), weight=(Q(1), Q(1)), plan="FAS
     path = plan_tubes(state, plan)
     idx = tuple(w1 * a + w2 * b for a, b in zip(path["s1"], path["s2"]))
     floor_min = min(min(path["s1"]), min(path["s2"]))
-    blind_alarm = (min(idx) > 0) and (floor_min < 0)
+    blind_alarm = (min(idx) >= 0) and (floor_min < 0)
     rho1, rho2 = licensing_thresholds(s1v, s2v)
     licensed = {
         "FAST (aggregate @ w)": (w2 / w1) >= rho1,

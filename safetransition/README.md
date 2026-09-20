@@ -85,6 +85,23 @@ res = certify_polyhedron([[1], [-1]], [(2, 5), (-3, 5)])
 res.certificate.lam, res.certificate.margin   # -> ((1/2, 1/2), 1/10)
 ```
 
+## Dependencies and trust boundary
+
+| Component | Dependencies |
+| --- | --- |
+| Core library (`src/safetransition`) | Python standard library only |
+| Independent checker (`check_safe_transition_cert.py`) | Python standard library only |
+| Dashboard rendering | Python standard library only |
+| Scaling study and tests | Python standard library only |
+| Figure regeneration | matplotlib, Pillow (optional, pinned) |
+
+The checker imports no SafeTransition modules and implements verification
+independently from the certificate-emission code. It validates
+certificates against the supplied system data — algebraic validity and,
+for partition/benchmark/belief-failure schemas, re-derivation from the
+certificate's own contents; it does not certify that a supplied system
+matches an external intention, nor the scientific validity of any datum.
+
 ## Certificate protocol
 
 Every infeasibility verdict ships as a checkable object. Farkas

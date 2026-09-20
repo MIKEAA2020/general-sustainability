@@ -165,6 +165,128 @@ def check_weight_partition(c):
     return ((rho1, rho2), fails)
 
 
+def _belief_recompute(F, gamma, safe, prior, horizon):
+    """Independent re-implementation of the label-quotient belief
+    recursion (stdlib only, no package imports). Returns (W, start)."""
+    def expand(B):
+        out = set()
+        for lab in B:
+            for st, l in gamma.items():
+                if l == lab:
+                    out.add(st)
+        return frozenset(out)
+
+    def step_ok(B, a):
+        for x in expand(B):
+            if any(p not in safe for p in F[x].get(a, [])):
+                return False
+        return True
+
+    def posts(B, a):
+        labs = set()
+        for x in expand(B):
+            for p in F[x].get(a, []):
+                labs.add(gamma[p])
+        return frozenset(labs)
+
+    start = frozenset(gamma[x] for x in prior)
+    W = {0: None}
+    viable = {B for B in [start]}
+    # forward reachable set
+    seen = {start}
+    frontier = [start]
+    while frontier:
+        nxt = []
+        for B in frontier:
+            for a in {act for x in expand(B) for act in F[x]}:
+                if step_ok(B, a):
+                    Bp = posts(B, a)
+                    if Bp not in seen:
+                        seen.add(Bp)
+                        nxt.append(Bp)
+        frontier = nxt
+    # backward: W[0] = all reachable beliefs (terminal condition: no
+    # constraint), W[k] = beliefs with an action whose en-route is safe
+    # and post-belief in W[k-1]
+    cur = set(seen)
+    W = {0: set(seen)}
+    for k in range(1, int(horizon) + 1):
+        nxt = set()
+        for B in seen:
+            for a in {act for x in expand(B) for act in F[x]}:
+                if step_ok(B, a) and posts(B, a) in W[k - 1]:
+                    nxt.add(B)
+                    break
+        W[k] = nxt
+    return W, start
+
+
+def check_belief_failure(c):
+    """Re-run the recursion from the serialized system alone and verify
+    the failure object: root non-viability at the stated horizon and
+    every per-action reason (violation en route with the offending
+    states, or post-belief failing at the previous level)."""
+    fails = []
+    sysd = c["system"]
+    F, gamma = sysd["F"], sysd["gamma"]
+    safe = set(sysd["safe"])
+    prior, horizon = sysd["prior"], int(sysd["horizon"])
+    W, start = _belief_recompute(F, gamma, safe, prior, horizon)
+    failure = c["failure"]
+    if failure.get("horizon") is None:
+        fails.append("certificate claims no failure; checker disagrees"
+                     if start not in W[int(horizon)] else "no failure: consistent")
+        return (None, fails if start not in W[int(horizon)] else [])
+    k = int(failure["horizon"])
+    if start in W[k]:
+        fails.append(f"root belief IS {k}-step viable; failure verdict wrong")
+    if k > int(horizon):
+        fails.append("failure horizon beyond the stated horizon")
+    def expand(B):
+        out = set()
+        for lab in B:
+            for st, l in gamma.items():
+                if l == lab:
+                    out.add(st)
+        return frozenset(out)
+
+    def posts(B, a):
+        labs = set()
+        for x in expand(B):
+            for p in F[x].get(a, []):
+                labs.add(gamma[p])
+        return frozenset(labs)
+
+    def step_ok(B, a):
+        for x in expand(B):
+            if any(p not in safe for p in F[x].get(a, [])):
+                return False
+        return True
+
+    declared_actions = sorted({act for x in expand(start) for act in F[x]})
+    if sorted(failure["actions"]) != declared_actions:
+        fails.append("failure object does not cover exactly the available actions")
+    for a, reason in failure["actions"].items():
+        if reason["reason"] == "violation en route":
+            bad = sorted({x for x in expand(start)
+                          for p in F[x].get(a, []) if p not in safe})
+            if sorted(reason["states"]) != bad or step_ok(start, a):
+                fails.append(f"action {a}: en-route violation not confirmed")
+        elif "not" in reason["reason"] and "viable" in reason["reason"]:
+            bp = posts(start, a)
+            if sorted(reason["post_belief"]) != sorted(bp):
+                fails.append(f"action {a}: post-belief mismatch")
+            if k > 1:
+                if bp in W[k - 1]:
+                    fails.append(
+                        f"action {a}: post-belief IS viable at level {k - 1}")
+            elif not step_ok(start, a):
+                fails.append(f"action {a}: should be an en-route failure at k = 1")
+        else:
+            fails.append(f"action {a}: unknown reason code {reason['reason']!r}")
+    return ((k, len(W.get(k, set()))), fails)
+
+
 def check_benchmark(c):
     fails = []
     P = c["params"]
@@ -210,7 +332,8 @@ def check_benchmark(c):
 
 CHECKERS = {"farkas": check_farkas,
             "weight_partition": check_weight_partition,
-            "benchmark": check_benchmark}
+            "benchmark": check_benchmark,
+            "belief_failure": check_belief_failure}
 
 
 def main(argv):
@@ -240,6 +363,8 @@ def main(argv):
                 extra = f" (thresholds rho1 = {info[0]}, rho2 = {info[1]})"
             elif ctype == "benchmark":
                 extra = f" ({info} values re-derived)"
+            elif ctype == "belief_failure":
+                extra = f" (failure at horizon {info[0]} re-derived; W_k size {info[1]})"
             print(f"VERIFIED {path} [{ctype}]{extra}")
     print(f"\n{total - rejected}/{total} certificates verified by the "
           "independent checker")

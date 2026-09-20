@@ -35,6 +35,7 @@ Run from the repository root:
 """
 import json
 import os
+import signal
 import subprocess
 import sys
 import tempfile
@@ -49,8 +50,33 @@ from safetransition import belief_backward, certify_polyhedron, typed_backward  
 CHECKER = os.path.abspath(os.path.join(os.path.dirname(__file__), "..",
                                        "check_safe_transition_cert.py"))
 QUICK = "--quick" in sys.argv
-RESULTS = {"meta": {"python": sys.version.split()[0],
-                    "mode": "quick" if QUICK else "full"}}
+
+import platform  # noqa: E402
+
+_CPU = "unknown"
+try:
+    with open("/proc/cpuinfo", encoding="utf-8") as fh:
+        for line in fh:
+            if line.startswith("model name"):
+                _CPU = line.split(":", 1)[1].strip()
+                break
+except OSError:
+    pass
+
+RESULTS = {"meta": {
+    "python": sys.version.split()[0],
+    "mode": "quick" if QUICK else "full",
+    "cpu": _CPU,
+    "machine": platform.machine(),
+    "os": platform.platform(),
+    "methodology": ("single run per instance; no warm-up; wall-clock via "
+                    "time.perf_counter; file I/O excluded from eliminator "
+                    "times but included in checker times (subprocess "
+                    "startup included); tracemalloc adds overhead to the "
+                    "traced phases; timings are not comparable across "
+                    "machines - growth rates, not absolute values, are "
+                    "the result"),
+}}
 
 
 def out_path():
@@ -62,6 +88,11 @@ def out_path():
     name = ("scaling_results_repro_quick.json" if QUICK
             else "scaling_results.json")
     return os.path.join(os.path.dirname(os.path.abspath(__file__)), name)
+
+
+def margin_bits(margin):
+    """Reduced numerator/denominator bit lengths of the margin."""
+    return margin.numerator.bit_length(), margin.denominator.bit_length()
 
 
 def max_bits(cert):
@@ -119,6 +150,7 @@ def family_fm_chain():
         expected = (Q(1, 5) - (k - 1) * gap) / (k + 1)
         assert res.certificate.margin == expected, \
             (res.certificate.margin, expected)
+        nb, db = margin_bits(res.certificate.margin)
         out.append({"k_vars": k, "rows_in": k + 1,
                     "eliminations": res.eliminations,
                     "rows_generated": res.rows_generated,
@@ -126,6 +158,10 @@ def family_fm_chain():
                     "cert_bytes": len(json.dumps(cert)),
                     "cert_bits": max_bits(cert),
                     "margin": str(res.certificate.margin),
+                    "margin_num_bits": nb, "margin_den_bits": db,
+                    "note": "planted family: rows generated is linear by "
+                            "construction and terminates at the planted "
+                            "contradiction",
                     "time_s": round(dt, 4),
                     "checker_s": round(check_t, 4),
                     "peak_mem_bytes": peak})
@@ -157,8 +193,10 @@ def family_bit_growth():
         assert res.certificate.margin == expected, \
             (res.certificate.margin, expected)
         cert = res.certificate.to_dict()
+        nb, db = margin_bits(res.certificate.margin)
         out.append({"bits_t": t,
                     "margin": str(res.certificate.margin),
+                    "margin_num_bits": nb, "margin_den_bits": db,
                     "rows_in": k + 1,
                     "rows_generated": res.rows_generated,
                     "cert_bits": max_bits(cert),
@@ -276,10 +314,67 @@ def family_beliefs():
                                         "m = 13 raises with no partial results"}
 
 
+def family_stress_dense():
+    """Random dense rational systems with planted answers: feasible via
+    u = 0 (all bounds positive), infeasible via all-negative bounds.
+    Unlike the chain family, elimination here hits the classical
+    combinatorial row growth with no deduplication. Each instance runs
+    under a wall-clock budget (SIGALRM); the size at which the budget
+    fires IS the reported result: the practical envelope of the
+    eliminator on dense systems is narrow, as the complexity statement
+    says."""
+    import random
+    rng = random.Random(20260920)
+    out = []
+    budget_s = 60
+    sizes = [3, 4] if QUICK is False else [3]
+    if hasattr(signal, "setitimer"):
+        sizes = [2, 3, 4] if not QUICK else [2, 3]
+    for t in sizes:
+        n_rows = 3 * t
+        A0 = [[Q(rng.randint(-5, 5), rng.randint(1, 3)) for _ in range(t)]
+              for _ in range(n_rows)]
+        b0 = [Q(rng.randint(1, 6), rng.randint(1, 2)) for _ in range(n_rows)]
+        for b, tag in ((b0, "planted_feasible_u0"),
+                       ([Q(-1)] * n_rows, "planted_infeasible")):
+            t0 = time.perf_counter()
+
+            def _alarm(signum, frame):
+                raise TimeoutError("stress budget exceeded")
+
+            old_handler = signal.signal(signal.SIGALRM, _alarm)
+            signal.setitimer(signal.ITIMER_REAL, budget_s)
+            try:
+                tracemalloc.start()
+                res = certify_polyhedron(A0, b)
+                peak = tracemalloc.get_traced_memory()[1]
+                tracemalloc.stop()
+                dt = time.perf_counter() - t0
+                if tag == "planted_feasible_u0":
+                    assert not res.infeasible
+                else:
+                    assert res.infeasible and res.certificate.verify()
+                out.append({"vars": t, "rows_in": n_rows, "case": tag,
+                            "rows_generated": res.rows_generated,
+                            "peak_rows": res.peak_rows,
+                            "time_s": round(dt, 4),
+                            "peak_mem_bytes": peak})
+            except TimeoutError:
+                tracemalloc.stop()
+                out.append({"vars": t, "rows_in": n_rows, "case": tag,
+                            "status": f"impractical: {budget_s}s budget "
+                                      "exceeded"})
+            finally:
+                signal.setitimer(signal.ITIMER_REAL, 0)
+                signal.signal(signal.SIGALRM, old_handler)
+    RESULTS["stress_dense"] = out
+
+
 if __name__ == "__main__":
     t0 = time.perf_counter()
     family_fm_chain()
     family_bit_growth()
+    family_stress_dense()
     family_typed_recursion()
     family_action_menu()
     family_beliefs()

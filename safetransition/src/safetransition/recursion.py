@@ -62,13 +62,18 @@ def belief_backward(F, gamma, safe, prior, horizon, max_beliefs=4096):
     prior : iterable of states consistent with the initial observation
     horizon : int
 
-    Beliefs are sets of observation labels whose full state fibres are
-    re-expanded at every step. The abstraction is exact when the
-    observation separates the states that matter (in particular when it
-    is injective on reachable states) and is otherwise sound for
-    viability certification: ``B in W[k]`` always certifies a viable
-    policy, while ``B not in W[k]`` is conclusive only under the
-    exactness condition.
+    Beliefs are sets of observation labels, i.e. elements of the quotient
+    of the state space by the observation map; the full state fibres are
+    re-expanded at every step. The recursion is SOUND for finite systems:
+    ``B in W[k]`` always certifies a belief-based (observation-history)
+    policy viable for ``k`` steps. Completeness of this label quotient --
+    ``B not in W[k]`` conclusive -- holds when the observation is a
+    safety-and-action quotient (safe-set membership and action
+    admissibility constant on fibres, successors label-determined);
+    label injectivity on reachable states is the simplest sufficient
+    condition. Absent the quotient condition, a non-membership is an
+    abstraction artifact, not a certificate of policy nonexistence; the
+    failure explainer's output carries the same qualification.
 
     Returns ``(W, start)`` where ``W[k]`` is the set of belief sets from
     which some policy keeps the trajectory violation-free for ``k``
@@ -192,3 +197,27 @@ def explain_belief_failure(F, gamma, safe, prior, horizon, max_beliefs=4096):
             return {"horizon": k, "belief": sorted(start), "actions": actions}
     return {"horizon": None, "belief": sorted(start), "actions": {},
             "note": "belief is viable over the horizon"}
+
+
+def failure_certificate(F, gamma, safe, prior, horizon, max_beliefs=4096):
+    """Serializable belief-failure certificate for the demo recourse system.
+
+    Bundles the system specification (actions, observation map, safe set,
+    prior, horizon) with ``explain_belief_failure``'s counterexample, so a
+    third party can re-run the recursion from the serialized data alone
+    and check both the non-viability verdict and every per-action failure
+    reason. Exactness note: the system data here is combinatorial (labels
+    and transitions), so string serialization is lossless; the certificate
+    type is ``belief_failure``."""
+    ex = explain_belief_failure(F, gamma, safe, prior, horizon, max_beliefs)
+    return {
+        "type": "belief_failure",
+        "system": {
+            "F": F,
+            "gamma": gamma,
+            "safe": sorted(safe),
+            "prior": list(prior),
+            "horizon": int(horizon),
+        },
+        "failure": ex,
+    }

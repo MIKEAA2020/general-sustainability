@@ -32,7 +32,13 @@ class TubeStatus(str, Enum):
     enclosing inequalities). The distinction matters: exact arithmetic on a
     supplied tube certifies verdicts relative to that tube, and a
     conservative enclosure transfers them to the realization only with the
-    enclosure certificate attached."""
+    enclosure certificate attached.
+
+    Verdict semantics are one-sided under CONSERVATIVE tubes: passing all
+    constraints on the enclosure certifies the realization safe; a
+    violation inside the enclosure is inconclusive for the realization
+    unless the violating point is known reachable (for EXACT tubes both
+    directions are conclusive)."""
 
     EXACT = "EXACT"
     CONSERVATIVE = "CONSERVATIVE"

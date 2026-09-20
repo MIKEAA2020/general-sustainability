@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from safetransition.benchmark import run_benchmark
 from safetransition.certificates import certify_polyhedron, common_action_obstruction
-from safetransition.dashboard import write
+from safetransition.dashboard import default_provenance, write
 from safetransition.indicators import compute
 
 out = sys.argv[1] if len(sys.argv) > 1 else "dashboard.html"
@@ -25,5 +25,6 @@ obs = common_action_obstruction({"FAST": {"pulse"}, "SLOW": {"hold"}})
 certs.append(("Common-action obstruction on disjoint plan sets {pulse} vs {hold}",
               "fires; minimal conflicting subfamily " + str(obs["minimal_conflict"]),
               obs["fires"]))
-path = write(readings, out, benchmark=bench, certificates=certs)
+path = write(readings, out, benchmark=bench, certificates=certs,
+             provenance=default_provenance())
 print(f"\nwrote {path}")

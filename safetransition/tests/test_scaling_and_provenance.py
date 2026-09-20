@@ -126,7 +126,9 @@ class TestFigureProvenance(unittest.TestCase):
             json.dumps(cert, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
         self.assertIn(digest, h1)
         self.assertIn("re-run", h1)
-        self.assertIn("1.2.1", h1)
+        import safetransition as _st
+        self.assertIn(_st.__version__, h1)
+        self.assertNotIn("vunknown", h1)
 
 
 class TestObstructionFarkasMapping(unittest.TestCase):

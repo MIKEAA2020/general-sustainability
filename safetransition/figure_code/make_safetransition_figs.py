@@ -72,8 +72,10 @@ ax.text(1.36, 0.70, "FAST licensed\n($r \\geq \\rho_1$)", color=BLUE, fontsize=9
 ax.text(0.68, 0.28, "SLOW licensed\n($r \\leq \\rho_2$)", color="#1e6e42", fontsize=9,
         ha="center")
 ax.text(1.1, 0.47, "both", fontsize=8.5, color="#444", ha="center")
-ax.text(1.1, 0.09, "no $r$ licenses a typed-safe plan at the witness",
-        fontsize=8.3, color=RED, ha="center")
+ax.text(1.1, 0.09, "neither plan is typed-safe at the witness\n"
+        "(at least one plan is aggregate-licensed\n"
+        "at every admissible ratio)",
+        fontsize=7.6, color=RED, ha="center", va="bottom")
 ax.set_xlim(0, 2.2); ax.set_ylim(0, 1)
 ax.set_yticks([])
 ax.set_xlabel("weight ratio $r = w_2/w_1$")
@@ -129,8 +131,9 @@ ax1.text(2.05, 0.62, "only FAST licensed\n($r > \\rho_2$)", color=BLUE, fontsize
 ax1.text(1.02, 0.46, "both licensed for\n$\\rho_1 \\leq r \\leq \\rho_2$", fontsize=8.8,
          color="#444", ha="center")
 ax1.text(1.04, 0.27, "$w = (1,1)$:\n$r = 1$", fontsize=8.5, color="#444", ha="left")
-ax1.text(1.25, 0.03, "no $r$ licenses a typed-safe plan at the witness "
-         "(floors breached path-wise)", fontsize=8.6, color=RED, ha="center")
+ax1.text(1.25, 0.02, "neither plan is typed-safe at the witness (floors breached path-wise);\n"
+         "at least one plan is aggregate-licensed at every admissible ratio",
+         fontsize=8.0, color=RED, ha="center")
 ax1.set_xlim(0, 2.5); ax1.set_ylim(0, 1); ax1.set_yticks([])
 ax1.set_xlabel("weight ratio $r = w_2/w_1$")
 ax1.set_title("(a) Licensing thresholds at the witness datum", loc="left")

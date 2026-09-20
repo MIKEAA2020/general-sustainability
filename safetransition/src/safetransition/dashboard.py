@@ -173,7 +173,8 @@ def default_provenance(certificates_json=None, datum_id=None):
         from .datum import describe_state, witness_state
         datum_id = "witness datum: " + describe_state(witness_state(1, 2, 2))
     checker_path = os.path.join(os.path.dirname(os.path.dirname(
-        os.path.abspath(__file__))), "check_safe_transition_cert.py")
+        os.path.dirname(os.path.abspath(__file__)))),
+        "check_safe_transition_cert.py")
     checker_version = "unknown"
     if os.path.exists(checker_path):
         import re

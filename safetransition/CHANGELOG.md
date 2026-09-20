@@ -1,5 +1,69 @@
 # Changelog
 
+## 1.3.0 — 2026-09-20
+
+Semantics-precision release implementing the three-audit joint review
+(gpt 62-item flaw list, deepseek executive re-assessment, revision plan):
+
+- **Belief semantics formalized.** `belief_backward` docstring states the
+  label-quotient construction explicitly: beliefs are elements of the
+  state-space quotient under the observation map; the recursion is SOUND
+  for finite systems (memberships certify belief-based
+  observation-history policies); completeness of the quotient holds under
+  a safety-and-action quotient condition (injectivity is the simplest
+  sufficient condition); absent it, non-membership is an abstraction
+  artifact, not a policy-nonexistence certificate.
+- **Tube-status verdict semantics.** `TubeStatus` documents the one-sided
+  consequence: constraints passed on a CONSERVATIVE enclosure certify the
+  realization safe; a violation inside the enclosure is inconclusive
+  unless the violating point is known reachable.
+- **Fibre criterion narrowed** to what it decides: classification of
+  current safe-set membership from the current observation alone — not
+  policy existence, conservative certification, or history-dependent
+  procedures.
+- **Common-action obstruction compatibility defined**: co-possibility
+  under the assessed observation; the action sets determine the horizon
+  of the ruled-out claim (immediate-safe vs recursively viable).
+- **Weight-partition scope and degenerates.** `weight_partition` states
+  its menu class (two-floor witness family, affine trough conditions in
+  the ratio) and its admissible parameter family (0 < s1, s2 < dip),
+  raising `ValueError` outside it (thresholds nonpositive or denominators
+  nonpositive mean licensed-everywhere plans); ratio domain (0, inf) with
+  0/inf as projective limit closures in the certificate.
+- **Index-blindness alarm boundary fixed**: fires when the composite
+  minimum is NONNEGATIVE (operator-licensed) with a negative floor
+  minimum, so boundary zero-margin cases are no longer missed.
+- **`certify_polyhedron` feasibility honesty**: feasible systems return a
+  bare verdict (no witness is reconstructed); the docstring says so.
+- **Belief-failure certificates.** `failure_certificate` serializes the
+  demo system plus the counterexample object; the independent checker
+  gains a `belief_failure` type that re-runs the recursion from a
+  stdlib-only reimplementation and validates the verdict and every
+  per-action failure reason (tampered objects rejected).
+- **Property-based and degenerate tests** (58 total): seeded randomized
+  chain inclusion (60), Farkas validity + cross-check against an
+  independent exact vertex-enumeration oracle (60), belief monotonicity
+  (25), partition coverage sampling (20), cross-process canonical-JSON
+  hash stability under three PYTHONHASHSEED values, 30 tamper mutations,
+  and degenerate systems (empty/zero rows, duplicates, coincident
+  thresholds, plans licensed everywhere rejected, empty action menus).
+  The bound-mutation test documents the algebra/semantics boundary:
+  a bound change leaving the system infeasible with the same multipliers
+  is algebraically valid for the tampered system and verifies — the
+  checker validates certificates against supplied systems, not systems
+  against intended data.
+- **Scaling study hardened.** Margin numerator/denominator bit lengths
+  reported separately (the dyadic family's reduced margin denominator is
+  7·2^320: 323 bits); platform, CPU, OS, Python version and full
+  methodology recorded in the results metadata; a dense random stress
+  family reports the classical row growth and its practical envelope
+  (975 intermediate rows at 3 variables; the 60 s budget fires at 4 —
+  the eliminator's dense-system envelope is narrow, as the complexity
+  statement says).
+- Figure labels: "neither plan is typed-safe at the witness (floors
+  breached path-wise); at least one plan is aggregate-licensed at every
+  admissible ratio" replaces the weight-dependent phrasing.
+
 ## 1.2.1 — 2026-09-20
 
 Scaling study and audit-provenance release (remaining external-audit

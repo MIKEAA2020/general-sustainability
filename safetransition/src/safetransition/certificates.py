@@ -94,7 +94,9 @@ def certify_polyhedron(A, b):
     """Exact feasibility verdict for ``A u <= b`` via Fourier-Motzkin
     elimination with provenance tracking. On infeasibility, the returned
     certificate's multiplier vector is the provenance of a derived
-    contradiction ``0 <= c, c < 0``, re-verified exactly."""
+    contradiction ``0 <= c, c < 0``, re-verified exactly. Feasible
+    systems return a bare verdict (``certificate is None``): no feasible
+    point is reconstructed, so feasibility is decided, not witnessed."""
     A = [tuple(frac(v) for v in row) for row in A]
     b = [frac(v) for v in b]
     m, n = len(A), len(A[0]) if A else 0
@@ -144,9 +146,15 @@ def common_action_obstruction(safe_sets):
     """Finite common-action obstruction.
 
     ``safe_sets`` maps each state of a compatible family to its safe
-    action set. The obstruction fires iff the intersection is empty
-    while each individual set is nonempty (every state individually
-    viable under full information). Returns a dict with keys ``fires``,
+    action set. Compatibility is co-possibility: the family must be
+    jointly possible under the assessed observation (typically one
+    observation class), so the empty intersection is epistemically
+    binding. The sets must contain the actions relevant to the claim:
+    with immediate-safe action sets the obstruction rules out an
+    immediately safe common action; with recursively viable action sets
+    it rules out a viable policy at that horizon. The obstruction fires
+    iff the intersection is empty while each individual set is nonempty
+    (every state individually viable under full information). Returns a dict with keys ``fires``,
     ``minimal_conflict`` (a minimal subfamily of states with empty
     intersection, minimum-cardinality: found by exhaustive search in nondecreasing size, so every strictly smaller subfamily is certified to intersect),
     ``intersection`` and ``sizes``.
@@ -171,13 +179,17 @@ def common_action_obstruction(safe_sets):
 
 
 def fibre_criterion(states, safe_fn, gamma):
-    """Observation-fibre criterion for exact observation-only certification.
+    """Observation-only safety-classification criterion (fibre criterion).
 
-    An exact certifier exists iff safe-set membership (the boolean
-    ``safe_fn``) is constant on every observation fibre of ``gamma``.
-    Returns ``(exists, violating_fibre)``: ``violating_fibre`` is a dict
-    ``{"label": ..., "states": [...], "safe": [...], "unsafe": [...]}``
-    or ``None``."""
+    Decides exactly this question: can current safe-set membership (the
+    boolean ``safe_fn``) be classified from the current observation alone?
+    Such a classification exists iff membership is constant on every
+    observation fibre of ``gamma``. It does NOT decide whether an
+    observation-based policy, a conservative certifier, or a
+    history-dependent procedure can exist: a violating fibre rules out
+    only the current-observation classifier. Returns ``(exists,
+    violating_fibre)``: ``violating_fibre`` is a dict describing the
+    fibre, its safe members, and its unsafe members, or is ``None``."""
     fibres = {}
     for x in states:
         fibres.setdefault(gamma[x], []).append(x)
