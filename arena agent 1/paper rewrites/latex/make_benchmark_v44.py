@@ -181,8 +181,8 @@ ax1.plot(ts, figdata["s1_adverse"], color=RED, lw=2.2, marker="s", ms=4,
          label="ecological margin $s_1$ (heatwave)")
 ax1.plot(ts, figdata["s1_benign"], color=RED, lw=1.4, ls="--", marker="s", ms=3,
          label="ecological margin $s_1$ (no heatwave)")
-ax1.annotate("index stays certified\n(min 2/5 > 0)", xy=(0.5, 0.4), xytext=(0.62, 1.15),
-             fontsize=9, color=GREEN,
+ax1.annotate("index stays certified\n(min 2/5 > 0)", xy=(0.5, 0.42), xytext=(0.53, 1.72),
+             fontsize=9, color=GREEN, ha="left",
              arrowprops=dict(arrowstyle="->", color=GREEN, lw=1.0))
 ax1.annotate("floor breached\nmid-transition\n($s_1 = -4/5$)", xy=(0.5, -0.8), xytext=(0.06, -1.45),
              fontsize=9, color=RED,
