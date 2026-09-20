@@ -140,8 +140,9 @@ ax2.plot(xs, kappa, color="#1c1c1c", lw=2.2)
 ax2.axvline(1.0, color=GRAY, lw=1.0, ls=":")
 ax2.plot([0.5], [0.5], marker="o", ms=6, color=RED)
 ax2.plot([1.5], [0.0], marker="o", ms=6, color=GREEN)
-ax2.annotate("FP witness $(x, \\kappa^{*}) = (1/2, 1/2)$:\nshortfall of $1/2$",
-             xy=(0.5, 0.5), xytext=(0.06, 0.82), fontsize=8.6, color=RED,
+ax2.annotate("FP witness $(1/2,\\ 1/2)$:\nshortfall of $1/2$",
+             xy=(0.5, 0.5), xytext=(0.62, 0.85), ha="center", va="center",
+             fontsize=8.6, color=RED,
              arrowprops=dict(arrowstyle="->", color=RED, lw=1.0))
 ax2.annotate("rescue witness $(3/2, 0)$:\n$c = 1$ financed, $1/2$ remains",
              xy=(1.5, 0.0), xytext=(1.02, 0.60), fontsize=8.6, color="#1e6e42",
