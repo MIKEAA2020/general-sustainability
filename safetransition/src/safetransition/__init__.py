@@ -20,7 +20,7 @@ from .indicators import Readings, compute, licensing_thresholds, weight_partitio
 from .benchmark import (run_benchmark, schedule_data, BenchmarkResult,
                         benchmark_certificate, tube_certificate)
 
-__version__ = "1.2.0"
+__version__ = "1.2.1"
 
 __all__ = [
     "Q", "frac", "fmt", "fmtf",
