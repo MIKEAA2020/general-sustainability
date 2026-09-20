@@ -36,6 +36,8 @@ import json
 import sys
 from fractions import Fraction as F
 
+CHECKER_VERSION = "1.0.0"
+
 
 def _frac(v):
     return v if isinstance(v, F) else F(v)
