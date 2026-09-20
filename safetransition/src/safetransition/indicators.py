@@ -41,17 +41,98 @@ class Readings:
     notes: list = field(default_factory=list)
 
 
-def licensing_thresholds(s1=None, s2=None):
+def licensing_thresholds(s1=None, s2=None, dip=DIP):
     """Per-weight licensing thresholds at a state with floors ``(s1, s2)``
-    and characteristic dip depth 2: FAST is aggregate-licensed iff
-    ``w2/w1 >= (2 - s1)/s2``; SLOW iff ``w2/w1 <= s1/(2 - s2)``. Derived
-    here directly from the tube geometry (minima of the aggregate along
-    the tube); defaults reproduce the witness values 2/3 and 3/2."""
+    and characteristic dip depth ``dip``: FAST is aggregate-licensed iff
+    ``w2/w1 >= (dip - s1)/s2``; SLOW iff ``w2/w1 <= s1/(dip - s2)``. Derived
+    directly from the tube geometry (minima of the aggregate along the
+    tube); defaults reproduce the witness values 2/3 and 3/2. Exact for any
+    rational floors and dip with ``0 < s2 < dip``."""
     s1 = Q(6, 5) if s1 is None else Q(s1)
     s2 = Q(6, 5) if s2 is None else Q(s2)
-    fast_rho = -(s1 - DIP) / s2      # w2 s2 >= w1 (2 - s1)
-    slow_rho = s1 / (DIP - s2)       # w1 s1 >= w2 (2 - s2)  <=>  w2/w1 <= s1/(2 - s2)
+    dip = Q(dip)
+    fast_rho = -(s1 - dip) / s2      # w2 s2 >= w1 (dip - s1)
+    slow_rho = s1 / (dip - s2)       # w1 s1 >= w2 (dip - s2) <=> w2/w1 <= s1/(dip - s2)
     return fast_rho, slow_rho
+
+
+def weight_partition(state=(0, Q(1, 2), Q(6, 5), Q(6, 5)), dip=DIP):
+    """Complete exact partition of the weight-ratio line r = w2/w1 in (0, inf).
+
+    For finite rational plan menus with piecewise-linear tubes, the
+    aggregate admissibility of each plan is a closed condition on r, so the
+    full licensing behaviour is a finite arrangement of rational
+    breakpoints. The arrangement has two regimes: for ``dip < s1 + s2``
+    (the benchmark's) the FAST threshold rho1 lies below the SLOW
+    threshold rho2 and the partition is [0, rho1) SLOW-only, [rho1, rho2]
+    both, (rho2, inf) FAST-only; for ``dip > s1 + s2`` the thresholds swap
+    and an unlicensed gap (rho2, rho1) opens around r = 1; at equality the
+    middle region degenerates to the single point r = rho1 = rho2, where
+    both plans bind simultaneously. Every region carries its licensed plan
+    set, the typed-safe availability, and each boundary carries the
+    binding witness constraint — the two benchmark thresholds 2/3 and 3/2
+    are instances of this complete object. The result serializes to a
+    certificate checkable by the independent checker
+    (``check_safe_transition_cert.py``).
+    """
+    _, x, s1v, s2v = state
+    dip = Q(dip)
+    rho1, rho2 = licensing_thresholds(s1v, s2v, dip)
+    staged_financed = x >= C_RESCUE
+    staged = ["STAGED"] if staged_financed else []
+    fast_w = {"at": fmt(rho1), "plan": "FAST",
+              "constraint": f"w1*(s1 - {fmt(dip)}) + w2*s2 = 0"}
+    slow_w = {"at": fmt(rho2), "plan": "SLOW",
+              "constraint": f"w1*s1 + w2*(s2 - {fmt(dip)}) = 0"}
+    r1, r2 = fmt(rho1), fmt(rho2)
+
+    if rho1 < rho2:       # dip < s1 + s2 (benchmark regime)
+        regions = [
+            dict(range={"lo": "0", "hi": r1, "lo_inc": True, "hi_inc": False},
+                 licensed=["SLOW"] + staged, typed_safe=staged_financed,
+                 boundary_witness=None),
+            dict(range={"lo": r1, "hi": r2, "lo_inc": True, "hi_inc": True},
+                 licensed=["FAST", "SLOW"] + staged, typed_safe=staged_financed,
+                 boundary_witness=fast_w),
+            dict(range={"lo": r2, "hi": "inf", "lo_inc": False, "hi_inc": False},
+                 licensed=["FAST"] + staged, typed_safe=staged_financed,
+                 boundary_witness=slow_w),
+        ]
+    elif rho1 > rho2:     # dip > s1 + s2: unlicensed gap opens around r = 1
+        regions = [
+            dict(range={"lo": "0", "hi": r2, "lo_inc": True, "hi_inc": True},
+                 licensed=["SLOW"] + staged, typed_safe=staged_financed,
+                 boundary_witness=slow_w),
+            dict(range={"lo": r2, "hi": r1, "lo_inc": False, "hi_inc": False},
+                 licensed=list(staged), typed_safe=staged_financed,
+                 boundary_witness=None),
+            dict(range={"lo": r1, "hi": "inf", "lo_inc": True, "hi_inc": False},
+                 licensed=["FAST"] + staged, typed_safe=staged_financed,
+                 boundary_witness=fast_w),
+        ]
+    else:                 # dip = s1 + s2: middle region is a single point
+        regions = [
+            dict(range={"lo": "0", "hi": r1, "lo_inc": True, "hi_inc": False},
+                 licensed=["SLOW"] + staged, typed_safe=staged_financed,
+                 boundary_witness=None),
+            dict(range={"lo": r1, "hi": r1, "lo_inc": True, "hi_inc": True},
+                 licensed=["FAST", "SLOW"] + staged, typed_safe=staged_financed,
+                 boundary_witness=fast_w),
+            dict(range={"lo": r1, "hi": "inf", "lo_inc": False, "hi_inc": False},
+                 licensed=["FAST"] + staged, typed_safe=staged_financed,
+                 boundary_witness=slow_w),
+        ]
+    return {
+        "type": "weight_partition",
+        "state": {"q": str(state[0]), "x": fmt(x), "s1": fmt(s1v), "s2": fmt(s2v)},
+        "dip": fmt(dip),
+        "regime": ("rho1 < rho2" if rho1 < rho2 else
+                   "rho1 > rho2" if rho1 > rho2 else "rho1 = rho2"),
+        "thresholds": {"rho1": r1, "rho2": r2},
+        "staged_financed": staged_financed,
+        "typed_safe_any_weight": staged_financed,
+        "regions": regions,
+    }
 
 
 def plan_tubes(state, plan):
