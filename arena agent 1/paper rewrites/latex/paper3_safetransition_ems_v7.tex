@@ -297,8 +297,9 @@ control, conservative certifiers, or three-valued procedures.
 
 \subsection{Architecture}\label{sec:architecture}
 
-The library is organized as nine modules plus the repository-root
-independent checker script (Table~\ref{tab:modules}). The
+The library is organized as nine modules, with the command-line
+entry point as an interface to them and the independent checker as a
+standalone repository-root script (Table~\ref{tab:modules}). The
 \texttt{rational} module provides the exact rational helpers on which every
 other module rests, and the \texttt{datum} module defines the transition-data interface and ships one
 fully specified instance, the witness datum of the companion manuscript,
@@ -308,9 +309,11 @@ subclass the interface. The \texttt{operators}, \texttt{recursion}, and
 \texttt{indicators} and \texttt{dashboard} modules produce the readings of
 Section~\ref{sec:readings}; the \texttt{benchmark} module carries the
 twenty-four exact checks of Section~\ref{sec:benchmark}. A command-line
-interface exposes \texttt{verify}, \texttt{report}, \texttt{demo}, and
+entry point exposes \texttt{verify}, \texttt{report}, \texttt{demo}, and
 \texttt{certify} --- the last emits the serializable certificates of
-Section~\ref{sec:partial} for the independent checker.
+Section~\ref{sec:partial} for the independent checker. The
+\texttt{benchmarks/} directory (not a module) carries the scaling study
+of Section~\ref{sec:scaling}.
 
 \begin{table}[t]
 \centering
@@ -329,16 +332,17 @@ Module & Contents \\
 \texttt{dashboard} & single-file HTML rendering (inline SVG/CSS) \\
 \texttt{benchmark} & twenty-four exact checks; verified schedule values; \\
                        & tube and benchmark certificates \\
-\texttt{benchmarks} & scaling study: five families, answers known \\
-                       & by construction (committed results) \\
+\texttt{benchmarks/} & (directory, not a module) scaling study: \\
+                       & six families, answers known by construction \\
 \texttt{cli} & \texttt{verify} / \texttt{report} / \texttt{demo} / \texttt{certify} \\
 \texttt{check\_safe\_transition\_cert.py} & independent stdlib-only verifier \\
                        & for serialized certificates (repository root) \\
 \bottomrule
 \end{tabular}
-\caption{Module organization of SafeTransition 1.3.0
-(1\,633 source lines, 621 test lines, plus the 250-line independent
-checker and the 291-line scaling study).}
+\caption{Module organization of SafeTransition 1.3.0 (line counts by
+\texttt{wc~-l} over the package tree: 1\,698 library lines, 966 test
+lines, plus the 375-line independent checker and the 386-line scaling
+study).}
 \label{tab:modules}
 \end{table}
 
@@ -815,7 +819,7 @@ standard library (matplotlib and Pillow only for regenerating figures;
 publicly maintained third-party distributions are listed with their pinned
 versions in the verification deposit) \\
 \textbf{Program language} & Python \\
-\textbf{Program size} & 1\,698 library lines, 951 test lines, 375-line
+\textbf{Program size} & 1\,698 library lines, 966 test lines, 375-line
 independent checker, 386-line scaling study (\texttt{wc~-l}) \\
 \textbf{Availability and cost} & open source under the MIT licence; source,
 tests, and examples archived in the verification deposit
@@ -827,7 +831,7 @@ at \url{https://github.com/MIKEAA2020/general-sustainability}; no cost \\
 \label{tab:availability}
 \end{table}
 
-The test suite (58 tests) covers the benchmark, the operator chain and
+The test suite (59 tests) covers the benchmark, the operator chain and
 witnessed separation on the witness datum, the certificate family on the
 deposited instances, the certificate protocol (serialization, independent
 checking, tamper rejection, import hygiene, the adversarial exact/float
@@ -841,8 +845,8 @@ vertex-enumeration oracle), belief-recursion monotonicity, partition
 coverage sampling including degenerate regimes, cross-process hash
 stability of the canonical serialization, mutation testing of the
 certificate protocol, and degenerate systems (zero rows, duplicate rows,
-coincident thresholds, empty action menus); the whole suite runs in under
-five seconds under the standard library's \texttt{unittest}. The suite
+coincident thresholds, empty action menus, uneven action menus across an
+observation fibre); the whole suite runs in under five seconds under the standard library's \texttt{unittest}. The suite
 is executed locally and archived with its outputs; no continuous
 integration service is claimed.
 The dashboard example regenerates the single-file HTML from the library.

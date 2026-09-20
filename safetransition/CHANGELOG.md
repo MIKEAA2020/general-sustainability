@@ -40,7 +40,8 @@ Semantics-precision release implementing the three-audit joint review
   gains a `belief_failure` type that re-runs the recursion from a
   stdlib-only reimplementation and validates the verdict and every
   per-action failure reason (tampered objects rejected).
-- **Property-based and degenerate tests** (58 total): seeded randomized
+- **Property-based and degenerate tests** (59 total, incl. an
+  uneven-action-menu regression for the belief recursion): seeded randomized
   chain inclusion (60), Farkas validity + cross-check against an
   independent exact vertex-enumeration oracle (60), belief monotonicity
   (25), partition coverage sampling (20), cross-process canonical-JSON

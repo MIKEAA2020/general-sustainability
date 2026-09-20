@@ -22,7 +22,7 @@ shipped files.
   availability §11, section plan §12, enhancements 13.1–13.6, wording
   14.1–14.9, DoD §15, priorities §16.
 
-**Ship vehicles.** Package **1.3.0** (`SafeTransition_v1.3.0.zip`; 58/58
+**Ship vehicles.** Package **1.3.0** (`SafeTransition_v1.3.0.zip`; 59/59
 tests; run_all 7/7; SHA256SUMS 55 entries), paper **v7**
 (`paper3_safetransition_ems_v7.tex`/`.pdf`, 15 pp.), supplementary
 **v4** (`paper3_supplementary_v4.md`, S1–S11), highlights **v7**.
@@ -46,11 +46,11 @@ tests; run_all 7/7; SHA256SUMS 55 entries), paper **v7**
 | 4 | Index-blindness alarm misses boundary: strict `>` skips zero-margin licensed plans (S-A §12, S-C 8.4) | `indicators.py` read; boundary case constructed: composite min exactly 0 with negative floor min → old code silent | Alarm fires on `min(idx) >= 0` (operator-licensed) with negative floor minimum; property battery covers the boundary |
 | 5 | `weight_partition` scope undefined; silent misinterpretation outside family (S-A §11, S-C 3.5) | `weight_partition` source read: thresholds `(dip−s1)/s2`, `s1/(dip−s2)` only meaningful for `0 < s1, s2 < dip` | Scope docstring (two-floor witness family, affine-in-r trough conditions, admissible parameter family) + `ValueError` guard before threshold computation; ratio domain (0, ∞) with 0/∞ as projective closures in the certificate |
 | 6 | Failure explanations not serializable/independently checkable (S-A §41, S-C 9.2) | `explain_belief_failure` returned a plain dict; checker had no belief type | `failure_certificate` serializer (system, horizon, per-action reason codes) + checker type `belief_failure` re-running the recursion from the serialized system through a stdlib-only reimplementation; tampered reasons/post-beliefs rejected (tests) |
-| 7 | No property-based or degenerate test battery (S-C 13.3/13.5, S-A #49) | v1.2.1 suite: 46 tests, all fixed instances | `tests/test_property_and_degenerate.py`: 12 tests — seeded random chain inclusion (60), Farkas validity vs independent exact vertex-enumeration oracle (60, full-rank gated), belief monotonicity, partition coverage incl. STAGED-licensed-when-financed, canonical-JSON cross-process `PYTHONHASHSEED` stability, 30-case tamper fuzz, degenerate systems (zero/duplicate rows, coincident thresholds ρ₁=ρ₂, licensed-everywhere plans, empty menus). Suite 58/58 |
+| 7 | No property-based or degenerate test battery (S-C 13.3/13.5, S-A #49) | v1.2.1 suite: 46 tests, all fixed instances | `tests/test_property_and_degenerate.py`: 12 tests — seeded random chain inclusion (60), Farkas validity vs independent exact vertex-enumeration oracle (60, full-rank gated), belief monotonicity, partition coverage incl. STAGED-licensed-when-financed, canonical-JSON cross-process `PYTHONHASHSEED` stability, 30-case tamper fuzz, degenerate systems (zero/duplicate rows, coincident thresholds ρ₁=ρ₂, licensed-everywhere plans, empty menus). Suite 59/59 |
 | 8 | Scaling study lacked platform metadata and bit-length separation (S-A §26, §21; S-C 7.3/7.6) | `scaling_results.json` v1.2.1 had no meta; bit metric conflated numerator/denominator | Study records CPU, OS, Python, methodology; `margin_num_bits`/`margin_den_bits` separate on chain and dyadic rows; full study re-run (73.6 s) and committed |
 | 9 | No row-growth stress family; scalability language unbounded (S-A §24; S-C 7.5) | Dense random systems (3t rows, t vars, entries ∪[−5,5]/[1,3]) probed: t=3 → 975 rows; t=4 infeasible → 7,505 rows/2.2 s; t=4 feasible → >60 s | `family_stress_dense` added with SIGALRM 60 s budget; the recorded impracticality point (t=4 feasible) is the output; claims scoped to structured planted families |
 | 10 | Dashboard provenance embedded the checker version as "vunknown" (found during 1.3.0 test hardening) | `default_provenance` resolved the checker path one directory short | Path fixed; checker version 1.0.0 embedded; shipped `dashboard.html` regenerated with the provenance table; test made version-agnostic and asserts no "vunknown" |
-| 11 | Latent crash: `step_ok(B, a) is None` where `step_ok` returns a list (found during 1.3.0 line-level re-read) | `recursion.py` l.121 read | Fixed with an explicit membership/skip; suite passes |
+| 11 | Latent crash: `F[x][a]` KeyErrors when a belief's action set (union over the fibre) contains an action that some fibre state lacks (found during 1.3.0 line-level re-read) | `recursion.py` l.121/169 read; crash reproduced by construction | Fixed in all of `step_ok`/`post_beliefs`/bad-state extraction with `F[x].get(a, ())`: an action is screened only against fibre states that offer it; uneven-menu regression test added (suite 59/59) |
 
 ## 3. Confirmed and fixed — paper v7
 
@@ -123,7 +123,7 @@ Related work and artifacts:
 - S3: normalized certificate contradiction value (row-rescaling caveat);
   feasibility decided-not-witnessed; co-possibility;
   minimum-cardinality subfamily; criterion narrowing.
-- S5: 1.3.0 tree (58 tests, 9 test files, 1,698 src lines); figure
+- S5: 1.3.0 tree (59 tests, 9 test files, 1,698 src lines); figure
   pipeline description corrected (`make_safetransition_figs.py`,
   `make_certificate_chain.py`).
 - S9: `belief_failure` checker row; trust-boundary statement; negative
@@ -132,7 +132,7 @@ Related work and artifacts:
   property battery described.
 - S10: rewritten for 1.3.0 — six families; separated bit metrics;
   measured dyadic numbers (2⁻³²⁰/7, 323 bits); stress family incl.
-  impracticality point; platform/methodology; 58 tests.
+  impracticality point; platform/methodology; 59 tests.
 - **S11 (new):** pooled-kernel regression anchor — normals
   (1,0), (−3/5,4/5), (−3/5,−4/5); λ = (3/8, 5/16, 5/16); Σλ = 1;
   Σλⱼnⱼ = (0,0) exactly; barycentric reading; cross-paper anchor role.
@@ -156,7 +156,7 @@ independence, scaling claim, coefficient growth, ratio phrasing).
 | --- | --- |
 | 13.1 certificate-chain figure | **Done** — `fig_certificate_chain.png` (Fig. 2 in v7), deterministic script, provenance-block arrow target |
 | 13.2 verdict-semantics table | **Done** — Table 3 in v7 §2.1 |
-| 13.3 property-based tests | **Done** — 12-test battery, suite 58/58 |
+| 13.3 property-based tests | **Done** — 12-test battery, suite 59/59 |
 | 13.4 optional external-solver cross-check | **Declined, with reason** — a third-party solver would break the stdlib-only trust boundary; the property battery instead cross-checks Farkas validity against an independent exact vertex-enumeration oracle (60 instances) written for this suite |
 | 13.5 degenerate-case tests | **Done** — zero/duplicate rows, coincident thresholds, licensed-everywhere plans, empty menus |
 | 13.6 limitations subsection | **Done** — §7.1 "Limitations" (datum relativity; conditional completeness; narrow dense envelope; partition family scope) |
@@ -186,7 +186,7 @@ description.
   (Tectonic 0.15.0) and QA-rendered with PyMuPDF at 100 dpi (title
   page, operator definitions, scaling table, chain-figure/recourse
   page).
-- Every package-side fix was followed by the full suite (58/58) and,
+- Every package-side fix was followed by the full suite (59/59) and,
   at release, `run_all.sh` 7/7 (tests, 24/24 benchmark checks, 3/3
   certificates verified, worked examples incl. recourse failure and
   pooled kernel, quick scaling, adversarial demo, figure regeneration).

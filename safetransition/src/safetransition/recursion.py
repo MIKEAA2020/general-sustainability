@@ -95,9 +95,15 @@ def belief_backward(F, gamma, safe, prior, horizon, max_beliefs=4096):
         return frozenset(out)
 
     def step_ok(B, a):
-        """No violation en route and every post-belief one-step viable."""
+        """No violation en route and every post-belief one-step viable.
+
+        A fibre state that does not carry action ``a`` contributes no
+        successors for it (``F[x].get(a, ())``), so an action is
+        screened only against the states that offer it; the action set
+        of a belief is the union over its fibre, and states without the
+        action neither veto it nor add post-belief labels."""
         for x in fibre_expansion(B):
-            posts = F[x][a]
+            posts = F[x].get(a, ())
             if any(p not in safe for p in posts):
                 return None
         return B  # screening only; post-belief computed by caller
@@ -105,7 +111,7 @@ def belief_backward(F, gamma, safe, prior, horizon, max_beliefs=4096):
     def post_beliefs(B, a):
         labels = set()
         for x in fibre_expansion(B):
-            for p in F[x][a]:
+            for p in F[x].get(a, ()):
                 labels.add(gamma[p])
         return frozenset(labels)
 
@@ -168,14 +174,14 @@ def explain_belief_failure(F, gamma, safe, prior, horizon, max_beliefs=4096):
 
     def step_ok(B, a):
         for x in fibre_expansion(B):
-            if any(p not in safe for p in F[x][a]):
+            if any(p not in safe for p in F[x].get(a, ())):
                 return False
         return True
 
     def post_beliefs(B, a):
         labels = set()
         for x in fibre_expansion(B):
-            for p in F[x][a]:
+            for p in F[x].get(a, ()):
                 labels.add(gamma[p])
         return frozenset(labels)
 
@@ -186,7 +192,7 @@ def explain_belief_failure(F, gamma, safe, prior, horizon, max_beliefs=4096):
             for a in sorted({act for x in fibre_expansion(start) for act in F[x]}):
                 if not step_ok(start, a):
                     bad = sorted({x for x in fibre_expansion(start)
-                                  for p in F[x][a] if p not in safe})
+                                  for p in F[x].get(a, ()) if p not in safe})
                     actions[a] = {"reason": "violation en route", "states": bad}
                 else:
                     bp = post_beliefs(start, a)

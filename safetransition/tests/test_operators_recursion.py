@@ -102,6 +102,21 @@ class TestBeliefRecursion(unittest.TestCase):
         self.assertIn(start, W[1], "root belief must be one-step viable")
         self.assertNotIn(start, W[2], "post-observation recourse failure must surface at k=2")
 
+    def test_uneven_action_menus_across_fibre(self):
+        # regression: two same-label states with disjoint action menus.
+        # step_ok/post_beliefs must tolerate a belief whose action set is
+        # the union over the fibre while individual states carry subsets.
+        F = {"x1": {"a": ["x1"]},
+             "x2": {"b": ["x2"]}}
+        gamma = {"x1": "y12", "x2": "y12"}
+        safe = {"x1", "x2"}
+        W, start = belief_backward(F, gamma, safe, prior=["x1", "x2"],
+                                   horizon=3)
+        self.assertEqual(start, frozenset({"y12"}))
+        for k in (1, 2, 3):
+            self.assertIn(start, W[k],
+                          f"each action screens only its own states (k={k})")
+
 
 if __name__ == "__main__":
     unittest.main()

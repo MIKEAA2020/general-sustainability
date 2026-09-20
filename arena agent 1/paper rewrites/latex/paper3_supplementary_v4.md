@@ -192,10 +192,10 @@ safetransition/
 │                                   # chain); graphical-abstract TIFF export
 ├── novelty_searches/               # related-software search records (S6)
 ├── src/safetransition/             # 9 modules, 1,698 lines
-└── tests/                          # 58 tests, 951 lines (9 files)
+└── tests/                          # 59 tests, 966 lines (9 files)
 ```
 
-`sh run_all.sh` executes, in order: the test suite (58/58, including the
+`sh run_all.sh` executes, in order: the test suite (59/59, including the
 certificate-protocol, scaling closed-form, provenance-determinism, and
 property-based/degenerate batteries), the exact benchmark checks (24/24),
 certificate emission plus the
@@ -332,8 +332,10 @@ independent exact vertex-enumeration oracle (60 instances, full-rank
 gated), belief-recursion monotonicity, partition coverage sampling
 including the STAGED-licensed-when-financed degenerate regime,
 coincident thresholds (`ρ₁ = ρ₂`), zero and duplicate rows, empty
-action menus, and cross-process canonical-JSON hash stability under
-three `PYTHONHASHSEED` values.
+action menus, uneven action menus across an observation fibre (the
+belief recursion screens an action only against the fibre states that
+offer it), and cross-process canonical-JSON hash stability under three
+`PYTHONHASHSEED` values.
 
 **Tube-status semantics (one-sided).** `TubeStatus ∈ {EXACT,
 CONSERVATIVE}`: declared piecewise-linear plan tubes are EXACT (each
@@ -407,7 +409,7 @@ itself is. Within the tested range, coefficient growth had a larger
 observed effect on certificate size than on wall-clock time. Closed
 forms (margin (1/5 − (k−1)/4096)/(k+1) for the chain; 2⁻ᵗ/7 for the
 dyadic family with L = 5) are asserted at every swept size and
-re-asserted on small instances in the unit suite (58 tests).
+re-asserted on small instances in the unit suite (59 tests).
 
 The planted families measure correctness and exact-arithmetic stability
 under controlled growth. The dense stress family complements them by
