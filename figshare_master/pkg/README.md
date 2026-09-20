@@ -49,7 +49,7 @@ LICENSE.txt                                  CC BY 4.0 notice
 manuscripts/                                venue-agnostic master manuscripts
   paper1_safetransition_master_v2.pdf/.tex  software description, master version
                                             (venue-neutral)
-  paper1_supplementary_v6.md                supplementary material (S1-S12, incl.
+  paper1_safetransition_ems_supplementary_v6.md  supplementary material (S1-S12, incl.
                                             the 25 exact grid checks of the
                                             assessment paper's verifier)
 safetransition/                             SafeTransition library, v1.3.0
