@@ -45,10 +45,21 @@ def _certificate_rows():
 def cmd_report(out):
     readings = compute()
     bench = run_benchmark(verbose=False)
-    from .dashboard import write
-    path = write(readings, out, benchmark=bench, certificates=_certificate_rows())
+    from .dashboard import default_provenance, write
+    prov = default_provenance(certificates_json=_certificate_dicts())
+    path = write(readings, out, benchmark=bench, certificates=_certificate_rows(),
+                 provenance=prov)
     print(f"wrote dashboard: {path}")
     return 0
+
+
+def _certificate_dicts():
+    from .benchmark import benchmark_certificate
+    from .indicators import weight_partition
+    res = certify_polyhedron([[Q(1)], [Q(-1)]], [Q(2, 5), Q(-3, 5)])
+    return [("farkas_stacked_menu_window", res.certificate.to_dict()),
+            ("weight_partition", weight_partition()),
+            ("benchmark", benchmark_certificate())]
 
 
 def main(argv=None):
