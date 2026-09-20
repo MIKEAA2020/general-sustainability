@@ -49,7 +49,7 @@ def one_period_typed_viable(datum, states):
     return {z for z in states if E(datum, z, mode="typ")}
 
 
-def belief_backward(F, gamma, safe, prior, horizon, fibre_of=None):
+def belief_backward(F, gamma, safe, prior, horizon, max_beliefs=4096):
     """Finite-horizon robust epistemic recursion over belief sets.
 
     Parameters
@@ -62,12 +62,22 @@ def belief_backward(F, gamma, safe, prior, horizon, fibre_of=None):
     prior : iterable of states consistent with the initial observation
     horizon : int
 
-    Returns ``(W, reaches)`` where ``W[k]`` is the set of belief sets
-    (frozensets of observation labels) from which some policy keeps the
-    trajectory violation-free for ``k`` steps, and ``reaches`` maps each
-    belief to its one-step observed successors per action. The recursion
-    is complete in finite systems: a belief outside ``W[horizon]``
-    admits no viable observation-based policy over that horizon.
+    Beliefs are sets of observation labels whose full state fibres are
+    re-expanded at every step. The abstraction is exact when the
+    observation separates the states that matter (in particular when it
+    is injective on reachable states) and is otherwise sound for
+    viability certification: ``B in W[k]`` always certifies a viable
+    policy, while ``B not in W[k]`` is conclusive only under the
+    exactness condition.
+
+    Returns ``(W, start)`` where ``W[k]`` is the set of belief sets from
+    which some policy keeps the trajectory violation-free for ``k``
+    steps and ``start`` is the initial belief. ``max_beliefs`` bounds
+    the reachable-belief enumeration; exhausting it raises
+    ``RuntimeError`` — the bound affects exploration completeness,
+    never the soundness of returned memberships, and no partial results
+    are returned. Use :func:`explain_belief_failure` for a per-action
+    witness when a belief is not viable.
     """
     def fibre_expansion(B):
         # states still possible given observed labels (all were safe when observed;
@@ -110,8 +120,10 @@ def belief_backward(F, gamma, safe, prior, horizon, fibre_of=None):
                         seen.add(Bp)
                         nxt.append(Bp)
         frontier = nxt
-        if len(seen) > 4096:
-            raise RuntimeError("belief enumeration exceeded 4096 reachable beliefs")
+        if len(seen) > max_beliefs:
+            raise RuntimeError(
+                f"belief enumeration exceeded max_beliefs={max_beliefs}; "
+                "no partial results are returned")
 
     # belief viability: Viable_1 = beliefs with a screening action;
     # Viable_{k+1} = beliefs with an action whose post-belief is Viable_k
@@ -130,3 +142,53 @@ def belief_backward(F, gamma, safe, prior, horizon, fibre_of=None):
                     break
         W[k] = Wk
     return W, start
+
+def explain_belief_failure(F, gamma, safe, prior, horizon, max_beliefs=4096):
+    """Per-action failure witness for a non-viable root belief.
+
+    Returns a dictionary with the first horizon ``k`` at which the
+    initial belief leaves the viable sets, the belief itself, and, for
+    every action, the exact reason the policy fails: either a state in
+    the fibre that enters a violation en route, or the post-belief that
+    is itself not viable at the previous level. This is the
+    counterexample object accompanying a ``prior not in W[horizon]``
+    verdict."""
+    def fibre_expansion(B):
+        out = set()
+        for lab in B:
+            for s_, l in gamma.items():
+                if l == lab:
+                    out.add(s_)
+        return frozenset(out)
+
+    def step_ok(B, a):
+        for x in fibre_expansion(B):
+            if any(p not in safe for p in F[x][a]):
+                return False
+        return True
+
+    def post_beliefs(B, a):
+        labels = set()
+        for x in fibre_expansion(B):
+            for p in F[x][a]:
+                labels.add(gamma[p])
+        return frozenset(labels)
+
+    W, start = belief_backward(F, gamma, safe, prior, horizon, max_beliefs)
+    for k in range(1, int(horizon) + 1):
+        if start not in W[k]:
+            actions = {}
+            for a in sorted({act for x in fibre_expansion(start) for act in F[x]}):
+                if not step_ok(start, a):
+                    bad = sorted({x for x in fibre_expansion(start)
+                                  for p in F[x][a] if p not in safe})
+                    actions[a] = {"reason": "violation en route", "states": bad}
+                else:
+                    bp = post_beliefs(start, a)
+                    ref = W.get(k - 1, W[1]) if k > 1 else W[1]
+                    if bp not in ref:
+                        actions[a] = {"reason": f"post-belief not {max(1, k - 1)}-step viable",
+                                      "post_belief": sorted(bp)}
+            return {"horizon": k, "belief": sorted(start), "actions": actions}
+    return {"horizon": None, "belief": sorted(start), "actions": {},
+            "note": "belief is viable over the horizon"}
