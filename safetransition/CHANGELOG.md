@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.1 — 2026-09-20
+
+- `novelty_searches/`: preserved related-software search records
+  (six queries, verbatim result records, method README) supporting the
+  positioning claims of the accompanying manuscript's Section 5 — the
+  analogue of the master deposit's novelty searches.
+
 ## 1.1.0 — 2026-09-20
 
 Deposit-readiness release, adopting the master deposit's reproduction
