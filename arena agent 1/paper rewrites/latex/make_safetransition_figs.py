@@ -14,9 +14,9 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch
-import shutil, os
+import shutil, os, sys
 
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "figs_p3")
+OUT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "figs_p3"))
 os.makedirs(OUT, exist_ok=True)
 
 plt.rcParams.update({
@@ -161,10 +161,14 @@ readings_path = os.path.join(OUT, "fig_readings.png")
 fig.savefig(readings_path, dpi=300, facecolor="white")
 plt.close(fig)
 
-# --------------------------------------------------- deposited benchmark figure
-src = "/home/user/fig_benchmark_v44.png"
+# --------------------------------------------------- benchmark figure (v45)
+# Regenerated from the library's exact checks (schedule_data) by the v45
+# script; the clarified fund axis replaces the deposited v44 copy.
+import subprocess
 dst = os.path.join(OUT, "fig_benchmark.png")
-shutil.copyfile(src, dst)
+subprocess.run([sys.executable, os.path.join(os.path.dirname(__file__),
+                                             "make_benchmark_v45.py")],
+               check=True)
 
 from PIL import Image
 for p in (ga_path, readings_path, dst):
