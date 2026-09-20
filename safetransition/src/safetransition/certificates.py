@@ -55,6 +55,23 @@ class FarkasCertificate:
         m = len(self.A)
         return -sum(self.lam[i] * self.b[i] for i in range(m))
 
+    def to_dict(self):
+        """Canonical JSON-ready dictionary (rationals as strings)."""
+        return {
+            "type": "farkas",
+            "A": [[str(v) for v in row] for row in self.A],
+            "b": [str(v) for v in self.b],
+            "lam": [str(v) for v in self.lam],
+        }
+
+    @classmethod
+    def from_dict(cls, d):
+        """Rebuild from a dictionary as produced by :meth:`to_dict`."""
+        assert d.get("type") == "farkas", "not a farkas certificate"
+        return cls(A=tuple(tuple(frac(v) for v in row) for row in d["A"]),
+                   b=tuple(frac(v) for v in d["b"]),
+                   lam=tuple(frac(v) for v in d["lam"]))
+
     def describe(self):
         return ("Farkas certificate: lam = (" + ", ".join(fmt(l) for l in self.lam)
                 + "); lam.A = 0; -lam.b = " + fmt(self.margin) + " > 0")
@@ -125,7 +142,7 @@ def common_action_obstruction(safe_sets):
     while each individual set is nonempty (every state individually
     viable under full information). Returns a dict with keys ``fires``,
     ``minimal_conflict`` (a minimal subfamily of states with empty
-    intersection, found by exhaustive search in nondecreasing size),
+    intersection, minimum-cardinality: found by exhaustive search in nondecreasing size, so every strictly smaller subfamily is certified to intersect),
     ``intersection`` and ``sizes``.
     """
     states = list(safe_sets)
