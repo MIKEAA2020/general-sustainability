@@ -2182,3 +2182,18 @@ Stage Summary:
 - The joint assessment delivered at BATCH8_PAPER1_ECOLOGICAL_INDICATORS_JOINT_ASSESSMENT.md: the four streams' evolution mapped, every checkable claim verified against paper1 v52 (10/10 qwen line-level items confirmed; gpt's quotes all located; the two math-error claims adjudicated with one auditor fix itself caught as defective), and the surviving points consolidated into a 42-point actionable queue under the owner's no-removal/no-condensing standing rule (15 additions, 9 precision rewordings, 7 mechanical fixes, 6 overridden removals, 5 rejected materials).
 - Key verification findings: the manuscript's Northern-cod arithmetic is internally consistent (the fix is one explicitness sentence, not a convention change); Theorem 6's body statement is already margin-scoped (only the abstract needs the qualifier); §5.5 and §5.1 already carry in substance many of the 'softening' asks and the value-of-information reading (pathway E largely pre-implemented); Theorem 11(2) is a conjecture, not a theorem.
 - Open items for future rounds: the implementation wave (new file versions per the owner's never-overwrite rule), the sigma-spectrum research program (pathway A first, with exact witnesses), the owner-gated framing decisions (title, abstract bounds, Thm 5/6 renumbering).
+
+---
+Task ID: 104-push
+Agent: main (Z.ai Code)
+Task: Push record for the Task 104 commit (the batch-8 joint assessment round).
+
+Work Log:
+- The pasted PAT again carried the stray trailing '.1' suffix (sixth occurrence): as pasted HTTP 401 against the GitHub API; the corrected form (suffix stripped) verified 200 as MIKEAA2020. Used in-memory only (a chmod-600 temp file outside the repo, deleted immediately; push by explicit URL; output redacted).
+- Pushed: remote main 5163f7d -> 7528ba5 (publishing the round's only creation, BATCH8_PAPER1_ECOLOGICAL_INDICATORS_JOINT_ASSESSMENT.md, plus the worklog Task 104 entry).
+- Post-push verification: git ls-remote main == local main; tree clean; zero raw-token occurrences under .git; origin remains the clean anonymous URL; the temp PAT file removed.
+- Rotation advised for the pasted PAT regardless (it transited the chat channel; the stray-suffix artifact has now appeared six times).
+
+Stage Summary:
+- Task 104 published on main (7528ba5); remote == local; tree clean; no token residue.
+- Owner-facing artifact: BATCH8_PAPER1_ECOLOGICAL_INDICATORS_JOINT_ASSESSMENT.md at the repo root - the verified, consolidated, standing-rule-compliant joint assessment of the four self-correcting audit streams in batch 8/paper 1 ecological indicators.txt.
