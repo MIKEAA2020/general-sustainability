@@ -29,6 +29,8 @@ The target is the Journal of Industrial Ecology, Springer Nature journal 44498. 
 
 The source-only ZIP was extracted into a clean temporary directory and compiled with Tectonic 0.15.0. Result: successful 11-page PDF; no fatal TeX error, undefined reference, missing asset or emergency stop.
 
+The main-paper and supplementary author lines both identify the affiliation as `Independent Researcher, Tehran, Iran`; the existing v2 supplement source was not overwritten. The updated main ZIP was re-extracted and compiled successfully, and the v3 supplementary source compiled successfully to 13 pages.
+
 ## Security check
 
 The v3 source, assets, ZIP, PDF, log and audit files contain no credential markers. The credential file used for optional Git authentication is not staged, copied into the package, placed in a checksum file, or included in the ZIP.

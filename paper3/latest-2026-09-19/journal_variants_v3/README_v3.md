@@ -40,4 +40,6 @@ The extracted ZIP was compiled with Tectonic 0.15.0. The build completed success
 
 The v3 package also contains the compiled PDF and log for local verification. They are deliberately not included in the source-only ZIP.
 
+The v3 package also contains the separately compiled supplementary source and PDF. The author affiliation in both the main paper and supplementary source is `Independent Researcher, Tehran, Iran`.
+
 No credential file or credential content is part of this package. Authentication credentials, if used for repository operations, remain outside the package and Git history.
