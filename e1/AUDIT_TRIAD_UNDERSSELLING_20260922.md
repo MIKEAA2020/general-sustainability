@@ -1,0 +1,50 @@
+# Joint evaluation of three audits (deepseek, qwen, grok) on manuscript underselling — Paper E1
+
+**Date:** 2026-09-22 · **Scope:** `/e1 underselling.txt` reviews of `paperE1_cod_forecast_ladder_v65` · **Outcome:** implemented as v66 (`paperE1_cod_forecast_ladder_v66_generalized.md`, archive + submission carriers, both 27 pp).
+
+---
+
+## 1. Joint evaluation
+
+The three audits converge on one diagnosis: the manuscript's strongest contribution is methodological (a pre-registered, benchmark-competitive, power-aware evaluation protocol), but the framing presents only a bounded Northern-cod case study. Their remedies converge almost exactly: modestly generalized title; protocol added to highlights and abstract; the two named shortcomings elevated as a general critique; a generality paragraph in Methods; framing sentences in 3.7/3.8; a new Discussion subsection on broader implications; a generalized closing paragraph in Conclusions. All three preserve every empirical result and prohibit overclaims ("persistence is generally superior", "structure never works").
+
+**Assessment: the diagnosis is sound and accepted in full.** The manuscript already contained all the machinery (active-naive-baseline bridge sentence, frozen-rule documentation, operating-characteristic simulation, target-robustness re-scoring) — what was missing is the explicit claim that this machinery constitutes a reusable protocol. That is the strongest possible generalization available, because it is fully backed by material already inside the evaluation; no new result is claimed.
+
+## 2. Verification of audit claims against v65 (claim-by-claim)
+
+| # | Audit claim about the manuscript | Manuscript evidence (v65 locations) | Verdict |
+|---|---|---|---|
+| 1 | Abstract limits itself: "The conclusion applies to this ladder, this estimator, and this scoring design" | Abstract, final paragraph, verbatim | **Verified** — but the audits missed that the abstract already ends with a general sentence ("...cannot be assumed from structural elaboration alone..."). Corrected implementation: add the *protocol* sentence, not a duplicate lesson sentence. |
+| 2 | Intro names "Target Disconnect" and "Binary Certification without Structural Ranking" as shortcomings | §1, numbered points 1–2, verbatim emphasis labels | **Verified** |
+| 3 | Persistence is treated as a real competitor, while field practice uses it mainly as a scaling device | §1 bridge paragraph: "active competitor rather than a passive scaling denominator"; retention rule H2 | **Verified** |
+| 4 | Scoring rule fixed before scores were read; protocol pre-registered | Abstract ("scoring rule fixed before the scores were read"); §1 (§3.8 protocol "pre-registered before any survey score was read"); §3.7 ("pre-registered simulation experiment", 200 replicates) | **Verified** — "pre-registered" in the title is consistent with the manuscript's own usage |
+| 5 | Power analysis: rule highly specific; <15% power for stock-flow and depensatory dynamics under depleted conditions | Abstract and §3.7 (97–99% rejection under persistence null; 97–99% power where autonomous signal strong under collapse-window conditions; <15% for M2/M1b under depletion) | **Verified** |
+| 6 | Realized catches supplied to M2–M4; retrospective reconstruction favours structure ⇒ conservative negative result | §4.5 item 1 (M2, M3, M4); Abstract ¶2 ("three models receive realised catches... makes the negative result conservative with respect to structure") | **Verified** (grok's "M2–M4" exact) |
+| 7 | §3.8 target robustness: re-scored against raw autumn survey index, no module retained | §3.8, incl. +29.8% vs +17.1% persistence advantage; "What the contrast certifies" subsection | **Verified** |
+| 8 | Collapse window measures misspecification penalty, not skill (class cannot generate collapse-then-recovery) | Abstract ¶3; §3.1 collapse-window readings; §3.8 fixed-window readings | **Verified** |
+| 9 | Guardrails: manuscript does not claim best-available model, bears on skill not status, state-space/age-structured models not excluded | Abstract ("The result bears on forecast skill, not on stock status; no tested model is shown to be the best available"); §4.5 item 4 | **Verified** — guardrails preserved in v66 |
+
+Every factual premise of the three audits checks out. Nothing in the audits required the manuscript to gain a new empirical claim.
+
+## 3. Where the audits were weak — strengthened jointly
+
+1. **duplication risk:** the audits' proposed abstract endings repeat the skill-cannot-be-assumed lesson that v65 already carries. Resolution: insert one protocol sentence and extend the existing final sentence with "on decision-relevant quantities".
+2. **3.7 redundancy:** §3.7 already opens with "an empirical negative result is only as informative as the statistical power of the diagnostic test". Grok's proposed paragraph would double it. Resolution: one closing bookend sentence, framed on the instrument/operating-characteristics idea shown in the §3.7 comparison table (MASE <1: power 0.651/specificity 0.675; IC rule: 0.509/0.992) — a column the audits themselves did not cite as evidence in their favour.
+3. **Title risk management:** a title change risks archive ambiguity (v65 carriers circulate under the old title). Resolution: the Data and Code Availability supersession sentence extended to retire the v65 title explicitly, with "no data, score, retention verdict, or reported number" altered.
+4. **Scope discipline:** no new numerals anywhere in the added prose (machine-checked: only intentional tokens "4.6" and "65" appear that were absent in v65); the six "transferable elements" are phrased as protocol design, not findings.
+5. **Highlights kept within Elsevier convention** (five short bullets), mixing protocol and result bullets rather than grok's longer formulations.
+
+## 4. Executed edits in v66 (anchors)
+
+1. **Title** → "Does Structural Elaboration Improve Biomass Forecasts? A Pre-Registered, Power-Aware Out-of-Sample Evaluation of Surplus-Production Models for Northern Cod (*Gadus morhua*)" (deepseek/qwen/grok option A).
+2. **Highlights** — five bullets: protocol, target alignment, empty retention, differential evidential weight, transferability.
+3. **Abstract** — "The empirical conclusion applies..." + added protocol sentence + final sentence extended "on decision-relevant quantities".
+4. **§1** — new paragraph after shortcoming #2: the two shortcomings are general; the case is a template for a forecast-evaluation protocol (cross-ref §2.3, §4.6).
+5. **§2.3** — generality paragraph after the retention-rule specification (declared comparators, frozen horizons, information-set documentation, rolling-origin scoring, uncertainty quantification, power calibration).
+6. **§3.7** — closing bookend sentence: a retention rule is an instrument with operating characteristics; non-retention is only as informative as the instrument's power under the relevant regime.
+7. **§3.8** — closing sentence: re-scoring on the rawest monitoring series is a general robustness discipline for reconstruction-based verdicts.
+8. **§4.6 (new)** — "Broader Implications: A Transferable Protocol for Forecast Validation": bounded empirical conclusion; six transferable elements; power-calibrated interpretation of negative results; collapse-window class-level misspecification as general regime-shift implication; conservative stress test (realized catches to M2–M4, retrospective reconstruction) with the no-overclaim hedge.
+9. **§5 Conclusions** — final paragraph: value of added structure must be demonstrated; protocol transferable to other stocks and ecological forecasting.
+10. **Data and Code Availability** — supersession extended to the v65 title-carrier.
+
+**Completeness statement (what was and was not checked):** every claimed insert anchor was matched against v65 before application; all ten edits applied; no empirically load-bearing sentence outside the ten anchors was modified; numeral-diff machine check passed; PDFs verified to contain the new title and §4.6 (27 pp, archive + submission carriers). The SI (V7) was not changed — nothing in it depends on the framing edits; the cover letter was re-issued as v4 with the new title only. The pending originality-response letter (20260919 v2) remains valid and was not touched: its evidence concerns own-deposit overlap sources, which is title-independent; if it is sent after v66 circulates, one sentence noting the retitled superseding version may optionally be added on review.
