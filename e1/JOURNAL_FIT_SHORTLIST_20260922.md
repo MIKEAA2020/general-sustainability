@@ -1,0 +1,23 @@
+# Journal-fit shortlist for E1 v68 (2026-09-22)
+
+Target paper: `e1/paperE1_cod_forecast_ladder_v68_hygiene.md` — "Does Structural Elaboration Improve Biomass Forecasts? A Pre-Registered, Power-Aware Out-of-Sample Evaluation of Surplus-Production Models for Northern Cod (Gadus morhua)" (27 pp + SI V8).
+
+Profile judged: protocol-forward methodology + canonical Canadian/NAFO case + rigorous negative result + single-author self-archived carriers (similarity-screen exposure already mitigated by supersession declarations and the drafted response letter).
+
+| Rank | Journal | IF (JCR, June 2026 release) | Quartile | Why it fits v68 | Risk / cost |
+|---|---|---|---|---|---|
+| 1 | **ICES Journal of Marine Science** | 3.9 | Q1 (Fisheries, Marine & Freshwater, Oceanography) | The journal's own prediction-skill literature (Kell et al. 2021 lineage) is v68's exact conversation; methods-forward; NAFO/NW Atlantic readership; negative results accepted when design-rigorous; protocol framing now elevated by the audits reads natively there | Highest bar of the realistic set; OUP format + tighter abstract (~350 words); competitive |
+| 2 | **Canadian Journal of Fisheries and Aquatic Sciences** | 2.5 | JCR Q2 / SJR Q1 Aquatic Science | The stock is Canadian; the post-mortem and rebuilding literature cited is CJFAS-heavy (Hutchings, Rose, Shelton); strong tradition of negative/null model results with power analysis; tolerant of single deep case studies | Lower visibility than ICESJMS; Canadian Science Publishing format |
+| 3 | **Fisheries Research** (current channel) | ~2 (verify at submission) | Q1–Q2 | Citation-community home (Kell 2016, Carvalho 2021 published here); originality-flag response letter already drafted for v68 line; path exists if reconsideration granted | Blocked until editor responds to the response letter; keep warm, don't re-submit blind |
+| 4 | **Ecological Modelling** | 3.5 | Q2 | The §3.6 identifiability geometries + §4.6 protocol + F1 reporting standard are model-theory content; Elsevier Methods attention; highest IF-per-effort after ICESJMS | Loses the fisheries-assessment audience; needs intro re-anchored to modeling practice |
+| 5 | **Fishery Bulletin** (NOAA) | ~1 | unranked niche | Open access, no APC, assessment-methods tolerant, explicitly receptive to null results | US-venue mismatch with Canadian stock; lowest prestige |
+| 6 | **PeerJ / PLoS ONE / Ecology and Evolution / F1000Research** | 1.4–2.9 | Q2 | Publish rigorous negative results and preregistered protocols by policy; §4.6's transferability claim plays well with broad-readership venues; F1000Research explicitly welcomes null results | Broad-audience dilution; APCs; lower signalling value |
+
+Explicit non-fits (checked and excluded): *Fisheries Oceanography* (process-oceanography audience), *Marine Ecology Progress Series* (field ecology), *Fish and Fisheries* and *Reviews in Fisheries Science & Aquaculture* (review venues — possible future venue for a forecast-evaluation review, not this paper), *Methods in Ecology and Evolution* (requires packaged software/method release; the ladder engine would demand a software-grade wrapper — overstretch).
+
+## Strategy notes
+- **Sequence recommendation:** ICES JMS first with v68 (best aesthetic-content match for the new title), CJFAS as engineered fallback, Ecological Modelling as lateral option if modeling-community signal is preferred, Fisheries Research channel kept alive only through the pending response letter (do not let it lapse silently: it contains the documented overlap evidence useful to any later iThenticate query at any publisher).
+- **Similarity-screen continuity:** all majors run Crossref/iThenticate; the response letter (4-row evidence table + §5 third-party audit) and the DOA supersession disclosures travel with v68 verbatim; no venue-specific rework needed.
+- **Format deltas to execute per venue:** (i) abstract must shrink 493 → ~350 (ICES) / ~350 (CJFAS); the surplus sits in the numeric results paragraph — owner decision needed on which numbers to drop; (ii) highlights block is Elsevier-specific — drop for OUP/CSP; (iii) Elsevier-style structured declarations → venue form.
+- **Lead citation anchor per venue:** ICESJMS → Kell 2016/2021 + Carvalho 2021 prediction-skill thread; CJFAS → Hutchings & Myers / Walters & Maguire post-mortem + Rose rebuilding thread; Ecological Modelling → F1 reporting standard + §3.6 objective-geometry identifiability.
+- All IF values: JCR released June 17, 2026, based on 2025 citation data (journalmetrics.org records for ICESJMS, Ecological Modelling, CJFAS). Fisheries Research IF not re-verified today; historically ~2.2 — check before claiming it anywhere.
