@@ -53,7 +53,7 @@ requirements.txt                             verified library versions
 CITATION.cff                                 citation metadata
 LICENSE.txt                                  CC BY 4.0 notice
 manuscripts/                                venue-agnostic master manuscripts
-  paper1_safetransition_master_v3.pdf/.tex  software description, master version
+  paper1_safetransition_master_v4.pdf/.tex  software description, master version
                                             (venue-neutral)
   paper1_safetransition_ems_supplementary_v7.md  supplementary material (S1-S11)
 safetransition/                             SafeTransition library, v1.3.0
