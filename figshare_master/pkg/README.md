@@ -1,18 +1,24 @@
-# Master Deposit — "Aggregate Indices and Transition Safety"
+# SafeTransition — Verification Deposit
 
 **Author:** Amin Abaee (ORCID 0000-0002-0019-1842)
-**Deposit (figshare):** https://doi.org/10.6084/m9.figshare.33764023
-**Deposited for:** *Aggregate Indices and Transition Safety: A Quantifier-Order Separation Between Scalarized and Coordinate-Wise Feasibility* (manuscript under journal submission). Shared master deposit: the `safetransition/` subtree additionally archives the software-description submission *SafeTransition: exact rational certification of transition safety for sustainability assessment* (Environmental Modelling & Software submission; package 1.3.0). The
+**Deposit:** figshare (DOI assigned upon publication of this item)
+**Deposited for:** *SafeTransition: exact rational certification of transition safety for sustainability assessment* (software description; manuscript under journal submission; package 1.3.0). The
 `manuscripts/` directory holds that submission's venue-agnostic master
-manuscript, from which venue-specific versions derive.
+manuscript, from which venue-specific versions derive. The deposit additionally
+archives the exact-verification artifacts of the companion manuscript
+*Aggregate Indices and Transition Safety: A Quantifier-Order Separation Between
+Scalarized and Coordinate-Wise Feasibility* (its exact-integer grid verifier,
+figure and graphical-abstract pipelines, and preserved search records), whose
+own deposit is https://doi.org/10.6084/m9.figshare.33764023.
 
-This is the single, venue-independent master deposit for the article. It
+This is the venue-independent master deposit for the software description. It
 contains all data and code generated and analysed during the study: the
-exact-arithmetic verification artifact for the paper's finite rational
-instance, the complete figure and graphical-abstract pipelines, the deposited
-image files, and the preserved novelty-search strings. It is structured to
-satisfy the data- and code-availability norms of control, systems and
-operations research, and environmental modelling journals alike.
+SafeTransition library with its complete test, benchmark, certificate, scaling,
+and dashboard artifacts, the companion manuscript's exact-arithmetic
+verification artifact, the complete figure and graphical-abstract pipelines,
+the deposited image files, and the preserved novelty-search strings. It is
+structured to satisfy the data- and code-availability norms of environmental
+modelling, scientific-software, and open-research-software venues alike.
 
 ## Contents
 
@@ -145,15 +151,16 @@ python3 figure_code/make_graphical_abstract_tif.py           # graphical_abstrac
 
 ## How to cite this deposit
 
+Abaee, A. (2026). *SafeTransition: exact rational certification of
+transition safety for sustainability assessment* (software description;
+verification deposit, version 1.3.0). figshare. DOI assigned upon
+publication of this item.
+
+For the `verification/` artifacts of the companion assessment manuscript:
 Abaee, A. (2026). *Verification code and figure pipeline for Aggregate
 Indices and Transition Safety: A Quantifier-Order Separation Between
 Scalarized and Coordinate-Wise Feasibility*. figshare.
 https://doi.org/10.6084/m9.figshare.33764023
-
-For the `safetransition/` subtree: Abaee, A. (2026). *SafeTransition:
-exact rational certification of transition safety for sustainability
-assessment* (software description). Archived in the same deposit,
-https://doi.org/10.6084/m9.figshare.33764023.
 
 ## License
 
