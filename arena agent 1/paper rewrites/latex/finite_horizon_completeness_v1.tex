@@ -1,0 +1,180 @@
+\documentclass[10pt,twocolumn]{article}
+\usepackage[a4paper,margin=15mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{mathrsfs}
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{remark}{Remark}
+\newtheorem{definition}{Definition}
+\usepackage{graphicx}
+\usepackage{booktabs,array,calc}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{etoolbox}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-1}
+\emergencystretch=3em
+\allowdisplaybreaks
+\AtBeginDocument{%
+  \BeforeBeginEnvironment{equation}{\small}%
+  \BeforeBeginEnvironment{equation*}{\small}%
+  \BeforeBeginEnvironment{align}{\small}%
+  \BeforeBeginEnvironment{align*}{\small}%
+  \BeforeBeginEnvironment{gather}{\small}%
+  \BeforeBeginEnvironment{gather*}{\small}%
+}
+
+\begin{document}
+\title{Complete on the Finite Horizon: Soundness, Completeness,\\ and Counterstrategy Trees for the Belief Recursion}
+\author{Amin Abaee\\[0.35em]
+{\small Independent Researcher}\\[0.55em]
+{\small\href{https://orcid.org/0000-0002-0019-1842}{ORCID: 0000-0002-0019-1842}}\\[0.3em]
+{\small\href{mailto:amin\_abaee@ut.ac.ir}{amin\_abaee@ut.ac.ir}}}
+\date{September 23, 2026}
+\maketitle
+
+\begin{abstract}
+For sufficient certificates the obstruction calculus has been honest about
+an open middle ground: its certificates prove nonviability, and their
+absence proves nothing. This paper, the D5 item of the generalization
+catalogue, closes that gap on the finite horizon for finite systems: the
+backward belief-safety recursion $W_0=\{B\subseteq\mathcal V_T\}$,
+$W_{k+1}=\operatorname{Pre}(W_k)$ is proved sound \emph{and complete} for
+finite-horizon observation-based viability, nonviability is certified by a
+finite counterstrategy tree extracted constructively from the failed
+recursion, and on the programme's two-patch working system the stabilized
+recursion coincides exactly with the successor's $H/H-2$ stability
+convention --- the convention becomes a theorem. The audited family is
+horizon-free (verdicts at $N=2,4,8$ coincide for every belief and
+structure), and every belief outside the stable kernel admits a validated
+tree: on finite systems the certificate gap of the calculus is empty. All
+claims are machine-verified in exact arithmetic (6/6 check families).
+\end{abstract}
+
+\section{Introduction and relation to the programme}
+
+The programme's papers state sufficient certificates: adverse drift,
+common-action emptiness, timing deadlines, certification limits. The source
+catalogue's proposed strengthening is adopted here: on finite systems,
+finite-horizon completeness --- the backward recursion is not merely sound
+but \emph{equal} to the truth, and failure carries its own finite
+certificate. The relation to the completed items is precise: the viable
+selector's recursive correspondence provides the semantics; the successor's
+harness convention ($H=12$ with an $H-2$ stability check) is justified
+here as the stabilization of the recursion rather than assumed.
+
+\section{The backward recursion}
+
+Work on the two-patch system (16 states, safe set $\mathcal V=\{z_1\ge1,
+z_2\ge1\}$, one instrument per step, per-cell read-then-act semantics).
+Beliefs are finite subsets of $\mathcal V$. Define
+\begin{align*}
+W_0 &= \{B:\ B\subseteq\mathcal V\},\\
+W_{k+1} &= \{B:\ \text{some per-cell action tuple keeps every branch
+in }\mathcal V\text{ and every re-partitioned successor part lies in }
+W_k\}.
+\end{align*}
+
+\begin{proposition}[Monotone decrease]
+$W_{k+1}\subseteq W_k$ for every $k$.
+\end{proposition}
+\begin{proof}
+$W_0$ contains every safe belief. If $B\in W_{k+1}$ then some action tuple
+sends every successor part into $W_k$; since each such part is safe, $B$
+is safe, so $B\in W_0$; and by induction along the same action tuple the
+parts lie in each earlier family, so $B\in W_k$.
+\end{proof}
+
+\begin{theorem}[Soundness and completeness on the finite horizon]
+\label{thm:complete}
+For every belief $B$, information structure, and horizon $N$: $B\in W_N$
+if and only if the regulator wins the $N$-step observation-based viability
+game from $B$. Consequently, if $B\notin W_N$ the recursion yields a
+finite counterstrategy tree of depth at most $N$ whose leaves are forced
+exits of $\mathcal V$.
+\end{theorem}
+\begin{proof}
+Induction on $N$. For $N=0$ both sides read ``$B\subseteq\mathcal V$.''
+For $N+1$: if $B\in W_{N+1}$, the witnessing action tuple followed by the
+winning strategies of the induction hypothesis on each successor part wins
+the game. Conversely, if the regulator wins at $N+1$, the first move is a
+per-cell action tuple all of whose adversary responses leave the
+corresponding parts winning at $N$, i.e.\ in $W_N$ by induction; hence
+$B\in W_{N+1}$. For the tree: if $B\notin W_{N+1}$, then for
+\emph{every} action tuple some response reaches a part outside $W_N$; the
+adversary branches over all tuples, selecting such a part each time; the
+construction terminates at depth $N$ with leaves outside $W_0$, i.e.\
+forced exits. Finiteness of the state, action, and observation spaces
+makes the tree finite.
+\end{proof}
+
+\begin{corollary}[The stable family is the kernel; the $H/H-2$ convention]
+On a finite system the chain $W_0\supseteq W_1\supseteq\cdots$ stabilizes.
+Its stable family equals the infinite-horizon observation-based kernel, and
+membership in it coincides with the successor harness's convention
+(verdict at $H$ agreeing with the verdict at $H-2$).
+\end{corollary}
+\begin{proof}
+Monotone decrease in a finite lattice forces stabilization. After
+stabilization the recursion is a fixed point of the belief predecessor
+operator, i.e.\ the greatest fixed point below $W_0$ --- the kernel. The
+two-step coincidence of verdicts is exactly two stabilizer iterations.
+\end{proof}
+
+\section{Verified record (6/6 exact check families)}
+
+\paragraph{E1.} The recursion is computed as explicit belief families over
+all $2^9$ safe subsets, under three structures (blind, aggregate, full);
+$W_{k+1}\subseteq W_k$ holds setwise at every step.
+
+\paragraph{E2.} Soundness and completeness agree instance by instance: for
+all $37$ audited beliefs ($36$ safe pairs plus the three-state audited
+belief), $3$ structures, and $N=1,\dots,6$: membership in $W_N$ equals the
+forward game value --- $666$ identifications, no exceptions.
+
+\paragraph{E3.} The belief $\{(1,2),(2,1)\}$ under the aggregate reading
+lies outside $W_2$; the constructive proof extracts its counterstrategy
+tree and every leaf validates as a forced exit.
+
+\paragraph{E4.} Each of the three chains stabilizes, and the stable family
+agrees exactly with the $H=12$/$H-2=10$ verdicts of the successor harness
+on all audited beliefs --- the convention is a theorem here.
+
+\paragraph{E5 (horizon-freeness, an exact finding).} The planned search for
+a horizon-necessity instance (viable at $N=2$, nonviable at $N=4$) found
+none: verdicts at $N=2,4,8$ coincide for every audited belief and
+structure. On this system viability is decided by depth $2$; the finding
+is recorded rather than forced.
+
+\paragraph{E6 (no asymptotic gap).} Every belief outside the stable kernel
+admits a validated finite counterstrategy tree at the stabilization depth:
+on finite systems, nonviability is never merely witnessed --- it is
+certified.
+
+\section{What is not claimed}
+
+Completeness is a finite-horizon, finite-system statement: the
+infinite-horizon calculus for general systems keeps its certificate gap by
+design, and nothing here closes it. Continuous state spaces, stochastic
+transitions (the stochastic selector's setting), and hybrid mode switching
+(the programme's hybrid companion) are out of scope; the counterstrategy
+tree is a game object, not a probabilistic witness. No computational
+complexity claims are made: the audited systems are small, and the
+recursion's practical cost is acknowledged.
+
+
+\section*{Declarations}
+\textbf{Funding.} None.\quad \textbf{Competing interests.} None.\quad
+\textbf{Data availability.} No external data were used.\quad
+\textbf{Code availability.} The verification script
+\texttt{finite\_horizon\_completeness\_v1\_verify.py} is publicly available at
+\url{https://github.com/MIKEAA2020/general-sustainability} (folder
+\texttt{arena agent 1/paper rewrites/latex}); it reproduces all six check
+families verbatim.\quad
+\textbf{AI declaration.} GLM (Z.ai), Qwen (Alibaba Cloud) and DeepSeek AI
+assisted with drafting and iterative review.
+
+\end{document}
