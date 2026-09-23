@@ -1,0 +1,489 @@
+The manuscript describes a useful, potentially publishable artifact, but its current novelty is mostly presented as a combination of existing methods: exact rational arithmetic, Fourier–Motzkin elimination, Farkas certificates, finite-state backward recursion, belief-state recursion, and a dashboard. The paper does not yet establish that the combination constitutes a technically novel contribution rather than a well-engineered implementation of the companion manuscripts.
+
+The strongest upgrade would be to make SafeTransition a **certificate-carrying assessment standard with an independently checkable certificate format**, and then demonstrate a new capability that follows from that standard: exact partitioning of weight space, certified policy synthesis under partial observation, or compositional certification of the reachability tubes. At present, the paper claims those capabilities but does not fully specify or validate them.
+
+## Highest-priority novelty gaps
+
+### 1. The paper lacks a precise software-level novelty claim
+
+**Location:** Abstract, p. 1; Introduction, pp. 1–2; Section 5, pp. 6–7.
+
+The central claim is that existing tools do not provide “a small, auditable layer” whose verdicts are returned as exact rational objects. That is a reasonable engineering motivation, but it is not yet a sufficiently sharp research contribution. Exact polyhedral arithmetic, Farkas certificates, finite-state model checking, and belief-state dynamic programming all predate this library.
+
+The novelty needs to be stated as a specific technical object, for example:
+
+> SafeTransition introduces a certificate-carrying assessment interface in which every admissibility, licensing, infeasibility, and partial-observation viability result is represented by a typed certificate that can be checked by an implementation-independent rational kernel.
+
+That claim would need a formal schema and an independent checker. Currently, the paper says certificates are “re-verified exactly,” but this appears to mean that the same library verifies its own outputs.
+
+**Impactful upgrade:**
+
+Add:
+
+- a versioned certificate schema;
+- canonical serialization, preferably JSON or a compact text format;
+- an independent checker with no dependency on the main library;
+- examples of certificates checked by a second implementation;
+- a soundness statement for every certificate type;
+- negative tests showing that altered certificates are rejected.
+
+The key distinction is:
+
+```text
+producer -> certificate artifact -> independent checker
+```
+
+rather than:
+
+```text
+library algorithm -> internal self-check
+```
+
+A self-check is valuable, but it does not establish independent auditability.
+
+### 2. Exact downstream arithmetic does not certify the reachability tubes
+
+**Location:** Section 2.1, p. 2; Section 3.2, p. 4; Section 4.1, p. 5.
+
+The manuscript repeatedly says that the library evaluates “exact reachability tubes” and that “no outer approximation enters.” However, the tube is supplied by the datum interface:
+
+> “each tube is the exact visited set”
+
+and the benchmark uses:
+
+> “conservatism of the certified tubes for the nonlinear realization”
+
+These are important distinctions. Exact arithmetic on a supplied tube does not certify that the tube is the exact reachable set of the underlying nonlinear fishery dynamics. A conservative tube may be safe for certification, but it is not the same object as an exact reachability tube.
+
+The manuscript currently conflates at least three cases:
+
+1. an analytically specified exact tube;
+2. a conservative outer enclosure;
+3. a numerically or symbolically generated tube whose correctness is independently certified.
+
+**Impactful upgrade:**
+
+Introduce a tube certificate containing:
+
+- the dynamics and parameter values;
+- action and disturbance domains;
+- breakpoint definitions;
+- endpoint and segment formulas;
+- proofs or checkable inequalities for every coordinate extremum;
+- a statement of whether the tube is exact or conservative;
+- an enclosure certificate when it is conservative.
+
+Then use terminology such as:
+
+- `ExactTubeCertificate`;
+- `OuterTubeCertificate`;
+- `TubeStatus.EXACT`;
+- `TubeStatus.CONSERVATIVE`.
+
+For the Schaefer example, show how the bound
+
+```text
+sigma >= 528/125 >= 4
+```
+
+is derived from a certified interval for biomass, rather than merely asserted as a benchmark check. This would make the environmental modelling contribution materially stronger.
+
+### 3. Weight-space licensing should be computed globally, not queried at selected weights
+
+**Location:** Abstract, p. 1; Section 4.1, p. 5; Section 4.2, p. 5; Figure 2, p. 7.
+
+The manuscript reports licensing thresholds `2/3` and `3/2`, but the interface is described as evaluating a state, plan, and individual weight:
+
+> `E(datum, z, mode, w)`
+
+and the dashboard appears to display selected ratios.
+
+For a finite set of rational plans and piecewise-linear or finitely enumerated tubes, the aggregate minimum is typically a finite minimum of affine functions in the weights. Therefore the full licensing behavior can be represented exactly by a finite arrangement of rational breakpoints or cones. That is a stronger and more genuinely novel capability than checking several weights.
+
+**Impactful upgrade:**
+
+Add an exact `weight_partition` operation that returns:
+
+- all rational threshold ratios;
+- the open and closed interval associated with each plan;
+- ties between plans;
+- regions where no plan is licensed;
+- regions where a plan is licensed but no typed-safe plan exists;
+- a witness constraint responsible for every boundary.
+
+For the benchmark, return a complete table such as:
+
+| Weight-ratio region | Licensed plans | Typed-safe plans | Witness |
+|---|---|---|---|
+| `r < 2/3` | ... | ... | ... |
+| `r = 2/3` | ... | ... | ... |
+| `2/3 < r < 3/2` | ... | ... | ... |
+| `r = 3/2` | ... | ... | ... |
+| `r > 3/2` | ... | ... | ... |
+
+This would turn the two thresholds from illustrative numbers into a general exact sensitivity-analysis method.
+
+### 4. “Minimal conflicting sub-family” is underspecified and potentially misleading
+
+**Location:** Abstract, p. 1; Section 2.3, p. 3; Section 4.3, p. 6.
+
+The manuscript says the common-action obstruction returns:
+
+> “a minimal conflicting sub-family”
+
+but it does not define whether minimal means:
+
+- inclusion-minimal;
+- minimum cardinality;
+- minimum weighted cost;
+- minimum under a fixed state ordering.
+
+Those are different computational problems. A greedy deletion procedure may produce an inclusion-minimal set but not a cardinality-minimal one.
+
+**Impactful upgrade:**
+
+Define the minimality notion formally and return a certificate for it. At minimum:
+
+- call the current result an **inclusion-minimal conflicting subfamily** if that is what is implemented;
+- report the action sets for every retained state;
+- show that removing any retained state restores a nonempty intersection;
+- distinguish this from a minimum-cardinality conflict;
+- optionally add a hitting-set or MILP-free exact branch-and-bound routine for minimum-cardinality conflicts.
+
+This is especially important because the phrase currently sounds stronger than the evidence supplied.
+
+### 5. The belief recursion needs a policy/counterexample certificate
+
+**Location:** Section 2.2, p. 3; Section 3.3, p. 4; Section 4.3, p. 6.
+
+The manuscript reports that the root belief lies in `W1 \ W2`, but the output appears to be only a set-membership result. For a paper centered on auditability, that is incomplete. A reviewer needs to know why the belief fails and what policy structure demonstrates the failure.
+
+There is also a potentially serious wording problem:
+
+> “the belief updates to the set of labels reachable under the action”
+
+A belief normally consists of possible system states, not merely observation labels. If the implementation really stores labels rather than reachable states, it may be unsound unless the model explicitly identifies labels with states or proves a sufficient abstraction.
+
+**Impactful upgrade:**
+
+Return one of the following for every belief result:
+
+- a certified policy tree when the belief is viable;
+- a counterexample observation/action tree when it is not;
+- the first horizon at which viability fails;
+- the observation fibre and states responsible for the failure;
+- the exact successor belief after every observation.
+
+Then clarify the update equation. It should generally have the form
+
+\[
+B'_{a,o} =
+\{z' : \exists z \in B,\; z' \in T(z,a),\; \operatorname{obs}(z')=o\},
+\]
+
+or the exact equivalent used by the library. “Set of labels” is not an adequate description unless that is genuinely the state representation.
+
+A concrete certificate for the three-state example would be far more convincing than the assertion that the root is in `W1 \ W2`.
+
+### 6. The observation-fibre criterion is currently overclaimed
+
+**Location:** Section 2.2, p. 3; Section 2.3, p. 3; Section 4.3, p. 6.
+
+The manuscript says:
+
+> “The observation-fibre criterion decides whether an exact observation-only certifier can exist at all: one exists if and only if safe-set membership is constant on observation fibres.”
+
+That criterion is plausible for **pointwise safe-set membership classification from observations alone**. It is not automatically a criterion for the existence of an observation-based viability policy. Those are different questions:
+
+- Can an observer determine whether the current state is safe?
+- Can an observer choose an action that remains viable for every state in the current belief?
+- Can an observer certify a transition verdict without knowing the hidden state?
+
+The paper risks presenting a narrow static criterion as a general epistemic-control result.
+
+**Upgrade:**
+
+Rename and formalize it as something like:
+
+> Exact observation-only classification of a predicate exists if and only if the predicate is constant on every observation fibre.
+
+Then separately state the policy-level result using belief-space recursion. Add a table distinguishing:
+
+| Question | Object checked | Criterion |
+|---|---|---|
+| Pointwise safety classification | safe predicate | fibre constancy |
+| Common action existence | action menus | nonempty intersection |
+| Finite-horizon policy viability | belief recursion | membership in `W_N` |
+
+That clarification would improve both correctness and novelty positioning.
+
+## Technical claims that need correction or stronger evidence
+
+### 7. “All computations” is too broad
+
+**Location:** Abstract, p. 1; Section 3.2, p. 4; Table 2, p. 5.
+
+The paper states that all computations use exact rational arithmetic, then says floats appear in SVG geometry and matplotlib coordinates. The distinction is probably intended to be “all semantic computations,” but the current wording is broader than what is demonstrated.
+
+The paper also says the library has no third-party runtime dependencies, while Table 3 lists matplotlib and Pillow for figure regeneration. That is not necessarily contradictory, but it should distinguish:
+
+- core runtime dependencies;
+- dashboard-generation dependencies;
+- figure-reproduction dependencies;
+- development/test dependencies.
+
+**Upgrade:**
+
+Add an automated dependency and numeric-type audit:
+
+- fail if `float`, `Decimal`, or implicit numeric coercion enters the semantic modules;
+- test rejection of binary-float inputs;
+- inspect the import graph;
+- run the core package in an environment where matplotlib and Pillow are absent;
+- publish the audit output.
+
+Use the more precise claim:
+
+> Core assessment and certificate generation use exact rationals; floating point is confined to optional rendering paths.
+
+### 8. The Fourier–Motzkin claim is too strong and too imprecise
+
+**Location:** Section 2.3, p. 3; Section 3.3, p. 4.
+
+The sentence:
+
+> “the Fourier–Motzkin eliminator is exponential in the worst case, as any exact general method is”
+
+should be removed or rewritten. Fourier–Motzkin is exponential in the worst case, but “as any exact general method is” is not a defensible general statement without qualification. Different exact algorithms have different practical and theoretical behavior.
+
+Also specify:
+
+- variable ordering;
+- duplicate-row elimination;
+- zero-row handling;
+- normalization;
+- coefficient growth;
+- whether the returned certificate corresponds to the original or normalized system;
+- whether strict inequalities are supported.
+
+A small coefficient-growth experiment would be valuable because exact rational arithmetic can become expensive even when the number of constraints is small.
+
+### 9. The operator chain requires exact scope conditions
+
+**Location:** Section 2.1, p. 2.
+
+The manuscript states:
+
+\[
+E_{\mathrm{typ}}(z) \subseteq E_w(z)
+\subseteq E_{\mathrm{tube,phys}}(z)
+\subseteq E_{\mathrm{end}}(z).
+\]
+
+This may be correct under the intended definitions, but the paper needs to state the assumptions precisely:
+
+- Is `w` strictly positive or merely nonnegative?
+- Are all typed floors normalized to zero?
+- Does the aggregate use the same disturbance quantification?
+- Does each physical operator impose the same transition and destination conditions?
+- Are the sets action sets or accepted-state sets?
+
+The later sentence about the fifth operator gives only:
+
+\[
+E_{\mathrm{typ}}(z) \subseteq E_{\mathrm{end,typ}}(z)
+\subseteq E_{\mathrm{end}}(z),
+\]
+
+but does not explain the relationship between `Eend,typ` and `Ew`.
+
+**Upgrade:**
+
+Include a proposition with hypotheses and a machine-checked test matrix covering:
+
+- positive weights;
+- zero weights;
+- negative weights rejected;
+- empty disturbance sets;
+- empty action sets;
+- endpoint-only versus tube violations;
+- typed and physical floor dimensions.
+
+This would turn an informal diagram into a formal software contract.
+
+### 10. The benchmark is too small and too bespoke to establish generality
+
+**Location:** Abstract, pp. 1–2; Section 4.1, p. 5; Table 2, p. 5.
+
+The evidence is one resource-transition benchmark, three-state belief example, one stacked menu, and a double-integrator identity. Twenty-four checks and twenty-seven tests demonstrate regression coverage, not broad validation.
+
+The current benchmark may show that the package reproduces its own companion-manuscript data. It does not show that the method works across independently constructed instances or that exact arithmetic remains useful outside one carefully chosen example.
+
+**Upgrade:**
+
+Add a parameterized benchmark family, with independent generation rules and known answers. Vary:
+
+- number of floors;
+- number of actions;
+- disturbance count;
+- tube breakpoints;
+- state graph size;
+- belief count;
+- coefficient bit length;
+- horizon;
+- degree of conflict among action menus.
+
+Report:
+
+- runtime;
+- peak memory;
+- largest numerator/denominator bit length;
+- number of Fourier–Motzkin rows;
+- number of reachable beliefs;
+- certificate size;
+- independent-checker runtime.
+
+Include at least one adversarial near-degenerate instance where floating-point computation changes the verdict. That would directly justify the exactness contribution.
+
+## Section 5 needs a closer comparison set
+
+**Location:** Section 5, pp. 6–7.
+
+The comparison with Raven, FloPy, SAFE, SALib, SPOTPY, Pywr, and airGR is mostly about domain and workflow. These are not the closest technical comparators for the claimed contribution.
+
+The paper should compare against:
+
+- exact polyhedral libraries;
+- SMT or theorem-proving approaches to linear arithmetic;
+- model-checking tools for finite transition systems;
+- probabilistic or epistemic model-checking tools if uncertainty is relevant;
+- reachability libraries supporting rational or interval arithmetic;
+- certificate-producing LP/polyhedral implementations.
+
+The important question is not whether environmental modelling packages return Farkas certificates. It is whether SafeTransition contributes a meaningful integration layer, a new certificate protocol, a new operator semantics, or an exact algorithm specialized to sustainability assessment.
+
+Add a table with columns:
+
+- exact arithmetic;
+- certificate output;
+- transition tubes;
+- weighted operator analysis;
+- finite-horizon belief recursion;
+- independent checking;
+- domain-specific dashboard;
+- licensing/support status.
+
+Without that comparison, the novelty argument is selective.
+
+## Specific wording and claim corrections
+
+### Abstract, p. 1
+
+“exact rational certification of transition safety” is stronger than the demonstrated scope if the tube itself is assumed as input. Consider:
+
+> exact rational certification of transition-safety verdicts for supplied exact or certified conservative tubes
+
+Also correct the spacing error in “forsustainability.”
+
+### Introduction, pp. 1–2
+
+The sentence:
+
+> “What is missing in the intersection...”
+
+is a broad ecosystem claim. Either support it with a systematic search or narrow it:
+
+> “We found no tool in the surveyed environmental-assessment software that...”
+
+The search record mentioned on p. 8 should be summarized in the main text, not left entirely to supplementary material.
+
+### Section 3.1, p. 3
+
+The claim that the library has “nine modules” is not fully aligned with the table as rendered. The table lists rational, datum, operators, recursion, certificates, indicators, dashboard, benchmark, and CLI, which is nine only if the CLI is counted separately. State explicitly whether the CLI is a module or an entry point.
+
+### Section 3.3, p. 4
+
+“Belief enumeration bounds itself (4 096 reachable beliefs) and raises rather than drifting” is an implementation limit, not a complexity result. Explain:
+
+- whether 4,096 is configurable;
+- whether the bound is on distinct beliefs or recursion nodes;
+- what exception is raised;
+- whether partial results are returned;
+- whether the bound affects soundness.
+
+### Section 4.1, p. 5
+
+The phrase:
+
+> “conservatism of the certified tubes for the nonlinear realization”
+
+should be made explicit. Is the result a conservative lower bound, an exact symbolic calculation, or a bound proved over an interval? The distinction matters to the transition-safety verdict.
+
+### Section 4.2, p. 5
+
+The dashboard is useful as an artifact, but rendering a result in one HTML file is not itself research novelty. Treat it as an audit-delivery mechanism and connect it to the certificate schema. The HTML should embed:
+
+- certificate hashes;
+- library version;
+- datum identifier;
+- exact input serialization;
+- checker version;
+- verification status;
+- a “re-run independent check” command.
+
+### Section 4.3, p. 6
+
+The statement that the Farkas certificate is “the same object the obstruction calculus attaches” needs a formal mapping between:
+
+- the common-action obstruction;
+- the stacked inequality system;
+- the rows of `A` and `b`;
+- the states/actions represented by each row.
+
+At present, the reader must infer that mapping.
+
+### Conclusion, p. 8
+
+The phrase:
+
+> “the tool closes a practical gap”
+
+is reasonable only after the paper demonstrates independent checking, broader benchmarks, and a direct comparison with certificate-producing alternatives. Otherwise, soften it to “provides an implementation of.”
+
+## What would count as a genuine novelty upgrade?
+
+The following combinations would materially improve the contribution.
+
+### Strongest option: certificate-carrying assessment
+
+Implement a small formal certificate language covering:
+
+- action admissibility;
+- tube extrema;
+- aggregate licensing;
+- Farkas infeasibility;
+- common-action obstruction;
+- belief viability;
+- observation-fibre violations.
+
+Provide an independent checker and a soundness table. This creates a clear software-method contribution beyond merely packaging the companion mathematics.
+
+### Second strongest option: exact global weight analysis
+
+Add exact weight-cone partitioning and prove that the returned regions are complete for finite rational plan menus. This would generalize the two benchmark thresholds into a reusable method for explaining when composite indicators license unsafe plans.
+
+### Third strongest option: certified partial-observation policy analysis
+
+Return policy trees and counterexample trees, not just `W_k` membership. Correctly represent beliefs as state sets, give exact belief-update certificates, and demonstrate a nontrivial horizon where a policy is viable for some observations but not others.
+
+### Required supporting work
+
+Regardless of which primary upgrade is chosen, add:
+
+- an independently generated benchmark family;
+- exact-versus-floating-point failure cases;
+- coefficient-growth and scaling results;
+- a closer software comparison;
+- precise definitions for “minimal,” “exact tube,” “observation-only certifier,” and “all computations.”
+
+**Bottom line:** the manuscript has a coherent engineering artifact and a potentially important auditability theme, but the current paper mainly demonstrates that the implementation reproduces its companion manuscripts. The most valuable revision is to turn “exact and re-verified” into an independent, serialized, checkable certificate protocol, then use that protocol to deliver either complete weight-space explanations or certified partial-observation policy/counterexample objects. That would give the software a defensible technical identity and a substantially stronger novelty claim.

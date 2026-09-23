@@ -1,0 +1,33 @@
+Let \(X, A, D, Y\) be finite, with a stochastic transition \(T(x' \mid x, a)\) and an observation likelihood \(g(y \mid x, a, x')\). Augment the state space with an absorbing unsafe state \(\bot\): for \(x \in \mathcal{V}\), \(T(\bot \mid x, a) = 1 - \sum_{x' \in \mathcal{V}} T(x' \mid x, a)\), and \(T(\bot \mid \bot, a) = 1\). A belief is a distribution \(b\) over \(X \cup \{\bot\}\), updated by Bayes' rule \(\tau(b, a, y)\), with \(\mathbb{P}(y \mid b, a) = \sum_{x, x'} b(x)\, T(x' \mid x, a)\, g(y \mid x, a, x')\). The \emph{safety value} is the maximal survival probability
+\[
+V_{k}(b) = \max_{\pi}\; \mathbb{P}_{\pi}\bigl( x_{t} \in \mathcal{V} \text{ for } t = 0, \dots, k \;\big|\; b \bigr).
+\]
+
+\begin{theorem}[belief-state safety value]\label{thm:pomdp}
+\(V_{0}(b) = b(\mathcal{V})\), and for \(k \ge 0\)
+\[
+V_{k+1}(b) = \max_{a \in A}\; \sum_{y \in Y} \mathbb{P}(y \mid b, a)\; V_{k}\bigl(\tau(b, a, y)\bigr),
+\]
+with the time convention that the policy acts, observes \(y\), then acts again. The recursion is exact on every finite horizon; it is the Smallwood--Sondik belief-state value iteration specialized to the absorbing safety reward (Smallwood and Sondik, 1973).
+\end{theorem}
+
+\emph{Proof.} Standard value iteration for the belief-state Markov decision process: conditioning on the observation after the action and applying the optimal continuation gives the identity, and the absorbing state makes \(V_{k}\) the \(k\)-step survival probability (Smallwood and Sondik, 1973). \hfill\(\square\)
+
+\begin{proposition}[chance-constrained common-action obstruction]\label{prop:chance}
+Let \(b \in \Delta(\mathcal{V})\) (so \(b(\mathcal{V}) = 1\)) and write \(p(x,a) = 1 - \sum_{x' \in \mathcal{V}} T(x' \mid x, a)\). If
+\[
+\sum_{x \in \mathcal{V}} b(x)\, p(x,a) \;\ge\; \delta \qquad \text{for every } a \in A,
+\]
+then \(V_{k}(b) \le 1 - \delta\) for every \(k \ge 1\), and the chance constraint \(\mathbb{P}_{\pi}(x_{t} \in \mathcal{V} \text{ for } t \le k) \ge 1 - \varepsilon\) is infeasible under every policy whenever \(\varepsilon < \delta\).
+\end{proposition}
+
+\emph{Proof.} The one-step survival probability under action \(a\) is \(1 - \sum_{x} b(x)\, p(x,a) \le 1 - \delta\), so \(V_{1}(b) \le 1 - \delta\). Since \(V_{k+1} \le V_{k}\) --- more steps cannot raise the survival probability --- \(V_{k}(b) \le V_{1}(b) \le 1 - \delta\). \hfill\(\square\)
+
+\begin{proposition}[degenerate (deterministic) limit]\label{prop:degenerate}
+Let \(X, A, D, Y\) be finite, fix the deterministic maps \(x^{+} = F(x,a,d)\) and \(y = O(x,a,x^{+})\) of Section 3.5, and suppose the stochastic transition and likelihood have supports \(\{F(x,a,d) : d \in D(x)\}\) and \(\{O(x,a,x^{+}) : x^{+} \text{ reachable}\}\), converging to the corresponding Dirac measures uniformly in \((x,a)\). Then, for a belief \(b\) carried by a set \(B \subseteq \mathcal{V}\), \(V_{k}(b) \to 1\) if \(B \in \mathcal{W}_{k}\) and \(V_{k}(b) \to 0\) otherwise.
+\end{proposition}
+
+\emph{Proof.} On the finite simplex product, value iteration is continuous in \((T, g)\) uniformly in \((x,a)\). At the limit the posterior support is exactly the set-valued post-state \(\mathrm{Post}(B, a, y)\) of Section 3.5, and the recursion becomes \(V_{k+1}(B) = \max_{a} \min_{y \text{ possible}} V_{k}(\mathrm{Post}(B,a,y))\) with \(V_{0}(B) = 1\); by Theorem~\ref{thm:finite-horizon} its value is the indicator of \(B \in \mathcal{W}_{k}\). \hfill\(\square\)
+
+Proposition~\ref{prop:degenerate} is the sense in which the chance-constrained obstruction degenerates to the common-action obstruction: at the deterministic limit \(V_{1}(b) = 1\) exactly when some action keeps every branch of the support in \(\mathcal{V}\), i.e.\ when the common safe-action set is nonempty. It is a finite-model statement; a continuous-state limit requires uniform concentration of the kernels, which is not developed here.
+

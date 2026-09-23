@@ -1,0 +1,1675 @@
+qwen:
+they can be **strengthened, connected, and partially unified**. They are **not truly distant domains**.
+
+But they should not be forced into one single mechanism. They are different manifestations of one underlying problem:
+
+> **Viability under incomplete observation requires the existence of a common admissible, safe, and recursively viable response for every state compatible with the current information. The six mechanisms certify different ways in which such a common response fails to exist.**
+
+That is the unifying idea.
+
+The important qualification is that the six mechanisms do not all have the same logical status. The first four are genuinely viability obstructions. The fifth is a certification/observability obstruction. The sixth is a policy-class obstruction. They can be placed in one framework, but they should remain distinct layers inside that framework.
+
+---
+
+# 1. The unifying object: a viable selector under information
+
+At any information state \(B\), an observation-based regulator must choose one response that works for every compatible state.
+
+That response may be:
+
+- an action;
+- a held action over a review interval;
+- a feedback law;
+- a safe/unsafe verdict;
+- a corrected or uncorrected estimator-based controller.
+
+So the basic object is a **response correspondence**.
+
+For a belief \(B\), define the set of acceptable responses:
+
+\[
+\Gamma(B)
+=
+\bigcap_{z\in B}
+\Gamma(z),
+\]
+
+where:
+
+- \(z\) is a compatible state, possibly augmented with hidden parameters;
+- \(\Gamma(z)\) is the set of responses acceptable at \(z\);
+- \(\Gamma(B)\) is the set of responses acceptable for every compatible state.
+
+An obstruction certificate is a proof that:
+
+\[
+\Gamma(B)=\varnothing,
+\]
+
+or that every element of \(\Gamma(B)\) fails some required safety, timing, or recursion condition.
+
+This is the common skeleton.
+
+---
+
+# 2. Specialize the selector to viability
+
+For robust observation-based viability, the relevant response is an action or action segment.
+
+Define the one-step viable-action correspondence:
+
+\[
+\mathcal A_N(B)
+=
+\left\{
+a\in U^B(B):
+\begin{array}{l}
+\text{for every compatible disturbance,}\\
+\text{the tube remains inside }\mathcal V\\
+\text{and every successor belief lies in }\mathscr W_{N-1}
+\end{array}
+\right\}.
+\]
+
+Here:
+
+\[
+U^B(B)=\bigcap_{x\in B}U(x).
+\]
+
+Then:
+
+\[
+B\in \mathscr W_N
+\iff
+\mathcal A_N(B)\neq\varnothing.
+\]
+
+This gives the clean unification:
+
+> The first four mechanisms are sufficient conditions proving  
+> \[
+> \mathcal A_N(B)=\varnothing.
+> \]
+
+They differ only in **why** the viable-action correspondence is empty.
+
+---
+
+# 3. The first four mechanisms belong to one family
+
+The first four mechanisms are closely related. They are all obstructions to the existence of a recursively safe common action.
+
+They can be arranged in a nested hierarchy.
+
+Define:
+
+\[
+U^B(B)
+=
+\bigcap_{x\in B}U(x),
+\]
+
+the common admissible-action set.
+
+Define:
+
+\[
+\mathcal R^B_{\mathcal V}(B)
+=
+\bigcap_{x\in B}\mathcal R_{\mathcal V}(x),
+\]
+
+the common instantaneous safe-action set.
+
+Define:
+
+\[
+\mathcal A_{\mathrm{tube}}(B,\Delta)
+=
+\{a:
+\operatorname{Reach}_{[0,\Delta]}(B,a)\subseteq\mathcal V
+\},
+\]
+
+the common tube-safe action set over a review interval.
+
+Define:
+
+\[
+\mathcal A_N(B)
+\]
+
+as the common \(N\)-step viable-action set.
+
+Under suitable regularity, these are nested:
+
+\[
+\mathcal A_N(B)
+\subseteq
+\mathcal A_{\mathrm{tube}}(B,\Delta)
+\subseteq
+\mathcal R^B_{\mathcal V}(B)
+\subseteq
+U^B(B).
+\]
+
+Emptiness at a higher level implies emptiness below it.
+
+This gives a unified obstruction ladder:
+
+| Mechanism | Empty object | Meaning |
+|---|---|---|
+| Admissibility obstruction | \(U^B(B)=\varnothing\) | no action is admissible at every compatible state |
+| Common safe-action obstruction | \(\mathcal R^B_{\mathcal V}(B)=\varnothing\) | no common action is instantaneously safe |
+| Tube obstruction | \(\mathcal A_{\mathrm{tube}}(B,\Delta)=\varnothing\) | no common action keeps the belief tube safe over the review interval |
+| Recursive obstruction | \(\mathcal A_N(B)=\varnothing\) | no common action keeps all successor beliefs viable |
+
+This is much stronger than treating them as separate stories.
+
+---
+
+# 4. Dynamic drift is the base obstruction in the same ladder
+
+The finite-time exit certificate says that for some compatible state, no control can prevent adverse exit.
+
+In selector language:
+
+\[
+\Gamma(x)=\varnothing
+\]
+
+for some compatible state \(x\in B\), even under full information.
+
+Then automatically:
+
+\[
+\Gamma(B)=\varnothing,
+\]
+
+because robust viability must protect every compatible state.
+
+So the dynamic drift certificate is not distant from the others. It is the strongest obstruction: it defeats the action correspondence even before observation is considered.
+
+It can be stated as:
+
+> If a belief \(B\) contains a state \(x\) from which adverse drift forces exit against every control, then \(B\) is excluded from the observation-based viability kernel.
+
+This connects the dynamic certificate directly to the belief predecessor framework.
+
+---
+
+# 5. The delayed-information obstruction is a timing version of the same selector problem
+
+The delayed-information mechanism can also be unified with the first four.
+
+Before the first informative observation, an observation-based policy cannot distinguish compatible branches. Therefore its action over the blind window is effectively open-loop.
+
+Define the blind-window action correspondence:
+
+\[
+\mathcal A_{\mathrm{blind}}(B_0,T_{\mathrm{obs}})
+=
+\left\{
+u(\cdot):
+\begin{array}{l}
+u(\cdot)\text{ is implementable before }T_{\mathrm{obs}},\\
+\text{and for every compatible branch,}\\
+\text{the trajectory remains inside }\mathcal V
+\text{ until }T_{\mathrm{obs}}
+\end{array}
+\right\}.
+\]
+
+Then the delayed-information obstruction is:
+
+\[
+\mathcal A_{\mathrm{blind}}(B_0,T_{\mathrm{obs}})
+=
+\varnothing.
+\]
+
+Equivalently, define the worst-case guaranteed survival time:
+
+\[
+\sigma^*(B_0)
+=
+\sup_{u(\cdot)}
+\inf_{x_0\in B_0,d(\cdot)}
+\tau(x_0,u,d),
+\]
+
+where the infimum is taken over branches that remain observation-equivalent before exit.
+
+Then:
+
+\[
+\sigma^*(B_0)<T_{\mathrm{obs}}
+\implies
+\mathcal A_{\mathrm{blind}}(B_0,T_{\mathrm{obs}})=\varnothing.
+\]
+
+Thus delayed information is not a separate domain. It is the same common-action obstruction extended over a blind time window.
+
+The instantaneous common-action obstruction is approximately the zero-slack, zero-delay limit of this timing obstruction.
+
+---
+
+# 6. The admissibility example is not a separate mechanism
+
+The minimal construction in which a constant observation merges states with different admissible control sets is best viewed as a special case of the common-action obstruction.
+
+There are two subcases.
+
+### Case 1: No common admissible action
+
+\[
+U^B(B)=\varnothing.
+\]
+
+Then the obstruction is purely admissibility-based.
+
+### Case 2: Common admissible action exists but is unsafe
+
+\[
+U^B(B)\neq\varnothing,
+\qquad
+\mathcal R^B_{\mathcal V}(B)=\varnothing.
+\]
+
+Then the obstruction is safety-based, caused by restricted admissibility.
+
+The paper’s minimal example belongs to the second case: the merged belief has a common admissible action, but that action is unsafe at the boundary.
+
+So it should not be presented as a sixth independent mechanism. It should be presented as a minimal example inside the common-action/tube obstruction family.
+
+---
+
+# 7. The fibre criterion is connected, but it is not a policy-viability obstruction
+
+The fibre criterion says that an exact observation-only certifier exists iff the safe set is saturated with respect to observation fibres:
+
+\[
+K=O^{-1}(O(K)).
+\]
+
+Equivalently:
+
+\[
+O(z_1)=O(z_2)
+\implies
+\bigl[z_1\in K \iff z_2\in K\bigr].
+\]
+
+This is structurally similar to the common-action problem: an observation-based verdict must assign one label to every state in a fibre.
+
+Define the label-response set:
+
+\[
+\Gamma_{\mathrm{label}}(F)
+=
+\left\{
+\ell\in\{0,1\}:
+\ell=\mathbf 1_K(z)\ \forall z\in F
+\right\}.
+\]
+
+Then an exact certifier exists iff:
+
+\[
+\Gamma_{\mathrm{label}}(O^{-1}(y))\neq\varnothing
+\]
+
+for every observation fibre \(O^{-1}(y)\).
+
+So the fibre criterion is a **selector problem for labels**, not for actions.
+
+This is the right connection.
+
+But it should not be conflated with policy viability. A fibre can fail exact certification while a policy may still be viable, if the regulator does not need exact safe/unsafe labels. Conversely, exact static certification does not imply dynamic viability.
+
+Therefore, the fibre criterion should be unified at the meta-level, but kept separate as a **certification obstruction**, not a policy obstruction.
+
+---
+
+# 8. The certainty-equivalence trap is a policy-class obstruction
+
+The certainty-equivalence example is different again.
+
+There the observation may be injective. No information is lost. The failure occurs because the allowed policy class is too small.
+
+Let:
+
+\[
+\Pi_{\mathrm{CE}}
+\]
+
+be the class of certainty-equivalence controllers that apply a perfect-information law directly to the biased observation without correction.
+
+Then the relevant kernel is:
+
+\[
+\operatorname{Viab}_{\Pi_{\mathrm{CE}}}(\mathcal V).
+\]
+
+The obstruction is:
+
+\[
+\operatorname{Viab}_{\Pi_{\mathrm{CE}}}(\mathcal V)
+=
+\varnothing
+\]
+
+even though:
+
+\[
+\operatorname{Viab}_{\Pi_{\mathrm{output}}}(\mathcal V)
+\neq
+\varnothing.
+\]
+
+This is not an information-loss obstruction. It is a restricted-selector obstruction.
+
+It can still be connected to the unified framework by writing the acceptable-response correspondence with a policy-class restriction:
+
+\[
+\Gamma_{\Pi}(B)
+=
+\Gamma(B)\cap \Pi.
+\]
+
+Then certainty equivalence produces:
+
+\[
+\Gamma_{\Pi_{\mathrm{CE}}}(B)=\varnothing
+\]
+
+even when:
+
+\[
+\Gamma_{\Pi_{\mathrm{output}}}(B)\neq\varnothing.
+\]
+
+So the right classification is:
+
+- mechanisms 1–4: information/dynamics obstructions to viable actions;
+- mechanism 5: observability obstruction to exact certification;
+- mechanism 6: policy-class obstruction to controller implementation.
+
+They are connected, but not identical.
+
+---
+
+# 9. A unified meta-theorem
+
+The paper could state a single meta-theorem.
+
+Let:
+
+\[
+\Gamma(B;\Pi,\mathcal I,\Delta,N)
+\]
+
+be the set of policy segments that are:
+
+1. admissible under the policy class \(\Pi\);
+2. implementable under the observation structure \(\mathcal I\);
+3. tube-safe over the relevant review interval;
+4. recursively viable for \(N\) steps.
+
+Then:
+
+\[
+B\in \mathscr W_N
+\iff
+\Gamma(B;\Pi,\mathcal I,\Delta,N)\neq\varnothing.
+\]
+
+An obstruction certificate is any checkable condition implying:
+
+\[
+\Gamma(B;\Pi,\mathcal I,\Delta,N)=\varnothing.
+\]
+
+Then the mechanisms become instances:
+
+| Mechanism | Condition |
+|---|---|
+| Dynamic exit | some compatible state has no safe control even under full information |
+| Admissibility obstruction | common admissible-action set is empty |
+| Common safe-action obstruction | common instantaneous safe-action set is empty |
+| Tube obstruction | common tube-safe action set is empty |
+| Delayed-information obstruction | blind-window action correspondence is empty |
+| Certification obstruction | exact safe/unsafe label selector is not measurable with respect to observation fibres |
+| Policy-class obstruction | restricted policy class removes the required selector |
+
+This is a strong unification without pretending the mechanisms are the same.
+
+---
+
+# 10. A stronger unified architecture
+
+I would organize the mechanisms as follows.
+
+---
+
+## Layer 1: Full-information dynamic obstructions
+
+These defeat every controller, regardless of observation.
+
+- adverse drift;
+- comparison-function exit;
+- worst-case exit-time bounds.
+
+Certificate form:
+
+\[
+\exists x\in B
+\quad\text{such that}\quad
+\forall u,\ \exists d
+\quad\text{forcing exit.}
+\]
+
+---
+
+## Layer 2: One-step belief-action obstructions
+
+These defeat every observation-based action at the current belief.
+
+- empty common admissible-action set;
+- empty common safe-action set;
+- empty tube-safe action set.
+
+Certificate form:
+
+\[
+U^B(B)=\varnothing,
+\]
+
+or
+
+\[
+\mathcal R^B_{\mathcal V}(B)=\varnothing,
+\]
+
+or
+
+\[
+\mathcal A_{\mathrm{tube}}(B,\Delta)=\varnothing.
+\]
+
+---
+
+## Layer 3: Timing obstructions
+
+These defeat every observation-based action before information arrives.
+
+- delayed observations;
+- slow indicators;
+- late regime identification.
+
+Certificate form:
+
+\[
+\sigma^*(B_0)<T_{\mathrm{obs}}.
+\]
+
+---
+
+## Layer 4: Certification obstructions
+
+These defeat exact observation-based verdicts, not necessarily policies.
+
+- fibres crossing safe-set boundaries;
+- aggregate indices unable to separate safe from unsafe states.
+
+Certificate form:
+
+\[
+K\neq O^{-1}(O(K)).
+\]
+
+---
+
+## Layer 5: Policy-class obstructions
+
+These defeat viability because the allowed controller class is too small.
+
+- certainty-equivalence control;
+- uncorrected biased indicators;
+- institutional command restrictions.
+
+Certificate form:
+
+\[
+\Gamma_{\Pi}(B)=\varnothing
+\quad\text{even though}\quad
+\Gamma(B)\neq\varnothing.
+\]
+
+---
+
+# 11. How to strengthen the connections
+
+The paper can make the unity explicit by adding three bridging results.
+
+---
+
+## 11.1 Nested action-correspondence proposition
+
+State:
+
+\[
+\mathcal A_N(B)
+\subseteq
+\mathcal A_{\mathrm{tube}}(B,\Delta)
+\subseteq
+\mathcal R^B_{\mathcal V}(B)
+\subseteq
+U^B(B),
+\]
+
+with the precise assumptions under which each inclusion holds.
+
+Then every emptiness certificate becomes a certificate of recursive nonviability.
+
+---
+
+## 11.2 Timing as blind-window predecessor emptiness
+
+Define:
+
+\[
+\operatorname{Pre}_{\mathrm{blind}}(\mathscr C)
+\]
+
+for the interval before the first informative observation.
+
+Then the delayed-information theorem becomes:
+
+\[
+B_0\notin \operatorname{Pre}_{\mathrm{blind}}(\mathscr C)
+\]
+
+whenever:
+
+\[
+\sigma^*(B_0)<T_{\mathrm{obs}}.
+\]
+
+This connects timing directly to the predecessor framework.
+
+---
+
+## 11.3 Certification as label selection
+
+Define the exact-label correspondence:
+
+\[
+\Lambda_K(F)
+=
+\{\ell\in\{0,1\}: \ell=\mathbf 1_K(z)\ \forall z\in F\}.
+\]
+
+Then the fibre criterion becomes:
+
+\[
+\Lambda_K(O^{-1}(y))\neq\varnothing
+\quad
+\forall y.
+\]
+
+This shows that fibre certification is the zero-step, label-valued analogue of common-action selection.
+
+---
+
+# 12. What should not be unified too aggressively
+
+The paper should avoid saying that all six mechanisms are “epistemic obstructions.”
+
+That would be misleading.
+
+The dynamic exit certificate is not epistemic. It defeats full-information control.
+
+The fibre criterion is not a policy-viability obstruction. It concerns exact certification.
+
+The certainty-equivalence trap is not necessarily informational. It can occur with injective observation.
+
+A better phrasing is:
+
+> The paper develops a selector-based obstruction framework. Some obstructions arise from dynamics, some from information merging, some from timing, some from certification limits, and some from policy-class restrictions.
+
+That is precise and still unified.
+
+---
+
+# 13. The strongest unified claim
+
+The strongest defensible unified claim is:
+
+> Observation-based viability requires the existence of a common recursively safe selector from information states to admissible responses. The obstruction certificates in this paper are checkable sufficient conditions under which no such selector exists. In finite-horizon finite systems, the backward belief recursion characterizes the existence of such a selector exactly. In continuous or infinite-horizon settings, the certificates provide sound local exclusion tests.
+
+This is better than:
+
+> we supply the necessity side of viability theory.
+
+It is also better than treating the mechanisms as unrelated examples.
+
+---
+
+# 14. Bottom line
+
+The six mechanisms are **not truly distant domains**.
+
+They can be unified as follows:
+
+1. **Dynamic exit** shows that the response set is empty even without observation.
+2. **Admissibility and common-action obstructions** show that the common response set is empty because merged states require incompatible controls.
+3. **Delayed-information obstruction** shows that the common blind-window response set is empty because the required information arrives too late.
+4. **Fibre certification** shows that the common label selector is empty because the observation does not separate safe from unsafe states.
+5. **Certainty equivalence** shows that the common corrected selector is missing because the policy class is restricted.
+
+The right unification is therefore:
+
+\[
+\text{viability under partial observation}
+=
+\text{existence of a common recursively safe selector}.
+\]
+
+The mechanisms are different ways of certifying that no such selector exists.
+
+So the answer is:
+
+> **Yes, they can be strengthened and unified, but only in a layered framework. The first four can be tightly unified through the belief predecessor and viable-action correspondence. The fibre criterion belongs to the same selector logic but concerns certification rather than control. The certainty-equivalence trap belongs to the same selector logic but concerns restricted policy classes. They are not distant, but they should not be collapsed into one indistinguishable mechanism.**
+
+gpt:
+The mechanisms are not isolated phenomena from distant domains. They arise from a common structural requirement:
+
+> **Viability under incomplete observation requires an implementable, admissible, safe, and recursively viable response that works for every state and disturbance history compatible with the current information.**
+
+The mechanisms certify different failures of that requirement.
+
+The qualification is important: they do not all have the same logical status.
+
+- Dynamic exit, common-action, tube, and delayed-information certificates are genuine viability obstructions.
+- The fibre criterion is an obstruction to exact observation-based certification.
+- The certainty-equivalence example is an obstruction induced by restricting the policy class.
+- Only in finite-horizon finite systems does backward belief recursion provide a complete characterization. In continuous-state or infinite-horizon settings, the local certificates are generally sufficient but not necessary tests for nonviability.
+
+The right synthesis is therefore a **layered selector framework**, not a claim that all mechanisms are identical.
+
+---
+
+# 1. Central object: a recursively viable response at an information state
+
+Let \(Z\) denote the augmented state space. A point \(z\in Z\) may include:
+
+- the physical state \(x\);
+- hidden parameters;
+- latent regimes;
+- delayed variables;
+- institutional modes affecting admissibility.
+
+Let \(B\subseteq Z\) be the current information state: the set of augmented states compatible with the observation record.
+
+An observation-based regulator cannot choose a different current response for two elements of \(B\) that remain observationally indistinguishable. It must choose one response that works for all compatible branches.
+
+For a finite review interval \([0,\Delta]\), let
+
+\[
+\mathfrak R_{\Pi,\mathcal I}(B)
+\]
+
+denote the set of response segments that:
+
+1. belong to the permitted policy class \(\Pi\);
+2. are implementable under the information structure \(\mathcal I\);
+3. satisfy the required nonanticipativity convention;
+4. are admissible for every branch represented by \(B\).
+
+Depending on the model, a response may be:
+
+- a held action \(a\);
+- an open-loop action segment \(u(\cdot)\);
+- a feedback law based on observations arriving within the interval;
+- a randomized action, if randomization is allowed.
+
+Let
+
+\[
+\operatorname{Succ}(B,\alpha,y^+)
+\]
+
+be the successor belief after applying response \(\alpha\) and receiving a possible next observation \(y^+\).
+
+For a terminal collection \(\mathscr W_0\), define recursively
+
+\[
+\Gamma_N(B)
+=
+\left\{
+\alpha\in\mathfrak R_{\Pi,\mathcal I}(B):
+\begin{array}{l}
+\text{every compatible trajectory remains in }\mathcal V\\
+\text{throughout the current review interval, and}\\
+\operatorname{Succ}(B,\alpha,y^+)\in\mathscr W_{N-1}\\
+\text{for every possible next observation }y^+
+\end{array}
+\right\},
+\]
+
+and
+
+\[
+\mathscr W_N
+=
+\{B:\Gamma_N(B)\neq\varnothing\}.
+\]
+
+Thus,
+
+\[
+\boxed{
+B\in\mathscr W_N
+\iff
+\Gamma_N(B)\neq\varnothing.
+}
+\]
+
+This is the central finite-horizon statement. A viable policy exists exactly when the current information state admits a common recursively safe response.
+
+An obstruction certificate is any checkable condition implying
+
+\[
+\Gamma_N(B)=\varnothing.
+\]
+
+---
+
+## Important selector qualification
+
+Pointwise nonemptiness of \(\Gamma_N(B)\) is enough for backward induction in a finite model. In general measurable spaces, however, a policy requires an admissible measurable or otherwise implementable selection
+
+\[
+B\longmapsto \alpha(B)\in\Gamma_N(B).
+\]
+
+Consequently, the following are distinct:
+
+1. \(\Gamma_N(B)\neq\varnothing\) at one specified belief;
+2. \(\Gamma_N(B)\neq\varnothing\) for every belief in a collection;
+3. the existence of a measurable, nonanticipative selector on that collection.
+
+The paper should either impose standard measurable-selection assumptions or restrict exact completeness claims to finite-state, finite-action, or suitably regular settings.
+
+---
+
+# 2. Static common-response correspondences
+
+For static or one-step questions, the common-response structure can be written as an intersection.
+
+If \(\Gamma(z)\) is the set of responses acceptable at augmented state \(z\), define
+
+\[
+\Gamma^{B}(B)
+=
+\bigcap_{z\in B}\Gamma(z).
+\]
+
+Then
+
+\[
+\Gamma^{B}(B)=\varnothing
+\]
+
+means that no single current response is acceptable for every compatible state.
+
+This intersection formula is appropriate for:
+
+- common action admissibility;
+- instantaneous boundary safety;
+- common static labels;
+- held-action tests.
+
+It should not be used without qualification for general multistage policies, because recursive viability depends on successor observations, belief updates, and nonanticipativity. The recursive correspondence \(\Gamma_N(B)\), rather than a simple pointwise intersection, is the correct general object.
+
+---
+
+# 3. A nested ladder of viability correspondences
+
+Under a held-action review convention, define the common admissible-action set
+
+\[
+U^B(B)
+=
+\bigcap_{z\in B}U(z).
+\]
+
+For a viable region
+
+\[
+\mathcal V=\{z:q_j(z)\ge 0,\ j=1,\ldots,m\},
+\]
+
+define the active constraints
+
+\[
+I(z)=\{j:q_j(z)=0\},
+\]
+
+and the robust instantaneous safe-action set
+
+\[
+\mathcal R_{\mathcal V}(z)
+=
+\left\{
+a\in U(z):
+Dq_j(z;f(z,a,d))\ge0
+\quad
+\forall d\in D(z),\ \forall j\in I(z)
+\right\}.
+\]
+
+The common instantaneous safe-action set is
+
+\[
+\mathcal R_{\mathcal V}^{B}(B)
+=
+\bigcap_{z\in B}\mathcal R_{\mathcal V}(z).
+\]
+
+For a review interval \(\Delta\), define
+
+\[
+\mathcal A_{\mathrm{tube}}(B,\Delta)
+=
+\left\{
+a\in U^B(B):
+\operatorname{Reach}_{[0,\Delta]}(B,a)
+\subseteq\mathcal V
+\right\}.
+\]
+
+Finally, under the same held-action convention, define
+
+\[
+\mathcal A_N(B)
+=
+\left\{
+a\in\mathcal A_{\mathrm{tube}}(B,\Delta):
+\operatorname{Succ}(B,a,y^+)\in\mathscr W_{N-1}
+\ \forall y^+
+\right\}.
+\]
+
+Subject to the usual tangency and regularity assumptions,
+
+\[
+\boxed{
+\mathcal A_N(B)
+\subseteq
+\mathcal A_{\mathrm{tube}}(B,\Delta)
+\subseteq
+\mathcal R_{\mathcal V}^{B}(B)
+\subseteq
+U^B(B).
+}
+\]
+
+The inclusions yield a hierarchy of sound obstruction certificates:
+
+\[
+U^B(B)=\varnothing
+\implies
+\mathcal R_{\mathcal V}^{B}(B)=\varnothing
+\implies
+\mathcal A_{\mathrm{tube}}(B,\Delta)=\varnothing
+\implies
+\mathcal A_N(B)=\varnothing.
+\]
+
+More precisely, emptiness of any larger correspondence forces emptiness of every subset to its left in the inclusion chain.
+
+| Certificate | Empty object | Interpretation |
+|---|---|---|
+| Admissibility | \(U^B(B)\) | No action is admissible at every compatible state |
+| Instantaneous safety | \(\mathcal R_{\mathcal V}^{B}(B)\) | No common action satisfies all active robust tangency conditions |
+| Tube safety | \(\mathcal A_{\mathrm{tube}}(B,\Delta)\) | No common held action keeps every branch safe until the next review |
+| Recursive viability | \(\mathcal A_N(B)\) | No current action is both tube-safe and leads only to viable successor beliefs |
+
+The converses generally fail. For example,
+
+\[
+\mathcal R_{\mathcal V}^{B}(B)\neq\varnothing
+\]
+
+does not imply finite-interval safety, because a tangentially admissible action may still lead to exit later in the review interval.
+
+---
+
+# 4. Full-information dynamic exit is the base obstruction
+
+A dynamic exit certificate shows that some compatible state cannot be protected even by a fully informed controller.
+
+Let \(\Pi_{\mathrm{FI}}\) be the full-information policy class. Suppose that for some \(z\in B\),
+
+\[
+\forall \pi\in\Pi_{\mathrm{FI}},
+\quad
+\exists d\in\mathcal D
+\quad
+\text{such that the resulting trajectory exits }\mathcal V.
+\]
+
+Because observation-based policies form a subclass of full-information policies, it follows that
+
+\[
+B\notin\mathscr W_N
+\]
+
+for every horizon exceeding the forced exit time.
+
+A local sufficient condition is an adverse-drift certificate. If there is a constraint margin \(q\) and a function \(\alpha(s)>0\) such that
+
+\[
+D^+q(z;f(z,u,d))
+\le -\alpha(q(z))
+\]
+
+for every admissible control \(u\) and for an appropriately quantified adversarial disturbance, then comparison gives
+
+\[
+\tau_{\mathrm{exit}}(z)
+\le
+\int_{0}^{q(z)}
+\frac{ds}{\alpha(s)},
+\]
+
+whenever the integral and comparison assumptions are valid.
+
+The constant-drift case
+
+\[
+D^+q\le-\varepsilon
+\]
+
+gives
+
+\[
+\tau_{\mathrm{exit}}(z)
+\le \frac{q(z)}{\varepsilon}.
+\]
+
+Hence:
+
+\[
+\exists z\in B
+\text{ that is robustly nonviable even under full information}
+\quad\Longrightarrow\quad
+B
+\text{ is observation-based nonviable}.
+\]
+
+This is the strongest type of obstruction. It does not arise from information loss; information cannot repair it.
+
+---
+
+# 5. Common-action and admissibility failures are one family
+
+Suppose all individual states in \(B\) are viable under full information, but they require incompatible current actions. Then the failure is caused by the need to use one observation-based response on the entire belief.
+
+There are two principal cases.
+
+## 5.1 Common admissibility failure
+
+\[
+U^B(B)
+=
+\bigcap_{z\in B}U(z)
+=
+\varnothing.
+\]
+
+No single action is legally, physically, or institutionally admissible at every compatible state.
+
+This immediately implies
+
+\[
+\Gamma_N(B)=\varnothing.
+\]
+
+## 5.2 Common safety failure
+
+It may instead be the case that
+
+\[
+U^B(B)\neq\varnothing
+\]
+
+but
+
+\[
+\mathcal R_{\mathcal V}^{B}(B)
+=
+\varnothing.
+\]
+
+Then some common actions exist, but every such action violates at least one branch-specific safety requirement.
+
+For positive review intervals, the stronger and exact held-action test is
+
+\[
+\mathcal A_{\mathrm{tube}}(B,\Delta)=\varnothing.
+\]
+
+Thus the minimal example in which a constant observation merges states having different admissible-control sets should not be presented as a wholly separate mechanism. It is an example of the belief-action obstruction:
+
+- either the common admissible set is empty;
+- or its surviving actions are not jointly safe.
+
+---
+
+# 6. Delayed information is blind-window predecessor emptiness
+
+The delayed-information mechanism is the dynamic, finite-duration version of the common-response problem.
+
+Before the first informative observation, compatible branches must receive the same implementable response. Let \(T_{\mathrm{obs}}\) be the first time at which the relevant branches can be distinguished.
+
+Define the blind-window correspondence
+
+\[
+\mathcal A_{\mathrm{blind}}(B_0,T_{\mathrm{obs}})
+=
+\left\{
+u(\cdot):
+\begin{array}{l}
+u(\cdot)\text{ is implementable from the observations}\\
+\text{available before }T_{\mathrm{obs}},\\
+\text{and every compatible trajectory remains in }\mathcal V\\
+\text{on }[0,T_{\mathrm{obs}}]
+\end{array}
+\right\}.
+\]
+
+The timing obstruction is
+
+\[
+\boxed{
+\mathcal A_{\mathrm{blind}}(B_0,T_{\mathrm{obs}})
+=
+\varnothing.
+}
+\]
+
+Equivalently, define the guaranteed blind-window survival time
+
+\[
+\sigma^*(B_0)
+=
+\sup_{u(\cdot)\in\mathcal U_{\mathrm{blind}}}
+\inf_{\substack{z_0\in B_0,\,d(\cdot)\\
+\text{compatible with the same}\\
+\text{pre-informative observation record}}}
+\tau(z_0,u,d).
+\]
+
+Then, subject to the adopted exit-time convention,
+
+\[
+\sigma^*(B_0)<T_{\mathrm{obs}}
+\quad\Longrightarrow\quad
+\mathcal A_{\mathrm{blind}}(B_0,T_{\mathrm{obs}})
+=
+\varnothing.
+\]
+
+Consequently, no observation-based policy can remain safe until the information needed to distinguish the branches becomes available.
+
+This can be expressed as a blind-window predecessor:
+
+\[
+\operatorname{Pre}_{\mathrm{blind}}(\mathscr C)
+=
+\left\{
+B:
+\exists u(\cdot)\in\mathcal A_{\mathrm{blind}}(B,T_{\mathrm{obs}})
+\text{ leading only to beliefs in }\mathscr C
+\right\}.
+\]
+
+The delayed-information theorem then becomes
+
+\[
+B_0\notin\operatorname{Pre}_{\mathrm{blind}}(\mathscr C).
+\]
+
+Thus delayed information is not a separate mathematical domain. It is predecessor emptiness over an interval during which the controller cannot condition its response on the hidden branch.
+
+---
+
+# 7. Recursive obstruction is the general case
+
+The preceding tests are local or one-step certificates. The general obstruction is recursive.
+
+A belief may admit a common tube-safe action,
+
+\[
+\mathcal A_{\mathrm{tube}}(B,\Delta)\neq\varnothing,
+\]
+
+but every such action may lead to at least one successor belief that is nonviable. In that case,
+
+\[
+\mathcal A_N(B)=\varnothing.
+\]
+
+This is a genuinely multistage obstruction and cannot always be detected by current tangency or current tube safety.
+
+For finite systems, define
+
+\[
+\mathscr W_0
+=
+\{B:B\subseteq\mathcal V_T\},
+\]
+
+and
+
+\[
+\mathscr W_{k+1}
+=
+\left\{
+B:
+\exists \alpha\in\mathfrak R_{\Pi,\mathcal I}(B)
+\text{ such that }
+\begin{array}{l}
+\text{the current tube is safe, and}\\
+\operatorname{Succ}(B,\alpha,y^+)\in\mathscr W_k\\
+\forall y^+
+\end{array}
+\right\}.
+\]
+
+Then:
+
+> **Finite-horizon selector theorem.**  
+> In a finite-state, finite-action, finite-observation model with the stated disturbance and belief-update semantics, \(B_0\) admits a robust observation-based policy that remains safe for \(N\) stages if and only if
+> \[
+> B_0\in\mathscr W_N.
+> \]
+
+Nonmembership produces a finite obstruction tree:
+
+- regulator nodes enumerate implementable actions;
+- adversarial branches identify disturbances or observations defeating those actions;
+- terminal leaves identify constraint violations or terminally nonviable beliefs.
+
+This is the setting in which the selector framework is complete, rather than merely a source of sufficient exclusion tests.
+
+---
+
+# 8. Fibre certification is a label-valued selector problem
+
+Let \(O:Z\to Y\) be a static observation map and let \(K\subseteq Z\) be the set whose membership is to be certified.
+
+An exact observation-only certifier is a function
+
+\[
+c:Y\to\{0,1\}
+\]
+
+such that
+
+\[
+c(O(z))=\mathbf 1_K(z)
+\qquad
+\forall z\in Z.
+\]
+
+For a fibre \(F_y=O^{-1}(y)\), define the acceptable-label correspondence
+
+\[
+\Lambda_K(F_y)
+=
+\left\{
+\ell\in\{0,1\}:
+\ell=\mathbf 1_K(z)
+\quad\forall z\in F_y
+\right\}.
+\]
+
+An exact set-theoretic certifier exists exactly when
+
+\[
+\Lambda_K(F_y)\neq\varnothing
+\qquad
+\forall y\in O(Z).
+\]
+
+Equivalently,
+
+\[
+O(z_1)=O(z_2)
+\implies
+\bigl[z_1\in K\iff z_2\in K\bigr],
+\]
+
+or
+
+\[
+\boxed{
+K=O^{-1}(O(K)).
+}
+\]
+
+Thus the safe set must be saturated by observation fibres.
+
+If \(c\) is additionally required to be measurable, fibre saturation alone is not always sufficient: one must also ensure that \(O(K)\) is measurable in the chosen observation \(\sigma\)-algebra, or impose assumptions guaranteeing this property.
+
+This is structurally connected to viable action selection because one common response must be assigned to an entire fibre. The response is now a binary label rather than a control action.
+
+It nevertheless remains a distinct logical layer:
+
+- failure of exact certification does not necessarily imply failure of viable control;
+- exact static certification does not imply dynamic viability.
+
+The regulator may be able to keep a mixed fibre safe without knowing whether every point is currently in a target classification set. Conversely, knowing the exact current label may provide no action capable of preventing future exit.
+
+---
+
+# 9. Certainty equivalence is a restricted-policy selector failure
+
+The certainty-equivalence mechanism may occur even when the observation is injective and the physical state is recoverable. Its source is not necessarily information loss; it is a restriction on how available information may be used.
+
+Let
+
+\[
+\Pi_{\mathrm{CE}}
+\subseteq
+\Pi_{\mathrm{out}}
+\]
+
+denote, respectively:
+
+- certainty-equivalence controllers that substitute the observed or estimated state into a prescribed full-information law without correction;
+- all admissible observation-based controllers.
+
+Define the corresponding viable-response sets
+
+\[
+\Gamma_N^{\mathrm{CE}}(B)
+=
+\Gamma_N(B)\cap\Pi_{\mathrm{CE}},
+\]
+
+and
+
+\[
+\Gamma_N^{\mathrm{out}}(B)
+=
+\Gamma_N(B)\cap\Pi_{\mathrm{out}}.
+\]
+
+A certainty-equivalence obstruction has the form
+
+\[
+\Gamma_N^{\mathrm{CE}}(B)=\varnothing
+\]
+
+while
+
+\[
+\Gamma_N^{\mathrm{out}}(B)\neq\varnothing.
+\]
+
+Equivalently,
+
+\[
+B\notin\mathscr W_N^{\mathrm{CE}},
+\qquad
+B\in\mathscr W_N^{\mathrm{out}}.
+\]
+
+This proves only that the restricted controller architecture fails. It does not prove that observation-based viability itself is impossible.
+
+Examples include:
+
+- failing to invert a known injective sensor transformation;
+- applying a nominal feedback directly to a biased measurement;
+- forbidding estimator correction;
+- restricting the regulator to a fixed command rule;
+- denying the authority needed to use an otherwise viable action.
+
+The correct interpretation is therefore a **policy-class obstruction**.
+
+---
+
+# 10. Unified meta-theorem
+
+The mechanisms can be summarized through a parameterized response correspondence
+
+\[
+\Gamma_N(B;\Pi,\mathcal I,\Delta,\mathcal D),
+\]
+
+where:
+
+- \(\Pi\) is the policy class;
+- \(\mathcal I\) is the information structure;
+- \(\Delta\) is the review or commitment interval;
+- \(\mathcal D\) specifies the disturbance model and its information pattern;
+- \(N\) is the remaining horizon.
+
+The correspondence contains responses that are:
+
+1. permitted by \(\Pi\);
+2. implementable under \(\mathcal I\);
+3. commonly admissible on \(B\);
+4. robustly tube-safe during the current interval;
+5. recursively viable for all possible successor beliefs.
+
+Under finite-model assumptions, or under regularity and measurable-selection hypotheses sufficient for dynamic programming,
+
+\[
+\boxed{
+B\in\mathscr W_N
+\iff
+\Gamma_N(B;\Pi,\mathcal I,\Delta,\mathcal D)\neq\varnothing.
+}
+\]
+
+Every viability obstruction in the paper should be presented as a sufficient condition for
+
+\[
+\Gamma_N(B;\Pi,\mathcal I,\Delta,\mathcal D)=\varnothing.
+\]
+
+The mechanisms then occupy the following positions:
+
+| Mechanism | What fails |
+|---|---|
+| Full-information dynamic exit | A compatible state has no robustly safe response even with complete state information |
+| Common admissibility | No current action is admissible on every compatible branch |
+| Common instantaneous safety | No current action satisfies every branch-specific boundary condition |
+| Tube safety | No common response keeps all branches safe until the next review |
+| Delayed information | No blind-window response survives until branch-separating information arrives |
+| Recursive viability | Every currently safe response leads to some nonviable successor belief |
+| Fibre certification | No exact common label can be assigned to an observation fibre |
+| Certainty equivalence | The permitted policy subclass excludes responses available to a broader output-feedback class |
+
+This table also clarifies that the initial “six mechanisms” naturally decompose into several subcases once admissibility, instantaneous safety, tube safety, and recursive safety are distinguished.
+
+---
+
+# 11. Monotonicity strengthens the framework
+
+The selector formulation yields useful monotonicity results.
+
+## Policy-class enlargement
+
+If
+
+\[
+\Pi_1\subseteq\Pi_2,
+\]
+
+then
+
+\[
+\Gamma_N(B;\Pi_1,\mathcal I,\Delta,\mathcal D)
+\subseteq
+\Gamma_N(B;\Pi_2,\mathcal I,\Delta,\mathcal D),
+\]
+
+and therefore
+
+\[
+\mathscr W_N^{\Pi_1}
+\subseteq
+\mathscr W_N^{\Pi_2}.
+\]
+
+This formalizes certainty-equivalence failures.
+
+## Action-set enlargement
+
+If
+
+\[
+U_1(z)\subseteq U_2(z)
+\qquad\forall z,
+\]
+
+then
+
+\[
+\mathscr W_N^{U_1}
+\subseteq
+\mathscr W_N^{U_2}.
+\]
+
+## Disturbance enlargement
+
+If
+
+\[
+D_1(z)\subseteq D_2(z)
+\qquad\forall z,
+\]
+
+under the same adversarial semantics,
+
+\[
+\mathscr W_N^{D_2}
+\subseteq
+\mathscr W_N^{D_1}.
+\]
+
+## Information refinement
+
+If \(\mathcal I_1\) is more informative than \(\mathcal I_2\), meaning that every \(\mathcal I_2\)-record is a measurable coarsening of an \(\mathcal I_1\)-record, then every \(\mathcal I_2\)-implementable policy can be implemented under \(\mathcal I_1\). Hence
+
+\[
+\mathscr W_N^{\mathcal I_2}
+\subseteq
+\mathscr W_N^{\mathcal I_1}.
+\]
+
+These relations form a partial order, not generally a total hierarchy. Information refinement, action enlargement, disturbance reduction, and policy-class enlargement improve viability through different model components.
+
+---
+
+# 12. Computational certificates fit the same structure
+
+The common-action obstruction becomes especially useful when safe-action sets are polyhedral.
+
+Suppose compatible states \(z_1,\ldots,z_r\) produce constraints
+
+\[
+\mathcal R_{\mathcal V}(z_i)
+=
+\{a:A_i a\le b_i\}.
+\]
+
+Stacking the inequalities gives
+
+\[
+Aa\le b.
+\]
+
+Then
+
+\[
+\mathcal R_{\mathcal V}^{B}(B)=\varnothing
+\]
+
+whenever this system is infeasible.
+
+By Farkas’ lemma, infeasibility is equivalent, under the standard finite-dimensional assumptions, to the existence of \(\lambda\ge0\) such that
+
+\[
+\lambda^\top A=0,
+\qquad
+\lambda^\top b<0.
+\]
+
+The multiplier \(\lambda\) is a compact dual obstruction certificate identifying the incompatible collection of branch-specific safety requirements.
+
+Analogous computational certificates can be generated by:
+
+- robust linear programming for uncertain dynamics;
+- mixed-integer formulations for finite observation partitions;
+- reachability overapproximations for tube emptiness;
+- backward safety games for recursive predecessor emptiness;
+- counterexample trees for finite-horizon nonviability.
+
+These are not separate theories. They are different methods for proving that the relevant response correspondence is empty.
+
+---
+
+# 13. What should not be unified too aggressively
+
+The paper should not call every mechanism an epistemic obstruction.
+
+That terminology would obscure important distinctions:
+
+- **Dynamic exit is not epistemic.** It defeats full-information control.
+- **Fibre crossing is not automatically a viability obstruction.** It defeats exact classification.
+- **Certainty-equivalence failure is not necessarily informational.** It can occur with an injective and perfectly invertible observation.
+- **Instantaneous tangency is not equivalent to finite-interval safety.**
+- **Pointwise response existence is not always equivalent to existence of a measurable global policy.**
+- **Local certificate failure does not establish viability.** It only means that the particular exclusion test is inconclusive.
+
+A precise formulation is:
+
+> The paper develops a selector-based obstruction framework. Dynamic, informational, timing, certification, and policy-class restrictions produce different forms of selector failure.
+
+---
+
+# 14. Recommended layered architecture
+
+## Layer 1: Full-information dynamic obstructions
+
+These defeat every controller, independently of observation.
+
+Certificate form:
+
+\[
+\exists z\in B\quad
+\forall \pi\in\Pi_{\mathrm{FI}}\quad
+\exists d
+\quad
+\text{forcing exit}.
+\]
+
+Examples:
+
+- adverse drift;
+- comparison-function exit bounds;
+- robust reachability into the unsafe set.
+
+## Layer 2: Current belief-action obstructions
+
+These defeat every common action at the present information state.
+
+Certificate forms:
+
+\[
+U^B(B)=\varnothing,
+\]
+
+\[
+\mathcal R_{\mathcal V}^{B}(B)=\varnothing,
+\]
+
+or
+
+\[
+\mathcal A_{\mathrm{tube}}(B,\Delta)=\varnothing.
+\]
+
+## Layer 3: Information-timing obstructions
+
+These defeat every common response before distinguishing information arrives.
+
+Certificate form:
+
+\[
+\sigma^*(B_0)<T_{\mathrm{obs}}.
+\]
+
+## Layer 4: Recursive belief obstructions
+
+These arise when current safety is possible but every current response leads to some nonviable successor belief.
+
+Certificate form:
+
+\[
+\mathcal A_N(B)=\varnothing
+\quad\text{despite}\quad
+\mathcal A_{\mathrm{tube}}(B,\Delta)\neq\varnothing.
+\]
+
+## Layer 5: Certification obstructions
+
+These defeat exact observation-based labels.
+
+Certificate form:
+
+\[
+K\neq O^{-1}(O(K)).
+\]
+
+## Layer 6: Policy-class obstructions
+
+These arise because the allowed controller class is too small.
+
+Certificate form:
+
+\[
+\Gamma_N(B;\Pi_{\mathrm{restricted}})=\varnothing
+\]
+
+while
+
+\[
+\Gamma_N(B;\Pi_{\mathrm{broader}})\neq\varnothing.
+\]
+
+---
+
+# 15. Strongest defensible unified claim
+
+The manuscript’s strongest supportable claim is:
+
+> **Observation-based viability is governed by the existence of an implementable common recursively safe selector on information states. The paper develops checkable certificates proving that no such selector exists because of adverse dynamics, incompatible branchwise actions, unsafe review-interval tubes, delayed information, or policy-class restrictions. Static fibre criteria provide the corresponding label-selection obstruction for exact certification. In finite-horizon finite systems, backward belief recursion characterizes selector existence exactly; in continuous-state or infinite-horizon settings, the proposed certificates are sound but generally incomplete exclusion tests.**
+
+This is stronger and more precise than claiming to provide “the necessity side of viability theory.”
+
+---
+
+# 16. Final synthesis
+
+The mechanisms are related through a common selector logic:
+
+1. **Dynamic exit:** the safe-response set is empty even under full information.
+2. **Admissibility conflict:** no response is admissible on every compatible branch.
+3. **Common safety conflict:** admissible responses exist, but none is jointly safe.
+4. **Tube conflict:** no common response remains safe until the next opportunity to revise it.
+5. **Delayed information:** no blind-window response remains safe until relevant information arrives.
+6. **Recursive failure:** current safety is possible, but every response leads to some nonviable successor belief.
+7. **Fibre certification:** no exact common label exists on an observation fibre.
+8. **Certainty equivalence:** viable responses exist, but the restricted controller class excludes them.
+
+The appropriate unifying formula is therefore
+
+\[
+\boxed{
+\text{observation-based viability}
+=
+\text{existence of an implementable common recursively safe selector}.
+}
+\]
+
+The mechanisms are different, logically distinct ways of proving that the required selector does not exist.

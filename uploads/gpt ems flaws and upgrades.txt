@@ -1,0 +1,4026 @@
+gpt:
+## Overall assessment
+mathematical inconsistencies**, especially in the belief recursion, tube semantics, weight-domain treatment, and complexity claims. There are also numerous places where the prose claims more than the described implementation can establish.
+
+The most serious issue is that the paper gives mutually incompatible descriptions of the belief-space algorithm: it is called sound and complete for finite systems, but later completeness is restricted to injective observations; beliefs are defined as sets of states, but updates are said to produce sets of labels. That is not a minor wording problem—it affects whether the partial-observation results are correct.
+
+---
+
+# Major technical inconsistencies
+
+## 1. The belief recursion is described inconsistently and may be mathematically unsound
+
+### Locations
+
+- Abstract, p. 1:
+  > “backward recursions over state and belief spaces”
+- Introduction, pp. 1–2:
+  > “a finite-horizon belief-space recursion that is sound and complete in finite systems”
+- Section 2.2, p. 3:
+  > “a belief (a set of states consistent with the observations so far)”
+- Section 2.2, p. 3:
+  > “the belief updates to the set of labels reachable under the action”
+- Section 2.2, p. 3:
+  > “Memberships certify viability in all finite systems; completeness ... holds when the observation is injective on reachable states”
+
+### Problems
+
+These statements cannot all be correct as written.
+
+1. A belief is defined as a **set of states**, but its successor is described as a **set of labels**. A set of labels generally loses information needed for future control. Different states with the same label can have different transitions and safe actions.
+
+2. The Introduction says the recursion is sound and complete in finite systems. Section 2.2 says completeness holds only when the observation is injective on reachable states.
+
+3. Injectivity on reachable states largely removes the partial-observation problem: if observations uniquely identify all reachable states, beliefs collapse to singletons after observation. That is an unexpectedly restrictive “exactness condition” for a method presented as a belief-space partial-observation recursion.
+
+4. A standard finite belief-state recursion can normally be complete without injective observations, provided beliefs retain states and are updated by transition and observation:
+   \[
+   B'_{a,o}
+   =
+   \{z' : \exists z\in B,\ z'\in T(z,a),\ \operatorname{obs}(z')=o\}.
+   \]
+   If SafeTransition instead replaces this set by reachable labels, it is using an abstraction whose soundness and completeness require a separate proof.
+
+5. The sentence
+   > “an action is admissible for a belief ... when no state in its observation fibre enters a violation”
+   
+   is also ambiguous. A history-dependent belief can be a strict subset of the full current observation fibre. Checking the entire fibre may be conservative and incomplete.
+
+### Required correction
+
+The paper must provide the exact recursion, including:
+
+- whether beliefs are sets of states, labels, or equivalence classes;
+- transition quantification;
+- disturbance quantification;
+- observation branching;
+- whether policies are memoryless in observations or history-dependent through beliefs;
+- the definition of \(W_0\) and \(W_k\);
+- a proof or precise citation for soundness and completeness.
+
+The contradiction should be resolved in one of two ways:
+
+- **If beliefs remain state sets:** replace “set of labels reachable” with the exact state-based update and remove the injectivity restriction if it is unnecessary.
+- **If beliefs are abstracted to labels:** state clearly that the algorithm is an abstraction, give the abstraction relation, and distinguish soundness from completeness.
+
+The abstract and Introduction should not claim unconditional finite-system completeness unless the algorithm actually has it.
+
+---
+
+## 2. The manuscript contradicts itself about whether tubes are exact or conservative
+
+### Locations
+
+Section 2.1, p. 2:
+
+> “each tube is the exact visited set and no outer approximation enters”
+
+Section 4.1, p. 6:
+
+> “the declared piecewise-linear plan tubes are exact by construction, while the Schaefer realization’s tubes are certified conservative outer enclosures”
+
+Conclusion, p. 10:
+
+> “under exact or certified conservative tubes”
+
+### Problem
+
+Section 2.1 makes a universal claim about the library’s transition datum: every tube is exact and no outer approximation enters. Section 4.1 and the Conclusion explicitly allow conservative outer enclosures.
+
+These are materially different semantics. If \(\widehat T\) is an outer enclosure of the true tube \(T\), then:
+
+- proving every point of \(\widehat T\) safe certifies the true tube safe;
+- finding a violation in \(\widehat T\) does **not** prove the true trajectory violates the floor.
+
+Therefore, exact and conservative tubes do not support symmetric acceptance and rejection conclusions.
+
+### Required correction
+
+Define separate tube statuses and verdict semantics, for example:
+
+- `EXACT`;
+- `OUTER_CERTIFIED`;
+- possibly `UNVERIFIED`.
+
+Then state explicitly:
+
+| Tube type | Passing all constraints means | Finding a violation means |
+|---|---|---|
+| Exact tube | certified safe | certified unsafe for represented trajectory |
+| Certified outer tube | certified safe | inconclusive unless violation is known reachable |
+| Unverified tube | conditional result only | conditional result only |
+
+Section 2.1 should say that the interface accepts either exact tubes or certified outer enclosures. It should not say “no outer approximation enters.”
+
+The benchmark should also state which object establishes the claimed typed/aggregate separation: the exact declared plan tube or the conservative Schaefer enclosure. If the rejection depends only on an outer-enclosure point, the separation is not established for the realized dynamics.
+
+---
+
+## 3. The observation-fibre criterion is overclaimed
+
+### Locations
+
+Section 2.3, p. 3:
+
+> “The observation-fibre criterion decides whether an exact observation-only certifier can exist at all”
+
+Section 4.3, p. 8:
+
+> “ruling out any exact observation-only certifier”
+
+### Problem
+
+Constancy of safe-set membership on observation fibres is an if-and-only-if criterion for a much narrower question:
+
+> Can current safe-set membership be determined exactly from the current observation alone?
+
+It is not automatically a criterion for:
+
+- existence of an observation-based control policy;
+- finite-horizon viability;
+- transition safety;
+- a conservative certifier;
+- a certifier using observation history;
+- a certifier returning three-valued outputs such as safe/unsafe/unknown.
+
+For example, safe-set membership can vary within a fibre while a robust common action still keeps every possible state safe. Conversely, fibre-constant current safety does not guarantee a viable future policy.
+
+### Required correction
+
+Rename the result, for example:
+
+> **Observation-only predicate-classification criterion.** Exact classification of current membership in \(S\) from the current observation exists iff membership in \(S\) is constant on every observation fibre.
+
+Then distinguish it from:
+
+- common-action existence;
+- belief viability;
+- history-dependent policy existence.
+
+The phrases “can exist at all” and “any exact observation-only certifier” are too broad.
+
+---
+
+## 4. The common-action obstruction is underspecified
+
+### Location
+
+Section 2.3, p. 3:
+
+> “the safe-action sets of pairwise-compatible states intersect emptily while each is nonempty”
+
+### Problems
+
+“Pairwise-compatible states” is undefined. It could mean:
+
+- states sharing an observation;
+- states jointly possible in one belief;
+- states whose action sets intersect pairwise.
+
+Those interpretations are different. In particular, pairwise nonempty intersections of action sets do not generally imply a nonempty global intersection.
+
+The obstruction also proves no immediate common action only if the sets contain the relevant recursively viable actions. If they contain merely one-step-safe actions, it does not by itself prove no finite-horizon policy exists.
+
+### Required correction
+
+Define:
+
+- the compatibility relation;
+- the exact action set attached to each state;
+- whether it is immediate-safe or recursively viable;
+- the horizon of the obstruction;
+- the policy class being ruled out.
+
+A formal statement should look like:
+
+\[
+\bigcap_{z\in B} A_k(z)=\varnothing,
+\qquad
+A_k(z)\ne\varnothing\ \forall z\in B,
+\]
+where \(A_k(z)\) is explicitly defined.
+
+---
+
+## 5. “Minimal conflicting subfamily” remains undefined
+
+### Locations
+
+Introduction, p. 2; Section 2.3, p. 3.
+
+### Problem
+
+The paper still does not say whether “minimal” means:
+
+- inclusion-minimal;
+- minimum cardinality;
+- minimum weighted size;
+- first found under deterministic ordering.
+
+These are not equivalent. A deletion procedure can establish inclusion-minimality but not minimum cardinality.
+
+### Required correction
+
+State the exact guarantee. If it is inclusion-minimal, use that phrase consistently and certify:
+
+- the retained family has empty intersection;
+- removing any one retained state makes the intersection nonempty.
+
+If minimum cardinality is computed, state the algorithm and complexity.
+
+---
+
+## 6. The operator definitions are not detailed enough to justify the inclusion chain
+
+### Location
+
+Section 2.1, p. 3:
+
+\[
+E_{\rm typ}(z)\subseteq E_w(z)
+\subseteq E_{\rm tube,phys}(z)
+\subseteq E_{\rm end}(z).
+\]
+
+### Problems
+
+The paper has not defined the physical operators sufficiently to prove \(E_w\subseteq E_{\mathrm{tube,phys}}\). A weighted floor condition does not, by itself, imply an unspecified physical constraint.
+
+Other missing scope conditions include:
+
+- whether every component of \(w\) is strictly positive or merely nonnegative;
+- whether the aggregate is evaluated over every disturbance;
+- whether all operators impose the same destination condition;
+- whether the endpoint is before or after the endpoint reset;
+- whether physical constraints are subsets, supersets, or different predicates;
+- whether tube constraints are coordinatewise linear only.
+
+The role of the transition-safe set \(S\), introduced on p. 2, is not explained in the five operator definitions. The typed operator is described using floor conditions and \(G\), but \(S\) disappears.
+
+### Required correction
+
+Give formal definitions for all five operators before stating the chain. Include all common predicates explicitly. For example:
+\[
+E_{\rm typ}(z)
+=
+\{a:\forall d,\ \forall y\in T(z,a,d),\ s_i(y)\ge0\ \forall i,\ 
+R(z,a,d)\in G\}.
+\]
+
+Then define each weakening by deleting named constraints. Add a proposition with exact hypotheses.
+
+---
+
+## 7. “Endpoint” is ambiguous because an endpoint reset is also present
+
+### Location
+
+Section 2.1, pp. 2–3.
+
+The datum includes:
+
+> “a destination set \(G\) reached under an endpoint reset”
+
+but the inclusion chain is justified by:
+
+> “endpoints are contained in tubes”
+
+### Problem
+
+If the tube endpoint is the pre-reset state and the successor in \(G\) is the post-reset state, then “the endpoint is contained in the tube” does not identify which endpoint the endpoint-only operators assess.
+
+### Required correction
+
+Define separately:
+
+- terminal pre-reset state \(y(T^-)\);
+- reset map \(R(y(T^-),a,d)\);
+- successor state \(z^+\);
+- which one is checked by `Eend` and `Eend,typ`.
+
+Without this, the operator chain is not formally checkable.
+
+---
+
+## 8. Disturbance semantics are internally inconsistent
+
+### Locations
+
+Section 2.1, p. 2:
+
+> “for each action and disturbance, an exact tube”
+
+and:
+
+> “actions ... declare ... an action-indexed worst-case disturbance”
+
+Section 4.2, p. 7:
+
+> “per-plan floor minima under each plan’s characteristic disturbance”
+
+### Problem
+
+Three different concepts appear:
+
+1. all disturbances \(d\);
+2. one action-indexed worst-case disturbance;
+3. one characteristic disturbance per plan.
+
+The operator definition quantifies over every disturbance, but dashboard readings appear to use one characteristic disturbance. Unless this disturbance is formally proved worst-case for every relevant predicate, the displayed minimum and licensing verdict need not correspond to the robust operator.
+
+Different floor coordinates can also have different worst-case disturbances; there need not be one disturbance that simultaneously minimizes all of them or their weighted sum.
+
+### Required correction
+
+Specify whether dashboard values are:
+
+- robust minima over all disturbances;
+- values under a selected illustrative branch;
+- values under a formally certified worst-case branch.
+
+If “characteristic” means illustrative, it must not be presented as the operator verdict. If it means worst-case, include the certificate proving that status.
+
+---
+
+# Weight-space analysis problems
+
+## 9. The ratio domain conflicts with the “positive weight cone”
+
+### Locations
+
+Section 2.1, p. 3:
+
+> “positive weight cone”
+
+Section 4.3, p. 8:
+
+> “SLOW-only on \([0,2/3)\)”
+
+### Problem
+
+If weights are strictly positive, then
+\[
+r=w_2/w_1\in(0,\infty),
+\]
+so \(r=0\) is not part of the domain. The interval should begin at \(0\) with an open endpoint, unless zero weights are allowed.
+
+If zero weights are allowed, “positive weight cone” is incorrect; the paper should say nonnegative cone with nonzero total weight.
+
+### Required correction
+
+Choose one convention and use it consistently:
+
+- strictly positive weights: \(r\in(0,\infty)\);
+- nonnegative weights: include \(r=0\) and define the point \(w_1=0\), corresponding to \(r=\infty\), separately.
+
+The checker must also certify coverage of the actual domain, not an inconsistent one.
+
+---
+
+## 10. The claimed three-regime rational family omits necessary assumptions
+
+### Location
+
+Section 4.3, p. 8:
+
+> “Across the rational family of floor pairs \((s_1,s_2)\) and dip depths the arrangement has three regimes...”
+
+with thresholds
+\[
+\frac{\mathrm{dip}-s_1}{s_2},
+\qquad
+\frac{s_1}{\mathrm{dip}-s_2}.
+\]
+
+### Problem
+
+These formulas and the claimed ordering require denominator and sign assumptions. At minimum, the derivation appears to require conditions such as:
+
+\[
+s_1>0,\qquad s_2>0,\qquad \mathrm{dip}>s_1,\qquad \mathrm{dip}>s_2.
+\]
+
+If \(\mathrm{dip}\le s_2\), the second denominator is zero or negative and the inequality direction or interpretation changes. If \(\mathrm{dip}\le s_1\), the first threshold can be nonpositive, so the associated plan may be licensed for every positive ratio.
+
+Thus the three-regime statement is not valid “across the rational family” without a restricted parameter domain.
+
+### Required correction
+
+State the admissible parameter region and separately handle degenerate cases:
+
+- zero denominator;
+- negative threshold;
+- coincident thresholds;
+- thresholds outside the positive-ratio domain;
+- plans licensed everywhere or nowhere.
+
+The weight-partition certificate should cover these cases if the interface is presented as general.
+
+---
+
+## 11. The scope of `weight_partition` is unclear
+
+### Locations
+
+Section 3.3, p. 5:
+
+> “returns the complete licensing arrangement along the weight ratio”
+
+Conclusion, p. 10:
+
+> “extension of the weight partition to richer plan menus”
+
+### Problem
+
+The API sounds general, but the Conclusion implies the current implementation handles only a restricted menu family. It is unclear whether `weight_partition` supports:
+
+- exactly two floors;
+- exactly two plans;
+- arbitrary finite plans but only one-dimensional weight ratios;
+- only the benchmark’s analytic template.
+
+### Required correction
+
+State the implemented input class precisely. For example:
+
+> The current routine supports two criteria and a finite plan menu whose robust aggregate minima are supplied as affine functions of \(r\).
+
+Do not describe it as a complete general weight-space analysis if richer menus are future work.
+
+---
+
+## 12. The “index-blindness alarm” misses boundary false positives
+
+### Location
+
+Section 4.2, p. 7:
+
+> “fires exactly when the composite minimum stays positive while a floor minimum is negative”
+
+### Problem
+
+The aggregate operator licenses when:
+\[
+w\cdot s\ge0.
+\]
+A plan with aggregate minimum exactly zero and a negative individual floor is still licensed and still exhibits compensatory blindness. An alarm requiring strict positivity will not fire.
+
+### Required correction
+
+Use “nonnegative” if the alarm is intended to identify every licensed aggregate/typed disagreement:
+\[
+\min_t w\cdot s(t)\ge0
+\quad\text{and}\quad
+\min_{t,i}s_i(t)<0.
+\]
+
+If strict positivity is intentional, state that the alarm detects only strict-margin cases and is not equivalent to operator disagreement.
+
+---
+
+# Certificate and checker issues
+
+## 13. The “infeasibility margin” is representation-dependent
+
+### Location
+
+Section 2.3, p. 3:
+
+> “the infeasibility margin \(-\lambda^\top b>0\) is defined by this normalization”
+
+### Problem
+
+Normalizing \(\lambda\) so that \(\sum_i\lambda_i=1\) removes arbitrary scaling of the multiplier, but it does not make the margin invariant to rescaling the original inequalities. Replacing one row by a positive scalar multiple changes the normalized certificate and generally changes \(-\lambda^\top b\).
+
+Therefore this is not an intrinsic geometric distance to feasibility. It is a margin relative to a particular row representation and normalization.
+
+### Required correction
+
+Call it a **normalized certificate contradiction value** or explicitly state:
+
+> The margin is invariant to positive scaling of the certificate vector but not to rescaling or renormalization of the input rows.
+
+If margins are compared across instances, define canonical row normalization first.
+
+---
+
+## 14. The checker proves algebraic validity, not necessarily semantic correctness
+
+### Locations
+
+Abstract, pp. 1–2; Introduction, p. 2; Sections 3.2 and 4.2.
+
+### Problem
+
+An independent checker can verify that serialized \(A,b,\lambda\) satisfy:
+\[
+\lambda\ge0,\qquad \lambda^\top A=0,\qquad \lambda^\top b<0.
+\]
+That does not prove that \(A\) and \(b\) correctly encode:
+
+- the original transition datum;
+- the stated action menu;
+- the disturbance quantification;
+- the correct tube;
+- the intended sustainability floors.
+
+The manuscript sometimes suggests that the semantics are “carried by the verdicts themselves,” but the trusted mapping from datum to linear system remains unclear.
+
+### Required correction
+
+Describe the trusted computing base. Distinguish:
+
+1. algebraic certificate checking;
+2. checking the derivation of constraints from the datum;
+3. checking tube validity against dynamics;
+4. checking dashboard binding to certificate files.
+
+If the checker re-derives the constraint system from serialized transition data, say so and document the schema. If it merely checks a supplied matrix, narrow the claim.
+
+---
+
+## 15. It is unclear which certificate types the independent checker supports
+
+### Locations
+
+Table 1, p. 4; Table 3, p. 6; Sections 4.2–4.3.
+
+Table 3 says:
+
+> “Independent checker over emitted certificates 3/3 verified”
+
+But the paper mentions at least:
+
+- Farkas certificates;
+- weight-partition certificates;
+- tube certificates;
+- benchmark certificates;
+- belief-failure objects;
+- common-action obstruction certificates;
+- fibre violations;
+- dashboard provenance.
+
+### Problem
+
+“3/3” could mean three files, three certificate classes, or three examples. The independent-checking scope is therefore unclear.
+
+### Required correction
+
+Add a certificate support matrix:
+
+| Certificate type | Emitted by library | Independently checked | Checker reconstructs semantics? |
+|---|---:|---:|---:|
+| Farkas | yes | yes | matrix only/full datum |
+| Weight partition | yes | yes | ... |
+| Tube enclosure | yes/no | yes/no | ... |
+| Belief failure | yes/no | yes/no | ... |
+| Fibre violation | yes/no | yes/no | ... |
+
+The abstract should not imply universal independent checking if only three selected artifacts are checked.
+
+---
+
+## 16. Feasibility certificates are mentioned but not specified
+
+### Location
+
+Section 3.3, p. 5:
+
+> “certify_polyhedron returns a feasibility verdict with its certificate”
+
+### Problem
+
+Section 2.3 explains certificates only for infeasibility. A feasible linear system requires a feasible point or another witness if its verdict is also described as certified.
+
+Fourier–Motzkin elimination can decide feasibility, but reconstructing a feasible assignment requires back-substitution or stored bounds. That process is not described.
+
+### Required correction
+
+State whether the API returns:
+
+- a feasible rational vector \(u\) when feasible;
+- a Farkas multiplier when infeasible;
+- or a bare Boolean in the feasible case.
+
+If a rational witness is returned, explain how it is reconstructed and checked.
+
+---
+
+## 17. “Sharing no code” is too absolute
+
+### Locations
+
+Abstract, p. 1; Conclusion, p. 10.
+
+### Problem
+
+Both implementations necessarily share at least the Python language and standard-library rational machinery. More importantly, they may share copied formulas, schema definitions, or generated data. “Sharing no code” should mean no project modules are imported, not complete implementation independence.
+
+### Required correction
+
+Use precise wording:
+
+> a standalone checker that imports no SafeTransition modules and has an independently implemented verification path.
+
+Also state whether it was written from the schema/specification independently or merely copied and simplified from the producer.
+
+---
+
+## 18. Canonical JSON and deterministic hashing are not specified
+
+### Location
+
+Section 4.2, p. 7.
+
+### Problem
+
+Byte-identical rendering and SHA-256 reproducibility require canonical choices for:
+
+- dictionary key ordering;
+- rational representation;
+- whitespace and separators;
+- Unicode encoding;
+- newline convention;
+- SVG numeric formatting;
+- set iteration order;
+- Python-version-dependent serialization.
+
+A test on one machine does not establish cross-platform determinism.
+
+### Required correction
+
+Specify the canonical serialization. Test determinism:
+
+- in separate processes;
+- under different hash seeds;
+- on at least two Python versions;
+- preferably on two operating systems.
+
+Also clarify that SHA-256 establishes integrity/identity, not authenticity or authorship.
+
+---
+
+# Complexity and scaling problems
+
+## 19. The Fourier–Motzkin complexity sentence is false
+
+### Location
+
+Section 3.3, p. 5:
+
+> “the Fourier–Motzkin eliminator is exponential in the worst case, as exact elimination inherently is”
+
+### Problem
+
+Fourier–Motzkin elimination has exponential worst-case growth. But exact linear feasibility is not inherently exponential: rational linear programming has polynomial-time algorithms in the bit model.
+
+The sentence incorrectly generalizes a limitation of Fourier–Motzkin elimination to all exact methods.
+
+### Required correction
+
+Replace it with:
+
+> Fourier–Motzkin elimination can generate exponentially many inequalities in the worst case. SafeTransition uses it because the targeted systems are small and because provenance is straightforward to retain.
+
+---
+
+## 20. Section 3.4 is empty
+
+### Location
+
+Page 5:
+
+> “3.4. Scaling of the exact pipeline”
+
+Immediately followed by:
+
+> “4. Illustrative examples”
+
+### Problem
+
+The scaling prose is placed in Section 3.3, while Section 3.4 contains no text. Table 2 appears later, after the Section 4 heading.
+
+### Required correction
+
+Move the scaling paragraphs and Table 2 into Section 3.4, or delete the heading.
+
+---
+
+## 21. The dyadic denominator claims are inconsistent
+
+### Locations
+
+Abstract, p. 1:
+
+> “margins with 321-bit denominators”
+
+Section 3.2, pp. 4–5:
+
+> “the certified margin keeps \(t+1\) denominator bits at \(t=320\)”
+
+Table 2, p. 6:
+
+> “margin \(2^{-320}/(L+2)\) certified exactly; 321 certificate bits”
+
+### Problem
+
+The symbol \(L\) is undefined. Moreover, the denominator of
+\[
+2^{-320}/(L+2)
+\]
+is generally \(2^{320}(L+2)\), whose bit length exceeds 321 unless cancellation occurs or \(L+2=1\). The abstract’s denominator claim therefore does not follow from the table as written.
+
+The table also says “321 certificate bits,” which is not the same as “321-bit denominators.”
+
+### Required correction
+
+Define \(L\), give the reduced fraction, and report separately:
+
+- maximum numerator bit length;
+- maximum denominator bit length;
+- total serialized certificate size.
+
+Ensure the abstract uses the same metric.
+
+---
+
+## 22. Two different margin formulas are presented without explaining their families
+
+### Locations
+
+Section 3.3, p. 5:
+
+> “the exact margin’s closed form \((1/5-(k-1)/4096)/(k+1)\)”
+
+Table 2:
+
+- FM chain margin:
+  \[
+  (1/5-255/4096)/257
+  \]
+- Dyadic growth margin:
+  \[
+  2^{-320}/(L+2)
+  \]
+
+### Problem
+
+The prose says “coefficient growth” and then gives the FM-chain formula, while the table has a separate dyadic-growth family. It is unclear which statement applies to which family.
+
+### Required correction
+
+Name the family in every formula and define all parameters. Do not transition from one family to another with “the exact margin” as though there were one common expression.
+
+---
+
+## 23. The belief scaling row contradicts the stated sweep
+
+### Locations
+
+Section 3.3, p. 5:
+
+> “the default enumeration bound of 4 096 is reached exactly at \(m=12\) and exceeded at \(m=13\)”
+
+Table 2, p. 6:
+
+> “Beliefs, \(m=10\) labels ... 1 024 enumerated ... bound fires at \(m=13\)”
+
+The table heading says:
+
+> “Family (largest instance)”
+
+### Problem
+
+If \(m=12\) successfully reaches exactly 4,096 beliefs, then \(m=10\) is not the largest successful instance. If \(m=13\) is run and raises, then it may be the largest attempted instance.
+
+### Required correction
+
+Use explicit labels such as:
+
+- largest completed instance: \(m=12\), 4,096 beliefs;
+- overflow test: \(m=13\), exception raised.
+
+---
+
+## 24. The scaling examples are too structurally easy to justify broad scalability language
+
+### Location
+
+Section 3.3, p. 5:
+
+> “Exactness also scales gracefully”
+
+and:
+
+> “Growth is unremarkable in the right sense”
+
+### Problem
+
+The 256-variable Fourier–Motzkin family is deliberately constructed so that it generates only \(k\) rows and terminates at a contradiction. It does not test the combinatorial row explosion for which Fourier–Motzkin is known.
+
+Similarly:
+
+- cloned actions test repetition rather than geometric complexity;
+- layered viable graphs may avoid difficult branching;
+- constructed \(2^m\) beliefs test enumeration but not complex transitions.
+
+These are useful controlled tests, but they do not establish general scalability.
+
+### Required correction
+
+Use narrower language such as:
+
+> The implementation handles these structured planted-answer families at the reported sizes.
+
+Add at least one row-growth stress family and report when the implementation becomes impractical.
+
+---
+
+## 25. “Coefficient growth inflates certificate size, not verdict times” is unsupported and overgeneralized
+
+### Location
+
+Section 3.3, p. 5.
+
+### Problem
+
+Large integer and rational coefficients necessarily affect arithmetic cost. The effect may be small at the tested sizes, but it is not generally true that they do not affect verdict time.
+
+### Required correction
+
+Say:
+
+> Within the tested range, coefficient growth had a larger observed effect on certificate size than on wall-clock time.
+
+Provide the underlying sweep or regression if retaining the claim.
+
+---
+
+## 26. Performance reporting lacks reproducibility detail
+
+### Location
+
+Table 2 and surrounding text.
+
+### Missing details
+
+- CPU model;
+- operating system;
+- Python version;
+- number of repetitions;
+- warm-up policy;
+- median versus minimum runtime;
+- variance;
+- whether file I/O is included;
+- whether checker startup is included;
+- memory-tracing overhead.
+
+“Single core of a laptop CPU” is insufficient for a software paper.
+
+---
+
+# Exactness and dependency claims
+
+## 27. “All computations” is still too broad
+
+### Locations
+
+Abstract, p. 1; Introduction, p. 2; Section 3.2, p. 4.
+
+> “All computations run in exact rational arithmetic”
+
+But the paper also reports:
+
+- floating-point rendering;
+- matplotlib coordinates;
+- wall-clock time;
+- traced memory;
+- hashing;
+- text serialization.
+
+### Required correction
+
+Use:
+
+> All semantic assessment, recursion, threshold, and certificate arithmetic uses exact rationals. Floating point is confined to optional rendering and performance measurement.
+
+That accurately captures the intended distinction.
+
+---
+
+## 28. “No third-party runtime dependencies” needs package-boundary clarification
+
+### Locations
+
+Abstract, p. 1; Introduction, p. 2; Table 5, p. 11.
+
+Table 5 says:
+
+> “matplotlib and Pillow only for regenerating figures”
+
+### Problem
+
+The claim is defensible for the core package, but not for reproducing all paper artifacts. The manuscript alternates between library runtime, dashboard generation, and paper reproduction without consistently separating their requirements.
+
+### Required correction
+
+List:
+
+- core package dependencies;
+- independent checker dependencies;
+- dashboard dependencies;
+- benchmark dependencies;
+- paper-figure dependencies;
+- development/test dependencies.
+
+“Structural exactness” also does not follow merely from lacking numerical third-party packages; standard-library floats can still be used accidentally. The stronger evidence is input rejection and source/import auditing.
+
+---
+
+## 29. The floating-point adversarial example is narrow and partly implementation-dependent
+
+### Location
+
+Section 3.2, p. 4:
+
+> “\(49\cdot(1/49)-1=0\) ... binary floating-point evaluation yields \(-1.11\times10^{-16}\)”
+
+### Problem
+
+This demonstrates one direct-evaluation path with no tolerance. A numerical implementation could:
+
+- reorder arithmetic;
+- use fused operations;
+- use a tolerance;
+- use decimal or interval arithmetic.
+
+It is a useful regression case, but it does not establish that floating-point tooling generally produces the wrong verdict.
+
+### Required correction
+
+Phrase it as:
+
+> Under direct IEEE-754 binary64 evaluation in the tested expression order and with an exact zero threshold, the sign is negative.
+
+Report the platform and expression used.
+
+---
+
+# Benchmark and modelling gaps
+
+## 30. “Exact by construction” does not validate correspondence to the nonlinear fishery
+
+### Location
+
+Section 4.1, p. 6.
+
+The piecewise-linear plan tubes are said to be exact by construction, while the Schaefer tubes are conservative outer enclosures.
+
+### Problem
+
+A tube can be exact for the declared piecewise-linear datum without being the exact trajectory of the Schaefer dynamics. The paper needs to separate:
+
+1. exactness relative to the software datum;
+2. correctness of that datum as an enclosure of the nonlinear realization;
+3. empirical or scientific validity of the fishery model.
+
+### Required correction
+
+State precisely which conclusions are conditional on the declared datum and which are transferred to the nonlinear realization by enclosure.
+
+---
+
+## 31. The monotonicity enclosure is not reproducible from the paper
+
+### Location
+
+Section 4.1, p. 6:
+
+> “the enclosure following from monotonicity of \(\sigma\) on the visited biomass interval \((\sigma\ge528/125\ge4)\)”
+
+### Problem
+
+The visited biomass interval is not given. For
+\[
+\sigma(B)=4B(1-B/10),
+\]
+monotonicity changes at \(B=5\). A monotonicity argument is valid only if the relevant interval lies entirely on one side of that turning point or is split appropriately.
+
+### Required correction
+
+Give:
+
+- the exact biomass interval;
+- its relation to \(B=5\);
+- endpoint evaluations;
+- the inequality deriving \(528/125\).
+
+Do not leave the key enclosure proof solely in the deposit if it supports the main benchmark claim.
+
+---
+
+## 32. Conservative tubes require one-sided interpretation of rejected plans
+
+### Location
+
+Sections 4.1 and 7.
+
+### Problem
+
+The paper says the tool certifies “transition safety,” but an outer tube can certify safety only when the whole outer set is safe. A rejection based on an outer-tube violation can be a false negative.
+
+### Required correction
+
+The API should distinguish at least:
+
+- `CERTIFIED_SAFE`;
+- `CERTIFIED_VIOLATION`;
+- `NOT_CERTIFIED_SAFE_FROM_OUTER_TUBE`.
+
+A Boolean admissible/inadmissible result is potentially misleading when enclosure status varies.
+
+---
+
+## 33. “Characteristic disturbance” may disconnect the dashboard from robust certification
+
+### Location
+
+Section 4.2, p. 7.
+
+If the dashboard shows one selected disturbance while the operator quantifies over all disturbances, the dashboard can display a benign path alongside a robust verdict driven by another path. The paper should show both the selected branch and the robust minimum, or clearly label the reading as illustrative.
+
+---
+
+# Software architecture and presentation inconsistencies
+
+## 34. Table 1 appears to list ten modules, not nine
+
+### Location
+
+Table 1, p. 4.
+
+The listed entries are:
+
+1. `rational`
+2. `datum`
+3. `operators`
+4. `recursion`
+5. `certificates`
+6. `indicators`
+7. `dashboard`
+8. `benchmark`
+9. `benchmarks`
+10. `cli`
+
+The text says:
+
+> “nine modules plus the repository-root independent checker script”
+
+### Required correction
+
+Explain whether `cli` is an entry point rather than a module, or whether `benchmark` and `benchmarks` are one package. Otherwise change “nine” to “ten.”
+
+---
+
+## 35. `benchmark` versus `benchmarks` is confusing
+
+### Location
+
+Table 1.
+
+There is both:
+
+- `benchmark`: twenty-four exact checks;
+- `benchmarks`: scaling study.
+
+This naming is easy to confuse and may not reflect actual package structure. Use more distinctive names such as `witness_benchmark` and `scaling_benchmarks`, or explain the package/module distinction.
+
+---
+
+## 36. A cross-reference in Section 4.2 is wrong
+
+### Location
+
+Section 4.2, p. 7:
+
+> “not the phase-state coordinates \((x,s_1,s_2)\) of Section 3.3”
+
+Section 3.3 discusses interfaces and complexity, not the phase-state definition. The state is introduced in Section 2.1.
+
+### Required correction
+
+Change the reference to Section 2.1. Also note that the full phase state was defined as
+\[
+z=(q,x,s_1,\ldots,s_n),
+\]
+so writing the witness state as only \((x,s_1,s_2)\) silently omits \(q\). State that the phase flag is fixed or suppressed.
+
+---
+
+## 37. The title contains a visible spacing error
+
+### Location
+
+Page 1:
+
+> “transition safety forsustainability assessment”
+
+Change to “for sustainability assessment.”
+
+The extracted author line also appears as:
+
+> “Amin AbaeeaaIndependent Researcher”
+
+This may be a PDF extraction/LaTeX affiliation-marker problem, but the rendered PDF should be checked.
+
+---
+
+## 38. The date and references are future-dated
+
+### Locations
+
+- “September 20, 2026”
+- companion manuscripts dated 2026;
+- preserved queries dated 2026;
+- first availability 2026.
+
+If this is being submitted before those dates, the metadata is impossible or misleading. If 2026 is intentional, ensure all cited deposits and URLs are publicly accessible by submission time.
+
+---
+
+# Partial-observation example gaps
+
+## 39. The recourse-failure example is not specified in the paper
+
+### Location
+
+Section 4.3, pp. 7–8.
+
+The paper states:
+
+> “the root belief lies in \(W_1\setminus W_2\)”
+
+but does not show:
+
+- the three states;
+- observation labels;
+- available actions;
+- transitions;
+- disturbance branches;
+- unsafe states;
+- \(W_0,W_1,W_2\);
+- the two post-beliefs.
+
+### Problem
+
+This is the principal demonstration of the belief recursion, yet the reader cannot verify it from the article.
+
+### Required correction
+
+Include a compact transition table and the actual returned counterexample object. This is especially necessary given the ambiguity in the belief-update definition.
+
+---
+
+## 40. “Both actions are admissible in isolation” is ambiguous
+
+### Location
+
+Section 4.3, p. 8.
+
+This could mean:
+
+- each action is safe for each individual state;
+- each action is safe for at least one state;
+- each action is one-step admissible for the whole root belief;
+- each action is admissible under full information but not under common observation.
+
+The intended meaning must be stated formally.
+
+---
+
+## 41. Failure explanations are not shown to be independently checkable
+
+### Location
+
+Sections 2.2, 3.3, and 4.3.
+
+The paper calls the failure object “machine-checkable,” but does not say whether the independent checker validates it. If it is checked only by the main library, this is another self-verification path rather than independent certification.
+
+The paper should specify the recursive certificate structure and checker support.
+
+---
+
+# Related-work weaknesses
+
+## 42. The closest exact and certificate-producing tools are still underrepresented
+
+### Location
+
+Section 5, pp. 9–10.
+
+The comparison includes environmental simulators, Z3, PRISM, and pyfme, but omits major relevant categories:
+
+- exact polyhedral libraries;
+- rational LP solvers;
+- proof-producing SMT systems;
+- formal proof assistants;
+- reachability tools with interval or exact arithmetic;
+- viability and invariant-set packages;
+- certifying optimization frameworks.
+
+Raven and FloPy are environmental simulators, not representative numerical viability-kernel tools. The sentence grouping “numerical viability kernels and reachability tools” with Raven and FloPy conflates different software classes.
+
+### Required correction
+
+Cite actual viability/reachability packages and exact-polyhedral systems. The novelty comparison should address whether SafeTransition’s distinction is:
+
+- domain semantics;
+- certificate schema;
+- independent checker;
+- exact weight partition;
+- belief-policy explanation;
+- integration of these components.
+
+---
+
+## 43. Claims about Z3 are too loose
+
+### Locations
+
+Section 5 and Table 4.
+
+> “produces checkable unsatisfiability cores”
+
+An unsatisfiable core is not, by itself, a proof of unsatisfiability. It identifies a subset of assertions that the solver reports unsatisfiable. Independent checking requires re-solving or a proof object.
+
+Z3 proof production also depends on logic, configuration, and output format. Table 4’s entry:
+
+> “unsat cores, proofs”
+
+needs qualification and citation to current capabilities relevant to rational linear arithmetic.
+
+---
+
+## 44. Claims about PRISM need qualification
+
+### Locations
+
+Section 5 and Table 4.
+
+> “returns counterexample traces at floating-point scale”
+
+PRISM’s counterexample support depends on model and property class and may involve external components or particular workflows. Likewise, “POMDP algorithms” does not make PRISM directly comparable to adversarial finite-horizon epistemic viability.
+
+The paper should state precisely which PRISM capabilities are being compared.
+
+---
+
+## 45. “None of the environmental families returns certificates” is too broad
+
+### Location
+
+Section 5, p. 9.
+
+A twelve-query web search is not enough to establish a universal absence claim across broad software families. The claim should be narrowed to the named packages and surveyed versions:
+
+> None of the named packages, in the surveyed versions and documented interfaces, was found to return the certificate forms used here.
+
+---
+
+## 46. The search methodology is not a substitute for a technical literature review
+
+### Locations
+
+Introduction and Section 5.
+
+Twelve archived web queries improve reproducibility of the search, but search-engine results depend on ranking, geography, date, and query selection. The paper should also provide a conventional literature-based selection rationale and explicit inclusion/exclusion criteria.
+
+---
+
+# Availability and reproducibility gaps
+
+## 47. The cited deposit title does not clearly identify the SafeTransition artifact
+
+### Locations
+
+Reference [9] and Section 6.
+
+Reference [9] is titled:
+
+> “Verification code and figure pipeline for Aggregate Indices and Transition Safety”
+
+But the paper says it archives SafeTransition source, tests, examples, checker, and scaling study.
+
+### Problem
+
+It is unclear whether the deposit is:
+
+- the companion manuscript’s verification deposit;
+- the SafeTransition software archive;
+- both;
+- a versioned release corresponding exactly to SafeTransition 1.2.1.
+
+### Required correction
+
+Provide a dedicated versioned software DOI or clearly identify the archive contents, release tag, commit hash, and checksum.
+
+---
+
+## 48. The project repository and package-index URLs are missing
+
+### Locations
+
+Sections 5–6 and Table 5.
+
+The text says the project is mirrored in a repository and distributed through package indexes, but Table 5 gives no repository or package URL.
+
+A software paper should provide:
+
+- repository URL;
+- archived release DOI;
+- release tag;
+- commit hash;
+- package-index URL if applicable;
+- documentation URL;
+- license file location.
+
+---
+
+## 49. Test counts do not establish broad certificate reliability
+
+### Locations
+
+Tables 2–3 and Section 6.
+
+Forty-six tests and three checked certificates are useful but modest for code handling exact arithmetic, serialization, elimination, and recursive state construction. Missing evidence includes:
+
+- randomized property tests;
+- comparison against an independent LP/SMT solver;
+- malformed JSON fuzzing;
+- row-scaling tests;
+- degenerate systems;
+- redundant and duplicate constraints;
+- zero rows;
+- empty systems;
+- unbounded feasible systems;
+- large numerator/denominator inputs;
+- certificate schema-version rejection.
+
+---
+
+## 50. The paper delegates too much foundational content to unpublished companion manuscripts
+
+### Locations
+
+Introduction and Section 2.
+
+Both mathematical foundations are cited as “Manuscript submitted for publication.” The software paper says proofs are delegated to them, but reviewers may not have access to accepted, stable versions.
+
+At minimum, this paper needs self-contained statements and proof sketches for the properties it relies on:
+
+- operator inclusion chain;
+- soundness of Farkas output;
+- belief-recursion soundness/completeness;
+- fibre criterion;
+- common-action obstruction;
+- completeness of weight partition.
+
+---
+
+# Additional wording and precision issues
+
+## 51. “Exact reachability” should be avoided where the object is only a supplied path
+
+A piecewise-linear declared tube is exact relative to its declaration. Calling it an “exact reachability tube” suggests it has been derived as the exact reachable set of a dynamical system. Use:
+
+> exact supplied trajectory tube
+
+unless dynamical reachability has actually been proved.
+
+---
+
+## 52. “Every visited extreme is attained at breakpoints” is insufficient for general constraints
+
+### Location
+
+Section 2.1, p. 2.
+
+Coordinatewise extrema of piecewise-linear paths occur at breakpoints, but extrema of nonlinear physical predicates need not. Even linear combinations are safe only if all coordinates share the same piecewise-linear parameterization over each segment.
+
+State the supported constraint class:
+
+- coordinate floors only;
+- affine predicates;
+- arbitrary callable predicates;
+- nonlinear predicates with separate certificates.
+
+---
+
+## 53. The disturbance set must be stated to be finite or effectively enumerable
+
+The action set is explicitly finite, but the disturbance set is only called “a set.” Exact universal checking by enumeration requires finiteness unless another symbolic representation is supported.
+
+---
+
+## 54. “Polynomial in graph size and horizon” needs a precise size model
+
+### Location
+
+Section 2.2, p. 3.
+
+State whether graph size includes:
+
+- states;
+- state-action pairs;
+- transitions;
+- disturbance branches;
+- tube points;
+- rational bit lengths.
+
+With rational predicates, “constant-time predicates” hides bit-complexity and input-size effects. The statement is acceptable only as an explicitly unit-cost graph-complexity claim.
+
+---
+
+## 55. The compensatory accepted set notation needs explanation
+
+### Location
+
+Section 2.1, p. 3:
+
+\[
+V_{\rm weak}=\bigcap_w V_w.
+\]
+
+This means that for every weight there exists some licensed action, potentially a different action for each weight:
+\[
+\forall w\ \exists a.
+\]
+It is not the same as:
+\[
+\exists a\ \forall w.
+\]
+
+Because the paper’s central theme is quantifier order, this distinction should be stated explicitly.
+
+---
+
+## 56. “No ratio licenses a typed-safe plan” is conceptually awkward
+
+### Location
+
+Figure 2 caption.
+
+Typed safety does not depend on the ratio. Better:
+
+> Neither plan is typed-safe, although at least one is aggregate-licensed at every admissible ratio.
+
+This avoids suggesting that typed safety itself is weight-dependent.
+
+---
+
+## 57. The dashboard’s “verification arrives together” claim should distinguish integrity from trust
+
+### Location
+
+Section 4.2.
+
+Embedding a certificate, hash, and command makes verification convenient, but a malicious or erroneous producer can embed mutually consistent false input data, certificate files, and hashes. The dashboard verifies consistency with the serialized datum, not external truth or scientific validity.
+
+---
+
+## 58. The pooled-kernel identity is too abrupt to be useful
+
+### Location
+
+Section 4.3, p. 8:
+
+> “The pooled-kernel identity of the deposited double-integrator instance... is checked exactly.”
+
+Neither the normals \(n_j\), the system, nor the relevance of this example is explained. It reads as an unsupported regression-test detail.
+
+Either give enough detail to understand the certificate or move it entirely to the supplementary artifact table.
+
+---
+
+## 59. “Hardware required none beyond a standard computer” is vague
+
+### Location
+
+Table 5.
+
+Every program requires hardware. Use something like:
+
+> Tested on ordinary x86-64/ARM64 desktop or laptop hardware; no GPU or specialized accelerator required.
+
+---
+
+## 60. The line-count claim needs a counting method
+
+### Locations
+
+Tables 1, 3, and 5.
+
+Line counts depend on whether blank lines, comments, generated files, and package metadata are included. This is minor, but repeated exact counts should cite the counting command or be removed.
+
+---
+
+# Priority corrections before submission
+
+## Essential
+
+1. Correct and formally define the belief update.
+2. Resolve the contradiction between finite-system completeness and injective-observation completeness.
+3. Separate exact tubes from certified outer tubes and define one-sided verdict semantics.
+4. Correct the Fourier–Motzkin complexity statement.
+5. Fix the positive-weight domain versus intervals containing \(r=0\).
+6. Add assumptions to the three-regime threshold formulas.
+7. Define “minimal conflicting subfamily.”
+8. Clarify disturbance quantification versus “characteristic disturbance.”
+9. Explain exactly what the independent checker verifies.
+10. Fix the undefined \(L\) and inconsistent denominator-bit claims.
+
+## Important
+
+11. Supply the three-state belief example in full.
+12. Formalize all five operators and prove the inclusion chain under stated assumptions.
+13. Clarify current `weight_partition` scope.
+14. Correct the index-blindness boundary condition.
+15. Move scaling content into the empty Section 3.4.
+16. Correct the module count.
+17. Add canonical serialization details.
+18. Expand related work to exact polyhedral and certifying systems.
+19. Provide complete artifact URLs and a version-specific archive.
+20. Narrow universal software-ecosystem claims.
+
+## Editorial
+
+21. Fix “forsustainability.”
+22. Repair the author/affiliation rendering.
+23. Correct the Section 3.3 cross-reference.
+24. Clarify omission of phase flag \(q\) from the witness state.
+25. Check future dates and public availability.
+26. Improve Table 2’s broken formatting and “largest instance” labeling.
+
+## Bottom line
+
+The paper now has the outline of a credible certificate-carrying software contribution, but it is not internally consistent enough yet for its strongest claims. The **belief-space semantics** are the most serious concern; the **exact-versus-conservative tube distinction**, **weight-domain errors**, and **incorrect exact-elimination complexity claim** are next. These should be treated as correctness issues, not merely editorial refinements.
+deepseek:
+## Executive assessment
+
+The manuscript has a credible and potentially useful core: a small, exact-rational, certificate-carrying layer for transition-safety verdicts in sustainability assessment. The strongest claims are also the ones that need the most repair. The current version is not yet internally consistent enough for its strongest statements about belief-space completeness, exact versus conservative tubes, weight-space completeness, independent verification, and scaling. 
+
+## 1. Belief-space recursion: the most serious correctness problem
+
+**Flaw.** The paper gives mutually incompatible descriptions:
+
+- A belief is “a set of states” (§2.2).
+- The belief updates to “the set of labels reachable under the action” (§2.2).
+- The Introduction claims the recursion is “sound and complete in finite systems.”
+- §2.2 later restricts completeness to the case where observation is injective on reachable states.
+- Admissibility is described as checking “no state in its observation fibre enters a violation,” but a history-dependent belief can be a strict subset of the current fibre.
+
+**Why it matters.** A set of labels generally loses the state information needed to determine future safe actions. If the algorithm abstracts beliefs to labels, soundness and completeness require a separate proof. If observations are injective on reachable states, the partial-observation problem largely collapses to singletons, which is an unexpectedly restrictive condition for a belief-space method.
+
+**Improvement.** State the exact recursion formally:
+
+- Beliefs are sets of states, or explicitly define the label abstraction.
+- Define the transition and observation update:
+  \[
+  B'_{a,o}=\{z':\exists z\in B,\ z'\in T(z,a),\ \operatorname{obs}(z')=o\}.
+  \]
+- Specify disturbance quantification.
+- Specify whether policies are memoryless in observations or history-dependent through beliefs.
+- Define \(W_0\) and \(W_k\).
+- Prove soundness and completeness under stated hypotheses, or cite exact theorem numbers from the companion manuscripts.
+- Remove unconditional “sound and complete in finite systems” unless that is actually proved.
+- If injectivity is required, explain why and whether it can be relaxed.
+
+---
+
+## 2. Exact versus conservative tubes are contradictory
+
+**Flaw.** §2.1 says “each tube is the exact visited set and no outer approximation enters.” §4.1 says the Schaefer realization’s tubes are “certified conservative outer enclosures.” The Conclusion says “exact or certified conservative tubes.”
+
+**Why it matters.** Exact and outer tubes support asymmetric verdicts:
+
+- Exact tube: safe everywhere ⇒ certified safe; violation ⇒ certified unsafe.
+- Outer tube: safe everywhere ⇒ true tube safe; violation ⇒ inconclusive unless the violating point is known reachable.
+
+**Improvement.** Introduce explicit tube statuses:
+
+- `EXACT`
+- `OUTER_CERTIFIED`
+- `UNVERIFIED`
+
+Define verdict semantics per status. The API should return at least:
+
+- `CERTIFIED_SAFE`
+- `CERTIFIED_VIOLATION`
+- `NOT_CERTIFIED_SAFE_FROM_OUTER_TUBE`
+
+For the benchmark, state whether the typed/aggregate separation is established by an exact declared plan tube or only by an outer Schaefer enclosure. If the rejection depends only on an outer-enclosure point, the separation is not established for the realized dynamics.
+
+---
+
+## 3. Operator definitions and inclusion chain are under-specified
+
+**Flaw.** §2.1 states
+\[
+E_{\text{typ}}(z)\subseteq E_w(z)\subseteq E_{\text{tube,phys}}(z)\subseteq E_{\text{end}}(z)
+\]
+without fully defining the operators. It is unclear:
+
+- whether all weights are strictly positive or merely nonnegative;
+- whether the aggregate is evaluated over every disturbance;
+- whether all operators impose the same destination condition;
+- whether the endpoint is pre- or post-reset;
+- how the transition-safe set \(S\) enters each operator;
+- what “physical” constraints are.
+
+**Improvement.** Give formal definitions for all five operators before the chain. For example:
+\[
+E_{\text{typ}}(z)=\{a:\forall d,\ \forall y\in T(z,a,d),\ s_i(y)\ge0\ \forall i,\ R(z,a,d)\in G\}.
+\]
+Then define each weakening by deleting named constraints. Add a proposition with exact hypotheses for the chain. Clarify the role of \(S\), \(G\), and the endpoint reset map \(R\).
+
+---
+
+## 4. Endpoint ambiguity with reset
+
+**Flaw.** The datum includes a destination set \(G\) reached under an endpoint reset, but the chain is justified by “endpoints are contained in tubes.” It is unclear which endpoint the endpoint-only operators assess: the pre-reset terminal state or the post-reset successor.
+
+**Improvement.** Define separately:
+
+- terminal pre-reset state \(y(T^-)\);
+- reset map \(R(y(T^-),a,d)\);
+- successor state \(z^+\);
+- which object `E_end` and `E_end,typ` check.
+
+Without this, the chain is not formally checkable.
+
+---
+
+## 5. Disturbance semantics are inconsistent
+
+**Flaw.** Three different concepts appear:
+
+1. all disturbances \(d\);
+2. one action-indexed worst-case disturbance;
+3. one “characteristic disturbance per plan” in dashboard readings.
+
+The operator definition quantifies over every disturbance, but dashboard values appear to use one characteristic disturbance. Different floors can have different worst-case disturbances; there need not be a single disturbance minimizing all floors or their weighted sum.
+
+**Improvement.** Specify whether dashboard values are:
+
+- robust minima over all disturbances;
+- values under a selected illustrative branch;
+- values under a formally certified worst-case branch.
+
+If “characteristic” is illustrative, label it as such and do not present it as the operator verdict. If it is worst-case, include the certificate proving that status.
+
+---
+
+## 6. Observation-fibre criterion is overclaimed
+
+**Flaw.** §2.3 says the criterion “decides whether an exact observation-only certifier can exist at all.” §4.3 says it rules out “any exact observation-only certifier.”
+
+**Why it matters.** Constancy of safe-set membership on observation fibres is an iff criterion for a much narrower question: can current safe-set membership be determined exactly from the current observation alone? It does not decide existence of an observation-based control policy, finite-horizon viability, transition safety, conservative certifiers, history-dependent certifiers, or three-valued certifiers.
+
+**Improvement.** Rename it, e.g.:
+
+> Observation-only predicate-classification criterion.
+
+State precisely: exact classification of current membership in \(S\) from the current observation exists iff membership in \(S\) is constant on every observation fibre. Distinguish it from common-action existence, belief viability, and history-dependent policy existence.
+
+---
+
+## 7. Common-action obstruction is under-specified
+
+**Flaw.** §2.3 refers to “safe-action sets of pairwise-compatible states intersect emptily while each is nonempty,” but “pairwise-compatible” is undefined. It could mean sharing an observation, being jointly possible in a belief, or having pairwise intersecting action sets. Also, the obstruction proves no immediate common action only if the action sets contain recursively viable actions; one-step-safe actions are not enough.
+
+**Improvement.** Define:
+
+- the compatibility relation;
+- the exact action set attached to each state;
+- whether it is immediate-safe or recursively viable;
+- the horizon;
+- the policy class being ruled out.
+
+Formal statement, e.g.:
+\[
+\bigcap_{z\in B} A_k(z)=\varnothing,\qquad A_k(z)\ne\varnothing\ \forall z\in B,
+\]
+with \(A_k(z)\) explicitly defined.
+
+---
+
+## 8. “Minimal conflicting subfamily” is undefined
+
+**Flaw.** It is unclear whether “minimal” means inclusion-minimal, minimum cardinality, minimum weighted size, or first found under deterministic ordering.
+
+**Improvement.** State the exact guarantee. If inclusion-minimal, certify:
+
+- retained family has empty intersection;
+- removing any one retained state makes the intersection nonempty.
+
+If minimum cardinality is computed, state the algorithm and complexity.
+
+---
+
+## 9. Weight-domain conflicts with “positive weight cone”
+
+**Flaw.** If weights are strictly positive, then
+\[
+r=w_2/w_1\in(0,\infty),
+\]
+so \(r=0\) is not in the domain. But §4.3 says “SLOW-only on \([0,2/3)\).”
+
+**Improvement.** Choose one convention:
+
+- strictly positive weights: \(r\in(0,\infty)\);
+- nonnegative weights with nonzero total: include \(r=0\) and define \(r=\infty\) separately.
+
+The checker must certify coverage of the actual domain.
+
+---
+
+## 10. Three-regime threshold formulas require missing assumptions
+
+**Flaw.** §4.3 claims three regimes “across the rational family” with thresholds
+\[
+\frac{\mathrm{dip}-s_1}{s_2},\qquad \frac{s_1}{\mathrm{dip}-s_2}.
+\]
+These require denominator and sign assumptions, e.g.
+\[
+s_1>0,\quad s_2>0,\quad \mathrm{dip}>s_1,\quad \mathrm{dip}>s_2.
+\]
+If \(\mathrm{dip}\le s_2\), the second denominator is zero or negative. If \(\mathrm{dip}\le s_1\), the first threshold can be nonpositive.
+
+**Improvement.** State the admissible parameter region and handle degenerate cases:
+
+- zero denominator;
+- negative threshold;
+- coincident thresholds;
+- thresholds outside the positive-ratio domain;
+- plans licensed everywhere or nowhere.
+
+The weight-partition certificate should cover these cases if the interface is presented as general.
+
+---
+
+## 11. `weight_partition` scope is unclear
+
+**Flaw.** §3.3 describes it as returning “the complete licensing arrangement along the weight ratio,” but the Conclusion says extension “to richer plan menus” is future work.
+
+**Improvement.** State the implemented input class precisely. For example:
+
+> The current routine supports two criteria and a finite plan menu whose robust aggregate minima are supplied as affine functions of \(r\).
+
+Do not describe it as a complete general weight-space analysis if richer menus are future work.
+
+---
+
+## 12. Index-blindness alarm misses boundary false positives
+
+**Flaw.** The aggregate operator licenses when \(w\cdot s\ge0\). A plan with aggregate minimum exactly zero and a negative individual floor is still licensed and still exhibits compensatory blindness. An alarm requiring strict positivity will not fire.
+
+**Improvement.** Use nonnegative:
+\[
+\min_t w\cdot s(t)\ge0
+\quad\text{and}\quad
+\min_{t,i}s_i(t)<0.
+\]
+If strict positivity is intentional, state that the alarm detects only strict-margin cases.
+
+---
+
+## 13. Infeasibility margin is representation-dependent
+
+**Flaw.** §2.3 says the margin \(-\lambda^\top b>0\) is defined by normalizing \(\sum_i\lambda_i=1\). Normalization removes arbitrary scaling of the certificate but not rescaling of the original rows.
+
+**Improvement.** Call it a **normalized certificate contradiction value**. State:
+
+> The margin is invariant to positive scaling of the certificate vector but not to rescaling or renormalization of the input rows.
+
+If margins are compared across instances, define canonical row normalization first.
+
+---
+
+## 14. Checker proves algebraic validity, not semantic correctness
+
+**Flaw.** An independent checker can verify that serialized \(A,b,\lambda\) satisfy
+\[
+\lambda\ge0,\quad \lambda^\top A=0,\quad \lambda^\top b<0.
+\]
+It does not prove that \(A,b\) correctly encode the original transition datum, action menu, disturbance quantification, tube, or sustainability floors.
+
+**Improvement.** Describe the trusted computing base. Distinguish:
+
+1. algebraic certificate checking;
+2. checking derivation of constraints from the datum;
+3. checking tube validity against dynamics;
+4. checking dashboard binding to certificate files.
+
+If the checker re-derives the constraint system from serialized transition data, document the schema. If it only checks a supplied matrix, narrow the claim.
+
+Also replace “sharing no code” with:
+
+> a standalone checker that imports no SafeTransition modules and has an independently implemented verification path.
+
+---
+
+## 15. Certificate support matrix is missing
+
+**Flaw.** Table 3 says “Independent checker over emitted certificates 3/3 verified,” but the paper mentions Farkas certificates, weight-partition certificates, tube certificates, benchmark certificates, belief-failure objects, common-action obstruction certificates, fibre violations, and dashboard provenance.
+
+**Improvement.** Add a matrix:
+
+| Certificate type | Emitted by library | Independently checked | Checker reconstructs semantics? |
+|---|---:|---:|---:|
+| Farkas | yes | yes | matrix only/full datum |
+| Weight partition | yes | yes | ... |
+| Tube enclosure | yes/no | yes/no | ... |
+| Belief failure | yes/no | yes/no | ... |
+| Fibre violation | yes/no | yes/no | ... |
+
+The abstract should not imply universal independent checking if only three selected artifacts are checked.
+
+---
+
+## 16. Feasibility certificates are unspecified
+
+**Flaw.** §3.3 says `certify_polyhedron` returns a feasibility verdict with its certificate. §2.3 explains certificates only for infeasibility.
+
+**Improvement.** State whether the API returns:
+
+- a feasible rational vector \(u\) when feasible;
+- a Farkas multiplier when infeasible;
+- or a bare Boolean in the feasible case.
+
+If a rational witness is returned, explain how it is reconstructed and checked.
+
+---
+
+## 17. Canonical JSON and deterministic hashing are unspecified
+
+**Flaw.** Byte-identical rendering and SHA-256 reproducibility require canonical choices for dictionary key ordering, rational representation, whitespace, Unicode, newlines, SVG numeric formatting, set iteration order, and Python-version-dependent serialization.
+
+**Improvement.** Specify the canonical serialization. Test determinism in separate processes, under different hash seeds, on at least two Python versions, preferably on two operating systems. Clarify that SHA-256 establishes integrity/identity, not authenticity or authorship.
+
+---
+
+## 18. Fourier–Motzkin complexity statement is false
+
+**Flaw.** §3.3 says “the Fourier–Motzkin eliminator is exponential in the worst case, as exact elimination inherently is.” Exact linear feasibility is not inherently exponential: rational linear programming has polynomial-time algorithms in the bit model.
+
+**Improvement.** Replace with:
+
+> Fourier–Motzkin elimination can generate exponentially many inequalities in the worst case. SafeTransition uses it because the targeted systems are small and because provenance is straightforward to retain.
+
+---
+
+## 19. Section 3.4 is empty; Table 2 is misplaced
+
+**Flaw.** Page 5 has “3.4. Scaling of the exact pipeline” immediately followed by “4. Illustrative examples.” The scaling prose is in §3.3, and Table 2 appears after the §4 heading.
+
+**Improvement.** Move the scaling paragraphs and Table 2 into §3.4, or delete the heading.
+
+---
+
+## 20. Dyadic denominator claims are inconsistent
+
+**Flaw.** The abstract says “margins with 321-bit denominators.” §3.2 says “the certified margin keeps \(t+1\) denominator bits at \(t=320\).” Table 2 says “margin \(2^{-320}/(L+2)\) certified exactly; 321 certificate bits.” The symbol \(L\) is undefined. The denominator of \(2^{-320}/(L+2)\) is generally \(2^{320}(L+2)\), whose bit length exceeds 321 unless cancellation occurs.
+
+**Improvement.** Define \(L\), give the reduced fraction, and report separately:
+
+- maximum numerator bit length;
+- maximum denominator bit length;
+- total serialized certificate size.
+
+Ensure the abstract uses the same metric.
+
+---
+
+## 21. Two margin formulas are conflated
+
+**Flaw.** §3.3 gives
+\[
+(1/5-(k-1)/4096)/(k+1)
+\]
+while Table 2 has a separate dyadic-growth margin \(2^{-320}/(L+2)\). It is unclear which formula applies to which family.
+
+**Improvement.** Name the family in every formula and define all parameters. Do not transition from one family to another with “the exact margin” as though there were one common expression.
+
+---
+
+## 22. Belief scaling row contradicts the sweep
+
+**Flaw.** §3.3 says the default bound of 4096 is reached exactly at \(m=12\) and exceeded at \(m=13\). Table 2 says “Beliefs, \(m=10\) labels … 1 024 enumerated … bound fires at \(m=13\),” under “Family (largest instance).” If \(m=12\) succeeds, \(m=10\) is not the largest successful instance.
+
+**Improvement.** Use explicit labels:
+
+- largest completed instance: \(m=12\), 4,096 beliefs;
+- overflow test: \(m=13\), exception raised.
+
+---
+
+## 23. Scaling examples are too structurally easy
+
+**Flaw.** The 256-variable Fourier–Motzkin family is constructed to generate only \(k\) rows and terminate at a contradiction. It does not test the combinatorial row explosion for which Fourier–Motzkin is known. Cloned actions test repetition, not geometric complexity. Layered viable graphs may avoid difficult branching.
+
+**Improvement.** Use narrower language:
+
+> The implementation handles these structured planted-answer families at the reported sizes.
+
+Add at least one row-growth stress family and report when the implementation becomes impractical.
+
+---
+
+## 24. “Coefficient growth inflates certificate size, not verdict times” is unsupported
+
+**Flaw.** Large integer and rational coefficients necessarily affect arithmetic cost. The effect may be small at tested sizes, but the general claim is unsupported.
+
+**Improvement.** Say:
+
+> Within the tested range, coefficient growth had a larger observed effect on certificate size than on wall-clock time.
+
+Provide the underlying sweep or regression.
+
+---
+
+## 25. Performance reporting lacks reproducibility detail
+
+**Flaw.** Table 2 and surrounding text do not report CPU model, OS, Python version, repetitions, warm-up policy, median versus minimum runtime, variance, whether file I/O is included, whether checker startup is included, or memory-tracing overhead.
+
+**Improvement.** Add a reproducibility table with these details. “Single core of a laptop CPU” is insufficient for a software paper.
+
+---
+
+## 26. “All computations” is too broad
+
+**Flaw.** The paper also reports floating-point rendering, matplotlib coordinates, wall-clock time, traced memory, hashing, and text serialization.
+
+**Improvement.** Use:
+
+> All semantic assessment, recursion, threshold, and certificate arithmetic uses exact rationals. Floating point is confined to optional rendering and performance measurement.
+
+Also separate dependency classes:
+
+- core package;
+- independent checker;
+- dashboard;
+- benchmark;
+- paper-figure;
+- development/test.
+
+“Structural exactness” does not follow merely from lacking numerical third-party packages; standard-library floats can still be used accidentally. The stronger evidence is input rejection and source/import auditing.
+
+---
+
+## 27. Floating-point adversarial example is narrow
+
+**Flaw.** §3.2 says \(49\cdot(1/49)-1=0\) holds exactly, while binary floating-point evaluation yields \(-1.11\times10^{-16}\). This depends on expression order, tolerance, and platform.
+
+**Improvement.** Phrase it as:
+
+> Under direct IEEE-754 binary64 evaluation in the tested expression order and with an exact zero threshold, the sign is negative.
+
+Report platform and expression used.
+
+---
+
+## 28. Benchmark: “exact by construction” does not validate the nonlinear fishery
+
+**Flaw.** §4.1 says piecewise-linear plan tubes are exact by construction, while Schaefer tubes are conservative outer enclosures. A tube can be exact for the declared piecewise-linear datum without being the exact trajectory of the Schaefer dynamics.
+
+**Improvement.** Separate:
+
+1. exactness relative to the software datum;
+2. correctness of that datum as an enclosure of the nonlinear realization;
+3. empirical or scientific validity of the fishery model.
+
+State which conclusions are conditional on the declared datum and which are transferred by enclosure.
+
+---
+
+## 29. Monotonicity enclosure is not reproducible
+
+**Flaw.** §4.1 says the enclosure follows from monotonicity of \(\sigma\) on the visited biomass interval \((\sigma\ge528/125\ge4)\). The visited biomass interval is not given. For
+\[
+\sigma(B)=4B(1-B/10),
+\]
+monotonicity changes at \(B=5\). A monotonicity argument is valid only if the relevant interval lies entirely on one side of that turning point or is split appropriately.
+
+**Improvement.** Give the exact biomass interval, its relation to \(B=5\), endpoint evaluations, and the inequality deriving \(528/125\).
+
+---
+
+## 30. Conservative tubes require one-sided rejection semantics
+
+**Flaw.** The paper says the tool certifies “transition safety,” but an outer tube can certify safety only when the whole outer set is safe. A rejection based on an outer-tube violation can be a false negative.
+
+**Improvement.** The API should distinguish:
+
+- `CERTIFIED_SAFE`;
+- `CERTIFIED_VIOLATION`;
+- `NOT_CERTIFIED_SAFE_FROM_OUTER_TUBE`.
+
+A Boolean admissible/inadmissible result is potentially misleading when enclosure status varies.
+
+---
+
+## 31. “Characteristic disturbance” may disconnect dashboard from robust certification
+
+**Flaw.** If the dashboard shows one selected disturbance while the operator quantifies over all disturbances, the dashboard can display a benign path alongside a robust verdict driven by another path.
+
+**Improvement.** Show both the selected branch and the robust minimum, or clearly label the reading as illustrative.
+
+---
+
+## 32. Table 1 module count is inconsistent
+
+**Flaw.** Table 1 lists ten entries:
+
+1. `rational`
+2. `datum`
+3. `operators`
+4. `recursion`
+5. `certificates`
+6. `indicators`
+7. `dashboard`
+8. `benchmark`
+9. `benchmarks`
+10. `cli`
+
+The text says “nine modules plus the repository-root independent checker script.”
+
+**Improvement.** Explain whether `cli` is an entry point rather than a module, or whether `benchmark` and `benchmarks` are one package. Otherwise change “nine” to “ten.” Rename `benchmark`/`benchmarks` to more distinctive names, e.g. `witness_benchmark` and `scaling_benchmarks`.
+
+---
+
+## 33. Cross-reference and state notation errors
+
+**Flaw.** §4.2 says “not the phase-state coordinates \((x,s_1,s_2)\) of Section 3.3.” Section 3.3 discusses interfaces and complexity, not the phase-state definition. The state is introduced in §2.1. Also, the full phase state was defined as
+\[
+z=(q,x,s_1,\ldots,s_n),
+\]
+so writing the witness state as only \((x,s_1,s_2)\) silently omits \(q\).
+
+**Improvement.** Change the reference to §2.1. State that the phase flag is fixed or suppressed.
+
+---
+
+## 34. Title, author line, and dates
+
+**Flaw.** Page 1 has “transition safety forsustainability assessment.” The author line appears as “Amin AbaeeaaIndependent Researcher.” Dates are future-dated 2026.
+
+**Improvement.** Fix spacing and rendered PDF. Verify all 2026 dates and ensure cited deposits and URLs are publicly accessible by submission time.
+
+---
+
+## 35. Recourse-failure example is not specified
+
+**Flaw.** §4.3 states that the root belief lies in \(W_1\setminus W_2\), but does not show the three states, observation labels, actions, transitions, disturbance branches, unsafe states, \(W_0,W_1,W_2\), or the two post-beliefs. This is the principal demonstration of the belief recursion, yet the reader cannot verify it from the article.
+
+**Improvement.** Include a compact transition table and the actual returned counterexample object. This is especially necessary given the ambiguity in the belief-update definition.
+
+Also clarify “both actions are admissible in isolation.” It could mean each action is safe for each individual state, for at least one state, one-step admissible for the whole root belief, or admissible under full information but not under common observation.
+
+---
+
+## 36. Failure explanations are not shown to be independently checkable
+
+**Flaw.** §2.2, §3.3, and §4.3 call the failure object “machine-checkable,” but do not say whether the independent checker validates it. If only the main library checks it, this is self-verification rather than independent certification.
+
+**Improvement.** Specify the recursive certificate structure and checker support for belief-failure objects.
+
+---
+
+## 37. Related work gaps and overclaims
+
+**Flaw.** §5 omits major relevant categories: exact polyhedral libraries, rational LP solvers, proof-producing SMT systems, formal proof assistants, reachability tools with interval or exact arithmetic, viability and invariant-set packages, and certifying optimization frameworks. Raven and FloPy are environmental simulators, not representative numerical viability-kernel tools.
+
+Also:
+
+- Z3 unsatisfiable cores are not, by themselves, proofs of unsatisfiability.
+- PRISM counterexample support depends on model and property class.
+- “None of the environmental families returns certificates” is too broad for a twelve-query web search.
+
+**Improvement.** Cite actual viability/reachability packages and exact-polyhedral systems. Qualify Z3 and PRISM claims. Narrow universal absence claims to named packages and surveyed versions. Add a conventional literature-based selection rationale and inclusion/exclusion criteria.
+
+---
+
+## 38. Availability and artifact identity are unclear
+
+**Flaw.** Reference [9] is titled “Verification code and figure pipeline for Aggregate Indices and Transition Safety,” but the paper says it archives SafeTransition source, tests, examples, checker, and scaling study. It is unclear whether the deposit is the companion manuscript’s verification deposit, the SafeTransition software archive, both, or a versioned release corresponding exactly to SafeTransition 1.2.1.
+
+**Improvement.** Provide a dedicated versioned software DOI or clearly identify archive contents, release tag, commit hash, and checksum. Add repository URL, package-index URL, documentation URL, and license file location.
+
+---
+
+## 39. Test coverage is modest for the claims
+
+**Flaw.** Forty-six tests and three checked certificates are useful but modest for code handling exact arithmetic, serialization, elimination, and recursive state construction.
+
+**Improvement.** Add:
+
+- randomized property tests;
+- comparison against an independent LP/SMT solver;
+- malformed JSON fuzzing;
+- row-scaling tests;
+- degenerate systems;
+- redundant and duplicate constraints;
+- zero rows;
+- empty systems;
+- unbounded feasible systems;
+- large numerator/denominator inputs;
+- certificate schema-version rejection.
+
+---
+
+## 40. Too much foundational content is delegated to unpublished companions
+
+**Flaw.** Both mathematical foundations are cited as “Manuscript submitted for publication.” Reviewers may not have access to accepted, stable versions.
+
+**Improvement.** Include self-contained statements and proof sketches for:
+
+- operator inclusion chain;
+- soundness of Farkas output;
+- belief-recursion soundness/completeness;
+- fibre criterion;
+- common-action obstruction;
+- completeness of weight partition.
+
+---
+
+## 41. Additional wording and precision issues
+
+- “Exact reachability tube” should be “exact supplied trajectory tube” unless dynamical reachability has actually been proved.
+- “Every visited extreme is attained at breakpoints” is insufficient for general nonlinear predicates. State the supported constraint class: coordinate floors only, affine predicates, arbitrary callable predicates, or nonlinear predicates with separate certificates.
+- The disturbance set must be stated to be finite or effectively enumerable.
+- “Polynomial in graph size and horizon” needs a precise size model: states, state-action pairs, transitions, disturbance branches, tube points, rational bit lengths. With rational predicates, “constant-time predicates” hides bit complexity.
+- The compensatory accepted set
+  \[
+  V_{\rm weak}=\bigcap_w V_w
+  \]
+  means \(\forall w\ \exists a\), not \(\exists a\ \forall w\). Because the paper’s theme is quantifier order, state this explicitly.
+- “No ratio licenses a typed-safe plan” is conceptually awkward. Typed safety does not depend on the ratio. Better: “Neither plan is typed-safe, although at least one is aggregate-licensed at every admissible ratio.”
+- The dashboard’s “verification arrives together” claim should distinguish integrity from trust. A malicious producer can embed mutually consistent false input data, certificate files, and hashes.
+- The pooled-kernel identity is too abrupt to be useful. Give enough detail or move it to supplementary material.
+- “Hardware required none beyond a standard computer” is vague. Use “Tested on ordinary x86-64/ARM64 desktop or laptop hardware; no GPU or specialized accelerator required.”
+- Line-count claims need a counting method.
+
+---
+
+## Priority corrections before submission
+
+### Essential
+
+1. Correct and formally define the belief update.
+2. Resolve the contradiction between finite-system completeness and injective-observation completeness.
+3. Separate exact tubes from certified outer tubes and define one-sided verdict semantics.
+4. Correct the Fourier–Motzkin complexity statement.
+5. Fix the positive-weight domain versus intervals containing \(r=0\).
+6. Add assumptions to the three-regime threshold formulas.
+7. Define “minimal conflicting subfamily.”
+8. Clarify disturbance quantification versus “characteristic disturbance.”
+9. Explain exactly what the independent checker verifies.
+10. Fix the undefined \(L\) and inconsistent denominator-bit claims.
+
+### Important
+
+11. Supply the three-state belief example in full.
+12. Formalize all five operators and prove the inclusion chain under stated assumptions.
+13. Clarify current `weight_partition` scope.
+14. Correct the index-blindness boundary condition.
+15. Move scaling content into the empty §3.4.
+16. Correct the module count.
+17. Add canonical serialization details.
+18. Expand related work to exact polyhedral and certifying systems.
+19. Provide complete artifact URLs and a version-specific archive.
+20. Narrow universal software-ecosystem claims.
+
+### Editorial
+
+21. Fix “forsustainability.”
+22. Repair the author/affiliation rendering.
+23. Correct the §3.3 cross-reference.
+24. Clarify omission of phase flag \(q\) from the witness state.
+25. Check future dates and public availability.
+26. Improve Table 2’s formatting and “largest instance” labeling.
+
+---
+
+## Bottom line
+
+The paper has the outline of a credible certificate-carrying software contribution. Its main weakness is not lack of ambition but overclaiming and under-specification. The belief-space semantics are the most serious correctness concern; the exact-versus-conservative tube distinction, weight-domain errors, and incorrect exact-elimination complexity claim are next. These should be treated as correctness issues, not merely editorial refinements. If repaired, the contribution could be compelling: a small, exact, auditable layer where sustainability-assessment verdicts carry independently checkable rational certificates.
+qwen:
+a formally precise, certificate-carrying EMS contribution**:
+
+# 1. Governing principle for the revision
+
+The manuscript’s central ambition is strong:
+
+> **Assessment verdicts should not merely be computed; they should be returned as exact rational objects that an independent third party can re-verify.**
+
+To meet or exceed that ambition, the revised paper must do three things simultaneously:
+
+1. **Make the semantics explicit.**  
+   Every object — tubes, disturbances, weights, beliefs, endpoints, safety sets, certificates — must have a formal definition in the paper itself, not only in companion manuscripts or code.
+
+2. **Align every claim with evidence.**  
+   If the paper claims completeness, independence, exactness, scalability, or certification, the exact scope of that claim must be stated and supported by a test, proof sketch, certificate schema, or archived artifact.
+
+3. **Separate mathematical certification from modelling trust.**  
+   The library can certify verdicts **relative to a supplied rational datum**. It cannot by itself certify that the datum is a scientifically valid representation of a fishery, climate system, or social system. The revised manuscript should make this boundary explicit; doing so strengthens credibility.
+
+---
+
+# 2. High-level claim-closure matrix
+
+The following table identifies the strongest claims in the manuscript, the risk associated with each, and the corrective action needed to make the claim defensible.
+
+| Current claim | Risk | Required correction | Revised claim |
+|---|---|---|---|
+| “All computations run in exact rational arithmetic.” | Too broad: rendering, timing, memory, hashing, serialization metadata are not rational semantic computations. | Restrict to semantic computations. | “All semantic assessment, recursion, threshold, and certificate arithmetic uses exact rational arithmetic; floating point is confined to optional rendering and performance measurement.” |
+| “The belief-space recursion is sound and complete in finite systems.” | Contradicted by later injectivity condition; belief described as state set but updated as label set. | Define beliefs formally, choose state-set beliefs or a proved abstraction, and state exact theorem. | “The state-set belief recursion is sound and complete for finite-horizon observation-history policies on finite transition systems. The label-based abstraction is sound generally and complete under an explicitly stated quotient condition.” |
+| “Each tube is the exact visited set and no outer approximation enters.” | Contradicted by later conservative Schaefer enclosures. | Introduce tube statuses: `EXACT`, `OUTER_CERTIFIED`, `UNVERIFIED`. | “The interface accepts either exact supplied tubes or certified conservative enclosures; verdict semantics depend on tube status.” |
+| “Independent checker sharing no code with the library.” | “No code” is too absolute; checker and library share language, rational representation, and possibly schema. | Replace with precise import boundary and implementation independence. | “The standalone checker imports no SafeTransition modules and implements verification independently from the certificate schema.” |
+| “The observation-fibre criterion decides whether an exact observation-only certifier can exist at all.” | Overclaimed: fibre constancy only decides current-state classification from current observation. | Rename and narrow. | “The fibre criterion decides whether current safe-set membership can be classified exactly from the current observation alone.” |
+| “Fourier–Motzkin eliminator is exponential in the worst case, as exact elimination inherently is.” | False: exact rational linear feasibility is polynomial in the bit model. | Attribute exponential behaviour to Fourier–Motzkin projection, not exact feasibility itself. | “Fourier–Motzkin elimination can generate exponentially many intermediate inequalities; SafeTransition uses it because target systems are small and provenance is easy to retain.” |
+| “Weight partition is complete along the weight ratio.” | Domain ambiguity: positive cone versus intervals including zero. | Define projective weight domain, including endpoints or excluding them consistently. | “The weight partition covers the projective nonnegative weight simplex; for two weights this is \(r=w_2/w_1\in[0,\infty]\), with endpoints treated explicitly.” |
+| “Margins with 321-bit denominators.” | Inconsistent with undefined \(L\) and table wording. | Define \(L\), report reduced numerator/denominator bit lengths separately, and use measured values. | “The largest certified reduced denominator in the dyadic family has 321 bits.” |
+| “Certificates carry the assessment semantics themselves.” | Checker may only verify algebraic identities, not semantic derivation from the datum. | Describe trusted computing base and certificate provenance. | “Certificates carry row-level provenance to the supplied datum; the checker verifies algebraic validity and, for supported schemas, re-derives rows from the serialized datum.” |
+
+---
+
+# 3. Mandatory semantic refactors
+
+These are not editorial fixes. They should be implemented in the manuscript and, where relevant, in the library API.
+
+---
+
+## 3.1 Replace the single notion of “tube” with explicit tube status
+
+The paper currently mixes exact tubes and conservative outer enclosures. These have different logical consequences.
+
+### Required conceptual distinction
+
+Introduce three tube statuses:
+
+```text
+EXACT
+OUTER_CERTIFIED
+UNVERIFIED
+```
+
+### Required verdict semantics
+
+Add a table such as this:
+
+| Tube status | If all constraints hold on tube | If a constraint is violated on tube |
+|---|---|---|
+| `EXACT` | Certified safe relative to the supplied datum. | Certified unsafe relative to the supplied datum. |
+| `OUTER_CERTIFIED` | Certified safe for the true trajectory, because true tube ⊆ certified enclosure. | Inconclusive unless the violating point is independently known to be reachable. |
+| `UNVERIFIED` | Conditional result only. | Conditional result only. |
+
+### API consequence
+
+The library should not return a bare Boolean `admissible` when conservative tubes are involved. It should return an enum such as:
+
+```text
+CERTIFIED_SAFE
+CERTIFIED_VIOLATION
+NOT_CERTIFIED_SAFE_FROM_OUTER_TUBE
+CONDITIONAL_ON_DATUM
+```
+
+### Manuscript correction
+
+Replace:
+
+> “each tube is the exact visited set and no outer approximation enters”
+
+with:
+
+> “A datum supplies either an exact tube or a certified conservative enclosure. The library records the tube status and returns verdicts whose logical strength depends on that status. Exact tubes support both certification and rejection relative to the supplied datum; certified outer enclosures support one-sided safety certification.”
+
+### Benchmark consequence
+
+For the fishery benchmark, the paper must state precisely which object proves the separation between typed and scalarized operators:
+
+- If the separation is shown on the **declared piecewise-linear plan tubes**, say so.
+- If the separation depends on the **Schaefer outer enclosure**, say that the result is a conservative certification, not a conclusive rejection of the nonlinear realization.
+- If both are used, separate the two claims.
+
+Recommended wording:
+
+> “The typed/aggregate separation is demonstrated on the exact declared plan tubes. The Schaefer realization is used only to show that the declared tubes admit certified conservative enclosures under the monotonicity condition; conclusions drawn from the enclosure are one-sided.”
+
+---
+
+## 3.2 Refactor the belief recursion into a formally sound and complete finite-horizon construction
+
+This is the single most important correctness repair.
+
+The current manuscript has three incompatible statements:
+
+1. A belief is a set of states.
+2. The belief updates to a set of labels.
+3. The recursion is sound and complete in finite systems, except later completeness requires injective observation.
+
+These cannot all remain as written.
+
+### Recommended resolution
+
+Use **state-set beliefs**, not label-set beliefs, for the finite-system completeness claim.
+
+A belief should be a set of states consistent with the observation history:
+
+\[
+B \subseteq Z.
+\]
+
+After taking action \(a\) and receiving observation \(o\), the updated belief is
+
+\[
+B'_{a,o}
+=
+\left\{
+z' \in Z:
+\exists z\in B,\ \exists d\in D(a),\ 
+z' = R(y_{z,a,d}^{-},a,d),\ 
+\operatorname{obs}(z') = o
+\right\},
+\]
+
+where \(y_{z,a,d}^{-}\) is the terminal pre-reset state on the tube from \(z\) under action \(a\) and disturbance \(d\), and \(R\) is the reset map.
+
+If disturbances are included robustly, the update must include all successors compatible with the observation and the disturbance model.
+
+### Recommended finite-horizon belief recursion
+
+Let \(W_k\) be the set of \(k\)-step viable beliefs.
+
+Define \(W_0\) according to the terminal condition. For example:
+
+\[
+W_0 = \{B \subseteq Z : B \subseteq G\},
+\]
+
+or another explicitly stated terminal acceptance condition.
+
+For \(k+1\):
+
+\[
+B\in W_{k+1}
+\]
+
+if and only if there exists an action \(a\) such that:
+
+1. **Immediate safety:** for every state \(z\in B\) and every admissible disturbance \(d\), the tube from \(z\) under \(a,d\) satisfies all floor and physical constraints.
+
+2. **Recursive viability:** for every observation \(o\) that can arise after taking \(a\), the updated belief \(B'_{a,o}\) belongs to \(W_k\).
+
+Formally:
+
+\[
+B\in W_{k+1}
+\iff
+\exists a\in A:
+\left[
+\forall z\in B,\ \forall d\in D(a),\ 
+\mathrm{TubeSafe}(z,a,d)
+\right]
+\land
+\left[
+\forall o\in O_{B,a},\ 
+B'_{a,o}\in W_k
+\right].
+\]
+
+### Theorem to state in the paper
+
+Add a theorem such as:
+
+> **Theorem: Soundness and completeness of finite belief recursion.**  
+> Let the state space, action set, disturbance set, and observation set be finite, and let policies be allowed to depend on the full observation history through the induced belief. Then the recursion above returns exactly the set of beliefs from which there exists an observation-history policy that is viable over horizon \(k\) under the stated disturbance semantics.
+
+### Important qualification
+
+If the intended policy class is **memoryless in the current observation**, then completeness may fail unless the observation is Markovian or satisfies a quotient condition. The paper must state which policy class it uses.
+
+Recommended wording:
+
+> “Completeness is stated for observation-history policies, equivalently belief-based policies. For memoryless observation-only policies, additional Markov or quotient conditions are required.”
+
+### If the implementation uses labels
+
+If SafeTransition’s implementation updates beliefs as sets of observation labels rather than states, then the manuscript must not claim unconditional completeness. It should instead say:
+
+> “The label-based recursion is a quotient abstraction. It is sound for finite systems. It is complete when the quotient preserves safety, action enablement, and observation-labelled successor structure.”
+
+Injectivity of observation is a sufficient condition but is so strong that it largely eliminates the partial-observation difficulty. It should not be the primary completeness condition unless the paper explicitly accepts that limitation.
+
+### Add the three-state recourse example in full
+
+The paper’s principal belief demonstration must be reproducible from the article. Add a compact table such as:
+
+| State | Observation | Available actions | Successor under action \(\alpha\) | Successor under action \(\beta\) | Immediate tube safe? |
+|---|---|---|---|---|---|
+| \(z_0\) | \(o_0\) | \(\alpha,\beta\) | \(z_2\) | \(z_2\) | yes |
+| \(z_1\) | \(o_0\) | \(\alpha,\beta\) | \(z_2\) | \(z_2\) | yes |
+| \(z_2\) | \(o_1\) | \(\alpha,\beta\) | \(z_2\) | \(z_2\) | no |
+
+Then show:
+
+\[
+B_0 = \{z_0,z_1\}\in W_1,
+\qquad
+B_0\notin W_2.
+\]
+
+Explanation:
+
+- At horizon 1, either action is safe from \(z_0\) and \(z_1\).
+- The post-belief after either action is \(\{z_2\}\).
+- \(\{z_2\}\notin W_1\) because no action keeps the tube safe from \(z_2\).
+- Therefore \(B_0\in W_1\setminus W_2\).
+
+Include the actual counterexample object returned by `explain_belief_failure`, preferably in JSON or pseudo-JSON.
+
+---
+
+## 3.3 Formalize the five operators and prove the inclusion chain under explicit assumptions
+
+The current inclusion chain is asserted before the operators are fully defined. The revision should define each operator as a constraint relaxation.
+
+### Recommended definitions
+
+Let \(z\) be a state. Let \(T(z,a,d)\) be the tube from \(z\) under action \(a\) and disturbance \(d\). Let \(y^{-}(z,a,d)\) be the terminal pre-reset state, and let
+
+\[
+z^{+}(z,a,d)=R(y^{-}(z,a,d),a,d)
+\]
+
+be the post-reset successor.
+
+Let the typed safe set be
+
+\[
+S_{\mathrm{typ}}
+=
+\{y : s_i(y)\ge 0\ \forall i,\ \mathrm{Phys}(y)\}.
+\]
+
+Let the physical safe set be
+
+\[
+S_{\mathrm{phys}}
+=
+\{y : \mathrm{Phys}(y)\}.
+\]
+
+Assume a common finite disturbance set \(D(a)\), common destination condition \(G\), and common physical predicate \(\mathrm{Phys}\).
+
+Define:
+
+\[
+E_{\mathrm{typ}}(z)
+=
+\left\{
+a:
+\forall d\in D(a),\ 
+T(z,a,d)\subseteq S_{\mathrm{typ}},\ 
+z^{+}(z,a,d)\in G
+\right\}.
+\]
+
+For a strictly positive weight vector \(w\in\mathbb{Q}_{>0}^n\), define:
+
+\[
+E_w(z)
+=
+\left\{
+a:
+\forall d\in D(a),\ 
+\forall y\in T(z,a,d),\ 
+w\cdot s(y)\ge 0,\ 
+\mathrm{Phys}(y),\ 
+z^{+}(z,a,d)\in G
+\right\}.
+\]
+
+Define the exact-tube physical operator:
+
+\[
+E_{\mathrm{tube,phys}}(z)
+=
+\left\{
+a:
+\forall d\in D(a),\ 
+T(z,a,d)\subseteq S_{\mathrm{phys}},\ 
+z^{+}(z,a,d)\in G
+\right\}.
+\]
+
+Define the endpoint physical operator:
+
+\[
+E_{\mathrm{end,phys}}(z)
+=
+\left\{
+a:
+\forall d\in D(a),\ 
+y^{-}(z,a,d)\in S_{\mathrm{phys}},\ 
+z^{+}(z,a,d)\in G
+\right\}.
+\]
+
+Define the typed endpoint operator:
+
+\[
+E_{\mathrm{end,typ}}(z)
+=
+\left\{
+a:
+\forall d\in D(a),\ 
+y^{-}(z,a,d)\in S_{\mathrm{typ}},\ 
+z^{+}(z,a,d)\in G
+\right\}.
+\]
+
+### Inclusion chain
+
+Under these definitions, for every \(w\in\mathbb{Q}_{>0}^n\),
+
+\[
+E_{\mathrm{typ}}(z)
+\subseteq
+E_w(z)
+\subseteq
+E_{\mathrm{tube,phys}}(z)
+\subseteq
+E_{\mathrm{end,phys}}(z).
+\]
+
+Also,
+
+\[
+E_{\mathrm{typ}}(z)
+\subseteq
+E_{\mathrm{end,typ}}(z)
+\subseteq
+E_{\mathrm{end,phys}}(z).
+\]
+
+### Why the chain holds
+
+- Coordinatewise floor satisfaction implies nonnegative weighted sum for positive weights.
+- Removing floor constraints weakens the condition.
+- Requiring a condition along the full tube is stronger than requiring it only at the endpoint.
+- Typed constraints imply physical constraints if physical constraints are part of \(S_{\mathrm{typ}}\).
+
+### Manuscript addition
+
+Add a short proposition:
+
+> **Proposition: Operator inclusion.**  
+> If all operators share the same finite disturbance set, destination condition, reset map, and physical predicate, and if weights are strictly positive, then the above inclusions hold. The inclusions may be strict.
+
+### Clarify the role of \(S\)
+
+The transition-safe set \(S\) should not disappear. Define whether \(S\) means:
+
+- typed safety: floors + physical constraints;
+- physical safety only;
+- destination feasibility;
+- a graph-level admissible state set.
+
+Recommended wording:
+
+> “The recursion uses \(S_{\mathrm{typ}}\) for typed viability and \(S_{\mathrm{phys}}\) for physical viability. The operator at a single state checks tube constraints and the destination condition; the backward recursion additionally requires successors to remain inside the appropriate viable set.”
+
+---
+
+## 3.4 Make disturbance semantics explicit and consistent
+
+The manuscript currently uses three disturbance concepts:
+
+1. all disturbances \(d\);
+2. an action-indexed worst-case disturbance;
+3. a plan’s characteristic disturbance.
+
+These must be distinguished.
+
+### Required definitions
+
+Let \(D(a)\) be the finite disturbance set associated with action \(a\).
+
+The robust operator verdict is:
+
+\[
+\forall d\in D(a).
+\]
+
+A dashboard reading that shows only one disturbance branch must be labelled as one of:
+
+```text
+ROBUST_MINIMUM_OVER_ALL_DISTURBANCES
+CERTIFIED_WORST_CASE_BRANCH
+ILLUSTRATIVE_BRANCH
+```
+
+### If “characteristic disturbance” means illustrative
+
+Use:
+
+> “Figure 2 displays the illustrative disturbance branch associated with each plan. The licensing verdicts are robust over all disturbance branches.”
+
+### If “characteristic disturbance” means worst-case
+
+Provide a certificate that the selected branch is worst-case for the relevant predicate. For example, for each plan \(p\) and floor aggregate \(m_p\), show:
+
+\[
+m_p(d^\star)
+=
+\min_{d\in D}
+m_p(d).
+\]
+
+If different floors have different worst-case disturbances, do not claim a single disturbance is worst-case for all quantities unless proved.
+
+### Recommended dashboard correction
+
+The dashboard should show either:
+
+- robust minima over all disturbances; or
+- both the robust minimum and the illustrative branch.
+
+Do not let a benign branch visually represent a robust verdict unless the relationship is explicit.
+
+---
+
+## 3.5 Fix the weight domain once and for all
+
+The paper alternates between “positive weight cone” and intervals including \(r=0\). Choose one convention.
+
+### Recommended convention for two-dimensional weights
+
+Use the projective nonnegative simplex:
+
+\[
+\Delta_1
+=
+\{(w_1,w_2)\in\mathbb{Q}_{\ge 0}^2 : w_1+w_2=1\}.
+\]
+
+Define the ratio
+
+\[
+r=\frac{w_2}{w_1}\in[0,\infty],
+\]
+
+with:
+
+- \(r=0\) corresponding to \((1,0)\);
+- \(r=\infty\) corresponding to \((0,1)\).
+
+Then intervals such as
+
+\[
+[0,2/3)
+\]
+
+are meaningful.
+
+### Alternative convention
+
+If the paper insists on strictly positive weights, use:
+
+\[
+r\in(0,\infty),
+\]
+
+and replace all intervals containing zero or infinity by open intervals or limiting statements.
+
+### Recommended manuscript wording
+
+> “Weights are nonnegative and not both zero. For two criteria, the projective weight domain is represented by \(r=w_2/w_1\in[0,\infty]\). The endpoints correspond to the coordinate axes of the weight simplex.”
+
+### Consequence for weight partition
+
+The weight-partition certificate must cover the full domain it claims to cover, including endpoints and degenerate thresholds.
+
+---
+
+# 4. Formal certificate framework to add to the paper
+
+The paper should introduce a small certificate ontology. This will greatly strengthen the EMS contribution.
+
+---
+
+## 4.1 Certificate classes
+
+Add a subsection called **Certificate classes** and define the following.
+
+### 1. Farkas infeasibility certificate
+
+For a rational system
+
+\[
+Au\le b,
+\]
+
+a Farkas certificate is a vector \(\lambda\ge 0\) such that
+
+\[
+\lambda^\top A = 0,
+\qquad
+\lambda^\top b < 0.
+\]
+
+Normalize:
+
+\[
+\sum_i \lambda_i = 1.
+\]
+
+The certificate proves infeasibility of the supplied row system.
+
+Important qualification:
+
+> The normalized contradiction value \(-\lambda^\top b\) is invariant under positive rescaling of \(\lambda\), but not under rescaling of the input rows. It is therefore a normalized certificate contradiction value, not an intrinsic geometric distance.
+
+### 2. Feasibility certificate
+
+If `certify_polyhedron` returns feasible, it should return either:
+
+- a rational witness \(u\) satisfying \(Au\le b\), checked exactly; or
+- a statement that feasibility is returned as a Boolean without witness.
+
+Recommended API:
+
+```text
+Feasible(witness=u)
+Infeasible(farkas=λ)
+```
+
+Do not call a bare Boolean a certificate.
+
+### 3. Weight-partition certificate
+
+For each plan \(p\), store the robust aggregate minimum as a piecewise-rational function of \(r\). Store:
+
+- domain convention;
+- thresholds;
+- region coverage;
+- inclusivity of endpoints;
+- licensed plan set per region;
+- binding constraints at boundaries;
+- degenerate cases.
+
+The checker should re-derive:
+
+- threshold order;
+- region coverage;
+- licensed set at sampled rational ratios;
+- boundary witnesses.
+
+### 4. Tube certificate
+
+For exact tubes:
+
+- breakpoints;
+- coordinate expressions per segment;
+- floor minima;
+- proof that extrema occur at breakpoints for the supported predicate class.
+
+For outer-certified tubes:
+
+- enclosure relation;
+- interval bounds;
+- monotonicity or derivative certificate;
+- rational inequalities proving true tube ⊆ enclosure.
+
+### 5. Belief-failure certificate
+
+For a belief \(B\notin W_k\), store:
+
+- belief identifier;
+- horizon \(k\);
+- for each candidate action, the reason for failure;
+- if failure is due to a post-belief, recursively include that post-belief’s failure certificate;
+- if failure is due to a fibre state entering violation, include the violating state, action, disturbance, and time or segment.
+
+This makes `explain_belief_failure` machine-checkable.
+
+### 6. Common-action obstruction certificate
+
+Define:
+
+- the compatibility relation, e.g. same observation fibre or same belief;
+- the recursively viable action set \(A_k(z)\) for each state;
+- proof that each \(A_k(z)\neq\varnothing\);
+- proof that \(\bigcap_z A_k(z)=\varnothing\);
+- proof of inclusion-minimality.
+
+Recommended statement:
+
+> “The returned subfamily is inclusion-minimal: the intersection over the retained states is empty, but removing any one retained state makes the intersection nonempty.”
+
+Do not claim minimum cardinality unless the algorithm computes it.
+
+### 7. Fibre-criterion certificate
+
+Rename this certificate:
+
+```text
+observation-only safety-classification obstruction
+```
+
+It proves only that no function of the current observation alone can classify current safe-set membership exactly.
+
+It does **not** prove that no observation-based policy exists.
+
+---
+
+## 4.2 Certificate support matrix
+
+Add a table to Section 4 or Section 6.
+
+Example:
+
+| Certificate type | Emitted by SafeTransition | Independently checked | Checker verifies algebra | Checker re-derives rows from datum |
+|---|---:|---:|---:|---:|
+| Farkas infeasibility | yes | yes | yes | yes for supported menus |
+| Feasibility witness | yes | yes | yes | yes |
+| Weight partition | yes | yes | yes | yes |
+| Exact tube minima | yes | yes | yes | yes |
+| Outer enclosure | yes | yes/optional | yes | yes/optional |
+| Belief failure | yes | yes | yes | yes |
+| Common-action obstruction | yes | yes | yes | yes |
+| Fibre classification obstruction | yes | yes | yes | yes |
+| Dashboard provenance | yes | yes | hash/checksum | n/a |
+
+If some entries are not independently checked, say so. This is better than implying universal independent verification.
+
+---
+
+## 4.3 Trusted computing base
+
+Add a short paragraph:
+
+> “The independent checker verifies algebraic certificate identities and, where supported by the certificate schema, re-derives constraint rows from the serialized datum. It does not verify the scientific validity of the transition datum, the ecological realism of the fishery model, or the adequacy of the tube enclosure for an unmodelled continuous system. The trust boundary is therefore: exact rational verification of verdicts conditional on the supplied datum and certificate schema.”
+
+This distinction is essential.
+
+---
+
+# 5. Revised mathematical statements to insert
+
+Below are ready-to-adapt formal blocks.
+
+---
+
+## 5.1 Transition datum
+
+Insert in Section 2.1:
+
+> A typed transition datum consists of:
+>
+> 1. a finite action set \(A\);
+> 2. a finite disturbance set \(D(a)\) for each action \(a\);
+> 3. a state representation \(z=(q,x,s_1,\ldots,s_n)\), where \(q\) is a phase flag, \(x\) denotes fund coordinates, and \(s_i\) are typed floors normalized to zero;
+> 4. for each initial state \(z\), action \(a\), and disturbance \(d\), a tube \(T(z,a,d)\) given as a piecewise-rational path over explicit breakpoints;
+> 5. a tube status for each tube: `EXACT`, `OUTER_CERTIFIED`, or `UNVERIFIED`;
+> 6. a reset map \(R\) and destination set \(G\);
+> 7. physical and typed safe sets \(S_{\mathrm{phys}}\) and \(S_{\mathrm{typ}}\).
+>
+> The disturbance set is finite or effectively enumerable. Universal quantification over disturbances is implemented by exact enumeration in the reported examples.
+
+---
+
+## 5.2 Endpoint reset
+
+Insert:
+
+> Let \(y^{-}(z,a,d)\) denote the terminal pre-reset state of the tube \(T(z,a,d)\). Let
+> \[
+> z^{+}(z,a,d)=R(y^{-}(z,a,d),a,d)
+> \]
+> denote the post-reset successor. Endpoint-only operators evaluate constraints at \(y^{-}\), while destination constraints are evaluated at \(z^{+}\). This distinction prevents ambiguity between the terminal visited state and the reset successor.
+
+---
+
+## 5.3 Accepted-state sets and quantifier order
+
+Insert:
+
+> For an operator \(E\), define
+> \[
+> V[E]=\{z:E(z)\neq\varnothing\}.
+> \]
+> For a scalarized operator at weight \(w\), define \(V_w=V[E_w]\). The compensatory accepted set is
+> \[
+> V_{\mathrm{weak}}=\bigcap_{w}V_w.
+> \]
+> This means
+> \[
+> z\in V_{\mathrm{weak}}
+> \iff
+> \forall w,\ \exists a\in A:\ a\in E_w(z).
+> \]
+> It does not imply
+> \[
+> \exists a,\ \forall w:\ a\in E_w(z).
+> \]
+> The distinction is central to the quantifier-order separation between scalarized and noncompensatory assessment.
+
+This addition is especially valuable because the paper’s theme is quantifier order.
+
+---
+
+## 5.4 Farkas certificate margin
+
+Replace the current margin sentence with:
+
+> When elimination derives a contradiction \(0\le c\) with \(c<0\), the retained provenance vector \(\lambda\ge0\) satisfies \(\lambda^\top A=0\) and \(\lambda^\top b=c<0\). The certificate is normalized so that \(\sum_i\lambda_i=1\). The normalized contradiction value \(-\lambda^\top b\) is invariant under positive rescaling of the certificate vector, but not under rescaling of the input rows. It is therefore reported as a normalized certificate contradiction value rather than as an intrinsic distance to feasibility.
+
+---
+
+## 5.5 Fourier–Motzkin complexity
+
+Replace:
+
+> “the Fourier–Motzkin eliminator is exponential in the worst case, as exact elimination inherently is”
+
+with:
+
+> “Fourier–Motzkin elimination can generate exponentially many intermediate inequalities in the worst case. Exact rational linear feasibility is not inherently exponential; polynomial-time algorithms exist in the bit model. SafeTransition uses Fourier–Motzkin elimination because the targeted assessment systems are small and because row-level provenance is straightforward to retain.”
+
+This is a critical correction.
+
+---
+
+## 5.6 Observation-fibre criterion
+
+Replace:
+
+> “decides whether an exact observation-only certifier can exist at all”
+
+with:
+
+> “decides whether current safe-set membership can be classified exactly from the current observation alone.”
+
+Add:
+
+> The criterion does not rule out observation-history policies, belief-based control, conservative certifiers, or three-valued verification procedures. It states only that a map
+> \[
+> f:O\to\{\mathrm{safe},\mathrm{unsafe}\}
+> \]
+> satisfying
+> \[
+> f(\operatorname{obs}(z)) = \mathbf{1}_{S}(z)
+> \]
+> for all reachable states exists if and only if safe-set membership is constant on observation fibres.
+
+---
+
+# 6. Software architecture corrections
+
+---
+
+## 6.1 Module count and naming
+
+Table 1 currently lists ten entries but the text says nine modules plus the checker.
+
+### Fix options
+
+Option 1: Count honestly as ten modules.
+
+Option 2: Treat CLI as an entry point, not a module, and state:
+
+> “Nine library modules plus a command-line entry point and a repository-root independent checker.”
+
+Option 3, best for clarity: rename modules to avoid confusion.
+
+Suggested names:
+
+| Current | Suggested |
+|---|---|
+| `benchmark` | `witness_benchmark` |
+| `benchmarks` | `scaling_benchmarks` |
+| `cli` | `cli` or `__main__` entry point |
+| `rational` | `rationals` or `exact_arithmetic` |
+| `certificates` | `certificates` |
+| `dashboard` | `dashboard` |
+
+This avoids the confusing `benchmark` versus `benchmarks` distinction.
+
+---
+
+## 6.2 Dependency claim
+
+Replace:
+
+> “no third-party runtime dependencies”
+
+with a dependency table.
+
+Example:
+
+| Component | Dependencies |
+|---|---|
+| Core SafeTransition package | Python standard library only |
+| Independent checker | Python standard library only |
+| Dashboard rendering | Python standard library only |
+| Benchmark suite | Python standard library only |
+| Scaling study | Python standard library only |
+| Figure regeneration | matplotlib, Pillow |
+| Development/testing | standard library plus optional linters |
+| Optional solver cross-check | z3 or another SMT/LP solver, development-only |
+
+Then state:
+
+> “Runtime assessment, recursion, and certificate verification require only the Python standard library. Optional figure regeneration uses matplotlib and Pillow. Optional development-time cross-checking may use external solvers, but these are not part of the runtime certificate chain.”
+
+---
+
+## 6.3 Exactness discipline
+
+The claim “structural exactness” should be strengthened by evidence:
+
+1. The library rejects binary floating-point inputs.
+2. Rationals are accepted only as integers, decimal strings, or numerator/denominator pairs.
+3. No implicit float-to-rational conversion exists.
+4. Semantic tests never read floats.
+5. Rendering and performance measurement are isolated.
+
+Suggested wording:
+
+> “Exactness is enforced by input typing rather than by reviewer discipline: binary floating-point inputs are rejected, and rational values enter only through integer, decimal-string, or numerator–denominator representations. Floating-point values may appear only in rendering coordinates and performance measurements.”
+
+---
+
+## 6.4 Canonical JSON and deterministic hashing
+
+Add a canonicalization specification.
+
+Recommended text:
+
+> Serialized certificates are canonicalized before hashing. Canonical JSON uses sorted dictionary keys, no insignificant whitespace, LF line endings, UTF-8 encoding, fixed schema version, and rational numbers encoded as strings of the form `"num/den"`. No timestamps, machine-specific paths, or environment-dependent fields are included in canonical certificate payloads.
+
+Add tests for:
+
+- determinism across separate processes;
+- different `PYTHONHASHSEED` values;
+- at least two Python versions;
+- at least two operating systems if possible;
+- rejection of malformed JSON;
+- rejection of schema-version mismatch.
+
+Also clarify:
+
+> SHA-256 establishes file identity and integrity under the assumed canonicalization. It does not by itself establish authenticity, authorship, or scientific correctness.
+
+---
+
+# 7. Scaling study repairs and enhancements
+
+The scaling study should be moved into Section 3.4. The current empty heading must be fixed.
+
+---
+
+## 7.1 Move content
+
+Move the scaling paragraphs and Table 2 into:
+
+```text
+3.4. Scaling of the exact pipeline
+```
+
+Do not leave Section 3.4 empty.
+
+---
+
+## 7.2 Clarify largest instances
+
+The table should distinguish:
+
+- largest completed instance;
+- largest attempted instance;
+- overflow or bound-firing test.
+
+For beliefs:
+
+| Family | Largest completed instance | Result | Overflow test |
+|---|---:|---|---|
+| Belief enumeration | \(m=12\), 4096 beliefs | completed | \(m=13\) raises exception |
+
+Do not label \(m=10\) as the largest instance if \(m=12\) completed successfully.
+
+---
+
+## 7.3 Define \(L\) and fix denominator-bit claims
+
+The symbol \(L\) must be defined. Better still, remove ambiguous notation and report measured bit lengths.
+
+Recommended table columns:
+
+| Family | Known answer | Runtime | Max numerator bits | Max denominator bits | Certificate size | Checker runtime |
+|---|---|---:|---:|---:|---:|---:|
+
+For the dyadic family, if the margin is exactly \(2^{-320}\), then the reduced denominator is \(2^{320}\), whose binary bit length is 321. State that directly.
+
+If the margin is
+
+\[
+\frac{2^{-320}}{L+2},
+\]
+
+then define \(L\), reduce the fraction, and report the actual denominator bit length.
+
+---
+
+## 7.4 Separate margin formulas by family
+
+Do not write “the exact margin” when multiple families exist.
+
+Use:
+
+- “For the Fourier–Motzkin chain family, the margin is …”
+- “For the dyadic coefficient-growth family, the margin is …”
+- “For the layered recursion family, the verified property is …”
+
+---
+
+## 7.5 Add a genuine row-growth stress family
+
+The current 256-variable chain is designed to terminate after \(k\) rows. That is useful, but it does not test the classical row explosion of Fourier–Motzkin elimination.
+
+To exceed the current scaling evidence, add at least one stress family where intermediate row growth is nontrivial.
+
+Possible designs:
+
+1. **Projected polytope family**  
+   Project a high-dimensional rational polytope and report intermediate row counts.
+
+2. **Planted-infeasibility family with intermediate expansion**  
+   Construct constraints so that many rows are generated before a contradiction is found.
+
+3. **Randomized rational menu family with fixed certificate**  
+   Generate random small rational systems with planted Farkas certificates. Verify the certificate independently.
+
+The stress family need not be enormous. It should show honesty about limits.
+
+Recommended wording:
+
+> “The planted-answer families measure correctness and exact-arithmetic stability under controlled growth. They are not evidence that Fourier–Motzkin elimination scales to arbitrary dense polyhedral systems. The additional stress family reports the point at which intermediate row growth becomes impractical.”
+
+This is more credible than broad scalability language.
+
+---
+
+## 7.6 Report reproducibility details
+
+Add a small reproducibility table.
+
+| Item | Recommended report |
+|---|---|
+| CPU model | exact model |
+| OS | version |
+| Python version | exact version |
+| Core binding | single core, if used |
+| Repetitions | e.g. 5 or 10 |
+| Runtime statistic | median and range or IQR |
+| Warm-up | whether first run discarded |
+| Memory measurement | tracing method and overhead note |
+| File I/O | included or excluded |
+| Checker startup | included or excluded |
+| Random seeds | if any randomized tests |
+
+Replace:
+
+> “single core of a laptop CPU”
+
+with a precise description.
+
+---
+
+# 8. Benchmark repairs
+
+---
+
+## 8.1 Separate datum exactness from dynamics fidelity
+
+The benchmark must distinguish three layers:
+
+1. **Exactness relative to the declared datum.**  
+   The piecewise-linear tubes are exactly represented in rational arithmetic.
+
+2. **Enclosure correctness relative to the Schaefer realization.**  
+   The declared tubes or enclosures contain the true Schaefer trajectory over the relevant interval.
+
+3. **Scientific validity of the fishery model.**  
+   The Schaefer model itself is a modelling choice and not certified by the library.
+
+Recommended wording:
+
+> “The exactness claims are relative to the supplied rational datum. The enclosure claims connect that datum to the Schaefer realization. The ecological adequacy of the Schaefer model is outside the scope of the certification layer.”
+
+---
+
+## 8.2 Make the monotonicity enclosure reproducible
+
+The paper states:
+
+\[
+\sigma \ge 528/125 \ge 4
+\]
+
+but does not give the biomass interval.
+
+Add:
+
+1. the visited biomass interval \(I=[B_{\min},B_{\max}]\);
+2. the location of the Schaefer maximum \(B=K/2=5\);
+3. the derivative:
+
+\[
+\sigma'(B)=4-\frac{4}{5}B;
+\]
+
+4. the monotonicity region;
+5. the endpoint evaluations;
+6. the derivation of \(528/125\).
+
+Example template:
+
+> On the adverse recovery leg, biomass lies in the interval \(I=[B_{\min},B_{\max}]\subseteq(0,5]\). Since \(\sigma'(B)=4-4B/5>0\) on this interval, \(\sigma\) is monotone increasing. Hence
+> \[
+> \min_{B\in I}\sigma(B)=\sigma(B_{\min}).
+> \]
+> With \(B_{\min}=\ldots\), we obtain
+> \[
+> \sigma(B_{\min})=\ldots=528/125>4.
+> \]
+
+If the interval crosses \(B=5\), split it and take the minimum over both monotone pieces.
+
+---
+
+## 8.3 Conservative tubes and rejection semantics
+
+If a plan is rejected because of a violation in an outer enclosure, the paper must not say the true realization is conclusively unsafe.
+
+Use:
+
+> “The outer enclosure does not certify the plan safe.”
+
+rather than:
+
+> “The plan is unsafe.”
+
+unless the violating point is known to be reachable.
+
+---
+
+## 8.4 Index-blindness alarm boundary condition
+
+The current alarm fires when:
+
+\[
+\min_t w\cdot s(t) > 0
+\quad\text{and}\quad
+\min_{t,i}s_i(t)<0.
+\]
+
+But the scalarized operator licenses when:
+
+\[
+w\cdot s(t)\ge 0.
+\]
+
+Therefore the alarm misses boundary cases where the aggregate minimum is exactly zero.
+
+### Fix
+
+Use:
+
+\[
+\min_t w\cdot s(t)\ge 0
+\quad\text{and}\quad
+\min_{t,i}s_i(t)<0.
+\]
+
+If strict positivity is intentional, state:
+
+> “The alarm detects strict-margin blindness only and does not capture boundary licensing cases.”
+
+Better: implement the nonnegative version.
+
+---
+
+# 9. Partial-observation and certificate example repairs
+
+---
+
+## 9.1 Define “admissible in isolation”
+
+The phrase is ambiguous. Replace it with one of the following precise alternatives.
+
+### If meaning state-wise full-information admissibility
+
+> “For each state in the root belief, there exists an action that is one-step viable under full state observation.”
+
+### If meaning belief-wise one-step admissibility
+
+> “Each action is one-step admissible for the root belief when considered without regard to the viability of its post-belief.”
+
+### If meaning recursively admissible but failing at next horizon
+
+> “Each action is safe over the first step, but every resulting post-belief lies outside \(W_1\).”
+
+The third is likely the intended meaning for \(W_1\setminus W_2\).
+
+---
+
+## 9.2 Make failure explanations independently checkable
+
+The failure object should be emitted as a certificate. It should contain:
+
+- belief ID;
+- horizon;
+- action list;
+- reason code for each action;
+- violating state or post-belief;
+- recursive sub-certificate if the reason is post-belief failure.
+
+The independent checker should be able to verify:
+
+1. the root belief is not in \(W_k\);
+2. every action fails for the stated reason;
+3. recursive references terminate in a base violation.
+
+If this is not implemented, say:
+
+> “Failure explanations are currently checked by the library test suite but are not yet independently verified by the standalone checker.”
+
+Better: extend the checker.
+
+---
+
+# 10. Related-work expansion and softened claims
+
+The related-work section should be broadened and made more precise.
+
+---
+
+## 10.1 Add missing software families
+
+Add representative categories:
+
+1. **Exact polyhedral libraries**
+   - Parma Polyhedra Library;
+   - Normaliz;
+   - lrslib;
+   - SageMath polyhedra;
+   - JuliaPolyhedra / Polyhedra.jl.
+
+2. **Rational and exact linear programming**
+   - exact rational LP solvers or rational modes of LP solvers;
+   - certified LP/optimization tools where relevant.
+
+3. **Proof-producing SMT and theorem proving**
+   - SMT solvers with proof output;
+   - interactive proof assistants;
+   - certified arithmetic or decision procedures.
+
+4. **Reachability and hybrid-system tools**
+   - tools using support functions, interval arithmetic, or conservative enclosures;
+   - tools with counterexample or reach-set output.
+
+5. **Viability and invariant-set tools**
+   - viability kernel algorithms;
+   - invariant-set computation tools;
+   - control barrier function or set-based safety tools, if relevant.
+
+The point is not to make SafeTransition compete with these tools, but to position it precisely as a **small exact certification layer with assessment semantics**.
+
+---
+
+## 10.2 Correct Z3 claim
+
+Replace:
+
+> “produces checkable unsatisfiability cores”
+
+with:
+
+> “can report unsatisfiable cores and, depending on logic and configuration, proof artifacts; independent checking of unsatisfiability may require re-solving or proof checking.”
+
+An unsat core is not by itself a full proof unless the checker accepts the solver or verifies the proof object.
+
+---
+
+## 10.3 Correct PRISM claim
+
+Qualify the PRISM comparison:
+
+> “PRISM verifies finite-state probabilistic models against temporal-logic properties. Its counterexample and diagnostic facilities depend on model class and property type. SafeTransition’s belief recursion targets adversarial finite-horizon viability under observation uncertainty rather than probabilistic temporal-logic verification.”
+
+---
+
+## 10.4 Narrow universal absence claims
+
+Replace:
+
+> “None of the environmental families returns certificates”
+
+with:
+
+> “Among the named packages and documented interfaces surveyed for this comparison, we did not find tools that return exact rational transition-safety certificates with independent checkers for the assessment semantics used here.”
+
+This is defensible.
+
+---
+
+# 11. Availability and artifact identity improvements
+
+For EMS, artifact availability should be unambiguous.
+
+---
+
+## 11.1 Provide a dedicated software release
+
+The current deposit title appears tied to the companion manuscript. SafeTransition should have its own versioned archive.
+
+Provide:
+
+- repository URL;
+- package index URL, if applicable;
+- archived release DOI;
+- release tag;
+- commit hash;
+- SHA-256 checksum of archive;
+- license file;
+- documentation URL;
+- exact version corresponding to the manuscript, e.g. SafeTransition 1.2.1.
+
+Recommended statement:
+
+> “The manuscript refers to SafeTransition 1.2.1. The source, tests, independent checker, scaling study, dashboard examples, and certificate examples are archived under DOI X, release tag vX.Y.Z, commit hash H.”
+
+---
+
+## 11.2 Separate deposit roles
+
+If the same archive contains companion-manuscript verification and SafeTransition source, state that explicitly.
+
+Better: create two DOIs:
+
+1. companion verification deposit;
+2. SafeTransition software archive.
+
+---
+
+# 12. Section-by-section revision plan
+
+---
+
+## Abstract
+
+Replace the abstract with a more precise version. Suggested draft:
+
+> SafeTransition is a Python library for constructing exact rational certificates of transition-safety verdicts in sustainability assessment. The library implements the assessment-operator framework: typed floor constraints evaluated on supplied tubes whose status is declared exact or certified conservative, scalarized aggregate operators over an explicitly defined projective weight domain, and backward recursions over state and belief spaces. Infeasibility is returned as a Farkas certificate: a nonnegative multiplier vector with vanishing weighted constraint sum and negative weighted bound. Feasible systems return exact rational witnesses where supported. Certificates serialize to canonical JSON and are verified by a standalone checker that imports no SafeTransition modules. All semantic computations use exact rational arithmetic; floating point is confined to optional rendering and performance measurement. Twenty-four exact checks re-derive the companion deposit’s benchmark, and a scaling study over parameterized families verifies closed-form answers and certificate integrity up to 256-variable eliminations and margins with 321-bit reduced denominators. A single-file dashboard renders readings with embedded certificate hashes and verification provenance. The library is distributed under the MIT licence.
+
+This version is still ambitious but more defensible.
+
+---
+
+## Introduction
+
+Make three changes:
+
+1. Keep the motivation about composite dashboards and safety verdicts.
+2. Add the trusted-computing-boundary distinction.
+3. Avoid implying that exact certification validates the underlying environmental model.
+
+Insert:
+
+> “SafeTransition certifies verdicts conditional on a supplied rational datum. It does not replace environmental modelling, statistical validation, or ecological judgement; it provides an exact audit layer for the consequences of a datum once that datum has been supplied.”
+
+---
+
+## Section 2.1: Transition data and operators
+
+Add:
+
+- finite disturbance set;
+- tube status;
+- reset map;
+- pre-reset and post-reset endpoints;
+- formal operator definitions;
+- explicit safe sets;
+- proposition with inclusion chain.
+
+Remove:
+
+> “no outer approximation enters”
+
+unless restricted to exact tubes only.
+
+---
+
+## Section 2.2: Recursions
+
+Add:
+
+- formal typed recursion;
+- formal belief recursion;
+- policy class;
+- soundness/completeness theorem;
+- explanation of bound on belief enumeration.
+
+Recommended wording for bound:
+
+> “The belief enumeration bound limits exploration completeness. If the reachable belief set exceeds the bound, the computation raises an exception and returns no partial membership claims. The bound therefore affects whether a full reachable belief set is explored, not the soundness of memberships that are returned.”
+
+---
+
+## Section 2.3: Certificates
+
+Add:
+
+- certificate classes;
+- feasibility witness;
+- normalized margin qualification;
+- minimal subfamily definition;
+- fibre criterion renaming;
+- certificate provenance.
+
+---
+
+## Section 3.1: Architecture
+
+Fix module count and naming.
+
+Suggested sentence:
+
+> “The library consists of nine semantic modules plus a command-line entry point and a repository-root independent checker.”
+
+Only use this if true. Otherwise say ten modules.
+
+---
+
+## Section 3.2: Exact-arithmetic discipline
+
+Replace “All computations” with “All semantic computations”.
+
+Rewrite the adversarial float example:
+
+> “The suite includes an adversarial regression in which the exact rational predicate evaluates to zero. Under direct IEEE-754 binary64 evaluation in the tested expression order and with a strict zero threshold, the same expression evaluates to a small negative number, which would change the verdict. SafeTransition rejects binary floating-point inputs, so this failure mode is structurally excluded.”
+
+This is stronger and less overbroad.
+
+---
+
+## Section 3.3: Interfaces and complexity
+
+Add:
+
+- precise API return types;
+- certificate types;
+- complexity correction;
+- unit-cost versus bit-complexity qualification.
+
+Recommended complexity wording:
+
+> “On explicit finite graphs with constant-time rational predicates, the typed recursion is polynomial in the number of states, state-action pairs, transitions, and horizon, under a unit-cost predicate model. Bit complexity depends on rational coefficient growth and is reported separately in the scaling study.”
+
+---
+
+## Section 3.4: Scaling of the exact pipeline
+
+Move all scaling content here.
+
+Include:
+
+- family definitions;
+- known answers;
+- largest completed instances;
+- stress family;
+- runtime details;
+- memory details;
+- certificate sizes;
+- numerator/denominator bit lengths;
+- checker runtimes.
+
+---
+
+## Section 4.1: Benchmark
+
+Add:
+
+- tube status table for benchmark objects;
+- exact declared tubes versus Schaefer enclosures;
+- monotonicity derivation;
+- separation provenance.
+
+---
+
+## Section 4.2: Dashboard
+
+Add:
+
+- canonicalization specification;
+- deterministic rendering details;
+- integrity versus trust distinction;
+- disturbance branch labelling.
+
+Insert:
+
+> “The dashboard provides convenient integrity and re-verification metadata. It does not authenticate the scientific origin of the datum. A malicious or erroneous producer can embed internally consistent certificates. The dashboard therefore supports auditability, not external truth.”
+
+---
+
+## Section 4.3: Partial observation and certificates
+
+Add:
+
+- full three-state example;
+- belief-failure certificate;
+- independent-checker status for belief failures;
+- common-action obstruction definitions;
+- fibre criterion narrowing.
+
+---
+
+## Section 5: Relation to existing software
+
+Expand categories and qualify claims. Add a comparison table with more precise columns:
+
+| Capability | SafeTransition | Exact polyhedral libraries | SMT/LP provers | Reachability tools | Environmental simulators | MCDA tools |
+|---|---:|---:|---:|---:|---:|---:|
+
+This will be more useful than only comparing against z3, PRISM, and pyfme.
+
+---
+
+## Section 6: Availability and requirements
+
+Add:
+
+- versioned DOI;
+- repository URL;
+- commit hash;
+- checksum;
+- dependency table;
+- test matrix;
+- certificate support matrix.
+
+---
+
+# 13. Additional high-value enhancements to exceed EMS expectations
+
+These are not strictly required to fix contradictions, but they would substantially elevate the paper.
+
+---
+
+## 13.1 Add a “certificate chain” figure
+
+Create a figure showing:
+
+```text
+supplied datum
+   ↓
+tube certificate
+   ↓
+operator constraint rows
+   ↓
+Farkas or feasibility certificate
+   ↓
+canonical JSON
+   ↓
+independent checker
+   ↓
+dashboard provenance
+```
+
+This makes the trusted computing base visible.
+
+---
+
+## 13.2 Add a “verdict semantics” table
+
+This table would show what each verdict means under each tube status.
+
+Example:
+
+| Input condition | Exact tube | Outer certified tube |
+|---|---|---|
+| All floors satisfied | certified safe | certified safe |
+| Floor violated at reachable breakpoint | certified unsafe | inconclusive unless reachable |
+| Floor violated only in enclosure region | certified unsafe relative to enclosure | not certified safe |
+
+---
+
+## 13.3 Add property-based tests
+
+Add randomized property tests for:
+
+- operator chain inclusion;
+- Farkas certificate validity;
+- feasibility witness validity;
+- belief recursion monotonicity:
+
+\[
+W_{k+1}\subseteq W_k
+\]
+
+when appropriate;
+
+- weight-partition coverage;
+- canonical JSON stability;
+- tamper rejection.
+
+Report counts in the paper.
+
+---
+
+## 13.4 Add optional cross-checking with an external solver
+
+During development/testing, cross-check random rational linear systems against an external solver such as Z3, SciPy rational? Better: an SMT solver or exact LP solver.
+
+The paper can say:
+
+> “A development-only cross-check compares SafeTransition’s Farkas and feasibility outcomes against an external solver on randomized rational systems. The external solver is not part of the runtime certificate chain.”
+
+This greatly strengthens confidence without compromising the no-runtime-dependency claim.
+
+---
+
+## 13.5 Add degenerate-case tests
+
+Include tests for:
+
+- zero rows;
+- duplicate constraints;
+- redundant constraints;
+- empty systems;
+- single-variable systems;
+- unbounded feasible systems;
+- infeasible systems with no variables;
+- zero weights if allowed;
+- coincident thresholds;
+- negative thresholds;
+- empty licensed plan sets;
+- plans licensed everywhere;
+- plans licensed nowhere;
+- beliefs with no possible action;
+- observations with empty fibre;
+- empty disturbance set if allowed.
+
+---
+
+## 13.6 Add a “limitations” subsection
+
+A concise limitations section would improve credibility.
+
+Suggested content:
+
+- scope limited to finite explicit rational instances;
+- continuous systems require certified enclosures;
+- scientific validity of data is outside scope;
+- Fourier–Motzkin row growth can be exponential;
+- belief enumeration can be exponential;
+- dashboard verifies consistency, not external truth.
+
+---
+
+# 14. Specific wording replacements
+
+Below are direct replacements for high-risk passages.
+
+---
+
+## 14.1 Exactness claim
+
+Original:
+
+> “All computations run in exact rational arithmetic”
+
+Replace with:
+
+> “All semantic assessment, recursion, threshold, and certificate computations run in exact rational arithmetic.”
+
+---
+
+## 14.2 Tube claim
+
+Original:
+
+> “each tube is the exact visited set and no outer approximation enters”
+
+Replace with:
+
+> “each tube is either an exact supplied tube or a certified conservative enclosure; the tube status is part of the datum and determines the logical strength of the resulting verdict.”
+
+---
+
+## 14.3 Belief completeness claim
+
+Original:
+
+> “a finite-horizon belief-space recursion that is sound and complete in finite systems”
+
+Replace with:
+
+> “a finite-horizon belief-space recursion that is sound for finite systems and complete for observation-history policies on finite systems under the stated transition and observation semantics.”
+
+---
+
+## 14.4 Fibre criterion claim
+
+Original:
+
+> “decides whether an exact observation-only certifier can exist at all”
+
+Replace with:
+
+> “decides whether exact observation-only classification of current safe-set membership is possible.”
+
+---
+
+## 14.5 Minimal subfamily claim
+
+Original:
+
+> “a minimal conflicting subfamily”
+
+Replace with:
+
+> “an inclusion-minimal conflicting subfamily”
+
+and add:
+
+> “removing any retained state restores a nonempty common action set.”
+
+---
+
+## 14.6 Checker independence claim
+
+Original:
+
+> “an independent checker sharing no code with the library”
+
+Replace with:
+
+> “a standalone checker that imports no SafeTransition modules and implements certificate verification independently from the library’s certificate-emission code.”
+
+---
+
+## 14.7 Scaling claim
+
+Original:
+
+> “Exactness also scales gracefully”
+
+Replace with:
+
+> “Within the tested structured families, exact rational certification remains stable as coefficient size and instance dimension grow.”
+
+---
+
+## 14.8 Coefficient growth claim
+
+Original:
+
+> “Coefficient growth inflates certificate size, not verdict times”
+
+Replace with:
+
+> “Within the tested range, coefficient growth had a larger observed effect on certificate size than on wall-clock time.”
+
+---
+
+## 14.9 “No ratio licenses a typed-safe plan”
+
+Replace with:
+
+> “Neither plan is typed-safe, although at least one plan is aggregate-licensed at every admissible weight ratio.”
+
+This avoids implying typed safety depends on weights.
+
+---
+
+# 15. Definition-of-done checklist
+
+Before resubmission, the manuscript should satisfy all of the following.
+
+---
+
+## Mathematical consistency
+
+- [ ] Beliefs are defined unambiguously as state sets, or the label abstraction is formally specified.
+- [ ] Soundness and completeness claims match the actual recursion and policy class.
+- [ ] The injectivity condition is either removed or correctly positioned as a sufficient condition for a label abstraction.
+- [ ] All five operators are formally defined.
+- [ ] The operator inclusion chain is proved under explicit hypotheses.
+- [ ] Endpoint, reset, and successor are distinct and clearly defined.
+- [ ] Disturbance quantification is explicit.
+- [ ] Weight domain is consistent across text, figures, and certificates.
+- [ ] Three-regime threshold formulas state all sign and denominator assumptions.
+- [ ] The fibre criterion is narrowed to current-state classification.
+
+---
+
+## Software and certificates
+
+- [ ] Tube statuses are implemented or described.
+- [ ] Verdict semantics depend on tube status.
+- [ ] Feasibility returns a witness or is not called a certificate.
+- [ ] Infeasibility margin is described as representation-dependent.
+- [ ] Certificate classes are enumerated.
+- [ ] Certificate support matrix is added.
+- [ ] Independent checker scope is explicit.
+- [ ] Canonical JSON is specified.
+- [ ] Deterministic rendering is specified and tested.
+- [ ] Belief-failure objects are machine-checkable.
+- [ ] Common-action obstruction defines compatibility and minimality.
+
+---
+
+## Evidence and reproduction
+
+- [ ] Three-state belief example is fully specified.
+- [ ] Benchmark monotonicity enclosure is derived in the paper or supplementary material.
+- [ ] Scaling content is in Section 3.4.
+- [ ] \(L\) is defined or removed.
+- [ ] Numerator and denominator bit lengths are reported separately.
+- [ ] Largest completed and overflow instances are distinguished.
+- [ ] Runtime reporting includes hardware, OS, Python version, repetitions, and statistic.
+- [ ] A row-growth stress family is added or the scalability claim is narrowed.
+- [ ] Software archive has a versioned DOI and clear contents.
+
+---
+
+## Editorial
+
+- [ ] Fix “forsustainability”.
+- [ ] Fix author/affiliation rendering.
+- [ ] Fix Section 4.2 cross-reference to Section 2.1.
+- [ ] Explain omission or fixing of phase flag \(q\) in examples.
+- [ ] Fix Table 1 module count.
+- [ ] Rename `benchmark` and `benchmarks` if retained.
+- [ ] Fix Table 2 formatting.
+- [ ] Check all dates and public availability.
+
+---
+
+# 16. Recommended priority order
+
+## Essential before any resubmission
+
+1. Formalize the belief recursion and fix soundness/completeness claims.
+2. Introduce exact versus certified-conservative tube statuses.
+3. Define all five operators and prove the inclusion chain.
+4. Fix the weight domain and weight-partition scope.
+5. Correct the Fourier–Motzkin complexity statement.
+6. Define minimal conflicting subfamily.
+7. Clarify disturbance semantics.
+8. Specify exactly what the independent checker verifies.
+9. Add the full three-state belief example.
+10. Fix scaling notation, especially undefined \(L\) and denominator-bit claims.
+
+## High-impact improvements
+
+11. Add certificate support matrix.
+12. Add canonical JSON specification.
+13. Add feasibility witnesses.
+14. Add belief-failure certificates to the checker.
+15. Add tube enclosure derivation for the benchmark.
+16. Expand related work.
+17. Add versioned software DOI and repository metadata.
+18. Add property-based and degenerate-case tests.
+19. Add a row-growth stress family.
+20. Add a certificate-chain figure.
+
+## Editorial polish
+
+21. Fix spacing, cross-references, module count, table formatting, and dates.
+22. Replace overbroad claims with scoped claims.
+23. Ensure figures and captions match the formal semantics.
+
+---
+
+# 17. Bottom line
+
+The manuscript has the foundation of a strong EMS software contribution. The most valuable move is not to reduce ambition, but to make the ambition **formally precise and evidentially complete**.
+
+If the revision implements the changes above, the paper can legitimately claim:
+
+> SafeTransition provides an exact rational certification layer for transition-safety verdicts, with explicit semantics, independently checkable certificates, and a clearly delineated trusted computing base.
+
+That version would not only close the gaps identified in the audits; it would make the manuscript substantially stronger than the current draft and well aligned with EMS standards for rigorous, reusable, and auditable environmental modelling software.

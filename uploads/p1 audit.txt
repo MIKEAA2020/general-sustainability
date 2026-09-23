@@ -1,0 +1,401 @@
+gemini:
+### 1. Severe Plotting, Graphic, and Caption Inconsistencies
+
+#### A. Figure 4(a): Mislabelling and Missing Floor Breach (Page 23)
+* **The Claim:** 
+  * Caption of Figure 4(a): *“the ecological margin breaches its floor mid-transition ($-4/5$ under the heatwave strike, $-3/10$ without it): the accepted-at-every-weighting reading is blind to the breach.”*
+  * Section 6.3 (p. 25): *“The floor itself, meanwhile, is breached mid-transition on both branches ($-4/5$ with the strike, $-3/10$ without)...”*
+* **The Flaw in the Graphic:**
+  1. The legend in Figure 4(a) assigns the green curve (with upward triangle markers) to `ecological margin s_1 (no heatwave)`.
+  2. At $t = 0$, this green curve starts at $y = 2.4$. But the witness state is explicitly defined as $(x, s_1, s_2) = (1/2, 6/5, 6/5)$, meaning the initial ecological margin is $s_1(0) = 6/5 = 1.2$, **not $2.4$**.
+  3. At mid-transition ($t = 1/2$), the green curve dips only to approximately $+0.9$. It **never crosses zero**, let alone dipping to the claimed $-3/10 = -0.3$.
+  4. Notice that $1.2 + 1.2 = 2.4$ (the initial composite index $s_1 + s_2$), and under the benign branch at $t = 1/2$, $s_1 + s_2 = -0.3 + 1.2 = +0.9$. 
+* **Conclusion:** The green curve **plots the composite index under benign conditions**, but the legend erroneously labels it as the ecological margin $s_1$. As a result, the promised benign floor breach of $-3/10$ does not appear anywhere on the graph, directly contradicting the caption and the text.
+
+---
+
+#### B. Figure 4(b): Unit and State-Variable Conflation (Page 23)
+* **The Text (pp. 24–25):** Under the `STAGED` plan, the fish stock rebuilds from $16/5 = 3.2$ kt to $69/20 = 3.45$ kt, while the reserve fund $x(t)$ draws down from $3/2 = 1.5$ to $1/2 = 0.5$.
+* **The Flaw in the Graphic:**
+  1. The right y-axis is titled `fund x(t) (STAGED, right axis)` and scaled from $0$ to $14$.
+  2. If the fund $x(t)$ draws down from $1.5$ to $0.5$, plotting it on a $0$–$14$ scale makes no sense; it would be a flat line compressed at the bottom.
+  3. Instead, the curve shown tracking between $3$ and $4$ represents the **biomass trajectory** $B(t)$ rebuilding to $3.45$. The plot has erroneously assigned the biomass rebuild trajectory to the right axis and labelled it as the fund schedule $x(t)$.
+
+---
+
+#### C. Floor Breach Phrasing Contradiction (Page 25)
+* **Text (p. 25, paragraph 2):** *“The floor itself, meanwhile, is breached mid-transition on both branches ($-4/5$ with the strike, $-3/10$ without)... the aggregate dashboard certifies a transition that violates the biomass limit whenever the strike arrives...”*
+* **Inconsistency:** If the floor is breached on **both** branches, the transition violates the biomass limit **even when the strike does not arrive** (since $-3/10 < 0$). Writing *“whenever the strike arrives”* incorrectly implies that the violation is contingent on the occurrence of the shock.
+
+---
+
+#### D. Disturbance Depth Attribution Error (Page 25)
+* **Text (p. 25, paragraph 4):** *“and the adverse disturbance’s worst-case depth (one full floor) is the order of the LRP crossing itself.”*
+* **Inconsistency:** In Section 6.3 (p. 23), the heatwave disturbance excess mortality is explicitly set to $\delta_0 = 1/2$ kt. Since $B_{\text{lim}} = 2$ kt, the disturbance shock is $\delta_0 / B_{\text{lim}} = 0.5 / 2 = 0.25$ floors, **not** one full floor. The value of "one full floor" ($2.0$ units) is the **total excursion of the FAST plan plus disturbance combined** ($1.5$ from quota $+ 0.5$ from heatwave), not the depth of the disturbance itself.
+
+---
+
+### 2. Mathematical, Conceptual, and Theoretical Flaws
+
+#### A. The "Chattering" / Time-Sharing Fallacy (Section 4.11 & Proof of Proposition 9)
+* **Text (p. 15, Proposition 9 Proof; p. 17, top):**
+  * *“A sequential policy that spends any positive time on FAST visits every $s_1$ in $[s_1 - 2, s_1]$ and any positive time on SLOW visits every $s_2$ in $[s_2 - 2, s_2]$...”* (p. 28)
+  * *“In the language of relaxed controls, the collapse theorem is a statement about the convexified (relaxed) action program and the converse a statement about chattering: sliding among plans at full strength does not buy what fractional allocation does.”* (p. 17)
+* **The Flaw:**
+  1. In continuous-time dynamics, if the state rates are bounded ($\dot{s}_1 = -4$), spending an infinitesimal time $\Delta t > 0$ on FAST can only change $s_1$ by at most $4\Delta t$. It is physically and mathematically impossible for an infinitesimal duration of FAST to cause the trajectory to plunge across the entire interval $[s_1 - 2, s_1]$.
+  2. In control theory, **chattering** (infinitesimally fast switching between extreme vector fields $u_{\text{FAST}}$ and $u_{\text{SLOW}}$) is well known (via Filippov’s theorem and the classical relaxed control theorem of Warga and Gamkrelidze) to produce an effective state trajectory that **identically tracks the convex combination** $\delta u_{\text{FAST}} + (1-\delta) u_{\text{SLOW}}$.
+  3. Claiming that chattering fails to close the gap while continuous convexification does is an artifact of defining sequential time-sharing as the static set union of whole, indivisible trajectory tubes $\text{Tube}(\text{FAST}) \cup \text{Tube}(\text{SLOW})$. Asserting that this is a property of "chattering" or temporal sharing in dynamic systems is a severe theoretical misrepresentation.
+
+---
+
+#### B. Error-Bound Modulus Conflation (Section 5.6, Page 22)
+* **Text (p. 22):** *“Along the resource route the minimal increment is the affine function $f(z) = (1 - x)_+$, whose error-bound modulus (Fabian et al., 2010) is identically 1 on $\{x < 1\}$; the rescue threshold $\kappa^*$ therefore coincides with the error-bound modulus along this route.”*
+* **The Flaw:** 
+  * An **error-bound modulus** is a conditioning constant $\tau > 0$ (here, $\tau = 1$) relating distance-to-feasibility to constraint violation: $\text{dist}(x, S) \le \tau [g(x)]_+$.
+  * The rescue threshold $\kappa^*(z) = (1 - x)$ is a **state-dependent function** taking values in $(0, 1]$ for $x \in [0, 1)$. 
+  * A varying function $\kappa^*(x) = 1 - x$ cannot "coincide" with a constant modulus of $1$. The author has conflated the *distance function* with the *modulus*.
+
+---
+
+#### C. Logical Contradiction in the Characterization of the Impossibility Region (Section 5.6)
+* **Text (p. 22, lines 4–8):**
+  * *“Because $\text{STAGED}_\kappa$ is admissible exactly when $x + \kappa \ge 1$, independently of the floors, the resource route admits every state with $x < 1$ — including states outside $V_{\text{weak}}$, such as $(1/2, 1/10, 1/10)$ — at cost $1 - x$; the impossibility region is exactly the set on which the four-action menu fails yet resource augmentation succeeds at finite cost.”*
+* **The Contradiction:**
+  1. The point $(1/2, 1/10, 1/10)$ has $s_1 + s_2 = 1/5 < 2$, so it is **outside** $V_{\text{weak}}$, meaning it is **not in the impossibility region** $I = V_{\text{weak}} \setminus V_{\text{typ}}$.
+  2. The four-action menu fails on $(1/2, 1/10, 1/10)$ (since $x < 1, s_1 < 2, s_2 < 2$), and resource augmentation succeeds on it at finite cost $\kappa = 1/2$.
+  3. Therefore, the set on which the four-action menu fails yet resource augmentation succeeds at finite cost is the entire non-typed-viable set $X_0 \setminus V_{\text{typ}}$, which strictly contains $I$. Claiming that $I$ is *“exactly the set on which the four-action menu fails yet resource augmentation succeeds at finite cost”* directly contradicts the sentence that precedes it.
+
+---
+
+#### D. Blend Parameter Interval Bounds in Theorem 8 (Page 15)
+* **Text (Theorem 8(i)):** $\text{BLEND}_\delta$ is typed-admissible at $z$ exactly when:
+  $$\delta \in \left[1 - \frac{s_2}{2}, \frac{s_1}{2}\right]$$
+* **The Flaw:** 
+  * By definition (Section 4.10), $\text{BLEND}_\delta$ is a convex combination of two controls, requiring $\delta \in [0, 1]$.
+  * If $s_1 > 2$ (e.g., $s_1 = 3, s_2 = 0.5$), the interval is $[0.75, 1.5]$. Values of $\delta > 1$ are not valid convex combination parameters.
+  * The admissible parameter set must be formally stated as $\delta \in [1 - s_2/2, s_1/2] \cap [0, 1]$.
+
+---
+
+#### E. Erroneous Necessary Condition for Typed Admissibility (Section 3.1, Page 7)
+* **Text (p. 7, bottom):** *“...so $E_{\text{end,typ}}(z) \ne \emptyset$ at every $z \in X_0$, while $E_{\text{typ}}(z) \ne \emptyset$ requires $s_1 \ge 2$ (Theorem 5(1)).”*
+* **The Flaw:** Theorem 5(1) proves:
+  $$V_{\text{typ}} = \{x \ge 1\} \cup \{s_1 \ge 2\} \cup \{s_2 \ge 2\}$$
+  If $x \ge 1$, $\text{STAGED}$ is typed-admissible even when $s_1 < 2$. If $s_2 \ge 2$, $\text{SLOW}$ is typed-admissible even when $s_1 < 2$. Thus, $E_{\text{typ}}(z) \ne \emptyset$ does **not** require $s_1 \ge 2$. The author forgot the other actions when writing this line.
+
+---
+
+### 3. Structural, Referencing, and Cross-Document Inconsistencies
+
+#### A. Broken Internal Cross-References: The Ghost "Section 4.12"
+* Throughout the text, the resource-transition benchmark is repeatedly cited as **Section 4.12**:
+  * Page 3, line 21: *“Section 4.12 makes the translation concrete on a standard biomass-yield model...”*
+  * Page 5, line 16: *“A resource-transition benchmark (Section 4.12)...”*
+  * Page 23, Figure 4 caption: *“The witness datum realized as a fishery-transition benchmark (Section 4.12).”*
+  * Page 24, bottom: *“All quota, stock, margin, and fund values are the exact rational values verified in Section 4.12.”*
+* **The Bug:** Section 4 ends at **Section 4.11** (Page 15). The benchmark was relocated to **Section 6.3** (Page 23), but none of the internal cross-references were updated.
+
+---
+
+#### B. Unnumbered Theorem in Section 4.4 (Page 9)
+* On page 9, between Proposition 4 and Theorem 5, there is a major theorem headed simply:
+  **`Theorem (finite-menu geometric characterization).`**
+* It has no number. In the text (e.g., page 5, contribution viii), it is awkwardly referenced as *“The finite-menu geometric characterization (Theorem, Section 4.4)”*. Every other proposition, remark, and theorem is numbered consecutively.
+
+---
+
+#### C. Empty Section Header (Page 13)
+* On page 13, between the caption of Figure 2 and Remark 6, appears:
+  ```latex
+  4.7. Figures
+  4.8. Propagation under hold-prefix extension
+  ```
+* Subsection **4.7** contains no text, no floats, and no content. It is an unremoved placeholder header.
+
+---
+
+#### D. Inconsistency in Machine Verification Check Counts (24 vs. 25 Checks)
+* **This manuscript (p. 14, 31, 32):** Repeatedly states that the verification test suite contains **25 checks** (*“All 25 checks pass and re-execution reproduces them exactly”*, *“all 25 checks; deterministic exact-integer arithmetic”*).
+* **Companion Software Paper (`SafeTransition`):** States in the Abstract, Section 1, Section 3.1, Section 4.1, and Table 2 that there are **24 checks** (*“Twenty-four exact checks re-derive the resource-transition benchmark”*, *“Benchmark exact checks (safetransition verify): 24/24 pass”*).
+* Two companion papers documenting the exact same deposit and software release (`v1.0.0`) contradict each other on the total number of benchmark checks.
+
+---
+
+#### E. Citation Formatting and Post-Dated Timestamps
+1. **In-text Citation Collisions:** On pages 3, 4, 7, 22, and 25, the author references four different 2026 manuscripts by full titles in running parenthetical text (e.g., *“Abaee, 2026, Typed Flux Ledgers and Depletion Arithmetic”*). Standard academic citation style requires letter disambiguation (e.g., Abaee, 2026a, b, c, d).
+2. **Post-Dated Preprint:** The footer on page 2 states: *“Preprint submitted to Elsevier September 20, 2026”*, which is a future-dated placeholder.
+grok:
+The mathematical core (operators, quantifier non-commutation \(\exists a\forall w\) vs. \(\forall w\exists a_w\), \(V_{\mathrm{typ}}\subseteq V_{\mathrm{weak}}\) with strict open gap \(I=\mathrm{FP}_{\mathrm{agg}}\), geometric finite-menu characterization, blend collapse vs. discrete time-sharing, rescue threshold \(\kappa^*(z)=(1-x)\cdot\mathbf{1}[z\notin V_{\mathrm{typ}}]\), hold-prefix persistence vs. two-stage erasure, and all appendix proofs) is internally consistent. Witness points, \(\rho_1=2/3\), \(\rho_2=3/2\), tubes (dip depth 2), \(e=(1/4,1/4)\), \(c=1\), \(V\) sets, region dictionary (Table 1), and fishery realization numbers (Schaefer \(r=4\), \(K=10\), \(B_{\lim}=2\), \(\sigma(16/5)=1088/125\), \(\sigma(6/5)=528/125>4\), pulse \(1463/125\), rebuild \(16/5\to 69/20\), fund \(3/2\to 1/2\)) all match across text, theorems, examples, Table 1, Figs. 1–4, and the 6.3 benchmark. Figure labels/captions (SLOW-only for small \(r<\rho_1\), FAST-only for large \(r>\rho_2\), overlap on \([\rho_1,\rho_2]\); I at \(x<1\), R at \(x\geq 1\)) agree with the formulas and with Theorem 5(6). No arithmetic contradictions, swapped witnesses, or chain violations appear. The action-indexed disturbance convention, dest-reset, and physical-vs-typed distinction are used uniformly.
+
+**Minor presentation issues:**
+- Section 4.7 is an empty “Figures” header with no text (figures themselves appear earlier as Figs. 1–3 and later as Fig. 4).
+- Occasional punctuation artifacts (e.g., “governance..” at end of 1.3(x)).
+- Future-dating is internally consistent (preprint 20 Sep 2026; all self-citations and companions also 2026) but, together with the AI drafting declaration and shared figshare DOI, makes the document read as a constructed companion pair rather than independent submissions.
+
+**Cross-paper / deposit issues (not contradictions inside this text, but affect the pair):**
+- Identical figshare DOI (`10.6084/m9.figshare.33764023`) is used for this paper’s verification/code/figures and for the software paper’s companion deposit. Descriptions overlap without a clear distinction between “this manuscript’s artifact” and “the software library’s 24 checks.”
+- Software paper’s §4.1 incorrectly assigned the false-positive/shortfall-1/2 witness to \(x=3/2\) (the rescue/STAGED entry point used here and in 6.3); this paper correctly uses \(x=1/2\) (with \((s_1,s_2)=(6/5,6/5)\) or \((1/10,1/10)\)) for I/FP and \(x=3/2\) for the rescue witness. The software Fig. 2(a) labeling also mismatched its own caption; this paper’s Figs. 1–2 do not.
+- AI declarations differ (this paper: GLM/Qwen/DeepSeek for drafting/review; software paper: DeepSeek/Qwen for code, under a “writing process” heading). Both are present.
+
+**Acknowledged scope gaps (authors are explicit, 5.4 + 6.2):** existence of an open gap rather than its size or prevalence; finite-horizon exact-tube data only (no infinite-horizon/stochastic/partial-obs/endogenous events); gap is a property of the finite deterministic menu (convexification/BLEND\(_\delta\) closes it exactly onto \(V_{\mathrm{weak}}\); discrete time-sharing/alternation does not, except on the already-typed set \(s_1\geq 2\) and \(s_2\geq 2\)); action-indexed (not coupled all-floor) disturbances; no empirical/predictive claims (fishery is a constructed rational re-reading whose tubes are shown conservative by a verified inequality; units merely anchored to a real LRP); no ranking of weak/strong doctrines; \(V_{\mathrm{weak}}\) is not claimed to be genuine-savings/inclusive-wealth; completeness of \(\mathcal{A}\) is a data requirement, not assumed. These are listed as limitations, not hidden.
+
+**Other notes:** 25 machine checks (31^{3} grid + critical ratios) vs. software’s 24/24 + 27/27 is a minor numbering difference, not a contradiction. Proofs are deferred (Appendices A–C) with the expected “see Appendix” pointers; the finite-menu separator argument and two-stage erasure construction are correctly sketched. The paper is dense and self-contained on its stated operators, with careful “no theorem of this paper concerns material cycles” and “the theorems require none of those properties” scoping relative to the companion ledger manuscript.
+
+Overall this manuscript does not reproduce the witness-assignment or figure-label errors of the software paper; its internal claims, numbers, and figures check. The main remaining weaknesses are the empty 4.7, the shared/future-dated deposit, and the inherent constructed nature of the 2026 companion pair.
+deepseek:
+### A. Mathematical and logical errors
+
+**1. Duplicate section number 1.2**
+
+On page 4, there are two consecutive sections both numbered **1.2**:
+
+- `1.2. The central result` (appears once)
+- `### 1.2. The central result` (appears again immediately after)
+
+Both are headed "The central result." One of them should be renumbered (or the first is a stray continuation marker). This is a genuine numbering collision.
+
+---
+
+**2. Inconsistent notation: $\mathcal{V}$ vs. $V$ vs. $\nu$**
+
+The accepted-state set is defined on page 8 as
+\[
+\mathcal{V}[E]=\{z:E(z)\neq\emptyset\}.
+\]
+It is written $\mathcal{V}_{\rm typ}$ on pages 8, 9, 10, 11. But on page 10–11, Theorem 5 uses
+\[
+\nu_{\rm typ},\quad \nu_{\rm weak},\quad \nu_{\rm phys},\quad \nu_{\rm end}
+\]
+with a lowercase Greek nu. The same symbol is used for the same object. This is a genuine notational inconsistency (possibly a PDF rendering artifact, but it appears in the extracted text and in the theorem statement).
+
+---
+
+**3. Missing Section 4.11 header**
+
+The conclusion on page 26 refers to **"Sections 4.10–4.11."** Section 4.10 is headed "Menu convexification: the blend family." There is no header for 4.11. The content that follows 4.10 (including Proposition 9 and the chattering discussion) is unlabeled. Proposition 9 is referenced but never formally introduced under a numbered heading. This is a genuine structural gap.
+
+---
+
+**4. Unnumbered theorem in Section 4.4**
+
+On page 9, between Proposition 4 and Theorem 5, there is a theorem headed only:
+> **Theorem (finite-menu geometric characterization).**
+
+It has no number. The text then awkwardly refers to it as **"(Theorem, Section 4.4)"** on page 5. Every other theorem, proposition, and remark is numbered. This is a genuine formatting/referencing problem.
+
+---
+
+**5. Page 7: "E_typ(z) ≠ ∅ requires s_1 ≥ 2"**
+
+On page 7, bottom:
+> "so $E_{\rm end,typ}(z)\neq\emptyset$ at every $z\in X_0$, while $E_{\rm typ}(z)\neq\emptyset$ requires $s_1\geq 2$ (Theorem 5(1))."
+
+Theorem 5(1) states
+\[
+\mathcal{V}_{\rm typ}=\{x\geq 1\}\cup\{s_1\geq 2\}\cup\{s_2\geq 2\}.
+\]
+So $E_{\rm typ}(z)\neq\emptyset$ if **any** of $x\geq 1$, $s_1\geq 2$, or $s_2\geq 2$ holds. The sentence omits the other two disjuncts. This is a genuine error.
+
+---
+
+**6. Page 24: "(3.2 kt above the limit)"**
+
+Page 24:
+> "a stock $B=B_{\rm lim}+6/5=16/5$ kt (3.2 kt above the limit)"
+
+$B_{\rm lim}=2$ kt, so $B=16/5=3.2$ kt. The amount **above the limit** is $3.2-2=1.2$ kt $=6/5$ kt. The parenthetical says "3.2 kt above the limit," which is wrong. It should be "1.2 kt above the limit" or "a stock of 3.2 kt, i.e. 6/5 kt above the limit." Genuine error.
+
+---
+
+**7. Page 25: "the adverse disturbance's worst-case depth (one full floor)"**
+
+Page 25, data-anchor paragraph:
+> "the adverse disturbance's worst-case depth (one full floor) is the order of the LRP crossing itself"
+
+The heatwave excess mortality is $\delta_0=1/2$ kt (stated on page 23). $B_{\rm lim}=2$ kt. So the heatwave depth is $0.5/2=0.25$ floors, not one full floor. The **total** FAST excursion (quota cut plus heatwave) is $2$ kt $=1$ floor. The sentence attributes the total excursion to the disturbance alone. Genuine error.
+
+---
+
+**8. Page 22: Error-bound modulus conflation**
+
+Page 22:
+> "Along the resource route the minimal increment is the affine function $f(z)=(1-x)_+$, whose error-bound modulus (Fabian et al., 2010) is identically 1 on $\{x<1\}$; the rescue threshold $\kappa^*$ therefore coincides with the error-bound modulus along this route."
+
+An error-bound modulus is a **constant** $\tau>0$ such that
+\[
+\operatorname{dist}(x,S)\leq \tau\,[g(x)]_+.
+\]
+Here $\tau=1$. The rescue threshold $\kappa^*(z)=(1-x)$ is a **state-dependent function**, not a constant. Saying $\kappa^*$ "coincides with the error-bound modulus" conflates a function with a modulus. The intended statement is that the distance-to-feasibility equals the violation, so the modulus is 1; but the text as written is incorrect. Genuine conceptual error.
+
+---
+
+**9. Page 22: Impossibility-region characterization contradiction**
+
+Page 22:
+> "Because $\mathrm{STAGED}_\kappa$ is admissible exactly when $x+\kappa\geq 1$, independently of the floors, the resource route admits every state with $x<1$ — including states outside $\mathcal{V}_{\rm weak}$, such as $(1/2,1/10,1/10)$ — at cost $1-x$; the impossibility region is exactly the set on which the four-action menu fails yet resource augmentation succeeds at finite cost."
+
+The point $(1/2,1/10,1/10)$ has $s_1+s_2=1/5<2$, so it is **outside** $\mathcal{V}_{\rm weak}$, hence **not** in the impossibility region $I=\mathcal{V}_{\rm weak}\setminus\mathcal{V}_{\rm typ}$. The four-action menu fails there, and resource augmentation succeeds at cost $1/2$. Therefore the set on which the four-action menu fails yet resource augmentation succeeds at finite cost is
+\[
+\{x<1,\ s_1<2,\ s_2<2\}=X_0\setminus\mathcal{V}_{\rm typ},
+\]
+which **strictly contains** $I$. The claim that $I$ is "exactly" that set is false. Genuine logical error.
+
+---
+
+**10. Page 29: Blend parameter interval bounds**
+
+Page 29, proof of Theorem 8(i):
+> "The window is nonempty exactly when $1-s_2/2\leq s_1/2$, i.e. $s_1+s_2\geq 2$."
+
+The window is
+\[
+\delta\in\left[1-\frac{s_2}{2},\ \frac{s_1}{2}\right].
+\]
+But $\mathrm{BLEND}_\delta$ is defined only for $\delta\in[0,1]$. If $s_1>2$ or $s_2>2$, the interval can extend outside $[0,1]$. The admissible set should be
+\[
+\delta\in\left[1-\frac{s_2}{2},\ \frac{s_1}{2}\right]\cap[0,1].
+\]
+On the impossibility region $I$, both $s_1<2$ and $s_2<2$, so the interval is automatically inside $(0,1)$. But the theorem statement and proof do not state this restriction. Genuine mathematical imprecision.
+
+---
+
+**11. Page 29: "Chattering" misrepresentation**
+
+Page 29, proof of Proposition 9:
+> "A sequential policy that spends any positive time on FAST visits every $s_1$ in $[s_1-2,s_1]$ and any positive time on SLOW visits every $s_2$ in $[s_2-2,s_2]$; the union tube stays within $S_0$ exactly when both dips are nonnegative..."
+
+In continuous-time control, infinitesimal chattering between FAST and SLOW does **not** cause the state to traverse the full tube $[s_1-2,s_1]$; the state moves at a rate bounded by the flow, and fast switching approximates the convex combination. The proof assumes a specific (strong) interpretation of "sequential time-sharing" as the union of whole trajectory tubes. The page 17 claim that this is a statement about "chattering" is therefore a theoretical misrepresentation. The distinction between finite-interval alternation and infinitesimal chattering is not made. This is a genuine conceptual issue, though it is scoped to a specific definition the paper could make explicit.
+
+---
+
+### B. Cross-reference and structural errors
+
+**12. Broken cross-references to "Section 4.12"**
+
+The resource-transition benchmark is cited as **Section 4.12** in multiple places:
+
+- Page 3: "Section 4.12 makes the translation concrete..."
+- Page 5: "A resource-transition benchmark (Section 4.12)..."
+- Page 23, Figure 4 caption: "The witness datum realized as a fishery-transition benchmark (Section 4.12)."
+- Page 24: "...verified in Section 4.12."
+
+But Section 4 ends at 4.10 (with an unlabeled 4.11). The benchmark is actually in **Section 6.3**. All four cross-references are broken.
+
+---
+
+**13. Page 24: "the benign margin line ... of the tube table"**
+
+Page 24:
+> "The FAST plan is realized by the announced quota $H^*(t)$ that makes the benign margin line $s_1:6/5\to 6/5-3/2\to 6/5$ of the tube table an exact trajectory..."
+
+The tube table in Section 4.5 gives the **worst-case (adverse)** tube, whose dip is $2$, not $3/2$. The benign line with dip $3/2$ is not in the tube table; it is derived by removing the heatwave. The phrase "of the tube table" is therefore inaccurate.
+
+---
+
+**14. Table 1 appears empty**
+
+On page 12, Table 1 is captioned:
+> "Table 1: Region dictionary on the witness datum (Theorem 5)..."
+
+The extracted text then shows no table content before Figure 1. If the table is genuinely empty in the PDF, this is a major omission. (This may be a PDF-extraction artifact, but it should be verified in the compiled PDF.)
+
+---
+
+**15. Tables 2 and 3 appear garbled**
+
+On page 19, Table 2 ("Terminology map") and on page 21, Table 3 ("Instruments") have captions but the extracted table content is garbled. This is likely an extraction artifact, but the compiled PDF should be checked for layout integrity.
+
+---
+
+### C. Figure and caption issues (beyond the audits)
+
+The Gemini audit already identified the Figure 4(a) mislabeling, Figure 4(b) axis mislabeling, and the "both branches" vs "whenever the strike arrives" contradiction. I confirm these are genuine and reproducible from the text.
+
+**16. Page 24: "a mid-season stock trough 6/5 kt above the limit"**
+
+Page 24:
+> "FAST's exposure is the ecological floor, whose worst-case (dip 2) trajectory is $s_1:6/5\to-4/5\to 6/5$ — a mid-season stock trough 6/5 kt above the limit, that is $6/5-2=-4/5$ relative to it."
+
+The trough is at $s_1=-4/5$, i.e. $4/5$ **below** the limit. The phrase "6/5 kt above the limit" describes the initial stock, not the trough. The sentence is confusing and could be read as saying the trough is above the limit. Genuine phrasing problem.
+
+---
+
+**17. Mixing $B$ and $s_1$ notation in Section 6.3**
+
+In Section 6.3, "trough" sometimes refers to the stock $B$ (e.g. "from the trough $17/10$ to $6/5$") and sometimes to the margin $s_1$ (e.g. "the adverse plan's trough"). The text uses $B=6/5$ and $s_1=-4/5$ interchangeably in places. This is a genuine notational inconsistency that could confuse a reader.
+
+---
+
+### D. Consistency with the companion software paper
+
+**18. 24 vs. 25 checks**
+
+This manuscript states **25 checks** on pages 14, 31, and 32. The companion software paper (*SafeTransition*) states **24 checks** in its abstract, Section 1, Section 3.1, Section 4.1, and Table 2. Two documents describing the same deposit and software release contradict each other. Genuine cross-document inconsistency.
+
+---
+
+### E. Minor formatting and style issues
+
+**19. Page 6: Missing space after section header**
+
+Page 6:
+> "2.2. The assessment datumThe results use..."
+
+Missing space between "datum" and "The." Minor.
+
+**20. Page 10: Nonstandard interval notation**
+
+Page 10:
+> "The worst-case tube of FAST is thus $|s_1-2,s_1|$ in the $s_1$ coordinate..."
+
+The notation $|s_1-2,s_1|$ is nonstandard for an interval; it should be $[s_1-2,s_1]$.
+
+**21. Page 26: "Sections 4.10–4.11"**
+
+As noted in item 3, Section 4.11 has no header. The cross-reference is broken.
+
+**22. Future-dated preprint**
+
+Page 2 footer: "Preprint submitted to Elsevier September 20, 2026." This is a future date relative to any plausible submission. Both audits noted this; it remains a genuine metadata issue.
+
+**23. Citation style**
+
+In-text citations such as "(Abaee, 2026, Typed Flux Ledgers and Depletion Arithmetic)" embed full titles in running text. Standard style would use letter disambiguation (2026a, 2026b, etc.) or short author–year citations. This is a genuine style inconsistency.
+
+---
+
+### F. Items from the audits I can confirm as genuine
+
+For completeness, these are genuine and I verified them:
+
+- Figure 4(a): green curve mislabeled as ecological margin; it plots the composite index.
+- Figure 4(b): right axis labeled `fund x(t)` but plots the biomass rebuild trajectory.
+- Floor-breach phrasing contradiction: "both branches" vs. "whenever the strike arrives."
+- Disturbance depth attribution: heatwave is $0.5$ kt $=0.25$ floors, not one full floor.
+- Section 4.7 is an empty "Figures" header.
+- "Section 4.12" cross-references are broken.
+- Unnumbered theorem in Section 4.4.
+- Error-bound modulus conflation.
+- Impossibility-region characterization contradiction.
+- Blend parameter interval missing $\cap[0,1]$.
+- $E_{\rm typ}(z)\neq\emptyset$ does not require $s_1\geq 2$.
+- 24 vs. 25 check count inconsistency with the software paper.
+
+---
+
+### Summary of the most consequential remaining issues
+
+The following are correctness-level and should be fixed before submission:
+
+1. The impossibility-region characterization on page 22 (item 9).
+2. The error-bound modulus conflation on page 22 (item 8).
+3. The "one full floor" disturbance-depth error on page 25 (item 7).
+4. The "$E_{\rm typ}$ requires $s_1\geq 2$" error on page 7 (item 5).
+5. The duplicate Section 1.2 (item 1).
+6. The missing Section 4.11 header (item 3).
+7. The broken "Section 4.12" cross-references (item 12).
+8. The unnumbered Theorem in 4.4 (item 4).
+9. The 24 vs. 25 check inconsistency with the companion software paper (item 18).
+10. The notational inconsistency $\mathcal{V}$ vs. $\nu$ (item 2).
+
+The Figure 4 issues, the "both branches" phrasing, and the blend-interval imprecision are also genuine and should be corrected. The chattering misrepresentation is more substantive and would benefit from a careful restatement of what "discrete time-sharing" means in this paper.

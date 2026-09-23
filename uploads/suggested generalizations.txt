@@ -1,0 +1,788 @@
+The paper becomes much stronger if it moves from a collection of separate mechanisms to a general theory of **belief-state viability under information constraints**.
+
+Below are non-decorative, meaningful ways to generalize it.
+
+---
+
+# 1. Generalize the central object: belief-state viability kernels
+
+The paper currently defines the “robust epistemic kernel” somewhat informally. A meaningful generalization is to define it as the **viability kernel of a set-valued belief dynamic**.
+
+For sampled observations or review intervals, let \(\mathcal B\) be a space of compact information sets \(B\subseteq X\). Define a robust belief predecessor operator:
+
+\[
+\operatorname{Pre}_{\Delta}(\mathcal C)
+=
+\left\{
+B\in \mathcal B:
+\exists a\in U^B(B)
+\text{ such that for every compatible disturbance,}
+\right.
+\]
+
+\[
+\left.
+\text{the trajectory remains in } \mathcal V \text{ on } [0,\Delta]
+\text{ and every possible successor belief belongs to } \mathcal C
+\right\},
+\]
+
+where
+
+\[
+U^B(B)=\bigcap_{x\in B}U(x).
+\]
+
+Then the robust observation-based viability kernel is the greatest fixed point:
+
+\[
+\mathcal K_{\mathcal I}^{\Delta}
+=
+\nu Z.\ \operatorname{Pre}_{\Delta}(Z).
+\]
+
+This is a serious generalization because it does three things:
+
+1. It makes the object rigorous.
+2. It connects the paper directly to viability theory.
+3. It turns the obstruction certificates into local tests for exclusion from a fixed point.
+
+Then the common-action obstruction becomes:
+
+\[
+U^B(B)=\varnothing
+\quad\text{or}\quad
+\mathcal A_{\mathrm{tube}}(B,\Delta)=\varnothing
+\implies
+B\notin \mathcal K_{\mathcal I}^{\Delta}.
+\]
+
+That is cleaner than treating the mechanisms as separate phenomena.
+
+---
+
+# 2. Generalize from a static observation map to general information structures
+
+The paper mostly uses a static observation map:
+
+\[
+O:X\to Y.
+\]
+
+That is fine, but the theory becomes much more useful if it allows:
+
+- delayed observations;
+- intermittent observations;
+- quantized indicators;
+- noisy set-valued observations;
+- hidden parameters;
+- event-triggered observations;
+- asynchronous review schedules.
+
+A clean way to do this is to treat an information structure as a filtration of observation records.
+
+Let the observation record up to time \(t\) be:
+
+\[
+y_{[0,t]}.
+\]
+
+The belief is:
+
+\[
+B_t
+=
+\{x(t): x_0\in B_0,\ \exists d(\cdot),\ \text{trajectory compatible with } y_{[0,t]}\}.
+\]
+
+Then the obstruction calculus can be stated for arbitrary information structures, not only static maps.
+
+Useful theorem:
+
+> If information structure \(\mathcal I_1\) is finer than \(\mathcal I_2\), then  
+> \[
+> \mathcal K_{\mathcal I_2}
+> \subseteq
+> \mathcal K_{\mathcal I_1}.
+> \]
+> Refining observations can only increase the observation-based viability kernel.
+
+This gives a monotonicity law for monitoring design.
+
+Even better, one can define a **separation requirement**:
+
+> An observation structure removes the common-action obstruction at belief \(B\) only if every observation fibre inside \(B\) contains states with nonempty common safe-action set.
+
+That gives a precise sensor-design criterion.
+
+---
+
+# 3. Generalize the timing obstruction using an exit-time value function
+
+The delayed-information theorem currently uses a condition like:
+
+\[
+D^+q \le -\varepsilon
+\]
+
+and gives the bound:
+
+\[
+T_{\mathrm{obs}} > \frac{\inf q}{\varepsilon}.
+\]
+
+That is useful but restrictive. A stronger generalization is to define a worst-case exit-time value function.
+
+For an initial belief \(B_0\), define:
+
+\[
+\tau^*(B_0)
+=
+\inf_{u(\cdot)}
+\sup_{x_0\in B_0,d(\cdot)}
+\inf\{t: q(x(t))<0\},
+\]
+
+where the infimum is taken over controls that are indistinguishable to the regulator before the first informative observation.
+
+Then the delayed-information obstruction becomes:
+
+\[
+T_{\mathrm{obs}} > \tau^*(B_0)
+\implies
+B_0\notin \mathcal K_{\mathcal I}.
+\]
+
+This is much more general and more recognizable to control theorists.
+
+It also allows a comparison-function version. Instead of constant drift \(\varepsilon\), suppose:
+
+\[
+D^+q(x;f(x,u,d)) \le -\alpha(q(x))
+\]
+
+for some positive function \(\alpha\). Then the exit-time bound becomes:
+
+\[
+t_{\mathrm{exit}}
+\le
+\int_{0}^{q(x_0)} \frac{ds}{\alpha(s)}.
+\]
+
+This generalizes the constant-\(\varepsilon\) case and gives sharper timing requirements.
+
+This is meaningful because monitoring frequency becomes a computable design variable:
+
+\[
+T_{\mathrm{obs}}
+<
+\tau^*(B_0).
+\]
+
+---
+
+# 4. Generalize from one floor to multiple floors and vector constraints
+
+The paper often discusses sustainability floors, but many results are stated for a single constraint \(q\ge0\). A natural and useful generalization is to handle:
+
+\[
+\mathcal V
+=
+\{x: q_j(x)\ge0,\ j=1,\dots,m\}.
+\]
+
+The safe-control correspondence becomes:
+
+\[
+\mathcal R_{\mathcal V}(x)
+=
+\left\{
+u\in U(x):
+\forall d\in D(x),\ 
+\nabla q_j(x)\cdot f(x,u,d)\ge0
+\text{ for every active } j
+\right\}.
+\]
+
+The common safe-action set is:
+
+\[
+\mathcal R_{\mathcal V}^B(B)
+=
+\bigcap_{x\in B}\mathcal R_{\mathcal V}(x).
+\]
+
+Then the obstruction is:
+
+\[
+\mathcal R_{\mathcal V}^B(B)=\varnothing
+\implies
+B\notin \mathcal K_{\mathcal I}.
+\]
+
+For polyhedral systems this becomes a finite linear feasibility problem. If each safe-control set is polyhedral,
+
+\[
+\mathcal R_{\mathcal V}(x_i)
+=
+\{u: A_i u\le b_i\},
+\]
+
+then the common safe-action set is empty iff the stacked system
+
+\[
+A u \le b
+\]
+
+is infeasible. Farkas’ lemma gives a certificate:
+
+\[
+\exists \lambda\ge0:
+\lambda^\top A=0,\quad \lambda^\top b<0.
+\]
+
+That is a genuine, checkable obstruction certificate.
+
+This generalization is especially useful for sustainability because sustainability constraints are rarely single-floor constraints. They are usually multiple floors:
+
+- minimum stock;
+- maximum pollution;
+- service level;
+- institutional limit;
+- resilience margin.
+
+The paper becomes much more relevant if the obstruction calculus is stated for vector floors.
+
+---
+
+# 5. Generalize from sufficient certificates to finite-horizon complete certificates
+
+The current paper gives sufficient certificates for nonviability. That is honest, but it leaves an “open middle ground.”
+
+A meaningful generalization is to obtain **complete certificates on finite horizon**.
+
+For discrete-time or sampled systems, define safe belief sets backward:
+
+\[
+\mathcal W_0
+=
+\{B: B\subseteq \mathcal V_T\},
+\]
+
+\[
+\mathcal W_{k+1}
+=
+\operatorname{Pre}(\mathcal W_k).
+\]
+
+Then an initial belief \(B_0\) is viable for \(N\) steps iff:
+
+\[
+B_0\in \mathcal W_N.
+\]
+
+If \(B_0\notin \mathcal W_N\), the backward recursion gives a finite certificate: a tree of disturbance choices and compatible states that force violation.
+
+This is valuable because:
+
+- it gives completeness in finite horizon;
+- it connects the paper to safety games and reachability;
+- it gives an algorithm;
+- it makes the obstruction calculus computationally meaningful.
+
+For finite state, action, disturbance, and observation spaces, this is especially clean.
+
+The theorem could be:
+
+> For finite transition systems with finite observation partitions, the backward belief-safety recursion is sound and complete for finite-horizon observation-based viability. Nonviability is certified by a finite counterstrategy tree.
+
+That would significantly strengthen the paper.
+
+---
+
+# 6. Generalize the computational side: certificates as dual objects
+
+The paper already mentions Farkas certificates, but this can be made central.
+
+A meaningful generalization is to treat obstruction certificates as **dual feasibility certificates**.
+
+Examples:
+
+### Common-action obstruction
+
+If the common safe-action set is polyhedral, emptiness is certified by Farkas multipliers.
+
+### Timing obstruction
+
+If the dynamics are linear and constraints polyhedral, the worst-case exit-time condition can be certified by linear programming or reachability computations.
+
+### Fibre certification obstruction
+
+If the observation is linear,
+
+\[
+y=Cx,
+\]
+
+and the safe set is polyhedral, then one can check whether an observation fibre crosses the safe-set boundary by solving linear programs.
+
+### Barrier-style obstruction
+
+For nonlinear systems, one can use sum-of-squares or barrier-like dual certificates to show that no observation-based policy can prevent exit.
+
+This gives the paper a much stronger applied-math identity:
+
+> The obstruction calculus produces primal-dual certificates of nonviability under information constraints.
+
+That is attractive for journals like JOTA, SVVA, or control journals with a computational orientation.
+
+---
+
+# 7. Generalize the policy class systematically
+
+The paper currently distinguishes:
+
+- perfect-information policies;
+- observation-based policies;
+- certainty-equivalence policies;
+- institutionally restricted policies.
+
+This can be generalized into a single parameterized framework.
+
+Let \(\Pi\) be a policy class. Define:
+
+\[
+\mathrm{Viab}_{\Pi}(\mathcal V)
+\]
+
+as the viability kernel under policies in \(\Pi\).
+
+Then one can prove monotonicity:
+
+\[
+\Pi_1\subseteq \Pi_2
+\implies
+\mathrm{Viab}_{\Pi_1}(\mathcal V)
+\subseteq
+\mathrm{Viab}_{\Pi_2}(\mathcal V).
+\]
+
+Similarly:
+
+- finer observation structures enlarge the kernel;
+- larger action sets enlarge the kernel;
+- smaller disturbance sets enlarge the kernel;
+- institutional restrictions shrink the kernel.
+
+This gives a clean hierarchy:
+
+\[
+\mathrm{Viab}_{\text{institutional, partial obs}}
+\subseteq
+\mathrm{Viab}_{\text{partial obs}}
+\subseteq
+\mathrm{Viab}_{\text{robust full obs}}
+\subseteq
+\mathrm{Viab}_{\text{full obs}}.
+\]
+
+More importantly, it allows a diagnostic question:
+
+> Which restriction is responsible for the loss of viability?
+
+One could define a “distance to viability”:
+
+- minimum sensor refinement needed;
+- minimum reduction in observation delay needed;
+- minimum expansion of the action set needed;
+- minimum relaxation of the disturbance class needed.
+
+That is highly meaningful for governance and monitoring design.
+
+---
+
+# 8. Generalize from obstruction to monitoring design
+
+Right now the paper mostly says: given an observation structure, here is why viability fails.
+
+A stronger generalization is to reverse the question:
+
+> Given a system and a safety set, what observation structure is needed to make viability possible?
+
+This turns obstruction into design.
+
+For example, define a sensor design problem:
+
+\[
+\min_{\mathcal I}
+\mathrm{Cost}(\mathcal I)
+\]
+
+subject to:
+
+\[
+B\in \mathcal K_{\mathcal I}
+\]
+
+for a target set of beliefs \(B\).
+
+Or more modestly:
+
+> Find the coarsest observation structure that removes all common-action obstructions on a target region.
+
+For static observations, a necessary condition for exact safety certification is:
+
+\[
+K = O^{-1}(O(K)).
+\]
+
+For observation-based viability, a stronger condition is needed:
+
+> Every observation fibre must contain states whose safe-control sets have nonempty intersection.
+
+That gives a precise design rule:
+
+\[
+O(x_1)=O(x_2)
+\implies
+\mathcal R_{\mathcal V}(x_1)\cap \mathcal R_{\mathcal V}(x_2)\neq\varnothing.
+\]
+
+For multiple states in a fibre:
+
+\[
+\bigcap_{x\in O^{-1}(y)} \mathcal R_{\mathcal V}(x)
+\neq
+\varnothing.
+\]
+
+This is a meaningful generalization because it tells monitoring systems what they must measure.
+
+It also gives a clean interpretation for sustainability indicators:
+
+- an aggregate index is acceptable only if its fibres do not merge states requiring incompatible policies;
+- a delayed indicator is acceptable only if its delay is shorter than the worst-case exit time;
+- a biased indicator is acceptable only if the controller applies the correction.
+
+That is exactly the kind of consequence that makes the paper useful.
+
+---
+
+# 9. Generalize the dynamic obstruction beyond constant drift
+
+The finite-time exit certificate currently assumes:
+
+\[
+\sup_u \inf_d D^+q \le -\varepsilon.
+\]
+
+This can be generalized in several useful ways.
+
+### 9.1 State-dependent drift
+
+Suppose:
+
+\[
+\sup_u \inf_d D^+q(x;f(x,u,d))
+\le
+-\varepsilon(x).
+\]
+
+Then the exit time bound becomes:
+
+\[
+t_{\mathrm{exit}}
+\le
+\int_{x_0}^{\partial \mathcal V}
+\frac{dq}{\varepsilon(q)}.
+\]
+
+### 9.2 Comparison functions
+
+Suppose:
+
+\[
+D^+q \le -\alpha(q)
+\]
+
+where \(\alpha\) is positive on \((0,a]\). Then:
+
+\[
+t_{\mathrm{exit}}
+\le
+\int_0^{q(x_0)} \frac{ds}{\alpha(s)}.
+\]
+
+### 9.3 Multiple-constraint exit
+
+Define the minimum slack:
+
+\[
+q_{\min}(x)
+=
+\min_j q_j(x).
+\]
+
+Then a drift condition on \(q_{\min}\) gives a certificate that at least one floor is breached.
+
+These are not decorative. They make the timing certificates applicable to nonlinear resource systems where decline accelerates near thresholds.
+
+---
+
+# 10. Generalize to hidden parameters and adaptive observation
+
+The paper already has a hidden-mode example:
+
+\[
+\dot z=\theta u,\quad \theta\in\{-1,+1\}.
+\]
+
+This can be generalized meaningfully.
+
+Let the augmented state be:
+
+\[
+(x,\theta)\in X\times \Theta.
+\]
+
+The observation may not reveal \(\theta\). The belief then lives in \(X\times\Theta\).
+
+The obstruction becomes:
+
+\[
+\bigcap_{(x,\theta)\in B}
+\mathcal R_{\mathcal V}(x,\theta)
+=
+\varnothing.
+\]
+
+This is exactly the problem of uncertain parameters in sustainability:
+
+- unknown regeneration rate;
+- unknown climate sensitivity;
+- unknown stock level;
+- unknown institutional effectiveness;
+- unknown shock persistence.
+
+One can then generalize to **learning**:
+
+- if \(\theta\) becomes observable after time \(T_{\mathrm{learn}}\), then the timing obstruction applies with \(T_{\mathrm{obs}}=T_{\mathrm{learn}}\);
+- if learning is endogenous, the belief dynamic includes parameter updating.
+
+This is meaningful because many sustainability failures are not caused by noisy data alone, but by structural uncertainty that is resolved too late.
+
+---
+
+# 11. Generalize to hybrid and discrete-continuous systems carefully
+
+The paper’s hidden-mode example is already hybrid-like: a discrete parameter \(\theta\) affects continuous dynamics.
+
+A meaningful generalization is to formulate the system as a hybrid inclusion:
+
+\[
+\dot x \in F(x,u,d),
+\]
+
+with discrete modes:
+
+\[
+\theta^+\in G_\theta(\theta,x,u,d).
+\]
+
+Then the belief state includes both continuous states and discrete modes.
+
+The common-action obstruction becomes:
+
+\[
+\bigcap_{(x,\theta)\in B}
+\mathcal R_{\mathcal V}(x,\theta)
+=
+\varnothing.
+\]
+
+This is useful because many sustainability systems have discrete regimes:
+
+- normal vs crisis;
+- healthy vs collapsed;
+- high vs low productivity;
+- cooperative vs noncooperative institutional regime.
+
+But this should be done only if the paper is targeting a control journal that values hybrid systems. Otherwise it may become decorative.
+
+---
+
+# 12. Generalize to approximate and buffered viability
+
+Exact viability is fragile. A useful generalization is to define buffered viability:
+
+\[
+\mathcal V_\delta
+=
+\{x: q_j(x)\ge \delta,\ \forall j\}.
+\]
+
+Then obstruction certificates can be stated with margins.
+
+For example:
+
+\[
+D^+q \le -\varepsilon
+\]
+
+certifies exit from the buffered set even faster.
+
+This is meaningful for three reasons:
+
+1. Real indicators have measurement error.
+2. Sustainability thresholds are uncertain.
+3. Numerical methods need robustness margins.
+
+One could define an **obstruction margin**:
+
+\[
+\mu(B)
+=
+\sup\{\delta: B \text{ is obstructed from } \mathcal V_\delta\}.
+\]
+
+This tells the regulator how much safety margin is already lost due to information constraints.
+
+---
+
+# 13. Generalize to decentralized or institutional observation
+
+The paper mentions institutions but does not develop them. A meaningful generalization is to model multiple regulators or agencies with different observation rights and command rights.
+
+Let agent \(i\) observe:
+
+\[
+y_i = O_i(x),
+\]
+
+and control only part of the action:
+
+\[
+u_i\in U_i(x).
+\]
+
+Then the joint admissible action set is constrained by:
+
+- common knowledge;
+- communication delays;
+- authority constraints;
+- enforcement limits.
+
+The common-action obstruction becomes richer:
+
+\[
+\bigcap_{x\in B}
+U_{\mathcal J}(x)
+\cap
+\mathcal R_{\mathcal V}(x)
+=
+\varnothing.
+\]
+
+This is especially relevant for sustainability governance, where different institutions observe different indicators and control different instruments.
+
+But this is a larger extension. It should be added only if the paper wants to make institutional constraints a central theme.
+
+---
+
+# 14. Generalize from robust viability to probabilistic safety — only as a separate extension
+
+One possible generalization is to replace robust viability with chance-constrained viability:
+
+\[
+\mathbb P(\text{violation})\le p.
+\]
+
+Then obstruction certificates would become lower bounds on violation probability.
+
+For example:
+
+> If the disturbance can force exit on a set of probability at least \(p\) before the first informative observation, then the chance-constrained viability problem is infeasible.
+
+This could be useful, but it changes the nature of the paper. It should not be mixed casually into the robust paper. It belongs in a separate extension.
+
+---
+
+# 15. The most valuable generalization package
+
+If the goal is to strengthen the paper without turning it into a different project, I would choose only these four generalizations:
+
+---
+
+## Generalization 1: Belief-state viability kernel
+
+Define the observation-based viability kernel as the greatest fixed point of a belief predecessor operator.
+
+This gives the paper a rigorous core.
+
+---
+
+## Generalization 2: Timing obstruction via worst-case exit time
+
+Replace the constant-\(\varepsilon\) timing condition with:
+
+\[
+T_{\mathrm{obs}}>\tau^*(B_0).
+\]
+
+This gives the delayed-information result real control-theoretic force.
+
+---
+
+## Generalization 3: Multi-floor polyhedral certificates
+
+State the common-action obstruction for multiple constraints and give Farkas/LP certificates.
+
+This makes the paper computationally useful.
+
+---
+
+## Generalization 4: Finite-horizon completeness
+
+Add a finite-horizon backward recursion for finite systems.
+
+This gives at least one setting where the obstruction calculus is complete, not merely sufficient.
+
+---
+
+Those four changes would transform the paper from a collection of mechanisms into a coherent theory.
+
+---
+
+# 16. What should not be generalized
+
+To keep the paper strong, avoid decorative generalizations such as:
+
+- “stochastic version” unless you are prepared to change the whole framework;
+- “infinite-dimensional systems” unless required;
+- “hybrid systems” unless the hidden-mode example is central;
+- “machine learning indicators” unless you have a formal observation-structure result;
+- “climate application” unless you have data and a model.
+
+Adding these without proof would weaken the paper.
+
+---
+
+# 17. A possible revised claim for the generalized paper
+
+A stronger version of the paper’s central claim would be:
+
+> We develop a belief-space viability framework for control systems under incomplete observation. We characterize observation-based viability as the greatest fixed point of a robust belief predecessor operator. From this framework we derive checkable obstruction certificates: adverse-drift certificates, common safe-action certificates, delayed-information certificates, and fibre-certification limits. For polyhedral systems the certificates reduce to linear feasibility tests with Farkas multipliers; for finite-horizon finite systems the backward recursion is complete. The results provide quantitative design rules for monitoring frequency, indicator resolution, aggregation, and bias correction in sustainability governance.
+
+That is much stronger than saying:
+
+> we supply the necessity side.
+
+It is also more defensible.
+
+1. define a belief-state viability kernel;
+2. derive obstruction certificates from that kernel;
+3. generalize timing through exit-time value functions;
+4. handle multiple floors and polyhedral computation;
+5. provide finite-horizon completeness where possible;
+6. connect everything to monitoring design.
+
