@@ -1,0 +1,338 @@
+\documentclass[10pt,twocolumn]{article}
+\usepackage[a4paper,margin=15mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{mathrsfs}
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{remark}{Remark}
+\newtheorem{definition}{Definition}
+\usepackage{graphicx}
+\usepackage{booktabs,array,calc}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{etoolbox}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-1}
+\emergencystretch=3em
+\allowdisplaybreaks
+\AtBeginDocument{%
+  \BeforeBeginEnvironment{equation}{\small}%
+  \BeforeBeginEnvironment{equation*}{\small}%
+  \BeforeBeginEnvironment{align}{\small}%
+  \BeforeBeginEnvironment{align*}{\small}%
+  \BeforeBeginEnvironment{gather}{\small}%
+  \BeforeBeginEnvironment{gather*}{\small}%
+}
+
+\begin{document}
+\title{The Stochastic Selector: Exact Rational Belief-State\\ Safety Values under Partial Observation}
+\author{Amin Abaee\\[0.35em]
+{\small Independent Researcher}\\[0.55em]
+{\small\href{https://orcid.org/0000-0002-0019-1842}{ORCID: 0000-0002-0019-1842}}\\[0.3em]
+{\small\href{mailto:amin\_abaee@ut.ac.ir}{amin\_abaee@ut.ac.ir}}}
+\date{September 23, 2026}
+\maketitle
+
+\begin{abstract}
+
+The viable-selector framework reads every obstruction certificate as the
+emptiness of a response correspondence at an information state; its closing
+section previewed the stochastic counterpart, in which the information state
+is a distribution and viability is the value-one level of a belief-state
+safety recursion. This paper develops that theory. The belief-state safety
+value is the stochastic selector, and its finite-horizon values are
+piecewise linear with exactly representable witnesses: over rational input
+data, the backward recursion propagates rational alpha-vectors, so all
+values are exact rationals computable without floating point. At the
+deterministic limit the recursion degenerates to a survived-mass formula
+over blind action sequences, recovering the robust verdicts of the
+companion papers and implying their deficit bounds. Obstruction
+certificates are read systematically as deficit lower bounds: the
+chance-constrained common-action bound, the degenerate minimal-mass bound,
+and monotonicity. On the audited delayed-regime class the theory is carried
+exactly: the alpha-vector recursion reproduces the closed-form values on
+all forty-eight audited cells, the certificate partition coincides with the
+value boundaries, the value's kink locus is exactly the certificate
+boundary, the deficit is constant on the certified region, and the class
+declaration is quantified --- the cells covered only by the timing
+certificate are precisely those where in-window adaptivity lifts the value
+to one. All computations run in exact rational arithmetic.
+
+\end{abstract}
+
+\subsection{1. Introduction}\label{introduction}
+
+The companion papers develop obstruction certificates for viability under
+incomplete observation --- finite witnesses that no observation-based policy
+is safe --- and unify them as emptiness of a response correspondence at an
+information state (Abaee, 2026a,b,c). The unifying paper closes with the
+stochastic counterpart, left there as an outlook: replace the
+set-valued information state by a distribution, the correspondence's
+nonemptiness by the value-one level of a safety recursion, and the
+certificate by a lower bound on the deficit from unity. This paper
+delivers that theory, seeded by the worked instance already carried in the
+calculus paper's probabilistic section and its coverage audit.
+
+Four results. First, the \emph{exact representation}: belief-state safety
+values are piecewise linear in the belief at every finite horizon, and over
+rational data the witnessing alpha-vectors are rational and propagated
+exactly by the backward recursion (Section~3, Propositions~\ref{prop:pl}
+and~\ref{prop:degen}) --- no floating point enters the value theory, in
+keeping with the companions' verification discipline. Second, the
+\emph{degeneration}: at the deterministic limit the recursion collapses to
+a survived-mass formula over blind action sequences, which recovers the
+companion papers' robust verdicts and proves their deficit bound
+(Proposition~\ref{prop:degen}). Third, the \emph{certificate reading}:
+obstruction certificates are deficit lower bounds, systematically
+(Proposition~\ref{prop:deficit}). Fourth, the \emph{agreement theorem} on
+the audited classes: on the delayed hidden-regime grid the alpha-recursion,
+the closed form, the certificate partition, and the kink locus of the value
+coincide cell by cell, with a constant deficit on the certified region and
+a quantified class declaration (Section~5, Theorem~\ref{thm:agree}).
+Everything is verified in exact rational arithmetic
+(Section~\ref{verified}).
+
+\subsection{2. The stochastic selector}\label{model}
+
+Let \(X, A, Y\) be finite, with transition \(T(x' \mid x, a)\) and
+observation likelihood \(g(y \mid x, a, x')\). Augment \(X\) with an
+absorbing unsafe state \(\bot\): for \(x \in \mathcal{V}\),
+\(T(\bot \mid x, a) = 1 - \sum_{x' \in \mathcal{V}} T(x' \mid x, a)\) and
+\(T(\bot \mid \bot, a) = 1\). A belief is a distribution \(b\) over
+\(X \cup \{\bot\}\), updated by Bayes' rule
+\(\tau(b, a, y)\), with
+\(\mathbb{P}(y \mid b, a) = \sum_{x, x'} b(x)\, T(x' \mid x, a)\,
+g(y \mid x, a, x')\). The \emph{safety value} at horizon \(k\) is the
+maximal survival probability
+\[
+V_{k}(b) = \max_{\pi}\; \mathbb{P}_{\pi}\bigl( x_{t} \in \mathcal{V}
+\text{ for } t = 0, \dots, k \;\big|\; b \bigr).
+\]
+
+In the selector framework this is the distributional counterpart of the
+recursive correspondence: the information state is \(b\), a response is a
+policy segment, and the \emph{stochastic selector at} \(b\),
+\[
+\Gamma^{\mathrm{s}}_{k}(b) = \Bigl\{ a \in A : \sum_{y} \mathbb{P}(y \mid
+b, a)\, V_{k-1}\bigl(\tau(b, a, y)\bigr) = V_{k}(b) \Bigr\},
+\]
+collects the actions attaining the value. Nonemptiness of the recursive
+selector corresponds to \(V_{k}(b) = 1\); obstruction certificates
+correspond to deficits \(1 - V_{k}(b) > 0\).
+
+\begin{theorem}[belief-state value recursion]\label{thm:recursion}
+\(V_{0}(b) = b(\mathcal{V})\) (the horizon counts the current state), and
+for \(k \ge 0\),
+\[
+V_{k+1}(b) = \max_{a \in A}\; \sum_{y \in Y} \mathbb{P}(y \mid b, a)\;
+V_{k}\bigl(\tau(b, a, y)\bigr).
+\]
+The recursion is exact on every finite horizon; it is the Smallwood--Sondik
+belief-state value iteration specialized to the absorbing safety reward
+(Smallwood and Sondik, 1973).
+\end{theorem}
+
+The proof is standard value iteration for the belief-state Markov decision
+process, with the absorbing state making \(V_{k}\) the \(k\)-step survival
+probability.
+
+\subsection{3. Exact piecewise-linear values}\label{exact}
+
+\begin{proposition}[rational alpha-vectors]\label{prop:pl}
+At every horizon \(k\), \(V_{k}\) is piecewise linear and convex:
+\(V_{k}(b) = \max_{\alpha \in \Gamma_{k}} \alpha^{\top} b\) for a finite
+witness set \(\Gamma_{k} \subset \mathbb{Q}^{|X|+1}\), constructed by the
+backup
+\[
+\alpha^{a,\,\gamma_{\cdot}}(x) = \sum_{x'} T(x' \mid x, a)
+\sum_{y} g(y \mid x, a, x')\, \gamma_{y}(x'),
+\quad \gamma_{y} \in \Gamma_{k},
+\]
+with \(\Gamma_{0} = \{ \mathbf{1}_{\mathcal{V}} \}\) and
+\(\Gamma_{k+1} = \{ \alpha^{a, \gamma_{\cdot}} : a \in A,\ \gamma_{\cdot}
+\text{ a selection} \}\), duplicates removed by exact equality. Over
+rational \(T\), \(g\), and priors, every \(\alpha \in \Gamma_{k}\) is an
+exact rational vector, every \(V_{k}(b)\) at a rational belief is an exact
+rational, and the attaining witness is part of the computation. The
+worst-case growth is \(|\Gamma_{k+1}| \le |A|\,|\Gamma_{k}|^{|Y|}\);
+deduplication and pruned selections are the practical controls, and the
+exponential law is the honest complexity statement for the general class.
+\end{proposition}
+
+\emph{Proof sketch.} The PL structure is Smallwood--Sondik's; the point
+here is the exact-arithmetic discipline: the backup maps rational vectors
+to rational vectors by finite sums and products, selections are finite, and
+equality tests for deduplication are exact on rationals.
+\hfill\(\square\)
+
+\begin{proposition}[deterministic-limit degeneration]\label{prop:degen}
+Let the kernels be deterministic, \(x^{+} = F(x, a, d)\), with disturbance
+support \(\{F(x,a,d) : d \in D\}\) read adversarially within its support,
+and let the window be blind with declared sequential class \(\Pi_{B}\).
+Then the value degenerates to the \emph{survived-mass formula}
+\[
+V_{k}(b) = \max_{(u_{0},\dots) \in \Pi_{B}}\;
+\sum_{x \in \mathrm{supp}\, b} b(x)\,
+\mathbf{1}\bigl[ x \text{ survives } (u_{0}, \dots) \bigr],
+\]
+a maximum of rational linear functions of \(b\) (the surviving indicators
+are the degenerate alpha-vectors). Consequently: if the support \(B\)
+carries a jointly surviving blind sequence, \(V_{k}(b) = 1\); and if every
+sequence loses some branch, then \(V_{k}(b) \le 1 - \min_{x \in B} b(x)\)
+--- the robust common-action verdicts and the minimal-mass deficit bound of
+the companion papers, recovered as exact values.
+\end{proposition}
+
+\emph{Proof sketch.} With deterministic kernels the posterior support
+follows the set-valued recursion, survival from a branch under a fixed
+sequence is a deterministic event, and prior mass sums over surviving
+branches; maximizing over sequences gives the formula, from which both
+consequences are immediate (a lost branch carries at least the minimal
+mass). \hfill\(\square\)
+
+\subsection{4. Certificates as deficit bounds}\label{deficit}
+
+Write \(\Delta_{k}(b) = 1 - V_{k}(b)\) for the deficit.
+
+\begin{proposition}[deficit lower bounds]\label{prop:deficit}
+Each companion certificate is a computable lower bound on the deficit:
+(i) \emph{chance-constrained common action:} if the one-step violation
+probabilities satisfy \(\sum_{x} b(x)\, p(x, a) \ge \delta\) for every
+\(a \in A\), then \(\Delta_{k}(b) \ge \delta\) for every \(k \ge 1\);
+(ii) \emph{degenerate minimal mass:} at the deterministic limit, if the
+support misses the \(k\)-step robust kernel,
+\(\Delta_{k}(b) \ge \min_{x \in \mathrm{supp}\, b} b(x)\);
+(iii) \emph{monotonicity:} \(V_{k+1}(b) \le V_{k}(b)\), so the deficit is
+nondecreasing in the horizon. For finite horizons the exact deficit
+\(1 - \max_{\alpha \in \Gamma_{k}} \alpha^{\top} b\) is computable, and the
+bounds are witnesses of it, not surrogates.
+\end{proposition}
+
+\emph{Proof sketch.} (i) is the chance-constrained obstruction of the
+companion paper: every action loses probability at least \(\delta\) at the
+first step and survival probabilities never increase. (ii) is
+Proposition~\ref{prop:degen}'s second consequence. (iii) holds since
+\(V_{k+1} = \max_a \mathbb{E}[V_{k} \circ \tau] \le \max_a \mathbb{E}
+[V_{k-1} \circ \tau] = V_{k}\) by induction.
+\hfill\(\square\)
+
+\subsection{5. Agreement on the audited classes}\label{agreement}
+
+The delayed hidden-regime instance of the calculus paper --- regimes
+\(\theta \in \{-1, +1\}\), blind window \(T_{\mathrm{obs}}\), declared hold
+class \(\{u \equiv \pm 1\}\), prior \((\tfrac12, \tfrac12)\) from
+\(z_{0}\) --- is the agreement test bed.
+
+\begin{theorem}[certificate--value agreement]\label{thm:agree}
+On the audited grid (\(z_{0} \in \{1.0, \dots, 2.5\}\),
+\(T_{\mathrm{obs}} \in \{1,2,3\}\); 48 cells), over the declared hold
+class: (a) the alpha-vector recursion of Proposition~\ref{prop:pl} returns
+exactly the closed form
+\begin{gather*}
+V_{k}(b_{0}) = \tfrac{1}{2}\bigl(\mathbf{1}[z_{0} - k \ge 1] +
+\mathbf{1}[z_{0} + k \ge 1]\bigr) \quad (k \le T_{\mathrm{obs}}),\\
+V_{k}(b_{0}) = \tfrac{1}{2}\bigl(1 + \mathbf{1}[z_{0} \ge 1 +
+T_{\mathrm{obs}}]\bigr) \quad (k > T_{\mathrm{obs}});
+\end{gather*}
+(b) the certificate partition coincides with the value boundaries:
+``viable'' iff \(V_{k} \equiv 1\); common-action-certified iff
+\(V_{1}(b_{0}) < 1\); timing-certified iff \(V_{1}(b_{0}) = 1\) but
+\(V_{T_{\mathrm{obs}}+1}(b_{0}) < 1\);
+(c) the attaining alpha-vector switches exactly at \(z_{0} = 2\): the
+value's kink locus is the certificate boundary;
+(d) the deficit equals \(\tfrac12\) on every nonviable cell --- the
+minimal-mass bound attained with the minimal prior; and
+(e) the declaration is quantified: over the unrestricted sequential blind
+class the value is \(1\) exactly on \(\{ z_{0} \ge 2 \}\) for
+\(k \ge 2\) --- the timing cells are precisely the cells where in-window
+adaptivity lifts the declared-class value.
+\end{theorem}
+
+\emph{Proof sketch.} The two-regime blind POMDP has, at each window
+horizon, exactly two alpha-vectors \(\alpha^{u} = (\mathbf{1}[z_{0} - u t
+\ge 1\ \forall t \le \cdot],\ \mathbf{1}[z_{0} + u t \ge 1\ \forall t \le
+\cdot])\), \(u = \pm 1\); evaluating \(\max_{u} \alpha^{u} b_{0}\) at the
+uniform prior gives (a), from which (b)--(d) read off against the
+companion paper's certificate conditions, and (c) compares the attaining
+witness across the boundary. For (e), the deterministic degeneration
+(Proposition~\ref{prop:degen}) over all alternating sequences keeps both
+branches within \(z_{0} \pm 1\). The complete computations are
+machine-verified in exact rational arithmetic. \hfill\(\square\)
+
+\subsection{6. Verified re-derivations}\label{verified}
+
+\texttt{paper2\_stochastic\_selector\_v1\_verify.py} (standard library;
+exact rational arithmetic; deterministic) re-derives every claim:
+\emph{two-floor instance:} the backup produces exactly
+\(\Gamma_{1} = \{(1,0), (0,1)\}\), \(V_{k}(b_{0}) = \tfrac12\) for all
+probed horizons, the chance bound \(\delta = \tfrac12\) attained, and
+piecewise linearity confirmed at eleven simplex beliefs against the direct
+value \(\max(b_{1}, b_{2})\); \emph{degeneration:} the exact survived-mass
+value equals brute-force evaluation at the probed beliefs, and at
+\((z_{0}, T) = (\tfrac32, 2)\) every blind sequence loses a branch, so the
+deficit is at least the minimal mass; \emph{agreement:} the recursion
+matches the closed form on all 48 cells and horizons \(k \le 4\); the
+partition coincidence holds cell by cell; the attaining witness switches at
+\(z_{0} = 2\) for every \(T_{\mathrm{obs}}\); the deficit is exactly
+\(\tfrac12\) on all 42 nonviable cells; the unrestricted class attains
+value \(1\) exactly on \(\{z_{0} \ge 2\}\) for \(k \ge 2\); \emph{books:}
+384 alpha-vectors generated across the campaign, all entries exact
+rationals (in this instance all in \(\{0,1\}\)), and deficit monotonicity
+at every probed belief of both instances. Ten check families, all passing.
+
+\subsection{7. Delimitations and outlook}\label{scope}
+
+The semantics here is stochastic expectation: the value is a survival
+\emph{probability}, and the robust quantifiers of the companion papers are
+recovered only at the deterministic degeneration
+(Proposition~\ref{prop:degen}); the stochastic and robust readings of a
+genuinely stochastic plant differ, and this paper does not conflate them.
+The alpha-set growth is exponential in the worst case; the agreement
+theorem's classes are two-witness instances precisely because the audited
+systems are. General information structures beyond history partitions
+(control-dependent observations, active sensing), continuous-time exit-time
+value functions, and the five-layer successor architecture are the next
+items of the programme; the deficit-bound reading of
+Proposition~\ref{prop:deficit} is the interface through which this theory
+attaches to the certificate families already established.
+
+\subsection{References}\label{references}
+{\footnotesize
+
+Abaee, A.: An obstruction calculus for viability under incomplete
+observation. Preprint.
+\url{https://github.com/MIKEAA2020/general-sustainability} (2026a)
+
+Abaee, A.: Finite nonviability certificates under delayed information.
+Preprint. \url{https://github.com/MIKEAA2020/general-sustainability} (2026b)
+
+Abaee, A.: The viable selector: a unifying framework for obstruction
+certificates under incomplete observation. Preprint.
+\url{https://github.com/MIKEAA2020/general-sustainability} (2026c)
+
+Bertsekas, D.P., Shreve, S.E.: Stochastic Optimal Control: The Discrete-Time
+Case. Academic Press, New York (1978)
+
+Smallwood, R.D., Sondik, E.J.: The optimal control of partially observable
+Markov processes over a finite horizon. Oper. Res. \textbf{21}(5),
+1071--1088 (1973)
+
+}
+
+\section*{Declarations}
+
+\textbf{Funding.} None.\quad \textbf{Competing interests.} None.\quad
+\textbf{Data availability.} No external data were used.\quad
+\textbf{Code availability.} The verification script
+\texttt{paper2\_stochastic\_selector\_v1\_verify.py} (exact rational
+arithmetic; ten check families re-deriving Section~\ref{verified}) is
+publicly available at
+\url{https://github.com/MIKEAA2020/general-sustainability} (folder
+\texttt{arena agent 1/paper rewrites/latex}).\quad
+\textbf{AI declaration.} GLM (Z.ai), Qwen (Alibaba Cloud) and DeepSeek AI
+assisted with drafting and iterative review.
+
+\end{document}
