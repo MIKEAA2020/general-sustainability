@@ -47,7 +47,7 @@ requirements.txt                             verified library versions
 CITATION.cff                                 citation metadata
 LICENSE.txt                                  CC BY 4.0 notice
 manuscripts/                                venue-agnostic master manuscripts
-  paper1_safetransition_master_v2.pdf/.tex  software description, master version
+  paper1_safetransition_master_v3.pdf/.tex  software description, master version
                                             (venue-neutral)
   paper1_safetransition_ems_supplementary_v7.md  supplementary material (S1-S11)
 safetransition/                             SafeTransition library, v1.3.0
@@ -55,7 +55,7 @@ safetransition/                             SafeTransition library, v1.3.0
   src/safetransition/                       9 modules (exact operators, recursions,
                                             certificates, indicators, dashboard)
   tests/                                    59 tests incl. certificate protocol
-  examples/, figure_code/, novelty_searches/, docs/
+  examples/, figure_code/, novelty_searches/
   run_all.sh, SHA256SUMS, CITATION.cff, pyproject.toml
 ```
 
