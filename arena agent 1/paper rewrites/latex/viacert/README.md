@@ -22,9 +22,13 @@ law pair, and the 48-cell review grid ship as audited default instances.
 
 ## Run
 
-    cd viacert
-    python3 -m viacert selftest        # 12 audited identities
-    python3 -m unittest discover -s tests -v
+From the folder containing the package (the `latex` folder):
+
+    python3 -m viacert selftest                    # 12 audited identities
+    python3 -m unittest discover -s viacert/tests -v
+
+The test suite is also location-robust (`python3 -m unittest discover -s tests`
+from inside `viacert/` resolves the package path itself).
 
 ## Provenance
 

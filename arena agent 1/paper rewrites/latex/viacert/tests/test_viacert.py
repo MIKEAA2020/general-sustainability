@@ -1,5 +1,6 @@
 """Audited-identity test suite (mirrors the CLI selftest; unittest style)."""
-import unittest
+import os, sys, unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from fractions import Fraction as Q
 from viacert.systems import audit_system, benchmark_caps, ce_laws, timing_grid
 from viacert.recursion import verdict, kernel, witness
