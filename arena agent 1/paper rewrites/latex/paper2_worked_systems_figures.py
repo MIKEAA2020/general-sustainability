@@ -302,7 +302,7 @@ fig.savefig(os.path.join(OUT, "fig_benchmark.pdf"))
 plt.close(fig)
 
 # ================= FIGURE 5: static duality =====================================================
-fig, ax = plt.subplots(figsize=(3.4, 2.4), constrained_layout=True)
+fig, ax = plt.subplots(figsize=(3.4, 2.5), constrained_layout=True)
 us = [Q(n, 100) for n in range(0, 101)]
 ax.plot([float(u) for u in us], [float(psi_obs[0](u)) for u in us], lw=1.0,
         color=BLUE, label=r"$\psi_1(u) = 2/5 - u$")
@@ -314,11 +314,18 @@ ax.plot([float(u) for u in us],
 ax.axhline(0, color=GRAY, lw=0.6)
 ax.plot([0.5], [-0.1], "o", ms=4, color=RED)
 ax.axhline(-0.1, color=RED, lw=0.9, ls="--")
-ax.annotate(r"$-\,\frac{1}{10}$: max--min $=$ min--max;"
-            r" Farkas $(\frac{1}{2},\frac{1}{2})$ constant",
-            (0.03, -0.16), fontsize=6.2, color=RED, va="top")
+ax.set_ylim(-0.72, 0.55)
+# legend in the open wedge between the two crossing lines, above the
+# annotation block (legend bottom sits above y = 0.25 in data coords):
+ax.legend(fontsize=5.6, loc="center", bbox_to_anchor=(0.5, 0.88),
+          frameon=False, handlelength=1.2, borderaxespad=0)
+# max--min label directly beneath the red dashed line (y = -1/10), in the
+# whitespace under the envelope apex; Farkas label alone in the open wedge:
+ax.annotate(r"$-\,\frac{1}{10}$: max--min $=$ min--max", (0.5, -0.33),
+            ha="center", fontsize=5.6, color=RED)
+ax.annotate(r"Farkas $(\frac{1}{2},\frac{1}{2})$ constant", (0.5, 0.125),
+            ha="center", fontsize=5.6, color=RED)
 ax.set_xlabel(r"$u \in [0,1]$"); ax.set_ylabel("drift rows")
-ax.legend(fontsize=6, loc="upper right", frameon=False)
 fig.savefig(os.path.join(OUT, "fig_duality.pdf"))
 plt.close(fig)
 
