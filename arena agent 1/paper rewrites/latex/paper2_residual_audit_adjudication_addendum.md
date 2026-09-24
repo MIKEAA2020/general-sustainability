@@ -62,7 +62,7 @@
 ## 4. Edition state and evidence
 
 - `paper2_worked_systems_v9.tex` / `.pdf` — 8 pp., zero overfull, no undefined references; 22 edits above + code-availability pointer.
-- `paper2_worked_systems_v9_verification.py` — **38/38 checks pass** (v8's 32 + P7 stabilization ×5 + P8 WLOG premises), chained lineage **57/57**; needles extended to 102 (+15 new, −1 removed with the deleted fibre-width sentence).
+- `paper2_worked_systems_v9_verification.py` — **38/38 checks pass** (v8's 32 + P7 stabilization ×5 + P8 WLOG premises), chained lineage **57/57**; needles extended to 101 (+15 new, −1 removed with the deleted fibre-width sentence).
 - `paper2_computational_certification_v6.tex` / `.pdf` — 8 pp., zero overfull, no undefined references; 6 edits above.
 - `paper2_computational_certification_v6_verification.py` — **26/26 checks pass** (Layer 2 dual identities, moduli, h = 1/15 witness, refutation pins unchanged; needles +6).
 - Prior editions byte-untouched; no claim softened; contradictions adjudicated before any edit; both audits' remaining valid findings implemented or explicitly dispatched (shipped / refuted / moot / ledger).

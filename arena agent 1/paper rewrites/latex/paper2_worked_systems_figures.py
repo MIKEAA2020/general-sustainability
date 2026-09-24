@@ -321,7 +321,7 @@ ax.legend(fontsize=5.6, loc="center", bbox_to_anchor=(0.5, 0.88),
           frameon=False, handlelength=1.2, borderaxespad=0)
 # max--min label directly beneath the red dashed line (y = -1/10), in the
 # whitespace under the envelope apex; Farkas label alone in the open wedge:
-ax.annotate(r"$-\,\frac{1}{10}$: max--min $=$ min--max", (0.5, -0.33),
+ax.annotate(r"$-\,\frac{1}{10}$: max$-$min $=$ min$-$max", (0.5, -0.33),
             ha="center", fontsize=5.6, color=RED)
 ax.annotate(r"Farkas $(\frac{1}{2},\frac{1}{2})$ constant", (0.5, 0.125),
             ha="center", fontsize=5.6, color=RED)
