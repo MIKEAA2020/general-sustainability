@@ -1,0 +1,235 @@
+\documentclass[10pt,article]{article}
+\usepackage[a4paper,margin=20mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{mathrsfs}
+\usepackage{amsthm}
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{booktabs}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-1}
+\emergencystretch=3em
+\allowdisplaybreaks
+\newcommand{\rulebar}{\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}}
+
+\begin{document}
+
+\begin{center}
+{\Large\bfseries Computational Viability Certification under Incomplete Observation}\\[0.4em]
+{\large\bfseries Supplementary Material: Complete Proofs and the Verification Record}\\[0.6em]
+Amin Abaee\\
+{\small Independent Researcher}\\
+{\small September 24, 2026}
+\end{center}
+
+\section*{S1. Complete proofs}
+
+Throughout, labels are \(a = (\theta, i, t) \in \mathscr S = \Theta \times
+\{1,\dots,s\} \times [0,T]\), \(k_a\), \(\beta_a\), \(\mathcal F_a\),
+\(J_{\mathcal I}(T)\), \(\phi_U\), \(\Gamma_{\mathcal I}\),
+\(\rho_{\mathcal H,G}\), and the program (5) are as in the main text.
+
+\textbf{Proof of Proposition 1 (robust rows).} The linear solution formula
+gives, for \(t \le T\),
+\[
+c_i^\top x_\theta(t) = c_i^\top X_\theta(t,0)x_0 + \int_0^t c_i^\top
+X_\theta(t,\sigma) g_\theta(\sigma)\,d\sigma + \int_0^t k_a(\sigma)^\top
+u(\sigma)\, d\sigma + \int_0^t c_i^\top X_\theta(t,\sigma)E_\theta(\sigma)
+d(\sigma)\, d\sigma .
+\]
+The initial-state term is bounded over \(x_0 \in P_\theta\) by the support
+value \(h_{P_\theta}(X_\theta(t,0)^\top c_i)\), and the disturbance term,
+maximized over all measurable \(d(\cdot)\) with values in \(D_\theta\), is
+\(\int_0^t h_{D_\theta}(E_\theta(\sigma)^\top X_\theta(t,\sigma)^\top
+c_i)\, d\sigma\); for polytopic \(D_\theta\) a maximizing vertex selection is
+measurable, so the bound is attained by an admissible disturbance signal.
+Collecting terms, the constraint \(c_i^\top x_\theta(t) \le b_i\) holds for
+every \((x_0, d)\) if and only if \(\mathcal F_a(\pi) \le 0\), and the
+separation of the maximizations from the control term is exactly that the
+control signal in a mode does not depend on \(x_0\) or \(d\).
+\rulebar
+
+\textbf{Proof of Proposition 2 (value and nonviability).} The admissible
+signal space is a finite product of the sets \(L^\infty(I_r; U)\); because
+\(U\) is compact and convex these are weak-* compact by the Banach--Alaoglu
+theorem. The safety functionals are affine and weak-* continuous because
+their kernels \(k_a\) lie in \(L^1\). Their supremum over the finitely many
+labels is therefore weak-* lower semicontinuous and attains its minimum on
+the policy space: \(J_{\mathcal I}(T)\) is well defined. Safety of some
+policy is \(\max_a \mathcal F_a(\pi) \le 0\), so \(B_0 \in
+\mathcal K_{\mathcal I}^T\) iff \(J_{\mathcal I}(T) \le 0\); since safety at
+the margin is viability (constraints closed) and \(J_{\mathcal I}(T) = 0\)
+admits safe policies, nonviability is \(J_{\mathcal I}(T) > 0\). The strict
+inequality is thus a consequence of compactness and closedness, not an added
+assumption.
+\rulebar
+
+\textbf{Proof of Theorem 1.}
+\emph{Step 1 (control-moment inequality).} For a block \(J_j\) and any
+measurable \(u\) with values in \(U\),
+\[
+\Bigl(\int_{J_j} k_a\Bigr)^{\!\top} \frac{1}{|J_j|}\int_{J_j} u
+- \int_{J_j} k_a^\top u
+= \int_{J_j} (\bar k_{a,\mathcal H} - k_a)^\top u
+\le \int_{J_j} h_U(\bar k_{a,\mathcal H} - k_a),
+\]
+using \(\sup_{v \in U} w^\top v = h_U(w)\). Summing over blocks proves (3);
+the averages remain compatible with the information structure because the
+mesh contains all sensing times, so common-history controls use the same
+block variable. For the bound, choose a center \(u_c\) of \(U\); since
+\(\int_{J_j}(\bar k - k) = 0\), the center cancels and
+\(e_{a,\mathcal H} \le R_U \|k_a - \bar k_{a,\mathcal H}\|_{L^1}\). A
+bounded-variation function satisfies \(\|k_a - \bar k_{a,\mathcal
+H}\|_{L^1} \le h_u\, \mathrm{TV}(k_a)\), whence \(e_{a,\mathcal H} \le R_U
+V_U h_u\).
+
+\emph{Step 2 (lower bound of (8)).} Take any admissible continuous-time
+policy and form its block averages, which lie in \(U\) and satisfy (3). For
+every grid label,
+\[
+A_a v - \beta_a^{+} - \bar e_a \le \int_0^T k_a^\top u^\pi_\theta -
+\beta_a = \mathcal F_a(\pi),
+\]
+so the finite program attains a value no larger than the maximum robust
+violation of that policy. Minimizing over policies gives \(\rho_{\mathcal
+H,G} \le J_{\mathcal I}(T)\).
+
+\emph{Step 3 (upper bound of (8)).} Take an optimizer \(v^{*}\) of (5) and
+implement the corresponding piecewise-constant information-adapted control,
+for which \(\int_0^T k_a^\top u^{v^{*}}_\theta = A_a v^{*}\). At grid times,
+\(\mathcal F_a(v^{*}) \le \rho_{\mathcal H,G} + \bar e_a + \delta_\beta\);
+the Lipschitz hypothesis (6) extends the bound to every time, giving
+\(\max_a \mathcal F_a(v^{*}) \le \rho_{\mathcal H,G} + R_U V_U h_u +
+\delta_\beta + L h_t\). Since \(J_{\mathcal I}(T)\) minimizes over all
+admissible policies, the upper bound follows. Together with (4) this gives
+the sharpened form. The asymmetry --- averaging arbitrary controls proves
+the lower bound, implementing piecewise-constant controls proves the upper
+bound --- is what makes na\"ive infeasibility-by-discretization arguments
+unsound.
+
+\emph{Step 4 (sound finite certificates).} Write the block input constraints
+as \(F_{\mathrm{blk}} v \le f_{\mathrm{blk}}\). The program's dual is
+\[
+\max_{\lambda,\mu}\ -\lambda^\top(\beta^{+} + \bar e) - \mu^\top
+f_{\mathrm{blk}}
+\quad \text{s.t.} \quad
+A^\top \lambda + F_{\mathrm{blk}}^\top \mu = 0,\quad
+\lambda \ge 0,\ \mathbf 1^\top \lambda = 1,\ \mu \ge 0,
+\tag{12}
+\]
+so a positive dual objective certifies infeasibility of \(\{A v \le
+\beta^{+} + \bar e,\ v \in U^{Q}\}\). By Step 1 every genuinely safe
+measurable controller would generate a feasible \(v\); the finite
+infeasibility certificate therefore excludes every such controller. Moreover
+the weighted continuous-time violation is at least the dual objective: a
+normalized certificate with margin \(\gamma > 0\) guarantees an actual facet
+violation of at least \(\gamma\) in one stored test (Remark 1 of the main
+text).
+
+\emph{Step 5 (completeness and exact duality).} If the system is nonviable,
+let \(\gamma = J_{\mathcal I}(T) > 0\) and choose meshes making the error in
+(8) smaller than \(\gamma\); then \(\rho_{\mathcal H,G} > 0\) and finite LP
+duality yields a positive certificate, proving (iii). Every finite atomic
+choice satisfies \(\Gamma_{\mathcal I}(\lambda, a) \le J_{\mathcal I}(T)\)
+(the same averaging computation as in Step 1 applied to the pooled kernels),
+and an optimal dual solution of (5) yields an atomic continuous-time lower
+bound at least \(\rho_{\mathcal H,G}\); letting the mesh error tend to zero
+proves (10). No belief-state recursion is used.
+
+\emph{Step 6 (sparsity).} Factor the finite row map through its rank,
+\(A v = L(Rv)\), \(Rv \in \mathbb R^{r}\); the attainable moment set
+\(\mathcal M = \{Rv : v \in U^{Q}\}\) is compact and convex, and each safety
+row defines a halfspace in \(\mathbb R^{r}\). If the common feasible set is
+empty, Helly's theorem in \(\mathbb R^{r}\) gives an obstruction involving at
+most \(r + 1\) safety halfspaces, and finite duality on that subproblem
+yields a sparse positive certificate with the same objective: \(r + 1 \le mQ
++ 1\) labels. To preserve a prescribed margin \(\gamma_0 < \rho_{\mathcal
+H,G}\), apply the argument to the still-infeasible shifted constraints \(A_a
+v \le \beta_a^{+} + \bar e_a + \gamma_0\). The continuous finite-rank case
+follows identically on the compact attainable moment body of the lifted
+kernels, giving \(r_{\mathcal I} + 1\). \hfill\(\square\)
+\rulebar
+
+\textbf{Proof of Proposition 3 (arbitrarily large minimal obstructions).}
+With the construction of the main text and \(w_j = \int_{I_j} u\): mode
+\(j \le q\) ends the interval at \(x_j = w_j - 1 \ge 0\), so safety of the
+blind window requires \(w_j \ge 1\); mode \(q+1\) ends at \(q - \varepsilon -
+\sum_j w_j\), so safety requires \(\sum_j w_j \le q - \varepsilon\). Summing
+the \(q\) lower bounds against the upper bound gives \(0 \le -\varepsilon\):
+a contradiction, so the full belief is nonviable. Removing mode \(q+1\),
+\(u \equiv 1\) gives \(w_j = 1\) and \(x_j = 0\): safe. Removing mode \(j \le
+q\), \(u = 0\) on \(I_j\) and \(u = 1\) elsewhere gives \(x_{q+1} =
+(q-1) - (q - \varepsilon) + 1 = \varepsilon \ge 0\) at the end and safety on
+the remaining branch: every proper subbelief is viable. Equal weights
+\(\lambda_j = 1/(q{+}1)\) on the \(q+1\) endpoint rows give pooled pre-kernels
+\(\sum_j \lambda_j k_j = 0\) on every interval where the modes agree and a
+margin of \(\varepsilon/(q{+}1)\) at the horizon. The kernel rank: the
+endpoint rows are \(\mathbf 1_{I_j}\)-weighted copies of the single input
+direction with one linear relation (their weighted sum), so the rank of the
+safety-row matrix is exactly \(q\), and Helly-type sparsity in that rank
+requires \(q + 1\) witnesses --- no bound in the input dimension \(m = 1\)
+exists. \hfill\(\square\)
+\rulebar
+
+\textbf{Proof of the erosion identity.} \(\phi_U\) is concave and
+positively homogeneous; for any decomposition,
+\(\phi_U(\sum_j g_j) \ge \sum_j \phi_U(g_j)\) because each
+\(\phi_U(g_j) = \min_{v \in U} g_j^\top v\) is attained at a common minimizer
+for the sum while separate minima only lower the total. Consequently the same
+witness family, evaluated on the coarse partition, dominates its evaluation
+on the refinement, \(\Gamma_{\mathrm{coarse}} \ge \Gamma_{\mathrm{fine}}\),
+and the exact erosion is the displayed integral (13). For
+\(U = [-\bar u, \bar u]^m\), \(\phi_U(g) = -\bar u \|g\|_1\), giving the
+stated \(\ell^1\) form. The \(3{,}240\)-pair verification for the hexagonal
+\(U\) is reported in S2. \hfill\(\square\)
+\rulebar
+
+\textbf{Proof of the oracle-recourse certificate (14).} The oracle relaxation
+replaces the true post-\(\tau\) policy class by the larger class that may
+assign each stored scenario its own measurable control. The certificate (14)
+is the atomic margin (1) evaluated in that enlarged class: before \(\tau\)
+the pooled kernel term is \(\phi_U(\sum_\ell \lambda_\ell k_\ell)\), after
+\(\tau\) each scenario \(\ell\) contributes \(\phi_U(\lambda_\ell k_\ell)\)
+with its own margin \(\beta_\ell\) computed from the stored scenario. A
+positive margin certifies infeasibility in the enlarged class by
+Propositions 1--2; every policy of the true class is feasible for the
+enlarged one, so the verdict transfers downward: no actual output-feedback
+policy is safe. Soundness is thus immediate; completeness fails because the
+oracle class is strictly larger.
+\rulebar
+
+\section*{S2. The verification record}
+
+All numbers in the main text are re-derived in exact rational arithmetic
+(Python \texttt{fractions}; no floating point in any witness computation;
+floats only inside the solver call, whose output is compared against the
+exact value only within solver tolerance). Two scripts carry the record, both
+at \url{https://github.com/MIKEAA2020/general-sustainability} (folder
+\texttt{arena agent 1/paper rewrites/latex}):
+
+\begin{itemize}\tightlist
+\item \texttt{paper2c\_lp\_campaign.py} --- the solver-certified mesh
+campaign: builds program (5) at each mesh \(h \in \{0.2, 0.1, 0.05, 0.02,
+0.01\}\), verifies the dimension identities (\(mQ{+}1\) variables;
+\(Ms(N_t{+}1) + p_U Q\) rows), solves with HiGHS, and certifies optimality of
+\(\rho(h) = \max\{0, \tfrac{3}{50} - Th/4\}\) by the exact primal witness
+(pre-observation blocks \(0\); post-observation blocks of mode \(j\) at
+\(-n_j\); every row checked) and the exact dual witness
+(\(\lambda = (\tfrac38, \tfrac5{16}, \tfrac5{16})\),
+\(\mu_{j,k} = \lambda_j a_k \eta_j\); stationarity and objective \(-\rho(h)\)
+per block). Also re-derives \(\Gamma(\tau) = \tau - \tfrac7{50}\),
+\(\tau_{\max} = \tfrac7{50}\), the \(h = \tfrac1{10}\) Farkas contradiction
+\(-\tfrac3{100}\), and the pair-viability positions \(1.9752\) and
+\(1.9352\). Current run: 9/9 checks pass; solver agreement at most
+\(4.2 \times 10^{-17}\) on all five meshes.
+\item \texttt{paper2\_nonstandard\_verification.py} --- the 51-check
+exact-arithmetic record for the predecessor material: the three-branch
+instance values, the \(m+1\) construction for all tested \(q\), the
+\(\phi_U\) superadditivity on \(3{,}240\) rational pairs, the error-bound
+checks, and the counterexamples. Current run: 51/51 checks pass.
+\end{itemize}
+
+The mesh table of the main text is regenerated verbatim by the first script;
+the reported iteration counts and wall-clock times are measured values from
+the run recorded here (scipy HiGHS, dual simplex), not estimates.
+
+\end{document}
