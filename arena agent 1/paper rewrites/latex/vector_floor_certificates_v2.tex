@@ -1,0 +1,271 @@
+\documentclass[10pt,twocolumn]{article}
+\usepackage[a4paper,margin=15mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{mathrsfs}
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{remark}{Remark}
+\newtheorem{definition}{Definition}
+\usepackage{graphicx}
+\usepackage{booktabs,array,calc}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{etoolbox}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-1}
+\emergencystretch=3em
+\allowdisplaybreaks
+\AtBeginDocument{%
+  \BeforeBeginEnvironment{equation}{\small}%
+  \BeforeBeginEnvironment{equation*}{\small}%
+  \BeforeBeginEnvironment{align}{\small}%
+  \BeforeBeginEnvironment{align*}{\small}%
+  \BeforeBeginEnvironment{gather}{\small}%
+  \BeforeBeginEnvironment{gather*}{\small}%
+}
+
+\begin{document}
+\title{Vector Floors: Farkas-Certified Obstruction\\ under Multiple Sustainability Constraints\\[0.2em]
+{\large\rmfamily Edition 2, revised after a joint audit}}
+\author{Amin Abaee\\[0.35em]
+{\small Independent Researcher}\\[0.55em]
+{\small\href{https://orcid.org/0000-0002-0019-1842}{ORCID: 0000-0002-0019-1842}}\\[0.3em]
+{\small\href{mailto:amin\_abaee@ut.ac.ir}{amin\_abaee@ut.ac.ir}}}
+\date{September 24, 2026}
+\maketitle
+
+\begin{abstract}
+Sustainability constraints are rarely single floors: minimum stocks, maximum
+emissions, service levels, and institutional limits bind simultaneously. The calculus states its certificates
+for general vector constraint sets $\mathcal V=\{x: q_j(x)\ge 0,\
+j=1,\dots,m\}$ (Abaee 2026a, Section 2.2), but its worked certificates and
+audited instances are carried by a single scalar margin (Section 3.4's
+two-floor certificate there). This paper, the D4 item of the programme's
+generalization catalogue, works the vector layer as such: the stacked
+safe-action system is infeasible precisely when a Farkas multiplier vector
+exists, so the vector obstruction itself is a checkable object of rational
+arithmetic; the new content over the source paper is the dual-certificate
+reading, the floor-monotonicity count on the audited pair family, and the
+three-floor support instance. On the programme's two-patch working system
+(Abaee 2026a, Section 8) the dynamic vector-floor reading reproduces the
+audited structure verdicts (blind and aggregate readings nonviable;
+$z_1$-only, $z_2$-only, and full readings viable), and adding a floor
+strictly shrinks the viable pair family --- from $36$ of $36$ viable pairs
+on one floor to $28$ on two, the pairs lost being exactly those containing
+the dynamically dead corner $(1,1)$. A three-floor stacked instance
+exhibits the support reading of the multipliers (the certificate's carrier
+is a minimal infeasible subsystem: inactive row, multiplier zero). All
+claims are machine-verified in exact rational arithmetic; the verification
+script ships with the paper.
+\end{abstract}
+
+\section{Introduction and relation to the programme}
+
+The programme's completed items --- the obstruction-calculus manuscript with
+its four certificate families, the continuous-to-finite companion bridge,
+the viable-selector unification, the stochastic selector, and the five-layer
+successor absorbing general information structures and exit-time values ---
+define vector
+constraint sets from the outset ($\mathcal V=\{x: q_j(x)\ge0,\ j=1,\dots,m\}$,
+Abaee 2026a, Section 2.2), and the polyhedral Farkas equivalence for the
+stacked safe-action system is already stated there (Section 3.2), with a
+worked two-floor certificate (Section 3.4). What the completed items do not
+do is carry the vector layer as an object of computation: the audited
+instances are scalar-margin instances, and the catalogue's D4 proposal ---
+real constraint systems are vectors of floors --- is left unexecuted. The
+present paper executes exactly that: the vector common-action
+correspondence, the stacked certificate as a checkable dual object, the
+floor-monotonicity count on the audited pair family, and the three-floor
+support instance. Nothing in the completed items is modified; the additions
+are computational, and each is positioned against its source passage.
+
+\section{The vector-floor model}
+
+Let the state space carry $m$ floors $q_1,\dots,q_m$ with safe set
+\begin{equation*}
+\mathcal V=\{x:\ q_j(x)\ge 0\ \text{for every } j\}.
+\end{equation*}
+For a state $x$ with instrument set $U(x)$ and discrete-time transition
+$x^{+}=F(x,u,d)$, the \emph{vector safe-action set} collects the instruments that keep every floor non-negative under every
+admissible disturbance:
+\begin{equation*}
+\mathcal R_{\mathcal V}(x)=\{u\in U(x):\ x^{+}\in\mathcal V\
+\text{for all successors } x^{+}\}.
+\end{equation*}
+For a belief $B$ (the set of states compatible with the reading), the
+common-action condition with per-cell semantics reads
+$\mathcal R^B_{\mathcal V}(B)=\bigcap_{x\in B}\mathcal R_{\mathcal V}(x)$
+within each indistinguishability cell, exactly as in the successor's
+read-then-act convention. The vector obstruction is the static statement
+\begin{equation*}
+\mathcal R^B_{\mathcal V}(B)=\varnothing\ \Longrightarrow\
+B\notin\mathrm{ERViab}_{\mathcal I}(\mathcal V),
+\end{equation*}
+where $\mathrm{ERViab}_{\mathcal I}(\mathcal V)$ is the observation-based
+viability kernel under structure $\mathcal I$ in the programme's notation
+(Abaee 2026a, Section 2.4): a single moment without a jointly
+floor-preserving instrument certifies nonviability, no matter how capable
+the future.
+
+\begin{proposition}[Branchwise/joint gap for vector floors]
+\label{prop:gap}
+(The vector instance of the common-action obstruction, Abaee 2026a,
+Theorem 2; the vector-specific content is the stacked dual layer of
+Proposition~\ref{prop:farkas} and the floor-monotonicity of E4.)
+If for each state $x\in B$ separately $\mathcal R_{\mathcal V}(x)\neq
+\varnothing$ but $\bigcap_{x\in B}\mathcal R_{\mathcal V}(x)=\varnothing$,
+then every branch of $B$ is individually floor-servable while the belief is
+vector-obstructed: the information constraint, not any single floor, is the
+cause of nonviability.
+\end{proposition}
+\begin{proof}
+The branchwise hypothesis provides, for each $x$, an instrument $u_x$
+keeping $x$ in $\mathcal V$ under \emph{all} floors jointly; each branch
+is thus servable in isolation. The joint hypothesis denies the existence of
+one instrument admissible for all $x$ simultaneously, which is precisely
+the per-cell read-then-act requirement; any observation-based policy must
+move the whole cell with one instrument and therefore fails at the first
+step. The cause cannot be attributed to any single floor's infeasibility
+(every branch is jointly floor-servable), nor to the future (the failure
+occurs in one step): it is the pairing of one instrument with several
+states, i.e.\ the information constraint.
+\end{proof}
+
+\section{The Farkas certificate}
+
+Let the floors and the instrument set be polyhedral, so that each
+safe-action set is $\mathcal R_{\mathcal V}(x_i)=\{u: A_i u\le b_i\}$ with
+rational data. The common safe-action system stacks to $Au\le b$, and:
+
+\begin{proposition}[Obstruction as dual infeasibility]
+\label{prop:farkas}
+The stacked system $Au\le b$ is infeasible if and only if there exists a
+rational $\lambda\ge 0$ with $\lambda^{\top}A=0$ and $\lambda^{\top}b<0$
+(Farkas' lemma). Consequently the vector obstruction admits a certificate
+that is itself checkable in exact rational arithmetic: given $\lambda$, the
+three identities are verifiable by Fraction arithmetic with no solver and
+no search.
+\end{proposition}
+\begin{proof}
+Farkas' lemma gives the equivalence. Checkability: the certificate side
+requires evaluating two matrix products and one inequality --- exact
+operations on rationals. The infeasibility side is certified, not searched:
+$\lambda^{\top}A=0$ and $\lambda^{\top}b<0$ with $\lambda\ge0$ yield
+$0=\lambda^{\top}(Au)\le\lambda^{\top}b<0$ for every candidate $u$, a
+contradiction.
+\end{proof}
+
+\begin{remark}[Support reading]
+In the stacked system of a three-floor instance below, the certified
+multiplier assigns weight $0$ to a redundant row: the certificate's
+\emph{support} is a minimal infeasible subsystem of the stacked rows (an
+infeasible system admits no primal solution, so the reading is one of dual
+support, not of primal activity). The obstruction is carried by exactly
+the floors that bind.
+\end{remark}
+
+\section{Verified instances}
+
+All of the following are re-derived and checked by the verification script
+(\textsf{8/8 exact check families}; standard library, Fraction arithmetic,
+deterministic).
+
+\paragraph{E1 (stacked equivalence, both directions).}
+The two-floor instrument instance $\mathcal R_1=\{u: u\le\tfrac25\}$,
+$\mathcal R_2=\{u: u\ge\tfrac35\}$ stacks to rows $u\le\tfrac25$,
+$-u\le-\tfrac35$; the multiplier $\lambda=(1,1)$ satisfies
+$\lambda^{\top}A=0$ and $\lambda^{\top}b=\tfrac25-\tfrac35=-\tfrac15<0$,
+certifying infeasibility; a $101$-point rational grid confirms no $u$
+satisfies both. The feasible contrast $\{u\le\tfrac25\}\cap\{u\ge\tfrac15\}$
+(with a redundant third row $u\le\tfrac45$) admits no certificate --- the
+exact case analysis forces $\lambda_1=\lambda_2$ and then
+$\lambda^{\top}b\ge 0$ --- and the witness $u=\tfrac15$ is exhibited. Both
+directions of Proposition~\ref{prop:farkas} are thereby exercised; the
+instance is the unnormalized form of the worked certificate of Abaee 2026a,
+Section 3.4 (there with the multiplier normalized to $\|\lambda\|_1=1$),
+and the feasible contrast is the direction that source states but does not
+exercise.
+
+\paragraph{E2 (the belief-level gap).}
+On the belief merging a state with floor-set $\{u\le\tfrac25\}$ with a
+state with floor-set $\{u\ge\tfrac35\}$: branchwise witnesses $u=\tfrac2{10}$
+and $u=\tfrac6{10}$ exist; the joint set is empty with the E1 certificate.
+Proposition~\ref{prop:gap} fires exactly.
+
+\paragraph{E3 (dynamic vector floors).}
+On the programme's two-patch system --- patches $i\in\{1,2\}$ with stocks
+$z_i\in\{0,1,2,3\}$, regeneration $+1$ per step capped at $3$, damage $2$
+on the unprotected patch, instruments $u\in\{1,2\}$ protecting one patch;
+defined in Abaee 2026a, Section 8, and restated with full transition data
+in the verification script --- the safe set is already a vector object
+$q_1: z_1\ge 1$, $q_2: z_2\ge 1$ ($m=2$) served by one shared instrument.
+Per-cell read-then-act viability over the audited beliefs
+$\{(1,2),(2,1)\}$ and $\{(1,2),(2,1),(2,2)\}$ reproduces the audited
+verdicts under five information structures: blind nonviable, aggregate
+nonviable, $z_1$-only viable, $z_2$-only viable, full viable --- the
+successor's structure table re-read as a statement about two floors and one
+instrument.
+
+\paragraph{E4 (floor monotonicity).}
+The \emph{viable pair family}: the $\binom{9}{2}=36$ two-state beliefs of
+the nine floor-safe states, a pair being viable when both of its states are
+(full observation splits the pair into its branches). Adding the second
+floor strictly shrinks the family from all $36$ to $28$: under two floors
+the corner $(1,1)$ has \emph{no} instrument keeping both floors (one
+shared instrument, damage $2$ on the other patch), so $(1,1)$ is
+dynamically nonviable and exactly the $8$ pairs containing it are lost.
+Dropping the second floor ($q_1$ only) re-admits all $36$, setwise, with
+strict separation witnessed by $\{(1,1),(1,2)\}$: viable on one floor,
+nonviable on two. Adding floors destroys viability --- the marginal cost of
+each additional institutional constraint is a computable set.
+
+\paragraph{E5 (exact multiplier recheck).}
+Every multiplier used above is re-validated componentwise
+($\lambda\ge0$; $\lambda^{\top}A=0$; $\lambda^{\top}b<0$) in Fraction
+arithmetic.
+
+\paragraph{E6 (three floors, complementarity).}
+The stacked system $\{u\le\tfrac25\}\wedge\{u\ge\tfrac35\}\wedge
+\{u\le\tfrac9{10}\}$ is infeasible with certificate $\lambda=(1,1,0)$: the
+inactive third row carries multiplier zero, exhibiting the support reading
+of Remark~1 (the script further certifies minimality: every two-row
+subsystem containing row 2 or row 3 is feasible).
+
+\section{What is not claimed}
+
+The dynamic vector-floor theory is not developed beyond the per-cell
+re-reading of the audited systems: no vector-valued comparison functions,
+no multi-floor dynamic programming, no Pareto readings of trade-offs
+between floors. The Farkas layer is static; the companion bridge's
+continuous-to-finite transfer and the successor's timing layer are cited,
+not re-derived. Non-convex instrument codices invalidate
+Proposition~\ref{prop:farkas} (Farkas' lemma is a convexity statement);
+the monitoring-design companion of this catalogue records the exact
+non-convex counterinstance. Sustainability floors with uncertain
+thresholds are treated in the programme's buffered-viability companion, not
+here. The dynamic vector layer is likewise recorded, not developed: the
+first-breach timing bound for floors with margins $\varepsilon_j$ --- exit
+by $\min_j \inf_{\mathcal V} q_j/\varepsilon_j$ --- and the multi-face
+Isaacs reading at corners where several floors are simultaneously active
+belong to the successor's timing layer; so does the distinction between
+cross-floor infeasibility at one state and cross-state infeasibility under
+merged readings, which Proposition~\ref{prop:gap} isolates in its static,
+one-step form.
+
+\section*{Declarations}
+\textbf{Funding.} None.\quad \textbf{Competing interests.} None.\quad
+\textbf{Data availability.} No external data were used.\quad
+\textbf{Code availability.} The verification script
+\texttt{vector\_floor\_certificates\_v2\_verify.py} is publicly available at
+\url{https://github.com/MIKEAA2020/general-sustainability} (folder
+\texttt{arena agent 1/paper rewrites/latex}); it reproduces all eight check
+families verbatim.\quad
+\textbf{AI declaration.} GLM (Z.ai), Qwen (Alibaba Cloud) and DeepSeek AI
+assisted with drafting and iterative review of the first edition; the joint
+audit of the first edition and this revision were prepared with further AI
+assistance, under the programme's verification discipline.
+
+\end{document}

@@ -1,0 +1,183 @@
+\documentclass[10pt,twocolumn]{article}
+\usepackage[a4paper,margin=15mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{mathrsfs}
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{remark}{Remark}
+\newtheorem{definition}{Definition}
+\usepackage{graphicx}
+\usepackage{booktabs,array,calc}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{etoolbox}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-1}
+\emergencystretch=3em
+\allowdisplaybreaks
+\AtBeginDocument{%
+  \BeforeBeginEnvironment{equation}{\small}%
+  \BeforeBeginEnvironment{equation*}{\small}%
+  \BeforeBeginEnvironment{align}{\small}%
+  \BeforeBeginEnvironment{align*}{\small}%
+  \BeforeBeginEnvironment{gather}{\small}%
+  \BeforeBeginEnvironment{gather*}{\small}%
+}
+
+\begin{document}
+\title{Decentralized Observation: Unanimity, Deadlock,\\ and the Value of Communication\\[0.2em]
+{\large\rmfamily Edition 2, revised after a joint audit}}
+\author{Amin Abaee\\[0.35em]
+{\small Independent Researcher}\\[0.55em]
+{\small\href{https://orcid.org/0000-0002-0019-1842}{ORCID: 0000-0002-0019-1842}}\\[0.3em]
+{\small\href{mailto:amin\_abaee@ut.ac.ir}{amin\_abaee@ut.ac.ir}}}
+\date{September 24, 2026}
+\maketitle
+
+\begin{abstract}
+Institutions observe different indicators, and their votes on a shared
+instrument count only in agreement; the obstruction calculus has so far
+spoken with one regulator's voice. This paper, the D13 item of the
+generalization catalogue, models two agencies with split observation
+rights (agency $1$ reads $z_1$, agency $2$ reads $z_2$) and a unanimity
+command protocol: the instrument executes only on agreement, and
+disagreement deadlocks the system. On the two-patch working system
+(Abaee 2026a, Section 8): the coordinator (reading the joint state)
+sustains $28$ of $36$ safe pairs; the decentralized unanimity regime,
+enumerated exhaustively over all $256$ agency-law pairs
+($256=16\times16$: each agency's law maps its coordinate's four values to
+two votes), sustains exactly $12$ --- and exactly $16$ coordinated-viable
+pairs are lost, including the exact instance $\{(1,2),(3,1)\}$, viable
+under each agency alone and under the coordinator but nonviable under
+\emph{every} unanimity law pair. The audited belief $\{(1,2),(2,1)\}$
+survives decentralization only through the anti-symmetric voting
+discipline (one agency's low-stock vote paired with the other's
+high-stock vote; $16$ of the $256$ law pairs sustain it --- a numerical
+coincidence with the $16$ lost pairs, no identity), and the authority
+restriction (forbidding agency 2's vote) destroys the entire decentralized
+kernel ($12\to0$, strict instance: the audited belief). The obstruction
+is robust to a one-step delayed own reading (agency 2 voting on its
+previous coordinate value). Communication has exact, computable value:
+the deadlock shadow (8/8 check families).
+\end{abstract}
+
+\section{Introduction and relation to the programme}
+
+The catalogue proposes multiple regulators with split observation rights
+$y_i=O_i(x)$ and split command rights $u_i\in U_i$, joint action
+constrained by common knowledge, delays, authority, and enforcement ---
+and warns that it is a larger extension to be added only where
+institutional constraints are central. The governance focus of the
+programme is exactly that case; the paper stays minimal --- two agencies,
+one instrument, unanimity --- and computes exactly.
+
+\section{Split rights under unanimity}
+
+The realized instrument is the agreed vote: $u=u_1(z_1)$ when
+$u_1(z_1)=u_2(z_2)$; otherwise the protocol deadlocks --- $u=0$ executes
+no instrument, and the protocol's declared uncoordinated-extraction rule
+applies, both coordinates losing one
+($z^{+}=(\max(0,z_1-1),\max(0,z_2-1))$; a declared rule of this
+protocol, distinct from the directed damage $2$ of an executed
+instrument). The laws: agency $i$'s law maps its coordinate's four values
+$z_i\in\{0,1,2,3\}$ to votes $\{1,2\}$, so each agency fields
+$2^{4}=16$ laws and the enumeration covers $16\times16=256$ law pairs.
+The induced closed loop is deterministic for a fixed law pair
+$(u_1,u_2)$; the belief set is updated \emph{pointwise} under the
+realized instrument (both realizations of the reading tracked), so cycle
+detection on belief sets is exact. Decentralizability of a belief is an
+\emph{existence certificate} over law pairs --- an institutional-design
+statement (which beliefs the protocol can sustain), not a belief-indexed
+controller: no agency needs knowledge of any audited belief; the
+enumeration certifies what the protocol can and cannot sustain.
+
+\begin{proposition}[The deadlock obstruction and its exact boundary]
+\label{prop:deadlock}
+The coordinator's kernel holds $28$ of $36$ safe pairs; the decentralized
+kernel holds exactly $12$; exactly $16$ coordinated-viable pairs are not
+decentralizable, and one such instance is exhibited --- the pair $\{(1,2),(3,1)\}$,
+viable under each agency alone (the $z_1$-only and $z_2$-only structures
+of Abaee 2026a, Section 8's structure audit) and under the coordinator,
+nonviable under every unanimity law pair. The audited belief
+$\{(1,2),(2,1)\}$ is decentralizable only through voting laws including
+the anti-symmetric discipline --- agency 1 voting $1$ on $z_1\le1$ and
+$2$ on $z_1\ge2$, agency 2 voting $2$ unless $z_2=2$ --- with $16$ of
+the $256$ law pairs sustaining it: institutional coordination is
+load-bearing exactly on the deadlock shadow.
+\end{proposition}
+\begin{proof}
+Exhaustive enumeration over the $256$ law pairs with exact trajectory
+simulation; the exhibited instance and the anti-symmetric law's
+trajectory are verified directly. The counting identity
+$28-12=16$ is the communication value on this family.
+\end{proof}
+
+\begin{proposition}[Authority and delay]
+Removing agency 2's right to vote $2$ collapses the decentralized kernel
+from $12$ to $0$ (strict instance: the audited belief), and granting
+agency 2 a one-step delayed own reading does not restore the deadlock
+boundary: the decentralized kernel under the delayed reading remains
+strictly below the coordinator's. (The delay is local memory --- agency 2
+voting on its own previous coordinate value --- not common knowledge of
+the joint state; the terminology of the first edition is here corrected.)
+Relation to the lattice companion: its institutional class (aggregate
+reading with a no-repeat codex) sustains $24$ of $36$ on the same grid ---
+a different institutional restriction with a different count; no ordering
+between the unanimity protocol's $12$ and the codex chain's $24$ is
+claimed.
+\end{proposition}
+\begin{proof}
+Both computations are exhaustive and exact: the restricted law space is
+the $16$ pairs with $u_2\equiv1$; the delayed regime lets agency 2 vote
+on its own previous coordinate value (initialized at the current value)
+and simulates the augmented (state, previous-$z_2$) trajectories
+exactly.
+\end{proof}
+
+\section{Verified record (8/8 exact check families)}
+
+E1 the coordinator's kernel ($28$, the full-observation kernel of Abaee
+2026a, Section 8); E2 the decentralized kernel ($12$) by exhaustion over
+$256$ law pairs; E3 the exact boundary ($16$ lost pairs), the exhibited
+instance $\{(1,2),(3,1)\}$ (individually sufficient under each agency
+alone and under the coordinator, jointly nonviable), and the audited
+belief's anti-symmetric survival; E4 the setwise communication value
+($12\subset28$); E5 the authority collapse ($12\to0$, strict instance
+recorded); E6 the delayed-own-reading robustness of the deadlock
+boundary; E7 the law-space identity ($256=2^{4}\times2^{4}$) with the
+deadlock transition as declared ($u=0$: both coordinates lose one) and
+the loss instance's three-way viability pinned; E8 the two sixteens
+distinguished ($16$ lost pairs against $16$ sustaining law pairs --- a
+coincidence of this grid, no identity).
+
+\section{What is not claimed}
+
+Two agencies, one instrument, unanimity: no $n$-agency theory, no
+sequential or weighted voting, no mechanism design, no enforcement or
+compliance dynamics, no negotiation models. The deadlock protocol is the
+simplest agreement discipline; procedural alternatives (default rules,
+tie-breakers) are not classified, and the deadlock extraction rule is a
+declared modelling choice of this protocol, not a consequence of the
+dynamics. Institutional effectiveness is
+not estimated from data. The catalogue's larger-programme warning is
+adopted: the paper claims the exact deadlock phenomenon and its boundary
+on the audited system, nothing broader.
+
+
+\section*{Declarations}
+\textbf{Funding.} None.\quad \textbf{Competing interests.} None.\quad
+\textbf{Data availability.} No external data were used.\quad
+\textbf{Code availability.} The verification script
+\texttt{institutional\_observation\_v2\_verify.py} is publicly available at
+\url{https://github.com/MIKEAA2020/general-sustainability} (folder
+\texttt{arena agent 1/paper rewrites/latex}); it reproduces all eight check
+families verbatim.\quad
+\textbf{AI declaration.} GLM (Z.ai), Qwen (Alibaba Cloud) and DeepSeek AI
+assisted with drafting and iterative review of the first edition; the joint
+audit of the first edition and this revision were prepared with further AI
+assistance, under the programme's verification discipline.
+
+\end{document}
