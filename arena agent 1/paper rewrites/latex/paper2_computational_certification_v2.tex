@@ -1,0 +1,731 @@
+\documentclass[10pt,twocolumn]{article}
+\usepackage[a4paper,margin=15mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{mathrsfs}
+\usepackage{amsthm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\usepackage{graphicx}
+\usepackage{booktabs,array,calc}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[colorlinks=true]{hyperref}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\renewcommand{\thesubsection}{\arabic{subsection}.}
+\emergencystretch=3em
+\allowdisplaybreaks
+
+\begin{document}
+\title{Computational Viability Certification under Incomplete Observation:\\
+A Continuous-to-Finite Bridge with Exact Certificates,\\
+a Solver-Certified Campaign, and a Reference Library}
+\newcommand{\edition}{2}
+\author{Amin Abaee\\[0.35em]
+{\small Independent Researcher}\\[0.55em]
+{\small\href{https://orcid.org/0000-0002-0019-1842}{ORCID: 0000-0002-0019-1842}}\\[0.3em]
+{\small\href{mailto:amin\_abaee@ut.ac.ir}{amin\_abaee@ut.ac.ir}}}
+\date{September 24, 2026}
+\maketitle
+
+\begin{abstract}
+Nonviability certificates are useful computationally only if they are finite,
+attainable by standard solvers, and independently checkable. This paper
+develops such a pipeline for linear systems under exogenous partial
+observation of a hidden mode. An outer moment approximation of all measurable
+information-adapted controls, combined with an inner adversarial approximation,
+yields finite linear programs whose optimal values sandwich the
+continuous-time safety value between explicit error estimates
+(\(\rho_{\mathcal{H},G} \le J_{\mathcal{I}}(T) \le \rho_{\mathcal{H},G} +
+R_U V_U h_u + \delta_\beta + L h_t\)); every dual solution is a finite
+obstruction certificate covering every measurable policy; nonviability is
+detected under every sufficiently fine refinement, and positive certificates
+never exceed \(r + 1\) safety labels at rank \(r\) --- the relevant dimension
+being information--time rank, not instantaneous input dimension, and a
+matching construction with scalar input produces obstructions requiring
+arbitrarily many witnesses. The certificates account for post-observation
+recourse: on the three-branch delayed-observation instance every pair of
+compatible states is viable and a common control keeps every branch safe
+throughout the blind window, yet nonviability is certified, with the exact
+delay threshold \(\tau^{*} = 7/50\). The finite program is solved by a
+standard solver (HiGHS) across a five-point mesh refinement; optimality is
+certified in exact rational arithmetic by independent primal and dual
+witnesses, the solver agreeing with the exact values to at most
+\(4.2 \times 10^{-17}\), and the refinement obeys the closed law
+\(\rho(h) = \max\{0,\ 3/50 - Th/4\}\). A reference library,
+\texttt{viacert}, packages the exact finite-horizon recursion and the
+fibre-partition criteria behind a pluggable finite-system interface, with
+twelve audited identities in its self-test. All exact computations run in
+integer and rational arithmetic.
+\end{abstract}
+
+\textbf{Keywords:} viability; incomplete observation; obstruction
+certificates; linear programming; semi-infinite programming; exact
+arithmetic; certified computation
+
+\subsection{Introduction}\label{introduction}
+
+Viability theory under full observation has a mature numerical apparatus:
+kernel approximations, set-valued meshes, and convergence results
+(Aubin, 1991; Cardaliaguet, Quincampoix, and Saint-Pierre, 1999). Under
+incomplete observation the sufficiency side is carried by output-feedback
+conditions and the estimation-tube programme (Veliov, 1993), while the
+necessity side --- certificates whose firing \emph{proves} nonviability of an
+information state (Abaee, 2026b) --- has lacked a computational bridge. The
+difficulty is the quantifier order: the adversary chooses the mode, the
+initial state inside its cell, and a measurable disturbance with knowledge of
+the announced policy, so naive discretization of controls proves at most the
+infeasibility of a held-control subclass, not of the policy class itself.
+
+This paper builds the bridge and the tooling around it. The main result
+(Theorem~\ref{thm:bridge}) approximates the admissible controls from outside
+by their block moments --- a necessary relaxation of continuous-time safety
+that restricts nothing --- and the adversary from inside by explicitly stored
+scenarios, yielding a finite linear program whose optimal value sandwiches
+the exact minimax safety violation. Dual solutions of the program are finite,
+policy-independent obstruction certificates; positive certificates survive
+mesh refinement; and their size is governed by the rank of the
+safety-row matrix in the information--time product, which no bound on the
+instantaneous input dimension controls (Proposition~\ref{prop:rank}).
+
+The pipeline is demonstrated end to end on a three-branch
+delayed-observation instance: delay threshold, Farkas certificate, and a
+five-point mesh campaign in which the HiGHS solver (Huangfu and Hall, 2018)
+attains the exact rational optimum at every mesh, with independent
+primal--dual witnesses closing the duality gap exactly. The finite-side
+machinery --- the exact backward recursion and the fibre-partition criteria
+--- is packaged as the reference library \texttt{viacert} with a pluggable
+finite-system interface and a self-test of twelve audited identities.
+
+The contributions are: the continuous-to-finite sandwich theorem with sound,
+refinement-complete, sparsity-bounded certificates (Section~\ref{bridge});
+the recourse-aware obstruction reading and the exact three-branch instance
+with its certified campaign (Section~\ref{instance}); the
+information--time rank separation (Section~\ref{rank}); the refinement-erosion
+identity and the oracle-recourse extension (Section~\ref{erosion}); the
+complexity and residual-bounded verification framework
+(Section~\ref{computation}); and the reference library
+(Section~\ref{library}).
+
+\subsection{Model, information, and quantifiers}\label{model}
+
+\emph{Dynamics.} Let the hidden mode be
+\(\theta \in \Theta := \{1,\dots,M\}\). Conditional on \(\theta\), the
+continuous state satisfies
+\[
+\dot x(t) = A_\theta(t)x(t) + g_\theta(t) + B_\theta(t)u(t) + E_\theta(t)d(t),
+\;\; t \in [0,T],
+\]
+under the standing assumptions: \(A_\theta, g_\theta, B_\theta, E_\theta\)
+bounded and piecewise continuous, with bounded-variation bounds on
+\(B_\theta, E_\theta\); the initial set in mode \(\theta\) a nonempty compact
+polytope \(P_\theta \subset \mathbb{R}^n\); the input and disturbance sets
+nonempty compact polytopes \(U = \{v : Fv \le f\} \subset \mathbb{R}^m\) and
+\(D_\theta \subset \mathbb{R}^p\); safety the closed polyhedron
+\(\mathcal{V} = \{x : c_i^\top x \le b_i,\ i = 1,\dots,s\}\); and the initial
+information state
+\(B_0 = \bigcup_{\theta} \{\theta\} \times P_\theta\) initially safe (a
+time-zero certificate suffices otherwise). The dynamics admit unique
+Carath\'eodory solutions for every admissible measurable signal pair.
+
+\emph{Information.} At known times
+\(0 = \tau_0 < \tau_1 < \dots < \tau_R = T\) the controller receives
+exogenous information about \(\theta\): refining history partitions
+\(\mathcal{P}_0 \preceq \mathcal{P}_1 \preceq \dots \preceq \mathcal{P}_{R-1}\)
+of \(\Theta\), the observation history during
+\(I_r = [\tau_r, \tau_{r+1})\) identifying the cell \(C_r(\theta) \in
+\mathcal{P}_r\). These are history partitions, not necessarily partitions
+generated by the latest observation alone. Observations do not depend on
+\(x, u, d\); active sensing and endogenous observation branching are excluded
+from the exact theorem (Section~\ref{erosion} gives a sound extension).
+
+\emph{Policies and quantifiers.} Policies are deterministic, measurable,
+nonanticipative, and adapted to the observation history; every such policy is
+represented exactly by signals \(u_{r,C} \in L^\infty(I_r; U)\),
+\(C \in \mathcal{P}_r\). The robust quantifier order is
+\[
+\exists \pi \in \Pi_{\mathcal{I}}\ \forall \theta\ \forall x_0 \in P_\theta\
+\forall d \in L^\infty([0,T]; D_\theta)\ \forall t \in [0,T],
+\]
+the adversary selecting mode, initial state, and measurable disturbance with
+knowledge of the announced policy; randomized policies are not included. The
+information-constrained viability kernel is
+\(\mathcal{K}_{\mathcal{I}}^T = \{ B_0 : \exists \pi\ \forall \theta, x_0,
+d, t\ \ x^{\pi}_{\theta, x_0, d}(t) \in \mathcal{V} \}\). Writing
+\(\mathrm{Lift}(K^T_{\mathrm{full}}) = \{ B : \varnothing \ne B \subseteq
+K^T_{\mathrm{full}} \}\) for the belief lifting of the full-information
+kernel, \(\mathcal{K}_{\mathcal{I}}^T \subseteq
+\mathrm{Lift}(K^T_{\mathrm{full}})\), and the inclusion is strict in general:
+the instance of Section~\ref{instance} has every two-state subbelief viable
+while the three-state belief is not.
+
+\subsection{Adjoint safety rows and the safety value}\label{rows}
+
+Let \(X_\theta(t,s)\) denote the state-transition matrix. For a label
+\(a = (\theta, i, t) \in \mathscr{S} := \Theta \times \{1,\dots,s\} \times
+[0,T]\) define the input kernel and margin
+\[
+k_a(\sigma) = \mathbf{1}_{\{\sigma \le t\}} B_\theta(\sigma)^\top
+X_\theta(t,\sigma)^\top c_i,
+\]
+\begin{align*}
+\beta_a = \;& b_i - h_{P_\theta}\!\bigl(X_\theta(t,0)^\top c_i\bigr)
+- \int_0^t c_i^\top X_\theta(t,\sigma) g_\theta(\sigma)\, d\sigma\\
+& - \int_0^t h_{D_\theta}\!\bigl(E_\theta(\sigma)^\top
+X_\theta(t,\sigma)^\top c_i\bigr)\, d\sigma,
+\end{align*}
+where \(h_Q(v) = \sup_{q \in Q} v^\top q\). For a policy \(\pi\) set
+\(\mathcal{F}_a(\pi) = \int_0^T k_a(\sigma)^\top u^\pi_\theta(\sigma)\,
+d\sigma - \beta_a\).
+
+\begin{proposition}[robust rows]\label{prop:rows}
+\(\pi\) is robustly safe on \([0,T]\) if and only if
+\(\mathcal{F}_a(\pi) \le 0\) for every \(a \in \mathscr{S}\). This follows
+from the linear solution formula; initial-state and disturbance maximizations
+separate from the control term because the control signal in a mode does not
+depend on \(x_0\) or \(d\). For polytopic \(D_\theta\), a maximizing
+disturbance can be chosen measurably by selecting a maximizing vertex at each
+time.
+\end{proposition}
+
+Define the minimax safety violation
+\(J_{\mathcal{I}}(T) = \min_{\pi \in \Pi_{\mathcal{I}}} \max_{a \in
+\mathscr{S}} \mathcal{F}_a(\pi)\).
+
+\begin{proposition}[value and nonviability]\label{prop:value}
+The minimum exists: the policy-signal space is weak-* compact and each
+\(\mathcal{F}_a\) is weak-* continuous. Consequently
+\(B_0 \notin \mathcal{K}_{\mathcal{I}}^T\) if and only if
+\(J_{\mathcal{I}}(T) > 0\). The strict positive margin is a consequence of
+compactness and closed safety constraints, not an extra nonviability
+assumption.
+\end{proposition}
+
+\subsection{The finite obstruction certificate}\label{certificate}
+
+Define \(\phi_U(g) := \min_{v \in U} g^\top v = -h_U(-g)\). Choose finitely
+many labels \(a_\ell = (\theta_\ell, i_\ell, t_\ell)\), \(\ell = 1,\dots,q\),
+and weights \(\lambda_\ell \ge 0\), \(\sum_\ell \lambda_\ell = 1\). For each
+active information cell \(C \in \mathcal{P}_r\), pool the adjoint kernels
+\(g_{r,C}(\sigma) = \sum_{\ell : \theta_\ell \in C} \lambda_\ell
+k_{a_\ell}(\sigma)\). The certificate margin is
+\[
+\Gamma_{\mathcal{I}}(\lambda, a)
+= \sum_{r=0}^{R-1} \int_{I_r} \sum_{C \in \mathcal{P}_r}
+\phi_U\!\bigl(g_{r,C}(\sigma)\bigr)\, d\sigma
+- \sum_{\ell=1}^q \lambda_\ell \beta_{a_\ell}.
+\tag{1}
+\]
+
+\begin{remark}[semantics]\label{rem:semantics}
+If \(\Gamma_{\mathcal{I}}(\lambda, a) > 0\), then no admissible
+information-adapted policy is safe: for every policy,
+\(\sum_\ell \lambda_\ell \mathcal{F}_{a_\ell}(\pi) \ge
+\Gamma_{\mathcal{I}}(\lambda, a)\), so at least one stored label satisfies
+\(\mathcal{F}_{a_\ell}(\pi) \ge \Gamma_{\mathcal{I}}(\lambda, a) > 0\) ---
+an admissible realization violates facet \(i_\ell\) at time \(t_\ell\). The
+violating label may depend on the policy; the finite list and its weights do
+not. The certificate is not an adversarial tree: it is a finite,
+policy-independent set of adversarial tests combined by an adjoint identity.
+\end{remark}
+
+\subsection{The continuous-to-finite theorem}\label{bridge}
+
+The exact dual expression (1) alone would be close to standard
+infinite-dimensional convex duality (Anderson and Nash, 1987; Hettich and
+Kortanek, 1993). The consequential result is a sound finite construction
+covering unrestricted measurable controls.
+
+\emph{Outer control moments.} Choose a control-time mesh
+\(\mathcal{H} = \{J_1,\dots,J_H\}\) containing every sensing time. Introduce
+one vector \(v_{j,C} \in U\) for every cell \(C\) active during \(J_j\), and
+let \(Q = \sum_j |\mathcal{P}_{r(j)}|\) be the number of information--time
+blocks. For a label \(a\) define the finite row
+\(A_{a,j,C} = \mathbf{1}_{\{\theta \in C\}} \int_{J_j} k_a(\sigma)\, d\sigma\),
+the block average
+\(\bar{k}_{a,\mathcal{H}}(\sigma) = \frac{1}{|J_j|} \int_{J_j} k_a(s)\, ds\)
+on \(J_j\), and the moment error
+\[
+e_{a,\mathcal{H}} = \int_0^T h_U\!\bigl(\bar{k}_{a,\mathcal{H}}(\sigma)
+- k_a(\sigma)\bigr)\, d\sigma,
+\tag{2}
+\]
+for which any verified upper bound \(\bar{e}_a \ge e_{a,\mathcal{H}}\) may be
+used. For every measurable policy, its block averages belong to \(U\), and
+\[
+A_a v - \int_0^T k_a(\sigma)^\top u^\pi_\theta(\sigma)\, d\sigma
+\le \bar{e}_a.
+\tag{3}
+\]
+Inequality (3) is the crucial orientation: the finite moments yield a
+necessary relaxation of continuous-time safety. They do not restrict the real
+controller to held inputs. For the sampled-data subclass whose policies are
+held constant on the blocks, the same polyhedron is an exact reduction rather
+than a relaxation.
+
+\emph{Inner adversarial approximation.} One may use a right-hand side
+\(\beta_a^{+} \ge \beta_a\) obtained from an explicit admissible initial
+state and disturbance signal rather than exact worst-case optimization. If
+\(0 \le \beta_a^{+} - \beta_a \le \delta_\beta\) uniformly over the labels
+used, the approximation is safe for nonviability: it weakens the adversary
+and enlarges the feasible controller set. For example, with
+\(w_a(\sigma) = \mathbf{1}_{\{\sigma \le t\}}
+E_\theta(\sigma)^\top X_\theta(t,\sigma)^\top c_i\), on a disturbance mesh
+choose \(d_{a,J} \in \arg\max_{d \in D_\theta} (\int_J w_a)^\top d\),
+yielding an explicit piecewise-constant admissible disturbance; if
+\(D_\theta\) has radius \(R_D\) about a fixed center and
+\(\mathrm{TV}(w_a) \le V_D\), then
+\[
+0 \le \beta_a^{+} - \beta_a \le R_D V_D h_d,
+\tag{4}
+\]
+apart from any separately accounted initial-state or numerical error.
+
+\emph{The finite program.} Let \(G \subset [0,T]\) be a finite time grid
+including every mode and safety facet at every grid time. Solve
+\begin{align*}
+\rho_{\mathcal{H},G} = \min_{v, \rho}\ \rho
+\quad \text{s.t.} \quad
+& A_a v - \beta_a^{+} - \bar{e}_a \le \rho \\
+& (a \in \Theta \times \{1,\dots,s\} \times G),
+\ v_{j,C} \in U.
+\tag{5}
+\end{align*}
+
+\begin{theorem}[continuous-to-finite]\label{thm:bridge}
+Assume: uniformly over admissible policies, modes, and facets,
+\(|\mathcal{F}_{\theta,i,t}(\pi) - \mathcal{F}_{\theta,i,t'}(\pi)| \le
+L|t - t'|\) (6); the input kernels satisfy \(\mathrm{TV}(k_a) \le V_U\) (7);
+\(U\) has radius \(R_U\) about some fixed center; and the time grid has
+covering radius at most \(h_t\), the control mesh maximum length \(h_u\),
+and the adversarial approximation satisfies the bound above. Then:
+\end{theorem}
+
+\noindent\emph{(i) Certified value sandwich.}
+\[
+\rho_{\mathcal{H},G} \le J_{\mathcal{I}}(T) \le \rho_{\mathcal{H},G}
++ R_U V_U h_u + \delta_\beta + L h_t.
+\tag{8}
+\]
+With (4), \(J_{\mathcal{I}}(T) - \rho_{\mathcal{H},G} \le R_U V_U h_u + R_D
+V_D h_d + L h_t\). Verified numerical row widths are added to the right side.
+
+\noindent\emph{(ii) Sound finite certificates.} If \(\rho_{\mathcal{H},G} > 0\), the
+program's dual supplies a finite certificate of nonviability of the original
+continuous-time system, covering every measurable information-adapted policy.
+
+\noindent\emph{(iii) Completeness under refinement.} If
+\(B_0 \notin \mathcal{K}_{\mathcal{I}}^T\), then every sufficiently fine
+sequence of the above meshes, with numerical errors tending to zero,
+eventually produces a positive finite certificate. Nonviability is thus
+semidecidable in this class when the coefficients and error bounds are
+effectively computable.
+
+\noindent\emph{(iv) Exact atomic dual representation.}
+\[
+J_{\mathcal{I}}(T) = \sup_{q < \infty,\ a_1,\dots,a_q,\
+\lambda \in \Delta_q} \Gamma_{\mathcal{I}}(\lambda, a).
+\tag{9}
+\]
+In particular, nonviability is equivalent to the existence of a positive
+finite atomic certificate.
+
+\noindent\emph{(v) Sparse witnesses.} Let \(r = \mathrm{rank}\, A\) for the
+finite safety-row matrix in (5). Whenever \(\rho_{\mathcal{H},G} > 0\), a
+positive certificate exists using at most \(r + 1 \le mQ + 1\) safety labels,
+and it can retain any prescribed margin strictly below
+\(\rho_{\mathcal{H},G}\). If the lifted continuous-time kernels span a
+finite-dimensional space of dimension \(r_{\mathcal{I}}\), a continuous-time
+obstruction has at most \(r_{\mathcal{I}} + 1\) labels. The relevant
+dimension is information--time rank, not \(m\).
+
+\emph{Proof outline.} The lower bound holds because every admissible
+measurable policy's control bounds are outer-approximated by the block
+moments, so the moment program relaxes the adversary's feasible set and
+its value cannot exceed the continuous safety value; the upper bound is
+realized by taking, on each block, the piecewise-constant control
+attained by the finite optimizer's scenarios, whose exit from the
+continuous value is charged exactly by the three error terms --- the
+input radius over the control mesh, the moment error, and the Lipschitz
+remainder over the time mesh. The asymmetry at its core is
+worth stating plainly: averaging arbitrary controls proves the lower bound;
+implementing piecewise-constant controls proves the upper bound. Confusing
+these two directions is what makes na\"ive infeasibility-by-discretization
+arguments unsound.
+
+\subsection{A three-branch delayed-observation instance carried exactly}\label{instance}
+
+\emph{Plant and exact delay threshold.} Consider the planar double integrator
+\(\dot p = v\), \(\dot v = u\), with unit vectors \(n_1 = (1,0)\),
+\(n_2 = (-\tfrac35, \tfrac45)\), \(n_3 = (-\tfrac35, -\tfrac45)\), the
+hexagonal input set
+\(U = \mathrm{conv}\{\pm n_1, \pm n_2, \pm n_3\}\), equivalently
+\(\{\nu : |u_2| \le \tfrac45,\ |2u_1 + u_2| \le 2,\ |2u_1 - u_2| \le 2\}\),
+safety \(n_i^\top p \le 2\) (\(i = 1,2,3\)) and
+\(|v_1|, |v_2| \le \tfrac65\), three possible initial states
+\(p_j(0) = \tfrac{34}{25} n_j\), \(v_j(0) = n_j\), no disturbance, and the
+mode unobserved until time \(\tau\), when it is revealed exactly.
+
+If \(j\) is known, \(u = -n_j\) for one second and then \(u = 0\) keeps the
+maximum critical position at \(\tfrac{34}{25} + \tfrac12 = \tfrac{93}{50} =
+1.86 < 2\): all three physical states are indefinitely viable under full
+information. Take three witness labels, each using its own position facet at
+\(t_* = \tau + 1\), with kernels
+\(k_j(s) = \mathbf{1}_{\{s \le t_*\}} (t_* - s) n_j\) and
+\(\beta_j = \tfrac{16}{25} - t_*\), weighted by \(\lambda_1 = \tfrac38\),
+\(\lambda_2 = \lambda_3 = \tfrac{5}{16}\), so that
+\(\sum_j \lambda_j n_j = 0\) --- the unique pooling weights on the
+equal-\(\{2,3\}\) family (they satisfy
+\(\tfrac38 = 1 - 2 \cdot \tfrac{5}{16}\), so a barycentric rendering
+\(\tfrac{6}{16} + \tfrac{5}{16} + \tfrac{5}{16}\) clamps to the same
+point). Before observation the pooled kernel is
+identically zero; after observation each mode has its own control and
+\(\phi_U(\lambda_j (t_* - s) n_j) = -\lambda_j (t_* - s)\). Hence
+\[
+\Gamma(\tau) = -\int_\tau^{\tau+1} (\tau + 1 - s)\, ds
+- \Bigl(\tfrac{16}{25} - \tau - 1\Bigr) = \tau - \frac{7}{50},
+\tag{10}
+\]
+so \(\tau > \tfrac{7}{50}\) implies
+\(B_0 \notin \mathcal{K}_{\mathcal{I}}\). Conversely, \(u = 0\) before
+observation and \(u = -n_j\) for one second afterward keeps the maximum
+critical position at \(\tfrac{34}{25} + \tau + \tfrac12\), safe exactly when
+\(\tau \le 0.14\). Thus \(\tau_{\max} = \tfrac{7}{50} = 0.14\) is exact, and
+for horizons containing the stopping time
+\(J_{\mathcal{I}}(\tau + 1) = \tau - 0.14\).
+
+\emph{Pairs are viable; the blind-window exit test misses.} At
+\(\tau = \tfrac15\), the common control \(u = 0\) keeps all three branches
+safe throughout the blind window:
+\(n_j^\top p_j(0.2) = \tfrac{39}{25} = 1.56 < 2\). No exit occurs before
+information arrives; nevertheless \(\Gamma(0.2) = 0.06 > 0\) --- the best
+post-observation recourse cannot recover all branches. The obstruction is
+not that information arrives after unavoidable physical exit; it is that
+information arrives after some indistinguishable branch has necessarily
+accumulated more braking liability than the remaining control authority can
+discharge.
+
+\emph{The finite program and its exact witnesses.} Set
+\(\tau = \tfrac15\), \(T = \tfrac65\), \(h = \tfrac1{10}\): two common
+pre-observation control blocks and ten post-observation blocks for each of
+three modes, so \(Q = 32\), \(mQ = 64\). For the endpoint position rows the
+exact moment error is \(e = 12 \cdot h^2/4 = \tfrac{3}{100}\) (the kernel is
+affine on each of the \(T/h = 12\) mesh intervals and
+\(h_U(\alpha n_j) = |\alpha|\)); the endpoint right-hand side is
+\(\beta = \tfrac{16}{25} - \tfrac65 = -\tfrac{14}{25}\), relaxed to
+\(\beta + e = -\tfrac{53}{100}\). The exact continuous certificate has
+margin \(\tfrac{3}{50} = 0.06\); the finite moment certificate has margin
+\(\tfrac{3}{100} = 0.03\).
+
+The dual witness is exact. Order the input facets by
+\(F = [(0,1);(0,-1);(2,1);(2,-1);(-2,1);(-2,-1)]\),
+\(f = (\tfrac45, \tfrac45, 2, 2, 2, 2)\), and define
+\(\eta_1 = (0,0,0,0,\tfrac14,\tfrac14)\),
+\(\eta_2 = (0,\tfrac12,0,\tfrac3{10},0,0)\),
+\(\eta_3 = (\tfrac12,0,\tfrac3{10},0,0,0)\), satisfying
+\(F^\top \eta_j = -n_j\) and \(f^\top \eta_j = 1\). For a post-observation
+interval \(J_k\) put \(a_k = \int_{J_k} (T - s)\, ds\) and
+\(\mu_{j,k} = \lambda_j a_k \eta_j\). Before observation, stationarity holds
+because \(\sum_j \lambda_j n_j = 0\); after observation, because
+\(\lambda_j a_k n_j + F^\top \mu_{j,k} = 0\). Since
+\(\sum_k a_k = \tfrac12\), the Farkas contradiction is
+\(\lambda^\top(\beta + e) + \mu^\top f_{\mathrm{blk}} = -\tfrac{53}{100} +
+\tfrac12 = -\tfrac{3}{100} < 0\) --- an exact rational certificate. The
+primal witness is equally exact: hold the pre-observation blocks at \(0\) and
+the post-observation blocks of mode \(j\) at \(-n_j\); the endpoint row then
+reads \(-\tfrac12 + \tfrac{14}{25} - \tfrac{3}{100} = \tfrac{3}{100}\), and
+every other row lies at or below the same value.
+
+\emph{Solver-certified mesh study.} For each mesh the program (5) is built
+at its claimed dimensions and solved by HiGHS; optimality is then certified
+in exact rational arithmetic by the witness pair above (primal feasibility of
+every row; dual stationarity and dual objective \(-\rho(h)\)), so the duality
+gap closes exactly and the solver's returned value is a computational
+confirmation of a proved optimum, not an observation.
+Table~\ref{tab:mesh} reports the campaign: exact values
+\(\rho(h) = \max\{0,\ \tfrac{3}{50} - Th/4\}\), solver values, iteration
+counts, and wall-clock times as measured on the verification machine.
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\begin{tabular}{@{}r|r|r|r|r|r|r|r@{}}
+\toprule
+\(h\) & blocks \(Q\) & variables \(mQ{+}1\) & rows \(Ms(N_t{+}1)+p_UQ\) & exact \(\rho(h)\) & solver \(\rho\) & iterations & time (s) \\
+\midrule
+0.20 & 16 & 33  & 243  & \(0\) & 0.000000000 & 36   & 0.024 \\
+0.10 & 32 & 65  & 465  & \(\tfrac{3}{100} = 0.030\) & 0.030000000 & 78   & 0.014 \\
+0.05 & 64 & 129 & 909  & \(\tfrac{9}{200} = 0.045\) & 0.045000000 & 141  & 0.043 \\
+0.02 & 160 & 321 & 2241 & \(\tfrac{27}{500} = 0.054\) & 0.054000000 & 501  & 0.252 \\
+0.01 & 320 & 641 & 4461 & \(\tfrac{57}{1000} = 0.057\) & 0.057000000 & 1062 & 1.015 \\
+\bottomrule
+\end{tabular}
+\caption{Solver-certified mesh study on the three-branch instance
+(\(\tau = \tfrac15\), \(T = \tfrac65\)): program dimensions, exact optimal
+values, HiGHS-attained values (agreement to at most \(4.2 \times 10^{-17}\)),
+simplex iterations, and wall-clock time. Optimality of each exact value is
+certified by the exact primal--dual witness pair, independent of the solver.
+The exact continuous value is \(0.06\); three safety labels support each
+positive certificate.}
+\label{tab:mesh}
+\end{table*}
+
+The values obey the exact law \(\rho(h) = \tfrac{3}{50} - Th/4\) for
+\(h < \tfrac15\) and vanish at \(h = \tfrac15\): the whole refinement gap is
+the control-moment error \(Th/4\) of the endpoint rows. All dimension counts
+(\(mQ + 1\) variables; \(Ms(N_t{+}1) + p_U Q\) inequalities), all witness
+inequalities, and the closed-form law are machine-verified in exact rational
+arithmetic by the verification scripts of Section~\ref{methods}, which
+regenerate Table~\ref{tab:mesh} verbatim and re-run the solver campaign.
+
+\subsection{Computation, complexity, and independent verification}\label{computation}
+
+With \(Q\) information--time blocks and \(N_t + 1\) time labels, the program
+has \(mQ + 1\) variables and at most \(Ms(N_t{+}1) + p_U Q\) inequalities
+(\(p_U\) input-polytope facets); it is polynomial-time in these dimensions
+and the rational data size, conditional on the validated coefficient bounds.
+Initial-state dependence is affine, so no vertex enumeration of \(P_\theta\)
+is required: at each label solve
+\(\max_{\xi \in P_\theta} c_i^\top X_\theta(t,0)\xi\) and store a maximizing
+or near-maximizing point --- the verifier needs only membership of the stored
+point in \(P_\theta\), not global optimality; near-optimality bears on the
+convergence guarantee, not on a positive certificate's validity. The same
+holds for stored disturbance signals.
+
+For rational outer rows \(\widehat A v \le \widehat b\),
+\(F_{\mathrm{blk}} v \le f_{\mathrm{blk}}\), a residual-bounded certificate
+test suffices: with \(\lambda, \mu \ge 0\),
+\(r = \widehat A^\top \lambda + F_{\mathrm{blk}}^\top \mu\),
+\(c = \lambda^\top \widehat b + \mu^\top f_{\mathrm{blk}}\), the condition
+\[
+c + \sum_j h_U(-r_j) < 0
+\tag{11}
+\]
+is sufficient, since any feasible \(v\) satisfies
+\(-\sum_j h_U(-r_j) \le r^\top v \le c\). All integration, rounding, and
+model-enclosure errors must be included before applying the test, and
+uncertain row data must be relaxed toward a larger feasible controller set:
+overestimating the worst disturbance contribution can create a false
+obstruction. A deletion-based sparsification uses at most one feasibility
+solve per safety row; exact rank compression requires verified rank, and
+floating-point singular-value truncation must be charged to the error budget.
+If \(J_{\mathcal{I}}(T) = \gamma > 0\), a mesh with
+\(R_U V_U h_u + R_D V_D h_d + L h_t < \gamma\) guarantees detection --- an
+explicit, though not claimed optimal, margin-dependent certificate-size
+bound.
+
+\subsection{Information--time rank: input dimension does not bound the witnesses}\label{rank}
+
+\begin{proposition}[arbitrarily large minimal obstructions with one input]\label{prop:rank}
+For every integer \(q \ge 1\) there is a continuous-time system with scalar
+input \(u(t) \in [0,1]\) and \(q+1\) indistinguishable modes such that every
+proper subbelief is viable, the full \((q{+}1)\)-mode belief is not, and
+every obstruction certificate must involve all \(q+1\) modes.
+\end{proposition}
+
+\begin{proof}
+Let \(T = q\), \(I_j = [j-1, j]\). For mode \(j \le q\):
+\(\dot x_j = \mathbf{1}_{I_j}(t)(u - 1)\), \(x_j(0) = 0\); for mode \(q+1\):
+\(\dot x_{q+1} = -u\), \(x_{q+1}(0) = q - \varepsilon\), \(0 < \varepsilon <
+1\). Require \(0 \le x \le q\); there are no observations. Writing
+\(w_j = \int_{I_j} u\), safety requires \(-w_j \le -1\) for \(j \le q\) and
+\(\sum_j w_j \le q - \varepsilon\); summing gives \(0 \le -\varepsilon\), a
+contradiction. If mode \(q+1\) is removed, \(u \equiv 1\) is safe; if mode
+\(j \le q\) is removed, \(u = 0\) on \(I_j\) and \(u = 1\) elsewhere is
+safe. Equal weights give certificate margin \(\varepsilon/(q+1)\); the
+kernel rank is \(q\), and \(q+1\) witnesses are necessary.
+\end{proof}
+
+A statement such as ``at most \(m+1\) compatible states suffice to witness
+nonviability'' is valid for convex common-action sets in \(\mathbb{R}^m\) but
+false for a common blind control function: the correct dimension counts
+independent temporal and informational control decisions. This distinction
+is consequential for review intervals, delayed sensing, and
+certificate-size claims; its discrete counterpart is a scoping caveat of the
+finite audits of Abaee (2026a).
+
+\subsection{Refinement erosion and oracle recourse}\label{erosion}
+
+Suppose a coarse information cell \(C\) is split into finer cells
+\(C_1,\dots,C_k\). Because
+\(\phi_U(g_1 + \dots + g_k) \ge \sum_j \phi_U(g_j)\), the same witness
+satisfies \(\Gamma_{\mathrm{coarse}} \ge \Gamma_{\mathrm{fine}}\), with the
+exact difference
+\[
+\int \Bigl[ \phi_U\Bigl(\sum_j g_{C_j}\Bigr) - \sum_j \phi_U(g_{C_j}) \Bigr]
+dt.
+\tag{12}
+\]
+For \(U = [-\bar u, \bar u]^m\) this is
+\(\bar u \int \bigl[\sum_j \|g_{C_j}(t)\|_1 - \|\sum_j g_{C_j}(t)\|_1\bigr] dt\):
+the certificate identifies the precise time intervals on which
+indistinguishable branches demand conflicting control effort. On rational
+instances the identity is exactly checkable; the verification record confirms
+\(\phi_U(g_1 + g_2) \ge \phi_U(g_1) + \phi_U(g_2)\) on \(3{,}240\)
+deterministic rational pairs for the hexagonal \(U\) of
+Section~\ref{instance}.
+
+The exact theorem assumes exogenous mode observations. A useful sound
+extension does not: if finitely many admissible initial-state/disturbance
+scenarios are provably indistinguishable until \(\tau\), give the controller
+after \(\tau\) separate arbitrary control signals for every stored scenario
+--- an oracle relaxation of the true policy class. If
+\[
+\int_0^\tau \phi_U\Bigl(\sum_\ell \lambda_\ell k_\ell\Bigr) dt
++ \sum_\ell \int_\tau^T \phi_U(\lambda_\ell k_\ell)\, dt
+- \sum_\ell \lambda_\ell \beta_\ell > 0,
+\tag{13}
+\]
+with \(\beta_\ell\) computed from the explicitly stored scenario, then no
+actual output-feedback policy can be safe. This covers arbitrary sensing
+after a known blackout; it is sound but generally incomplete.
+
+\subsection{The reference library}\label{library}
+
+The finite side of the pipeline is packaged as \texttt{viacert}, a
+standard-library Python package in exact integer and rational arithmetic.
+Its design follows three principles. \emph{Exactness:} no floating point on
+any audited path; values, witnesses, and bounds are rationals.
+\emph{Fidelity to the verified recursion:} the finite-horizon selector is the
+calculus's backward recursion (Abaee, 2026b) with the no-repeat protocol
+threaded as a parameter, matching the audited implementations rather than a
+reformulation. \emph{Pluggability:} new systems enter through a
+\texttt{FiniteSystem} interface (states, actions, safe set, transition, null
+action); the audited systems --- the shared two-coordinate audit system, the
+continuous benchmark caps, the certainty-equivalence law pair, and the
+review grid --- ship as default instances.
+
+The public surface comprises the recursion module (viability verdicts,
+kernels, and step-one witness extraction), the monitoring module (safe and
+common safe-action sets, the partition-form adequacy converse, maximal
+common-action sets, the partition census, the review-timing identity with
+its threshold convention, and the certainty-equivalence drift audit), and a
+command-line self-test of twelve audited identities --- the four-cell kernel
+counts \(24/26/25/28\) with the meet identity, the census \(15\) total and
+\(7\) adequate partitions with maximal sets overlapping in \((2,2)\), the
+benchmark \(Y^{*} = 27/5\), the drift bounds \(21/100\) and \(0\), the
+48-cell delay identity with its boundary cell, and witness extraction ---
+each a pointer to the published audits (Abaee, 2026a, 2026b). In the
+certification workflow the library plays the enumerate-and-check role:
+finite instances are enumerated exactly, candidate designs are tested
+against the fibre criteria, and every claim is archived with the script that
+regenerates it. The library is not a reimplementation of this paper's bridge theorems: it carries the exact finite machinery they reduce from, while the bridge's programs live in the campaign scripts of Section~ef{methods}; consolidating those scripts as a 	exttt{viacert.continuous} module is the library's recorded next step (and, with it, the retirement of the present scripts' superseded audit identities), so the title's ``reference library'' is read as this finite-side package plus the certified campaign pipeline.
+
+\subsection{Scope delimitations}\label{scope}
+
+The exact theorem does not cover: control-dependent observations or active
+sensing; arbitrary continuous-state measurements; nonlinear dynamics without
+additional validated enclosures; nonconvex actuator sets without a
+relaxation gap; rate-constrained actuators without modifying the
+approximation; or unrestricted infinite-horizon completeness. For general
+sensing after a blackout, the oracle-recourse certificate is sound but
+incomplete --- exactness in the audited instance belongs to the complete
+revelation at \(\tau\), not to the relaxation. For nonlinear systems, a uniform validated flow-error bound can
+be added to the row budgets, yielding a sound extension, not automatic
+completeness. Against the alternatives: full-information viability decides
+none of the information-constrained question; initial admissibility and
+tangency tests see no obstruction here; safety-before-first-observation
+tests are silent when a common safe blind control exists; exact finite
+safety games await a justified continuous-to-finite bridge, which is what
+Theorem~\ref{thm:bridge} provides; and na\"ive held-control infeasibility
+excludes only the held-control class. No general-purpose
+computational-calculus claim is made: the theorem is a certificate generator
+for the stated class, with completeness only under refinement and
+semidecidability only with effectively computable bounds.
+
+\subsection{Conclusion}\label{conclusion}
+
+Nonviability certification under incomplete observation is computationally
+well-posed exactly when three requirements hold: the discretization must
+relax the controller and never the adversary's necessity direction;
+optimality must be certifiable independently of the solver; and certificate
+size must be understood in the information--time product rather than the
+input dimension. The bridge theorem delivers all three, the three-branch
+instance shows the resulting certificates detecting failure that
+full-information viability, blind-window exit tests, and held-control
+infeasibility all miss, and the campaign shows standard solvers attaining
+proved optima to numerical precision while exact witnesses close every gap.
+The reference library carries the exact finite machinery to new systems.
+What remains open is completeness beyond refinement: an inner
+approximation of the policy class that is computationally effective for
+general sensing is not known, and the oracle-recourse extension is the
+current sound surrogate.
+
+\subsection{Verification methods}\label{methods}
+
+Every number in this paper is regenerated by deterministic scripts, exact
+rational arithmetic unless stated as solver output, standard library plus
+the solver interface only. Three scripts cover the claims. The exact
+verification record re-derives the instance's certificates --- delay
+threshold, margins, witnesses, erosion identity, rank construction ---
+in 51 exact checks. The campaign script rebuilds the program (5) at each of
+the five meshes, runs HiGHS, and certifies optimality by the exact
+primal--dual witnesses, closing the duality gap; it re-derives the mesh law
+and all dimension identities (nine checks). The library self-test runs the
+twelve audited identities. A master script chains the three, then
+recomputes independently: the mesh values from the closed law
+\(\max\{0, 3/50 - Th/4\}\), the Farkas contradiction
+\(-\tfrac{53}{100} + \tfrac12 = -\tfrac{3}{100}\), the primal row value
+\(\tfrac{3}{100}\), the margins \(\tfrac{3}{50}\) and \(\tfrac{3}{100}\),
+the moment error \(e = \tfrac{3}{100}\), the relaxed right-hand side
+\(-\tfrac{53}{100}\), the delay threshold \(\tau^{*} = \tfrac{7}{50}\), the
+blind-window safety value \(\tfrac{39}{25}\), and every headline number in
+the text.
+
+\subsection*{References}
+
+Abaee, A. An obstruction calculus for viability under incomplete
+observation (submitted).
+
+Abaee, A., 2026a. Robust viability of the 2J3KL limit reference point
+under a surplus-production map: policy scoring, expansion, and when catch
+cannot help. Zenodo. \url{https://doi.org/10.5281/zenodo.22552060}
+
+Anderson, E.J., Nash, P., 1987. Linear Programming in Infinite-Dimensional
+Spaces: Theory and Applications. Wiley, Chichester.
+
+Aubin, J.-P., 1991. Viability Theory. Birkh\"auser, Boston.
+
+Cardaliaguet, P., Quincampoix, M., Saint-Pierre, P., 1999. Set-valued
+numerical methods for optimal control and differential games, in:
+Stochastic and Differential Games: Theory and Numerical Methods,
+pp.~177--247. Birkh\"auser, Boston.
+
+Hettich, R., Kortanek, K.O., 1993. Semi-infinite programming: theory,
+methods, and applications. SIAM Rev. 35(3), 380--429.
+
+Huangfu, Q., Hall, J.A.J., 2018. Parallelizing the dual revised simplex
+method. Math. Program. Comput. 10(1), 119--142.
+
+Veliov, V.M., 1993. Sufficient conditions for viability under imperfect
+measurement. Set-Valued Anal. 1, 305--317.
+
+\subsection*{Declarations}
+
+\subsection*{Funding}
+None.
+
+\subsection*{Competing interests}
+None.
+
+\subsection*{Data availability}
+No external data were used.
+
+\subsection*{Code availability}
+The verification scripts \url{paper2_computational_certification_v2_verification.py},
+\url{paper2_nonstandard_verification.py},
+\url{paper2c_lp_campaign.py}, and the \texttt{viacert} package are publicly
+available at \url{https://github.com/MIKEAA2020/general-sustainability}
+(folder \texttt{arena agent 1/paper rewrites/latex}); they reproduce all
+exact values, witnesses, bounds, and the solver campaign verbatim.
+
+\subsection*{AI declaration}
+GLM (Z.ai), Qwen (Alibaba Cloud) and DeepSeek AI assisted with drafting
+and iterative review. The author reviewed and edited outputs and takes
+responsibility for the final work.
+
+\end{document}
