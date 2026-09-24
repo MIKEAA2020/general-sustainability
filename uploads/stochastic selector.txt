@@ -1,0 +1,165 @@
+gemini:
+### 1. Fatal Technical Contradiction: Proposition 1 vs. Theorem 2(a) & 2(e)
+
+* **The Setup:**
+  * **Proposition 1** states that belief-state safety values are computed via the standard Smallwood–Sondik (1973) backward recursion:
+    $$\alpha^{a, \gamma_\cdot}(x) = \sum_{x'} T(x' \mid x, a) \sum_y g(y \mid x, a, x') \gamma_y(x'), \quad \gamma_y \in \Gamma_k$$
+    $$\Gamma_{k+1} = \{\alpha^{a, \gamma_\cdot} : a \in A, \gamma_\cdot \text{ a selection}\}$$
+    This is the standard Bellman backup for POMDPs, which optimizes over **all causal sequential policies** (the unrestricted policy class).
+  * **Theorem 2(a)** claims:
+    > "the alpha-vector recursion of Proposition 1 returns exactly the closed form
+    > $$V_k(b_0) = \frac{1}{2} (\mathbf{1}[z_0 - k \ge 1] + \mathbf{1}[z_0 + k \ge 1]) \quad (k \le T_{\text{obs}}),$$
+    > $$V_k(b_0) = \frac{1}{2} (1 + \mathbf{1}[z_0 \ge 1 + T_{\text{obs}}]) \quad (k > T_{\text{obs}})$$
+    > over the declared hold class."
+* **The Contradiction:**
+  1. **Proposition 1 does not enforce a hold class.** In standard POMDP value iteration, the controller is free at each time step $t$ to select any action $a_t \in A$.
+  2. For the hidden-regime system ($z^+ = z + \theta u$, $\theta \in \{-1, +1\}$, $u \in \{-1, +1\}$, floor $z \ge 1$), if the controller plays the alternating open-loop sequence $u_0 = +1, u_1 = -1, u_2 = +1, u_3 = -1, \dots$ during the blind window:
+     * When $\theta = +1$: $z_0 \to z_0 + 1 \to z_0 \to z_0 + 1 \dots$
+     * When $\theta = -1$: $z_0 \to z_0 - 1 \to z_0 \to z_0 - 1 \dots$
+     For any $z_0 \ge 2$, the declining branch **never drops below $z_0 - 1 \ge 1$**, meaning **neither branch ever exits $V$**, regardless of the length of $T_{\text{obs}}$!
+  3. The author acknowledges this in **Theorem 2(e)**:
+     > *"over the unrestricted sequential blind class the value is 1 exactly on $\{z_0 \ge 2\}$ for $k \ge 2$ — the timing cells are precisely the cells where in-window adaptivity lifts the declared-class value."*
+  4. **Therefore:**
+     * If Proposition 1 is run as stated, its alpha-vector backup will generate the alternating policy and return $V_k(b_0) = 1$ for all $z_0 \ge 2, k \ge 2$.
+     * It **cannot** return the closed form in (a) (which equals $1/2$ whenever $k > z_0 - 1$).
+     * Claiming in Theorem 2(a) that *"the alpha-vector recursion of Proposition 1 returns exactly the closed form"* is **false** unless Proposition 1 is modified to artificially suppress action switching.
+
+---
+
+### 2. Conceptual Consequence: Collapse of the Timing Obstruction under Adaptive Control
+
+This technical contradiction exposes an unaddressed limitation in the companion paper’s timing obstruction:
+* In Paper 1 (Section 3.3, Theorem 3; Section 8, Table 2), the timing bound $T_{\text{obs}} > z_0 - 1$ was claimed to prove nonviability on the 12 cells with $z_0 \ge 2$ and $T_{\text{obs}} \in \{2, 3\}$.
+* However, as shown by Theorem 2(e), that nonviability is **purely an artifact of imposing a hold-constant policy** ($u \equiv \text{const}$).
+* If an agent in discrete time is allowed to vary actions over the blind window, the guaranteed blind survival time is not $\sigma^*(B_0) = z_0 - 1$, but $\sigma^*(B_0) = \infty$ for all $z_0 \ge 2$.
+* The timing obstruction does not certify nonviability of the system; it only certifies nonviability of the zero-order hold policy class.
+
+---
+
+### 3. Formal Gaps in the POMDP Definition (Section 2)
+
+* **Undefined Transitions on $X \setminus V$:**
+  * Section 2 states: *"Augment $X$ with an absorbing unsafe state $\bot$: for $x \in V$, $T(\bot \mid x, a) = 1 - \sum_{x' \in V} T(x' \mid x, a)$ and $T(\bot \mid \bot, a) = 1$."*
+  * What is $T(x' \mid x, a)$ for $x \in X \setminus V$? The text is completely silent.
+  * If $X \setminus V \ne \emptyset$ and transitions from $X \setminus V$ back into $V$ are possible, the definition allows trajectories starting outside $V$ to re-enter $V$.
+* **Missing Observation Model for $\bot$:**
+  * Bayes' rule is defined as:
+    $$P(y \mid b, a) = \sum_{x, x'} b(x) T(x' \mid x, a) g(y \mid x, a, x').$$
+  * What is $g(y \mid x, a, \bot)$ or $g(y \mid \bot, a, \bot)$?
+  * If the absorbing state $\bot$ emits no observation (or $g$ is undefined on $\bot$), $P(y \mid b, a)$ fails to sum to 1 whenever $b(\bot) > 0$ or $T(\bot \mid x, a) > 0$. The text does not clarify whether $b$ is an unnormalized sub-probability measure on $V$ or a normalized probability measure on $V \cup \{\bot\}$.
+* **Proposition 1 Alpha-Vector Backup Formula Lacks Boundary Masking:**
+  * The backup equation:
+    $$\alpha^{a, \gamma_\cdot}(x) = \sum_{x'} T(x' \mid x, a) \sum_y g(y \mid x, a, x') \gamma_y(x')$$
+    computes values for all $x \in X$.
+  * If $x \in X \setminus V$ and transitions into $V$ were evaluated, $\alpha(x)$ could be strictly positive.
+  * But survival requires $x_0 \in V$ at $t=0$, so $\alpha(x)$ must be identically 0 for all $x \notin V$. The backup formula must include the indicator $\mathbf{1}_V(x)$:
+    $$\alpha^{a, \gamma_\cdot}(x) = \mathbf{1}_V(x) \sum_{x'} T(x' \mid x, a) \dots$$
+    (or $X$ must be defined strictly as $X = V$).
+
+---
+
+### 4. Vector Dimension Discrepancy: $|X|+1$ vs. $|X|$
+
+* In **Proposition 1**, the witness set is defined as:
+  $$\Gamma_k \subset \mathbb{Q}^{|X|+1}$$
+  accounting for states $X \cup \{\bot\}$.
+* However, in **Section 6 (Verified re-derivations)**:
+  > *"two-floor instance: the backup produces exactly $\Gamma_1 = \{(1, 0), (0, 1)\}$"*
+* In the two-floor instance, $|X| = 2$.
+  If the alpha-vectors belonged to $\mathbb{Q}^{|X|+1}$, they would be 3-vectors: $(1, 0, 0)$ and $(0, 1, 0)$.
+  The script and worked example omit the $\bot$ coordinate entirely, directly contradicting the $|X|+1$ dimensionality claim of Proposition 1.
+
+---
+
+### 5. Flawed Definition of the "Stochastic Selector" $\Gamma_k^s(b)$
+
+* In Section 2, the stochastic selector is defined as:
+  $$\Gamma_k^s(b) = \left\{ a \in A : \sum_y P(y \mid b, a) V_{k-1}(\tau(b, a, y)) = V_k(b) \right\}.$$
+* The author immediately asserts:
+  > *"Nonemptiness of the recursive selector corresponds to $V_k(b) = 1$; obstruction certificates correspond to deficits $1 - V_k(b) > 0$."*
+* **Logical Error:**
+  * Because $A$ is finite, the maximum in $V_k(b) = \max_{a \in A} \dots$ is **always attained**.
+  * Therefore, $\Gamma_k^s(b)$ is **never empty** (it always contains the maximizing action), even if $V_k(b) = 0$!
+  * Nonemptiness of $\Gamma_k^s(b)$ does *not* correspond to $V_k(b) = 1$. The viable action set would be $\{a \in A : \sum_y P(y \mid b, a) V_{k-1}(\tau(b, a, y)) = 1\}$. Conflating the argmax set with the set of value-1 actions is a conceptual error.
+
+---
+
+### 6. Mixing Game-Theoretic Adversaries with POMDP Expectations (Proposition 2)
+
+* In Section 2, the framework is a standard POMDP with transition probabilities $T(x' \mid x, a)$ and expected survival probabilities.
+* In **Proposition 2**, the author suddenly states:
+  > *"Let the kernels be deterministic, $x^+ = F(x, a, d)$, with disturbance support $\{F(x, a, d) : d \in D\}$ read adversarially within its support..."*
+* A POMDP does not have an adversarial player.
+* If nature chooses $d$ adversarially after the control is chosen, the system is a partially observable game (minimax), not a standard POMDP.
+* An adversarial disturbance cannot be "read" out of a standard POMDP expectation unless the transition probabilities $T(x' \mid x, a)$ are specifically structured or replaced by a robust / game-theoretic Bellman operator.
+
+---
+
+### 7. Mischaracterization of Discontinuities as a "Kink Locus" (Theorem 2(c))
+
+* **Theorem 2(c)** states:
+  > *"the attaining alpha-vector switches exactly at $z_0 = 2$: the value's kink locus is the certificate boundary"*
+* As a function of initial position $z_0$, the closed-form value in Theorem 2(a) consists of step functions:
+  $$V_k(b_0) = \frac{1}{2}(\mathbf{1}[z_0 - k \ge 1] + \mathbf{1}[z_0 + k \ge 1]).$$
+* A step function has a **jump discontinuity** at $z_0 = 2$, not a **kink** (a point where a continuous function has a discontinuous derivative).
+* While $V_k(b)$ has kinks with respect to the continuous probability vector $b \in \Delta(X)$ across cells of the belief simplex, the transition with respect to $z_0$ across the certificate boundary is a jump discontinuity.
+
+---
+
+### 8. Broken Internal References (Unresolved LaTeX `\ref`)
+
+There are three instances of uncompiled cross-references where `Section )` appears with missing numbers:
+1. **Abstract** (page 1, column 2, line 42):
+   `"Everything is verified in exact rational arithmetic (Section )."`
+2. **Section 1 (Introduction)** (page 1, column 2, line 23):
+   `"Everything is verified in exact rational arithmetic (Section )."`
+3. **Declarations (Code availability)** (page 3, column 1, line 16):
+   `"ten check families re-deriving Section )"`
+All three should point to **Section 6**.
+
+---
+
+### 9. Ambiguity in Proposition 3(ii)
+
+* Proposition 3(ii) states: *"if the support misses the $k$-step robust kernel, $\Delta_k(b) \ge \min_{x \in \operatorname{supp} b} b(x)$"*.
+* In viability theory, "the $k$-step robust kernel" is conventionally a subset of state space, $\operatorname{RViab}_k(V) \subseteq X$.
+* Here, the author means the collection of viable beliefs, $W_k \subseteq 2^V$.
+* Stating that *"the support misses the kernel"* is ambiguous: it conflates $\operatorname{supp}(b) \cap \operatorname{RViab}_k(V) = \emptyset$ with $\operatorname{supp}(b) \notin W_k$. The correct statement is: *"if the support $\operatorname{supp}(b)$ is not in $W_k$"*.
+grok:
+**The Stochastic Selector paper (3 pages, dated 23 Sep 2026) is a condensed exact-arithmetic development of the belief-state safety-value recursion already stated as Theorem 7 / Propositions 9–10 in the obstruction-calculus paper §9.** It adds rational alpha-vector witnesses, an explicit deterministic degeneration to survived-mass, a systematic deficit-bound reading of the earlier certificates, and a cell-by-cell agreement theorem on the 48-cell delayed hidden-regime audit. The mathematics of the recursion itself is consistent (absorbing ⊥ makes \(P(\text{all } t=0\dots k\text{ in }\mathcal{V})=P(x_k\in\mathcal{V})\)), the PL structure is the standard Smallwood–Sondik backup, and the audited closed forms match the hold-class constants. Several editing, wording, scoping and example-consistency issues remain.
+
+**Editing / presentation gaps**
+- Two leftover placeholders: “verified in exact rational arithmetic (Section ).” (abstract and end of §1). The verification material is in §6.
+- Extremely terse: proofs are one-paragraph sketches; the 48-cell, 384-alpha, 10-family campaign is asserted via an unshown script (`paper2_stochastic_selector_v1_verify.py`). No complexity table, no pruning algorithm, no listing of the ten check families.
+- Informal code path in the declarations (“folder arena agent 1/paper rewrites/latex”).
+- Alpha dimension written \(|X|+1\) (includes ⊥) while the two running examples are treated as 2-vectors on the physical states; harmless but unremarked.
+
+**Wording / definitional inconsistencies**
+- The stochastic selector is defined as the ordinary argmax
+  \[
+  \Gamma_k^*(b)=\bigl\{a:\textstyle\sum_y\mathbb{P}(y|b,a)V_{k-1}(\tau(b,a,y))=V_k(b)\bigr\}
+  \]
+  which is nonempty whenever \(A\) is. The next sentence nevertheless says “Nonemptiness of the recursive selector corresponds to \(V_k(b)=1\)”. What is meant is existence of an action achieving value 1 (i.e., the 1-level set of the selector). The overload collides with the companion papers’ usage of “selector” for the viable-response set.
+- “In-window adaptivity” (Theorem 2(e) and abstract) is used for open-loop time-varying sequences during a blind window. Those sequences cannot depend on observations; they are merely non-stationary. The contrast that actually appears is declared *hold class* \(\{u\equiv\pm1\}\) versus unrestricted sequential (open-loop) class.
+- Theorem 2 closed form writes the redundant indicator \(1[z_0+k\ge1]\) (always true on the grid \(z_0\ge1\)). Harmless, but the expression is presented as if both branches could be limiting.
+
+**Example / companion consistency (the delayed hidden-regime grid)**
+- Dynamics \(z^+=z+\theta u\), \(\mathcal{V}=\{z\ge1\}\), two-point prior on \(\theta=\pm1\). A constant action always drives one branch down at rate 1; a switching open-loop sequence (e.g. \(+1,-1,+1,\dots\)) keeps both branches inside \(\{z\ge1\}\) for every \(z_0\ge2\) by oscillation (touches the boundary then returns). Consequently:
+  - hold-class value \(=1\) iff \(z_0\ge1+T_{\mathrm{obs}}\) (or the one-step condition \(z_0\ge2\));
+  - unrestricted sequential value \(=1\) for all horizons once \(z_0\ge2\), independently of \(T_{\mathrm{obs}}\).
+- The original obstruction paper (§8, Table 2, Figure 4) states the ground-truth viability condition as \(z_0\ge1+T_{\mathrm{obs}}\) and certifies the cells \(T_{\mathrm{obs}}\in\{2,3\}\), \(z_0\ge2\) as timing-nonviable. That claim is correct only inside the *hold-until-review* (piecewise-constant) class that the institutional reading of the first paper adopts. The present paper correctly distinguishes the two classes in Theorem 2(e) and recovers the original audit exactly on the declared hold class. The language “in-window adaptivity lifts the declared-class value” nevertheless invites the misreading that closed-loop reaction (impossible while blind) is being used.
+- At the closed-set boundary the indicators are \(1[\ge]\); the value as a function of continuous \(z_0\) therefore jumps from \(1/2\) to 1 at \(z_0=2\). The paper calls this the “kink locus \ldots exactly the certified region.” For a piecewise-linear function of a continuous parameter it is a jump, not a kink; on the discrete grid it is simply the partition boundary.
+
+**Technical points that check out**
+- Recursion (Theorem 1) is the standard finite-horizon POMDP value iteration for an absorbing safety reward; the absorbing property makes the “current-state” factor unnecessary.
+- Rational data \(\Rightarrow\) rational alphas \(\Rightarrow\) exact rational values at rational beliefs (Proposition 1). Worst-case \(|\Gamma_{k+1}|\le|A|\,|\Gamma_k|^{|Y|}\) is stated honestly; the audited instances stay two-witness because \(|Y|=1\) while blind.
+- Deterministic degeneration (Proposition 2) recovers both the robust common-action verdict (\(V=1\) iff a single sequence saves the whole support) and the min-mass deficit bound of the companion papers.
+- Deficit reading (Proposition 3) is correct: chance-constrained one-step loss \(\delta\) lower-bounds every subsequent \(\Delta_k\); monotonicity \(V_{k+1}\le V_k\) is immediate from the recursion; the exact deficit \(1-\max_\alpha\alpha^\top b\) is the witness, not a surrogate.
+- Agreement theorem (Theorem 2) on the 48 cells reproduces the hold-class closed form, matches the original certificate partition (common-action when \(V_1<1\), timing when \(V_1=1\) but later \(V<1\)), places the attaining-vector switch at \(z_0=2\), and records constant deficit \(1/2\) on all 42 non-viable cells. The unrestricted sequential class is used only to quantify the “timing cells”.
+- Two-floor (common-observation) instance recovers \(\Gamma_1=\{(1,0),(0,1)\}\), \(V=\max(b_1,b_2)\), chance bound \(\delta=1/2\) attained.
+
+**Delimitations that are properly flagged**
+- Stochastic (expected survival) versus robust (worst-case / value-1) readings are distinguished; the robust certificates of the companions appear only at the deterministic degeneration.
+- Exponential alpha growth, history-partition information structures only, finite horizon only, no general filtrations / active sensing / continuous-time exit-time values. Those items are correctly listed as “next items of the programme”.
+
+**Summary judgement.** The core claims (exact rational PL values, degeneration, deficit bounds, 48-cell agreement on the hold class) are internally consistent and match the obstruction-calculus audit once the hold-class restriction is observed. The paper still needs the empty section references filled, the selector-nonemptiness sentence rewritten, the “adaptivity” wording replaced by “open-loop time-variation / hold-class versus sequential class”, and an explicit remark that the original paper’s \(\sigma^*=z_0-1\) ground truth is the hold-class (sampled-review) statement, not the unrestricted open-loop statement. Those are editorial and scoping fixes, not mathematical contradictions. The verification script remains the sole evidence for the 384-alpha / 10-family campaign; without it the agreement theorem is an assertion.

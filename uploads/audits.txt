@@ -1,0 +1,1058 @@
+policy:
+gemini:
+### 1. The Core Conceptual Failure: The "Lattice" is Only an Incomplete 3-Element Chain
+
+* **The Claim (Title, Abstract, Introduction):**
+  * The title advertises *"The Policy-Class Lattice: Which Restriction Destroyed Viability?"*
+  * The Abstract states: *"this paper, the D7 item of the generalization catalogue, organizes them as a lattice with a computable diagnostic."*
+* **The Reality:**
+  * In order theory, a **lattice** is a partially ordered set $(L, \le)$ in which every two elements have a unique meet (greatest lower bound, $a \wedge b$) and join (least upper bound, $a \vee b$).
+  * The paper never defines a lattice. Instead, in **Proposition 2**, it only evaluates a **strictly linear 3-element chain**:
+    $$\text{institutional } (24) \;\subset\; \text{observation-based } (26) \;\subset\; \text{full-information } (28).$$
+  * The paper claims this chain arises from two distinct axes of restriction:
+    1. **Observation structure:** Aggregate reading vs. Full-information.
+    2. **Action/Codex constraint:** "No-repeat codex" vs. Unrestricted actions.
+  * These two independent binary choices form a classic $2 \times 2$ Boolean product lattice $\{0, 1\}^2$ with **four** policy classes:
+    * $(\text{Full Information}, \text{Unrestricted}) \implies 28 \text{ pairs}$ (Top)
+    * $(\text{Aggregate Reading}, \text{Unrestricted}) \implies 26 \text{ pairs}$
+    * $(\text{Full Information}, \text{No-repeat Codex}) \implies \mathbf{???}$ (**Missing**)
+    * $(\text{Aggregate Reading}, \text{No-repeat Codex}) \implies 24 \text{ pairs}$ (Bottom)
+  * **The Fatal Gap:** The author never evaluates the fourth node: **Full Information under a No-Repeat Codex**. 
+  * Without this node, there is no meet, no join, and no branching. The paper examines a simple line of three numbers ($24 < 26 < 28$) and labels it a "lattice." Calling a 3-element chain a "lattice" without exhibiting non-comparable elements is a severe mathematical misnomer.
+
+---
+
+### 2. Complete Absence of the System Model ("Two-Patch System")
+
+Throughout the paper, all quantitative results ($24 \subseteq 26 \subseteq 28$, $B^* = \{(1, 2), (2, 1)\}$, $u = 3$, etc.) depend entirely on the "two-patch working system."
+* **The Flaw:** **The two-patch working system is never defined anywhere in the text.**
+  * What are the state variables $z_1, z_2$?
+  * Are the dynamics discrete-time difference equations $z^+ = F(z, u, d)$ or continuous-time differential equations $\dot{z} = f(z, u, d)$?
+  * What is the disturbance set $D$? What are the transitions?
+  * What is the baseline control set $U$?
+  * What is the exact observation map $O(z)$? (The text hints at an "aggregate reading," presumably $y = z_1 + z_2$, but never writes down an equation for it).
+* As a standalone submission, the paper is 100% un-evaluatable and un-reproducible from its text alone. A reviewer cannot check why 24, 26, or 28 pairs are viable.
+
+---
+
+### 3. Severe Linguistic and Mathematical Confusion: "States" vs. "Pairs" vs. "Beliefs"
+
+The paper uses the word **"pair"** simultaneously for two completely different mathematical entities:
+1. An individual 2D state coordinate $x = (z_1, z_2)$ (a pair of integers).
+2. A 2-state belief set $B = \{x_1, x_2\}$ (an unordered pair of states).
+
+* **The Resulting Number Paradox:**
+  * The text repeatedly refers to **"36 safe pairs"** (Abstract, Prop. 2, Prop. 3, E1, E3).
+  * If a "pair" were a 2-state belief $B = \{x_1, x_2\}$, having exactly 36 total pairs would imply that the underlying state space has only 9 states, since $\binom{9}{2} = \frac{9 \times 8}{2} = 36$. (This matches a grid where $z_1 \in \{1, 2, 3\}$ and $z_2 \in \{1, 2, 3\}$, giving $3 \times 3 = 9$ states).
+  * But then look at Proposition 2:
+    > *"the institutional class... sustains 24 of 36 safe pairs; the per-cell aggregate class sustains 26; the full-information class sustains 28."*
+  * Under **full information**, an agent observes the exact state $x \in X$. In viability theory, full-information viability is a property of **individual states** $x \in X$, not beliefs of two states!
+  * If the author means 28 of the 36 *beliefs* are viable under full information, that is trivial: a belief $\{x_1, x_2\}$ is viable under full information if and only if both $x_1$ and $x_2$ are individually viable. If all 9 states are viable, then all 36 pairs of states are viable under full information! Why does full information only sustain 28 pairs?
+  * The author is hopelessly tangled between state space and belief space, creating utter confusion over what is being counted.
+
+---
+
+### 4. Category Error: Conflating Output Feedback with Certainty Equivalence
+
+In **Proposition 2**, the author writes:
+> *"On this family the certainty-equivalence class coincides with the per-cell class (laws act on the reading only); the successor’s trap — corrected-class drift $\ge \frac{21}{100}$ on $s \in [1, 2]$ — is the mechanism that separates the two off this family."*
+
+This conflates two entirely different concepts:
+1. **Per-cell observation-based class ($\Pi_{\text{output}}$):** Any arbitrary causal feedback map $u = \pi(y)$ from observations to admissible controls.
+2. **Certainty-Equivalence class ($\Pi_{\text{CE}}$):** The specific controller obtained by designing a state-feedback law $u = \pi_{\text{perf}}(x)$ and applying it uncorrected to the estimate/observation, $u = \pi_{\text{perf}}(y)$.
+* An observation-based policy is **not** identical to a certainty-equivalence policy. The certainty-equivalence controller is a *single, specific policy* inside $\Pi_{\text{output}}$. Claiming they "coincide" because "laws act on the reading only" is an elementary misunderstanding of control terminology.
+* Furthermore, citing the 1D continuous scalar system from Paper 1 ($g(s) = s^2$, drift $g(s + 0.1) - g(s) \ge 0.21$) inside the proof of Proposition 2—which purports to analyze a discrete two-patch grid—is a category mismatch. What does the continuous scalar cubic drift have to do with the discrete two-patch system? Nothing. It is pasted into the proof to mask the fact that Certainty Equivalence is not defined on the discrete grid.
+
+---
+
+### 5. Triviality of the "Distance to Viability" Diagnostic (Proposition 3)
+
+In **Section "Distance to viability"**, the author defines:
+> *"For a nonviable belief and a family of restorative moves, the distance is the minimum number of moves that restores viability."*
+
+Then, in **Proposition 3**, for the nonviable belief $B^* = \{(1, 2), (2, 1)\}$:
+* **(i) Minimum sensor refinement = 1 split:**
+  $B^*$ contains exactly two states: $(1, 2)$ and $(2, 1)$. There is only *one* possible non-trivial partition of a 2-element set: $\{\{(1, 2)\}, \{(2, 1)\}\}$. Discovering that the "minimum number of splits" is 1 is trivial: for any 2-element set, the only possible split is 1 split!
+* **(iii) Minimum prior shrinking = 1 state:**
+  $B^*$ has 2 states. The only proper non-empty subsets are the two singletons. Removing 1 state leaves a singleton, which is viable. Therefore, the distance is 1. This is another tautology.
+* **(ii) Minimum action expansion = 1 instrument ($u = 3$):**
+  The author invents an action $u = 3$ that "protects both patches," which magically makes all 36 pairs viable. 
+  Adding an unconstrained omnipotent control that solves the system by decree is not a mathematical discovery of "distance to viability"; it is arbitrary problem modification.
+
+Calling the inspection of a 2-element set's trivial sub-partitions a "computable diagnostic of distance to viability" overstates a trivial exercise.
+
+---
+
+### 6. Undefined Technical Terms and Jargon
+
+The manuscript introduces several critical terms without providing definitions:
+1. **"No-repeat codex" (Proposition 2):** Never defined mathematically. Does it mean $u_t \ne u_{t-1}$? Does it restrict history? What is its domain?
+2. **"Codex" (Abstract, line 1):** Used colloquially as if it were standard control-theoretic terminology; it has no standard definition in viability theory.
+3. **"Read-then-act semantics" (Section "Policy classes"):** Mentioned in passing without mathematical formulation.
+4. **"Restorative moves" (Section "Distance to viability"):** Never defined as a formal set of operations or metric space.
+
+---
+
+### 7. Redundancy with Paper 1
+
+* **Proposition 1 (Monotonicity):**
+  $$\Pi_1 \subseteq \Pi_2 \implies \operatorname{Viab}_{\Pi_1}(V) \subseteq \operatorname{Viab}_{\Pi_2}(V).$$
+  * **Proof in text:** *"A witness law for $B$ under $\Pi_1$ is a law of $\Pi_2$."*
+  * **Paper 1, Section 6.4, Proposition 8** already stated and proved this exact result:
+    $$\Pi_1 \subseteq \Pi_2 \implies \operatorname{ERViab}^{\Pi_1} \subseteq \operatorname{ERViab}^{\Pi_2}.$$
+  * Re-publishing a one-line tautology that was already stated in Proposition 8 of the lead Automatica paper provides zero new mathematical content.
+
+---
+
+### Summary Verdict
+
+This draft is not ready for publication and cannot serve as a credible execution of Roadmap Item D7:
+1. It promises a **lattice**, but only presents an **incomplete 3-element chain**, missing the fourth node of the product space.
+2. It claims exact numerical verification on a **"two-patch system"** that is never defined.
+3. It confuses **2D coordinates** with **2-state belief sets**, rendering its "36 safe pairs" counts ambiguous.
+4. It commits a category error by equating **Certainty Equivalence** with **general output feedback**, and pastes unrelated 1D continuous formulas into a discrete 2D grid proof.
+5. Its "distance to viability" is a set of tautological statements about a 2-element set.
+grok:
+**The Policy-Class Lattice note (2 pages, 23 Sep 2026) is a thin D7 catalogue item that restates the original paper’s kernel monotonicity (Proposition 8) as a chain of three nested policy classes on one working example, then adds a “distance-to-viability” diagnostic computed by enumeration.** The lattice is only a chain; the CE trap is re-used as an off-chain separator. All concrete numbers recycle or mildly extend the two-patch / pair-family counts already appearing in the Vector Floors and Viable Selector notes. Positioning as a new taxonomy is overstated, terminology for the CE mechanism collides with the sibling paper, and the manuscript has the same production artefacts.
+
+**Positioning and relation to the source papers**
+- Original obstruction calculus already contained the hierarchy institutional ⊆ observation-based ⊆ full-information, Proposition 8 (monotonicity of ERViab in the policy class, action set, disturbance set and information structure), and the CE trap (Remark 4) as a policy-class restriction. The Viable Selector paper already packaged the same monotonicity as Theorem 2(iii) and Corollary 1. This note’s Proposition 1 is identical to those statements.
+- The two-patch pair family, the 28/36 counts, B* = {(1,2),(2,1)}, and the 21/100 drift already appear in Vector Floors E3–E4 and Viable Selector §6. The present “new diagnostic” is therefore an enumeration of restoratives on an already-audited 36-pair set.
+- Abstract and introduction present D7 as organizing “separate policy classes case by case” into a lattice. What is shown is one chain of three classes plus one off-chain CE instance. No further classes (delayed, history-dependent, chance-constrained, \ldots) are placed on the lattice.
+
+**Editing / production failures (identical pattern)**
+- Informal GitHub path again (“folder arena agent 1/paper rewrites/latex”).
+- Verification remains an unshown script (`policy_class_lattice_v1_verify.py`, “6/6 families”).
+- Extremely terse: the two-patch dynamics, the meaning of a “no-repeat codex”, the 9-element state set that yields \(\binom{9}{2}=36\) pairs, and the successor’s structure table are all assumed known. A reader with only this note cannot reconstruct the counts.
+- “Corrected-class drift” wording (see below) is already inconsistent on first reading of the abstract.
+
+**Wording / definitional inconsistencies**
+- Certainty-equivalence terminology collides with the Viable Selector note. There the *corrected* (bias-corrected) law has identically zero drift and the unrestricted correspondence is nonempty, while every *certainty-equivalence* (uncorrected) law has drift \(\ge 21/100\) and the class-restricted correspondence is empty. Here the abstract and Proposition 2 attach the same 21/100 figure to “the successor’s trap (corrected-class drift \(\ge 21/100\))” and call it the off-lattice separator. The displayed identity \(g(s+1/10)-g(s)=s/5+1/100\) is precisely the *uncorrected* CE drift of the original Remark 4. The label “corrected-class” is therefore reversed relative to the sibling paper.
+- “On this family the certainty-equivalence class coincides with the per-cell class \ldots the trap \ldots separates the two off this family.” “The two” is never identified; the sentence is incomplete.
+- Institutional class is “aggregate reading with a no-repeat codex”. The codex is undefined in this text.
+- Kernel defined as “beliefs from which some law of the class maintains the floors indefinitely”. This elides the robust / epistemic / institutional distinctions of the original hierarchy (Section 2.1) and the selector qualification of the Viable Selector paper.
+
+**Technical points that check (once the two-patch system is granted)**
+- Proposition 1 (monotonicity) is immediate and already proved in the source papers.
+- The chain 24 \(\subseteq\) 26 \(\subseteq\) 28 of 36 is compatible with Vector Floors E4 (two floors, full-information 28 of 36; dropping a floor yields 36 of 36). Interpretation: 8 individually viable states give \(\binom{8}{2}=28\) viable pairs under full information; two further pairs become nonviable once states cannot be distinguished (the classic incompatible-safe-control pair B*); two more are lost under the extra institutional restriction. Adding the joint instrument \(u=3\) then makes every pair viable even under the coarse reading (26 \(\to\) 36).
+- Proposition 3 distances on B* are combinatorially immediate: a two-point set has exactly one nontrivial partition (the two singletons); adding one common instrument restores a jointly safe action; deleting either state leaves a viable singleton. The script is unnecessary for these three facts.
+- Scope paragraph (“What is not claimed”) is honest: one working system, one belief family, no general distance algorithm, no continuous-state version, institutional restrictions modelled only as action codices.
+
+**Gaps and example-consistency problems**
+- No statement of the state space, dynamics, observation maps or floors. The 36-pair count, the separating beliefs {(1,2),(3,1)} and {(1,2),(2,1)}, and the instrument \(u=3\) cannot be checked from this text.
+- Full-information kernel of 28 (not 36) implies that not every individual state is viable; the note never lists which states lie outside \(\mathcal{V}\). Vector Floors’ “dropping a floor enlarges 28 \(\to\) 36” is the only clue.
+- Distance is defined only for three discrete restorative families (sensor splits, action-set expansions, prior deletions) and only for one belief. No general theory, no complexity, no relation to the fibre criterion or the Helly witness already in the original paper.
+- The lattice never includes the delayed-information, tube, or certification classes of the companions; they remain outside the picture.
+
+**Judgement.** Monotonicity and the three elementary distances on a 36-pair set are correct and consistent with the earlier two-patch audits once “corrected-class” is read as a slip for the uncorrected CE drift. The note nevertheless cannot serve as a D7 taxonomy paper: the original calculus already contained the lattice (as a chain) and the CE trap, the concrete counts are recycled, the CE wording contradicts the Viable Selector note, and the diagnostic is an enumeration on a toy example whose system is never defined here. The same unshown-script standard and production defects appear as in the three sibling notes of the same date. Repair would require (i) aligning CE terminology, (ii) defining the two-patch system or citing it precisely, (iii) replacing the “lattice” claim by “chain plus one off-chain separator”, and (iv) moving the distance calculations to an addendum of the original polyhedral / two-patch paragraph. No mathematical contradiction inside the three propositions themselves; the contradictions are with the source papers the note claims to organize.
+gemini:
+A line-level critical audit of **"From Obstruction to Design: Fibre Conditions for Monitoring and Indicator Choice"** (Amin Abaee, September 23, 2026) reveals conceptual flaws, mathematical gaps, undefined target systems, vacuous theorems, and internal inconsistencies.
+
+---
+
+### 1. Complete Absence of the Underlying System Model
+
+* **The Problem (E1, E3, Abstract):**
+  * In the Abstract, the author claims: *"verified over all 15 partitions of the four-state target region"*.
+  * In **E1**, the four target states are identified as:
+    $$\{(1, 2), (2, 1), (2, 2), (3, 1)\}.$$
+  * In **E3**, the author asserts: *"The coarsest admissible monitoring costs exactly 2 cells (7 of 15 partitions admissible); a minimizing partition isolates the demanding state $(1, 2)$ and merges the rest..."*
+* **The Fatal Gap:**
+  * **What are the floor-servable action sets $R(x)$ for these four states?**
+  * The manuscript **never defines** $R(1, 2)$, $R(2, 1)$, $R(2, 2)$, or $R(3, 1)$ anywhere in the text!
+  * Nor are the dynamics, constraint functions $q_j(x)$, control spaces $U(x)$, or disturbance sets $D(x)$ stated.
+  * Without knowing what $R(x)$ is for any of the four states, it is impossible for a reader or reviewer to evaluate whether $\bigcap_{x \in F} R(x) \ne \emptyset$ holds for *any* of the 15 partitions, let alone verify the claim that "7 of 15 partitions are admissible."
+
+---
+
+### 2. Category Error and Solipsism in Proposition 1: "Singleton Beliefs" vs. Output Feedback
+
+* **Proposition 1 Statement:**
+  > *"Proposition 1 (Intersection form: necessary and sufficient). Every singleton belief $\{x\}$ in a target region is one-step admissible under the structure iff every fibre $F$ (within the target) satisfies $\bigcap_{x \in F} R(x) \ne \emptyset$."*
+* **The Conceptual Error:**
+  1. **A "singleton belief under an observation structure" is a contradiction in terms.**
+     * If an agent is under an incomplete observation structure with fibres $F = O^{-1}(y)$, the agent **never holds a singleton belief $\{x\}$** unless the fibre $F$ is a singleton!
+     * When the true state is $x$, the agent observes $y = O(x)$ and forms the belief $B = O^{-1}(y) = F$.
+     * If the agent already held the belief $\{x\}$, the agent would possess full state information, making the compatibility condition $\bigcap_{z \in F} R(z)$ irrelevant.
+  2. What the author actually means is: *"An output-feedback policy $u = \pi(y)$ keeps every physical state $x \in T$ safe for one step if and only if for every fibre $F$, $\bigcap_{x \in F} R(x) \ne \emptyset$."*
+     Calling a physical state $x$ a "singleton belief" confuses physical state space with belief space.
+
+---
+
+### 3. Unsound Boundary Scoping in Proposition 1 ("Within the Target")
+
+* **The Text:**
+  > *"...iff every fibre $F$ (within the target) satisfies $\bigcap_{x \in F} R(x) \ne \emptyset$."*
+* **The Mathematical Flaw:**
+  * In partial observation, the regulator observes a signal $y = O(x)$. The regulator **cannot restrict a fibre to the target region $T$**.
+  * If a fibre $F = O^{-1}(y)$ crosses the boundary of $T$ (i.e., contains some $x \in T$ and some $x' \notin T$), an observation-based action chosen upon seeing $y$ must be safe for **all** states compatible with $y$, including $x' \notin T$.
+  * By restricting the intersection test to $F \cap T$, the author implicitly assumes that $T$ is an exact union of observation fibres ($T = O^{-1}(O(T))$).
+  * If $T$ is not a union of fibres, testing only states "within the target" can declare an action safe when in fact the true state is outside the target and the action causes violation. This directly contradicts the author's own **Fibre Criterion** (Proposition 7 of Paper 1).
+
+---
+
+### 4. Combinatorial and Structural Ambiguity in E3 (7 of 15 Partitions)
+
+* **The Text (E3):**
+  > *"The coarsest admissible monitoring costs exactly 2 cells (7 of 15 partitions admissible); a minimizing partition isolates the demanding state $(1, 2)$ and merges the rest — enumeration certifies minimality."*
+* **The Ambiguity and Inconsistency:**
+  * A 4-element set has $B_4 = 15$ total partitions:
+    * 1 partition of 1 block (indiscrete)
+    * 7 partitions of 2 blocks
+    * 6 partitions of 3 blocks
+    * 1 partition of 4 blocks (discrete / full information)
+  * **Admissibility is monotonically preserved under partition refinement:** if a partition $P$ is admissible ($\bigcap_{x \in F} R(x) \ne \emptyset$ for all $F \in P$), then any refinement $P'$ of $P$ must also be admissible, because subsets only enlarge or maintain intersections.
+  * Therefore, the set of admissible partitions is an **upper set (filter)** in the partition lattice $\Pi_4$.
+  * If the coarsest admissible partition is $\{ \{(1, 2)\}, \{(2, 1), (2, 2), (3, 1)\} \}$, its refinements are:
+    * Itself (1 two-cell partition)
+    * 3 three-cell partitions (splitting the 3-element block into $2+1$)
+    * 1 four-cell partition
+    This single partition generates an upper set of **5 partitions**.
+  * For the total number of admissible partitions to equal **7**, there must be additional admissible partitions that do not isolate $(1, 2)$, which contradicts the narrative that $(1, 2)$ is the unique "demanding state" that must be isolated.
+  * Alternatively, did the author mean that **all 7 two-cell partitions** are admissible? If so, why claim that $(1, 2)$ must be isolated? The text is structurally muddled.
+
+---
+
+### 5. Vacuous "Dynamic Caveat": Proposition 2 vs. E2
+
+* **Proposition 2 (Dynamic Caveat):**
+  > *"Proposition 2 (Dynamic caveat). Singleton fibre-admissibility is necessary only: a structure admissible for every singleton belief can still obstruct a multi-state belief dynamically. On the audited target the exhaustive search records whether such an instance exists; either outcome is an exact finding."*
+* **The Finding in E2:**
+  > *"E2 (an exact absence). The dynamic caveat’s exhaustive search over 15 partitions $\times$ target pairs found no instance on this target: the singleton rule happens to be sufficient here; the absence is recorded as the finding (necessity-only remains the general claim)."*
+* **The Flaw:**
+  * The author proves/states a proposition warning of a failure mode ("Dynamic caveat"), runs an exhaustive audit on the paper's only model, and discovers that **the failure mode never occurs**!
+  * Claiming that *"either outcome is an exact finding"* is unfalsifiable rhetoric. If the counterexample never occurs on the system under study, the manuscript provides zero evidence or instantiation for the caveat it introduces.
+
+---
+
+### 6. Trivialization of Helly's Theorem
+
+* **The Text (Proposition 1 Proof & E1):**
+  > *"...the pairwise form of the rule is shown by an exact three-codex instance to be necessary but not sufficient off convexity — the one-dimensional Helly protection fails for non-convex instrument codices... The non-convex counter-instance: $R_1 = \{2/10, 6/10\}, R_2 = \{2/10, 65/100\}, R_3 = \{6/10, 65/100\}$ — pairwise intersections nonempty, total intersection empty."*
+* **The Flaw:**
+  * Helly's Theorem (1923) is explicitly and fundamentally a theorem about **convex sets**.
+  * Pointing out that three discrete sets $\{a, b\}, \{a, c\}, \{b, c\}$ have pairwise non-empty intersections but an empty 3-way intersection is a standard school exercise in elementary set theory.
+  * Framing this trivial discrete counterexample as *"the one-dimensional Helly protection fails for non-convex instrument codices"* dresses elementary set intersection in pretentious, misplaced terminology.
+
+---
+
+### 7. Frankenstein Amalgamation: E4, E5, and E6 Are From Three Different Systems
+
+The paper claims in its Abstract and Introduction that "three design rules follow as exact identities" on the programme's working systems. In reality, E4, E5, and E6 are disjoint fragments taken from three completely different, unrelated models:
+1. **E4 (Delay Rule):** Evaluated on the 1D discrete hidden-regime POMDP ($z \in \{1.0, \dots, 2.5\}$, $u \in \{-1, +1\}$).
+2. **E5 (Bias Rule):** Evaluated on the 1D continuous cubic differential equation ($\dot{s} = u - s^2$, $s \in [1, 2]$).
+3. **E6 (Aggregation Rule):** Evaluated on the 2D discrete two-patch grid ($\{(1, 2), (2, 1)\}$).
+
+These are not three rules derived from a unified "monitoring design framework." They are a collage of three isolated toy examples pasted together from earlier drafts.
+
+---
+
+### 8. Factual Falsehood in the Abstract Concerning the Delay Rule
+
+* **The Abstract Claims:**
+  > *"...the delay rule (an indicator is acceptable only with period beating worst-case exit: $T_{\text{obs}} < \sigma^*(z_0) = z_0 - 1$ on all 48 audited cells)..."*
+* **The Mathematical Falsehood:**
+  * On the 48-cell grid ($z_0 \in \{1.0, 1.1, \dots, 2.5\}$, $T_{\text{obs}} \in \{1, 2, 3\}$), the inequality $T_{\text{obs}} < z_0 - 1$ **does not hold on all 48 cells**!
+  * For example, at $z_0 = 1.0$ and $T_{\text{obs}} = 1$, $z_0 - 1 = 0$, so $T_{\text{obs}} < z_0 - 1$ becomes $1 < 0$, which is **false**.
+  * In fact, the condition fails on **42 of the 48 cells**!
+  * Phrasing this as "$T_{\text{obs}} < z_0 - 1$ on all 48 audited cells" in the Abstract makes it sound as if every cell satisfies the inequality, whereas the author meant that the *test was evaluated* on 48 cells. As written, the sentence is factually untrue.
+
+---
+
+### 9. Self-Defeating Disclaimers: The Paper Does Not Deliver "Design"
+
+In the section **"What is not claimed"**, the author writes:
+> *"No sensor-cost theory is developed (the cost function is cell count); no informational-efficiency or mechanism-design claims; the delay rule is stated for the audited hold class, not for general exit-time values beyond the successor’s; the design search is exhaustive over the fifteen-partition target, not over general partition lattices (Bell-number growth is acknowledged as the combinatorial wall). Non-convexity enters only as the recorded counterinstance — no general non-convex design theory is claimed."*
+
+* **Assessment:**
+  The paper is titled *"From Obstruction to Design: Fibre Conditions for Monitoring and Indicator Choice"*, promising to answer *"what must be measured for viability to be possible."*
+  Yet it provides no algorithm, no cost optimization, no continuous sensor mapping, no scalability beyond brute-force checking 15 partitions of 4 states, and no multi-step dynamic design. 
+  The paper reduces "monitoring design" to exhaustive brute-force search over toy finite sets.
+grok:
+**The Policy-Class Lattice note (2 pages, 23 Sep 2026) is a thin D7 catalogue item that restates the original paper’s kernel monotonicity (Proposition 8) as a chain of three nested policy classes on one working example, then adds a “distance-to-viability” diagnostic computed by enumeration.** The lattice is only a chain; the CE trap is re-used as an off-chain separator. All concrete numbers recycle or mildly extend the two-patch / pair-family counts already appearing in the Vector Floors and Viable Selector notes. Positioning as a new taxonomy is overstated, terminology for the CE mechanism collides with the sibling paper, and the manuscript has the same production artefacts.
+
+**Positioning and relation to the source papers**
+- Original obstruction calculus already contained the hierarchy institutional ⊆ observation-based ⊆ full-information, Proposition 8 (monotonicity of ERViab in the policy class, action set, disturbance set and information structure), and the CE trap (Remark 4) as a policy-class restriction. The Viable Selector paper already packaged the same monotonicity as Theorem 2(iii) and Corollary 1. This note’s Proposition 1 is identical to those statements.
+- The two-patch pair family, the 28/36 counts, B* = {(1,2),(2,1)}, and the 21/100 drift already appear in Vector Floors E3–E4 and Viable Selector §6. The present “new diagnostic” is therefore an enumeration of restoratives on an already-audited 36-pair set.
+- Abstract and introduction present D7 as organizing “separate policy classes case by case” into a lattice. What is shown is one chain of three classes plus one off-chain CE instance. No further classes (delayed, history-dependent, chance-constrained, \ldots) are placed on the lattice.
+
+**Editing / production failures (identical pattern)**
+- Informal GitHub path again (“folder arena agent 1/paper rewrites/latex”).
+- Verification remains an unshown script (`policy_class_lattice_v1_verify.py`, “6/6 families”).
+- Extremely terse: the two-patch dynamics, the meaning of a “no-repeat codex”, the 9-element state set that yields \(\binom{9}{2}=36\) pairs, and the successor’s structure table are all assumed known. A reader with only this note cannot reconstruct the counts.
+- “Corrected-class drift” wording (see below) is already inconsistent on first reading of the abstract.
+
+**Wording / definitional inconsistencies**
+- Certainty-equivalence terminology collides with the Viable Selector note. There the *corrected* (bias-corrected) law has identically zero drift and the unrestricted correspondence is nonempty, while every *certainty-equivalence* (uncorrected) law has drift \(\ge 21/100\) and the class-restricted correspondence is empty. Here the abstract and Proposition 2 attach the same 21/100 figure to “the successor’s trap (corrected-class drift \(\ge 21/100\))” and call it the off-lattice separator. The displayed identity \(g(s+1/10)-g(s)=s/5+1/100\) is precisely the *uncorrected* CE drift of the original Remark 4. The label “corrected-class” is therefore reversed relative to the sibling paper.
+- “On this family the certainty-equivalence class coincides with the per-cell class \ldots the trap \ldots separates the two off this family.” “The two” is never identified; the sentence is incomplete.
+- Institutional class is “aggregate reading with a no-repeat codex”. The codex is undefined in this text.
+- Kernel defined as “beliefs from which some law of the class maintains the floors indefinitely”. This elides the robust / epistemic / institutional distinctions of the original hierarchy (Section 2.1) and the selector qualification of the Viable Selector paper.
+
+**Technical points that check (once the two-patch system is granted)**
+- Proposition 1 (monotonicity) is immediate and already proved in the source papers.
+- The chain 24 \(\subseteq\) 26 \(\subseteq\) 28 of 36 is compatible with Vector Floors E4 (two floors, full-information 28 of 36; dropping a floor yields 36 of 36). Interpretation: 8 individually viable states give \(\binom{8}{2}=28\) viable pairs under full information; two further pairs become nonviable once states cannot be distinguished (the classic incompatible-safe-control pair B*); two more are lost under the extra institutional restriction. Adding the joint instrument \(u=3\) then makes every pair viable even under the coarse reading (26 \(\to\) 36).
+- Proposition 3 distances on B* are combinatorially immediate: a two-point set has exactly one nontrivial partition (the two singletons); adding one common instrument restores a jointly safe action; deleting either state leaves a viable singleton. The script is unnecessary for these three facts.
+- Scope paragraph (“What is not claimed”) is honest: one working system, one belief family, no general distance algorithm, no continuous-state version, institutional restrictions modelled only as action codices.
+
+**Gaps and example-consistency problems**
+- No statement of the state space, dynamics, observation maps or floors. The 36-pair count, the separating beliefs {(1,2),(3,1)} and {(1,2),(2,1)}, and the instrument \(u=3\) cannot be checked from this text.
+- Full-information kernel of 28 (not 36) implies that not every individual state is viable; the note never lists which states lie outside \(\mathcal{V}\). Vector Floors’ “dropping a floor enlarges 28 \(\to\) 36” is the only clue.
+- Distance is defined only for three discrete restorative families (sensor splits, action-set expansions, prior deletions) and only for one belief. No general theory, no complexity, no relation to the fibre criterion or the Helly witness already in the original paper.
+- The lattice never includes the delayed-information, tube, or certification classes of the companions; they remain outside the picture.
+
+**Judgement.** Monotonicity and the three elementary distances on a 36-pair set are correct and consistent with the earlier two-patch audits once “corrected-class” is read as a slip for the uncorrected CE drift. The note nevertheless cannot serve as a D7 taxonomy paper: the original calculus already contained the lattice (as a chain) and the CE trap, the concrete counts are recycled, the CE wording contradicts the Viable Selector note, and the diagnostic is an enumeration on a toy example whose system is never defined here. The same unshown-script standard and production defects appear as in the three sibling notes of the same date. Repair would require (i) aligning CE terminology, (ii) defining the two-patch system or citing it precisely, (iii) replacing the “lattice” claim by “chain plus one off-chain separator”, and (iv) moving the distance calculations to an addendum of the original polyhedral / two-patch paragraph. No mathematical contradiction inside the three propositions themselves; the contradictions are with the source papers the note claims to organize.
+gemini:
+A rigorous line-level audit of **"Decentralized Observation: Unanimity, Deadlock, and the Value of Communication"** (Amin Abaee, September 23, 2026) reveals conceptual contradictions regarding decentralized control, mathematical inconsistencies in its combinatorial counts, a misrepresentation of "common knowledge," and complete omission of the underlying dynamical model.
+
+---
+
+### 1. Conceptual Paradox: Decentralized Execution vs. Belief-Specific Policy Selection
+
+The paper suffers from an unresolved foundational paradox regarding who selects the voting laws and what information they possess:
+
+* **The Problem:**
+  * The paper studies decentralized observation: Agency 1 observes *only* $z_1$, and Agency 2 observes *only* $z_2$.
+  * Yet, throughout the text, viability is defined and evaluated **per belief set $B$**:
+    > *"a belief is decentralizable iff some law pair's trajectory never exits the safe set"* (Page 1, col 2)
+    > *"The audited belief $\{(1, 2), (2, 1)\}$ is decentralizable only through voting laws including the anti-symmetric one (16 of 256 law pairs work)"* (Abstract and Prop. 1)
+* **The Contradiction:**
+  1. If Agency 1 only reads $z_1$ and Agency 2 only reads $z_2$, **neither agency knows the belief $B$**. (For instance, neither agency can distinguish whether the true state is in $\{(1, 2), (2, 1)\}$ or in a singleton belief).
+  2. If the agencies must select a voting law $(u_1, u_2)$ tailored to a specific belief $B$, **who selects it?** An external agent who knows $B$ would possess centralized information, defeating the entire premise of decentralized observation.
+  3. Conversely, if a decentralized policy $(u_1, u_2)$ is fixed *globally* across the operational domain, then viability cannot be indexed per belief $B$ with different law pairs chosen for different beliefs. 
+  The author treats the policy pair $(u_1, u_2)$ as an open-loop parameter chosen with full knowledge of the initial belief $B$, while simultaneously claiming the agencies operate strictly under split observations.
+
+---
+
+### 2. Direct Contradiction on Institutional Powers (Abstract vs. Introduction)
+
+* **Abstract (Lines 1–4):**
+  > *"Institutions observe different indicators and **command different instruments**; the obstruction calculus has so far spoken with one regulator’s voice. This paper... models two agencies with split observation rights... and a **unanimity command protocol: the instrument executes only on agreement**, and disagreement deadlocks the system."*
+* **Introduction (Lines 11–13):**
+  > *"...the paper stays minimal — **two agencies, one instrument, unanimity** — and computes exactly."*
+* **The Inconsistency:**
+  * Having **"split command rights"** means each agency controls its own separate physical actuator ($u_1 \in U_1, u_2 \in U_2$, e.g., Agency 1 manages harvest in Region 1, Agency 2 manages emissions in Region 2).
+  * A **"unanimity command protocol on one instrument"** is **joint/veto control over a single shared actuator**, which is the exact opposite of split command rights.
+  * The first sentence of the Abstract asserts that institutions command different instruments, but the mathematical model immediately restricts them to voting on a single shared instrument.
+
+---
+
+### 3. Complete Absence of the Dynamical System Model
+
+Just as in the *Lattice* and *Design* drafts, the **"two-patch working system"** is completely undefined:
+* What are the state variables $(z_1, z_2)$? Are they discrete integers or continuous levels?
+* What are the equations of motion $z^+ = F(z, u)$?
+* What do the controls $u \in \{1, 2\}$ physically do? 
+* What is the safe set $V$? (Is it $\{z_1 \ge 1, z_2 \ge 1\}$?)
+* What does "deadlock ($u = 0$, both patches damaged)" mean mathematically? Does $z_i^+ = z_i - 1$?
+Without these equations, none of the quantitative results ($28$ coordinated pairs, $12$ decentralized pairs, $16$ lost pairs, $16$ working anti-symmetric laws) can be independently evaluated, simulated, or verified by a reader.
+
+---
+
+### 4. Combinatorial Inconsistency: 256 Law Pairs vs. 36 Safe Pairs
+
+The text boasts an *"exhaustive enumeration over all 256 agency-law pairs"* (Abstract, Prop. 1, E2). Analyzing this number against the state space reveals an unaddressed mathematical flaw:
+
+1. **Reconstructing the 256 Laws:**
+   * Two agencies with symmetric law spaces: $\sqrt{256} = 16$ candidate control laws per agency ($|U_1^{Z_1}| = 16$).
+   * In Proposition 2, restricting Agency 2 to $u_2 \equiv 1$ leaves exactly 16 pairs, confirming that Agency 1 has 16 laws.
+   * If the control choices are binary votes ($u_i \in \{1, 2\}$, so $|U_i| = 2$), then for an agency to have 16 distinct laws:
+     $$2^{|Z_i|} = 16 \implies |Z_i| = 4.$$
+   * Each agency must observe a coordinate $z_i$ that takes **4 distinct values** (e.g., $z_i \in \{0, 1, 2, 3\}$).
+2. **The Conflict with "36 Safe Pairs":**
+   * If each $z_i$ has 4 values, the full state space has $|Z| = 4 \times 4 = 16$ states.
+   * The number of pairs of states in a 16-state space is $\binom{16}{2} = \frac{16 \times 15}{2} = 120$ pairs.
+   * Why does the text repeatedly refer to **"36 safe pairs"**? 
+   * $\binom{9}{2} = 36$. A total of 36 pairs implies that the safe set $V$ contains only **9 states** (i.e., a $3 \times 3$ grid, $z_1 \in \{1, 2, 3\}, z_2 \in \{1, 2, 3\}$).
+3. **The Flaw:**
+   * If the safe set $V$ has only 3 values per coordinate ($z_i \in \{1, 2, 3\}$), then the 4th value ($z_i = 0$) represents an already unsafe/dead state.
+   * Actions chosen at $z_i = 0$ have zero impact on whether trajectories starting in $V$ remain in $V$.
+   * On the 9 safe states of $V$, an agency with binary choices only has $2^3 = 8$ distinct policies. Two agencies therefore have only $8 \times 8 = 64$ effective law pairs on $V$.
+   * Enumerating 256 laws means the author is artificially inflating the policy space by a factor of 4 ($64 \times 4 = 256$) by counting irrelevant actions assigned to states that have already failed.
+
+---
+
+### 5. Flawed Definition of "Delayed Common Knowledge" (Proposition 2)
+
+* **Proposition 2 Statement & Proof:**
+  > *"granting agency 2 a one-step delayed reading does not restore the deadlock boundary: the decentralized kernel under delayed common knowledge remains strictly below the coordinator's."*
+  > *Proof: "...the delayed regime simulates the augmented (state, previous-$z_2$) trajectories."*
+* **The Flaw:**
+  * **Common knowledge** between two agents requires mutual information about shared states or about each other's observations (e.g., Agency 2 receiving Agency 1's past observation $z_1(t-1)$).
+  * In the proof, the author states that the simulation augments the state with **"previous-$z_2$"**.
+  * Giving Agency 2 access to $z_2(t-1)$ is merely giving Agency 2 **local memory of its own past observation**. It transmits **zero** information about Agency 1.
+  * Calling local memory "delayed common knowledge" is a fundamental misuse of epistemic game theory terminology. Local memory cannot create common knowledge of the joint state.
+
+---
+
+### 6. The "Deadlock Shadow" is an Artifact of a Pathological Default Rule
+
+* The paper claims to uncover a fundamental informational limitation called the **"deadlock obstruction"**:
+  $$u = \begin{cases} u_1(z_1) & \text{if } u_1(z_1) = u_2(z_2), \\ 0 \text{ (deadlock, both patches damaged)} & \text{if } u_1(z_1) \ne u_2(z_2). \end{cases}$$
+* **Assessment:**
+  * The collapse of the viable kernel from 28 to 12 is entirely manufactured by the assumption that disagreement triggers catastrophic mutual damage ($u = 0$).
+  * In institutional design, disagreement protocols routinely incorporate default tie-breakers (e.g., maintaining the previous status quo, alternating priority, or granting one agency jurisdiction based on an indicator).
+  * The author admits this in "What is not claimed": *"The deadlock protocol is the simplest common-knowledge discipline; procedural alternatives (default rules, tie-breakers) are not classified."*
+  * Because the nonviability is driven entirely by the modeler's choice to penalize disagreement with instant collapse, it is an institutional design failure of an extreme veto protocol, not an inherent mathematical limit of decentralized observation.
+
+---
+
+### 7. Undefined Technical Jargon and Informal References
+
+1. **"Anti-symmetric voting law" (Abstract & Prop. 1):**
+   The author asserts that the audited belief $\{(1, 2), (2, 1)\}$ survives only through *"voting laws including the anti-symmetric one."* Anti-symmetry is never defined mathematically for functions $u_1, u_2: \{1, 2, 3, 4\} \to \{1, 2\}$.
+2. **"The successor's full-observation count" (E1):**
+   In E1, the author writes: *"the coordinator's kernel (28, the successor's full-observation count)"*. Citing an un-named, un-submitted "successor" draft inside a formal academic submission is an editorial lapse.
+3. **"Authority collapse ($12 \to 0$)" (Prop. 2):**
+   The author claims that *"Removing agency 2's right to vote 2 collapses the decentralized kernel from 12 to 0."* If Agency 2 can only vote 1, then agreement can only occur when Agency 1 also votes 1. This trivially reduces the system to a single fixed action $u \equiv 1$ whenever Agency 1 agrees, and deadlock otherwise. That a system collapses when an essential control action is banned is a triviality of control authority, not an insight into decentralized observation.
+
+---
+
+### Summary Verdict
+
+This draft suffers from severe structural and conceptual issues:
+1. It confuses **belief-contingent control** with **decentralized state feedback**, never clarifying who chooses the policy pair $(u_1, u_2)$ for a given belief set.
+2. It claims **"split command rights"** in the abstract, but analyzes **shared veto control over a single actuator**.
+3. It keeps the **underlying dynamical system completely anonymous** (no state transitions, no disturbance definitions).
+4. Its **256 law pairs count** is bloated by evaluating actions on dead states outside the constraint set.
+5. It mislabels **local agent memory** as **"delayed common knowledge."**
+grok:
+**The Decentralized Observation note (2 pages, 23 Sep 2026) is a thin D13 catalogue item that introduces a two-agency unanimity-deadlock protocol on the same undefined two-patch 36-pair working system used by the Vector Floors, Policy-Class Lattice and Monitoring-Design notes.** Coordinator (joint reading) recovers the familiar 28; exhaustive enumeration of 256 law-pairs yields a decentralized kernel of 12, so a communication/deadlock shadow of 16; the incompatible pair \(B^*=\{(1,2),(2,1)\}\) is rescued only by anti-symmetric voting (16 of 256); an authority restriction collapses 12\(\to\)0; one-step delayed common knowledge does not close the gap. The deadlock mechanism itself is a genuine (toy) addition relative to the original single-regulator institutional kernel. Everything else—pair-family counting, \(B^*\), the 28, unshown-script verification, production boilerplate—is recycled. The working system, observation alphabets, action set and the origin of 256 are never defined, so none of the counts can be reconstructed from this text.
+
+**Positioning versus the source papers**
+- Original §2.1 already defined the institutionally restricted kernel \(\operatorname{IRViab}_{\mathcal{J}}(\mathcal{V})\) and listed institutional contraction (authority, enforcement, allocation) as one of three causes of kernel shrinkage; Proposition 8 already gave monotonicity in the policy class. Original §6.4 already drew the institutional design consequence. This note’s coordinator 28 is exactly the full-information / joint-reading count of Policy-Class Lattice and Vector Floors E4.
+- The new content is the *protocol*: split observation (agency 1 reads \(z_1\), agency 2 reads \(z_2\)) plus unanimity (execute \(u=u_1(z_1)\) only on agreement, else deadlock \(u=0\)). That is a concrete multi-agent command structure the original did not compute. It is still an enumeration on the identical 9-state / 36-pair toy, not a general theory.
+- “D13 of the generalization catalogue” and “larger extension \ldots added only where institutional constraints are central” overstate the increment. The catalogue warning that the item is large is acknowledged, then ignored in favour of the same two-patch grid.
+
+**Editing / production (identical pattern to the four sibling notes of this date)**
+- Unshown script `institutional_observation_v1_verify.py`, “6/6 exact check families”, informal GitHub path (“folder arena agent 1/paper rewrites/latex”), same AI-declaration boilerplate.
+- Two-patch dynamics, floors, instrument set, possible readings, possible votes, and the meaning of “vote 2” are never stated. 256, 36, 28, 12, 16 cannot be verified from the note.
+- Extremely terse; “cycle detection on belief sets” is the entire infinite-horizon argument.
+
+**Wording / definitional issues**
+- Two different 16s appear without warning: 16 pairs lost (communication value \(28-12\)) versus 16 of 256 law-pairs that rescue \(B^*\). Abstract and Prop. 1 juxtapose them.
+- “Each agency alone” (viable under \(z_1\)-only and \(z_2\)-only) is the single-agency observation structures of Vector Floors E3 / Monitoring E6, not defined here.
+- “Trajectory never exits \ldots (cycle detection on belief sets)” is imprecise. For a 2-point belief to be robustly viable both actual-state trajectories must stay in \(\mathcal{V}\); belief-set cycles are a proxy only if the pair is not split by the observations. The paper does not distinguish.
+- Deadlock “\(u=0\), both patches damaged”: in the original fishery-style dynamics \(u=0\) (no harvest) is typically the safest action. The stipulation that deadlock damages both patches is an extra modelling choice, unmotivated and possibly inconsistent with the two-patch being a stock-floor system (cf. Vector Floors instruments of the form \(u\le 2/5\) or \(u\ge 3/5\)).
+- Kernel defined as “beliefs from which some law pair maintains the floors indefinitely” again elides the robust / epistemic / institutional distinctions of original §2.1.
+
+**Technical points that check (once the two-patch pair-family is granted)**
+- Coordinator 28 of 36 matches every prior full-information / joint-reading count on this toy (\(C(8,2)=28\) if 8 of 9 states are individually viable).
+- Unanimity + split observation is a well-defined (if stylized) protocol; for a fixed law-pair the closed loop is deterministic, so finite-state cycle detection decides infinite-horizon viability.
+- \(B^*=\{(1,2),(2,1)\}\) is the classic incompatible-safe-control pair. The two states present complementary observations, so an anti-symmetric voting pair can in principle agree on a *different* \(u\) in each world without communication. The claim that only those 16 of 256 work, and that \(B^*\) is viable under each singleton-agency reading and under the coordinator, is consistent with Monitoring E6 (\(z_1\)-only viable, aggregate nonviable) and with full-info distinguishability.
+- Authority restriction (agency 2 forbidden to vote 2) collapsing the whole decentralized kernel 12\(\to\)0 is a possible (extreme) finding if every surviving pair required that vote; recorded as a strict instance on \(B^*\).
+- Delayed common knowledge leaving the kernel strictly below 28 is the expected residual: one-step delay does not restore joint reading.
+- Scope paragraph is honest: two agencies, one instrument, unanimity only; no \(n\)-agency, no weighted voting, no enforcement dynamics, no claim beyond the audited system.
+
+**Gaps and example-consistency problems**
+- Origin of 256 unexplained (likely \(16\times 16\) laws, e.g. 4 readings \(\times\) binary vote, or similar). Without the alphabets the anti-symmetric claim and the “vote 2” restriction cannot be checked.
+- No comparison with Policy-Class Lattice’s institutional count of 24 (aggregate + no-repeat codex). Different restriction, same toy, unremarked.
+- The exhibited “individually-sufficient-yet-jointly-nonviable” instance (one of the 16 lost pairs that is viable under each agency alone *and* the coordinator) is never identified; only \(B^*\) (which *is* decentralizable) is named.
+- Pair-family viability under decentralization requires that *both* members of the pair stay in \(\mathcal{V}\) under the induced closed loop. The paper’s “belief-set” language does not confirm that both realizations are tested.
+- No statement of how \(u=0\) interacts with the floors; if 0 lies in every \(\mathcal{R}_\mathcal{V}(x)\) deadlock would be safe, contradicting “both patches damaged”.
+
+**Judgement.** The unanimity-deadlock protocol, the 12-versus-28 gap, the anti-symmetric rescue of \(B^*\), and the authority collapse are internally consistent *as an enumeration on an unspecified finite system* and constitute a genuine (narrow) increment over the original single-regulator institutional kernel. The note nevertheless cannot serve as a D13 paper: the two-patch system is undefined, 256 is unexplained, every headline number except 12 is recycled from the sibling notes, fibre/control versus certification distinctions from the unification paper are ignored, and the same unshown-script / production defects appear. The delay-rule off-by-one of the Monitoring note is absent here, but the \(u=0\)-damages modelling choice may conflict with the resource-floor interpretation of the same working system. Repair would require (i) defining states, floors, \(U\), observation alphabets and the 256, (ii) exhibiting the lost instance and the 16 anti-symmetric laws, (iii) reconciling deadlock-\(u=0\) with the original dynamics, (iv) citing original IRViab and Prop. 8, and (v) moving the 256-enumeration to an addendum of the two-patch paragraph. No contradiction inside the 28-12-16 arithmetic itself; the contradictions are with the undefined system, the source papers’ institutional treatment, and the sibling notes’ counts for neighbouring restrictions.
+gemini:
+A rigorous line-level audit of **"Discrete Regimes, Carefully: Mode Uncertainty in the Obstruction Calculus"** (Amin Abaee, September 23, 2026) reveals that the paper suffers from mathematical vacuity (disguising 1-state failure as a 28-pair combinatorial property), a game-theoretic timing paradox, a false general identity on switched systems, an unstated dynamical model, and a phantom section reference.
+
+---
+
+### 1. Mathematical Vacuity: The "28 of 36 Pairs" is a Combinatorial Facade
+
+The paper’s central quantitative result is stated as follows:
+> *"with the regime unread, the mode-blind kernel holds exactly 28 of 36 — eight beliefs, precisely those containing the thin-stock corner $(1, 1)$, are lost purely to unread regimes..."* (Abstract, Prop. 2, E2)
+
+Analyzing the underlying state space reveals that **there is zero belief-level or epistemic phenomenon occurring here**:
+1. **The Underlying State Count:**
+   As established across the companion papers, the safe set $V$ on the two-patch grid consists of $3 \times 3 = 9$ states: $(z_1, z_2) \in \{1, 2, 3\}^2$.
+   The number of unordered pairs of distinct states is $\binom{9}{2} = \frac{9 \times 8}{2} = 36$.
+2. **Individual State Viability:**
+   * At the corner state $(1, 1)$, both patches are at the minimum boundary floor.
+   * If the mode $m \in \{1, 2\}$ is unread, the regulator must choose to protect patch 1 ($u=1$) or patch 2 ($u=2$).
+   * Whichever patch is left unprotected, the adversary damages it, driving that coordinate to $0 \notin V$.
+   * Therefore, **the individual state $(1, 1)$ is nonviable on its own** (even as a singleton belief $\{(1, 1)\}$).
+   * Conversely, all other 8 states have enough buffer to survive.
+3. **The Tautological Pair Count:**
+   * In robust viability, a belief $B = \{x, x'\}$ is viable if and only if *both* $x$ and $x'$ can survive.
+   * If state $(1, 1)$ is dead, then **any pair containing $(1, 1)$ is automatically dead**.
+   * How many pairs contain $(1, 1)$? Exactly $9 - 1 = 8$ pairs!
+   * How many pairs do not contain $(1, 1)$? Exactly $\binom{8}{2} = \frac{8 \times 7}{2} = 28$ pairs!
+4. **The Flaw:**
+   * All 28 surviving pairs are simply the pairs formed by the 8 viable states.
+   * **There is not a single pair $\{x, x'\}$ of viable states that fails due to being merged together.**
+   * In Paper 1, the core thesis of an obstruction certificate was that *every compatible state is individually viable, but the belief is nonviable due to information loss*.
+   * Here, the 8 pairs fail solely because $(1, 1)$ is individually unviable. Framing this as an "epistemic obstruction on 8 beliefs" is an empty mathematical inflation of the fact that 1 of 9 physical states is dead.
+
+---
+
+### 2. Causal / Timing Paradox: Non-Causal Mode Observation
+
+In the section **"Mode uncertainty"**, the author defines the game timing:
+> *"after the regulator's per-cell move the adversary re-picks the mode."* (Page 1, col 1, line 3 of Mode uncertainty)
+
+In the very next sentence, the author defines the policy classes:
+> *"Three policy classes: frozen mode (no switching), mode-blind (cells keyed by state), mode-observed (cells keyed by $(x, m)$)."*
+
+* **The Contradiction:**
+  * If the adversary re-picks the mode $m_t$ **after** the regulator chooses its action $u_t$, then at the moment the regulator acts, the current mode $m_t$ does not yet exist!
+  * How can an action be *"keyed by $(x, m)$"* if $m$ is selected by the adversary *after* the action is chosen?
+  * A policy cannot condition on a variable that has not yet been realized, unless the regulator possesses non-causal anticipation (clairvoyance).
+  * If the author meant that the adversary picked $m_{t-1}$ at the previous step, then $m$ was picked *before* the move, directly contradicting the explicit text.
+
+---
+
+### 3. Decorative Taxonomy: "Hybrid System" vs. Standard Disturbance
+
+The paper claims to execute Item D11 of the generalization catalogue (*"Discrete Regimes, Carefully: Mode Uncertainty in the Obstruction Calculus"*):
+* The author writes: *"finite modes, total transitions, no Zeno, no continuous-mode metrics... The regime is adversarial and exogenous..."*
+* **The Conceptual Flaw:**
+  * In systems and control theory, a **hybrid system** requires continuous dynamics interacting with discrete automata, timers, guards, or state-dependent resets.
+  * If the system has an exogenous variable $m_t \in \{1, 2\}$ that transitions arbitrarily ("total transitions") and adversarially at each discrete step $t$, $m_t$ is mathematically nothing more than an ordinary bounded disturbance $d_t \in D = \{1, 2\}$.
+  * Relabeling a disturbance $d_t$ as a "hybrid regime" to claim a contribution to hybrid viability theory is purely decorative taxonomy—the exact pitfall the author claimed to avoid in the opening sentence.
+
+---
+
+### 4. False General Identity on Switched Systems
+
+In **Proposition 2**, the author asserts the general setwise equality:
+$$\operatorname{Viab}_{\text{observed}} = \operatorname{Viab}_{\text{frozen-1}} \cap \operatorname{Viab}_{\text{frozen-2}}.$$
+
+* **The Flaw:**
+  * This equality is **false in general switched/hybrid systems**.
+  * It is well established in viability theory and switched control that a system may be viable under frozen mode 1 (with policy $u^{(1)}$) and viable under frozen mode 2 (with policy $u^{(2)}$), yet **nonviable under arbitrary mode switching even when the mode is observed**.
+  * For example, switching can force the state to oscillate between two basins of attraction, depleting buffer margins until the state exits $V$.
+  * In general, only the inclusion $\operatorname{Viab}_{\text{observed}} \subseteq \operatorname{Viab}_{\text{frozen-1}} \cap \operatorname{Viab}_{\text{frozen-2}}$ holds.
+  * Stating this as an exact general identity because it happens to evaluate to $36 = 36 \cap 36$ on a trivial $3 \times 3$ grid is mathematically unsound.
+
+---
+
+### 5. Phantom Section Reference: "Section 3's Eight Lost Beliefs"
+
+In **"Introduction and relation to the catalogue's warning"** (page 1, col 1, line 5), the author writes:
+> *"...Section 3’s eight lost beliefs vanish under either frozen regime and under full reading..."*
+
+* **The Error:**
+  * **There is no Section 3 in this manuscript.**
+  * In fact, none of the sections in the manuscript are numbered at all (the headings are *"Introduction..."*, *"Mode uncertainty"*, *"Verified record..."*, *"What is not claimed"*, and *"Declarations"*).
+  * This is a dangling cross-reference pasted from another document without updating.
+
+---
+
+### 6. Complete Absence of the Dynamical Equations
+
+Just as with the *Lattice*, *Design*, and *Decentralized* drafts:
+* The paper never writes down the state equations $z^+ = F(z, u, m)$.
+* It relies on colloquial descriptions: *"each patch regenerates, and the pressured patch takes damage unless protected"* and *"thin-stock corner $(1, 1)$"*.
+* What is the numerical rate of regeneration? What is the damage rate? What are the allowed control values $u$?
+* Without explicit equations, the claims that $u = m$ "restores all 36 pairs" or that $(1, 1)$ exits in one step cannot be independently verified from the text.
+
+---
+
+### 7. Total Absence of References / Bibliography
+
+* The manuscript contains **no References section** and **no bibliography**.
+* It refers to "the catalogue", "Abaee 2026a,b,c", and "the companion papers" throughout the text, but provides no bibliographic citations.
+
+---
+
+### Summary Verdict
+
+This draft does not constitute a viable execution of Roadmap Item D11:
+1. It reduces "mode uncertainty" to an ordinary 2-valued disturbance, offering no hybrid system structure.
+2. Its combinatorial claim ($28$ of $36$ pairs) is an empty inflation of the fact that state $(1, 1)$ is individually unviable ($\binom{8}{2} = 28$).
+3. It contains a causal timing contradiction (conditioning actions on an adversarial choice made *after* the action).
+4. It asserts a false general identity regarding the viability of switched systems under observed modes.
+5. It contains a dangling reference to a nonexistent "Section 3" and lacks a reference list entirely.
+grok:
+**The Discrete-Regimes note (2 pages, 23 Sep 2026) is a thin D11 catalogue item that adds an exogenous switching mode \(m\in\{1,2\}\) to the same undefined 9-state / 36-pair two-patch toy used by Vector Floors, Policy-Class Lattice, Monitoring-Design and Decentralized Observation.** Frozen at either value, every pair is viable (36 of 36); unread adversarial switching loses exactly the eight pairs that contain the thin corner \((1,1)\) (28 of 36); observing the mode and matching \(u=m\) restores 36. The chain \(\mathrm{Viab}_{\mathrm{blind}}\subset\mathrm{Viab}_{\mathrm{observed}}=\mathrm{Viab}_{\mathrm{frozen\text{-}1}}\cap\mathrm{Viab}_{\mathrm{frozen\text{-}2}}\) is therefore a counting identity on that toy. The increment relative to the original paper is real but narrow: original Example 1 and §8 already treated a *constant* unread hidden parameter as a common-action obstruction; this note switches the mode every step after the move. Scope language is better than the sibling notes. The working system, damage/regeneration rules, instrument set and the origin of the 36 pairs are never defined, so none of the counts can be reconstructed from this text. The same unshown-script / production pattern appears.
+
+**Positioning versus the source papers and the catalogue**
+- Original Example 1 is already the unread-mode obstruction (constant \(\theta\in\{-1,+1\}\), individually viable states, empty common safe-action). Original §8 is a delayed hidden-regime with the same constant \(\theta\). Catalogue D10 is “hidden parameters and adaptive observation”; D11 is “hybrid / discrete-continuous (careful — mode semantics).” This note is closer to D10 (unread discrete mode) than to hybrid systems; it stays finite discrete with total transitions and explicitly disclaims Zeno, timed metrics and continuous-mode dynamics. The “catalogue warning” is therefore honoured in the scope paragraph, but the item is filed under the wrong D-number relative to the original hidden-mode results, which are not cited.
+- The 36-pair family, the corner \((1,1)\), and the 28-of-36 count are the same combinatorial object as Vector Floors E4 (two floors, full information 28 of 36; one floor 36 of 36) and Policy-Class Lattice (full-information 28). Here unread switching plays the role that the second floor or the coarse reading played there: it knocks out every pair containing \((1,1)\). The dynamics have been altered (regeneration of both patches, damage only to the pressured one) so that *frozen* modes make all 36 viable — a change that is asserted, not derived in the text.
+- Original Proposition 8 already gave monotonicity of the epistemic kernel in the information structure. The chain here is that statement instantiated on three information patterns (frozen / state-keyed / \((x,m)\)-keyed) plus an adversary who re-picks \(m\) after each move.
+
+**Editing / production (identical pattern to the five sibling notes of this date)**
+- Unshown script `hybrid_mode_viability_v1_verify.py`, “6/6 exact check families,” informal GitHub path (“folder arena agent 1/paper rewrites/latex”), same AI-declaration boilerplate.
+- Two-patch / 9-state grid, floors, regeneration and damage maps, instrument set, and the meaning of “protect the pressured patch” are never stated. 36, 28, 8, and “all containing \((1,1)\)” cannot be checked from the note.
+- Extremely terse: “cycle detection” is not even mentioned; infinite-horizon viability is left to the script. The recursive augmented-belief computation of E4 is unnamed in the body.
+
+**Wording / definitional issues**
+- “Safe pairs” / “every safe pair is viable (36 of 36)”: if the 36 are \(\binom{9}{2}\) pairs on a \(\{1,2,3\}^2\) grid, then \((1,1)\) itself is treated as a state in \(\mathcal{V}\). Previous notes on the same grid had \((1,1)\) special (thin, or outside \(\mathcal{V}\) under two floors). The present dynamics must have changed; that is unremarked.
+- “Eight lost beliefs, precisely those containing the thin-stock corner \((1,1)\)”: combinatorially this is exactly the eight pairs \(\{(1,1),x\}\) for the other eight states, so \(36-8=28\). Internally consistent *as counting*, and the only numerical identity that can be verified without the system.
+- “Thin-buffer beliefs cannot juggle an unread adversary, buffered ones can”: informal; no buffer width, no comparison function, no relation to original Theorem 4 (finite-time exit) or the strip \(\mathcal{S}_a\).
+- Three policy classes (frozen / mode-blind keyed by state / mode-observed keyed by \((x,m)\)) are information structures, not hybrid objects. Calling the paper “discrete regimes” / D11 hybrid while the mathematics is unread switching of a discrete parameter blurs D10 and D11.
+- Adversary “re-picks the mode” *after* the regulator’s per-cell move: the information pattern is therefore open-loop with respect to the next mode. That is closer to original Theorem 3 (blind window) or a switching disturbance than to hybrid mode semantics.
+
+**Technical points that check (once the 9-state pair family and the damage/regeneration story are granted)**
+- Frozen at either \(m\): if protecting the pressured patch lets both patches grow, then a constant matching control keeps every pair inside \(\mathcal{V}\). 36 of 36 is then the claim that every pair of the nine states is viable under that constant law. Possible if regeneration dominates and \((1,1)\) is interior enough under frozen damage.
+- Mode-blind (cells keyed only by \(x\)): one instrument per state must serve both modes. Pairs containing \((1,1)\) have no such instrument; the other 28 do. Restoration under observation (\(u=m\) per \((x,m)\) cell) is the obvious matching law and restores 36.
+- Setwise chain \(\mathrm{Viab}_{\mathrm{blind}}\subset\mathrm{Viab}_{\mathrm{observed}}=\mathrm{Viab}_{\mathrm{frozen\text{-}1}}\cap\mathrm{Viab}_{\mathrm{frozen\text{-}2}}\) is then \(28\subset 36=36\cap 36\), a tautology on these counts. Strictness of the first inclusion is the eight \((1,1)\)-pairs.
+- E4’s cross-check (three probe beliefs \(\times\) horizons 1–4 \(\times\) frozen vs switching) is a small finite-horizon sanity test, not a completeness argument. Original Theorem 1 already gave exact finite-horizon backward recursion on finite systems.
+- Scope paragraph is the most careful of the 23 Sep batch: finite modes, total transitions, no Zeno, no continuous-mode metrics, regime exogenous not endogenous, damage–regeneration asymmetry not classified, hybrid layer disappears when the mode is frozen or observed. That matches the catalogue warning they quote.
+
+**Gaps and example-consistency problems**
+- No citation of original Example 1 (constant hidden mode, common-action emptiness) or §8 (delayed hidden-regime, \(\theta\) unread until \(T_{\mathrm{obs}}\)). A reader of the programme cannot see whether switching-every-step is a new obstruction or the same common-action mechanism with a time-varying hidden parameter.
+- No statement of how “each patch regenerates” and “pressured patch takes damage unless protected” produce next states, nor of \(U\), nor of whether \(u=m\) is even admissible. The restoration strategy is named, not shown to be safe.
+- Relation to Vector Floors’ 28-of-36 (two floors, no mode) is unremarked: the same integer now appears as the *mode-blind* kernel. If the underlying grid and pair family are the same, the two 28s are different kernels on the same 36 and should be compared.
+- Policy-Class Lattice’s institutional 24 and observation-based 26 on the same 36 are likewise unmentioned. Adding a switching mode and then enumerating three information patterns does not situate the new 28 among the old ones.
+- “Recursive augmented-belief computation” vs “brute-force game-tree enumeration” is asserted as cross-validation; neither algorithm is written. For a 9-state 2-mode system the game tree is tiny; the claim is plausible and unverifiable here.
+- Endogenous regime change (institutional response to stocks) is named as a governance extension and not developed — consistent with the catalogue, but then D11 has no hybrid content left beyond an unread discrete switch.
+
+**Judgement.** The counting identity (frozen 36, unread 28 = all pairs except those containing \((1,1)\), observed 36) is internally consistent as combinatorics on a 9-element set, the matching restoration \(u=m\) is the obvious analogue of original Example 1’s mode-dependent safe actions, and the scope paragraph is unusually honest for this batch. The note nevertheless cannot serve as a D11 hybrid paper: the system is undefined, the 36-pair toy and the integer 28 are recycled from four sibling notes, original hidden-mode results are not cited, switching-every-step versus constant unread parameter is not distinguished, and D10 (hidden parameters) is the more accurate catalogue slot. Same unshown-script standard and production defects as the rest of the 23 Sep series. Repair would require (i) defining states, floors, regeneration/damage, \(U\) and the 36, (ii) citing original Example 1 / §8 and locating the note against D10, (iii) exhibiting the eight lost pairs and the matching law, (iv) comparing the new 28 with Vector Floors’ 28 and Policy-Class Lattice’s 24/26/28 on the same grid, and (v) moving the enumeration to an addendum of the original hidden-mode paragraph. No contradiction inside the 36–8–28 arithmetic itself; the contradictions are with the undefined system, the original hidden-mode calculus, and the sibling notes’ counts for neighbouring restrictions on the same toy.
+gemini:
+To elevate this project from a collection of theoretical proofs and combinatorial toy models into a foundational, high-impact body of work in systems, control, and governance, the project must undergo a strategic transformation.
+
+Currently, the project suffers from a stark divide:
+
+The core insight of Paper 1 (The Automatica Manuscript) is profound and genuinely original: characterizing the impossibility/necessity boundary of viability under incomplete observation, linking information loss directly to Farkas infeasibility, Isaacs adverse drift, and explicit monitoring timing bounds.
+The subsequent drafts (Drafts 1–7) suffer from hyper-fragmentation and combinatorial diminishing returns: they re-analyze the exact same 
+3
+×
+3
+3×3 discrete grid (9 states, 36 pairs) repeatedly across 2-page notes, dressing elementary finite-set properties in heavy jargon ("Policy-Class Lattice", "Helly Protection Failure", "Anti-symmetric Voting Laws"), while leaving the underlying dynamical equations completely unstated.
+Here is a comprehensive blueprint across four pillars to elevate the project’s mathematical rigor, algorithmic scalability, and direct human usefulness.
+
+Pillar I: Architectural Consolidation (Kill the Micro-Paper Trap)
+The current strategy of splitting every single generalization item (
+D
+4
+,
+D
+7
+,
+D
+8
+,
+D
+11
+,
+D
+13
+D4,D7,D8,D11,D13) into separate 2-page micro-papers harms the credibility of the research. It gives the impression of paper-slicing around a single toy example.
+
+The Solution: Consolidate the entire programme into three flagship papers:
+
+text
+
+                  ┌────────────────────────────────────────────────────────┐
+                  │                        PAPER 1                         │
+                  │             The Automatica Foundation (v44)            │
+                  │   Core Theory: Selector Principle, Dini Exit, Farkas,  │
+                  │         Timing Bound, Fibre Limit, Bias Trap           │
+                  └───────────────────────────┬────────────────────────────┘
+                                              │
+                     ┌────────────────────────┴────────────────────────┐
+                     ▼                                                 ▼
+┌──────────────────────────────────────────┐     ┌──────────────────────────────────────────┐
+│                 PAPER 2                  │     │                 PAPER 3                  │
+│   Computational & Algorithmic Engine     │     │       Socio-Ecological & CPS Impact      │
+│      (Target: IEEE TAC / SICON)          │     │ (Target: Nature Sustainability / Autom.) │
+│                                          │     │                                          │
+│ • Unifies Companion Bridge & Stochastic  │     │ • The Anti-Greenwashing Audit Tool       │
+│ • Continuous-to-finite LP / SOS / SDP    │     │ • Sensor & Review Cadence Sizing         │
+│ • Scalable algorithms beyond 9 states    │     │ • Real empirical case study: Aquifer /   │
+│ • Resolves the timing/adaptivity gap     │     │   Fishery with real data & uncertainty   │
+└──────────────────────────────────────────┘     └──────────────────────────────────────────┘
+Paper 1 (Automatica): Keep focused strictly on the Foundational Theory of Obstructions. Resolve the minor review-of-record items identified in Track A.
+Paper 2 (Methodology/Computation - IEEE TAC or SIAM J. Control & Optimization): Merge the Viable Selector, Stochastic Selector, and Companion Bridge into a single, comprehensive treatise on Computational Methods for Incomplete-Observation Viability.
+Paper 3 (Domain Impact / Application): Take the Design (D8), Lattice (D7), and Decentralized (D13) ideas, strip away the abstract jargon, and build an applied framework for auditing monitoring systems and composite indicators.
+Pillar II: Algorithmic Elevation (Escaping the 
+3
+×
+3
+3×3 Toy Grid)
+Currently, the numerical verification relies almost entirely on exact rational checks on a 
+3
+×
+3
+3×3 grid or scalar intervals. To be taken seriously by control theorists and engineers, the calculus must scale to continuous, multi-dimensional state spaces.
+
+1. Formulate Continuous Obstruction Certificates via Sum-of-Squares (SOS) / SDP
+In Paper 1, Theorem 4 gives a Dini-drift condition:
+sup
+⁡
+u
+∈
+U
+(
+x
+)
+inf
+⁡
+d
+∈
+D
+(
+x
+)
+∇
+q
+(
+x
+)
+⋅
+f
+(
+x
+,
+u
+,
+d
+)
+≤
+−
+ε
+.
+sup 
+u∈U(x)
+​
+ inf 
+d∈D(x)
+​
+ ∇q(x)⋅f(x,u,d)≤−ε.
+
+The Elevation: For polynomial dynamics and semialgebraic sets, formulate the search for an adverse disturbance and the verification of this inequality using Sum-of-Squares (SOS) programming and Semidefinite Programming (SDP) relaxations (using tools like SOSTOOLS or YALMIP).
+Instead of assuming the disturbance is chosen adversarially in the abstract, you provide an algorithm that computes a polynomial certificate of nonviability. This makes the obstruction calculus computationally operational for 
+n
+n-dimensional nonlinear systems.
+2. Polyhedral Zonotopes and Support Functions for High-Dimensional Tube Safety
+Replace the brute-force grid enumeration of 
+A
+tube
+(
+B
+,
+Δ
+)
+A 
+tube
+​
+ (B,Δ) with modern set-based reachability analysis (using zonotopes, ellipsoids, or constrained zonotopes, e.g., CORA).
+Under linear dynamics 
+x
+˙
+=
+A
+x
++
+B
+u
++
+E
+d
+x
+˙
+ =Ax+Bu+Ed, the reachable set over 
+[
+0
+,
+Δ
+]
+[0,Δ] from an information set 
+B
+B can be computed using support functions. The common-action obstruction then becomes a sequence of standard convex quadratic or second-order cone programs (SOCP), which scale to dozens of state variables.
+3. Resolve the Timing vs. Adaptivity Contradiction
+As revealed in the audit of the Stochastic Selector, the timing bound 
+T
+obs
+>
+z
+0
+−
+1
+T 
+obs
+​
+ >z 
+0
+​
+ −1 in the hidden-regime system collapsed when the controller was allowed to alternate actions (
+u
+t
+∈
+{
++
+1
+,
+−
+1
+}
+u 
+t
+​
+ ∈{+1,−1}).
+
+The Elevation: Formulate the timing obstruction properly under unrestricted open-loop control classes.
+Characterize 
+σ
+∗
+(
+B
+0
+)
+σ 
+∗
+ (B 
+0
+​
+ ) not via zero-order hold assumptions, but as the solution to an optimal control / differential game problem:
+σ
+∗
+(
+B
+0
+)
+=
+inf
+⁡
+x
+0
+∈
+B
+0
+sup
+⁡
+u
+(
+⋅
+)
+inf
+⁡
+d
+(
+⋅
+)
+τ
+exit
+(
+x
+0
+,
+u
+,
+d
+)
+.
+σ 
+∗
+ (B 
+0
+​
+ )=inf 
+x 
+0
+​
+ ∈B 
+0
+​
+ 
+​
+ sup 
+u(⋅)
+​
+ inf 
+d(⋅)
+​
+ τ 
+exit
+​
+ (x 
+0
+​
+ ,u,d).
+Show under what conditions (e.g., control authority vs. disturbance magnitude) high-frequency switching cannot prevent exit, restoring the validity of the timing bound for general causal controllers.
+Pillar III: Elevating Human and Practical Utility
+How does this project actually help humans make better decisions, protect ecosystems, or design safer machines?
+
+1. Software Tool: The "Indicator & Monitoring Audit Toolkit"
+Create an open-source, user-friendly Python package (e.g., viability-auditor):
+
+Input:
+System bounds and dynamics (or empirical historical drift rates 
+ε
+ε).
+A proposed monitoring frequency 
+T
+obs
+T 
+obs
+​
+  (e.g., quarterly surveys).
+A proposed composite indicator map 
+y
+=
+O
+(
+x
+)
+y=O(x) (e.g., ESG score, Ecological Health Index).
+A vector of non-negotiable safety floors 
+q
+j
+(
+x
+)
+≥
+0
+q 
+j
+​
+ (x)≥0 (e.g., groundwater level, minimum population).
+Output (Automated Obstruction Diagnostics):
+Timing Warning: Flags if 
+T
+obs
+>
+min
+⁡
+j
+inf
+⁡
+q
+j
+ε
+j
+T 
+obs
+​
+ >min 
+j
+​
+  
+ε 
+j
+​
+ 
+infq 
+j
+​
+ 
+​
+  and outputs the maximum safe review interval.
+Fibre Blind-Spot Visualization: Automatically searches for pairs of states 
+(
+x
+safe
+,
+x
+unsafe
+)
+(x 
+safe
+​
+ ,x 
+unsafe
+​
+ ) that yield the exact same indicator score 
+O
+(
+x
+safe
+)
+=
+O
+(
+x
+unsafe
+)
+O(x 
+safe
+​
+ )=O(x 
+unsafe
+​
+ ) and visualizes them.
+Incompatibility Certificate: Computes whether conflicting emergency actions are demanded across indistinguishable states.
+2. Real-World Case Study: The "Anti-Greenwashing" Audit
+Apply this toolkit to a
+grok:
+Consolidate into three real papers, one public artefact, and one applied case — and stop minting 2-page catalogue notes. The original obstruction calculus is a genuine contribution (sound certificates that an information structure, not the dynamics, makes viability impossible). Everything dated 23 Sep 2026 is the same 9-state / 36-pair toy re-enumerated under a new restriction, with the same unshown scripts and the same production defects. That pattern lowers both generality and usefulness. Elevation is a matter of architecture, evidence, and audience, not more D-numbers.
+
+1. Architecture: three papers, not a swarm
+
+Paper A (Automatica, Track A as planned). The calculus itself: selector principle, nested correspondences, common-action / delayed-information / finite-time exit / fibre / CE trap, finite-horizon completeness, static-observation reduction, residual dynamic gap stated as open. Fix the review-of-record list, the boxed overclaims, and the “necessity side” language. Demote elementary restatements. This is the only piece that currently has theorem-level weight.
+Paper B (SCL / SOIC-class companion). Continuous-to-finite bridge with an actual LP solver run, certified sandwich, mesh law, sparse witnesses. That is the only computational increment that is not an enumeration of 15 or 256 objects. Do not claim a general-purpose computational calculus.
+Paper C (successor, after A is settled). One unifying object — the viable selector under information — with the five-layer architecture written once, causes kept distinct (exit is not epistemic; fibre is certification not control; CE is a policy-class restriction). Stochastic lift (belief-state safety values, exact rational alphas) belongs inside C as a section, not as a 3-page sibling. Fold into C only those catalogue increments that survive a “would this exist if the two-patch toy did not?” test: unanimity-deadlock as an institutional protocol; switching vs constant hidden mode; coarsest admissible partition as a design primitive. Kill Vector Floors, Policy-Class Lattice, and Monitoring-Design as standalone papers; they are addenda to original §2.2, Prop. 8, and §6.4.
+2. One artefact instead of six undefined “working systems”
+
+Publish a single, fully specified, citable model: states, 
+f
+f, 
+U
+U, 
+D
+D, floors 
+q
+j
+q 
+j
+​
+ , observation maps, hold vs sequential classes, and every kernel that any note has claimed (full-info 28, observation-based 26, institutional 24, mode-blind 28, decentralized 12, \ldots). Ship the verification scripts as a reproducible package (exact rational arithmetic, public, pinned environment), not a GitHub path containing “arena agent 1”. Every later extension must cite that artefact and add at most one new column. Until that exists, 28/36/21/100/
+B
+∗
+B 
+∗
+  are not results; they are shared folklore of an unpublished grid.
+
+3. Generality that is worth having (ordered)
+
+The catalogue’s 13 directions are not equal. Prioritise the ones that change what a theorem says, not how many times a pair is counted.
+
+Priority	Item	Why it raises generality	What “done” looks like
+1	Checkable continuous-time certificates (even if incomplete)	Removes the residual gap that currently confines completeness to finite/static classes	A Dini/comparison certificate that is n&s on a declared regular class, or a honest sufficient test with a counterexample showing where it fails
+2	Belief-state theory as a paper, not a note	Stochastic viability under partial observation is the natural lift; POMDP people can use it	Finite-horizon exactness + deficit bounds + one non-toy example; exponential alpha growth treated as a computational fact, not hidden
+3	Observation scheduling as an optimisation problem	Turns obstruction into a design spec: min cost s.t. no certificate fires	Integer/partition programme on fibres + review times; complexity stated; Helly/convexity scoped
+4	Buffered / approximate viability	Practitioners need margins, not exact kernels	Safety buffer vs observation error vs review interval; one inequality relating the three
+5	General information structures (filtrations, delayed schedules)	Static maps are the least interesting case for monitoring	One theorem for “first informative time” that does not assume hold-until-review
+—	Vector floors, policy lattice, hybrid modes, 
+n
+n-agency voting	Already in the original paper or enumerative on the toy	Addenda, not papers
+Do not pursue n-agency mechanism design, Zeno hybrid machinery, or Pareto vector-floor theory until 1–4 exist. Those are decorative in the catalogue’s own warning.
+
+4. Usefulness to humans (the actual bottleneck)
+
+The human-facing content of the whole project is four sentences, already in original §6.4:
+
+Review interval must precede worst-case exit 
+inf
+⁡
+q
+/
+ε
+infq/ε.
+An indicator that merges states with incompatible safe controls cannot support a safety verdict at that reading.
+An index whose fibres cross a floor cannot be an exact certifier; fall silent outside the certainly-safe set.
+Known bias must be corrected; uncorrected certainty-equivalence can empty a nonempty kernel.
+Those sentences do not become useful by being restated as E4/E5/E6 in five notes. They become useful by three further steps:
+
+A. Software, not scripts. A small library: input polyhedral 
+V
+V, 
+U
+U, fibres (or an observation map), optional drift bound 
+ε
+ε; output Farkas pair or empty, certainly-safe observations, timing bound, and which certificate fired. Engineers in hybrid-systems and resource modelling already use barrier-certificate and viability-kernel tools; this would sit next to them. Exact rational mode for the polyhedral fragment; floating-point with the mesh law of Paper B for the rest.
+
+B. One real system, not a grid. Take a published stock-assessment (fishery, aquifer, forest, emissions-and-cap) that already has a floor, a review calendar, and a coarse indicator. Calibrate 
+ε
+ε, 
+T
+o
+b
+s
+T 
+obs
+​
+ , observation fibres, and bias from the assessment itself. Report: (i) whether any obstruction fires on the current monitoring design; (ii) the cheapest change (split one fibre, shorten the review, correct the bias) that restores a nonempty selector; (iii) comparison with how the agency actually argues safety. Without this, “sustainability governance” remains rhetorical scaffolding. Ecological Economics / Natural Resource Modeling is the right second venue for that paper, not Automatica.
+
+C. A practitioner layer inside Paper A or C. Three pages, no 
+Γ
+N
+Γ 
+N
+​
+ : a decision tree (“if the indicator is scalar and the floor is on the base, check fibres first; if reviews are annual and slack is seasonal, check timing first”), the certainly-safe set as the only sound “green” region, and an explicit statement of what the certificates cannot do (dynamic observation, post-reveal recourse, nonconvex instrument sets). The rest of the paper stays for theorists.
+
+5. Hygiene that is currently costing credibility
+
+These
+

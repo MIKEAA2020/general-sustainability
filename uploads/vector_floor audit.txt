@@ -1,0 +1,153 @@
+gemini:
+### 1. Direct Contradiction and Redundancy with Paper 1
+
+* **The Paper's Core Premise (Abstract & Introduction):**
+  > *"The obstruction calculus to date states its certificates for one constraint at a time. This paper, the D4 item of the programme’s generalization catalogue, states the common-action obstruction for vector floors $V = \{x : q_j(x) \ge 0, j = 1, \dots, m\}$..."* (Abstract, lines 3–6)
+  > *"The programme’s completed items... share one working simplification: the safe set is presented through a single scalar margin."* (Introduction, lines 4–8)
+* **The Contradiction:**
+  This claim mischaracterizes Paper 1 (*An Obstruction Calculus for Viability under Incomplete Observation*):
+  1. **Paper 1, Section 2.2** explicitly defines the constraint set as a vector of $m$ constraints from the start:
+     $$V = \{x : q_j(x) \ge 0, \; j = 1, \dots, m\}.$$
+  2. **Paper 1, Section 2.2** defines the safe-control correspondence across all active constraints:
+     $$\mathcal{R}_V(x) = \{u \in U(x) : \forall d \in D(x), \forall j \text{ with } q_j(x) = 0, \; \nabla q_j(x) \cdot f(x, u, d) \ge 0\}.$$
+  3. **Paper 1, Section 3.2** already gives the exact stacked polyhedral Farkas certificate:
+     > *"For polyhedral data the emptiness certificate is a Farkas pair: with safe actions given by finitely many affine inequalities $A_i u \le b_i$ across compatible states, stacked as $Au \le b$, the intersection is empty if and only if there exists $\mu \ge 0$ with $\mu^\top A = 0$ and $\mu^\top b < 0$ (Farkas, 1902; Gale, 1960)..."* (Paper 1, page 6, col 1).
+  4. **Paper 1, Section 3.4** is titled **"A worked certificate (two floors, one scalar action)"**, working through $u \le 0.4$ and $u \ge 0.6$ with Farkas multiplier $\lambda = (1/2, 1/2)$.
+* **Consequence:** Proposition 2 and the polyhedral formulation in this paper do not constitute an extension (item D4); they are a verbatim duplication of what was already derived and published in Sections 3.2 and 3.4 of Paper 1.
+
+---
+
+### 2. Conceptual Error: "Complementary Slackness" in Infeasible Systems
+
+* **Remark 1 & Example E6:**
+  > *"Remark 1 (Complementarity reading). In the stacked system of a three-floor instance below, the certified multiplier assigns weight 0 to a redundant row: inactive constraints receive zero multipliers, the standard complementary pairing of primal activity and dual weight, here read as 'the obstruction is carried by exactly the floors that bind.'"* (Page 2, col 1)
+  > *"E6 (three floors, complementarity). The stacked system $\{u \le 2/5\} \wedge \{u \ge 3/5\} \wedge \{u \le 9/10\}$ is infeasible with certificate $\lambda = (1, 1, 0)$: the inactive third row carries multiplier zero, exhibiting the complementarity reading of Remark 1."* (Page 2, col 1)
+* **The Flaw:**
+  * In optimization and duality theory, **complementary slackness** ($\lambda_i^* (b_i - A_i u^*) = 0$) is a property of a **primal feasible** optimal solution $u^*$ paired with a dual optimal solution $\lambda^*$.
+  * In Farkas' Lemma, the primal system $Au \le b$ is **infeasible**—it has **no** solution. Because no $u$ exists, no constraint can be evaluated as "active" ($A_i u = b_i$) or "inactive/slack" ($A_i u < b_i$).
+  * The fact that $\lambda_3 = 0$ for the constraint $u \le 9/10$ simply means that the first two constraints ($u \le 2/5$ and $-u \le -3/5$) already form an infeasible sub-system. In linear programming, this is known as a **Minimal Infeasible Subsystem (MIS)** or the support of the dual infeasibility ray.
+  * Framing the sparsity of a Farkas dual certificate as *"the standard complementary pairing of primal activity and dual weight"* is mathematically incorrect.
+
+---
+
+### 3. Misattribution in Proposition 1: What is the "Vector-Floor Gap"?
+
+* **Proposition 1 Statement:**
+  > *"Proposition 1 (Branchwise/joint gap for vector floors). If for each state $x \in B$ separately $\mathcal{R}_V(x) \ne \emptyset$ but $\bigcap_{x \in B} \mathcal{R}_V(x) = \emptyset$, then every branch of $B$ is individually floor-servable while the belief is vector-obstructed: the information constraint, not any single floor, is the cause of nonviability."*
+* **The Flaw:**
+  1. The condition $\mathcal{R}_V(x) \ne \emptyset \; \forall x \in B$ and $\bigcap_{x \in B} \mathcal{R}_V(x) = \emptyset$ is **identical to the scalar common-action obstruction** (Theorem 2 of Paper 1). For example, with a single scalar floor $z \ge 0$, state $x_1$ may require $u = +1$ and state $x_2$ may require $u = -1$. Proposition 1 fires identically there.
+  2. The proposition has **nothing specifically to do with vector floors**. 
+  3. A genuine "vector-floor gap" under partial observation would analyze the failure of joint multi-floor satisfiability across states where each floor *individually* is compatible across the entire belief:
+     $$\bigcap_{x \in B} \mathcal{R}_{\{q_j \ge 0\}}(x) \ne \emptyset \quad \forall j \in \{1, \dots, m\}, \quad \text{yet} \quad \bigcap_{j=1}^m \bigcap_{x \in B} \mathcal{R}_{\{q_j \ge 0\}}(x) = \emptyset.$$
+     Proposition 1 does not address this interaction; it merely re-states Theorem 2 of Paper 1.
+  4. In the proof, the author writes: *"hence no floor fails in isolation... The cause cannot be a floor: each is satisfiable alone."* 
+     This is a non sequitur. $\mathcal{R}_V(x) \ne \emptyset$ means there is an action satisfying all floors simultaneously at state $x$. It does not evaluate floors in isolation.
+
+---
+
+### 4. Critical Omission: The Entirely Undefined "Two-Patch System" (E3 & E4)
+
+* **The Text (Page 2, col 1):**
+  > *"E3 (dynamic vector floors). On the programme’s two-patch system the safe set is already a vector object $q_1 : z_1 \ge 1, q_2 : z_2 \ge 1 \; (m = 2)$ served by one shared instrument. Per-cell read-then-act viability over the audited beliefs $\{(1, 2), (2, 1)\}$ and $\{(1, 2), (2, 1), (2, 2)\}$ reproduces the audited verdicts under five information structures: blind nonviable, aggregate nonviable, $z_1$-only viable, $z_2$-only viable, full viable..."*
+* **The Gap:**
+  * **Where is this system defined?** 
+  * Neither the state equations $\dot{z} = f(z, u, d)$ (or $z^+ = F(z, u, d)$), the state space $Z$, the control space $U$, the disturbance space $D$, nor the five observation maps $\mathcal{O}_i(z)$ are provided anywhere in this paper.
+  * Nor were they defined in Paper 1 or the Viable Selector manuscript (both referenced this mysterious system without ever writing down its equations).
+  * Without the dynamical equations, assertions such as *"reproduces the audited verdicts under five information structures"* are impossible for any reviewer or reader to verify.
+
+---
+
+### 5. Coherence and Notation Breakdown in Example E4
+
+* **Example E4 Statement:**
+  > *"E4 (floor monotonicity). Dropping the second floor ($q_1$ only) enlarges the viable pair family from 28 to 36 of 36 under full information, setwise, with strict separation witnessed (e.g. $\{(1, 1), (1, 2)\}$: viable on one floor, nonviable on two)."* (Page 2, col 1)
+* **The Inconsistencies:**
+  1. What is a **"viable pair"** under **"full information"**?
+     * Under full information, the controller observes the exact state $x$. Viability is a property of individual states $x \in X$, not pairs of states.
+     * If the author means ordered pairs of state coordinates $(z_1, z_2) \in \{1, \dots, 6\}^2$, why does the text write `{(1, 1), (1, 2)}` with set brackets, denoting a set of two distinct states?
+     * If `{(1, 1), (1, 2)}` is an information set (a belief of two states), it belongs to **partial information**, which contradicts the explicit phrase *"under full information"*.
+  2. In the Abstract (lines 10–11), the author writes: *"adding a floor strictly shrinks the viable pair family (28 $\to$ 36 reversed: one floor admits 36, two floors 28)"*. 
+     This phrasing is confusing: dropping a floor enlarges the set ($28 \to 36$), while adding a floor shrinks it ($36 \to 28$). Calling it "28 $\to$ 36 reversed" introduces unnecessary ambiguity.
+
+---
+
+### 6. Notation Clashes with Programme Conventions
+
+1. **Control Symbol:**
+   * Section "The vector-floor model" defines controls as $\nu \in U(x)$:
+     $$\mathcal{R}_V(x) = \{\nu \in U(x) : x' \in V \dots\}.$$
+   * Then, in the very next subsection ("The Farkas certificate") and in all examples (E1, E6), the control is denoted $u$.
+2. **Viability Kernel Symbol:**
+   * Section "The vector-floor model" writes:
+     $$\mathcal{R}_V^B(B) = \emptyset \implies B \notin \mathcal{K}_{\mathcal{I}}.$$
+   * In Paper 1, the observation-based kernel is strictly denoted $\operatorname{ERViab}_{\mathcal{I}}(V)$, and Section 2.4 of Paper 1 explicitly established:
+     > *"the observation structure is always $\mathcal{I}$ and the institution is always $\mathcal{J}$; no other letter serves either role."*
+   * Introducing an undefined symbol $\mathcal{K}_{\mathcal{I}}$ violates the programme's own established terminology.
+3. **Definition of $\mathcal{R}_V(x)$:**
+   * In continuous-time viability (Paper 1), $\mathcal{R}_V(x)$ is the subtangential cone condition $\nabla q_j(x) \cdot f(x, u, d) \ge 0$.
+   * In discrete-time viability (Paper 1, Section 7, Theorem 5), the one-step safe set was denoted $S_1(x) = \{a \in U(x) : F(x, a, d) \in V\}$.
+   * Here, the text defines $\mathcal{R}_V(x) = \{\nu \in U(x) : x' \in V \text{ for all successors } x'\}$, silently repurposing continuous-time notation for discrete-time transitions without defining the transition map.
+
+---
+
+### 7. Triviality of the Numerical Examples
+
+* In **E1**, the paper solves the scalar system:
+  $$u \le \frac{2}{5}, \quad -u \le -\frac{3}{5}.$$
+  This is literally the statement that $(-\infty, 0.4] \cap [0.6, \infty) = \emptyset$.
+* The Farkas multiplier is $\lambda = (1, 1)$, giving $\lambda^\top A = 1 - 1 = 0$ and $\lambda^\top b = 0.4 - 0.6 = -0.2 < 0$.
+* This is numerically and structurally identical to the worked example in Paper 1 Section 3.4 ($u \le 0.4, -u \le -0.6$). Stating that a 101-point rational grid search was used to confirm this in a dedicated verification script over-engineers a trivial scalar inequality.
+
+---
+
+### 8. What a True "Vector Floors" (D4) Generalization Actually Demands
+
+In the Section "What is not claimed", the author concedes:
+> *"The dynamic vector-floor theory is not developed beyond the per-cell re-reading of the audited systems: no vector-valued comparison functions, no multi-floor dynamic programming, no Pareto readings of trade-offs between floors. The Farkas layer is static..."*
+
+By this admission, the paper bypasses all the substantive mathematical challenges of vector constraints in viability theory under partial observation:
+1. **Timing Obstruction for Vector Constraints:**
+   In Paper 1 (Theorem 3), the timing bound is $T_{\text{obs}} > \frac{\inf q}{\varepsilon}$ for a single floor $q$. With vector floors $q_1, \dots, q_m$, each floor has its own margin $\varepsilon_j$. Exit occurs when the first floor is breached:
+   $$T_{\text{exit}} \le \min_{j=1, \dots, m} \frac{\inf_{x \in B_0} q_j(x)}{\varepsilon_j}.$$
+   This basic and necessary extension is entirely absent.
+2. **Isaacs Condition for Multiple Boundary Faces:**
+   When multiple floors are simultaneously active (corners and edges of $V$), the normal cone contains non-trivial convex combinations of constraint gradients $\sum_{j \in J(x)} \mu_j \nabla q_j(x)$. The dynamic exit certificate (Theorem 4 of Paper 1) must be formulated across these cones. The paper completely avoids this.
+3. **Cross-Floor vs. Cross-State Infeasibility:**
+   The paper fails to distinguish between *infeasibility caused by competing floors at a single state* versus *infeasibility caused by merging states with conflicting single floors*.
+
+### Summary Verdict
+This draft does not meet the standards of a standalone mathematical contribution or a valid execution of Roadmap Item D4. It duplicates existing results from Paper 1 under the guise of an extension, misapplies the concept of complementary slackness to infeasible systems, relies on an undefined dynamic model ("two-patch system"), and explicitly disclaims all dynamic aspects of vector-floor viability.
+grok:
+**The Vector Floors note (2 pages, 23 Sep 2026) is a thin D4 catalogue item that restates the already-vector common-action obstruction of the original calculus as a stacked polyhedral infeasibility with an explicit Farkas certificate, then re-reads existing working examples.** The Farkas equivalence itself is classical and correctly applied; the six “verified instances” recycle or mildly extend numbers that already appear in the source papers. The manuscript is not a genuine generalization: the original obstruction-calculus paper already defined \(\mathcal{V}\) by \(m\) constraint functions \(q_j\), already formed \(\mathcal{R}_\mathcal{V}(x)\) as the controls that protect every active floor, already stacked the resulting inequalities across states, and already exhibited the identical two-floor Farkas pair. Positioning, wording and example-consistency problems are therefore first-order.
+
+**Positioning contradiction with the source paper**
+- Abstract and introduction assert that “the obstruction calculus to date states its certificates for one constraint at a time” and that vector floors are the D4 generalization. The original paper (Section 2.2) already writes
+  \[
+  \mathcal{V}=\{x:q_j(x)\ge0,\,j=1\dots m\}
+  \]
+  and defines the safe-control set by the requirement that *every* active constraint have nonnegative inward drift. Theorem 2 and the polyhedral Farkas paragraph of that paper already stack inequalities across both states *and* floors. The worked two-floor certificate on original p. 8 is numerically identical to E1 here (\(u\le0.4=2/5\), \(u\ge0.6=3/5\)).
+- Consequently the claim “new static layer” and the catalogue label D4 are overstated. What is new is only the three-floor complementarity remark, the monotonicity count, and the re-labelling of an existing two-patch audit.
+
+**Editing and wording failures (same production pattern as the sibling notes)**
+- Abstract: “adding a floor strictly shrinks the viable pair family (28 → 36 reversed: 28 → 36 of 36 reversed)”. The phrase is ungrammatical and reverses the direction that E4 actually states (dropping the second floor *enlarges* 28 → 36 of 36). Leftover editing debris.
+- “Viable pair family” is never defined. E4 speaks of it “under full information” yet illustrates with a two-point set \(\{(1,1),(1,2)\}\). Under full information information states are singletons; the 36 = \(\binom{9}{2}\) interpretation (all pairs of states) is possible but unstated, and the example pair remains inside \(\mathcal{V}\) for the floors \(z_i\ge1\), so the claimed “nonviable on two” does not follow.
+- E3 versus abstract: abstract lists “\(z_1\)-only, \(z_2\)-only, and full *aggregate* readings viable”; E3 says “full viable”. Minor but symptomatic.
+- Informal code path again (“folder arena agent 1/paper rewrites/latex”).
+- Extremely terse: the two-patch dynamics, observation maps and the “successor’s structure table” are assumed known; a reader who has only this note cannot reconstruct the 28/36 count or the five verdicts.
+
+**Technical points that check**
+- Proposition 1 is the obvious vector reading of the original common-action gap: each singleton has a safe instrument, the cell does not. Cause is informational, not any single floor, and not the future (one-step failure). Proof is correct.
+- Proposition 2 is Farkas’ lemma applied to the stacked system \(\bigcap_{x\in B}\mathcal{R}_\mathcal{V}(x)\). Given a rational \(\lambda\ge0\) the three identities \(\lambda^\top A=0\), \(\lambda^\top b<0\) are exact rational arithmetic; no solver is required for *verification*. (Finding \(\lambda\) may still need a solver; the paper does not claim otherwise.)
+- E1 both directions: infeasible pair certified by \(\lambda=(1,1)\), \(\lambda^\top b=-1/5\); feasible contrast \(\{u\le2/5\}\cap\{u\ge1/5\}\) admits no such \(\lambda\) and exhibits witness \(u=1/5\). Numbers match the original paper’s 0.4/0.6 example (unnormalized versus \(\ell_1\)-normalized).
+- E2 is exactly Proposition 1 instantiated on the E1 pair; branchwise witnesses exist, joint empty.
+- E6 complementarity: redundant third inequality \(u\le9/10\) receives \(\lambda_3=0\). Standard supporting-hyperplane geometry, correctly read as “the obstruction is carried by the floors that bind.”
+- E5 is a re-validation of the same multipliers in Fraction arithmetic; tautological once E1/E6 hold.
+- Scope paragraph (“What is not claimed”) is honest: no vector comparison functions, no multi-floor DP, no Pareto trade-offs, Farkas requires convexity, uncertain thresholds belong to the buffered-viability companion.
+
+**Gaps and example-consistency problems**
+- E3 “dynamic vector floors” is only a per-cell re-reading of an already-audited two-patch system whose safe set was already two-dimensional. The note supplies neither the transition nor the observation maps, so the five verdicts (blind/aggregate nonviable, coordinate-wise and full viable) cannot be checked from this text alone.
+- E4 monotonicity is true in general (adding constraints shrinks \(\mathcal{V}\)) but the concrete 28/36 figures and the pair \(\{(1,1),(1,2)\}\) are unexplained. If the intended meaning is “number of viable 2-point sets” or “\(\binom{|\mathcal{V}|}{2}\)”, the “full information” qualifier and the example’s nonviability claim do not match.
+- No statement of how the one-step successor map \(x\mapsto x'\) produces the polyhedral inequalities \(A_i u\le b_i\). The original paper distinguished the first-order tangency reading (continuous) from the exact-next-state reading (discrete); this note uses the latter without comment.
+- Verification remains an unshown script (`vector_floor_certificates_v1_verify.py`, “6/6 families”). The six items are E1–E6; three of them are re-derivations of original-paper numbers.
+
+**Judgement.** The Farkas certificate for a stacked polyhedral common-action set is correct and checkable, and the complementarity and monotonicity remarks are valid. The note nevertheless cannot serve as a D4 generalization paper: the original calculus already contained vector floors, the identical two-floor Farkas example, and the Helly \(m+1\) witness. The abstract’s garbled 28/36 sentence, the undefined “viable pair family”, the full-information/pair mismatch, and the recycled examples are the items that must be repaired (or the note withdrawn in favour of a one-paragraph addendum to the original polyhedral paragraph). The same unshown-script evidence standard and production artefacts (empty-ish paths, declarations boilerplate) appear as in the stochastic-selector and viable-selector notes. No mathematical contradiction inside the Farkas layer itself; the contradiction is with the source paper the note claims to extend.
