@@ -1,0 +1,7 @@
+# Computational certification — edition 4 addendum
+
+**Edition:** `paper2_computational_certification_v4` + `paper2_computational_certification_v4_supplementary` (tex/pdf/verify), replacing v3 per the new-editions-only protocol. **Trigger:** rigor-elevation directive (and the round-3 audit's #1 essential item). **Verification:** 21/21 checks (chained 51/51 + 9/9 + 12/12); builds 0 overfull.
+
+## Content (v3 → v4)
+
+**Theorem 1(iv) is now proved, not gestured.** Main text carries the compact proof (Sion's minimax theorem over \(\mathcal P(\mathscr S)\), Dirac attainment, weak-* density of finitely supported measures, measurable vertex selection for the \(\Gamma\) identity, nonviability equivalence both ways); S1 v4 Step 5b carries the complete seven-step verification of every hypothesis ((a) policy compactness, (b) joint continuity from the label-continuity hypothesis — now stated in the theorem, (c) Sion, (d) value-function continuity via Arzelà–Ascoli, (e) atomic approximation, (f) the \(\Gamma\) representation, (g) the equivalence). The sandwich proof is completed (lower side: every policy's block moments are feasible at objective \(\max_a \mathcal F_a\); upper side: exact implementation + Lipschitz grid step), the moment-error lemma gained its pointwise TV proof, and the Anderson–Nash gesture is retired ("the surrounding theory, not a load-bearing citation"); Sion (1958) added to the references. No claim softened, no number changed; the verify script reads S1 v4 and asserts the proof block and the new needles.
