@@ -19,7 +19,8 @@ new systems plug in through `viacert.systems.FiniteSystem`.
 Nothing here is a new theorem: every identity is a pointer to a source
 edition and its verification script (see README.md). AI declaration: GLM
 (Z.ai), Qwen (Alibaba Cloud) and DeepSeek AI assisted with drafting and
-iterative review, under the programme's verification discipline.
+iterative review. The author reviewed and edited outputs and takes
+responsibility for the final work.
 """
 from .systems import FiniteSystem, audit_system, benchmark_caps, ce_laws, timing_grid
 from .recursion import viable, verdict, kernel, witness

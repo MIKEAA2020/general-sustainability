@@ -1,0 +1,3 @@
+# Worked-Systems Audit, Edition 3 — Addendum (declarations restructured)
+
+**Edition:** `paper2_worked_systems_v3` (tex + pdf + verification). **Base:** edition 2 (retained unmodified). **Scope:** declarations only — per the journal convention, the back matter now carries separate headings (Funding; Competing interests; Data availability; Code availability; AI declaration), and the AI declaration reads: "GLM (Z.ai), Qwen (Alibaba Cloud) and DeepSeek AI assisted with drafting and iterative review. The author reviewed and edited outputs and takes responsibility for the final work." **No scientific content changed**; the verification script (16/16, chain 57/57) asserts the separate headings and the responsibility wording. Build: 3 pages, zero errors, zero overfull.

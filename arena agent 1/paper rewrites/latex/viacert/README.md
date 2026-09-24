@@ -44,5 +44,5 @@ Repository: https://github.com/MIKEAA2020/general-sustainability
 (folder `arena agent 1/paper rewrites/latex/viacert`).
 
 AI declaration: GLM (Z.ai), Qwen (Alibaba Cloud) and DeepSeek AI
-assisted with drafting and iterative review, under the programme's
-verification discipline.
+assisted with drafting and iterative review. The author reviewed and
+edited outputs and takes responsibility for the final work.
