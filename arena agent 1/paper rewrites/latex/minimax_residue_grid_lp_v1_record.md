@@ -1,0 +1,17 @@
+# Continuous-Time Residue: Exact Rational-Grid LP Study (v1 record)
+
+**Date:** 2026-09-26. **Artifact:** `minimax_residue_grid_lp_v1.py` — 42/42 exact checks, standard library only, chaining the minimax battery. **Object:** the three parts of the residue conjecture (`minimax_dual_certificates_v5`, Conjecture `conj:envelope`), probed on exact rational grids: (i) the coupling law, (ii) the partition-refinement limit, (iii) value attainment / selection.
+
+## Findings (all exact rationals)
+
+**F1 — The certified policy's envelope is coupling-independent (part i).** On the segment of consistent couplings for the two-review instance (γ = λ·product + (1−λ)·countermonotone, both one-step marginals fixed at ½), the paper's optimal tree (u₁ = −2 with recourse (0, −2, 2, 2) at z₁ = (−1, 1, 3, 5)) evaluates to exactly ½ at every λ: its payoff depends only on the d₁ marginal, which every consistent coupling shares. The paper's Q₀ = ½ is therefore not merely product-coupling value — it is the coupling-robust value.
+
+**F2 — A certified coupling-selection gap on the instance (parts i/iii).** Over all 243 (u₁, recourse) pairs: sup_π inf_λ E[F] = ½ (attained by the paper's tree), while sup_π sup_λ E[F] = 1 (attained by (−2, 0, 0, 2, 2) under the countermonotone vertex). The selection direction — which coupling the evolution law picks — is worth exactly a factor 2 on the certified instance: the residue's part (iii) is substantive, with a closed instance-level gap.
+
+**F3 — The product coupling is interior at every K ≥ 2 (parts i/iii).** On the K=2 polytope the product coupling is the exact midpoint of the comonotone and countermonotone vertices; on the K=3 polytope (71 vertices enumerated exactly by support enumeration over the uniform-marginal transport polytope) the product coupling is relatively interior. Consequence: no selection principle stated as vertex choice over consistent couplings can pin the product coupling at any K ≥ 2 — the conjecture's "coupling law must reduce to the product coupling" is a substantive evolution axiom, not a consequence of LP geometry. For a spread-seeking marker (−|d₁+d₂+d₃|) the polytope optimum strictly beats the product coupling (−1 vs −3/2): pinning product is a real restriction.
+
+**F4 — The dyadic refinement limit is exact and monotone (part ii).** For the matching instance with N = 2^m states (margin −|x−a|) under the k-th dyadic refinement (blocks of b = N/2^k consecutive states), the envelope is exactly Q_k = −(N/2^k)·D(b)/N with D(b) = b²/4 (b even) or (b²−1)/4 (b odd): monotone non-decreasing in k, with limit 0 and per-halving rate ½ (tables certified for all N ≤ 64). The refinement sequence the conjecture's part (ii) must take is monotone with an exactly computable rate on this family.
+
+## Scope
+
+This study does not resolve the conjecture; it certifies, on the paper's own instance and on a closed refinement family: the coupling-robustness of the certified value, a concrete selection gap, the LP-geometric impossibility of vertex-pinning product, and a monotone exact refinement limit with rate. These are the boundary conditions any continuous-time evolution law must satisfy. Candidate next step: the LP dual over couplings as the candidate evolution law (its optimal couplings at K=2 are the two vertices; the certified policy is insensitive to the choice — the law may be free where it matters and pinned where it does not).

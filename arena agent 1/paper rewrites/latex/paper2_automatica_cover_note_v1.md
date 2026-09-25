@@ -1,6 +1,6 @@
 # Cover Note — Obstruction Calculus Submission Package (Automatica)
 
-**Date:** 2026-09-26. **Enclosures:** main text `paper2_obstruction_calculus_v53_Automatica_routes.{tex,pdf}` (18 pp), Supplementary Material `paper2_obstruction_calculus_v51_Automatica_routes_supplementary.{tex,pdf}` (20 pp), verification artifacts (`paper2_coverage_audit.py`, belief-state verifier, stochastic-selector seeds), and the applied companion `applied_regime_viability_v4.{tex,pdf}` with its exact-arithmetic verifier (185/185).
+**Date:** 2026-09-26. **Enclosures:** main text `paper2_obstruction_calculus_v53_Automatica_routes.{tex,pdf}` (18 pp), Supplementary Material `paper2_obstruction_calculus_v51_Automatica_routes_supplementary.{tex,pdf}` (20 pp), verification artifacts (`paper2_coverage_audit.py`, belief-state verifier, stochastic-selector seeds), and the applied companion `applied_regime_viability_v5.{tex,pdf}` with its exact-arithmetic verifier (229/229).
 
 ## Summary of the submission
 
