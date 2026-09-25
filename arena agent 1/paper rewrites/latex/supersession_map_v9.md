@@ -1,0 +1,134 @@
+# Supersession Map — Programme-Wide Banner Pass (v4)
+
+**Date:** September 26, 2026. **Supersedes `supersession_map_v3.md`.** Rule
+unchanged: frozen files are never edited; this map is the banner.
+
+## P1 — Obstruction calculus (flagship)
+
+| Artifact | Status |
+|----------|--------|
+| `paper2_obstruction_calculus_v49_Automatica_routes.tex` | **current**; owner venue decision pending; supp v47 (six enumerated complete proofs) scheduled |
+| `paper2_obstruction_calculus_v46_Automatica_routes_supplementary.*` | current; **six proofs enumerated missing** (see round-15 addendum) |
+| earlier v1–v48 | superseded by v49 |
+
+## P2 — Computational certification + library (flagship)
+
+| Artifact | Status |
+|----------|--------|
+| `paper2_computational_certification_v10.tex` (+ PDF + verify 39/39) | **current** |
+| `paper2_computational_certification_v9.tex` (verify 37/37) | superseded by v10 (chained seed) |
+| `paper2_computational_certification_supplementary_v6.tex` | **current** (the bridge's complete-proof layer) |
+| `viacert` library | **current** |
+| `paper2_exact_belief_computation_v3.tex` (verify 19/19) | **current**; v1–v2 superseded (chained seeds) |
+| earlier computational editions | superseded |
+
+## P3 — Probabilistic sufficiency (flagship)
+
+| Artifact | Status |
+|----------|--------|
+| `paper2_probabilistic_sufficiency_v6.tex` (+ PDF + verify 30/30; 18 envs / 18 proofs) | **current** |
+| v5 (28/28) | superseded by v6 |
+| v4 (`2ac7adc`), v3 (`c630363`), v2 (`36ed76b`), v1 (`bd04641`) | superseded, frozen |
+| seeds `paper2_stochastic_selector_v2*`, `paper2_belief_state_v2*` (+ `figs_bs2/`) | byte-frozen origins |
+
+## P4 — Worked-systems supplement (flagship)
+
+| Artifact | Status |
+|----------|--------|
+| `paper2_worked_systems_v10.tex` | **current**, scan-clean |
+
+## P5 — Applied flagship
+
+| Artifact | Status |
+|----------|--------|
+| `applied_regime_viability_v1.tex` (+ PDF + verify 11/11) | **current — the programme's applied certification (P5, executed)** |
+| `paperE1_cod_forecast_ladder_v50.tex` (verify 47/47) + `paperE1_calibration_data_v1*` | **current applied forecast lineage**, cross-cited |
+| `paper2_p5_decision_memo_v1.md` | historical record of the decision; default (a) superseded by execution of (b) per owner criteria |
+
+## Other
+
+| Artifact | Status |
+|----------|--------|
+| `hidden_parameter_learning_v1*` | byte-frozen seed |
+| roadmaps v16–v33 | superseded by **v34** |
+| `supersession_map_v1–v3` | superseded by this map |
+| `uploads/github_pat.txt` | **never push** |
+| release-asset `.github_pat` (`edwards-framework-e1`) | **owner action: revoke/rotate** |
+
+
+---
+
+# Round-16 supersessions (map v5)
+
+| Retired this round | Superseded by | Note |
+|---|---|---|
+| paper2_obstruction_calculus_v49_Automatica_routes.tex | paper2_obstruction_calculus_v50_Automatica_routes.tex | D1/D2 register fixes (3 instances); technical audit/programme usages retained |
+| paper2_obstruction_calculus_v46_..._supplementary.tex | paper2_obstruction_calculus_v47_..._supplementary.tex | +3 complete proofs (selector, sparse witness, recourse soundness w/ corrected certificate) |
+| paper2_computational_certification_v10.* | paper2_computational_certification_v11.* (tex/pdf/verification) | register fixes; verifier needles synced; 39/39 |
+| paper2_probabilistic_sufficiency_v6.* | paper2_probabilistic_sufficiency_v7.* (tex/pdf/verification) | parity sentence removed; audited->certified; script pointers updated; 30/30 |
+| paper2_worked_systems_v10.tex | paper2_worked_systems_v11.tex (+verification) | abstract citation removed; edition's-script sweep; 46/46 |
+| paper2_exact_belief_computation_v3.* | paper2_exact_belief_computation_v4.* (tex/pdf/verification) | abstract rewritten self-contained; edition/companion-theory sweep; references formalized; 19/19 |
+| paperE1_cod_forecast_ladder_v50.* | paperE1_cod_forecast_ladder_v51.* (+verification) | one sentence de-programmed; comment provenance cleaned; 47/47 |
+| applied_regime_viability_v1.* | applied_regime_viability_v2.* (tex/pdf/verification) | abstract rewritten; +Schijns/RV/RAM datasets + summary table; 61/61 |
+
+Unchanged: P1 seeds, P3 seeds v1-v5, ebc v1-v2, comp v9, all figures, calibration data v1 + wave_e_cod.
+
+
+---
+
+# Round-17 supersessions (map v6)
+
+| Retired this round | Superseded by | Note |
+|---|---|---|
+| paper2_obstruction_calculus_v50_Automatica_routes.tex | paper2_obstruction_calculus_v51_Automatica_routes.tex | delegation of 7 discussion blocks; recourse fold-in (Γ_h, Section 3.7); roadmap sentence |
+| paper2_obstruction_calculus_v47_..._supplementary.tex | paper2_obstruction_calculus_v48_..._supplementary.tex | +7 complete-discussion blocks; recourse header 3.7; attainment remark edition-free |
+| minimax_dual_certificates_v1.* | minimax_dual_certificates_v2.* (tex/pdf/verify) | corrected dynamic envelope: root causes + complete proofs + residue conjecture; 24/24 chained |
+| paperE1_cod_forecast_ladder_v51.* | paperE1_cod_forecast_ladder_v52.* (+verification) | single-longtable overfull fix; 0 overfull; 47/47 |
+
+Unchanged: P3 v7, comp v11, ws v11, ebc v4, ARV v2, all seeds, all figures, calibration data.
+
+
+---
+
+# Round-18 supersessions (map v7)
+
+| Retired this round | Superseded by | Note |
+|---|---|---|
+| minimax_dual_certificates_v2.* | minimax_dual_certificates_v3.* (tex/pdf/verify) | + review-sequence couplings section (tower on 81 trees; strict 1/2 > 0; refinement monotone); 20/20 chained |
+| paper2_obstruction_calculus_v48_..._supplementary.tex | paper2_obstruction_calculus_v49_..._supplementary.tex | dedup cross-references (Farkas block <-> worked certificates) |
+| paperE1_cod_forecast_ladder_v52.* | paperE1_cod_forecast_ladder_v53.* (+verification) | CORRECTION: v52's DM preamble lost @{}} (unbuildable tex; stale shipped pdf) — repaired in v53; minipage headers collapsed; 0 overfull, 47/47, build-verified |
+
+Unchanged: P1 v51 main, P3 v7, comp v11, ws v11, ebc v4, ARV v2, all seeds, all figures, calibration data.
+
+
+---
+
+# Round-19 supersessions (map v8)
+
+| Retired this round | Superseded by | Note |
+|---|---|---|
+| minimax_dual_certificates_v3.* | minimax_dual_certificates_v4.* (tex/pdf/verify) | + general finite-sequence envelope theorem (tower, DP, refinement, exactness; coupling-selection remark); 24/24 chained |
+| paper2_obstruction_calculus_v51_Automatica_routes.tex | paper2_obstruction_calculus_v52_Automatica_routes.tex | table-style normalization (2 case-study tables, vertical rules removed) |
+| paper2_obstruction_calculus_v49_..._supplementary.tex | paper2_obstruction_calculus_v50_..._supplementary.tex | same normalization (belief-state slice table) |
+| paper2_automatica_cover_note_v1.md (updated in place, as directed) | — | enclosure line → v52 + v50; companion paragraph → minimax v4 |
+
+Unchanged: P3 v7, comp v11, ws v11, ebc v4, ARV v2, E1 v53, all seeds, all figures, calibration data.
+
+
+---
+
+# Round-20 supersessions (map v9)
+
+| Retired this round | Superseded by | Note |
+|---|---|---|
+| minimax_dual_certificates_v4.* | minimax_dual_certificates_v5.* (tex/pdf/verify) | audit-narration removed; candidate-formulation analysis retained as mathematics; 23/23 chained |
+| paper2_exact_belief_computation_v4.* | paper2_exact_belief_computation_v5.* (+verification) | self-history and self-citation removed; refs rekeyed; 19/19 |
+| paper2_obstruction_calculus_v52_Automatica_routes.tex | paper2_obstruction_calculus_v53_Automatica_routes.tex | navigation phrase |
+| paper2_obstruction_calculus_v50_..._supplementary.tex | paper2_obstruction_calculus_v51_..._supplementary.tex | timeless section map |
+| paper2_probabilistic_sufficiency_v7.* | paper2_probabilistic_sufficiency_v8.* | "honest" ×2; 30/30 |
+| paper2_computational_certification_v11.* | paper2_computational_certification_v12.* | "honest" ×2; 39/39 |
+| paper2_worked_systems_v11.tex | paper2_worked_systems_v12.tex (+verification) | "sound report"; 46/46 |
+| applied_regime_viability_v2.* | applied_regime_viability_v3.* (+verification) | "so far" removed; 61/61 |
+| paperE1_cod_forecast_ladder_v53.* | paperE1_cod_forecast_ladder_v54.* (+verification) | edition clause + provenance comment removed; 47/47 |
+
+Unchanged: all seeds, all figures, calibration data.
