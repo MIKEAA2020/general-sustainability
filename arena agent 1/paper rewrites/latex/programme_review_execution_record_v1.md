@@ -33,3 +33,50 @@
 ## Discipline
 
 All four editions: explicit staging, collision-free names, collision cmp byte-identical, fresh-clone cmp, verifier re-runs from the clone, identity "Amin Abaee <amin_abaee@ut.ac.ir>"; family keying table recorded in the map's round-25 section; no superseded edition overwritten; uploads and `.cache/dl` never staged.
+
+
+---
+
+## Round 26 execution record (September 25, 2026)
+
+Scope: review2 adjudications + the clarity/flow scan, executed as one
+round (26a+26b) under the merit gate. Every item below passed the full
+gates: verifier green on the shipped tex, tectonic build green with
+zero overfull and zero unresolved references, pinned rebuild
+(`SOURCE_DATE_EPOCH=1758825600`) byte-identical, content-loss audit
+clean.
+
+Figures (recompute-then-assert, vector PDF, scripts archived):
+- `paper2_comp_certification_figures_v1.py` — 10/10 assertions
+  (peaks 93/50, 12345/6250, 2419/1250; falsified 103/50 and
+  2501/1250 at t = 29/25; window-exit velocities 23/25 and 22/25;
+  Gamma_a thresholds 7/50, 39/100, 16/25; pair thresholds
+  (15-sqrt(183))/6 and (10-sqrt(58))/6). Outputs `figs_comp2/`.
+- `paper2_arv_record_figure_v1.py` — 11/11 assertions against the
+  locked files (input vintage 1983–2015 from NCAM Table A2; database
+  vintage 2014–2021 = 238, 277, 340, 433, 394, 419, 440, 411 kt under
+  the verifier's conversion rules; thresholds 276 and 44229/50 kt;
+  1993 breach 101.05; 1995 minimum 9.68; 22 below-floor readings to
+  2014; re-crossing 250.12->298.65 and 238->277). Output `figs_arv/`.
+
+Citations (verified against real records before shipping): Chvátal
+1983 (Linear Programming, W.H. Freeman); Helly 1923 (J. Deutsche
+Math.-Ver. 32, 175–176); Milanese, Norton, Piet-Lahanier, Walter
+(Eds.) 1996 (Bounding Approaches to System Identification, Plenum);
+Baccelli, Cohen, Olsder, Quadrat 1992 (Synchronization and Linearity,
+Wiley); Hutchings & Myers 1994 (Can. J. Fish. Aquat. Sci. 51,
+2126–2146, entry consistent with E1 v55's bibliography).
+
+Editions and gates:
+- minimax v7: 37/37 chained (v3 20, v2 24, v1 8); 5 pp.
+- comp v15: 48/48; 11 pp.
+- ws v15: 54/54 (chained 57/57); 11 pp.
+- ebc v6: 25/25; 4 pp.
+- ARV v6: 236/236; 7 pp.
+- E1 v56: 49/49; 36 pp.
+
+Declined (decorative/duplicative): minimax coupling-tree figure; comp
+rates table; E1 DFO/RAM/xteNCAM/MSE expansions. Withdrawn: minimax
+§2-first reorder (Review I mis-report). Queued unchanged: notation
+tables, running-instance clauses, hypothesis-list parity, verification
+triple, contribution parity.

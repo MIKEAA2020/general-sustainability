@@ -80,20 +80,64 @@ figures, calibration data v1 + wave_e_cod.
 
 ---
 
-## Current editions (after round 22)
+## Current editions (after round 26)
 
 | Artifact | Status |
 |----------|--------|
 | `paper2_obstruction_calculus_v53_Automatica_routes.*` (18 pp) | **current** P1 main |
 | `paper2_obstruction_calculus_v51_Automatica_routes_supplementary.*` (20 pp) | **current** P1 supplementary |
-| `minimax_dual_certificates_v6.*` (5 pp, 34/34 chained) | **current** |
-| `paper2_exact_belief_computation_v5.*` (19/19) | **current** |
+| `minimax_dual_certificates_v7.*` (5 pp, 37/37 chained) | **current** |
+| `paper2_exact_belief_computation_v6.*` (4 pp, 25/25) | **current** |
 | `paper2_probabilistic_sufficiency_v8.*` (30/30) | **current** P3 |
-| `paper2_computational_certification_v14.*` (48/48) | **current** P2 |
-| `paper2_worked_systems_v14.*` (54/54) | **current** P4 |
-| `applied_regime_viability_v5.*` (7 pp, **229/229**) | **current** P5 viability layer |
-| `paperE1_cod_forecast_ladder_v55.*` (36 pp, 47/47) | **current** applied forecast lineage |
+| `paper2_computational_certification_v15.*` (11 pp, 48/48) | **current** P2 |
+| `paper2_worked_systems_v15.*` (11 pp, 54/54, chained 57/57) | **current** P4 |
+| `applied_regime_viability_v6.*` (7 pp, **236/236**) | **current** P5 viability layer |
+| `paperE1_cod_forecast_ladder_v56.*` (36 pp, 49/49) | **current** applied forecast lineage |
 | `paperE1_calibration_data_v1*`, `paperE1_calibration_data_v2_ram_panel_v1.csv` | **current** locked data records |
 | roadmaps v16–v40 | superseded by **v41** |
 | `supersession_map_v1–v10` | superseded by this map |
 | `uploads/github_pat.txt` | **never push** |
+
+
+---
+
+## Round 26 (accessibility, figures, and flow — September 25, 2026)
+
+Motivation: `programme_review2_accessibility_figures_insights_v1.md`
+(merit adjudications) plus the clarity/flow scan of all 4+1 papers
+(objective fixes only). Every figure is script-built under the
+recompute-then-assert rule; every new citation was verified against the
+real bibliographic record before shipping; every new edition passed the
+full gates (verifier green, build green, zero overfull, byte-identical
+pinned rebuild at `SOURCE_DATE_EPOCH=1758825600`).
+
+Supersessions:
+
+| Artifact | New edition | Delta |
+|----------|-------------|-------|
+| minimax | v6 -> **v7** (37/37 chained, 5 pp) | check-family table G1–G6 (tab:checks); Chvátal 1983 (LP duality/basic solutions) and Helly 1923 (planar tightness) citations + bibliography entries |
+| comp | v14 -> **v15** (48/48, 11 pp) | bridge hypotheses itemized H1–H6 (same words); `figs_comp2/fig_trajectories.pdf` + `fig_hierarchy.pdf` (10/10 exact assertions); LP introduced; Chvátal/Helly/Milanese et al. 1996 anchors; methods figure-script note |
+| ws | v14 -> **v15** (54/54, chained 57/57, 11 pp) | Baccelli et al. 1992 anchor at the regime-graph max-plus recursion; DP expanded at check P21; bibliography entry |
+| ebc | v5 -> **v6** (25/25, 4 pp) | "audited structure at a glance" classification table (drift law, cube accounting, 16 singletons, 32 Hamming-adjacent pairs, no larger sets, 65,536 raw vs 736 stored, ladder, deadline law) |
+| ARV | v5 -> **v6** (236/236, 7 pp) | `figs_arv/fig_record.pdf` (11/11 exact assertions against the locked files); NCAM expanded; one Hutchings–Myers 1994 context sentence; graphicx |
+| E1 | v55 -> **v56** (49/49, 36 pp) | NCAM and LRP expanded at first use (clarity scan objective fix) |
+
+New artifacts: `paper2_comp_certification_figures_v1.py` (10/10),
+`paper2_arv_record_figure_v1.py` (11/11), `figs_comp2/` (2 vector
+figures), `figs_arv/` (1 vector figure). Edition PDFs added alongside
+their sources; superseded editions and seeds byte-frozen.
+
+Declined at execution (adjudicated decorative or duplicative): the
+minimax coupling-tree figure (would plot the two asserted values 0 vs
++1 of check G5 — the table's G5 row carries the content); the comp
+redesign-rates table (duplicates the exact rates sentence already in
+the text); E1 expansions of DFO/RAM/xteNCAM/MSE (proper names or field
+standard). Withdrawn from Review I findings: the minimax "§2-first"
+reorder (§2 already opens with the measure dual — mis-reported defect).
+
+Content-loss audit: five vN->vN+1 diffs contain only intended
+insertions and in-place modifications; no removed content.
+
+Still queued (owner approval outstanding): per-paper notation tables
+with collision rows, running-instance clauses, hypothesis-list parity
+beyond comp, the uniform verification triple, contribution-list parity.
