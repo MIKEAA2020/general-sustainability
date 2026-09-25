@@ -3,6 +3,31 @@
 **Date:** September 26, 2026. **Supersedes `supersession_map_v10.md`.** Rule
 unchanged: frozen files are never edited; this map is the banner.
 
+## Round-25 supersessions (map v11)
+
+| Retired this round | Superseded by | Note |
+|---|---|---|
+| minimax_dual_certificates_v5.* | minimax_dual_certificates_v6.* (tex/pdf/verify) | review repairs: references section added, family keying (P1 = 2026b), register sweep (zero "corrected" occurrences), envelope-formulation renaming, code pointer v6; S5 DR-interpolation sentence + S2 parser pointer; 23/23 -> 34/34 (chained v3 20/20; v2 24/24; v1 8/8); 5 pp |
+| paper2_computational_certification_v13.* | paper2_computational_certification_v14.* (tex/pdf/verification) | review repairs: library identities re-cited to P1 + ws, rank caveat to ws; S2 parser shipped and recorded; S3 radius-law sentence on ebc's deadline instance; S4 refinement-axis sentence citing ws; 48/48; 11 pp |
+| paper2_worked_systems_v13.* | paper2_worked_systems_v14.* (tex/pdf/verification) | D2 ownership clause (caps derivation + fibre width owned by the dual-certificate companion, cross-cited); S4 refinement-axis sentence citing comp; 54/54 (chained 57/57); 11 pp |
+| paperE1_cod_forecast_ladder_v54.* | paperE1_cod_forecast_ladder_v55.* (tex/pdf/verification) | D5: replication block names archived wave_e_cod/src/ paths, CRediT and Funding completed; S6 sentence citing P1's delayed-information theorem; 47/47; 36 pp |
+
+New artifacts: `certificate_exchange_v1.py` (+ `comp_three_branch_v1.json`,
+`minimax_caps_v1.json`; 18 exact checks, tamper-rejecting),
+`paper2_coupling_dr_interpolation_check_v1.py` (6/6: sup over the DR family
+= rho exactly, marginals preserved, coupling extremum at rho = 1),
+`paper2_ebc_comp_beliefcell_joint_check_v1.py` (5/5, 295 probes: radius law
+delta <= z0 - (1 + T/2), zero-slack boundary, singleton recovery),
+`programme_review_execution_record_v1.md` (repairs D1-D7 + S2-S6 execution).
+
+Family author-year keying (theory line): 2026a = ARV, 2026b = P1, 2026c =
+ws, 2026d = comp, 2026e = P3, 2026f = ebc, 2026g = minimax. E1's list keys
+its own deposits (a = Edwards, b = periodic review, c = ARV) and cites P1
+as 2026d. ebc and P3 stay frozen this round; their reciprocal citations
+ride their next natural editions (recorded in the execution record).
+
+---
+
 ## Round-24 supersessions (map v11)
 
 | Retired this round | Superseded by | Note |
@@ -61,13 +86,13 @@ figures, calibration data v1 + wave_e_cod.
 |----------|--------|
 | `paper2_obstruction_calculus_v53_Automatica_routes.*` (18 pp) | **current** P1 main |
 | `paper2_obstruction_calculus_v51_Automatica_routes_supplementary.*` (20 pp) | **current** P1 supplementary |
-| `minimax_dual_certificates_v5.*` (5 pp, 23/23 chained) | **current** |
+| `minimax_dual_certificates_v6.*` (5 pp, 34/34 chained) | **current** |
 | `paper2_exact_belief_computation_v5.*` (19/19) | **current** |
 | `paper2_probabilistic_sufficiency_v8.*` (30/30) | **current** P3 |
-| `paper2_computational_certification_v13.*` (48/48) | **current** P2 |
-| `paper2_worked_systems_v13.*` (54/54) | **current** P4 |
+| `paper2_computational_certification_v14.*` (48/48) | **current** P2 |
+| `paper2_worked_systems_v14.*` (54/54) | **current** P4 |
 | `applied_regime_viability_v5.*` (7 pp, **229/229**) | **current** P5 viability layer |
-| `paperE1_cod_forecast_ladder_v54.*` (35 pp, 47/47) | **current** applied forecast lineage |
+| `paperE1_cod_forecast_ladder_v55.*` (36 pp, 47/47) | **current** applied forecast lineage |
 | `paperE1_calibration_data_v1*`, `paperE1_calibration_data_v2_ram_panel_v1.csv` | **current** locked data records |
 | roadmaps v16–v40 | superseded by **v41** |
 | `supersession_map_v1–v10` | superseded by this map |
