@@ -3,6 +3,22 @@
 **Date:** September 26, 2026. **Supersedes `supersession_map_v10.md`.** Rule
 unchanged: frozen files are never edited; this map is the banner.
 
+## Round-24 supersessions (map v11)
+
+| Retired this round | Superseded by | Note |
+|---|---|---|
+| paper2_computational_certification_v12.* | paper2_computational_certification_v13.* (tex/pdf/verification) | bridge audit adjudicated and completed: belief-cell certificates proposition (the recorded cell-conditioned lift, instantiated on the compatible-mode hierarchy with radius bounds 31/1250, 81/1250, δ_C < Γ), redesign-sensitivities proposition (timing rate one, authority rate one half, shared-window and velocity budget rate zero); audit's four core repairs adjudicated stale (defects of v3–v6, fixed in v7, script-certified since); 39/39 → 48/48; 10 pp |
+
+New artifact: `paper2_comp_bridge_audit_adjudication_addendum.md` (routing
+confirmed; quote-by-quote adjudication against v3–v13; execution record for
+the audit's generalization asks).
+
+Unchanged this round: P1 v53/v51, minimax v5, ebc v5, P3 v8, ws v13,
+E1 v54, ARV v5, cover note, all seeds, figures, calibration data v1 +
+wave_e_cod.
+
+---
+
 ## Round-23 supersessions (map v11)
 
 | Retired this round | Superseded by | Note |
@@ -48,7 +64,7 @@ figures, calibration data v1 + wave_e_cod.
 | `minimax_dual_certificates_v5.*` (5 pp, 23/23 chained) | **current** |
 | `paper2_exact_belief_computation_v5.*` (19/19) | **current** |
 | `paper2_probabilistic_sufficiency_v8.*` (30/30) | **current** P3 |
-| `paper2_computational_certification_v12.*` (39/39) | **current** P2 |
+| `paper2_computational_certification_v13.*` (48/48) | **current** P2 |
 | `paper2_worked_systems_v13.*` (54/54) | **current** P4 |
 | `applied_regime_viability_v5.*` (7 pp, **229/229**) | **current** P5 viability layer |
 | `paperE1_cod_forecast_ladder_v54.*` (35 pp, 47/47) | **current** applied forecast lineage |
