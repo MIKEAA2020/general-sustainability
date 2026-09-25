@@ -1,0 +1,256 @@
+\documentclass[10pt,twocolumn]{article}
+\usepackage[a4paper,margin=15mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{amsthm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\usepackage{booktabs,array,calc}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[colorlinks=true]{hyperref}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\renewcommand{\thesubsection}{\arabic{subsection}.}
+\emergencystretch=3em
+\allowdisplaybreaks
+
+\begin{document}
+\title{Exact Belief-State Computation at Scale:\\
+Point-Based Recursion and Survivable-Set Compression\\[0.2em]
+{\large\rmfamily A computational companion to the belief-state
+safety-value theory}}
+\author{Amin Abaee\\[0.35em]
+{\small Independent Researcher}\\[0.55em]
+{\small\href{https://orcid.org/0000-0002-0019-1842}{ORCID: 0000-0002-0019-1842}}\\[0.3em]
+{\small\href{mailto:amin\_abaee@ut.ac.ir}{amin\_abaee@ut.ac.ir}}}
+\date{September 26, 2026}
+\maketitle
+
+\begin{abstract}
+The belief-state safety-value theory is carried in exact rational
+arithmetic, but its published audits stop at instances a pencil could
+hold. This paper scales the exact programme to a medium instance ---
+\(48\) augmented states (\(12\) stock levels against the floor
+\(\times\) \(4\) hidden-parameter cells), five controls --- with two
+compression disciplines and no floating point anywhere. First, exact
+point-based evaluation: the alpha-set backup evaluated at probed beliefs
+returns the exact value at every probed belief, verified against
+definition-level trajectory enumeration at all probed points (seven
+rational beliefs, three horizons). Second, survivable-set compression:
+the belief kernel is stored as the antichain of maximal jointly
+survivable parameter sets rather than the full subset lattice ---
+\(48\) stored sets in place of \(180\) raw subset evaluations across the
+twelve levels. The instance's structure is carried completely: the
+indefinite-horizon kernel is singleton at the floor's edge, the four
+coordinate pairs above it, and never larger --- no policy keeps all four
+parameter cells safe, an obstruction proved by an averaging identity
+(every control's drifts sum to \(-\tfrac25\) per step over the four
+cells) and certified at \(60\) steps for every three-periodic policy.
+The observation ladder is strict: blind values stabilize at
+\(\tfrac14\) (floor edge) and \(\tfrac12\) (everywhere above), one
+probe of the first parameter reaches \(1\) for every level above the
+edge (\(\tfrac12\) at the edge), and full observation is \(1\)
+throughout --- one well-chosen probe exhausts the value of observation
+above the floor's edge. All computations are exact integer and rational
+arithmetic, standard library only.
+\end{abstract}
+
+\textbf{Keywords:} exact computation; partially observable control;
+point-based value iteration; zero-suppressed sets; survivable sets;
+observation design
+
+\subsection{Introduction}\label{introduction}
+
+The belief-state safety value \(V_{k}(b)\) is exactly computable over
+rational data, but the audited demonstrations in the companion theory
+(hereafter the theory paper) use grids of at most \(16\) states. This
+paper asks whether the exact discipline survives scaling by an order of
+magnitude, and what new structure appears when it does. The answer is
+yes, with two working disciplines: \emph{point-based evaluation}, which
+restores exactness at probed beliefs without enumerating the simplex,
+and \emph{survivable-set compression}, which replaces subset lattices
+by their maximal antichains. The medium instance --- \(12\) floor
+levels \(\times\) \(4\) hidden-parameter cells, five controls --- turns
+out to carry a sharp structural obstruction (no control keeps all four
+parameter cells safe, ever), a strict observation ladder, and a clean
+band structure for the kernel; all of it is carried exactly.
+
+\subsection{The instance}\label{instance}
+
+The state is \((z, \theta)\) with stock \(z\) on the grid
+\(z_{0} \in \{1.0, 1.1, \dots, 2.1\}\) and hidden parameter
+\(\theta = (\theta_{1}, \theta_{2}) \in \{+1, -1\}^{2}\): \(48\)
+augmented cells. Controls are \(u \in \{(1,1), (-1,-1), (1,-1),
+(-1,1), (0,0)\}\), and the one-step drift is additive,
+\[
+\dot z \;=\; d(u, \theta) \;=\; -\tfrac{1}{10}
+\;+\; \tfrac{1}{5}\,(u_{1}\theta_{1} + u_{2}\theta_{2}),
+\]
+with the floor \(z \ge 1\) and the matched action \(u = \theta\)
+rising at \(+\tfrac{3}{10}\). The belief lives on the four parameter
+cells at the observed stock level. No observation noise is present:
+the difficulty is the unknown pair, not the sensor.
+
+\subsection{Exact point-based evaluation}\label{pbvi}
+
+\begin{proposition}[exact point-based values]\label{prop:pbvi}
+For finite \(A\) and fixed horizon \(k\), the alpha-set backup of the
+theory paper's Proposition (rational alpha-vectors) evaluated at a
+belief \(b\) --- \(\max_{u}\sum_{\theta} b(\theta)\,
+\mathbb{1}[\text{the cell survives the appended action}]\) --- returns
+the exact value \(V^{\Pi}_{k}(b)\) whenever the enumerated class
+element is optimal at \(b\); more generally the evaluated maximum over
+all class elements is the exact value by definition, with the
+attaining element as witness. No belief-space discretization error
+exists: the ``point-based'' step selects where to \emph{evaluate}, not
+what to compute, and every returned number is an exact rational.
+\end{proposition}
+
+On the instance, seven probed rational beliefs (and the uniform belief
+at every level) are evaluated exactly at horizons \(k \in \{1, 3,
+6\}\), each against definition-level trajectory enumeration over all
+action sequences --- exact equality throughout (Section
+\ref{methods}). The finite-horizon table over the twelve levels is the
+paper's first output: \(V_{6}(b_{0}) = \tfrac14\) at the floor's edge,
+\(\tfrac12\) on \(1.1\) through \(1.5\), and \(1\) from \(1.6\) up
+(the doomed cells survive six steps from higher stock), monotone
+nonincreasing in the horizon at every level.
+
+\subsection{Survivable-set compression}\label{zdd}
+
+\begin{proposition}[kernel by antichain]\label{prop:antichain}
+A parameter-cell set \(S\) is \emph{jointly survivable} if one
+(possibly time-varying) blind policy keeps every cell in \(S\) above
+the floor indefinitely. The indefinite-horizon belief kernel is
+\(\{b : \max_{S} b(S) = 1\}\) over the maximal jointly survivable
+sets, and the stored object is the antichain of maximal sets
+(componentwise order), not the subset lattice: on the instance,
+\(48\) stored sets in place of \(180\) raw subset evaluations over the
+twelve levels. The bands are: the four singletons at \(z_{0} = 1.0\);
+the four \emph{coordinate pairs} --- \(\{++,
++-\}\), \(\{++,
+-+\}\), \(\{-+,
+--\}\), \(\{+-,
+--\}\) --- at every level \(z_{0} \ge 1.1\); nothing larger, ever.
+\end{proposition}
+
+Two structural facts explain the bands. First, the coordinate pairs
+rise: under the alternation \((1,1) \leftrightarrow (1,-1)\) both
+cells of \(\{++, +-\}\) drift \(+\tfrac3{10}, -\tfrac1{10}\) per pair
+of steps, net \(+\tfrac1{10}\) with dips of \(\tfrac1{10}\), safe
+forever from \(z_{0} \ge 1.1\). Second, nothing larger survives:
+
+\begin{proposition}[the averaging obstruction]\label{prop:obstruction}
+Every control's drifts over the four parameter cells sum to
+\(-\tfrac25\) per step. Hence over any time window the four cells'
+cumulative displacements sum to a negative number, so some cell exits
+the floor band: no policy --- blind or otherwise, of any horizon ---
+keeps all four parameter cells safe indefinitely. With one cell
+sacrificed, the search certifies at \(60\) steps that every
+three-periodic policy keeps at most a coordinate pair; the pairs are
+therefore maximal, and the indefinite-horizon kernel at the uniform
+belief is \(\tfrac12\) for every \(z_{0} \ge 1.1\) and \(\tfrac14\) at
+the edge.
+\end{proposition}
+
+The obstruction is structural, not numeric: it is the same
+``someone must pay for the drift'' identity that the timing layer of
+the calculus prices, here read across parameter cells rather than
+time.
+
+\subsection{The observation ladder}\label{ladder}
+
+\begin{proposition}[one probe exhausts observation above the edge]
+\label{prop:ladder}
+Reveal \(\theta_{1}\) only (one probe; the support becomes a
+coordinate pair). The post-probe support is jointly survivable at
+every \(z_{0} \ge 1.1\), so the one-probe value is \(1\) there; at the
+floor's edge it is \(\tfrac12\): the controller keeps exactly one
+cell of the pair alive, and the probe's expected value is half the
+single-cell mass. Fully observed play (matched action,
+drift \(+\tfrac3{10}\)) is \(1\) everywhere. The ladder per level is
+therefore
+\[
+\tfrac14 \;<\; \tfrac12 \;<\; 1 \quad (z_{0} = 1.0), \qquad
+\tfrac12 \;<\; 1 \;=\; 1 \quad (z_{0} \ge 1.1):
+\]
+above the floor's edge, a single well-chosen probe exhausts the value
+of observation; the second parameter is worth nothing once the first
+is known, because the surviving pairs share a coordinate.
+\end{proposition}
+
+\subsection{Verification methods}\label{methods}
+
+Every number is regenerated by one deterministic script in exact
+integer and rational arithmetic, standard library only: the
+finite-horizon table by definition-level enumeration over all action
+sequences at \(k \in \{1, 2, 3, 6\}\) and all twelve levels; the
+maximal-set classification by two- and three-periodic policy search
+with \(60\)-step certificates, maximality by antichain filtering; the
+averaging obstruction by the identity \(10\,d(u, \theta) = -1 +
+2(u_{1}\theta_{1} + u_{2}\theta_{2})\) summed over the cells; the
+ladder by post-probe support enumeration; the point-based claims by
+exact evaluation at seven probed rational beliefs against the
+definition path; the compression census (\(48\) stored sets, \(180\)
+raw) by counting; and every headline number asserted present in this
+text.
+
+\subsection{Delimitations}\label{scope}
+
+The instance has deterministic per-cell dynamics and error-free
+probes; observation noise enters the companion theory's stochastic
+layer, not this one. Point-based evaluation is exact at the probed
+beliefs and does not approximate between them. The compression is
+exact for the stored objects and makes no claim beyond the antichain's
+size. Scaling further (hundreds of cells, many parameters) is the next
+step, for which the antichain representation --- not the subset
+lattice --- is the argued data structure.
+
+\subsection{Conclusion}\label{conclusion}
+
+The exact discipline scales, and scaling pays in structure: a medium
+instance exhibits an averaging obstruction no policy can beat, a
+two-band kernel, and an observation ladder in which one probe is
+everything. The two working disciplines --- evaluate exactly where you
+probe, store the antichain not the lattice --- are the transferable
+result.
+
+\subsection*{References}
+
+{\footnotesize
+Abaee, A. An obstruction calculus for viability under incomplete
+observation (submitted).
+
+Abaee, A. Probabilistic sufficiency for the obstruction calculus:
+belief-state safety values under partial observation (companion
+theory paper, same repository).
+}
+
+\subsection*{Declarations}
+
+\subsection*{Funding}
+None.
+
+\subsection*{Competing interests}
+None.
+
+\subsection*{Data availability}
+No external data were used.
+
+\subsection*{Code availability}
+The verification script
+\url{paper2_exact_belief_computation_v1_verification.py} is publicly
+available at \url{https://github.com/MIKEAA2020/general-sustainability}
+(folder \texttt{arena agent 1/paper rewrites/latex}); it reproduces all
+values, sets, bands, and census counts verbatim.
+
+\subsection*{AI declaration}
+GLM (Z.ai), Qwen (Alibaba Cloud) and DeepSeek AI assisted with drafting
+and iterative review. The author reviewed and edited outputs and takes
+responsibility for the final work.
+
+\end{document}
