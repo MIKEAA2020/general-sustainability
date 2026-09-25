@@ -3,6 +3,18 @@
 **Date:** September 26, 2026. **Supersedes `supersession_map_v10.md`.** Rule
 unchanged: frozen files are never edited; this map is the banner.
 
+## Round-23 supersessions (map v11)
+
+| Retired this round | Superseded by | Note |
+|---|---|---|
+| paper2_worked_systems_v12.* | paper2_worked_systems_v13.* (tex/pdf/verification) | worked-systems audits completed: stationary-policy proposition added (aggregate union empty, full-info union equals the kernel), requirement criterion replaced by statewise factoring, strict-difference clauses corrected; 46/46 → 54/54; 11 pp |
+
+Unchanged this round: P1 v53/v51, minimax v5, ebc v5, P3 v8, comp v12,
+E1 v54, ARV v5, cover note (replication counts updated to the round-22
+applied companions), all seeds, figures, calibration data v1 + wave_e_cod.
+
+---
+
 ## Round-22 supersessions (map v11)
 
 | Retired this round | Superseded by | Note |
@@ -16,7 +28,7 @@ extract; RAM Legacy v4.66, DOI 10.5281/zenodo.14043031, md5
 `ed6d7cd3f7da1fdcbc60015c3d65014b`), `applied_panel_discrimination_v1.py`
 (+ record), `minimax_residue_grid_lp_v1.py` (+ record).
 
-Unchanged: P1 v53/v51, minimax v5, ebc v5, P3 v8, comp v12, ws v12, E1 v54,
+Unchanged: P1 v53/v51, minimax v5, ebc v5, P3 v8, comp v12, E1 v54,
 cover note (applied companion line updated to ARV v5 229/229), all seeds,
 figures, calibration data v1 + wave_e_cod.
 
@@ -32,7 +44,7 @@ figures, calibration data v1 + wave_e_cod.
 | `paper2_exact_belief_computation_v5.*` (19/19) | **current** |
 | `paper2_probabilistic_sufficiency_v8.*` (30/30) | **current** P3 |
 | `paper2_computational_certification_v12.*` (39/39) | **current** P2 |
-| `paper2_worked_systems_v12.*` (46/46) | **current** P4 |
+| `paper2_worked_systems_v13.*` (54/54) | **current** P4 |
 | `applied_regime_viability_v5.*` (7 pp, **229/229**) | **current** P5 viability layer |
 | `paperE1_cod_forecast_ladder_v54.*` (35 pp, 47/47) | **current** applied forecast lineage |
 | `paperE1_calibration_data_v1*`, `paperE1_calibration_data_v2_ram_panel_v1.csv` | **current** locked data records |

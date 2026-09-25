@@ -14,7 +14,7 @@ The paper develops an obstruction calculus for viability under incomplete observ
 
 ## Replication
 
-Every quantitative claim traces to a standard-library exact-arithmetic script in the public repository (folder `arena agent 1/paper rewrites/latex`): the coverage-audit grid (`paper2_coverage_audit.py`), the belief-state battery (30/30, chained seeds), and the applied pair (61/61). Scripts print their check counts and exit nonzero on any failure.
+Every quantitative claim traces to a standard-library exact-arithmetic script in the public repository (folder `arena agent 1/paper rewrites/latex`): the coverage-audit grid (`paper2_coverage_audit.py`), the belief-state battery (30/30, chained seeds), and the applied companions (`applied_regime_viability_v5` 229/229, `applied_panel_discrimination_v1` 18/18, `minimax_residue_grid_lp_v1` 42/42). Scripts print their check counts and exit nonzero on any failure.
 
 ## Companion work recorded this round (not part of the submission)
 
