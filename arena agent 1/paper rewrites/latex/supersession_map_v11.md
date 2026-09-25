@@ -13,6 +13,11 @@ Unchanged this round: P1 v53/v51, minimax v5, ebc v5, P3 v8, comp v12,
 E1 v54, ARV v5, cover note (replication counts updated to the round-22
 applied companions), all seeds, figures, calibration data v1 + wave_e_cod.
 
+New artifact: `paper2_ws_upgrades_audit_adjudication_addendum.md` — routing
+adjudication of the ws-upgrades audit (checked against both papers; quoted
+defects located in ws, comp-side items already discharged in v12; the two
+3/50 margins shown to belong to different instances; no comp edition change).
+
 ---
 
 ## Round-22 supersessions (map v11)
