@@ -1,6 +1,6 @@
 # Cover Note — Obstruction Calculus Submission Package (Automatica)
 
-**Date:** 2026-09-26. **Enclosures:** main text `paper2_obstruction_calculus_v51_Automatica_routes.{tex,pdf}` (18 pp), Supplementary Material `paper2_obstruction_calculus_v48_Automatica_routes_supplementary.{tex,pdf}` (20 pp), verification artifacts (`paper2_coverage_audit.py`, belief-state verifier, stochastic-selector seeds), and the applied companion `applied_regime_viability_v2.{tex,pdf}` with its exact-arithmetic verifier (61/61).
+**Date:** 2026-09-26. **Enclosures:** main text `paper2_obstruction_calculus_v52_Automatica_routes.{tex,pdf}` (18 pp), Supplementary Material `paper2_obstruction_calculus_v50_Automatica_routes_supplementary.{tex,pdf}` (20 pp), verification artifacts (`paper2_coverage_audit.py`, belief-state verifier, stochastic-selector seeds), and the applied companion `applied_regime_viability_v2.{tex,pdf}` with its exact-arithmetic verifier (61/61).
 
 ## Summary of the submission
 
@@ -18,5 +18,5 @@ Every quantitative claim traces to a standard-library exact-arithmetic script in
 
 ## Companion work recorded this round (not part of the submission)
 
-- The rejected dynamic-envelope proposal (external audit) has been root-caused and corrected: the expectation-to-realization bridge needs no selection theorem; the envelope is well-posed as an information-state recursion and identifies exactly with the recourse certificate one step deep; the continuous-time residue is restated as the corrected conjecture (`minimax_dual_certificates_v2.{tex,pdf}`, 24/24 exact checks, v1 battery chained).
+- The rejected dynamic-envelope proposal (external audit) has been root-caused and corrected: the expectation-to-realization bridge needs no selection theorem; the envelope is well-posed as an information-state recursion and identifies exactly with the recourse certificate one step deep; the continuous-time residue is restated as the corrected conjecture (`minimax_dual_certificates_v4.{tex,pdf}`, 24/24 exact checks, chaining the v3/v2/v1 batteries); in its general finite-sequence form the envelope carries the tower identity, a dynamic-programming characterization, and refinement monotonicity over arbitrary review filtrations, and the residue is stated as a coupling-selection and refinement-limit conjecture grounded by that theorem.
 - The applied ladder's typesetting inherited overfull boxes from the conversion pipeline; cleared in v52 (47/47).
