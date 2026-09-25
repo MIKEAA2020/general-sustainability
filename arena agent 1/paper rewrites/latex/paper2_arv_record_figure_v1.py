@@ -14,6 +14,7 @@ re-crossing (both vintages) annotated with the exact printed values.
 """
 import csv
 import os
+os.environ.setdefault("SOURCE_DATE_EPOCH", "1758825600")  # pin embedded PDF metadata to the round's pinned build epoch
 from fractions import Fraction as Q
 import matplotlib
 matplotlib.use("Agg")

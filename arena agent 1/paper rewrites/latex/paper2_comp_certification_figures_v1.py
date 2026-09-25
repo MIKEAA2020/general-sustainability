@@ -19,6 +19,7 @@ the pair delay thresholds (15 - sqrt(183))/6 and (10 - sqrt(58)/6), and
 the zero line.
 """
 import os
+os.environ.setdefault("SOURCE_DATE_EPOCH", "1758825600")  # pin embedded PDF metadata to the round's pinned build epoch
 from fractions import Fraction as Q
 import matplotlib
 matplotlib.use("Agg")
