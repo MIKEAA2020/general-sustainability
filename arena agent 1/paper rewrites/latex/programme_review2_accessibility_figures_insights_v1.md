@@ -109,3 +109,7 @@ shipped tex (§2 already opens with the measure dual).
 Gates: all six new editions verifier-green, build-green (zero
 overfull, zero unresolved refs), byte-identical pinned rebuilds;
 content-loss audit clean; map round-26 rows updated.
+
+### Post-hoc verification appendix (review III, September 26, 2026)
+
+Section 3.3's rationale for declining the general max-plus duality theorem in ws — "would re-prove P1's attributed Theorem 1 ground" — is retracted as mis-premised: P1 v53 contains no max-plus content (zero hits; its eight theorems are soundness/completeness, common-action obstruction, delayed-information, LP instantiation, exit certificate, and three further theorems). The decline stands on verified grounds: no shipped ws claim needs a general theorem (the regime-graph recursion is certified exactly, check P21); ws's scope is certified instances and the general algebra is now cited (Baccelli et al., 1992, ws v15) rather than re-proved; a new general theorem would add a proof burden and an owner question with no claim-level payoff. ws has no conjecture apparatus, so an "extension" would require new section-grade machinery to be honest. Full adjudication: `programme_review3_declined_additions_adjudication_v1.md`. The hysteresis and viability-kernel rationales were verified and stand as recorded.
