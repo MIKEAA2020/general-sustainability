@@ -50,3 +50,29 @@ Each paper is *internally* consistent — nothing is technically broken — whic
 1. The ECOMOD manuscript (separate "productivity illusion" lineage) uses its own local `2026a/2026b` — same treatment at its next edition if A is adopted.
 2. Future deposits join the registry at the next letter; the map's table is the single source of truth.
 3. Zenodo deposit **titles** remain owner-side (the carried refresh item); the lettering fix is independent of it.
+
+## 5. Owner decision (September 26, 2026)
+
+**Letter-free formal citation adopted. No new versions for this.** The
+two-tier scheme (unlettered title-distinguished reference entries;
+in-text plain "(Abaee, 2026)" when unique, shortened-title form when
+several 2026 works are cited) is the family convention from now on, and
+it **rides the next organic edition** of each affected manuscript — no
+standalone version-creating round is to be executed for citation form.
+
+Concrete disposition:
+
+- **ARV / E1:** apply the scheme to their deposit/preprint keys at their
+  next organic editions (whenever substantive content next changes).
+  Until then the shipped editions stand as-is — internally consistent;
+  the collision remains documented in the registry table above for
+  audit purposes only.
+- **New manuscripts:** apply the letter-free scheme from birth.
+- **Cover letters, submission portals, data statements:** letter-free
+  immediately (no versions involved).
+- **Sealed packages** (paper1 v62 JMCDA, ECOMOD v37): untouched — v62
+  already uses the unlettered entry style.
+- The global lettering registry (2026a–l) is **not adopted**; the table
+  in §1 remains as the audit-trail record of the historical keying.
+- Standing rule added: **never create editions for citation-form
+  changes alone.**

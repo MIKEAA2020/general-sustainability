@@ -2678,3 +2678,15 @@ Work Log:
 
 Stage Summary:
 - No losses; recovery unnecessary; policy documented. Lettering proposal rescoped per owner preference; execution queued pending approval.
+
+---
+Task ID: 131
+Agent: Arena Agent Mode (continuation session)
+Task: record the owner's citation-form decision — letter-free formal citation, explicitly without creating new versions.
+
+Work Log:
+- Owner decision recorded in `programme_2026_lettering_unification_proposal_v1.md` §5: the two-tier letter-free scheme (unlettered title-distinguished entries; in-text plain vs shortened-title by ambiguity) is the family convention; it rides the next organic edition of each affected manuscript; no standalone version-creating round for citation form, ever (standing rule). ARV/E1 apply at next organic editions; new manuscripts from birth; cover letters and portal materials immediately; sealed packages untouched; the 2026a-l registry is not adopted (table remains audit-trail-only).
+- No paper files edited; no editions created; doc-only commit.
+
+Stage Summary:
+- Convention on the books; execution deferred to organic editions; nothing pushed but this record.
