@@ -59,3 +59,5 @@ The strategic note above (line 41) is obsolete on three counts, established by t
 3. **Editions are stale.** comp v11 / ws v11 / ARV v2 / E1 v53 are now v15 / v15 / v6 / v56 (check counts in the map's current-editions table).
 
 The venue-strategy substance that survives: the separation of the Automatica and MoOR submissions, and the comp-to-SIOPT / ws-to-SCL simultaneity point. The applied pair's correct general-audience posture remains the one review III recorded: no extractable theorem; companion-by-construction split (ARV prices what could have been kept safe, E1 prices what could be predicted); governance-adjacent material delegated by citation (ARV → E1 §3.10; E1 → the sampled-governance deposit, 22554297).
+
+**Timeline note (same day).** The venue table above is the round-19 snapshot, frozen as written: obstruction calculus P1 v52 + supp v50, comp v11, ws v11, ebc v4, ARV v2, E1 v53, minimax v4, P3 v7. Current editions (map v11, round 26): obstruction calculus **v53 + supp v51**, comp v15, ws v15, ebc v6, ARV v6, E1 v56, minimax v7, P3 v8. The v52 mention is historical, not a current-state claim.

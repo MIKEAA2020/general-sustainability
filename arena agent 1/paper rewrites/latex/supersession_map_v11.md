@@ -20,6 +20,14 @@ New artifacts: `certificate_exchange_v1.py` (+ `comp_three_branch_v1.json`,
 delta <= z0 - (1 + T/2), zero-slack boundary, singleton recovery),
 `programme_review_execution_record_v1.md` (repairs D1-D7 + S2-S6 execution).
 
+Naming disambiguation (round 26): board "P1" is the Automatica
+obstruction-calculus lineage, whose repo filenames are
+`paper2_obstruction_calculus_*` — it is **paper 2 in the broader repo
+series**. Repo `paper1_assessment_separation_*` is a different, earlier
+lineage (not board-keyed); the standing rule "never mix paper-1
+lineages" exists for exactly this collision. Board P-number = family
+key, not repo file number.
+
 Family author-year keying (theory line): 2026a = ARV, 2026b = P1, 2026c =
 ws, 2026d = comp, 2026e = P3, 2026f = ebc, 2026g = minimax. E1's list keys
 its own deposits (a = Edwards, b = periodic review, c = ARV) and cites P1
