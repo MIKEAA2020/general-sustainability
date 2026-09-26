@@ -2492,3 +2492,28 @@ Stage Summary:
 - The six audit questions are answered with an evidence trail: one alignment-doc residue implemented (Q1); delegation declined with reasons (Q2); two alignment gaps found and fixed, everything else verified (Q3); the supplementary complete as a companion, one alignment completion implemented, the partial-status items confirmed deliberate (Q4); expository density at ceiling - only the two genuine completions implemented (Q5); full-read clarity/flow scan clean, all seams seamless (Q6).
 - The JMCDA SI submission package is current: v62 tex/pdf + supplementary v12 + the SI-named cover letter; deadline 31 January 2027.
 - Open (carried, unchanged): the owner-side Zenodo deposit-title refresh; the ECOMOD next-round flags from Task 117; the SI submission itself (owner action via the Wiley portal).
+
+---
+Task ID: 121
+Agent: main (Z.ai Code)
+Task: Lean formalization of the paper family's theorem layer (owner mandate: persist the GitHub PAT; provide Lean sources for the eight paper slots in a new lean/ folder, committed and pushed).
+
+Work Log:
+- PAT persistence: token stored at /home/z/my-project/.github_pat with bootstrap script /home/z/my-project/gh_bootstrap.sh (re-applies remote + credential store + identity after any rollback) and bundle/mirror backups via sync_lean_backup.sh. DIAGNOSTIC: the provided fine-grained PAT is REJECTED (401 Bad credentials on api.github.com in all auth forms); length 92 vs the standard 93-char fine-grained format — almost certainly truncated by one character. All work is committed locally (4 commits) and mirrored to the persistent volume (git bundle + source mirror); push is one command once a valid token is supplied.
+- Workspace was found reset (repo absent); re-cloned depth-1 from origin and verified all eight paper slots present.
+- Lean toolchain: elan 4.2.4 + leanprover/lean4:v4.34.1 installed and pinned; project has NO dependencies (no Mathlib) so builds work offline on a bare toolchain.
+- Built the shared prelude (Formalizations.Prelude): OrdField ordered-field interface (all statements interface-level, papers = instance K = R), ordered-field algebra (cancellation/sign/monotonicity/division), lsum/sumRange finite sums with telescoping, list-based linear algebra (dotp/vadd/vscale/linComb + linearity workhorses), farkas_sound (Farkas certificate soundness — the LP-obstruction sound direction), IsMax attainment, FinMass finite mass functions with expectation E and Bool-event probability Prb. 102 theorems.
+- Formalized all eight slots (each module header documents paper references per theorem and what is NOT formalized with reasons):
+  * P1_Obstruction (2026b v53): finite-system framework, Wk backward recursion, finite-horizon soundness + policy-tree completeness, obstruction-tree duality, one-step characterization, epistemic kernel with coinduction/selector/common-action obstruction, kernel monotonicity (action/disturbance), Farkas perturbation margin, exact-certifier/fibre criterion/certainly-safe, hidden-mode instance (33 theorems).
+  * Minimax_Dual (2026g v7): measure-dual certificate soundness, convexity-boundary counterexample in full, l1/singleton recoveries, benchmark margin algebra (22).
+  * Comp_Certification (2026d v15): robust-row soundness, certified sandwich, margin-obstruction verdict, dual-feasible certificate (6).
+  * EBC_ExactBelief (2026f v6): pair-sum bound (i) with hold action, observation-ladder doubling (9).
+  * P3_ProbSufficiency (2026e v8): expectation-kernel recursion laws, pointwise-ceiling agreement core (4).
+  * ARV_RegimeViability (2026a v6): harvest-free multiplier bracket complete (12).
+  * WS_WorkedSystems (2026c v15): master monotonicity, all three axes (3).
+  * E1_ForecastLadder (v56): ladder telescoping/bracket/ascent laws (5).
+- Gates: full lake build green (12 jobs); zero sorry, zero new axioms across all nine modules (196 theorems); README theorem index completed; four local commits; bundle + mirror synced to /home/z/my-project.
+
+Stage Summary:
+- The lean/ folder at the repo root is the family's Lean formalization layer: no-dependency Lake project, pinned toolchain, two-tier architecture (Lean theorem layer + the papers' Python instance verifiers), interface-level fidelity over OrdField K with documented exclusions.
+- BLOCKED: git push — the supplied PAT is invalid (92/93 chars, likely one-character truncation). Recovery: put a valid token in /home/z/my-project/.github_pat, run bash /home/z/my-project/gh_bootstrap.sh, then git -C /home/z/general-sustainability push origin main. Everything else is done: commits are local, the bundle general-sustainability.bundle and the source mirror lean-mirror/ on the persistent volume hold the full state.
