@@ -2556,3 +2556,23 @@ Stage Summary:
 - ECOMOD v37 is the family-aligned edition: attribution hygiene complete (one marked quotation, no unmarked echoes), the post-v36 anchors (Lemma A, Theorem S2(ii)) in place, the affiliation consistent.
 - All editions ship as new versions (never-overwrite honored repo-wide); verifiers, compiles, box profiles, and text layers all green; the freeze terms satisfied via the reciprocal citations riding the natural editions.
 - Open (carried): the owner-side Zenodo deposit-title refresh; the JMCDA SI submission of paper 1 v62 (owner action; the presentation pass deliberately did NOT touch paper 1's sealed JMCDA package); the owner-approval-gated remainder of the map queue (notation tables now DONE; running instances DONE; hypothesis-list parity and verification triple remain declined/queued).
+
+---
+Task ID: 124
+Agent: main (Z.ai Code)
+Task: Formalize paper 1's own theorem layer (Theorem 5, Lemma A/B, Theorem S2, the blend-collapse theorem) in Lean; commit and push sources.
+
+Work Log:
+- Located paper 1 v62 at `arena agent 1/paper rewrites/latex/paper1_assessment_separation_v62.tex` (the sealed JMCDA edition); mapped the theorem layer: Theorem 5 (Sec 4.6, lines 663-727), Lemma A (1583), Lemma B (1594), Theorem S2 (1712), Theorem 9 blend collapse (921), Proposition 10 (1016), Appendix B proofs.
+- Installed elan + leanprover/lean4:v4.34.1 toolchain in the sandbox.
+- Built `lean/Formalizations/P1_AssessmentSeparation.lean` (1,980 lines, 138 theorems): the complete arithmetic toolkit (natK cast, npow powers, fraction algebra, Bernoulli-type product bound); the witness datum (states, actions, tubes, successors, endpoints — all exact visited sets, no outer approximation); the five assessment operators with per-action characterizations; the operator machinery (Remark 2 full-cone scalarization, Proposition 3 fourfold chain + the full-cone identity E_typ = ∩E_w, rho_order overlap law); Theorem 5 complete: (1) V_typ identity, (2) V_weak identity with the killing-weight construction, (3) V_phys = V_end = X₀, (4) FP_agg = I with interior witness (1/2, 6/5, 6/5), (5) strictness witnesses, (6) per-weight licensing thresholds, (7) rescue split with four exhibited violations; Theorem 9: (i) admissible window, (iii) weight independence; Proposition 10; Lemma A: the handshake identity + the engine equivalence Θ¹ ↔ E_w; Lemma B: the collapse convention; the rung interface (RungCond/RungCondNeg/CollapseSafe/DiagAccPos/DiagAccNeg); the negPow machinery; the Leontief identification V⁰ = V_typ.
+- Gates: `lake build` green (13 jobs); zero `sorry`; zero new axioms; all 138 theorems fully proved; every statement interface-level over `OrdField K`.
+- Added import to Formalizations.lean; updated lean/README.md (slot table + theorem index + count 196→334).
+- Committed and pushed as 7d50af97 (after rebase onto ac4aa5fb).
+
+Stage Summary:
+- P1_AssessmentSeparation (138 theorems) is PUBLISHED on github.com/MIKEAA2020/general-sustainability; the Lean layer now covers ten modules / 334 theorems.
+- Covered: Theorem 5 (1)-(7) in full; Theorem 9 (i)+(iii); Proposition 10; Lemma A (identity + engine); Lemma B (convention); the Leontief identification; the rung interface; the Bernoulli engine.
+- Scoped for the next round: the master-equation reduction (the averaging argument collapsing the θ-rung protocol to the single comparison on the gap-region diagonal), the S2(ii) false-certification witnesses (σ=1/2 at 13/8, σ=1/4 at 9/5, the conditional fractional rungs), and Lemma B(ii)'s explicit rational witness.
+- Manuscript assessment: NO revision warranted — the formalization surfaced no paper defects; all statements formalized cleanly against v62.
+- Open (carried): owner-side Zenodo deposit-title refresh; ECOMOD next-round flags; map-v11 queue; JMCDA SI submission (owner action, deadline 2027-01-31).
