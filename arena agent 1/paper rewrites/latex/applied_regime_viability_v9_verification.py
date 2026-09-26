@@ -332,7 +332,13 @@ for needle in ["41800}{45147", "2021}{7639", "83600}{86323", "44320}{45147", "15
                "600, 352, 79", "2.18, 1.28, 0.29", "276", "884.6", "884.58", "250.12", "298.65",
                "238 \\to 277", "250.12 \\to 298.65", "340, 433, 394,", "44000}{88460", "49.7", "2.3\\%", "3.0\\%", "breach frontier", "(861.92, 921.66]",
                "sixteen", "Section 3.10", "836.00", "841.08, 863.23, 836.00", "138", "172{,}012",
-               "266{,}713", "219{,}452", "1.4\\%", "rho_{\\mathrm{g}}^{16}", "352.56", "280.90"]:
+               "266{,}713", "219{,}452", "1.4\\%", "rho_{\\mathrm{g}}^{16}", "352.56", "280.90",
+               "(Abaee, 2026, The Northern cod forecast ladder",
+               "(Abaee, 2026, Calibration data record)",
+               "Abaee (2026, An obstruction calculus)",
+               "Abaee, A. (2026). An obstruction calculus",
+               "Abaee, A. (2026). The Northern cod forecast ladder",
+               "Abaee, A. (2026). Calibration data record"]:
     chk(needle in tex, f"needle: {needle!r}")
 for bad in ["F_{\\mathrm{lim}}", "four and five orders", "tens of thousands of kilotonnes",
             "zero removals inherits", "witnessed twice", "independent of the assessment models",
@@ -340,7 +346,9 @@ for bad in ["F_{\\mathrm{lim}}", "four and five orders", "tens of thousands of k
             "never a catch-optimization", "\\pm 6.4", "sat at its own failure boundary",
             "match the realized timeline exactly", "approaching the closed fishery",
             "programme", "edition", "flagship", "board", "charter", "L4",
-            "Abaee (2026a, 2026b)", "Helly"]:
+            "Abaee (2026a, 2026b)", "Abaee (2026a)", "(Abaee, 2026c",
+            "(Abaee, 2026d", "Abaee, A. (2026a)", "Abaee, A. (2026c)",
+            "Abaee, A. (2026d)", "Helly"]:
     if bad in tex:
         FAIL.append(f"retracted/marker absent: {bad!r}")
     else:

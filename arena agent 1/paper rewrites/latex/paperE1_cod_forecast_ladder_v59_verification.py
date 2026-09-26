@@ -33,8 +33,21 @@ tex = open(os.path.join(HERE, "paperE1_cod_forecast_ladder_v59.tex"), encoding="
 
 for _needle in ("Northern Cod Assessment Model", "limit reference point",
                  "Pella and Tomlinson, 1969", "Schaefer (1954)",
-                 "Pella, J.J., Tomlinson, P.K., 1969", "Schaefer, M.B., 1954"):
+                 "Pella, J.J., Tomlinson, P.K., 1969", "Schaefer, M.B., 1954",
+                 "Abaee (2026, Does a one-pool water-balance model improve forecasts of Edwards Aquifer head)",
+                 "Abaee (2026, Periodic review as sampled governance)",
+                 "(Abaee, 2026, An obstruction calculus)",
+                 "in Abaee (2026, Robust viability of the 2J3KL limit reference point)",
+                 "Abaee, A., 2026. Does a one-pool",
+                 "Abaee, A., 2026. Periodic review",
+                 "Abaee, A., 2026. Robust viability",
+                 "Abaee, A., 2026. An obstruction calculus"):
     check(_needle in " ".join(tex.split()), f"v6 needle: {_needle!r}")
+for _bad in ("Abaee (2026a)", "Abaee (2026b)", "Abaee (2026c)", "Abaee (2026d)",
+             "(Abaee, 2026a)", "(Abaee, 2026b)", "(Abaee, 2026c)", "(Abaee, 2026d)",
+             "Abaee, A., 2026a.", "Abaee, A., 2026b.", "Abaee, A., 2026c.",
+             "Abaee, A., 2026d."):
+    check(_bad not in " ".join(tex.split()), f"lettered form absent: {_bad!r}")
 
 # ---------- E1: Specification A base series integrity ----------
 lrp = sum(a2[y] for y in range(1983, 1990)) / 7
