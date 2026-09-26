@@ -2666,3 +2666,15 @@ Work Log:
 
 Stage Summary:
 - Shipped tip fully certified; log regression repaired; proposal + this entry pushed. Open (owner): lettering approval, Zenodo deposit-title refresh, SI submission 2027-01-31. Open (agent, on approval): ARV v10 / E1 v60 keying round; lake build gold-standard run.
+
+---
+Task ID: 130
+Agent: Arena Agent Mode (continuation session)
+Task: (1) citation-form decision support — owner prefers no letters and no deposit changes; (2) recover anything lost in the workspace-cap incident.
+
+Work Log:
+- Recovery audit built from first principles (repo tree at 9e4b98f vs local walk; the /tmp manifest had been volatile): 5,826 tracked blobs; 4,651 not present locally — of which 4,282 non-PDF are in repo-only archive areas (research_program/, wave_e_*/, zips_archive/, batch folders, root-level history) that the sandbox never mirrored: remote-only archive, not loss. Within the mirrored areas: latex/ non-PDF missing = 0 (all sources, verifiers, figures, data, records present); lean/ = 0; worklog = 0; uploads/ intact. The only local absences are 317 superseded-edition PDFs (deliberate remote-only policy from the cap repair; byte-frozen on the remote, one-command recovery each). Local untracked non-uploads files: 0 — nothing unpushed was ever at risk. Also known-absent by platform policy: .cache/dl RAM workbook (re-downloadable from Zenodo if a build needs it). VERDICT: nothing to recover; no file lost.
+- Citation-form decision support: deposits stay untouched (letters were always manuscript-side). Scheme delivered in-chat: unlettered title-distinguished reference entries (the sealed v62 house style) + two-tier in-text rule (plain "Abaee, 2026" when unique; Chicago-17-style shortened-title form when several 2026 works are cited). Scope A (deposits/preprints only: ARV v10, E1 v60) kills the flagged Zenodo-vs-programme collision; per-paper local letters for manuscript cross-citations are journal-standard (copyeditors re-letter per paper regardless). Supersedes the global-registry lettering proposal (2026_lettering_unification_proposal_v1.md Option B, refined); registry table remains audit-trail-only. Execution on owner approval: ARV v10 + E1 v60, small round.
+
+Stage Summary:
+- No losses; recovery unnecessary; policy documented. Lettering proposal rescoped per owner preference; execution queued pending approval.
