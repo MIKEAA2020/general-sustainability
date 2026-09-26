@@ -1,3 +1,5 @@
 import Formalizations.Prelude
 import Formalizations.P1_Obstruction
 import Formalizations.Minimax_Dual
+import Formalizations.Comp_Certification
+import Formalizations.ARV_RegimeViability

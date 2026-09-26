@@ -64,3 +64,5 @@ only sources are versioned.)
 | Module | Formalizes (paper items) | Status |
 |---|---|---|
 | `Prelude` | ordered-field interface; `lsum`/`sumRange` (incl. telescoping); `dotp`/`linComb` + `farkas_sound`; `IsMax`; `FinMass`/`E`/`Prb` | done |
+| `P1_Obstruction` | §3.1 framework + `Wk` recursion; `thm:finite-horizon` (soundness + policy-tree completeness, obstruction-tree duality `blocked_iff`); `prop:ladder` (descending kernels); `thm:onestep`; `def:kernel`/`prop:selector` (coinductive `EpiK`); `thm:common-action` discrete core; `prop:monotone` (action + disturbance constituents, finite-horizon); `rem:robust-farkas` (perturbation margin); `def:certifier`/`prop:fibre`/`cor:certainly-safe`; `ex:hidden-mode` (complete instance) | done |
+| `Minimax_Dual` | `thm:dual` certificate-soundness direction; `prop:gap` (convexity boundary, complete); `prop:recover` (i)+(ii); `thm:benchmark` obstruction algebra | done |
