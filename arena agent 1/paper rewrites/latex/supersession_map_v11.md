@@ -88,19 +88,19 @@ figures, calibration data v1 + wave_e_cod.
 
 ---
 
-## Current editions (after round 28)
+## Current editions (after round 29)
 
 | Artifact | Status |
 |----------|--------|
 | `paper2_obstruction_calculus_v55_Automatica_routes.*` (18 pp) | **current** P1 main |
 | `paper2_obstruction_calculus_v51_Automatica_routes_supplementary.*` (20 pp) | **current** P1 supplementary |
-| `minimax_dual_certificates_v9.*` (6 pp, 40/40 chained) | **current** |
-| `paper2_exact_belief_computation_v8.*` (4 pp, 26/26) | **current** |
+| `minimax_dual_certificates_v10.*` (6 pp, 44/44 chained) | **current** |
+| `paper2_exact_belief_computation_v9.*` (4 pp, 28/28) | **current** |
 | `paper2_probabilistic_sufficiency_v10.*` (11 pp, 31/31) | **current** P3 |
-| `paper2_computational_certification_v17.*` (11 pp, 48/48) | **current** P2 |
+| `paper2_computational_certification_v18.*` (11 pp, 48/48) | **current** P2 |
 | `paper2_worked_systems_v17.*` (11 pp, 54/54, chained 57/57) | **current** P4 |
-| `applied_regime_viability_v8.*` (7 pp, **236/236**) | **current** P5 viability layer |
-| `paperE1_cod_forecast_ladder_v58.*` (37 pp, 49/49) | **current** applied forecast lineage |
+| `applied_regime_viability_v9.*` (7 pp, **238/238**) | **current** P5 viability layer |
+| `paperE1_cod_forecast_ladder_v59.*` (37 pp, 53/53) | **current** applied forecast lineage |
 | `paperE1_calibration_data_v1*`, `paperE1_calibration_data_v2_ram_panel_v1.csv` | **current** locked data records |
 | roadmaps v16–v40 | superseded by **v41** |
 | `supersession_map_v1–v10` | superseded by this map |
@@ -186,3 +186,51 @@ README slot table updated to the round-28 set. Brief data statement
 recorded in `worklog.md` (Task 126). All eight: verifier green, build
 green (zero overfull), byte-identical pinned rebuilds. Old editions
 byte-frozen.
+
+
+---
+
+## Round 29 (reference-grounding audit + venue assignment — September 26, 2026)
+
+**Audit question:** are the references complete, or is further grounding
+merited? **Bar:** only non-decorative additions — a named result used
+without attribution, a named method's provenance, a data source, a
+keyword's claimed lineage. Every new record verified against the real
+bibliographic record before shipping.
+
+**Adds shipped (all ⚑-verified):**
+| Paper | Addition | Ground |
+|---|---|---|
+| minimax v10 | Sion, M., 1958 (Pac. J. Math. 8, 171–176) | Sion's minimax theorem invoked at the envelope proposition, uncited |
+| minimax v10 | Farkas, J., 1902 (J. Reine Angew. Math. 124, 1–27) | the Farkas multiplier vector named 8×, uncited |
+| ebc v9 | Minato, S., 1993 (DAC '93, 272–277) | "zero-suppressed sets" keyword claims the lineage; body storage anchored at the antichain proposition |
+| ARV v9 | Ricard, D. et al., 2012 (Fish and Fisheries 13, 380–398) | the RAM Legacy database is a primary input vintage, named but uncited |
+| E1 v59 | Schaefer, M.B., 1954 (Bull. IATTC 1(2), 27–56); Pella, J.J., Tomlinson, P.K., 1969 (Bull. IATTC 13, 419–496) | the Schaefer law named 4× uncited; the cubic-logistic module form is the Pella–Tomlinson generalization |
+| comp v18 | (no citation) keyword fix | "semi-infinite programming" appeared only in keywords with no body claim — replaced by "delayed observation" (an SIP citation would have been decorative) |
+
+**Audited complete (no change):** obstr v55 (fully grounded: Aubin,
+Saint-Pierre, Veliov, Cardaliaguet–Quincampoix–Saint-Pierre, Prajna line,
+Doyen line; classical facts explicitly disclaimed), ws v17 (Baccelli
+1992 in since v15; certainty-equivalence earned in body), psuff v10
+(already cites Smallwood & Sondik 1973, Papadimitriou & Tsitsiklis 1987,
+Chatterjee et al. 2009, Alshiekh et al. 2018, Nakao et al. 2021 — an
+initial "missing" verdict was reversed on full-bibliography read).
+
+**Gates:** verifiers 44/44 (chained 20+24+8), 48/48, 28/28, 238/238,
+53/53; builds zero overfull / zero halt / zero ??; byte-identical pinned
+rebuilds; pages 6/11/4/7/37. Supersessions: minimax v9→v10, comp
+v17→v18, ebc v8→v9, ARV v8→v9, E1 v58→v59.
+
+**Venue and article type (advisory, owner decides; Automatica length
+norms as verified in the round-19 addendum):**
+
+| Paper (edition, pp) | Primary venue — article type | Backup |
+|---|---|---|
+| obstr v55 (18 pp) | Automatica — Regular Paper | IEEE TAC Full Paper; SICON |
+| comp v18 (11 pp) | SIAM J. Optimization — research article | Automatica Regular Paper |
+| ws v17 (11 pp) | Systems & Control Letters — research article | Automatica Regular Paper (after trim) |
+| minimax v10 (6 pp) | Mathematics of OR — research article (concise format) | J. Convex Analysis |
+| ebc v9 (4 pp) | Automatica — Technical Communiqué | Stochastic Systems — article |
+| psuff v10 (11 pp) | IEEE TAC — Full Paper | Stochastic Systems — article |
+| ARV v9 (7 pp) | Can. J. Fish. Aquat. Sci. — Research Article | ICES J. Marine Science |
+| E1 v59 (37 pp) | Int. J. Forecasting — full-length research article | Fisheries Research |

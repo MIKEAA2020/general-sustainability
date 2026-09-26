@@ -2618,3 +2618,17 @@ Work Log:
 Stage Summary:
 - Round 28 pushed: 8 tex + 7 verifiers + 8 PDFs (new editions), lean/README.md + worklog.md + supersession_map_v11.md updated; old editions byte-frozen; ECOMOD v37 and the sealed JMCDA v62 package untouched.
 - Carried: Zenodo deposit-title refresh (owner); SI submission deadline 2027-01-31 (owner); 2026-lettering collision Zenodo-series vs programme-series (owner decision).
+
+---
+Task ID: 127
+Agent: Arena Agent Mode
+Task: (a) reference-completeness audit across the board family with a strict non-decorative merit bar; (b) venue + article-type assignment per paper.
+
+Work Log:
+- Audited all eight editions' citation coverage for named-but-uncited results, named methods, data sources, and keyword-claimed lineages. All new records web-verified before shipping (Sion 1958 Pac. J. Math. 8:171-176; Farkas 1902 J. Reine Angew. Math. 124:1-27; Minato 1993 DAC '93:272-277; Ricard et al. 2012 Fish Fish. 13:380-398, fourth author Baum caught by verification; Schaefer 1954 Bull. IATTC 1(2):27-56 and Pella-Tomlinson 1969 Bull. IATTC 13:419-496, page ranges set by plurality of scholarly sources given bulletin-pagination variance).
+- Shipped: minimax v10 (Sion + Farkas), ebc v9 (Minato anchor at the antichain proposition; an in-text-only insert was caught and completed with the bib entry), ARV v9 (RAM Legacy/Ricard), E1 v59 (Schaefer + Pella-Tomlinson), comp v18 (keyword correction: "semi-infinite programming" -> "delayed observation"; an SIP citation would have been decorative — no body claim).
+- Declined/reversed: obstr complete; ws complete; psuff initially flagged for missing Smallwood-Sondik, REVERSED on full-bibliography read (already cited, plus Papadimitriou-Tsitsiklis 1987 et al.) — root cause: truncated grep; lesson recorded.
+- Gates: verifiers 44/44, 48/48, 28/28, 238/238, 53/53; builds 0 overfull / 0 halt / 0 ??; byte-identical pinned rebuilds.
+- Venue + article type table recorded in the map (round-29 section): obstr Automatica Regular; comp SIOPT research; ws SCL; minimax MoOR; ebc Automatica Technical Communiqué; psuff IEEE TAC Full Paper; ARV CJFAS Research Article; E1 IJF full-length article.
+Stage Summary:
+- Round 29 pushed: 5 tex + 5 verifiers + 5 PDFs + map + this worklog; psuff v10, ws v17, obstr v55 unchanged.
