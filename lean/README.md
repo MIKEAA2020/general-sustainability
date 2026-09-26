@@ -59,7 +59,8 @@ only sources are versioned.)
 
 ## Theorem index
 
-(to be completed as modules land)
+Complete — all nine modules landed (196 theorems total; `lake build` green,
+zero `sorry`, zero new axioms).
 
 | Module | Formalizes (paper items) | Status |
 |---|---|---|
