@@ -49,3 +49,13 @@ Strategic note: the calculus (Automatica) and the dual-certificates paper (MoOR)
 | P1 supplementary | v50 | ?? absent | 20 | 0 | exit 0, halt 0 |
 | cover note | v1 (updated in place, as directed) | — | — | — | — |
 | (unchanged) P3 v7, comp v11, ws v11, ebc v4, ARV v2, E1 v53 | prior editions | 30/30, 39/39, 46/46, 19/19, 61/61, 47/47 | — | 0 | — |
+
+### Correction appendix (September 26, 2026, post round 26 + review III)
+
+The strategic note above (line 41) is obsolete on three counts, established by the shipped record:
+
+1. **The "governance theorem" no longer exists in the package.** The referent was ARV v2's `prop:capelin`, "the covariate alarm **leads** the mortality crossing" ("the monitoring instrument moved before the mortality regime did") — the early-warning reading behind the PNAS-style option. The current edition certifies the weaker, correct claim: v6's `prop:capelin` is "the covariate crossing **is contemporaneous with** the mortality crossing" — at annual data resolution the crossings coincide; the lead is not certifiable as a predictive claim and was withdrawn in the verification lineage (lineage audit, `programme_lineage_content_loss_audit_v1.md`). The one piece a general-audience venue could take dissolved under exact certification; the decision this note posed ("keep with the package or let it stand alone") resolved itself — there is nothing to extract, and ARV v6 stays CJFAS-scoped on the realized record.
+2. **The branding was loose even for v2.** ARV v2 contains zero occurrences of "governance"; the proposition is a monitoring/early-warning result about one stock's indicators. Theorem-grade governance content in this programme lives in `paper5_sampled_governance` ("The decision clock", blinded NatSustain edition v47) — which already stands alone, so the note's either/or has been executed on the correct object by other means.
+3. **Editions are stale.** comp v11 / ws v11 / ARV v2 / E1 v53 are now v15 / v15 / v6 / v56 (check counts in the map's current-editions table).
+
+The venue-strategy substance that survives: the separation of the Automatica and MoOR submissions, and the comp-to-SIOPT / ws-to-SCL simultaneity point. The applied pair's correct general-audience posture remains the one review III recorded: no extractable theorem; companion-by-construction split (ARV prices what could have been kept safe, E1 prices what could be predicted); governance-adjacent material delegated by citation (ARV → E1 §3.10; E1 → the sampled-governance deposit, 22554297).
