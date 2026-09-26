@@ -1,18 +1,21 @@
 # Lean Formalization Layer — `general-sustainability` paper family
 
 This directory contains a Lean 4 formalization of the **core theorem layer** of
-the paper family in `arena agent 1/paper rewrites/latex/`. One module per slot:
+the paper family in `arena agent 1/paper rewrites/latex/`. One module per slot: (edition citations current as of round 28; the
+formalized theorem layer is unchanged across these presentation-pass
+editions — round 27/28 touched navigation, keywords, and reference
+hygiene only)
 
 | Slot | Paper (edition, source of record) | Module |
 |---|---|---|
-| P1 | Obstruction calculus — theory main line (2026b, `paper2_obstruction_calculus_v53_Automatica_routes.tex`) | `Formalizations.P1_Obstruction` |
-| comp | Computational certification (2026d, `paper2_computational_certification_v15.tex`) | `Formalizations.Comp_Certification` |
-| ws | Worked systems (2026c, `paper2_worked_systems_v15.tex`) | `Formalizations.WS_WorkedSystems` |
-| minimax | Minimax dual certificates (2026g, `minimax_dual_certificates_v7.tex`) | `Formalizations.Minimax_Dual` |
-| ebc | Exact belief computation (2026f, `paper2_exact_belief_computation_v6.tex`) | `Formalizations.EBC_ExactBelief` |
-| P3 | Probabilistic sufficiency (2026e, `paper2_probabilistic_sufficiency_v8.tex`) | `Formalizations.P3_ProbSufficiency` |
-| ARV | Applied regime viability (2026a, `applied_regime_viability_v6.tex`) | `Formalizations.ARV_RegimeViability` |
-| E1 | Applied forecast ladder (E1, `paperE1_cod_forecast_ladder_v56.tex`) | `Formalizations.E1_ForecastLadder` |
+| P1 | Obstruction calculus — theory main line (2026b, `paper2_obstruction_calculus_v55_Automatica_routes.tex`) | `Formalizations.P1_Obstruction` |
+| comp | Computational certification (2026d, `paper2_computational_certification_v17.tex`) | `Formalizations.Comp_Certification` |
+| ws | Worked systems (2026c, `paper2_worked_systems_v17.tex`) | `Formalizations.WS_WorkedSystems` |
+| minimax | Minimax dual certificates (2026g, `minimax_dual_certificates_v9.tex`) | `Formalizations.Minimax_Dual` |
+| ebc | Exact belief computation (2026f, `paper2_exact_belief_computation_v8.tex`) | `Formalizations.EBC_ExactBelief` |
+| P3 | Probabilistic sufficiency (2026e, `paper2_probabilistic_sufficiency_v10.tex`) | `Formalizations.P3_ProbSufficiency` |
+| ARV | Applied regime viability (2026a, `applied_regime_viability_v8.tex`) | `Formalizations.ARV_RegimeViability` |
+| E1 | Applied forecast ladder (E1, `paperE1_cod_forecast_ladder_v58.tex`) | `Formalizations.E1_ForecastLadder` |
 | **P1-AS** | **Assessment separation — the head paper** (`paper1_assessment_separation_v62.tex`) | `Formalizations.P1_AssessmentSeparation` |
 
 ## Two-tier architecture

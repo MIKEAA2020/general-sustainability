@@ -2598,3 +2598,23 @@ Stage Summary:
 - Paper 1's own theorem layer is COMPLETE in Lean: 199 theorems covering Theorem 5 (1)-(7), Theorem 9 + Proposition 10, Lemma A, Lemma B(i)+(ii), the master-equation reduction in all four regimes (θ>0, θ<0, θ∈(0,1) via the mid-protocol, θ=0 via GeoLaws), Theorem S2 in full (the pointwise half, the Leontief identification, all five false-certification witnesses + the ∀m family), and the two-sided summary.
 - The Lean layer now covers ten modules / 395 theorems, all interface-level over OrdField K, zero sorry, zero new axioms, lake build green.
 - Open (carried): owner-side Zenodo deposit-title refresh; the 2026-lettering collision; JMCDA SI submission (owner action, deadline 2027-01-31); Theorem S1 (cross-rung nesting) remains the documented analytic exclusion.
+
+---
+Task ID: 126
+Agent: Arena Agent Mode (adjudication + lineage audit + review III sessions)
+Task: (a) update the Lean/data statement, kept brief; (b) align title/abstract/keywords/sections/supplementaries of the board family with the latest editions, keywords capped at 7 with discoverability + novelty priority; (c) full repo paths for the 4+1 papers and supps. Includes repair of the referencing inconsistencies identified against the Lean layer.
+
+Work Log:
+- Verified the round-27 presentation pass and Lean layer against the repo before building (commit chain 3d601913 -> 47a54142; ten modules present incl. P1_AssessmentSeparation; README total 395 theorems, zero sorry, zero admitted axioms).
+- Referencing inconsistencies found and fixed (all stale in-tex verifier URLs): obstr n/a; comp v16 cited v15 verifier; ws v16 cited v15; minimax v8 none (keywords also absent); ebc v7 cited v6; psuff v9 cited v8; ARV v7 cited v5 (two editions stale); E1 v57 cited v54 (three editions stale). Supp v51 checked: no stale self-references (no bump needed). lean/README.md slot table cited round-26 editions; updated to the round-28 set with a stability note.
+- New editions (never-overwrite): obstr v55, comp v17, ws v17, minimax v9, ebc v8, psuff v10, ARV v8, E1 v58.
+- Keywords aligned to the 7-cap: obstr 9 -> 7 (dropped "viability theory" as subsumed by "viability kernel" and "information structures" as the weakest discovery term); minimax 0 -> 7 (minimax duality; Farkas certificates; zero-sum games; obstruction certificates; adversarial priors; Isaacs condition; exact arithmetic); ws 6 -> 7 (+ max-plus algebra, anchored by the Baccelli et al. 1992 citation since v15); ebc 6 -> 7 (+ antichain compression, the paper's distinctive object); psuff 6 -> 7 (+ POMDP, the highest-traffic discovery term for the area); comp (7), ARV (7), E1 (7) already at cap and left untouched. Titles and abstracts audited against the shipped content: all current (round 27 had already aligned contributions/sections); supplementaries aligned (v51 clean).
+- Gates: verifiers green (minimax 40/40 chained v3 20 + v2 24 + v1 8; comp 48/48; ws 54/54 chained 57/57; ebc 26/26; psuff 31/31 chained 16/16 + 21 nested + 15/15 + 6/6; ARV 236/236; E1 49/49); tectonic builds zero overfull / zero halt / zero unresolved refs, pages 18/11/11/6/4/11/7/37; SOURCE_DATE_EPOCH=1758825600 double builds byte-identical for all eight.
+- One verifier edit repaired in-flight: psuff's injected keyword needle used the wrong argument order for its check() signature (caught by the run, fixed, rerun green).
+- Brief data statement recorded (paste-ready for journal portals):
+
+  Data and code availability. Everything is openly available at https://github.com/MIKEAA2020/general-sustainability: the locked data records (CSV), standard-library Python verification scripts that regenerate every instance-level claim in the papers, and a Lean 4 formalization of the theorem layer under lean/ (ten self-contained modules, 395 theorems, zero `sorry`, zero admitted axioms; statements proved at an ordered-field interface of which the papers' statements are the real-number instance, each theorem referenced to its source result). Documented exclusions: the classical separation directions the certificates do not use, and one analytic gap (Theorem S1, cross-rung nesting) listed in the Lean README.
+
+Stage Summary:
+- Round 28 pushed: 8 tex + 7 verifiers + 8 PDFs (new editions), lean/README.md + worklog.md + supersession_map_v11.md updated; old editions byte-frozen; ECOMOD v37 and the sealed JMCDA v62 package untouched.
+- Carried: Zenodo deposit-title refresh (owner); SI submission deadline 2027-01-31 (owner); 2026-lettering collision Zenodo-series vs programme-series (owner decision).

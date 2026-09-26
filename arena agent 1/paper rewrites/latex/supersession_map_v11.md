@@ -88,19 +88,19 @@ figures, calibration data v1 + wave_e_cod.
 
 ---
 
-## Current editions (after round 26)
+## Current editions (after round 28)
 
 | Artifact | Status |
 |----------|--------|
-| `paper2_obstruction_calculus_v53_Automatica_routes.*` (18 pp) | **current** P1 main |
+| `paper2_obstruction_calculus_v55_Automatica_routes.*` (18 pp) | **current** P1 main |
 | `paper2_obstruction_calculus_v51_Automatica_routes_supplementary.*` (20 pp) | **current** P1 supplementary |
-| `minimax_dual_certificates_v7.*` (5 pp, 37/37 chained) | **current** |
-| `paper2_exact_belief_computation_v6.*` (4 pp, 25/25) | **current** |
-| `paper2_probabilistic_sufficiency_v8.*` (30/30) | **current** P3 |
-| `paper2_computational_certification_v15.*` (11 pp, 48/48) | **current** P2 |
-| `paper2_worked_systems_v15.*` (11 pp, 54/54, chained 57/57) | **current** P4 |
-| `applied_regime_viability_v6.*` (7 pp, **236/236**) | **current** P5 viability layer |
-| `paperE1_cod_forecast_ladder_v56.*` (36 pp, 49/49) | **current** applied forecast lineage |
+| `minimax_dual_certificates_v9.*` (6 pp, 40/40 chained) | **current** |
+| `paper2_exact_belief_computation_v8.*` (4 pp, 26/26) | **current** |
+| `paper2_probabilistic_sufficiency_v10.*` (11 pp, 31/31) | **current** P3 |
+| `paper2_computational_certification_v17.*` (11 pp, 48/48) | **current** P2 |
+| `paper2_worked_systems_v17.*` (11 pp, 54/54, chained 57/57) | **current** P4 |
+| `applied_regime_viability_v8.*` (7 pp, **236/236**) | **current** P5 viability layer |
+| `paperE1_cod_forecast_ladder_v58.*` (37 pp, 49/49) | **current** applied forecast lineage |
 | `paperE1_calibration_data_v1*`, `paperE1_calibration_data_v2_ram_panel_v1.csv` | **current** locked data records |
 | roadmaps v16–v40 | superseded by **v41** |
 | `supersession_map_v1–v10` | superseded by this map |
@@ -149,3 +149,40 @@ insertions and in-place modifications; no removed content.
 Still queued (owner approval outstanding): per-paper notation tables
 with collision rows, running-instance clauses, hypothesis-list parity
 beyond comp, the uniform verification triple, contribution-list parity.
+
+
+---
+
+## Rounds 27–28 (presentation passes — September 26, 2026)
+
+**Round 27 (parallel session; recorded here from verified repo state at
+`3d601913`):** shared-symbols tables with family collision rows,
+running-instance clauses, contributions sections for the six papers
+lacking them, the ebc/P3 freeze satisfied (reciprocal citations shipped:
+ebc <- comp's radius law; psuff <- minimax's coupling-extremum check),
+ECOMOD v37 attribution hygiene. Editions obstr v54, comp v16, ws v16,
+psuff v9, ebc v7, minimax v8, ARV v7, E1 v57.
+
+**Round 28 (this session):** alignment + keywords pass; repairs the
+referencing inconsistencies the Lean-layer review identified — stale
+in-tex verifier URLs (comp v15, ws v15, ebc v6, psuff v8, ARV v5,
+E1 v54), minimax's missing keywords, and the Lean README's round-26
+edition citations.
+
+| Artifact | New edition | Delta |
+|----------|-------------|-------|
+| obstr | v54 -> **v55** | keywords 9 -> 7 (dropped "viability theory", "information structures") |
+| comp | v16 -> **v17** (48/48) | in-tex verifier URL v15 -> v17 |
+| ws | v16 -> **v17** (54/54, chained 57/57) | verifier URL v15 -> v17; keywords 6 -> 7 (+ max-plus algebra) |
+| minimax | v8 -> **v9** (40/40 chained) | keywords added (7: minimax duality; Farkas certificates; zero-sum games; obstruction certificates; adversarial priors; Isaacs condition; exact arithmetic) |
+| ebc | v7 -> **v8** (26/26) | verifier URL v6 -> v8; keywords 6 -> 7 (+ antichain compression) |
+| psuff | v9 -> **v10** (31/31) | verifier URL v8 -> v10; keywords 6 -> 7 (+ POMDP) |
+| ARV | v7 -> **v8** (236/236) | verifier URL v5 -> v8 |
+| E1 | v57 -> **v58** (49/49) | verifier URL v54 -> v58 |
+
+comp/ARV/E1 titles, abstracts, keywords (7 each), and sections audited
+current; supp v51 clean (no stale self-references, no bump). Lean
+README slot table updated to the round-28 set. Brief data statement
+recorded in `worklog.md` (Task 126). All eight: verifier green, build
+green (zero overfull), byte-identical pinned rebuilds. Old editions
+byte-frozen.
