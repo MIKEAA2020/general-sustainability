@@ -13,6 +13,7 @@ the paper family in `arena agent 1/paper rewrites/latex/`. One module per slot:
 | P3 | Probabilistic sufficiency (2026e, `paper2_probabilistic_sufficiency_v8.tex`) | `Formalizations.P3_ProbSufficiency` |
 | ARV | Applied regime viability (2026a, `applied_regime_viability_v6.tex`) | `Formalizations.ARV_RegimeViability` |
 | E1 | Applied forecast ladder (E1, `paperE1_cod_forecast_ladder_v56.tex`) | `Formalizations.E1_ForecastLadder` |
+| **P1-AS** | **Assessment separation — the head paper** (`paper1_assessment_separation_v62.tex`) | `Formalizations.P1_AssessmentSeparation` |
 
 ## Two-tier architecture
 
@@ -59,8 +60,8 @@ only sources are versioned.)
 
 ## Theorem index
 
-Complete — all nine modules landed (196 theorems total; `lake build` green,
-zero `sorry`, zero new axioms).
+Complete — ten modules (334 theorems total; `lake build` green, zero
+`sorry`, zero new axioms).
 
 | Module | Formalizes (paper items) | Status |
 |---|---|---|
