@@ -2690,3 +2690,19 @@ Work Log:
 
 Stage Summary:
 - Convention on the books; execution deferred to organic editions; nothing pushed but this record.
+
+---
+Task ID: 132
+Agent: Arena Agent Mode (continuation session)
+Task: execute the letter-free citation scheme IN PLACE, without creating new versions (explicit owner instruction of September 26, 2026, overriding the never-overwrite default and the rides-on-organic-editions deferral).
+
+Work Log:
+- Scope: the two papers carrying lettered deposit/preprint keys (ARV v9, E1 v59). Edition numbers unchanged; git history at 53fe006 preserves the prior lettered state as the provenance record.
+- ARV v9: 7 sites (4 in-text two-tier forms, 3 unlettered reference entries). E1 v59: 10 sites (6 in-text, 4 reference entries). All 17 removed lines audited one-to-one against their replacements (lettered -> letter-free; no other content touched).
+- Verifier needles regenerated from the diff (stale-needle rule): ARV +6 positive pins of the letter-free forms + 6 negative pins banning the lettered forms (250/250); E1 +8 positive pins + 12 negative pins (73/73). One in-flight catch: the E1 verifier's needle loop was the concurrent session's variant (Pella/Schaefer tuple replaced this session's earlier tuple) — first edit anchored on the stale tuple, assertion failed, file unwritten, real anchor located, edit applied.
+- Builds: both texs rebuilt in place, same filenames; exit 0, zero overfull, zero halt, zero unresolved refs (ARV 7 pp, E1 37 pp); SOURCE_DATE_EPOCH-pinned double builds byte-identical; letter-free forms verified rendering in the PDF text layers (8 and 13 Abaee occurrences respectively, all letter-free).
+- Side repair discovered during the builds: the workspace-cap prune had removed the four PDF-only figure directories (figs_arv, figs_comp2, figs_bs2, figs_ws4) — restored all 13 figure PDFs from the remote; builds fixed.
+- Incident note: an earlier worklog push (5c191f5) briefly displaced the concurrent session's Tasks 127-128; repaired at 9e4b98f by verbatim restoration (integrity check: zero removed lines vs d56eeb6).
+
+Stage Summary:
+- Letter-free citation form is now LIVE in the shipped ARV v9 and E1 v59 (same edition numbers, in place per owner instruction). Map carries the round-31 note. Open (owner): Zenodo deposit-title refresh; SI submission 2027-01-31; lake build gold-standard run queued.

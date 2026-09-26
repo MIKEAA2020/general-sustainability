@@ -259,3 +259,26 @@ lean/README.md slot table updated for all six stale edition references
 (four inherited from round 28/29, two round-29's own). Gates: verifiers
 48/48, 30/30, 32/32; builds zero overfull, byte-identical pinned
 rebuilds.
+
+---
+
+## Round 31 — letter-free citation form executed in place (September 26, 2026)
+
+Owner instruction: execute the letter-free citation scheme **without
+creating new versions** — explicit override of the never-overwrite
+default; the prior lettered state of both files is preserved in git
+history at `53fe006` as the provenance record. Edition numbers are
+unchanged.
+
+- **ARV v9** (in place): 4 in-text sites to the two-tier letter-free
+  form, 3 reference entries unlettered; verifier needles regenerated
+  (+6 positive, +6 negative pins); 250/250; rebuild byte-identical
+  (7 pp, zero overfull).
+- **E1 v59** (in place): 6 in-text sites, 4 reference entries;
+  verifier needles regenerated (+8 positive, +12 negative pins);
+  73/73; rebuild byte-identical (37 pp, zero overfull).
+- Content-loss audit: 17 removed lines, each the lettered form of a
+  replacement added in the same edit — no other content touched.
+- The six theory papers keep their internal family keying (consistent
+  among themselves); their letter-free conversion, if ever wanted,
+  rides their own organic editions. Sealed packages untouched.
