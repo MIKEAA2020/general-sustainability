@@ -2619,32 +2619,36 @@ Stage Summary:
 - Round 28 pushed: 8 tex + 7 verifiers + 8 PDFs (new editions), lean/README.md + worklog.md + supersession_map_v11.md updated; old editions byte-frozen; ECOMOD v37 and the sealed JMCDA v62 package untouched.
 - Carried: Zenodo deposit-title refresh (owner); SI submission deadline 2027-01-31 (owner); 2026-lettering collision Zenodo-series vs programme-series (owner decision).
 
+
 ---
 Task ID: 127
-Agent: Arena Agent Mode
-Task: (a) reference-completeness audit across the board family with a strict non-decorative merit bar; (b) venue + article-type assignment per paper.
+Agent: Arena Agent Mode (continuation session)
+Task: reference-completeness audit across the board family; add only non-decorative, genuinely merited references; venue/article-type table; per-paper Lean statements.
 
 Work Log:
-- Audited all eight editions' citation coverage for named-but-uncited results, named methods, data sources, and keyword-claimed lineages. All new records web-verified before shipping (Sion 1958 Pac. J. Math. 8:171-176; Farkas 1902 J. Reine Angew. Math. 124:1-27; Minato 1993 DAC '93:272-277; Ricard et al. 2012 Fish Fish. 13:380-398, fourth author Baum caught by verification; Schaefer 1954 Bull. IATTC 1(2):27-56 and Pella-Tomlinson 1969 Bull. IATTC 13:419-496, page ranges set by plurality of scholarly sources given bulletin-pagination variance).
-- Shipped: minimax v10 (Sion + Farkas), ebc v9 (Minato anchor at the antichain proposition; an in-text-only insert was caught and completed with the bib entry), ARV v9 (RAM Legacy/Ricard), E1 v59 (Schaefer + Pella-Tomlinson), comp v18 (keyword correction: "semi-infinite programming" -> "delayed observation"; an SIP citation would have been decorative — no body claim).
-- Declined/reversed: obstr complete; ws complete; psuff initially flagged for missing Smallwood-Sondik, REVERSED on full-bibliography read (already cited, plus Papadimitriou-Tsitsiklis 1987 et al.) — root cause: truncated grep; lesson recorded.
-- Gates: verifiers 44/44, 48/48, 28/28, 238/238, 53/53; builds 0 overfull / 0 halt / 0 ??; byte-identical pinned rebuilds.
-- Venue + article type table recorded in the map (round-29 section): obstr Automatica Regular; comp SIOPT research; ws SCL; minimax MoOR; ebc Automatica Technical Communiqué; psuff IEEE TAC Full Paper; ARV CJFAS Research Article; E1 IJF full-length article.
-Stage Summary:
-- Round 29 pushed: 5 tex + 5 verifiers + 5 PDFs + map + this worklog; psuff v10, ws v17, obstr v55 unchanged.
+- Mechanical completeness scan (body author-year invocations vs reference block, both directions) plus named-method screening per paper. All flags adjudicated manually (regex noise from initials separated from real gaps).
+- Complete without additions: obstr v55 (Aubin/Veliov/Saint-Pierre/Prajna/Doyen anchors rich; estimation tubes anchored; zero MPC naming), comp v17 (Veliov 1993 in refs; Chvatal/Helly/Milanese present; "semi-infinite programming" keyword-only for a finite-LP method), ws v17 (Baccelli 1992 present; "certainty-equivalence law" is a paper-internal named proposition object), ARV v8 (DFO 2016, Regular 2025, Schijns 2021, Hutchings-Myers 1994; zero PA-framework invocation).
+- Four genuine gaps repaired via new editions: minimax v10 (Isaacs 1965; Beiglböck-Henry-Labordère-Penkner 2013), ebc v9 + psuff v11 (Lovejoy 1991 at the point-based sites; S-S 1973 already covered psuff's PWLC structure), E1 v59 (Schaefer 1954 at the definitional naming).
+- Records verified by search before insertion (Helly lesson); one planned entry corrected by the search itself (the discrete-time martingale-transport canonical is BHP 2013 Finance & Stochastics, not the SIAM BHT paper).
+- Gates: minimax 44/44 chained, ebc 28/28, psuff 32/32 chained, E1 51/51; builds zero overfull / zero halt / zero unresolved refs; byte-identical pinned double builds; content-loss audit: pure insertions (one reflowed sentence each).
+- psuff needle incident: my verifier needle expected "(Lovejoy, 1991" but the shipped clause reads "sense, Lovejoy, 1991" — needle corrected to the shipped text (the tex was right).
 
+Stage Summary:
+- Round 29 pushed: 4 tex + 4 verifiers + 4 PDFs + lean README + map v11 + worklog. obstr/comp/ws/ARV declared reference-complete, no bumps.
+- Venue/article-type table and per-paper Lean statements delivered in-chat this round; per-module Lean statement facts taken from the lean README (10 modules, 395 theorems, zero sorry, zero admitted axioms, ordered-field interface).
 
 ---
-Task ID: 128
-Agent: Arena Agent Mode (continuation session)
-Task: reconcile the concurrent round-29 sessions; ship the residual reference-grounding delta; deliver venue/article-type table and per-paper Lean statements.
+Task ID: 129
+Agent: Arena Agent Mode (continuation session — close-out of rounds 29/30)
+Task: certify the concurrent round-29 additions riding in adopted papers; full fresh-clone verifier sweep; workspace integrity; 2026-lettering collision proposal.
 
 Work Log:
-- Discovered the concurrent round-29 push (8a2b287) mid-flight via collision checks; adopted it as base (never-overwrite honored; my conflicting-number editions discarded, not pushed).
-- Re-verified my three residual findings against the remote texs (Isaacs 4x uncited; martingale-transport 2x uncited; point-based lineage absent in ebc 4 sites / psuff 2 sites) and shipped minimax v11, ebc v10, psuff v11.
-- Fixed lean/README.md's six stale edition rows (comp v18 and ARV v9 were round-29's own misses).
-- Gates: minimax 48/48 chained, ebc 30/30, psuff 32/32; builds zero overfull; byte-identical pinned rebuilds; content-loss audit: pure insertions.
-- E1 Schaefer/Pella-Tomlinson item dropped: subsumed by round 29's E1 v59.
+- Workspace-cap incident: the latex folder exceeded the 128 MB snapshot cap between turns (~600 files silently dropped, 131 MB of PDFs). Repaired by selective re-sync from the remote: all sources + the ten current-edition PDFs only; superseded PDFs remain remote-only (42 MB local). Policy recorded here for future rounds.
+- Parallel round-29's five bibliographic records verified: Farkas 1902 (J. Reine Angew. Math. 124, 1-27) and Sion 1958 (Pacific J. Math. 8, 171-176) canonical; Minato 1993 (DAC '93, 272-277) confirmed by search; Ricard et al. 2012 confirmed by search as Fish and Fisheries 13(4), 380-398 (the session's ICES-memory flag was wrong; search settled it); Pella-Tomlinson 1969 (Inter-Am. Trop. Tuna Comm. Bull. 13, 419-496). All five correct as shipped.
+- Content-loss audit of the parallel session's five edition bumps: clean (in-place reflows; ebc's antichain sentence and ARV's RAM Legacy passage spot-checked retained).
+- Lean layer static check: zero `sorry` and zero `axiom` declarations outside header comments stating their absence (grep over all ten modules); full `lake build` remains the gold standard and is noted as open.
+- Fresh-clone verifier sweep at d56eeb6: comp v18 48/48, ws v17 54/54 (chained 57/57), ARV v9 238/238, E1 v59 53/53 (minimax v11 48/48, ebc v10 30/30, psuff v11 32/32 already verified from clone). All eight board papers green at the shipped tip.
+- 2026-lettering collision: evidence completed line-by-line across all nine manuscripts — three-way collision ("2026a" = ARV in the programme six, = P1 in ARV v9, = the Edwards deposit in E1 v59). Decision-ready unification proposal written (`programme_2026_lettering_unification_proposal_v1.md`): extend the family keying repo-wide (registry 2026a-g + new h = forecast-ladder deposit, i = Edwards, j = sampled-governance, k = calibration record, l = ledgers reserved); execution = ARV v10 + E1 v60, one mechanical round, gated on owner approval. paper1 v62's unlettered style maps onto the registry without edits.
 
 Stage Summary:
-- Round 30 pushed; workspace synced to remote. Venue table + Lean statements delivered in-chat (venue baseline = round-29's recorded table, concurred).
+- Shipped tip d56eeb6 fully certified; no corrections needed; proposal + this log pushed. Open (owner): lettering approval, Zenodo deposit-title refresh, SI submission 2027-01-31; open (agent, on approval): ARV v10 / E1 v60 keying round; lake build gold-standard run.
