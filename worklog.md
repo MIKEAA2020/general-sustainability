@@ -2706,3 +2706,4 @@ Work Log:
 
 Stage Summary:
 - Letter-free citation form is now LIVE in the shipped ARV v9 and E1 v59 (same edition numbers, in place per owner instruction). Map carries the round-31 note. Open (owner): Zenodo deposit-title refresh; SI submission 2027-01-31; lake build gold-standard run queued.
+- Addendum (same day): the two regenerated verifier scripts initially missed commit 2c8ad18 — caught by the fresh-clone verifier-count check (clone 238/238 and 53/53 vs workspace 250/250 and 73/73); pushed as d17fe86; clone re-verified at the pinned counts. Lesson: when a commit message cites verifier pins, the pinned-verifier discipline requires the verifier files in the same commit — the fresh-clone count comparison is the detector.
