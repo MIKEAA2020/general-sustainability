@@ -9,13 +9,13 @@ hygiene only)
 | Slot | Paper (edition, source of record) | Module |
 |---|---|---|
 | P1 | Obstruction calculus — theory main line (2026b, `paper2_obstruction_calculus_v55_Automatica_routes.tex`) | `Formalizations.P1_Obstruction` |
-| comp | Computational certification (2026d, `paper2_computational_certification_v17.tex`) | `Formalizations.Comp_Certification` |
+| comp | Computational certification (2026d, `paper2_computational_certification_v18.tex`) | `Formalizations.Comp_Certification` |
 | ws | Worked systems (2026c, `paper2_worked_systems_v17.tex`) | `Formalizations.WS_WorkedSystems` |
-| minimax | Minimax dual certificates (2026g, `minimax_dual_certificates_v9.tex`) | `Formalizations.Minimax_Dual` |
-| ebc | Exact belief computation (2026f, `paper2_exact_belief_computation_v8.tex`) | `Formalizations.EBC_ExactBelief` |
-| P3 | Probabilistic sufficiency (2026e, `paper2_probabilistic_sufficiency_v10.tex`) | `Formalizations.P3_ProbSufficiency` |
-| ARV | Applied regime viability (2026a, `applied_regime_viability_v8.tex`) | `Formalizations.ARV_RegimeViability` |
-| E1 | Applied forecast ladder (E1, `paperE1_cod_forecast_ladder_v58.tex`) | `Formalizations.E1_ForecastLadder` |
+| minimax | Minimax dual certificates (2026g, `minimax_dual_certificates_v11.tex`) | `Formalizations.Minimax_Dual` |
+| ebc | Exact belief computation (2026f, `paper2_exact_belief_computation_v10.tex`) | `Formalizations.EBC_ExactBelief` |
+| P3 | Probabilistic sufficiency (2026e, `paper2_probabilistic_sufficiency_v11.tex`) | `Formalizations.P3_ProbSufficiency` |
+| ARV | Applied regime viability (2026a, `applied_regime_viability_v9.tex`) | `Formalizations.ARV_RegimeViability` |
+| E1 | Applied forecast ladder (E1, `paperE1_cod_forecast_ladder_v59.tex`) | `Formalizations.E1_ForecastLadder` |
 | **P1-AS** | **Assessment separation — the head paper** (`paper1_assessment_separation_v62.tex`) | `Formalizations.P1_AssessmentSeparation` |
 
 ## Two-tier architecture

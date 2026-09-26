@@ -2632,3 +2632,19 @@ Work Log:
 - Venue + article type table recorded in the map (round-29 section): obstr Automatica Regular; comp SIOPT research; ws SCL; minimax MoOR; ebc Automatica Technical Communiqué; psuff IEEE TAC Full Paper; ARV CJFAS Research Article; E1 IJF full-length article.
 Stage Summary:
 - Round 29 pushed: 5 tex + 5 verifiers + 5 PDFs + map + this worklog; psuff v10, ws v17, obstr v55 unchanged.
+
+
+---
+Task ID: 128
+Agent: Arena Agent Mode (continuation session)
+Task: reconcile the concurrent round-29 sessions; ship the residual reference-grounding delta; deliver venue/article-type table and per-paper Lean statements.
+
+Work Log:
+- Discovered the concurrent round-29 push (8a2b287) mid-flight via collision checks; adopted it as base (never-overwrite honored; my conflicting-number editions discarded, not pushed).
+- Re-verified my three residual findings against the remote texs (Isaacs 4x uncited; martingale-transport 2x uncited; point-based lineage absent in ebc 4 sites / psuff 2 sites) and shipped minimax v11, ebc v10, psuff v11.
+- Fixed lean/README.md's six stale edition rows (comp v18 and ARV v9 were round-29's own misses).
+- Gates: minimax 48/48 chained, ebc 30/30, psuff 32/32; builds zero overfull; byte-identical pinned rebuilds; content-loss audit: pure insertions.
+- E1 Schaefer/Pella-Tomlinson item dropped: subsumed by round 29's E1 v59.
+
+Stage Summary:
+- Round 30 pushed; workspace synced to remote. Venue table + Lean statements delivered in-chat (venue baseline = round-29's recorded table, concurred).

@@ -88,15 +88,15 @@ figures, calibration data v1 + wave_e_cod.
 
 ---
 
-## Current editions (after round 29)
+## Current editions (after round 30)
 
 | Artifact | Status |
 |----------|--------|
 | `paper2_obstruction_calculus_v55_Automatica_routes.*` (18 pp) | **current** P1 main |
 | `paper2_obstruction_calculus_v51_Automatica_routes_supplementary.*` (20 pp) | **current** P1 supplementary |
-| `minimax_dual_certificates_v10.*` (6 pp, 44/44 chained) | **current** |
-| `paper2_exact_belief_computation_v9.*` (4 pp, 28/28) | **current** |
-| `paper2_probabilistic_sufficiency_v10.*` (11 pp, 31/31) | **current** P3 |
+| `minimax_dual_certificates_v11.*` (6 pp, 48/48 chained) | **current** |
+| `paper2_exact_belief_computation_v10.*` (4 pp, 30/30) | **current** |
+| `paper2_probabilistic_sufficiency_v11.*` (11 pp, 32/32) | **current** P3 |
 | `paper2_computational_certification_v18.*` (11 pp, 48/48) | **current** P2 |
 | `paper2_worked_systems_v17.*` (11 pp, 54/54, chained 57/57) | **current** P4 |
 | `applied_regime_viability_v9.*` (7 pp, **238/238**) | **current** P5 viability layer |
@@ -234,3 +234,28 @@ norms as verified in the round-19 addendum):**
 | psuff v10 (11 pp) | IEEE TAC — Full Paper | Stochastic Systems — article |
 | ARV v9 (7 pp) | Can. J. Fish. Aquat. Sci. — Research Article | ICES J. Marine Science |
 | E1 v59 (37 pp) | Int. J. Forecasting — full-length research article | Fisheries Research |
+
+
+---
+
+## Round 30 — residual reference grounding after the concurrent-round reconciliation (September 26, 2026)
+
+Round 29 (parallel session, `8a2b287`) and this session's independent
+audit ran concurrently on the same directive; this round reconciles.
+Round 29's additions (Sion 1958, Farkas 1902, Minato 1993, Ricard et al.
+2012, Schaefer 1954, Pella-Tomlinson 1969, comp v18 keyword correction)
+are adopted as the base. This session's audit found three residual gaps
+that round 29 did not cover; each re-verified against the remote state
+before shipping:
+
+| Edition | Addition | Why it survives the round-29 audit |
+|----------|-------------|-------|
+| minimax v10 -> **v11** (48/48) | Isaacs 1965 at the Isaacs drift/condition; Beiglböck, Henry-Labordère, Penkner 2013 at the martingale-transport couplings | round 29 anchored Sion (the minimax theorem) and Farkas (the multiplier vector) but the "Isaacs drift/condition" (4 body invocations) and "martingale-transport structure" (2 invocations) remained uncited |
+| ebc v9 -> **v10** (30/30) | Lovejoy 1991 lineage clause at the point-based section | round 29 anchored Minato 1993 (the zero-suppressed keyword) but the point-based method name (4 sites) remained without its lineage |
+| psuff v10 -> **v11** (32/32) | Lovejoy 1991 at both point-based sites | round 29's reversal addressed the Smallwood–Sondik PWLC structure; the point-based method name (2 sites) is a separate invocation — Smallwood–Sondik does not cover it |
+
+Round-30 adds are pure insertions (one reflowed sentence each);
+lean/README.md slot table updated for all six stale edition references
+(four inherited from round 28/29, two round-29's own). Gates: verifiers
+48/48, 30/30, 32/32; builds zero overfull, byte-identical pinned
+rebuilds.
