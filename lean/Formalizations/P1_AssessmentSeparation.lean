@@ -58,31 +58,41 @@
       reduced, at an abstract monotone/antitone power interface, to the
       single master comparison (the averaging argument: the two plan
       conditions sum to `A + B`, so the equal weight is always the
-      binding one).  The negative-integer rungs `θ = -m` (elasticities
-      `σ = 1/(m+1)`) instantiate the interface in pure ordered-field
-      arithmetic — no bridges — and yield: the golden-ratio closed form
-      at `m = 1` (Fibonacci witnesses 8/5 rejects / 13/8 accepts), the
-      paper's `σ = 1/4` witness (θ = -3 accepts 9/5), the `∀m`
-      false-certification family (every `σ = 1/(m+1)` false-certifies an
-      exact rational interval of gap states — via a Bernoulli-type
-      product bound proved here), and the Leontief identification
-      `V⁰ = V_typ` (the only uniformly safe aggregator of the covered
-      family).  The fractional rungs (σ = 3 at 6/5, σ = 2 at 13/10) are
-      covered by certificate-conditional theorems: given rational lower
-      bounds on the power values (checked over ℝ by the deposited
-      verifier), the rung false-certifies the stated interval.
+      binding one).  All four signs of the ladder are covered:
+      θ > 0 and θ < 0 at the abstract interface; the negative-integer
+      rungs `θ = -m` (elasticities `σ = 1/(m+1)`) instantiate it in pure
+      ordered-field arithmetic — the golden-ratio closed form at `m = 1`
+      (Fibonacci witnesses 8/5 rejects / 13/8 accepts, the whole
+      interval `[13/8, 2)`), the paper's `σ = 1/4` witness (θ = -3
+      accepts 9/5), and the `∀m` false-certification family (every
+      `σ = 1/(m+1)` false-certifies `[2 - 2^-(m+1), 2)` — via a
+      Bernoulli-type lower bound proved here); the fractional rungs
+      through algebraic power-law interfaces — the square law for θ = 1/2
+      (σ = 2, whose exact rational floor `5/4` is proved as an iff, the
+      ladder table's row) and the cube law `pw x³ = x²` for θ = 2/3
+      (σ = 3, the canonical datum 6/5 with the rational brackets
+      `(1/3, 5/3)` proved inside the layer, and the critical-elasticity
+      bracket `σ* ∈ (2, 3]` at the Section 6.3 datum); and the geometric
+      member θ = 0 (σ = 1, the LPI functional form) through the
+      geometric-mean interface `GeoLaws` (positivity, per-coordinate
+      monotonicity, the swap-product identity `gp(x,y,w)·gp(y,x,w) = xy`
+      replacing the paper's log-space averaging, and equal-weight
+      symmetry) — the master comparison `s² ≥ 2`, the paper's witness
+      `3/2`, and the `√2` floor's rational bracket `141/100` rejects.
+      S2(i): the θ = 1 rung accepts every gap state (full Leontief is
+      never necessary at a fixed state).  The Leontief identification
+      `V⁰ = V_typ`: the σ = 0 member accepts no gap state — the only
+      uniformly safe aggregator of the covered family
+      (`s2_two_sided_summary`).
 
   Not formalized (and why), per the layer's fidelity policy:
 
     * **Theorem S1 (nesting)** — monotonicity of the power means in θ —
-      and with it the prefix/ladder structure of `σ*` and the full
-      pointwise clause of S2(i) on the band `s ∈ (1, 13/8)`: the
-      θ-family's order structure is genuinely analytic (real exponents);
-      each rung's up-set-in-`s` structure is proved instead.
-    * **The geometric member θ = 0 (σ = 1)** — its master comparison
-      `s² ≥ 2` averages in log space; the exponential structure is
-      beyond the ordered-field interface.  The paper's witness "`σ = 1`
-      certifies `s = 3/2`" is covered by no theorem here.
+      and with it the prefix/ladder structure of `σ*` across distinct
+      rungs and the transfer of false-certification intervals to
+      non-ladder elasticities: the θ-family's order structure is
+      genuinely analytic (real exponents); each rung's up-set-in-`s`
+      structure is proved instead.
     * The relative-interior topology of Theorem 5(4) — replaced by the
       explicit strictly-interior witness; the continuity (IVT) step in
       the paper's S2(ii) — replaced by explicit rational interval
@@ -1972,5 +1982,1632 @@ def DiagHyps (z : WitState K) : Prop :=
 rider — the collapse convention is the family's defining property. -/
 theorem lemB_reject {_pw : K → K} {w1 w2 : K} {a : WitAct K} {z : WitState K}
     {rung : Prop} (h : CollapseSafe a z ∧ rung) : CollapseSafe a z := h.1
+
+/-! ## The master-equation reduction (the averaging argument)
+
+On the gap-region diagonal `z = (x < 1, s, s)`, `1 < s < 2`, the θ-rung
+protocol of the substitutability extension collapses to the paper's
+single master comparison.  The trough values of the two serving plans
+are `(s-1, s+1)` and `(s+1, s-1)`, whose rung aggregates at any weight
+sum to the weight-independent `A + B` (`cross_sum`), so one of the two
+plans always covers at least `(A+B)/2` — the halving of
+`averaging_step` — and the equal weight is the binding one.  θ > 0:
+`accept ↔ (s-1)^θ + (s+1)^θ ≥ 2`;  θ < 0: the comparison flips to
+`≤ 2`. -/
+
+/-- `1/2 + 1/2 = 1`. -/
+theorem one_half_add_one_half {K : Type} [OrdField K] :
+    (natK 1 / natK 2 + natK 1 / natK 2 : K) = 1 := by
+  have h2 : (1 : Nat) + 1 = 2 := rfl
+  rw [div_add_div_same natK_two_ne_zero, ← natK_add, h2,
+    div_self natK_two_ne_zero]
+
+theorem one_half_nonneg {K : Type} [OrdField K] : (0 : K) ≤ natK 1 / natK 2 :=
+  div_nonneg (natK_nonneg 1) (natK_pos (by omega))
+
+theorem one_half_pos {K : Type} [OrdField K] : (0 : K) < natK 1 / natK 2 :=
+  div_pos (natK_pos (by omega)) (natK_pos (by omega))
+
+/-- `2 · (1/2) = 1`. -/
+theorem two_mul_one_half {K : Type} [OrdField K] :
+    natK 2 * (natK 1 / natK 2) = (1 : K) := by
+  rw [mul_comm]
+  have h : (natK 1 / natK 2 : K) * natK 2 = natK 1 :=
+    div_mul_cancel natK_two_ne_zero (natK 1)
+  rw [h, natK_one]
+
+theorem wNorm_one_half {K : Type} [OrdField K] :
+    WNorm (natK 1 / natK 2 : K) (natK 1 / natK 2) :=
+  ⟨one_half_nonneg, one_half_nonneg, one_half_add_one_half⟩
+
+/-- `0 < 1 + a` whenever `0 ≤ a`. -/
+theorem zero_lt_one_add {a : K} (ha : 0 ≤ a) : 0 < 1 + a :=
+  lt_of_lt_of_le zero_lt_one ((one_le_add_one_iff a).mpr ha)
+
+/-- `0 < a + 1` whenever `0 ≤ a`. -/
+theorem zero_lt_add_one {a : K} (ha : 0 ≤ a) : 0 < a + 1 := by
+  rw [add_comm]
+  exact zero_lt_one_add ha
+
+/-- A normalized weight pair lies in the nonnegative cone. -/
+theorem wNorm_wPos {w1 w2 : K} (hw : WNorm w1 w2) : WPos w1 w2 := by
+  refine ⟨hw.1, hw.2.1, ?_⟩
+  by_cases h1 : w1 = 0
+  · right
+    intro h2
+    have hw2 : w1 + w2 = 1 := hw.2.2
+    rw [h1, h2, add_zero] at hw2
+    exact zero_ne_one' hw2
+  · left
+    exact h1
+
+/-- `w₁ + w₂ = 1` implies `w₁·c + w₂·c = c`. -/
+theorem wsum_const {w1 w2 : K} (hw : w1 + w2 = 1) (c : K) :
+    w1 * c + w2 * c = c := by
+  rw [← right_distrib, hw, one_mul']
+
+/-- `a - 2 + 1 = a - 1`. -/
+theorem sub_two_add_one (a : K) : a - natK 2 + 1 = a - 1 := by
+  have h2 : natK 2 = (1 : K) + 1 := by rw [← two_mul (1 : K), mul_one]
+  rw [h2, sub_add_add_cancel]
+
+/-- `1 + (a - 2) = a - 1`. -/
+theorem one_add_sub_two (a : K) : 1 + (a - natK 2) = a - 1 := by
+  rw [add_comm, sub_two_add_one]
+
+/-- `1 + 1 = 2`. -/
+theorem one_add_one_eq_two {K : Type} [OrdField K] : (1 : K) + 1 = natK 2 := by
+  rw [← two_mul (1 : K), mul_one]
+
+/-- `0 < a - 1` when `1 < a`. -/
+theorem sub_one_pos {a : K} (h : 1 < a) : 0 < a - 1 := by
+  have h1 : 1 - a < 0 := sub_lt_zero.mpr h
+  rw [← neg_sub]
+  exact neg_pos' h1
+
+/-- On the diagonal, `1 + z.s₂ = s + 1`. -/
+theorem one_add_s2 (z : WitState K) (hz : DiagHyps z) :
+    1 + z.s2 = z.s1 + 1 := by
+  rw [← hz.2.2.1, add_comm 1 z.s1]
+
+/-- The averaging step (constructive halving): if two aggregates sum to
+at least `2`, one of them is at least `1`. -/
+theorem averaging_step (F S : K) (h : natK 2 ≤ F + S) :
+    (1 : K) ≤ F ∨ (1 : K) ≤ S := by
+  have key : ∀ T : K, natK 2 ≤ T + T → (1 : K) ≤ T := by
+    intro T hT
+    have h3 : natK 2 * (1 : K) ≤ natK 2 * T := by
+      rw [mul_one, two_mul]
+      exact hT
+    exact mul_le_cancel_left natK_two_pos h3
+  cases le_total F S with
+  | inl hFSle => exact Or.inr (key S (le_trans h (add_le_add_right hFSle S)))
+  | inr hSFle => exact Or.inl (key F (le_trans h (add_le_add_left hSFle F)))
+
+/-- The averaging step, `≤` form. -/
+theorem averaging_step_neg (F S : K) (h : F + S ≤ natK 2) :
+    F ≤ (1 : K) ∨ S ≤ (1 : K) := by
+  have key : ∀ T : K, T + T ≤ natK 2 → T ≤ (1 : K) := by
+    intro T hT
+    have h3 : natK 2 * T ≤ natK 2 * (1 : K) := by
+      rw [mul_one, two_mul]
+      exact hT
+    exact mul_le_cancel_left natK_two_pos h3
+  cases le_total F S with
+  | inl hFSle => exact Or.inl (key F (le_trans (add_le_add_left hFSle F) h))
+  | inr hSFle => exact Or.inr (key S (le_trans (add_le_add_right hSFle S) h))
+
+/-- The collapse convention is automatic for every deterministic plan on
+the diagonal (all floor-referenced indices stay a full unit above the
+collapse level). -/
+theorem collapse_safe_all_det (z : WitState K) (hz : DiagHyps z) (a : DetAct) :
+    CollapseSafe (.det a) z := by
+  have hs1 : 0 < z.s1 - 1 := sub_one_pos hz.2.2.2.1
+  have hs2 : 0 < z.s1 + 1 := zero_lt_add_one hz.1.2.1
+  intro p hp
+  cases a with
+  | noswitch =>
+      rw [hp]
+      exact ⟨zero_lt_one_add hz.1.2.1, zero_lt_one_add hz.1.2.2⟩
+  | fast =>
+      have h1 : z.s1 - 1 ≤ 1 + p.s1 := by
+        rw [← one_add_sub_two]
+        exact add_le_add_left hp.2.2.1 1
+      rw [hp.2.1, one_add_s2 z hz]
+      exact ⟨lt_of_lt_of_le hs1 h1, hs2⟩
+  | slow =>
+      have h1 : z.s1 - 1 ≤ 1 + p.s2 := by
+        rw [← one_add_sub_two, hz.2.2.1]
+        exact add_le_add_left hp.2.2.1 1
+      rw [hp.2.1, add_comm 1 z.s1]
+      exact ⟨hs2, lt_of_lt_of_le hs1 h1⟩
+  | staged =>
+      have h1 : (1 : K) ≤ 1 + p.s1 :=
+        (one_le_add_one_iff p.s1).mpr (le_trans hz.1.2.1 hp.2.2.1)
+      have h2 : (1 : K) ≤ 1 + p.s2 :=
+        (one_le_add_one_iff p.s2).mpr (le_trans hz.1.2.2 hp.2.2.2.2.1)
+      exact ⟨lt_of_lt_of_le zero_lt_one h1, lt_of_lt_of_le zero_lt_one h2⟩
+
+/-- The θ-rung condition for FAST from the trough comparison
+(θ > 0 sign, monotone power interface). -/
+theorem rungCond_fast_of_trough {pw : K → K}
+    (hmono : ∀ a b, 0 ≤ a → a ≤ b → pw a ≤ pw b) (z : WitState K)
+    (hz : DiagHyps z) {w1 w2 : K} (hw : WNorm w1 w2)
+    (h : (1 : K) ≤ w1 * pw (z.s1 - 1) + w2 * pw (z.s1 + 1)) :
+    RungCond pw w1 w2 (.det .fast) z := by
+  have hs1m1 : 0 ≤ z.s1 - 1 := le_of_lt (sub_one_pos hz.2.2.2.1)
+  have hs2 : 0 < z.s1 + 1 := zero_lt_add_one hz.1.2.1
+  have hAB : pw (z.s1 - 1) ≤ pw (z.s1 + 1) :=
+    hmono _ _ hs1m1
+      (le_trans (sub_le_self z.s1 1 zero_le_one')
+        (le_add_right z.s1 1 zero_le_one'))
+  refine ⟨?_, ⟨rfl, hz.1.1, ?_⟩⟩
+  · intro p hp
+    have hx : 0 ≤ p.x := by rw [hp.1]; exact hz.1.1
+    refine ⟨hx, ?_⟩
+    have hb1 : pw (z.s1 - 1) ≤ pw (1 + p.s1) := by
+      refine hmono _ _ hs1m1 ?_
+      rw [← one_add_sub_two]
+      exact add_le_add_left hp.2.2.1 1
+    have hb2 : pw (1 + p.s2) = pw (z.s1 + 1) := by
+      rw [hp.2.1, one_add_s2 z hz]
+    have h1 : w1 * pw (z.s1 - 1) + w2 * pw (z.s1 + 1)
+        ≤ w1 * pw (1 + p.s1) + w2 * pw (1 + p.s2) := by
+      rw [hb2]
+      exact add_le_add (mul_le_mul_of_nonneg_left hb1 hw.1) (le_refl _)
+    exact le_trans h h1
+  · show (1 : K) ≤ w1 * pw (1 + (z.s1 + eGain))
+      + w2 * pw (1 + (z.s2 + eGain))
+    rw [← hz.2.2.1, wsum_const hw.2.2]
+    have hB1 : (1 : K) ≤ pw (z.s1 + 1) := by
+      have h5 : w1 * pw (z.s1 - 1) + w2 * pw (z.s1 + 1)
+          ≤ w1 * pw (z.s1 + 1) + w2 * pw (z.s1 + 1) :=
+        add_le_add (mul_le_mul_of_nonneg_left hAB hw.1) (le_refl _)
+      rw [wsum_const hw.2.2] at h5
+      exact le_trans h h5
+    have hS : pw (z.s1 + 1) ≤ pw (1 + (z.s1 + eGain)) := by
+      refine hmono _ _ (le_of_lt hs2) ?_
+      rw [add_comm z.s1 1]
+      exact add_le_add_left (le_add_right z.s1 eGain eGain_nonneg) 1
+    exact le_trans hB1 hS
+
+/-- The θ-rung condition for SLOW from the trough comparison
+(θ > 0 sign). -/
+theorem rungCond_slow_of_trough {pw : K → K}
+    (hmono : ∀ a b, 0 ≤ a → a ≤ b → pw a ≤ pw b) (z : WitState K)
+    (hz : DiagHyps z) {w1 w2 : K} (hw : WNorm w1 w2)
+    (h : (1 : K) ≤ w1 * pw (z.s1 + 1) + w2 * pw (z.s1 - 1)) :
+    RungCond pw w1 w2 (.det .slow) z := by
+  have hs1m1 : 0 ≤ z.s1 - 1 := le_of_lt (sub_one_pos hz.2.2.2.1)
+  have hs2 : 0 < z.s1 + 1 := zero_lt_add_one hz.1.2.1
+  have hAB : pw (z.s1 - 1) ≤ pw (z.s1 + 1) :=
+    hmono _ _ hs1m1
+      (le_trans (sub_le_self z.s1 1 zero_le_one')
+        (le_add_right z.s1 1 zero_le_one'))
+  refine ⟨?_, ⟨rfl, hz.1.1, ?_⟩⟩
+  · intro p hp
+    have hx : 0 ≤ p.x := by rw [hp.1]; exact hz.1.1
+    refine ⟨hx, ?_⟩
+    have hb1 : pw (z.s1 - 1) ≤ pw (1 + p.s2) := by
+      refine hmono _ _ hs1m1 ?_
+      rw [← one_add_sub_two, hz.2.2.1]
+      exact add_le_add_left hp.2.2.1 1
+    have hb2 : pw (1 + p.s1) = pw (z.s1 + 1) := by
+      rw [hp.2.1, add_comm 1 z.s1]
+    have h1 : w1 * pw (z.s1 + 1) + w2 * pw (z.s1 - 1)
+        ≤ w1 * pw (1 + p.s1) + w2 * pw (1 + p.s2) := by
+      rw [hb2]
+      exact add_le_add (le_refl _) (mul_le_mul_of_nonneg_left hb1 hw.2.1)
+    exact le_trans h h1
+  · show (1 : K) ≤ w1 * pw (1 + (z.s1 + eGain))
+      + w2 * pw (1 + (z.s2 + eGain))
+    rw [← hz.2.2.1, wsum_const hw.2.2]
+    have hB1 : (1 : K) ≤ pw (z.s1 + 1) := by
+      have h5 : w1 * pw (z.s1 + 1) + w2 * pw (z.s1 - 1)
+          ≤ w1 * pw (z.s1 + 1) + w2 * pw (z.s1 + 1) :=
+        add_le_add (le_refl _) (mul_le_mul_of_nonneg_left hAB hw.2.1)
+      rw [wsum_const hw.2.2] at h5
+      exact le_trans h h5
+    have hS : pw (z.s1 + 1) ≤ pw (1 + (z.s1 + eGain)) := by
+      refine hmono _ _ (le_of_lt hs2) ?_
+      rw [add_comm z.s1 1]
+      exact add_le_add_left (le_add_right z.s1 eGain eGain_nonneg) 1
+    exact le_trans hB1 hS
+
+/-- **The master-equation reduction** (θ > 0 sign): on the diagonal, the
+θ-rung protocol accepts exactly when the master comparison
+`(s-1)^θ + (s+1)^θ ≥ 2` holds — the averaging argument. -/
+theorem master_reduction_pos {pw : K → K}
+    (hmono : ∀ a b, 0 ≤ a → a ≤ b → pw a ≤ pw b) (z : WitState K)
+    (hz : DiagHyps z) :
+    DiagAccPos pw z ↔ (natK 2 : K) ≤ pw (z.s1 - 1) + pw (z.s1 + 1) := by
+  constructor
+  · intro hd
+    have hpair := hd (natK 1 / natK 2) (natK 1 / natK 2) wNorm_one_half
+    cases hpair with
+    | intro a ha =>
+        cases a with
+        | noswitch => exact Bool.noConfusion ha.2.1
+        | staged =>
+            have hbot : witTube (.det .staged) z ⟨z.x - 1, z.s1, z.s2⟩ :=
+              ⟨le_refl _, sub_le_self z.x 1 zero_le_one', le_refl _,
+                le_add_right z.s1 eGain eGain_nonneg, le_refl _,
+                le_add_right z.s2 eGain eGain_nonneg⟩
+            have h1 := ha.1 _ hbot
+            have h2 : z.x - 1 < 0 := sub_lt_zero.mpr hz.2.1
+            exact absurd h1.1 (not_le_of_lt h2)
+        | fast =>
+            have hdip : witTube (.det .fast) z ⟨z.x, z.s1 - natK 2, z.s2⟩ :=
+              ⟨rfl, rfl, le_refl _, sub_le_self z.s1 (natK 2) (natK_nonneg 2)⟩
+            have h1 := ha.1 _ hdip
+            rw [one_add_sub_two, one_add_s2 z hz] at h1
+            have h3 : (natK 1 / natK 2) * (pw (z.s1 - 1) + pw (z.s1 + 1))
+                = (natK 1 / natK 2) * pw (z.s1 - 1)
+                + (natK 1 / natK 2) * pw (z.s1 + 1) :=
+              left_distrib _ _ _
+            rw [← h3] at h1
+            have h4 : natK 2 * 1
+                ≤ natK 2 * ((natK 1 / natK 2)
+                  * (pw (z.s1 - 1) + pw (z.s1 + 1))) :=
+              mul_le_mul_of_nonneg_left h1.2 (natK_nonneg 2)
+            rw [mul_one, ← mul_assoc, two_mul_one_half, one_mul'] at h4
+            exact h4
+        | slow =>
+            have hdip : witTube (.det .slow) z ⟨z.x, z.s1, z.s2 - natK 2⟩ :=
+              ⟨rfl, rfl, le_refl _, sub_le_self z.s2 (natK 2) (natK_nonneg 2)⟩
+            have h1 := ha.1 _ hdip
+            rw [← hz.2.2.1, one_add_sub_two, add_comm 1 z.s1] at h1
+            have h3 : (natK 1 / natK 2) * (pw (z.s1 - 1) + pw (z.s1 + 1))
+                = (natK 1 / natK 2) * pw (z.s1 + 1)
+                + (natK 1 / natK 2) * pw (z.s1 - 1) := by
+              rw [left_distrib,
+                add_comm ((natK 1 / natK 2) * pw (z.s1 - 1))
+                  ((natK 1 / natK 2) * pw (z.s1 + 1))]
+            rw [← h3] at h1
+            have h4 : natK 2 * 1
+                ≤ natK 2 * ((natK 1 / natK 2)
+                  * (pw (z.s1 - 1) + pw (z.s1 + 1))) :=
+              mul_le_mul_of_nonneg_left h1.2 (natK_nonneg 2)
+            rw [mul_one, ← mul_assoc, two_mul_one_half, one_mul'] at h4
+            exact h4
+  · intro hmaster w1 w2 hw
+    have hFS : natK 2 ≤ (w1 * pw (z.s1 - 1) + w2 * pw (z.s1 + 1))
+        + (w1 * pw (z.s1 + 1) + w2 * pw (z.s1 - 1)) := by
+      rw [cross_sum w1 w2 (pw (z.s1 - 1)) (pw (z.s1 + 1)), hw.2.2, one_mul']
+      exact hmaster
+    cases averaging_step _ _ hFS with
+    | inl hF => exact ⟨.fast, rungCond_fast_of_trough hmono z hz hw hF⟩
+    | inr hS => exact ⟨.slow, rungCond_slow_of_trough hmono z hz hw hS⟩
+
+/-- The θ-rung condition for FAST from the trough comparison
+(θ < 0 sign, antitone power interface). -/
+theorem rungCondNeg_fast_of_trough {pw : K → K}
+    (hanti : ∀ a b, 0 < a → a ≤ b → pw b ≤ pw a) (z : WitState K)
+    (hz : DiagHyps z) {w1 w2 : K} (hw : WNorm w1 w2)
+    (h : w1 * pw (z.s1 - 1) + w2 * pw (z.s1 + 1) ≤ (1 : K)) :
+    ThetaSubAdm pw w1 w2 (.det .fast) z := by
+  have hs1m1 : 0 < z.s1 - 1 := sub_one_pos hz.2.2.2.1
+  have hs2 : 0 < z.s1 + 1 := zero_lt_add_one hz.1.2.1
+  have hAB : pw (z.s1 + 1) ≤ pw (z.s1 - 1) :=
+    hanti _ _ hs1m1
+      (le_trans (sub_le_self z.s1 1 zero_le_one')
+        (le_add_right z.s1 1 zero_le_one'))
+  refine ⟨collapse_safe_all_det z hz .fast, ?_, ⟨rfl, hz.1.1, ?_⟩⟩
+  · intro p hp
+    have hx : 0 ≤ p.x := by rw [hp.1]; exact hz.1.1
+    refine ⟨hx, ?_⟩
+    have hb1 : pw (1 + p.s1) ≤ pw (z.s1 - 1) := by
+      refine hanti _ _ hs1m1 ?_
+      rw [← one_add_sub_two]
+      exact add_le_add_left hp.2.2.1 1
+    have hb2 : pw (1 + p.s2) = pw (z.s1 + 1) := by
+      rw [hp.2.1, one_add_s2 z hz]
+    have h1 : w1 * pw (1 + p.s1) + w2 * pw (1 + p.s2)
+        ≤ w1 * pw (z.s1 - 1) + w2 * pw (z.s1 + 1) := by
+      rw [hb2]
+      exact add_le_add (mul_le_mul_of_nonneg_left hb1 hw.1) (le_refl _)
+    exact le_trans h1 h
+  · show w1 * pw (1 + (z.s1 + eGain)) + w2 * pw (1 + (z.s2 + eGain))
+        ≤ (1 : K)
+    rw [← hz.2.2.1, wsum_const hw.2.2]
+    have hB1 : pw (z.s1 + 1) ≤ (1 : K) := by
+      have h5 : pw (z.s1 + 1)
+          = w1 * pw (z.s1 + 1) + w2 * pw (z.s1 + 1) :=
+        (wsum_const hw.2.2 _).symm
+      rw [h5]
+      refine le_trans (add_le_add (mul_le_mul_of_nonneg_left hAB hw.1)
+        (le_refl _)) h
+    have hS : pw (1 + (z.s1 + eGain)) ≤ pw (z.s1 + 1) := by
+      refine hanti _ _ hs2 ?_
+      rw [add_comm z.s1 1]
+      exact add_le_add_left (le_add_right z.s1 eGain eGain_nonneg) 1
+    exact le_trans hS hB1
+
+/-- The θ-rung condition for SLOW from the trough comparison
+(θ < 0 sign). -/
+theorem rungCondNeg_slow_of_trough {pw : K → K}
+    (hanti : ∀ a b, 0 < a → a ≤ b → pw b ≤ pw a) (z : WitState K)
+    (hz : DiagHyps z) {w1 w2 : K} (hw : WNorm w1 w2)
+    (h : w1 * pw (z.s1 + 1) + w2 * pw (z.s1 - 1) ≤ (1 : K)) :
+    ThetaSubAdm pw w1 w2 (.det .slow) z := by
+  have hs1m1 : 0 < z.s1 - 1 := sub_one_pos hz.2.2.2.1
+  have hs2 : 0 < z.s1 + 1 := zero_lt_add_one hz.1.2.1
+  have hAB : pw (z.s1 + 1) ≤ pw (z.s1 - 1) :=
+    hanti _ _ hs1m1
+      (le_trans (sub_le_self z.s1 1 zero_le_one')
+        (le_add_right z.s1 1 zero_le_one'))
+  refine ⟨collapse_safe_all_det z hz .slow, ?_, ⟨rfl, hz.1.1, ?_⟩⟩
+  · intro p hp
+    have hx : 0 ≤ p.x := by rw [hp.1]; exact hz.1.1
+    refine ⟨hx, ?_⟩
+    have hb1 : pw (1 + p.s2) ≤ pw (z.s1 - 1) := by
+      refine hanti _ _ hs1m1 ?_
+      rw [← one_add_sub_two, hz.2.2.1]
+      exact add_le_add_left hp.2.2.1 1
+    have hb2 : pw (1 + p.s1) = pw (z.s1 + 1) := by
+      rw [hp.2.1, add_comm 1 z.s1]
+    have h1 : w1 * pw (1 + p.s1) + w2 * pw (1 + p.s2)
+        ≤ w1 * pw (z.s1 + 1) + w2 * pw (z.s1 - 1) := by
+      rw [hb2]
+      exact add_le_add (le_refl _) (mul_le_mul_of_nonneg_left hb1 hw.2.1)
+    exact le_trans h1 h
+  · show w1 * pw (1 + (z.s1 + eGain)) + w2 * pw (1 + (z.s2 + eGain))
+        ≤ (1 : K)
+    rw [← hz.2.2.1, wsum_const hw.2.2]
+    have hB1 : pw (z.s1 + 1) ≤ (1 : K) := by
+      have h5 : pw (z.s1 + 1)
+          = w1 * pw (z.s1 + 1) + w2 * pw (z.s1 + 1) :=
+        (wsum_const hw.2.2 _).symm
+      rw [h5]
+      refine le_trans (add_le_add (le_refl _)
+        (mul_le_mul_of_nonneg_left hAB hw.2.1)) h
+    have hS : pw (1 + (z.s1 + eGain)) ≤ pw (z.s1 + 1) := by
+      refine hanti _ _ hs2 ?_
+      rw [add_comm z.s1 1]
+      exact add_le_add_left (le_add_right z.s1 eGain eGain_nonneg) 1
+    exact le_trans hS hB1
+
+/-- **The master-equation reduction** (θ < 0 sign): on the diagonal, the
+θ-rung protocol accepts exactly when the flipped master comparison
+`(s-1)^θ + (s+1)^θ ≤ 2` holds. -/
+theorem master_reduction_neg {pw : K → K}
+    (hanti : ∀ a b, 0 < a → a ≤ b → pw b ≤ pw a) (z : WitState K)
+    (hz : DiagHyps z) :
+    DiagAccNeg pw z ↔ pw (z.s1 - 1) + pw (z.s1 + 1) ≤ (natK 2 : K) := by
+  constructor
+  · intro hd
+    have hpair := hd (natK 1 / natK 2) (natK 1 / natK 2) wNorm_one_half
+    cases hpair with
+    | intro a ha =>
+        cases a with
+        | noswitch => exact Bool.noConfusion ha.2.2.1
+        | staged =>
+            have hbot : witTube (.det .staged) z ⟨z.x - 1, z.s1, z.s2⟩ :=
+              ⟨le_refl _, sub_le_self z.x 1 zero_le_one', le_refl _,
+                le_add_right z.s1 eGain eGain_nonneg, le_refl _,
+                le_add_right z.s2 eGain eGain_nonneg⟩
+            have h1 := ha.2.1 _ hbot
+            have h2 : z.x - 1 < 0 := sub_lt_zero.mpr hz.2.1
+            exact absurd h1.1 (not_le_of_lt h2)
+        | fast =>
+            have hdip : witTube (.det .fast) z ⟨z.x, z.s1 - natK 2, z.s2⟩ :=
+              ⟨rfl, rfl, le_refl _, sub_le_self z.s1 (natK 2) (natK_nonneg 2)⟩
+            have h1 := ha.2.1 _ hdip
+            rw [one_add_sub_two, one_add_s2 z hz] at h1
+            have h3 : (natK 1 / natK 2) * (pw (z.s1 - 1) + pw (z.s1 + 1))
+                = (natK 1 / natK 2) * pw (z.s1 - 1)
+                + (natK 1 / natK 2) * pw (z.s1 + 1) :=
+              left_distrib _ _ _
+            rw [← h3] at h1
+            have h4 : natK 2 * ((natK 1 / natK 2)
+                * (pw (z.s1 - 1) + pw (z.s1 + 1))) ≤ natK 2 * 1 :=
+              mul_le_mul_of_nonneg_left h1.2 (natK_nonneg 2)
+            rw [← mul_assoc, two_mul_one_half, one_mul', mul_one] at h4
+            exact h4
+        | slow =>
+            have hdip : witTube (.det .slow) z ⟨z.x, z.s1, z.s2 - natK 2⟩ :=
+              ⟨rfl, rfl, le_refl _, sub_le_self z.s2 (natK 2) (natK_nonneg 2)⟩
+            have h1 := ha.2.1 _ hdip
+            rw [← hz.2.2.1, one_add_sub_two, add_comm 1 z.s1] at h1
+            have h3 : (natK 1 / natK 2) * (pw (z.s1 - 1) + pw (z.s1 + 1))
+                = (natK 1 / natK 2) * pw (z.s1 + 1)
+                + (natK 1 / natK 2) * pw (z.s1 - 1) := by
+              rw [left_distrib,
+                add_comm ((natK 1 / natK 2) * pw (z.s1 - 1))
+                  ((natK 1 / natK 2) * pw (z.s1 + 1))]
+            rw [← h3] at h1
+            have h4 : natK 2 * ((natK 1 / natK 2)
+                * (pw (z.s1 - 1) + pw (z.s1 + 1))) ≤ natK 2 * 1 :=
+              mul_le_mul_of_nonneg_left h1.2 (natK_nonneg 2)
+            rw [← mul_assoc, two_mul_one_half, one_mul', mul_one] at h4
+            exact h4
+  · intro hmaster w1 w2 hw
+    have hFS : (w1 * pw (z.s1 - 1) + w2 * pw (z.s1 + 1))
+        + (w1 * pw (z.s1 + 1) + w2 * pw (z.s1 - 1)) ≤ natK 2 := by
+      rw [cross_sum w1 w2 (pw (z.s1 - 1)) (pw (z.s1 + 1)), hw.2.2, one_mul']
+      exact hmaster
+    cases averaging_step_neg _ _ hFS with
+    | inl hF =>
+        exact ⟨.fast, rungCondNeg_fast_of_trough hanti z hz hw hF⟩
+    | inr hS =>
+        exact ⟨.slow, rungCondNeg_slow_of_trough hanti z hz hw hS⟩
+
+/-- Protocol 2 under the θ ∈ (0,1) rungs, with the collapse-convention
+rider (these are θ < 1 members). -/
+def DiagAccMid (pw : K → K) (z : WitState K) : Prop :=
+  ∀ w1 w2, WNorm w1 w2 → ∃ a : DetAct, ThetaMidAdm pw w1 w2 (.det a) z
+
+/-- On the diagonal, the convention-carrying θ ∈ (0,1) protocol agrees
+with the plain positive-sign protocol (the convention is automatic for
+every deterministic plan there). -/
+theorem diagAccMid_iff_pos {pw : K → K} (z : WitState K) (hz : DiagHyps z) :
+    DiagAccMid pw z ↔ DiagAccPos pw z := by
+  constructor
+  · intro hd w1 w2 hw
+    cases hd w1 w2 hw with
+    | intro a ha => exact ⟨a, ha.2⟩
+  · intro hd w1 w2 hw
+    cases hd w1 w2 hw with
+    | intro a ha => exact ⟨a, collapse_safe_all_det z hz a, ha⟩
+
+/-! ## Theorem S2(i) — the pointwise half
+
+Every gap state is accepted by the θ = 1 member (the linear
+aggregate): by Lemma A's engine equivalence, the compensatory engine
+serves every weight (Theorem 5(2)/(4)), so full Leontief is never
+necessary at a fixed state. -/
+
+/-- **Theorem S2(i)**: the θ = 1 rung accepts every gap state — the
+linear member is the pointwise certificate. -/
+theorem s2_i_linear_accepts (z : WitState K) (hz : InX0 z) (hg : IsGap z)
+    (w1 w2 : K) (hw : WNorm w1 w2) :
+    ∃ a : DetAct, Theta1Adm w1 w2 (.det a) z := by
+  have hfp : FPAgg z := (thm5_4 z hz).mpr hg
+  have hvw := hfp.1 w1 w2 (wNorm_wPos hw)
+  cases hvw with
+  | intro a ha => exact ⟨a, (lemA_engine hw.2.2 (.det a) z).mpr ha⟩
+
+/-! ## The Leontief identification (`V⁰ = V_typ`)
+
+The Leontief member's acceptance (`minᵢ λᵢ ≥ 1` along the tube) does
+not involve the weight, so its protocol collapses into the common-plan
+criterion — the typed operator. -/
+
+/-- **The Leontief identification**: the σ = 0 member's protocol
+acceptance set is the typed operator's accepted set. -/
+theorem leontief_eq_vtyp (z : WitState K) :
+    (∀ w1 w2 : K, WNorm w1 w2 → ∃ a : DetAct, TypedAdm (.det a) z) ↔ VTyp z := by
+  constructor
+  · intro hd
+    have hpair := hd (natK 1 / natK 2) (natK 1 / natK 2) wNorm_one_half
+    cases hpair with
+    | intro a ha => exact ⟨a, ha⟩
+  · intro hV _w1 _w2 _
+    cases hV with
+    | intro a ha => exact ⟨a, ha⟩
+
+/-- **Theorem S2(ii), Leontief side**: the σ = 0 member accepts no gap
+state — the only uniformly safe aggregator of the covered family. -/
+theorem s2_leontief_rejects_gaps (z : WitState K) (hz : InX0 z)
+    (hg : IsGap z) :
+    ¬ ∀ w1 w2 : K, WNorm w1 w2 → ∃ a : DetAct, TypedAdm (.det a) z := by
+  intro h
+  have hfp : FPAgg z := (thm5_4 z hz).mpr hg
+  exact hfp.2 ((leontief_eq_vtyp z).mp h)
+
+/-! ## Theorem S2(ii) — the false-certification witnesses
+
+For every rung of the ladder except the Leontief member there is an
+exact rational interval of gap states the rung accepts — false
+certification, since the typed operator rejects every gap state. -/
+
+/-- Every diagonal state is a gap state. -/
+theorem diagHyps_gap (z : WitState K) (hz : DiagHyps z) : IsGap z := by
+  refine ⟨hz.2.1, hz.2.2.2.2, ?_, ?_⟩
+  · rw [← hz.2.2.1]
+    exact hz.2.2.2.2
+  · rw [← hz.2.2.1, ← one_add_one_eq_two]
+    exact add_le_add (le_of_lt hz.2.2.2.1) (le_of_lt hz.2.2.2.1)
+
+/-- The typed operator rejects every diagonal state. -/
+theorem diagHyps_not_vtyp (z : WitState K) (hz : DiagHyps z) : ¬ VTyp z := by
+  have hfp : FPAgg z := (thm5_4 z hz.1).mpr (diagHyps_gap z hz)
+  exact hfp.2
+
+/-- **Theorem S2(ii), the harmonic member** (θ = -1, σ = 1/2): the rung
+false-certifies the exact rational interval `[13/8, 2)` of the diagonal
+— the golden-ratio floor's Fibonacci upper witness. -/
+theorem s2_ii_harmonic_interval (z : WitState K) (hz : DiagHyps z)
+    (hs : natK 13 / natK 8 ≤ z.s1) :
+    DiagAccNeg (fun x => x⁻¹) z := by
+  refine (master_reduction_neg (fun a b ha hab => inv_le_inv ha hab) z hz).mpr ?_
+  show (z.s1 - 1)⁻¹ + (z.s1 + 1)⁻¹ ≤ natK 2
+  have h1 : 0 < z.s1 - 1 := sub_one_pos hz.2.2.2.1
+  have h2 : 0 < z.s1 + 1 := zero_lt_add_one hz.1.2.1
+  have e1 : (z.s1 - 1)⁻¹ = (1 : K) / (z.s1 - 1) := by
+    rw [div_eq, one_mul']
+  have e2 : (z.s1 + 1)⁻¹ = (1 : K) / (z.s1 + 1) := by
+    rw [div_eq, one_mul']
+  rw [e1, e2, div_add_div (ne_of_gt h1) (ne_of_gt h2), one_mul', one_mul']
+  rw [div_le_iff (mul_pos h1 h2)]
+  -- (z.s1 + 1) + (z.s1 - 1) ≤ 2 * ((z.s1 - 1) * (z.s1 + 1))
+  have h85 : natK 13 - natK 8 = (natK 5 : K) :=
+    sub_add_eq (by rw [← natK_add])
+  have e58 : natK 13 / natK 8 - 1 = (natK 5 / natK 8 : K) := by
+    rw [← div_self (natK_ne_zero (n := 8) (by omega)), ← sub_div, h85]
+  have hfive : natK 5 / natK 8 ≤ z.s1 - 1 := by
+    rw [← e58]
+    exact sub_le_sub_right hs 1
+  have hsp : (1 : K) ≤ z.s1 * (z.s1 - 1) := by
+    have t1 : natK 13 / natK 8 * (natK 5 / natK 8)
+        ≤ natK 13 / natK 8 * (z.s1 - 1) :=
+      mul_le_mul_of_nonneg_left hfive
+        (div_nonneg (natK_nonneg 13) (natK_pos (n := 8) (by omega)))
+    have t2 : natK 13 / natK 8 * (z.s1 - 1) ≤ z.s1 * (z.s1 - 1) :=
+      mul_le_mul_of_nonneg_right hs (le_of_lt h1)
+    have e65 : natK 13 / natK 8 * (natK 5 / natK 8)
+        = (natK 13 * natK 5 / (natK 8 * natK 8) : K) :=
+      div_mul_div (natK_ne_zero (n := 8) (by omega)) (natK_ne_zero (n := 8) (by omega))
+    have ege : (1 : K) ≤ natK 13 * natK 5 / (natK 8 * natK 8) := by
+      rw [le_div_iff (mul_pos (natK_pos (n := 8) (by omega))
+        (natK_pos (n := 8) (by omega))), one_mul', ← natK_mul 8 8, ← natK_mul 13 5]
+      exact natK_le (by omega)
+    exact le_trans ege (le_trans (le_of_eq e65.symm) (le_trans t1 t2))
+  have eL : (z.s1 + 1) + (z.s1 - 1) = natK 2 * z.s1 := by
+    rw [sub_eq, add_comm4 z.s1 1 z.s1 (-1), add_neg_cancel, add_zero,
+      ← two_mul z.s1]
+  have eR : (z.s1 - 1) * (z.s1 + 1) = z.s1 * z.s1 - 1 := by
+    rw [sub_mul, left_distrib, mul_one, one_mul', add_comm z.s1 1]
+    exact add_sub_add_comm (z.s1 * z.s1) z.s1 1
+  have eQ : z.s1 * z.s1 - z.s1 - 1 = z.s1 * (z.s1 - 1) - 1 := by
+    rw [mul_sub, mul_one]
+  rw [eL, eR]
+  refine mul_le_mul_of_nonneg_left ?_ (natK_nonneg 2)
+  refine sub_nonneg.mp ?_
+  have reord : z.s1 * z.s1 - 1 - z.s1 = z.s1 * z.s1 - z.s1 - 1 := by
+    rw [sub_eq, sub_eq, sub_eq, sub_eq, add_right_comm]
+  rw [reord, eQ, sub_nonneg]
+  exact hsp
+
+/-- **Theorem S2(ii), the harmonic witness package**: the σ = 1/2 rung
+false-certifies every diagonal gap state with `s ≥ 13/8`. -/
+theorem s2_ii_harmonic_witness (z : WitState K) (hz : DiagHyps z)
+    (hs : natK 13 / natK 8 ≤ z.s1) :
+    DiagAccNeg (fun x => x⁻¹) z ∧ ¬ VTyp z :=
+  ⟨s2_ii_harmonic_interval z hz hs, diagHyps_not_vtyp z hz⟩
+
+/-- **Theorem S2(ii), the Fibonacci lower witness**: the harmonic rung
+rejects `s = 8/5` — the golden-ratio floor's rational lower bracket
+(the paper's Fibonacci pair `8/5 rejects / 13/8 accepts`). -/
+theorem s2_ii_harmonic_reject (z : WitState K) (hz : DiagHyps z)
+    (hs : z.s1 = natK 8 / natK 5) : ¬ DiagAccNeg (fun x => x⁻¹) z := by
+  intro hd
+  have hmaster :=
+    (master_reduction_neg (fun a b ha hab => inv_le_inv ha hab) z hz).mp hd
+  rw [hs] at hmaster
+  have h53 : natK 8 - natK 5 = (natK 3 : K) :=
+    sub_add_eq (by rw [← natK_add])
+  have e1 : natK 8 / natK 5 - 1 = (natK 3 / natK 5 : K) := by
+    rw [← div_self (natK_ne_zero (n := 5) (by omega)), ← sub_div, h53]
+  have e2 : natK 8 / natK 5 + 1 = (natK 13 / natK 5 : K) := by
+    rw [← div_self (natK_ne_zero (n := 5) (by omega)),
+      div_add_div_same (natK_ne_zero (n := 5) (by omega)), ← natK_add]
+  rw [e1, e2] at hmaster
+  rw [div_inv (natK_ne_zero (n := 3) (by omega)) (natK_ne_zero (n := 5) (by omega)),
+    div_inv (natK_ne_zero (n := 13) (by omega)) (natK_ne_zero (n := 5) (by omega)),
+    div_add_div (natK_ne_zero (n := 3) (by omega)) (natK_ne_zero (n := 13) (by omega))] at hmaster
+  rw [div_le_iff (mul_pos (natK_pos (n := 3) (by omega))
+    (natK_pos (n := 13) (by omega)))] at hmaster
+  -- natK 5 * natK 13 + natK 5 * natK 3 ≤ natK 2 * (natK 3 * natK 13)
+  rw [← natK_mul 5 13, ← natK_mul 5 3, ← natK_add, ← natK_mul 3 13,
+    ← natK_mul 2 (3 * 13)] at hmaster
+  exact absurd (natK_le_iff.mp hmaster) (by omega)
+
+/-- **Theorem S2(ii), the σ = 1/4 rung** (θ = -3): the paper's witness
+`9/5` — the rung false-certifies the gap state. -/
+theorem s2_ii_sigma_quarter_witness (z : WitState K) (hz : DiagHyps z)
+    (hs : z.s1 = natK 9 / natK 5) :
+    DiagAccNeg (fun x => (npow x 3)⁻¹) z ∧ ¬ VTyp z := by
+  refine ⟨?_, diagHyps_not_vtyp z hz⟩
+  refine (master_reduction_neg ?_ z hz).mpr ?_
+  · intro a b ha hab
+    exact inv_le_inv (npow_pos ha 3) (npow_mono hab (le_of_lt ha) 3)
+  · show (npow (z.s1 - 1) 3)⁻¹ + (npow (z.s1 + 1) 3)⁻¹ ≤ natK 2
+    rw [hs]
+    have h94 : natK 9 - natK 5 = (natK 4 : K) :=
+      sub_add_eq (by rw [← natK_add])
+    have e1 : natK 9 / natK 5 - 1 = (natK 4 / natK 5 : K) := by
+      rw [← div_self (natK_ne_zero (n := 5) (by omega)), ← sub_div, h94]
+    have e2 : natK 9 / natK 5 + 1 = (natK 14 / natK 5 : K) := by
+      rw [← div_self (natK_ne_zero (n := 5) (by omega)),
+        div_add_div_same (natK_ne_zero (n := 5) (by omega)), ← natK_add]
+    have e4 : npow (natK 4) 3 = (natK 64 : K) := by rw [npow_natK]
+    have e5 : npow (natK 5) 3 = (natK 125 : K) := by rw [npow_natK]
+    have e14 : npow (natK 14) 3 = (natK 2744 : K) := by rw [npow_natK]
+    rw [e1, e2,
+      npow_div (natK_ne_zero (n := 5) (by omega)) 3,
+      npow_div (natK_ne_zero (n := 5) (by omega)) 3,
+      div_inv (npow_ne_zero (natK_ne_zero (n := 4) (by omega)) 3)
+        (npow_ne_zero (natK_ne_zero (n := 5) (by omega)) 3),
+      div_inv (npow_ne_zero (natK_ne_zero (n := 14) (by omega)) 3)
+        (npow_ne_zero (natK_ne_zero (n := 5) (by omega)) 3),
+      e5, e4, e14,
+      div_add_div (natK_ne_zero (n := 64) (by omega))
+        (natK_ne_zero (n := 2744) (by omega)),
+      div_le_iff (mul_pos (natK_pos (n := 64) (by omega))
+        (natK_pos (n := 2744) (by omega)))]
+    -- 125·2744 + 125·64 ≤ 2·(64·2744)
+    rw [← natK_mul 125 2744, ← natK_mul 125 64, ← natK_add,
+      ← natK_mul 64 2744, ← natK_mul 2 (64 * 2744)]
+    exact natK_le (by omega)
+
+/-! ## Theorem S2(ii) — the `∀m` false-certification family
+
+Every negative-integer rung θ = -m (elasticity `σ = 1/(m+1)`) accepts
+the whole rational interval `[2 - 2^-(m+1), 2)` of the diagonal — so
+aggregators of arbitrarily small strictly-positive elasticity still
+false-certify gap states (the interface-level rendition of the uniform
+critical elasticity `inf_z σ*(z) = 0`).  The engine is a Bernoulli-type
+lower bound proved here. -/
+
+/-- `npow x 1 = x`. -/
+theorem npow_one (x : K) : npow x 1 = x := by
+  show x * npow x 0 = x
+  rw [npow_zero, mul_one]
+
+/-- `0 < 1 - a` when `a < 1`. -/
+theorem one_sub_pos {a : K} (h : a < 1) : 0 < 1 - a := by
+  have h1 : a - 1 < 0 := sub_lt_zero.mpr h
+  rw [← neg_sub]
+  exact neg_pos' h1
+
+/-- `a ≤ c - b` when `a + b ≤ c`. -/
+theorem le_sub_of_add {a b c : K} (h : a + b ≤ c) : a ≤ c - b := by
+  have h1 : a + b + -b ≤ c + -b := add_le_add_right h (-b)
+  rw [add_assoc, add_neg_cancel, add_zero] at h1
+  rw [sub_eq]
+  exact h1
+
+/-- The Bernoulli-type lower bound: `1 - m·δ ≤ (1 - δ)^m`. -/
+theorem bernoulli_lower {δ : K} (hδ1 : 0 ≤ δ) (hδ2 : δ ≤ 1) (m : Nat) :
+    (1 : K) - natK m * δ ≤ npow (1 - δ) m := by
+  induction m with
+  | zero =>
+      show (1 : K) - natK 0 * δ ≤ npow (1 - δ) 0
+      rw [natK_zero, zero_mul, sub_zero, npow_zero]
+      exact le_refl _
+  | succ k ih =>
+      have h0 : 0 ≤ 1 - δ := sub_nonneg.mpr hδ2
+      have h1 : (1 - δ) * (1 - natK k * δ)
+          ≤ (1 - δ) * npow (1 - δ) k :=
+        mul_le_mul_of_nonneg_left ih h0
+      have en : δ * (natK k * δ) = natK k * (δ * δ) := by
+        rw [← mul_assoc, mul_comm δ (natK k), mul_assoc]
+      have h2 : (1 - δ) * (1 - natK k * δ)
+          = (1 : K) - natK (k + 1) * δ + natK k * (δ * δ) := by
+        rw [sub_mul, one_mul', mul_sub, mul_one, en,
+          sub_sub (1 - natK k * δ) δ (natK k * (δ * δ)), natK_succ,
+          right_distrib, one_mul', sub_eq, sub_eq, sub_eq, neg_add_dist,
+          ← add_assoc]
+      have h3 : 0 ≤ natK k * (δ * δ) :=
+        mul_nonneg (natK_nonneg k) (mul_nonneg hδ1 hδ1)
+      rw [npow_succ]
+      calc (1 : K) - natK (k + 1) * δ
+          ≤ (1 : K) - natK (k + 1) * δ + natK k * (δ * δ) :=
+            le_add_right _ _ h3
+        _ = (1 - δ) * (1 - natK k * δ) := h2.symm
+        _ ≤ (1 - δ) * npow (1 - δ) k := h1
+
+/-- The halving bound: `m·(1/2)^m ≤ 1/2` for every `m ≥ 1`. -/
+theorem half_pow_scaled (m : Nat) (hm : 1 ≤ m) :
+    natK m * npow (natK 1 / natK 2) m ≤ (natK 1 / natK 2 : K) := by
+  have key : ∀ n : Nat,
+      natK (n + 1) * npow (natK 1 / natK 2) (n + 1) ≤ (natK 1 / natK 2 : K) := by
+    intro n
+    induction n with
+    | zero =>
+        show (natK 1 : K) * ((natK 1 / natK 2) * 1) ≤ natK 1 / natK 2
+        rw [mul_one, natK_one, one_mul']
+        exact le_refl _
+    | succ k ih =>
+        have esplit : npow (natK 1 / natK 2 : K) (k + 1 + 1)
+            = natK 1 / natK 2 * npow (natK 1 / natK 2) (k + 1) :=
+          npow_succ _ _
+        have hmhalf : natK (k + 1 + 1) * (natK 1 / natK 2 : K)
+            = natK (k + 1 + 1) / natK 2 := by
+          rw [div_eq, div_eq, natK_one, one_mul']
+        have hle : natK (k + 1 + 1) / (natK 2 : K) ≤ natK (k + 1) := by
+          rw [div_le_iff natK_two_pos, ← natK_mul (k + 1) 2, natK_le_iff]
+          omega
+        rw [esplit, ← mul_assoc, hmhalf]
+        exact le_trans (mul_le_mul_of_nonneg_right hle
+          (npow_nonneg one_half_nonneg (k + 1))) ih
+  have hre : m = (m - 1) + 1 := by omega
+  rw [hre]
+  exact key (m - 1)
+
+/-- The inverse-sum conversion: `a⁻¹ + b⁻¹ ≤ c ↔ b + a ≤ c·(a·b)` for
+positive `a`, `b`. -/
+theorem inv_add_le_mul_iff {a b c : K} (ha : 0 < a) (hb : 0 < b) :
+    a⁻¹ + b⁻¹ ≤ c ↔ b + a ≤ c * (a * b) := by
+  constructor
+  · intro h
+    have hab : 0 < a * b := mul_pos ha hb
+    have h1 : (a⁻¹ + b⁻¹) * (a * b) ≤ c * (a * b) :=
+      mul_le_mul_of_nonneg_right h (le_of_lt hab)
+    have e : (a⁻¹ + b⁻¹) * (a * b) = b + a := by
+      rw [right_distrib, ← mul_assoc, mul_inv_cancel' (ne_of_gt ha),
+        one_mul', ← mul_assoc, mul_comm b⁻¹ a, mul_assoc,
+        mul_inv_cancel' (ne_of_gt hb), mul_one]
+    rw [e] at h1
+    exact h1
+  · intro h
+    have hab : 0 < a * b := mul_pos ha hb
+    have h1 : (b + a) * (a * b)⁻¹ ≤ c * (a * b) * (a * b)⁻¹ := by
+      refine mul_le_mul_of_nonneg_right h ?_
+      exact le_of_lt (inv_pos hab)
+    have ec : c * (a * b) * (a * b)⁻¹ = c := by
+      rw [mul_assoc, mul_inv_cancel_field (ne_of_gt hab), mul_one]
+    have e1 : b * (a⁻¹ * b⁻¹) = a⁻¹ := by
+      rw [← mul_assoc, mul_comm b a⁻¹, mul_assoc,
+        mul_inv_cancel_field (ne_of_gt hb), mul_one]
+    have e2 : a * (a⁻¹ * b⁻¹) = b⁻¹ := by
+      rw [← mul_assoc, mul_inv_cancel_field (ne_of_gt ha), one_mul']
+    have e : (b + a) * (a * b)⁻¹ = a⁻¹ + b⁻¹ := by
+      rw [right_distrib, mul_inv_rev, e1, e2]
+    rw [e, ec] at h1
+    exact h1
+
+theorem one_half_le_one {K : Type} [OrdField K] :
+    (natK 1 / natK 2 : K) ≤ (1 : K) := by
+  rw [div_le_iff natK_two_pos, one_mul']
+  exact natK_le (by omega)
+
+theorem one_half_lt_one {K : Type} [OrdField K] :
+    (natK 1 / natK 2 : K) < (1 : K) := by
+  rw [div_lt_iff natK_two_pos, one_mul']
+  exact natK_lt_iff.mpr (by omega)
+
+/-- The arithmetic core of the `∀m` family: at the endpoint
+`s₀ = 2 - δ` (with `2mδ ≤ 1/2`), the `-m` master comparison holds. -/
+theorem negm_master_bound (m : Nat) (hm : 1 ≤ m) (δ : K) (hδ : 0 < δ)
+    (hδ2 : δ < 1)
+    (h2mδ : natK 2 * natK m * δ ≤ natK 1 / natK 2) :
+    (npow (1 - δ) m)⁻¹ + (npow (natK 3 - δ) m)⁻¹ ≤ (natK 2 : K) := by
+  have h1δ : 0 < 1 - δ := one_sub_pos hδ2
+  have h3δ : 0 < natK 3 - δ := by
+    have h1 : δ - natK 3 < 0 := sub_lt_zero.mpr
+      (lt_of_lt_of_le hδ2
+        (le_trans (le_of_eq natK_one.symm) (natK_le (by omega))))
+    rw [← neg_sub]
+    exact neg_pos' h1
+  have hne3 : npow (natK 3 - δ) m ≠ 0 := npow_ne_zero (ne_of_gt h3δ) m
+  have hpos1 : 0 < npow (1 - δ) m := npow_pos h1δ m
+  have hpos3 : 0 < npow (natK 3 - δ) m := npow_pos h3δ m
+  -- the base comparison (1-δ)/(3-δ) ≤ 1/3
+  have hδ23 : δ ≤ natK 3 * δ := by
+    have e3 : natK 3 * δ = (δ + natK 2 * δ : K) := by
+      have e : (natK 3 : K) = natK 1 + natK 2 := by rw [← natK_add]
+      rw [e, right_distrib, natK_one, one_mul']
+    rw [e3]
+    exact le_add_right δ (natK 2 * δ)
+      (mul_nonneg (natK_nonneg 2) (le_of_lt hδ))
+  have hr : (1 - δ) / (natK 3 - δ) ≤ natK 1 / natK 3 := by
+    rw [div_le_div_cross h3δ (natK_pos (n := 3) (by omega))]
+    rw [sub_mul, one_mul', natK_one, one_mul', mul_comm δ (natK 3)]
+    exact add_le_add_left (neg_le_neg hδ23) (natK 3)
+  -- the Bernoulli bound
+  have hB : (1 : K) - natK m * δ ≤ npow (1 - δ) m :=
+    bernoulli_lower (le_of_lt hδ) (le_of_lt hδ2) m
+  -- the divided comparison q ≤ 1/3
+  have h13le : natK 1 / natK 3 ≤ (1 : K) := by
+    rw [div_le_iff (natK_pos (n := 3) (by omega)), one_mul']
+    exact natK_le (by omega)
+  have hq : npow ((1 - δ) / (natK 3 - δ)) m ≤ natK 1 / natK 3 := by
+    refine le_trans (npow_mono hr
+      (div_nonneg (le_of_lt h1δ) h3δ) m) ?_
+    have h2 := npow_le_of_le_one (div_nonneg (natK_nonneg 1) (natK_pos (n := 3) (by omega)))
+      h13le (by omega)
+    exact le_trans h2 (le_of_eq (npow_one _))
+  -- the key divided comparison: 1 + q ≤ 2·(1-δ)^m
+  have hkey : (1 : K) + npow ((1 - δ) / (natK 3 - δ)) m
+      ≤ natK 2 * npow (1 - δ) m := by
+    have hL : (1 : K) + npow ((1 - δ) / (natK 3 - δ)) m
+        ≤ (1 : K) + natK 1 / natK 3 :=
+      add_le_add (le_refl _) hq
+    have t0 : natK 1 / natK 3 + natK 1 / natK 2 ≤ (1 : K) := by
+      rw [div_add_div (natK_ne_zero (n := 3) (by omega))
+        (natK_ne_zero (n := 2) (by omega)), natK_one, one_mul', one_mul',
+        ← natK_add, ← natK_mul 3 2,
+        div_le_iff (natK_pos (n := 3 * 2) (by omega)), one_mul']
+      exact natK_le (by omega)
+    have t2 : (1 : K) + natK 1 / natK 3 + natK 1 / natK 2
+        ≤ (natK 2 : K) := by
+      rw [add_assoc]
+      exact le_trans (add_le_add (le_refl _) t0)
+        (le_of_eq one_add_one_eq_two)
+    have hR3 : (1 : K) + natK 1 / natK 3
+        ≤ natK 2 - natK 2 * natK m * δ := by
+      refine le_sub_of_add ?_
+      have t4 : (1 : K) + natK 1 / natK 3 + natK 2 * natK m * δ
+          ≤ (1 : K) + natK 1 / natK 3 + natK 1 / natK 2 :=
+        add_le_add (le_refl _) h2mδ
+      exact le_trans t4 t2
+    have hR2 : natK 2 * ((1 : K) - natK m * δ)
+        = natK 2 - natK 2 * natK m * δ := by
+      rw [mul_sub, mul_one, mul_assoc]
+    have hR1 : natK 2 * ((1 : K) - natK m * δ)
+        ≤ natK 2 * npow (1 - δ) m :=
+      mul_le_mul_of_nonneg_left hB (natK_nonneg 2)
+    refine le_trans hL ?_
+    refine le_trans hR3 ?_
+    rw [← hR2]
+    exact hR1
+  -- multiply through by npow (3-δ) m > 0 and convert
+  have hmul := mul_le_mul_of_nonneg_right hkey (le_of_lt hpos3)
+  have esplit : npow ((1 - δ) / (natK 3 - δ)) m * npow (natK 3 - δ) m
+      = npow (1 - δ) m := by
+    rw [npow_div (ne_of_gt h3δ) m, div_mul_cancel hne3 (npow (1 - δ) m)]
+  have eL : ((1 : K) + npow ((1 - δ) / (natK 3 - δ)) m)
+      * npow (natK 3 - δ) m
+      = npow (natK 3 - δ) m + npow (1 - δ) m := by
+    rw [right_distrib, one_mul', esplit]
+  have eR : natK 2 * npow (1 - δ) m * npow (natK 3 - δ) m
+      = natK 2 * npow ((1 - δ) * (natK 3 - δ)) m := by
+    rw [mul_assoc, ← npow_mul_base]
+  rw [eL, eR] at hmul
+  refine (inv_add_le_mul_iff hpos1 hpos3).mpr ?_
+  rw [← npow_mul_base]
+  exact hmul
+
+/-- **Theorem S2(ii), the `∀m` family**: every negative-integer rung
+`θ = -m` (elasticity `σ = 1/(m+1)`) false-certifies the whole rational
+interval `[2 - 2^-(m+1), 2)` of the diagonal. -/
+theorem s2_ii_negm_interval (m : Nat) (hm : 1 ≤ m) (z : WitState K)
+    (hz : DiagHyps z)
+    (hs : natK 2 - npow (natK 1 / natK 2 : K) (m + 1) ≤ z.s1) :
+    DiagAccNeg (fun x => (npow x m)⁻¹) z ∧ ¬ VTyp z := by
+  refine ⟨?_, diagHyps_not_vtyp z hz⟩
+  refine (master_reduction_neg ?_ z hz).mpr ?_
+  · intro a b ha hab
+    exact inv_le_inv (npow_pos ha m) (npow_mono hab (le_of_lt ha) m)
+  · show (npow (z.s1 - 1) m)⁻¹ + (npow (z.s1 + 1) m)⁻¹ ≤ natK 2
+    have hδpos : 0 < npow (natK 1 / natK 2 : K) (m + 1) :=
+      npow_pos one_half_pos (m + 1)
+    have hδle1 : npow (natK 1 / natK 2 : K) (m + 1) < (1 : K) := by
+      have h1 : npow (natK 1 / natK 2 : K) (m + 1)
+          ≤ npow (natK 1 / natK 2) 1 :=
+        npow_le_of_le_one one_half_nonneg one_half_le_one (by omega)
+      rw [npow_one] at h1
+      exact lt_of_le_of_lt h1 one_half_lt_one
+    -- 2m·(1/2)^(m+1) = m·(1/2)^m ≤ 1/2
+    have h2mδ : natK 2 * natK m * npow (natK 1 / natK 2) (m + 1)
+        ≤ (natK 1 / natK 2 : K) := by
+      have esplit : npow (natK 1 / natK 2 : K) (m + 1)
+          = natK 1 / natK 2 * npow (natK 1 / natK 2) m :=
+        npow_succ _ _
+      rw [esplit,
+        mul_assoc (natK 2) (natK m)
+          ((natK 1 / natK 2) * npow (natK 1 / natK 2) m),
+        ← mul_assoc (natK m) (natK 1 / natK 2)
+          (npow (natK 1 / natK 2) m),
+        mul_comm (natK m) (natK 1 / natK 2),
+        mul_assoc (natK 1 / natK 2) (natK m) (npow (natK 1 / natK 2) m),
+        ← mul_assoc (natK 2) (natK 1 / natK 2)
+          (natK m * npow (natK 1 / natK 2) m),
+        two_mul_one_half, one_mul']
+      exact half_pow_scaled m hm
+    have hnb := negm_master_bound m hm (npow (natK 1 / natK 2) (m + 1))
+      hδpos hδle1 h2mδ
+    -- the per-coordinate transfer from the endpoint
+    have h1D : 0 < (1 : K) - npow (natK 1 / natK 2 : K) (m + 1) :=
+      one_sub_pos hδle1
+    have h3D : 0 < natK 3 - npow (natK 1 / natK 2 : K) (m + 1) := by
+      have h1 : npow (natK 1 / natK 2 : K) (m + 1) - natK 3 < 0 :=
+        sub_lt_zero.mpr
+          (lt_of_lt_of_le hδle1
+            (le_trans (le_of_eq natK_one.symm) (natK_le (by omega))))
+      rw [← neg_sub]
+      exact neg_pos' h1
+    have hz1 : (1 : K) - npow (natK 1 / natK 2 : K) (m + 1) ≤ z.s1 - 1 := by
+      have e21 : natK 2 - 1 = (1 : K) := sub_add_eq one_add_one_eq_two
+      have e1 : natK 2 - npow (natK 1 / natK 2 : K) (m + 1) - 1
+          = (1 : K) - npow (natK 1 / natK 2) (m + 1) := by
+        rw [sub_eq, sub_eq, add_right_comm, ← sub_eq (natK 2) 1, e21,
+          ← sub_eq]
+      rw [← e1]
+      exact sub_le_sub_right hs 1
+    have hz2 : natK 3 - npow (natK 1 / natK 2 : K) (m + 1) ≤ z.s1 + 1 := by
+      have e23 : (natK 2 : K) + 1 = natK 3 := by
+        rw [← natK_one, ← natK_add]
+      have e2 : natK 2 - npow (natK 1 / natK 2 : K) (m + 1) + 1
+          = natK 3 - npow (natK 1 / natK 2) (m + 1) := by
+        rw [sub_eq, add_right_comm, e23, ← sub_eq]
+      rw [← e2]
+      exact add_le_add_right hs 1
+    have c1 : (npow (z.s1 - 1) m)⁻¹
+        ≤ (npow ((1 : K) - npow (natK 1 / natK 2 : K) (m + 1)) m)⁻¹ := by
+      refine inv_le_inv (npow_pos h1D m) ?_
+      exact npow_mono hz1 (le_of_lt h1D) m
+    have c2 : (npow (z.s1 + 1) m)⁻¹
+        ≤ (npow (natK 3 - npow (natK 1 / natK 2 : K) (m + 1)) m)⁻¹ := by
+      refine inv_le_inv (npow_pos h3D m) ?_
+      exact npow_mono hz2 (le_of_lt h3D) m
+    exact le_trans (add_le_add c1 c2) hnb
+
+/-! ## Theorem S2(ii) — the fractional rungs (σ = 2 and σ = 3)
+
+The θ ∈ (0,1) rungs are covered through algebraic power-law
+interfaces: the square law for θ = 1/2 and the cube law `pw x³ = x²`
+for θ = 2/3 (sound over ℝ, where the interfaces are instantiated by
+the power functions).  The rational bracket certificates are proved
+inside the layer — no external verifier needed. -/
+
+/-- Strict square monotonicity: `0 ≤ u < v → u² < v²`. -/
+theorem sq_lt_sq {u v : K} (hu : 0 ≤ u) (h : u < v) : u * u < v * v := by
+  have hv : 0 < v := lt_of_le_of_lt hu h
+  have h1 : u * u ≤ u * v := mul_le_mul_of_nonneg_left (le_of_lt h) hu
+  have h2 : u * v < v * v := mul_lt_mul_of_pos_right h hv
+  exact lt_of_le_of_lt h1 h2
+
+/-- `npow x 2 = x * x`. -/
+theorem npow_two (x : K) : npow x 2 = x * x := by
+  show x * (x * 1) = x * x
+  rw [mul_one]
+
+/-- `npow x 3 = x * x * x`. -/
+theorem npow_three (x : K) : npow x 3 = x * x * x := by
+  show x * (x * (x * 1)) = x * x * x
+  rw [mul_one, mul_assoc]
+
+/-- Strict cube monotonicity: `0 ≤ u < v → u³ < v³`. -/
+theorem cube_lt_cube {u v : K} (hu : 0 ≤ u) (h : u < v) :
+    u * u * u < v * v * v := by
+  have hv : 0 < v := lt_of_le_of_lt hu h
+  by_cases hu0 : u = 0
+  · rw [hu0, zero_mul, zero_mul]
+    exact mul_pos (mul_pos hv hv) hv
+  · have hu' : 0 < u := lt_of_le_of_ne hu (fun he => hu0 he.symm)
+    have huu : 0 < u * u := mul_pos hu' hu'
+    have h1 : u * (u * u) < v * (u * u) := mul_lt_mul_of_pos_right h huu
+    have h2 : v * (u * u) ≤ v * (v * v) :=
+      mul_le_mul_of_nonneg_left (le_of_lt (sq_lt_sq hu h)) (le_of_lt hv)
+    rw [mul_assoc, mul_assoc]
+    exact lt_of_lt_of_le h1 h2
+
+/-- The square-law bracket (lower): `q² ≤ x → q ≤ pw x`. -/
+theorem pw_sq_ge (pw : K → K) (hnn : ∀ x, 0 ≤ x → 0 ≤ pw x)
+    (hlaw : ∀ x, 0 ≤ x → pw x * pw x = x) {q x : K} (hq : 0 ≤ q)
+    (hx : 0 ≤ x) (h : q * q ≤ x) : q ≤ pw x := by
+  by_cases hq2 : q ≤ pw x
+  · exact hq2
+  · have hlt : pw x < q := le_of_not_le hq2
+    have h1 : pw x * pw x < q * q := sq_lt_sq (hnn x hx) hlt
+    rw [hlaw x hx] at h1
+    exact absurd h (not_le_of_lt h1)
+
+/-- The square-law bracket (upper): `x ≤ q² → pw x ≤ q`. -/
+theorem pw_sq_le (pw : K → K) (hnn : ∀ x, 0 ≤ x → 0 ≤ pw x)
+    (hlaw : ∀ x, 0 ≤ x → pw x * pw x = x) {q x : K} (hq : 0 ≤ q)
+    (hx : 0 ≤ x) (h : x ≤ q * q) : pw x ≤ q := by
+  by_cases hq2 : pw x ≤ q
+  · exact hq2
+  · have hlt : q < pw x := le_of_not_le hq2
+    have h1 : q * q < pw x * pw x := sq_lt_sq hq hlt
+    rw [hlaw x hx] at h1
+    exact absurd h (not_le_of_lt h1)
+
+/-- Monotonicity from the square law. -/
+theorem pw_sq_mono (pw : K → K) (hnn : ∀ x, 0 ≤ x → 0 ≤ pw x)
+    (hlaw : ∀ x, 0 ≤ x → pw x * pw x = x) :
+    ∀ a b, 0 ≤ a → a ≤ b → pw a ≤ pw b := by
+  intro a b ha hab
+  have hb : 0 ≤ b := le_trans ha hab
+  by_cases hp : pw b < pw a
+  · have h1 : pw b * pw b < pw a * pw a := sq_lt_sq (hnn b hb) hp
+    rw [hlaw b hb, hlaw a ha] at h1
+    exact absurd hab (not_le_of_lt h1)
+  · exact le_of_not_lt hp
+
+/-- Strict monotonicity from the square law. -/
+theorem pw_sq_strict_mono (pw : K → K) (hnn : ∀ x, 0 ≤ x → 0 ≤ pw x)
+    (hlaw : ∀ x, 0 ≤ x → pw x * pw x = x) :
+    ∀ a b, 0 ≤ a → a < b → pw a < pw b := by
+  intro a b ha h
+  have h1 : pw a ≤ pw b := pw_sq_mono pw hnn hlaw a b ha (le_of_lt h)
+  refine lt_of_le_of_ne h1 ?_
+  intro he
+  have e1 : a = pw a * pw a := (hlaw a ha).symm
+  have e2 : b = pw b * pw b := (hlaw b (le_trans ha (le_of_lt h))).symm
+  rw [e1, e2, he] at h
+  exact lt_irrefl _ h
+
+/-- The cube-law bracket (lower): `q³ ≤ x² → q ≤ pw x`. -/
+theorem pw_cube_ge (pw : K → K) (hnn : ∀ x, 0 ≤ x → 0 ≤ pw x)
+    (hlaw : ∀ x, 0 ≤ x → pw x * pw x * pw x = x * x) {q x : K}
+    (hq : 0 ≤ q) (hx : 0 ≤ x) (h : q * q * q ≤ x * x) : q ≤ pw x := by
+  by_cases hq2 : q ≤ pw x
+  · exact hq2
+  · have hlt : pw x < q := le_of_not_le hq2
+    have h1 : pw x * pw x * pw x < q * q * q :=
+      cube_lt_cube (hnn x hx) hlt
+    rw [hlaw x hx] at h1
+    exact absurd h (not_le_of_lt h1)
+
+/-- Monotonicity from the cube law. -/
+theorem pw_cube_mono (pw : K → K) (hnn : ∀ x, 0 ≤ x → 0 ≤ pw x)
+    (hlaw : ∀ x, 0 ≤ x → pw x * pw x * pw x = x * x) :
+    ∀ a b, 0 ≤ a → a ≤ b → pw a ≤ pw b := by
+  intro a b ha hab
+  have hb : 0 ≤ b := le_trans ha hab
+  by_cases hp : pw b < pw a
+  · have h1 : pw b * pw b * pw b < pw a * pw a * pw a :=
+      cube_lt_cube (hnn b hb) hp
+    rw [hlaw b hb, hlaw a ha] at h1
+    have h2 : a * a ≤ b * b := by
+      have t1 : a * a ≤ b * a := mul_le_mul_of_nonneg_right hab ha
+      have t2 : b * a ≤ b * b := mul_le_mul_of_nonneg_left hab hb
+      exact le_trans t1 t2
+    exact absurd h2 (not_le_of_lt h1)
+  · exact le_of_not_lt hp
+
+/-- **Theorem S2(ii), the σ = 2 rung** (θ = 1/2): the master comparison's
+exact rational floor is `5/4` — the ladder table's row
+(`accept ⟺ s ≥ 5/4`). -/
+theorem s2_ii_sigma_two_floor (pw : K → K)
+    (hnn : ∀ x, 0 ≤ x → 0 ≤ pw x)
+    (hlaw : ∀ x, 0 ≤ x → pw x * pw x = x) (z : WitState K)
+    (hz : DiagHyps z) :
+    DiagAccMid pw z ↔ natK 5 / natK 4 ≤ z.s1 := by
+  have hmono := pw_sq_mono pw hnn hlaw
+  have hstrict := pw_sq_strict_mono pw hnn hlaw
+  have h1s1 : 0 ≤ z.s1 - 1 := le_of_lt (sub_one_pos hz.2.2.2.1)
+  have h1s1' : 0 ≤ z.s1 + 1 :=
+    le_trans hz.1.2.1 (le_add_right z.s1 1 zero_le_one')
+  have eq14 : (natK 1 / natK 2 : K) * (natK 1 / natK 2)
+      = natK 1 * natK 1 / (natK 2 * natK 2) :=
+    div_mul_div (natK_ne_zero (n := 2) (by omega))
+      (natK_ne_zero (n := 2) (by omega))
+  have eq94 : (natK 3 / natK 2 : K) * (natK 3 / natK 2)
+      = natK 3 * natK 3 / (natK 2 * natK 2) :=
+    div_mul_div (natK_ne_zero (n := 2) (by omega))
+      (natK_ne_zero (n := 2) (by omega))
+  have hq4 : pw (natK 1 / natK 4 : K) = (natK 1 / natK 2 : K) := by
+    have hx4 : 0 ≤ (natK 1 / natK 4 : K) :=
+      div_nonneg (natK_nonneg 1) (natK_pos (n := 4) (by omega))
+    refine le_antisymm ?_ ?_
+    · refine pw_sq_le pw hnn hlaw one_half_nonneg hx4 ?_
+      rw [eq14, ← natK_mul 1 1, ← natK_mul 2 2]
+      exact le_refl _
+    · refine pw_sq_ge pw hnn hlaw one_half_nonneg hx4 ?_
+      rw [eq14, ← natK_mul 1 1, ← natK_mul 2 2]
+      exact le_refl _
+  have hq9 : pw (natK 9 / natK 4 : K) = (natK 3 / natK 2 : K) := by
+    have hx9 : 0 ≤ (natK 9 / natK 4 : K) :=
+      div_nonneg (natK_nonneg 9) (natK_pos (n := 4) (by omega))
+    have hq32 : 0 ≤ (natK 3 / natK 2 : K) :=
+      div_nonneg (natK_nonneg 3) (natK_pos (n := 2) (by omega))
+    refine le_antisymm ?_ ?_
+    · refine pw_sq_le pw hnn hlaw hq32 hx9 ?_
+      rw [eq94, ← natK_mul 3 3, ← natK_mul 2 2]
+      exact le_refl _
+    · refine pw_sq_ge pw hnn hlaw hq32 hx9 ?_
+      rw [eq94, ← natK_mul 3 3, ← natK_mul 2 2]
+      exact le_refl _
+  have e5h : natK 4 + natK 1 = (natK 5 : K) := by rw [← natK_add]
+  have e5 : natK 5 / natK 4 - 1 = (natK 1 / natK 4 : K) := by
+    rw [← div_self (natK_ne_zero (n := 4) (by omega)), ← sub_div,
+      sub_add_eq e5h]
+  have e9 : natK 5 / natK 4 + 1 = (natK 9 / natK 4 : K) := by
+    rw [← div_self (natK_ne_zero (n := 4) (by omega)),
+      div_add_div_same (natK_ne_zero (n := 4) (by omega)), ← natK_add]
+  constructor
+  · intro hd
+    have hmaster : (natK 2 : K) ≤ pw (z.s1 - 1) + pw (z.s1 + 1) :=
+      (master_reduction_pos hmono z hz).mp ((diagAccMid_iff_pos z hz).mp hd)
+    cases le_total (natK 5 / natK 4) z.s1 with
+    | inl hge => exact hge
+    | inr hlt =>
+        by_cases he : z.s1 = natK 5 / natK 4
+        · exact le_of_eq he.symm
+        · have hlt' : z.s1 < natK 5 / natK 4 := lt_of_le_of_ne hlt he
+          have hs1 : z.s1 - 1 < natK 1 / natK 4 := by
+            rw [← e5]
+            exact sub_lt_sub_right hlt' 1
+          have hs2 : z.s1 + 1 < natK 9 / natK 4 := by
+            rw [← e9]
+            exact add_lt_add_right' hlt' 1
+          have b1 : pw (z.s1 - 1) < natK 1 / natK 2 := by
+            have ht := hstrict (z.s1 - 1) (natK 1 / natK 4) h1s1 hs1
+            rw [hq4] at ht
+            exact ht
+          have b2 : pw (z.s1 + 1) < natK 3 / natK 2 := by
+            have ht := hstrict (z.s1 + 1) (natK 9 / natK 4) h1s1' hs2
+            rw [hq9] at ht
+            exact ht
+          have e42 : (natK 4 : K) / natK 2 = natK 2 := by
+            refine mul_right_cancel' (natK_ne_zero (n := 2) (by omega)) ?_
+            rw [div_mul_cancel (natK_ne_zero (n := 2) (by omega)) (natK 4),
+              ← natK_mul]
+          have e2 : natK 1 / natK 2 + natK 3 / natK 2 = (natK 2 : K) := by
+            rw [div_add_div_same (natK_ne_zero (n := 2) (by omega)),
+              ← natK_add]
+            exact e42
+          have hsum : pw (z.s1 - 1) + pw (z.s1 + 1)
+              < natK 1 / natK 2 + natK 3 / natK 2 :=
+            lt_trans (add_lt_add_left' b2 (pw (z.s1 - 1)))
+              (add_lt_add_right' b1 (natK 3 / natK 2))
+          rw [e2] at hsum
+          exact absurd hmaster (not_le_of_lt hsum)
+  · intro hs
+    have b1 : (natK 1 / natK 2 : K) ≤ pw (z.s1 - 1) := by
+      refine pw_sq_ge pw hnn hlaw one_half_nonneg h1s1 ?_
+      have h1 : natK 1 / natK 4 ≤ z.s1 - 1 := by
+        have ht := sub_le_sub_right hs 1
+        rw [e5] at ht
+        exact ht
+      rw [eq14, ← natK_mul 1 1, ← natK_mul 2 2]
+      exact h1
+    have b2 : (natK 3 / natK 2 : K) ≤ pw (z.s1 + 1) := by
+      refine pw_sq_ge pw hnn hlaw
+        (div_nonneg (natK_nonneg 3) (natK_pos (n := 2) (by omega))) h1s1' ?_
+      have h1 : natK 9 / natK 4 ≤ z.s1 + 1 := by
+        have ht := add_le_add_right hs 1
+        rw [e9] at ht
+        exact ht
+      rw [eq94, ← natK_mul 3 3, ← natK_mul 2 2]
+      exact h1
+    have e42 : (natK 4 : K) / natK 2 = natK 2 := by
+      refine mul_right_cancel' (natK_ne_zero (n := 2) (by omega)) ?_
+      rw [div_mul_cancel (natK_ne_zero (n := 2) (by omega)) (natK 4),
+        ← natK_mul]
+    have e2 : natK 1 / natK 2 + natK 3 / natK 2 = (natK 2 : K) := by
+      rw [div_add_div_same (natK_ne_zero (n := 2) (by omega)), ← natK_add]
+      exact e42
+    exact (diagAccMid_iff_pos z hz).mpr
+      ((master_reduction_pos hmono z hz).mpr
+        (le_trans (le_of_eq e2.symm) (add_le_add b1 b2)))
+
+/-- **Theorem S2(ii), the σ = 2 witness**: the paper's witness `13/10`
+sits above the exact floor `5/4`. -/
+theorem s2_ii_sigma_two_witness (pw : K → K)
+    (hnn : ∀ x, 0 ≤ x → 0 ≤ pw x)
+    (hlaw : ∀ x, 0 ≤ x → pw x * pw x = x) (z : WitState K)
+    (hz : DiagHyps z) (hs : natK 5 / natK 4 ≤ z.s1) :
+    DiagAccMid pw z ∧ ¬ VTyp z :=
+  ⟨(s2_ii_sigma_two_floor pw hnn hlaw z hz).mpr hs, diagHyps_not_vtyp z hz⟩
+
+/-- **Theorem S2(ii), the σ = 3 rung** (θ = 2/3): the paper's canonical
+datum `s = 6/5` — the rational brackets `(1/3, 5/3)` are proved inside
+the layer (`(1/3)³ ≤ (1/5)²`, `(5/3)³ ≤ (11/5)²`, sum exactly `2`). -/
+theorem s2_ii_sigma_three_witness (pw : K → K)
+    (hnn : ∀ x, 0 ≤ x → 0 ≤ pw x)
+    (hlaw : ∀ x, 0 ≤ x → pw x * pw x * pw x = x * x) (z : WitState K)
+    (hz : DiagHyps z) (hs : natK 6 / natK 5 ≤ z.s1) :
+    DiagAccMid pw z ∧ ¬ VTyp z := by
+  have hmono := pw_cube_mono pw hnn hlaw
+  have h1s1 : 0 ≤ z.s1 - 1 := le_of_lt (sub_one_pos hz.2.2.2.1)
+  have h1s1' : 0 ≤ z.s1 + 1 :=
+    le_trans hz.1.2.1 (le_add_right z.s1 1 zero_le_one')
+  have e1 : npow (natK 1 / natK 3 : K) 3 = (natK 1 / natK 27 : K) := by
+    rw [npow_div (natK_ne_zero (n := 3) (by omega)) 3, npow_natK 1 3,
+      npow_natK 3 3]
+  have e2 : npow (natK 5 / natK 3 : K) 3 = (natK 125 / natK 27 : K) := by
+    rw [npow_div (natK_ne_zero (n := 3) (by omega)) 3, npow_natK 5 3,
+      npow_natK 3 3]
+  have e3 : npow (natK 1 / natK 5 : K) 2 = (natK 1 / natK 25 : K) := by
+    rw [npow_div (natK_ne_zero (n := 5) (by omega)) 2, npow_natK 1 2,
+      npow_natK 5 2]
+  have e4 : npow (natK 11 / natK 5 : K) 2 = (natK 121 / natK 25 : K) := by
+    rw [npow_div (natK_ne_zero (n := 5) (by omega)) 2, npow_natK 11 2,
+      npow_natK 5 2]
+  have br1 : npow (natK 1 / natK 3 : K) 3 ≤ npow (natK 1 / natK 5 : K) 2 := by
+    rw [e1, e3,
+      div_le_div_cross (natK_pos (n := 27) (by omega))
+        (natK_pos (n := 25) (by omega))]
+    rw [← natK_mul 1 25, ← natK_mul 1 27]
+    exact natK_le (by omega)
+  have br2 : npow (natK 5 / natK 3 : K) 3 ≤ npow (natK 11 / natK 5 : K) 2 := by
+    rw [e2, e4,
+      div_le_div_cross (natK_pos (n := 27) (by omega))
+        (natK_pos (n := 25) (by omega))]
+    rw [← natK_mul 125 25, ← natK_mul 121 27]
+    exact natK_le (by omega)
+  refine ⟨?_, diagHyps_not_vtyp z hz⟩
+  refine (diagAccMid_iff_pos z hz).mpr ((master_reduction_pos hmono z hz).mpr ?_)
+  have hx1 : (natK 1 / natK 5 : K) ≤ z.s1 - 1 := by
+    have e61h : natK 5 + natK 1 = (natK 6 : K) := by rw [← natK_add]
+    have e61 : natK 6 / natK 5 - 1 = (natK 1 / natK 5 : K) := by
+      rw [← div_self (natK_ne_zero (n := 5) (by omega)), ← sub_div,
+        sub_add_eq e61h]
+    rw [← e61]
+    exact sub_le_sub_right hs 1
+  have hx2 : (natK 11 / natK 5 : K) ≤ z.s1 + 1 := by
+    have e115 : natK 6 / natK 5 + 1 = (natK 11 / natK 5 : K) := by
+      rw [← div_self (natK_ne_zero (n := 5) (by omega)),
+        div_add_div_same (natK_ne_zero (n := 5) (by omega)), ← natK_add]
+    rw [← e115]
+    exact add_le_add_right hs 1
+  have b1 : (natK 1 / natK 3 : K) ≤ pw (z.s1 - 1) := by
+    refine pw_cube_ge pw hnn hlaw
+      (div_nonneg (natK_nonneg 1) (natK_pos (n := 3) (by omega))) h1s1 ?_
+    rw [← npow_three, ← npow_two]
+    exact le_trans br1
+      (npow_mono hx1
+        (div_nonneg (natK_nonneg 1) (natK_pos (n := 5) (by omega))) 2)
+  have b2 : (natK 5 / natK 3 : K) ≤ pw (z.s1 + 1) := by
+    refine pw_cube_ge pw hnn hlaw
+      (div_nonneg (natK_nonneg 5) (natK_pos (n := 3) (by omega))) h1s1' ?_
+    rw [← npow_three, ← npow_two]
+    exact le_trans br2
+      (npow_mono hx2
+        (div_nonneg (natK_nonneg 11) (natK_pos (n := 5) (by omega))) 2)
+  have esum : (natK 1 / natK 3 : K) + natK 5 / natK 3 = (natK 2 : K) := by
+    rw [div_add_div_same (natK_ne_zero (n := 3) (by omega)), ← natK_add]
+    refine mul_right_cancel' (natK_ne_zero (n := 3) (by omega)) ?_
+    rw [div_mul_cancel (natK_ne_zero (n := 3) (by omega)) (natK 6), ← natK_mul]
+  exact le_trans (le_of_eq esum.symm) (add_le_add b1 b2)
+
+/-- The canonical datum's critical-elasticity bracket: at `s = 6/5` the
+σ = 2 rung rejects (the exact floor `5/4` exceeds it) while the σ = 3
+rung accepts — the interface-level form of the paper's
+`σ* ∈ (2, 3)` at the Section 6.3 datum. -/
+theorem s2_ii_canonical_bracket (pw2 pw3 : K → K)
+    (hnn2 : ∀ x, 0 ≤ x → 0 ≤ pw2 x) (hlaw2 : ∀ x, 0 ≤ x → pw2 x * pw2 x = x)
+    (hnn3 : ∀ x, 0 ≤ x → 0 ≤ pw3 x)
+    (hlaw3 : ∀ x, 0 ≤ x → pw3 x * pw3 x * pw3 x = x * x)
+    (z : WitState K) (hz : DiagHyps z) (hs : z.s1 = natK 6 / natK 5) :
+    ¬ DiagAccMid pw2 z ∧ DiagAccMid pw3 z := by
+  refine ⟨?_, ?_⟩
+  · intro hd
+    have hfloor := (s2_ii_sigma_two_floor pw2 hnn2 hlaw2 z hz).mp hd
+    rw [hs] at hfloor
+    rw [div_le_div_cross (natK_pos (n := 4) (by omega))
+      (natK_pos (n := 5) (by omega))] at hfloor
+    rw [← natK_mul 5 5, ← natK_mul 6 4] at hfloor
+    exact absurd (natK_le_iff.mp hfloor) (by omega)
+  · exact (s2_ii_sigma_three_witness pw3 hnn3 hlaw3 z hz
+      (le_of_eq hs.symm)).1
+
+/-! ## Theorem S2(ii) — the geometric member (σ = 1, the LPI form)
+
+The θ = 0 member is covered through the geometric-mean interface
+`GeoLaws` — the four algebraic laws of the weighted geometric mean
+(positivity, per-coordinate monotonicity, the swap-product identity
+`gp(x,y,w)·gp(y,x,w) = xy`, and equal-weight symmetry), all sound over
+ℝ.  The swap-product identity replaces the paper's log-space
+averaging: the master comparison collapses to `s² ≥ 2`. -/
+
+/-- The geometric-mean interface laws. -/
+def GeoLaws (gp : K → K → K → K → K) : Prop :=
+  (∀ x y w1 w2, 0 < x → 0 < y → 0 < gp x y w1 w2) ∧
+  (∀ x x' y w1 w2, 0 ≤ x → x ≤ x' → 0 ≤ w1 →
+      gp x y w1 w2 ≤ gp x' y w1 w2) ∧
+  (∀ y y' x w1 w2, 0 ≤ y → y ≤ y' → 0 ≤ w2 →
+      gp x y w1 w2 ≤ gp x y' w1 w2) ∧
+  (∀ x y w1 w2, 0 < x → 0 < y → w1 + w2 = 1 →
+      gp x y w1 w2 * gp y x w1 w2 = x * y) ∧
+  (∀ x y, gp x y (natK 1 / natK 2) (natK 1 / natK 2)
+      = gp y x (natK 1 / natK 2) (natK 1 / natK 2))
+
+/-- Protocol 2 under the geometric member (θ = 0 < 1 carries the
+collapse convention). -/
+def GeoAdm (gp : K → K → K → K → K) (w1 w2 : K) (a : WitAct K)
+    (z : WitState K) : Prop :=
+  CollapseSafe a z ∧
+  (∀ p, witTube a z p →
+      (0 ≤ p.x ∧ 1 ≤ gp (1 + p.s1) (1 + p.s2) w1 w2)) ∧
+  ((witSucc a z).1 = true ∧ 0 ≤ (witSucc a z).2.x ∧
+      1 ≤ gp (1 + (witSucc a z).2.s1) (1 + (witSucc a z).2.s2) w1 w2)
+
+/-- The geometric protocol on the deterministic menu. -/
+def DiagAccGeo (gp : K → K → K → K → K) (z : WitState K) : Prop :=
+  ∀ w1 w2, WNorm w1 w2 → ∃ a : DetAct, GeoAdm gp w1 w2 (.det a) z
+
+/-- Strict subtraction compatibility on the left. -/
+theorem sub_lt_sub_left' {a b c : K} (h : a < b) : c - b < c - a :=
+  add_lt_add_left' (neg_lt_neg' h) c
+
+/-- The degenerate value `gp c c w1 w2 = c` (derived from the swap law
+and positivity). -/
+theorem gp_diag (gp : K → K → K → K → K) (hl : GeoLaws gp) {c : K}
+    (hc : 0 < c) {w1 w2 : K} (hw : w1 + w2 = 1) : gp c c w1 w2 = c := by
+  have gpos : 0 < gp c c w1 w2 := hl.1 c c w1 w2 hc hc
+  have h1 : gp c c w1 w2 * gp c c w1 w2 = c * c :=
+    hl.2.2.2.1 c c w1 w2 hc hc hw
+  by_cases hg : gp c c w1 w2 = c
+  · exact hg
+  · cases le_total (gp c c w1 w2) c with
+    | inl hle =>
+        have hlt : gp c c w1 w2 < c := lt_of_le_of_ne hle hg
+        have h2 : gp c c w1 w2 * gp c c w1 w2 < c * c :=
+          sq_lt_sq (le_of_lt gpos) hlt
+        rw [← h1] at h2
+        exact absurd h2 (lt_irrefl (gp c c w1 w2 * gp c c w1 w2))
+    | inr hle =>
+        have hlt : c < gp c c w1 w2 :=
+          lt_of_le_of_ne hle (fun he => hg he.symm)
+        have h2 : c * c < gp c c w1 w2 * gp c c w1 w2 :=
+          sq_lt_sq (le_of_lt hc) hlt
+        rw [h1] at h2
+        exact absurd h2 (lt_irrefl (c * c))
+
+/-- **The master-equation reduction, geometric member** (θ = 0, σ = 1 —
+the LPI functional form): on the diagonal, the geometric protocol
+accepts exactly when `s² ≥ 2` — the swap-product identity `F·S = s² - 1`
+replaces the paper's log-space averaging. -/
+theorem master_reduction_geo (gp : K → K → K → K → K) (hl : GeoLaws gp)
+    (z : WitState K) (hz : DiagHyps z) :
+    DiagAccGeo gp z ↔ natK 2 ≤ z.s1 * z.s1 := by
+  have h1s1 : 0 < z.s1 - 1 := sub_one_pos hz.2.2.2.1
+  have h1s1' : 0 < z.s1 + 1 := zero_lt_add_one hz.1.2.1
+  have eR : (z.s1 - 1) * (z.s1 + 1) = z.s1 * z.s1 - 1 := by
+    rw [sub_mul, left_distrib, mul_one, one_mul', add_comm z.s1 1]
+    exact add_sub_add_comm (z.s1 * z.s1) z.s1 1
+  have hsym : gp (z.s1 - 1) (z.s1 + 1) (natK 1 / natK 2)
+      (natK 1 / natK 2)
+      = gp (z.s1 + 1) (z.s1 - 1) (natK 1 / natK 2) (natK 1 / natK 2) :=
+    hl.2.2.2.2 _ _
+  have hGS : gp (z.s1 - 1) (z.s1 + 1) (natK 1 / natK 2)
+      (natK 1 / natK 2)
+      * gp (z.s1 + 1) (z.s1 - 1) (natK 1 / natK 2) (natK 1 / natK 2)
+      = (z.s1 - 1) * (z.s1 + 1) :=
+    hl.2.2.2.1 _ _ _ _ h1s1 h1s1' one_half_add_one_half
+  rw [← hsym] at hGS
+  -- hGS : G * G = (s-1)(s+1) = s² - 1
+  have hcore : (1 : K) ≤ gp (z.s1 - 1) (z.s1 + 1)
+      (natK 1 / natK 2) (natK 1 / natK 2) →
+      natK 2 ≤ z.s1 * z.s1 := by
+    intro hGge
+    have hGpos : 0 < gp (z.s1 - 1) (z.s1 + 1)
+        (natK 1 / natK 2) (natK 1 / natK 2) :=
+      hl.1 _ _ _ _ h1s1 h1s1'
+    have hGG : (1 : K) * 1
+        ≤ gp (z.s1 - 1) (z.s1 + 1) (natK 1 / natK 2) (natK 1 / natK 2)
+          * gp (z.s1 - 1) (z.s1 + 1) (natK 1 / natK 2) (natK 1 / natK 2) :=
+      le_trans (mul_le_mul_of_nonneg_right hGge zero_le_one')
+        (mul_le_mul_of_nonneg_left hGge (le_of_lt hGpos))
+    rw [one_mul'] at hGG
+    rw [hGS, eR] at hGG
+    have h5 : (1 : K) + 1 ≤ (z.s1 * z.s1 - 1) + 1 :=
+      add_le_add hGG (le_refl 1)
+    rw [one_add_one_eq_two, sub_add_cancel] at h5
+    exact h5
+  constructor
+  · intro hd
+    have hpair := hd (natK 1 / natK 2) (natK 1 / natK 2) wNorm_one_half
+    cases hpair with
+    | intro a ha =>
+        cases a with
+        | noswitch => exact Bool.noConfusion ha.2.2.1
+        | staged =>
+            have hbot : witTube (.det .staged) z ⟨z.x - 1, z.s1, z.s2⟩ :=
+              ⟨le_refl _, sub_le_self z.x 1 zero_le_one', le_refl _,
+                le_add_right z.s1 eGain eGain_nonneg, le_refl _,
+                le_add_right z.s2 eGain eGain_nonneg⟩
+            have h1 := ha.2.1 _ hbot
+            have h2 : z.x - 1 < 0 := sub_lt_zero.mpr hz.2.1
+            exact absurd h1.1 (not_le_of_lt h2)
+        | fast =>
+            have hdip : witTube (.det .fast) z ⟨z.x, z.s1 - natK 2, z.s2⟩ :=
+              ⟨rfl, rfl, le_refl _, sub_le_self z.s1 (natK 2) (natK_nonneg 2)⟩
+            have h1 := ha.2.1 _ hdip
+            rw [one_add_sub_two, one_add_s2 z hz] at h1
+            exact hcore h1.2
+        | slow =>
+            have hdip : witTube (.det .slow) z ⟨z.x, z.s1, z.s2 - natK 2⟩ :=
+              ⟨rfl, rfl, le_refl _, sub_le_self z.s2 (natK 2) (natK_nonneg 2)⟩
+            have h1 := ha.2.1 _ hdip
+            rw [← hz.2.2.1, one_add_sub_two, add_comm 1 z.s1] at h1
+            rw [← hsym] at h1
+            exact hcore h1.2
+  · intro hmaster w1 w2 hw
+    have hF : gp (z.s1 - 1) (z.s1 + 1) w1 w2
+        * gp (z.s1 + 1) (z.s1 - 1) w1 w2 = z.s1 * z.s1 - 1 := by
+      rw [hl.2.2.2.1 _ _ _ _ h1s1 h1s1' hw.2.2, eR]
+    have hpos1 : 0 < gp (z.s1 - 1) (z.s1 + 1) w1 w2 :=
+      hl.1 _ _ _ _ h1s1 h1s1'
+    have hpos2 : 0 < gp (z.s1 + 1) (z.s1 - 1) w1 w2 :=
+      hl.1 _ _ _ _ h1s1' h1s1
+    have hFSge : (1 : K) ≤ gp (z.s1 - 1) (z.s1 + 1) w1 w2
+        * gp (z.s1 + 1) (z.s1 - 1) w1 w2 := by
+      rw [hF]
+      exact le_sub_of_add (by rw [one_add_one_eq_two]; exact hmaster)
+    cases le_total (1 : K) (gp (z.s1 - 1) (z.s1 + 1) w1 w2) with
+    | inl hF1 =>
+        refine ⟨.fast, ⟨collapse_safe_all_det z hz .fast, ?_,
+          ⟨rfl, hz.1.1, ?_⟩⟩⟩
+        · intro p hp
+          refine ⟨by rw [hp.1]; exact hz.1.1, ?_⟩
+          have hb : gp (z.s1 - 1) (1 + p.s2) w1 w2
+              ≤ gp (1 + p.s1) (1 + p.s2) w1 w2 := by
+            refine hl.2.1 _ _ _ _ _ (le_of_lt h1s1) ?_ hw.1
+            rw [← one_add_sub_two]
+            exact add_le_add_left hp.2.2.1 1
+          have hF' : gp (z.s1 - 1) (1 + p.s2) w1 w2
+              = gp (z.s1 - 1) (z.s1 + 1) w1 w2 := by
+            rw [hp.2.1, one_add_s2 z hz]
+          exact le_trans hF1 (le_trans (le_of_eq hF'.symm) hb)
+        · show (1 : K) ≤ gp (1 + (z.s1 + eGain))
+              (1 + (z.s2 + eGain)) w1 w2
+          rw [← hz.2.2.1]
+          have hc : 0 < 1 + (z.s1 + eGain) :=
+            zero_lt_one_add (add_le_add_of_nonneg hz.1.2.1 eGain_nonneg)
+          rw [gp_diag gp hl hc hw.2.2]
+          exact (one_le_add_one_iff _).mpr
+            (add_le_add_of_nonneg hz.1.2.1 eGain_nonneg)
+    | inr hFle =>
+        have hS : (1 : K) ≤ gp (z.s1 + 1) (z.s1 - 1) w1 w2 := by
+          have h3 : gp (z.s1 - 1) (z.s1 + 1) w1 w2
+              * gp (z.s1 + 1) (z.s1 - 1) w1 w2
+              ≤ (1 : K) * gp (z.s1 + 1) (z.s1 - 1) w1 w2 :=
+            mul_le_mul_of_nonneg_right hFle (le_of_lt hpos2)
+          rw [one_mul'] at h3
+          exact le_trans hFSge h3
+        refine ⟨.slow, ⟨collapse_safe_all_det z hz .slow, ?_,
+          ⟨rfl, hz.1.1, ?_⟩⟩⟩
+        · intro p hp
+          refine ⟨by rw [hp.1]; exact hz.1.1, ?_⟩
+          have hb : gp (1 + p.s1) (z.s1 - 1) w1 w2
+              ≤ gp (1 + p.s1) (1 + p.s2) w1 w2 := by
+            refine hl.2.2.1 _ _ _ _ _ (le_of_lt h1s1) ?_ hw.2.1
+            rw [← one_add_sub_two, hz.2.2.1]
+            exact add_le_add_left hp.2.2.1 1
+          have hS' : gp (1 + p.s1) (z.s1 - 1) w1 w2
+              = gp (z.s1 + 1) (z.s1 - 1) w1 w2 := by
+            rw [hp.2.1, add_comm 1 z.s1]
+          exact le_trans hS (le_trans (le_of_eq hS'.symm) hb)
+        · show (1 : K) ≤ gp (1 + (z.s1 + eGain))
+              (1 + (z.s2 + eGain)) w1 w2
+          rw [← hz.2.2.1]
+          have hc : 0 < 1 + (z.s1 + eGain) :=
+            zero_lt_one_add (add_le_add_of_nonneg hz.1.2.1 eGain_nonneg)
+          rw [gp_diag gp hl hc hw.2.2]
+          exact (one_le_add_one_iff _).mpr
+            (add_le_add_of_nonneg hz.1.2.1 eGain_nonneg)
+
+theorem s2_ii_sigma_one_witness (gp : K → K → K → K → K)
+    (hl : GeoLaws gp) (z : WitState K) (hz : DiagHyps z)
+    (hs : (natK 3 / natK 2 : K) ≤ z.s1) :
+    DiagAccGeo gp z ∧ ¬ VTyp z := by
+  refine ⟨?_, diagHyps_not_vtyp z hz⟩
+  refine (master_reduction_geo gp hl z hz).mpr ?_
+  have h1 : (natK 3 / natK 2 : K) * (natK 3 / natK 2) ≤ z.s1 * z.s1 := by
+    have t1 : natK 3 / natK 2 * (natK 3 / natK 2)
+        ≤ natK 3 / natK 2 * z.s1 :=
+      mul_le_mul_of_nonneg_left hs
+        (div_nonneg (natK_nonneg 3) (natK_pos (n := 2) (by omega)))
+    have t2 : natK 3 / natK 2 * z.s1 ≤ z.s1 * z.s1 :=
+      mul_le_mul_of_nonneg_right hs hz.1.2.1
+    exact le_trans t1 t2
+  have e33 : natK 3 * natK 3 = (natK 9 : K) := by rw [← natK_mul]
+  have e22 : natK 2 * natK 2 = (natK 4 : K) := by rw [← natK_mul]
+  have h2 : (natK 9 / natK 4 : K) ≤ natK 3 / natK 2 * (natK 3 / natK 2) := by
+    rw [← e33, ← e22,
+      div_mul_div (natK_ne_zero (n := 2) (by omega))
+        (natK_ne_zero (n := 2) (by omega))]
+    exact le_refl _
+  have h3 : (natK 2 : K) ≤ natK 9 / natK 4 := by
+    rw [le_div_iff (natK_pos (n := 4) (by omega))]
+    rw [← natK_mul 2 4]
+    exact natK_le (by omega)
+  exact le_trans h3 (le_trans h2 h1)
+
+/-- **Theorem S2(ii), the √2 floor's rational bracket**: the geometric
+rung rejects `s = 141/100` (the floor `√2` exceeds it). -/
+theorem s2_ii_sigma_one_reject (gp : K → K → K → K → K)
+    (hl : GeoLaws gp) (z : WitState K) (hz : DiagHyps z)
+    (hs : z.s1 = natK 141 / natK 100) : ¬ DiagAccGeo gp z := by
+  intro hd
+  have h := (master_reduction_geo gp hl z hz).mp hd
+  rw [hs] at h
+  have h100 : (natK 100 : K) ≠ 0 := natK_ne_zero (n := 100) (by omega)
+  have e : (natK 141 / natK 100 : K) * (natK 141 / natK 100)
+      = natK 141 * natK 141 / (natK 100 * natK 100) :=
+    div_mul_div h100 h100
+  rw [e, ← natK_mul 141 141, ← natK_mul 100 100] at h
+  rw [le_div_iff (natK_pos (n := 100 * 100) (by omega)),
+    ← natK_mul 2 (100 * 100)] at h
+  exact absurd (natK_le_iff.mp h) (by omega)
+
+/-! ## Lemma B(ii) — the linear exception's rational witness -/
+
+/-- **Lemma B(ii)**: only the perfectly-substitutable dashboard
+certifies through a collapsed coordinate.  At the state
+`z₀ = (1/2, 1/2, 5/2)`, the plan FAST's tube dips `λ₁ = 1 + s₁` to
+`-1/2 ≤ 0` (a collapsed coordinate), yet the θ = 1 member certifies the
+plan at the equal weight; every θ < 1 member rejects it (the collapse
+convention — `CollapseSafe` fails). -/
+theorem lemB_ii_linear_witness (K : Type) [OrdField K] :
+    (1 + (natK 1 / natK 2 - natK 2 : K) ≤ 0) ∧
+    Theta1Adm (natK 1 / natK 2 : K) (natK 1 / natK 2) (.det .fast)
+      ⟨natK 1 / natK 2, natK 1 / natK 2, natK 5 / natK 2⟩ ∧
+    ¬ CollapseSafe (.det .fast)
+      ⟨(natK 1 / natK 2 : K), natK 1 / natK 2, natK 5 / natK 2⟩ := by
+  have hneq : 1 + (natK 1 / natK 2 - natK 2 : K) ≤ 0 := by
+    rw [one_add_sub_two, ← neg_sub]
+    have h2 : (0 : K) ≤ 1 - natK 1 / natK 2 :=
+      sub_nonneg.mpr one_half_le_one
+    have h3 := neg_le_neg h2
+    rw [neg_zero] at h3
+    exact h3
+  refine ⟨hneq, ?_, ?_⟩
+  · rw [lemA_engine one_half_add_one_half,
+      wAdm_fast_iff ⟨one_half_nonneg, one_half_nonneg,
+        Or.inl (ne_of_gt one_half_pos)⟩]
+    refine ⟨one_half_nonneg, ?_⟩
+    rw [← left_distrib]
+    have e : (natK 1 / natK 2 - natK 2) + natK 5 / natK 2 = (1 : K) := by
+      rw [add_sub_comm, div_add_div_same (natK_ne_zero (n := 2) (by omega)),
+        ← natK_add]
+      have e62 : (natK 6 : K) / natK 2 = natK 3 := by
+        refine mul_right_cancel' (natK_ne_zero (n := 2) (by omega)) ?_
+        rw [div_mul_cancel (natK_ne_zero (n := 2) (by omega)) (natK 6),
+          ← natK_mul]
+      have h32 : natK 2 + natK 1 = (natK 3 : K) := by rw [← natK_add]
+      rw [e62, sub_add_eq h32, natK_one]
+    rw [e, mul_one]
+    exact one_half_nonneg
+  · intro hcs
+    have hdip : witTube (.det .fast)
+        ⟨(natK 1 / natK 2 : K), natK 1 / natK 2, natK 5 / natK 2⟩
+        ⟨natK 1 / natK 2, natK 1 / natK 2 - natK 2, natK 5 / natK 2⟩ :=
+      ⟨rfl, rfl, le_refl _, sub_le_self _ (natK 2) (natK_nonneg 2)⟩
+    have h1 := hcs _ hdip
+    exact lt_irrefl (0 : K) (lt_of_lt_of_le h1.1 hneq)
+
+/-- Every θ < 1 member rejects the collapsed plan of Lemma B(ii) (both
+the θ ∈ (0,1) and the θ < 0 conventions carry `CollapseSafe`). -/
+theorem lemB_ii_only_linear (pw : K → K) (w1 w2 : K) (a : WitAct K)
+    (z : WitState K) (h : ThetaSubAdm pw w1 w2 a z ∨ ThetaMidAdm pw w1 w2 a z)
+    (hcs : ¬ CollapseSafe a z) : False := by
+  cases h with
+  | inl hsub => exact hcs hsub.1
+  | inr hmid => exact hcs hmid.1
+
+/-- **The two-sided Leontief statement** (the covered family): (i) the
+θ = 1 rung accepts every gap state — full Leontief is never necessary
+at a fixed state; (ii) every negative-integer rung `σ = 1/(m+1)`
+false-certifies a nonempty rational interval of diagonal gap states;
+and the Leontief member itself accepts no gap state — the only
+uniformly safe aggregator of the covered family. -/
+theorem s2_two_sided_summary (K : Type) [OrdField K] :
+    (∀ z' : WitState K, InX0 z' → IsGap z' → ∀ w1 w2, WNorm w1 w2 →
+        ∃ a : DetAct, Theta1Adm w1 w2 (.det a) z') ∧
+    (∀ m : Nat, 1 ≤ m → ∃ z' : WitState K, DiagHyps z' ∧
+        DiagAccNeg (fun x => (npow x m)⁻¹) z' ∧ ¬ VTyp z') ∧
+    (∀ z' : WitState K, InX0 z' → IsGap z' →
+        ¬ ∀ w1 w2 : K, WNorm w1 w2 → ∃ a : DetAct, TypedAdm (.det a) z') := by
+  refine ⟨fun _ hz hg => s2_i_linear_accepts _ hz hg, ?_,
+    fun _ hz hg => s2_leontief_rejects_gaps _ hz hg⟩
+  intro m hm
+  have hδpos : 0 < npow (natK 1 / natK 2 : K) (m + 1) :=
+    npow_pos one_half_pos (m + 1)
+  have hδle1 : npow (natK 1 / natK 2 : K) (m + 1) < (1 : K) := by
+    have h1 : npow (natK 1 / natK 2 : K) (m + 1)
+        ≤ npow (natK 1 / natK 2) 1 :=
+      npow_le_of_le_one one_half_nonneg one_half_le_one (by omega)
+    rw [npow_one] at h1
+    exact lt_of_le_of_lt h1 one_half_lt_one
+  have hδ2 : npow (natK 1 / natK 2 : K) (m + 1) ≤ natK 2 :=
+    le_trans (le_of_lt hδle1)
+      (le_trans (le_of_eq natK_one.symm) (natK_le (by omega)))
+  have hdiag : DiagHyps ⟨natK 1 / natK 2,
+      natK 2 - npow (natK 1 / natK 2 : K) (m + 1),
+      natK 2 - npow (natK 1 / natK 2 : K) (m + 1)⟩ := by
+    refine ⟨⟨one_half_nonneg, sub_nonneg.mpr hδ2, sub_nonneg.mpr hδ2⟩,
+      one_half_lt_one, rfl, ?_, ?_⟩
+    · have e21 : natK 2 - 1 = (1 : K) := sub_add_eq one_add_one_eq_two
+      rw [← e21]
+      exact sub_lt_sub_left' hδle1
+    · have hlt : natK 2 - npow (natK 1 / natK 2 : K) (m + 1)
+          < natK 2 - (0 : K) := sub_lt_sub_left' hδpos
+      rw [sub_zero] at hlt
+      exact hlt
+  exact ⟨⟨natK 1 / natK 2,
+    natK 2 - npow (natK 1 / natK 2 : K) (m + 1),
+    natK 2 - npow (natK 1 / natK 2 : K) (m + 1)⟩, hdiag,
+    (s2_ii_negm_interval m hm _ hdiag (le_refl _)).1,
+    (s2_ii_negm_interval m hm _ hdiag (le_refl _)).2⟩
 
 end P1Sep

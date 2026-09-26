@@ -60,7 +60,7 @@ only sources are versioned.)
 
 ## Theorem index
 
-Complete — ten modules (334 theorems total; `lake build` green, zero
+Complete — ten modules (395 theorems total; `lake build` green, zero
 `sorry`, zero new axioms).
 
 | Module | Formalizes (paper items) | Status |
@@ -74,3 +74,4 @@ Complete — ten modules (334 theorems total; `lake build` green, zero
 | `ARV_RegimeViability` | `lem:bracket` harvest-free multiplier bracket in full (both accounting forms, lower bracket, sub-unitary certificate, contraction readings) | done |
 | `WS_WorkedSystems` | `prop:master` all three axes (policy/action, observation refinement, memory) as horizon-kernel monotonicity via the P1 machinery | done |
 | `E1_ForecastLadder` | the ladder bookkeeping: telescoping identity, two-sided level bracket, ascent law | done |
+| `P1_AssessmentSeparation` | the witness datum (§4.5) exactly; Theorem 5 (1)–(7) in full; Remark 2 + Proposition 3 (fourfold chain, full-cone identity); Theorem 9 (i)(iii) + Proposition 10; Lemma A (handshake identity + engine equivalence); Lemma B(i) convention + (ii) rational witness (the linear exception through a collapsed coordinate); **the master-equation reductions** — θ > 0 and θ < 0 at the abstract power interface (the averaging argument), θ = 0 (the LPI form) at the `GeoLaws` geometric-mean interface (swap-product identity `F·S = s²-1`, master row `s² ≥ 2`); **Theorem S2** — (i) the θ = 1 rung accepts every gap state; the Leontief identification `V⁰ = V_typ`; (ii) the false-certification witnesses: the harmonic member's Fibonacci pair (8/5 rejects / 13/8 accepts, the whole interval `[13/8, 2)`), the σ = 1/4 rung at 9/5, the `∀m` family (every `σ = 1/(m+1)` false-certifies `[2-2^-(m+1), 2)` via a Bernoulli lower bound), the σ = 2 rung's exact rational floor `5/4` (an iff, the ladder table's row), the σ = 3 rung at the canonical datum 6/5 (rational brackets `(1/3, 5/3)` proved in-layer; the critical-elasticity bracket `σ* ∈ (2, 3]`), the σ = 1 (LPI) witness 3/2 and the `√2` floor's bracket 141/100; the two-sided summary (only Leontief is uniformly safe) | done |
