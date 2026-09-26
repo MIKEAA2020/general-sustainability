@@ -417,7 +417,7 @@ NEEDLES = [
     "-\\tfrac15", "tfrac{24}{25}" if False else "the program is a relaxation",
     "\\delta_{\\mathrm{init}} +",
     "Solver-assisted, exactly certified mesh study",
-    "2026b. An obstruction calculus", "Manuscript submitted for publication",
+    "2026. An obstruction calculus", "Manuscript submitted for publication",
     "not a probability distribution", "mathscr{S}_G", "block variables",
     "resolution bound", "irredundant", "necessary but not sufficient",
     "rests on three requirements", "Every reported mathematical benchmark value",
@@ -455,15 +455,17 @@ NEEDLES = [
     "The rates order the redesign options exactly",
     "observation design is the same refinement axis as mesh design",
     "the audited delay hierarchy is exactly the cell-refinement family",
-    "published audits (Abaee, 2026b, 2026c)",
-    "finite audits of Abaee (2026c)",
+    "published audits (Abaee, 2026, An obstruction calculus; Abaee, 2026, Worked systems for the obstruction calculus)",
+    "information state (Abaee, 2026, An obstruction calculus)",
+    "calculus's backward recursion (Abaee, 2026, An obstruction calculus)",
+    "finite audits of Abaee (2026, Worked systems for the obstruction calculus)",
     "certificate\\_exchange\\_v1.py",
-    "dual-certificate companion (Abaee, 2026g)",
-    "master monotonicity of the worked-systems companion (Abaee, 2026c)",
-    "2026c. Worked systems for the obstruction calculus",
-    "2026g. The measure dual of the common-action obstruction",
-    "joint check archived; Abaee, 2026f",
-    "2026f. Exact belief-state computation at scale",
+    "dual-certificate companion (Abaee, 2026, Minimax dual certificates)",
+    "master monotonicity of the worked-systems companion (Abaee, 2026, Worked systems for the obstruction calculus)",
+    "2026. Exact audits of worked systems for the obstruction calculus",
+    "2026. Minimax dual certificates for the common-action obstruction",
+    "joint check archived; Abaee, 2026, Exact belief-state computation at scale II",
+    "2026. Exact belief-state computation at scale II",
     "1983. Linear Programming. A Series of Books",
     "Helly, E., 1923",
     "Milanese, M., Norton, J., Piet-Lahanier, H., Walter, E. (Eds.), 1996",
@@ -480,6 +482,12 @@ NEEDLES = [
 missing = [n for n in NEEDLES if n not in tex]
 check(f"all {len(NEEDLES)} headline needles present in the tex", not missing,
       f"(missing: {missing})" if missing else "")
+lettered = [b for b in ["Abaee, 2026a", "Abaee, 2026b", "Abaee, 2026c",
+            "Abaee, 2026f", "Abaee, 2026g", "Abaee, A., 2026a.",
+            "Abaee, A., 2026b.", "Abaee, A., 2026c.", "Abaee, A., 2026f.",
+            "Abaee, A., 2026g.", "2026b, 2026c"] if b in tex]
+check("lettered citation forms absent (round-32 letter-free conversion)",
+      not lettered, f"(present: {lettered})" if lettered else "")
 
 check("ladder cross-references: the contribution list cites the ladder "
       "subsection and the belief-cell instantiation cites the ladder "

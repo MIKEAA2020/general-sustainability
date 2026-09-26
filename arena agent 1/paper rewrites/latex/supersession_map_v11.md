@@ -282,3 +282,26 @@ unchanged.
 - The six theory papers keep their internal family keying (consistent
   among themselves); their letter-free conversion, if ever wanted,
   rides their own organic editions. Sealed packages untouched.
+
+## Round 32 (September 26, 2026, in place, same editions): programme-wide letter-free conversion
+
+Owner correction applied: the letter-free convention covers every live
+manuscript — the theory cluster's internal family keying (2026a–g, noted
+above) was itself letters, and the rides-on-organic-editions deferral is
+superseded. Converted in place: minimax v11, comp v18, ws v17, ebc v10,
+psuff v11, successor_five_layer v1, vector_floor v2, policy_class v2,
+hybrid_mode v2, institutional_observation v2, monitoring_design v3, plus
+the lean README slot table and the E1 supplementary. Canonical short
+titles now in force across the programme: An obstruction calculus
+(obstr v55); Worked systems for the obstruction calculus (ws v17);
+Computational viability certification (comp v18); Exact belief-state
+computation at scale II (ebc v10); Probabilistic sufficiency (psuff
+v11); Minimax dual certificates (minimax v11); Robust viability of the
+2J3KL limit reference point (E2 v23); Finite nonviability certificates
+(recourse bridge v1); The viable selector (v3); The stochastic selector
+(v2). Entry records corrected to the shipped titles where stale; the
+dangling citations the lettered apparatus had masked were repaired
+(ebc gained its comp entry; psuff its minimax entry; the five notes
+gained reference sections). Superseded editions remain byte-frozen in
+their lettered state (git history is the provenance); sealed packages
+untouched (paper1 v62 and ECOMOD v37 carry no lettered tokens).

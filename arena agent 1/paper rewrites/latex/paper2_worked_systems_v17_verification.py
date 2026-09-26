@@ -634,10 +634,13 @@ NEEDLES = [
     "Quantifier and dual form",
 ]
 NEEDLES += [
-    "dual-certificate companion (Abaee, 2026g)",
+    "dual-certificate companion (Abaee, 2026, Minimax dual certificates)",
+    "the applied model of Abaee (2026, Robust viability of the 2J3KL limit reference point)",
+    "; Abaee, 2026, An obstruction calculus, Theorem 1)",
+    "(Abaee, 2026, Computational viability certification)",
     "the certification companion's meshes, stored scenarios, and belief cells",
-    "2026d. Exact certification of continuous-time viability",
-    "2026g. The measure dual of the common-action obstruction",
+    "2026. Computational viability certification under incomplete",
+    "2026. Minimax dual certificates for the common-action",
     "fibre-width formula \\(\\Delta x_1(Y) = Y - 4\\)",
     "Baccelli et al., 1992",
     "Baccelli, F., Cohen, G., Olsder, G.J., Quadrat, J.-P., 1992",
@@ -647,6 +650,11 @@ NEEDLES += [
 missing = [n for n in NEEDLES if n not in tex]
 check(f"all {len(NEEDLES)} headline needles present in the tex", not missing,
       f"(missing: {missing})" if missing else "")
+lettered = [b for b in ["Abaee, 2026a", "Abaee, 2026b", "Abaee, 2026d",
+            "Abaee, 2026g", "Abaee, A., 2026a.", "Abaee, A., 2026b.",
+            "Abaee, A., 2026d.", "Abaee, A., 2026g."] if b in tex]
+check("lettered citation forms absent (round-32 letter-free conversion)",
+      not lettered, f"(present: {lettered})" if lettered else "")
 figs_ok = all(os.path.exists(os.path.join(HERE, f)) for f in
               ["figs_ws4/fig_kernels.pdf", "figs_ws4/fig_timing.pdf",
                "figs_ws4/fig_census.pdf", "figs_ws4/fig_benchmark.pdf",

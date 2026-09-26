@@ -235,11 +235,17 @@ for needle in ["The general finite-sequence envelope",
                "martingale-transport",
                "minimax\\_dual\\_certificates\\_v6\\_verify.py",
                "The envelope formulation",
-               "Abaee, 2026c. Worked systems",
-               "Abaee, 2026b. An obstruction calculus",
-               "worked-systems companion (Abaee, 2026c)",
+               "2026. Exact audits of worked systems for the obstruction calculus",
+               "2026. An obstruction calculus",
+               "worked-systems companion (Abaee, 2026, Worked systems for the obstruction calculus)",
                "orthogonal to",
-               "Abaee, 2026e. Probabilistic sufficiency",
+               "2026. Probabilistic sufficiency for the obstruction calculus",
+               "(Abaee, 2026, An obstruction calculus, Section 3.2)",
+               "(Abaee, 2026, An obstruction calculus, Theorem 2; Abaee, 2026, Worked systems for the obstruction calculus)",
+               "(Abaee, 2026, An obstruction calculus, Open Problem 1)",
+               "(Abaee, 2026, An obstruction calculus, Section 3.2: on the two-floor instance",
+               "(Abaee, 2026, Robust viability of the 2J3KL limit reference point)",
+               "(Abaee, 2026, Probabilistic sufficiency)",
                "certificate\\_exchange\\_v1.py",
                "exactly, in either direction",
                "Chv\\'a tal, 1983, chapters 2",
@@ -261,7 +267,10 @@ for needle in ["The general finite-sequence envelope",
                "adversarial priors"]:
     chk(needle in tn, f"needle: {needle!r}")
 for bad in ["programme", "edition's", "v3\\_verify.py", "corrected",
-            "v4\\_verify.py", "Abaee 2026a"]:
+            "v4\\_verify.py", "Abaee 2026a", "Abaee, 2026a",
+            "Abaee, 2026b", "Abaee, 2026c", "Abaee, 2026e",
+            "Abaee, A., 2026a.", "Abaee, A., 2026b.", "Abaee, A., 2026c.",
+            "Abaee, A., 2026e."]:
     chk(needle in tn, f"needle: {needle!r}")
 for bad in ["programme", "edition's", "v3\\_verify.py"]:
     chk(bad not in tex, f"marker absent: {bad!r}")

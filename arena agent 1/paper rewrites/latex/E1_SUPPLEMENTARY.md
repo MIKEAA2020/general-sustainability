@@ -71,7 +71,7 @@ term. The Schaefer law requires \(a \equiv 1\), which is the separate branch in 
 depensation factor is replaced, not obtained by a limiting value of \(\mathfrak s\). ∎
 
 The distinction matters because it fixes what M1b adds to M1: a separate branch of the
-family, not a limiting case of it. Abaee (2026b) makes the same distinction.
+family, not a limiting case of it. Abaee (2026, Periodic review as sampled governance) makes the same distinction.
 
 ---
 

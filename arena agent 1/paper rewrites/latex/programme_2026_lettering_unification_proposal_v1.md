@@ -76,3 +76,11 @@ Concrete disposition:
   in §1 remains as the audit-trail record of the historical keying.
 - Standing rule added: **never create editions for citation-form
   changes alone.**
+
+- **Owner override (round 32, September 26, 2026, executed in place):**
+  "cite formally without letters" applied programme-wide immediately,
+  including the theory cluster's internal keying — superseding the
+  rides-on-organic-editions deferral above for all live manuscripts.
+  Superseded editions stay byte-frozen lettered; sealed packages
+  untouched; the standing rule against citation-only editions remains
+  in force for the future (this round was explicit owner execution).
