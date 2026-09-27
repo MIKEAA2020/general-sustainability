@@ -1,0 +1,167 @@
+%% paper2_repairA_thm_support_v1.tex
+%% ------------------------------------------------------------------
+%% Drafted for the author's edit of paper2_probabilistic_sufficiency_v11.tex.
+%% Repair A: keep the unrestricted sequential class, restate the viable-set
+%% recursion as the FEEDBACK recursion, with a remark covering the blind
+%% window (repair C).
+%%
+%% Line numbers refer to paper2_probabilistic_sufficiency_v11.tex.
+%%
+%% Everything below is prose the author should edit, not drop in verbatim.
+%% ------------------------------------------------------------------
+
+%% ==================================================================
+%% 1. NOTATION EDIT — replaces lines 251–253
+%% ==================================================================
+
+% The paper currently has ONE symbol for TWO recursions. Introduce two, and
+% say which is the belief-space analogue of which. Replace lines 251–253 by:
+
+\(\mathcal{W}^{\mathrm{fb}}_{k}\) the feedback viable-set recursion
+(\(\mathcal{W}^{\mathrm{fb}}_{0} = \{B \subseteq \mathcal{V}\}\);
+\(B \in \mathcal{W}^{\mathrm{fb}}_{k}\) if some admissible \(a\) and, for
+every observation \(y\) that \(a\) can produce from \(B\), a
+\(\mathcal{W}^{\mathrm{fb}}_{k-1}\)-continuation of
+\(\mathrm{Post}(B,a,y)\)), \(\mathcal{W}_{k}\) the blind recursion
+(\(\mathcal{W}_{0} = \{B \subseteq \mathcal{V}\}\);
+\(B \in \mathcal{W}_{k}\) if some admissible \(a\) maps every \(x \in B\)
+into a \(\mathcal{W}_{k-1}\)-supported posterior — one action for the whole
+set, chosen before any observation), and
+\(\mathcal{W}^{\mathrm{bel}}_{k}\) the belief-space analogue of
+\(\mathcal{W}_{k}\) (a family of beliefs); unsuperscripted values do not
+appear.
+
+%% WHY: as printed, \(\mathcal{W}_k\) is defined by the blind recursion
+%% (lines 302–304) but used in Theorem thm:support for the unrestricted
+%% sequential class. Those are different families; Remark
+%% rem:feedback-strict below exhibits the divergence. The layer's names are
+%% `Wmem` (\(\mathcal{W}^{fb}\)) and `Wblind` (\(\mathcal{W}\)).
+
+%% ==================================================================
+%% 2. THE THEOREM — restates lines 306–324
+%% ==================================================================
+
+% Two changes only: \(\mathcal{W}_k \to \mathcal{W}^{fb}_k\) in the
+% statement, and the converse half of the proof. The rest of the theorem
+% (support identity, deficit bound, monotonicity) is correct as printed.
+
+\begin{theorem}[support identity]\label{thm:support}
+On finite models with deterministic kernels and deterministic
+observation maps, for every action \(a\) and
+observation \(y\),
+\[
+\mathrm{supp}\bigl(b^{+}(\cdot \mid a, y)\bigr)
+\;=\; \mathrm{Post}\bigl(\mathrm{supp}(b), a, y\bigr),
+\]
+the set-valued post-state of the calculus. Consequently, for the
+unrestricted sequential class,
+\(V_{k}(b) = 1\) if and only if
+\(\mathrm{supp}(b) \in \mathcal{W}^{\mathrm{fb}}_{k}\), while if
+\(\mathrm{supp}(b) \notin \mathcal{W}^{\mathrm{fb}}_{k}\) then every policy loses a
+compatible state of positive mass along its realized observation path
+(the loss can occur at any stage), so
+\[
+1 - V_{k}(b) \;\ge\; \min_{x \in \mathrm{supp}(b)} b(x).
+\]
+Moreover \(V_{k}(b)\) is non-increasing in \(k\).\end{theorem}
+
+% PROOF. Everything is unchanged except the converse. As printed the
+% converse reads
+%
+%   "with deterministic observations the realized observation path is
+%    fixed by the declared sequence, so V_k(b) = max_seq \sum_{x
+%    surviving} b(x); if supp(b) \notin W_k no declared sequence keeps
+%    every compatible branch, so each sequence loses at least one branch"
+%
+% That step is invalid for a feedback policy: the branch it takes depends
+% on the observation, which depends on the initial state, so a policy is
+% not a sequence. Determinism makes the path *determined by* the policy
+% and the initial state, not fixed in advance of it.
+%
+% Replace it by induction on k against the feedback recursion:
+%
+%   "For the converse, induct on k. For k = 0 there is nothing to prove.
+%    Suppose supp(b) \notin W^{fb}_k and let \pi be any policy, with first
+%    action a. For each observation y that a produces with positive
+%    probability from b, the posterior b^+(\cdot|a,y) has support
+%    Post(supp(b), a, y) by the support identity; if that support lay in
+%    W^{fb}_{k-1} for every such y, then supp(b) would lie in W^{fb}_k by
+%    the recursion's definition. Hence for some y the posterior support is
+%    outside W^{fb}_{k-1}, and by the induction hypothesis the
+%    continuation of \pi after (a,y) loses a branch of that posterior of
+%    positive mass. Composing, \pi loses a branch of b of positive mass;
+%    taking the minimum over the finitely many such branches gives
+%    1 - V_k(b) >= min_{x in supp(b)} b(x)."
+%
+% The forward direction is unchanged: a witness for the recursion is a
+% policy, and every branch survives it, so V_k(b) = 1.
+
+%% ==================================================================
+%% 3. THE REMARK — new, after thm:support's proof (after line 345)
+%% ==================================================================
+
+% This is the substantive observation behind the defect: feedback is
+% strictly stronger than a fixed schedule here, and the paper loses
+% nothing by saying so.
+
+\begin{remark}[observation-dependent continuation is strictly
+stronger]\label{rem:feedback-strict}
+Both recursions are downward closed and
+\(\mathcal{W}_{k} \subseteq \mathcal{W}^{\mathrm{fb}}_{k}\); the
+inclusion can be strict, even under the hypotheses of
+Theorem~\ref{thm:support}. Let \(p \neq q\) be safe states and
+\(a_{0}\) the only admissible action keeping both alive, sending them to
+distinct successors \(p^{+} \neq q^{+}\) that the observation map
+distinguishes; let the unique safe continuation at \(p^{+}\) be \(b\) and
+the unique safe continuation at \(q^{+}\) be \(c \neq b\). Then
+\(\{p,q\} \in \mathcal{W}^{\mathrm{fb}}_{2}\) --- play \(a_{0}\), read the
+observation, continue with \(b\) or \(c\) accordingly --- while
+\(\{p,q\} \notin \mathcal{W}_{2}\): the first action must be \(a_{0}\),
+and no single second action is safe at both \(p^{+}\) and \(q^{+}\). For
+a belief with support \(\{p,q\}\) it follows that
+\(V^{\Pi_{\mathrm{seq}}}_{2}(b) = 1\) while \(V^{\Pi_{B}}_{2}(b) < 1\):
+the value of observation is strict here in the strongest form available,
+all or nothing. The two recursions do agree when no information arrives ---
+on a blind window, \(\mathcal{W}^{\mathrm{fb}}_{k} = \mathcal{W}_{k}\),
+the set-level content of Theorem~\ref{thm:lattice}'s
+\(V^{\mathrm{ol}} = V^{\mathrm{seq,blind}}\). Theorems~\ref{thm:support}
+and~\ref{prop:degen} therefore differ in their class, not only in their
+normalization: the first is a feedback theorem, the second a blind one, and
+Proposition~\ref{prop:closed} is accordingly not a corollary of
+Theorem~\ref{thm:support}.
+\end{remark}
+
+% The last sentence makes explicit what line 415 already says in passing
+% ("not a corollary of Theorem thm:support, whose value is the
+% unrestricted one"); it is worth promoting into the remark because it is
+% the sentence that rules out reading thm:support as a blind statement.
+
+%% ==================================================================
+%% 4. WHAT NEEDS NO EDIT
+%% ==================================================================
+
+% prop:degen (644–661) — blind throughout, never invokes W_k by name.
+%   Unaffected.
+% prop:deficit (ii) (796–798) — uses W^{bel}_k, which is DEFINED as the
+%   declared-class (blind) family at line 789–791. Unaffected, PROVIDED
+%   W^{bel}_k remains the analogue of W_k (blind) and not of W^{fb}_k.
+%   This is the one place where incautious relabelling would do damage:
+%   if W^{bel}_k were redefined as the belief-space analogue of W^{fb}_k,
+%   the proof of (ii), which cites prop:degen, would break.
+% prop:deficit (iii) (804–805) — cites thm:support only for monotonicity
+%   of V_k in k, which holds on both readings. Unaffected.
+% Line 164 (relation to Chatterjee–Doyen–Henzinger 2009) — the
+%   qualitative "almost-sure safety depends only on belief supports"
+%   literature is about general policies, so repair A moves the paper
+%   TOWARDS that literature, not away from it. No edit needed.
+
+%% ==================================================================
+%% 5. ONE GAP THIS EDIT DOES NOT CLOSE
+%% ==================================================================
+
+% prop:freeze (687–701) asserts that V_ell(b) "stabilizes after at most
+% 2^{|supp b|} strict decreases". Unlike the Sperner bound in
+% prop:antichain (iii), this count is the paper's own claim; the layer
+% proves the monotonicity and the finiteness of the range but not the
+% 2^{|supp b|} bound. It needs only |subsetsOf l| = 2^{|l|}, which is a
+% short induction — offered, not done.
