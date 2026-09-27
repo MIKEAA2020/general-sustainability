@@ -39,3 +39,4 @@ import Formalizations.P3_Binomial
 import Formalizations.P3_SupportValue
 import Formalizations.P3_SupportRepair
 import Formalizations.P3_FreezeCount
+import Formalizations.P3_FreezeValue
