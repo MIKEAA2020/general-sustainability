@@ -51,3 +51,4 @@ import Formalizations.EBC_Pairs
 import Formalizations.EBC_Pairs_v2
 import Formalizations.EBC_Pairs_v3
 import Formalizations.EBC_Classification
+import Formalizations.EBC_Classification_v2
