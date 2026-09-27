@@ -44,3 +44,4 @@ import Formalizations.P3_FreezeValue
 import Formalizations.EBC_ExactBelief_v3
 import Formalizations.EBC_Dynamics
 import Formalizations.EBC_Hamming
+import Formalizations.EBC_Bands
