@@ -45,11 +45,24 @@
   * §4 `pairIpSum` and `totalDrift_pair` — the summed pair identity that
     `cor:hamming` couples to `lem:pairsum` (i).
 
-  **Not yet proved here**: `cor:hamming` itself. Its chain is
-  `5·T ≤ pairIpSum ≤ 2·(m−h)·T`, then cancellation of `T > 0`, then the
-  `m = 4` arithmetic `5 ≤ 2(4−h) ⟹ h ≤ 1`. That is the next push; the
-  cancellation lemma (`le_of_mul_le_mul_pos`) is the only new ingredient
-  it needs beyond what is below.
+  * §5 **`cor:hamming`**: `pairIpSum_upper` (`lem:pairsum` (i), summed)
+    meets `pairIpSum_lower_of_survive`, the horizon cancels, and the
+    result is `five ≤ two * agreeMass I θ θ'` — the paper's `5 ≤ 2(m−h)`
+    — and, via `agreeMass_add_natToK_hamming`, its distance form
+    `5 + 2h ≤ 2m`, i.e. the paper's `h ≤ m − 5/2` made integral.
+
+  **The `liminf` is not needed.** The paper gets `cor:hamming` from
+  `lem:pairsum` (ii), a `liminf` of Cesàro averages over an infinite
+  blind policy. `pairIpSum_lower_of_survive` proves the same inequality
+  at every finite horizon `T > 0`, so no limit, no Cesàro average and no
+  Archimedean hypothesis enters — and the layer has none to offer. The
+  cost is the statement's form: it is quantified over a finite action
+  list `us` and a starting state `z₀ = 1`, not over an infinite policy.
+
+  **Not done**: the paper's mnemonic `h ≤ 3/2 ⟹ h ≤ 1` at `m = 4`
+  (`cor_hamming_m4`), which needs one more bridge from `2h ≤ 3` in `K`
+  back to `h ≤ 1` in `Nat`; `prop:ladder` and `prop:deadline`, which
+  queue behind `prop:bands` and the delayed-instance dynamics.
 -/
 
 import Formalizations.Prelude
@@ -307,5 +320,170 @@ theorem totalDrift_pair (I : List Nat) (θ θ' : Nat → Bool) (us : List (Nat �
     _ = -(natToK (K := K) us.length) +
         fifth * lsum (us.map (fun u => ipi I u θ + ipi I u θ')) := by
             rw [lsum_neg_ones, ← lsum_const_mul]
+
+/-! ## §5 `cor:hamming` — the pair-sum bound meets survival -/
+
+theorem lsum_const {α : Type} (l : List α) (c : K) :
+    lsum (l.map (fun _ => c)) = natToK l.length * c := by
+  induction l with
+  | nil => simp [lsum_nil]
+  | cons a t ih =>
+      calc
+        lsum ((a :: t).map (fun _ => c)) = c + lsum (t.map (fun _ => c)) := by rfl
+        _ = c + natToK (K := K) t.length * c := by rw [ih]
+        _ = (natToK (K := K) t.length + 1) * c := by
+            rw [mul_comm (natToK (K := K) t.length + 1) c]
+            rw [left_distrib c (natToK (K := K) t.length) (1 : K)]
+            rw [mul_comm c (natToK (K := K) t.length), mul_one, add_comm]
+        _ = natToK (K := K) (a :: t).length * c := by simp
+
+/-- **`lem:pairsum` (i), summed.** Over a horizon of `T` actions the pair
+inner-product sum is at most `T · 2(m−h)` — i.e. `T` times the per-step
+bound, with `agreeMass` carrying the `(m−h)`. -/
+theorem pairIpSum_upper (I : List Nat) (us : List (Nat → Tri)) (θ θ' : Nat → Bool) :
+    pairIpSum I us θ θ' ≤ natToK (K := K) us.length * (two * agreeMass I θ θ') := by
+  unfold pairIpSum
+  calc
+    lsum (us.map (fun u => ipi I u θ + ipi I u θ'))
+        ≤ lsum (us.map (fun _ => two (K := K) * agreeMass I θ θ')) := by
+            apply lsum_le_lsum
+            intro u hu
+            simpa [two, natToK] using (pair_sum_bound (K := K) I u θ θ')
+    _ = natToK (K := K) us.length * (two * agreeMass I θ θ') := lsum_const us _
+
+/-- **Survival forces the pair inner-product sum up.** At the floor edge
+`z₀ = 1`, survival of both cells to horizon `T` gives
+`5·T ≤ Σ(⟨u,θ⟩ + ⟨u,θ'⟩)`.
+
+This is `lem:pairsum` (ii) **without the `liminf`**: the inequality holds
+at every horizon, so no Cesàro average, no limit, and no Archimedean
+hypothesis is needed. (The paper's route passes to the limit; the
+finite-horizon form is what the layer can actually carry.) -/
+theorem pairIpSum_lower_of_survive (I : List Nat) (θ θ' : Nat → Bool)
+    (us : List (Nat → Tri))
+    (hs : survivesTo I θ us (1 : K)) (hs' : survivesTo I θ' us (1 : K)) :
+    five * natToK (K := K) us.length ≤ pairIpSum I us θ θ' := by
+  have hθ := survivesTo_totalDrift_lower I θ us (1 : K) hs
+  have hθ' := survivesTo_totalDrift_lower I θ' us (1 : K) hs'
+  rw [sub_self] at hθ hθ'
+  have hsum : (0 : K) ≤ totalDrift I θ us + totalDrift I θ' us := by
+    have := add_le_add hθ hθ'
+    simpa using this
+  rw [totalDrift_pair] at hsum
+  have hle : natToK (K := K) us.length ≤ fifth * pairIpSum I us θ θ' := by
+    calc
+      natToK (K := K) us.length = (0 : K) + natToK (K := K) us.length := by rw [zero_add]
+      _ ≤ (-(natToK (K := K) us.length) + fifth * pairIpSum I us θ θ') +
+            natToK (K := K) us.length := add_le_add hsum (le_refl _)
+      _ = fifth * pairIpSum I us θ θ' := by
+          rw [add_comm (-(natToK (K := K) us.length) + fifth * pairIpSum I us θ θ')
+                (natToK (K := K) us.length)]
+          rw [← add_assoc, add_neg_cancel, zero_add]
+  calc
+    five * natToK (K := K) us.length ≤ five * (fifth * pairIpSum I us θ θ') :=
+        mul_le_mul_of_nonneg_left hle (le_of_lt (five_pos (K := K)))
+    _ = (five * fifth) * pairIpSum I us θ θ' := by rw [mul_assoc]
+    _ = (1 : K) * pairIpSum I us θ θ' := by rw [five_mul_fifth]
+    _ = pairIpSum I us θ θ' := by simp
+
+/-- Cancellation of a positive factor. -/
+theorem le_of_mul_le_mul_pos {a b c : K} (h : c * a ≤ c * b) (hc : (0 : K) < c) :
+    a ≤ b := by
+  have h' : a * c ≤ b * c := by simpa [mul_comm] using h
+  have hsub : (0 : K) ≤ (b - a) * c := by
+    rw [sub_mul]
+    exact sub_nonneg.mpr h'
+  have hba : (0 : K) ≤ b - a := nonneg_of_mul_nonneg_of_pos hsub hc
+  exact sub_nonneg.mp hba
+
+/-- **Agreement mass plus Hamming distance is the dimension** — the `m − h`
+of `lem:pairsum` (i), proved rather than assumed. This links
+`EBC_ExactBelief_v2`'s `agreeMass` (a `K`-valued sum) to
+`EBC_ExactBelief_v3`'s `hamming` (a `Nat`). -/
+theorem agreeMass_add_natToK_hamming (I : List Nat) (θ θ' : Nat → Bool) :
+    agreeMass I θ θ' + natToK (K := K) (hamming I θ θ') =
+      natToK (K := K) I.length := by
+  induction I with
+  | nil => simp [agreeMass, hamming]
+  | cons i Is ih =>
+      by_cases heq : θ i = θ' i
+      · have hh : natToK (K := K) (hamming (i :: Is) θ θ') =
+            (0 : K) + natToK (K := K) (hamming Is θ θ') := by
+            simp [hamming, heq]
+        have ha : agreeMass (K := K) (i :: Is) θ θ' = (1 : K) + agreeMass (K := K) Is θ θ' := by
+            simp [agreeMass, heq]
+        rw [ha, hh]
+        calc
+          ((1 : K) + agreeMass Is θ θ') + ((0 : K) + natToK (K := K) (hamming Is θ θ'))
+              = (1 : K) + (agreeMass Is θ θ' + natToK (K := K) (hamming Is θ θ')) := by
+                  simp [add_assoc]
+          _ = (1 : K) + natToK (K := K) Is.length := by rw [ih]
+          _ = natToK (K := K) (i :: Is).length := by simp [add_comm]
+      · have hh : natToK (K := K) (hamming (i :: Is) θ θ') =
+            (1 : K) + natToK (K := K) (hamming Is θ θ') := by
+            simp [hamming, heq, natToK_add]
+        have ha : agreeMass (K := K) (i :: Is) θ θ' = agreeMass (K := K) Is θ θ' := by
+            simp [agreeMass, heq]
+        rw [ha, hh]
+        calc
+          agreeMass Is θ θ' + ((1 : K) + natToK (K := K) (hamming Is θ θ'))
+              = (agreeMass Is θ θ' + (1 : K)) +
+                  natToK (K := K) (hamming Is θ θ') := by rw [← add_assoc]
+          _ = ((1 : K) + agreeMass Is θ θ') +
+                  natToK (K := K) (hamming Is θ θ') := by
+                  rw [add_comm (agreeMass Is θ θ') (1 : K)]
+          _ = (1 : K) + (agreeMass Is θ θ' + natToK (K := K) (hamming Is θ θ')) := by
+                  rw [add_assoc]
+          _ = (1 : K) + natToK (K := K) Is.length := by rw [ih]
+          _ = natToK (K := K) (i :: Is).length := by simp [add_comm]
+
+/-- **`cor:hamming`, as an inequality on the agreement mass.** If both
+cells survive a nonempty horizon from `z₀ = 1` under one blind action
+sequence, then `5 ≤ 2·(m−h)`.
+
+The paper states this at `m = 4`, deriving `h ≤ 3/2` from
+`lem:pairsum` (ii). The finite-horizon form holds for every `m`. -/
+theorem cor_hamming (I : List Nat) (θ θ' : Nat → Bool) (us : List (Nat → Tri))
+    (hpos : 0 < us.length)
+    (hs : survivesTo I θ us (1 : K)) (hs' : survivesTo I θ' us (1 : K)) :
+    five (K := K) ≤ two (K := K) * agreeMass (K := K) I θ θ' := by
+  have hlow := pairIpSum_lower_of_survive I θ θ' us hs hs'
+  have hup := pairIpSum_upper (K := K) I us θ θ'
+  have hchain : five * natToK (K := K) us.length ≤
+      natToK (K := K) us.length * (two * agreeMass I θ θ') := le_trans hlow hup
+  rw [mul_comm (five (K := K)) (natToK (K := K) us.length)] at hchain
+  have hT : (0 : K) < natToK (K := K) us.length := by
+    have h1 : natToK (K := K) 1 ≤ natToK (K := K) us.length := natToK_mono hpos
+    have h1' : (1 : K) ≤ natToK (K := K) us.length := by simpa [natToK] using h1
+    exact lt_of_lt_of_le (zero_lt_one (K := K)) h1'
+  exact le_of_mul_le_mul_pos hchain hT
+
+/-- **`cor:hamming`, in distance form**: `5 + 2h ≤ 2m`. This is the
+paper's `h ≤ m − 5/2`, integral and division-free, for every `m`. -/
+theorem cor_hamming_dist (I : List Nat) (θ θ' : Nat → Bool) (us : List (Nat → Tri))
+    (hpos : 0 < us.length)
+    (hs : survivesTo I θ us (1 : K)) (hs' : survivesTo I θ' us (1 : K)) :
+    five (K := K) + two (K := K) * natToK (K := K) (hamming I θ θ') ≤
+      two (K := K) * natToK (K := K) I.length := by
+  have hc := cor_hamming I θ θ' us hpos hs hs'
+  have hm := agreeMass_add_natToK_hamming (K := K) I θ θ'
+  have hag : agreeMass I θ θ' =
+      natToK (K := K) I.length - natToK (K := K) (hamming I θ θ') := by
+    calc
+      agreeMass I θ θ' = (agreeMass I θ θ' + natToK (K := K) (hamming I θ θ')) -
+            natToK (K := K) (hamming I θ θ') := by rw [add_sub_cancel]
+      _ = natToK (K := K) I.length - natToK (K := K) (hamming I θ θ') := by rw [hm]
+  rw [hag] at hc
+  rw [mul_sub] at hc
+  have hadd : five + two * natToK (K := K) (hamming I θ θ') ≤
+      (two * natToK (K := K) I.length - two * natToK (K := K) (hamming I θ θ')) +
+        two * natToK (K := K) (hamming I θ θ') :=
+    add_le_add_right hc (two * natToK (K := K) (hamming I θ θ'))
+  calc
+    five + two * natToK (K := K) (hamming I θ θ') ≤
+        (two * natToK (K := K) I.length - two * natToK (K := K) (hamming I θ θ')) +
+          two * natToK (K := K) (hamming I θ θ') := hadd
+    _ = two * natToK (K := K) I.length := by rw [sub_add_cancel]
+
 
 end Formalizations.EBC
