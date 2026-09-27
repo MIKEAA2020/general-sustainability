@@ -41,3 +41,4 @@ import Formalizations.P3_SupportRepair
 import Formalizations.P3_FreezeCount
 import Formalizations.P3_FreezeValue
 import Formalizations.EBC_ExactBelief_v3
+import Formalizations.EBC_Dynamics
