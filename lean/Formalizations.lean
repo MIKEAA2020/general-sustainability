@@ -45,3 +45,5 @@ import Formalizations.EBC_ExactBelief_v3
 import Formalizations.EBC_Dynamics
 import Formalizations.EBC_Hamming
 import Formalizations.EBC_Bands
+import Formalizations.RatArith
+import Formalizations.EBC_Bands_v2
