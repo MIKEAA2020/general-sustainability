@@ -47,3 +47,4 @@ import Formalizations.EBC_Hamming
 import Formalizations.EBC_Bands
 import Formalizations.RatArith
 import Formalizations.EBC_Bands_v2
+import Formalizations.EBC_Pairs
