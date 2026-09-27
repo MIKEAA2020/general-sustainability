@@ -34,3 +34,5 @@ import Formalizations.P3_Feedback
 import Formalizations.P3_FeedbackValue
 import Formalizations.P3_SurvivableAdm
 import Formalizations.P3_BlindValue
+import Formalizations.P3_Rational
+import Formalizations.P3_Binomial
