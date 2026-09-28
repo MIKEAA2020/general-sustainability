@@ -2769,3 +2769,19 @@ Work Log:
 Stage Summary:
 - The Lean layer is fully closed out: built green from a fresh clone and fresh toolchain; the JMCDA package's verification story now spans the deposited exact-rational verifier, the paste-ready data statement (Task 126), and the cover-letter v2 formalization paragraph.
 - Open (carried): JMCDA SI submission 2027-01-31 (owner); paper-4 venue decision (owner: JDDE transfer vs Discover AM fresh); Discover AM indexing check; TE notice text unarchived; Zenodo deposit-title refresh (owner).
+
+---
+Task ID: 138
+Agent: main (Z.ai Code)
+Task: Owner's decision round on paper 4's next venue — "just JDDE cover letter v1 with reviewers re-aimed to the delay-dynamics community: Kuang, Nisbet, Zhang/Shen/Chen" — verification and closure of the JDDE package.
+
+Work Log:
+- The Task-136 deliverable confirmed standing and in place: arena agent 1/paper rewrites/latex/COVER_LETTER_paper4_delay_dynamics_JDDE_v1.md (commit 35dbc98, pushed; repo in sync with remote, zero unpushed commits).
+- Reviewer section verified against the owner's spec — all three suggestions grounded in the v41 citation base: Kuang (Kuang 1993, Delay Differential Equations with Applications in Population Dynamics — cited at the maturation/self-limitation lineage); Nisbet (Gurney, Blythe, and Nisbet 1980, Nicholson's blowflies — the canonical delayed-recruitment reference, cited repeatedly incl. the GBN-compartment construction); one of Zhang/Shen/Chen (Zhang, G.D., Shen, Y., Chen, B.S., 2013, Hopf bifurcation of a predator-prey system with predator harvesting and two delays, Nonlinear Dyn. 73, 2119-2131 — cited for the paired-ecological-delays Hopf lineage; the letter's "one of" form is correct since they are co-authors of one cited paper).
+- Quantitative claims spot-verified verbatim against paper4_delay_dynamics_v41.tex/pdf: Hopf crossings interval-certified near 3.7 and 150 yr (abstract line 69; Candidate A line 230); protective no-Hopf theorem / loop gain below one at the calibrated point (lines 71-73, 243, 1287); the 2.3-yr apparent threshold as discretisation artefact (lines 74, 258; precise 2.306 crossing at lines 1512-13); mobilising review restabilising above 6.5 yr via Neimark-Sacker (lines 76, 264); five-regime attractor (13 occurrences); two folds certified at the discrete collocation level (lines 78, 279-81); 45 pages confirmed by pdfinfo; one figure confirmed by figure-environment count.
+- Zip integrity re-confirmed: paper4_delay_dynamics_v41_JDDE.zip sha256 prefix 4da8567feb4935d6 matches the Task-136 record.
+- This round is verification-only: no manuscript, letter, or package file touched (never-overwrite honored); the JDDE package is submission-ready for the owner's transfer action.
+
+Stage Summary:
+- The JDDE route is the owner-confirmed choice for paper 4 (Discover AM remains the verified APC-free-until-2027-12-31 fallback if JDDE declines). Package contents: standing v41 manuscript + supplementary v8 + JDDE cover letter v1 (reviewers Kuang / Nisbet / one of Zhang-Shen-Chen) + JDDE-named zip — all verified, committed, pushed.
+- Open (carried): owner's transfer action at the Springer transfer desk (or JDDE fresh submission); JMCDA SI submission 2027-01-31 (paper 1); Discover AM indexing check (residual, only if the fallback is exercised); TE rejection notice text unarchived (needs owner to forward); Zenodo deposit-title refresh (owner).
