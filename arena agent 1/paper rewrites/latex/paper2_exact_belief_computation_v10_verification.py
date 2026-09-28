@@ -11,7 +11,7 @@ with 60-step certificates (16 singletons at the floor's edge, exactly the 32
 Hamming-adjacent pairs above it, nothing larger); the alternation cycle
 arithmetic; the ten observation-ladder values; exact point-based evaluation
 (7 rational beliefs x 3 levels x 4 horizons, alpha-set deduplication of
-17^4 = 83,521 sequences); the antichain census (1,048,576 raw -> 736 stored);
+17^4 = 83,521 sequences); the antichain census (1,048,576 raw -> 496 stored);
 the deadline instance (z0 >= 1 + T/2); the crude-instrument contrast; and all
 headline needles, declarations, and source hygiene.
 """
@@ -221,7 +221,8 @@ tex = open(os.path.join(HERE, "paper2_exact_belief_computation_v10.tex"),
 
 for _needle in ("The audited structure at a glance", "tab:glance",
                 "exactly the $32$ Hamming-adjacent pairs; no other pair",
-                "$2^{16} = 65{,}536$ raw subsets, $736$ stored antichain",
+                "$2^{16} = 65{,}536$ raw subsets per level, "
+                "$496$ stored maximal sets",
                 "drifts sum to $-8$ per step over the 16 cells",
                 "antichain compression",
                 "(Minato, 1993)",
