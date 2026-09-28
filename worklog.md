@@ -2728,3 +2728,44 @@ Stage Summary:
 - The EMA package is ready for the owner's transfer action: EMA cover letter v1 + the EMA-named zip + the standing v41 manuscript and supplementary; the manuscript itself unchanged.
 - Open (carried): owner-side Zenodo deposit-title refresh; JMCDA SI submission 2027-01-31; lake-build gold-standard run; the TE rejection notice text itself (not yet seen) to be archived with the V-series if the owner forwards it.
 - Push-status addendum: the push of this round's commit 40bfd76 is BLOCKED — the persisted /home/z/my-project/.github_pat is the stale 92-char token Task 121 diagnosed as truncated (401 Bad credentials on push and API alike; the concurrent rounds 27-32 that pushed used an in-memory token lost with each sandbox recycle). Recovery = one `git push origin main` after the owner re-supplies a valid 93-char PAT under the standing protocol. The commit is secured durably: the persistent-volume bundle refreshed to 307M and verified (it carries 40bfd76 as refs/heads/main, complete history).
+
+---
+Task ID: 135
+Agent: main (Z.ai Code)
+Task: Owner re-supplied the PAT (the standing 92-char truncation completed with its final character); make it persist and clear the blocked push.
+
+Work Log:
+- The full 93-char token written to /home/z/my-project/.github_pat (94 bytes incl. newline, mode 600); gh_bootstrap.sh rerun — credential store rebuilt on the durable volume, remote re-applied, ls-remote verified OK.
+- Push completed: d89c93c..0fa3791 main -> main (the Task-134 transfer round 40bfd76 plus its push-status addendum). Remote == local, zero unpushed commits; the Task-121/134 blocked-push loop is closed.
+- sync_lean_backup.sh header note refreshed (the stale "push blocked by invalid PAT" comment replaced); bundle + mirror refreshed after this round's commits (Task 137).
+
+Stage Summary:
+- The PAT persists correctly on the durable volume; one command (gh_bootstrap.sh) restores credentials after any recycle. All future pushes unblocked.
+
+---
+Task ID: 136
+Agent: main (Z.ai Code)
+Task: Owner reports the EMA desk rejection of paper 1 ("Aggregate Indices and Transition Safety" — "too abstract"; the editor recommends Control Theory / Systems-and-OR journals publishing Viability Theory), infers the same fate for paper 4 at EMA, and asks about Discover Applied Mathematics as paper 4's next venue.
+
+Work Log:
+- The EMA editor's text archived verbatim (humanizing audits/V46 Part I). For paper 1: no action — the editor's recommended class is exactly the already-planned JMCDA SI placement (and SVVA for the obstruction calculus); the rejection validates the venue table rather than disturbing it.
+- EMA demoted for paper 4 (V46 Part II, with the honest nuance that p4 is a stronger EMA fit than paper 1 — a model-analysis paper against EMA's own format clause — but the editor's demonstrated accessibility bar makes a 45-pp theorem-proof manuscript a coin-flip-to-negative there). V45's ranking revised: JDDE first, Discover AM strong alternative, IJACM fallback, EMA not recommended, ORF declined.
+- Discover Applied Mathematics verified from the journal's own pages (2026-09-28, link.springer.com/journal/44585): fully OA; scope "all fields relevant to applied mathematics" + SDG welcome; APC WAIVED — "Publication costs will be covered by Springer Nature until 31st December 2027 … Current charge: €0/$0/£0. Standard charge: €1790/$2090/£1490" (the printed caveat covers transfers out, not in). Indexing status unverified (residual).
+- Deliverables (new files only; never-overwrite honored): humanizing audits/V46_EMA_BAR_AND_P4_VENUE_REASSESSMENT.md (the verified record + decision matrix); latex/COVER_LETTER_paper4_delay_dynamics_JDDE_v1.md (house style; quantitative claims verbatim from the 17/17-grounded TE/EMA chain; venue hook on JDDE's verified scope quotes — "the dynamics of differential equations and their discrete analogs" / "theoretical studies proving new approaches and/or techniques"; suggested reviewers re-aimed to the delay-dynamics community: Kuang; Nisbet; Zhang/Shen/Chen, all in the citation base); submission_zips/paper4_delay_dynamics_v41_JDDE.zip (sha256 4da8567feb4935d6… recorded in V46; four payload files byte-identical to the verified TE/EMA packages, EMA zip re-verified at its recorded sha256 before copying; JDDE-aimed README). The v41 manuscript, supplementary v8, and the EMA package all stand unchanged.
+
+Stage Summary:
+- Recommendation: transfer to JDDE (files carry over from the TE decision), with Discover AM as the APC-free-until-2027-12-31 fallback; or Discover AM now if certainty + speed dominate — scope-safe and free in the window, at the cost of prestige and community targeting. Paper 1's JMCDA plan untouched and validated.
+
+---
+Task ID: 137
+Agent: main (Z.ai Code)
+Task: Close the standing Lean open item (the gold-standard `lake build` run) and refresh the JMCDA cover-letter verification statement (the standing deliverable of the paper-1 theorem-layer task, whose implementation landed in Tasks 122-129).
+
+Work Log:
+- Fresh toolchain: elan 4.2.4 installed; leanprover/lean4:v4.34.1 pulled on first invocation; full `lake build` in lean/ GREEN (exit 0, 13 jobs, 1m43s incl. download) — the only diagnostics are benign unused-variable linter warnings in P1_AssessmentSeparation.lean (lines 2990, 3028). Zero `sorry` and zero admitted `axiom` declarations re-confirmed by grep over all ten modules. The "lake build gold-standard run" item carried since Task 129 is CLOSED.
+- JMCDA cover letter refreshed: latex/COVER_LETTER_paper1_assessment_separation_JMCDA_v2.md — identical to v1 except the "Method and verification" paragraph now records the Lean 4 machine-checked layer (Theorem 5; Proposition 3; Theorem 9 with Proposition 10; Theorem S2 with Lemma A and Lemma B; ten modules, 395 theorems, zero sorry, zero admitted axioms, statements at an ordered-field interface with the paper the real-number instance; openly available in the programme repository). v1 retained byte-frozen.
+- Bundle + lean-mirror refreshed on the persistent volume after this round's commits; push verified.
+
+Stage Summary:
+- The Lean layer is fully closed out: built green from a fresh clone and fresh toolchain; the JMCDA package's verification story now spans the deposited exact-rational verifier, the paste-ready data statement (Task 126), and the cover-letter v2 formalization paragraph.
+- Open (carried): JMCDA SI submission 2027-01-31 (owner); paper-4 venue decision (owner: JDDE transfer vs Discover AM fresh); Discover AM indexing check; TE notice text unarchived; Zenodo deposit-title refresh (owner).
