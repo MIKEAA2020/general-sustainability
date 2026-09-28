@@ -1041,11 +1041,10 @@ proving it necessary — and notes the useful consequence, that the
 paper's open question about non-blind disciplines cannot be settled by
 transfer.
 
-Two defects were introduced and caught before the push: a `ef{bands}`
-with no matching `\label` (the band proposition is `ef{prop:bands}`,
-in the section labelled `hamming`), and a `
-oindent` destroyed by a
-Python escape. Post-fix: **unresolved refs none**, braces balanced,
+Two defects were introduced and caught before the push: a `\ref{bands}`
+with no matching `\label` (the band proposition is `\ref{prop:bands}`, 
+in the section labelled `hamming`), and a `\noindent` destroyed by a 
+Python escape. Post-fix: **unresolved refs none**, braces balanced, environments matched.
 environments matched.
 
 **Caveat:** no `pdflatex` in this environment, so v11 was **not
