@@ -89,8 +89,12 @@ eight named papers had received no work. That was exculpatory rather than accura
 ## 4. Confidence
 
 - `comp` and `psuff` identification: **high** (stems match the given names).
-- `ebc` identification: **moderate** (no file named `ebc*`; `paper2_exact_belief_computation`
-  is the only stem whose initials fit). Paper 5 rests on this and should be confirmed first.
+- `ebc` identification: **high** (confirmed 2026-09-29, upgraded from moderate). Sixteen Lean
+  modules named `EBC_*` exist in `lean/Formalizations/` — `EBC_Bands`, `EBC_Classification`,
+  `EBC_Deadline`, `EBC_Dynamics`, `EBC_ExactBelief`, `EBC_Hamming`, `EBC_Ladder`, `EBC_Pairs`
+  and successive versions — in namespace `Formalizations.EBC`, carrying 134 theorem/lemma
+  declarations with zero `sorry`. The module names map onto paper 5's own section labels
+  (`hamming`, `bands`, `ladder`, `pbvi`, `deadline`). `EBC` = Exact Belief Computation.
 - The content-overlap test is **sentence-level on shared strings**; it would miss
   paraphrase. Strong evidence of disjointness, not proof.
 - Word counts for papers 9, 10, 11 include all concatenated parts.
