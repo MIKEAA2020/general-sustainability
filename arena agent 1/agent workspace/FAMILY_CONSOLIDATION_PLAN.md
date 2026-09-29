@@ -188,19 +188,23 @@ observation-based policy works?*
 
 Gaps, in order:
 
-1. **Prior art first, before any other writing.** **DRAFTED 2026-09-29, in
-   `PAPER_A_PRIOR_ART.md`, and the verdict is that the claim as stated does not survive
-   unqualified.** The plan named Veliov (1993) as the nearest neighbour — a *sufficient*
-   condition, leaving necessity open. It missed the paper that closes it:
-   *Set-Valued Analysis* **8**, 149–162 (2000) gives **necessary and sufficient**
-   conditions for guaranteed viability under output feedback with bounded disturbance on
-   both dynamics and output, via the Lipschitz kernel of a set-valued map, with geometric
-   and HJ–Isaacs equivalents and a construction algorithm. Paper A's residual gap is
-   therefore narrower than the working title: an **exactly checkable non-existence
-   certificate valid against every observation-based policy (not merely Lipschitz ones),
-   for properties beyond exact maintenance of a closed domain**. Section 2.4 of the prior
-   art sets out the three distinctions that must be argued. **Blocking: that 2000 paper
-   must be read in full before any results section is drafted.**
+1. **Prior art first, before any other writing.** **DONE 2026-09-29.** Drafted in
+   `PAPER_A_PRIOR_ART.md`. The first verdict ("the claim as stated does not survive
+   unqualified") was **withdrawn**: it had been drafted from the plan summary plus an
+   external search, without first probing `obstr_v55`'s own citations --- the Veliov gap it
+   rested on was already closed in the manuscript. Doyen (2000), *Set-Valued Analysis*
+   **8**, 149--162, has since been read **in full** and the claim **survives**: his
+   Definition 1.1 quantifies over Lipschitz selections with a memoryless closed loop
+   `u(h(x,w))`, and his property is exact invariance of a closed set, so his necessity does
+   not reach observation-based policies generally. Paper A's residual gap is therefore
+   exactly: an **exactly checkable non-existence certificate valid against every
+   observation-based policy (not merely Lipschitz ones), for properties beyond exact
+   maintenance of a closed domain**. **Both prior-art paragraphs are integrated into the
+   manuscript** (`diffs/obstr_v57.tex`): the Doyen distinction in §1.3 *Related work*,
+   placed between the sufficiency direction and the "On the failure side" sentence, and the
+   Hamilton--Jacobi reachability / viscosity contrast after the barrier-certificate
+   sentence, with six bibliography entries added and the narrowed residual claim stated.
+   **No longer blocking.** Remaining on Paper A: item 2 below, and a compile check.
 2. **At least one worked case where a certificate bites on a system whose kernel cannot
    be computed.** Without it the instrument is unfalsified in the regime that motivates
    it.
