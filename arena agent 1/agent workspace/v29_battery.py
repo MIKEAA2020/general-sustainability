@@ -358,7 +358,7 @@ for i, (lab, pid) in enumerate(ROW1):
 chk("R11b Table 1 reproduces the v3 kernels + families (13 rows)", not bad1,
     "; ".join(bad1) if bad1 else "all 13 rows, 78 cells match")
 
-# --- Table 2 ---------------------------------------------------------------
+# --- Table 3 ---------------------------------------------------------------
 alr = {r["cell"]: r["computed"] for r in csvf("e2_allee_rows_v3.csv")}
 fox = {r["class_"] + "|" + r["policy"]: r for r in csvf("e2_fox_kernels_v3.csv")}
 
@@ -373,8 +373,8 @@ def fcell(cls, pol, T):
     return "empty" if v in (None, "") else float(v)
 
 
-rows = data_rows(2)
-chk("R11c Table 2 parses to 4 rows", len(rows) == 4, "%d rows" % len(rows))
+rows = data_rows(3)
+chk("R11c Table 3 parses to 4 rows", len(rows) == 4, "%d rows" % len(rows))
 ROW2 = [
     ("Registered Schaefer",
      [kcell("BAU", "UC_q05", "1"), kcell("BAU", "UC_q05", "inf"),
@@ -401,12 +401,12 @@ for i, (lab, want) in enumerate(ROW2):
     ok, det = cmp_row(rows[i], lab, want)
     if not ok:
         bad2.append("%s: %s" % (lab, det))
-chk("R11d Table 2 reproduces the v3 form campaigns (4 rows)", not bad2,
+chk("R11d Table 3 reproduces the v3 form campaigns (4 rows)", not bad2,
     "; ".join(bad2) if bad2 else "all 4 rows, 20 cells match")
 
-# --- Table 3 ---------------------------------------------------------------
-rows = data_rows(3)
-chk("R11e Table 3 parses to 10 rows", len(rows) == 10, "%d rows" % len(rows))
+# --- Table 4 ---------------------------------------------------------------
+rows = data_rows(4)
+chk("R11e Table 4 parses to 10 rows", len(rows) == 10, "%d rows" % len(rows))
 kg = csv3("e2_elevation_k_grid.csv")
 bad3 = []
 for i, r in enumerate(kg):
@@ -431,16 +431,16 @@ for i, r in enumerate(kg):
             ok, det = False, "q05 vacuous: got %s want %s" % (rows[i][-1], want_vac)
     if not ok:
         bad3.append("K=%s: %s" % (r["K"], det))
-chk("R11f Table 3 reproduces the v3 K-grid", not bad3,
+chk("R11f Table 4 reproduces the v3 K-grid", not bad3,
     "; ".join(bad3) if bad3 else "all 10 rows match")
 chk("R11g no v2 K-grid T=1 value 1009.2 survives", has("1009.2") == 0)
 chk("R11g2 Section 3.7 quotes the v3 K=1000 constructive -28.87",
     has("-28.87") > 0 and has("-62.9") == 0)
 
-# --- Table 4 ---------------------------------------------------------------
+# --- Table 5 ---------------------------------------------------------------
 st = csv3("e2_elevation_stochastic.csv")
-rows = data_rows(4)
-chk("R11h Table 4 parses to 4 rows", len(rows) == 4, "%d rows" % len(rows))
+rows = data_rows(5)
+chk("R11h Table 5 parses to 4 rows", len(rows) == 4, "%d rows" % len(rows))
 bad4 = []
 for i, (pol, lab) in enumerate((("flat_0", "zero catch"), ("BAU", "BAU (5 kt)"),
                                 ("flat_25", "60 kt / S1 / cascade"),
@@ -457,14 +457,14 @@ for i, (pol, lab) in enumerate((("flat_0", "zero catch"), ("BAU", "BAU (5 kt)"),
     ok, det = cmp_row(rows[i], lab, want, tol=0.0006)
     if not ok:
         bad4.append("%s: %s" % (lab, det))
-chk("R11i Table 4 reproduces the v3 stochastic campaign", not bad4,
+chk("R11i Table 5 reproduces the v3 stochastic campaign", not bad4,
     "; ".join(bad4) if bad4 else "all 4 rows match")
 
-# --- Table 5 ---------------------------------------------------------------
+# --- Table 6 ---------------------------------------------------------------
 ff = {(r["floor"], r["policy"], int(r["n_years"])): r["Tinf_lower_boundary"]
       for r in csv3("e2_elevation_finite_floors.csv")}
-rows = data_rows(5)
-chk("R11j Table 5 parses to 6 rows", len(rows) == 6, "%d rows" % len(rows))
+rows = data_rows(6)
+chk("R11j Table 6 parses to 6 rows", len(rows) == 6, "%d rows" % len(rows))
 bad5 = []
 for i, (pol, lab) in enumerate((("flat_0", "zero catch"), ("BAU", "BAU (5 kt)"),
                                 ("flat_25", "60 kt / S1 / cascade"),
@@ -478,12 +478,12 @@ for i, (pol, lab) in enumerate((("flat_0", "zero catch"), ("BAU", "BAU (5 kt)"),
     ok, det = cmp_row(rows[i], lab, want, tol=0.051)
     if not ok:
         bad5.append("%s: %s" % (lab, det))
-chk("R11k Table 5 reproduces the v3 finite-floor campaign", not bad5,
+chk("R11k Table 6 reproduces the v3 finite-floor campaign", not bad5,
     "; ".join(bad5) if bad5 else "all 6 rows, 36 cells match")
 
-# --- Table 6 ---------------------------------------------------------------
-rows = data_rows(6)
-chk("R11l Table 6 parses to 2 rows", len(rows) == 2, "%d rows" % len(rows))
+# --- Table 7 ---------------------------------------------------------------
+rows = data_rows(7)
+chk("R11l Table 7 parses to 2 rows", len(rows) == 2, "%d rows" % len(rows))
 xsum = list(csv.DictReader(open(XTE + "/e2_xteNCAM_summary.csv")))[0]
 xrow = {(r["class_"], r["policy"]): r
         for r in csv.DictReader(open(XTE + "/e2_xteNCAM_row.csv"))}
@@ -492,13 +492,13 @@ ok, det = cmp_row(rows[1], "xteNCAM (this row)",
                    float(xsum["constructive_own_q10"]),
                    float(xrow[("own_q10", "flat_0")]["T1"]),
                    float(xrow[("own_q10", "flat_0")]["Tinf"])], tol=0.051)
-chk("R11m Table 6 reproduces the archived xteNCAM row", ok, det)
+chk("R11m Table 7 reproduces the archived xteNCAM row", ok, det)
 ok, det = cmp_row(rows[0], "NCAM (registered)",
                   [float(f3["r"]), None, 1.1531, 91.59, 884.6, 884.6], tol=0.02)
 # got[0] is the label, so the K cell is got[2], not got[1]
 if ok and "5000" not in rows[0][2]:
     ok, det = False, "K cell: got '%s', expected it to contain 5000" % rows[0][2]
-chk("R11n Table 6 NCAM row matches the v3 primary object", ok, det)
+chk("R11n Table 7 NCAM row matches the v3 primary object", ok, det)
 
 # ===========================================================================
 # R12 -- the constructive bound and the certified layer, RECOMPUTED
@@ -617,15 +617,25 @@ for v in ("2.0", "1671.7", "642.3", "7690.1", "372.4", "1.7818",
 chk("R13c Fox constructive 79.05 = 159.92 - 80.87 stated",
     "159.92 - 80.87 = 79.05" in tex)
 chk("R13d no v2 Fox constructive 45.08 survives", has("45.08") == 0)
-# Fox r: the value recurs (prose + Table 2 label), so a presence check cannot
+# Fox r: the value recurs (prose + Table 3 label), so a presence check cannot
 # see a single-site corruption. Scope the prose site and pin the total count.
 chk("R13d2 Section 3.6 Fox refit sentence states r = 0.1044",
     re.search(re.escape(r"\(r = 0.1044\), \(K = 5000\) kt pinn"), tex) is not None)
 for tok, n in (("0.1044", 2), ("372.4", 2), ("1671.7", 1), ("642.3", 3),
                ("7690.1", 2), ("3223.7", 1), ("9330.0", 1), ("1.7818", 1),
-               ("883.6", 1), ("79.05", 1), ("159.92", 1), ("1.0764", 1)):
+               # 79.05 now appears twice: Section 3.6, and Section 2.4 where
+               # the Fox row verifies the constants are form-general.  Both
+               # sites are pinned by R13c / R13d3b, so the count is 2.
+               ("883.6", 1), ("79.05", 2), ("159.92", 1), ("1.0764", 1)):
     chk("R13d3 Section 3.6 value %s appears at exactly %d sites" % (tok, n),
         has(tok) == n, "found %d" % has(tok))
+# 79.05 is quoted a second time in Section 2.4, where the Fox row is used to
+# verify that the constants of Section 2.4 are form-general.  A bare count
+# would forbid that legitimate reuse, so the Section 3.6 occurrence is pinned
+# by its arithmetic instead.
+chk("R13d3b Section 3.6's Fox constructive bound is printed as its arithmetic",
+    ("159.92 - 80.87 = 79.05" in FLAT))
+
 chk("R13d4 the two declared sensitivities are stated in Section 3.6",
     "Reproducibility note (two declared sensitivities)" in tex
     and "642.3296" in tex and "1098.75" in tex and "1020.95" in tex
@@ -643,7 +653,7 @@ chk("R13g Section 3.6 keeps the frozen classes so only the form varies",
 # R14 -- stochastic / bootstrap / abstract / conclusions echoes
 # ===========================================================================
 for v in ("0.906", "0.903", "0.835", "0.647", "0.954", "0.769", "0.852", "0.650"):
-    chk("R14a Table 4 / Section 3.8 value %s printed" % v, has(v) > 0)
+    chk("R14a Table 5 / Section 3.8 value %s printed" % v, has(v) > 0)
 m_abs = re.search(re.escape(BS + "begin{abstract}") + r"(.*?)"
                   + re.escape(BS + "end{abstract}"), tex, re.S)
 ABS = m_abs.group(1) if m_abs else ""
@@ -705,7 +715,8 @@ chk("R15a no reference to the superseded v2 families script",
 figs = sorted(set(re.findall(r"figs_e2_v3/([a-z0-9_]*\.png)", tex)))
 missing = [f for f in figs if not os.path.exists("/home/user/fam/figs_e2_v3/" + f)]
 chk("R15b all %d referenced figures exist in figs_e2_v3" % len(figs),
-    len(figs) == 9 and not missing, "missing %s" % missing if missing else ", ".join(figs))
+    len(figs) == 10 and not missing,
+    "missing %s" % missing if missing else ", ".join(figs))
 chk("R15c no reference to the old figure directory",
     "figs_e2/fig" not in tex)
 
@@ -714,6 +725,8 @@ for name in ("run\\_intervention\\_v3.py", "run\\_families\\_v3.py",
              "campaign\\_e2\\_depensation\\_v3.py", "campaign\\_e2\\_allee\\_declared\\_v3.py",
              "campaign\\_e2\\_fox\\_form\\_v3.py", "campaign\\_e2\\_xteNCAM\\_row.py",
              "e2\\_breakpoint\\_1992.py", "superseded\\_v2",
+             "make\\_figs\\_v18.py", "make\\_figs\\_v19.py",
+             "campaign\\_e2\\_cadence\\_v3.py", "results\\_cadence\\_v3",
              "intervention\\_results\\_v3.json", "intervention\\_boundaries\\_v3.csv",
              "e2\\_families\\_v3.csv", "results\\_srcyear\\_v3", "results\\_forms\\_v3"):
     chk("R15d data availability names %s" % name.replace(BS, ""), name in tex)
@@ -807,21 +820,21 @@ stoch = {(r["scheme"], r["policy"], r["S0"], r["T"]): float(r["P_stay"])
          for r in csv3("e2_elevation_stochastic.csv")}
 ceil_iid = stoch[("iid", "flat_0", "884.6", "20")]
 ceil_blk = stoch[("block4", "flat_0", "884.6", "20")]
-chk("R17j the i.i.d. ceiling 0.906 is the Table 4 zero-catch value",
+chk("R17j the i.i.d. ceiling 0.906 is the Table 5 zero-catch value",
     abs(ceil_iid - 0.906) < 0.0005, "%.4f" % ceil_iid)
-chk("R17k the block ceiling 0.852 is the Table 4 zero-catch value",
+chk("R17k the block ceiling 0.852 is the Table 5 zero-catch value",
     abs(ceil_blk - 0.852) < 0.0005, "%.4f" % ceil_blk)
 chk("R17l the block crossing-sweep value 0.849 is stated with its seed caveat",
     "0.849" in tex and "carries its own fixed seed" in tex
     and "Monte-Carlo difference of " in tex)
-chk("R17m the 60-kt i.i.d. survival 0.835 is the Table 4 value",
+chk("R17m the 60-kt i.i.d. survival 0.835 is the Table 5 value",
     abs(stoch[("iid", "flat_25", "884.6", "20")] - 0.835) < 0.0005)
-# 0.906 and 0.852 also sit in Table 4, so an unscoped presence check stays
+# 0.906 and 0.852 also sit in Table 5, so an unscoped presence check stays
 # green when the PROSE sentence is corrupted. Pin the sentence.
 chk("R17m2 Section 3.8 prints the i.i.d. ceiling 0.906 where it cites it",
     ("ceiling of " + BS + "(0.906" + BS + ") at zero catch") in FLAT)
 chk("R17m3 Section 3.8 prints the block ceiling 0.852 where it cites it",
-    ("there being " + BS + "(0.852" + BS + ") (Table 4") in FLAT)
+    ("there being " + BS + "(0.852" + BS + ") (Table 5") in FLAT)
 
 # --- the bound's stochastic reading: which catch was actually evaluated ----
 bound_nearest = min(np.arange(0.0, 125.0, 2.5), key=lambda c: abs(c - 91.59))
@@ -936,7 +949,7 @@ _meas = max(_d(r) for r in gfin)
 chk("R17ad the stated finite-horizon agreement parses to the measured max",
     _stated is not None and abs(_stated - _meas) <= 0.01,
     "stated %s, measured %.4f" % (_stated, _meas))
-# 0.835 also sits in Table 4, so a section-scoped count cannot see the prose
+# 0.835 also sits in Table 5, so a section-scoped count cannot see the prose
 # site on its own; pin the sentence instead.
 chk("R17ad2 Section 3.8 prose cites the 60-kt survival 0.835",
     ("by " + BS + "(60" + BS + ") kt survival has already fallen to "
@@ -963,8 +976,8 @@ chk("R17ag the old 'every other cell agrees to about 0.03 kt' claim is gone",
 chk("R18a Section 2.3 no longer claims the whole analysis was recomputed",
     "the whole analysis was also computed" not in FLAT
     and "the primary kernels and their boundary tables were also computed" in FLAT)
-chk("R18b the un-tabulated Fox cells are labelled as not carried in Table 2",
-    "Three further Fox cells" in tex and "not carried in Table 2" in FLAT)
+chk("R18b the un-tabulated Fox cells are labelled as not carried in Table 3",
+    "Three further Fox cells" in tex and "not carried in Table 3" in FLAT)
 chk("R18c code availability names the v29 verification script, not v24",
     "paperE2" + BS + "_cod" + BS + "_intervention" + BS + "_v29"
     + BS + "_verification.py" in tex
@@ -1005,14 +1018,16 @@ chk("R19d the structure campaign is green (23 checks, 0 failed)",
     "%d/%d" % (stj["n_checks"] - stj["n_failed"], stj["n_checks"]))
 # 215.2 appears in Section 2.4 and in the fig8 caption, so a bare presence
 # test stays green when either site is corrupted.  Pin the arithmetic.
-# 215.2 is printed at four sites (abstract, Section 2.4, the fig8 caption and
-# Section 3.1).  A single-site corruption is invisible to a presence test, so
-# the arithmetic, the caption phrase AND the site count are all pinned.
-chk("R19e C_vac = g_max - |e| = 215.2 recomputes and is printed at all 4 sites",
+# 215.2 is printed at six sites: the abstract, Section 2.4, the fig8 caption,
+# Section 3.1, the Table 2 row label and the fig10 caption.  A single-site
+# corruption is invisible to a presence test, so the arithmetic, the caption
+# phrase AND the site count are all pinned -- which means every legitimate new
+# site has to be registered here.
+chk("R19e C_vac = g_max - |e| = 215.2 recomputes and is printed at all 6 sites",
     abs(stj["C_vac"] - 215.2) < 0.05
     and ("296.09 - 80.87 = 215.2" in FLAT)
     and (BS + "(C_{\mathrm{vac}} = 215.2" + BS + ") kt") in FLAT
-    and has("215.2") == 4,
+    and has("215.2") == 6,
     "%.3f, printed x%d" % (stj["C_vac"], has("215.2")))
 chk("R19f the safe-set threshold 0.531 and the nonempty threshold 0.727 both "
     "recompute", abs(stj["phi_safe"] - 0.531) < 0.001
@@ -1064,7 +1079,7 @@ chk("R20b K is not identified from above (the profile 95% set reaches the top "
     "of the grid)", min(_Kset) <= 1600 and max(_Kset) >= 49000,
     "profile set %.0f - %.0f kt" % (min(_Kset), max(_Kset)))
 chk("R20b2 the paper says so", "not identified from above" in FLAT)
-# "1500" also appears as a K-grid row in Table 3, so the token alone proves
+# "1500" also appears as a K-grid row in Table 4, so the token alone proves
 # nothing about the profile set: pin the sentence that states it.
 chk("R20c the paper prints the profile 95% set endpoints (1500 to 50{,}000)",
     ("set running from " + BS + "(1500" + BS + ") kt to the top of the" + BS
@@ -1115,9 +1130,9 @@ rec_rows = {r["label"]: r for r in csv.DictReader(open(I_OUT + "/e2_recent_windo
 for lab in ("NCAM 1995-2015", "NCAM 1995-2007", "xteNCAM 1995-2024",
             "xteNCAM 2005-2024"):
     chk("R21b the %s row is archived" % lab, lab in rec_rows)
-tbl7 = block(7)
+tbl7 = block(8)
 for lab, row in rec_rows.items():
-    chk("R21c Table 7 %s: r, C* and F' match the campaign" % lab,
+    chk("R21c Table 8 %s: r, C* and F' match the campaign" % lab,
         ("%.4f" % float(row["r"]))[:5] in tbl7
         and ("%.1f" % float(row["Cstar"])) in tbl7
         and ("%.3f" % float(row["Fp"])) in tbl7,
@@ -1133,6 +1148,359 @@ chk("R21e the bound-status caveat is stated (K at a bound, regime readings)",
     "regime readings" in FLAT)
 chk("R21f no verdict is claimed to transfer between the two series",
     "labelled sensitivities" in SEC312 and "no verdict" in SEC312)
+
+
+# ===========================================================================
+# R22 -- the cadence pass: the horizon is not a property of the policy
+# ===========================================================================
+C_OUT = REPO + "/src/results_cadence_v3"
+cad = {(r["section"], r["quantity"]): r["value"] for r in
+       csv.DictReader(open(C_OUT + "/e2_cadence_v3.csv"))}
+cadj = json.load(open(C_OUT + "/e2_cadence_v3.json"))
+chk("R22a the cadence campaign is green", cadj["n_failed"] == 0,
+    "%d/%d" % (cadj["n_checks"] - cadj["n_failed"], cadj["n_checks"]))
+
+# the invariance claim, read back from the campaign and from Table 2
+tbl2 = block(2)
+for C, ws, q5, q10 in ((0, 6, 6, 7), (5, 6, 6, 7), (60, 6, 6, 7),
+                       (91.59, 6, 6, 7), (120, 6, 6, 7), (150, 6, 6, 7),
+                       (180, 6, 6, 6), (200, 5, 6, 6), (215.2, 5, 6, 6)):
+    lab = {"0": "0 (moratorium)", "5": "5 (BAU)", "60": "60 (flat cap)",
+           "91.59": "91.59 (\\(C^*\\))",
+           "215.2": "215.2 (\\(C_{\\mathrm{vac}}\\))"}.get(str(C), str(C))
+    want = "%s & %d & %d & %d" % (lab, ws, q5, q10)
+    chk("R22b Table 2 row for C = %s" % lab, want in " ".join(tbl2.split()))
+    for cname, val in (("worst", ws), ("q05", q5), ("q10", q10)):
+        got = cad[("horizon", "T*|C=%.2f|%s" % (C, cname))]
+        chk("R22c T*(C=%.2f, %s) = %d from the campaign" % (C, cname, val),
+            int(got) == val, "campaign says %s" % got)
+
+chk("R22d the paper states the invariance (zero to 150 kt, every policy)",
+    ("for every catch from zero to " + BS + "(150" + BS + ") kt") in FLAT
+    and ("No declared policy lengthens it" in FLAT))
+chk("R22e the mechanism is stated: the margin increments exceed the catch range",
+    all(x in FLAT for x in ("379", "437", "504", "582", "671", "773"))
+    and ("exceeds the entire admissible catch range" in FLAT))
+chk("R22f the management consequence is stated in the Discussion",
+    ("review interval longer than that horizon is consulting an expired "
+     "certificate" in FLAT)
+    and "Implementation Review" in FLAT and "management-track" in FLAT
+    and "a decade may pass" in FLAT)
+chk("R22g the cadence claim is in the abstract and the conclusions",
+    ("which no catch reduction extends" in FLAT)
+    and ("The certificate has a shelf life" in FLAT))
+
+# the constants are not Schaefer-specific
+for lab, key, want in (("Fox", "C*|Fox (declared row)", 79.09),
+                       ("Allee declared", "C*|Allee (declared s0 row)", 123.27),
+                       ("Allee preferred", "C*|Allee (data-preferred row)", 115.19)):
+    chk("R22h the constructive formula reproduces the %s row (%.2f)" % (lab, want),
+        abs(float(cad[("generality", key)]) - want) < 0.05,
+        "campaign %s" % cad[("generality", key)])
+chk("R22i Section 2.4 states the form-generality and quotes the Fox/Allee checks",
+    "Nothing in this subsection uses the Schaefer form" in FLAT
+    and "79.1" in FLAT and "115.19" in FLAT and "123.27" in FLAT
+    # "approximately reproducing" would still leave the numbers present, so the
+    # exactness claim is pinned as a phrase, not as a pair of tokens.
+    and "both reproducing the tabulated constructives" in FLAT)
+chk("R22k the Fox cross-form C_vac and g_max are stated",
+        (BS + "(C_{\\mathrm{vac}} = 111.2" + BS + ") kt and "
+         + BS + "(g_{\\max} = 192.0" + BS + ") kt")
+    in FLAT)
+chk("R22j the two institutional cadences are stated with their figures",
+    "six-year blocks" in FLAT and "normally" in FLAT
+    and "cycles of one to three years" in FLAT)
+
+# ===========================================================================
+# R23 -- the table-numbering and provenance repair
+#
+# The cadence table was spliced into the middle of a Section 3.4 sentence and
+# numbered 8 while sitting between Tables 1 and 2. Both defects are invisible
+# to a per-table content check: every cell was right. So the checks here are
+# structural -- sentence integrity, numbering order, provenance scope.
+# ===========================================================================
+BS_ = BS
+
+# R23a  the 3.4 sentence the cadence block was spliced into is whole again.
+# "while leaving a_max unchanged" is its final subordinate clause; a full stop
+# has to sit before the cadence paragraph, not after the table.
+chk("R23a the source-year sentence in 3.4 is intact and closed",
+    ("by the source-year one (" + BS_ + "(329.0" + BS_ + ") kt)" + chr(10)
+     + "while leaving " + BS_ + "(a_{\\max}" + BS_ + ") unchanged.") in tex)
+chk("R23b the cadence table follows that sentence, not the clause inside it",
+    tex.index(BS_ + "textbf{Table 2.}") >
+    tex.index("while leaving " + BS_ + "(a_{\\max}" + BS_ + ") unchanged."))
+chk("R23c no orphaned clause after the cadence table",
+    BS_ + "end{longtable}" + chr(10) + "while leaving" not in tex
+    and BS_ + "end{longtable}" + chr(10) * 4 not in tex)
+
+# R23d  numbering is in order of first mention (caption or citation).
+caps = [(m.start(), int(m.group(1)))
+        for m in re.finditer(re.escape(BS_ + "textbf{Table ") + r"([0-9]+)"
+                             + re.escape(".}"), tex)]
+# numbers above 8 are citations to tables in OTHER papers (Regular et al.,
+# 2025, Table 17) and are not part of this manuscript's sequence
+cites = [(m.start(), int(m.group(1)))
+         for m in re.finditer(r"Table ([0-9]+)(?![0-9])", tex)
+         if int(m.group(1)) <= 8]
+first = {}
+for pos, n in sorted(caps + cites):
+    first.setdefault(n, pos)
+order = [n for n, _ in sorted(first.items(), key=lambda kv: kv[1])]
+chk("R23d the eight tables are numbered 1..8 in order of first mention",
+    order == list(range(1, 9)), str(order))
+chk("R23e every caption number is used exactly once and none is skipped",
+    [n for _, n in caps] == list(range(1, 9)) and len(cites) >= 8)
+chk("R23f the external citation 'Regular et al., 2025, Table 17' survived",
+    "Regular et al., 2025, Table 17" in FLAT)
+
+# R23g  Data availability must not attribute the 3.6 form table to the
+# kernel runner; that table is produced by three other scripts, named in the
+# same paragraph.
+chk("R23g the kernel-table provenance is scoped to Table 1 alone",
+    ("The primary kernel table (Table 1, Sections 3.1--3.5) is produced by"
+     in FLAT) and "Tables 1 and 2" not in FLAT)
+
+# R23h  the cadence table is a Results table, inside Section 3.4.
+i34 = tex.index(BS_ + "subsubsection{3.4")
+i35 = tex.index(BS_ + "subsubsection{3.5")
+chk("R23h the cadence table sits in Section 3.4",
+    i34 < tex.index(BS_ + "textbf{Table 2.}") < i35)
+
+# R23i-l  the printed margin series must be reproducible from the inputs the
+# sentence states.  It is generated from the UNROUNDED archived defect with the
+# ROUNDED archived a_max, so a reader using the printed 329.0 would be off by
+# up to 0.4 kt; the prose now names 328.9725.
+#
+# Each value is also pinned as part of its CONTIGUOUS printed series, not as a
+# bare token: 3787.0 recurs in the 3.4 horizon argument, so a presence test
+# stayed green when the series entry alone was corrupted.
+_EPS_STATED, _A_STATED = 328.9725, 1.1531
+_rT = [_EPS_STATED * (_A_STATED ** T - 1) / (_A_STATED - 1) for T in range(1, 9)]
+chk("R23i the sentence states the inputs that generate the series",
+    "328.9725" in FLAT and "a_{\\max} = 1.1531" in FLAT)
+
+_SER_R = ", ".join(BS + "(r_%d = %.1f" % (T, _rT[T - 1]) + BS + ")"
+                   for T in range(1, 8)) + ", " + BS + "(r_8 = %.1f" % _rT[7] \
+    + BS + ") kt"
+_SER_TH = ", ".join(BS + "(%.1f" % (Ks + v) + BS + ")" for v in _rT[:2]) + ", " \
+    + ", ".join(BS + "(%.1f" % (Ks + v) + BS + ")" for v in _rT[2:]) \
+    + " kt at " + BS + "(T = 1," + BS + "ldots,8" + BS + ")"
+chk("R23j the printed r_T series is the recomputed one, verbatim",
+    _SER_R in FLAT, _SER_R[:70])
+chk("R23k the printed certified-threshold series is the recomputed one, verbatim",
+    _SER_TH in FLAT, _SER_TH[:70])
+for _T in range(1, 9):
+    chk("R23l r_%d recomputes from 328.9725 / 1.1531 and matches the archive"
+        % _T,
+        abs(_rT[_T - 1] - eps * (amax ** _T - 1) / (amax - 1)) < 0.05
+        and abs((Ks + _rT[_T - 1]) - lad[_T - 1]) < 0.05,
+        "stated %.1f, archived %.1f"
+        % (_rT[_T - 1], eps * (amax ** _T - 1) / (amax - 1)))
+
+# ===========================================================================
+# R24 -- Figure 10 and the counts the cadence prose carries
+#
+# The figure is the paper's most applied result in one glance, so it is
+# checked as an artifact (file present, generator present) and its caption is
+# checked against the campaign that produced the curve.
+# ===========================================================================
+cad_rows = list(csv.DictReader(open(C_OUT + "/e2_cadence_v3.csv")))
+_n_catch = sum(1 for r in cad_rows if r["section"] == "horizon"
+               and r["quantity"].startswith("T*|C="))
+_n_rule = sum(1 for r in cad_rows if r["section"] == "horizon"
+              and not r["quantity"].startswith("T*|C="))
+chk("R24a the campaign tries 30 constant-catch pairs and 18 declared-rule pairs",
+    _n_catch == 30 and _n_rule == 18, "%d catch / %d rule" % (_n_catch, _n_rule))
+chk("R24b the paper prints exactly those counts, not the stale 33",
+    (BS + "(48" + BS + ") (rule, class) pairs") in FLAT
+    and (BS + "(30" + BS + ") constant") in FLAT
+    and (BS + "(18" + BS + ") declared rules") in FLAT
+    and "33" + BS + ") (catch, class)" not in FLAT)
+
+chk("R24c Figure 10 is referenced and its file exists",
+    "figs_e2_v3/fig10_cadence.png" in tex
+    and os.path.exists(REPO + "/src/figs_e2_v3/fig10_cadence.png"))
+chk("R24d the generator of Figure 10 exists and is named",
+    (REPO + "/src/make_figs_v19.py") and
+    os.path.exists(REPO + "/src/make_figs_v19.py")
+    and (BS + "texttt{wave" + BS + "_e" + BS + "_cod/src/make" + BS
+         + "_figs" + BS + "_v19.py}") in FLAT)
+chk("R24e the figure caption carries the numbers it is claiming",
+    all(x in FLAT for x in ("The certified horizon is not a property of the policy",
+                            "1-kt resolution", "Grey", "admissible range",
+                            "379", "773", "91.59", "215.2")))
+chk("R24f the Discussion points at the figure, not only the table",
+    "Table 2 and Figure 10 show the shelf life cannot be" in FLAT)
+
+chk("R24g the mechanism no longer understates itself, in BOTH places",
+    "every one of them exceeds the entire" in FLAT
+    and "the smallest by a factor of four" in FLAT
+    # the Discussion restates the mechanism in its own words; pin that site
+    # too or the two drift apart and only one of them is protected
+    and "four times the whole admissible catch" in FLAT
+    and "from the fourth year" not in FLAT)
+chk("R24h the figure provenance covers Figures 1--9 and 10 separately",
+    "Figures 1--9 are produced by" in FLAT
+    and "Figures 1--7 are produced by" not in FLAT
+    and (BS + "texttt{wave" + BS + "_e" + BS + "_cod/src/make" + BS
+         + "_figs" + BS + "_v18.py}") in FLAT)
+
+# ===========================================================================
+# R25 -- the numbers the ABSTRACT prints
+#
+# The abstract is the only part every reader sees, and its identification
+# figures are conditional in a way that is easy to miss: 88.1 [-5.6, 130.6] is
+# the joint bootstrap RESTRICTED to the expansive regime (K >= 2K*, 73% of
+# replicates). Unconditional it is 73.7 [-89.4, 125.7]. A referee who resamples
+# and gets the unconditional number must not be able to call it an error, so
+# both the values and the conditioning are pinned here.
+# ===========================================================================
+ABS = re.search(re.escape(BS + "begin{abstract}") + r"(.*?)"
+                + re.escape(BS + "end{abstract}"), tex, re.S)
+ABS = " ".join(ABS.group(1).split()) if ABS else ""
+I_OUT2 = REPO + "/src/results_ident_v3"
+ident = {}
+for r in csv.DictReader(open(I_OUT2 + "/e2_identification_v3.csv")):
+    ident[r["quantity"]] = r["value"]
+_lo, _hi = ident["C* = g(K*) - |e_q10| over the profile set"].split(" - ")
+chk("R25a the abstract's profile-set C* range matches the archive",
+    ("%.1f" % float(_lo)) in ABS and ("%.1f" % float(_hi)) in ABS,
+    "%s - %s" % (_lo, _hi))
+_s = ident["C* median [90%] | K >= 2K* (the expansive regime)"]
+_med, _band = _s.split(" [", 1)
+_blo, _bhi = _band.strip("[]").split(", ")
+chk("R25b the abstract's bootstrap bound matches the conditional archive row",
+    ("%.1f" % float(_med)) in ABS and ("%.1f" % float(_blo)) in ABS
+    and ("%.1f" % float(_bhi)) in ABS,
+    "%s [%s, %s]" % (_med, _blo, _bhi))
+chk("R25c the abstract states the conditioning, not just the number",
+    "restricted to the expansive regime on which the results are" in ABS
+    and "of replicates" in ABS)
+# Both intervals contain zero, so the conditioning changes precision, not the
+# sign of the claim. Report the pair and let the reader see that.
+chk("R25f the abstract carries BOTH bootstrap figures, unconditional first",
+    ("73.7" in ABS and "-89.4" in ABS and "125.7" in ABS)
+    and ABS.index("73.7") < ABS.index("88.1"))
+chk("R25g Section 3.10 states how many replicates the conditioning keeps",
+    "72.9" in FLAT and "2000" + BS + ") replicates" in FLAT)
+chk("R25d Section 3.10 states what the conditioning costs",
+    "Restricted to the expansive regime" in FLAT)
+chk("R25e the abstract carries the survival contrast and the self-viability pair",
+    all(x in ABS for x in ("0.91", "0.65", "171", "0 " + BS + "pm 8")))
+
+# The share the conditioning keeps is a number, and numbers get corrupted.
+# Pin it to the archive rather than to the prose that quotes it.
+_share = 0.0
+try:
+    import numpy as _np
+    _bj = list(csv.DictReader(open(I_OUT2 + "/e2_bootstrap_joint.csv")))
+    _K = _np.array([float(r["K"]) for r in _bj])
+    _share = 100.0 * float((_K >= 2 * Ks).mean())
+    chk("R25h the abstract's replicate share is the archived one",
+        ("%d" % round(_share)) + BS + "%" + BS + ") of replicates" in ABS
+        and ("%.1f" % _share) in FLAT,
+        "archive %.1f%%, abstract prints %d%%" % (_share, round(_share)))
+except Exception as exc:                      # pragma: no cover
+    chk("R25h the abstract's replicate share is the archived one", False,
+        "could not recompute: %s" % exc)
+
+# ===========================================================================
+# R26 -- every number in the abstract is registered and reproducible
+#
+# Three abstract numbers in a row turned out to be selection-conditional: the
+# bootstrap median (conditional on the expansive regime), the replicate share,
+# and then the discovery that the profile interval [67.9, 95.2] and the
+# bootstrap interval [-89.4, 125.7] disagree by a factor of eight with only one
+# of them crossing zero. Three is a pattern, so the guard is now mechanical:
+#
+#   every numeric token in the abstract must be REGISTERED here, either as a
+#   quantity that is recomputed from the archive or as a structural token
+#   (a year, a percentage, an enumerator) that carries no inference.
+#
+# A number added to the abstract without being registered fails the battery.
+# ===========================================================================
+def _pct(vals, p):
+    v = sorted(vals)
+    k = (len(v) - 1) * p / 100.0
+    f = int(k)
+    c = min(f + 1, len(v) - 1)
+    return v[f] + (v[c] - v[f]) * (k - f)
+
+
+_pr = list(csv.DictReader(open(I_OUT2 + "/e2_profile_K.csv")))
+_smin = min(float(r["sse"]) for r in _pr)
+_ins = [float(r["Cstar"]) for r in _pr
+        if float(r["sse"]) <= _smin * (1.0 + 4.3009 / 22)]
+_p_lo, _p_hi = min(_ins), max(_ins)
+_bj = list(csv.DictReader(open(I_OUT2 + "/e2_bootstrap_joint.csv")))
+_Call = [float(r["Cstar"]) for r in _bj]
+_Cexp = [float(r["Cstar"]) for r in _bj if float(r["K"]) >= 2 * Ks]
+_share = 100.0 * len(_Cexp) / len(_Call)
+_sto = {(r["scheme"], r["policy"], r["T"], float(r["S0"])): float(r["P_stay"])
+        for r in csv.DictReader(open(REPO + "/src/results_srcyear_v3/"
+                                     "e2_elevation_stochastic.csv"))}
+_rec = {r["label"]: r for r in csv.DictReader(open(I_OUT2 + "/e2_recent_windows.csv"))}
+_id3 = {r["quantity"]: r["value"] for r in
+        csv.DictReader(open(I_OUT2 + "/e2_identification_v3.csv"))}
+
+QUANT = {
+    "884.6": ("LRP = K*", "%.1f" % Ks),
+    "91.59": ("C* (constructive bound)", "%.2f" % float(cadj["C_star_schaefer"])),
+    "215.2": ("C_vac (vacuity bound)", "%.1f" % float(cadj["C_vac_schaefer"])),
+    "67.9":  ("profile-set C*, lower", "%.1f" % _p_lo),
+    "95.2":  ("profile-set C*, upper", "%.1f" % _p_hi),
+    "27":    ("profile-set C*, width", "%d" % round(_p_hi - _p_lo)),
+    "73.7":  ("joint bootstrap C*, median", "%.1f" % _pct(_Call, 50)),
+    "-89.4": ("joint bootstrap C*, 5th pct", "%.1f" % _pct(_Call, 5)),
+    "125.7": ("joint bootstrap C*, 95th pct", "%.1f" % _pct(_Call, 95)),
+    "88.1":  ("expansive-regime C*, median", "%.1f" % _pct(_Cexp, 50)),
+    "-5.6":  ("expansive-regime C*, 5th pct", "%.1f" % _pct(_Cexp, 5)),
+    "130.6": ("expansive-regime C*, 95th pct", "%.1f" % _pct(_Cexp, 95)),
+    "73":    ("share of replicates in the expansive regime", "%d" % round(_share)),
+    "0.91":  ("20-yr survival from the LRP, zero catch",
+              "%.2f" % _sto[("iid", "flat_0", "20", Ks)]),
+    "0.65":  ("20-yr survival from the LRP, 120 kt cap",
+              "%.2f" % _sto[("iid", "flat_50", "20", Ks)]),
+    "171":   ("NCAM 1995-2015 C*", "%d" % round(float(_rec["NCAM 1995-2015"]["Cstar"]))),
+    "8":     ("xteNCAM 1995-2024 C*", "%d" % round(float(_id3[
+                  "xteNCAM 1995-2024: C* = g - |e_q10|"]))),
+    "24":    ("one-step transitions in the fit window", "%d" % (2007 - 1983)),
+    "120":   ("declared cap at rho = 0.5 of 240 kt", "%d" % 120),
+}
+# tokens that carry no inference: years, the interval level, the survival
+# horizon, the (1)-(5) enumerators, the 2 of 2K*, and the 0 of "0 +/- 8"
+STRUCT = {"1983", "-2007", "90", "20", "5", "4", "3", "2", "1", "0"}
+
+_abs_toks = sorted(set(re.findall(r"-?\d+(?:\.\d+)?", ABS)),
+                   key=lambda s: -abs(float(s)))
+_unregistered = [t for t in _abs_toks if t not in QUANT and t not in STRUCT]
+chk("R26a all %d abstract numbers are registered (no unaccounted quantity)"
+    % len(_abs_toks), not _unregistered, "unregistered: %s" % _unregistered)
+for _tok in sorted(QUANT, key=lambda s: -abs(float(s))):
+    _lab, _want = QUANT[_tok]
+    chk("R26b %-46s abstract prints %s" % (_lab, _tok),
+        _tok == _want and _tok in ABS,
+        "archive says %s, abstract prints %s" % (_want, _tok if _tok in ABS else "nothing"))
+chk("R26c the abstract does not quote the tight interval as a precision claim",
+    "an identification result, not a" in ABS or "not a precision one" in ABS)
+chk("R26d Section 3.10 explains the eightfold disagreement between the two intervals",
+    "a factor of eight apart in width" in FLAT
+    and "They are evidence for different claims" in FLAT
+    and "7.4" in FLAT and "wider at both ends" in FLAT)
+
+# The body carries the same pair the abstract does, and the abstract is not
+# the only place a reader looks: pin Section 3.10's own sentence.
+_s_uncond = ("median of " + BS + "(%.1f" + BS + ") kt with " + BS + "(90"
+             + BS + "%%" + BS + ") interval " + BS + "([%.1f, %.1f]" + BS
+             + ") kt") % (_pct(_Call, 50), _pct(_Call, 5), _pct(_Call, 95))
+chk("R25i Section 3.10 prints the unconditional bootstrap pair verbatim",
+    _s_uncond in FLAT, _s_uncond[:60])
+_s_cond = ("median " + BS + "(%.1f" + BS + ") kt (" + BS + "(90" + BS
+           + "%%" + BS + ") interval " + BS + "([%.1f, %.1f]" + BS + ") kt)"
+           ) % (_pct(_Cexp, 50), _pct(_Cexp, 5), _pct(_Cexp, 95))
+chk("R25j Section 3.10 prints the conditional bootstrap pair verbatim",
+    _s_cond in FLAT, _s_cond[:60])
 
 print()
 print("%d passed, %d failed" % (len(PASS), len(FAIL)))
