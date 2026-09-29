@@ -163,3 +163,76 @@ That reframes the case correctly and avoids constructing non-termination from sc
 
 This is very likely the intended reading of the gap, and it uses results the paper already
 has rather than new ones it would have to earn.
+
+
+---
+
+## Route 3 pursued first (2026-09-29) — and a large find
+
+### On the ordering, honestly
+
+I listed route 3 last while calling it "most promising". That was incoherent: I ranked by
+**implementation effort** (route 1 was a small edit to a script I already had) while
+labelling by **probability of success**. The two orderings disagreed and I did not notice.
+Underneath it, I was treating "use the result the paper already has" as a fallback and
+"construct something new" as the real work — a bias toward novelty over assets already in
+hand. Route 3 is first from here.
+
+### The two results, read properly
+
+**`prop:decomposition`** [exact two-phase decomposition]. In the two-phase model, `B₀` is
+viable iff (i) some declared blind control keeps every branch in `V` through step `K`, and
+(ii) some declared blind control satisfying (i) lands every branch in `RViab(V)` at the
+reveal. Over any declared class on which the window certificates are complete (finite
+classes; polytope-declared classes, by `thm:lp-instant`), these are equivalent: both
+certificates silent; clause (i) holds; and `B₀` is either viable or its nonviability is
+exactly the post-observation recourse mode, the failure of (ii) for every window-surviving
+blind control.
+
+**`prop:window-nogo`** [no window-measurable pair is complete]. Call a certificate pair
+*window-measurable* when its two verdicts depend only on the window sub-model — the initial
+belief, the branch transitions within the window, the floors, and the observation schedule.
+Then **no window-measurable pair is complete** for the two-phase model: *the three-state
+instance of Supplementary S3/A.3 and its variant agree on all window data, the certificates
+are silent in both, and yet one is nonviable (`x₄` exits under every post-reveal action)
+while the other is viable (`x₄` is maintained).*
+
+Two things follow:
+
+1. The proof of `prop:window-nogo` **is** a worked case. It is an explicit three-state
+   instance with a variant, differing only outside the window data. So the paper is not
+   short of a worked instance; it is short of one framed as the answer to the gap.
+2. The right statement of the gap is therefore narrower than "the kernel cannot be
+   computed". What is proven is: no *window-measurable* certificate pair is complete. The
+   honest reading is that the **window phase is decidable by certificates** while the
+   **recourse phase is not decidable by any window-measurable pair** — so a certificate
+   returns a verdict on the part it can decide, on a system whose full viability question
+   cannot be settled window-measurably.
+
+### A large find: `paper2_worked_systems`, versions 1-17
+
+`arena agent 1/paper rewrites/latex/paper2_worked_systems_v17.tex` — **10,374 words, 17
+sections**, with a companion `paper2_worked_systems_v17_verification.py` of **63,080
+characters**. Versions v1 through v17 exist, most with their own `_verification.py`.
+
+Sections: Introduction; Systems, conventions, and methods; A master monotonicity theorem;
+The master table; Policy classes; Decentralized observation; Review timing on the
+hidden-regime grid; Monitoring adequacy; Regime uncertainty; The continuous benchmark;
+Static duality; The certainty-equivalence drift audit; Multiple floors; Robustness margins;
+Design rules; Verification methods; Conclusion.
+
+This is worked-case material — a whole manuscript of worked systems with executable
+verification — and **none of it is in paper01**. It is the natural source for, or home of,
+the worked case the plan says paper 1 lacks.
+
+### Next step
+
+Read `paper2_worked_systems_v17` against the gap, and check whether its master table
+already contains an instance where a certificate fires while the kernel is not
+window-measurably decidable. If it does, the gap closes by folding that instance into
+paper01 with a pointer; if it does not, construct the instance inside that framework —
+which has conventions, a master table and a verification harness already in place, rather
+than from scratch.
+
+Also still to locate: Supplementary S3/A.3 itself, which holds the three-state instance
+that `prop:window-nogo` is proved on.
