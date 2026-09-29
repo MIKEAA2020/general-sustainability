@@ -93,9 +93,91 @@ requires first confirming the modules actually build and that each named declara
 what the mapping above assumes. Writing the claim before the check is exactly the failure
 that produced the retracted "tension" argument.
 
-## Caveat needing resolution
+## Caveat — RETRACTED
 
-`lean/Formalizations/P1_AssessmentSeparation_v5.lean` (paper 6) is 160,246 characters and
-246 declarations with 0 axioms but **1 `sorry`** — an admitted gap. Paper 6 mentions Lean
-once. If that mention asserts "no admitted gaps" it is false as it stands and must be
-corrected before submission.
+~~`P1_AssessmentSeparation_v5.lean` (paper 6) has 1 `sorry`, an admitted gap.~~
+
+**This was a false positive and is retracted.** The single grep hit for `sorry` is line
+108 of the file, which is a *comment* reading "Every theorem is fully proved; there are
+no `sorry`s and no extra axioms." A grep hit is not evidence. The claim was made from an
+unexamined grep, the same failure family as the retracted "tension" argument.
+
+Corrected by the verification pass below: paper 6's module is clean.
+
+
+---
+
+## Verification pass on the Lean layer — 2026-09-29
+
+Every mechanized claim above was **checked before being written into any paper**.
+
+### Method
+
+Lean 4.14.0 was installed (elan), the `lean/` project fetched from the remote
+(`lakefile.toml` plus 67 modules) and built.
+
+### Result 1: the project builds
+
+`lake build` → **60/60 jobs, exit 0**. This matches the "54 modules, 60 build jobs"
+figure the sources claim.
+
+### Result 2: no admitted gaps, established three independent ways
+
+1. **`#print axioms` on the named declarations** (the only reliable test — in Lean an
+   unfinished proof surfaces as the axiom `sorryAx` in the footprint of every declaration
+   depending on it):
+
+   | declaration | axioms |
+   |---|---|
+   | `finite_horizon_sound` | none |
+   | `finite_horizon_complete` | `Classical.choice` |
+   | `tree_sound` | none |
+   | `blocked_iff` | `propext`, `Classical.choice`, `Quot.sound` |
+   | `Wk_antitone`, `Wk_descending`, `preOp_mono`, `commonSafe` | none |
+
+   `sorryAx` appears nowhere. The three named axioms are Lean's standard classical
+   axioms, not gaps.
+
+2. **Comment-stripped source scan** over all of `Formalizations/`: **zero** `sorry`,
+   `admit`, or `axiom` declarations. The only modifier found is `noncomputable` (20
+   occurrences), which marks a definition as using classical choice and is not a gap.
+
+3. **At scale**: 170 declarations of `P1_AssessmentSeparation_v5` checked —
+   `sorryAx` count **0**; only `propext`, `Quot.sound`, `Classical.choice` appear.
+
+### Result 3: scale of the layer
+
+**1,237** theorem/lemma declarations across 61 modules, including 199 in
+`P1_AssessmentSeparation_v5`, 33 in `P1_Obstruction` (plus the `HiddenMode` section),
+and 21 in `Minimax_Dual`.
+
+### Result 4: fidelity — the formalization does apply to paper 1 as it stands
+
+The formalization's declared source of record is `paper2_obstruction_calculus_v53`;
+paper 1 descends from `obstr_v57`. Comparing them: v53 has 73 labels, paper01 has 74,
+**and the only difference is `worked-case`, added by me this session**. Nothing dropped,
+and `thm:finite-horizon`, `def:kernel`, `thm:common-action`, `prop:monotone`,
+`thm:static-complete`, `prop:selector` are present in both.
+
+### Scope limits, recorded in the papers, not omitted
+
+1. **The continuous-time results are NOT formalized.** The header of
+   `P1_Obstruction.lean` says the Dini-derivative arguments, exit certificates and timing
+   bounds "live in an analysis setting outside a dependency-free Lean layer." What is
+   formalized is the discrete core: Section 3.1 (finite systems, backward recursion over
+   beliefs), the Section 7 one-step characterization, the Section 3.2 common-action
+   obstruction in discrete/infinite-horizon form, the Section 4.1 certification theory,
+   the Farkas robustness margin, the hidden-mode conflict example, and kernel monotonicity.
+2. **Completeness is with respect to policy trees, not stationary policies.**
+   `finite_horizon_complete` returns a `PolicyTree`, a history-dependent object. Where a
+   paper asserts a stationary policy suffices, that rests on the hand proof.
+
+### Written
+
+- `paper01_obstruction_calculus_v60.tex` — new subsection **3.8 Mechanized verification
+  of the discrete core**, with the declaration-to-result table, the axiom evidence, and
+  both scope limits.
+- `paper04_minimax_dual_certificates_v13.tex` — new section **Mechanized verification**
+  (inserted before References; that paper has no Conclusion section).
+
+Neither claim was written before the checks above had run.
