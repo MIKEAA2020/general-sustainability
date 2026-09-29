@@ -356,3 +356,119 @@ novelty claim narrowly: the obstruction certificates "have not been stated in th
    it, since they belong to the same viability school P2 already speaks to.
 
 **Neither blocks drafting.** The blocking item identified in §4 is resolved.
+
+---
+
+## 8. The two missing paragraphs — draft prose, LaTeX-ready
+
+Both blocks are written to be pasted into the related-work discussion of `obstr_v55.tex`
+(§1.1, alongside the existing barrier-certificate and discriminating-kernel discussion).
+
+### 8.1 Paragraph A — Doyen (2000), cite and distinguish
+
+```latex
+Doyen (\citeyear{doyen2000}) studies output feedback for uncertain nonlinear systems
+under state and control constraints and obtains necessary and sufficient conditions
+for what he terms a \emph{guaranteed viability domain}: a closed set $K$ such that
+there exists a \emph{Lipschitz selection} $u(\cdot)$ of the control constraint map
+$U(\cdot)$ for which $K$ is invariant under the differential inclusion
+$\dot x \in \{f(x,u(h(x,w)),w),\; w\in W(x)\}$, the disturbance acting on both the
+dynamics and the output.  His Theorem~1.2 characterises the property by the
+non-emptiness, for some $\lambda>0$, of the Lipschitz kernel
+$L_\lambda(R^\lambda_K)(y)$ at every output $y$, and Corollary~1.3 synthesises a
+feedback by Steiner selection.
+
+Doyen's result is the nearest neighbour to the question we pose, and it differs from
+it on three axes, each visible in his own statement.  First, the \emph{policy class}:
+Definition~1.1 quantifies over Lipschitz selections, and the closed loop is
+$u(h(x,w))$---a memoryless function of the current output.  A policy that is
+non-Lipschitz, or that uses the history of observations rather than the current
+output alone, lies outside the range of his necessity.  Our obstruction certificates
+are asserted for observation-based policies generally, and are therefore neither
+implied by nor subsumed under his condition.  Second, the \emph{property}: Doyen's
+is exact invariance of a closed set, which is one particular viability property
+among those our certificates address.  Third, the \emph{direction}: Theorem~1.2 is
+an equivalence whose constructive content is carried by Corollary~1.3, which
+\emph{builds} a viable feedback.  The systematic obstruction side---certifying that
+no observation-based policy is viable---is not developed there, and Doyen himself
+records the reason: ``to our knowledge, no general viability result is available in
+this differential game context with imperfect and/or partial information.''  It is
+that undeveloped side, and not the synthesis, that the obstruction calculus is
+intended to serve.
+```
+
+### 8.2 Paragraph B — HJ reachability and viscosity
+
+```latex
+The dominant computational tradition in safety verification reaches the same
+question from the opposite side.  Hamilton--Jacobi reachability formulates safety as
+a two-player differential game and recovers the backward reachable tube as the zero
+sublevel set of the viscosity solution of a time-dependent
+Hamilton--Jacobi--Isaacs PDE \citep{MitchellBayenTomlin2005, MargellosLygeros2011};
+see \citet{BansalChenHerbertTomlin2017} for a survey and
+\citeauthor{CrandallIshiiLions1992} for the viscosity-solution theory the
+formulation rests on.  The construction is elegant and, in low dimension, exact.
+
+It does not reach the setting considered here, for a reason that is structural
+rather than technical.  The HJI value function is posed on the physical state
+$x\in\mathbb{R}^n$: the grid, or the neural collocation points, discretise the state
+space itself.  Under incomplete observation the sufficient statistic is not a state
+but a \emph{belief}---a probability measure over states---and the value function
+would accordingly have to live on an infinite-dimensional space of measures.  Level-set
+and physics-informed solvers are discretisation schemes for finite-dimensional
+domains; they do not carry over to that setting.  The obstruction calculus sidesteps
+the difficulty by not solving a PDE at all: the certificates of Section~3 are finite
+algebraic objects, checkable without discretising any continuum.
+
+Two further contrasts are worth recording.  Even with perfect observation the
+Hamilton--Jacobi certificate is only as exact as its discretisation: grid-based
+solvers scale exponentially in the state dimension and are in practice confined to
+five or six dimensions, and the learning-based approaches that lift that bound
+\citep{BansalTomlin2021} purchase scalability with approximation---a neural
+backward reach--avoid tube benchmarked against a six-dimensional grid reference
+recovers roughly four fifths of the true unsafe set.  And in \emph{direction} the
+tradition is, like viability theory proper, a sufficiency machine: it computes the
+states from which some control against all disturbance preserves safety, which is
+the direction Veliov's condition and the estimation-tube reduction already serve.
+The obstruction certificates supply the complementary direction, and do so in the
+observation-constrained regime in which neither tradition returns an answer.
+```
+
+### 8.3 Bibliography entries to add
+
+```bibtex
+@article{doyen2000,
+  author  = {Doyen, Luc},
+  title   = {Guaranteed Output Feedback Control for Uncertain Systems under
+             Control and State Constraints},
+  journal = {Set-Valued Analysis},
+  volume  = {8}, pages = {149--162}, year = {2000},
+  doi     = {10.1023/A:1008734827394}
+}
+```
+
+The Hamilton--Jacobi entries (Mitchell--Bayen--Tomlin 2005; Margellos--Lygeros 2011;
+Bansal--Chen--Herbert--Tomlin 2017; Bansal--Tomlin 2021; Crandall--Ishii--Lions 1992)
+should be confirmed against the bibliography style in use before the paragraph is
+committed to the manuscript.
+
+### 8.4 Verification notes on the claims made in §8.2
+
+- *BRT as zero sublevel set of the viscosity solution of an HJI PDE* — confirmed; the
+  statement is the standard formulation of the level-set method for reachability.
+- *Grid-based solvers confined to five or six dimensions* — confirmed across several
+  independent sources; one states the bound as "five or six dimensions", another as
+  "six or fewer".
+- *Neural BRT recovering roughly four fifths of the true unsafe set* — the
+  spacecraft-docking benchmark reports a true-positive rate of 81.1\% against a
+  6-D grid ground truth, with a 0.15\% false-positive rate. The figure is stated as
+  "roughly four fifths" rather than quoted to three significant figures, because it is
+  a single benchmark on one architecture and should not be presented as a universal
+  characterisation of learning-based HJ methods.
+
+### 8.5 Status
+
+Prior-art section is now **complete**. Both gaps identified in §4 and §6 have been
+closed in draft: gap (1) the HJ/viscosity paragraph --- §8.2; gap (2) the Doyen
+(2000) citation and distinction --- §7 and §8.1. The results section of Paper~A can
+now be drafted.
