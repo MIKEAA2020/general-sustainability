@@ -236,3 +236,75 @@ than from scratch.
 
 Also still to locate: Supplementary S3/A.3 itself, which holds the three-state instance
 that `prop:window-nogo` is proved on.
+
+
+---
+
+## GAP CLOSED (2026-09-29) — subsection 3.7 added as `paper01_..._v59.tex`
+
+Route 3 paid off: the worked case was found in `paper2_worked_systems_v17`, not
+constructed from scratch.
+
+### What v17 already contained
+
+Two candidate instances, both audited:
+
+1. **The finite two-floor audit system** (Section: Systems, conventions, and methods).
+   States `(z1,z2)` in `{0,1,2,3}^2`, safe set `{z1>=1, z2>=1}`, instruments `u` in `{0,1,2}`.
+   Nine safe states generate `C(9,2)=36` two-element belief pairs. Kernel sizes:
+   `|W_inst|=24`, `|W_agg|=26`, `|W_full-codex|=25`, `|W_full|=28`, `|W_dec|=12`.
+   **Four pairs are full-information-viable but institutionally nonviable** — `12|21`,
+   `12|31`, `13|21`, `13|31` — the certificate biting. But this system is finite, so its
+   kernel *is* computable (backward recursion over the `2^9 = 512`-belief universe). It
+   validates the calculus; it does not exhibit the motivating regime.
+
+2. **The continuous benchmark** (Section: The continuous benchmark). This is the one.
+   State `(x1,x2) >= 0`, aggregate `Y = x1 + x2`, the `Y`-fibre a CONTINUUM. Caps
+   `cap1(Y) = 3/2 - (Y-2)/10`, `cap2(Y) = 59/50 - (Y-2)/10`; control set
+   `U = {u >= 0 : u1+u2 >= 2}`; feasible iff `u_i <= cap_i(Y)`.
+
+### Verified independently, exact rational arithmetic
+
+`wk_continuous.py`, standard library `Fraction` only:
+
+```
+Y=5     cap1=6/5   cap2=22/25  sum=52/25   -> viable
+Y=27/5  cap1=29/25 cap2=21/25  sum=2       -> crossover, EXACT
+Y=6     cap1=11/10 cap2=39/50  sum=47/25   -> OBSTRUCTED, margin 3/50
+```
+
+- `Y* = 27/5` recovered in closed form; cap sum there is exactly `2`.
+- Dual measure `(1/2, 1/2)`; margin `(2 - capsum)/2` equals `(Y - 27/5)/10` at every
+  tested aggregate, including `Y = 5, 27/5, 6, 7, 10`.
+- Witness at `Y=5` is `(6/5, 4/5)`: meets demand exactly, respects both caps.
+- **200 aggregates on the half-line `Y >= 27/5` checked: zero violations.**
+- All of it matches the paper's own tabulated values.
+
+### What was written
+
+New subsection **3.7 "A worked case: an exact obstruction on a continuum"** in
+`paper01_obstruction_calculus_v59.tex` (previous version preserved as v58). It states the
+system, the certificate, the two audited fibres, what the instance establishes, and —
+importantly — the scope.
+
+### Scope, stated in the subsection and not overclaimed
+
+What is certified is a **static obstruction on the observation fibre**, not the full dynamic
+epistemic kernel. The audited object in that section is fibre feasibility, not the transition
+dynamics. The subsection says so explicitly and points to `prop:window-nogo` for the limits
+of what certificate pairs can decide in the dynamic two-phase model.
+
+This is weaker than the literal wording of the plan's gap ("a system whose kernel cannot be
+computed") and stronger than nothing: the fibre is a continuum, so no enumeration settles
+it, and the certificate settles it exactly with two rationals. I have not claimed, and the
+text does not claim, that a certificate decides a dynamic kernel that is in principle
+undecidable.
+
+### Still open
+
+- Supplementary **S3/A.3**, holding the three-state instance `prop:window-nogo` is proved on,
+  has not been located. Worth finding: it would let that proposition carry its own instance
+  in the main text rather than by reference.
+- The four obstructed pairs of the finite system (`12|21`, `12|31`, `13|21`, `13|31`) are
+  candidates for a second worked case showing the *epistemic* mechanism specifically, since
+  each is full-information-viable and institutionally nonviable.
