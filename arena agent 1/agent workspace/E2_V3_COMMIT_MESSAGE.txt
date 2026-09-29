@@ -1,0 +1,68 @@
+E2 v29: the source-year (v3) basis end to end
+
+The residual-timing convention is the source-year convention, in which the
+transition t->t+1 is paired with the catch of year t -- the convention the
+estimator fit_params minimises. v1/v2 paired it with the catch of year t+1 and
+so combined parameters fitted under one convention with disturbance classes
+measured under another. v3 files are additive: v1/v2 are untouched.
+
+Runner and kernels
+  src/run_intervention_v3.py            promoted source-year runner
+  results/intervention_results_v3.json  SD 114.91; classes -328.97/-287.36/-80.87
+  results/intervention_boundaries_v3.csv
+  src/run_families_v3.py -> results/e2_families_v3.csv   Table 1 reactive rows
+  src/campaign_e2_elevation_v3.py -> src/results_srcyear_v3/
+                                     K-grid, stochastic, finite floors, bootstrap
+
+Model-form rows (Section 3.6), all re-derived on v3
+  src/campaign_e2_depensation_v3.py    Allee free refit
+  src/campaign_e2_allee_declared_v3.py declared-strength row: s0 FIXED, (r,K) refitted
+  src/campaign_e2_fox_form_v3.py       Fox row, Schaefer reference computed
+  src/results_forms_v3/
+  src/superseded_v2/                   the v2-era pair, bannered and retained
+
+Paper
+  arena agent 1/paper rewrites/latex/paperE2_cod_intervention_v29.tex + .pdf
+  arena agent 1/paper rewrites/figs_e2_v3/   (make_figs_v17.py; bit-identical to
+                                              make_figs_v16.py, md5-verified)
+
+What the migration changes: the constructive bound 57.61 -> 91.59 kt; the
+vacuous floor classes 2 -> 1; the q05 BAU T=inf kernel restored at 2219.6 kt;
+the certified horizon per class (empty from T=7 under the two harsher floors,
+from T=8 under the informative one); the 60-kt rules' q10 T=inf boundary
+900.3 -> 884.6 kt.
+
+Verification (the three scripts run from the latex/ directory)
+  ..._v29_verification.py   213 checks, 0 failed
+  ..._v29_basis_audit.py    106 declared quantities, 0 on the v2 basis
+  ..._v29_sabotage.py       49 mutations, 0 holes, behind a green-control
+
+Compiles with tectonic 0.17: no errors, no overfull boxes (22 pages).
+
+Structural pass (added since the previous version of this message)
+------------------------------------------------------------------
+* Corrects Result 3.4.  The criterion for the surplus-proportional family
+  holding the WHOLE SAFE SET is (1-phi)g(K*) >= |e|, i.e. phi <= 0.531, not the
+  printed (1-phi)g_max > |e|, i.e. phi < 0.727 -- which is the criterion for
+  the kernel being NONEMPTY.  The margins are 48.5 / 5.4 / -37.8 kt, not
+  141.2 / 67.2 / -6.8 kt.  Every tabulated verdict was right, because no
+  declared member fell in the band between the two thresholds; the stated
+  criterion was not.  The family is extended by phi = 0.60 so that Table 1
+  exhibits the third regime.
+* Adds Section 2.4: four propositions with one-line proofs showing that the
+  kernel table reduces to three constants -- C* = g(K*) - |e| = 91.59 kt,
+  C_vac = g_max - |e| = 215.2 kt, and the certified horizon as an exact
+  crossing -- plus the identity that makes the no-dominance verdict structural:
+  at the reference point, a rule's protection margin plus its catch equal C*.
+* Adds Section 3.12 and Table 7: the same construction on post-moratorium
+  windows.  Self-viability is regime-dependent -- 171 kt on the assessment
+  series after the moratorium, 0 +/- 8 kt on the modern series.
+* Adds the identification answer to the pinned-K objection (Sections 3.7 and
+  3.10): the profile-likelihood set for K runs past 50,000 kt, so K is not
+  identified from above, while g(K*), C* and F'(K*) are identified across it.
+  Makes the declared observation-error conflation quantitative.
+* Adds Figures 8 and 9 (make_figs_v18.py; Figures 1-7 regenerated unchanged).
+
+Verification: 301 battery checks / 0 failed; 157 declared quantities, 0 on the
+v2 basis, 0 unexplained; 97 sabotage mutations / 0 holes behind a green
+control; compiles at 25 pages with 0 overfull boxes.
