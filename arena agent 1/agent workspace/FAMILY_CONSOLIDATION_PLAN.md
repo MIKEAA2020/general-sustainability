@@ -32,16 +32,16 @@ Sizes are the branch copies, fetched today. "Lead" = the version to build from.
 | manuscript | file | size | role | → paper |
 |---|---|---|---|---|
 | **P2 obstruction** | `fam/obstr_v55.tex` | 143 KiB | obstruction certificates; the necessity direction | **A** (core) |
-| minimax duals | `fam/minimax_v11.tex` | 41 KiB | `minimax_dual_certificates`, `certificate_duality` | **A** (fold in) |
-| P1 separation | `fam/arv_v9.tex` | 45 KiB | acceptance-gap geometry | **A** (fold in) |
+| minimax duals | `fam/minimax_v11.tex` | 41 KiB | `minimax_dual_certificates`, `certificate_duality` | **A** (fold in) — `minimax_dual_certificates_v12` is one version on; diff before use |
+| **P1 separation** | `paper rewrites/latex/paper1_assessment_separation_v63.tex` | **194 KiB** | quantifier-order separation, scalarized vs coordinate-wise (42 sections, 30.6k words) | **A** (Supplement S1 in full) |
 | **P5 sample-and-hold** | `fam/p5_v47.tex` | 131 KiB | review interval as a stability variable | **B** (core) |
 | **P4 governance delay** | `fam/p4_v41.tex` | 190 KiB | delay from observed decline to response | **B** (core) |
 | **E2 cod intervention** | `.../paperE2_cod_intervention_v29.tex` | 110 KiB | viability kernels + certified horizon on a real record | **B** (core, applied half) |
-| ARV applied regime | `.../applied_regime_viability_v9.tex` | 45 KiB | the same cod record, exact rational arithmetic | **B** (evidence) |
-| **P3 typed ledgers** | `fam/p3_v32.tex` | 163 KiB | what depletion diagnostics can certify | **C** (core) |
-| **E3 Edwards forecast** | `fam/e3_v16.tex` | 65 KiB | null result: benchmarks beat process models | **C** (lead with it) |
+| ARV applied regime | `.../applied_regime_viability_v9.tex` | 45 KiB | the same cod record, exact rational arithmetic | **B** (evidence) — **this file is byte-identical in content to `fam/arv_v9.tex`** (same title, 7,256 words). The old "P1 = arv_v9" mapping was a duplicate of this slot |
+| **P3 typed ledgers** | `fam/p3_v32.tex` | 163 KiB | what depletion diagnostics can certify | **C** (core) — **build from `paper3_material_ledgers_v50` (229 KiB, 36,387 words): same title, 40% more content** |
+| **E3 Edwards forecast** | `fam/e3_v16.tex` | 65 KiB | null result: benchmarks beat process models | **C** (lead with it) — `paperE3_edwards_forecast_ladder_v17` is one version on; diff before use |
 | E1 baselines | `fam/e1_v60.tex` | 137 KiB | case study | **C** (evidence) |
-| E4 elevation | `fam/e4_v15.tex` | 61 KiB | case study | **C** (evidence) |
+| E4 elevation | `fam/e4_v15.tex` | 61 KiB | case study | **C** (evidence) — `paperE4_edwards_intervention_v16` is one version on; diff before use |
 | welfare/support | `fam/ws_v17.tex` | 73 KiB | supporting | **C** (evidence) |
 
 Two further `.tex` lines (`e2_v23`, `e2/paperE2..._v28`) are superseded and E2 v28 is
@@ -165,9 +165,12 @@ Gaps, in order:
 ## 6. Cross-cutting, from the assessment
 
 * **Freeze and prune.** One clean manuscript plus one supplement per paper; archive the
-  other ~330 `.tex` files out of the submission tree. Note the standing constraint from
-  earlier in this session: archive, do not delete — the working set is needed until all
-  three papers are built.
+  other `.tex` files out of the submission tree. **The count is ~430 files in 79 families,
+  not ~330** (audited 2026-09-29). Note the standing constraint from earlier in this
+  session: **archive, do not delete** — the working set is needed until all three papers
+  are built. Pruning is currently unsafe: see `CONSOLIDATION_AUDIT.md`, which lists 618 KiB
+  of `revised_articles/A0xx` modules and a 582 KiB theory manuscript that no paper is
+  mapped to.
 * **Demote the verification apparatus.** The batteries, sabotage harnesses and
   "reproduced to nine significant figures" claims certify that a manuscript matches its
   own archive. That is reproducibility engineering and it belongs in a reproducibility
@@ -191,8 +194,30 @@ Gaps, in order:
    whether the paper exists at all. Writing it first, before any other part of A, is the
    assessment's instruction and it is the right one.
 
+**Audited 2026-09-29:** see `CONSOLIDATION_AUDIT.md`. Of the 16 concrete items in this
+plan, one is closed (E2). The audit found a mapping error (the P1 slot named a file that
+is a duplicate of the ARV slot, leaving the real 194 KiB separation paper unmapped),
+five leads that lag their families, and 618 KiB of modules mapped to no paper.
+
 **Resolved 2026-09-29:** all three papers go to **preprints.org**, and length is not a
 constraint. The consequence for Paper B is that it can be assembled at full length rather
 than compressed, and the supplement can carry the derivations rather than being a
 compressed remnant of them. The one thing that still has to be *decided* rather than
 *fitted* is the headline (§2 above).
+
+## Resolved 2026-09-29 (v29o): profile vs bootstrap intervals in the abstract
+
+The abstract carried the profile range [67.9, 95.2] (width 27.3, excludes zero)
+and the bootstrap interval [-89.4, 125.7] (width 215.0, includes zero) for the
+same quantity without saying why they disagree by ~8x or which one the paper's
+claim rests on. Resolved by (i) presenting the profile range as an
+identification result and explicitly not a precision one, and (ii) a paragraph
+in 3.10 explaining the disagreement. The gap is NOT the 7.4% of replicates
+whose refit puts K below the reference point: the bootstrap is wider at both
+ends (35 kt above the profile ceiling, 74 kt below its floor) even after
+restricting to the expansive regime.
+
+Guard: R26 in v29_battery.py registers every numeric token in the abstract (19
+quantities recomputed from the archive, 10 structural). A number added to the
+abstract without provenance now fails the battery. R25i/R25j pin the body's own
+bootstrap sentences, which were previously unpinned.
