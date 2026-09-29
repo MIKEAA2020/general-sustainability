@@ -472,3 +472,52 @@ Prior-art section is now **complete**. Both gaps identified in §4 and §6 have 
 closed in draft: gap (1) the HJ/viscosity paragraph --- §8.2; gap (2) the Doyen
 (2000) citation and distinction --- §7 and §8.1. The results section of Paper~A can
 now be drafted.
+
+---
+
+## 9. Integrated into the manuscript — 2026-09-29
+
+Both paragraphs are now **in the manuscript**, not merely drafted beside it.
+
+- Output: `/home/user/diffs/obstr_v56.tex` (v55 untouched, preserved alongside).
+- Location: the prior-art paragraph of §2 *Framework* — the one beginning "The
+  viability-theory background is Aubin (1991)".
+- Doyen paragraph inserted after the Veliov / Quincampoix--Veliov /
+  Cardaliaguet--Quincampoix--Saint-Pierre sentence, so that it sits between the sufficiency
+  direction and the "On the failure side" sentence, which is where it belongs: Veliov supplies
+  sufficiency, Doyen supplies synthesis under partial observation, and the obstruction calculus
+  takes up the side Doyen leaves open.
+- HJ paragraph inserted after the barrier-certificate sentence and before the sustainability
+  application domain, keeping the two verification traditions adjacent.
+- Six bibliography entries added in correct alphabetical position (reference block audited:
+  35 entries, sorted; the two apparent inversions are the manuscript's pre-existing
+  `Åström`-before-`Abaee` convention and a trailing funding/data-availability block).
+- Net change: **+801 words**.
+
+### 9.1 House-style finding — load-bearing for any future manuscript edit
+
+**`obstr_v55.tex` contains zero `\cite{}` macros.** It has no `\bibliography{}` call and no
+`thebibliography` environment. Citations are **literal author--year prose** — `(Aubin, 1991)`,
+`Aubin and Frankowska (1990)`, `` ``shadow'' `` for quotes — and the References section is a
+hand-written, alphabetized block inside `{\footnotesize ...}` following
+`\subsection{References}`. Inline math uses `\( ... \)`.
+
+The draft prose in §8.1 and §8.2 was written with natbib commands (`\citep`, `\citet`,
+`\citeyear`) and would **not** have compiled. It was converted on insertion. Any future
+prose drafted for this manuscript must use the literal convention, not citation macros.
+
+### 9.2 Caveats on the added bibliography entries
+
+- **Doyen (2000)** — volume, pages and year are exact, taken from the PDF header itself.
+- **Crandall, Ishii, and Lions (1992)**, **Mitchell, Bayen, and Tomlin (2005)**,
+  **Margellos and Lygeros (2011)** — journal, volume, issue and pages as recorded above.
+- **Bansal, Chen, Herbert, and Tomlin (2017)** and **Bansal and Tomlin (2021)** — conference
+  and year given; **page numbers omitted deliberately** because I could not confirm them, and
+  a wrong page number in a bibliography is worse than an absent one.
+
+All six should be spot-checked against the publisher records before submission.
+
+### 9.3 Status
+
+Prior-art treatment is **complete and integrated**. The results section of Paper A can now be
+drafted.
