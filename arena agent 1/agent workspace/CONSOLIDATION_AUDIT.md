@@ -16,7 +16,7 @@ below.
 |---|---|---|---|
 | §0 | fix E2 first | **done** | E2 frozen at v29; battery 421 checks / 0 failed; sabotage 136 mutations / 0 holes; basis audit 187/187; 28 pp, 10 figs, 8 tables; graphical abstract added |
 | §1 | inventory of manuscripts | **done, but defective** | 12 leads named; see §2 — one lead is the wrong file |
-| §2 | settle the P5/E2 relation | **SETTLED 2026-09-29 — the answer is no** | different objects on different systems (`r = 0.2369` vs `0.02 /yr`, 11.8x), opposite inequality directions (E2 is an upper bound, P5 a lower bound). Rewritten as §2.1-§2.5 of the plan; a same-system experiment (§2.4) is the one thing that could reopen it |
+| §2 | settle the P5/E2 relation | **SETTLED BY COMPUTATION 2026-09-29 — the answer is no** | P5's crossing scan was transcribed, validated against its committed gate (6.5013 / 47.5360 / 79.1427 / 2.3064, protective-exact stable) and re-run on cod biology: the crossing moves to **17.5 yr or beyond** in all six transports. The constraints are not merely unproven to coincide — they are incompatible. See plan §2.4 |
 | §3.1 | Paper A: prior-art section first | **open** | nothing written |
 | §3.2 | Paper A: worked case where a certificate bites | **open** | |
 | §3.3 | Paper A: decide what of P1 survives | **open — and the input file is wrong** | see §2.1 |
@@ -24,11 +24,11 @@ below.
 | §4.2 | Paper B: promote the null result | **open** | |
 | §4.3 | Paper B: 2–3 mechanism figures | **open** | no figure budget now applies |
 | §4.4 | Paper B: table of real institutional cadences | **open** | |
-| §4.5 | Paper B: reconcile E2 and ARV | **open** | now known to be easier than it looked: see §2.1 |
+| §4.5 | Paper B: reconcile E2 and ARV | **settled — complementary** | ARV is the obstruction/necessity direction (harvest-free multiplier brackets, exact rational); E2 is the construction/sufficiency direction. Opposite questions, no numbers to reconcile. Plan §8.2 |
 | §5.1 | Paper C: lead with E3's null result | **open** | |
 | §5.2 | Paper C: tie P3's typology to a consequence | **open** | |
 | §5.3 | Paper C: demote E1 and E4 to sections | **open** | |
-| §6 | freeze and prune ~330 `.tex` files | **open, and currently unsafe** | see §2.3 — it is ~430 files / 79 families, and pruning now would archive unmapped content |
+| §6 | freeze and prune ~330 `.tex` files | **unblocked for 3 of 4 blockers** | E3 +85 and E4 +88 words are front matter only; minimax v11 == v12. P3 remains the real gap (26,027 vs 36,387 words). Plan §8.1 |
 | §6 | demote the verification apparatus | **open** | belongs in a reproducibility statement |
 | §6 | one headline per paper | **partial** | B's headline drafted; A and C have none |
 | §7 | build order | **on track** | E2 done; B is next, and it starts with §2 not with drafting |

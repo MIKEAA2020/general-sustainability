@@ -103,46 +103,80 @@ must not be said on this evidence: it is a cross-system inference between system
 growth rates differ by 11.8×. Any reviewer who checks the parameters finds the window is
 an artefact of comparing a cod stock to an illustrative baseline.
 
-### 2.4 The decisive experiment — what actually settles it
+### 2.4 The decisive experiment — RUN 2026-09-29, and it answers no
 
-The question cannot be settled by comparing published numbers across two different
-systems. It requires both objects on **one** system, and both sides have archived,
-runnable code:
+P5's crossing scan was transcribed from
+`arena agent 1/other documents/rerun_campaigns/campaign_p5_crossing_scan.py`
+into `p5_cod_transport.py`, re-run on P5's baseline, then re-run on cod biology
+with the institutional parameters (`eta`, `Emax`, `dref`, `d0`, `tm`, `Zref`,
+`delta`) **held fixed**, so only the biology moves.
 
-* **P5:** `arena agent 1/other documents/rerun_campaigns/campaign_p5_crossing_scan.py`.
-  Committed validation gate: protective Euler `ρ(1) = 0.9838`, crossing `2.306`;
-  mobilising Euler `ρ(1) = 1.00055`, crossings `47.536` / `79.143`; mobilising exact
-  `ρ(1) = 1.00035`, single crossing ≈ `6.5`; protective exact stable throughout
-  (max `ρ = 0.9967` on `[0.2, 120]`).
-* **E2:** `wave_e_cod/src/campaign_e2_cadence_v3.py`.
+**Validation gate passed first** — the transcription reproduces P5's committed
+record before any new number was allowed to count:
 
-**Do this.** Calibrate P5's effort/hold model to the cod record and re-run the crossing
-scan on cod parameters, then compare the resulting `T_r^UC` with E2's `T* = 6/6/7` on the
-same stock. The work is the mapping: E2 is a surplus-production model in catch, P5 is an
-effort model with `C = qEN`, so `q` and `E_max` must be fitted to the cod catch and
-biomass series before the scan means anything.
+| committed | reproduced |
+|---|---|
+| mobilising exact, single crossing ≈ 6.5 | **6.5013** |
+| mobilising Euler, crossings 47.536 / 79.143 | **47.5360 / 79.1427** |
+| protective Euler, crossing 2.306 | **2.3064** |
+| protective exact, stable throughout | **no crossing on [0.05, 200]** |
 
-* If the cod-calibrated crossing **also** lands near 6–7 yr, there is something real to
-  explain — and the opposite directions then make it a genuine, publishable **tension**:
-  a feasible window of about half a year, or none.
-* If it lands elsewhere, which the 11.8× rate difference makes likely, the matter is
-  closed and the two results are reported separately with no link claimed.
+**Then cod** (`r = 0.2369 /yr`, `K = 5000 kt`; `q` recalibrated to place the
+equilibrium):
 
-Until that run exists, Paper B carries **no** claim linking them.
+| transport | exploitation `N*/K` | mobilising-exact crossing | `rho(1)` |
+|---|---|---|---|
+| P5 baseline (`r = 0.02`) | 0.8955 | **6.50 yr** | 1.0004 |
+| cod, equilibrium at the LRP (884.6 kt) | 0.1769 | **175.51 yr** | 14.36 |
+| cod, P5's exploitation ratio held | 0.8955 | **42.44 yr** | 8.98 |
+| cod, `q` left at P5's value | 0.9912 | **26.62 yr** | 1.92 |
+| cod at P5's own biomass scale (`K = 100`), ratio held | 0.8955 | **17.50 yr** | 1.179 |
+| cod at P5's own biomass scale, at the LRP | 0.1769 | **82.00 yr** | 1.469 |
+
+**Every transport puts the crossing at 17.5 yr or beyond** — 2.7× to 27× away
+from 6.5. The crossing is `unstable -> stable` in every one of them, so it is a
+*lower* bound throughout: on cod biology P5's loop is unstable for all review
+intervals below ~17.5 yr, while E2's certificate expires at 6–7 yr.
+
+**The near-agreement is therefore an artefact of comparing a cod certification
+horizon to an illustrative baseline's stability boundary.** On one system the two
+constraints do not merely fail to coincide — they are **incompatible**: no review
+interval on cod is both stable and certifiable. The feasible window is not the
+half-year of §2.3; it is **empty, by a factor of at least 2.5**.
+
+**Caveat, stated plainly: the transport is not unique.** P5's institutional
+parameters carry implicit scale — `Zref`, `delta`, `Emax` are absolute, not
+scaled to biomass — so "run P5 on cod" admits several defensible calibrations
+and the crossing is only pinned within 17.5–175 yr. The *conclusion* (no
+coincidence; constraints incompatible) holds in all six; the *number* does not.
+
+**A second finding, and a risk to Paper B.** The 6.501 yr is ill-conditioned:
+
+| `N*/K` | crossing |
+|---|---|
+| 0.89552 | 6.50 yr |
+| 0.89343 | 10.10 yr |
+| 0.88507 | 18.38 yr |
+| 0.87462 | 25.31 yr |
+
+A **0.2%** change in the exploitation ratio moves the crossing by 55%. P5's
+headline number is a property of one knife-edge calibration, not a robust time
+scale of the mechanism. Paper B should not lead with it without a sensitivity
+band, and this is worth raising with P5 before the merge.
 
 ### 2.5 What Paper B's headline becomes
 
-The near-match is not available as a headline. What survives is the family's own claim,
-carried by P5 alone and by E2's cadence consequence, without the coincidence:
+The near-match is dead — computed, not argued. What survives is the family's own
+claim, carried by P5 and E2 separately:
 
-> What decides whether management stabilises or destabilises a renewable resource is not
-> biology alone but the decision clock.
+> What decides whether management stabilises or destabilises a renewable
+> resource is not biology alone but the decision clock.
 
-Whether a second clause — that certification cannot see past ~6–7 years while a
-sampled-and-held loop is unstable when reviewed more often than ~6.5 — belongs in the
-headline is exactly what §2.4 decides.
-
----
+And the two results are now known to **conflict** rather than agree — certification
+expires at 6–7 yr while the sampled loop is unstable below ~17.5 yr on the same
+stock. That conflict is the interesting result, and it is stronger than the
+agreement would have been. It is also the one claim that most needs the
+calibration caveat of §2.4 carried beside it.
 
 ## 3. Paper A — theory
 
@@ -289,3 +323,74 @@ Guard: R26 in v29_battery.py registers every numeric token in the abstract (19
 quantities recomputed from the archive, 10 structural). A number added to the
 abstract without provenance now fails the battery. R25i/R25j pin the body's own
 bootstrap sentences, which were previously unpinned.
+
+---
+
+## 8. Settled 2026-09-29 — the decidable items
+
+The same treatment applied to the other open items: go to the source, then
+believe the result. Some close; some turn out to be drafting work, and are
+labelled as such rather than dressed up as settled.
+
+### 8.1 The prune blocker is cleared (§6)
+
+The three one-version gaps that were stopping the prune:
+
+| lead | family latest | delta | new sections |
+|---|---|---|---|
+| `e3_v16` | `paperE3_edwards_forecast_ladder_v17` | **+85 words** | Funding, Competing interests, Code availability |
+| `e4_v15` | `paperE4_edwards_intervention_v16` | **+88 words** | Funding, Competing interests, Code availability |
+| `minimax_v11` | `minimax_dual_certificates_v12` | **+0 words** | none — identical section set |
+
+**No scientific content is lost** by building from the leads; the deltas are
+front and back matter. Minimax v11 and v12 are the same paper. The prune is
+unblocked for these three. (P3 remains the real gap: `p3_v32` at 26,027 words
+against `paper3_material_ledgers_v50` at 36,387.)
+
+### 8.2 E2 and ARV reconciled (§4.5) — they are complementary, not competing
+
+ARV (`arv_v9` ≡ `applied_regime_viability_v9`, one file under two names) and E2
+read the same cod record and answer **opposite** questions:
+
+| | **ARV** | **E2** |
+|---|---|---|
+| direction | **obstruction / necessity** | **construction / sufficiency** |
+| arithmetic | exact rational, no fitted model | floating point, Schaefer fitted 1983–2007 |
+| certified object | a harvest-free multiplier bracket `[rho, max{rho+r, rho/(1-r)}]` | `C* = 91.59 kt`, `C_vac = 215.2 kt`, `T* = 6/6/7` |
+| finding | both collapse steps are harvest-free contractions (upper bounds 0.754, 0.372); the reference window's worst step does **not** certify — "a typology, not a blanket verdict" | the reference point is expansive (`F' = 1.1531`) and 91.59 kt is certifiably viable, for 6–7 years |
+
+They do not conflict: ARV certifies that **specific historical steps** were
+contractions regardless of removals; E2 constructs a **management bound** from a
+fit over a stated window. Different slices, opposite directions.
+
+The real link runs the other way and is worth using: ARV's harvest-free collapse
+certificates are *evidence for* E2's regime-dependence conclusion (171 kt on the
+post-moratorium window, 0 ± 8 kt on the modern series). A record whose collapse
+steps were harvest-free contractions is not one stationary production regime,
+which is exactly why E2's bound is regime-dependent. Paper B should say that.
+
+**Action for Paper B:** one paragraph, both directions named, no reconciliation
+of numbers — there is nothing to reconcile.
+
+### 8.3 What remains, honestly triaged
+
+| item | kind | what it actually needs |
+|---|---|---|
+| §3.1 Paper A prior art | **research** | literature work: HJ reachability, viscosity characterisations, contingent cones, differential-inclusion capture basins, Veliov. Nothing can be written until this is read |
+| §3.2 worked case where a certificate bites | **research** | a new computation, not a rewrite |
+| §3.3 what of P1 survives | **decidable after §3.1** | the separation result is 194 KiB / 42 sections; whether it survives is a prior-art verdict, and my recommendation stands: Supplement S1 in full |
+| §4.2 promote the null result | **writing** | the 42-stock and 32-system screens exist; they need promoting in the abstract, not re-deriving |
+| §4.3 mechanism figures | **writing** | one figure now exists (E2's graphical abstract); two more to draw |
+| §4.4 table of real cadences | **research** | needs an actual survey of institutional review cycles |
+| §5.1–5.3 Paper C | **writing** | E3's null result is written; leading with it is an editorial act |
+| §6 demote the verification apparatus | **writing** | move to a reproducibility statement |
+| §6 one headline per paper | **partly blocked** | B's headline is at §2.5; A's waits on §3.1, C's on §5.1 |
+
+**Root cause of the pattern across all of them:** the plan ordered the family by
+what was *most finished* rather than by what was *most decidable*. The items that
+closed in this session — §2, §8.1, §8.2 — closed because each had an archived
+artefact that could be read and checked. The items that remain are open because
+each needs something produced, not something adjudicated. That is a scheduling
+fact, not a failure, and the build order should reflect it: **do the decidable
+ones first** (they are cheap and they de-risk the rest), and do not let a drafting
+task queue behind a research task it does not depend on.
