@@ -44,6 +44,44 @@ Sizes are the branch copies, fetched today. "Lead" = the version to build from.
 | E4 elevation | `fam/e4_v15.tex` | 61 KiB | case study | **C** (evidence) — `paperE4_edwards_intervention_v16` is one version on; diff before use |
 | welfare/support | `fam/ws_v17.tex` | 73 KiB | supporting | **C** (evidence) |
 
+### 1.1 Disposition of the eight venue-assigned papers — 2026-09-29
+
+The family was originally presented as eight papers each carrying its own venue:
+`obstr` (Automatica, Regular), `comp` (SIAM J. Optimization), `ws` (Systems & Control
+Letters), `minimax` (Mathematics of OR), `ebc` (Automatica, Technical Communiqué), `arv`
+(CJFAS), `e1` (Int. J. Forecasting), `psuff` (IEEE TAC). The inventory above did not
+account for three of them. They are identified here by stem from the full repo tree
+(135 distinct stems searched).
+
+| given as | identified file | venue | → paper |
+|---|---|---|---|
+| `obstr` | `fam/obstr_v55.tex` | Automatica, Regular | **A** (core) |
+| `minimax` | `fam/minimax_v11.tex` | Math. OR | **A** (fold in) |
+| `comp` | `paper2_computational_certification_v9.tex` | SIAM J. Optimization | **A** (companion) |
+| `ebc` | `paper2_exact_belief_computation_v9.tex` | Automatica, Tech. Communiqué | **A** (companion) |
+| `psuff` | `paper2_probabilistic_sufficiency_v9.tex` | IEEE TAC | **A** (companion) |
+| `arv` | `fam/arv_v9.tex` | CJFAS | **B** (evidence) |
+| `e1` | `fam/e1_v60.tex` | Int. J. Forecasting | **C** (evidence) |
+| `ws` | `fam/ws_v17.tex` | Systems & Control Letters | **C** (evidence) |
+
+**Consequence.** **Five of the eight venue-assigned papers are the P2 obstruction
+programme**, split across five venues: the core plus four companions (minimax duals,
+computational certification, exact belief computation, probabilistic sufficiency). The
+3-paper architecture folds all five into Paper A. That is the largest single consolidation
+move in the plan, and it is the one that most needs a decision the plan does not record:
+whether those four companions submit separately to their named venues, or are absorbed
+into Paper A and their venues surrendered.
+
+**Confidence.** `comp` and `psuff` are high confidence — the stems match the given names.
+`ebc` is **moderate**: no file is named `ebc*`, and `paper2_exact_belief_computation` is
+the only stem whose initials fit an Automatica Technical Communiqué slot. Confirm before
+acting on it.
+
+**Root cause of the omission.** The inventory was built from the `fam/` directory plus a
+few known paths. The four P2 companions live in `paper rewrites/latex/` under
+`paper2_*` names and were never enumerated, so they were invisible to a plan built by
+listing `fam/`. Any future inventory must enumerate the whole tree, not one directory.
+
 Two further `.tex` lines (`e2_v23`, `e2/paperE2..._v28`) are superseded and E2 v28 is
 explicitly **never a base** — its verification scripts pin the hybrid convention.
 
