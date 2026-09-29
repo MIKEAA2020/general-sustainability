@@ -94,3 +94,39 @@ eight named papers had received no work. That was exculpatory rather than accura
 - The content-overlap test is **sentence-level on shared strings**; it would miss
   paraphrase. Strong evidence of disjointness, not proof.
 - Word counts for papers 9, 10, 11 include all concatenated parts.
+
+---
+
+## 5. Status update — 2026-09-29, editorial pass
+
+Items 2, 3 and 4 of the outstanding list above are now addressed; items 1 and 5 are not.
+
+- **Cross-citations (item 2): done.** Every one of the eleven files now carries a sibling
+  block naming its companion papers, with the directive that the selector principle, the
+  epistemic kernel and the observation structure are defined in paper 1 and cited by 2--5
+  rather than re-derived.
+- **6.5-year ownership (item 3): assigned.** Paper 7 computes it on the sampled map and
+  owns it; paper 8 carries an instruction to cite paper 7 and remove any independent
+  re-derivation. The instruction is a note, not yet a text edit --- the duplicate passage
+  in paper 8 still has to be removed by hand.
+- **Merge bridges (item 4): written.** Papers 9, 10 and 11 now open with a
+   paragraph and their parts are promoted to 
+  units with labels. Paper 9's bridge is the E2/ARV reconciliation, which was already
+  written; papers 10 and 11 are new.
+
+**Still outstanding, and not mechanically finishable:**
+
+1. **Framework de-duplication across papers 1--5.** The sibling blocks state the rule; the
+   actual excision of the repeated setup from papers 2--5 is editorial judgement and has
+   not been done. Each of 2--5 still contains its own derivation of the shared framework.
+2. **Bibliography merging for papers 9, 10, 11.** Each still carries two or three separate
+   reference lists. A diagnostic counted duplicate long lines: all three report zero, which
+   means the reference lists are not literal duplicates and must be merged by content, not
+   by string match.
+3. **The duplicate 6.5-year passage in paper 8** is flagged but not yet removed.
+
+Root cause of the failure that this pass corrected: the divider written into the merged
+files used  inside a Python percent-format string, which collapses to a single , so
+the bridge-insertion regex silently matched nothing. It was caught only because the script
+reported zero words for three files instead of writing them. A silent no-match is the
+failure mode to guard against: a script that edits should always report what it changed.
