@@ -275,3 +275,84 @@ was assessed from a plan summary and an external literature search, without read
 manuscript's own treatment first. Plan §2.2 identifies this failure mode in the P5/E2
 headline; it recurred here, in the one section whose entire purpose is to check before
 claiming.
+
+---
+
+## 7. Doyen (2000), read in full — 2026-09-29
+
+**Luc Doyen, "Guaranteed Output Feedback Control for Uncertain Systems under Control and
+State Constraints", *Set-Valued Analysis* 8: 149–162 (2000)**, CNRS, Centre de Recherche
+Viabilité-Contrôle, Université Paris-Dauphine. Read in full from the supplied PDF.
+
+### 7.1 What it actually proves
+
+System: `ẋ = f(x,u,w)`, `y = h(x,w)`, `u ∈ U(y)`, `w ∈ W(x)` — disturbance on **both**
+dynamics and output.
+
+> **Definition 1.1.** "We shall say that the set K is a guaranteed viability domain for the
+> system (1) if and only if there exists a **Lipschitz selection u(·) of U(·)** such that K
+> is invariant for the differential inclusion `ẋ ∈ {f(x, u(h(x,w)), w), w ∈ W(x)}`."
+
+> **Theorem 1.2.** Equivalent: (i) K is a guaranteed viability domain; (ii) there exists
+> `λ > 0` such that `∀y ∈ ℝ^q, L_λ(R^λ_K)(y) ≠ ∅`, where `R^λ_K` is a regulation map built
+> from the tangent cone `T_K(x)` and `L_λ` is the **Lipschitz kernel** of a closed
+> set-valued map.
+
+> **Corollary 1.3.** If K is guaranteed, a Lipschitz robust viable output feedback is given
+> by the **Steiner selection** `u(y) = Steiner(R(y))`.
+
+§2 gives differential-game characterisations through a **discriminating property**, and
+epi-contingent Hamilton–Jacobi conditions of the form
+`∀x ∈ K, sup_{w ∈ W(x)} D↑d_K(x)(g(x,w)) ⩽ 0`, equivalently the geometric
+`g(x,W(x)) ⊂ T_K(x)`.
+
+### 7.2 What it does *not* do — three distinctions, all in the text
+
+1. **Policy class.** Definition 1.1 requires a **Lipschitz selection**, and the closed loop
+   is `u(h(x,w))` — a **memoryless** function of the current output. Doyen's necessity is
+   relative to *Lipschitz memoryless* output feedbacks. It does not speak to non-Lipschitz
+   policies, nor to policies using the observation history.
+2. **Property.** Doyen's property is **invariance of a closed set K** — maintaining the
+   state exactly inside K — under worst-case disturbance. That is one specific viability
+   property.
+3. **Direction.** Theorem 1.2 is an equivalence and Corollary 1.3 **constructs** a
+   feedback. The obstruction side — a systematic, finitely checkable certificate of
+   *non-existence* — is not developed; the paper's thrust is synthesis. And **Doyen himself
+   disclaims the harder case**: "to our knowledge, **no general viability result is
+   available in this differential game context with imperfect and/or partial
+   information**."
+
+### 7.3 The citation finding
+
+`obstr_v55` mentions "Doyen" **12 times — and every occurrence is the sustainability
+application cluster**: Béné, Doyen & Gabay (2001); De Lara & Doyen (2008); Doyen et al.
+(2012); Doyen & Gajardo (2020). The 2000 output-feedback paper's machinery appears
+**zero** times: "Lipschitz kernel" 0, "Steiner" 0, "tangent cone" 0, "invariance" 0.
+
+So P2 cites Doyen the *applied* author and misses Doyen the *output-feedback theorist* —
+the same person, and the closest prior art to its central claim.
+
+### 7.4 Resolved verdict
+
+**The claim survives.** Doyen (2000) is the nearest neighbour and must be cited, but it does
+not close the gap, for the three reasons in §7.2 — all of which are stated in Doyen's own
+text and require no interpretation.
+
+For completeness, P2's prior art is stronger than this document first credited: it already
+engages the barrier-certificate/verification lineage (Prajna & Jadbabaie 2004; Prajna,
+Jadbabaie & Pappas 2007; Prajna & Rantzer 2005; Maghenem & Sanfelice 2019), the
+discriminating-kernel calculus (Cardaliaguet–Quincampoix–Saint-Pierre), and states its
+novelty claim narrowly: the obstruction certificates "have not been stated in this form;
+… in particular the certification criterion and the timing bound".
+
+**Two writing jobs remain, both small:**
+
+1. **Cite Doyen (2000) and distinguish** on policy class (Lipschitz memoryless vs every
+   observation-based policy), property (exact invariance vs the certificate objects), and
+   direction (synthesis vs obstruction) — quoting his own disclaimer in §7.2(3).
+2. **Add the HJ reachability / viscosity paragraph.** "viscosity" occurs **zero** times in
+   22,615 words. P2 engages the *barrier-certificate* verification tradition but not the
+   *HJ reachability* one — and Doyen's §2 HJ–Isaacs conditions are the natural bridge into
+   it, since they belong to the same viability school P2 already speaks to.
+
+**Neither blocks drafting.** The blocking item identified in §4 is resolved.

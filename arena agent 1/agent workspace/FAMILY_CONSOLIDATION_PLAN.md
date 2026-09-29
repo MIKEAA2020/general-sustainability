@@ -522,8 +522,22 @@ and the priority between them flips:
    **exactly** — narrower than P2's "every policy" framing, and likely from the same school
    P2 already engages. A citation-and-distinguish job, still required.
 
-The blocking step is therefore **writing the viscosity paragraph**, not obtaining the 2000
-paper.
+**BLOCKING ITEM RESOLVED 2026-09-29.** Doyen (2000) was read in full (§7 of
+`PAPER_A_PRIOR_ART.md`). **The claim survives.** Its Definition 1.1 requires a **Lipschitz
+selection** and a **memoryless** closed loop `u(h(x,w))`; its property is **exact
+invariance** of a closed set; and its thrust is synthesis (Corollary 1.3 constructs a
+feedback by Steiner selection), with Doyen himself disclaiming the harder case — "no
+general viability result is available in this differential game context with imperfect
+and/or partial information". So it is nearest neighbour, not anticipation.
+**Citation finding:** `obstr_v55` mentions "Doyen" 12 times, but every occurrence is the
+sustainability-application cluster (Béné–Doyen–Gabay 2001; De Lara–Doyen 2008; Doyen et
+al. 2012; Doyen–Gajardo 2020). The 2000 paper's machinery occurs **zero** times —
+"Lipschitz kernel" 0, "Steiner" 0, "tangent cone" 0, "invariance" 0. The paper cites
+Doyen the applied author and misses Doyen the output-feedback theorist.
+**Two small writing jobs remain**: (1) cite Doyen (2000) and distinguish on policy class,
+property and direction, quoting his own disclaimer; (2) add the HJ reachability / viscosity
+paragraph (0 occurrences in 22,615 words), using Doyen's §2 HJ–Isaacs conditions as the
+bridge. **Neither blocks drafting.**
 
 **Also:** do not fold P1's 194 KiB separation result into Paper A until this is settled.
 It carries its own prior-art question (quantifier-order separation against
