@@ -49,7 +49,14 @@ res3 = json.load(open(f"{REPO}/results/intervention_results_v3.json"))
 res2 = json.load(open(f"{REPO}/results/intervention_results_v2.json"))
 
 V3E = f"{REPO}/src/results_srcyear_v3"
-V2E = "/home/user/fam/e2/rerun_campaigns/results"
+# The v2 (registered-convention) elevation outputs live in the archived
+# rerun_campaigns tree. After the workspace restore they are no longer
+# mirrored into fam/e2, so fall back to the repository copy.
+_V2_CANDIDATES = ("/home/user/fam/e2/rerun_campaigns/results",
+                  "/home/user/repo/arena agent 1/other documents/"
+                  "rerun_campaigns/results")
+V2E = os.environ.get("E2_V2") or next(
+    (c for c in _V2_CANDIDATES if os.path.isdir(c)), _V2_CANDIDATES[0])
 
 
 def csv3(name):
@@ -77,10 +84,14 @@ def ff(path, keycol=None):
 D = []
 
 
-def q(label, v2, v3, note="", allow=()):
-    """allow: regexes for contexts in which the v2 value is legitimate
+def q(label, v2, v3, note="", allow=(), whole=False):
+    """whole: count against the WHOLE document, not the
+    2.3-stripped text (Section 2.4 lies inside that block).
+
+    allow: regexes for contexts in which the v2 value is legitimate
     (an explicit registered-convention comparison), not a migration defect."""
-    D.append({"label": label, "v2": v2, "v3": v3, "note": note, "allow": allow})
+    D.append({"label": label, "v2": v2, "v3": v3, "note": note,
+            "allow": allow, "whole": whole})
 
 
 # --- residual summary (Section 2) -----------------------------------------
@@ -240,12 +251,49 @@ q("xteNCAM 2005-2024 F'(LRP) (Section 3.12)", "", "0.925")
 q("xteNCAM 1954-2007 fitted K (Section 3.11)", "", "4812.9")
 q("xteNCAM recent fitted K (Section 3.12)", "", "472")
 
+# --- the cadence pass (Table 2, Section 3.4; form generality, Section 2.4) --
+# These numbers are new in v3 and have no v2 counterpart, so the v2 slot is
+# empty on purpose: the audit then only asks that the v3 value is printed.
+CAD = {}
+for _r in csv.DictReader(open(REPO + "/src/results_cadence_v3/e2_cadence_v3.csv",
+                              encoding="utf-8")):
+    CAD[(_r["section"], _r["quantity"])] = _r["value"]
+_ER = json.load(open(REPO + "/results/intervention_results_v3.json"))["erosion"]
+
+q("cadence horizon, worst/q05 class, any catch <= 150 kt", "",
+  CAD[("cadence", "horizon, worst/q05 classes, any catch <= 150 kt")])
+q("cadence horizon, informative class, any catch <= 150 kt", "",
+  CAD[("cadence", "horizon, informative class, any catch <= 150 kt")])
+q("cadence horizon at C_vac, informative class", "",
+  CAD[("cadence", "horizon at C = 215.2 kt (C_vac, informative class)")])
+for _i, _v in enumerate(
+        CAD[("cadence", "year-on-year increment of r_T (kt)")].split(", ")):
+    q("erosion-margin increment %d (kt)" % (_i + 1), "", _v)
+# The margin series is generated from the UNROUNDED archived defect with the
+# ROUNDED archived a_max; Section 3.4 now states exactly that, so the eight
+# values a reader recomputes are the eight the paper prints.
+for _T in range(1, 9):
+    q("erosion margin r_%d (Section 3.4, kt)" % _T, "",
+      "%.1f" % (_ER["eps_train_max"] * (_ER["a_max"] ** _T - 1)
+                / (_ER["a_max"] - 1)))
+
+# --- cross-form constants (Section 2.4): the formula is not Schaefer-specific
+q("Fox C* from the formula", "", "79.1", note="tabulated value is 79.05",
+  whole=True)
+q("Fox C_vac from the formula", "",
+  "%.1f" % float(CAD[("generality", "C_vac|Fox (declared row)")]), whole=True)
+q("Allee C*, declared s0 row", "", CAD[("generality", "C*|Allee (declared s0 row)")],
+  whole=True)
+q("Allee C*, data-preferred row", "",
+  CAD[("generality", "C*|Allee (data-preferred row)")], whole=True)
+
 # --------------------------------------------------------------------------
 # AUDIT
 # --------------------------------------------------------------------------
-def count(tok):
+def count(tok, src=None):
     """Occurrences of a numeric token, skipping those inside \\vspace etc."""
-    return len(re.findall(r"(?<![\d.])" + re.escape(tok) + r"(?!\d)", TEXNC))
+    return len(re.findall(r"(?<![\d.])" + re.escape(tok) + r"(?!\d)",
+                          src if src is not None else TEXNC))
 
 
 def count_excused(d):
@@ -267,7 +315,8 @@ def count_excused(d):
 rows = []
 for d in D:
     n2 = count_excused(d) if d["v2"] not in ("", "empty") else 0
-    n3 = count(d["v3"]) if d["v3"] not in ("", "empty") else 0
+    n3 = (count(d["v3"], tex) if d.get("whole") else count(d["v3"])) \
+        if d["v3"] not in ("", "empty") else 0
     rows.append((d, n2, n3))
 
 print("=" * 96)
