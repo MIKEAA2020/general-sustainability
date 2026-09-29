@@ -167,8 +167,10 @@ Changed in `FAMILY_CONSOLIDATION_PLAN.md`:
 Next, in order:
 1. Diff the three unverified one-version gaps (E3, E4, minimax) — cheap, and it closes the
    last unknown before any pruning.
-2. Diff A011/A012 against `p5_v47`/`p4_v41` to see whether Paper B's supplement gains
-   content or is redundant.
+2. ~~Diff A011/A012 against `p5_v47`/`p4_v41`~~ **done 2026-09-29**: A012 gains real
+   content (a model-family registry: bisection intervals, orbit folds, Floquet multipliers);
+   A011 keeps three case studies and four methodology sections with no counterpart in P5;
+   A020 is 91% subsumed. None is redundant enough to archive. Plan section 8.4.
 3. ~~Then §2 — settle the P5/E2 relation~~ **done 2026-09-29**: they are not the same
    quantity. The remaining task is the same-system experiment of §2.4 — calibrate P5's
    effort/hold model to the cod record (`q`, `E_max`) and re-run the crossing scan on cod

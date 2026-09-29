@@ -394,3 +394,55 @@ each needs something produced, not something adjudicated. That is a scheduling
 fact, not a failure, and the build order should reflect it: **do the decidable
 ones first** (they are cheap and they de-risk the rest), and do not let a drafting
 task queue behind a research task it does not depend on.
+
+### 8.4 A011 / A012 / A020 against P5 and P4 — supplement gains content
+
+Asked: does Paper B's supplement gain anything from the `revised_articles/`
+modules that sit on top of P5 and P4, or are they redundant? Screen used
+(`diffs/compare.py`): extract every number of three or more significant digits
+from each document and ask how many of the module's numbers appear nowhere in
+the paper.
+
+| module | words | vs | numbers shared | verdict |
+|---|---|---|---|---|
+| A011 periodic review | 5,692 | P5 (`p5_v47`, 19,765 w) | 17 of 22 (**77%**) | **keep as supplement** — moderate confidence |
+| A012 delay dynamics | 8,006 | P4 (`p4_v41`, 29,662 w) | 57 of 76 (**75%**) | **keep as supplement** — high confidence |
+| A020 two channels | 2,295 | P4 | 21 of 23 (**91%**) | **probably subsumed** — weak confidence |
+
+**A012 — the clear case.** Its absent numbers are unambiguously registry data
+with no counterpart in P4: a persistence bisection at the upper boundary
+(`tau` in `[148.125, 148.438]` yr), crossings at `17.568` and `18.362` yr at the
+out-of-range `eta = 10`, periodic-orbit folds near `5.574–5.575` and `5.587` yr,
+a second branch with crossings at `3.7849` and `150.12` yr, a real Floquet
+multiplier running `1.0514` at `tau = 5.584` to `0.998983` at `tau = 5.587`,
+supercritical amplitude onset with fitted exponent `0.59`, and sustained cycles
+of `360–380` yr in the lower regime. The module is titled *"A Registered Family
+of Renewable-Resource Models"* — it is a family registry, which is what a
+supplement is for. Fold it in.
+
+**A011 — keep, with a caveat.** Three named case studies appear nowhere in P5:
+Bangkok pumping (declines after 1999), Peruvian anchoveta (1950–2019 input),
+and Icelandic cod with an author-calculated coefficient of variation falling
+from `0.387` to `0.143` post-implementation. Four methodology sections have no
+counterpart heading: the cross-sectional RAM spectral screen, power and
+detectability, prospective identification designs, and governance-event panels.
+**Caveat:** P5 is an IMRaD paper (14 headings) and A011 is a structured module
+(23 headings); they share only "conclusion", so the section test cannot
+establish redundancy. A human read is needed to confirm the spectral screen is
+not already reported in P5's Methods.
+
+**A020 — probably subsumed.** 91% numeric overlap; the only two absent numbers
+are a SHA-256 fragment and one frequency (`0.0583`). Its framing sections (two
+delays, sampled protection, pacing) may still be distinct, and at 2,295 words it
+is cheap to keep rather than judge.
+
+**Limits of this screen, stated so the verdict is not over-read.** A shared
+number means shared content; an absent number does not prove absence, because a
+result can be reported at different rounding or in different units. The section
+test failed outright as a redundancy test because the two genres differ. So
+these are screening verdicts: A012 is safe to fold in on this evidence, A011
+needs one human read, A020 is a judgement call.
+
+**Consequence for §6:** none of the three is *redundant enough to archive*.
+The prune should treat `revised_articles/` as supplement feedstock, not as
+prunable duplicates.
