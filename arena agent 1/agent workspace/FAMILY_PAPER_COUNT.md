@@ -1,6 +1,7 @@
 # Optimal number of papers — recommendation, 2026-09-29
 
-**Recommendation: 8.** Reasoning, and the evidence it rests on, below.
+**REVISED 2026-09-29 (see §0): recommendation is 10, not 8.**
+~~Recommendation: 8.~~ Reasoning, and the evidence it rests on, below.
 
 The question reduces to something sharper than "how many". Since preprints.org is a
 *staging* venue with **no length limit**, posting more preprints buys nothing on its own.
@@ -92,3 +93,79 @@ floating point, with no numbers to reconcile. `ARV` at 7,256 words is too thin a
 - Word counts for `E1`, `E3`, `E4`, `ws` are inferred from file sizes, not counted.
 - The economics material (`ecomod_v37`, `manuscript_ECOMOD_v37`, `paper3_JIE_submission`,
   `JIE_cover_letter`) is **not** in any of the eight. If it is live, it is a ninth.
+
+---
+
+## 0. Revision — the count is 10, not 8
+
+The §1 check used **section-title** overlap and proved the P2 companions are not absorbed.
+It did not test content. That test has now been run: sentences of eight or more words were
+extracted from all five P2 manuscripts and intersected.
+
+| pair | shared sentences | overlap of the smaller |
+|---|---|---|
+| `obstr` ↔ `psuff` | 0 | **0.0%** |
+| `obstr` ↔ `comp` | 0 | **0.0%** |
+| `obstr` ↔ `ebc` | 0 | **0.0%** |
+| `obstr` ↔ `minimax` | 1 | 0.7% |
+| `minimax` ↔ `psuff` | 2 | 1.5% |
+| `psuff` ↔ `comp` | 4 | 1.9% |
+| `psuff` ↔ `ebc` | 3 | 3.4% |
+| `comp` ↔ `ebc` | 4 | 4.5% |
+| `minimax` ↔ `comp` / `ebc` | 1 / 0 | 0.7% / 0.0% |
+
+Sentence counts: `obstr` 557, `psuff` 248, `comp` 216, `minimax` 137, `ebc` 89.
+
+**The five are essentially disjoint in content.** This reverses the two merges of §3:
+
+- `minimax` → `obstr` was justified by thinness, not duplication. With no duplication to
+  remove, folding it in buries an independent result. **It stands alone** at 6,107 words,
+  which is a legitimate length for a Mathematics of OR research article.
+- `ebc` → `comp` likewise. **It stands alone** at 3,420 words — which is about right for an
+  Automatica *Technical Communiqué*, the short format it was already assigned.
+
+The revised count therefore matches the original venue assignment, which gave the five P2
+papers five separate venues.
+
+### The revised ten
+
+| # | paper | from | words | venue |
+|---|---|---|---|---|
+| 1 | Obstruction certificates under incomplete observation | `obstr` | 22,615 | Automatica, Regular |
+| 2 | Exact probabilistic sufficiency | `psuff` | 11,804 | IEEE TAC, Full |
+| 3 | Computational certification | `comp` | 9,924 | SIAM J. Optimization |
+| 4 | Minimax dual certificates | `minimax` | 6,107 | Mathematics of OR |
+| 5 | Exact belief computation | `ebc` | 3,420 | Automatica, Tech. Communiqué |
+| 6 | Quantifier-order separation in assessment | `P1` | ~30,600 | Math. OR / SIAM J. Opt |
+| 7 | The decision clock | `P5` + `P4` | ~45,600 | preprints first |
+| 8 | Certified horizons on a real record | `E2` + `ARV` | ~23,500 | CJFAS |
+| 9 | What depletion numbers can certify | `P3` + `E4` | ~45,000 | Ecological Economics |
+| 10 | Forecasting baselines and the null | `E1` + `E3` + `ws` | ~41,000 | Int. J. Forecasting |
+
+### What still justifies merging, and what does not
+
+**Paper 7 survives as a merge** because `P5` and `P4` share an actual *result* — both report
+the 6.5-year crossing. That is content overlap, not thinness, and splitting would make each
+cite the other for the same number. This is the one merge the evidence supports.
+
+**Papers 1–5 stand apart** because the overlap test found nothing to remove by merging.
+Each poses its own question and carries its own result.
+
+**Papers 8, 9, 10** are unchanged: 8 because two directions on one record were already
+reconciled and `ARV` is thin alone; 9 and 10 because they split by question, not length.
+
+### Consequence for preprints.org
+
+Ten preprints, ten DOIs, ten journal submissions. The salami-slicing risk is smaller than it
+looks precisely because the overlap is near zero — but the corollary is that each paper must
+cite its siblings for the shared framework rather than re-deriving it. With five disjoint
+P2 papers, a reader of paper 3 needs to be told, in one line, that the selector principle and
+epistemic kernel are defined in paper 1.
+
+### Remaining caveats
+
+- The overlap test is sentence-level on shared strings. It would miss paraphrase-level
+  duplication. It is strong evidence of disjointness, not proof.
+- `ebc` identification remains moderate confidence (no file named `ebc*`).
+- Word counts for `E1`, `E3`, `E4`, `ws`, `P1` are inferred from file size, not counted.
+- The economics material is in none of the ten; if live, that is an eleventh.
