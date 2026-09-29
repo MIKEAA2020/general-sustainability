@@ -1375,11 +1375,35 @@ chk("R25b the abstract's bootstrap bound matches the conditional archive row",
     and ("%.1f" % float(_bhi)) in ABS,
     "%s [%s, %s]" % (_med, _blo, _bhi))
 chk("R25c the abstract states the conditioning, not just the number",
-    "in the expansive regime" in ABS)
+    "restricted to the expansive regime on which the results are" in ABS
+    and "of replicates" in ABS)
+# Both intervals contain zero, so the conditioning changes precision, not the
+# sign of the claim. Report the pair and let the reader see that.
+chk("R25f the abstract carries BOTH bootstrap figures, unconditional first",
+    ("73.7" in ABS and "-89.4" in ABS and "125.7" in ABS)
+    and ABS.index("73.7") < ABS.index("88.1"))
+chk("R25g Section 3.10 states how many replicates the conditioning keeps",
+    "72.9" in FLAT and "2000" + BS + ") replicates" in FLAT)
 chk("R25d Section 3.10 states what the conditioning costs",
     "Restricted to the expansive regime" in FLAT)
 chk("R25e the abstract carries the survival contrast and the self-viability pair",
     all(x in ABS for x in ("0.91", "0.65", "171", "0 " + BS + "pm 8")))
+
+# The share the conditioning keeps is a number, and numbers get corrupted.
+# Pin it to the archive rather than to the prose that quotes it.
+_share = 0.0
+try:
+    import numpy as _np
+    _bj = list(csv.DictReader(open(I_OUT2 + "/e2_bootstrap_joint.csv")))
+    _K = _np.array([float(r["K"]) for r in _bj])
+    _share = 100.0 * float((_K >= 2 * Ks).mean())
+    chk("R25h the abstract's replicate share is the archived one",
+        ("%d" % round(_share)) + BS + "%" + BS + ") of replicates" in ABS
+        and ("%.1f" % _share) in FLAT,
+        "archive %.1f%%, abstract prints %d%%" % (_share, round(_share)))
+except Exception as exc:                      # pragma: no cover
+    chk("R25h the abstract's replicate share is the archived one", False,
+        "could not recompute: %s" % exc)
 
 print()
 print("%d passed, %d failed" % (len(PASS), len(FAIL)))

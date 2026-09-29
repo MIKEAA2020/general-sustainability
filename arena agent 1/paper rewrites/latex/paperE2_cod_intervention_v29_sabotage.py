@@ -280,16 +280,27 @@ MUT = [
      "215.2 (" + chr(92) + "(C_{\\mathrm{vac}}" + chr(92) + ")) & 5 & 6 & 7"),
 
     # --- the numbers the abstract prints -----------------------------------
-    ("the abstract's bootstrap bound corrupted",
-     chr(92) + "(88.1" + chr(92) + ") kt with",
-     chr(92) + "(88.7" + chr(92) + ") kt with"),
+    ("the abstract's conditional bootstrap figure corrupted",
+     chr(92) + "(88.1" + chr(92) + ") kt",
+     chr(92) + "(88.7" + chr(92) + ") kt"),
     ("the abstract's bootstrap conditioning dropped",
-     "in the expansive regime the bound", "the bound"),
+     "restricted to the expansive regime on which the results are conditional",
+     "restricted to a subsample of replicates"),
     ("the abstract's profile-set range corrupted",
      "[67.9, 95.2]", "[67.9, 95.8]"),
     ("the abstract's self-viability figure corrupted",
      chr(92) + "(171" + chr(92) + ") kt on the post-moratorium window",
      chr(92) + "(177" + chr(92) + ") kt on the post-moratorium window"),
+
+    # --- the conditioning is now stated with its cost ----------------------
+    ("the abstract's unconditional bootstrap figure corrupted",
+     chr(92) + "(73.7" + chr(92) + ") kt with",
+     chr(92) + "(73.1" + chr(92) + ") kt with"),
+    ("the replicate share the conditioning keeps is overstated",
+     chr(92) + "(73" + chr(92) + "%" + chr(92) + ") of replicates",
+     chr(92) + "(93" + chr(92) + "%" + chr(92) + ") of replicates"),
+    ("the Section 3.10 replicate share corrupted",
+     "72.9", "79.2"),
 
 ]
 

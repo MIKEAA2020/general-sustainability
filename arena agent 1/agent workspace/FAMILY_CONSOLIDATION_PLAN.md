@@ -105,7 +105,11 @@ Gaps, in order:
 
 **Working title.** *The decision clock: how review timing and response delay determine
 resource stability*
-**Venues.** *Nature Sustainability*, *PNAS*, *Nature Communications*
+**Venue.** **preprints.org first**, journal submission derived from it afterwards.
+**Length is not a constraint** — do not compress for a word budget. This retires the
+`cut the math density hard` instruction from the original assessment: it was advice for a
+NatSustain word limit that no longer applies. Keep the figures and the mechanism clear
+because clarity is worth having, not because space is short.
 **Core.** P5 (sample-and-hold) + P4 (governance delay) + E2 and ARV (the cod
 certification). The assessment's reasoning for merging: these are two halves of one idea.
 
@@ -122,10 +126,10 @@ Gaps, in order:
    robust institutional cycles, and the 32-system cross-sector search finds no
    unconfounded oscillator. Currently framed as a limitation. Well-framed null results
    are publishable at this level; buried ones are not. It belongs in the abstract.
-3. **Cut the math density hard** for a NatSustain-calibre venue, and put the mechanism in
-   two or three figures. E2's Figure 10 is the model: one glance, no notation. Figure
-   budget to plan: (i) review interval → stability, from P5; (ii) governance delay → the
-   stabilising window, from P4; (iii) the certified horizon against catch, from E2.
+3. **Put the mechanism in two or three figures.** E2's Figure 10 is the model: one glance,
+   no notation. Figure plan: (i) review interval → stability, from P5; (ii) governance
+   delay → the stabilising window, from P4; (iii) the certified horizon against catch,
+   from E2. No figure budget to respect.
 4. **Make the policy variable actionable.** The practitioner literature shows cadence is a
    live, varying institutional choice — annual, biennial, three-year, five-year, six-year.
    E2's Discussion already names two real ones: the IWC's six-year implementation reviews
@@ -187,7 +191,8 @@ Gaps, in order:
    whether the paper exists at all. Writing it first, before any other part of A, is the
    assessment's instruction and it is the right one.
 
-Open item needing a human either way: **the venue for Paper B**, because it sets the word
-and figure budget — E2 alone is ~12,100 narrative words and 28 pages, and Paper B is E2
-plus two more manuscripts, so Paper B will have to be far shorter than the sum of its
-parts, with the rest moved to a supplement.
+**Resolved 2026-09-29:** all three papers go to **preprints.org**, and length is not a
+constraint. The consequence for Paper B is that it can be assembled at full length rather
+than compressed, and the supplement can carry the derivations rather than being a
+compressed remnant of them. The one thing that still has to be *decided* rather than
+*fitted* is the headline (§2 above).
