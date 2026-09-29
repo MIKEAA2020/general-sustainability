@@ -1,0 +1,155 @@
+#!/usr/bin/env python3
+"""Commit the cadence pass (v29j-n) to e2-v3-source-year.
+
+One commit, three groups:
+
+  * the paper, its compiled PDF and the three named verification scripts, in
+    the paper's own directory under the names Data availability cites;
+  * the cadence campaign, its archived outputs and the Figure 10 generator, in
+    the source tree the paper's provenance sentence points at;
+  * the five patch scripts that produced the pass, kept as workspace records.
+
+The clone in /home/user/repo is a blobless partial checkout and cannot commit,
+so this goes through the Git data API: blobs by content, a tree on top of the
+branch's base tree, one commit, one ref update. Zero disk.
+"""
+from __future__ import annotations
+
+import base64
+import json
+import os
+import sys
+import time
+import urllib.error
+import urllib.request
+
+OWNER, REPO, BRANCH = "MIKEAA2020", "general-sustainability", "e2-v3-source-year"
+API = "https://api.github.com"
+WORK = "/home/user"
+PAT = open(os.path.join(WORK, "uploads", "github_pat.txt"), encoding="utf-8").read().strip()
+
+LATEX = "arena agent 1/paper rewrites/latex"
+FIGS = "arena agent 1/paper rewrites/figs_e2_v3"
+WS = "arena agent 1/agent workspace"
+SRC = "wave_e_cod/src"
+
+FILES = [
+    # --- the paper, in the directory and under the names it cites ----------
+    (LATEX + "/paperE2_cod_intervention_v29.tex",
+     "/home/user/fam/e2/paperE2_cod_intervention_v29.tex"),
+    (LATEX + "/paperE2_cod_intervention_v29.pdf",
+     "/home/user/fam/e2/paperE2_cod_intervention_v29.pdf"),
+    (LATEX + "/paperE2_cod_intervention_v29_verification.py",
+     "/home/user/v29_battery.py"),
+    (LATEX + "/paperE2_cod_intervention_v29_sabotage.py",
+     "/home/user/sabotage_v29.py"),
+    (LATEX + "/paperE2_cod_intervention_v29_basis_audit.py",
+     "/home/user/basis_audit.py"),
+    (FIGS + "/fig10_cadence.png", "/home/user/fam/figs_e2_v3/fig10_cadence.png"),
+    # --- what the provenance sentence names --------------------------------
+    (SRC + "/campaign_e2_cadence_v3.py",
+     "/home/user/repo/wave_e_cod/src/campaign_e2_cadence_v3.py"),
+    (SRC + "/results_cadence_v3/e2_cadence_v3.csv",
+     "/home/user/repo/wave_e_cod/src/results_cadence_v3/e2_cadence_v3.csv"),
+    (SRC + "/results_cadence_v3/e2_cadence_v3.json",
+     "/home/user/repo/wave_e_cod/src/results_cadence_v3/e2_cadence_v3.json"),
+    (SRC + "/make_figs_v19.py",
+     "/home/user/repo/wave_e_cod/src/make_figs_v19.py"),
+    (SRC + "/figs_e2_v3/fig10_cadence.png",
+     "/home/user/repo/wave_e_cod/src/figs_e2_v3/fig10_cadence.png"),
+]
+for tag in "jklmn":
+    FILES.append((WS + "/make_v29%s.py" % tag,
+                  "/home/user/make_v29%s.py" % tag))
+
+
+def api(method, path, payload=None):
+    url = API + path
+    data = json.dumps(payload).encode() if payload is not None else None
+    req = urllib.request.Request(url, data=data, method=method)
+    req.add_header("Authorization", "Bearer " + PAT)
+    req.add_header("Accept", "application/vnd.github+json")
+    req.add_header("X-GitHub-Api-Version", "2022-11-28")
+    if data is not None:
+        req.add_header("Content-Type", "application/json")
+    try:
+        with urllib.request.urlopen(req, timeout=180) as r:
+            return json.loads(r.read())
+    except urllib.error.HTTPError as e:
+        sys.exit("HTTP %d on %s %s\n%s" % (e.code, method, path,
+                                           e.read()[:600].decode()))
+
+
+missing = [l for _, l in FILES if not os.path.exists(l)]
+if missing:
+    sys.exit("missing local files: %s" % missing)
+total = sum(os.path.getsize(l) for _, l in FILES)
+print("files: %d  (%.2f MiB)" % (len(FILES), total / 1048576))
+
+parent = api("GET", "/repos/%s/%s/git/ref/heads/%s" % (OWNER, REPO, BRANCH))["object"]["sha"]
+base_tree = api("GET", "/repos/%s/%s/git/commits/%s" % (OWNER, REPO, parent))["tree"]["sha"]
+print("parent %s -> base tree %s" % (parent[:10], base_tree[:10]))
+
+entries, t0 = [], time.time()
+for i, (rpath, lpath) in enumerate(FILES, 1):
+    with open(lpath, "rb") as fh:
+        content = fh.read()
+    blob = api("POST", "/repos/%s/%s/git/blobs" % (OWNER, REPO),
+               {"content": base64.b64encode(content).decode(),
+                "encoding": "base64"})
+    entries.append({"path": rpath, "mode": "100644", "type": "blob",
+                    "sha": blob["sha"]})
+    print("  blob %2d/%2d  %-64s %5.1fs"
+          % (i, len(FILES), rpath.split("/")[-1], time.time() - t0))
+
+tree = api("POST", "/repos/%s/%s/git/trees" % (OWNER, REPO),
+           {"base_tree": base_tree, "tree": entries})
+
+msg = """E2 v29: the cadence pass --- the certified horizon is not a policy variable
+
+The paper's most applied result was carried only by a table. It is now a
+result in its own right: the certified horizon is 6/6/7 years for every
+constant catch from zero to the moratorium and for every declared reactive
+and graded rule, and no policy lengthens it.
+
+  * new Table 2 (horizon against constant catch) and Figure 10, generated by
+    make_figs_v19.py, which refuses to write the panel unless every tabulated
+    catch reproduces the archived cadence campaign;
+  * new campaign_e2_cadence_v3.py and its outputs in results_cadence_v3/
+    (12/12): 48 (rule, class) pairs confirm Proposition 2.4's exact crossing
+    against the committed kernel, and the three constants recompute on the Fox
+    and both Allee rows, so they are not Schaefer-specific;
+  * the Discussion draws the management consequence against two real
+    institutional cadences (IWC six-year implementation reviews / aboriginal
+    strike-limit blocks, NOAA management-track assessments).
+
+Defects the pass found and fixed:
+  * the cadence table was spliced into the middle of a Section 3.4 sentence
+    and numbered 8 while sitting between Tables 1 and 2; the tables are now
+    numbered in order of first citation and the sentence is whole;
+  * the printed margin series was not reproducible from its own stated inputs
+    (it used the unrounded archived defect 328.9725 with the rounded
+    a_max = 1.1531, not the 329.0 the prose named);
+  * the mechanism sentence and the Discussion understated the result ("from
+    the fourth year" -- every increment exceeds the whole catch range, the
+    smallest by a factor of four);
+  * the pair count was 33 where the campaign tries 48;
+  * Data availability credited Figures 1-7 only, though the paper has nine.
+
+Verification: 380 checks pass, the mutation harness reports 0 holes across
+124 single-site corruptions, and the basis audit reports 178 declared numbers
+all on the v3 basis. 28 pages, 10 figures."""
+
+commit = api("POST", "/repos/%s/%s/git/commits" % (OWNER, REPO),
+             {"message": msg, "tree": tree["sha"], "parents": [parent]})
+api("PATCH", "/repos/%s/%s/git/refs/heads/%s" % (OWNER, REPO, BRANCH),
+    {"sha": commit["sha"], "force": False})
+
+back = api("GET", "/repos/%s/%s/git/trees/%s?recursive=1" % (OWNER, REPO, commit["sha"]))
+have = {e["path"]: e["sha"] for e in back["tree"]}
+bad = [p for (p, _), e in zip(FILES, entries) if have.get(p) != e["sha"]]
+print("verified %d/%d paths" % (len(FILES) - len(bad), len(FILES)))
+if bad:
+    sys.exit("MISMATCH: %s" % bad)
+print("\nPUSHED %s @ %s\nhttps://github.com/%s/%s/tree/%s"
+      % (BRANCH, commit["sha"][:10], OWNER, REPO, BRANCH))
