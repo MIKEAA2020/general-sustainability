@@ -188,12 +188,19 @@ observation-based policy works?*
 
 Gaps, in order:
 
-1. **Prior art first, before any other writing.** The assessment is explicit that this
-   decides whether the novelty claim survives: HJ reachability and viscosity
-   characterisations, Pontryagin-style backward procedures and contingent-cone
-   conditions, differential-inclusion capture basins, and Veliov's output-feedback
-   regulation condition for the sufficiency direction. Write this section before the
-   results section.
+1. **Prior art first, before any other writing.** **DRAFTED 2026-09-29, in
+   `PAPER_A_PRIOR_ART.md`, and the verdict is that the claim as stated does not survive
+   unqualified.** The plan named Veliov (1993) as the nearest neighbour — a *sufficient*
+   condition, leaving necessity open. It missed the paper that closes it:
+   *Set-Valued Analysis* **8**, 149–162 (2000) gives **necessary and sufficient**
+   conditions for guaranteed viability under output feedback with bounded disturbance on
+   both dynamics and output, via the Lipschitz kernel of a set-valued map, with geometric
+   and HJ–Isaacs equivalents and a construction algorithm. Paper A's residual gap is
+   therefore narrower than the working title: an **exactly checkable non-existence
+   certificate valid against every observation-based policy (not merely Lipschitz ones),
+   for properties beyond exact maintenance of a closed domain**. Section 2.4 of the prior
+   art sets out the three distinctions that must be argued. **Blocking: that 2000 paper
+   must be read in full before any results section is drafted.**
 2. **At least one worked case where a certificate bites on a system whose kernel cannot
    be computed.** Without it the instrument is unfalsified in the regime that motivates
    it.
@@ -446,3 +453,67 @@ needs one human read, A020 is a judgement call.
 **Consequence for §6:** none of the three is *redundant enough to archive*.
 The prune should treat `revised_articles/` as supplement feedstock, not as
 prunable duplicates.
+
+### 8.5 The P3 version gap — build Paper C from `v50`, and it supplies §5.2
+
+| | `p3_v32` | `paper3_material_ledgers_v50` |
+|---|---|---|
+| words | 26,027 | **36,387** (+40%) |
+| headings | 65 | 71 |
+| distinct numbers | 91 | 136 (**38% of v50's are new**) |
+
+Six substantive new sections in v50, four of them applied cases:
+
+* *Composition of ledgers and the calculus of certificates*
+* *Groundwater anomaly-persistence indices*
+* *The applied depletion-horizon tables*
+* *The phosphate reserve-life ratio*
+* *The fisheries removals-only pressure time* (the `547 / 346 / 251 / 173` d series)
+* *What an aggregate record fixes*
+
+plus Abstract, Funding and Code availability. **Nothing was lost**: the one
+heading that disappears, *First-Passage Semantics on Declared Surrogates*, was
+absorbed rather than dropped — "first passage" occurs 22 times in v50 against 20
+in v32.
+
+**Why this is not housekeeping.** Plan §5.2 says P3's contribution is "a
+typology — 'three diagnostics are widely misread'" and that "as a top-journal
+contribution that is a clarification unless it is tied to a measurable
+consequence." The four applied sections in v50 **are** that consequence: the
+applied depletion-horizon tables, the phosphate reserve-life ratio proved to be
+a static arithmetic quotient of an economic classification, the groundwater
+persistence indices, and the fisheries removals-only pressure time. Building
+Paper C from `p3_v32` would forfeit the ingredient §5.2 says the paper needs.
+
+**Decision: build Paper C from `paper3_material_ledgers_v50`.**
+
+### 8.6 Paper A prior art — drafted, and it does not clear the claim
+
+`PAPER_A_PRIOR_ART.md` (2026-09-29) covers the four areas the plan named plus two more.
+Findings:
+
+* **Viability theory (Aubin)** and **HJ reachability** both give exact obstruction
+  statements — the complement of the viability kernel, the BRT as the zero sublevel set of
+  a viscosity solution — but both assume **full state observation**. Their gap is
+  observation, not existence.
+* **Veliov (1993)** is *sufficient only*, exactly as the plan said, and alone would leave
+  Paper A's necessity claim intact.
+* **The 2000 *Set-Valued Analysis* paper is the problem**: necessary *and* sufficient,
+  output feedback, disturbance on dynamics **and** output, geometric and HJ–Isaacs
+  characterisations, plus an algorithm. On the abstract, that is the claimed gap, closed.
+* **The 2026 partial-observability line** (CBVF with conformal prediction; streaming
+  contraction certificates) gives sufficiency with probabilistic, finite-horizon
+  guarantees — not impossibility.
+
+**Consequence.** Paper A's claim must be restated in the narrow form, and the three
+distinctions (policy class beyond Lipschitz; property beyond exact maintenance;
+*checkability* rather than characterisation) must each be argued against the 2000 paper,
+not asserted. If the distinction collapses on a full reading, the novelty reduces to
+`obstr_v55`'s applied content — the calibrated case study, coverage audit, selector
+principle and belief-state development — and the paper should be repositioned around
+those. That is an acceptable outcome and better than finding it at review.
+
+**Also:** do not fold P1's 194 KiB separation result into Paper A until this is settled.
+It carries its own prior-art question (quantifier-order separation against
+robust-optimisation and MCDM separation results), and folding it in first would compound
+two unresolved novelty risks.
