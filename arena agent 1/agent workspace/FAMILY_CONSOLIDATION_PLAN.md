@@ -49,30 +49,98 @@ explicitly **never a base** — its verification scripts pin the hybrid conventi
 
 ---
 
-## 2. The spine of Paper B (and the one thing to get right)
+## 2. The P5/E2 relation — settled 2026-09-29, and the answer is no
 
-Two independent objects put a review-interval boundary at essentially the same place:
+**The two are not the same quantity, and the numerical proximity is a coincidence.
+Paper B must not imply a link. The firm reason, as opposed to mere caution, is that the
+two results point in *opposite directions*: a conflated claim would be contradicted by
+one of the two papers it rests on.**
 
-* **P5** (sample-and-hold governance, an illustrative baseline): the exact map crosses
-  once, near a **6.5-year** review interval; one-step approximations report artefact
-  crossings.
-* **E2** (Northern cod, frozen protocol, committed kernel computation): the certified
-  horizon is **6 years** under the two harsher floors and **7** under the informative
-  one — and it is 6/6/7 for *every* admissible catch, including none at all.
+### 2.1 What each object actually is
 
-Same neighbourhood, arrived at from opposite directions: P5 asks at what review interval
-a managed loop loses stability; E2 asks over what horizon a robustness certificate for a
-reference point remains valid. If those are two faces of one quantity, Paper B has a
-headline no reviewer can miss, because the theory and the certification agree.
+| | **P5** (`p5_v47`, sampled governance) | **E2** (Northern cod, frozen protocol) |
+|---|---|---|
+| system | illustrative logistic hold map: `r = 0.02 /yr`, `K = 100`, `q = 0.001`, measurement averaging `t_m = 5 yr` | Northern cod 2J3KL, Schaefer; committed fit `r = 0.2369 /yr`, `K = 5000 kt` (pinned), `K* = 884.6 kt` |
+| object | closed-loop **stability boundary**: the review interval at which the sampled map's monodromy leaves the unit circle | open-loop **certification horizon**: the last horizon at which a worst-case certificate holds |
+| event | a complex pair crosses the unit circle — a Neimark–Sacker bifurcation (nonlinear nondegeneracy *not* verified) | the inequality `F^T(S_hi) ≥ K* + r_T` becomes false |
+| mechanism | the **institutional loop** — effort response and measurement averaging. The resource is nearly static: `A_N = −0.0179` | the **resource's expansion** — `a_max = F'(K*) = 1 + r(1 − 2K*/K) = 1.1531`, with defect `ε = 328.97 kt` accumulating as `r_T = ε(a^T−1)/(a−1)` |
+| scale | set by `t_m = 5 yr` and the effort gains | set by `1/ln(a_max) = 7.0 yr` |
+| direction | **lower bound**: unstable for `T_r < 6.501`, stable on `[6.501, 200]` yr | **upper bound**: certifiable only for `T ≤ 6` (worst class) / `T ≤ 7` (informative) |
+| longer is | **stabilising** | **certificate-failing** |
 
-**They are not yet shown to be the same quantity, and the paper must not imply it until
-they are.** P5's crossing is a stability boundary in review-interval space for a
-sample-and-hold operator; E2's horizon is the crossing at which a geometrically growing
-erosion margin overtakes the worst-case trajectory. The first job on Paper B is to settle
-this: either derive the link, or state plainly that the numerical proximity is a
-coincidence of two different objects and keep the two results in separate sections.
+(`r = 0.2369 /yr` is recovered two ways from the committed fit — from `F'(K*)` and from
+`g(K*) = 172.46` — agreeing to four decimals.)
 
-Everything else in Paper B is easier than this, and this decides the headline.
+Two mechanisms, two systems, and two inequalities running opposite ways. Longer review
+intervals stabilise P5's loop and destroy E2's certificate.
+
+### 2.2 Why the near-agreement looked like a result — root cause
+
+1. **The headline was written before the check.** This plan said: *"If those are two
+   faces of one quantity, Paper B has a headline no reviewer can miss."* That is a
+   conclusion stated as an aspiration, attached to a comparison nobody had performed. The
+   incentive to confirm it was structural, and it survived an entire drafting cycle
+   unchallenged.
+2. **It is a selection from a four-entry record.** P5's crossing record is `2.306`
+   (protective, Euler), `6.501` (mobilising, exact), `47.536` and `79.143` (mobilising,
+   Euler). Two of the four are explicitly **artefacts of the forward-Euler command
+   step**, and the protective-exact channel has **no crossing at all**. The "agreement"
+   is with one of four crossings, chosen after the fact.
+3. **The systems are not comparable.** Cod `r = 0.2369 /yr` against P5's `r = 0.02 /yr`
+   — a factor of **11.8** — and cod `K = 5000 kt` against P5's `K = 100` dimensionless.
+   No shared parameter could make the two numbers track each other.
+4. **The dominant term is different.** E2's clock is the resource expanding; P5's clock
+   is an institutional measurement window against a resource whose own linearisation is
+   already stable.
+5. **The directions are opposite.** This is the disproof, not a caveat.
+
+### 2.3 The claim the conflation would make, and why it is not available
+
+Were both computed on one system, the two constraints would intersect in `[6.501, 7]` yr
+— a **half-year window** — and be **empty** under E2's worst residual class
+(`T* = 6 < 6.501`). That is a striking thing to be able to say, which is precisely why it
+must not be said on this evidence: it is a cross-system inference between systems whose
+growth rates differ by 11.8×. Any reviewer who checks the parameters finds the window is
+an artefact of comparing a cod stock to an illustrative baseline.
+
+### 2.4 The decisive experiment — what actually settles it
+
+The question cannot be settled by comparing published numbers across two different
+systems. It requires both objects on **one** system, and both sides have archived,
+runnable code:
+
+* **P5:** `arena agent 1/other documents/rerun_campaigns/campaign_p5_crossing_scan.py`.
+  Committed validation gate: protective Euler `ρ(1) = 0.9838`, crossing `2.306`;
+  mobilising Euler `ρ(1) = 1.00055`, crossings `47.536` / `79.143`; mobilising exact
+  `ρ(1) = 1.00035`, single crossing ≈ `6.5`; protective exact stable throughout
+  (max `ρ = 0.9967` on `[0.2, 120]`).
+* **E2:** `wave_e_cod/src/campaign_e2_cadence_v3.py`.
+
+**Do this.** Calibrate P5's effort/hold model to the cod record and re-run the crossing
+scan on cod parameters, then compare the resulting `T_r^UC` with E2's `T* = 6/6/7` on the
+same stock. The work is the mapping: E2 is a surplus-production model in catch, P5 is an
+effort model with `C = qEN`, so `q` and `E_max` must be fitted to the cod catch and
+biomass series before the scan means anything.
+
+* If the cod-calibrated crossing **also** lands near 6–7 yr, there is something real to
+  explain — and the opposite directions then make it a genuine, publishable **tension**:
+  a feasible window of about half a year, or none.
+* If it lands elsewhere, which the 11.8× rate difference makes likely, the matter is
+  closed and the two results are reported separately with no link claimed.
+
+Until that run exists, Paper B carries **no** claim linking them.
+
+### 2.5 What Paper B's headline becomes
+
+The near-match is not available as a headline. What survives is the family's own claim,
+carried by P5 alone and by E2's cadence consequence, without the coincidence:
+
+> What decides whether management stabilises or destabilises a renewable resource is not
+> biology alone but the decision clock.
+
+Whether a second clause — that certification cannot see past ~6–7 years while a
+sampled-and-held loop is unstable when reviewed more often than ~6.5 — belongs in the
+headline is exactly what §2.4 decides.
 
 ---
 

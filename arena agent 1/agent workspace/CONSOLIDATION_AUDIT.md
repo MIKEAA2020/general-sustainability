@@ -16,11 +16,11 @@ below.
 |---|---|---|---|
 | §0 | fix E2 first | **done** | E2 frozen at v29; battery 421 checks / 0 failed; sabotage 136 mutations / 0 holes; basis audit 187/187; 28 pp, 10 figs, 8 tables; graphical abstract added |
 | §1 | inventory of manuscripts | **done, but defective** | 12 leads named; see §2 — one lead is the wrong file |
-| §2 | settle the P5/E2 relation | **open** | the headline decision; first job of Paper B, not started |
+| §2 | settle the P5/E2 relation | **SETTLED 2026-09-29 — the answer is no** | different objects on different systems (`r = 0.2369` vs `0.02 /yr`, 11.8x), opposite inequality directions (E2 is an upper bound, P5 a lower bound). Rewritten as §2.1-§2.5 of the plan; a same-system experiment (§2.4) is the one thing that could reopen it |
 | §3.1 | Paper A: prior-art section first | **open** | nothing written |
 | §3.2 | Paper A: worked case where a certificate bites | **open** | |
 | §3.3 | Paper A: decide what of P1 survives | **open — and the input file is wrong** | see §2.1 |
-| §4.1 | Paper B: settle P5/E2 | **open** | = §2 |
+| §4.1 | Paper B: settle P5/E2 | **settled — no link** | = §2, now rewritten |
 | §4.2 | Paper B: promote the null result | **open** | |
 | §4.3 | Paper B: 2–3 mechanism figures | **open** | no figure budget now applies |
 | §4.4 | Paper B: table of real institutional cadences | **open** | |
@@ -169,5 +169,7 @@ Next, in order:
    last unknown before any pruning.
 2. Diff A011/A012 against `p5_v47`/`p4_v41` to see whether Paper B's supplement gains
    content or is redundant.
-3. Then §2 — settle the P5/E2 relation, which is the first job of Paper B and decides its
-   headline.
+3. ~~Then §2 — settle the P5/E2 relation~~ **done 2026-09-29**: they are not the same
+   quantity. The remaining task is the same-system experiment of §2.4 — calibrate P5's
+   effort/hold model to the cod record (`q`, `E_max`) and re-run the crossing scan on cod
+   parameters. That is the only thing that could turn the coincidence into a result.
