@@ -97,3 +97,69 @@ mechanism, not parameters. Three routes, in the order I would try them:
    undecidable part. That is likely the intended reading of the gap.
 
 Route 3 is the most promising and the closest to what the paper already proves.
+
+
+---
+
+## CORRECTION (2026-09-29): the negative result above was an artefact of the method
+
+I reported that "the two properties are in tension" and gave a structural argument
+(disjointness needs a shift exceeding the constraint width `H`, which the state range
+bounds by `H`). **That conclusion is unsupported and should not be relied on.** The
+argument may still be correct, but the evidence I cited for it does not test it.
+
+Diagnosed by instrumenting the search to count the two properties separately:
+
+```
+combinations tested      : 125
+(a) non-terminating      : 0
+(b) obstruction present  : 50
+BOTH                     : 0
+```
+
+**(a) returned zero out of 125 for a reason that has nothing to do with the dynamics.**
+The state space was gridded into 601 points. On a finite grid the kernel iteration is a
+decreasing sequence of subsets of a finite set, so it is **guaranteed to stabilise within
+601 steps**. Discretisation destroys non-termination by construction. No grid-based search
+can ever find property (a), whatever the parameters.
+
+The same flaw invalidates the `wk_search.py` sweep reported above: its "zero instances"
+result is likewise an artefact, not evidence about the family.
+
+### What this means
+
+- **(b) obstruction is easy** — 50 of 125 combinations on the disconnected-constraint
+  family. This is not the hard half.
+- **(a) non-termination is the entire difficulty**, and it is a property of the
+  *continuous* system. It must be established symbolically: compute `K_n` in closed form
+  (as unions of intervals with exact endpoints) and prove strict decrease for all `n`.
+  Grid numerics cannot see it, so grid numerics must not be used to search for it.
+
+### Why the hand-construction also stalled
+
+Attempted symbolically: with `x^+ = alpha*x - c + phi(u)` and `K_n = [t_n, H]`, the
+recursion gives `t_{n+1} = max(t_n, (t_n + c - 1)/alpha)`, whose fixed point is
+`t* = (1-c)/(1-alpha)`. For `t_n < t*` the map sends `t_n` *below* itself so the `max`
+pins it at `t_0`; for `t_n > t*` it increases away from `t*` toward the boundary. So this
+linear family gives either no movement or escape to the boundary — never asymptotic
+approach. A nonlinear safe-set boundary is required for the iteration to approach its
+limit without reaching it.
+
+### Revised plan: route 3, not route 1
+
+The disconnected-constraint route (route 1) does not address the half that is actually
+hard. The right move is the one flagged as most promising in the first place: build the
+worked case on the manuscript's **existing** undecidability result, `prop:window-nogo`,
+which proves the post-observation recourse phase undecidable by any certificate pair
+reading only the window sub-model.
+
+That reframes the case correctly and avoids constructing non-termination from scratch:
+
+- exhibit a system where the **window phase is decided completely** by a certificate
+  (finitely, `prop:decomposition`),
+- while the **recourse phase is exactly the undecidable part** (`prop:window-nogo`),
+- so the certificate returns a verdict on the part it can decide, on a system whose full
+  kernel cannot be computed because deciding it would require deciding the recourse phase.
+
+This is very likely the intended reading of the gap, and it uses results the paper already
+has rather than new ones it would have to earn.
