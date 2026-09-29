@@ -7,9 +7,16 @@ result, `finite_horizon_completeness`, `minimax_dual_certificates`, `certificate
 works?*
 
 The plan (§3.1) is explicit that this section decides whether the novelty claim survives,
-and that it must be written before the results section. It is written first here. **The
-headline finding is that the claim as stated does not survive unqualified**, and the reason
-is a specific paper, identified in §2.4.
+and that it must be written before the results section. It is written first here.
+
+**Revision, 2026-09-29, after checking the manuscript.** The first version of this document
+was drafted from the plan's summary plus an external search, *without first reading
+`obstr_v55`'s own prior-art treatment*. That was the same failure mode catalogued in plan
+§2.2 with respect to the P5/E2 headline — a conclusion drafted before the check — and it
+produced an overstated verdict. §5 records what the manuscript already does, and the
+verdict in §4 is revised accordingly: **the claim survives considerably better than this
+document first concluded.** Two genuine gaps remain, and one of them is not the one this
+document originally led with.
 
 ---
 
@@ -205,3 +212,66 @@ and not the 2000 necessary-and-sufficient one.
 11. No Certificate for Alignment: two independent impossibilities (impossibility of
     certifying infinite-domain properties from finite observations)
     [https://pith.science/paper/2603.08761](https://pith.science/paper/2603.08761)
+
+---
+
+## 5. What the manuscript already does (checked 2026-09-29)
+
+`obstr_v55` (22,615 words) is **not** prior-art-naive. Citation counts: Aubin 19, Veliov
+12, viability kernel 10, belief 71, reachab* 6, Isaacs 4, output feedback 4, Set-Valued
+Analysis 3, Haddad 3, capture basin 3, contingent 1 — and **viscosity 0**.
+
+It already:
+
+* **Poses the question in exactly the right split.** "Under incomplete observation the
+  sufficiency direction has a canonical answer in Veliov's output-feedback regulation
+  condition and the estimation-tube reduction. **The complementary direction — certifying
+  that no observation-based policy is viable —**" is the paper's object.
+* **Cites the full French viability lineage**: Aubin (1991); Aubin, Bayen & Saint-Pierre
+  (2011); Saint-Pierre (1994) on kernel approximation; Aubin & Frankowska (1990) and
+  Frankowska (1989) on robust viability; **Veliov (1993)**; **Quincampoix & Veliov (1994)**
+  on viability with a priori unknown but observable parameters; **Cardaliaguet,
+  Quincampoix & Saint-Pierre (2007)** on the estimation-set reduction; and, on the failure
+  side, **Aubin (2001)**, which characterises the complement of the kernel.
+* **Makes the recommended distinction in its own words**: *"Veliov's condition tells us
+  when output feedback can work; the obstruction calculus tells us when it cannot."*
+* **Distinguishes on checkability**, which is one of the three distinctions proposed in
+  §2.4: one obstruction object "is a finite, checkable test", whereas two drift
+  certificates "are not finite objects".
+* **Has a dedicated section** — §5 *The Sufficiency Landscape* — which "record[s] the
+  sufficiency results against which the obstruction calculus is defined".
+
+## 6. Revised verdict
+
+**The novelty claim is on much firmer ground than §4 concluded.** The 1993 Veliov gap this
+document was built around is *already closed in the manuscript*, and closed in the precise
+way §3 recommends. Two real gaps remain:
+
+1. **The 2000 *Set-Valued Analysis* 8, 149–162 paper** is still uncited (zero occurrences
+   of "Guaranteed Output", "Lipschitz kernel"). It gives *necessary and sufficient*
+   conditions — but for a **Lipschitz closed-loop** maintaining the state **exactly**, which
+   is narrower than P2's "every policy" framing. Given the authors are likely from the same
+   school P2 already engages (Quincampoix / Veliov), this is a citation-and-distinguish job,
+   not a threat to existence. **Still needs doing** — a referee from that school will find it
+   immediately.
+2. **The HJ reachability and viscosity line is entirely absent** — "viscosity" occurs
+   **zero times** in 22,615 words. This is the plan's *first-named* prior-art area and the
+   dominant computational tradition in safety verification. **This is now the more urgent
+   gap**, ahead of the 2000 paper: P2 already speaks the language of the viability school,
+   but says nothing to the reachability school, and referees at *Automatica* or *SICON* may
+   well come from it. The minimum response is a paragraph contrasting the obstruction
+   certificate with the BRT-as-viscosity-sublevel-set construction: same shape of object,
+   different observation assumption (§2.2 above), plus the belief-state dimensionality
+   barrier that stops the HJ route under partial observation.
+
+**Consequence for §4:** strike "does not survive unqualified". The work is (a) add the
+2000 paper and distinguish on policy class and the exact-maintenance property; (b) add the
+HJ/viscosity paragraph — the larger of the two jobs; (c) keep the §5 distinctions already
+present. The blocking step is no longer "read the 2000 paper before drafting anything"; it
+is **write the viscosity paragraph**, which needs no paywalled source.
+
+**Root cause of the original overstatement, recorded so it is not repeated:** the prior art
+was assessed from a plan summary and an external literature search, without reading the
+manuscript's own treatment first. Plan §2.2 identifies this failure mode in the P5/E2
+headline; it recurred here, in the one section whose entire purpose is to check before
+claiming.

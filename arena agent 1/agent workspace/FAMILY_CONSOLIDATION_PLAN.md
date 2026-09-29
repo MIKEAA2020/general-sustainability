@@ -505,13 +505,25 @@ Findings:
   contraction certificates) gives sufficiency with probabilistic, finite-horizon
   guarantees — not impossibility.
 
-**Consequence.** Paper A's claim must be restated in the narrow form, and the three
-distinctions (policy class beyond Lipschitz; property beyond exact maintenance;
-*checkability* rather than characterisation) must each be argued against the 2000 paper,
-not asserted. If the distinction collapses on a full reading, the novelty reduces to
-`obstr_v55`'s applied content — the calibrated case study, coverage audit, selector
-principle and belief-state development — and the paper should be repositioned around
-those. That is an acceptable outcome and better than finding it at review.
+**REVISED after checking the manuscript (§5–§6 of `PAPER_A_PRIOR_ART.md`).** The first
+verdict overstated the risk: `obstr_v55` already closes the Veliov gap in the recommended
+way — *"Veliov's condition tells us when output feedback can work; the obstruction calculus
+tells us when it cannot"* — cites the whole French viability lineage including Aubin (2001)
+on the failure side, and has a dedicated §5 *Sufficiency Landscape*. Two real gaps remain,
+and the priority between them flips:
+
+1. **HJ reachability / viscosity is entirely absent** — "viscosity" occurs **zero times** in
+   22,615 words, despite being the plan's first-named prior-art area and the dominant
+   computational tradition in safety verification. **This is now the more urgent gap**: add a
+   paragraph contrasting the obstruction certificate with the BRT-as-viscosity-sublevel-set
+   construction. No paywalled source needed.
+2. **The 2000 *Set-Valued Analysis* 8, 149–162 paper** is uncited. It gives necessary *and*
+   sufficient conditions, but only for a **Lipschitz closed-loop** maintaining the state
+   **exactly** — narrower than P2's "every policy" framing, and likely from the same school
+   P2 already engages. A citation-and-distinguish job, still required.
+
+The blocking step is therefore **writing the viscosity paragraph**, not obtaining the 2000
+paper.
 
 **Also:** do not fold P1's 194 KiB separation result into Paper A until this is settled.
 It carries its own prior-art question (quantifier-order separation against
