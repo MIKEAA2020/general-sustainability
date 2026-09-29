@@ -279,6 +279,18 @@ MUT = [
      "215.2 (" + chr(92) + "(C_{\\mathrm{vac}}" + chr(92) + ")) & 5 & 6 & 6",
      "215.2 (" + chr(92) + "(C_{\\mathrm{vac}}" + chr(92) + ")) & 5 & 6 & 7"),
 
+    # --- the numbers the abstract prints -----------------------------------
+    ("the abstract's bootstrap bound corrupted",
+     chr(92) + "(88.1" + chr(92) + ") kt with",
+     chr(92) + "(88.7" + chr(92) + ") kt with"),
+    ("the abstract's bootstrap conditioning dropped",
+     "in the expansive regime the bound", "the bound"),
+    ("the abstract's profile-set range corrupted",
+     "[67.9, 95.2]", "[67.9, 95.8]"),
+    ("the abstract's self-viability figure corrupted",
+     chr(92) + "(171" + chr(92) + ") kt on the post-moratorium window",
+     chr(92) + "(177" + chr(92) + ") kt on the post-moratorium window"),
+
 ]
 
 

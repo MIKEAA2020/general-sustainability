@@ -1346,6 +1346,41 @@ chk("R24h the figure provenance covers Figures 1--9 and 10 separately",
     and (BS + "texttt{wave" + BS + "_e" + BS + "_cod/src/make" + BS
          + "_figs" + BS + "_v18.py}") in FLAT)
 
+# ===========================================================================
+# R25 -- the numbers the ABSTRACT prints
+#
+# The abstract is the only part every reader sees, and its identification
+# figures are conditional in a way that is easy to miss: 88.1 [-5.6, 130.6] is
+# the joint bootstrap RESTRICTED to the expansive regime (K >= 2K*, 73% of
+# replicates). Unconditional it is 73.7 [-89.4, 125.7]. A referee who resamples
+# and gets the unconditional number must not be able to call it an error, so
+# both the values and the conditioning are pinned here.
+# ===========================================================================
+ABS = re.search(re.escape(BS + "begin{abstract}") + r"(.*?)"
+                + re.escape(BS + "end{abstract}"), tex, re.S)
+ABS = " ".join(ABS.group(1).split()) if ABS else ""
+I_OUT2 = REPO + "/src/results_ident_v3"
+ident = {}
+for r in csv.DictReader(open(I_OUT2 + "/e2_identification_v3.csv")):
+    ident[r["quantity"]] = r["value"]
+_lo, _hi = ident["C* = g(K*) - |e_q10| over the profile set"].split(" - ")
+chk("R25a the abstract's profile-set C* range matches the archive",
+    ("%.1f" % float(_lo)) in ABS and ("%.1f" % float(_hi)) in ABS,
+    "%s - %s" % (_lo, _hi))
+_s = ident["C* median [90%] | K >= 2K* (the expansive regime)"]
+_med, _band = _s.split(" [", 1)
+_blo, _bhi = _band.strip("[]").split(", ")
+chk("R25b the abstract's bootstrap bound matches the conditional archive row",
+    ("%.1f" % float(_med)) in ABS and ("%.1f" % float(_blo)) in ABS
+    and ("%.1f" % float(_bhi)) in ABS,
+    "%s [%s, %s]" % (_med, _blo, _bhi))
+chk("R25c the abstract states the conditioning, not just the number",
+    "in the expansive regime" in ABS)
+chk("R25d Section 3.10 states what the conditioning costs",
+    "Restricted to the expansive regime" in FLAT)
+chk("R25e the abstract carries the survival contrast and the self-viability pair",
+    all(x in ABS for x in ("0.91", "0.65", "171", "0 " + BS + "pm 8")))
+
 print()
 print("%d passed, %d failed" % (len(PASS), len(FAIL)))
 if FAIL:

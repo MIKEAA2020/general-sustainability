@@ -250,6 +250,32 @@ q("xteNCAM 1954-2007 F'(LRP) (Section 3.11)", "", "1.4447")
 q("xteNCAM 2005-2024 F'(LRP) (Section 3.12)", "", "0.925")
 q("xteNCAM 1954-2007 fitted K (Section 3.11)", "", "4812.9")
 q("xteNCAM recent fitted K (Section 3.12)", "", "472")
+# --- identification numbers the ABSTRACT prints (Section 3.10 / 3.11) ------
+# The abstract quotes the profile-set range for C* and the joint-bootstrap
+# bound. The bootstrap figure is CONDITIONAL on the expansive regime
+# (K >= 2K*, 73% of replicates); unconditional it is 73.7 [-89.4, 125.7], so
+# the conditioning has to be carried by the text, not left implicit.
+_ID = {}
+for _r in csv.DictReader(open(REPO + "/src/results_ident_v3/"
+                              "e2_identification_v3.csv", encoding="utf-8")):
+    _ID[_r["quantity"]] = _r["value"]
+_lo, _hi = _ID["C* = g(K*) - |e_q10| over the profile set"].split(" - ")
+q("C* over the profile set, lower", "", "%.1f" % float(_lo))
+q("C* over the profile set, upper", "", "%.1f" % float(_hi))
+_lo, _hi = _ID["g(K*) over the profile set"].split(" - ")
+# Section 3.7 prints the range to one decimal: [148.8, 176.1]
+q("g(K*) over the profile set, lower", "", "%.1f" % float(_lo))
+q("g(K*) over the profile set, upper", "", "%.1f" % float(_hi))
+_s = _ID["C* median [90%] | K >= 2K* (the expansive regime)"]
+_med, _band = _s.split(" [", 1)
+_band = "[" + _band
+_blo, _bhi = _band.strip("[]").split(", ")
+q("joint bootstrap C* median (expansive regime)", "", "%.1f" % float(_med))
+q("joint bootstrap 90% band, lower (expansive)", "", "%.1f" % float(_blo))
+q("joint bootstrap 90% band, upper (expansive)", "", "%.1f" % float(_bhi))
+q("Fox g_max from the formula", "", "192.0", whole=True)
+q("xteNCAM LRP (Section 2.2)", "", "276")
+
 
 # --- the cadence pass (Table 2, Section 3.4; form generality, Section 2.4) --
 # These numbers are new in v3 and have no v2 counterpart, so the v2 slot is
@@ -287,75 +313,76 @@ q("Allee C*, declared s0 row", "", CAD[("generality", "C*|Allee (declared s0 row
 q("Allee C*, data-preferred row", "",
   CAD[("generality", "C*|Allee (data-preferred row)")], whole=True)
 
-# --------------------------------------------------------------------------
-# AUDIT
-# --------------------------------------------------------------------------
-def count(tok, src=None):
-    """Occurrences of a numeric token, skipping those inside \\vspace etc."""
-    return len(re.findall(r"(?<![\d.])" + re.escape(tok) + r"(?!\d)",
-                          src if src is not None else TEXNC))
+if __name__ == "__main__":
+    # --------------------------------------------------------------------------
+    # AUDIT
+    # --------------------------------------------------------------------------
+    def count(tok, src=None):
+        """Occurrences of a numeric token, skipping those inside \\vspace etc."""
+        return len(re.findall(r"(?<![\d.])" + re.escape(tok) + r"(?!\d)",
+                              src if src is not None else TEXNC))
 
 
-def count_excused(d):
-    """v2 occurrences that are NOT an explicit registered-convention
-    comparison. A v2 value quoted side by side with its v3 counterpart is the
-    point of the convention note; the same value used as the paper's own
-    number is a defect."""
-    tok = d["v2"]
-    if tok in ("", "empty"):
-        return 0
-    n = 0
-    for m in re.finditer(r"(?<![\d.])" + re.escape(tok) + r"(?!\d)", TEXNC):
-        ctx = TEXNC[max(0, m.start() - 140): m.end() + 140]
-        if not any(re.search(a, ctx, re.S) for a in d["allow"]):
-            n += 1
-    return n
+    def count_excused(d):
+        """v2 occurrences that are NOT an explicit registered-convention
+        comparison. A v2 value quoted side by side with its v3 counterpart is the
+        point of the convention note; the same value used as the paper's own
+        number is a defect."""
+        tok = d["v2"]
+        if tok in ("", "empty"):
+            return 0
+        n = 0
+        for m in re.finditer(r"(?<![\d.])" + re.escape(tok) + r"(?!\d)", TEXNC):
+            ctx = TEXNC[max(0, m.start() - 140): m.end() + 140]
+            if not any(re.search(a, ctx, re.S) for a in d["allow"]):
+                n += 1
+        return n
 
 
-rows = []
-for d in D:
-    n2 = count_excused(d) if d["v2"] not in ("", "empty") else 0
-    n3 = (count(d["v3"], tex) if d.get("whole") else count(d["v3"])) \
-        if d["v3"] not in ("", "empty") else 0
-    rows.append((d, n2, n3))
+    rows = []
+    for d in D:
+        n2 = count_excused(d) if d["v2"] not in ("", "empty") else 0
+        n3 = (count(d["v3"], tex) if d.get("whole") else count(d["v3"])) \
+            if d["v3"] not in ("", "empty") else 0
+        rows.append((d, n2, n3))
 
-print("=" * 96)
-print("BASIS-AWARE NUMERIC AUDIT   (v3 = source-year, AUTHORITATIVE)")
-print("=" * 96)
-print(f"{'quantity':44s} {'v2 (WRONG)':>12s} {'n':>3s}  {'v3 (RIGHT)':>12s} {'n':>3s}  verdict")
-print("-" * 96)
+    print("=" * 96)
+    print("BASIS-AWARE NUMERIC AUDIT   (v3 = source-year, AUTHORITATIVE)")
+    print("=" * 96)
+    print(f"{'quantity':44s} {'v2 (WRONG)':>12s} {'n':>3s}  {'v3 (RIGHT)':>12s} {'n':>3s}  verdict")
+    print("-" * 96)
 
-bad_v2, ok, neither = [], [], []
-for d, n2, n3 in rows:
-    if d["v2"] == d["v3"]:
-        verdict = "same both"
-        ok.append(d)
-    elif n3 > 0 and n2 == 0:
-        verdict = "OK (v3)"
-        ok.append(d)
-    elif n2 > 0 and n3 == 0:
-        verdict = "** V2 BASIS **"
-        bad_v2.append((d, n2))
-    elif n2 > 0 and n3 > 0:
-        verdict = "** BOTH PRESENT **"
-        bad_v2.append((d, n2))
-    else:
-        verdict = "neither printed"
-        neither.append(d)
-    print(f"{d['label']:44s} {d['v2']:>12s} {n2:3d}  {d['v3']:>12s} {n3:3d}  {verdict}")
+    bad_v2, ok, neither = [], [], []
+    for d, n2, n3 in rows:
+        if d["v2"] == d["v3"]:
+            verdict = "same both"
+            ok.append(d)
+        elif n3 > 0 and n2 == 0:
+            verdict = "OK (v3)"
+            ok.append(d)
+        elif n2 > 0 and n3 == 0:
+            verdict = "** V2 BASIS **"
+            bad_v2.append((d, n2))
+        elif n2 > 0 and n3 > 0:
+            verdict = "** BOTH PRESENT **"
+            bad_v2.append((d, n2))
+        else:
+            verdict = "neither printed"
+            neither.append(d)
+        print(f"{d['label']:44s} {d['v2']:>12s} {n2:3d}  {d['v3']:>12s} {n3:3d}  {verdict}")
 
-print()
-print("=" * 96)
-print(f"SUMMARY: {len(ok)} correct/v3, {len(bad_v2)} ON THE V2 BASIS, "
-      f"{len(neither)} not printed")
-print("=" * 96)
-if bad_v2:
-    print("\nMUST BE REVERTED (v2 basis present in the tex):")
-    for d, n in bad_v2:
-        print(f"  {d['label']:44s}  v2={d['v2']:>10s} (x{n})  ->  v3={d['v3']}")
-if neither:
-    print("\nDeclared but not printed anywhere (check the label is right):")
-    for d in neither:
-        print(f"  {d['label']:44s}  v3={d['v3']}")
+    print()
+    print("=" * 96)
+    print(f"SUMMARY: {len(ok)} correct/v3, {len(bad_v2)} ON THE V2 BASIS, "
+          f"{len(neither)} not printed")
+    print("=" * 96)
+    if bad_v2:
+        print("\nMUST BE REVERTED (v2 basis present in the tex):")
+        for d, n in bad_v2:
+            print(f"  {d['label']:44s}  v2={d['v2']:>10s} (x{n})  ->  v3={d['v3']}")
+    if neither:
+        print("\nDeclared but not printed anywhere (check the label is right):")
+        for d in neither:
+            print(f"  {d['label']:44s}  v3={d['v3']}")
 
-sys.exit(1 if bad_v2 else 0)
+    sys.exit(1 if bad_v2 else 0)
