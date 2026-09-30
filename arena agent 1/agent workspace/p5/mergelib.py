@@ -204,6 +204,14 @@ def merge_preamble(pre_a, pre_b):
     the second across verbatim raises "Command \\proposition already defined."
     """
     existing_thm = set(_THM.findall(pre_a))
+    # \\usepackage is de-duplicated by PACKAGE NAME, not by literal line: paper 9 loads
+    # \\usepackage[a4paper,margin=15mm]{geometry} and paper 10b loads geometry with
+    # different options, and copying both raises "Option clash for package geometry".
+    _PKG = re.compile(r'\\usepackage\*?\s*(?:\[[^\]]*\])?\s*\{([^}]*)\}')
+    existing_pkg = set()
+    for m in _PKG.finditer(pre_a):
+        existing_pkg.update(n.strip() for n in m.group(1).split(',') if n.strip())
+
     extra = []
     for line in pre_b.split('\n'):
         t = line.strip()
@@ -216,13 +224,31 @@ def merge_preamble(pre_a, pre_b):
             existing_thm.add(m.group(1))
             extra.append(t)
             continue
+        m = _PKG.match(t)
+        if m:
+            names = [n.strip() for n in m.group(1).split(',') if n.strip()]
+            if names and all(n in existing_pkg for n in names):
+                continue          # every package on this line is already loaded
+            existing_pkg.update(names)
+            extra.append(t)
+            continue
         if t.startswith(('\\usepackage', '\\newcommand', '\\DeclareMathOperator',
                          '\\providecommand', '\\def')):
             if t not in pre_a:
                 extra.append(t)
     if extra:
-        i = pre_a.rfind('\\begin{document}')
-        pre_a = pre_a[:i] + '\n'.join(extra) + '\n' + pre_a[i:]
+        # MUST be comment-aware. Paper 9's provenance header MENTIONS \begin{document}
+        # ("It contained 2x \documentclass, 2x \begin{document}, ..."), so a plain
+        # rfind() matches INSIDE the comment and injects the package block mid-comment --
+        # which turns the comment's continuation lines into live LaTeX. This is the same
+        # comment-vs-code confusion that has now appeared in five different forms.
+        m = find_real(pre_a, r'\\begin\{document\}')
+        if m:
+            pre_a = pre_a[:m.start()] + '\n'.join(extra) + '\n' + pre_a[m.start():]
+        else:
+            # split_body() already stripped the real \begin{document}, so normally there
+            # is none: append at the end of the preamble.
+            pre_a = pre_a.rstrip('\n') + '\n' + '\n'.join(extra) + '\n'
     return pre_a
 
 
