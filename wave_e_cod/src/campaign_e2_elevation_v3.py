@@ -168,9 +168,15 @@ def main():
     K_STAR, S_HI = ri.K_STAR, ri.S_HI
     fit = ri.fit_surplus()
     r0, K0 = float(fit["r"]), float(fit["K"])
-    committed = json.loads(
-        (REPO / "wave_e_cod" / "results" / "intervention_results.json").read_text()
-    )
+    # NOTE (self-containment fix): this campaign used to load the v2 artifact
+    #   REPO/"wave_e_cod"/"results"/"intervention_results.json"
+    # into a local `committed`, but the residual-derived fields it took from that
+    # file are all recomputed from the source-year data immediately below and
+    # written back onto `fit`, and an AST check confirmed the binding was never
+    # read anywhere else in this module (one Store node, zero Load nodes).
+    # The load is therefore dead weight that also made the campaign unrunnable
+    # wherever the v2 artifact was absent. It is removed so the v3 chain is
+    # self-contained on the source-year data alone.
 
     # training-window residuals in the committed fit_surplus convention (catch at t+1)
     res_by_year = {

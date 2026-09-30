@@ -217,13 +217,99 @@ Against the computation, for units 7, 8 and 10:
 Not established: the UC and residual-mean figures were read from committed results rather than
 re-derived, and units 1–6 and 11 remain unaudited because their claims are symbolic.
 
-## 7. Remaining work
+## 7. Remaining work — status
 
-1. **Fix the three hardcoded `/home/user/repo` paths** at source so the v3 chain is relocatable.
-2. **Make the v3 chain self-contained** — remove the elevation campaign's dependence on the v2
-   `intervention_results.json`, since the values it takes from that file are overridden anyway.
-3. **Re-run the elevation campaign** once 1 and 2 are done, to re-derive UC_min, UC_q05, UC_q10
-   and the residual mean from execution rather than from committed files.
-4. **Audit units 1–6 and 11** by proof review. Their claims are theorems, and no numeric check
-   will discharge them.
-5. **Compile.** Still unverified — no LaTeX toolchain is obtainable in this session.
+Items 1–4 are **closed**; item 5 remains blocked.
+
+| # | item | status |
+|---|---|---|
+| 1 | Fix the three hardcoded `/home/user/repo` paths | **DONE** |
+| 2 | Make the v3 chain self-contained | **DONE** |
+| 3 | Re-run the elevation campaign | **DONE — reproduces bit-exactly** |
+| 4 | Audit units 1–6 and 11 by proof review | **DONE** (see `PROOF_AUDIT.md`) |
+| 5 | Compile | **BLOCKED** — no LaTeX toolchain obtainable |
+
+### 7.1 Item 1 — relocatable paths (done)
+
+Three scripts hardcoded `REPO = Path("/home/user/repo")`:
+
+- `wave_e_cod/src/campaign_e2_allee_declared_v3.py` (L46)
+- `wave_e_cod/src/campaign_e2_depensation_v3.py` (L40)
+- `wave_e_cod/src/campaign_e2_fox_form_v3.py` (L38)
+
+Each derives `COD = REPO/"wave_e_cod"/"src"` and reads
+`REPO/"wave_e_cod"/"results"/...`. Since the scripts live in
+`<repo>/wave_e_cod/src/`, `Path(__file__).resolve().parents[2]` resolves to the
+same root, and all three now use that. Verified after the change that `REPO`,
+`COD` and `results/` still point at real directories and that
+`intervention_results_v3.json` is still reachable. The `/home/user/repo`
+symlink is no longer needed by the chain.
+
+`wave_e_cod/src/campaign_srcyear.py` (L41) also hardcodes a root —
+`Path("/home/user/git_repo")` — but it is the **superseded v2-era ancestor** of
+`campaign_e2_elevation_v3.py`, is not imported by any v3 script (the only match
+is a comment in `run_intervention_v3.py` L54), and is left untouched as a
+historical artifact. Recorded here rather than fixed.
+
+### 7.2 Item 2 — self-containment (done)
+
+`campaign_e2_elevation_v3.py` loaded the **v2** artifact
+`REPO/"wave_e_cod"/"results"/"intervention_results.json"` into a local
+`committed`. That file is absent from the tree, which is why the campaign could
+not previously be run at all.
+
+Removal was justified by an AST check, not by grep: the binding had exactly one
+node, a `Store` at L171, and **zero `Load` nodes** anywhere in the module. Every
+residual-derived field it had supplied is recomputed from the source-year data
+immediately below and written back onto `fit` (`train_residual_sd`, `min`,
+`max`, `_q05`, `_q10`, and `e_min/e_q05/e_q10`). The load was dead weight.
+
+The `import json` at L34 is now unused, but `campaign_e2_fox_form_v3.py` has
+the same situation and keeps it, so this is house style and was left alone.
+
+### 7.3 Item 3 — elevation campaign re-run (done)
+
+The campaign now runs start to finish (`ALL LAYERS COMPLETE`, exit 0). The four
+quantities the item asked to re-derive, from execution:
+
+| quantity | re-derived by execution | committed v3 | delta |
+|---|---|---|---|
+| UC_min (residual_min) | **−328.97** | −328.97 | 0.0000 |
+| UC_q05 (residual_q05) | **−287.36** | −287.36 | 0.0000 |
+| UC_q10 (residual_q10) | **−80.87** | −80.87 | 0.0000 |
+| residual mean | **−10.88** | −10.88 | 0.0000 |
+
+Also reproduced in the same run: residual SD **114.91**, residual max
+**206.55**, lag-1 ACF **0.554**, and the q10 constructive bound **91.59**. The
+script's internal self-checks assert these and would have aborted otherwise.
+
+**Stronger than equality of the printed values.** All six output artefacts were
+regenerated and compared byte-for-byte against the committed copies in
+`wave_e_cod/src/results_srcyear_v3/`:
+
+```
+e2_elevation_residuals.csv                 IDENTICAL
+e2_elevation_k_grid.csv                    IDENTICAL
+e2_elevation_stochastic.csv                IDENTICAL
+e2_elevation_finite_floors.csv             IDENTICAL
+e2_elevation_stochastic_constructive.csv   IDENTICAL
+e2_elevation_bootstrap.csv                 IDENTICAL
+```
+
+So the campaign is no longer merely consistent with the committed numbers at
+display precision — it reproduces the committed artefacts exactly. The earlier
+caveat that UC and residual mean were "exact but not re-derived" no longer
+applies.
+
+Two related runs were re-executed to confirm the path edits broke nothing:
+`run_intervention_v3.py` (exit 0; reproduces the BAU UC_q05 T=inf kernel
+**2219.65** and `UC_q10` constructive bound 91.59) and the three modified
+campaigns themselves (all exit 0). `run_intervention_v3.py` never hardcoded a
+path.
+
+### 7.4 Item 5 — compilation, still blocked
+
+No LaTeX engine is available in this session and none could be fetched. Every
+check in this record and in `PROOF_AUDIT.md` is static. The one exception on
+record remains E2, which compiled cleanly under tectonic 0.17 (22 pages, no
+errors, no overfull boxes).

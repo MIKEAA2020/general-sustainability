@@ -37,7 +37,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-REPO = Path("/home/user/repo")
+REPO = Path(__file__).resolve().parents[2]  # repo root, resolved from this file so the tree is relocatable
 COD = REPO / "wave_e_cod" / "src"
 OUT = Path(__file__).resolve().parent / "results_forms_v3"
 OUT.mkdir(exist_ok=True)

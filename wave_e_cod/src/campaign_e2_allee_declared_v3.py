@@ -43,7 +43,7 @@ import pandas as pd
 from scipy.optimize import minimize
 
 HERE = Path(__file__).resolve().parent
-REPO = Path("/home/user/repo")
+REPO = Path(__file__).resolve().parents[2]  # repo root, resolved from this file so the tree is relocatable
 COD = REPO / "wave_e_cod" / "src"
 OUT = HERE / "results_forms_v3"
 OUT.mkdir(exist_ok=True)
