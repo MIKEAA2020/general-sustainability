@@ -22,21 +22,25 @@ scanned; units 7 and 9 were drawn in because the instrument found them.
 | Claims with **no evidence of proof of any convention** | **1** |
 | Claims evidenced informally (worked instance / unmarked prose / computation) | 3 |
 | Pointers to the paper's own supplementary sections | 75 |
-| Pointers that resolve against a supplement found on the branch | **74** |
-| **Pointers that resolve to nothing** | **1** (unit 7, Supplementary S9.5) |
+| Pointers that resolve against a supplement found on the branch | **75** |
+| **Pointers that resolve to nothing** | **0** |
 
 Three findings, all narrower than first reported:
 
 - **Finding A — 1 claim.** Unit 1's *selector principle* (`calc-prop:selector`)
   has no proof of any kind in the main text. It is the only one of 112 claims
   in that state. Its complete proof exists in the unit's supplement.
-- **Finding B — corrected.** 74 of the 75 supplement pointers resolve. The
-  supplements for units 6, 7 and 9 exist on the branch. One pointer does not
-  resolve: unit 7's **Supplementary S9.5**, which has never existed in any
-  version of the supplement.
-- **Finding C — packaging/staleness.** All four supplements are unattached to
-  the current unit files, and unit 1's is **twelve versions stale**: the main
-  text advanced from v51 to v63 and no supplement was produced after v51.
+- **Finding B — resolved.** All 75 supplement pointers resolve. The supplements
+  exist on the branch, filed under the **old** paper numbering, and unit 7
+  needs **two** of them because it is a merge (§6.3). Nothing is missing.
+- **Finding C — packaging/staleness.** The supplements were unattached to the
+  current unit files, and unit 1's is **twelve versions stale**: the main text
+  advanced from v51 to v63 and no supplement was produced after v51.
+
+Two claims in this record were published and then retracted — first that 75
+pointers were dead, then that 1 was. Both were search-scoping errors (§9). The
+final position is that **nothing is missing**; the work was packaging, not
+authorship.
 
 No finding here is a proof-correctness finding. This audit checks that a proof
 is *evidenced*, not that it is *correct*.
@@ -186,21 +190,44 @@ replaces real citations with "citation blinded for review" and real paths with
 Unit 7's main text is the **unblinded** `paper08_governance_delay_v46` (the
 blinded main is v47, a separate file). So the matching supplement is **v19**.
 
-### 6.3 The one pointer that resolves to nothing
+### 6.3 Unit 7 is a MERGE, and S9.5 lives in the other half
 
-Unit 7, L1207:
+**Corrected.** An earlier version of this section reported S9.5 as the family's
+one dead pointer. That was wrong, for the same reason as the retracted §6: I
+checked only one of unit 7's two source lineages.
+
+Unit 7 is `PAPER_MERGE_08_07` — a merge of **paper08 (delay dynamics)** and
+**paper07 (sampled governance)**. Each has its own supplement:
+
+| lineage | old seed | supplement | carries |
+|---|---|---|---|
+| paper07 sampled governance | paper5 | `paper5_supplementary_v19_NatSustain.md` | S1–S13.3, incl. **S13.1–S13.3** |
+| paper08 delay dynamics | paper4 | `paper4_supplementary_v8.md` | S1–S12, incl. **S9.5** |
+
+Unit 7 L1207 cites:
 
 > "The registered compute-core Hopf pair \(3.666149\) / \(150.358477\) yr —
 > the base core (1)'s institutional-delay certificates, reproduced by the
 > recovered compute core (**Supplementary S9.5**) — certifies this pair"
 
-v19 contains S9.1 and S9.2 but **no S9.5**. Checked across every available
-supplement version (v14–v20): **S9.5 occurs zero times in all of them**, and
-neither "compute core" nor the values 3.666149 / 150.358477 appear anywhere in
-v19. This content has never been written.
+**S9.5 is `S9.5 Compute-core self-check (G5)` in `paper4_supplementary_v8.md`
+("Supplementary Material — Governance delay and the stability of harvested
+stocks")**, which also carries the Hopf pair four times. The values originate in
+the delay lineage's own campaign artefacts,
+`campaign_p4_dr_registration.py` and `results/p4_dr_registration_gates.txt`.
+The record has always existed — in the delay half, not the governance half.
 
-This is the single genuinely dead pointer in the family. It is one pointer, not
-44.
+Re-resolving all 16 sections unit 7 cites against **both** supplements:
+
+```
+resolved by both ............ 12
+resolved by paper5 only .....  3   (S13.1, S13.2, S13.3)
+resolved by paper4 only .....  1   (S9.5)
+resolved by neither .........  0
+```
+
+So unit 7 has **no dead pointers** and requires **both** supplements attached.
+Attaching only paper5's — as was first done — leaves S9.5 dangling.
 
 ### 6.4 Staleness
 
@@ -226,8 +253,8 @@ therefore sound.
 | # | action | status | resolves |
 |---|---|---|---|
 | 1 | **Unit 1** — recover the v51 supplement, retitle to match v63, attach. Labels needed no rewrite: the supplement is a standalone document (0 dangling refs, braces balanced, environments balanced as committed). Added `\renewcommand{\thefigure}{S\arabic{figure}}` immediately before S4 so its figures render S1/S2/S3 and match the main text's `Figure~S1` (ladder) and `Figure~S2` (obstruction tree); the fibre figure earlier in the document keeps ordinary numbering and does not consume an S-slot. | **DONE** — `paper01_obstruction_calculus_v63_supplementary.tex` | Finding A + 17 pointers |
-| 2 | **Unit 7** — attach the unblinded `v19` (not the blinded `v20`). | **DONE** — `paper08_governance_delay_v46_supplementary.md` | 43 of 44 pointers |
-| 3 | **Unit 7 — S9.5.** The main text cites a compute-core Hopf-pair record that has never existed. | **OPEN — needs the author.** Not fabricable here. | the 1 dead pointer |
+| 2 | **Unit 7** — attach the unblinded `v19` (not the blinded `v20`). | **DONE** — `..._supplementary_governance.md` | 15 of 16 sections |
+| 3 | **Unit 7 — S9.5.** Resolved: S9.5 is `S9.5 Compute-core self-check (G5)` in the **delay** lineage's supplement (`paper4_supplementary_v8.md`), not the governance one. Attach it alongside #2. | **DONE** — `..._supplementary_delay.md`. Nothing needs the author. | the last section |
 | 4 | **Units 6 and 9** — attach `paper1_supplementary_v12.md` and `paper3_supplementary_v18.tex`; update the stale "Accompanies" titles to the current main-text titles. | **DONE** — `paper06_..._supplementary.md`, `paper10_..._supplementary.tex` | 14 pointers |
 
 **On item 3.** Unit 7 L1207 attributes the Hopf pair \(3.666149\) /
@@ -246,10 +273,24 @@ ORCID, and an "Accompanies" line character-identical to the main text's
 Unit 6's H1 and "Accompanies" line both carried the superseded title
 *"Aggregate Indices and Transition Safety"* and both were updated.
 
-All four attached files verify: braces balanced, no dangling `\ref`,
-environments balanced, and the two `.tex` files are standalone
-(`documentclass` → `\begin{document}` → `\end{document}`). Build scripts are in
-`papers/supprec/`.
+Five files are attached in total — one for units 1, 6 and 9 each, and **two for
+unit 7** because it is a merge:
+
+```
+paper01_obstruction_calculus_v63_supplementary.tex
+paper06_assessment_separation_v67_supplementary.md
+paper08_governance_delay_v46_supplementary_governance.md   (paper5 lineage)
+paper08_governance_delay_v46_supplementary_delay.md        (paper4 lineage)
+paper10_depletion_ledgers_v53_supplementary.tex
+```
+
+An earlier single `paper08_governance_delay_v46_supplementary.md` carried only
+the governance half; it is superseded by the pair above.
+
+All five verify: braces balanced, no dangling `\ref`, environments balanced,
+and the two `.tex` files are standalone (`documentclass` → `\begin{document}` →
+`\end{document}`). Unit 7's 16 cited sections resolve to **zero** unresolved
+across the pair. Build scripts are in `papers/supprec/`.
 
 ---
 
@@ -288,14 +329,28 @@ It was wrong because the supplements are named `paper1_supplementary_v12.md`,
 old numbering, no unit-name substring. A content search for `S13.3` (a section
 only unit 7 cites) found them immediately.
 
-Two lessons, both versions of errors already on record:
+**The same error then recurred once more, inside unit 7.** Having found the
+governance supplement, I checked unit 7's 16 cited sections against it alone
+and declared S9.5 dead, reporting "one dead pointer" and asking the author for
+a compute-core record that did not need to be written. S9.5 is present in the
+delay lineage's supplement. Unit 7 is a merge of two papers, and I had
+established that fact in `PAPER_MERGE_08_07.md` without applying it to the
+cross-check.
+
+Three lessons, all versions of errors already on record:
 
 1. **A null result from a scoped search is not evidence of absence.** Filename
    matching proves nothing when the naming scheme may differ; search content,
    or enumerate everything and read the list. All 166 supplement-like files
    were one listing away.
 2. **The reported severity was an artifact of the search, and it ran the wrong
-   way.** A too-narrow search inflated the defect count from 1 to 75. Earlier
-   errors of this class also inflated counts. Narrow searches that miss files
-   and loose regexes that over-match both produce false findings; only reading
-   the candidate distinguishes them.
+   way.** A too-narrow search inflated the defect count from 1 to 75, and the
+   same too-narrow check then left it at 1 instead of 0. Narrow searches that
+   miss files and loose regexes that over-match both produce false findings;
+   only reading the candidate distinguishes them.
+3. **For a merged unit, check every source lineage.** The partition merged
+   papers; the supplements were never merged. `PAPER_MERGE_*` records which
+   units are merges, and each constituent may carry its own supplement. Here
+   the two lineages' section series overlap (S1–S12 exist in both) while their
+   distinctive tails do not (S13.1–S13.3 only in paper5; S9.5 only in paper4),
+   so a single-lineage check looked nearly complete and hid the gap.
