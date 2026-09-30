@@ -198,6 +198,53 @@ respectively, so the split is intended — but again the source head has not bee
 prior art** (Part I), and **unit 11 has 402 w** (Part II — consistent with the architecture's
 405 w figure for unit 11).
 
+### 3.1 RESOLVED 2026-09-30 — containers split
+
+`split_parts.py` performs the split **non-destructively**: containers are left byte-identical
+and new numbered versions are written.
+
+| new file | unit | words | note |
+|---|---|---|---|
+| `paper05_exact_belief_computation_v16.tex` | **5** | 5,654 | Part I; has its own title/abstract/maketitle |
+| `paper06_assessment_separation_v67.tex` | **6** | 24,799 | Part I; own abstract, but **no** `\maketitle` — one is injected |
+
+Two candidate splits were **discarded as redundant**: `paper11c…v3` and `paper10…v54` (the
+container-derived Part IIs) overlap their pre-existing standalone files by only 67.4% and
+91.6%, i.e. the containers hold *earlier* states. **`paper11c_v2` and `paper10_v53` remain
+authoritative for units 11 and 9.** They were deleted to prevent ambiguity about which file is
+the unit source.
+
+**Asymmetries the splitter had to handle** (a blind split would have broken both):
+
+- `paper05`: Part I has its own `\title`/`\maketitle`/`\begin{abstract}`. Keeping the umbrella
+  block too emitted **two `\maketitle`** and printed the title block twice. Fixed by starting
+  Part I at its `\part` and injecting the umbrella `\title`.
+- `paper06`: Part I has its own abstract but **no `\maketitle`** — in the container the
+  umbrella's `\maketitle` covers both parts. Fixed by starting at its `\part` and injecting
+  `\title` + `\maketitle`.
+- `paper10`'s Part II emits its abstract as `\section*{Abstract}`, not `\begin{abstract}`.
+
+**Verification performed** (no LaTeX toolchain available in this session — `apt` needs root and
+the tectonic binary could not be fetched, so compilation was not possible):
+
+- 1 `\documentclass`, 1 `\begin{document}`, 1 `\end{document}`, 1 `\part` per file;
+- all environments balanced (`enumerate`, `itemize`, `abstract`, `figure`, `table`, `center`,
+  `document`);
+- **no cross-part macro dependency** — every `\newcommand`/`\def`/`\newtheorem`/
+  `\DeclareMathOperator` defined only in one part is checked against the other, and none is
+  used across the boundary;
+- no dangling `\ref` after stripping comments (a `\ref{priorart}` inside a `%%` comment is a
+  false positive and is not a defect);
+- word counts consistent with the measured part sizes.
+
+**Residual risk:** the preambles are copied verbatim from sources known to compile, so package
+availability is unchanged. The unverified step is compilation itself — **the four splits should
+be compiled once a toolchain is available** before any of them is merged or posted.
+
+**Known cosmetic issue:** both splits carry the umbrella title, which names both parts (e.g.
+*"…computation at scale and the audits that bind the obstruction calculus to its worked
+systems"*). Narrowing the titles is a content decision and was not taken.
+
 ---
 
 ## 4. Unit 5 — novelty test
