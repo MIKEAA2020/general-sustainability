@@ -55,7 +55,56 @@ def preamble_and_title(s):
     return preamble, title, author
 
 
-def write(out, preamble, title, author, body, note, need_maketitle=False):
+def reference_block(s):
+    """The shared, hand-formatted reference list.
+
+    Both containers keep ONE bibliography at the very end of the document, inside Part II's
+    character range, but it serves BOTH parts. A naive split therefore leaves every part
+    without a reference list.
+
+    Note these papers use no \\cite commands -- citations are literal inline text -- so a
+    missing list produces no '?' markers and the defect is invisible until the end of the
+    document. It is nonetheless fatal for publication, so the list is attached to every part.
+    """
+    m = re.search(r'\\(?:section|subsection|chapter)\*?\{[^}]*'
+                  r'(?:Reference|Bibliograph)[^}]*\}', s, re.I)
+    if not m:
+        return None
+    start = m.start()
+
+    # paper06's list is FRAGMENTED: it runs A..V, is interrupted by a Supplementary material
+    # section, then resumes with a SECOND \label{references} block. A naive "stop at the next
+    # heading" therefore truncates it. Run to the Declarations section instead, then drop the
+    # Supplementary sections that were interleaved.
+    decl = re.search(r'\\(?:section|subsection|chapter)\*?\{[^}]*Declarations[^}]*\}',
+                     s[start:])
+    end = start + decl.start() if decl else s.rindex('\\end{document}')
+    block = s[start:end]
+
+    # Rather than stripping the interleaved Supplementary sections wholesale (which also
+    # discards the reference entries sitting inside them), keep the heading plus every
+    # paragraph that has the shape of a hand-formatted bibliography entry: a paragraph
+    # beginning "Surname, X." Supplementary prose does not match and is dropped.
+    # A shape test on "Surname, X." alone is too strict: it drops institutional authors with
+    # no comma ("DFO. (2016).", "World Bank. (2011)."), lowercase nobiliary prefixes
+    # ("von Neumann, J. (1928)."), and LaTeX accents ("Sch\\\"ar, S., ... (2025)."). All of
+    # those are cited by Part I and all were verified present in the container list.
+    # Bibliography entries essentially always carry a year, so that is the robust test.
+    paras = re.split(r'\n\s*\n', block)
+    bibpara = re.compile(r'^\s*[A-Z][A-Za-z\-\'\\]+,\s+[A-Z]\.')
+    hasyear = re.compile(r'\((?:19|20)\d\d\)')
+    kept = [paras[0]] + [p for p in paras[1:]
+                         if bibpara.match(p) or hasyear.search(p)]
+
+    # The list carries \label{references} twice; keep only the first.
+    block = '\n\n'.join(k for k in kept if k.strip())
+    labs = [x.start() for x in re.finditer(r'\\label\{references\}', block)]
+    for pos in reversed(labs[1:]):
+        block = block[:pos] + block[pos + len('\\label{references}'):]
+    return block
+
+
+def write(out, preamble, title, author, body, note, need_maketitle=False, refs=None):
     parts = [preamble]
     if title:
         parts.append(title + '\n')
@@ -63,7 +112,10 @@ def write(out, preamble, title, author, body, note, need_maketitle=False):
         parts.append(author + '\n')
     if need_maketitle:
         parts.append('\\maketitle\n')
-    parts.append('\n' + body.rstrip() + '\n\n\\end{document}\n')
+    parts.append('\n' + body.rstrip() + '\n')
+    if refs:
+        parts.append('\n' + refs.rstrip() + '\n')
+    parts.append('\n\\end{document}\n')
     open(out, 'w', encoding='utf-8').write(''.join(parts))
     print('  wrote %-46s %7d chars' % (os.path.basename(out),
                                        os.path.getsize(out)))
@@ -77,6 +129,8 @@ def main():
     f = 'paper05_exact_belief_computation_v15.tex'
     s = open(f, encoding='utf-8', errors='replace').read()
     pre, title, author = preamble_and_title(s)
+    refs = reference_block(s)
+    assert refs, 'paper05: no reference list found'
     parts = [m.start() for m in re.finditer(r'\\part\*?\{', s)]
     assert len(parts) == 2, 'paper05 expected 2 \\part, got %d' % len(parts)
     enddoc = s.rindex('\\end{document}')
@@ -85,7 +139,7 @@ def main():
     # AT its \\part and the umbrella \\title is injected instead. Part II has no title of its
     # own, so it starts at its \\part and relies on the injected umbrella \\title.
     jobs.append(('paper05_exact_belief_computation_v16.tex', pre, title, author,
-                 s[parts[0]:parts[1]], 'unit 5  (Part I)'))
+                 s[parts[0]:parts[1]], 'unit 5  (Part I)', False, refs))
     jobs.append(('paper11c_worked_systems_audit_v3.tex', pre, title, author,
                  s[parts[1]:enddoc], 'unit 11 (Part II)'))
 
@@ -93,6 +147,8 @@ def main():
     f = 'paper06_assessment_separation_v66.tex'
     s = open(f, encoding='utf-8', errors='replace').read()
     pre, title, author = preamble_and_title(s)
+    refs = reference_block(s)
+    assert refs, 'paper06: no reference list found'
     parts = [m.start() for m in re.finditer(r'\\part\*?\{', s)]
     assert len(parts) == 2, 'paper06 expected 2 \\part, got %d' % len(parts)
     enddoc = s.rindex('\\end{document}')
@@ -100,15 +156,16 @@ def main():
     # container the umbrella's \\maketitle covers both parts. So Part I starts at its \\part and
     # gets an injected \\title + \\maketitle; its own abstract then follows the Part heading.
     jobs.append(('paper06_assessment_separation_v67.tex', pre, title, author,
-                 s[parts[0]:parts[1]], 'unit 6  (Part I)', True))
+                 s[parts[0]:parts[1]], 'unit 6  (Part I)', True, refs))
     jobs.append(('paper10_depletion_ledgers_v54.tex', pre, title, author,
-                 s[parts[1]:enddoc], 'unit 9  (Part II)'))
+                 s[parts[1]:enddoc], 'unit 9  (Part II)', False, refs))
 
     for job in jobs:
         out, pre, title, author, body, note = job[:6]
         need_mt = job[6] if len(job) > 6 else False
+        refs = job[7] if len(job) > 7 else None
         print('%s' % note)
-        write(out, pre, title, author, body, note, need_mt)
+        write(out, pre, title, author, body, note, need_mt, refs)
 
 
 if __name__ == '__main__':

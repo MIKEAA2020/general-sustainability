@@ -173,10 +173,48 @@ menu" and deserves one distinguishing sentence.
 **Novelty survives.** The claim is genuinely narrow and the path-wise-feasibility scope is a
 real and defensible boundary — the literature surveyed studies objective value, not feasibility.
 
-**No repositioning or dropping indicated.** But two citations must land before the claim can
-be made, and both are cheap. Under a no-withdrawal publication target, publishing Theorem 9
-without addressing Kuhn is the one avoidable risk in this unit: the objection is immediate,
-obvious to any reader with game-theory training, and fully answerable in one paragraph.
+**No repositioning or dropping indicated.** Two citations had to land before the claim could be
+made. Under a no-withdrawal publication target, publishing Theorem 9 without addressing Kuhn was
+the one avoidable risk in this unit: the objection is immediate, obvious to any reader with
+game-theory training, and fully answerable in one paragraph.
+
+### 2.6 STATUS: BOTH FIXES APPLIED (2026-09-30) to `paper06_assessment_separation_v67.tex`
+
+1. **Wei & Zhang (2024)** — added to the *Adjustable and randomized robust optimization*
+   subsection, replacing the mis-attribution to Bertsimas & Goyal (2012), which is a paper
+   about affine policies and does not give the zero-adjustability condition. The distinction is
+   stated on three axes: objective value vs feasibility; polyhedral uncertainty sets vs the
+   present setting; and characterising when the commutation *closes* vs exhibiting when it
+   *fails* with nonempty interior.
+2. **Kuhn** — 343-word paragraph added, stating the objection in the reader's own terms and
+   answering it: Kuhn's realization-equivalence is an equality of *distributions over paths*
+   under an *expected* criterion, whereas the certified constraint is *path-wise*; convexification
+   must occur *within* a step, and alternation varies *across* steps. **Main & Randour (2024)**
+   added as reinforcement from the other side — Kuhn's equivalence *fails outright under finite
+   memory*, which is this paper's setting, so the classical theorem does not apply even before
+   the worst-case criterion is imposed.
+
+Three bibliography entries added in the paper's own flat hand-formatted style, anchored on the
+alphabetically-following entries (Kuhn after Krause; Main after Lygeros; Wei after von Neumann).
+
+**Verified after the edit:** all six checked citations resolve (Kuhn 1953, Main 2024, Wei 2024,
+Krause 2011, Kobayashi 2023, Sion 1958); braces balanced in every inserted passage and in the
+whole file (1824/1824); one `\begin{document}` / `\end{document}`. Unit 6 is now **27,325 w**
+(24,799 before the fixes). Compilation still unverified — see §3.1.
+
+**Citation record — all three verified against Crossref before insertion:**
+
+| work | record | DOI |
+|---|---|---|
+| Kuhn, H.W. 1953 | *Contributions to the Theory of Games (AM-28), Vol. II*, 193–216, Princeton UP | 10.1515/9781400881970-012 |
+| Main, J.C.A. & Randour, M. 2024 | *Information and Computation* **301**, 105229 | 10.1016/j.ic.2024.105229 |
+| Wei, N. & Zhang, P. 2024 | *Mathematical Programming* **208**(1–2), 581–628 | 10.1007/s10107-023-02049-w |
+
+> **Process note.** Main & Randour was first recorded here as *Games and Economic Behavior*
+> with DOI `10.1016/j.geb.2024.05.004`. **That DOI was fabricated** — inferred from a PII
+> prefix I misread — and the journal was wrong. Both were corrected by Crossref lookup before
+> the entry was inserted. Under a no-withdrawal target an invented DOI would have been
+> permanent, so no citation goes into a source file unverified.
 
 ---
 
@@ -240,6 +278,40 @@ the tectonic binary could not be fetched, so compilation was not possible):
 **Residual risk:** the preambles are copied verbatim from sources known to compile, so package
 availability is unchanged. The unverified step is compilation itself — **the four splits should
 be compiled once a toolchain is available** before any of them is merged or posted.
+
+#### Bibliography: the first split silently dropped the entire reference list
+
+Both containers keep **one shared reference list at the very end of the document, inside Part
+II's character range**, even though it serves both parts. The first split therefore produced
+files with **no bibliography at all**.
+
+This was nearly missed, and for an instructive reason: **these papers use no `\cite` commands**
+— citations are literal inline text (`(Ben-Tal, Goryashko, Guslitzer and Nemirovski, 2004)`). A
+missing list therefore produces **no `?` markers and no LaTeX warning**; it is invisible until
+the end of the document. It is nonetheless fatal for publication.
+
+**Two further source defects surfaced while extracting it:**
+
+- **paper06's list is fragmented.** It runs A→V, is interrupted by a
+  `\section{Supplementary material}`, then resumes with a **second `\label{references}`**
+  block. A "stop at the next heading" rule truncates it (86 of 109 entries, with Sion 1958,
+  Saint-Pierre 1994, Schaefer 1954, Solow 1974, Roy 1996 and Vincke 1992 all unresolved).
+- **A shape-based filter is also too strict.** Testing entries on `Surname, X.` silently drops
+  institutional authors with no comma (`DFO. (2016).`, `World Bank. (2011).`), lowercase
+  nobiliary prefixes (`von Neumann, J. (1928).`), and LaTeX accents
+  (`Sch\"ar, S., Pohl, E., and Geldermann, J. (2025).`).
+
+**Resolution:** capture from the References heading to the Declarations section, then keep the
+heading plus every paragraph matching `Surname, X.` **or** containing a parenthesised year —
+bibliography entries essentially always carry a year, supplementary prose mostly does not.
+
+| | container | first split | final split |
+|---|---|---|---|
+| paper05 → unit 5 bib entries | 22 | 0 | **22** |
+| paper06 → unit 6 bib entries | 109 | 0 → 86 → 108 | **109** |
+| unit 6 unresolved citations | — | 15 | **0 real** (2 regex false positives) |
+| `\label{references}` | 2 (duplicate) | — | **1** |
+| supplementary sections leaked | — | — | **0** |
 
 **Known cosmetic issue:** both splits carry the umbrella title, which names both parts (e.g.
 *"…computation at scale and the audits that bind the obstruction calculus to its worked
