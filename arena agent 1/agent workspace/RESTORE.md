@@ -54,3 +54,52 @@ python3 paperE2_cod_intervention_v29_sabotage.py          # 97 mutations, 0 hole
 * **Zenodo** — re-deposit as v3, keeping v2. Issue a new version with a note
   naming the convention change; do not overwrite. Needs a human.
 * The branch has not been merged into `main`.
+
+---
+
+# 2026-09-30 — workspace trimmed back under budget
+
+The repository was cloned into `repo/` to unblock the Phase 1 claim audit. That added
+**924 MB / 6,407 files**, far past the workspace snapshot cap (~128 MB / 10,000 files). The cap
+began pruning on its own: `repo/` self-trimmed from 6,407 files to 2,416 before any deletion was
+done by hand.
+
+## What was pushed first (nothing deleted before it was verified on the branch)
+
+| commit | contents |
+|---|---|
+| `e8755a1624` | Restored unit 1 (`paper01_v63`), Phase 0 closure, Phase 1 stale-value pass |
+| `4febe9921c` | Emergency push: 15 unit-source `.tex`, all `papers/*.md`, all tooling, 2.6 MB |
+| `4a803d296a` | Sweep completion: everything never previously committed — 252 files, 15.1 MB |
+
+A full sweep then compared every workspace file against the branch tree by basename.
+**Result: the entire workspace is mirrored.** The only file not committed is excluded on purpose
+(see below).
+
+## What was deleted from the workspace
+
+All three are recoverable; none contained workspace-original content.
+
+| Deleted | Size | Recover by |
+|---|---|---|
+| `repo/` | 106 MB at deletion (was 924 MB) | `git clone -b e2-v3-source-year https://github.com/MIKEAA2020/general-sustainability.git repo` |
+| `tools/` | 69 MB — `tectonic` 26 MB + `tcache` 44 MB | the `curl` / `tar` command in the Restore section above |
+| `lean/` | 1.2 MB | present in the repository |
+
+**Workspace after deletion: 15 MB in 253 files** — comfortably under the cap.
+
+## Deliberately NOT committed
+
+- **`uploads/github_pat.txt`** — a credential. Never commit it. 94 bytes; replace with a fresh
+  token if lost.
+- **`p5/reps.pkl`** — a 40-byte pickle, referenced by no script in the workspace. Contents
+  recorded here so nothing is lost: `[[0, 5, 9, 12], [1, 5, 9, 13]]`. Pickles are also an
+  arbitrary-code-execution risk to anyone loading one from a public repository, so it stays out.
+
+## Consequence for compilation
+
+No LaTeX toolchain is obtainable in this session — `apt` needs root, and the tectonic release
+fetch returns a 9-byte non-gzip file. Deleting `tools/` removes the last local engine, so **all
+checks on the papers remain static** (brace balance, environment balance, dangling `\ref`,
+8-gram content coverage). Compilation is unverified and this is recorded as residual risk in
+`papers/PRIOR_ART_PASS.md` §3.1 and `papers/PHASE0_MERGE_VERIFICATION.md`.
