@@ -141,11 +141,36 @@ def split_entries(block):
     """
     body = re.sub(r'^\\(?:sub)*section\*?\{References\}\s*(\\label\{[^}]*\})?\s*\n',
                   '', block, count=1)
-    body = re.sub(r'^\s*\{\s*(?:\\(?:tiny|scriptsize|footnotesize|small|normalsize|large))?\s*',
-                  '', body)
-    body = re.sub(r'\}\s*$', '', body)
+    # Drop size-group delimiter LINES before splitting. Some papers wrap the list -- or
+    # several sub-blocks of it -- in { ... } / {\footnotesize ... } with the delimiter on
+    # its own line. The entry splitter cannot break across them (there is no ". " to key
+    # on), so the opener and closer stay glued to whichever entries were first and last,
+    # and an alphabetical sort scatters them -> "Too many }'s" at end of document.
+    SIZE = r'(?:tiny|scriptsize|footnotesize|small|normalsize|large|Large)'
+    keep = []
+    for ln in body.split('\n'):
+        if re.fullmatch(r'\s*\{\s*(?:\\' + SIZE + r')?\s*\}?\s*', ln) or \
+           re.fullmatch(r'\s*\{\s*\\' + SIZE + r'\s*', ln) or \
+           re.fullmatch(r'\s*\}\s*', ln):
+            continue
+        keep.append(ln)
+    body = '\n'.join(keep)
+
     parts = re.split(r'(?<=\.)\s+(?=[A-ZÄÖÅ][\w\'{}\\\"~\^\- ]{1,30}?, )', body)
-    return [p.strip() for p in parts if p.strip()]
+    # Clean PER ENTRY, not just at the block ends. A size-group opener/closer can end up
+    # attached to whichever entry happened to be first/last in the source, and after an
+    # alphabetical sort that entry lands in the middle of the merged list -- leaving an
+    # unbalanced group ("Too many }'s"). Strip only brace wrappers that look like size
+    # groups, so legitimate braces inside an entry survive.
+    out = []
+    for p in parts:
+        p = re.sub(r'^\s*\}\s*', '', p.strip())
+        p = re.sub(r'^\s*\{\s*(?:\\(?:tiny|scriptsize|footnotesize|small|normalsize|large))?\s*',
+                   '', p)
+        p = re.sub(r'\s*\}\s*$', '', p)
+        if p.strip():
+            out.append(p.strip())
+    return out
 
 
 def norm(e):
