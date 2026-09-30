@@ -744,3 +744,95 @@ resolve; 11,730 → 12,003 words.
 
 Three units tested, three gaps found, three fixed, **no unit repositioned, combined or dropped**.
 The attrition budget remains undrawn after two passes. Units 7, 8 and 10 are the remainder.
+
+### 7.6 Unit 7 — delay as a stabilising mechanism, without the literature that stabilises by delay
+
+Unit 7's prior art is strong and honestly framed. It names three literatures — delays in
+population dynamics (Hutchinson 1948; Hale and Verduyn Lunel 1993; Diekmann et al. 1995; Kuang
+1993; Hassard et al. 1981; Hayes 1950), informational and knowledge delay (Adamson and Hilker
+2020; Li et al. 2016; Peterson et al. 2022), and management delay as a cost (Shertzer and Prager
+2007; Brown et al. 2012; Karlsson and Gilek 2020; Hocherman et al. 2025) — and reconciles its own
+finding with the third by localising the range over which their monotonicity should be expected
+to hold. It also cites the sampled-data control canon (Åström and Wittenmark; Chen and Francis)
+and the bifurcation texts (Kuznetsov; Guckenheimer), and is careful about Neimark–Sacker: the
+paper calls it the "linear spectral signature" and repeatedly states that the *nonlinear*
+conditions are not verified.
+
+But its headline differentiator is that "for the mobilising rule, intermediate delay
+*stabilises* the equilibrium, with two subcritical Hopf crossings bounding the stabilising
+window" — and the literature on **delay as a stabilising mechanism** was entirely uncited:
+Pyragas, Niculescu, Michiels, Sipahi, Insperger and Stépán all appeared zero times.
+
+**Fixed** with a new paragraph, "Delay as a stabilising mechanism", placed between "delay as a
+cost" and "Where this paper departs". It names Pyragas's delayed-feedback stabilisation of
+unstable orbits (Pyragas, 1992), delayed positive feedback stabilising oscillatory systems
+(Abdallah, Dorato, Benites-Read and Byrne, 1993), and the general eigenvalue-based treatment
+(Niculescu, 2007). It then separates on **who chooses**: in that literature the delay is a
+*control design parameter* — introduced, tuned, and proved stable at a chosen value — whereas
+here the delay belongs to the institution, nobody introduces it as a stabiliser, and the finding
+is that a bounded intermediate range happens to stabilise. It closes by tying this to why the
+result is reported as a bracketed window with its perturbation band rather than as a
+recommendation.
+
+Crossref-verified: Pyragas, K. (1992), *Physics Letters A* **170**, 421–428,
+doi:10.1016/0375-9601(92)90745-8. Abdallah, C.T., Dorato, P., Benites-Read, J. and Byrne, R.
+(1993), *1993 American Control Conference*, 3106–3107, doi:10.23919/acc.1993.4793475.
+Niculescu, S.-I. (2007), *Stability and Stabilization of Time-Delay Systems*, SIAM,
+doi:10.1137/1.9780898718645.
+
+**Unit 7 survives.** The operator contrast and the bounded stabilising window are untouched.
+Verified after edit: braces +0; document/abstract balanced; no dangling `\ref`; all three
+citations resolve; 47,863 words.
+
+### 7.7 Unit 10 — a locked evaluation design, without the data-snooping literature
+
+Unit 10 is the most candid of the set about scope. The cod section states that the
+M-competitions aggregate over tens of thousands of series and 61 methods whereas this paper
+scores five modules plus two baselines on one stock, and that "a cross-series result about the
+average performance of method classes does not entail anything about a particular stock". The
+Edwards section states that "the paper's contribution is therefore not a new forecasting model;
+it is a locked evaluation design applied to a familiar model family, with the negative result as
+the finding." Diebold and Mariano (1995), Hyndman and Koehler (2006) and Makridakis et al.
+(2000, 2018, 2020) are all cited.
+
+But the paper's methodological claim — "a negative result of this kind is informative only
+against a protocol fixed before any score is computed" — is precisely the data-snooping problem,
+and that literature was entirely uncited: White, Romano, Wolf, Hansen, "data snooping",
+"multiple testing", "pre-registered", "pre-specified" and "cross-validation" all appeared zero
+times in the bibliography.
+
+**Fixed** with a new paragraph, "Guarding against selection after the fact", placed in the
+methodology discussion. It names White's reality check, which constructs the distribution of the
+best performance statistic across candidates under the null that none has skill (White, 2000),
+and the stepwise testing literature's familywise-error control (Romano and Wolf, 2005). It then
+distinguishes: those procedures take a *set of already-computed scores* and ask which survive
+correction for having been selected, whereas here nothing is selected from the scores at all —
+the rule is a predicate fixed before any score is read, applied without exception, with its
+operating characteristics measured by simulation under known ground truth. That is why a
+negative result can be reported as a finding rather than an absence of evidence. It also states
+the cost, which is real: a rule fixed in advance cannot be tuned to the series.
+
+Crossref-verified: White, H. (2000), *Econometrica* **68**(5), 1097–1126,
+doi:10.1111/1468-0262.00152. Romano, J.P. and Wolf, M. (2005), *Econometrica* **73**(4),
+1237–1282, doi:10.1111/j.1468-0262.2005.00615.x.
+
+**Unit 10 survives.** The locked design and the negative result are untouched; the citations
+supply the reason the design is necessary.
+Verified after edit: braces +0; document/abstract balanced; no dangling `\ref`; both citations
+resolve; 32,229 words.
+
+### 7.8 The recurring shape of the gaps
+
+Five units have now yielded exactly one genuine gap each, and all five have the same shape:
+
+| Unit | Literature engaged | Literature that owns its central object, and was missing |
+|---|---|---|
+| 5 | POMDP *algorithms* (PBVI) | constrained / chance-constrained POMDPs |
+| 9 | composite-indicator critique, MFA, stoichiometry | Solow–Hartwick, origin of weak sustainability |
+| 11 | viability theory's founding text, ARCH-COMP | computing viability kernels |
+| 7 | delay as a cost; sampled-data control | delay as a stabilising mechanism |
+| 10 | forecast accuracy, M-competitions | data snooping / multiple testing |
+
+In every case the paper cites the literature *adjacent to its method* and misses the literature
+that owns *its objective*. This is a diagnosable habit of the series rather than five
+coincidences, and it is the check to run first on any remaining unit.
