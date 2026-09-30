@@ -25,6 +25,34 @@ STALE = [
     (r'\b60\s+build\s+jobs\b', 'build claim from the v4.14.0 run; not reproducible here'),
 ]
 
+# CONTEXT CHECK — a string match is a CANDIDATE, not a finding.
+#
+# Seven of the first ten "findings" were false positives: every one of papers 1, 3, 4 and 5
+# states the stale Lean pin *and then discloses it* ("The build has not been re-run since
+# the toolchain pin moved, so the build-job figures below date from the v4.14.0 run and
+# should be re-confirmed before submission"). Editing those would have DELETED an honest
+# caveat. So: if the excusing context is present near the match, the hit is reclassified as
+# a disclosed caveat -- which is a POSITIVE signal, not a defect.
+#
+# This is the mirror of enumeration-undercounting: pattern-matching invents defects, and
+# acting on invented defects degrades the paper.
+CONTEXT_WINDOW = 700   # characters either side of the match
+CONTEXT_EXCUSE = {
+    r'v4\.14\.0': [
+        r'currently\s*\\texttt\{v4\.34\.1\}',      # states the current pin too
+        r'build has not\s*\\?\s*(?:been\s*)?re-?run',  # and discloses it
+    ],
+    r'\b54\s+modules\b': [r'(?:currently|now)\s*\\texttt\{?60'],
+    r'\b60\s+build\s+jobs\b': [r'build has not\s*\\?\s*(?:been\s*)?re-?run'],
+}
+
+# Self-disclosure is a GOOD sign. Detect it so the sweep can report it positively.
+DISCLOSED_MARKERS = [
+    (r'build has not\s*\\?\s*(?:been\s*)?re-?run', 'toolchain caveat disclosed'),
+    (r'should be re-?confirmed before submission', 'pre-submission recheck flagged by the paper'),
+    (r'not verifiable (?:here|now)|UNVERIFIABLE', 'verification limit stated'),
+]
+
 # (B) superseded hybrid basis (E2): v2 numbers, wrong under the source-year ruling
 HYBRID_BAD = {
     '-460.03': 'UC_min v2 (hybrid) -> -328.97',
@@ -65,8 +93,23 @@ def scan(path):
     key = key.group(1) if key else stem
     out = []
 
+    # positive check: the paper discloses its own verification limits
+    for pat, why in DISCLOSED_MARKERS:
+        if re.search(pat, c, re.I):
+            out.append(('OK.disclosed', 'present', why, None))
+
     for pat, why in STALE:
         for m in re.finditer(pat, c, re.I):
+            lo = max(0, m.start() - CONTEXT_WINDOW)
+            hi = min(len(c), m.end() + CONTEXT_WINDOW)
+            ctx = c[lo:hi]
+            excuses = CONTEXT_EXCUSE.get(pat, [])
+            if excuses and all(re.search(e, ctx, re.I) for e in excuses):
+                # disclosed on purpose -> not a defect
+                out.append(('OK.disclosed-not-defect', m.group(0),
+                            '%s — but the paper states the current value and the caveat '
+                            'beside it' % why, c[:m.start()].count('\n') + 1))
+                continue
             out.append(('A.stale', m.group(0), why, c[:m.start()].count('\n') + 1))
 
     for num, why in HYBRID_BAD.items():
