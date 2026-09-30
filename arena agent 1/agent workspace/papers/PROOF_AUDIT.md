@@ -242,6 +242,16 @@ Unit 1 is the only demonstrable staleness. A content search for *"Complete proof
 of the selector principle"* returns v47–v51 and nothing later, confirming no
 supplement was produced after v51.
 
+**Version confirmed by the author.** The recovery was requested as "the v58
+supplement" and carried out against **v51**. The author has confirmed v58 was a
+typo and that v51 was intended. `v58` is a valid version in several lineages —
+`paper01_obstruction_calculus_v58.tex` is unit 1's own main text as it stood at
+the time of the partition (22,257 w in `PAPERS_MANIFEST.md`, before it advanced
+to v63), `paper1_assessment_separation_v58.tex` is unit 6's lineage, and
+`paperE1_cod_forecast_ladder_v58.tex` belongs to another family — but in every
+case v58 is a **main text**, not a supplement. No obstruction-calculus
+supplement exists at v58; the series peaks at v51, which is what is attached.
+
 For unit 1 the supplement still **fits exactly** despite being stale: v51 main
 and v63 contain identical 21-claim sets (§6.1). The recovery proposed in §7 is
 therefore sound.
