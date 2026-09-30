@@ -223,14 +223,33 @@ therefore sound.
 
 ## 7. Remediation
 
-| # | action | resolves |
-|---|---|---|
-| 1 | **Unit 1** — recover the v51 supplement, retitle to match v63, attach. Mechanical apart from the title; labels need no rewrite since the supplement is a standalone document (0 dangling refs, braces balanced, environments balanced as committed). Add `\renewcommand{\thefigure}{S\arabic{figure}}` immediately before S4 so its figures render S1/S2/S3 and match the main text's `Figure~S1` (ladder) and `Figure~S2` (obstruction tree) — the fibre figure earlier in the document keeps ordinary numbering and does not consume an S-slot. | Finding A + 17 pointers |
-| 2 | **Unit 7** — attach `paper5_supplementary_v19_NatSustain.md` (unblinded). Do **not** attach v20. | 43 of 44 pointers |
-| 3 | **Unit 7** — resolve S9.5: either write the compute-core Hopf-pair record, or remove the parenthetical and state the values' provenance in the main text. | the 1 dead pointer |
-| 4 | **Units 6 and 9** — attach `paper1_supplementary_v12.md` and `paper3_supplementary_v18.tex`. Update unit 6's stale "Accompanies" title (the main text is now *"Aggregation is a claim, not a presentation…"*, not *"Aggregate Indices and Transition Safety…"*). | 14 pointers |
+| # | action | status | resolves |
+|---|---|---|---|
+| 1 | **Unit 1** — recover the v51 supplement, retitle to match v63, attach. Labels needed no rewrite: the supplement is a standalone document (0 dangling refs, braces balanced, environments balanced as committed). Added `\renewcommand{\thefigure}{S\arabic{figure}}` immediately before S4 so its figures render S1/S2/S3 and match the main text's `Figure~S1` (ladder) and `Figure~S2` (obstruction tree); the fibre figure earlier in the document keeps ordinary numbering and does not consume an S-slot. | **DONE** — `paper01_obstruction_calculus_v63_supplementary.tex` | Finding A + 17 pointers |
+| 2 | **Unit 7** — attach the unblinded `v19` (not the blinded `v20`). | **DONE** — `paper08_governance_delay_v46_supplementary.md` | 43 of 44 pointers |
+| 3 | **Unit 7 — S9.5.** The main text cites a compute-core Hopf-pair record that has never existed. | **OPEN — needs the author.** Not fabricable here. | the 1 dead pointer |
+| 4 | **Units 6 and 9** — attach `paper1_supplementary_v12.md` and `paper3_supplementary_v18.tex`; update the stale "Accompanies" titles to the current main-text titles. | **DONE** — `paper06_..._supplementary.md`, `paper10_..._supplementary.tex` | 14 pointers |
 
-Nothing has been edited yet.
+**On item 3.** Unit 7 L1207 attributes the Hopf pair \(3.666149\) /
+\(150.358477\) yr to "the recovered compute core (Supplementary S9.5)". No
+such record exists in any supplement version, and the values appear nowhere in
+v19. The honest options are to write the record from the computation, or to
+remove the parenthetical and give the values' provenance in the main text.
+Neither can be done without the author: the first needs the compute-core
+artifact, and the second removes a claim attribution, which is a content
+decision. **It is left as-is and flagged rather than patched**, so the dangling
+pointer is visible rather than papered over.
+
+Unit 9's supplement was already correctly titled and attributed (author,
+ORCID, and an "Accompanies" line character-identical to the main text's
+`\title`); only its `\title` was amended to say it is supplementary material.
+Unit 6's H1 and "Accompanies" line both carried the superseded title
+*"Aggregate Indices and Transition Safety"* and both were updated.
+
+All four attached files verify: braces balanced, no dangling `\ref`,
+environments balanced, and the two `.tex` files are standalone
+(`documentclass` → `\begin{document}` → `\end{document}`). Build scripts are in
+`papers/supprec/`.
 
 ---
 
