@@ -167,7 +167,10 @@ def split_entries(block):
         p = re.sub(r'^\s*\}\s*', '', p.strip())
         p = re.sub(r'^\s*\{\s*(?:\\(?:tiny|scriptsize|footnotesize|small|normalsize|large))?\s*',
                    '', p)
-        p = re.sub(r'\s*\}\s*$', '', p)
+        # Do NOT strip a trailing } that closes a command, e.g. \end{document}. Stripping
+        # it there silently mangles the command and yields "Paragraph ended before \end".
+        if not re.search(r'\\(?:begin|end)\{[^{}]*\}$', p.strip()):
+            p = re.sub(r'\s*\}\s*$', '', p)
         if p.strip():
             out.append(p.strip())
     return out
@@ -242,6 +245,10 @@ def merge(BASE, A, B, OUT, TITLE, ABSTRACT, CROSS, HEAD_A, HEAD_B, PREF_A, PREF_
     decl_b = namespace(decl_b, PREF_B, known=lab_b)
 
     pre_a = merge_preamble(pre_a, pre_b)
+    # If a source has no Declarations-style heading, its references block runs to EOF and
+    # therefore still contains \end{document}. It must not end up as a "reference entry".
+    refs_a = refs_a.replace('\\end{document}', '')
+    refs_b = refs_b.replace('\\end{document}', '')
     merged = merge_refs(refs_a, refs_b)
 
     doc = [pre_a, '\n\\begin{document}\n',
