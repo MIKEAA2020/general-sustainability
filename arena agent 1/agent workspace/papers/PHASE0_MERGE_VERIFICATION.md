@@ -240,7 +240,22 @@ classified as *live claim* or *documented migration* by whether the v3 value app
 Unit 8 (`paper09_cod_certification_v32.tex`) additionally cites three authoritative v3 values
 (`-80.87`, `0.554`, `91.59`). **The stale-number residual is closed with evidence.**
 
-### 7.1 Two measurement artifacts caught in this pass, worth naming
+### 7.1 The table above is independently confirmed
+
+`E2_REMEDIATION_PLAN.md` — the authoritative audit that `superseded_v2/README.md` points to — was
+recovered from the branch on 2026-09-30 and corroborates the migration table from a second source:
+
+- "Basis is **ratified and closed**. v3 = source-year. The hybrid v2 is not a convention and is
+  not used anywhere."
+- "`results/intervention_results_v3.json` | SD 114.91, UC = -328.97 / -287.36 / -80.87"
+- "§2 SD / mean / max / acf | 134.96 / -20.44 / +179.76 / 0.652 | **114.91 / -10.88 / +206.55 /
+  0.554**"
+
+It also records that the E2 paper compiled cleanly under tectonic 0.17 (22 pages, no errors, no
+overfull boxes), and that the v2 basis was reverted to `src/superseded_v2/` with a banner and this
+README. So the ruling is not merely documented in two places, it was executed.
+
+### 7.2 Two measurement artifacts caught in this pass, worth naming
 
 - **`2 of 3` matched inside "sustains 12 of 36 pairs"** in unit 11 — an unrelated quantity. The
   check now requires digit boundaries on both sides.
