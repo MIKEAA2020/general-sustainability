@@ -1,3 +1,6 @@
+<!-- Unit 7 is a merge (paper08 delay + paper07 sampled governance). This is the sampled-governance lineage (old paper5): S1-S13.3, incl. S13.1-S13.3.
+     Both files are required: the main text cites sections from each. -->
+
 # Supplementary Material — Periodic Review as Sampled Governance
 
 *Accompanies: "Governance latency: the delay, the clock, and the stability of periodically reviewed renewable resources."*
