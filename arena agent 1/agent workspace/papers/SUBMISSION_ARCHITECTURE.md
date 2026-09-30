@@ -1,5 +1,7 @@
 # Architecture — coherence-driven, re-derived 2026-09-30
 
+**Target: preprints.org — final, not staging.**
+
 **Status: RATIFIED, then RE-DERIVED.** The partition was first derived from the recorded venue
 strategy and grouped by *submission unit*. That derivation was **wrong in its reasoning**: the
 case for separating units 2–5 rested on "folding surrenders four venues", and with
@@ -147,12 +149,27 @@ carried additional gaps, both since closed:
 
 ## Open questions
 
-1. **Is preprints.org the final target or the first step?** The record
-   (`FAMILY_PAPER_COUNT.md` §0) treats it as *staging*, with one preprint mapping to one
-   eventual journal submission; the current direction treats it as primary. These are
-   compatible if the reading is "primary near-term target, journals later." The answer
-   determines only whether the venue column is retained as provisional or dropped entirely.
-   **The partition is the same either way**, since it is now coherence-driven.
+1. **RESOLVED (2026-09-30).** Preprints.org is the **final** target; journals are a possible
+   secondary prospect only, and are never allowed to shape the partition. Venue column dropped.
 
 2. **Unit 1's venue is no longer an open item.** The JMCDA concern is void: with preprints as
    the target there is no competing journal submission to conflict with.
+
+3. **NEW — pre-posting checklist.** To be verified against the platform itself before the
+   first unit goes up; none of it changes the partition.
+
+   - **AI-use disclosure.** Preprints.org is run by MDPI, whose house policy requires
+     generative-AI use to be disclosed in an Acknowledgments statement and described in detail
+     in Methods, with grammar and formatting exempt
+     [1](https://libguides.iou.edu.gm/c.php?g=1482669&p=11059956)
+     [2](https://www.mdpi.com/about/announcements/5687). That policy is documented for MDPI
+     *journals*; whether it is applied to the preprint platform has **not** been verified.
+     It bears squarely on this family, developed with AI assistance. Verify before posting and
+     **default to disclosure if uncertain** — over-disclosure carries no penalty.
+   - **Research data must be available** at submission
+     [5](https://www.preprints.org/blog/post/preprints-young-academics). Each unit needs a
+     data/code availability statement. The Lean-checked units already name their toolchain
+     pins, which is most of one.
+   - **Consent to the no-withdrawal policy.** Co-authors must agree to CC BY 4.0 posting and
+     to the fact that the preprint cannot be removed once online [5]. Sole-authored or not,
+     that irreversibility is worth a conscious decision per unit, taken *after* its passes.
