@@ -120,9 +120,22 @@ Items 2, 3 and 4 of the outstanding list in section 2 are addressed. Items 1 and
 
 **Still outstanding, and not mechanically finishable:**
 
-1. **Framework de-duplication across papers 1–5.** The sibling blocks state the rule; the
-   actual excision of the repeated setup from papers 2–5 is editorial judgement and has not
-   been done. Each of 2–5 still contains its own derivation of the shared framework.
+1. **Framework de-duplication across papers 1–5 — CLOSED 2026-10-01, no edits made.**
+   Audited under the author's instruction to de-duplicate only what is clearly duplicated and
+   to retain when in doubt. The duplication this item describes is not present as verbatim
+   text, and the premise that "each of 2–5 still contains its own derivation of the shared
+   framework" does not hold. See `FRAMEWORK_DEDUP_AUDIT.md` for the evidence, in summary:
+   shared word-12-gram overlap with paper 1 is 0.72–2.76%, and every contiguous shared run of
+   40+ words is a bibliography entry, declarations boilerplate, or the Lean
+   verification-provenance paragraph — never framework setup; "selector principle" and
+   "epistemic kernel" occur **zero** times in papers 2–5; and papers 2–5 each cite paper 1
+   explicitly ("Abaee, 2026, An obstruction calculus", with section and theorem numbers in
+   papers 3 and 4). Paper 2, the one paper with substantial "selector" usage, says "In the
+   selector framework" and develops the distributional counterpart — an extension, not a
+   restatement. The single byte-identical body passage (the 111-word Lean provenance
+   paragraph shared by papers 4 and 5) is retained deliberately: each paper needs its own
+   provenance statement, and each continues into a different Scope paragraph. The previous
+   wording of this item is therefore wrong and has been replaced; do not act on it.
 2. **Bibliography merging for papers 9, 10, 11.** Each still carries two or three separate
    reference lists. A diagnostic counted duplicated long lines and found **87** in paper 9,
    **45** in paper 10 and **113** in paper 11. These are the shared preamble and repeated
