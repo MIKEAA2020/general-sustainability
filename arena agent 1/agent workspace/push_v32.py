@@ -33,67 +33,41 @@ FILES = [
     ("arena agent 1/agent workspace/papers/PAPERS_MANIFEST.md", "/home/user/papers/PAPERS_MANIFEST.md"),
 ]
 
-MSG = """Bar assessment of the eleven papers, plus prior-art requirement blocks
+MSG = """Editorial pass on the eleven papers
 
-Assessed against: sufficient novelty and impact, substantial methodological
-development, and/or empirical or applied contributions of broad practical
-interest. Applied even though these go to preprints.org, because a preprint is
-the front of a journal submission.
+Cross-citations, 6.5-year ownership, and merge bridges.
 
-HEADLINE: NO PAPER IS READY AS IT STANDS.
+  Cross-citations: every one of the eleven files now carries a sibling block
+  naming its companions, with the directive that the selector principle, the
+  epistemic kernel and the observation structure are defined in paper 1 and
+  CITED by papers 2-5 rather than re-derived.
 
-Measured, not asserted -- word counts, formal-result counts, empirical density,
-and whether each paper states a prior-art position:
+  6.5-year ownership assigned: paper 7 computes it on the sampled map and owns
+  it; paper 8 carries an instruction to cite paper 7 and remove any independent
+  re-derivation. The instruction is a note, not yet a text edit -- the duplicate
+  passage in paper 8 still has to be removed by hand.
 
-  1 obstruction calculus      22,399 w   23 results   prior art YES   close
-  2 probabilistic sufficiency 11,962 w   19 results   prior art NO    blocked
-  3 computational cert.       10,077 w    5 results   prior art NO    blocked
-  4 minimax dual certs         6,263 w   14 results   prior art NO    blocked
-  5 exact belief computation   3,578 w    8 results   prior art NO    BELOW BAR
-  6 assessment separation     28,066 w    0 results   weak     HIGHEST RISK
-  7 sampled governance        18,441 w    0 results   yes     ill-conditioned
-  8 governance delay          27,518 w    0 results   yes     duplicate
-  9 cod certification         22,520 w   14 results   no      STRONGEST APPLIED
- 10 depletion ledgers         43,147 w    0 results   weak     typology risk
- 11 forecasting baselines     39,704 w   14 results   no      strong empirical
+  Merge bridges written: papers 9, 10 and 11 now open with a "How the parts
+  fit together" paragraph and their parts are promoted to \part{} units with
+  labels. Paper 9 uses the E2/ARV reconciliation, which was already written;
+  papers 10 and 11 are new prose.
 
-Papers 6, 7, 8 and 10 record zero formal results because they are EMPIRICAL
-papers -- their top LaTeX environments are tabular, figure and longtable, not
-theorem. Verified. For those the bar is the substance of the empirical
-contribution and they are assessed as such.
+STILL OUTSTANDING, not mechanically finishable:
+  1 Framework de-duplication across papers 1-5. The sibling blocks state the
+    rule; the actual excision of repeated setup from papers 2-5 is editorial
+    judgement and has NOT been done. Each still derives the shared framework.
+  2 Bibliography merging for papers 9, 10, 11. Each carries two or three
+    separate reference lists. A duplicate-long-line diagnostic returned ZERO
+    for all three, meaning the lists are not literal duplicates and must be
+    merged by content, not by string match.
+  3 The duplicate 6.5-year passage in paper 8 is flagged but not removed.
 
-MEASUREMENT BUG CORRECTED: an earlier run reported zero reference sections for
-all eleven. That was an over-escaped regex. All eleven DO have reference
-sections, and papers 9, 10 and 11 have TWO each, confirming the bibliography
-merge task.
-
-DONE THIS PASS: prior-art requirement blocks inserted into papers 2, 3, 4 and
-5, naming the specific literature each must engage (Veliov 1993, Doyen 2000,
-Astrom 1965, the estimation-tube programme; barrier certificates and
-Saint-Pierre on complexity with HJ reachability as the comparator; the
-discriminating-kernel calculus and Aubin's shadow; and for paper 5, exact
-arithmetic plus Sperner/antichain bounds with an explicit scope decision).
-These are REQUIREMENTS, not prose: they convert an absence into a specified
-task rather than filling the gap with a stub.
-
-KEY GAPS NAMED IN THE ASSESSMENT:
-  paper 6: the plan already records that the separation result sits close to
-    known robust-optimisation and MCDM separation results and "either carries
-    an aggressive prior-art paragraph or it does not go in". That paragraph
-    does not exist. Research, not editing.
-  paper 7: its headline 6.5-year figure moves 55% under a 0.2% change in the
-    exploitation ratio. Needs a sensitivity band, not a point.
-  paper 1: needs a worked case where a certificate bites on a system whose
-    kernel cannot be computed -- new computation.
-  paper 10: the typology is a clarification at top-journal level unless tied
-    to a measurable consequence. Not yet tied.
-
-ROOT CAUSE across every failing item: results were developed before their
-novelty was established against the literature. Prior art was treated as
-something to write at the end. That is why paper 1 -- the only paper where
-prior art was done FIRST, and where doing it changed the paper's central
-claim -- is the one closest to the bar, and why the four papers with no
-prior-art position are the ones that cannot yet be assessed at all.
+ROOT CAUSE of the failure this pass corrected: the divider written into the
+merged files used %% inside a Python percent-format string, which collapses to
+a single %, so the bridge-insertion regex silently matched nothing. Caught only
+because the script reported zero words for three files instead of writing them.
+A silent no-match is the failure mode to guard against: a script that edits
+should always report what it changed.
 """
 
 

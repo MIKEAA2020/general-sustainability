@@ -1502,6 +1502,49 @@ _s_cond = ("median " + BS + "(%.1f" + BS + ") kt (" + BS + "(90" + BS
 chk("R25j Section 3.10 prints the conditional bootstrap pair verbatim",
     _s_cond in FLAT, _s_cond[:60])
 
+# ===========================================================================
+# R27 -- the graphical abstract plots the same numbers the paper prints
+#
+# It is a separate upload for preprints.org, so nothing in the manuscript pins
+# it. Every value it plots is re-derived here from the same archive.
+# ===========================================================================
+import os as _os
+_GA = "/home/user/fam/e2/graphical_abstract_e2.png"
+_GAJ = "/home/user/fam/e2/graphical_abstract_e2_data.json"
+chk("R27a the graphical abstract exists", _os.path.exists(_GA),
+    "missing: %s" % _GA)
+_g = json.load(open(_GAJ)) if _os.path.exists(_GAJ) else {}
+for _tok, _lab in (("67.9", "profile lower"), ("95.2", "profile upper")):
+    chk("R27b the graphical abstract carries the %s bound" % _lab,
+        ("%.1f" % (float(_g["C_profile_lo"]) if _lab.endswith("lower")
+                   else float(_g["C_profile_hi"]))) == _tok)
+chk("R27c the GA profile band matches the profile interval in Section 3.7",
+    abs(float(_g["C_profile_lo"]) - 67.90) < 0.01
+    and abs(float(_g["C_profile_hi"]) - 95.19) < 0.01,
+    "%.2f .. %.2f" % (float(_g["C_profile_lo"]), float(_g["C_profile_hi"])))
+chk("R27d the GA horizon row matches the cadence campaign",
+    all(int(_g["horizon_by_catch"][str(c)]["worst"]) == 6
+        for c in (0.0, 5.0, 60.0, 91.59, 120.0, 150.0))
+    and all(int(_g["horizon_by_catch"][str(c)]["q10"]) == 7
+            for c in (0.0, 5.0, 60.0, 91.59, 120.0, 150.0)),
+    "6/6/7 must hold for every admissible catch")
+chk("R27e the GA erosion-margin series matches Section 3.4",
+    [float(x) for x in _g["r_T"]] == [329, 708, 1146, 1650, 2232, 2902, 3675]
+    and [float(x) for x in _g["increments"]] == [379, 437, 504, 582, 671, 773],
+    str(_g.get("r_T")))
+chk("R27f the GA rate F'(K*) matches the committed value",
+    abs(float(_g["Fprime_Kstar"]) - 1.1530555) < 1e-6,
+    "%.7f" % float(_g["Fprime_Kstar"]))
+chk("R27g the GA bound and vacuity bound match the manuscript",
+    abs(float(_g["C_star"]) - 91.594) < 1e-3
+    and abs(float(_g["C_vac"]) - 215.217) < 1e-2,
+    "%.3f / %.3f" % (float(_g["C_star"]), float(_g["C_vac"])))
+chk("R27h the GA does not claim the profile SSE is flat (it falls to the edge)",
+    "K has no upper limit." in open("/home/user/make_graphical_abstract_e2.py",
+                                    encoding="utf-8").read()
+    and "the SSE is flat" not in open("/home/user/make_graphical_abstract_e2.py",
+                                      encoding="utf-8").read())
+
 print()
 print("%d passed, %d failed" % (len(PASS), len(FAIL)))
 if FAIL:

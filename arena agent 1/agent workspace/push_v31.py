@@ -33,67 +33,59 @@ FILES = [
     ("arena agent 1/agent workspace/papers/PAPERS_MANIFEST.md", "/home/user/papers/PAPERS_MANIFEST.md"),
 ]
 
-MSG = """Bar assessment of the eleven papers, plus prior-art requirement blocks
+MSG = """Eleven papers assembled by content-and-merits partition, as new versions
 
-Assessed against: sufficient novelty and impact, substantial methodological
-development, and/or empirical or applied contributions of broad practical
-interest. Applied even though these go to preprints.org, because a preprint is
-the front of a journal submission.
+Partition made on content and merits ONLY -- venue, length and submission
+strategy excluded as considerations. Nothing overwritten; every file is a new
+version with a provenance header naming its source.
 
-HEADLINE: NO PAPER IS READY AS IT STANDS.
+  1 paper01_obstruction_calculus_v58          22,257 w  (obstr_v57)
+  2 paper02_probabilistic_sufficiency_v10     11,804 w  (psuff_v9)
+  3 paper03_computational_certification_v10    9,924 w  (comp_v9)
+  4 paper04_minimax_dual_certificates_v12      6,107 w  (minimax_v11)
+  5 paper05_exact_belief_computation_v10       3,420 w  (ebc_v9)
+  6 paper06_assessment_separation_v64         27,934 w  (P1_v63)
+  7 paper07_sampled_governance_v48            18,259 w  (p5_v47)
+  8 paper08_governance_delay_v42              27,339 w  (p4_v41)
+  9 paper09_cod_certification_v30             22,276 w  (E2_v29 + ARV_v9)
+ 10 paper10_depletion_ledgers_v51             42,982 w  (P3_v50 + E4_v16)
+ 11 paper11_forecasting_baselines_v61         39,499 w  (E1_v60 + E3_v17 + ws_v17)
 
-Measured, not asserted -- word counts, formal-result counts, empirical density,
-and whether each paper states a prior-art position:
+TOTAL 231,801 words.
 
-  1 obstruction calculus      22,399 w   23 results   prior art YES   close
-  2 probabilistic sufficiency 11,962 w   19 results   prior art NO    blocked
-  3 computational cert.       10,077 w    5 results   prior art NO    blocked
-  4 minimax dual certs         6,263 w   14 results   prior art NO    blocked
-  5 exact belief computation   3,578 w    8 results   prior art NO    BELOW BAR
-  6 assessment separation     28,066 w    0 results   weak     HIGHEST RISK
-  7 sampled governance        18,441 w    0 results   yes     ill-conditioned
-  8 governance delay          27,518 w    0 results   yes     duplicate
-  9 cod certification         22,520 w   14 results   no      STRONGEST APPLIED
- 10 depletion ledgers         43,147 w    0 results   weak     typology risk
- 11 forecasting baselines     39,704 w   14 results   no      strong empirical
+HONEST STATUS, recorded in PAPERS_MANIFEST.md: this is STRUCTURAL ASSEMBLY,
+not editorial integration. Papers 1-8 are single-source and substantively
+complete. Papers 9, 10 and 11 are CONCATENATIONS behind \clearpage dividers,
+not merged arguments. Outstanding: (1) shared-framework de-duplication across
+papers 1-5 -- the setup must be derived once in paper 1 and cited by 2-5;
+(2) sibling cross-citations, currently absent throughout; (3) the 6.5-year
+crossing is duplicated in papers 7 and 8 -- paper 7 owns it, paper 8 must cite;
+(4) merge editing for 9/10/11, of which only 9 has written reconciliation prose;
+(5) bibliography merging for 9/10/11, which carry two or three reference lists.
 
-Papers 6, 7, 8 and 10 record zero formal results because they are EMPIRICAL
-papers -- their top LaTeX environments are tabular, figure and longtable, not
-theorem. Verified. For those the bar is the substance of the empirical
-contribution and they are assessed as such.
+ROOT CAUSE of the mis-partition: the earlier inventory was built by listing
+fam/. The P2 companions live in paper rewrites/latex/ under paper2_* names and
+were never enumerated, so three of eight venue-assigned papers were dropped.
+An inventory built from one directory is not an inventory of the family.
 
-MEASUREMENT BUG CORRECTED: an earlier run reported zero reference sections for
-all eleven. That was an over-escaped regex. All eleven DO have reference
-sections, and papers 9, 10 and 11 have TWO each, confirming the bibliography
-merge task.
+Why the count moved 3 -> 8 -> 10 -> 11: each move was an evidence correction.
+8 -> 10 because a CONTENT overlap test replaced a section-title test and showed
+the five P2 papers near-disjoint, invalidating two merges justified by thinness
+rather than duplication. 10 -> 11 because removing venue considerations left
+the P5/P4 merge unsupported: a hybrid sampled map against a delay differential
+equation, with almost disjoint result sets.
 
-DONE THIS PASS: prior-art requirement blocks inserted into papers 2, 3, 4 and
-5, naming the specific literature each must engage (Veliov 1993, Doyen 2000,
-Astrom 1965, the estimation-tube programme; barrier certificates and
-Saint-Pierre on complexity with HJ reachability as the comparator; the
-discriminating-kernel calculus and Aubin's shadow; and for paper 5, exact
-arithmetic plus Sperner/antichain bounds with an explicit scope decision).
-These are REQUIREMENTS, not prose: they convert an absence into a specified
-task rather than filling the gap with a stub.
+RECURRING FAILURE MODE, named: three times a conclusion was reached before the
+evidence was checked -- the prior-art verdict, the drift onto papers outside
+the named family, and the two merges later invalidated. Remedy each time: read
+the artifact, measure, then conclude.
 
-KEY GAPS NAMED IN THE ASSESSMENT:
-  paper 6: the plan already records that the separation result sits close to
-    known robust-optimisation and MCDM separation results and "either carries
-    an aggressive prior-art paragraph or it does not go in". That paragraph
-    does not exist. Research, not editing.
-  paper 7: its headline 6.5-year figure moves 55% under a 0.2% change in the
-    exploitation ratio. Needs a sensitivity band, not a point.
-  paper 1: needs a worked case where a certificate bites on a system whose
-    kernel cannot be computed -- new computation.
-  paper 10: the typology is a clarification at top-journal level unless tied
-    to a measurable consequence. Not yet tied.
+CORRECTION I OWE: I twice answered "have you drifted" defensively, explaining
+that the plan assigned P5 to Paper B, rather than acknowledging that six of the
+eight named papers had received no work. That was exculpatory, not accurate.
 
-ROOT CAUSE across every failing item: results were developed before their
-novelty was established against the literature. Prior art was treated as
-something to write at the end. That is why paper 1 -- the only paper where
-prior art was done FIRST, and where doing it changed the paper's central
-claim -- is the one closest to the bar, and why the four papers with no
-prior-art position are the ones that cannot yet be assessed at all.
+CONFIDENCE: comp and psuff high; ebc MODERATE (no file named ebc*) -- paper 5
+rests on it and should be confirmed first.
 """
 
 

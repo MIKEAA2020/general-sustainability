@@ -49,7 +49,14 @@ res3 = json.load(open(f"{REPO}/results/intervention_results_v3.json"))
 res2 = json.load(open(f"{REPO}/results/intervention_results_v2.json"))
 
 V3E = f"{REPO}/src/results_srcyear_v3"
-V2E = "/home/user/fam/e2/rerun_campaigns/results"
+# The v2 (registered-convention) elevation outputs live in the archived
+# rerun_campaigns tree. After the workspace restore they are no longer
+# mirrored into fam/e2, so fall back to the repository copy.
+_V2_CANDIDATES = ("/home/user/fam/e2/rerun_campaigns/results",
+                  "/home/user/repo/arena agent 1/other documents/"
+                  "rerun_campaigns/results")
+V2E = os.environ.get("E2_V2") or next(
+    (c for c in _V2_CANDIDATES if os.path.isdir(c)), _V2_CANDIDATES[0])
 
 
 def csv3(name):
@@ -77,10 +84,14 @@ def ff(path, keycol=None):
 D = []
 
 
-def q(label, v2, v3, note="", allow=()):
-    """allow: regexes for contexts in which the v2 value is legitimate
+def q(label, v2, v3, note="", allow=(), whole=False):
+    """whole: count against the WHOLE document, not the
+    2.3-stripped text (Section 2.4 lies inside that block).
+
+    allow: regexes for contexts in which the v2 value is legitimate
     (an explicit registered-convention comparison), not a migration defect."""
-    D.append({"label": label, "v2": v2, "v3": v3, "note": note, "allow": allow})
+    D.append({"label": label, "v2": v2, "v3": v3, "note": note,
+            "allow": allow, "whole": whole})
 
 
 # --- residual summary (Section 2) -----------------------------------------
@@ -239,74 +250,139 @@ q("xteNCAM 1954-2007 F'(LRP) (Section 3.11)", "", "1.4447")
 q("xteNCAM 2005-2024 F'(LRP) (Section 3.12)", "", "0.925")
 q("xteNCAM 1954-2007 fitted K (Section 3.11)", "", "4812.9")
 q("xteNCAM recent fitted K (Section 3.12)", "", "472")
+# --- identification numbers the ABSTRACT prints (Section 3.10 / 3.11) ------
+# The abstract quotes the profile-set range for C* and the joint-bootstrap
+# bound. The bootstrap figure is CONDITIONAL on the expansive regime
+# (K >= 2K*, 73% of replicates); unconditional it is 73.7 [-89.4, 125.7], so
+# the conditioning has to be carried by the text, not left implicit.
+_ID = {}
+for _r in csv.DictReader(open(REPO + "/src/results_ident_v3/"
+                              "e2_identification_v3.csv", encoding="utf-8")):
+    _ID[_r["quantity"]] = _r["value"]
+_lo, _hi = _ID["C* = g(K*) - |e_q10| over the profile set"].split(" - ")
+q("C* over the profile set, lower", "", "%.1f" % float(_lo))
+q("C* over the profile set, upper", "", "%.1f" % float(_hi))
+_lo, _hi = _ID["g(K*) over the profile set"].split(" - ")
+# Section 3.7 prints the range to one decimal: [148.8, 176.1]
+q("g(K*) over the profile set, lower", "", "%.1f" % float(_lo))
+q("g(K*) over the profile set, upper", "", "%.1f" % float(_hi))
+_s = _ID["C* median [90%] | K >= 2K* (the expansive regime)"]
+_med, _band = _s.split(" [", 1)
+_band = "[" + _band
+_blo, _bhi = _band.strip("[]").split(", ")
+q("joint bootstrap C* median (expansive regime)", "", "%.1f" % float(_med))
+q("joint bootstrap 90% band, lower (expansive)", "", "%.1f" % float(_blo))
+q("joint bootstrap 90% band, upper (expansive)", "", "%.1f" % float(_bhi))
+q("Fox g_max from the formula", "", "192.0", whole=True)
+q("xteNCAM LRP (Section 2.2)", "", "276")
 
-# --------------------------------------------------------------------------
-# AUDIT
-# --------------------------------------------------------------------------
-def count(tok):
-    """Occurrences of a numeric token, skipping those inside \\vspace etc."""
-    return len(re.findall(r"(?<![\d.])" + re.escape(tok) + r"(?!\d)", TEXNC))
+
+# --- the cadence pass (Table 2, Section 3.4; form generality, Section 2.4) --
+# These numbers are new in v3 and have no v2 counterpart, so the v2 slot is
+# empty on purpose: the audit then only asks that the v3 value is printed.
+CAD = {}
+for _r in csv.DictReader(open(REPO + "/src/results_cadence_v3/e2_cadence_v3.csv",
+                              encoding="utf-8")):
+    CAD[(_r["section"], _r["quantity"])] = _r["value"]
+_ER = json.load(open(REPO + "/results/intervention_results_v3.json"))["erosion"]
+
+q("cadence horizon, worst/q05 class, any catch <= 150 kt", "",
+  CAD[("cadence", "horizon, worst/q05 classes, any catch <= 150 kt")])
+q("cadence horizon, informative class, any catch <= 150 kt", "",
+  CAD[("cadence", "horizon, informative class, any catch <= 150 kt")])
+q("cadence horizon at C_vac, informative class", "",
+  CAD[("cadence", "horizon at C = 215.2 kt (C_vac, informative class)")])
+for _i, _v in enumerate(
+        CAD[("cadence", "year-on-year increment of r_T (kt)")].split(", ")):
+    q("erosion-margin increment %d (kt)" % (_i + 1), "", _v)
+# The margin series is generated from the UNROUNDED archived defect with the
+# ROUNDED archived a_max; Section 3.4 now states exactly that, so the eight
+# values a reader recomputes are the eight the paper prints.
+for _T in range(1, 9):
+    q("erosion margin r_%d (Section 3.4, kt)" % _T, "",
+      "%.1f" % (_ER["eps_train_max"] * (_ER["a_max"] ** _T - 1)
+                / (_ER["a_max"] - 1)))
+
+# --- cross-form constants (Section 2.4): the formula is not Schaefer-specific
+q("Fox C* from the formula", "", "79.1", note="tabulated value is 79.05",
+  whole=True)
+q("Fox C_vac from the formula", "",
+  "%.1f" % float(CAD[("generality", "C_vac|Fox (declared row)")]), whole=True)
+q("Allee C*, declared s0 row", "", CAD[("generality", "C*|Allee (declared s0 row)")],
+  whole=True)
+q("Allee C*, data-preferred row", "",
+  CAD[("generality", "C*|Allee (data-preferred row)")], whole=True)
+
+if __name__ == "__main__":
+    # --------------------------------------------------------------------------
+    # AUDIT
+    # --------------------------------------------------------------------------
+    def count(tok, src=None):
+        """Occurrences of a numeric token, skipping those inside \\vspace etc."""
+        return len(re.findall(r"(?<![\d.])" + re.escape(tok) + r"(?!\d)",
+                              src if src is not None else TEXNC))
 
 
-def count_excused(d):
-    """v2 occurrences that are NOT an explicit registered-convention
-    comparison. A v2 value quoted side by side with its v3 counterpart is the
-    point of the convention note; the same value used as the paper's own
-    number is a defect."""
-    tok = d["v2"]
-    if tok in ("", "empty"):
-        return 0
-    n = 0
-    for m in re.finditer(r"(?<![\d.])" + re.escape(tok) + r"(?!\d)", TEXNC):
-        ctx = TEXNC[max(0, m.start() - 140): m.end() + 140]
-        if not any(re.search(a, ctx, re.S) for a in d["allow"]):
-            n += 1
-    return n
+    def count_excused(d):
+        """v2 occurrences that are NOT an explicit registered-convention
+        comparison. A v2 value quoted side by side with its v3 counterpart is the
+        point of the convention note; the same value used as the paper's own
+        number is a defect."""
+        tok = d["v2"]
+        if tok in ("", "empty"):
+            return 0
+        n = 0
+        for m in re.finditer(r"(?<![\d.])" + re.escape(tok) + r"(?!\d)", TEXNC):
+            ctx = TEXNC[max(0, m.start() - 140): m.end() + 140]
+            if not any(re.search(a, ctx, re.S) for a in d["allow"]):
+                n += 1
+        return n
 
 
-rows = []
-for d in D:
-    n2 = count_excused(d) if d["v2"] not in ("", "empty") else 0
-    n3 = count(d["v3"]) if d["v3"] not in ("", "empty") else 0
-    rows.append((d, n2, n3))
+    rows = []
+    for d in D:
+        n2 = count_excused(d) if d["v2"] not in ("", "empty") else 0
+        n3 = (count(d["v3"], tex) if d.get("whole") else count(d["v3"])) \
+            if d["v3"] not in ("", "empty") else 0
+        rows.append((d, n2, n3))
 
-print("=" * 96)
-print("BASIS-AWARE NUMERIC AUDIT   (v3 = source-year, AUTHORITATIVE)")
-print("=" * 96)
-print(f"{'quantity':44s} {'v2 (WRONG)':>12s} {'n':>3s}  {'v3 (RIGHT)':>12s} {'n':>3s}  verdict")
-print("-" * 96)
+    print("=" * 96)
+    print("BASIS-AWARE NUMERIC AUDIT   (v3 = source-year, AUTHORITATIVE)")
+    print("=" * 96)
+    print(f"{'quantity':44s} {'v2 (WRONG)':>12s} {'n':>3s}  {'v3 (RIGHT)':>12s} {'n':>3s}  verdict")
+    print("-" * 96)
 
-bad_v2, ok, neither = [], [], []
-for d, n2, n3 in rows:
-    if d["v2"] == d["v3"]:
-        verdict = "same both"
-        ok.append(d)
-    elif n3 > 0 and n2 == 0:
-        verdict = "OK (v3)"
-        ok.append(d)
-    elif n2 > 0 and n3 == 0:
-        verdict = "** V2 BASIS **"
-        bad_v2.append((d, n2))
-    elif n2 > 0 and n3 > 0:
-        verdict = "** BOTH PRESENT **"
-        bad_v2.append((d, n2))
-    else:
-        verdict = "neither printed"
-        neither.append(d)
-    print(f"{d['label']:44s} {d['v2']:>12s} {n2:3d}  {d['v3']:>12s} {n3:3d}  {verdict}")
+    bad_v2, ok, neither = [], [], []
+    for d, n2, n3 in rows:
+        if d["v2"] == d["v3"]:
+            verdict = "same both"
+            ok.append(d)
+        elif n3 > 0 and n2 == 0:
+            verdict = "OK (v3)"
+            ok.append(d)
+        elif n2 > 0 and n3 == 0:
+            verdict = "** V2 BASIS **"
+            bad_v2.append((d, n2))
+        elif n2 > 0 and n3 > 0:
+            verdict = "** BOTH PRESENT **"
+            bad_v2.append((d, n2))
+        else:
+            verdict = "neither printed"
+            neither.append(d)
+        print(f"{d['label']:44s} {d['v2']:>12s} {n2:3d}  {d['v3']:>12s} {n3:3d}  {verdict}")
 
-print()
-print("=" * 96)
-print(f"SUMMARY: {len(ok)} correct/v3, {len(bad_v2)} ON THE V2 BASIS, "
-      f"{len(neither)} not printed")
-print("=" * 96)
-if bad_v2:
-    print("\nMUST BE REVERTED (v2 basis present in the tex):")
-    for d, n in bad_v2:
-        print(f"  {d['label']:44s}  v2={d['v2']:>10s} (x{n})  ->  v3={d['v3']}")
-if neither:
-    print("\nDeclared but not printed anywhere (check the label is right):")
-    for d in neither:
-        print(f"  {d['label']:44s}  v3={d['v3']}")
+    print()
+    print("=" * 96)
+    print(f"SUMMARY: {len(ok)} correct/v3, {len(bad_v2)} ON THE V2 BASIS, "
+          f"{len(neither)} not printed")
+    print("=" * 96)
+    if bad_v2:
+        print("\nMUST BE REVERTED (v2 basis present in the tex):")
+        for d, n in bad_v2:
+            print(f"  {d['label']:44s}  v2={d['v2']:>10s} (x{n})  ->  v3={d['v3']}")
+    if neither:
+        print("\nDeclared but not printed anywhere (check the label is right):")
+        for d in neither:
+            print(f"  {d['label']:44s}  v3={d['v3']}")
 
-sys.exit(1 if bad_v2 else 0)
+    sys.exit(1 if bad_v2 else 0)
