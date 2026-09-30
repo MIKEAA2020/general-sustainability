@@ -836,3 +836,76 @@ Five units have now yielded exactly one genuine gap each, and all five have the 
 In every case the paper cites the literature *adjacent to its method* and misses the literature
 that owns *its objective*. This is a diagnosable habit of the series rather than five
 coincidences, and it is the check to run first on any remaining unit.
+
+### 7.9 Unit 8 — the production model is used throughout and never cited
+
+Unit 8 (`paper09_cod_certification_v32`) has the strongest prior art of the set. Across its three
+merged papers it names owners rather than neighbours: Regnier and De Lara (2015) for robust
+viability kernels, with an explicit distinction (their kernel is computed numerically by a
+descending set iteration on a discretised state space; here the increasing branch collapses to
+algebra), Butterworth (2007) and Punt et al. (2016) for management strategy evaluation, and
+Hutchings and Myers (1994), Myers and Cadigan (1995) and Myers, Hutchings and Barrowman (1997)
+for the received attribution of the collapse — with a paragraph stating plainly that the paper
+"does not adjudicate" the tension and that a reader taking the harvest-free result as evidence
+about productivity "is going beyond what is certified". It also flags the VPA-versus-survey
+divergence as load-bearing for its own choice of series.
+
+But the governed object is a **surplus-production model of Schaefer form**, and the count is
+decisive: `Schaefer` appears **ten times in the body** — "Schaefer fit 1983–2007", "the registered
+Schaefer form", "Schaefer-form (Allee term off)", "Registered Schaefer & 989.0" — and **zero
+times in the References**. Schaefer, Clark, Hilborn, Walters, Quinn, Deriso and Pella all absent.
+The single most standard model in fisheries is used, compared against two alternatives (Allee,
+Fox) across an entire section, and never once attributed.
+
+**Fixed** with a new paragraph, "The production model", in the cod section's prior art. It names
+Schaefer (1954) for the logistic surplus-production form and Fox (1970) for the exponential
+surplus-yield form fitted as a co-equal alternative, states that neither is contributed and that
+the comparison is decided on residual MSE rather than convention, and then separates on the use
+to which the fitted form is put: the production-model literature estimates parameters and asks
+what harvest maximises yield or profit, whereas here the fitted surplus enters a viability
+problem and the quantity extracted is not an optimal effort but a *kernel*. It closes on why the
+form comparison is not a sensitivity check — the two forms give different kernels, not merely
+different optimal efforts.
+
+Crossref-verified: Schaefer, M.B. (1954), *Bulletin of the Inter-American Tropical Tuna
+Commission* **1**(2), 27–56; the 1954 original is not DOI-indexed, so the entry cites it and
+carries the DOI of the verified 1991 reprint (*Bulletin of Mathematical Biology* **53**, 253–279,
+doi:10.1007/bf02464432). Fox, W.W. (1970), *Transactions of the American Fisheries Society*
+**99**(1), 80–88, doi:10.1577/1548-8659(1970)99<80:aesmfo>2.0.co;2.
+
+**Unit 8 survives.** The closed-form collapse, the no-dominance verdict and the harvest-free
+certificates are untouched; citing Schaefer attributes the model, not the result.
+
+Verified after edit: braces +0; document/abstract balanced; no dangling `\ref`; both citations
+resolve; 35,150 words.
+
+### 7.10 Sweep complete
+
+| Unit | Central object | Literature that owns it, and was missing | Fixed |
+|---|---|---|---|
+| 5 | belief-state safety value \(V_k(b)\) | constrained / chance-constrained POMDPs | yes |
+| 7 | intermediate delay stabilises | delay as a stabilising mechanism | yes |
+| 8 | Schaefer-form surplus production | Schaefer 1954; Fox 1970 | yes |
+| 9 | weak vs strong sustainability | Solow 1974; Hartwick 1977 | yes |
+| 10 | locked pre-specified retention rule | data snooping / multiple testing | yes |
+| 11 | viability kernels over belief pairs | computing viability kernels | yes |
+
+**Six units tested, one gap each, six fixed. No unit repositioned, combined or dropped. The
+attrition budget was never drawn on.**
+
+The recurring shape (§7.8) held to the end, with unit 8 the sharpest instance: the paper's
+*method* literature was cited thoroughly while the *model* it governs — used on nearly every
+page — went unattributed. The diagnostic that finds these is not "what is adjacent to this
+paper?" but "who owns the object this paper computes, and is that name in the bibliography?"
+
+### 7.11 One process failure worth recording
+
+The unit 8 bibliography insertion initially **failed silently in part**: a helper was called with
+one argument where two were required, raising `TypeError`. The body paragraph had already been
+written, so for a period the paper cited Schaefer and Fox in text with **no bibliography entries
+at all** — strictly worse than before the edit. Caught by the verification step, which reports
+in-text and entry counts side by side, and repaired in the same turn.
+
+The lesson is the standing one and now has a concrete instance behind it: **verify after every
+write, and verify the thing that could break rather than the thing that is easy to check.** A
+braces-balance check would have passed throughout.
