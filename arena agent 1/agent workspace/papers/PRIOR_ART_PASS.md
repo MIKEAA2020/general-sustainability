@@ -589,3 +589,76 @@ Each paper uses its own **flat hand-formatted** bibliography — no `\bibitem`. 
 be anchored on the **alphabetically-following entry that already exists**, in that paper's own
 style. Unit 6's source head must be **split** (§1) before any edit, so that unit 6 edits land
 in Part I only.
+
+---
+
+## 7. Extension of the pass to units 7–11 (2026-09-30)
+
+The ratified prior-art pass covered units 2–6. Units 7–11 had never been tested. Their
+prior-art sections were measured first:
+
+| Unit | File | Related-work sections | Words |
+|---|---|---|---|
+| 7 | `paper08_governance_delay_v46` | 1 | 508 |
+| 8 | `paper09_cod_certification_v32` | 3 (merged from three papers) | 606 / 638 / 586 |
+| 9 | `paper10_depletion_ledgers_v53` | 1 | 509 |
+| 10 | `paper11_forecasting_baselines_v64` | 2 (merged) | 526 / 424 |
+| 11 | `paper11c_worked_systems_audit_v2` | 1 | 398 |
+
+Per-paper prior art runs 398–638 words, against 709–1,680 for units 2–6. Read, they are
+substantive rather than stubs: each names its founding literature and states what it adds.
+Unit 9, for instance, cites Brunner and Rechberger (2016) and Sterner and Elser (2002) and says
+plainly that "the contribution is therefore not a new way to close a balance but a typing
+discipline that rules out a class of aggregations". Unit 11 cites Aubin (1991), the ARCH-COMP
+benchmark literature, and Farkas, Helly and max-plus algebra, and states that "none of these is
+contributed here".
+
+### 7.1 First finding — unit 5 revisited: the constrained-POMDP literature was uncited
+
+Re-reading unit 5 against its own central object surfaced a gap the first pass missed. Unit 5
+computes \(V_k(b)\), "the maximal probability of remaining safe for \(k\) steps". That is
+precisely the objective of the **constrained and chance-constrained POMDP** literature. Unit 5
+cited the POMDP *algorithms* literature — Lovejoy (1991), Pineau, Gordon and Thrun (2003),
+Shani, Pineau and Kaplow (2013), all on point-based value iteration — but **nothing** on
+constrained or chance-constrained formulations. A grep confirmed `constrained` appeared zero
+times in the file.
+
+So the paper engaged the literature on *how to compute belief-space values approximately* and
+not the literature on *the objective it computes*. The question it answers is asked and
+answered approximately in that literature; the question is not new.
+
+**Fixed.** New subsection "Constrained and chance-constrained POMDPs" (`\label{scale-cpomdp}`),
+inserted before "Mechanized verification". It names Altman (1999) for constrained MDPs, then
+Poupart et al. (2015), Undurti and How (2010) and Santana et al. (2016) for constrained POMDPs,
+and Ono et al. (2015) for chance-constrained dynamic programming. It separates on three axes —
+those formulations optimise over policies subject to a constraint whereas \(V_k(b)\) is the
+value *function* studied as an object; their constraint is a feasibility threshold whereas the
+result here is the probability's *shape* (the piecewise-linear \(\alpha\)-vector support and the
+antichain structure); and every one of those methods is approximate whereas nothing here is.
+It closes by stating that the question is not new and the paper does not claim it is.
+
+All five citations were Crossref-verified before insertion, per the standing rule:
+
+| Citation | Venue | DOI |
+|---|---|---|
+| Altman, E., 1999 | *Constrained Markov Decision Processes*, Chapman & Hall/CRC | 10.1201/9781315140223 (2021 CRC reprint) |
+| Poupart, Malhotra, Pei, Kim, Goh and Bowling, 2015 | AAAI **29**(1) | 10.1609/aaai.v29i1.9655 |
+| Santana, Thiébaux and Williams, 2016 | AAAI **30**(1) | 10.1609/aaai.v30i1.10423 |
+| Undurti and How, 2010 | ICRA 2010, 3966–3973 | 10.1109/robot.2010.5509743 |
+| Ono, Pavone, Kuwata and Balaram, 2015 | *Autonomous Robots* **39**, 555–571 | 10.1007/s10514-015-9467-7 |
+
+Note on Altman: the canonical original is 1999 (Chapman & Hall); Crossref indexes the 2021 CRC
+reprint, whose DOI is recorded. The entry cites 1999 and carries the reprint DOI.
+
+**Unit 5 survives.** Its contributions — exact rational arithmetic, the support identity, the
+antichain structure of the \(\alpha\)-vectors, and the exhaustive classification — are untouched
+by this literature, which is uniformly approximate. No repositioning.
+
+Verified after the edit: braces +0; document/abstract/enumerate/itemize balanced; no dangling
+`\ref`; all five in-text citations resolve to bibliography entries; 7,580 → 8,101 words.
+
+### 7.2 Status of the extension
+
+Unit 5 revisited and fixed. Units 7–11 remain to be tested individually — §7.1 came out of
+re-reading unit 5, not from the units 7–11 sweep, which has only reached the measurement stage
+above. That sweep is the next manuscript task.
