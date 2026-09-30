@@ -17,13 +17,49 @@ This document re-derives the same partition with **coherence as the sole driver*
 > **Separate** when the member poses its own question, carries its own result, and is coherent
 > on its own terms.
 >
-> **Never fold to fix a missing prior-art section** — a merged paper still has no prior art.
+> **Never fold to fix a missing prior-art section** — a merged paper still has none. *(The rule
+> stands. Note that as of 2026-09-30 it does not describe units 2–5, whose prior-art gaps turned
+> out to be a measurement error; see the corrected table under "Prior art".)*
 
-**Venue is informational only.** It records an intended eventual destination and is not the
-reason any unit is constituted. Nothing below changes if a venue is retargeted.
+**Target: preprints.org, as the final destination.** Journal submission is a possible secondary
+prospect and is recorded nowhere as a constraint. No unit below is constituted, sized or split
+for the convenience of a journal, and no column records a venue.
 
-**The cost-of-folding column is withdrawn.** It measured venue loss, which is not a cost under
-the actual goal.
+**The venue column is dropped, not provisional.** A provisional column reopens the question
+"would this fold more neatly at journal X?" every time the partition is revisited. With the
+target settled, that question has no standing.
+
+### What "final target" changes about the bar
+
+This is a real change, not bookkeeping. Under a journal target three functions are discharged
+*for* the paper by referees: error detection, scope moderation, prior-art screening. Under
+preprints.org as the final destination none of them are.
+
+- **Screening is narrow, so the checking burden is ours alone. The standard is unchanged.**
+  Preprints.org screens for "basic scientific content, author background, and compliance with
+  ethical standards", in under one business day [2](https://www.preprints.org/about). It will
+  not detect a false lemma, a mis-stated interval, or a missing prior-art section. That is a
+  statement about **who** checks, not about **how much** checking is owed: the objective remains
+  valid, accurate, correct science — no erroneous mathematics, no erroneous prose. Because no one
+  else will catch those defects, **we are the only ones who can**, and the passes below are the
+  mechanism for doing so.
+- **There is no revision round.** Screening is a pass/fail gate, not a referee loop. What is
+  posted is what stands.
+- **It cannot be taken back.** Authors must acknowledge that "preprints cannot be completely
+  removed once online" [5](https://www.preprints.org/blog/post/preprints-young-academics).
+  A published defect is permanent and carries a DOI.
+
+So the pending passes are not preparation for a gate that will check them — **they are the only
+gate there is.** Phase 0 (soundness), the prior-art novelty test, and the claim audit move from
+advisory to load-bearing. And because publication is irreversible, order matters: a unit should
+not be posted before it has passed its own passes.
+
+**Upsides worth banking.** Preprints.org assigns a DOI and posts under CC BY 4.0
+[1](https://www.preprints.org/blog/post/preprint-benefits)
+[3](https://www.preprints.org/blog/post/chances-getting-published), so every unit — and every
+supplementary file — is permanently citable and dated. This is what makes the standing
+"no content lost" rule satisfiable: material displaced to supplementary is citable, not
+orphaned.
 
 ---
 
@@ -77,16 +113,21 @@ Under the recorded venue strategy, `paper10b` (E4, Edwards viability kernels) sa
 
 ### What did not change, and why the reasons had to be replaced
 
-**Units 1–5 still separate — but not for the reason I gave.** The venue argument is void, so
-the separation now rests on two venue-independent grounds:
+**Units 1–5 still separate — but not for either reason I gave.** The venue argument is void, and
+the prior-art argument (ground 2 below) was **struck on 2026-09-30** when direct measurement
+showed every unit already has a substantial prior-art section (709–1,680 w). The separation now
+rests on **one** venue-independent ground:
 
 1. **Don't bury independent results.** The five are essentially disjoint: sentence-level overlap
    is 0.0% (obstr↔psuff/comp/ebc), 0.7% (obstr↔minimax), 4.5% (comp↔ebc). Folding removes
    nothing and buries five independent results inside one another. This is a coherence defect
-   under any target.
-2. **Folding cannot produce a prior-art section.** Units 2, 3, 4 and 5 have stub prior-art
-   sections (0 words) against 405–951 words for the others. A merged paper still has none. This
-   is the argument that survives the change of driver intact.
+   under any target, and it is sufficient on its own.
+
+2. ~~**Folding cannot produce a prior-art section.**~~ **STRUCK — factually false.** It asserted
+   units 2–5 had "stub prior-art sections (0 words)". They have 1,493 / 1,680 / 1,321 / 709 w
+   respectively. The *rule* against folding to fix a prior-art gap remains good doctrine; it
+   simply no longer describes these units and cannot support their separation. See the corrected
+   table under "Prior art" below.
 
 **Units 7, 8, 10 still fold**, on shared *result* (7: the 6.5-yr crossing), shared *machinery
 and question* (8), and shared *rule and question* (10) — with a thin member in each case
@@ -111,24 +152,34 @@ and is worth naming explicitly. Three checks hold the line:
 
 ## Prior art: still the live defect, and now the gating task
 
-Measured prior-art sections across the fifteen sources:
+**CORRECTED 2026-09-30.** The table previously in this place recorded **0 words** of prior art
+for units 2–6. That measurement was **wrong**. Direct measurement of the source heads:
 
-| unit | 1 | **2** | **3** | **4** | **5** | **6** | 7a/7b | 8a/8b/**8c** | 9 | 10a/10b | 11 |
+| unit | 1 | 2 | 3 | 4 | 5 | 6 | 7a/7b | 8a/8b/8c | 9 | 10a/10b | 11 |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| words | 951 | **0** | **0** | **0** | **0** | **0** | 518/652 | 608/647/590 | 531 | 532/438 | 405 |
+| words | 951 | **1,493** | **1,680** | **1,321** | **709** | **921** | 518/652 | 608/647/590 | 531 | 532/438 | 405 |
 
-Five units have no prior-art section at all. This is a defect under any target — a preprint
-without prior art is incomplete scholarship whether or not it is peer-reviewed.
+Every unit has a real prior-art section. **Two consequences:**
 
-**It must be treated as a novelty test, not a drafting exercise.** No one has checked whether
-these results survive the literature, because until now there was no prior-art section to check
-them against. Attrition is to be budgeted for.
+1. **The argument "folding cannot produce a prior-art section" is void as a ground for keeping
+   units 1–5 apart.** There was no missing prior-art section to produce. That ground is struck
+   from §"What did not change" below; the separation now rests on disjointness alone.
+2. **This was never a drafting exercise.** Prior art existed and had not been checked against
+   the literature — which is the novelty test as originally specified.
 
-**Attrition plan.** If a unit's result does not survive: (i) reposition the claim to what the
-evidence supports; (ii) combine with a sibling — permissible here, since the prohibition is
-specifically on folding *to fix a prior-art gap*, not on folding for a new reason; or (iii)
-drop. Unit 5 is the likeliest casualty (thinnest, 6,435 w); unit 3 the least likely (its
-comparator is now explicit).
+**Prior-art pass result (2026-09-30), recorded in `PRIOR_ART_PASS.md`:**
+
+| unit | verdict | action required |
+|---|---|---|
+| 2 | **PASSES** | none |
+| 3 | **PASSES** | none |
+| 4 | **PASSES** | optional: surface the Carathéodory/Helly attribution in the related work |
+| 5 | **SURVIVES** | antichain-*algorithms* literature uncited; Harper's theorem uncited; abstract looser than body |
+| 6 | **SURVIVES** | Kuhn's theorem unaddressed; Wei & Zhang (2024) uncited |
+
+**No unit was repositioned, combined, or dropped. The attrition budget was not drawn on.**
+Units 3 and 4 had already anticipated and conceded the classical results that a search would
+surface; unit 5's and unit 6's claims survive but each needs two citations to be safely made.
 
 ---
 
