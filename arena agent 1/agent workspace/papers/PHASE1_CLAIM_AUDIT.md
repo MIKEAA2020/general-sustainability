@@ -307,9 +307,72 @@ Two related runs were re-executed to confirm the path edits broke nothing:
 campaigns themselves (all exit 0). `run_intervention_v3.py` never hardcoded a
 path.
 
-### 7.4 Item 5 — compilation, still blocked
+### 7.4 Item 5 — compilation (RESOLVED 2026-10-01, verified end-to-end)
 
-No LaTeX engine is available in this session and none could be fetched. Every
-check in this record and in `PROOF_AUDIT.md` is static. The one exception on
-record remains E2, which compiled cleanly under tectonic 0.17 (22 pages, no
-errors, no overfull boxes).
+**The "still blocked" wording above was wrong in two independent ways and is
+hereby struck.** (a) Compilation had in fact already been carried out in earlier
+passes — records were sitting in `PAPER_MERGE_*.md`, `PAPER09/10/11_SPLIT_AND_
+PRIOR_ART.md`, `PAPERS_RESTRUCTURED.md` and `LEAN_AUDIT_2026-09-30.md`, and were
+never grepped for. (b) The toolchain *was* obtainable: tectonic 0.15.0 fetched in
+one `curl` from the GitHub release tarball. "No engine available" was a cached
+single earlier failure treated as permanent. Lesson recorded: before declaring an
+item blocked, grep the existing records for whether it was already done, and
+retry the cheap acquisition.
+
+**Harness:** `compile_check.py` (workspace). Compiles each unit head in scratch,
+fetches the real figures it requests from branch `e2-v3-source-year` (exact
+basename, then `_vNN`-stripped variant), stubs only figures present in neither
+form, and reports real/stubbed counts so "compiled" is never conflated with
+"compiled with stubs." Figure index built from `supprec/tree.json`: 550 distinct
+image basenames.
+
+**Result — all thirteen compilable files, 0 errors:**
+
+| unit | file | result | pages | figures |
+|---|---|---|---|---|
+| 1 | `paper01_obstruction_calculus_v63` | OK | 21 | 3 real / 0 stub |
+| 2 | `paper02_probabilistic_sufficiency_v12` | OK | 14 | 5 real / 0 stub |
+| 3 | `paper03_computational_certification_v16` | OK | 15 | 2 real / 0 stub |
+| 4 | `paper04_minimax_dual_certificates_v16` | OK | 11 | no graphics |
+| 5 | `paper05_exact_belief_computation_v16` | OK | 9 | no graphics |
+| 6 | `paper06_assessment_separation_v67` | OK | 58 | 4 real / 0 stub |
+| 7 | `paper08_governance_delay_v46` | OK | 88 | 6 real / 0 stub |
+| 8 | `paper09_cod_certification_v32` | OK | 63 | 12 real / 0 stub |
+| 9 | `paper10_depletion_ledgers_v53` | OK | 56 | no graphics |
+| 10 | `paper11_forecasting_baselines_v64` | OK | 59 | 11 real / 0 stub |
+| 11 | `paper11c_worked_systems_audit_v2` | OK | 19 | 5 real / 0 stub |
+| S1 | `paper01_..._v63_supplementary.tex` | OK | 20 | — |
+| S9 | `paper10_..._v53_supplementary.tex` | OK | 19 | — |
+
+**413 pages across the eleven heads; 452 including both `.tex` supplements.
+Zero figures stubbed anywhere.** The three `.md` supplements (units 6, 7g, 7d)
+are markdown source and cannot be compiled by any LaTeX engine; no markdown→LaTeX
+converter was available, so they are reported as N/A rather than silently passed.
+
+**A clean compile is not itself the finding.** The valuable check is the one a
+static pass cannot make: a scan of all thirteen compile logs for
+`undefined reference` / `undefined citation` returns **0 of 13**. LaTeX renders
+these as `??` and still exits 0, so this is the only way to see them. The
+remaining log output is entirely cosmetic typography (underfull/overfull hbox),
+normal for documents of this length and not defects.
+
+**One real defect was found, and it was mine, not the corpus's.**
+`paper11c_worked_systems_audit_v2.tex` line 1423 carried
+`\emph{Applied Mathematics & Optimization}` with a bare `&`, in the Saint-Pierre
+bibliography entry added during the prior-art pass. LaTeX requires `\&`. Tectonic
+halted there. Brace-balance, dangling-`\ref` and environment checks had all
+passed it — this defect class is visible **only** to an actual compile. Fixed to
+`Applied Mathematics \& Optimization` and re-verified (unit 11 now OK). The
+near-miss: the Altman entry added to paper05 was correctly escaped
+(`Chapman \& Hall/CRC`), so this was a one-off slip, not a systematic pattern.
+A regex pre-filter for bare `&` is not viable — essentially every hit is a
+legitimate `tabular`/`align` separator; tectonic's own line number is the only
+reliable localiser.
+
+Two measurement artifacts of my own tooling, both caught and corrected rather
+than reported: (i) an initial `/Count` regex returned `-` for every file because
+tectonic writes compressed object streams; (ii) the decompressing fallback then
+took the *first* `/Count` (2 for unit 7) instead of the maximum, under-reporting
+unit 7 as 2 pages when the streams contain {2, 5, 6, 22, 88}. The correct figure
+is 88. Cross-checked against file size (1.19 MB), which is consistent with a
+long figure-bearing document and inconsistent with two pages.
