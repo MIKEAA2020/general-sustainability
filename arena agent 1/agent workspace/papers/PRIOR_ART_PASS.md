@@ -429,7 +429,50 @@ expectation that it was the likeliest casualty. Its five contributions are real,
 correctly scoped in the body.
 
 Required: **one new subsection** on antichain algorithms (§4.2), **one citation plus a stated
-relation** on Harper (§4.3), and **an abstract tightening** (§4.4). No change to the partition.
+relation** on Harper (§4.3), and **a scope tightening** (§4.4). No change to the partition.
+
+### 4.6 STATUS: ALL THREE APPLIED (2026-09-30) to `paper05_exact_belief_computation_v16.tex`
+
+1. **New subsection "Antichain algorithms in formal verification"** — De Wulf, Doyen, Henzinger
+   & Raskin (2006); Doyen & Raskin (2009); De Wulf, Doyen, Maquet & Raskin (2008); Filiot, Jin
+   & Raskin (2009, 2011). States plainly that *"the compression itself should not be read as a
+   new result"*, then distinguishes three axes: those algorithms compute **fixed points**
+   whereas there is none here; those settings are **qualitative** (a winning region) whereas
+   \(V_k(b)\) is a **quantitative** worst-case probability whose stored antichain is the
+   identifying structure of its \(\alpha\)-vectors; and the compression figures are **measured
+   costs of exhaustive exact classification at this size**, not a claimed asymptotic
+   improvement.
+2. **Harper (1966)** — cited, with the relation stated precisely. The paper's radius-one-ball
+   result turns out to be **independent of isoperimetry**, and the source now says why: the
+   balls arise *radially* — the constant matched action \(u=\mathbf{1}\) gives a cell at Hamming
+   distance \(k\) the drift \(-\tfrac12 + \tfrac{m-2k}{5}\), which depends on the cell only
+   through \(k\), so the set on which it is nonnegative is a Hamming ball *automatically*.
+   Nothing is minimised, and no result of the paper depends on Harper's theorem. The coincidence
+   with the isoperimetric extremal sets is structural rather than consequential.
+3. **Scope tightening** — the split itself removed the umbrella abstract, and with it both
+   overclaiming phrases (`scales further`, `relaxing instinct`: verified 0 occurrences in v16,
+   1 each in the container). One residual survived in the Introduction — *"the answer is
+   affirmative"* to a general question, qualified only two sentences later. Changed to *"**On
+   the instance studied here** the answer is affirmative"*, aligning it with the related work's
+   own discipline.
+
+Six bibliography entries added in the paper's flat style, anchored alphabetically (De Wulf ×2
+and Doyen & Raskin after Baccelli; Filiot ×2 after Farkas; Harper after Geretti).
+
+**Verified after edit:** all eight checked citations resolve; braces balanced in every inserted
+passage and file-wide (546/546); one `\begin{document}` / `\end{document}`. Unit 5 is now
+**6,710 w** (6,068 before). Compilation still unverified — see §3.1.
+
+**All six new citations Crossref-verified before insertion:**
+
+| work | record | DOI |
+|---|---|---|
+| De Wulf, Doyen, Henzinger & Raskin 2006 | CAV 2006, LNCS 4144, 17–30 | 10.1007/11817963_5 |
+| De Wulf, Doyen, Maquet & Raskin 2008 | TACAS 2008, LNCS 4963, 63–77 | 10.1007/978-3-540-78800-3_6 |
+| Doyen & Raskin 2009 | *Logical Methods in Computer Science* 5(1) | 10.2168/lmcs-5(1:5)2009 |
+| Filiot, Jin & Raskin 2009 | CAV 2009, LNCS 5643, 263–277 | (publisher record) |
+| Filiot, Jin & Raskin 2011 | *Formal Methods in System Design* 39, 261–296 | (Springer record) |
+| Harper 1966 | *J. Combinatorial Theory* 1, 385–393 | 10.1016/s0021-9800(66)80059-5 |
 
 ---
 

@@ -111,7 +111,7 @@ design; antichain compression
 
 \subsection{Introduction}\label{scale-introduction}
 
-Two working disciplines govern the exact treatment of belief-state safety values: evaluate exactly where you probe, and store the antichain of maximal survivable sets rather than the lattice (Abaee, 2026, An obstruction calculus). This paper asks whether the exact discipline survives the curse of dimensionality, and what new structure appears there. The answer is affirmative, and the structure changes: the four-parameter cube is not a larger version of the two-parameter instance but a different regime. The cube is the paper's running instance; every structural claim below is instantiated on it.
+Two working disciplines govern the exact treatment of belief-state safety values: evaluate exactly where you probe, and store the antichain of maximal survivable sets rather than the lattice (Abaee, 2026, An obstruction calculus). This paper asks whether the exact discipline survives the curse of dimensionality, and what new structure appears there. On the instance studied here the answer is affirmative, and the structure changes: the four-parameter cube is not a larger version of the two-parameter instance but a different regime. The cube is the paper's running instance; every structural claim below is instantiated on it.
 Its survivable sets are governed by Hamming adjacency rather than by
 coordinate matching; its observation ladder is geometric rather than
 one-shot; and its raw subset lattice (\(2^{16}\) per level) is four
@@ -613,13 +613,57 @@ theorem (Sperner, 1927) gives the maximum size of an antichain on an \(n\)-set a
 with the asymptotic count \(2^{\binom{n}{\lfloor n/2\rfloor}(1+o(1))}\) due to Kleitman
 (1966) and exact values known only for small \(n\) (Stanley, 2013; Engel, 1997, for the
 standard treatments). Hamming adjacency, and the coding-theoretic machinery built on it, is
-likewise classical.
+likewise classical --- and the extremal role of Hamming balls on the cube is the subject of
+hypercube vertex isoperimetry: among all subsets of the cube of a given size, Hamming balls
+(the initial segments of the simplicial order) minimise the vertex boundary (Harper, 1966),
+with stability versions showing the extremal sets \emph{are} Hamming balls.
+
+That adjacency deserves one word of separation, because the present paper also finds Hamming
+balls extremal and reaches them by a different route. Here the balls arise \emph{radially}: the
+constant matched action \(u = \mathbf{1}\) gives a cell at Hamming distance \(k\) the constant
+drift \(-\tfrac12 + \tfrac{m-2k}{5}\), which depends on the cell only through \(k\), so the set
+on which it is nonnegative is a Hamming ball of radius \(r^{*}(m) = \lfloor (2m-5)/4\rfloor\)
+automatically. Nothing is being minimised. The coincidence with the isoperimetric extremal sets
+is therefore structural rather than consequential: the survivable region is a ball because the
+drift is radial, not because balls optimise any boundary functional, and no result of this
+paper depends on Harper's theorem.
 
 \textbf{This paper proves no new theorem about antichains.} The census of
 Section~\ref{scale-census} is a computation \emph{on one instance}: \(1{,}048{,}576\) raw subset
 evaluations collapsing to \(496\) stored maximal sets. That figure is an output, and its
 value is that it was obtained exactly and in full. The classical results are the scaffold,
 not the contribution.
+
+\subsection{Antichain algorithms in formal verification}
+
+A separate literature uses antichains not as objects to be counted but as a compact
+\emph{data structure}. When the sets an algorithm manipulates are downward closed under a
+preorder, storing only the maximal elements is canonical and can be exponentially more succinct
+than storing the set itself. That observation underlies the antichain algorithms introduced for
+checking universality and language inclusion of finite automata (De Wulf, Doyen, Henzinger and
+Raskin, 2006) and extended to B\"uchi automata and the automata-based approach to model
+checking (Doyen and Raskin), to LTL satisfiability and model checking (De Wulf, Doyen, Maquet
+and Raskin, 2008), and to LTL realizability and synthesis (Filiot, Jin and Raskin, 2009, 2011).
+The succinctness is a theorem rather than an empirical finding: De Wulf et al. exhibit families
+of automata on which the subset construction is exponential while the antichain algorithm is
+polynomial, and show that the basic operations stay polynomial in the size of the compact
+representation while that size may be exponentially smaller than the set represented. The same
+representation is used for games of imperfect information, where the winning belief states are
+downward closed and only the maximal elements are stored.
+
+This paper stores the antichain of maximal survivable subsets, so it uses the same
+representation, and \textbf{the compression itself should not be read as a new result}. Three
+things distinguish the uses. First, those algorithms compute \emph{fixed points} --- of a
+reachability, universality or realizability operator --- whereas there is no fixed point here:
+the object is a complete classification of one finite instance by exhaustive exact enumeration.
+Second, those settings are \emph{qualitative}: the question is whether a player wins, and the
+stored antichain is a winning region. Here the stored antichain is the identifying structure of
+a \emph{quantitative} worst-case value function \(V_k(b)\), a maximal probability of remaining
+safe; the stored sets are the supports of its \(\alpha\)-vectors rather than a winning set.
+Third, the figures reported below (\(1{,}048{,}576\) collapsing to \(496\);
+\(68{,}719{,}476{,}736\) to \(1{,}552\)) are \emph{measured costs of exhaustive exact
+classification at this size}, offered as cost figures; they are not a claimed asymptotic
+improvement on those algorithms, and nothing here bears on their complexity.
 
 \subsubsection{Point-based and exact computation for partially observed models}
 
@@ -820,15 +864,38 @@ Linearity: An Algebra for Discrete Event Systems}.
 Baccelli, F., Cohen, G., Olsder, G.J., Quadrat, J.-P., 1992.
 Synchronization and Linearity: An Algebra for Discrete Event Systems.
 
+De Wulf, M., Doyen, L., Henzinger, T.A. and Raskin, J.-F., 2006. Antichains: a new
+algorithm for checking universality of finite automata. In: \emph{Computer Aided
+Verification (CAV 2006)}, Lecture Notes in Computer Science, vol.~4144, pp.~17--30.
+Springer.
+
+De Wulf, M., Doyen, L., Maquet, N. and Raskin, J.-F., 2008. Antichains: alternative
+algorithms for LTL satisfiability and model-checking. In: \emph{Tools and Algorithms
+for the Construction and Analysis of Systems (TACAS 2008)}, Lecture Notes in Computer
+Science, vol.~4963, pp.~63--77. Springer.
+
+Doyen, L. and Raskin, J.-F., 2009. Antichains for the automata-based approach to
+model-checking. \emph{Logical Methods in Computer Science}, 5(1).
+
 Engel, K., 1997. \emph{Sperner Theory}. Cambridge University Press.
 
 Farkas, J., 1902. Theorie der einfachen Ungleichungen. \emph{Journal f\"ur die Reine und
 Angewandte Mathematik} \textbf{124}, 1--27.
 
+Filiot, E., Jin, N. and Raskin, J.-F., 2009. An antichain algorithm for LTL
+realizability. In: \emph{Computer Aided Verification (CAV 2009)}, Lecture Notes in
+Computer Science, vol.~5643, pp.~263--277. Springer.
+
+Filiot, E., Jin, N. and Raskin, J.-F., 2011. Antichains and compositional algorithms
+for LTL synthesis. \emph{Formal Methods in System Design}, 39, 261--296.
+
 Geretti, L., Dit Sandretto, J.A., Althoff, M., et al., 2020. ARCH-COMP20 category report:
 continuous and hybrid systems with nonlinear dynamics. In: \emph{ARCH20, 7th International
 Workshop on Applied Verification of Continuous and Hybrid Systems}, EPiC Series in Computing,
 vol.~74, pp.~49--75.
+
+Harper, L.H., 1966. Optimal numberings and isoperimetric problems on graphs.
+\emph{Journal of Combinatorial Theory}, 1, 385--393.
 
 Helly, E., 1923. \"Uber Mengen konvexer K\"orper mit gemeinschaftlichen Punkten.
 \emph{Jahresbericht der Deutschen Mathematiker-Vereinigung} \textbf{32}, 175--176.
