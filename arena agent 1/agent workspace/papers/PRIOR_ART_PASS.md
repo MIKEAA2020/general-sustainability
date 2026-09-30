@@ -662,3 +662,85 @@ Verified after the edit: braces +0; document/abstract/enumerate/itemize balanced
 Unit 5 revisited and fixed. Units 7–11 remain to be tested individually — §7.1 came out of
 re-reading unit 5, not from the units 7–11 sweep, which has only reached the measurement stage
 above. That sweep is the next manuscript task.
+
+### 7.3 Unit 9 — weak/strong sustainability framed without citing its origin
+
+Unit 9 (`paper10_depletion_ledgers_v53`) otherwise covers its ground well: a bibliography check
+found Tilton (2), Redner, Daly, Neumayer, Munda (2), Ekins, Hubbert (2), Bartlett, Sterner and
+Brunner (2) all cited — reserve-life criticism, first-passage processes, ecological economics,
+noncompensatory aggregation, MFA and stoichiometry.
+
+But its third objective is to "formalize weak and strong sustainability not as irreconcilable
+ethical doctrines, but as two distinct operating regimes", and the **Weak Sustainability Regime**
+bullet describes exactly the substitutability assumption that Solow and Hartwick formalized —
+while citing only Daly (1990), Neumayer (2013) and Ekins (2003). `Solow` and `Hartwick` appeared
+zero times. The weak-sustainability criterion (a non-declining consumption path sustained by
+investing resource rents in reproducible capital) is the canonical origin of precisely the
+regime the bullet defines.
+
+**Fixed** by adding the origin at the claim site, and distinguishing rather than merely naming:
+
+> "This substitution-based criterion is the one canonically associated with Solow's
+> intergenerational-equity formulation and the rule that bears Hartwick's name ... The ledger does
+> not dispute that criterion; it makes its precondition checkable, since whether material loops
+> close at the rate of throughput is a property of the incidence structure that the aggregate
+> criterion presupposes and does not itself test."
+
+Crossref-verified: Solow, R.M. (1974), *Review of Economic Studies* **41**, 29–45,
+doi:10.2307/2296370. Hartwick's 1977 *American Economic Review* original is **not** indexed by
+Crossref; the entry cites the original and carries the DOI of the verified 2017 Routledge reprint
+(*The Economics of Sustainability*, 63–65, doi:10.4324/9781315240084-4). That discrepancy is
+recorded here rather than smoothed over.
+
+**Unit 9 survives.** Its contributions — the typed ledger, the three certification layers, the
+no-nonnegative-weighting theorem, the double-counting rules, the reclassification of the three
+public indicators — are untouched by Solow–Hartwick, which the paper now uses as the frame it
+makes checkable rather than as a competitor.
+
+Verified after edit: braces +0; no dangling `\ref`; both citations resolve; 32,782 words.
+
+### 7.4 Unit 11 — computes viability kernels without citing the literature that computes them
+
+Unit 11's prior art was the thinnest at 398 words. It cited Aubin (1991) for viability theory's
+founding move, the ARCH-COMP benchmark literature, and the classical instruments (Farkas, Helly,
+max-plus). It also handled its own positioning honestly, disclaiming superiority over
+interval arithmetic: "a statement about the verification pipeline and not a claim of
+superiority over validated or interval-arithmetic approaches".
+
+But several audits tabulate viability kernels — "kernel sizes 24, 26, 25, and 28 of 36 belief
+pairs" — and the literature on *computing* viability kernels was entirely uncited.
+
+**Fixed** with a new paragraph, "Computing viability kernels", naming Saint-Pierre's
+backward-reaching-set algorithm with its convergence property (Saint-Pierre, 1994) and the
+support-vector approximation of kernels and resilience values (Deffuant, Chapel and Martin,
+2007). It separates on two axes: those methods address **fully observed** dynamics in continuous
+or large discrete spaces, where exact computation is infeasible and the honest goal is a
+guaranteed approximation, whereas the audits here are exact in rational arithmetic with no
+approximation error to bound; and their objects are kernels over states, not the
+observation-constrained kernels over **belief pairs** under declared observation structures and
+policy-class restrictions tabulated here. It closes by naming what *does* transfer — the
+question of which states admit a constraint-satisfying control, and the finding that the answer
+is not monotone in the observation structure, which is a statement about the observation layer
+those methods do not model.
+
+Crossref-verified: Saint-Pierre, P. (1994), *Applied Mathematics & Optimization* **29**, 187–209,
+doi:10.1007/bf01204182. Deffuant, G., Chapel, L. and Martin, S. (2007), *IEEE Transactions on
+Automatic Control* **52**(5), 933–937, doi:10.1109/tac.2007.895881.
+
+**Unit 11 survives.** It is an audit paper; its contribution is the exact tabulation, which is
+precisely what the approximated methods cannot supply.
+
+Verified after edit: braces +0; document/abstract balanced; no dangling `\ref`; both citations
+resolve; 11,730 → 12,003 words.
+
+### 7.5 Sweep status
+
+| Unit | Tested | Outcome |
+|---|---|---|
+| 5 (revisited) | yes | gap found and fixed — constrained/chance-constrained POMDPs |
+| 9 | yes | gap found and fixed — Solow–Hartwick origin of weak sustainability |
+| 11 | yes | gap found and fixed — computational viability kernel literature |
+| 7, 8, 10 | **not yet** | measured only (§7 table); central claims not yet tested |
+
+Three units tested, three gaps found, three fixed, **no unit repositioned, combined or dropped**.
+The attrition budget remains undrawn after two passes. Units 7, 8 and 10 are the remainder.
