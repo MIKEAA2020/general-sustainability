@@ -202,3 +202,75 @@ head; the fix applies to future merges.
 all six drivers: one Declarations block, one supplement heading, both passages
 and both data statements kept, 3 unique references, no glued entries, no
 headless fragments.
+
+---
+
+# Terminal repairs: the three live heads (2026-10-01)
+
+With the scripts fixed, the remaining gate failures are legacy damage in files
+that already exist. The test for whether a file gets a script fix or a direct
+repair is "will it be re-merged?" -- merging always produces a NEW version, so a
+current head will not be re-merged and must be repaired directly.
+
+Corpus: 59 `.tex` files, 32 failing at the start of this work, 12 after the
+script fix, **9 now**. Every one of the 9 is a superseded version (v62, v15,
+v15, v66, v42/43/44, v30, v61). **All 15 live heads are clean.**
+
+## paper01 v63 -- `8059d2b`
+
+Two Declarations blocks, one per merge source. The second is cross-unit: its
+Code availability names four **paper02** scripts and claims they "reproduce all
+values, bounds, thresholds, figures, and tabulated entries verbatim". They
+cannot -- paper01's label namespace is entirely `calc-` (39 labels), with no
+`suff-` labels and no paper02 body. Dropped.
+
+One name that looks like the same error and is not: block 1 names
+`paper2_coverage_audit.py`, but so does the BODY at L1775, regenerating
+paper01's own `calc-tab:coverage` and `calc-fig:coverage`, and paper02 v12 does
+not mention the script at all. A stale filename from the unit rename -- the
+paper08 v42/43/44 class. Kept; renaming it is a source-level change.
+
+Verified: 0 fatal (was 1). Compiles: exit 0, PDF 478,150 B, 0 undefined refs.
+
+## paper09 v32 -- `86f7d15`
+
+A three-source merge (cod + ARV + Edwards) carrying three Declarations blocks
+and six detached bibliography tails.
+
+The tails were sorted INDEPENDENTLY of their heads -- "Aubin, J.-P., 1991.
+Viability Theory." stayed under A while its publisher "Birkhaeuser, Boston."
+sorted under B, four entries away. That is why the damage never appeared
+adjacent to itself. Each tail was reattached using the source papers (v30/v31,
+paper09b v2, paper10b v1) as ground truth; one orphan had no head of its own
+(two sources carried Aubin, the heads de-duplicated, both tails survived) and
+was deleted. A seventh, "Water Data for Texas...", was found late because it
+opens with a title word rather than a publisher token, so the detector never
+flagged it.
+
+The three Declarations were integrated, not reduced: Data availability and Code
+availability keep all three statements under lead-ins, because they describe
+different data and different scripts; funding, competing interests and the AI
+declaration are stated once because all three agreed.
+
+Verified: 0 fatal (was 4). 51 entries, 0 tails (was 57, 6). Compiles: exit 0,
+PDF 1,487,432 B, 0 undefined refs.
+
+## paper11 v64 -- `7f89b2d`
+
+One detached tail, "Fisheries and Oceans Canada, Ottawa.", four entries from its
+DFO 2009 head. Intact in all three predecessors (v61/v62/v63). Two edits.
+
+Verified: 0 fatal (was 1). Compiles: exit 0, PDF 1,294,630 B, 0 undefined refs.
+The 7 remaining `L.dup-ref-key` warnings are non-fatal by design and left for a
+human.
+
+## Detector gap found while doing this
+
+`K.split-refs` only fires when a fragment has **no year**. Tails that carry a
+year in the detached half -- "Geological Survey Circular 1186, **Denver, CO.**"
+is yearless, but "DFO Can. Sci. Advis. Sec. Sci. Advis. Rep. **2016/026.**"
+carries one -- are missed, and so are tails that open with a title word rather
+than a publisher token. Three of the seven tails repaired here were invisible to
+the gate and were found by reading. The rule needs a second signal: a fragment
+whose text is a plausible continuation of another entry (publisher, city, or
+report-number tail) should be reported whether or not it has a year.
