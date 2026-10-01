@@ -100,14 +100,18 @@ for pname, base in [("r", 0.02), ("K", 100.0), ("q", 0.001), ("eta", 0.914),
     print("   %-8s %10.3f %10.3f %10.3f %10.3f %10.3f" % (pname, *vals))
 
 print()
-print("   sensitivity of the crossing to a +/-1% parameter change (yr, and %):")
+print("   largest finite crossing shift under +/-2% (yr, and % of baseline):")
+print("   no-crossing endpoints are reported separately in the grid above.")
 rows = []
 for p, v in sweep.items():
-    d1 = abs(v[4] - v[2]); d2 = abs(v[0] - v[2])
-    worst = max(d1, d2)
+    # The endpoints v[0], v[4] are -2%, +2% (not +/-1%). A missing crossing
+    # is qualitative; it cannot be treated as a finite displacement.
+    finite_shifts = [abs(v[i] - v[2]) for i in (0, 4)
+                     if np.isfinite(v[i]) and np.isfinite(v[2])]
+    worst = max(finite_shifts) if finite_shifts else float("nan")
     rows.append((worst, p, v))
 for worst, p, v in sorted(rows, reverse=True):
-    print("      %-6s  worst 1%% swing: %8.3f yr  (%6.1f%% of baseline)" % (p, worst, 100 * worst / BASE))
+    print("      %-6s  worst finite 2%% swing: %8.3f yr  (%6.1f%% of baseline)" % (p, worst, 100 * worst / BASE))
 
 print()
 print("=" * 78)
