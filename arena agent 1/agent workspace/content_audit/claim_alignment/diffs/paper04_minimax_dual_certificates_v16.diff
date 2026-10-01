@@ -1,0 +1,224 @@
+--- /home/user/papers/paper04_minimax_dual_certificates_v16.tex
++++ /home/user/content_audit/claim_alignment/drafts/paper04_minimax_dual_certificates_v16.tex
+@@ -94,7 +94,7 @@
+ when an adversarial probability measure on the active
+ boundary--disturbance bundle drives the expected inward drift strictly
+ negative against every control, with a certificate supported on at most
+-$k+1$ points ($k$ the control dimension; the bound is tight). The
++$k+1$ points ($k$ the control dimension; tightness is exhibited here in dimensions one and two). The
+ polyhedral case recovers the $l_1$-normalized Farkas pair exactly; the
+ singleton case recovers the Isaacs drift with the adversarial
+ \emph{distribution} over disturbances load-bearing. A two-action instance
+@@ -110,8 +110,8 @@
+ $\Delta x_{1}(Y) = Y - 4$ gives the aggregation rule its exact reading.
+ Dynamic-envelope, quantization, and stochastic-bridge extensions are
+ recorded as conjectures; the residual dynamic-observation completeness gap
+-of the source paper remains open. All claims are machine-verified in exact
+-rational arithmetic (8 check families).
++of the source paper remains open. Eight exact-rational check families verify the declared finite
++instances, not the general analytic converse or dynamic-envelope claims.
+ \end{abstract}
+ 
+ \vspace{0.4em}
+@@ -165,7 +165,7 @@
+ \]
+ define the inward drift
+ $\psi(x,j,d;u) = \nabla q_{j}(x)\cdot[f_{0}(x,d) + G(x)u]$ and the
+-expected drift $\Phi(u,\mu) = \int_{\mathcal{K}(B} \psi \,d\mu$ over
++expected drift $\Phi(u,\mu) = \int_{\mathcal{K}(B)} \psi \,d\mu$ over
+ Borel probability measures $\mu$ on $\mathcal{K}(B)$.
+ 
+ \begin{theorem}[minimax dual certificate]\label{thm:dual}
+@@ -203,8 +203,8 @@
+ \begin{proposition}[atomic support; $k+1$ witnesses, tight]
+ \label{prop:sparse}
+ If $\mathcal{R}^{B}_{V}(B) = \varnothing$, the certificate $\mu^{*}$ may
+-be chosen atomic with support of at most $k+1$ triples, and the bound is
+-tight in dimension $k$.
++be chosen atomic with support of at most $k+1$ triples, and the bound is shown tight below in dimensions $k=1$ and $k=2$;
++no general-dimensional tightness example is asserted here.
+ \end{proposition}
+ \begin{proof}
+ Write $\psi(x,j,d;u) = v(x,j,d)\cdot u + c(x,j,d)$ with
+@@ -221,8 +221,8 @@
+ $\lambda$ is a basic solution of $k+1$ active constraints and is supported
+ on at most $k+1$ indices (standard theory: Chv\'{a}tal, 1983, chapters 2
+ and 7; the pairing argument itself is Carath\'eodory's theorem in
+-$\mathbb{R}^{k}$). The tightness bound is Helly's theorem in the plane
+-(Helly, 1923) applied to the row half-spaces. Tightness: in dimension $k = 2$ the rows
++$\mathbb{R}^{k}$). The following low-dimensional tightness examples illustrate
++the support bound; the plane case can be read through Helly (1923). Tightness: in dimension $k = 2$ the rows
+ $\{u_{1} \ge 1\}$, $\{u_{2} \ge 1\}$, $\{u_{1}+u_{2} \le 1\}$ on the
+ compact square $[-10,10]^{2}$ are pairwise intersecting with empty total
+ intersection (checked on the rational grid by the record), so no two
+@@ -405,25 +405,32 @@
+ expected safety functional. For each fixed $\pi$ the process
+ $t \mapsto \mathbb{E}^{\mu^{*}}[F^{\pi} \mid \mathcal{F}_{t}]$ is a
+ martingale; the envelope is its essential supremum over policies, and its
+-evaluation at information states --- a Bellman recursion, not a
+-differential operator --- is the well-posed successor of the proposed
+-information-set operator.
++pointwise optimization over \emph{complete} policies can select
++different past actions on different later cells. It need not obey a
++Bellman recursion unless committed action history is included in the
++state and only future actions are optimized.
+ \end{definition}
+ 
+ \begin{theorem}[finite well-posedness, comparison, exactness]
+ \label{thm:envelope-finite}
+ In the finite setting --- disturbance set $\Omega$ finite, information
+-states $b$ drawn from a finite partition, admissible actions finite, data
+-rational --- define the one-step operator
++states $b$ drawn from a finite partition together with their
++committed action prefixes (or a proved Markov-sufficient state encoding
++them), admissible actions finite, data rational --- define the
++one-step continuation operator
+ \[
+ \Phi V(b) \;=\; \max_{a}\; \mathbb{E}^{\mu^{*}}\bigl[\, V(b') \,\big|\, b, a \,\bigr],
+ \]
+-where $b'$ is the posterior given $(b, a, y)$
+-the maximum over admissible actions of the prior-averaged next-belief
+-value. Then: (i) $\Phi$ is order-preserving,
++where $b'$ records the posterior and the committed prefix
++extended by $a$ after observation $y$; the maximum concerns only
++not-yet-chosen actions. Bare posterior cells alone need not be a
++sufficient state for path-dependent terminal $F$. Then: (i) $\Phi$ is order-preserving,
+ $V \le W \Rightarrow \Phi V \le \Phi W$ pointwise; (ii)
+-$Q(0) = \Phi^{N} g$ is computed exactly by backward induction, in rational
+-arithmetic; and (iii) $Q(0) < 0$ certifies that for every admissible policy
++with committed prefixes the initial attainable value $Q(0)$ is
++computed exactly by the finite backward induction \(\Phi^N g\),
++in rational arithmetic; this does not identify intermediate values
++with the pointwise essential supremum over complete policies in
++Definition~\ref{def:envelope}; and (iii) $Q(0) < 0$ certifies that for every admissible policy
+ the set of disturbance realizations defeating it carries positive
+ $\mu^{*}$-measure.
+ \end{theorem}
+@@ -435,8 +442,15 @@
+ $\Phi^{0} g = g$ is exact by definition; the induction step applies $\Phi$
+ once, and each evaluation is a finite weighted sum of previously computed
+ values, so rational data propagate exactly through the recursion.
+-Well-posedness --- existence and uniqueness of the recursion's output ---
+-is supplied by the same induction. (iii) $Q(0) < 0$ bounds every policy's
++Well-posedness of the committed-prefix recursion follows from
++the same induction. For a counterexample to posterior-only recursion,
++choose a blind first action $a_1\in\{0,1\}$ and then reveal a
++fair bit $s\in\{0,1\}$, with terminal reward
++$G(s,a_1)=\mathbf{1}[a_1=s]$. Every feasible complete policy has
++initial value $1/2$; at the revealed cell the pointwise essential
++supremum over \emph{complete} policies is $1$ for each bit, by
++retrospectively choosing two different first actions. A Bellman
++continuation retaining the first action returns $1/2$, as required. (iii) $Q(0) < 0$ bounds every policy's
+ conditional expectation: for the optimal policy the expectation is
+ $Q(0) < 0$, and for every suboptimal $\pi$ the expectation is smaller
+ still, so Lemma~\ref{lem:bridge} applies to each $\pi$ and yields the
+@@ -630,7 +644,11 @@
+ $\mathcal{P}_{k}$-cell of $\omega$.
+ 
+ \begin{theorem}[general finite-sequence envelope]\label{thm:general}
+-Under the setup above: \emph{(i) tower and martingale.} For every
++Under the setup above, use the recursion only on cells
++$C$ with $\mu^*(C)>0$; omit null children from its sums and leave
++null-node conditional values undefined (or assign arbitrary values
++that never affect the root). In particular the initial node is
++positive-mass. Then: \emph{(i) tower and martingale.} For every
+ nonanticipative policy $\pi$,
+ \[
+ \mathbb{E}^{\mu^{*}}[G^{\pi}] \;=\;
+@@ -644,7 +662,7 @@
+ review tree --- nodes are pairs (cell, action prefix) --- by
+ $N_{K}\bigl(\{\omega\},\, a_{1:K-1}\bigr) = \max_{a \in A_{K}}
+ G(\omega, a_{1:K-1}, a)$ and, for $k < K$, the sum running over the
+-children $C' \subseteq C$ of $\mathcal{P}_{k+1}$ with the child weights
++children $C' \subseteq C$ of $\mathcal{P}_{k+1}$ over positive-mass children only, with the child weights
+ $w(C') = \mu^{*}(C')/\mu^{*}(C)$,
+ \[
+ N_{k}\bigl(C,\, a_{1:k-1}\bigr)
+@@ -654,7 +672,7 @@
+ Then the envelope value $Q_{0} := \sup_{\pi}
+ \mathbb{E}^{\mu^{*}}[G^{\pi}]$ equals $N_{1}$ evaluated on the
+ $\mathcal{P}_{1}$-cells, averaged by their prior weights
+-$Q_{0} = \sum_{C \in \mathcal{P}_{1}} \mu^{*}(C)\,
++$Q_{0} = \sum_{C \in \mathcal{P}_{1}:\mu^*(C)>0} \mu^{*}(C)\,
+ N_{1}(C)$ (a single node if $\mathcal{P}_{1}$ is trivial); the supremum
+ is attained by a nonanticipative policy read off the maximizing
+ arguments of $N$. \emph{(iii) Refinement monotonicity.} If a second
+@@ -672,7 +690,9 @@
+ formula is that identity read backwards, and the martingale property is
+ $M^{\pi}_{k} = \mathbb{E}[M^{\pi}_{k+1} \mid \mathcal{P}_{k}]$, which
+ is the defining property of conditional expectation applied twice.
+-\emph{(ii)} By backward induction on the stage. For $k = K$ the node
++\emph{(ii)} Positive-mass conditioning makes each weight
++well-defined and null children contribute zero to the root. Proceed
++by backward induction on the stage. For $k = K$ the node
+ value is the best terminal action, and $G^{\pi}$ at a singleton cell is
+ $G(\omega, \cdot)$ evaluated at the realized prefix and $\pi_{K}$, so
+ $\max_{a_{K}} G = N_{K}$ pointwise. For the step, fix a
+@@ -742,8 +762,17 @@
+ 
+ \section{Mechanized verification}
+ 
+-The duality results above are formalized in Lean~4 in \texttt{Formalizations/Minimax\_Dual} (\(21\) theorems and lemmas, importing only the
+-project prelude). The module builds as part of the project's \(60\)-job build, all of
++The Lean~4 module \texttt{Formalizations/Minimax\_Dual} proves
++conditional soundness of a supplied finite measure certificate and
++specific algebraic examples, not the Sion converse, sparse bound or
++dynamic envelope. A current comment-stripped count including Unicode names finds \(22\)
++\texttt{theorem} declarations and no \texttt{lemma} declarations.
++The historical report of \(21\) is an undercount: an ASCII-only name
++filter reproduces it by omitting \texttt{\ensuremath{\psi}single\_sum}.
++The original historical counting command has not been recovered; this
++is a reproducible explanation, not proof of its exact implementation.
++No current-toolchain build is claimed. The module imports only the
++project prelude. The module builds as part of the project's \(60\)-job build, all of
+ which pass.
+ 
+ \noindent\textbf{No admitted gaps.} In Lean an unfinished proof appears as the axiom
+@@ -756,8 +785,8 @@
+ section were run under \texttt{v4.14.0}. On 2026-09-30 the source-level invariants were
+ re-verified against the current tree: a comment-stripped scan of all \texttt{.lean} files in
+ the project finds no \texttt{sorry}, \texttt{admit}, \texttt{axiom} or \texttt{constant}
+-declaration anywhere, and the declaration counts and named declarations quoted below were
+-re-counted and confirmed present. \textbf{The build has not been re-run since the toolchain
++declaration anywhere, and the named declarations quoted below were confirmed present;
++the 21-vs-22 undercount is explained above and logged with its counting convention. \textbf{The build has not been re-run since the toolchain
+ pin moved}, so the build-job figures below date from the \texttt{v4.14.0} run and should be
+ re-confirmed before submission.
+ 
+@@ -788,11 +817,16 @@
+ is as the largest, smallest, or \emph{unique minimax} --- bilateral --- fixed point of an
+ adequate map on pairs of subsets (Aubin and Catt\'e, 2002).
+ 
+-\textbf{This paper's obstruction is the emptiness of that object, and it should be read that
+-way.} The common safe-action set is nonempty exactly when the relevant discriminating domain
+-is nonempty, so Theorem~\ref{thm:dual} is, in the vocabulary of that programme, a
+-certificate for the discriminating kernel being empty. That is a real collision with prior
+-art and is conceded here rather than argued around.
++\textbf{The static local obstruction is not a global-kernel test.}
++Theorem~\ref{thm:dual} certifies emptiness of the common
++\emph{instantaneous} safe-action set at the declared information
++state under its compact-control hypotheses. A global discriminating
++or viability kernel additionally requires a horizon/invariance
++argument. For example, on $[0,1]$ with $\dot x=1$ and $U=\{0\}$,
++$x=0$ has an inward-pointing instantaneous action, but every
++trajectory eventually exits and the infinite-horizon kernel is
++empty. The established global-kernel programme is therefore related
++prior art, not a logically equivalent restatement of this static dual.
+ 
+ Four things are not in that programme, and they are what this paper claims.
+ 
+@@ -801,11 +835,11 @@
+   returns a \emph{subset of state space}, characterised by a fixed-point property and computed
+   by a set iteration. Theorem~\ref{thm:dual} returns a \emph{probability measure} on the
+   active boundary--disturbance bundle, finitely supported, whose existence is equivalent to
+-  emptiness. Membership in a kernel is thereby converted into the existence of a dual object
+-  that can be exhibited and checked without running the iteration.
++  emptiness of the \emph{local common safe-action set} under its hypotheses.
++  This does not by itself decide membership in a global invariant kernel.
+ \item \textbf{The support bound, and its tightness.} Proposition~\ref{prop:sparse} gives a
+   certificate supported on at most $k+1$ points, where $k$ is the \emph{control} dimension,
+-  and shows the bound tight. Note the scaling: the witness count is governed by the dimension
++  with tight examples shown here for $k=1,2$. Note the scaling: the witness count is governed by the dimension
+   of the instrument space, not of the state space. Nothing in the fixed-point characterisation
+   of kernels yields a finite witness of this kind.
+ \item \textbf{The convexity boundary is located exactly where the kernel programme puts it,
