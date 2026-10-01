@@ -327,6 +327,28 @@ doc.append('\n\\end{document}\n')
 
 out = ''.join(doc)
 
+# Fail closed on source-vs-script provenance. The sampled input v47 was
+# deliberately blinded; rerunning a merge of it would resurrect lost author,
+# source citation, revision hash and source declarations. A structural gate
+# alone cannot detect this because citation masks and missing bylines compile.
+# The terminal article was restored using unblinded sampled v46 + continuous
+# v45 (content_audit/repair_08.py). Until THIS producer integrates that front
+# and back matter and collapses redundant title pages, it must not overwrite it.
+unsafe = []
+for mark in ('citation blinded for review', '[blinded]',
+             'Author. 2026. [Blinded for review.]', 'Anonymized for review.',
+             '[AUTHOR NAME --- full name as it should appear]'):
+    if mark in out:
+        unsafe.append(mark)
+for mark in ('\\author{Amin Abaee', '24c980cd', '10.5281/zenodo.22554217',
+             'A.A. conceptualized the entire work, wrote, reviewed and edited the manuscript.'):
+    if mark not in out:
+        unsafe.append('missing ' + mark)
+if out.count('\\maketitle') != 1:
+    unsafe.append('multiple/missing active title pages')
+if unsafe:
+    raise RuntimeError('REFUSE content-incomplete paper08 remerge: ' + repr(unsafe))
+
 # ------------------------------------------------------------------ gate
 # This merge is scripted, so damage it introduces returns on the next re-merge
 # however carefully the .tex is repaired by hand. Paper08's reference list was
