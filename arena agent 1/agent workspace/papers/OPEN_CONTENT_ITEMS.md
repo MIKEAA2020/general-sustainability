@@ -219,12 +219,33 @@ script, actual-figure Tectonic compile, separate push and API reverse-sweep.
   declarations and inherited review masks. First measure report-only across
   the corpus and inspect false positives before promoting any broad fatal
   rule. Keep the manual reading pass; a detector alone is not the audit.
-- [ ] **Claim/evidence reading audit:** underway, NOT cleared. See
-  [`CLAIM_EVIDENCE_AUDIT_2026-10-01.md`](CLAIM_EVIDENCE_AUDIT_2026-10-01.md)
-  for source-executed partial paper07 review, copied paper08 findings,
-  remaining per-head statuses and the owner's grouping-before-rebuild
-  decision. The live-head generator discrepancy remains open by design
-  until the content review informs the final partition.
+- [x] **Narrow paper07 v49 sensitivity prose correction (copied into paper08):**
+  the source script, computation note, current paper07 v50 and current paper08
+  v46 now label the calculated percentages as *finite ±2% shifts*, name the
+  non-crossing case, and report the two spectral margins without an inflated
+  ratio. Historical v49 remains unchanged as the origin witness. The
+  source-executed check is `python3 content_audit/check_p7_sensitivity_addition.py`.
+  Provenance and exact checks: [`CLAIM_EVIDENCE_AUDIT_2026-10-01.md`](CLAIM_EVIDENCE_AUDIT_2026-10-01.md).
+- [ ] **Source-to-head reproducibility:** reviewed live heads remain target
+  artifacts; final grouping is an owner decision. Repair the upstream producer
+  and compare scratch output with the reviewed heads. No new 15-head scientific
+  audit is a prerequisite. A full content/prior-art audit is a *separate optional
+  project*, not an active repair block.
+
+## 9. New-section evidence rule — **STANDING RULE AT THE ADDITION BOUNDARY**
+
+When a section is **added**, before it is merged or copied into another paper,
+check its quantitative prose against its *own computation*: every table heading,
+perturbation size, finite/non-finite convention, percentage, comparison basis,
+and qualifier must be supported by an identified source run. Preserve the
+source run and a short review record with the new section. This is a
+**content checklist** performed when the text is authored; a downstream
+structural gate or Lean theorem is not a substitute. For the paper07 v49
+sensitivity addition, `content_audit/check_p7_sensitivity_addition.py`
+re-executes the source script and checks both current manuscript instances;
+that targeted check is the regression example. Any *general* automated rule
+must first be tested report-only for false positives and missed cases, not
+promoted to a blanket fatal gate.
 
 Latest named checks after these repairs: `phase0_scan.py --gate` reports **0
 live failing files / 0 live findings**; `scan_continuations.py --live-only`
