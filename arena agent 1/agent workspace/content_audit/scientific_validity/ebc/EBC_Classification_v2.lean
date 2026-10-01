@@ -1,0 +1,171 @@
+/-
+  Formalizations.EBC_Classification_v2
+  ====================================
+
+  **The `z₀`-indexed pair-sum bound — the machinery the open half of
+  `prop:bands` (iii) needs.**
+
+  `cor_hamming_m4` bounds two survivors' Hamming distance, but only from
+  `z₀ = 1`: it bounds the accumulated drift *from zero* and does not
+  transfer to a higher start. So the "`z₀ ≥ 1.1`" half of "nothing
+  larger" needs the bound re-done with `z₀` as a parameter. This module
+  does that, in two independent pieces.
+
+  **Lower bound** (`pairIpSum_lower_of_survive_z0`). Each survivor
+  accumulates drift at least `1 − z₀` (`survivesTo_totalDrift_lower`), so
+  the pair accumulates at least `2(1 − z₀)`; rewriting by
+  `totalDrift_pair` and scaling by `5` to avoid division:
+
+      `5 · ((1 − z₀) + (1 − z₀) + L) ≤ pairIpSum`
+
+  **Upper bound** (`pairIpSum_upper_far`). `pairIpSum_upper` bounds the
+  pair's summed inner products by `L · 2·agreeMass`; at `m = 4` with
+  `h ≥ 2`, `agreeMass = 4 − h ≤ 2`, so the bound is `L · 4`:
+
+      `pairIpSum ≤ L · 4`
+
+  Chained, they give `far_pair_sum_bound`, i.e.
+
+      `5·(2(1 − z₀) + L) ≤ 4L`,
+
+  and the *only* thing left is the algebra that turns this into
+  `L ≤ 10·(z₀ − 1)` — at `z₀ = 1.1`, `L ≤ 1`. That step has no EBC
+  content left in it; it is arithmetic over `K`, and it is the next
+  commit. It is stated here unreduced, with the reduction recorded in
+  `lean_audit_v36.md` §3, so that the two substantive lemmas are
+  independently usable and independently checkable.
+
+  Note the scaled form: the lower bound is stated **after** multiplying
+  by `5`, exactly as `pairIpSum_lower_of_survive` does, because the layer
+  has no division.
+-/
+
+import Formalizations.Prelude
+import Formalizations.EBC_ExactBelief_v2
+import Formalizations.EBC_ExactBelief_v3
+import Formalizations.EBC_Dynamics
+import Formalizations.EBC_Hamming
+import Formalizations.EBC_Bands
+import Formalizations.EBC_Bands_v2
+import Formalizations.EBC_Pairs
+import Formalizations.EBC_Pairs_v2
+import Formalizations.EBC_Pairs_v3
+import Formalizations.EBC_Classification
+import Formalizations.RatArith
+
+open Formalizations.EBC
+
+namespace Formalizations.EBC
+
+variable {K : Type} [OrdField K]
+
+/-! ## Lower bound, with `z₀` as a parameter -/
+
+/-- **Two survivors accumulate at least `2(1 − z₀)` of combined drift**,
+hence — after `totalDrift_pair` and scaling by `5` —
+
+    `5 · ((1 − z₀) + (1 − z₀) + L) ≤ pairIpSum`,
+
+where `L = |us|`. This is `pairIpSum_lower_of_survive` with the
+`z₀ = 1` specialization undone: that lemma calls
+`survivesTo_totalDrift_lower` and immediately rewrites `sub_self`, which
+throws away the `z₀` we now need.
+
+Everything is scaled by `5` because the layer has no division. -/
+theorem pairIpSum_lower_of_survive_z0 (I : List Nat) (θ θ' : Nat → Bool)
+    (us : List (Nat → Tri)) (z0 : K)
+    (hs : survivesTo I θ us z0) (hs' : survivesTo I θ' us z0) :
+    five * (((1 : K) - z0) + ((1 : K) - z0) +
+      natToK (K := K) us.length) ≤ pairIpSum I us θ θ' := by
+  have hθ := survivesTo_totalDrift_lower I θ us z0 hs
+  have hθ' := survivesTo_totalDrift_lower I θ' us z0 hs'
+  have hsum : ((1 : K) - z0) + ((1 : K) - z0) ≤
+      totalDrift I θ us + totalDrift I θ' us := add_le_add hθ hθ'
+  rw [totalDrift_pair] at hsum
+  have h1 : ((1 : K) - z0) + ((1 : K) - z0) +
+      natToK (K := K) us.length ≤ fifth * pairIpSum I us θ θ' := by
+    calc
+      ((1 : K) - z0) + ((1 : K) - z0) + natToK (K := K) us.length
+          ≤ (-(natToK (K := K) us.length) + fifth * pairIpSum I us θ θ') +
+              natToK (K := K) us.length :=
+              add_le_add_right hsum (natToK (K := K) us.length)
+      _ = fifth * pairIpSum I us θ θ' := by
+              rw [add_comm (-(natToK (K := K) us.length) +
+                fifth * pairIpSum I us θ θ') (natToK (K := K) us.length)]
+              rw [← add_assoc, add_neg_cancel, zero_add]
+  calc
+    five * (((1 : K) - z0) + ((1 : K) - z0) +
+        natToK (K := K) us.length)
+        ≤ five * (fifth * pairIpSum I us θ θ') :=
+            mul_le_mul_of_nonneg_left h1 (le_of_lt (five_pos (K := K)))
+    _ = pairIpSum I us θ θ' := by
+            rw [← mul_assoc, five_mul_fifth]
+            simp
+
+/-! ## Upper bound, for two cells at distance `≥ 2` -/
+
+/-- **At `m = 4`, two cells at Hamming distance `≥ 2` agree on at most
+two coordinates**: `agreeMass = 4 − h ≤ 2`. -/
+theorem agreeMass_le_two_of_far (I : List Nat) (θ θ' : Nat → Bool)
+    (hlen : I.length = 4) (hfar : 2 ≤ hamming I θ θ') :
+    agreeMass (K := K) I θ θ' ≤ two (K := K) := by
+  have H := agreeMass_add_natToK_hamming (K := K) I θ θ'
+  rw [hlen] at H
+  have htwo_le : two (K := K) ≤ natToK (K := K) (hamming I θ θ') :=
+    natToK_mono hfar
+  have h4 : natToK (K := K) 4 = two (K := K) + two (K := K) := by
+    change natToK (K := K) 4 = natToK (K := K) 2 + natToK (K := K) 2
+    rw [← natToK_add]
+  have hle : agreeMass (K := K) I θ θ' + two (K := K) ≤
+      two (K := K) + two (K := K) := by
+    calc
+      agreeMass (K := K) I θ θ' + two (K := K)
+          ≤ agreeMass (K := K) I θ θ' +
+              natToK (K := K) (hamming I θ θ') :=
+              add_le_add_left htwo_le _
+      _ = natToK (K := K) 4 := H
+      _ = two (K := K) + two (K := K) := h4
+  apply le_of_add_le_add_left (a := two (K := K))
+  simpa [add_comm] using hle
+
+/-- **Two cells at distance `≥ 2` have summed inner products at most
+`L · 4`** over the policy: `pairIpSum_upper` gives `L · 2·agreeMass`, and
+`2·agreeMass ≤ 2·2 = 4`. -/
+theorem pairIpSum_upper_far (I : List Nat) (us : List (Nat → Tri))
+    (θ θ' : Nat → Bool) (hlen : I.length = 4) (hfar : 2 ≤ hamming I θ θ') :
+    pairIpSum I us θ θ' ≤ natToK (K := K) us.length * four := by
+  have ham := agreeMass_le_two_of_far (K := K) I θ θ' hlen hfar
+  have h2am : two (K := K) * agreeMass (K := K) I θ θ' ≤ four (K := K) := by
+    calc
+      two (K := K) * agreeMass (K := K) I θ θ'
+          ≤ two (K := K) * two (K := K) :=
+              mul_le_mul_of_nonneg_left ham (le_of_lt two_pos)
+      _ = four (K := K) := two_mul_two_eq_four
+  have hup := pairIpSum_upper (K := K) I us θ θ'
+  exact le_trans hup
+    (mul_le_mul_of_nonneg_left h2am (natToK_nonneg us.length))
+
+/-! ## The chained bound -/
+
+/-- **The bound, unreduced.** For two cells at Hamming distance `≥ 2`
+that both survive `us` from `z₀`, with `L = |us|`:
+
+    `5 · ((1 − z₀) + (1 − z₀) + L) ≤ L · 4`
+
+At `z₀ = 1` this is `5L ≤ 4L`, so `L ≤ 0` — nothing nonempty survives,
+which is how `cor_hamming_m4` goes through. At `z₀ = 1.1` it yields
+`L ≤ 1`: such a pair survives at most one step, so no set surviving at
+*all* horizons can contain one. Extracting that from the displayed
+inequality is pure arithmetic over `K` — no EBC content — and is the
+next commit. -/
+theorem far_pair_sum_bound (I : List Nat) (θ θ' : Nat → Bool)
+    (us : List (Nat → Tri)) (z0 : K)
+    (hlen : I.length = 4) (hfar : 2 ≤ hamming I θ θ')
+    (hs : survivesTo I θ us z0) (hs' : survivesTo I θ' us z0) :
+    five * (((1 : K) - z0) + ((1 : K) - z0) +
+      natToK (K := K) us.length) ≤
+        natToK (K := K) us.length * four :=
+  le_trans (pairIpSum_lower_of_survive_z0 I θ θ' us z0 hs hs')
+    (pairIpSum_upper_far I us θ θ' hlen hfar)
+
+end Formalizations.EBC

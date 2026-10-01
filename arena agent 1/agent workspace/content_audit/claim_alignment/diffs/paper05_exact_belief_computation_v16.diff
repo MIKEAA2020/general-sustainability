@@ -1,0 +1,235 @@
+--- /home/user/papers/paper05_exact_belief_computation_v16.tex
++++ /home/user/content_audit/claim_alignment/drafts/paper05_exact_belief_computation_v16.tex
+@@ -21,8 +21,8 @@
+ %% (d) Added subsection priorart: concedes Sperner/Dedekind/Kleitman and Hamming
+ %%   adjacency as classical, states this paper proves NO new theorem about
+ %%   antichains, narrows the claim to four items. Added subsection mech (16 EBC
+-%%   modules, 134 declarations, 0 sorry) with the honest note that the census
+-%%   enumeration itself is NOT formalized.
++%%   modules, historically reported as 134 bare theorem headers; see the
++%%   corrected 138-declaration census below. Census enumeration is NOT Lean-formalized.
+ %% (e) Markups are \subsection to match this paper (it uses no \section).
+ %% PRIOR ART AND SCOPE REQUIRED -- bar item, inserted 2026-09-29.
+ %% This is the shortest paper in the family (~3.6k words) with no related-work
+@@ -106,8 +106,8 @@
+ so three probes exhaust observation above the edge. Exact point-based
+ evaluation is verified against definition-level enumeration at seven
+ rational beliefs, three levels, four horizons; the four-step alpha-set
+-deduplicates \(83{,}521\) action sequences to at most \(545\) distinct
+-outcome vectors. The antichain census is the headline: \(1{,}048{,}576\) raw subset evaluations collapse to \(496\) stored maximal sets. The instance is then enlarged to five parameters (Section~\ref{scale-fivecube}), where the classification changes qualitatively and is given completely: the maximal blind-survivable sets are the \(32\) radius-one Hamming balls at every level, plus \(80\) four-cell sets appearing from \(z_{0} \ge 1.3\), so that \(16 \times 2^{32} = 68{,}719{,}476{,}736\) raw subsets collapse to \(1{,}552\) stored sets. The raw lattice grows \(65{,}536\times\) against a \(3.13\times\) growth in the stored object, improving compression by four orders of magnitude; and the pairwise-Hamming instrument, sharp at four parameters, is shown necessary but no longer sufficient at five. A third instance of the theory's additive deadline law closes the paper (threshold \(1 + T/2\), zero probe excursion).
++deduplicates \(83{,}521\) action sequences to at most \(857\) distinct
++outcome vectors on the tested levels (\(545\) at \(z_0=2.5\)). The antichain census is the headline: \(1{,}048{,}576\) raw subset evaluations collapse to \(496\) stored maximal sets. The instance is then enlarged to five parameters (Section~\ref{scale-fivecube}), where the classification changes qualitatively and is given completely: the maximal blind-survivable sets are the \(32\) radius-one Hamming balls at every level, plus \(80\) four-cell sets appearing from \(z_{0} \ge 1.3\), so that \(16 \times 2^{32} = 68{,}719{,}476{,}736\) raw subsets collapse to \(1{,}552\) stored sets. The raw lattice grows \(65{,}536\times\) against a \(3.13\times\) growth in the stored object, improving compression by four orders of magnitude; and the pairwise-Hamming instrument, sharp at four parameters, is shown necessary but no longer sufficient at five. A third instance of the theory's additive deadline law closes the paper (threshold \(1 + T/2\), zero probe excursion).
+ \end{abstract}
+ 
+ \textbf{Keywords:} exact computation; partially observable control;
+@@ -346,8 +346,8 @@
+ levels, and seven random rational beliefs, the maximum over the
+ deduplicated alpha-set equals the maximum over definition-level
+ trajectory enumeration --- all \(84\) pairings equal. The four-step
+-alpha-set deduplicates \(17^{4} = 83{,}521\) action sequences to at
+-most \(545\) distinct outcome vectors per level (and to a single
++alpha-set deduplicates \(17^{4} = 83{,}521\) action sequences to at most \(857\) distinct outcome vectors on the tested levels
++(\(545\) at the top level) (and to a single
+ vector at the top level's one-step horizon, where every action is
+ safe --- the silent region of the cube). Point-based selection
+ chooses where to evaluate, never what the value is.
+@@ -401,7 +401,7 @@
+ \toprule
+ Layer & Exact statement \\
+ \midrule
+-Per-step drift & matched $+\tfrac3{10}$; $k$ mismatches: $-\tfrac12-\tfrac{2k}{5}$; hold $-\tfrac12$ \\
++Per-step drift & matched $+\tfrac3{10}$; $k$ mismatches: $+\tfrac3{10}-\tfrac{2k}{5}$; hold $-\tfrac12$ \\
+ Cube accounting & drifts sum to $-8$ per step over the 16 cells \\
+ Singletons & $16$ survivable (exactly the floor's edge) \\
+ Pairs & exactly the $32$ Hamming-adjacent pairs; no other pair \\
+@@ -519,11 +519,23 @@
+ 
+ \textbf{Size \(4\).} The \(160\) size-\(4\) maximal cliques fall into exactly two orbits under
+ the automorphism group, \(80\) each: the \emph{tetrahedral} orbit, all six pairwise
+-distances equal to \(2\), and the orbit with distance multiset \(\{1,1,1,1,2,2\}\). The
+-tetrahedral orbit is \emph{not} survivable at any level --- the safety game returns an empty
+-winning region at the diagonal state for every \(L \in \{0,\dots,15\}\). The second orbit is
+-survivable exactly from \(L \ge 3\), i.e. \(z_{0} \ge 1.3\). Both verdicts are stable under
+-increasing the state cap from \(16\) to \(40\).
++distances equal to \(2\), and the orbit with distance multiset \(\{1,1,1,1,2,2\}\). The tetrahedral orbit is \emph{not} survivable at any finite starting stock:
++choose its representative \(00000,11000,10100,01100\). Across
++these four cells, the first three signed coordinates cancel and the
++remaining two contribute at most \(8\) to the aggregate; in
++integer-tenths units each sign action has aggregate drift at most
++\(-20+2(8)=-4\), and hold is still worse. Their total slack
++therefore decreases indefinitely under any common action sequence.
++The other orbit is the two-coordinate square face with representative
++\(00000,10000,01000,11000\). Every sign action has distance at
++least two from one square vertex, giving its first-step drift at most
++\(-3\) tenths; hold drifts \(-5\). Thus \(L<3\) cannot
++survive its first step. At \(L\ge3\), alternate the actions
++matching opposite corners \(00000\) and \(11000\). Every
++vertex gains \(2\) tenths per two steps, with initial dip at
++most \(3\); hence it survives indefinitely. Orbit symmetry
++transfers both arguments to all \(80+80\) four-cliques, with no
++artificial state cap.
+ 
+ \textbf{Smaller sets.} All \(912\) cliques of size \(\le 3\) are contained in some
+ radius-\(1\) ball, and survivability is hereditary downward, so none is maximal. A
+@@ -570,11 +582,16 @@
+ \subsubsection{Point-based evaluation at five parameters}
+ 
+ The four-step \(\alpha\)-set at \(m = 5\) deduplicates \(33^{4} = 1{,}185{,}921\) action
+-sequences to at most \(11{,}145\) distinct outcome vectors per level, against
+-\(17^{4} = 83{,}521 \to 545\) at \(m = 4\): the raw enumeration grows \(14.2\times\) and the
+-deduplicated object \(20.4\times\), so deduplication buys proportionally \emph{more}, not
+-less, as dimension rises. By level the count is \(945\) at \(z_{0} \le 1.2\), rising to
+-\(11{,}145\) at \(z_{0} = 2.5\). The two endpoint behaviours of the four-cube persist: the
++sequences to at most \(15{,}929\) distinct outcome vectors over the tested levels
++(\(11{,}145\) at the top level), against
++\(17^{4} = 83{,}521 \to 545\) at \(m = 4\) at the common top level: the raw
++enumeration grows \(14.2\times\) and the top-level deduplicated object
++\(20.4\times\), so the top-level compression ratio is \emph{lower}, not
++higher, at five parameters. Across the 16 levels the four-cube maximum
++is \(857\) (at \(z_0=2.2\)), and the five-cube maximum is
++\(15{,}929\) (at \(z_0=2.3\)); neither top-level count is a
++global ceiling. Five-cube counts are \(945\) at \(z_0\le1.2\)
++and \(11{,}145\) at \(z_0=2.5\), without monotonicity in between. The two endpoint behaviours of the four-cube persist: the
+ one-step top-level collapse to a single outcome vector (\(33\) sequences, one vector, every
+ action safe in the silent region), and the edge behaviour (\(33\) sequences, \(33\) distinct
+ vectors, no collapse at all).
+@@ -694,7 +711,7 @@
+   and rational arithmetic, with no approximation and no sampling.
+ \item \textbf{The cost figures for doing so.} The census collapse
+   (\(1{,}048{,}576 \to 496\)), the four-step \(\alpha\)-set deduplication
+-  (\(83{,}521 \to 545\)), and the doubling of the observation ladder. These are the
++  (\(83{,}521 \to 857\) maximum, \(545\) at the top level), and the doubling of the observation ladder. These are the
+   empirical content of the paper: they say what exactness costs at this size.
+ \item \textbf{The pairwise-Hamming structural restrictions as they apply here} --- that
+   every blind survivable set consists of Hamming-adjacent cells, and that no three cells of
+@@ -753,17 +770,31 @@
+ \subsection{Mechanized verification}
+ \label{scale-mech}
+ 
+-The results above are additionally machine-checked. Sixteen modules of the project's
++Selected combinatorial components, not the whole manuscript, have
++Lean declarations. Sixteen modules of the project's
+ Lean~4 formalization are devoted to this paper's objects, in namespace
+ \texttt{Formalizations.EBC}: \texttt{EBC\_Bands}, \texttt{EBC\_Classification},
+ \texttt{EBC\_Deadline}, \texttt{EBC\_Dynamics}, \texttt{EBC\_ExactBelief},
+ \texttt{EBC\_Hamming}, \texttt{EBC\_Ladder} and \texttt{EBC\_Pairs}, with successive
+-versions of several. Together they carry \(134\) theorem and lemma declarations. The
+-mapping onto the sections here is by name: \texttt{EBC\_Hamming} carries the
+-pairwise-Hamming classification of Section~\ref{scale-hamming}, \texttt{EBC\_Bands} the exact
+-bands, \texttt{EBC\_Ladder} the doubling of Section~\ref{scale-ladder},
+-\texttt{EBC\_ExactBelief} the point-based evaluation of Section~\ref{scale-pbvi}, and
+-\texttt{EBC\_Deadline} the deadline instance of Section~\ref{scale-deadline}.
++versions of several. A full comment-stripped header count of these 16 modules is
++\(138\) theorem declarations (zero \texttt{lemma} headers). The
++historical \(134\) counted only lines opening with \texttt{theorem}:
++it omitted four \texttt{@[simp] theorem} declarations,
++\texttt{EBC\_Deadline.holdRep\_zero},
++\texttt{EBC\_Deadline.matchedRep\_zero},
++\texttt{EBC\_Dynamics.natToK\_zero}, and
++\texttt{EBC\_Dynamics.natToK\_succ}. The prior provisional
++\(135\) report was also an incomplete static count; the
++reproducible source census supersedes it. Declaration-level coverage
++is narrower than section names: \texttt{pair\_sum\_bound} and
++\texttt{cor\_hamming\_m4} constrain four-cube pairs;
++\texttt{floor\_pair\_fails}, \texttt{pair\_survives}, and
++\texttt{survivor\_is\_singleton\_or\_adjacent\_pair}
++cover stated floor, threshold and finite-horizon conditions;
++\texttt{ladder\_doubling} is a conditional mass-ratio identity;
++\texttt{deadline\_law} proves the specified four-coordinate
++hold-then-matched schedule. No EBC declaration enumerates the
++16-level census, the 84 alpha comparisons or the five-cube orbit.
+ 
+ \noindent\textbf{No admitted gaps.} The full project builds cleanly under Lean~4 (\(60\) of \(60\) build jobs). In Lean an unfinished proof surfaces as the axiom
+ \texttt{sorryAx} in the axiom footprint of every declaration depending on it; a
+@@ -775,8 +806,8 @@
+ section were run under \texttt{v4.14.0}. On 2026-09-30 the source-level invariants were
+ re-verified against the current tree: a comment-stripped scan of all \texttt{.lean} files in
+ the project finds no \texttt{sorry}, \texttt{admit}, \texttt{axiom} or \texttt{constant}
+-declaration anywhere, and the declaration counts and named declarations quoted below were
+-re-counted and confirmed present. \textbf{The build has not been re-run since the toolchain
++declaration anywhere, and the named declarations quoted below were confirmed present;
++the 134-vs-138 discrepancy is explained by the four attribute-prefixed declarations above. \textbf{The build has not been re-run since the toolchain
+ pin moved}, so the build-job figures below date from the \texttt{v4.14.0} run and should be
+ re-confirmed before submission.
+ 
+@@ -788,7 +819,13 @@
+ 
+ \subsection{Verification methods}\label{scale-methods}
+ 
+-Every number is regenerated by one deterministic script in exact integer and rational arithmetic, standard library only. The battery opens with the pair-sum bound over all \(120\) pairs and \(17\) actions; the
++The deposited verification script checks the four-cube core in exact
++integer and rational arithmetic, standard library only. The five-cube
++clique census and cross-level alpha-mask maxima require separate exact
++enumeration; the clique witness uses NetworkX for graph enumeration,
++and \texttt{alpha\_check.py} uses NumPy only to pack and deduplicate
++integer outcome masks. Their source-specific results accompany this
++alignment draft and are not covered by a green legacy script. The battery opens with the pair-sum bound over all \(120\) pairs and \(17\) actions; the
+ adjacency-triangle check over all \(560\) triples; the exhaustive
+ one-, two-, three-periodic classification with \(60\)-step
+ certificates; the ten ladder values by survivable-subset enumeration
+@@ -799,40 +836,43 @@
+ actions; the ball radii \(r^{*}(m)\) for \(m = 3, \dots, 8\) with
+ the drift sign pattern and \(60\)-step simulations of the radius-one
+ ball at \(m = 5\) and the \(29\)-cell radius-two ball at
+-\(m = 7\)); and every headline number asserted present in this
+-text.
+-
+-\textbf{A second, independent apparatus.} The script above enumerates;
+-it does not prove. Alongside it, the results of
+-Sections~\ref{scale-hamming}--\ref{scale-deadline} are formalized in a mechanized
+-layer (Lean~4, 60 modules under \texttt{Formalizations/}) with no axioms, no admitted
+-gaps, and no reliance on a computer-algebra oracle: every statement is
+-derived from the ordered-field interface alone, so it holds in any
+-model of that interface. The two apparatus were built separately and
+-agree where they overlap --- the ladder's first two entries
+-(\(1/16\) at the edge, \(1/8\) above it), the
+-adjacency-triangle fact behind the \(560\)-triple check, and the
+-\(16\)-singleton / \(32\)-pair census. Agreement of an enumeration
+-with a proof is evidence about both; it is not a substitute for either.
++\(m = 7\)); and selected headline strings in the original source. A passing
++string check does not recompute the five-cube alpha masks or prove the
++classification.
++
++\textbf{A second, independent apparatus.} The script above enumerates the four-cube core; it does not prove
++the whole paper or independently cover every five-cube assertion. Alongside it, the results of
++The formal layer proves particular ordered-field combinatorial
++lemmas, not every statement in Sections~\ref{scale-hamming}--\ref{scale-deadline}.
++In particular \texttt{ladder\_doubling} assumes an already-proved
++probability ratio and \texttt{deadline\_law} treats the declared
++four-coordinate hold-then-matched sequence. Exact grid counts and
++point-based comparisons rest on separate finite arithmetic, not on
++the formal source. Agreement where hypotheses coincide is a
++cross-check, not a substitute for either apparatus.
+ 
+ What each result now rests on, stated plainly:
+ 
+ \begin{itemize}
+-\item \textbf{Proved.} The band structure at the floor and above the
+-edge (Proposition~\ref{scale-prop:bands}); the ladder's value form
+-(Section~\ref{scale-ladder}); the deadline threshold
+-(Section~\ref{scale-deadline}). These hold as stated over an arbitrary
+-ordered field, with the support size and the horizon symbolic.
++\item \textbf{Formalized components.} The declared four-cube
++pair-sum, far-pair exclusion, floor-pair impossibility, and adjacent-pair
++construction have Lean declarations with their stated dimension, stock
++and finite-horizon hypotheses. \texttt{ladder\_doubling} proves a
++conditional ratio, not the ten grid entries; \texttt{deadline\_law}
++proves the specified hold-then-matched schedule for four coordinates
++and symbolic natural deadline. These do not formalize the five-cube or
++the entire band, ladder and census text.
+ 
+ \item \textbf{Enumerated, not proved.} The census, the \(84\)
+-point-based pairings, the \(83{,}521 \to 545\) deduplication, and the
++point-based pairings, the \(83{,}521 \to 857\) maximum across levels, and the
+ dimension-scope battery at \(m \ne 4\). These are finite checks over
+ the cube; their content is the count, and a count is what the script
+ supplies.
+ 
+ \item \textbf{Simulated.} The \(60\)-step ball certificates at
+ \(m = 5\) and \(m = 7\), and the grid certification of the deadline
+-thresholds. For the deadline the simulation is now redundant --- the
++thresholds. The five-cube orbit verdicts above instead use a
++whole-horizon aggregate-loss argument and a two-action witness. For the deadline the simulation is now redundant --- the
+ threshold is proved --- and is retained as an independent cross-check.
+ \end{itemize}
+ 
