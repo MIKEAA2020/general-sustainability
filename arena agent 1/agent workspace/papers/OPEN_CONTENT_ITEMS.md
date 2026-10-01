@@ -205,9 +205,11 @@ script, actual-figure Tectonic compile, separate push and API reverse-sweep.
   into References; its merger checks source placement and its splitter
   refuses bibliography-less paper11c output. Commit `4f4ca017`.
 - [ ] **Complete safe regeneration:** the paper05/06/11c splitters, the
-  paper01 shared-reference merger and the paper08 merger intentionally
-  **refuse** deficient output rather than fully regenerating the corrected
-  terminal heads. This protection is not a completed pipeline rewrite.
+  paper01 shared-reference merger, paper08 merger and paper09 merger
+  intentionally **refuse** deficient output rather than fully regenerating
+  the corrected terminal heads. For paper09, the refusal happens **before
+  writing**, with reviewed v32 byte-identical in the negative test. This
+  protection is not a completed pipeline rewrite.
 - [ ] **Corpus-wide content tests:** generalize source-aware checks for missing
   whole sections, citation title/venue/page tails, references after
   declarations and inherited review masks. First measure report-only across
