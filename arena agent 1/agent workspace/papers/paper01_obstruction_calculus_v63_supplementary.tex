@@ -188,15 +188,20 @@ policy cannot distinguish them before \(T_{\mathrm{obs}}\); between
 observations the information set evolves by the set-membership semantics
 of Section 2.3.
 
-(H3.2) There exist a constraint function \(q\) of class \(C^1\) (the
-class of Theorem~\ref{thm:exit}'s proof) with \(\mathcal{V} \subseteq \{ q \ge 0 \}\)
-and a constant \(\varepsilon > 0\) such that, \textbf{for every implementable blind-window control} --- every
-measurable \(u(\cdot)\) on \([0, T_{\mathrm{obs}})\) that is admissible at
-every compatible state throughout the blind window, \(u(t) \in U^B(B_t)\)
+(H3.2) Fix the class being certified: by default all implementable
+measurable blind-window controls; a whole-window hold or another
+institutional restriction must be explicitly declared and gives only
+a class-relative nonviability conclusion. There exist a constraint
+function \(q\) of class \(C^1\) (the class of
+Theorem~\ref{thm:exit}'s proof) with \(\mathcal V\subseteq\{q\ge0\}\)
+and a constant \(\varepsilon>0\) such that \textbf{for every
+implementable control in that class} --- measurable on
+\([0,T_{\mathrm{obs}})\) and admissible at all compatible states,
+\(u(t)\in U^B(B_t)\)
 with \(B_t\) the set-membership belief propagated under \(u(\cdot)\) ---
-which is exactly the class of controls that an observation-based policy
-can realize before the first informative observation, where its actions
-are a fixed function of time --- there are a compatible initial state \(x^* \in B_0\) attaining
+which is the full class realizable before the first informative
+observation \emph{only in the unrestricted case}; a declared hold class
+is a proper subclass --- there are a compatible initial state \(x^* \in B_0\) attaining
 \(q(x^*) = \inf_{x \in B_0} q(x)\) (with \(B_0\) compact and \(q\) lower
 semicontinuous; otherwise replace the infimum by \(\inf q + \delta\) for
 an arbitrary \(\delta\)-minimizer, let \(\delta \downarrow 0\), and read
@@ -208,13 +213,15 @@ that open-loop control, the record remains compatible and
 (H3.3) The timing bound holds:
 \[T_{\mathrm{obs}} \;>\; \frac{\inf_{x \in B_0} q(x)}{\varepsilon}. \tag{3}\]
 
-Then, under hypotheses (H3.1)--(H3.3),
-\(B_0 \notin \mathrm{ERViab}_{\mathcal{I}}(\mathcal{V})\): information
-may be accurate but arrive too late.
+Then under (H3.1)--(H3.3), no policy in the fixed class is viable
+from \(B_0\). For the unrestricted observation-based class this yields
+\(B_0\notin\mathrm{ERViab}_{\mathcal I}(\mathcal V)\); for a proper
+institutional subclass it does not exclude unrestricted viability.
 
 \end{theorem}
 
-\emph{Proof.} Fix any observation-based policy. By (H3.1) its actions on
+\emph{Proof.} Fix any observation-based policy \emph{in the fixed
+class}. By (H3.1) its actions on
 \([0, T_{\mathrm{obs}})\) are a fixed open-loop function of time --- the record carries no
 informative observation before \(T_{\mathrm{obs}}\), so every
 observation-equivalent branch induces the same actions; if this function
@@ -242,8 +249,10 @@ to every other compatible branch before \(T_{\mathrm{obs}}\), so the
 policy cannot have altered its action in response to the violation
 before it occurs. Since the policy was arbitrary and the violating
 realization is compatible with the observation record, no
-observation-based policy is robustly viable:
-\(B_0 \notin \mathrm{ERViab}_{\mathcal{I}}(\mathcal{V})\). \ensuremath{\square}
+policy in the fixed class is robustly viable. Only when this is the
+unrestricted class does it follow that
+\(B_0\notin\mathrm{ERViab}_{\mathcal I}(\mathcal V)\).
+\ensuremath{\square}
 
 \begin{theorem}[finite-time exit certificate]\label{thm:exit}
 
@@ -477,28 +486,22 @@ and not re-derived. \rule{0.5\linewidth}{0.5pt}
 \bigskip
 \noindent\textbf{Complete proof of the sparse common-action witness
 (main text, Section 3; Proposition prop:helly).}
-The statement is read with the constraint functions \(q_{j}\) convex in
-addition to \(C^{1}\) --- the standing hypothesis of the barrier
-literature this section joins; the convexity is load-bearing and is
-discussed in the remark after the proof. Fix \(x\) and write the
-safe-control set
-\(\mathcal{R}_{\mathcal{V}}(x) = \{u \in U(x) : q_{j}(F(x, u, d)) \le 0
-\ \forall j,\ \forall d \in D(x)\}\).
-\emph{Closed.} Let \(u_{n} \to u\) with \(u_{n} \in
-\mathcal{R}_{\mathcal{V}}(x)\) witnessed by disturbances
-\(d_{n} \in D(x)\); compactness of \(D(x)\) passes to a subsequence
-\(d_{n_{k}} \to d \in D(x)\), continuity of \(F\) and of \(q_{j}\) gives
-\(q_{j}(F(x, u, d)) = \lim_{k} q_{j}(F(x, u_{n_{k}}, d_{n_{k}})) \le 0\),
-so \(u \in \mathcal{R}_{\mathcal{V}}(x)\). \emph{Bounded.} As a subset
-of the compact \(U\). \emph{Convex.} For \(u_{1}, u_{2} \in
-\mathcal{R}_{\mathcal{V}}(x)\), \(\theta \in [0,1]\), and any
-\(d \in D(x)\): affinity of \(F\) in the control gives
-\(F(x, \theta u_{1} + (1 - \theta) u_{2}, d) = \theta F(x, u_{1}, d) +
-(1 - \theta) F(x, u_{2}, d)\), and convexity of \(q_{j}\) gives
-\(q_{j}(\theta F(x, u_{1}, d) + (1 - \theta) F(x, u_{2}, d)) \le
-\theta q_{j}(F(x, u_{1}, d)) + (1 - \theta) q_{j}(F(x, u_{2}, d)) \le
-0\); as \(d\) was arbitrary, the convex combination is safe. Now
-suppose \(\bigcap_{x \in B} \mathcal{R}_{\mathcal{V}}(x) = \varnothing\).
+This proves the \emph{same tangent-condition statement} as the main
+text, not a separate discrete successor condition. At a fixed state
+\(x\), let \(J(x)\) denote the active safety facets, and use safety
+\(q_j\ge0\) and the control-affine vector field
+\(f(x,u,d)=f_0(x,d)+f_u(x,d)u\). Then
+\[\mathcal R_{\mathcal V}(x)=\{u\in U(x):
+\nabla q_j(x)\cdot f(x,u,d)\ge0\quad
+\forall j\in J(x),\ \forall d\in D(x)\}.\]
+For each fixed \((x,j,d)\) the expression on the left of the
+inequality is affine in \(u\). Thus the inequality defines a closed
+halfspace in control space, regardless of whether \(q_j\) is convex
+as a function of \(x\). Intersecting these halfspaces over all active
+facets and disturbances with the closed convex admissible set \(U(x)\)
+gives a closed convex set. Since \(U(x)\subseteq U\) and \(U\) is
+compact, the set is compact (including when it is empty). Now suppose
+\(\bigcap_{x\in B}\mathcal R_{\mathcal V}(x)=\varnothing\).
 Each member of the family \(\{\mathcal{R}_{\mathcal{V}}(x)\}_{x \in B}\)
 is compact and convex in the Euclidean space \(U \subseteq
 \mathbb{R}^{m}\). If every finite subfamily had nonempty intersection,
@@ -514,27 +517,30 @@ required witness. The converse direction is immediate --- the witness
 sets are members of the family, so their empty intersection implies the
 full one. \smallskip
 
-\emph{Remark (on the convexity hypothesis).} Without convexity of the
-\(q_{j}\) the safe-control set \(\mathcal{R}_{\mathcal{V}}(x)\) need not
-be convex --- the nonconvex rows example of Section 3.4 of the main text
-exhibits exactly this failure --- and the Helly route does not apply;
-the witness bound then holds for the convexified (relaxed) safe-control
-sets, a weaker statement consistent with the reading of the relaxation
-in Section 3. \rule{0.5\linewidth}{0.5pt}
+\emph{Scope of the convexity hypothesis.} For the continuous-time
+tangent condition just proved, convexity is required of \(U(x)\)
+and of the resulting control sets, \emph{not} of \(q_j(x)\):
+\(C^1\) regularity suffices for the affine-in-control tangent
+inequalities. A different, discrete rule based on
+\(q_j(F(x,u,d))\ge0\) need not produce convex control sets without
+additional hypotheses; that rule is not the proposition proved here.
+\rule{0.5\linewidth}{0.5pt}
 
 \bigskip
 \noindent\textbf{Complete proof of the soundness of the oracle-recourse
 certificate (main text, Section 3.7), with the display corrected to the
 support-function form.}
-Write the stored facets as functions \(g_{j}\) with the safe set
-\(\{g_{j} \ge 0\}\), so \(\beta_{\ell}^{d} = g_{j}(\bar
-x_{\theta}^{d}(t))\) is the zero-control facet value at the label and
-the realized facet value along branch \(\theta\) under signals
-\((w, u_{\theta})\) --- \(w\) the common window signal on \([0, \tau)\),
-\(u_{\theta}\) the branch's post-reveal signal --- is, by variation of
-constants in the control-affine dynamics (exact for linear control
-entry; to first order with the remainder charged against the stored
-margin in the general control-affine case),
+Use the main proposition's narrowed hypotheses: for each fixed exogenous
+admissible disturbance scenario the state equation is affine in the state
+and input with coefficients independent of the controlled path, and each
+stored facet \(g_j(x)=c_j^\top x+b_j\) is affine with safety
+\(g_j\ge0\). Thus \(\beta_\ell^d=g_j(\bar x_\theta^d(t))\) is its
+zero-control facet value. For signals \((w,u_\theta)\) --- \(w\) common
+on \([0,\tau)\), \(u_\theta\) a branch's post-reveal signal ---
+variation of constants and affinity of \(g_j\) give the following
+\emph{exact} identity. General control-affine dynamics with
+state-dependent \(B(x)\), or nonlinear facets, are not covered without
+a separately validated one-sided remainder bound:
 \[
 g_{j}\bigl(x_{\theta}^{u, d}(t)\bigr) \;=\; \beta_{\ell}^{d}
 \;+\; \int_{0}^{\tau} \bigl(k_{\ell}^{d}\bigr)^{\top} w
@@ -552,11 +558,13 @@ k_{\ell}^{d}\bigr)\, d\sigma \Bigr\},
 \]
 with \(h_{U}(g) := \max_{v \in U} g^{\top} v\) the support function. If
 \(\Gamma_{h}(\lambda) < 0\), then \(B_{0} \notin
-\mathrm{ERViab}_{\mathcal{I}}(\mathcal{V})\): some stored facet is
-violated along some branch, for every policy in the stated class and
-every branch selection.
-\emph{Proof.} Let \(d^{*}(\cdot)\) realize the infimum (or an
-infimizing sequence; the argument is pointwise in \(d\)). Consider any
+\mathrm{ERViab}_{\mathcal{I}}(\mathcal{V})\): for every policy,
+at least one compatible stored branch has a violated facet under the
+fixed exogenous scenario (the branch may depend on the policy).
+\emph{Proof.} Since \(\Gamma_h<0\), the definition of infimum supplies
+one exogenous admissible scenario \(d^{*}(\cdot)\) whose bracket is
+strictly negative. That same scenario is admissible against every
+policy; attainment of the infimum is unnecessary. Consider any
 admissible policy: its window signal \(w\) is one fixed measurable
 function (the blind-window reduction of
 Theorem~\ref{thm:delayed}), and its post-reveal branch signals
@@ -578,8 +586,8 @@ h_{U}(\sum_{\ell} \lambda_{\ell} k_{\ell}^{d^{*}}) + \sum_{\ell}
 negative weighted sum of the facet values forces some facet value to be
 strictly negative: the facet is violated along its branch. Since the
 window signal \(w\) was arbitrary, every policy in the class fails;
-branch selection is immaterial because the sum ranges over all stored
-labels. \(\square\)
+the violating stored branch can depend on the policy; no assertion
+about every individual branch is needed. \(\square\)
 
 \emph{Remark (an attainment-special variant).} A variant certificate
 replaces \(h_{U}\) by the minimum \(\phi_{U}(g) = \min_{v \in U}
@@ -755,24 +763,31 @@ certifier exists (Proposition~\ref{prop:fibre}).}
 
 \bigskip
 \noindent\textbf{Complete discussion of the degenerate (deterministic) limit: the worked instances and the audit-slice table (main text, Section 10).}
-The deficit bound of the degenerate limit, attained:
-The proposition's deficit bound is attained on both worked instances: It is a finite-model statement; a continuous-state limit requires uniform concentration of the kernels, which is not developed here. The deficit from \(1\) is at least the smallest compatible mass \(\min_{x \in B} b(x)\).
+The deterministic-kernel deficit bound, attained:
+The proposition's bound applies to the following finite models with
+deterministic single-successor transitions, deterministic observations,
+and \(B=\mathrm{supp}(b)\). It does not extend on the strength of
+transition support alone to a fixed stochastic disturbance mixture:
+a bad successor of arbitrarily small positive probability can produce
+a smaller deficit. Under the stated deterministic-kernel assumptions,
+the two worked instances attain the lower bound
+\(1-V_k(b)\ge\min_{x\in B}b(x)\); no continuous-state limit is claimed.
 
-\textbf{A worked instance (the two-floor conflict).} Read the two-floor system of Section 3.4 as a finite POMDP: states \(x_{1}\) and \(x_{2}\) share one observation; the action \(u \in [0,1]\) is admissible; the one-step violation probability is \(p(x_{1}, u) = 1\) for \(u > 0.4\) and \(0\) otherwise, and \(p(x_{2}, u) = 1\) for \(u < 0.6\) and \(0\) otherwise; the prior is uniform, \(b_{0} = (1/2, 1/2)\). Then \(\sum_{x} b_{0}(x)\, p(x, u) \ge 1/2\) for every \(u\), so the chance-constrained proposition of the main text (Section 10) gives \(V_{k}(b_{0}) \le 1/2\) for all \(k \ge 1\), and the chance constraint \(\mathbb{P}_{b,\pi} \ge 1 - \varepsilon\) is infeasible for every \(\varepsilon < 1/2\). The bound is attained: \(V_{1}(b_{0}) = 1/2\) (each action sacrifices exactly one floor), and the surviving floor is thereafter kept safe by its own action, so \(V_{k}(b_{0}) = 1/2\) for all \(k\). At the degenerate limit this reads \(B_{0} = \{x_{1}, x_{2}\} \notin \mathcal{W}_{1}\) with \(V_{k}(b_{0}) = 1 - \min_{x \in B_{0}} b_{0}(x) = 1/2\), the bound of the proposition (main text, Section 10) --- the chance-constrained obstruction evaluated at its exact value.
+\textbf{A worked instance (the two-floor conflict).} Read a finite-action restriction of the two-floor system of Section 3.4 as a finite POMDP: states \(x_{1}\) and \(x_{2}\) share one observation; take the two representative actions \(A=\{0,1\}\subset[0,1]\) (the same values follow with the full interval in a non-finite-action version); the one-step violation probability is \(p(x_{1}, u) = 1\) for \(u > 0.4\) and \(0\) otherwise, and \(p(x_{2}, u) = 1\) for \(u < 0.6\) and \(0\) otherwise; the prior is uniform, \(b_{0} = (1/2, 1/2)\). Then \(\sum_{x} b_{0}(x)\, p(x, u) \ge 1/2\) for every \(u\), so the chance-constrained proposition of the main text (Section 10) gives \(V_{k}(b_{0}) \le 1/2\) for all \(k \ge 1\), and the chance constraint \(\mathbb{P}_{b,\pi} \ge 1 - \varepsilon\) is infeasible for every \(\varepsilon < 1/2\). The bound is attained: \(V_{1}(b_{0}) = 1/2\) (each action sacrifices exactly one floor), and the surviving floor is thereafter kept safe by its own action, so \(V_{k}(b_{0}) = 1/2\) for all \(k\). At the degenerate limit this reads \(B_{0} = \{x_{1}, x_{2}\} \notin \mathcal{W}_{1}\) with \(V_{k}(b_{0}) = 1 - \min_{x \in B_{0}} b_{0}(x) = 1/2\), the bound of the proposition (main text, Section 10) --- the chance-constrained obstruction evaluated at its exact value.
 
-\textbf{A worked instance (the delayed hidden regime on the audit grid).} Read the audit system of Section 9 of the main text as a finite POMDP over the declared hold class: states \((z,\theta)\) with \(\theta \in \{-1,+1\}\), prior \(b_{0} = (\tfrac{1}{2}, \tfrac{1}{2})\) on the two regimes from \(z_{0}\), no observation before \(T_{\mathrm{obs}}\), exact regime revelation at \(T_{\mathrm{obs}}\), and blind-window actions restricted to the declared holds \(u \equiv \pm 1\). The safety values are exact: for \(k \le T_{\mathrm{obs}}\),
+\textbf{A worked instance (the delayed hidden regime on the audit grid).} This is a \emph{class-restricted} finite POMDP calculation, not a direct application of the unrestricted-policy equivalence in the deterministic-kernel proposition of the main text (Section 10). Read the audit system of Section 9 as a finite POMDP over the declared whole-window hold class: states \((z,\theta)\) with \(\theta \in \{-1,+1\}\), prior \(b_{0} = (\tfrac{1}{2}, \tfrac{1}{2})\) on the two regimes from \(z_{0}\), no observation before \(T_{\mathrm{obs}}\), exact regime revelation at \(T_{\mathrm{obs}}\), and blind-window actions restricted to the declared holds \(u \equiv \pm 1\). Define \(V^{\mathrm{hold}}_{k,T_{\mathrm{obs}}}(b_0)\) by maximizing survival over this whole-window hold class with regime-adapted continuation after revelation. This is not the unrestricted \(V_k\) of Section 10; it requires remembering the chosen hold action. Its values are exact: for \(k \le T_{\mathrm{obs}}\),
 \[
-V_{k}(b_{0}) \;=\; \tfrac{1}{2}\bigl(\mathbf{1}[z_{0} - k \ge 1] + \mathbf{1}[z_{0} + k \ge 1]\bigr),
+V^{\mathrm{hold}}_{k,T_{\mathrm{obs}}}(b_{0}) \;=\; \tfrac{1}{2}\bigl(\mathbf{1}[z_{0} - k \ge 1] + \mathbf{1}[z_{0} + k \ge 1]\bigr),
 \]
 since a hold drives one branch down at unit rate; and for \(k > T_{\mathrm{obs}}\),
-\(V_{k}(b_{0}) = \tfrac{1}{2}\bigl(1 + \mathbf{1}[z_{0} \ge 1 + T_{\mathrm{obs}}]\bigr)\), the revealed regime then held to growth. Three alignments follow. First, \(V_{1}(b_{0}) = 1\) exactly when \(z_{0} \ge 2\): the one-step certificate's silent region is exactly the region where the first blind step is safe. Second, \(V_{k}(b_{0}) = 1\) for every \(k\) exactly when \(z_{0} \ge 1 + T_{\mathrm{obs}}\): the belief-state value reproduces the audit's viability boundary, so on this grid the certificate partition and the value recursion agree cell by cell. Third, every deficit equals \(\tfrac{1}{2} = \min_{x} b_{0}(x)\): on each nonviable cell the bound of the proposition (main text, Section 10) is attained --- the declining branch is the lost mass, and the chance-constrained obstruction is again evaluated at its exact value. Table~\ref{tab:beliefV} tabulates the slice \(z_{0} \in \{1.5, 2, 2.5\}\); the verification script evaluates all 48 cells in exact rational arithmetic and regenerates the table verbatim. The class declaration is load-bearing here, as in clause (iv) of the class-declaration theorem of the main text (Section 10): over unrestricted time-varying blind policies the alternating sequence keeps both branches within \(z_{0} \pm 1\), so the unrestricted value equals \(1\) exactly on \(\{z_{0} \ge 2\}\) --- the cells the timing bound covers are exactly the cells where in-window adaptivity rescues the declared hold class.
+\(V^{\mathrm{hold}}_{k,T_{\mathrm{obs}}}(b_{0}) = \tfrac{1}{2}\bigl(1 + \mathbf{1}[z_{0} \ge 1 + T_{\mathrm{obs}}]\bigr)\), the revealed regime then held to growth. Three alignments follow. First, \(V^{\mathrm{hold}}_{1,T_{\mathrm{obs}}}(b_{0}) = 1\) exactly when \(z_{0} \ge 2\): the one-step certificate's silent region is exactly the region where the first blind step is safe. Second, \(V^{\mathrm{hold}}_{k,T_{\mathrm{obs}}}(b_{0}) = 1\) for every \(k\) exactly when \(z_{0} \ge 1 + T_{\mathrm{obs}}\): the belief-state value reproduces the audit's viability boundary, so on this grid the certificate partition and the separately class-restricted values agree cell by cell. Third, every hold-class deficit equals \(\tfrac{1}{2}=\min_x b_0(x)\): the declining branch is the lost mass. The same pathwise minimum-mass argument works with the recursion \emph{also restricted to holds}, but this is not an application of the main deterministic-kernel proposition to its unrestricted \(\mathcal W_k\); for \(z_0\ge2\), per-step alternation changes both the unrestricted viability verdict and \(V_k\). Table~\ref{tab:beliefV} tabulates the slice \(z_{0} \in \{1.5, 2, 2.5\}\); the verification script evaluates all 48 cells in exact rational arithmetic and regenerates the table verbatim. The class declaration is load-bearing here, as in clause (iv) of the class-declaration theorem of the main text (Section 10): over unrestricted time-varying blind policies the alternating sequence keeps both branches within \(z_{0} \pm 1\), so the unrestricted value equals \(1\) exactly on \(\{z_{0} \ge 2\}\) --- the cells the timing bound covers are exactly the cells where in-window adaptivity rescues the declared hold class.
 
 \begin{table}[t]
 \centering
 \footnotesize
 \begin{tabular}{@{}ccccccl@{}}
 \toprule
-\(z_{0}\) & \(T_{\mathrm{obs}}\) & \(V_{1}\) & \(V_{2}\) & \(V_{3}\) & audit verdict & covering certificate \\
+\(z_{0}\) & \(T_{\mathrm{obs}}\) & \(V^{\mathrm{hold}}_{1}\) & \(V^{\mathrm{hold}}_{2}\) & \(V^{\mathrm{hold}}_{3}\) & audit verdict & covering certificate \\
 \midrule
 1.5 & 1 & \(\tfrac{1}{2}\) & \(\tfrac{1}{2}\) & \(\tfrac{1}{2}\) & \(\bullet\) & common-action \\
 1.5 & 2 & \(\tfrac{1}{2}\) & \(\tfrac{1}{2}\) & \(\tfrac{1}{2}\) & \(\bullet\) & common-action \\
@@ -785,11 +800,12 @@ since a hold drives one branch down at unit rate; and for \(k > T_{\mathrm{obs}}
 2.5 & 3 & \(1\) & \(\tfrac{1}{2}\) & \(\tfrac{1}{2}\) & \(\ast\) & timing bound \\
 \bottomrule
 \end{tabular}
-\caption{Belief-state safety values \(V_{k}(b_{0})\) on the audit slice,
+\caption{Belief-state safety values \(V^{\mathrm{hold}}_{k,T_{\mathrm{obs}}}(b_{0})\) on the audit slice,
 computed over the declared hold class (exact rational values; the script
-regenerates all 48 cells). The deficit is \(\tfrac{1}{2}\) on every nonviable
-cell --- the attained bound of the proposition (main text, Section 10) --- and
-\(V_{k} \equiv 1\) exactly on the viable region \(z_{0} \ge 1 + T_{\mathrm{obs}}\).}
+regenerates all 48 cells). The hold-class deficit is \(\tfrac{1}{2}\) on every hold-class nonviable
+cell (the class-relative pathwise bound), and the hold-class value is
+\(1\) for every horizon exactly when \(z_0\ge1+T_{\mathrm{obs}}\).
+This table is not the unrestricted value recursion of the main proposition.}
 \label{tab:beliefV}
 \end{table}
 \rule{0.5\linewidth}{0.5pt}
@@ -895,15 +911,22 @@ definitional: the program's feasible set is, by construction,
 step } K\}\), so no relaxation is taken and the computation is sound and complete over the
 declared class.
 
-For claim (iv), the two computations. \emph{Hidden-regime gap:} with branches
-\(z^{+} = z + u\), \(z^{-} = z - u\), floor \(z \ge 1\), and declared finite class
-\(\{\pm 1\}\), any hold control drives one branch down at unit rate, which reaches the floor
-at time \(z_{0} - 1\): \(\sigma^{*} = z_{0} - 1\). Enlarging the declaration to the polytope
-\([-1,1]\) admits \(u \equiv 0\), under which both branches remain at \(z_{0} \ge 1\)
-forever: \(\sigma^{*}_{\mathrm{rel}} = \infty\), and the relaxed timing certificate never
-fires. The gap between the relaxed and implementable certificates is therefore unbounded,
-and soundness of the relaxed verdict does not restore completeness over the implementable
-class. \emph{Duality computation:} with branches \(z^{+} = \tfrac{9}{10} z \pm u\), the
+For claim (iv), \emph{two distinct systems} are checked.
+\emph{Hidden-regime hold-versus-relaxation gap:} with branches
+\(z^{+}=z+u\), \(z^{-}=z-u\), floor \(z\ge1\), declare
+\(\Pi_{\mathrm{hold}}=\{(u,\ldots,u):u\in\{\pm1\}\}\) over the
+entire blind window. At \(z_0=2\), either hold keeps both branches
+safe for exactly one step, then one exits on step two. The polytope
+per-step relaxation \(u_k\in[-1,1]\) admits \(u\equiv0\), which keeps
+both branches at \(z_0\) through every horizon. Thus the difference
+in maximal safe-step counts grows without bound as \(K\) increases.
+This comparison is \emph{not} between all finite per-step sequences
+\(u_k\in\{\pm1\}\) and the polytope: in that larger finite class,
+alternation can keep both branches safe from \(z_0=2\).
+For general real \(z_0\ge1\), a whole-window hold survives
+\(\lfloor z_0-1\rfloor\) integer blind steps, with the real quantity
+\(z_0-1\) marking its linearly interpolated floor-crossing time.
+\emph{Decaying-system duality computation (a separate model):} with branches \(z^{+} = \tfrac{9}{10} z \pm u\), the
 level-\(k\) rows are \(z^{+}_{k} \ge 1\) and \(z^{-}_{k} \ge 1\) with
 \(z^{\pm}_{k} = (\tfrac{9}{10})^{k} z_{0} \pm \sum_{i<k} (\tfrac{9}{10})^{k-1-i} u_{i}\).
 Summing the pair cancels the control terms pairwise (equal magnitudes, opposite signs),
@@ -1141,20 +1164,21 @@ differs between the two'' situation.
 \end{example}
 
 \begin{remark}[threshold form of the timing obstruction]\label{rem:sigma}
-The delayed-information obstruction has a sharp threshold. Let
-\(\sigma^*(B_0)\) be the guaranteed blind-window survival time: the
-largest duration such that some pre-observation policy keeps every
-observation-equivalent branch in \(\mathcal{V}\) until then,
-\[\sigma^*(B_0) \;=\; \sup_{u(\cdot)} \inf_{x_0\in B_0,\, d(\cdot)} \tau(x_0,u,d),\]
-with the infimum over branches that remain observation-equivalent on
-\([0,T_{\mathrm{obs}})\) and \(\tau\) the first violation time under the
-convention of Theorem~\ref{thm:delayed}. Then
-\[\sigma^*(B_0) < T_{\mathrm{obs}} \;\Longrightarrow\; B_0 \notin \mathrm{ERViab}_{\mathcal{I}}(\mathcal{V}),\]
-because before \(T_{\mathrm{obs}}\) a policy cannot condition its action
-on which branch realizes. Condition (3) certifies this threshold: under
-(H3.1)--(H3.2) every branch exits by time
+For a declared blind-window policy class \(\Pi\), define the
+class-relative guaranteed survival time by
+\[\sigma^*_{\Pi}(B_0)=\sup_{u(\cdot)\in\Pi}
+\inf_{x_0\in B_0,\,d(\cdot)}\tau(x_0,u,d),\]
+where the infimum ranges over observation-equivalent branches and
+\(\tau\) is the first strict violation time. Then
+\[\sigma^*_{\Pi}(B_0)<T_{\mathrm{obs}}\ \Longrightarrow\
+\text{no policy in }\Pi\text{ is viable from }B_0.\]
+Only for the unrestricted class is this an assertion that
+\(B_0\notin\mathrm{ERViab}_{\mathcal I}(\mathcal V)\).
+Before the first observation a policy cannot distinguish branches.
+Under (H3.1)--(H3.2), for \emph{every} control in \(\Pi\) at least
+one compatible branch exits by time
 \(\inf_{x\in B_0}q(x)/\varepsilon\), hence
-\(\sigma^*(B_0)\le\inf_{x\in B_0}q(x)/\varepsilon\), and (3) states that
+\(\sigma^*_{\Pi}(B_0)\le\inf_{x\in B_0}q(x)/\varepsilon\), and (3) states that
 this upper bound lies below \(T_{\mathrm{obs}}\); the threshold itself
 may be strictly smaller, in which case nonviability holds even when (3)
 fails. The threshold is the blind-window response correspondence of the
