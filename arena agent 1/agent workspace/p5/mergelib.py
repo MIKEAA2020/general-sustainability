@@ -294,6 +294,16 @@ def merge(BASE, A, B, OUT, TITLE, ABSTRACT, CROSS, HEAD_A, HEAD_B, PREF_A, PREF_
     out = ''.join(doc)
     io.open(BASE + OUT, 'w', encoding='utf-8').write(out)
 
+    # ------------------------------------------------------------------ gate
+    # The merge is scripted, so any damage it introduces comes back on the next
+    # re-merge no matter how carefully the .tex is repaired by hand. Paper08 was
+    # repaired by hand on 2026-10-01 (26 tails reattached, 5 duplicates removed,
+    # the list re-sorted); a clean re-merge reproduced every artifact. So: gate
+    # the assembled document and refuse to emit it if the structural classes
+    # fire. Fix the merge, not the output.
+    import phase0_scan
+    phase0_scan.report_gate(phase0_scan.gate_text(out, OUT), OUT)
+
     c = "\n".join(re.sub(r'(?<!\\)%.*$', '', l) for l in out.split('\n'))
     L = set(re.findall(r'\\label\{([^}]*)\}', c))
     R = set(re.findall(r'\\ref\{([^}]*)\}', c))

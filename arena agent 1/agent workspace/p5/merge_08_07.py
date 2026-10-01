@@ -13,7 +13,7 @@ Structure produced:
     merged references (union, de-duplicated)
     merged declarations
 """
-import io, re
+import io, os, re, sys
 
 BASE = '/home/user/papers/'
 A = 'paper08_governance_delay_v45.tex'       # continuous delay (DDE)
@@ -320,6 +320,20 @@ for d in (decl_a, decl_b):
 doc.append('\n\\end{document}\n')
 
 out = ''.join(doc)
+
+# ------------------------------------------------------------------ gate
+# This merge is scripted, so damage it introduces returns on the next re-merge
+# however carefully the .tex is repaired by hand. Paper08's reference list was
+# rebuilt by hand on 2026-10-01 (5 glued lines split, 26 detached tails
+# reattached, 5 duplicate entries removed, the list re-sorted) and a clean
+# re-merge reproduced every one of those artifacts plus a second Declarations
+# block, a second supplementary-material passage and the cross-unit
+# paper4_supplementary pointer. Gate the assembled document and refuse to write
+# it if the structural classes fire. Fix this script, not the output.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import phase0_scan
+phase0_scan.report_gate(phase0_scan.gate_text(out, os.path.basename(OUT)), OUT)
+
 io.open(BASE + OUT, 'w', encoding='utf-8').write(out)
 
 # ---------------- checks ----------------
