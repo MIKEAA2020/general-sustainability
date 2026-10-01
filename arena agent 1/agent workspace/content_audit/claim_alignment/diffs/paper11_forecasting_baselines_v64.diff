@@ -1,0 +1,172 @@
+--- /home/user/papers/paper11_forecasting_baselines_v64.tex
++++ /home/user/content_audit/claim_alignment/drafts/paper11_forecasting_baselines_v64.tex
+@@ -1,9 +1,9 @@
+ %% ============================================================
+ %% PAPER 11 (of 11) -- forecasting_baselines -- Part I: NORTHERN COD
+ %% v62 (2026-09-30). Derived from paper11_forecasting_baselines_v61.tex.
+-%% NOTE: v61 was THREE complete LaTeX documents concatenated (3x \documentclass,
+-%%   3x \begin{document}, 3x \end{document}); \part{E3} and \part{Ws} sat in the
+-%%   GAPS between them, outside any document. Nothing past the first \end{document}
++%% NOTE: v61 was THREE complete LaTeX documents concatenated (three document
++%%   starts and terminators); E3 and Ws sat in the gaps between them,
++%%   outside any document. Nothing past the first document terminator
+ %%   compiled, so Parts II and III (141k chars, 19.2k words) were DEAD TEXT.
+ %% SIBLINGS: paper11b_edwards_forecast_v1.tex (E3),
+ %%           paper11c_worked_systems_audit_v1.tex (Ws).
+@@ -42,10 +42,10 @@
+ predictability of the driver it persists. Where a model's causal content consists of carrying a
+ driver forward in time, and that driver is close to white, the structure adds parameters without
+ adding signal --- the mechanism is real but carries no forecast information at the horizon in
+-question, and persisting it is overhead rather than insight. \emph{A model that persists a
+-near-white driver has no claim to beat persistence, whatever its mechanistic fidelity.} Two
+-consequences are general: a negative result of this kind is informative only against a protocol
+-fixed before any score is computed; and the failure is \emph{diagnostic}, locating the defect in
++question, and persisting it is overhead rather than insight. \emph{For the tested process modules, persisting a weakly predictive driver did not
++improve the scored forecast against persistence at the stated horizons.} Two
++consequences are general: a negative result is interpretable against a stated scoring core,
++with later tie-band and comparator completions disclosed; and the failure is \emph{diagnostic}, locating the defect in
+ the driver's spectrum rather than only reporting a loss.
+ 
+ \noindent\textbf{Why two systems.} A finding on one system is a demonstration; the same finding on
+@@ -59,10 +59,13 @@
+ point: \emph{the test is the same even though the mechanism is not.} Each system is held to the
+ standard that added structure clears a naive benchmark, and the verdict is allowed to be negative.
+ 
+-\noindent\textbf{What is found.} On both systems, at the annual origin, last-value persistence is
+-more accurate than the process-based alternatives scored. On the cod series no module is retained
+-on either unpooled specification; on the aquifer the univariate AR(1) is retained, by a margin the
+-paper shows to be a coin-flip. At multi-year horizons climatological baselines win on the aquifer,
++\noindent\textbf{What is found.} On the cod series, at both scored horizons, persistence has lower pooled
++rolling-origin RMSE than the tested structural modules on either unpooled
++specification. On the aquifer, at the annual origin, the output-only
++univariate AR(1) reads 12.84 versus 13.23 ft for persistence and is
++retained under its original one-horizon point rule, though the margin is
++within noise; a water-balance-identified affine model with climatological
++fluxes reads 12.28 ft but is declined by its protocol class clause. At multi-year horizons climatological baselines win on the aquifer,
+ robustly. Under known ground truth the rule recovers a true autonomous module in \(97\%\) of
+ replicates at collapse-window parameters, so the empirical non-retention of that module is
+ evidence about the series rather than about the instrument --- while for the stock-flow and
+@@ -152,8 +155,9 @@
+ 884.6 to 790.0 kt across vintages, and the real 2022--2023 survey
+ suspension --- two assessment cycles with the leading indicator
+ uncomputable and removals frozen --- supplies the review-timing boundary
+-case. The decision-relevant uncertainty of the period accumulated in the
+-observation and reference-point layer, not in forecast structure.
++case. In the observed 2016--2023 update window, changes to observations
++and reference points affect decision interpretation; this window does
++not independently establish that forecast structure was irrelevant.
+ 
+ \end{abstract}
+ 
+@@ -299,9 +303,10 @@
+ discipline for this question (Diebold and Mariano, 1995), and the scaled error measures used
+ below follow the established treatment of accuracy metrics (Hyndman and Koehler, 2006). The
+ design here departs from the common practice of that literature in one respect: the retention
+-rule --- keep a module only if it lowers RMSE against both the next-simpler module and
+-persistence --- was fixed before any score was computed, and the rule itself is then evaluated
+-by simulation under known ground truth.
++rule --- compare RMSE against both the next-simpler module and
++persistence --- was coded before the first scoring pass. The 5\% tie band
++and comparator declarations were recorded after the scores, as \S2.3 discloses;
++the applied rule is then evaluated by simulation under known ground truth.
+ 
+ \paragraph{Guarding against selection after the fact.} Why a protocol must be fixed beforehand,
+ and why stating it as a commitment rather than a preference matters, is the data-snooping
+@@ -315,13 +320,16 @@
+ The design here addresses the same hazard by a different and more restrictive route, and the
+ difference should be stated rather than left implicit. Those procedures take a \emph{set of
+ already-computed scores} and ask which, if any, survive correction for having been selected.
+-Here nothing is selected from the scores at all: the retention rule is a predicate fixed before
+-any score is read, applied without exception, and its operating characteristics are measured by
+-simulation under known ground truth. That is why a negative result can be reported as a finding
+-rather than as an absence of evidence --- the rule either retains a module or it does not, and
+-on both systems it does not. The cost of the choice is scope, and it is a real cost: a rule
+-fixed in advance cannot be tuned to the series, so a module that a more permissive protocol
+-would have retained is still reported here as not retained.
++Here the model class and scoring core were fixed before scoring, but the
++retention predicate does select on RMSE, and the later tie-band and comparator
++completions are disclosed in \S2.3. Simulation estimates operating
++characteristics conditional on the rule as applied; it is not a
++familywise-error correction or evidence that every clause was prespecified.
++On cod the applied rule retains no structural module; the aquifer
++originally retains an output-only AR(1) at one year while declining
++water-balance stock-flow additions. The cost of the choice is scope, and it is a real cost: a rule
++with its scoring core set in advance and later completions disclosed cannot
++be retroactively retuned without changing the interpretation of the verdict.
+ 
+ \paragraph{Simple benchmarks are hard to beat, which is the finding this paper shares.} That
+ naive and simple statistical benchmarks are not far from the most accurate methods, and that
+@@ -478,9 +486,6 @@
+ The factor \(a(S_t)\) is a multiplicative depensation term, not a
+ parameter switch. Setting \(\mathfrak s=0\) gives \(a(S_t)=S_t/K\) (a
+ cubic modification of the logistic surplus; Pella and
+-Romano, J.P. and Wolf, M., 2005. Stepwise multiple testing as formalized data snooping.
+-\emph{Econometrica}, 73(4), 1237--1282. doi:10.1111/j.1468-0262.2005.00615.x.
+-
+ Tomlinson, 1969), not the Schaefer (1954) law. The
+ Schaefer model is the separate member of the family in which the factor
+ is replaced by \(1\); Abaee (2026, Periodic review as sampled governance) makes the same distinction.
+@@ -1883,8 +1888,10 @@
+ this series cannot show. That analysis applied the retention rule
+ without a tie band and horizon by horizon; the figures below restate its
+ verdict under the rule used here, so that both systems are judged by one
+-criterion. The restatement changes no outcome: the retained set is empty
+-on both systems under either form of the rule. Six Edwards margins fall
++criterion. Under the stricter E1 two-horizon 5\% rule, no tested structural
++module is retained on either series. This is a restatement of the Edwards
++scores under a different rule, not a claim that its original one-year
++point rule rejects the output-only AR(1), which it retains. Six Edwards margins fall
+ inside the \(5\%\) band, and the module they bear on was already
+ excluded on other grounds. There the autonomous module reads below
+ persistence on the point ranking at one year (12.84 against 13.23 ft)
+@@ -2443,8 +2450,9 @@
+ groundwater system in Abaee (2026, Does a one-pool water-balance model improve forecasts of Edwards Aquifer head) and restated under the rule used
+ here, the same criterion withholds retention from a module that beats
+ persistence on the point ranking, so the tie band and the two-horizon
+-requirement are load-bearing rather than nominal. The retained set is
+-empty on both systems, while the series are not pooled and no verdict is
++requirement are load-bearing rather than nominal. Under the E1 stricter restatement the tested structural retained set
++is empty on both systems; the aquifer original one-year point rule does
++retain its output-only AR(1). The series are not pooled and no verdict is
+ transferred between them. The same retention outcome holds on the
+ unpooled xteNCAM series, whose post-2015 stall period fails in the same
+ way the reconstructions stall.
+@@ -2473,9 +2481,9 @@
+ \begin{abstract}
+ 
+ 
+-\textbf{Problem.} Index-well head forecasting is a recurring operational need, while deliberately simple process-based water-balance models are rarely tested against naive benchmarks under a locked retention rule.
+-
+-\textbf{Approach.} On the 1934--2023 annual-mean J-17 Edwards Aquifer head series, a fixed ladder was scored by rolling and fixed-window out-of-sample RMSE: persistence, training-mean climatology, univariate AR(1), a one-pool stock-flow water balance, residual/delay variants, and climate-informed recharge. A causal module was retained only if it beat both persistence and the next-simpler causal model under a protocol frozen before any score.
++\textbf{Problem.} Index-well head forecasting is a recurring operational need; this record tests a deliberately simple water-balance model against naive benchmarks under a disclosed retention rule.
++
++\textbf{Approach.} On the 1934--2023 annual-mean J-17 Edwards Aquifer head series, a fixed ladder was scored by rolling and fixed-window out-of-sample RMSE: persistence, training-mean climatology, univariate AR(1), a one-pool stock-flow water balance, residual/delay variants, and climate-informed recharge. The scoring core compared RMSE with persistence and the next-simpler model before the first pass; comparator and tie-band clauses were completed after scores and are disclosed here.
+ 
+ \textbf{Results.} The stock-flow map that persists last year's recharge loses to persistence at one year (14.70 vs. 13.23 ft), because annual recharge is near-white (corr(R\_t, R\_{t\ensuremath{-}1}) = 0.17 vs. corr(\ensuremath{\Delta}H\_t, R\_t) = 0.74). The univariate AR(1) improves one-year RMSE by 0.39 ft (12.84 ft), but its margin is a coin-flip (mean absolute error a tie, five-year loss, bootstrap interval covering zero). The climatological-flux affine map (M2m) is the best one-step forecaster (12.28 ft) yet is declined by a protocol clause. Given realized fluxes the same map nowcasts (7.55 ft); climate modules gain at most 0.13 ft and none is retained. At five years climatology beats persistence robustly (16.80 vs. 21.11 ft).
+ 
+@@ -3780,6 +3788,9 @@
+ U.S. Geological Survey. National Water Information System, site
+ 08168710, Comal Springs at New Braunfels, Texas.
+ 
++Romano, J.P. and Wolf, M., 2005. Stepwise multiple testing as formalized data snooping.
++\emph{Econometrica}, 73(4), 1237--1282. doi:10.1111/j.1468-0262.2005.00615.x.
++
+ White, H., 2000. A reality check for data snooping. \emph{Econometrica}, 68(5),
+ 1097--1126. doi:10.1111/1468-0262.00152.
+ 
+@@ -3870,9 +3881,12 @@
+ The scored ladder and every auxiliary campaign are produced by the scripts
+ named above, archived with their outputs. The verification script
+ \texttt{paperE1\_cod\_forecast\_ladder\_v60\_verification.py} re-runs
+-the record and recompares the printed scores, reference points and
+-window facts against the locked input files; it is archived alongside
+-this manuscript.
++the outcome-year, vintage and threshold checks against the locked
++input files, but does not recompute the rolling-origin forecast scores
++or power simulations; those are archived with their separate campaign
++scripts and results. The v60 verifier also requires a compatible
++\texttt{texcheck.py} helper defining \texttt{no\_variant}; archive that helper
++with it before describing a reproducible exit-status check.
+ 
+ \paragraph{Edwards Aquifer data availability.}
+ 
