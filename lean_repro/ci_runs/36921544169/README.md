@@ -1,0 +1,3 @@
+# GitHub Actions rerun evidence
+
+Push run [36921544169](https://github.com/MIKEAA2020/general-sustainability/actions/runs/36921544169) at commit `2745ad6577a4ad52afa5099d5a99443041d44079`. The job concluded **failure by design**: the full imported-declaration axiom gate rejects ten `native_decide`-generated axioms. The default Lake target built **60/60**, named checks **21/21**; no publication-ready clean verdict. These files were downloaded from the expiring Actions artifact and independently compared to its source snapshot, then the two footprint parsers were rerun locally. `run_metadata.json` identifies the artifact and zip digest. The original Lean source bundle remains in `../source_snapshot.tar.gz`.
