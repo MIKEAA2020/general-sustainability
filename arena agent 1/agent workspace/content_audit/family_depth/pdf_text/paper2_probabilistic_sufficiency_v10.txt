@@ -1,0 +1,1825 @@
+Probabilistic Suﬀiciency for the Obstruction Calculus:
+Belief-State Safety Values under Partial Observation
+Amin Abaee
+Independent Researcher
+ORCID: 0000-0002-0019-1842
+amin_abaee@ut.ac.ir
+September 26, 2026
+Abstract
+The obstruction calculus characterizes nonviability
+through certificates on information states; the probabilis-
+tic side asks what the certificates imply when the infor-
+mation state is a distribution. This paper develops the
+belief-state safety value Vk(b) — the maximal probability
+of remaining safe for k steps — as a theory carried en-
+tirely in exact rational arithmetic, with six results. First,
+a support identity: on finite models with deterministic
+kernels and deterministic observation maps the posterior
+support coincides with the set-valued post-state of the cal-
+culus, the value-one level of the recursion coincides with
+the viable-set recursion Wk, and outside it the deficit sat-
+isfies 1 − Vk(b) ≥ minx∈supp(b) b(x), attained on natural
+instances; moreover the alpha-vectors are exactly the indi-
+cators of the maximal jointly survivable subsets of the sup-
+port — an antichain, Sperner-bounded — which explains
+why the certified witness census realizes three types. Sec-
+ond, exactness and parametric closed forms: over rational
+input data the finite-horizon values are piecewise linear
+with rational alpha-vectors, and on the delayed hidden-
+regime class both the declared hold-class and the open-
+loop values are proved in closed form for all initial states,
+all window lengths and horizons, and all prior weights —
+value one exactly on z0 ≥ 1 + min(k, Tobs) and on z0 ≥ 2
+respectively, the larger prior mass off those regions, zero
+below the floor — so the complete 16 × 12 certified value
+table, the 36/156 census, and the 384 hold-direction wit-
+nesses (348 distinct after deduplication) become one-line
+corollaries. Third, the class lattice: declared hold ⊆ open-
+loop ⊆ sequential ⊆ fully observed orders the values, and
+both gaps are realized exactly — the value of flexibility
+on the timing cells and the value of observation on the
+common-action cells, each 1
+2 at the symmetric prior and
+zero elsewhere. Fourth, agreement and stabilization: the
+segment-form enumeration reproduces the closed forms on
+all 48 certified cells and horizons k ≤ 4, the certificate par-
+tition coincides with the value boundaries, the hold-class
+value jumps by exactly 1
+2 at z0 = 1 + min(k, Tobs), the two
+classes differ exactly where 2 ≤ z0 < 1 + min(k, Tobs) (on
+the certified grid, exactly the timing cells, 36 combina-
+tions), and the value is frozen once k ≥ Tobs on the finite
+survivable-set lattice, so the certified tables are complete.
+Fifth, a genuinely stochastic layer: an exact weighted-path
+deficit identity under noisy observation — the deficit is
+the prior mass weighted by fatal-reading probabilities, and
+a two-state sensor instance attains deficit 1/20 against a
+minimal mass of 1/2, so the min-mass bound is not uni-
+versal there — a noisy-probe deadline family with three-
+valued exact values, and the repetition trade-off: a second
+probe cuts the misread probability from 1/10 to 7/250,
+and each probe step costs 1/10 of floor margin. Sixth, a
+distributionally robust interpolation between the expected
+and adversarial operators over contamination ambiguity
+sets — V ρ is the exact ρ-mixture of the two, recovering
+expectation at ρ = 0 and the worst-case reading at ρ = 1,
+with an exact closed form on the delayed class — an exact
+probe-count bound pwrong(n) ≤ (4ε(1 − ε))n/2 giving the
+log(1/δ)/sep2 probe law, and the general additive dead-
+line law: the threshold is the floor plus the probe excur-
+sion plus drift times deadline, verified on two instances.
+Every closed form is verified against brute-force enumer-
+ation from the definitions, including a seeded randomized
+battery.
+Keywords: partially observable control; viability ker-
+nels; belief states; safety values; exact arithmetic; adaptive
+observation; POMDP
+1. Introduction
+Viability under incomplete observation divides into a ne-
+cessity side and a suﬀiciency side. The obstruction cal-
+culus treats the necessity side: certificates whose fir-
+ing proves nonviability of an information state (Abaee,
+2026b). The probabilistic question is the quantitative
+counterpart. If the controller holds a distribution b over
+states rather than a set, how safe is safe? The answer is a
+function: the belief-state safety value Vk(b), the maximal
+worst-case probability of keeping the state trajectory in
+the safe set for k steps. Its value-one level is the viability
+statement of the set-valued theory; everything below level
+one is measured by the deficit 1 − Vk(b), and the obstruc-
+tion certificates reappear as lower bounds on that deficit.
+This paper develops the probabilistic layer of the via-
+bility theory of Abaee (2026b): the calculus there is set-
+valued, and the present theory quantifies what remains
+safe once the information state is a distribution. It brings
+together the stochastic selector development, the belief-
+state value campaign, and the hidden-parameter learning-
+deadline audit into one theory with parametric closed
+forms, a class lattice, and an exact stochastic layer; the
+1
+companion papers (the calculus, its computational certifi-
+cation, and the worked-systems audit) are unaffected, and
+nothing verified in them is re-proved differently here.
+The development proceeds in seven steps. Section 2.
+states the augmented model — total transition rows,
+an absorbing unsafe state carrying its own observation,
+masked witnesses — and the value recursion, distinguish-
+ing the selector’s attaining set from its value-one level.
+Section 3. connects the belief-state recursion to the set-
+valued recursion of the calculus exactly, through the sup-
+port of the belief. Section 4. shows the finite-horizon
+values are piecewise linear and exactly representable, and
+carries the complete certified value table over the delayed
+grid. Section 5. evaluates the deterministic limit, at which
+the recursion degenerates to a survived-mass formula over
+blind action sequences, with the asymmetric audit carried
+sequence by sequence. Section 6. reads the obstruction
+certificates systematically as deficit lower bounds. Section
+7. proves agreement between the declared-class segment
+enumeration and the closed-form values on the certified
+delayed-regime class, quantifies what the class declaration
+contributes, locates the value’s jump loci, and carries the
+derivations. Section 8. treats observation as a design vari-
+able: probes, learning deadlines, and the exact kernel cost
+of late resolution of a hidden parameter. The running
+instances are the delayed hidden-regime instance, with
+the two-floor conflict as the second worked case — both
+shared with the obstruction calculus’s Supplementary Ma-
+terial. The contributions are: the belief-state value re-
+cursion with its operator laws and the selector’s viable-
+response structure (Section 2.); the support identity and
+exact suﬀiciency, with the piecewise-linear closed forms on
+the delayed hidden-regime class — hold-class and open-
+loop values proved for all initial states, window lengths,
+horizons, and prior weights — and the deficit lower-bound
+reading of obstruction certificates (Sections 3.–6.); and
+the agreement theorem between the declared-class enu-
+meration and the closed-form values, together with the
+adaptive-observation layer and the distributionally robust
+interpolation family (Sections 7.–10.).
+Relation to prior work. The belief-support reduction
+at the core of Theorem 3 is the finite-horizon qualitative
+analysis of partially observable Markov decision processes:
+almost-sure safety depends only on belief supports, as es-
+tablished for qualitative objectives by Chatterjee, Doyen,
+and Henzinger (2009). What is added here is quantitative
+and structural: the deficit bound and its witness reading
+(Propositions 7 and 12), the survivable-set (antichain) for-
+mula behind the witness census (Proposition 4), the class
+lattice with its realized gaps (Theorem 14), the parametric
+closed forms (Proposition 5 and Theorem 6), and the class-
+scoped timing obstruction. On complexity, finite-horizon
+partially observable problems are PSPACE-complete and
+their no-observation variant NP-complete (Papadimitriou
+and Tsitsiklis, 1987); the exponential witness-growth law
+of Proposition 7 is the general behaviour, and the certi-
+fied two-witness families are structural rather than repre-
+sentative. Runtime safety filters for learning agents (Al-
+shiekh et al., 2018) and distributionally robust partially
+observable models over ambiguity sets (Nakao, Jiang, and
+Shen, 2021), whose value functions remain piecewise lin-
+ear, bound the present development from the computa-
+tional and the modelling side; Section 12. records the
+ambiguity-set interpolation as the formal home of worst-
+case wording.
+All certified computations are exact: integer and ratio-
+nal arithmetic, standard library only, deterministic scripts
+(Section 11.).
+2. The augmented model, the safety
+value, and the selector
+The augmented state space. Let the physical safe set be V
+and let the state space of the model be X ⊥ = V ∪ {⊥} ,
+where ⊥ is an absorbing unsafe state. For x ∈ V the
+transition row splits between V and ⊥,
+∑
+x′∈V T (x′ | x, a) ≤ 1, T (⊥ | x, a) = 1 − ∑
+x′∈V T (x′ | x, a),
+and the bottom row is T (⊥ | ⊥ , a) = 1 : every row of T sums
+to one and ⊥ is absorbing, so exit from V is absorption and no
+trajectory re-enters V from outside it. The observation model
+is completed on all of X ⊥: there is a distinguished observation
+y⊥ with g(y⊥ | ⊥ , a, ⊥) = 1 (and g(y | · , ·, ⊥) = 0 for y ̸=
+y⊥), while g(· | x, a, x′) on V is arbitrary non-negative with
+the usual normalization per (x, a). A belief is a distribution b
+over X ⊥, updated by Bayes’ rule τ (b, a, y), with P(y | b, a) =∑
+x,x′ b(x) T (x′ | x, a) g(y | x, a, x′); because every row sums
+to one and every (x, a, x′) emits exactly one observation with
+probability one, the laws P(y | b, a) sum to one over y at every
+belief — no sub-probability bookkeeping is needed. On the
+deterministic kernels of the certified instances this formalism
+converts set-valued nonviability into almost-sure nonviability
+on the augmented chain.
+Definition 1 (safety value) . Fix a declared policy class Π.
+The safety value at horizon k is the maximal class-survival
+probability
+V Π
+k (b) = max
+π∈Π
+Pπ
+(
+xt ∈ V for t = 0, . . . , k
+⏐⏐ b
+)
+,
+the horizon counting the current state. The unrestricted class
+Π = Π seq is the class of all sequential policies.
+The selector and its levels. In the selector framework this is
+the distributional counterpart of the recursive correspondence:
+the information state is b, a response is a class-admissible policy
+segment. Two objects must be distinguished. The attaining set
+at b,
+Γs
+k(b) =
+{
+a ∈ A : ∑
+y P(y | b, a) V Π
+k−1
+(
+τ (b, a, y)
+)
+= V Π
+k (b)
+}
+,
+collects the actions attaining the value; for finite A it is
+nonempty at every belief and horizon — nonemptiness is au-
+tomatic and carries no viability content. The value-one level ,
+SΠ
+k (b) =
+{
+a ∈ A : ∑
+y P(y | b, a) V Π
+k−1
+(
+τ (b, a, y)
+)
+= 1
+}
+,
+is the selector’s viable-response set, and its nonemptiness cor-
+responds exactly to V Π
+k (b) = 1 . Obstruction certificates corre-
+spond to deficits 1 − V Π
+k (b) > 0. Notation is fixed as follows:
+ΓΠ
+k denotes alpha-vector witness sets, Γs
+k(b) the attaining ac-
+tion set, Wk the calculus’s viable-set recursion (a family of state
+sets), and W bel
+k its belief-space analogue (a family of beliefs);
+unsuperscripted values do not appear.
+Shared symbols across the companion papers. The com-
+panion papers share this vocabulary with paper-local mean-
+ings; the letters below carry meanings here that differ there:
+2
+Here In the companions
+ΓΠ
+k , Γs
+k: the alpha-vector
+witness sets and the at-
+taining action set
+the certificate margin ΓI (certi-
+fication); the recourse certificate
+Γh (obstruction calculus; mini-
+max duals)
+ρ: the contamina-
+tion/interpolation radius
+of Dρ (expected value
+at ρ = 0 , worst case at
+ρ = 1)
+the mesh relaxation parameter
+(certification); the net biomass
+multiplier (applied regime via-
+bility)
+Theorem 2 (belief-state value recursion) . V Π
+0 (b) = b(V) (the
+horizon counts the current state), and for k ≥ 0,
+V Π
+k+1(b) = max
+a∈A(Π)
+∑
+y∈Y
+P(y | b, a) V Π
+k
+(
+τ (b, a, y)
+)
+,
+where A(Π) is the class-admissible action set at the current
+stage for Markov classes Π. The recursion is exact on every
+finite horizon; over the unrestricted class it is the Smallwood–
+Sondik belief-state value iteration specialized to the absorbing
+safety reward (Smallwood and Sondik, 1973).
+Proof. The proof is standard value iteration for the belief-state
+Markov decision process, with the absorbing state making V Π
+k
+the k-step class-survival probability (Bertsekas and Shreve,
+1978). For non-Markov classes (the hold and open-loop classes
+of Section 7.) the class constraint couples stages; the certified
+computations there use the equivalent segment form of Propo-
+sition 7 below.
+3. The support identity and exact suﬀi-
+ciency
+Sperner, E. (1928). Ein Satz ueber Untermengen einer
+endlichen Menge. Mathematische Zeitschrift 27, 544-548.
+The bridge to the set-valued theory runs through the sup-
+port. Write supp(b) for the states carrying positive mass,
+and let Wk denote the calculus’s viable-set recursion: W0 =
+{B ⊆ V} and Wk = {B : some admissible a maps every x ∈
+B into Wk−1-supported posteriors }.
+Theorem 3 (support identity) . On finite models with deter-
+ministic kernels and deterministic observation maps, for every
+action a and observation y,
+supp
+(
+b+(· | a, y)
+)
+= Post
+(
+supp(b), a, y
+)
+,
+the set-valued post-state of the calculus. Consequently, for the
+unrestricted sequential class, Vk(b) = 1 if and only if supp(b) ∈
+Wk, while if supp(b) /∈ W k then every policy loses a compatible
+state of positive mass along its realized observation path (the
+loss can occur at any stage), so
+1 − Vk(b) ≥ min
+x∈supp(b)
+b(x).
+Moreover Vk(b) is non-increasing in k.
+Proof. Support identity: a state x′ carries posterior mass ex-
+actly when some x ∈ supp(b) has T (x′ | x, a) g(y | x, a, x′) > 0;
+with deterministic kernels and observation maps the indicators
+make this set exactly Post(supp(b), a, y). Suﬀiciency is induc-
+tion on k: the calculus’s witness sequence keeps every compat-
+ible trajectory inside V and the posterior supports inside the
+calculus’s viable sets at every stage, so every branch survives
+and Vk(b) = 1 . For the converse, with deterministic obser-
+vations the realized observation path is fixed by the declared
+sequence, so Vk(b) = max seq
+∑
+x surviving b(x); if supp(b) /∈ W k
+no declared sequence keeps every compatible branch, so each
+sequence loses at least one branch of mass b(x) ≥ minx′ b(x′),
+giving 1 − Vk(b) ≥ minx∈supp(b) b(x). Monotonicity: absorption
+at ⊥ is permanent, so a policy safe for k + 1 stages is safe for
+k (equivalently, the survivable families are prefix-nested).
+Proposition 4 (survivable sets, witnesses, and the census) .
+Let the kernels and observation maps be deterministic, fix a
+declared class, and let Sk be the family of subsets S of the sup-
+port that are jointly survivable by one admissible class-element
+(sequence or policy). Then: (i) Vk(b) = max S∈Sk b(S); (ii) the
+alpha-vectors are exactly the indicators of the maximal elements
+of Sk in the componentwise order; (iii) the maximal elements
+form an antichain, so their number is at most
+( n
+⌊n/2⌋
+)
+for a sup-
+port of size n (Sperner); (iv) the deficit is 1−Vk(b) = min b(Sc),
+the minimum over the maximal survivable sets, and the min-
+mass bound is the special case |Sc| = 1 . On the delayed in-
+stance the maximal survivable sets are {+, −} exactly when
+z0 ≥ 2 and the two singletons otherwise (at z0 ≥ 1), giving the
+empty, mirror-pair, and merged witness families — the three-
+type census of the certified campaign is this antichain read off
+the grid.
+Branches survive a fixed sequence independently, survived
+prior mass sums over surviving branches, and maximizing over
+class-elements gives (i); the indicator of a survivable set is a
+witness and dominance gives (ii) with deduplication; maximal-
+ity gives (iii) with Sperner’s theorem; and monotonicity of b(S)
+in S gives (iv).
+Proof. (i) Fix a class element; the compatible branches it keeps
+alive form a set S ∈ S k by definition and its value at b is b(S);
+conversely every S ∈ S k is realized by some element, so max-
+imizing over elements gives Vk(b) = max S b(S). (ii) The ele-
+ment’s alpha-vector is its survival indicator 1S; the indicator
+of a non-maximal S is pointwise dominated by that of a maxi-
+mal S′ ⊇ S, so the attained maximum is always attained on a
+maximal element and the undominated vectors — the alpha-
+set — are exactly the indicators of the maximal elements. (iii)
+Maximality is inclusion-maximality, so the maximal sets form
+an antichain, and their count is at most
+( n
+⌊n/2⌋
+)
+by Sperner’s
+theorem (Sperner, 1928). (iv) 1−maxS b(S) = min S b(S∁) over
+the same maximal sets; when a maximal set misses exactly one
+state this is the min-mass bound. The delayed-instance classi-
+fication is the computed one (the verification script).
+Proposition 5 (closed form on the delayed class, declared hold
+class). On the delayed hidden-regime instance — states (z, θ)
+with θ ∈ {− 1, +1}, prior b0 = ( 1
+2 , 1
+2 ) from z0, no observation
+before Tobs, exact revelation at Tobs, and unit drift against the
+floors — the belief support follows the two branches z0 ∓ k, and
+the declared hold class value ( Πhold: one blind hold u ≡ ±1 for
+the whole window) is
+V Πhold
+k (b0) =
+
+
+
+1
+2
+(
+⊮[z0 − k ≥ 1] + ⊮[z0 + k ≥ 1]
+)
+, k ≤ Tobs,
+1
+2
+(
+1 + ⊮[z0 ≥ 1 + Tobs]
+)
+, k > T obs.
+In particular V Πhold
+k (b0) = 1 exactly on z0 ≥ 1+Tobs, recovering
+the declared-class deterministic verdict as the value-one level;
+Theorem 15 quantifies where the unrestricted class does better.
+This is a statement about the declared class, proved by direct
+enumeration below — not a corollary of Theorem 3, whose
+value is the unrestricted one.
+Theorem 6 (parametric closed forms). On the delayed hidden-
+regime instance with prior mass w on the θ = +1 branch (ar-
+bitrary rational w ∈ [0, 1]), initial state z0 (arbitrary real), and
+effective window ℓ = min(k, Tobs) ≥ 1:
+V Πhold
+k (b0) =
+
+
+
+0, z0 < 1,
+1, z0 ≥ 1 + ℓ,
+max(w, 1 − w), 1 ≤ z0 < 1 + ℓ,
+3
+V Πol
+k (b0) =
+
+
+
+0, z0 < 1,
+1, z0 ≥ 2,
+max(w, 1 − w), 1 ≤ z0 < 2.
+For k = 0, V0(b0) = ⊮[z0 ≥ 1]. At the symmetric prior both off-
+viability values are 1
+2 , and Proposition 5, the complete certified
+table, the 36/156 census, and the witness types are one-line
+corollaries (the grid has z0 ≥ 1, so the zero level is vacuous
+there).
+Proof. Survival requires the state in the safe set at every stage,
+in particular at t = 0 : if z0 < 1 both branches are below the
+floor immediately and the value is zero. Under a hold u both
+branches move monotonically, so each survives the window ex-
+actly if it is at or above the floor at its horizon position: under
+u = +1 the + branch rises (safe) and the − branch ends at
+z0 − ℓ, giving survived mass w + (1 − w) ⊮[z0 ≥ 1 + ℓ]; the
+mirror holds for u = −1; maximizing over the two holds gives
+the first display. Under open-loop play the partial sums of any
+±1-sequence move the branches in opposition, so the first move
+sends one branch to z0 − 1 and joint survival requires z0 ≥ 2;
+the alternating sequence keeps both branches in [z0 − 1, z0 + 1],
+which lies above the floor exactly when z0 ≥ 2; a single branch
+is survivable by the constant sequence away from it (which
+makes that branch rise), so off the joint region the value is the
+larger prior mass.
+Derivation of Proposition 5. While k ≤ Tobs no observation
+arrives, so a declared-class policy commits to one blind hold
+u ≡ ± 1: under u ≡ +1 the θ = +1 branch sits at z0 + k
+at the horizon and the θ = −1 branch at z0 − k; under u ≡
+−1 the roles swap. Each branch carries mass 1
+2 and survives
+exactly when it stays at or above the floor, giving 1
+2 (⊮[z0 − k ≥
+1] + ⊮[z0 + k ≥ 1]), and the expectation over the prior retains
+exactly the surviving mass — the lost branch simply carries the
+missing half; no adversarial selection is involved. For k > T obs,
+revelation at Tobs splits the belief: the posterior collapses to
+the realized branch, and the rising control u = +1 keeps it safe
+exactly when it sits at or above the floor at revelation — so
+survival reduces to surviving the blind window of length Tobs
+on both branches, the mass- 1
+2 falling branch sitting at z0 −Tobs
+at revelation, whence the indicator ⊮[z0 ≥ 1 + Tobs] weighting
+the certainly-saved mass 1
+2 . (The rising continuation is the
+point: a falling continuation would exit later, and Proposition
+11 pins the frozen value for all horizons.)
+4. Exact piecewise-linear values
+Proposition 7 (rational alpha-vectors, class-restricted) . Fix
+a declared class Π. At every horizon k, V Π
+k is piecewise linear
+and convex: V Π
+k (b) = max α∈ΓΠ
+k
+α⊤b for a finite witness set ΓΠ
+k
+on Q|V|+1 (coordinates indexed by V ∪ {⊥}), constructed by the
+masked backup
+αa, γ· (x) =
+∑
+x′
+T (x′ | x, a)
+∑
+y
+g(y | x, a, x′) γy(x′), γ y ∈ ΓΠ
+k ,
+with ΓΠ
+0 = {1V } and the boundary condition α(⊥) = 0 applied
+at every backup (the backup acts on V only; the ⊥-coordinate
+of every witness is anchored at zero and remains zero under
+the backup) and ΓΠ
+k+1 = {αa,γ· : a ∈ A(Π), γ · a selection },
+duplicates removed by exact equality. For a blind open-loop
+window the equivalent segment form applies: each admissible
+action segment (u0, . . . , um) ∈ Π contributes the witness αseg =
+(1[the segment saves branch x])x and V Π
+k (b) = max seg αseg⊤b.
+Over rational T , g, and priors, every α is an exact rational
+vector, every V Π
+k (b) at a rational belief is an exact rational, and
+the attaining witness is part of the computation. The worst-
+case growth is |ΓΠ
+k+1| ≤ | A| |ΓΠ
+k ||Y |; deduplication and pruned
+1.0 1.5 2.0 2.5
+z0
+1
+2
+1Vk(b0)
+Tobs = 1
+1.0 1.5 2.0 2.5
+z0
+Tobs = 2
+1.0 1.5 2.0 2.5
+z0
+Tobs = 3
+k = 1
+k = 2
+k = 3
+k = 4
+Figure 1: The closed-form values of Proposition 5 on the
+delayed grid: flat at 1
+2 while a branch falls, jumping by exactly
+1
+2 at z0 = 1 + min( k, Tobs), constant beyond.
+selections are the practical controls, and the exponential law is
+the exact complexity statement for the general class.
+The PL structure is Smallwood–Sondik’s; the masking factor
+anchors α(⊥) = 0 (survival requires the current state in V,
+and ⊥ is absorbing, so no backup can revive a lost branch).
+The exact-arithmetic discipline is the point: the backup maps
+rational vectors to rational vectors by finite sums and products,
+selections are finite, and equality tests for deduplication are
+exact on rationals. In the verification campaign the delayed
+grid enumerates the two hold-direction witnesses at each of its
+192 cell-horizon combinations — 384 exact rational vectors (the
+two-floor instance’s witness set is carried separately) — and 348
+distinct vectors remain after exact-equality deduplication.
+Proof. Induction on k. At k = 0 , V Π
+0 (b) = b(V) = 1⊤
+V b with
+α(⊥) = 0 . For the step, substitute the induction hypothe-
+sis into the recursion of Theorem 2: the finite maximum over
+a ∈ A(Π) and witness tuples (γy)y, γy ∈ ΓΠ
+k , commutes with
+the observation sum, and collecting the coeﬀicient of b(x) gives
+exactly the masked backup αa,γ· ; the ⊥-coordinate stays zero
+because the backup sums over V only and the anchor α(⊥) = 0
+is applied at every stage. Finiteness: finitely many action
+choices and witness tuples. Rationality: rational transition
+and observation data with rational ΓΠ
+k give rational backups,
+by induction. Piecewise linearity and convexity are the form
+”finite maximum of linear functionals”; for non-Markov classes
+the same construction runs with history-indexed witnesses (the
+segment form), the class constraint pinning the available action
+at each stage, which restricts the backup tuples without chang-
+ing the argument.
+Remark 8 (dimension) . On the two-floor instance the value
+function on the one-dimensional simplex is max(b0, b1) for all
+certified horizons (Figure 5); the witness alpha-vectors live in
+the two-coordinate display, with the suppressed bottom coordi-
+nate identically zero — padded to (1, 0, 0), (0, 1, 0) on V ∪ {⊥}.
+On the delayed grid the campaign evaluates αk(z0, Tobs)
+at all 16 × 3 × 4 = 192 cell-horizon combinations of z0 ∈
+{1.0, 1.1, . . . ,2.5}, Tobs ∈ { 1, 2, 3}, k ∈ { 1, 2, 3, 4}. The re-
+alized vectors take exactly three types: (1, 1) (both branches
+savable in the blind window), 72 occurrences; and the mir-
+ror pair (1, 0) and (0, 1) (one branch savable), 156 occurrences
+each — the symmetry between the two mirror types is exact,
+72+156+156 = 384 . The type counts are the pre-deduplication
+census over the two hold directions: on the 36 combinations
+where both holds save both branches the two witnesses coin-
+cide at (1, 1) (2 × 36 = 72 ), and exact-equality deduplication
+merges them, leaving 36 + 156 + 156 = 348 distinct vectors —
+one per unit-value combination, two per the others. Table 1
+carries the complete value table; Figure 1 displays the closed
+forms.
+4
+T able 1: The complete certified value table on the delayed grid: the exact Vk(b0) (values 1 or 1
+2 ) for all 16 grid states, three
+blind-window lengths, four horizons — 192 cell-horizon combinations, each regenerated by script and each equal to both the
+declared-class segment enumeration and the closed form of Proposition 5.
+Tobs = 1 Tobs = 2 Tobs = 3
+z0 k=1 k=2 k=3 k=4 k=1 k=2 k=3 k=4 k=1 k=2 k=3 k=4
+1.0 1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1.1 1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1.2 1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1.3 1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1.4 1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1.5 1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1.6 1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1.7 1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1.8 1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1.9 1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+1
+2
+2.0 1 1 1 1 1 1
+2
+1
+2
+1
+2 1 1
+2
+1
+2
+1
+2
+2.1 1 1 1 1 1 1
+2
+1
+2
+1
+2 1 1
+2
+1
+2
+1
+2
+2.2 1 1 1 1 1 1
+2
+1
+2
+1
+2 1 1
+2
+1
+2
+1
+2
+2.3 1 1 1 1 1 1
+2
+1
+2
+1
+2 1 1
+2
+1
+2
+1
+2
+2.4 1 1 1 1 1 1
+2
+1
+2
+1
+2 1 1
+2
+1
+2
+1
+2
+2.5 1 1 1 1 1 1
+2
+1
+2
+1
+2 1 1
+2
+1
+2
+1
+2
+5. The deterministic limit and the two op-
+erators
+Remark 9 (the two operators) . The expectation over the dis-
+turbance law and the adversarial reading of its support are
+different Bellman operators . Proposition 10 states the deter-
+ministic degeneration as a change of operator: when the kernels
+are deterministic the stochastic expectation is replaced by the
+robust (adversarial-support) reading, and the resulting value is
+the robust value of the companion papers. The degeneration
+is a theorem about the robust operator; it is not a claim about
+the stochastic plant, whose expectation and robust readings
+differ in general (Section 12.).
+Proposition 10 (survived-mass formula) . Let the kernels be
+deterministic, x+ = F (x, a, d), and let the disturbance be read
+adversarially within its support — the robust operator of Re-
+mark 9. Let the window be blind with declared sequential class
+ΠB. Then the degenerated value is the survived-mass formula
+Vk(b) = max
+(u0,... )∈ΠB
+∑
+x∈supp b
+b(x) 1
+[
+x survives (u0, . . .)
+]
+,
+a maximum of rational linear functions of b (the surviving
+indicators are the degenerate alpha-vectors). Consequently:
+if the support B carries a jointly surviving blind sequence,
+Vk(b) = 1 ; and if every declared sequence loses some branch,
+then Vk(b) ≤ 1 − minx∈B b(x) — the robust common-action
+verdicts and the minimal-mass deficit bound of the companion
+papers, recovered as exact values of the robust operator.
+With deterministic kernels the posterior support follows the
+set-valued recursion, survival from a branch under a fixed se-
+quence is a deterministic event, and prior mass sums over sur-
+viving branches; maximizing over declared sequences gives the
+formula, from which both consequences are immediate (a lost
+branch carries at least the minimal mass).
+Proof. Under the robust operator a branch survives a declared
+sequence exactly when it survives under every disturbance in
+its support, so survival is deterministic per branch and the
+value is the maximum over declared sequences of the total sur-
+vived mass — the displayed formula, whose summands are the
+survived indicators, the degenerate alpha-vectors. Each indi-
+cator is a {0, 1}-valued linear function of b, so the value is a
+maximum of finitely many rational linear functions. If some
+declared sequence keeps every branch of B, its indicator is
+identically one on B and Vk(b) = 1 . If every declared sequence
+loses some branch, fix a maximizing sequence and a lost branch
+x∗: the survived mass is 1 − b(x∗) ≤ 1 − minx∈B b(x) — the
+robust common-action verdict with the minimal-mass deficit
+bound.
+Proposition 11 (stabilization on the survivable-set lattice) .
+With deterministic kernels the survivable-set families satisfy
+Sℓ+1 ⊆ S ℓ; hence Vℓ(b) is non-increasing in the horizon and
+stabilizes after at most 2|supp b| strict decreases, the frozen value
+being maxS b(S) over the maximal sets of the frozen family —
+an exact computable infinite-horizon value. On the delayed in-
+stance the open-loop family is frozen from ℓ = 1 (oscillation
+and single-branch rises are length-independent), and the de-
+clared class freezes once k ≥ Tobs (the window ends and the
+rising continuation u = +1 then preserves safety indefinitely
+above the floor); consequently every certified table at Tobs ≤ 3,
+k ≤ 4 already records the full-horizon value.
+Survivability over a longer window is the conjunction of sur-
+vivability over the shorter, giving the decreasing lattice; a
+monotone sequence on a finite lattice freezes; the instance’s
+length-independence and the window’s end give the two freez-
+ing statements, verified to horizon 40 by the verification script.
+On the two-floor chance instance — states {0, 1}, actions
+u ∈ { 2
+5 , 3
+5 }, state 0 surviving exactly the lower action and
+state 1 exactly the higher — the one-step witness set is ΓΠ
+1 =
+{(1, 0), (0, 1)} and Vk(b0) = 1
+2 for all certified k ≤ 5: the chance
+deficit δ = 1
+2 is attained, and the deficit equals the minimal
+mass (Figure 5).
+The asymmetric audit prices the deficit beyond the symmet-
+ric case. At (z0, Tobs) = ( 3
+2 , 2) with prior masses w = 3
+10 and
+7
+10 , the four blind two-step sequences survive { 3
+10 , 3
+10 , 7
+10 , 7
+10 }
+(Table 2): every sequence loses a branch, so V2(b0) = 7
+10 and
+the deficit 3
+10 equals the minimal mass — the degenerate bound
+of Proposition 12 attained off the symmetric prior (Figure 2).
+Proof. A class element surviving ℓ + 1 stages survives its pre-
+fix of ℓ stages, and declared classes are closed under prefixes,
+so Sℓ+1 ⊆ S ℓ; by Proposition 4(i), Vℓ(b) is non-increasing in
+ℓ. The families live in the finite lattice 2supp b, so each strict
+decrease retires at least one subset and at most 2|supp b| strict
+decreases occur; the frozen value is the maximal-set mass of
+the frozen family. On the delayed instance the closed forms of
+Theorem 6 are length-independent in the stated regimes (oscil-
+lation and single-branch rises do not change with added stages),
+5
+T able 2: The asymmetric audit at (z0, Tobs) = ( 3
+2 , 2), b0 =
+( 3
+10 , 7
+10 ): survived mass of each blind two-step sequence. Every
+sequence loses a branch at step 1 — at z0 = 3
+2 the first move
+sends one branch to 1
+2 < 1 —; the value is 7
+10 and the deficit
+3
+10 equals the minimal mass.
+Sequence Survived mass Lost branch
+(+1, +1) 3
+10 heavier branch, step 1
+(+1, −1) 3
+10 heavier branch, step 1
+(−1, +1) 7
+10 lighter branch, step 1
+(−1, −1) 7
+10 lighter branch, step 1
+++ +− −+ −−
+blind two-step sequence u1u2 at (z0, Tobs) = (3
+2 , 2), w = 3
+10
+0.0
+0.2
+0.4
+0.6
+0.8survived mass
+V2(b0) = 7
+10
+deficit 3
+10 =  min mass
+Figure 2: The asymmetric audit: survived mass by blind
+two-step sequence at ( 3
+2 , 2) with w = 3
+10 . The best sequences
+save the heavy branch only; the deficit 3
+10 is the minimal mass,
+attained.
+so the open-loop family is frozen from ℓ = 1; the declared class
+freezes once k ≥ Tobs because the window has ended and the
+rising continuation keeps every revealed branch above the floor
+indefinitely; the verification script certifies the frozen values on
+the certified tables.
+6. Certificates as deficit bounds
+The obstruction certificates bound the deficit from below; their
+attaining witnesses are the deficit’s dual objects — computed
+lower-bound sides of the exact value, not surrogates for it.
+Proposition 12 (deficit lower bounds) . Write ∆k(b) = 1 −
+Vk(b) for the deficit, and let W bel
+k denote the k-step robust ker-
+nel in belief space: the family of beliefs whose support admits a
+jointly surviving declared-class sequence. Each companion cer-
+tificate is a computable lower bound on the deficit. (i) Chance-
+constrained common action: if the one-step violation probabili-
+ties satisfy ∑
+x b(x) p(x, a) ≥ δ for every a ∈ A, then ∆k(b) ≥ δ
+for every k ≥ 1. (ii) Degenerate minimal mass: at the de-
+terministic limit, if b /∈ W bel
+k (the support admits no jointly
+surviving declared sequence), then ∆k(b) ≥ minx∈supp b b(x)
+— the two-floor instance attains δ = 1
+2 , and on the delayed
+grid at (z0, Tobs) = ( 3
+2 , 2) every blind sequence loses a branch,
+so the deficit is at least the minimal mass 3
+10 of the certified
+asymmetric prior, attained (Table 2). (iii) Monotone deficit:
+Vk+1(b) ≤ Vk(b), so the deficit is non-decreasing in the hori-
+zon; on the certified nonviability region of the delayed grid the
+declared-class deficit is constant in k once k > T obs (and at
+every k ≥ 1 on the common-action cells), while on the timing
+cells it steps from 0 at k = 1 to 1
+2 at k ≥ 2 (Theorem 13d). For
+finite horizons the exact deficit 1−maxα∈Γk α⊤b is computable,
+and the bounds are witnesses of it, not surrogates.
+Proof. (i) At k = 1 , survival under a has probability 1 −∑
+x b(x) p(x, a) ≤ 1 − δ, and the hypothesis makes the bound
+uniform over a, so V1(b) ≤ 1 − δ; monotonicity of Vk in k (The-
+orem 3) gives ∆k(b) ≥ ∆1(b) ≥ δ for every k ≥ 1. (ii) At
+the deterministic limit Proposition 10 gives Vk(b) = max S b(S)
+over the jointly surviving sets; if b /∈ W bel
+k no full-mass set
+survives, so every surviving S misses a state of mass at least
+minx b(x) and ∆k(b) ≥ minx b(x). The two-floor attainment
+δ = 1
+2 and the delayed-instance attainments are the computed
+records of the verification script.
+7. Agreement on the delayed-regime class
+The delayed hidden-regime instance of the calculus paper —
+regimes θ ∈ {− 1, +1}, blind window Tobs, declared hold class
+{u ≡ ± 1}, prior ( 1
+2 , 1
+2 ) from z0 — is the agreement test bed.
+The class declaration is part of the model: the blind-window
+policy may be required to hold one action throughout the win-
+dow (the declared hold class), or may act sequentially without
+observation, or may act with open-loop time-variation.
+Theorem 13 (certificate–value agreement) . On the certified
+grid ( z0 ∈ { 1.0, . . . ,2.5}, Tobs ∈ { 1, 2, 3}; 48 cells), over the
+declared hold class, and horizons k ≤ 4: (a) the segment-
+form enumeration of the declared hold class (Proposition 7,
+segment form) returns exactly the closed form of Proposition 5
+(on the certified grid the second indicator of the k ≤ Tobs line
+is vacuous, z0 + k ≥ 2; it is retained for branch symmetry).
+The class constraint is load-bearing here: a stagewise recur-
+sion over A(Π) = {±1} would compute the unrestricted value,
+which is 1 on the timing cells — the agreement is a statement
+about the segment enumeration; (b) the certificate partition co-
+incides with the value boundaries: “viable” iff Vk ≡ 1; common-
+action-certified iff V1(b0) < 1; timing-certified iff V1(b0) = 1 but
+VTobs+1(b0) < 1; (c) at the one-step horizon both mirror wit-
+nesses (1, 0) and (0, 1) attain the value 1
+2 below z0 = 2 , and
+the merged (1, 1) attains 1 at and above it; at horizon k ≤ Tobs
+the family changes at z0 = 1 + k — an off-grid consequence
+of the closed form (in particular z0 = 3 , not 2, for k = 2 with
+Tobs ≥ 2), verified by the verification script beyond the certified
+grid, which stops at z0 = 2 .5; and read as a function of the
+continuous parameter z0 the hold-class value has jump discon-
+tinuities exactly at z0 = 1+min( k, Tobs) — a jump of exactly 1
+2 ,
+from 1
+2 to 1 — these loci being the certificate edges on the grid
+(kinks in the strict sense belong to the piecewise-linear value as
+a function of the belief, not of z0); (d) on the nonviable cells
+the hold-class deficit equals 1
+2 at every horizon k > T obs and
+at every k ≤ Tobs with k > z 0 − 1, while it is 0 at horizons
+k ≤ z0 − 1 (on the certified grid: on the timing cells the deficit
+is 0 at k = 1 and 1
+2 at k ≥ 2; on the common-action cells it
+is 1
+2 at every k ≥ 1) — the minimal-mass bound attained with
+the minimal prior from the first horizon at which the falling
+branch exits.
+Derivation of the jump loci. Fix Tobs and k. On the closed
+form: if k ≤ Tobs the value is 1
+2 (⊮[z0 ≥ 1 + k] + 1), the second
+indicator being identically one on the grid; it jumps by exactly
+1
+2 at z0 = 1 + k. If k > T obs the value is 1
+2 (1 +⊮[z0 ≥ 1 +Tobs]),
+jumping by exactly 1
+2 at z0 = 1 + Tobs. Both loci are z0 =
+1 + min(k, Tobs); between jumps both expressions are constant
+in z0. The witness family changes exactly at the same loci:
+the attaining one-step vectors are both mirrors (1, 0) and (0, 1)
+below z0 = 2 and the merged (1, 1) at and above, and at horizon
+k the change sits at z0 = 1 + min( k, Tobs).
+Theorem 14 (class lattice and realized gaps) . For the value of
+Definition 1, Π ⊆ Π′ implies V Π
+k (b) ≤ V Π′
+k (b). On the delayed
+instance with ℓ ≥ 1 and z0 ≥ 1:
+V Πhold ≤ V Πol = V Πseq,blind ≤ V Πobs ,
+the middle equality holding because no observation arrives in-
+side the window, so sequential blind policies reduce to open-
+loop sequences; and V Πobs = ⊮[z0 ≥ 1] (the controller knows
+6
+θ at t = 0 and plays the rising control). The gaps are exact:
+V Πol −V Πhold = 1 −max(w, 1−w) exactly on {2 ≤ z0 < 1+ℓ} —
+the value of flexibility — and V Πobs −V Πol = 1 −max(w, 1−w)
+exactly on {1 ≤ z0 < 2} — the value of observation; at the sym-
+metric prior each gap is 1
+2 on its cells and 0 elsewhere, and the
+two cell families are disjoint.
+Inclusion monotonicity is immediate from the maximizing
+definition; the instance values are Theorem 6’s and the ob-
+served value is the rising computation; the gap arithmetic is
+1 − max(w, 1 − w) = min( w, 1 − w).
+Proof. Monotonicity: Π ⊆ Π′ makes every admissible class el-
+ement of Π admissible for Π′, and the value is a maximum over
+class elements, so V Π
+k ≤ V Π′
+k . Middle equality: inside the blind
+window no observation arrives, so a sequential blind policy’s
+stage actions depend only on the observation-free history —
+the initial belief — and the policy is one fixed sequence: se-
+quential blind collapses to open-loop. Observed value: know-
+ing θ at t = 0 , the controller plays the rising control on ev-
+ery branch (drift + 3
+10 ), viable exactly from z0 ≥ 1, giving
+V Πobs = ⊮[z0 ≥ 1]. The gaps: hold and open-loop values are
+the closed forms of Theorem 6; subtracting the two case dis-
+plays, the gap V Πol − V Πhold = 1 − max(w, 1 − w) survives ex-
+actly on the cases where the displays differ — {2 ≤ z0 < 1 + ℓ}
+— and vanishes off them; the observation gap’s locus is the
+same case analysis against ⊮[z0 ≥ 1]. The script verifies both
+loci cell by cell on the certified grid.
+Theorem 15 (class declaration) . The declared hold class and
+the unrestricted sequential blind class coincide at the one-step
+horizon. For horizons k ≥ 2 they differ exactly where 2 ≤
+z0 < 1 + min(k, Tobs) — on the certified grid (z0 ≤ 2.5) exactly
+the timing cells, since 1 + min(k, Tobs) ≥ 3 there — and there
+open-loop time-variation within the blind window lifts the value
+to one: an alternating hold sequence keeps both branches at or
+above the floor whenever z0 ≥ 2, which no constant hold does
+(off the grid the hold class already attains one at z0 ≥ 1 + k:
+e.g. at (z0, Tobs, k) = (3 .5, 3, 2) both classes attain one, so no
+difference). On the common-action cells z0 < 2 the restriction
+costs nothing — no blind sequence saves both branches — and
+on the viable cells both classes attain one. On the certified grid
+the difference comprises exactly the 12 timing cells at each of
+k = 2, 3, 4: 36 cell-horizon combinations in all (Figure 3).
+Derivation of Theorem 15. At k = 1 both classes choose one
+blind action, so they coincide. Let k ≥ 2 and write the two
+branch positions after a blind sequence u1:ℓ, ℓ = min( k, Tobs),
+as z0±∑
+t ut. If z0 < 2, some branch sits below 2−(z0−1) steps
+from its floor, and since the partial sums of any ±1-sequence
+move one branch down whenever they move the other up, one
+branch reaches its floor: no blind sequence saves both, both
+classes give 1
+2 , no difference. If z0 ≥ 1 + min(k, Tobs) the con-
+stant hold already survives the window on both branches (the
+falling branch exits only after k > z 0 −1 steps) and both classes
+attain one. On the difference cells 2 ≤ z0 < 1 + min(k, Tobs): a
+constant hold drives the falling branch to z0 − ℓ < 1 (deficit),
+while the alternating sequence has partial sums in {0, ±1}, so
+both branches stay at or above z0 − 1 ≥ 1 through the window,
+and revelation at Tobs then regenerates both: the unrestricted
+class attains one while the declared class does not. This locates
+the difference setwise.
+Remark 16 (the timing obstruction is class-scoped) . The cal-
+culus paper’s timing certificates — σ∗(B0) = z0 − 1, with
+the certificate firing exactly when Tobs > σ ∗ (equivalently
+z0 < 1 + Tobs; viability at the deadline holds when Tobs ≤ σ∗)
+— are statements about the declared hold-until-review class —
+the institutional reading of a sampled-review regulator. The-
+orem 15 quantifies the contrast: within the declared class the
+1.0 1.5 2.0 2.5
+z0
+1
+2
+3Tobs
+hold class below open loop classes agree
+three sub-cells per column: k = 2, 3, 4
+Figure 3: The class declaration on the certified grid: red
+cells mark cell-horizon combinations where the declared hold
+class and the unrestricted open-loop class differ — exactly the
+timing cells ( 2 ≤ z0 < 1 + Tobs) at horizons k = 2 , 3, 4 (three
+sub-cells per column); 36 combinations in all. The classes agree
+at k = 1, on the common-action cells, and on the viable cells.
+timing cells are nonviable with deficit 1
+2 at every horizon k ≥ 2
+(and 0 at k = 1); under the unrestricted sequential blind class
+the same cells attain value 1 by oscillation, and on the certified
+grid no other cell differs. The timing obstruction therefore cer-
+tifies exactly what it claims — nonviability within the declared
+class — and no statement of the companion papers is altered
+by this reading. The word “adaptive” is avoided for blind win-
+dows: while the window is blind, no observation updates the
+belief, and the only distinction available is hold-constant versus
+time-varying open-loop control.
+8. Adaptive observation and hidden pa-
+rameters
+Observation is a design variable. Structural uncertainty — a
+hidden parameter resolved too late, rather than noisy data —
+is the obstruction: the state augments with a hidden parameter
+θ ∈ Θ, the belief lives on the product (x, θ), and the obstruc-
+tion is the emptiness of the joint floor-servable set over (x, θ)
+cells. On the declining instance the parameter θ ∈ {− 1, +1}
+gates the correctable component of a − 1
+10 drift; the list of af-
+fected sustainability parameters — regeneration rates, climate
+sensitivity, institutional effectiveness — motivates the model
+class, and the paper verifies on exact instances.
+Proposition 17 (probes and learning deadlines) . On the cer-
+tified grid, with quantized control u ∈ {−1, 0, 1} and hold-then-
+probe-then-act schedules: with θ observed, every cell is viable
+(16 of 16). Under one-probe endogenous learning with free
+probe timing (probe at the start), the probe reveals θ exactly —
+the branch separation is 2, so one observation splits the belief
+with no statistics — and survival forces z0 ≥ 21/10, indepen-
+dent of any deadline. Under the certified pinned-probe family
+— hold u = 0 to the probe horizon and probe at Tlearn, so no
+earlier probe is available within the family — viability holds
+exactly when
+z0 ≥ 21
+10 + Tlearn
+10 , T learn = 0, 1, 2, 3, 4,
+the pinned-probe learning-deadline identity: the deadline prices
+the forced late probe, and the kernel shrinks exactly linearly
+and antitone in it, |K| = 5 , 4, 3, 2, 1 on the grid for Tlearn =
+0, 1, 2, 3, 4 (Table 3 and Figure 4). Two exact benchmarks bound
+the family from both sides: with free probe timing the thresh-
+old is flat at 21/10, and with probe-free exogenous revelation
+at Tlearn (hold, then the learned act; no probe) viability holds
+exactly when z0 ≥ 1 + Tlearn/10 — kernel sizes 16, 15, 14, 13, 12
+on the grid for Tlearn = 0 , 1, 2, 3, 4; the certified family sits
+between the two. A two-patch instance with unknown regenera-
+tion rate g ∈ {1, 2} shows the same phenomenon on the certified
+7
+T able 3: The pinned-probe learning-deadline audit: the exact
+threshold 21
+10 + Tlearn
+10 and the resulting kernel on the grid at each
+deadline.
+Tlearn Threshold |K| Kernel K on the grid
+0 21/10 5 {2.1, 2.2, 2.3, 2.4, 2.5}
+1 22/10 4 {2.2, 2.3, 2.4, 2.5}
+2 23/10 3 {2.3, 2.4, 2.5}
+3 24/10 2 {2.4, 2.5}
+4 25/10 1 {2.5}
+0 1 2 3 4
+Tlearn
+2.0
+2.2
+2.4
+2.6threshold on z0
+|K|= 5
+|K|= 4
+|K|= 3
+|K|= 2
+|K|= 1
+21
+10 + Tlearn
+10
+0 1 2 3 4
+Tlearn
+0
+2
+4
+6|K| on the grid
+5
+4
+3
+2
+1
+Figure 4: The pinned-probe learning-deadline identity: the
+viability threshold increases exactly linearly in Tlearn (left), and
+the kernel on the grid shrinks linearly and antitone, |K| =
+5, 4, 3, 2, 1 (right); the probe-free benchmark 1 +Tlearn/10 (ker-
+nels 16 down to 12) and the flat free-probe threshold 21/10
+bound it from below and above.
+two-patch belief pair: unknown-regeneration nonviable, (x, g)-
+observed viable.
+Proof. The schedule pins the probe to Tlearn: within the family
+no earlier probe is admissible, so the free-probe and probe-free
+thresholds are not attainable in it. Before Tlearn the drift is − 1
+10
+(hold u = 0 ), so survival to the probe forces z0 − Tlearn
+10 ≥ the
+probe threshold; the probe u = +1 moves z by − 1
+10 + θ, which
+must stay safe on both branches, giving the threshold 21
+10 at
+Tlearn = 0; after the probe the learned law u = θ has drift − 1
+10 +
+θ2 = 9
+10 > 0, so survival is indefinite. The branch positions
+z0 − 1
+10 Tlearn − 1
+10 ± 1 differ by 2, so the post-probe reading
+determines θ uniquely. Antitonicity is the threshold identity;
+strictness on the grid is the computed counts 5, 4, 3, 2, 1.
+9. Genuinely stochastic instances
+Everything to this point has deterministic kernels and observa-
+tions; the values are prior masses of surviving branches. This
+section opens the stochastic layer, where values cease to be
+two-valued and the min-mass bound ceases to be universal.
+Proposition 18 (weighted-path deficit identity) . At the one-
+step horizon, with finite X, deterministic per-reading actions
+a(y′), and arbitrary normalized observations, the deficit is ex-
+actly
+∆1(b) =
+∑
+x
+b(x) px, p x = P
+(
+a(y′) unsafe at x
+⏐⏐ x
+)
+,
+the prior mass weighted by fatal-reading probabilities. The min-
+mass bound is the case px ≡ 1 (deterministic readings, no com-
+mon action) and is not universal: in the two-state instance with
+ai safe only at xi and sensor error ε (P(reads j ̸= i | xi) = ε),
+the deficit is ε for every prior; at b = ( 1
+2 , 1
+2 ), ε = 1
+20 , the deficit
+1
+20 is strictly below the minimal mass 1
+2 . This delimits the
+deterministic-limit reach of the calculus’s probabilistic develop-
+ment (its Section 10): there the deficit from unity is bounded
+0.0 0.5 1.0
+b0 (mass on state 0)
+0
+1
+2
+1V1(b)
+V1(b) = max(b0, b1)
+Γ1 =
+{
+(1, 0), (0, 1)
+}
+:
+attaining alpha-vectors
+(bottom coordinate 0)
+b0 = (1
+2 , 1
+2 ): V = 1
+2 , deficit = 1
+2
+Figure 5: The two-floor chance instance: the one-step
+value is max(b0, b1), attained by the alpha-vectors of ΓΠ
+1 =
+{(1, 0), (0, 1)} with zero bottom coordinate (green probes); at
+the symmetric prior the value is 1
+2 and the deficit equals the
+minimal mass.
+below by the smallest compatible mass under adversarial dis-
+turbance readings, an estimate exact at the degeneration this
+paper’s Proposition 10 records; the sensor instance shows the
+estimate is scoped to that limit, not a law of the noisy layer.
+Conversely, the calculus’s delayed-hidden-regime instance is the
+deadline law of Proposition 23 at d0 = 1 , ep = 0 : its viability
+boundary z0 ≥ 1 + Tobs is the law’s threshold form, and the
+tabulated agreement there is cell-by-cell.
+Proof. Fix a deterministic per-reading action map a(·). One-
+step survival is ∑
+x b(x) P(a(y′) safe | x) = 1 − ∑
+x b(x) pa(·)
+x ,
+and optimizing over maps gives V1(b) = 1 −mina(·)
+∑
+x b(x) pa(·)
+x
+— the displayed identity at the optimizing map. In the two-
+state instance the reading-own-action map makes px = ε for
+both states (the wrong reading arrives with probability ε and
+its action is fatal), and no map does better: one of the two
+actions is fatal at each state whichever reading carries it with
+positive probability. Hence ∆1(b) = ε at every prior, and at
+b = ( 1
+2 , 1
+2 ), ε = 1
+20 , the deficit 1
+20 is strictly below the minimal
+mass 1
+2 .
+Proposition 19 (noisy probes and the repetition trade-off) .
+On the declining instance (blind drift − 1
+10 ), pin a single probe
+to horizon tp whose reading is correct with probability 1 − ε and
+flipped with probability ε, then act on the reading to horizon
+k ≥ tp. With zp = z0 − tp/10:
+Vk(b0) = (1 − ε) ⊮[zp ≥ 1] + ε ⊮
+[
+zp ≥ 1 + 11
+10 (k − tp)
+]
+,
+exactly (the correct reading acts under drift 9
+10 , the flipped read-
+ing under drift − 11
+10 ). The values realize exactly three levels
+{0, 1 − ε, 1} — genuinely non-two-valued — and the min-mass
+bound survives here as a bound (the deficit ε or 1 dominates the
+post-probe minimal mass ε) while failing as an identity. With
+three pinned probes and majority reading, the wrong-majority
+probability is 3ε2(1 − ε) + ε3 = ε2(3 − 2ε) — 7
+250 at ε = 1
+10 ,
+against 1
+10 for one probe — and the same display holds with
+p = 7
+250 in place of ε: each additional probe step costs 1
+10 of floor
+margin to the blind drift, the exact explore–exploit exchange at
+this scale.
+Proof. Condition on (θ, reading): the four joint cases carry
+probabilities 1
+2 (1 − ε) and 1
+2 ε per branch; the correct reading
+acts under drift − 1
+10 + θ2 = 9
+10 and survives from zp ≥ 1; the
+flipped reading acts under drift − 1
+10 − 1 = − 11
+10 and survives
+exactly when zp − 11
+10 (k − tp) ≥ 1; summing gives the display.
+For the majority family, the wrong-majority event is two or
+three flipped readings, of probability 3ε2(1 − ε) +ε3; the falling
+continuation is as above. The identity’s proof is the law of total
+probability over readings at the one-step horizon.
+8
+10. Distributionally robust interpolation
+The expected and adversarial readings of Remark 9 are the two
+ends of one exact family. Fix the contamination ambiguity set
+Dρ = {q = (1 − ρ) p + ρ r : r ∈ ∆(Y )} at radius ρ ∈ [0, 1].
+Proposition 20 (contamination interpolation) .
+Let Dρ be as above and define V ρ
+k+1(b) =
+maxa inf q∈Dρ
+∑
+y q(y) V ρ
+k (τ (b, a, y)). Then: (i) the inner
+infimum is exact,
+inf
+q∈Dρ
+∑
+y q(y) vy = (1 − ρ) ∑
+y p(y) vy + ρ miny vy,
+the adversary spending the whole contamination ρ on the worst
+outcome; (ii) V ρ
+k (b) = (1 − ρ) V 0
+k (b) + ρ V 1
+k (b) at every stage:
+the interpolation is pointwise exact, with ρ = 0 the expected
+value of Definition 1 and ρ = 1 the adversarial reading; (iii)
+V ρ
+k is concave and piecewise linear in b at every ρ, so the exact-
+arithmetic discipline of Proposition 7 carries over verbatim.
+Proof. The infimum of a linear functional over the contam-
+ination set is attained at a vertex r = δy∗ , giving (i); (ii)
+follows by induction with (i) at every stage, since the adver-
+sary’s optimal contamination is stage-wise; concavity is pre-
+served under pointwise mixtures of concave piecewise-linear
+functions. On the delayed class with prior contamination
+q(+1) = (1 − ρ)w + ρ r, the hold-class value is exactly
+V ρ, Πhold
+k (b0) =
+
+
+
+0, z0 < 1,
+1, z0 ≥ 1 + ℓ,
+(1 − ρ) max(w, 1 − w), 1 ≤ z0 < 1 + ℓ,
+the adversary pouring the contamination onto a falling branch;
+at the symmetric prior the three ρ-levels are 0, 1−ρ
+2 , and 1
+(verified by exact enumeration on the swept grid).
+This proposition is the formal home of worst-case wording:
+an ambiguity-minded reviewer may read every expected value
+here at any ρ, and every table carries the ρ = 0 column of a
+one-parameter family.
+Proposition 21 (probe-count bound) . Let n = 2m + 1 pinned
+probes with per-probe error ε < 1/2 be read by majority. The
+wrong-majority probability satisfies
+pwrong(n) ≤
+(
+4ε(1 − ε)
+)n/2
+≤ e−2n sep2
+, sep = 1
+2 − ε,
+so n ≥ ln(1/δ)/(2 sep2) probes achieve wrong probability ≤ δ:
+the probe count grows like log(1/δ) over the squared separation,
+and on the declining instance each probe step costs 1
+10 of floor
+margin to the blind drift (the exploration–safety exchange of
+Proposition 19, now with its rate). At ε = 1
+10 the bound reads
+pwrong(n) ≤ (3/5)n, verified exactly at n = 1, 3, 5, 7, 9 (the exact
+values 1
+10 , 7
+250 , 107
+12500 , 341
+125000 , 22273
+25000000 ).
+Proof. The bound is the standard misselection probability of
+the binomial head: pwrong(n) ≤ (4ε(1 − ε))n/2 by pairing each
+wrong-majority string with its complement and Stirling’s esti-
+mate, and 4ε(1 − ε) = 1 − 4 sep2 ≤ e−4 sep2
+.
+Remark 22 (noiseless limit of the probe-count law) . The ex-
+act split of Proposition 17 is the ε → 0 degeneration of the
+probe-count bound: the separation sep = 1
+2 − ε rises to 1
+2 and
+pwrong(1) = ε falls to 0, so one probe already achieves δ = 0
+— the branch split of separation 2 needs no statistics precisely
+because the bound’s exponent vanishes with ε. For ε > 0 the
+count law prices what the exact split gets for free, and on the
+declining instance each probe step additionally pays its 1
+10 of
+floor margin (Proposition 19).
+Proposition 23 (general additive deadline law) . Let the hid-
+den parameter enter the drift additively: ˙z = d(u, θ) =
+c(u) + h(u) θ with θ ∈ Θ finite, floor z ≥ 1, and consider the
+hold–probe–learn schedule family: hold u0 to the probe hori-
+zon T (the probe pinned there, no earlier probe in the family),
+probe with up, then play u∗(θ) with minθ d(u∗(θ), θ) = µ > 0.
+Set d0 = max θ(−d(u0, θ)) and ep = max θ(−d(up, θ)). Then
+indefinite viability holds exactly when
+z0 ≥ 1 + T d 0 + ep,
+the floor plus drift times deadline plus probe excursion; after
+the learned act the positive drift µ preserves safety forever, so
+the deadline identity is the whole answer. The certified instance
+has d0 = 1
+10 , ep = 11
+10 , giving 21
+10 + T
+10 ; a second instance with
+drift − 3
+20 and excursion 21
+20 gives 41
+20 + 3T
+20 — both verified exactly
+at all swept (z0, T ).
+Proof. Necessity: some θ realizes the hold displacement d0 and
+the probe excursion ep at the adversarial stages (the maxima
+are attained), dropping the state to z0 − T d0 − ep, below the
+floor exactly when the display fails. Suﬀiciency: every θ keeps
+the state at or above the floor through hold and probe, and the
+learned drift µ > 0 then lifts it away from the floor forever.
+Reciprocal check (dual-certificate companion). On
+the two-window residue instance of the minimax companion
+(Abaee, 2026g), the interpolation family above is exact at
+its coupling extremum: supq∈Dρ Eq[G] = ρ at every probed
+ρ ∈ { 1
+4 , 1
+2 , 3
+4 , 1}, the product coupling attaining the ρ = 1
+end, with the one-step marginals preserved at every ρ and
+the coupling-selection diﬀiculty left orthogonal to the mixture
+parameter; the joint check is archived with the companion’s
+verification record.
+11. Verification methods
+Every value, bound, identity, threshold, figure, and tabulated
+entry in this paper is regenerated by deterministic scripts in
+exact integer and rational arithmetic, standard library only.
+Three per-system scripts cover the worked instances; one mas-
+ter entry point executes all of them. The computational com-
+panion papers (exact belief computation and its certification)
+carry the scaling record — exact point-based evaluation at
+probed beliefs, the antichain compression of survivable-set lat-
+tices, and the four-parameter cube’s Hamming classification
+— built on the alpha-vector representation of Proposition 7;
+its scripts chain this paper’s seeds but are not part of this
+paper’s chain. The belief-state campaign script runs sixteen
+check families on the stochastic values (the two-floor instance,
+piecewise-linearity, the deterministic limit, the 48-cell agree-
+ment, the partition coincidence, the witness family, the deficit
+identity, the unrestricted class, rationality of all 384 cam-
+paign alpha-vectors, deficit monotonicity, the oscillation iden-
+tity, model completeness, the selector split, dimension consis-
+tency, the jump loci, and the declarations), chaining two per-
+instance scripts of twenty-one further checks. The stochastic
+selector script re-derives every selector claim in fifteen check
+families (S1–S15: the two-floor backup, eleven-belief piecewise
+linearity, degeneration against brute force, 48-cell closed-form
+agreement, partition coincidence, witness-family loci, the exact
+deficit on all 42 nonviable cells, the class declaration by brute
+force, rationality of the 384 vectors, monotonicity, the oscil-
+lation identity to horizon 24, model completeness, the selec-
+tor split, dimension padding, and the one-sided jump values).
+The hidden-parameter script runs six check families on the
+adaptive-observation instance (theta observed on all 16 cells,
+the probe threshold 21
+10 as a branchwise identity, the dead-
+line identity at Tlearn = 0 , . . . ,4, injective revelation, the anti-
+9
+tone kernel chain, and the unknown-regeneration two-patch in-
+stance). The master script for this paper chains the three, then
+recomputes independently from the definitions: the closed-
+form values on the whole 16 × 12 grid by direct branch-mass
+enumeration, the resulting census ( 36 unit values and 156 half
+values on the declared class), the identity of the class-difference
+set with the region 2 ≤ z0 < 1 + min( k, Tobs), checked on an
+extended grid to z0 = 4.0 and equal to the timing-cell combina-
+tions on the certified grid at k ≥ 2, by brute-force enumeration
+over blind sequences; the 384-vector type census ( 156, 156,
+72) and its deduplicated 348-vector form; the hold-class deficit
+profile on all 48 cells ( 0 before the falling-branch exit, 1
+2 after);
+the lost-branch step of the asymmetric audit (step 1 for all
+four sequences, heavier branch under u1 = +1 , lighter under
+u1 = −1); the pinned-probe learning-deadline chain 21
+10 + Tlearn
+10
+with the free-probe ( 21/10, flat) and probe-free ( 1 + Tlearn/10,
+kernels 16 down to 12) benchmarks; and every headline num-
+ber asserted present in the text and bound to the scripts’ cer-
+tified families. Two independent paths back the closed forms:
+a brute-force path that enumerates trajectories straight from
+the definitions (all holds and all open-loop sequences, pathwise
+survival) over a structured sweep of 2268 triples (z0, w, ℓ) in-
+cluding z0 < 1, and a seeded randomized battery of 500 further
+cases; the survivable-set antichain, the class ordering and its
+gaps, the stabilization freeze (spot enumeration to horizon 15
+and value agreement to horizon 40), the weighted-path iden-
+tity, the sensor counterexample, and the noisy-probe and ma-
+jority closed forms are each re-derived by independent enumer-
+ation; the contamination lemma and the delayed-class ρ-closed
+form are checked against vertex enumeration, the probe-count
+bound at n = 1 , 3, 5, 7, 9 in exact rationals, and the additive
+deadline law on both instances.
+12. Delimitations and outlook
+The semantics here is stochastic expectation: the value is a
+survival probability, and the robust quantifiers of the compan-
+ion papers are recovered only at the deterministic degenera-
+tion, which is a change of operator (Remark 9); the stochastic
+and robust readings of a genuinely stochastic plant differ, and
+this paper does not conflate them. The timing layer’s state-
+ments, here and in the companion papers, are class-scoped (Re-
+mark 16). No learning theory is claimed beyond the one-probe
+exact split: Bayesian updating, repeated experiments, and
+exploration–exploitation trade-offs are out of scope; the dead-
+line identity is for the pinned-probe schedule family (hold to
+the probe horizon, probe, learned act), with the free-probe and
+probe-free benchmarks stated alongside, and other schedules
+are not classified; the parameter θ enters additively, and state-
+dependent parameter dynamics belong to the hybrid compan-
+ion’s setting. The alpha-set growth is exponential in the worst
+case — and finite-horizon partially observable problems are
+PSPACE-complete, their no-observation variant NP-complete
+(Papadimitriou and Tsitsiklis, 1987) — so the certified two-
+witness families are structural, not representative. The con-
+tamination interpolation of Section 10. is the formal home
+of worst-case wording; the moment- and distance-based am-
+biguity families (piecewise-linear values persist there; Nakao,
+Jiang, and Shen, 2021) are the natural next ring and are not
+developed here. Scaling past the certified instances — exact
+point-based value iteration with rational solvers, survivable-set
+compression over the antichain of Proposition 4, and medium
+instances with several hidden parameters — the probe-count
+asymptotics of the repetition trade-off, the general learning-
+deadline law for additively entering hidden parameters, and a
+proof-assistant formalization of the closed forms are the nat-
+ural next steps; the deficit-bound reading of Proposition 12
+remains the interface through which this theory attaches to
+the certificate families already established, and the exact ra-
+tional values of the certified campaign are the benchmark any
+relaxation must meet.
+13. Conclusion
+The belief-state safety value carries the obstruction calculus
+into the probabilistic setting without loss of exactness. The
+support identity ties the value-one level to the viable-set re-
+cursion; rational alpha-vectors keep every certified value exact,
+and the complete value table shows the two-valued structure
+the certificates predict; the certificates survive as deficit lower
+bounds, attained on natural instances on both the symmetric
+and the asymmetric prior; the certified delayed-regime class
+agrees with its closed form cell by cell, with the class declara-
+tion responsible for exactly the 36 timing combinations on the
+grid; and the adaptive-observation audit prices late resolution
+exactly — for the pinned-probe family a linear learning dead-
+line on the viable set, |K| = 5 , 4, 3, 2, 1, bracketed by the flat
+free-probe threshold and the probe-free benchmark — while the
+stochastic layer prices observation noise exactly: a weighted-
+path deficit identity, a sensor instance breaking the min-mass
+bound’s universality, and a repetition trade-off at 7/250 per
+extra probe pair. The observation layer, not the forecast layer,
+sets the value; the design rules are the same ones the deter-
+ministic audits impose, now with a price attached and every
+number in the tables open to script-level re-inspection.
+References
+Abaee, A. An obstruction calculus for viability under incomplete
+observation (submitted).
+Abaee, A., 2026a. Robust viability of the 2J3KL limit reference
+point under a surplus-production map: policy scoring, expansion,
+and when catch cannot help. Zenodo. https://doi.org/10.5281/
+zenodo.22552060
+Bertsekas, D.P., Shreve, S.E., 1978. Stochastic Optimal Control:
+The Discrete-Time Case. Academic Press, New York.
+Àström, K.J., 1965. Optimal control of Markov processes with
+incomplete state information. J. Math. Anal. Appl. 10, 174–205.
+Alshiekh, M., Bloem, R., Ehlers, R., Könighofer, B., Niekum, S.,
+Topcu, U., 2018. Safe reinforcement learning via shielding. Proc.
+AAAI Conf. Artif. Intell. 32(1).
+Chatterjee, K., Doyen, L., Henzinger, T.A., 2009. Qualitative
+analysis of partially-observable Markov decision processes. In: Int.
+Symp. Math. Found. Comput. Sci. (MFCS 2009). LNCS, vol.
+5734, pp. 635–646.
+Nakao, H., Jiang, R., Shen, S., 2021. Distributionally robust par-
+tially observable Markov decision process with moment-based ambi-
+guity. SIAM J. Optim. 31(1), 461–488.
+Papadimitriou, C.H., Tsitsiklis, J.N., 1987. The complexity of
+Markov decision processes. Math. Oper. Res. 12(3), 441–450.
+Smallwood, R.D., Sondik, E.J., 1973. The optimal control of
+partially observable Markov processes over a finite horizon. Oper.
+Res. 21(5), 1071–1088.
+Declarations
+Funding
+None.
+Competing interests
+None.
+Data availability
+No external data were used.
+10
+Code availability
+The verification script paper2_probabilistic_sufficiency_
+v10_verification.py — which chains the per-system
+scripts paper2_belief_state_v2_verification.py,
+paper2_stochastic_selector_v2_verify.py, and
+hidden_parameter_learning_v1_verify.py — and the figure-
+and-table generation script paper2_belief_state_figures.py
+are publicly available at https://github.com/MIKEAA2020/
+general-sustainability (folder arena agent 1/paper
+rewrites/latex, at the commit pinned to this article’s
+submission); they reproduce all values, bounds, thresholds,
+figures, and tabulated entries verbatim.
+AI declaration
+GLM (Z.ai), Qwen (Alibaba Cloud) and DeepSeek AI assisted
+with drafting and iterative review. The author reviewed and
+edited outputs and takes responsibility for the final work.
+11

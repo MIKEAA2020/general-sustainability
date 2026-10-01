@@ -1,0 +1,2399 @@
+An Obstruction Calculus for Viability under Incomplete Observation
+Amin Abaee
+Independent Researcher
+ORCID: 0000-0002-0019-1842
+amin_abaee@ut.ac.ir
+September 24, 2026
+Abstract
+Under perfect measurement the viability kernel — the
+set of states from which some feedback keeps the sys-
+tem within its constraints — is characterized by tan-
+gency conditions. Under incomplete observation the suﬀi-
+ciency direction has a canonical answer in Veliov’s output-
+feedback regulation condition and the estimation-tube re-
+duction. The complementary direction — certifying that
+no observation-based policy is viable — has received less
+systematic treatment.
+This paper develops that instrument: a calculus of
+obstruction certificates, sound suﬀicient conditions for
+nonviability (equivalently, necessary conditions for via-
+bility), finitely checkable in the common-action, fibre-
+certification, and finite-horizon forms and analytic drift-
+and-timing conditions elsewhere. They do not exhaust
+the complement of the epistemic kernel, the kernel’s
+observation-based counterpart; in finite systems backward
+recursion is complete. Five mechanisms are established —
+two finitely checkable, two closed-form conditional, one
+minimal — with a sixth under a policy-class restriction.
+The central common-action obstruction shows that when
+the safe controls of compatible states intersect emptily, no
+observation-based policy is viable, though every compati-
+ble state is individually viable under full information. The
+others are a finite-time exit certificate under an Isaacs-
+type drift condition, an epistemic-emptiness construction
+in which a constant observation merges states with in-
+compatible admissible controls, a delayed-information ob-
+struction with an explicit timing bound, and a certification
+limit: an exact observation-only certifier exists iff safe-set
+membership is constant on the observation fibres. The
+sixth, a certainty-equivalence trap, empties the kernel of
+the uncorrected controller under a biased observation even
+when the perfect-information kernel is nonempty. Two
+certification-theoretic completions are established: over
+polytope-declared blind-window classes the timing certifi-
+cate is exactly computable as a linear program, with the
+Farkas dual as the obstruction witness, sound beyond the
+declaration with an unbounded implementable-class gap;
+and the residual dynamic gap is shown to decompose ex-
+actly, its post-observation recourse phase undecidable by
+any certificate pair that reads only the window sub-model.
+The calculus is positioned against barrier certificates
+and estimation tubes, and its monitoring and institutional
+consequences — observation timing, coarseness, aggrega-
+tion, and bias — are drawn.
+Keywords: viability kernel; obstruction certificates;
+robust viability; epistemic viability; output feedback; sus-
+tainability governance; partial observation
+Mathematics Subject Classification: 49J53;
+93B03; 93C41; 91B76
+1. Introduction
+1.1 The problem
+Viability theory characterizes the states of a constrained
+control system from which at least one control can keep ev-
+ery future state within a constraint set (Aubin, 1991). For
+sustainability problems the constraints are floors — stock
+levels, service thresholds, safety margins — and viability
+is the formal counterpart of maintaining a development
+path rather than merely optimizing it (Béné, Doyen, and
+Gabay, 2001; De Lara and Doyen, 2008; Doyen et al., 2012;
+Doyen and Gajardo, 2020). The theory under perfect mea-
+surement is complete in the relevant sense: the viability
+kernel exists as the largest viable subset, and Nagumo-
+type tangency conditions certify it.
+Sustainability governance, however, operates under in-
+complete observation . Stocks are assessed at discrete re-
+view intervals. Indicators are coarser than the state. Some
+stocks are unobserved altogether. And the information
+that does arrive may arrive late. This paper addresses
+that side: for an incomplete observation structure, it de-
+velops instruments that certify that no observation-based
+policy is viable — that the infeasibility is due to the in-
+formation structure, not to the dynamics.
+Floors in sustainability assessment are typically con-
+straints on the productive base — the state of the system
+that yields the measured output — rather than on the
+output itself. Such a base can be read as natural capital,
+as a stock, or as a slowly regenerating flow of services;
+these are overlapping readings of the same asset rather
+than mutually exclusive ones, and what makes a use of it
+sustainable is whether the use falls on the yield or on the
+base itself. Across assets, whether the base behaves as a
+flow or as a stock is a continuum, set by its regeneration
+timescale relative to the rate of use — a continuum that
+runs from a season, through a year, to geological time for
+a mineral deposit. If a base regenerates too slowly for the
+rate at which it is taken, drawdown is still liquidation.
+A base can also erode while measured output is main-
+tained, because use draws on the base rather than on its
+yield: the measured quantity can be held up while the
+base declines, and partial observation may not detect the
+1
+erosion until a floor is breached. The signal that would re-
+veal the erosion is accordingly often the one that is coarse,
+postponed, or absent. Incomplete observation is therefore
+structural to the certification problem, not merely a prac-
+tical limitation; the suﬀiciency literature and the obstruc-
+tion calculus of this paper address the same underlying
+indeterminacy rather than competing ones.
+The question splits naturally. The suﬀiciency direc-
+tion has a canonical literature: Veliov (1993) gives con-
+ditions for the existence of an output-feedback regulation
+map under incomplete and inexact measurement, reducing
+under perfect measurement to the classical viability con-
+dition (Haddad, 1981); the estimation-tube programme
+(Cardaliaguet, Quincampoix, and Saint-Pierre, 2007) ab-
+sorbs imperfect information into an estimation space of
+sets of compatible states with no loss of value; and bar-
+rier certificates certify safety (Prajna and Jadbabaie, 2004;
+Prajna, Jadbabaie, and Pappas, 2007), with converse and
+hybrid necessary-and-suﬀicient characterizations (Prajna
+and Rantzer, 2005; Maghenem and Sanfelice, 2019). What
+that literature does not supply is the converse direction:
+a calculus of obstruction certificates, each a suﬀicient con-
+dition for nonviability whose negation is a necessary con-
+dition for observation-based viability. An obstruction cer-
+tificate is a checkable witness that no observation-based
+policy exists — finite in the finite-state and polyhedral
+cases — and the argument it makes is that a prescribed
+class of observation-based policies fails not because a par-
+ticular policy is bad, but because the information struc-
+ture leaves no room for any policy. In the polyhedral
+common-action and certification forms (Theorem 2 and
+Proposition 7) it is a finite, checkable test; the drift cer-
+tificates of Theorem 5 and Theorem 3 are not finite ob-
+jects, one exhibiting an enforcement selection and the
+other bounding the timing uniformly over every policy.
+Veliov’s condition tells us when output feedback can work;
+the obstruction calculus tells us when it cannot, and for
+the borderline cases it identifies which quantitative fea-
+ture of the observation design — timing, coarseness, bias,
+aggregation — is responsible.
+1.2 Contributions
+Five obstruction mechanisms are developed, each with a
+complete proof, and a sixth is exhibited under a policy-
+class restriction:
+1. The instantaneous common-action obstruction
+(finitely checkable) (Theorem 2, Example 1). If the
+safe-control sets of the states compatible with the
+current information set intersect emptily, then no
+observation-based policy is viable, even though ev-
+ery compatible state is individually viable under full
+information. The failure is purely informational: no
+stochasticity, no estimation error.
+2. The delayed-information obstruction (closed-
+form conditional) (Theorem 3). If the information
+needed to distinguish safe from unsafe compatible
+states arrives only at time Tobs, and the disturbance
+can force constraint violation earlier than Tobs, then
+no observation-based policy is viable. The timing
+bound inf q/ε < T obs is stated explicitly: information
+may be accurate but arrive too late.
+3. The finite-time exit certificate (closed-form con-
+ditional) (Theorem 5). Under a Dini-drift condition
+of Isaacs type — the disturbance chooses after the
+control — the disturbance can force exit from the
+safe set within an explicit time bound, for every ad-
+missible control of any information structure. This
+is the base obstruction: when it applies, the viability
+question is closed without any observation-theoretic
+argument.
+4. Epistemic emptiness by admissibility (minimal
+construction) (Proposition 5, a minimal construc-
+tion). A constant observation merges states whose
+admissible controls differ: the state-dependent con-
+trol set forces a single common action, and that ac-
+tion is unsafe at the boundary, so the unresolved ini-
+tial observation fibre lies outside the epistemic ker-
+nel, even though every physical state is viable under
+full information. The mechanism is admissibility —
+the common-action obstruction of Theorem 2 at min-
+imal size — and Example 1 gives the hidden-mode
+instance.
+5. The fibre certification criterion (finitely check-
+able) (Proposition 7, Corollary 1). An exact
+observation-only safety certifier — a function of the
+observation that returns “safe” exactly on the safe set
+— exists if and only if safe-set membership is constant
+on every observation fibre. The certainly-safe set is
+the sound relaxation: the largest set of observations
+that can be labeled safe without further information.
+6. The certainty-equivalence trap (policy-class re-
+striction) (Remark 5). Even an injective observa-
+tion empties the kernel of a system whose perfect-
+information kernel is nonempty for the canoni-
+cal certainty-equivalence controller — the perfect-
+information zeroing law applied to the uncorrected
+observation. The trap is a policy-specific failure:
+a controller that uses the observation map’s policy-
+specific failure: a controller that uses the observation
+map’s structure (the bias correction) restores viabil-
+ity.
+7. Computable instantiation and the exact resid-
+ual (finitely checkable; exact residual) (Theorem 4,
+Example 2, Propositions 9 and 10). Over polytope-
+declared blind-window classes the timing certificate is
+exactly computable as a linear program — polynomial
+size, exact in rational arithmetic, Farkas-certified on
+failure — sound beyond the declaration, with the
+implementable-class gap shown unbounded by an ex-
+plicit instance on which the relaxation extinguishes
+the certificate. The residual gap of the completeness
+question decomposes exactly into the window phase,
+decided completely by the certificates, and the post-
+observation recourse phase, decided by no window-
+measurable certificate pair.
+The calculus is organized by a single selector principle
+(Proposition 1, Section 2.4): observation-based viability
+is the existence of one response — admissible, safe, and
+recursively viable — for every compatible state, and each
+certificate proves that a specific response correspondence
+2
+is empty; the obstructions are nested in a ladder (Proposi-
+tion 3). Five refinements complete the picture: backward
+belief recursion is sound and complete on any finite horizon
+in finite systems (Theorem 1); a uniform-margin condition
+connects the instantaneous and tube obstructions (Propo-
+sition 2); the timing obstruction has a sharp threshold
+form (Remark 2); a Helly-type sparse witness bounds the
+common-action obstruction by m + 1 compatible states
+(Proposition 4); and a comparison-function form sharpens
+the exit-time bound (Remark 4). The epistemic kernel is
+monotone in action sets, disturbances, information, and
+policy class (Proposition 8).
+Throughout, “obstruction” means a certified failure.
+Theorem 5 and Theorem 3 each exhibit the violating con-
+straint, an admissible disturbance, and the quantitative
+bound that make failure inevitable, for every policy in
+the prescribed class; Proposition 5 and Theorem 2 exhibit
+the incompatible admissible controls — the merged obser-
+vation whose incompatible safe controls certify emptiness
+— with no quantitative bound claimed there; and Propo-
+sition 7 is the converse-side characterization of the cer-
+tification limit itself. The calculus is positioned against
+the barrier-certificate literature (Section 6.2) and the
+estimation-tube programme (Section 6.3), and its conse-
+quences for the design of monitoring and indicators in sus-
+tainability governance are drawn in Section 6.4.
+1.3 Related work
+The viability-theory background is Aubin (1991), Aubin,
+Bayen, and Saint-Pierre (2011), and the kernel approxi-
+mation theory of Saint-Pierre (1994); robust viability is
+Aubin and Frankowska (1990) and Frankowska (1989).
+Under incomplete measurement, the suﬀiciency theorem
+is Veliov (1993), viability with a priori unknown but ob-
+servable parameters is Quincampoix and Veliov (1994),
+and the estimation-set reduction is Cardaliaguet, Quin-
+campoix, and Saint-Pierre (2007). On the failure side,
+Aubin (2001) characterizes the complement of the ker-
+nel — Poincaré’s “shadow” — together with the capture
+basins, and Aubin and Catté (2002) supply the bilateral-
+fixed-point and discriminating-kernel calculus; the certifi-
+cates of Section 3 are one-sided, observation-constrained
+analogues of that programme. In verification, barrier cer-
+tificates originate with Prajna and Jadbabaie (2004), with
+worst-case and converse results in Prajna, Jadbabaie, and
+Pappas (2007) and Prajna and Rantzer (2005) and hy-
+brid characterizations in Maghenem and Sanfelice (2019).
+The sustainability application domain is Béné, Doyen, and
+Gabay (2001), De Lara and Doyen (2008), Doyen et al.
+(2012), and Doyen and Gajardo (2020). To our knowledge,
+the obstruction certificates of Theorem 2, Theorem 3, and
+Proposition 7 — in particular the certification criterion
+and the timing bound — have not been stated in this
+form; the elementary facts on which they rest (quantifier
+commutation and Dini comparison) are classical.
+1.4 Organization
+Section 2 fixes the framework: the control system, the via-
+bility kernel hierarchy, observation structures, information
+states, the safe-control correspondence, and the selector
+principle (Proposition 1). Section 3 develops the obstruc-
+tion calculus (Theorem 1–5, Propositions 2–5, Remarks 2–
+4, and Example 1): finite-horizon completeness, the in-
+stantaneous common-action obstruction with its ladder
+and sparse witness, the delayed-information obstruction
+with its threshold form, and — as supporting certificates
+— the finite-time exit certificate and the admissibility ob-
+struction, together with a recourse certificate for the post-
+observation mode (Proposition 6, Example 3). Section
+4 develops the certification limits (Proposition 7, Corol-
+lary 1, Remark 5). Section 5 reviews the suﬀiciency land-
+scape, cited rather than re-derived. Section 6 discusses
+the position of the calculus relative to barrier certificates
+and estimation tubes, states the monotonicity of the epis-
+temic kernel (Proposition 8), and draws the governance
+consequences. Sections 7–10 develop the new material:
+complete characterizations and the residual gap (Section
+7), the selector principle with its dual witnesses and the
+monitoring-adequacy converse (Section 8), a calibrated
+case study with a coverage audit (Section 9), and the
+probabilistic belief-state development (Section 10). Sec-
+tion 11 concludes. Brief sketches and short proofs of the
+main-text statements are given in place; the extended dis-
+cussions and worked instances of the Sections 3, 4, and 10
+certificates, the complete proofs of the Section 3 certifi-
+cates, the expanded suﬀiciency review, and the auxiliary
+constructions are collected in the Supplementary Mate-
+rial; the results of Sections 7 and 9 are proved in the main
+text. The running instances are fixed here for orientation:
+the two-floor conflict (Supplementary S1), on which the
+worked instances of the Sections 3, 4, and 10 certificates
+are built, and the calibrated delayed-hidden-regime case
+study (Section 9).
+2. Framework
+2.1 The control system and the kernel hierarchy
+This section fixes the mathematical objects used through-
+out the paper: the control system, the disturbance struc-
+ture, the constraint set, and the four kernels (perfect-
+information, robust, epistemic, and institutionally re-
+stricted) that organize the analysis.
+Fix a state space X ⊆ Rn, a control set U , a disturbance
+set D, and dynamics
+˙x(t) = f (x(t), u(t), d(t)), u (t) ∈ U (x(t)), d (t) ∈ D(x(t)),
+with f continuous, U and D set-valued with closed graph and
+nonempty compact values, and admissible controls and dis-
+turbances taken to be measurable selections — the standing
+solution-existence conditions: every selection pair admits a
+Carathéodory solution, and the convexified relaxed inclusion
+of Section 3.5 satisfies the Marchaud conditions of the viability
+literature (Aubin, 1991). Let V ⊆ X be a closed constraint
+set. A causal policy π is a map from the observation record to
+controls, respecting the specified information structure. The
+standard objects are:
+• Viab(V; U, πperf ): the viability kernel under full-
+information (state-feedback) policies — the largest closed
+subset of V from which there exists a state-feedback con-
+trol keeping the trajectory in V for all time — no distur-
+bance, or a known disturbance trajectory (Aubin, 1991).
+• R Viab(V): the robust kernel , the largest subset of V
+from which there exists a state-feedback policy keeping
+every trajectory — for every admissible disturbance real-
+ization — in V (Aubin and Frankowska, 1990).
+3
+• ER ViabI(V): the robust epistemic kernel — the object
+of this paper (Definition 1). Its elements are states of
+information, not physical states (Section 2.3). The non-
+robust counterpart EViabI(V) is the non-robust contrast
+class (Section 2.3).
+Projected to physical state space — with proj∃(B) =⋃
+B∈B B the existential projection of a collection B of infor-
+mation states, applied to the first two terms, whose elements
+are information states — the informational hierarchy reads
+proj∃
+(
+IR ViabJ (V)
+)
+⊆ proj∃
+(
+ER ViabI(V)
+)
+⊆ R Viab(V) ⊆ Viab(V),
+where IR ViabJ (V) is the institutionally restricted kernel of Sec-
+tion 6.4. The physical implication of epistemic viability is the
+inclusion at the level of beliefs: B0 ∈ ER ViabI(V) ⇒ B0 ⊆
+R Viab(V). Each inclusion can be strict, with a distinct cause:
+robust contraction arises from disturbances; epistemic contrac-
+tion from indistinguishability; institutional contraction from
+restricted authority, enforcement, and allocation. The present
+paper characterizes the epistemic contraction: the mechanisms
+by which indistinguishability empties or shrinks the kernel.
+2.2 The safe-control correspondence
+For a constraint set V described by finitely many C 1 constraint
+functions, V = {x : qj(x) ≥ 0, j = 1 ..m}, define the safe-
+control correspondence at x ∈ V :
+RV (x) =
+{
+u ∈ U (x) : ∀d ∈ D(x), ∀j with qj(x) = 0 ,
+∇qj(x) · f (x, u, d) ≥ 0
+}
+,
+the set of controls whose drift is inward (subtangential) on ev-
+ery active constraint face, uniformly over the disturbance. For
+x in the interior of V (no active constraints), RV (x) = U (x).
+Two levels of the tangency condition are distinguished through-
+out. (i) Local reading. The correspondence is applied to the
+constraint set itself: by Nagumo’s theorem (Nagumo, 1942) in
+its robust form, if V is closed and RV (x) ̸= ∅ on ∂V with a
+measurable selection u(x) ∈ R V (x), then V is itself robustly
+invariant, i.e. R Viab(V) = V (Aubin, 1991; Frankowska, 1989).
+(ii) Kernel reading. When V is not invariant, viability of a
+point x0 ∈ V requires instead a selection u(x) ∈ R G(x) along
+the trajectory, where G = R Viab(V) and RG is the same cor-
+respondence computed on the kernel: points of V \ G may
+admit controls that are instantaneously safe while every tra-
+jectory must exit later. The obstruction theorems below are
+local certificates against RV : exhibiting a state at which even
+the weaker pointwise condition fails certifies exclusion from the
+kernel, and this is the reading in which the certificates are used.
+The correspondence is the bridge between the pointwise (tan-
+gency) and the global (kernel) description, and it is the object
+the observation structure acts upon: an observation-based pol-
+icy can select controls only as a function of the observation
+record.
+2.3 Observation structures, information states,
+and epistemic kernels
+Conventions. Throughout, the plant evolves in continuous
+time and a policy acts at review times, holding the selected ac-
+tion until the next review; the observation record is generated
+by the observation map O (the error, hidden-parameter, and
+delay extensions are noted below). Between reviews the record
+y(t) = O(x(t)) is observed continuously but cannot change
+the held action; the certificates of Sections 3.2–3.3 and 3.6 use
+the record only through what it discriminates (observation-
+equivalence), so they remain valid under any refinement of
+the within-interval record that does not separate compatible
+branches. A policy is observation-based if its action depends
+on the record only through the information set Bt; under the
+delay-free set-membership semantics used here the information
+set is a suﬀicient statistic, so observation-based and record-
+based policies coincide (with delays, hidden parameters, or
+history-dependent constraints the belief must be augmented
+and suﬀiciency is not automatic; Section 6.5). The distur-
+bance is chosen adversarially after the control (the Isaacs order
+of Theorems 5 and 2), an action outside U (x) at a compatible
+state x is itself a failure (Section 2.4), and constraint violation
+is the strict inequality q < 0.
+An observation structure I = ( Y, O) is a measurable
+space Y and an observation map O : X → Y . The policy ob-
+serves y(t) = O(x(t)). At time t, the information set (belief)
+of a regulator who knows the dynamics, the disturbance class,
+its own applied controls (u(s))s<t, and the record (y(s))s≤t is
+Bt =
+{
+ξ(t) : ξ(0) ∈ B0,
+˙ξ(s) = f (ξ(s), u(s), d(s)), d (s) ∈ D(ξ(s)),
+O(ξ(s)) = y(s) for all observed s ≤ t
+}
+,
+where the applied control history u(·) in the dynamics is the
+regulator’s own — common to every candidate trajectory —
+and ξ(·) ranges over candidate trajectories: the set of current
+states compatible with the record and the applied controls.
+We assume the standard set-membership semantics (Kurzhan-
+ski and Vályi, 1997), so that Bt contains every state consis-
+tent with the observations and the applied controls. (With
+observation error, the equality becomes membership y(s) ∈
+H(ξ(s), v(s)); with hidden parameters the belief lives in X ×Θ;
+with delays it lives in a history space — the extensions are
+noted as open in Section 6.5.) A policy is observation-based
+if u(t) depends on the record only through Bt; this is a special
+case of record-based policies, and the two coincide when the be-
+lief is a suﬀicient statistic for the decision problem, which holds
+in the delay-free set-membership semantics used throughout.
+We write U B(B) = ⋂
+x∈B U (x) for the controls available at ev-
+ery compatible state — the only controls an observation-based
+policy may select without risking inadmissibility.
+Definition 1 (robust epistemic kernel) . B0 ∈ ER ViabI(V)
+if there exists a nonanticipative observation-based policy π
+such that, for every compatible initial state x0 ∈ B0 and ev-
+ery admissible disturbance realization d(·), the trajectory of
+˙x = f (x, u(t), d(t)) generated from x0 by π’s actions under d(·)
+— the record being the one that (π, d(·)) generates — remains
+in V for all time. (This is the standard exists-strategy-for-all-
+realizations form. The quantifier order is essential: the record
+is generated by the realization, so conditioning the admissi-
+ble realizations on the record would be circular.) Admissible
+initial beliefs are the compact information sets B0 ⊆ X gen-
+erated by the observation structure — the observation fibres
+O−1(y), y ∈ O(X), in the constructions of Sections 3.2–3.3
+and 3.6. The existential (non-robust) counterpart EViabI(V)
+is the non-robust contrast class.
+We use ER Viab throughout, since the disturbance classes
+of sustainability problems are adverse by construction. The
+theorems are stated for this robust notion; they do not trans-
+fer a fortiori to the non-robust contrast class EViabI(V), in
+which there exist an observation-based policy and some ad-
+missible disturbance realization under which every compatible
+trajectory remains in V for all time. Since the robust kernel is
+contained in the non-robust one, an observation-based policy
+may exist there that no robust policy survives.
+The thesis is now precise: the epistemic kernel is the
+greatest recursively viable collection of information
+states in the sense of the estimation-space reduction
+cited in Section 5; common-action compatibility is a
+4
+necessary one-step condition, but not by itself a com-
+plete characterization — and the obstruction calculus
+certifies, mechanism by mechanism, the information
+states outside it.
+2.4 Notation
+We collect the principal symbols used throughout the paper
+and fix the two structural symbols: the observation struc-
+ture is always I (calligraphic I) and the institution of Sec-
+tion 6.4 is always J (calligraphic J); no other letter serves
+either role. The state space is X ⊆ Rn; the control set is U
+(set-valued U (x) at state x); the disturbance set is D (set-
+valued D(x)). The dynamics are ˙x = f (x, u, d). The closed
+constraint set is V ⊆ X, described by finitely many C 1 con-
+straint functions qj (j = 1 , . . . , m). The safe-control corre-
+spondence at x ∈ V is RV (x). The observation structure is
+I = (Y, O) with observation map O : X → Y ; the information
+set (belief) at time t is Bt; the initial belief is B0 — admis-
+sible initial beliefs are the compact information sets the ob-
+servation structure generates, the observation fibres O−1(y),
+y ∈ O(X), in the constructions. The common admissible ac-
+tion set at belief B is U B(B) = ⋂
+x∈B U (x) — the only con-
+trols an observation-based policy may select without risking
+inadmissibility, under the convention, used from Proposition 5
+on, that an action outside U (x) at a compatible state is itself
+failure; the common safe-action set is RB
+V (B) = ⋂
+x∈B RV (x).
+The tube-safe action set at review length ∆ is Atube(B, ∆) =
+{a : Reach[0,∆](B, a) ⊆ V} , where Reach[0,∆](B, a) is the robust
+— all-disturbance, all-solution — reachable set of the system
+from B under the held action a over [0, ∆]. The first infor-
+mative observation time is Tobs: the first time the observation
+record discriminates between compatible branches — before it,
+the branches of Theorem 3’s (H3.1) produce identical records.
+The adverse-selection correspondences of the exit certificates
+are Dε(x, u) = {d ∈ D(x) : D+q(x; f (x, u, d)) ≤ − ε} (Theo-
+rem 5) and Dη(x) = {d ∈ D(x) : ∇qj(x) · f (x, a, d) ≤ − η/2}
+(Theorem 2’s proof, local). The upper right Dini derivative of
+q in direction v is D+q(x; v) = lim sup h↓0[q(x + hv) − q(x)]/h;
+for q of class C 1 — the class assumed in the exit theorems —
+D+q(x; v) = ∇q(x) · v.
+The kernels of the hierarchy are Viab(V; U, πperf ) (perfect
+information), R Viab(V) (robust), and ER ViabI(V) (the robust
+epistemic kernel — Definition 1, the object of this paper), with
+proj∃(B) = ⋃
+B∈B B the existential projection of a collection
+B of information states. Consistency check: when the obser-
+vation O is injective the record determines the state, so the
+epistemic and robust kernels agree, ER ViabI(V) = R Viab(V),
+the informational certificates of Sections 3.2–3.3 and 3.6 re-
+duce to the no-merge case, and only the dynamic obstruction
+of Section 3.5 can certify exclusion — the definitions degen-
+erate to classical robust viability exactly when observation is
+perfect. The non-robust counterpart EViabI(V) is the non-
+robust contrast class (Section 2.3). The institutionally re-
+stricted kernel is IR ViabJ (V) (Section 6.4). The policy classes
+are πperf (state feedback), Πoutput, Πstate, and ΠCE — the
+certainty-equivalence class defined in Remark 5: fixed perfect-
+information regulation laws applied uncorrected to the obser-
+vation. The policy-specific safety set of Section 4.1 is SafeΠ
+T ;
+the certainly-safe set of Corollary 1 is Ysafe.
+A few letters carry local meanings, as declared here: the strip
+width a of Theorem 5’s Sa is not the held action a = π(B) of
+Theorem 2’s proof, nor the pathway vector a ≥ 0 of Section
+5(d); λ is the Farkas multiplier of Theorem 2’s checkability cer-
+tificate and the observer decay rate of Section 5(c); and α is the
+comparison function of Remark 4 and a multiplier of Section
+5(d)’s substitution alternative. The letter K denotes the safe
+set of Section 4’s certification problems, while in Section 5(c) it
+denotes the kernel itself, with the buffered set Kζ and eroded
+kernels K −cζ of Section 5(c). The observation-error map of
+Section 2.3 is H(ξ, v), whereas the harvest vector of the Sup-
+plementary Material is the lowercase h; and the finite-horizon
+recursion set WN of Section 3.1 is calligraphic, distinct from
+the Lyapunov function W = S1 + S2 of the Supplementary
+Material.
+Shared symbols across the companion papers. The
+companion papers (worked systems, computational certifica-
+tion, probabilistic suﬀiciency, exact belief computation, mini-
+max dual certificates, applied regime viability, and the applied
+forecast ladder) deliberately share one formal vocabulary; the
+letters below carry paper-local meanings here that differ there:
+Here In the companions
+K: the safe set of
+Section 4’s certification
+problems; the kernel of
+Section 5(c)
+window depth and contact set
+K(B) (minimax duals); the full-
+information kernel K T
+full (certi-
+fication); stock carrying capac-
+ities (forecast ladder; minimax
+benchmark)
+λ: the Farkas multiplier
+of Theorem 3’s certifi-
+cate; the observer decay
+rate of Section 5(c)
+certificate weight vectors (certi-
+fication; minimax duals)
+Γh: the recourse certifi-
+cate of Section 5(d)
+the certificate margin ΓI (certifi-
+cation); the alpha-vector witness
+sets ΓΠ
+k (suﬀiciency)
+τ : delay and observa-
+tion times
+the worst-case exit time τ ∗
+(worked systems)
+σ: the recourse con-
+struction’s trajectory
+parameter
+the kernel time variable (cer-
+tification; minimax duals); the
+floored exit count σ∗ (worked
+systems); a noise scale (forecast
+ladder)
+µ: a Farkas multiplier an adversarial probability mea-
+sure (certification; minimax du-
+als)
+The four correspondences of this section are one skeleton.
+An observation-based regulator selects a single response for an
+entire information set — a held action, a feedback segment,
+or a safe/unsafe verdict — and observation-based viability is
+the existence of a response that is simultaneously admissible,
+safe, and recursively viable for every compatible state and
+disturbance history. Each obstruction certificate of Sections
+3 and 4 is a checkable suﬀicient condition under which one
+of these response correspondences is empty: U B(B) (admis-
+sibility), RB
+V (B) (instantaneous safety), Atube(B, ∆) (review-
+interval safety), or the recursive predecessor of Section 3.1. The
+mechanisms differ in which correspondence fails, and the ob-
+structions are nested (Proposition 3). The organizing claim of
+the calculus is the following, stated once and used implicitly
+by every certificate of Sections 3 and 4.
+Proposition 1 (selector principle) . If B ∈ ER ViabI(V) and
+π is a policy witnessing viability on B, then at every review
+time the action a = π(B) selected by π is a response that is (i)
+admissible, a ∈ U B(B); (ii) safe, keeping every compatible tra-
+jectory in V until the next observation — Reach[0,∆](B, a) ⊆ V
+at review length ∆; and (iii) recursively viable , in that every
+post-observation belief reached at the next review is again in
+ER ViabI(V) under the continuation of π. A belief is there-
+fore viable only if each of the response correspondences of this
+section — U B(B), RB
+V (B), Atube(B, ∆), and the recursive pre-
+decessor of Section 3.1 — is nonempty along every reachable
+branch; hence a certificate that any one of them is empty at
+a reachable belief certifies nonviability. In finite systems the
+converse is exact (Theorem 1); in continuous time the converse
+is the backward-recursion completion noted in Section 6.5.
+5
+3. The Obstruction Calculus
+3.1 Finite-horizon completeness (finite systems)
+In the finite setting the calculus is complete: backward re-
+cursion over beliefs — the set-membership analogue of the
+belief-state recursion of partially observable Markov processes
+(Smallwood and Sondik, 1973) — is sound and complete on
+any finite horizon, and nonviability is certified by a finite ob-
+struction tree. The certificates of Sections 3.2–3.3 and 3.5–3.6
+are suﬀicient conditions, not a complete characterization of the
+epistemic kernel.
+Fix finite state, action, disturbance, and observation spaces
+X, A, D, Y , a transition map x+ = F (x, a, d), an observation
+map y = O(x, a, d, x+), a safe set V ⊆ X, and admissible-
+action sets U (x) ⊆ A. For a belief B ⊆ X, an action a, and an
+observation y, the post-belief is
+Post(B, a, y) =
+{
+x+ ∈ X : ∃ x ∈ B, d ∈ D(x),
+x+ = F (x, a, d), y = O(x, a, d, x+)
+}
+,
+and y is possible under (B, a) if Post(B, a, y) ̸= ∅. With
+U B(B) = ⋂
+x∈B U (x), define the one-step predecessor of a col-
+lection C of beliefs by
+Pre(C) =
+{
+B ⊆ V : ∃ a ∈ U B(B) such that
+Post(B, a, y) ∈ C for every possible y
+}
+,
+and the finite-horizon kernels by W0 = {B : B ⊆ V} ,
+Wk+1 = Pre( Wk). The N -step common safe-action set at
+a belief B is AN (B) =
+{
+a ∈ U B(B) : Post( B, a, y) ∈
+WN −1 for every possible y
+}
+, so that B ∈ W N ⇐ ⇒ AN (B) ̸=
+∅. The recursion is exact but of worst-case complexity expo-
+nential in |X| — the belief space contains up to 2|X| beliefs —
+so finite-checkability is per belief, not a polynomial-time global
+procedure.
+Theorem 1 (finite-horizon soundness and completeness) . An
+initial belief B0 admits an observation-based policy that keeps
+every compatible trajectory in V for N steps if and only if
+B0 ∈ W N .
+Proof sketch. Both directions are inductions on the hori-
+zon. Necessity: a policy safe for N steps picks a ∈ U B(B0),
+and every possible successor belief is safe for N − 1 steps, so
+B0 ∈ Pre(WN −1). Suﬀiciency: choose the witness action at
+each step, and every reachable state remains in V for N steps.
+If B0 /∈ W N , the failure is certified by a finite obstruction tree
+alternating regulator and nature turns — the complete con-
+struction, with the one-step abstraction of Example 1 as its
+smallest tree, is given in the Supplementary Material (S1; the
+tree is drawn in Figure S2).
+3.2 The instantaneous common-action obstruction
+The instantaneous obstruction is the static core of the calculus:
+it certifies nonviability at a single information state, without a
+timing or horizon argument.
+Theorem 2 (common-action obstruction) . Let B ⊆ V be an
+information set of the specified observation structure (the safe-
+control correspondence RV is defined on V, so the belief is
+taken inside it). Suppose the following hypotheses hold.
+(H2.1) The selected action is held until the next observation
+(sampled review: no informative observation arrives before the
+next action must be selected, and the policy holds the selected
+action over the review interval — the institutional reading;
+without a positive dwell time the instantaneous statement be-
+low must be replaced by the tube-safety statement below).
+(H2.2) Either the common admissible action set is
+empty,
+U B(B) =
+⋂
+x∈B
+U (x) = ∅, (admissibility obstruction)
+or the common safe-action set is empty while common ad-
+missibility holds,
+RB
+V (B) :=
+⋂
+x∈B
+RV (x) = ∅, (1)
+with U B(B) ̸= ∅ (safety obstruction)
+(H2.3) Closed-loop existence of the local adverse se-
+lection (safety case). The disturbance correspondence is
+lower semicontinuous, or locally constant near the boundary
+point at which the obstruction fires, so that the local adverse
+selection of the proof is realized along the compatible trajec-
+tory; alternatively, the certificate is read against the convex-
+ified (relaxed) inclusion, which preserves the signed drift (for
+C 1 q the directional derivative is aﬀine in the velocity).
+Then, under hypotheses (H2.1)–(H2.3), B /∈ ER ViabI(V):
+every compatible state may be individually robustly viable, and
+the belief is nevertheless nonviable, because the state-specific
+safe actions are incompatible.
+Proof sketch. If the selected action is inadmissible at some
+compatible state, the policy fails there outright. Otherwise
+a ∈ U B(B), and the emptiness of the common safe-action set
+is caused by the boundary: some ¯x ∈ B ∩ ∂V has a /∈ R V (¯x),
+giving an active constraint j and a disturbance ¯d with ∇qj(¯x) ·
+f (¯x, a, ¯d) < 0. A measurable local adverse selection (closed
+graph of D, continuity of the drift; realized by (H2.3)) then
+drives qj strictly downward from qj(¯x) = 0 within the first
+review period, before any observation can arrive.
+For polyhedral data the emptiness certificate is a Farkas pair
+— a finite, independently checkable certificate of epistemic in-
+feasibility — and for infinite beliefs the Helly-type witness of
+Proposition 4 supplies a finite-witness reduction under the con-
+vexity hypotheses of Section 3.4; the complete discussion is
+given in the Supplementary Material (S1).
+Remark 1 (numerical robustness of the polyhedral certifi-
+cate). Linearity makes the Farkas certificate robust in two
+practical senses. First, bounded data perturbation degrades
+the margin gracefully: if µ ≥ 0 certifies µ⊤A = 0 and
+µ⊤b ≤ −µ0 < 0, then for perturbed right-hand sides b+∆b with
+∥∆b∥∞ ≤ ϵ the same multipliers give µ⊤(b+∆b) ≤ −µ0+∥µ∥1ϵ,
+still negative while ϵ < µ 0/∥µ∥1; the margin µ0 is exactly the
+certificate’s numerical robustness, and normalized multipliers
+(∥µ∥1 = 1, as in Section 3.4’s worked certificate) maximize the
+tolerable perturbation. Second, verified approximate data suf-
+fice: if the multipliers are computed with residual r := ˆµ⊤ ˆA
+and objective c := ˆµ⊤ˆb, then feasibility of some u ∈ U would
+imply −hU (−r) ≤ r⊤u ≤ c, where hU (g) := sup v∈U g⊤v is the
+support function of the action set; hence the test c+hU (−r) < 0
+— with all integration, rounding, and enclosure errors charged
+into c and r before it is applied — certifies infeasibility with-
+out exact stationarity. Both extensions share the orientation
+rule for nonviability certificates: uncertain row data must be
+relaxed toward a larger feasible controller set, never toward a
+smaller one; tightening ˆb on the strength of an unverified worst
+case can manufacture a false obstruction.
+The tube-safety form. The instantaneous condition (1)
+is the ∆ ↓ 0 boundary approximation of the exact one-step ob-
+struction: with the action held over a review interval of length
+∆, the exact condition is the emptiness of the tube-safe action
+set
+Atube(B, ∆) =
+{
+a : Reach[0,∆](B, a) ⊆ V
+}
+,
+6
+Figure 1: Incompatible safe controls. The states x1 and
+x2 share an observation, but their safe-action sets [0, 0.4] and
+[0.6, 1] are disjoint, so no common safe action exists (Theo-
+rem 2).
+with Reach[0,∆](B, a) the robust (all-disturbance) reachable set
+(the reading specified in Section 2.4), and Atube(B, ∆) = ∅
+certifies B /∈ ER ViabI(V) for every review interval of length
+∆ and every target collection. The theorems above and below
+use the instantaneous and timing readings; the tube form is
+the unifying one-step object.
+Proposition 2 (uniform margin gives a tube obstruction at
+every review length) . Let B ⊆ V be a compact information set
+with U B(B) ̸= ∅, f and ∇qj continuous, and suppose there is
+η > 0 such that for every a ∈ U B(B) there exist a boundary
+state xa ∈ B ∩ ∂V, an active constraint j with qj(xa) = 0 , and
+a disturbance da ∈ D(xa) satisfying
+∇qj(xa) · f (xa, a, da) ≤ −η.
+Under the closed-loop existence convention of Theorem 2, the
+tube-safe action set is then empty at every review length,
+Atube(B, ∆) = ∅ ∀ ∆ > 0,
+and hence B /∈ ER ViabI(V) under sampled review of any
+length.
+Proof sketch. For fixed a ∈ U B(B), continuity of the drift
+and the closed graph of D extend the margin to −η/2 on a
+neighbourhood of (xa, a, da), and a measurable local selection
+realizes it; the trajectory from xa under the held action then
+satisfies qj(x(t)) ≤ −(η/2)t < 0 for small t, so a /∈ A tube(B, ∆)
+for every ∆ > 0. As a was arbitrary, the tube-safe action set
+is empty.
+Proposition 3 (obstruction ladder) . Under the standing reg-
+ularity assumptions and the closed-loop existence convention
+of Theorem 2, the common response sets of Section 2.4 are
+nested:
+Atube(B, ∆) ⊆ R B
+V (B) ⊆ U B(B) ∀ ∆ > 0,
+and emptiness descends the ladder:
+U B(B) = ∅ =⇒ R B
+V (B) = ∅ =⇒ A tube(B, ∆) = ∅
+=⇒ B /∈ ER ViabI(V).
+Proof sketch. The inclusion RV (x) ⊆ U (x) gives the sec-
+ond nesting. For the first, an action outside RB
+V (B) violates
+∇qj(x) · f (x, a, d) ≥ 0 at some active boundary state, and the
+corresponding trajectory leaves V in arbitrarily small time, so
+the action is not tube-safe.
+The obstruction ladder’s four rungs — admissibility, com-
+mon safe-action, tube, and recursive — are itemized and shown
+strict in general in the Supplementary Material (S1, Figure S1);
+the dynamic exit certificate of Theorem 5 sits below the ladder,
+emptying a response set at some compatible state even under
+full information.
+Example 1 (hidden-mode conflict) . Let an unobserved pa-
+rameter satisfy θ ∈ {− 1, +1}, with ˙z = θu, u ∈ {− 1, +1}, and
+constraint z ≥ 0. At z = 0 : if θ = +1 , only u = +1 is safe; if
+θ = −1, only u = −1 is safe. Both compatible states are in-
+dividually robustly viable under full information (each admits
+its safe control), but the information set B = {(0, +1), (0, −1)}
+satisfies RB
+V (B) = {+1} ∩ {− 1} = ∅, so B /∈ ER ViabI(V).
+This is a purely informational failure: no stochasticity and no
+estimation-quality argument is involved. The example is the
+two-action skeleton of every “the stock is either recovering or
+collapsing, and the safe policy differs between the two” situa-
+tion.
+3.3 The delayed-information obstruction
+Theorem 3 (delayed-information obstruction). Let B0 be an
+initial information set. Suppose the following hypotheses hold.
+(H3.1) No informative observation arrives before time Tobs >
+0 — formally, there are branches that are observation-
+equivalent on [0, Tobs): they produce identical observation
+records throughout that interval, so the policy cannot distin-
+guish them before Tobs; between observations the information
+set evolves by the set-membership semantics of Section 2.3.
+(H3.2) There exist a constraint function q of class C 1 (the
+class of Theorem 5’s proof, Section 3.5) with V ⊆ { q ≥ 0} and
+a constant ε > 0 such that, for every implementable blind-
+window control — every measurable u(·) on [0, Tobs) that is
+admissible at every compatible state throughout the blind win-
+dow, u(t) ∈ U B(Bt) with Bt the set-membership belief propa-
+gated under u(·) — which is exactly the class of controls that
+an observation-based policy can realize before the first infor-
+mative observation, where its actions are a fixed function of
+time — there are a compatible initial state x∗ ∈ B0 attaining
+q(x∗) = inf x∈B0 q(x) (with B0 compact and q lower semicontin-
+uous; otherwise replace the infimum by inf q+δ for an arbitrary
+δ-minimizer, let δ ↓ 0, and read the timing bound with inf q+δ)
+and an admissible disturbance realization such that, along the
+realized trajectory from x∗ under that open-loop control, the
+record remains compatible and
+D+q(x(t); f (x(t), u(t), d(t))) ≤ − ε while q(x(t)) > 0,
+(2)
+(H3.3) The timing bound holds:
+Tobs > inf x∈B0 q(x)
+ε . (3)
+Then, under hypotheses (H3.1)–(H3.3), B0 /∈ ER ViabI(V):
+information may be accurate but arrive too late.
+Proof sketch. By (H3.1) the policy’s actions on [0, Tobs) form
+one fixed open-loop control; if it is ever inadmissible at a com-
+patible state the policy fails outright, otherwise (H3.2), applied
+to this implementable control, supplies a compatible state x∗
+with q(x∗) = inf B0 q and an admissible disturbance realizing
+the drift (2); integrating (2) gives q(x(t)) ≤ inf B0 q − εt, so
+the violation q < 0 occurs by time inf B0 q/ε, which (3) places
+strictly before Tobs — before any informative observation, so
+the policy cannot react in time.
+Hypothesis (2) is a condition on the data of the problem, not
+on the policies, and condition (3) is the timing bound: inverted,
+it is the design requirement that the first informative observa-
+tion precede the enforced exit time. The complete discussion of
+both hypotheses, and the formal-zero-margin comparison with
+Theorem 2, are given in the Supplementary Material (S1).
+Remark 2 (threshold form of the timing obstruction) . The
+delayed-information obstruction has a sharp threshold. Let
+σ∗(B0) be the guaranteed blind-window survival time: the
+7
+largest duration such that some pre-observation policy keeps
+every observation-equivalent branch in V until then,
+σ∗(B0) = sup
+u(·)
+inf
+x0∈B0, d(·)
+τ (x0, u, d),
+with the infimum over branches that remain observation-
+equivalent on [0, Tobs) and τ the first violation time under the
+convention of Theorem 3. Then
+σ∗(B0) < T obs =⇒ B0 /∈ ER ViabI(V),
+because before Tobs a policy cannot condition its action on
+which branch realizes. Condition (3) certifies this threshold:
+under (H3.1)–(H3.2) every branch exits by time inf x∈B0 q(x)/ε,
+hence σ∗(B0) ≤ inf x∈B0 q(x)/ε, and (3) states that this up-
+per bound lies below Tobs; the threshold itself may be strictly
+smaller, in which case nonviability holds even when (3) fails.
+The threshold is the blind-window response correspondence of
+the timing layer: its emptiness is the timing certificate, the
+delayed-information analogue of the tube and common-action
+correspondences.
+Checkability of the timing certificate. The drift hy-
+pothesis (3) is finitely checkable whenever the blind-window
+control class is finite: if B0 is finite and the admissible blind-
+window controls form a finite family (hold-until- Tobs controls
+with u in a finite set, or piecewise-constant controls on a finite
+partition), the certificate reduces to the finite check that every
+candidate control enforces exit before Tobs, each worst-case exit
+time computed by branchwise integration or by the recursion
+of Section 3.1. The hidden-regime instance of Section 9 is this
+check in closed form: the worst branch declines at unit rate,
+giving σ∗(B0) = z0 − 1, and the certificate fires exactly when
+Tobs > z 0 − 1. For continuous control classes the check remains
+a template, part of Open Problem 1; over polytope-declared
+classes, however, the check is exact and finite (Theorem 4),
+and the class declaration itself is load-bearing (Example 2).
+Theorem 4 (linear-programming instantiation of the tim-
+ing certificate) . Let the blind window have K discrete steps,
+finitely many branches j ∈ J with robust aﬀine dynamics
+x+ = Ajx + Bju + Ejw, w ∈ Wj a polytope, known initial
+branch states xj,0, polyhedral safe set V = {x : F x ≤ g}, and
+declared blind-window class ΠB = {(u0, . . . , uK−1) : uk ∈ U }
+for a polytope U . Then: (i) σ∗(B0; ΠB) is computed exactly
+by at most ⌈log2 K⌉ + 1 linear programs of size polynomial in
+K, |J|, and the description lengths of U , Wj, V — unrolling
+the dynamics makes each robust floor row one linear inequality
+in the control sequence, the disturbance entering only through
+precomputed support constants — and with rational data ev-
+ery step is exact. (ii) Infeasibility at horizon K is certified
+by Farkas multipliers: nonnegative weights on the rows whose
+aggregate control projection vanishes and whose aggregate con-
+stant is negative — the timing certificate in adjoint-row form.
+(iii) The program’s feasible set is the declared class itself, so the
+computation is sound and complete over ΠB: no relaxation gap
+arises. (iv) The declaration is load-bearing: the same compu-
+tation over a polytope U ⊇ Uﬁn holding a finite implementable
+class computes the relaxation, which remains sound but can
+be arbitrarily incomplete — on the hidden-regime data with
+Uﬁn = {−1, +1} one has σ∗ = z0 − 1, while U = [ −1, 1] ad-
+mits u ≡ 0, which holds both branches on the floor forever, so
+σ∗
+rel = ∞ and the relaxed certificate never fires.
+Proof sketch. Unrolling the aﬀine dynamics makes each
+branch state xj,k aﬀine in (u0, . . . , uk−1), so every robust floor
+row is one linear inequality once maxw∈Wj F EjAℓw is precom-
+puted; feasibility of the horizon- K ′ system is monotone in K ′
+(prefix truncation), giving (i) by bisection, and Farkas’ lemma
+gives (ii). Claim (iii) is definitional: the program’s variables
+are the declared controls themselves. Claim (iv) is the compu-
+tation displayed in Example 2; the complete proof, including
+the duality computation, is in Supplementary S1.
+Example 2 (the relaxation gap is unbounded) . Two branches
+share z+ = 9
+10 z ± u from a common z0, floor V = {z ≥ 1},
+declared class U = [−1, 1] per step. The branch sum z+
+k +z−
+k =
+2( 9
+10 )kz0 is invariant under the control, so both floors force
+z0 ≥ ( 10
+9 )k at every step k: the window- K program is feasible
+exactly when z0 ≥ ( 10
+9 )K . The level- k Farkas certificate is the
+pair of floor rows summed — their control coeﬀicients cancel
+pairwise — leaving 2( 9
+10 )kz0 ≥ 2; and u ≡ 0 attains feasibility
+on the boundary z0 = ( 10
+9 )K , keeping the branches balanced at
+( 10
+9 )K−k ≥ 1. The program is thus a complete characterization
+of the declared class. If instead the declared class is the finite
+set {−1, +1}, the guaranteed survival time is σ∗ = z0 − 1:
+strictly smaller. The relaxation enlarges the class and, on the
+hidden-regime data, extinguishes the certificate altogether.
+Remark 3 (adjoint-row correspondence) . The Farkas multi-
+pliers of (ii) are the finite analogue of the adjoint safety rows of
+the continuous-to-finite bridge: a weight λj,k,i on the i-th floor
+row of branch j at step k plays the role of an adjoint variable
+on a continuous-time safety row, the vanishing aggregate con-
+trol projection is the pooled adjoint condition, and the negative
+aggregate constant is the certificate margin. The control coef-
+ficients of Example 2 cancel pairwise within each level, which
+is the discrete image of the pooled adjoint rows’ cancellation.
+The bridge to continuous time — error-controlled sampling of
+these programs — is developed in a companion work.
+Figure 2: Delayed information. The constraint margin q
+reaches zero at t∗ = q0/ε, before the first informative obser-
+vation at Tobs: the information is accurate but arrives too late
+(Theorem 3).
+3.4 The sparse finite witness
+Proposition 4 (sparse common-action witness) . Let B ⊆ V
+be an information set, U (x) ⊆ U with U ⊆ Rm compact and
+convex and U (x) convex and closed, let the dynamics be aﬀine
+in the control, f (x, u, d) = f0(x, d)+ fu(x, d) u, with D(x) com-
+pact, and let V have C 1 constraint functions qj. Then each
+safe-control set RV (x) is a compact convex subset of U , and the
+safety-case common-action obstruction ⋂
+x∈B RV (x) = ∅ holds
+if and only if it is witnessed by at most m+1 compatible states:
+there exist x1, . . . , xm+1 ∈ B with ⋂m+1
+i=1 RV (xi) = ∅. The
+admissibility analogue (with RV (x) replaced by U (x)) holds
+under the same convexity assumptions.
+Proof. For fixed (x, j, d) the inequality ∇qj(x) · f (x, u, d) ≥
+0 is aﬀine in u, so RV (x), an intersection of closed halfspaces
+(over active j and d ∈ D(x)) with the closed convex U (x), is
+closed and convex; contained in the compact U , it is compact.
+If the intersection over all x ∈ B is empty, then by compact-
+ness some finite subfamily of {RV (x)}x∈B already has empty
+8
+intersection, and by the finite Helly theorem at most m + 1
+members suﬀice; the converse direction is immediate. □
+Scope. Both conclusions rest on convexity: the finite Helly
+theorem is what bounds the witness by m + 1 , and beyond
+convex safe-control sets neither the bound nor the finite check-
+ability of the certificate survives in general.
+A worked certificate (two floors, one scalar action).
+Two floors demand incompatible extraction rates on a single
+control u ∈ [0, 1]. At the compatible state x1 (floor 1 active)
+the safe controls are u ≤ 0.4; at x2 (floor 2 active) they are
+u ≥ 0.6. The observation merges x1 and x2, so a common safe
+action must satisfy both. Writing the constraints as Au ≤ b
+with A = (1 , −1)⊤ and b = (0 .4, −0.6)⊤, the stacked system
+u ≤ 0.4, −u ≤ − 0.6 is infeasible; the Farkas certificate is
+λ = (1/2, 1/2) (normalized, ∥λ∥1 = 1), for which λ⊤A = 0 and
+λ⊤b = −0.1 < 0. Under the normalization ∥λ∥1 = 1, the mag-
+nitude |λ⊤b| = 0 .1 is the infeasibility margin of the stacked
+system, shrinking to zero exactly as the two safe-action sets
+come to touch. The multiplier exhibits the contradiction as
+a convex combination of the two floor constraints: no com-
+mon extraction rate respects both floors, and any observation
+that separates x1 from x2 restores one-step viability (Figure 1).
+With m = 1, the two incompatible states are exactly the m+1-
+state witness of Proposition 4.
+Scope of the convexity hypotheses. Convexity is essen-
+tial to the witness: without it the bound fails even in a single
+control dimension. Take U = R (m = 1 ) and three nonconvex
+safe-action sets R1 = {0, 1}, R2 = {0, 2}, R3 = {1, 2}. Each
+pair intersects (R1 ∩R2 = {0}, R1 ∩R3 = {1}, R2 ∩R3 = {2}),
+yet the three-way intersection is empty, so no (m+ 1) = 2-state
+witness exists. The convexity hypotheses of Proposition 4 ex-
+clude exactly this failure mode.
+Scope of the count: instantaneous actions, not
+window-policies. The m + 1 bound counts independent in-
+stantaneous decisions: it applies to a common action u ∈ U ⊆
+Rm, and it fails for common blind control functions. Parti-
+tion a blind window into Q blocks I1, . . . , IQ and let q + 1
+branches be indistinguishable throughout, with scalar input
+(m = 1 ): branch j ≤ q evolves as ˙xj = 1Ij (t)(u − 1) from
+xj(0) = 0 under the floor xj ≥ 0, which forces u ≡ 1 on every
+block (each wj =
+∫
+Ij
+u dt = 1 ), while branch q + 1 evolves as
+˙xq+1 = −u from xq+1(0) = q − ε under the same floor, forcing∑
+j wj ≤ q − ε. Summing the forced withdrawals gives 0 ≤ −ε:
+the full system is infeasible, while removing any single branch
+restores feasibility ( u ≡ 1, or u = 0 on the dropped branch’s
+block and 1 elsewhere), so every obstruction involves all q + 1
+branches — far more than m + 1 = 2 . The adjoint kernels
+here are the block indicators, of rank q: for window-policies
+the governing count is the information–time rank, and sparsity
+claims for review-interval and delayed-sensing certificates must
+be stated in the block dimension mQ, not the instantaneous di-
+mension m (cf. the block structure of the delayed-information
+check in Section 8).
+3.5 The finite-time exit certificate
+The base obstruction operates before any observation-theoretic
+argument: it certifies membership in the full-information
+“shadow” — the complement of the viability kernel (Aubin,
+2001; Aubin and Catté, 2002). It is a drift condition under
+which no control — of any information structure — can be
+viable. Put in management terms, when the dynamics them-
+selves force exit before any control can react, no monitoring
+design can rescue viability, and the certification problem is
+closed without observation-theoretic reasoning.
+Theorem 5 (finite-time exit certificate) . Let q : X → R be a
+constraint function of class C 1 — the class assumed through-
+out the exit theorems — with V ⊆ { q ≥ 0}, and suppose the
+following hypotheses hold.
+(H5.1) There exist constants a > 0 and ε > 0 such that on
+the strip Sa = {x : 0 ≤ q(x) ≤ a},
+sup
+u∈U (x)
+inf
+d∈D(x)
+D+q(x; f (x, u, d)) ≤ − ε ∀x ∈ S a, (4)
+where D+q(x; v) = lim sup h↓0[q(x + hv) − q(x)]/h is the upper
+right Dini derivative of q in direction v (for C 1 q, D+q(x; v) =
+∇q(x) · v — the form the proof uses).
+(H5.2) Closed-loop existence of the adverse realiza-
+tion. The disturbance correspondence is lower semicontin-
+uous, or constant, on the strip, so that the state-dependent
+adverse selection constructed in the proof is realized by an ad-
+missible control–disturbance pair for which the Carathéodory
+existence theorem applies. (Alternatively, without (H5.2), the
+certificate is read against the convexified (relaxed) inclusion
+˙x ∈ co f (x, u(t), Dε(x, u(t))), which admits solutions under
+Marchaud-type conditions and preserves the drift inequality
+because, for C 1 q, the directional derivative ∇q(x) · v is aﬀine
+in the velocity; closure and relaxation are the standard tools
+for this step.)
+Then, under hypotheses (H5.1)–(H5.2), for every admissible
+control and every initial state x0 ∈ S a there exists an admissi-
+ble disturbance realization under which the trajectory attains
+q(x(t)) < 0 — hence leaves {q ≥ 0} ⊇ V — by every time
+strictly larger than q(x0)/ε: inf{t : q(x(t)) < 0} ≤ q(x0)/ε, in
+particular within time at most a/ε (since q(x0) ≤ a). (Con-
+vention, used in both exit theorems: violation is the strict in-
+equality q < 0; at q = 0 the state may still lie on ∂V ⊆ V .)
+Proof sketch. Fix an admissible control. By (4), the adverse-
+selection correspondence Dε(x, u) has nonempty values on the
+strip; its closed graph and compact values (Section 2.1) yield
+a measurable selection d(·), realized in closed loop by (H5.2).
+The fundamental theorem of calculus integrates (4) along the
+resulting trajectory to q(x(t)) ≤ q(x0) − εt, so q attains the
+strict violation q < 0 by time q(x0)/ε ≤ a/ε.
+Remark 4 (comparison-function form) . Hypothesis (H5.1)
+uses a constant drift margin ε. The certificate extends to state-
+dependent decline: if there is a continuous α : (0 , a] → (0, ∞)
+with
+sup
+u∈U (x)
+inf
+d∈D(x)
+D+q(x; f (x, u, d)) ≤ −α(q(x)) ∀x ∈ S a,
+then the exit-time bound sharpens to
+texit ≤
+∫ q(x0)
+0
+ds
+α(s) ,
+whenever the integral is finite. The proof replaces the linear
+comparison q(x(t)) ≤ q(x0) − εt with the solution r of ˙r =
+−α(r), r(0) = q(x0), by the standard comparison argument. If
+α(0) = 0 and the integral diverges, the conclusion weakens to
+asymptotic approach rather than finite-time exit; the constant-
+margin case α ≡ ε is the sharp finite-time instance.
+Two readings of (4) matter. First, it is an Isaacs-type con-
+dition: the disturbance chooses after the control, so the certifi-
+cate asserts that the disturbance can enforce exit against any
+policy. Second, (4) is an outward-drift certificate dual in spirit,
+but not logically complementary, to an inward barrier condition.
+The pointwise robust barrier reading is supu inf d D+q ≥ 0 —
+some control keeps the drift inward against every disturbance
+— and the two conditions leave an unresolved intermediate
+region in which neither holds (Section 6.2). Theorem 5 is the
+“unsafety” side of that duality, and it is unconditional: it needs
+no observation argument because it defeats all controls, includ-
+ing clairvoyant ones.
+9
+3.6 Epistemic emptiness by admissibility: a mini-
+mal construction
+The admissibility obstruction applies to systems in which every
+state is individually viable under full information and the ker-
+nel empties only under the observation structure. The minimal
+construction of this section empties the kernel through admis-
+sibility — a state-dependent control set whose common ac-
+tion is forced and unsafe at the boundary; the common-action
+obstruction of Section 3.2 and Example 1’s hidden-parameter
+conflict are the informational cases proper, merging states with
+incompatible safe controls. In ecological terms, each stock is
+manageable on its own; the failure arises because the indicator
+cannot tell the manager which stock is present.
+Proposition 5 (epistemic emptiness by admissibility —
+a minimal construction) . There exists a system with
+Viab(V; U, πperf ) = V ̸ = ∅ such that, for a non-injective ob-
+servation map O, every admissible initial information state —
+the observation fibres B0 = O−1(O(S0)), S0 ∈ V — lies out-
+side ER ViabI(V): the epistemic kernel over the fibre-induced
+initial beliefs is empty. The mechanism is admissibility rather
+than a hidden mode: the state-dependent control set of the
+construction leaves a single common action at the merged be-
+lief — one that is outward-drifting at the boundary state — so
+the emptiness is the common-action obstruction (Theorem 2’s
+safety case) at minimal size, produced by the control-set prim-
+itive rather than by information; the hidden-mode instance is
+Example 1.
+Proof sketch (construction). Take X = [1 , 2], ˙S = u − r(S)
+with r continuous and injective, U (S) = {0, r(S)}, V = [1 , 2],
+and the constant observation O ≡ 0. Under full information
+u = r(S) gives ˙S = 0 , so every state is viable. Under O ≡ 0
+the common control set over the fibre is {0} — injectivity of
+r rules out a common r(S) — so the policy must hold u = 0 ,
+and ˙S = −r(S) < 0 drives every compatible trajectory out of
+V in finite time.
+The construction is the minimal instance of Theorem 2’s ad-
+missibility mechanism — with a constant control set in the
+same plant the fibre is epistemically viable — so the empty-
+kernel phenomenon is epistemic rather than dynamic; the com-
+plete isolation of the mechanism is given in the Supplementary
+Material (S1).
+3.7 A recourse certificate for the post-observation
+mode
+The certificates of the preceding subsections fire before infor-
+mation discriminates: the common-action obstruction is in-
+stantaneous (Section 3.2) and the timing obstruction exits
+within the blind window (Section 3.3, Remark 2). Section
+6.5(ii) isolates the complementary mode: insuﬀicient post-
+observation recourse. In that mode a common blind-window
+control keeps every branch safe, yet no observation-adapted
+control can recover every branch once the distinguishing obser-
+vation arrives; the discrete instance of Supplementary A.3 ex-
+hibits the mode while no certificate fires. This subsection sup-
+plies a continuous-time certificate for the mode. Its soundness
+covers every measurable information-adapted policy. Com-
+pleteness is not claimed, because the certificate relaxes the
+post-observation class upward: an oracle grants each stored
+branch its own controller whether or not the sensor reveals
+that much, and an oracle failure is only a suﬀicient condition
+for real failure.
+Proposition 6 (oracle-recourse obstruction) . Let the dynam-
+ics be aﬀine in the control, f (x, u, d) = f0(x, d) + B(x) u, with
+compact convex U ⊆ Rm, and let branches x1, . . . , xL ∈ B0
+be observation-equivalent on [0, τ) with horizon T > τ (dis-
+turbances admitted, D compact). Fix a label ℓ = ( θ, j, t) —
+branch θ, constraint j, time t ∈ (τ, T ] — and a disturbance
+realization d(·). Let ¯xd
+θ(·) denote branch θ’s zero-control re-
+alization under d(·), X d
+θ (·, ·) its state-transition matrix, and
+Bd(σ) := B(¯xd
+θ(σ)). Define the input kernel
+kd
+ℓ (σ) = 1{σ≤t}
+(
+Bd(σ)
+)⊤(
+X d
+θ (t, σ)
+)⊤
+∇qj
+(
+¯xd
+θ(t)
+)
+,
+let βd
+ℓ = qj
+(
+¯xd
+θ(t)
+)
+denote the zero-control facet margin at the
+label, and write ϕU (g) := min v∈U g⊤v. For weights λℓ ≥ 0,∑
+ℓ λℓ = 1, define the recourse certificate
+Γh(λ) = inf
+d(·)
+{ ∑
+ℓ
+λℓβd
+ℓ +
+∫ τ
+0
+hU
+( ∑
+ℓ
+λℓkd
+ℓ (σ)
+)
+dσ
++
+∑
+ℓ
+∫ T
+τ
+hU
+(
+λℓkd
+ℓ (σ)
+)
+dσ
+}
+,
+with hU (g) := max v∈U g⊤v the support function of U ; the in-
+fimum runs over admissible disturbance realizations (for aﬀine
+dynamics each bracket is computable in closed form by varia-
+tion of constants). If Γh(λ) < 0, then B0 /∈ ER ViabI(V): some
+stored facet is violated along some branch, for every policy in
+the stated class and every branch selection.
+Proof sketch. Fix a disturbance realization attaining the
+infimum and any admissible policy. Variation of constants ex-
+pands the weighted facet sum at the stored labels into the
+β-term, the window pairing (one common measurable signal
+on [0, τ), by the blind-window reduction of Theorem 3), and
+the branch pairings (separate post-reveal signals); each realized
+pairing is bounded above by the corresponding support value,
+so the weighted facet sum is at most Γh(λ). A strictly nega-
+tive weighted sum forces some facet value strictly negative —
+the facet is violated along its branch — and the window signal
+was arbitrary, so every policy in the class fails. The complete
+proof, the comparison with the attainment-special ϕU -variant,
+and the position of the pooling weights are given in the Sup-
+plementary Material (S1). □
+Example 3 (three branches, delayed recourse) . A planar
+braking instance in which the obstruction is purely one of
+post-observation recourse. Branches j = 1 , 2, 3 run ˙p = v,
+˙v = u (no disturbance) from pj(0) = 34
+25 nj, vj(0) = nj,
+where n1 = (1 , 0), n2 = ( − 3
+5 , 4
+5 ), n3 = ( − 3
+5 , − 4
+5 ); the actu-
+ator set is U = conv {±n1, ±n2, ±n3} (the hexagon |u2| ≤ 4
+5 ,
+|2u1 ±u2| ≤ 2); safety is n⊤
+i p ≤ 2 for i = 1, 2, 3 with ∥v∥∞ ≤ 6
+5 ;
+the realized branch is revealed at time τ . Every branch is vi-
+able under full information — brake along −nj for one sec-
+ond; peak critical position 34
+25 + 1
+2 = 93
+50 < 2 — and u ≡ 0
+keeps every branch strictly safe through any blind window of
+length up to 16
+25 (n⊤
+j pj(τ ) = 34
+25 + τ ): no instantaneous or blind-
+window certificate fires. Yet the label (j, n ⊤
+j p ≤ 2, τ +1) along
+branch j has zero-control margin βj = 16
+25 − τ − 1 and kernel
+1{σ≤τ +1}(τ + 1 − σ)nj; the weights λ = ( 3
+8 , 5
+16 , 5
+16 ) pool the
+pre-observation kernel to zero, and the certificate evaluates to
+Γh(τ ) =
+(
+16
+25 − τ − 1
+)
++
+∑
+j
+λj
+∫ τ +1
+τ
+(τ + 1 − σ) dσ = 7
+50 − τ,
+the pooled pre-observation kernel vanishing under λ and each
+post-reveal branch’s pairing bounded by its support value( ∑
+j λj/2 = 1
+2
+)
+. For τ > 7
+50 the certificate fires and the triple
+is nonviable — the blind window accumulates braking liability
+that the post-observation authority cannot discharge on every
+branch at once — while the hold-then-brake policy ( u = 0 ,
+then −nj for one second) is safe exactly to τ = 7
+50 = 0.14: the
+threshold is exact. The obstruction is genuinely three-way: at
+τ = 1
+5 , every pair of branches is jointly viable under a com-
+mon blind control (worst critical positions 2469
+1250 = 1 .9752 and
+2419
+1250 = 1.9352, both below 2), so six of the seven nonempty pri-
+ors over these branches are viable at a delay where the triple is
+10
+not. The discrete analogue in which no certificate fires is Sup-
+plementary A.3; here the certificate fires, Γh( 1
+5 ) = − 3
+50 < 0.
+The certificate is deliberately asymmetric, like the calculus
+it joins: it is sound against every measurable policy of the in-
+formation class, its stored labels are finite and independently
+checkable (exact arithmetic throughout the instance above),
+and its incompleteness is explicit — a complete continuous-
+time characterization of the recourse mode remains open (Sec-
+tion 6.5(ii)).
+4. Certification Limits
+4.1 Exact certification and the fibre criterion
+The obstruction theorems of Section 3 concern policies. Sus-
+tainability governance also uses certificates: verdicts — safe
+or unsafe — computed from observations alone, without refer-
+ence to a policy. The question is when such verdicts can be
+exact. For a manager operating under partial ecological infor-
+mation, the question is whether an indicator reading alone can
+ever settle whether the system is on the safe side of a specified
+floor.
+Definition 2 (exact certifier) . For an admissible domain Z ⊆
+X and a safe set K ⊆ Z, an exact certifier based on the
+observation map O : Z → Y is a function C : Y → {0, 1} such
+that
+C(O(z)) = 1 ⇐ ⇒ z ∈ K for every z ∈ Z.
+Proposition 7 (observation-fibre criterion). An exact certifier
+based on O exists if and only if membership in K is constant
+on every observation fibre:
+O(z1) = O(z2) = ⇒
+[
+z1 ∈ K ⇐ ⇒ z2 ∈ K
+]
+∀z1, z2 ∈ Z,
+(5)
+equivalently, K = O−1(O(K)) on the admissible domain.
+Proof sketch. If C exists and O(z1) = O(z2), then 1K (z1) =
+C(O(z1)) = C(O(z2)) = 1K (z2), so membership is fibre-
+constant. Conversely, (5) makes C(y) = 1K (z) for any z with
+O(z) = y well defined and exact.
+The fibre criterion concerns static classification — whether
+membership in a safe set factors through the observation — and
+applies verbatim to three distinct certification problems, which
+should not be conflated: constraint certification ( K = V), ro-
+bust viability certification ( K = R Viab(V)), and policy-specific
+safety certification ( K = Safe Π
+T ). The same theorem governs
+all three, but its governance meaning differs. The criterion is
+the zero-step, label-valued analogue of the common-action test:
+an observation-based verdict assigns a single label to an entire
+fibre, exactly as an observation-based action assigns a single
+action to an entire belief, so both are selector problems. They
+remain distinct — a fibre may fail exact certification while a
+policy is still viable, and exact static certification does not im-
+ply dynamic viability; hence certification is treated as a layer
+separate from viability throughout.
+Corollary 1 (safety-crossing fibres and the certainly-safe set) .
+If two admissible states share an observation and lie on opposite
+sides of the same component safety constraint — with the safe
+set of that certification problem read as the single floor K =
+{qj ≥ 0}; or, in the general form of the hypothesis, one of
+the two states lies in K and the other outside K — no exact
+observation-only certificate exists. (Crossing one floor of an
+intersection K = ⋂
+j{qj ≥ 0} does not by itself put the pair on
+opposite sides of the intersection — the state satisfying floor
+j may violate floor i — hence the single-floor scoping.) The
+largest set of observations that can soundly be labeled safe
+without further information is the certainly-safe set
+Ysafe =
+{
+y ∈ O(Z) : O−1(y) ⊆ K
+}
+.
+Proof sketch. A fibre containing one state in K and one
+outside violates (5), so Proposition 7 denies the certifier. On
+Ysafe every compatible state is safe, so the constant verdict
+“safe” is sound; outside it some compatible state is unsafe, so
+no sound “safe” verdict exists.
+The governance reading: a composite index whose fibres
+cross a floor boundary cannot support an exact certification
+of that floor, however carefully it is thresholded; the certainly-
+safe set is the sound region where the index may certify safety,
+outside which it must fall silent. The complete discussion, with
+the fibre figure, is given in the Supplementary Material (S1).
+4.2 The certainty-equivalence trap
+The obstruction of Proposition 5 relies on a non-injective ob-
+servation — information lost. The same emptying occurs with
+a fully injective observation for a single policy: the canon-
+ical certainty-equivalence controller that applies a perfect-
+information law to the uncorrected observation.
+Remark 5 (the certainty-equivalence trap) . Consider ˙S =
+u − g(S) with u ∈ [0, ¯u], g strictly increasing on [Smin, S∗ + b],
+g(0) = 0 , and V = [ Smin, S∗]. Assume the range condition
+g(S + b) ≤ ¯u for every S ∈ [Smin, S∗], so that the controller
+below is admissible. Under perfect information the zeroing
+feedback u(t) = g(S(t)) gives ˙S = 0 , so every S0 ∈ V is vi-
+able and Viab(V; U, πperf ) = V ̸ = ∅. Now take the injective,
+biased observation ˆS = S + b with b > 0, and the canon-
+ical certainty-equivalence controller: the perfect-information
+zeroing law applied directly to the uncorrected observation,
+u = g( ˆS) = g(S + b). Then
+˙S = g(S + b) − g(S) > 0 ∀S,
+and since g is strictly increasing on the compact interval
+[Smin, S∗ + b], ˙S is bounded below by a positive constant there;
+hence S strictly increases and exits above S∗ in finite time from
+every S0 ∈ V : the kernel of this single controller is empty. The
+bias-corrected controller u = g( ˆS − b) = g(S) uses the obser-
+vation map’s structure, restores ˙S = 0 , and keeps the kernel
+nonempty.
+The mechanism is a failure of one policy to use the ob-
+servation map’s structure , not a loss of information: for a
+known invertible observation the output-feedback class is as
+powerful as the state-feedback class. The phenomenon is the
+viability-theoretic analogue of Witsenhausen’s counterexample
+in stochastic control (Witsenhausen, 1968): the information
+pattern — not the dynamics and not the constraint — de-
+feats the uncorrected controller. The remark is policy-specific;
+it does not assert that the entire certainty-equivalence class
+empties the kernel.
+5. The Suﬀiciency Landscape
+For contrast, we record the suﬀiciency results against which
+the obstruction calculus is defined; the proofs are in the cited
+sources.
+(a) V eliov’s output-feedback condition. Veliov (1993)
+gives a suﬀicient condition for the existence of an output-
+feedback regulation map under incomplete and inexact mea-
+surement, reducing under perfect measurement to the classi-
+cal viability condition (Haddad, 1981). Veliov’s theorem cer-
+tifies existence; the obstruction calculus certifies nonexistence;
+a problem satisfying neither requires a stronger observer or a
+finer observation structure.
+(b) The estimation-tube programme. Cardaliaguet,
+Quincampoix, and Saint-Pierre (2007) pass from imperfect in-
+formation in the measurement space to perfect information in
+an estimation space of sets of compatible states, with equal-
+ity of value functions and a Dini-derivative characterization.
+11
+Under the set-membership semantics the estimation-space so-
+lution propagates the belief under a single control signal, so
+its controls are common controls; the common-action obstruc-
+tion (Theorem 2) is the certificate that no jointly admissible
+selection exists at the information state in question (Section
+6.3).
+(c) Observer-and-buffer transfer. If a full-information
+feedback exists with a strict inward margin and an observer
+supplies exponentially convergent estimates, output feedback
+of the estimate preserves safety on a buffered subset (observer-
+to-viability transfer with safety buffer; Sontag, 1998), and
+eroded kernels remain invariant under bounded estimation and
+implementation errors (erosion absorbs the error). Under mar-
+gins and convergence, output feedback can work; Sections 3–4
+state when it cannot.
+(d) The linear substitution alternative. For a finite
+linear model in which a resource-typed system must meet a
+demand vector through specified substitution pathways, ex-
+actly one of the following holds (Farkas, 1902; Gale, 1960): (i)
+there exists a non-negative pathway vector a ≥ 0 satisfying
+the linear substitution constraints; or (ii) there exist multipli-
+ers α, β, γ ≥ 0 with
+α⊤R + β⊤E − γ⊤Q ≥ 0 componentwise,
+γ⊤sreq > α ⊤x + β⊤e.
+The second statement is a separation certificate that the path-
+ways cannot meet demand within the typed resource and
+capacity bounds — the feasibility-side complement of the
+observation-side obstructions of Sections 3–4.
+6. Discussion
+6.1 The shape of the calculus
+The six mechanisms form a nonexhaustive taxonomy of
+information-theoretic failure. Table 1 collects the certificates,
+the response correspondence each one empties, and the design
+consequence each one licenses.
+The exit certificate (Theorem 5) is the dynamic obstruction:
+it defeats all controls, so it needs no observation argument. The
+epistemic-emptiness construction (Proposition 5) exhibits the
+mechanism at minimal size — one scalar state, two admissible
+controls, one constant observation — in the admissibility form
+of Section 3.6. The common-action obstruction (Theorem 2) is
+the static obstruction: it defeats all policies at a single informa-
+tion state. The delayed-information obstruction (Theorem 3)
+interpolates between them in time. The fibre criterion (Propo-
+sition 7) is the certification obstruction: it limits not policies
+but verdicts. The certainty-equivalence trap (Remark 5) limits
+a single uncorrected policy. Finite-horizon completeness (The-
+orem 1) supplies the exact finite-setting counterpart of these
+suﬀicient certificates.
+A governance failure of observation can be diagnosed by
+which certificate applies. If the exit certificate holds, no mon-
+itoring design helps — the dynamics are adverse under every
+control. If only the common-action obstruction holds, the rem-
+edy is a finer observation structure (an informative measure-
+ment distinguishing the incompatible states). If the delayed-
+information obstruction holds with a slack timing bound, the
+remedy is a shorter review interval or a faster indicator. If
+the fibre criterion fails, the remedy is an observation that sep-
+arates the sides of the floor rather than a better threshold on
+the aggregate.
+6.2 Relation to barrier certificates
+Barrier certificates certify safety from a scalar function whose
+zero level set separates the unsafe region from all trajectories
+(Prajna and Jadbabaie, 2004; Prajna, Jadbabaie, and Pappas,
+2007); the converse, under convex-duality conditions on density
+functions, is Prajna and Rantzer (2005), and necessary-and-
+suﬀicient hybrid characterizations are Maghenem and Sanfe-
+lice (2019). Theorem 5 is the unsafety complement of that
+converse, not its observation-theoretic counterpart: a Dini-
+drift certificate of unsafety needing no observation structure,
+constructive in the enforcing disturbance and exit time. The
+remaining certificates (Proposition 5, Theorem 2, Theorem 3,
+Proposition 7) act at the level of the information set itself: bar-
+rier constructions presuppose a state — or a specified state es-
+timate — for feedback, whereas the common-action and timing
+obstructions certify the emptiness of the common safe-action
+set at a given information state, which barrier methods do not
+address.
+6.3 Relation to the estimation-tube programme
+The estimation-tube programme shows that imperfect mea-
+surement can be absorbed into set-valued dynamics on an es-
+timation space with no loss in value (Cardaliaguet, Quincam-
+poix, and Saint-Pierre, 2007); the present theorems delimit its
+reach rather than contradict it. The reduction preserves values,
+and its belief-state controls are common controls; the obstruc-
+tion calculus is the local certificate layer of that programme —
+the common-action obstruction certifies that the belief-state
+predecessor is empty, the timing bound quantifies when it fails
+for reasons of information arrival, and the fibre criterion states
+when no observation-based verdict can be exact. Belief-space
+viability answers whether; the obstruction calculus answers why
+not, and what to change . A single worked system carrying the
+three methods side by side — barrier certificate, estimation-
+tube reduction, and obstruction certificate — is given in the
+Supplementary Material (S2).
+6.4 Consequences for monitoring and indicator de-
+sign
+Five consequences follow directly from the certificates. Each
+translates a formal impossibility into a concrete design speci-
+fication for monitoring systems under partial ecological infor-
+mation.
+Timing. Theorem 3 gives the minimal monitoring fre-
+quency in closed form: the first informative observation must
+precede the enforced exit time inf q/ε. A review interval longer
+than the worst-case time from the most-constrained compatible
+state — the minimum- q state, which has the least constraint
+slack — to constraint violation is an information structure un-
+der which the violation is undetectable in time, whatever the
+review then concludes. The bound is computable from the
+drift certificate (2), which a robustness analysis computes in
+any case.
+Coarseness. Theorem 2 states that an observation struc-
+ture merging two compatible states with incompatible safe con-
+trols is nonviable at that information state , even though both
+states are viable in isolation. The design consequence is that
+the observation must separate safety classes, not states: an
+indicator is exposed to Theorem 2’s obstruction when some
+observation fibre crosses the safe-control partition of the state
+space — merging states whose safe controls differ is what the
+theorem certifies, and keeping every fibre within a single class
+is what removes that exposure; refinement is never harmful
+(a finer observation merges nothing the coarser one did not),
+though Theorem 2 claims no benefit beyond the removal, and
+other mechanisms may still certify nonviability on a finer par-
+tition.
+Aggregation. Proposition 7 and Corollary 1 apply ver-
+batim to composite indices, which are observation maps from
+the system state to a scalar. An index whose fibres cross a
+floor boundary cannot support exact floor certification; the
+12
+Certificate Emptied response
+correspondence
+Design consequence (Section 6.4)
+finite-time exit (Theorem 5) the response set of some
+compatible state, even
+under full information
+none — dynamics, not
+information
+admissibility (Proposition 5) U B(B) = ∅ enlarge the command set
+common action and tube (Theorem 2, Proposition 2) RB
+V (B) = ∅,
+Atube(B, ∆) = ∅
+a separating observation; a
+shorter review interval
+delayed information (Theorem 3, Remark 2) σ∗(B0) < T obs an earlier informative observation
+fibre certification (Proposition 7, Corollary 1) K ̸= O−1(O(K)) a refined index; per-floor
+measurement
+certainty equivalence (Remark 5) kernel of the uncorrected
+controller u = g( ˆS) is
+empty
+correct the known bias
+finite-horizon recursion (Theorem 1) B0 /∈ W N exact characterization (Section
+3.1)
+T able 1: The obstruction certificates, the response correspondence each one empties, and the design consequence each one
+licenses. The first six are sound suﬀicient conditions for nonviability; the last is the exact finite-horizon characterization.
+certainly-safe set is the domain in which an index-based verdict
+is sound. Where separately-binding floors matter, exact certifi-
+cation requires an observation that separates every admissible
+pair on opposite sides of a floor (per-floor measurement is one
+suﬀicient design), a formal complement to the thesis, argued
+informally since Martinez-Alier, Munda, and O’Neill (1998),
+that weakly comparable values cannot be fused into one met-
+ric without loss. The requirement is sharpest where the floor
+constrains the productive base rather than its output: an ag-
+gregate of services can read at full level while the base regen-
+erating them is reduced beneath it, and only an observation
+reaching the base itself can detect the discrepancy.
+Bias. Remark 5 shows that the loss need not be in the mea-
+surement: a biased indicator with an uncorrected certainty-
+equivalence policy empties the epistemic kernel of a system
+whose perfect-information kernel is nonempty. Monitoring
+therefore has two obligations — bounding the observation er-
+ror and supplying the correction — and the second lies entirely
+at the governance structure’s discretion: the indicator is pub-
+lished, the correction is not applied, and the kernel empties
+although the information was suﬀicient.
+Institutions. The hierarchy of Section 2.1 records that
+epistemic contraction is one of three causes of kernel shrinkage,
+the others being disturbances and institutional restriction (au-
+thority, enforcement, allocation). The epistemic-institutional
+kernel IR ViabJ (V) (Section 2.1) combines them: an institution
+restricted in what it may observe and in what it may command
+inherits both contractions. The obstruction calculus character-
+izes the first; its certificates remain valid, and typically tighten,
+when the institution’s command set is further restricted, since
+restriction of the action correspondence can only empty kernels,
+never create them (one-sided monotonicity of viability under
+correspondence restriction).
+Proposition 8 (monotonicity of the epistemic kernel) . The
+robust epistemic kernel is monotone in its constituents: en-
+larging the action sets, reducing the disturbance sets, refining
+the information structure, or enlarging the policy class never
+shrinks the kernel. Writing ER Viab· for the kernel with the
+indicated constituent, U1 ⊆ U2, D1 ⊆ D2, Π1 ⊆ Π2, and “ I1
+refines I2” imply respectively
+ER ViabU1 ⊆ ER ViabU2 , ER ViabD2 ⊆ ER ViabD1 ,
+ER ViabΠ1 ⊆ ER ViabΠ2 , ER ViabI2 ⊆ ER ViabI1 .
+Proof sketch. A policy viable under the smaller action sets,
+larger disturbance sets, smaller policy class, or coarser infor-
+mation structure remains admissible and nonanticipative un-
+der the corresponding enlargement or refinement, while the
+adversary’s options are unchanged or reduced; the same policy
+witnesses viability.
+6.5 Limitations
+The certificates are sound but not complete; several extensions
+are noted as open.
+(i) The continuous-time certificates of Sections 3.2–3.3 and
+3.5–3.7 are suﬀicient conditions for nonviability, not
+necessary-and-suﬀicient characterizations of the epistemic
+kernel (backward recursion is complete in the finite-
+horizon finite-system setting, Section 3.1); the middle
+ground (neither a Veliov-type condition nor an obstruc-
+tion certificate) is open. In continuous settings complete-
+ness would additionally require a measurable-selection
+theory beyond the explicit selections the certificates ex-
+hibit; completeness is therefore claimed only where back-
+ward recursion is exact (Section 3.1).
+(ii) The timing obstruction of Theorem 3 (and its threshold
+form, Remark 2) certifies failure by exit before the first
+informative observation. It is blind to the complementary
+mode of nonviability — insuﬀicient post-observation re-
+course — in which a common blind-window control keeps
+every compatible branch safe, yet no observation-adapted
+control can recover every branch once the distinguishing
+observation arrives; the finite-horizon recursion (Section
+3.1) captures that mode exactly, and the oracle-recourse
+certificate of Section 3.7 certifies it in continuous time
+— soundly against every measurable information-adapted
+policy under an oracle relaxation of the post-observation
+class, with a worked three-branch instance whose de-
+lay threshold is exact; what remains open is a complete
+continuous-time characterization that does not relax the
+post-observation class. A discrete instance in which every
+one-step certificate is silent is given in the Supplementary
+Material (S3, A.3).
+(iii) The information-set semantics is set-membership; proba-
+bilistic or belief-space formulations require separate state-
+ments, although the common-action obstruction transfers
+mutatis mutandis to any semantics in which the policy
+must choose a single action per information state.
+(iv) The results are finite-dimensional and time-invariant; the
+delay-free setting makes the timing bound of Theorem 3
+sharp, and delay systems require the retarded extension of
+the Dini comparison argument (Hale and Verduyn Lunel,
+1993).
+(v) Theorem 5’s adversarial-realization step presupposes both
+the closed-graph regularity of Section 2.1 and the closed-
+loop existence hypothesis (H5.2) — D lower semicontinu-
+13
+ous or constant, or the convexified reading; without these
+the certificate remains a heuristic.
+(vi) The institutional consequences of Section 6.4 are design
+conclusions from the certificates, not empirical findings;
+their empirical testing belongs to applied studies.
+7. Complete Characterizations and the
+Residual Gap
+The certificates of Section 3 are sound suﬀicient conditions for
+nonviability, and Section 6.5 recorded that they do not ex-
+haust the complement of the epistemic kernel. This section
+makes that gap precise: it exhibits two settings in which the
+viability question admits an exact answer — the one-step (finite
+discrete) setting, where the common-action certificate is nec-
+essary and suﬀicient, and the static-observation setting, where
+the problem reduces exactly to open-loop robust viability —
+and states the residual dynamic gap as an open problem.
+Theorem 6 (one-step completeness). Let X, A, D, Y be finite,
+with transition x+ = F (x, a, d), observation y = O(x, a, x+),
+and safe set V ⊆ X. Define the one-step safe set
+S1(x) =
+{
+a ∈ U (x) : F (x, a, d) ∈ V for all d ∈ D(x)
+}
+.
+A belief B ⊆ V is one-step viable under I — some observation-
+based policy achieves x1 ∈ V for every x0 ∈ B and every ad-
+missible disturbance — if and only if ⋂
+x∈B S1(x) ̸= ∅. Hence
+B /∈ W 1 exactly when the common safe-action set is empty,
+the discrete reading of Theorem 2.
+Proof. (⇒) An observation-based policy depends on the
+record only, and every x ∈ B produced the same record, so the
+policy plays a single a ∈ U B(B); safety of the first step forces
+F (x, a, d) ∈ V for all x ∈ B and d ∈ D(x), i.e. a ∈ ⋂
+x∈B S1(x).
+(⇐) Playing any a in the intersection keeps every successor in
+V. □
+Combined with the backward recursion Wk+1 = Pre(Wk) of
+Theorem 1, Theorem 6 shows that the pair (common-action
+certificate, recursion) is a complete characterization at every
+finite horizon in finite systems: the certificate detects first-
+step emptiness, and the recursion propagates the obstruction
+to every later step.
+Theorem 7 (static-observation reduction to open-loop viabil-
+ity). Let V be compact with C 1 constraint functions qj, f con-
+tinuous with D compact-valued and of closed graph, U (x) ≡ U ,
+and suppose the observation is static: y(t) = O(x(t)) is con-
+stant along every admissible trajectory, so no information ac-
+crues over time. Then every observation-based policy coincides
+with an open-loop control — a measurable function of time
+only, u(·) : [0 , ∞) → U — and B0 ∈ ER ViabI(V) if and only if
+there exists an open-loop control under which every trajectory
+from every x0 ∈ B0 and every admissible disturbance realiza-
+tion stays in V for all time. Within the constant-control sub-
+class u(·) ≡ u0, the condition is the robust Nagumo boundary
+condition
+∇qj(x)·f (x, u0, d) ≥ 0 for all x ∈ ∂V, active j, d ∈ D(x),
+necessary for a constant control to keep V invariant and suﬀi-
+cient under the standard regularity assumptions (Aubin, 1991;
+Frankowska, 1989). A time-varying open-loop control may be
+viable when no constant control is; the open-loop reduction,
+not the constant-control condition, is the exact characteriza-
+tion in the static class.
+Proof. A static observation makes the record constant, so
+a policy’s action at time t can depend on time only — open-
+loop; this gives the reduction in both directions (a viable policy
+yields a viable open-loop control, and every open-loop con-
+trol is an admissible observation-based policy). The constant-
+control statement is the robust Nagumo theorem (Aubin, 1991;
+Frankowska, 1989): necessary, because any trajectory leaving
+V under u0 exhibits a boundary point with outward drift, and
+suﬀicient under the regularity assumptions. □
+Theorem 7 makes the sense of completeness in the static
+class precise: the obstruction is exactly the nonexistence of
+a robustly viable open-loop control, and within the constant-
+control subclass the boundary condition of Theorem 2 is nec-
+essary and suﬀicient. Completeness fails only when informa-
+tion accrues, where the residual modes are post-observation
+recourse and timing — the hidden-mode example and the tim-
+ing bound of Section 3.3.
+The static-observation theorem localizes where completeness
+can fail, and the failure admits a precise structure. Consider
+the two-phase model : a window of K blind steps followed by
+exact branch revelation and branch-adapted continuation, with
+declared blind class ΠB and full-information kernel R Viab(V)
+available after the reveal.
+Proposition 9 (exact two-phase decomposition) . In the two-
+phase model, B0 is viable if and only if (i) some declared
+blind control keeps every branch in V through step K, and (ii)
+some declared blind control satisfying (i) lands every branch
+in R Viab(V) at the reveal. Consequently, over any declared
+class on which the window certificates are complete — finite
+classes; polytope-declared classes, by Theorem 4 — the fol-
+lowing are equivalent: both certificates are silent; clause (i)
+holds; and either B0 is viable or its nonviability is exactly the
+post-observation recourse mode, the failure of (ii) for every
+window-surviving blind control.
+Proof sketch. A policy for the two-phase model is a blind
+part followed by an adapted part. After the reveal the infor-
+mation is complete, so an adapted continuation exists from a
+revealed state if and only if that state lies in R Viab(V); and
+the blind part succeeds only branchwise, since a branch leav-
+ing V before the reveal, or landing outside the kernel at it,
+kills viability upon that branch’s realization. This gives the
+equivalence. Completeness of the window certificates turns si-
+lence into clause (i), and the residual failure of clause (ii) is the
+recourse mode; the complete proof is in Supplementary S1.
+Proposition 10 (no window-measurable pair is complete) .
+Call a certificate pair window-measurable when its two verdicts
+depend only on the window sub-model: the initial belief, the
+branch transitions within the window, the floors, and the obser-
+vation schedule. Then no window-measurable pair is complete
+for the two-phase model: the three-state instance of Supple-
+mentary S3/A.3 and its variant agree on all window data, the
+certificates are silent in both, and yet one is nonviable ( x4 exits
+under every post-reveal action) while the other is viable ( x4 is
+maintained).
+Proof sketch. The two instances differ only in x4’s post-
+reveal transitions, so any window-measurable pair returns iden-
+tical verdicts — here, silence on both. The exact recursion de-
+cides differently: in the first instance every post-reveal action
+exits V, so x4 /∈ R Viab(V) and the belief misses W2; in the
+second x4 is maintained, lies in the kernel, and the belief is vi-
+able. Both computations are machine-verified in exact rational
+arithmetic (Supplementary S1, verification record). The resid-
+ual dynamic gap of Open Problem 1 is thereby narrowed to a
+definite target: any complete certificate pair for the dynamic
+class must read data beyond the window sub-model.
+Open Problem 1 (dynamic-observation completeness). Give
+a finite, checkable certificate that is necessary and suﬀicient
+for membership in ER ViabI(V) under dynamic observation be-
+yond the belief-space restatement below, or prove a separation
+14
+showing that none exists in a natural class. The belief-space
+restatement is: B0 ∈ ER ViabI(V) if and only if B0 belongs
+to the viability kernel of the set-valued belief dynamics under
+the observation constraint (Cardaliaguet, Quincampoix, and
+Saint-Pierre, 2007); this is a complete characterization on the
+infinite-dimensional space of compact beliefs, and the obstruc-
+tion calculus of Section 3 is its finite, certifiable layer.
+8. The Selector Principle, Dual Certifi-
+cates, and Monitoring Adequacy
+The certificates of Section 3 are stated mechanism by mecha-
+nism. This section records the one object they consolidate, the
+exactness class in which its emptiness is also complete, and the
+design converse; it adds no new certificate and modifies none.
+The selector. For a declared policy class, information
+structure, review length ∆, and horizon N , the recursively vi-
+able selector at information state B is
+ΓN (B) =
+{
+α : Reach [0,∆](B, α) ⊆ V
+and every successor belief B′ ∈ W N −1
+}
+,
+with W0 = {B ⊆ V} and WN = {B : Γ N (B) ̸= ∅} — the
+recursion of Theorem 1 — whose one-step factors are the ladder
+of Proposition 3. The principle: viability within a declared
+class is nonemptiness of this selector, and each certificate of
+Section 3 is a checkable witness that one factor of it is empty.
+Dual witnesses. The witnesses, by factor: the common-
+action factor RB
+V (B) = ∅, witnessed by the Farkas pair of
+Section 3.2 and, under convexity, by the m + 1-point sparse
+witness of Proposition 4; the tube factor, witnessed by the
+uniform-margin review obstruction of Proposition 2; the tim-
+ing factor, witnessed by the threshold form σ∗(B0) < T obs of
+Remark 2 and Theorem 3; finite-time exit, witnessed by the
+outward drift of Theorem 5 already at singletons; epistemic
+emptiness, witnessed by the minimal admissibility construc-
+tion of Proposition 5; certification failure, witnessed by a fi-
+bre meeting both K and K c, with the certainly-safe set of
+Corollary 1 (Proposition 7); and class restriction, witnessed by
+the certainty-equivalence trap of Remark 5 — the uncorrected
+law’s strictly positive drift against the corrected law’s nonpos-
+itive drift.
+Exactness class. Weak duality holds unconditionally: a
+dual witness certifies nonviability in the declared class. Strong
+duality — emptiness if and only if a witness exists — holds ex-
+actly in the classes of Theorem 6 (finite horizon, finite model),
+Theorem 7 (static observation), and the delayed class of Re-
+mark 6; beyond them the converse is Open Problem 1, open.
+The causes are not unified: dynamic exit empties the selector
+under full information and is not epistemic; the fibre results are
+limits on certification, not on policy viability (Section 4); the
+trap is a class restriction and can fire under injective observa-
+tion. Unifying the form while keeping the causes distinct is the
+strongest unifying statement the framework supports, and the
+companion unification statement carries the same discipline.
+Monitoring adequacy (the design converse). Ob-
+struction answers why nonviability is forced; design asks what
+must be measured. In the one-step exact class the converse is
+immediate: an observation structure is adequate on a target
+exactly when every fibre meeting the target has a nonempty
+common safe action — the partition form of the fibre crite-
+rion (Proposition 7); pairwise intersection is necessary and, off
+convexity, not suﬀicient (the three two-point codices of the
+companion monitoring paper). Four rules follow as identities
+on the audited systems. (i) Timing: on the delayed hidden-
+regime hold class, viability at deadline Tobs holds exactly when
+Tobs ≤ σ∗(B0) = z0 − 1, equivalently z0 ≥ 1 + Tobs; the bound-
+ary case z0 = 1 + Tobs is viable — the review must land no
+later than worst-case exit (Section ’s grid; the strict form fails
+at the boundary cell, as the verification script records). (ii)
+Coarseness: a fibre merging states with disjoint safe-action
+sets obstructs at that information state while every branch re-
+mains viable (Theorem 2); the remedy is a fibre split, not a
+finer threshold on the same index. (iii) Aggregation: an index
+whose fibres cross a floor cannot support an exact safe/unsafe
+verdict; report the certainly-safe set or fall silent (Corollary 1).
+(iv) Bias: the trap of Remark 5 empties a nonempty kernel
+under the uncorrected law; the remedy is structural correction
+of the observation map, not a better sensor. The consolidated
+statement, with every audited count cited to its system, is
+maintained in the supplementary material.
+9. A Calibrated Case Study and a Cover-
+age Audit
+We instantiate the three observation-side mechanisms on a con-
+crete resource model and audit the certificates against the ex-
+act recursion of Theorem 1. The model is a single-species stock
+S ∈ [0, 1] (fraction of carrying capacity) with discrete dynamics
+S+ = clip
+(
+S + S(1 − S) − u + w
+)
+,
+u ∈ [0, 0.3], w ∈ {−0.02, 0, +0.02},
+harvest u, recruitment noise w read adversarially, and a sus-
+tainability floor Smin = 0.3 (Clark, 1990).
+The fibre criterion. The regulator observes a coarse two-
+bin index, low if S < 0.6 and high if S ≥ 0.6. The safe set
+V = [0 .3, 1] is not a union of index bins: the low bin contains
+both 0.1 (below the floor) and 0.4 (above it). By Proposition 7
+no exact observation-only certifier exists, and by Corollary 1
+the certainly-safe set is the single bin Ysafe = {high}. A verdict
+of “safe” on the strength of a low reading is therefore unsound;
+the index can certify safety only when it reads high.
+T wo-dimensional aggregation. The fibre criterion also
+governs a multidimensional stock. Take a two-species state
+(S1, S2) ∈ [0, 1]2 with the floor S1 ≥ 0.4, and suppose the reg-
+ulator observes only the aggregate I = S1 + S2. The states
+(0.5, 0.5) and (0.2, 0.8) are both compatible with the reading
+I = 1.0, yet the first satisfies the floor and the second violates
+it, so by Proposition 7 no exact observation-only certifier exists;
+by Corollary 1 the certainly-safe readings are exactly I ≥ 1.4
+(the smallest S1 compatible with I is I − 1, so I − 1 ≥ 0.4).
+An aggregate reading below 1.4 must therefore fall silent, how-
+ever carefully thresholded — the two-dimensional form of the
+aggregation consequence of Section 6.4.
+The delayed-information timing bound. The timing
+obstruction is sharpest in the hidden-regime system of Section
+3.3: regimes θ ∈ {− 1, +1}, dynamics z+ = z + θu, controls
+u ∈ {− 1, +1}, floor z ≥ 1, with θ revealed only after a blind
+window of Tobs steps. From z0 = 2 the drift of q(z) = z − 1 on
+the declining branch is −1 under every admissible action, so the
+threshold of Theorem 3 and Remark 2 is σ∗(B0) = z0 − 1 = 1 :
+nonviability is certified for every Tobs > 1, while Tobs = 1 is
+viable — the regime is revealed in time, and u = θ then restores
+growth. In the fishery above the same certificate is silent in the
+normal regime, because u0 = 0 keeps every stock above the
+floor; the bound fires only when no blind action avoids decline,
+which is precisely its scope.
+The certainty-equivalence trap. With a biased index
+ˆS = S + 0 .1, g(S) = S2, and V = [1 , 2], the certainty-
+equivalence policy u = g( ˆS) produces ˙S = g(S + 0.1) − g(S) =
+0.2S + 0.01 > 0, which reaches the upper bound from S = 1 in
+15
+≈ 3.3 time units, while the bias-corrected policy u = g( ˆS − 0.1)
+keeps ˙S = 0 and the kernel nonempty (Remark 5).
+A reproducible delayed hidden-regime model. The
+audit runs on the exact instance specified here. The state is
+(z, θ) with θ ∈ {−1, +1} a hidden regime and z ≥ 0; the action
+u ∈ {− 1, +1} is common to both regimes; the transition is
+z+ = z + θu; the safe set is V = {z ≥ 1}; and the observation
+reveals nothing before Tobs and reveals θ exactly at time Tobs.
+From a known z0 with both regimes possible, the belief after
+k < T obs blind steps contains the two extreme histories (z0 −
+k, −1) and (z0 + k, +1), and a blind policy must choose the
+same u for both branches at every blind step. The guaranteed
+blind-window survival time is therefore σ∗(B0) = z0 − 1: the
+best blind policy drives one branch down at unit rate, so the
+declining branch reaches the floor 1 at time z0 − 1, and after
+the reveal u = θ keeps z ≥ 1 forever. Hence B0 is robustly
+epistemically viable if and only if z0−1 ≥ Tobs, i.e. z0 ≥ 1+Tobs
+— the ground truth against which the certificates are audited.
+The one-step certificate of Theorem 2 fires exactly when z0 < 2
+(one blind step already forces z0−1 < 1), and the timing bound
+of Theorem 3 fires exactly when z0 ≥ 2 and Tobs > z 0 − 1.
+A coverage audit. To quantify the gap identified in
+Section 6.5, we audit the certificates against the exact re-
+cursion on the delayed hidden-regime system, over the grid
+z0 ∈ { 1.0, 1.1, . . . ,2.5}, Tobs ∈ { 1, 2, 3}. Table 2 and Fig-
+ure 3 report the true verdict, the one-step certificate, and
+the timing bound. The audit is reproduced by the script
+paper2_coverage_audit.py, publicly available at https:
+//github.com/MIKEAA2020/general-sustainability (folder
+arena agent 1/paper rewrites/latex ), which regenerates
+Table 2 and Figure 3 verbatim.
+Remark 6 (joint completeness in the delayed class) . In every
+audited cell the true verdict is reproduced by exactly one of the
+two certificates: of the 42 nonviable cells, 30 are certified by the
+common-action certificate and the remaining 12 — precisely
+those with z0 ≥ 2 and Tobs > z 0 − 1 — by the timing bound;
+none is uncovered. In this class the two certificates are jointly
+complete, and the Section 6.5 gap reduces to the timing cells.
+Why joint completeness holds in this class. The ground truth
+is the identity B0 ∈ ER ViabI(V) ⇐ ⇒ z0 ≥ 1 + Tobs estab-
+lished in the reproducible-model paragraph above, so nonvia-
+bility holds exactly when z0 < 1 + Tobs. The two certificates
+partition that set: the common-action certificate fires exactly
+when z0 < 2, and the timing bound fires exactly when z0 ≥ 2
+and Tobs > z 0 − 1, that is 2 ≤ z0 < 1 +Tobs; the two conditions
+are disjoint and their union is {z0 < 1+ Tobs}. Every nonviable
+cell is therefore certified by exactly one certificate, so within the
+delayed hidden-regime class the pair (common-action, timing)
+is a complete characterization at every horizon, and the gap of
+Section 6.5 is exactly the timing cells.
+Calibration. The certificate parameters correspond to
+quantities estimable from standard stock-assessment practice:
+the drift margin ε is a net growth rate at the floor; the first
+informative observation time Tobs is the assessment or review
+periodicity; the bias b of the certainty-equivalence instance is
+the systematic error of the indicator; and the floor is the ref-
+erence point of the management rule. Calibrating these four
+numbers from a published assessment is all the machinery the
+certificates require; the present section stays symbolic, and the
+empirical calibration is left to applied studies.
+A two-patch protection audit. The aggregation obstruc-
+tion is not a one-dimensional phenomenon, and the certificates
+read it directly in two dimensions. Two patches i ∈ {1, 2} carry
+stocks zi ∈ {0, 1, 2, 3}, each with recruitment +1 per step and a
+protection resource that covers one patch per step: the action
+u ∈ {1, 2} protects patch u, the protected patch loses nothing,
+and the other loses two units, z+
+i = min{3, z i + 1− 2 · 1[u ̸= i]}.
+The sustainability floor is zi ≥ 1 for both patches, and the reg-
+ulator observes only the aggregate reading y = z1 + z2. From
+the reading y = 3 the compatible safe states are (1, 2) and
+(2, 1); the first is safe only under u = 1 and the second only
+under u = 2 , so the common safe-action set is empty and the
+common-action certificate (Theorem 2) fires — while each state
+alone lies in the full-information kernel (protect the low patch,
+then alternate), the minimal epistemic-emptiness form of Sec-
+tion 3.4 realized in two dimensions. The certainly-safe readings
+are exactly y ≥ 4: every state compatible with y ≤ 3 includes
+one with a depleted patch, so the aggregated index can cer-
+tify safety only above that threshold — the two-dimensional
+reading of Corollary 1. Table 3 audits the aggregated beliefs
+against the exact belief-level recursion, in which the reading
+splits the belief into its y-cells at every step: every nonviable
+belief is certified, and all by the common-action certificate —
+the aggregation obstruction is instantaneous, and no observa-
+tion schedule rescues it, in contrast with the timing cells of the
+one-dimensional audit above, where Tobs = 1 is viable. The
+full-information kernel is R Viab(V) = {z1, z2 ≥ 1} \ { (1, 1)}:
+the double-depleted state is nonviable outright, one protec-
+tion per step cannot hold both floors — an instance of nonvi-
+ability beneath all epistemic analysis. Both computations are
+machine-verified in exact integer arithmetic, and the verifica-
+tion script regenerates the table verbatim.
+The audit is symbolic and one-dimensional, with two two-
+dimensional instances (the aggregated reading above and the
+two-patch protection audit); a full multidimensional belief-
+space numerical campaign is deferred to future work, and the
+case study makes no claim of a general-purpose computational
+calculus.
+10. A Probabilistic Development: Belief-
+State Safety Values
+The certificates of Sections 3–4 rest on set-membership seman-
+tics: the information state is a set of compatible states. This
+section records the stochastic counterpart — the belief-state
+safety value of partially observable control — and its obstruc-
+tion certificate, connecting the calculus to the partially observ-
+able literature (Åström, 1965; Smallwood and Sondik, 1973).
+Let X, A, D, Y be finite, with a stochastic transition T (x′ |
+x, a) and an observation likelihood g(y | x, a, x′). Augment
+the state space with an absorbing unsafe state ⊥: for x ∈ V ,
+T (⊥ | x, a) = 1 − ∑
+x′∈V T (x′ | x, a), and T (⊥ | ⊥ , a) = 1 .
+A belief is a distribution b over X ∪ {⊥}, updated by Bayes’
+rule τ (b, a, y), with P(y | b, a) = ∑
+x,x′ b(x) T (x′ | x, a) g(y |
+x, a, x′). The safety value is the maximal survival probability
+Vk(b) = max
+π
+Pπ
+(
+xt ∈ V for t = 0, . . . , k
+⏐⏐ b
+)
+.
+Theorem 8 (belief-state safety value). V0(b) = b(V) (the hori-
+zon counts the current state), and for k ≥ 0
+Vk+1(b) = max
+a∈A
+∑
+y∈Y
+P(y | b, a) Vk
+(
+τ (b, a, y)
+)
+,
+with the time convention that the policy acts, observes y, then
+acts again. The recursion is exact on every finite horizon; it is
+the Smallwood–Sondik belief-state value iteration specialized
+to the absorbing safety reward (Smallwood and Sondik, 1973).
+Proof. Standard value iteration for the belief-state Markov
+decision process: conditioning on the observation after the ac-
+tion and applying the optimal continuation gives the identity,
+and the absorbing state makes Vk the k-step survival probabil-
+ity (Smallwood and Sondik, 1973). □
+16
+Tobs initial position z0
+1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0 2.1 2.2 2.3 2.4 2.5
+1 • • • • • • • • • • ◦ ◦ ◦ ◦ ◦ ◦
+2 • • • • • • • • • • ∗ ∗ ∗ ∗ ∗ ∗
+3 • • • • • • • • • • ∗ ∗ ∗ ∗ ∗ ∗
+T able 2: Coverage audit on the delayed hidden-regime system: ◦ viable; • nonviable, certified by the common-action certificate
+(Theorem 2); ∗ nonviable, certified only by the timing bound (Theorem 3). Every nonviable cell is covered by exactly one
+certificate.
+Figure 3: The coverage audit of Table 2: green = viable; red = nonviable, certified by the common-action certificate; orange
+= nonviable, certified only by the timing bound (the residual gap of Section 6.5). The dashed curve is the true boundary
+z0 = 1 + Tobs and the solid vertical line the one-step boundary z0 = 2.
+initial belief reading y verdict covering certificate / witness
+(2, 2) 4 ◦ viable witness: u = (1, 2) cycling
+(1, 2), (2, 2) 3, 4 ◦ viable witness: u = (1, 2) cycling
+(2, 1), (2, 2) 3, 4 ◦ viable witness: u = (2, 1) cycling
+(1, 2), (2, 1) 3 • common-action (Theorem 2)
+(1, 2), (2, 1), (2, 2) 3 , 4 • common-action (Theorem 2)
+(1, 1) 2 • common-action (Theorem 2)
+T able 3: The two-patch protection audit: aggregated be-
+liefs under the reading y = z1 + z2, audited against the exact
+belief-level recursion. Every nonviable belief is certified by the
+common-action certificate (Theorem 2); the viable beliefs carry
+explicit blind witness cycles.
+Proposition 11 (chance-constrained common-action obstruc-
+tion). Let b ∈ ∆(V) (so b(V) = 1 ) and write p(x, a) =
+1 − ∑
+x′∈V T (x′ | x, a). If
+∑
+x∈V
+b(x) p(x, a) ≥ δ for every a ∈ A,
+then Vk(b) ≤ 1 − δ for every k ≥ 1, and the chance constraint
+Pb,π(x0, . . . , xk ∈ V ) ≥ 1 − ε is infeasible under every policy
+whenever ε < δ .
+Proof. The one-step survival probability under action a is
+1 − ∑
+x b(x) p(x, a) ≤ 1 − δ, so V1(b) ≤ 1 − δ. Since Vk+1 ≤ Vk
+— more steps cannot raise the survival probability — Vk(b) ≤
+V1(b) ≤ 1 − δ. □
+Proposition 12 (degenerate (deterministic) limit) . Let
+X, A, D, Y be finite with the deterministic maps x+ =
+F (x, a, d) and y = O(x, a, x+) of Section 3.1, and let the
+stochastic transition and likelihood have supports {F (x, a, d) :
+d ∈ D(x)} and {O(x, a, x+) : x+ reachable}. Then the poste-
+rior support under the belief-state update is exactly the set-
+valued post-state Post(B, a, y) of Section 3.1, so the support of
+the belief-state recursion follows the set-valued recursion Wk.
+For a belief b carried by B ⊆ V and the disturbance read ad-
+versarially within its support, Vk(b) = 1 if B ∈ W k, while if
+B /∈ W k then Vk(b) ≤ 1 − minx∈B b(x) < 1.
+Proof. Under the deterministic kernels the posterior is sup-
+ported exactly on Post(B, a, y), so the support of the belief
+evolves by the set-valued recursion. If B ∈ W k, the witness ac-
+tions of Theorem 1 keep every compatible branch in V, giving
+Vk(b) = 1 . If B /∈ W k, every action leaves some compatible
+state x ∈ B of mass b(x) with a successor outside V under
+an admissible disturbance, so the one-step survival probabil-
+ity under every action is at most 1 − minx∈B b(x); since Vk is
+non-increasing in k, Vk(b) ≤ 1 − minx∈B b(x) < 1. □
+Proposition 12 is the sense in which the chance-constrained
+obstruction degenerates to the common-action obstruction: at
+the deterministic limit V1(b) = 1 exactly when the common
+safe-action set is nonempty, and the deficit from 1 is at least the
+smallest compatible mass minx∈B b(x). The bound is attained
+on the worked instances of the Supplementary Material (S1):
+the two-floor conflict at Vk(b0) = 1
+2 for all k, and the delayed
+hidden regime on the audit grid of Section 9, where the script
+regenerates all 48 cells of the safety-value table verbatim.
+11. Conclusion
+Under standard finite-dimensional regularity assumptions, vi-
+ability under perfect measurement has a mature kernel, tan-
+gency, and approximation theory. Viability under incom-
+plete observation has long been asymmetric: the suﬀiciency
+side is carried by Veliov’s output-feedback condition and the
+estimation-tube programme, while the failure side has received
+less systematic treatment. This paper supplies the missing in-
+strument: the obstruction calculus develops sound, computa-
+tionally interpretable certificates for nonviability — that is,
+17
+suﬀicient conditions for nonviability, equivalently necessary
+conditions for viability. They do not exhaust the complement
+of the epistemic kernel (Section 6.5), and the paper claims no
+complete characterization. The mechanisms are organized by
+one selector principle (Proposition 1) — observation-based vi-
+ability is the existence of a common recursively safe response
+— and are nested in an obstruction ladder (Proposition 3); in
+finite systems backward belief recursion is sound and complete
+(Theorem 1), so the calculus is exact where it can be and sound
+elsewhere.
+With displayed proofs and explicit witnesses, the certificates
+identify five mechanisms by which an observation structure can
+make robust viability impossible, plus one through which a
+single uncorrected policy empties the kernel: the disturbance
+can enforce exit in finite time against every control; a con-
+stant observation can merge states with incompatible admissi-
+ble controls (Proposition 5’s admissibility form); the compat-
+ible states can demand incompatible actions at a single infor-
+mation state; the information can arrive after the enforced exit;
+and the observation fibres can cross the safe-set boundary, de-
+feating every exact certifier — with the uncorrected certainty-
+equivalence controller as the sixth, policy-specific, mechanism.
+Each certificate that admits a design remedy identifies it: a
+faster indicator, a separating observation, an observation that
+separates the sides of each floor instead of aggregate certifi-
+cation, or the correction of a known bias. For sustainability
+governance, where observation is conducted through coarse in-
+dicators at discrete reviews, the calculus states the quantita-
+tive limits of what monitoring can deliver — and converts each
+impossibility into a design specification. Four elements com-
+plete the picture: the certificates are complete in the one-step
+and static-observation classes, with the residual dynamic gap
+stated as an open problem (Section 7); the selector principle
+consolidates the certificates as dual witnesses of one correspon-
+dence, with the monitoring-adequacy converse and the design
+rules (Section 8); a calibrated case study and a coverage audit
+show the certificates reproducing the exact recursion verdict
+on a grid of delayed hidden-regime systems, with a two-patch
+audit carrying the aggregation obstruction to two dimensions
+(Section 9); and the probabilistic belief-state lift connects the
+calculus to the partially observable control literature, its safety
+values worked in closed form on the same grid (Section 10). A
+fourth completion is structural: over polytope-declared blind-
+window classes the timing certificate is exactly computable as
+a linear program, sound beyond the declaration with an un-
+bounded implementable-class gap (Section 3.3), and the resid-
+ual dynamic gap decomposes exactly, its post-observation re-
+course phase undecidable by any window-measurable certificate
+pair (Section 7).
+References
+Åström, K.J.: Optimal control of Markov processes with incomplete
+state information. J. Math. Anal. Appl. 10, 174–205 (1965)
+Abaee, A.: Aggregate indices and transition safety: a quantifier-
+order separation between scalarized and coordinate-wise feasibility.
+figshare. https://doi.org/10.6084/m9.figshare.33764023 (2026).
+Aubin, J.-P.: Viability Theory. Birkhäuser, Boston (1991)
+Aubin, J.-P.: Viability kernels and capture basins of sets under
+differential inclusions. SIAM J. Control Optim. 40(3), 853–871
+(2001)
+Aubin, J.-P., Bayen, A.M., Saint-Pierre, P.: Viability Theory:
+New Directions, 2nd edn. Birkhäuser, Boston (2011)
+Aubin, J.-P., Catté, F.: Bilateral fixed-points and algebraic prop-
+erties of viability kernels and capture basins of sets. Set-Valued
+Anal. 10, 379–416 (2002)
+Aubin, J.-P., Frankowska, H.: Set-Valued Analysis. Birkhäuser,
+Boston (1990)
+Béné, C., Doyen, L., Gabay, D.: A viability analysis for a bio-
+economic model. Ecol. Econ. 36, 385–396 (2001)
+Cardaliaguet, P., Quincampoix, M., Saint-Pierre, P.: Differential
+games through viability theory: old and recent results. In: Jør-
+gensen, S., Quincampoix, M., Vincent, T.L. (eds.) Advances in Dy-
+namic Game Theory. Annals of the International Society of Dynamic
+Games, vol. 9, pp. 3–35. Birkhäuser, Boston (2007)
+Clark, C.W.: Mathematical Bioeconomics: The Optimal Man-
+agement of Renewable Resources, 2nd edn. Wiley, New York (1990)
+De Lara, M., Doyen, L.: Sustainable Management of Natural Re-
+sources: Mathematical Models and Methods. Springer, Berlin (2008)
+Doyen, L., Gajardo, P.: Sustainability standards, multicriteria
+maximin, and viability. Nat. Resour. Model. 33(3), e12250 (2020)
+Doyen, L., Thébaud, O., Béné, C., Martinet, V., Gourguet, S.,
+Bertignac, M., Fifas, S., Blanchard, F.: A stochastic viability ap-
+proach to ecosystem-based fisheries management. Ecol. Econ. 75,
+32–42 (2012)
+Farkas, J.: Theorie der einfachen Ungleichungen. J. Reine Angew.
+Math. 124, 1–27 (1902)
+Frankowska, H.: Optimal trajectories associated with a solution
+of contingent Hamilton–Jacobi equations. Appl. Math. Optim. 19,
+291–311 (1989)
+Gale, D.: The Theory of Linear Economic Models. McGraw-Hill,
+New York (1960)
+Haddad, G.: Monotone viable trajectories for functional-
+differential inclusions. J. Differ. Equ. 42, 1–24 (1981)
+Hale, J.K., Verduyn Lunel, S.M.: Introduction to Functional Dif-
+ferential Equations. Springer, New York (1993)
+Kurzhanski, A.B., Vályi, I.: Ellipsoidal Calculus for Estimation
+and Control. Birkhäuser, Boston (1997)
+Maghenem, M., Sanfelice, R.G.: Characterizations of safety in
+hybrid inclusions via barrier functions. In: Proceedings of the 22nd
+ACM International Conference on Hybrid Systems: Computation
+and Control (HSCC), pp. 109–118 (2019)
+Martinez-Alier, J., Munda, G., O’Neill, J.: Weak comparability of
+values as a foundation for ecological economics. Ecol. Econ. 26(3),
+277–286 (1998)
+Nagumo, M.: Úber die Lage der Integralkurven gewóhnlicher Dif-
+ferentialgleichungen. Proc. Phys.-Math. Soc. Japan 24, 551–559
+(1942)
+Prajna, S., Jadbabaie, A.: Safety verification of hybrid systems
+using barrier certificates. In: Alur, R., Pappas, G.J. (eds.) Hybrid
+Systems: Computation and Control (HSCC 2004). LNCS, vol. 2993,
+pp. 477–492. Springer, Berlin (2004)
+Prajna, S., Jadbabaie, A., Pappas, G.J.: A framework for worst-
+case and stochastic safety verification using barrier certificates.
+IEEE Trans. Autom. Control 52(8), 1415–1428 (2007)
+Prajna, S., Rantzer, A.: On the necessity of barrier certificates.
+IF AC Proc. Vol. 38(1), 526–531 (2005)
+Quincampoix, M., Veliov, V.M.: Viability with a target: theory
+and applications. In: Control Theory, Multivariate Analysis and
+Applications, pp. 47–63. Springer (1994)
+Saint-Pierre, P.: Approximation of the viability kernel. Appl.
+Math. Optim. 29, 187–209 (1994)
+Smallwood, R.D., Sondik, E.J.: The optimal control of partially
+observable Markov processes over a finite horizon. Oper. Res. 21(5),
+1071–1088 (1973)
+Sontag, E.D.: Mathematical Control Theory: Deterministic Fi-
+nite Dimensional Systems, 2nd edn. Springer, New York (1998)
+Veliov, V.M.: Suﬀicient conditions for viability under imperfect
+measurement. Set-Valued Anal. 1, 305–317 (1993)
+Witsenhausen, H.S.: A counterexample in stochastic optimum
+control. SIAM J. Control 6(1), 131–147 (1968)
+Declarations
+F unding. None. Competing interests. None.
+Data availability . No external data were used.
+Code availability . The coverage-audit script
+paper2_coverage_audit.py is publicly available at
+https://github.com/MIKEAA2020/general-sustainability
+(folder arena agent 1/paper rewrites/latex ); it regener-
+ates Table 2 and Figure 3 verbatim. AI declaration. GLM
+(Z.ai), Qwen (Alibaba Cloud) and DeepSeek AI assisted with
+drafting and iterative review.
+18
