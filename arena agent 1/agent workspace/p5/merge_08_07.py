@@ -155,25 +155,25 @@ if extra:
     pre_a = pre_a[:anchor] + '\n'.join(extra) + '\n' + pre_a[anchor:]
 
 # ---------------- merge references (union, de-duplicated, alphabetical) ----------------
-def split_entries(block):
-    body = re.sub(r'^\\subsection\{References\}.*?\n', '', block, flags=re.S)
-    parts = re.split(r'(?<=\.)\s+(?=[A-ZÄÖÅ][\w\'{}\\\"~\^\- ]{1,30}?, )', body)
-    return [p.strip() for p in parts if p.strip()]
+# The local splitter here used to break on ". " + "Word, ", which is the shape of
+# a book's publisher line, and sorted on the first 24 alphanumeric characters --
+# shredding the list into heads and orphan tails (v45 36/0 -> 30/14). Both are now
+# taken from mergelib, which splits on blank lines and sorts by author surname.
+import os as _os, sys as _sys
+_sys.path.insert(0, '/home/user/p5')
+import mergelib
 
-
-def norm(e):
-    return re.sub(r'[^a-z0-9]', '', e.lower())[:110]
-
-
-ea, eb = split_entries(refs_a), split_entries(refs_b)
+refs_a, supp_a = mergelib.partition_refs(refs_a)
+refs_b, supp_b = mergelib.partition_refs(refs_b)
+ea, eb = mergelib.split_entries(refs_a), mergelib.split_entries(refs_b)
 merged, seen = [], set()
 for e in ea + eb:
-    k = norm(e)
+    k = mergelib.norm(e)
     if k in seen:
         continue
     seen.add(k)
     merged.append(e)
-merged.sort(key=lambda e: re.sub(r'[^a-z]', '', e.lower())[:24])
+merged.sort(key=mergelib.ref_sort_key)
 
 # ---------------- new front matter ----------------
 TITLE = ("Governance latency: the delay, the clock, and the stability of "
@@ -314,9 +314,15 @@ doc.append(body_b.strip() + '\n\n')
 doc.append(CROSS.strip() + '\n\n')
 doc.append('\\subsection*{References}\n\\label{references}\n')
 doc.append('\n\n'.join(merged) + '\n\n')
-for d in (decl_a, decl_b):
-    if d.strip():
-        doc.append(d.replace('\\end{document}', '').strip() + '\n')
+# ONE supplementary-material section and ONE Declarations block, integrated from
+# both sources. Previously each source appended its own copy, giving two of each.
+supp = mergelib.merge_supplement([supp_a, supp_b])
+if supp.strip():
+    doc.append('\\begin{center}\\rule{0.5\\linewidth}{0.5pt}\\end{center}\n\n')
+    doc.append(supp.strip() + '\n\n')
+decl = mergelib.merge_declarations([decl_a, decl_b])
+if decl.strip():
+    doc.append(decl.strip() + '\n')
 doc.append('\n\\end{document}\n')
 
 out = ''.join(doc)
@@ -331,6 +337,7 @@ out = ''.join(doc)
 # paper4_supplementary pointer. Gate the assembled document and refuse to write
 # it if the structural classes fire. Fix this script, not the output.
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, '/home/user/p5')
 import phase0_scan
 phase0_scan.report_gate(phase0_scan.gate_text(out, os.path.basename(OUT)), OUT)
 

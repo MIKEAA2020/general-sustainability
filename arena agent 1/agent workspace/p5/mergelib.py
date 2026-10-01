@@ -130,23 +130,67 @@ def namespace(body, pref, known=None):
 
 
 # -------------------------------------------------------------------- references
-def split_entries(block):
-    """Split a References block into individual entries.
+SIZE = r'(?:tiny|scriptsize|footnotesize|small|normalsize|large|Large)'
 
-    Some papers wrap the whole list in a size group (paper 1 uses
-    `{\\footnotesize ... }`). The opener and closer must be stripped BEFORE entries are
-    split and sorted, or the sort scatters them into different entries and the merged
-    reference section has an unbalanced group -> "Too many }'s" at the end of the
-    document.
+# A seam the OLD splitter could not see: the tail of one reference runs into the
+# next author's head with no separating period, because the tail ends in a DOI,
+# a page range, a volume:page or a bare year. "and Richardson, A.J., 2012" and
+# "Smith, J., Jones, A., 2020" deliberately do NOT match -- the token before the
+# surname must be something that ENDS a reference.
+_TAIL_TOK = (r'(?:\bdoi:\S+|\bhttps?://\S+|\d+\s*-{1,2}\s*\d+|\b\d+\s*:\s*\d+'
+             r'|\b(?:19|20)\d{2}\b)')
+_NAME_YR = r'[A-ZÄÖÅ][\w\'{}\\\"~\^\- ]{1,30}?,\s*(?:19|20)\d{2}'
+
+# seam between two references run together in one paragraph, and the year
+# test that distinguishes a next reference from a publisher line
+# The token after the period must be a SURNAME, i.e. word characters only --
+# excluding '.' and ',' from the class is what stops "Rose, G. A., and Rowe"
+# from splitting at the initial "A.," and yielding a headless fragment.
+_SEAM = re.compile(r'(?<=\.)\s+(?=[{\[A-ZÄÖÅ][\w\'{}\\\"~^\-]{1,40}?,)')
+_YR = re.compile(r'\b(?:19|20)\d{2}\b')
+GLUED = re.compile(_TAIL_TOK + r'\s+' + _NAME_YR)
+
+
+def _clean_entry(p):
+    p = p.strip()
+    p = re.sub(r'^\s*\}\s*', '', p)
+    p = re.sub(r'^\s*\{\s*(?:\\(?:' + SIZE + r'))?\s*', '', p)
+    if not re.search(r'\\(?:begin|end)\{[^{}]*\}$', p):
+        p = re.sub(r'\s*\}\s*$', '', p)
+    return re.sub(r'\s+', ' ', p).strip()
+
+
+def split_entries(block):
+    r"""Split a References block into individual entries.
+
+    Rewritten 2026-10-01. The previous version split on
+
+        (?<=\.)\s+(?=[A-ZÄÖÅ][\w...]{1,30}?, )
+
+    i.e. a period, whitespace, then "Word, ". That is exactly the shape of a
+    book's publisher line, so "Introduction to Interval Analysis.\n SIAM,
+    Philadelphia." became two "entries" -- and with sort keys taken from the
+    first 24 alphanumeric characters, the orphan "SIAM, Philadelphia." sorted
+    under S while its head sorted under C. That is the mechanism behind the
+    "heads sorted by author, tails sorted by journal" damage.
+
+    The sources are PARAGRAPH-DELIMITED (verified: paper08 v45 -> 36 entries /
+    0 orphans; paper07 v50 -> 37 / 0), so splitting on blank lines is both
+    simpler and correct. The sentence-boundary splitter is kept only as a
+    fallback for lists that use no blank lines.
     """
     body = re.sub(r'^\\(?:sub)*section\*?\{References\}\s*(\\label\{[^}]*\})?\s*\n',
                   '', block, count=1)
-    # Drop size-group delimiter LINES before splitting. Some papers wrap the list -- or
-    # several sub-blocks of it -- in { ... } / {\footnotesize ... } with the delimiter on
-    # its own line. The entry splitter cannot break across them (there is no ". " to key
-    # on), so the opener and closer stay glued to whichever entries were first and last,
-    # and an alphabetical sort scatters them -> "Too many }'s" at end of document.
-    SIZE = r'(?:tiny|scriptsize|footnotesize|small|normalsize|large|Large)'
+
+    # The reference list ends at the first thing that is not a reference.
+    # Stopping only at Declarations is wrong: paper08 has a Supplementary
+    # material section between the two, and swallowing its prose produced a
+    # 39-line fake "entry" with no year.
+    for pat in (r'\\(?:sub)*section\*?\{', r'\\begin\{center\}'):
+        m = re.search(pat, body)
+        if m:
+            body = body[:m.start()]
+
     keep = []
     for ln in body.split('\n'):
         if re.fullmatch(r'\s*\{\s*(?:\\' + SIZE + r')?\s*\}?\s*', ln) or \
@@ -156,30 +200,76 @@ def split_entries(block):
         keep.append(ln)
     body = '\n'.join(keep)
 
-    parts = re.split(r'(?<=\.)\s+(?=[A-ZÄÖÅ][\w\'{}\\\"~\^\- ]{1,30}?, )', body)
-    # Clean PER ENTRY, not just at the block ends. A size-group opener/closer can end up
-    # attached to whichever entry happened to be first/last in the source, and after an
-    # alphabetical sort that entry lands in the middle of the merged list -- leaving an
-    # unbalanced group ("Too many }'s"). Strip only brace wrappers that look like size
-    # groups, so legitimate braces inside an entry survive.
+    paras = [_clean_entry(p) for p in re.split(r'\n\s*\n', body)]
+    paras = [p for p in paras if p and not p.startswith('\\')]
+
+    # Paragraph splitting is used unconditionally. There used to be a fallback
+    # to the old sentence-boundary splitter for short lists (len(paras) < 5),
+    # but that splitter is the one that manufactured the orphan tails in the
+    # first place, and _split_glued() now recovers run-together entries
+    # correctly, so the fallback was both unnecessary and harmful.
+    entries = paras
+
+    # split any entry that still carries a glued seam
     out = []
-    for p in parts:
-        p = re.sub(r'^\s*\}\s*', '', p.strip())
-        p = re.sub(r'^\s*\{\s*(?:\\(?:tiny|scriptsize|footnotesize|small|normalsize|large))?\s*',
-                   '', p)
-        # Do NOT strip a trailing } that closes a command, e.g. \end{document}. Stripping
-        # it there silently mangles the command and yields "Paragraph ended before \end".
-        if not re.search(r'\\(?:begin|end)\{[^{}]*\}$', p.strip()):
-            p = re.sub(r'\s*\}\s*$', '', p)
-        if p.strip():
-            out.append(p.strip())
+    for e in entries:
+        out.extend(_split_glued(e))
     return out
+
+
+def _split_glued(entry):
+    r"""Undo one paragraph holding several references run together.
+
+    Some sources put two or three references in a single paragraph with no
+    blank line between them, e.g.
+
+        Adamson, M. W., and Hilker, F. M. 2020. ... 425--434.
+        {\AA}str{"o}m, K. J., and Wittenmark, B. 1997. ... Alkire, S., ...
+
+    A candidate seam is a period, whitespace, then a "Surname," token. It is
+    accepted only when the text that follows it contains a four-digit year --
+    that is what separates a genuine next reference from a publisher line such
+    as "Introduction to Interval Analysis. SIAM, Philadelphia.", which carries
+    no year and is therefore stitched back onto its head.
+    """
+    seams = [m.end() for m in _SEAM.finditer(entry)]
+    if not seams:
+        return [entry]
+    bounds = [0] + seams + [len(entry)]
+    segs = [entry[bounds[i]:bounds[i + 1]].strip()
+            for i in range(len(bounds) - 1)]
+    out = []
+    for seg in segs:
+        if out and not _YR.search(seg):
+            out[-1] = out[-1] + ' ' + seg
+        else:
+            out.append(seg)
+    return [o for o in out if o]
 
 
 def norm(e):
     return re.sub(r'[^a-z0-9]', '', e.lower())[:110]
 
 
+def ref_sort_key(e):
+    """Bibliographic sort key: first author's surname, then year, then text.
+
+    The old key was the first 24 alphanumeric characters of the entry, which
+    sorts a detached tail by its JOURNAL or PUBLISHER rather than by its
+    author. Sorting on the surname is what "alphabetical" means for a
+    bibliography.
+    """
+    m = re.match(r'^(.*?)(?:,\s|\.\s)', e + ' ')
+    head = m.group(1) if m else e.split(',')[0]
+    for a, b in ((r'\AA', 'A'), (r'\aa', 'a'), (r"\'a", 'a'), (r"\'e", 'e'),
+                 (r"\'i", 'i'), (r"\'o", 'o'), (r"\'u", 'u'), (r"\'c", 'c'),
+                 (r"\'s", 's'), (r'\^e', 'e'), (r'\~a', 'a'), (r'\~n', 'n'),
+                 (r'\~o', 'o'), (r'\v{s}', 's'), (r'\v{S}', 'S')):
+        head = head.replace(a, b)
+    head = re.sub(r'\\[A-Za-z]+', '', head).replace('{', '').replace('}', '')
+    head = re.sub(r'[^A-Za-z\- ]', '', head).strip().lower()
+    y = re.search(r'\b(?:1[89]\d{2}|20\d{2})\b', e)
+    return (head, y.group(0) if y else '9999', e.lower())
 def merge_refs(refs_a, refs_b):
     merged, seen = [], set()
     for e in split_entries(refs_a) + split_entries(refs_b):
@@ -188,8 +278,180 @@ def merge_refs(refs_a, refs_b):
             continue
         seen.add(k)
         merged.append(e)
-    merged.sort(key=lambda e: re.sub(r'[^a-z]', '', e.lower())[:24])
+    merged.sort(key=ref_sort_key)
     return merged
+
+
+
+# ------------------------------------------------------- back matter integration
+# The old merge emitted one Declarations block PER SOURCE ("for d in (decl_a,
+# decl_b): doc.append(...)"), so merging two papers produced two blocks and
+# merging three produced three -- paper09 v32 and paper11 v61 both carry three.
+# Same for supplementary-material passages. The merges concatenated; they did
+# not integrate. These helpers integrate.
+
+# semantic aliases: these names mean the same declaration
+DECL_ALIAS = {
+    'conflicts of interest': 'Declaration of competing interest',
+    'competing interests': 'Declaration of competing interest',
+    'declaration of competing interest': 'Declaration of competing interest',
+    'competing interest': 'Declaration of competing interest',
+}
+
+PLACEHOLDER = re.compile(r'^\s*(?:anonymi[sz]ed for review|blinded for review)'
+                         r'[\s.]*\s*$', re.I)
+
+
+def split_subsections(block, level=r'\\(?:sub)*section\*?\{([^}]*)\}'):
+    """-> [(name, body), ...] preserving order. Body keeps its LaTeX."""
+    out = []
+    pos = 0
+    for m in re.finditer(level, block):
+        if m.start() > pos:
+            pass
+        name = m.group(1)
+        nxt = re.search(level, block[m.end():])
+        end = m.end() + nxt.start() if nxt else len(block)
+        body = block[m.end():end]
+        body = body.lstrip('}').strip()
+        out.append((name, body.strip()))
+        pos = end
+    return out
+
+
+def is_placeholder(text):
+    return bool(PLACEHOLDER.match(text or ''))
+
+
+def merge_declarations(blocks, heading=r'\section*{Declarations}'):
+    """Merge N per-source Declarations blocks into ONE integrated block.
+
+    Subsections are keyed by (aliased) name and kept in order of first
+    appearance. Where two sources both supply the same subsection, both texts
+    are kept -- they describe different data -- unless one is an
+    "Anonymized for review." placeholder, in which case the substantive text
+    wins. A subsection that is ONLY ever a placeholder is dropped: for a
+    non-double-blind venue it says nothing, and inventing content is worse.
+    """
+    order, byname = [], {}
+    for blk in blocks:
+        if not blk or not blk.strip():
+            continue
+        subs = split_subsections(blk)
+        if not subs:
+            continue
+        for name, body in subs:
+            key = DECL_ALIAS.get(name.strip().lower(), name.strip())
+            if key not in byname:
+                byname[key] = []
+                order.append(key)
+            text = re.sub(r'\\end\{document\}', '', body).strip()
+            if text:
+                byname[key].append(text)
+
+    out = [heading, '']
+    for key in order:
+        texts = byname[key]
+        if not texts:
+            continue
+        real = [t for t in texts if not is_placeholder(t)]
+        if not real:
+            continue                      # only ever a placeholder -> drop
+        out.append(r'\subsection*{%s}' % key)
+        out.append('')
+        for t in real:
+            out.append(t)
+            out.append('')
+    return '\n'.join(out).rstrip() + '\n' if len(out) > 2 else ''
+
+
+def merge_supplement(blocks):
+    """Merge N supplementary-material passages into ONE section.
+
+    Distinct passages are kept as separate paragraphs -- each describes a
+    different supplement file -- but they go under a single heading so the
+    paper has one supplementary-material section, not one per source.
+    """
+    paras = []
+    for blk in (blocks or []):
+        if not blk or not blk.strip():
+            continue
+        txt = re.sub(r'\\end\{document\}', '', blk).strip()
+        # partition_refs() keeps the horizontal rule that preceded the section,
+        # so strip the rule first -- otherwise the heading is no longer at the
+        # start of the string and the strip below silently misses it.
+        txt = re.sub(r'^\s*\\begin\{center\}.*?\\end\{center\}\s*', '',
+                     txt, flags=re.S)
+        txt = re.sub(r'^\s*\\(?:sub)*section\*?\{Supplementary material\}'
+                     r'\s*(?:\\label\{[^}]*\})?\s*', '', txt).strip()
+        # a bold lead-in is kept: it identifies which channel the passage is for
+        if txt:
+            paras.append(txt)
+    if not paras:
+        return ''
+    out = [r'\subsection{Supplementary material}\label{supplementary-material}', '']
+    for p in paras:
+        out.append(p)
+        out.append('')
+    return '\n'.join(out).rstrip() + '\n'
+
+
+
+# prose that can only belong to a supplementary-material passage
+_SUPP_MARK = re.compile(
+    r'deposited with this article|accompanying file|is deposited'
+    r'|Supplementary material\} is deposited', re.I)
+
+_SUPP_HEAD = re.compile(r'\\(?:sub)*section\*?\{Supplementary material\}')
+_RULE = re.compile(r'\\begin\{center\}.*?\\end\{center\}', re.S)
+_ANY_HEAD = re.compile(r'\\(?:sub)*section\*?\{')
+
+
+def partition_refs(refs_block):
+    """-> (pure reference list, supplementary-material block or '').
+
+    In paper08 v45 the Supplementary material section sits BETWEEN the
+    References heading and the Declarations heading, so split_body() returns it
+    as part of the reference block. It must be pulled out before the list is
+    split into entries, or its prose becomes one enormous fake reference -- and
+    it must be re-emitted, or the content is silently lost.
+
+    Two shapes occur, and both must be caught:
+      (a) v45 -- introduced by a real \\subsection{Supplementary material}
+          heading, preceded by a horizontal rule;
+      (b) v50 -- NO heading at all, just the rule and a bold lead-in
+          \\textbf{Supplementary material} is deposited ...
+    Detecting only (a) loses passage (b) entirely, which is why the first
+    version of this function dropped the sampled-governance passage.
+    """
+    if not refs_block:
+        return '', ''
+    start = None
+
+    # (a) an explicit heading wins
+    m = _SUPP_HEAD.search(refs_block)
+    if m:
+        start = m.start()
+    else:
+        # (b) a horizontal rule followed by supplement prose
+        for rm in _RULE.finditer(refs_block):
+            tail = refs_block[rm.end():]
+            nxt = _ANY_HEAD.search(tail)
+            window = tail[:nxt.start()] if nxt else tail
+            if _SUPP_MARK.search(window):
+                start = rm.start()
+                break
+    if start is None:
+        return refs_block, ''
+    # carry the preceding rule along with the section, if there is one
+    rule = None
+    for rm in _RULE.finditer(refs_block):
+        if rm.end() <= start:
+            rule = rm
+    if rule:
+        start = rule.start()
+    return refs_block[:start], refs_block[start:]
+
 
 
 # ---------------------------------------------------------------------- preamble
@@ -275,6 +537,12 @@ def merge(BASE, A, B, OUT, TITLE, ABSTRACT, CROSS, HEAD_A, HEAD_B, PREF_A, PREF_
     # therefore still contains \end{document}. It must not end up as a "reference entry".
     refs_a = refs_a.replace('\\end{document}', '')
     refs_b = refs_b.replace('\\end{document}', '')
+    # The supplementary-material section sits between References and Declarations
+    # in some sources, so it arrives inside the reference block. Pull it out
+    # before entries are split (its prose would otherwise become one enormous
+    # fake reference) and re-emit it below.
+    refs_a, supp_a = partition_refs(refs_a)
+    refs_b, supp_b = partition_refs(refs_b)
     merged = merge_refs(refs_a, refs_b)
 
     doc = [pre_a, '\n\\begin{document}\n',
@@ -286,9 +554,15 @@ def merge(BASE, A, B, OUT, TITLE, ABSTRACT, CROSS, HEAD_A, HEAD_B, PREF_A, PREF_
            CROSS.strip() + '\n\n',
            '\\subsection*{References}\n\\label{references}\n',
            '\n\n'.join(merged) + '\n\n']
-    for d in (decl_a, decl_b):
-        if d.strip():
-            doc.append(d.replace('\\end{document}', '').strip() + '\n')
+    # ONE supplementary-material section and ONE Declarations block, integrated
+    # from both sources -- previously each source contributed its own copy.
+    supp = merge_supplement([supp_a, supp_b])
+    if supp.strip():
+        doc.append('\\begin{center}\\rule{0.5\\linewidth}{0.5pt}\\end{center}\n\n')
+        doc.append(supp.strip() + '\n\n')
+    decl = merge_declarations([decl_a, decl_b])
+    if decl.strip():
+        doc.append(decl.strip() + '\n')
     doc.append('\n\\end{document}\n')
 
     out = ''.join(doc)

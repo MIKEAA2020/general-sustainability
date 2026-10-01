@@ -118,3 +118,87 @@ tectonic 0.15.0 — PDF builds, **0 undefined references**.
 
 **Author contributions** is absent: v45 has none and v50's is a placeholder.
 It needs to be written, not invented here.
+
+---
+
+# The upstream fix (2026-10-01)
+
+Repairing v46 was the right call for that file and the wrong call as a policy,
+because a repair is erased by the next re-merge. The three defects are now fixed
+in the merge scripts, so a clean re-merge no longer produces them.
+
+## What was wrong
+
+**`split_entries()`** split the reference list on
+
+    (?<=\.)\s+(?=[A-ZÄÖÅ][\w'{}\\"~^- ]{1,30}?, )
+
+a period, whitespace, then "Word, ". That is exactly the shape of a book's
+publisher line, so `Introduction to Interval Analysis.  SIAM, Philadelphia.`
+became two "entries". Because the sort key was the first **24 alphanumeric
+characters**, the orphan `SIAM, Philadelphia.` sorted under **S** while its head
+sorted under **C** — the "heads by author, tails by journal" damage.
+
+**`for d in (decl_a, decl_b)`** emitted one Declarations block *per source*, so a
+three-source merge produced three blocks. Same for the supplement passage.
+
+## What was done
+
+1. `split_entries()` now splits on **blank lines**. A reference list is
+   paragraph-delimited; this is both simpler and correct.
+2. `ref_sort_key()` sorts by **surname, then year, then text**, replacing the
+   24-character alphanumeric key.
+3. `partition_refs()` pulls the supplementary-material section out of the
+   reference block before splitting — in v45 it sits *between* References and
+   Declarations, so it arrives inside the block. Without this its prose becomes
+   one enormous fake reference, or is silently discarded.
+4. `merge_supplement()` / `merge_declarations()` emit **one** section and **one**
+   Declarations block, integrated from all sources.
+5. The old-sentence-splitter **fallback for short lists** was removed: it was the
+   buggy splitter, and `_split_glued()` now handles run-together entries.
+6. `merge_08_07.py` no longer carries its own duplicate copies of
+   `split_entries` / `norm` / the sort — it imports them from `mergelib`.
+
+## Measured effect
+
+| | before | after |
+|---|---|---|
+| v45 entries / orphan tails | 30 / 14 | **35 / 0** |
+| v50 entries / orphan tails | 59 / 12 | **46 / 0** |
+| re-merged v46: fatal gate findings | 37 | **0** |
+
+The only remaining findings on a re-merge are ten **non-fatal**
+`L.dup-ref-key` warnings: the same work cited in two name formats
+(`Brown, C. J.,` vs `Brown, C.J.,`). These are correctly *not* auto-merged —
+conservative de-duplication — and are listed for a human to reconcile.
+
+## Two corrections made along the way
+
+**Both supplement passages are required.** An earlier note proposed keeping
+passage A and dropping B. That was wrong, and the test that produced it was
+wrong: it compared supplement vocabulary against the *main text*, but
+supplement-only sections are absent from the body by design. Tested against the
+supplement `.md` files, passage A matches the delay supplement 11/11 and passage
+B matches the governance supplement 10/10, and both files state that both are
+required.
+
+Detector rule **I** was therefore also wrong: it counted passages and failed on
+more than one. It now compares *supplement identity* — two passages naming the
+same file, or two near-identical unnamed passages, are duplicates; two passages
+naming different files are complementary and pass.
+
+## v46 must not be regenerated
+
+A re-merge of v45 + v50 produces a clean file, but it is **not** v46: v46
+contains content authored directly into it after the merge, which appears in
+neither source (`Delay as a stabilising mechanism`, and the Niculescu, Pyragas
+and Abdallah citations it depends on; the `sampled-governance channel` label;
+`S1--S12`). Regenerating v46 would silently delete it. v46 stays as the repaired
+head; the fix applies to future merges.
+
+## Regression test
+
+`p5/tests/test_merge_integrity.py` covers the generic `mergelib.merge()` used by
+all six drivers: one Declarations block, one supplement heading, both passages
+and both data statements kept, 3 unique references, no glued entries, no
+headless fragments.
