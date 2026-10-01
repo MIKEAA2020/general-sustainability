@@ -1,0 +1,67 @@
+name: Pinned Lean reproducibility gate
+on:
+  push:
+    branches: [e2-v3-source-year]
+    paths:
+      - 'lean/**'
+      - 'lean_repro/**'
+      - '.github/workflows/lean-repro.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  lean:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify source snapshot BEFORE toolchain installation
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p lean_repro/evidence
+          git rev-parse HEAD | tee lean_repro/evidence/runner_commit.txt
+          python3 lean_repro/verify_inputs.py | tee lean_repro/evidence/input_verification.log
+          cp lean/lean-toolchain lean_repro/evidence/lean-toolchain.txt
+      - name: Install toolchain manager on disposable runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --no-modify-path
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Compile whole pinned Lean project and check named footprints
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          lean --version | tee lean_repro/evidence/lean_version.log
+          lake --version | tee lean_repro/evidence/lake_version.log
+          cd lean
+          lake build 2>&1 | tee ../lean_repro/evidence/build.log
+          lake env lean ../lean_repro/AxiomFootprint.lean 2>&1 | tee ../lean_repro/evidence/axioms.log
+          cd ..
+          python3 lean_repro/check_footprints.py lean_repro/evidence/axioms.log | tee lean_repro/evidence/footprint_verdict.log
+          cd lean
+          lake env lean ../lean_repro/AllFootprints.lean 2>&1 | tee ../lean_repro/evidence/all_footprints.log
+          cd ..
+          python3 lean_repro/check_all_footprints.py lean_repro/evidence/all_footprints.log | tee lean_repro/evidence/all_footprints_verdict.log
+      - name: Preserve source inputs and evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lean-repro-${{ github.run_id }}
+          retention-days: 30
+          if-no-files-found: error
+          path: |
+            lean_repro/AxiomFootprint.lean
+            lean_repro/AllFootprints.lean
+            lean_repro/SOURCE_COMMIT.txt
+            lean_repro/SOURCE_MANIFEST.tsv
+            lean_repro/SOURCE_ARCHIVE.sha256
+            lean_repro/source_snapshot.tar.gz
+            lean_repro/evidence/
+            lean/lean-toolchain
+            lean/lake-manifest.json
+            lean/lakefile.toml
