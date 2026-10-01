@@ -1,5 +1,13 @@
 # Preservation recheck: previously unexamined version transitions
 
+**Follow-up on eight named source families:** see
+[`FAMILY_DEPTH_PRESERVATION_REVIEW_2026-10-01.md`](FAMILY_DEPTH_PRESERVATION_REVIEW_2026-10-01.md).
+It identifies and restores paper03's missing standalone v6 complete-proofs
+supplement (TeX and PDF), with a pointer in the reviewed main; the other seven
+families were compared to their respective standalone heads without bulk
+reinstatement of superseded text. This follow-up does not reopen the expanded
+scientific audit or the deferred upstream rebuild.
+
 2026-10-01 · **Narrow source-preservation review, not a new scientific audit.**
 The reviewed live heads remain the intended outputs. The earlier review compared
 39 documented seed/predecessor pairs with an 8-word-window detector, but it did
