@@ -82,3 +82,7 @@ them and their verification is script-based. No false claim was introduced.
 
 All seven changed files compiled with tectonic: 21, 13, 8, 6, 8, 12 and 41 pages; **zero
 undefined references, zero errors**.
+
+## 2026-10-01 count correction (supersedes two 2026-09-30 count verdicts only)
+
+The source-level count rows for Minimax and EBC above were incomplete. A reproducible comment-stripped declaration-header census at `content_audit/claim_alignment/reconcile_lean_counts.py` finds **22** `theorem` headers and zero `lemma` headers in `latest/lean/Minimax_Dual.lean` (including the Unicode-named `ψsingle_sum` at line 244); an ASCII-only declaration-name filter returns the formerly quoted **21**. The historical counting command was not saved, so that exact mechanism is a reproducible explanation, not a proven account of the old command. For the 16 source-matched EBC modules, the correct count is **138** theorem headers, zero lemma headers. The formerly reported **134** is exactly reproduced by a bare-line `^\s*theorem` filter that overlooks four `@[simp] theorem` declarations: `EBC_Deadline.holdRep_zero`, `EBC_Deadline.matchedRep_zero`, `EBC_Dynamics.natToK_zero`, `EBC_Dynamics.natToK_succ`. The subsequent provisional **135** figure in the scientific-validity review was likewise an incomplete static count and is superseded. This correction is a source enumeration, **not** a fresh Lean build or an axiom-footprint check; all original historical build caveats remain.
