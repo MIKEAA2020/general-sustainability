@@ -87,7 +87,13 @@ def signals(frag: str, prev: str) -> list:
     if p0.TAIL_LEAD.match(f) and not YEAR.search(f):
         out.append("A:shipped-rule")
 
-    if not YEAR.search(f) and not AUTHORISH.match(f) and len(f) < 130:
+    # Corporate authors are exempt: a government data portal legitimately has
+    # no publication year, and without this guard B reported
+    # "U.S. Geological Survey. National Water Information System..." as a
+    # detached tail. The guard is the phase0_scan CORPORATE list, so the two
+    # rules agree on what counts as an institutional author.
+    if (not YEAR.search(f) and not AUTHORISH.match(f)
+            and not p0.CORPORATE.match(f) and len(f) < 130):
         out.append("B:no-year+no-author")
 
     if PLACE_TAIL.match(f) and not YEAR.search(f):

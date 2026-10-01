@@ -2,18 +2,46 @@
 
 Things a structural detector cannot see. The gate checks whether an artifact is
 *well-formed*; it cannot check whether it is *true*, *complete*, or *yours to
-assert*. These are tracked here so they do not drift.
+assert*. Tracked here so they do not drift.
 
 Status key: **OPEN** = needs a human decision · **DONE** = resolved, with where.
+
+---
+
+## 0. Read this first: "the gate says clean" ≠ "clean"  — **STANDING RULE**
+
+**The gate's clean verdict has been wrong twice, in two consecutive turns.**
+
+1. **It counted the wrong unit.** `--gate` did `bad += len(hits)` — counting
+   *findings* — and printed the total as "N structural failure(s)", while the
+   prose reports counted *files*. A figure of "32" and a count of "12 failing
+   files" therefore looked contradictory when they were different units.
+2. **It missed a real defect.** `K.split-refs` fires only when a fragment has
+   no year *and* opens with one of ~18 hardcoded journal names. paper11 v64
+   carried a second detached pair — `Texas Water Development Board.` and
+   `Water Data for Texas, well 6837203 (J-17)…` — that met neither condition.
+   The gate reported v64 clean. It was not.
+
+Both times, **reading** caught what the gate did not.
+
+**Therefore, standing rules:**
+
+- **A clean verdict must name the checks that produced it.** "Clean" from a
+  single gate is not a claim anyone should make or accept. Name the checks.
+- **Run the report-only detector (`p5/scan_continuations.py`) on live heads as
+  a routine**, not only after a repair. It is the check that found what the
+  gate missed.
+- **The corpus is not audited until the reading pass and the detector pass
+  agree.** Neither alone is sufficient. Keep both running until they converge.
 
 ---
 
 ## 1. CRediT authorship contribution statement — **OPEN**
 
 Who did what is a fact about people, not about the manuscript. It cannot be
-inferred from the `.tex` and must not be invented. A template with the full
-CRediT taxonomy and blanks marked is now in place in both files; the blanks
-need filling at submission.
+inferred from the `.tex` and must not be invented. But a bare "to be completed"
+placeholder gives the author nothing to fill in and gets skipped at submission,
+so both files now carry the full CRediT taxonomy with blanks marked.
 
 | File | Before | Now |
 |---|---|---|
@@ -21,35 +49,32 @@ need filling at submission.
 | `paper08_governance_delay_v46.tex` | absent entirely | template added before the AI declaration |
 
 Two blanks to fill in each:
-- **Author name.** Neither file declares `\author`. The self-citations read
-  `Abaee, A.`, but the full name appears nowhere in the manuscript, so the
-  template says `[AUTHOR NAME --- full name as it should appear]`.
-- **Which roles apply.** Delete the ones that do not.
 
-Also worth deciding: the AI declaration and the CRediT statement both describe
-contribution. They are kept separate on purpose — AI tools are named in the AI
-declaration, never as a CRediT contributor — but if the venue expects CRediT to
-carry everything, that is a venue-format call.
+- **Author name** — **deliberately left blank.** Neither file declares
+  `\author`. The self-citations read `Abaee, A.`, but the preferred name form
+  for the paper is not asserted anywhere in the manuscript. The git identity is
+  known and is still not a basis for guessing the byline.
+- **Which roles apply** — delete those that do not.
 
 ## 2. Author contributions, prose form — **OPEN**
 
 Distinct from CRediT. `paper08_governance_delay_v46.tex` has no
-Author-contributions paragraph of any kind. v45 had none and v50's was a
+author-contributions paragraph of any kind. v45 had none and v50's was a
 placeholder, so there was nothing to merge and nothing to repair. If the venue
 wants prose as well as CRediT, this needs writing.
 
 ## 3. Supplement / declaration questions — **DONE, recorded**
 
-These were open at the end of the paper08 and paper09 turns. All three are now
-resolved and the reasoning is in `MERGE_PIPELINE_DIAGNOSIS.md`:
+Open at the end of the paper08 and paper09 turns; all three resolved. Reasoning
+in `MERGE_PIPELINE_DIAGNOSIS.md`:
 
 - **Both supplementary-material passages are required.** An earlier note
-  proposed keeping passage A and dropping passage B. That was wrong, and the
-  test that produced it was wrong: it compared supplement vocabulary against
-  the *main text*, but supplement-only sections are absent from the body by
-  design. Tested against the supplement `.md` files, A matches the delay
-  supplement 11/11 and B matches the governance supplement 10/10, and both
-  files state that both are required. **Both kept in v46.**
+  proposed keeping passage A and dropping passage B. Wrong, and the test that
+  produced it was wrong: it compared supplement vocabulary against the *main
+  text*, but supplement-only sections are absent from the body by design.
+  Against the supplement `.md` files, A matches the delay supplement 11/11 and
+  B the governance supplement 10/10, and both files state both are required.
+  **Both kept in v46.**
 - **The `paper4_supplementary` cross-unit pointer** is a stale filename from the
   unit rename, not contamination. **Corrected in v46** to
   `supplementary_delay` / `supplementary_governance`. Still present in the
@@ -58,50 +83,89 @@ resolved and the reasoning is in `MERGE_PIPELINE_DIAGNOSIS.md`:
   double-blind, so the four `"Anonymized for review."` placeholders were
   **resolved to real content rather than preserved**, and both Data
   availability statements were kept because they describe different data.
-  Preprints.org is the final target; this is settled, not provisional.
 
-## 4. Detector gap — **OPEN, deliberately**
+## 4. Duplicate detection: byte-identity replaced — **DONE**
 
-`K.split-refs` only fires when a fragment has **no year** and opens with one of
-~18 hardcoded journal names. Tails that carry a year, or that open with a title
-word, are invisible to it. Three of the seven tails repaired in paper09 v32 were
-invisible; so was the second tail in paper11 v64, which the gate reported clean.
+Byte-identity was the wrong test. Two entries citing one report routinely
+differ in citation style and nothing else, so a byte comparison says "they
+differ" and leaves a human to notice the report number is identical. The DFO
+2016 pair:
 
-`p5/scan_continuations.py` implements a second signal and runs **report-only**,
-so its false-positive rate can be measured before anything is made fatal.
-Triage across 59 files:
+```
+DFO, 2016. Stock Assessment of Northern cod (NAFO Divs. 2J3KL) in 2016.
+DFO Can. Sci. Advis. Sec. Sci. Advis. Rep.~2016/026.
+DFO (2016). Stock assessment of Northern cod (NAFO 2J3KL).
+\emph{Can. Sci. Advis. Sec. Sci. Advis. Rep.} 2016/026.
+```
 
-| Signal | Hits | Verdict |
+Not byte-identical. Same report, `2016/026`. Merged to one.
+
+`same_work(a, b)` in `phase0_scan.py` now decides identity semantically:
+a shared **DOI**, a shared **report number**, or the same **year plus ≥60%
+title-token overlap**. `L.dup-ref-key` fires only when entries are the same
+work, so the finding is actionable — "merge these" — rather than "go check
+whether these conflict". Findings dropped from **32 to 18** across the corpus.
+
+## 5. Detached-tail detector — **C promoted, B report-only, E dropped**
+
+`K.split-refs` fires only on a fragment with no year that opens with a known
+journal name. Three of the seven tails repaired in paper09 v32 were invisible
+to it, as was the v64 pair. `p5/scan_continuations.py` asks the question the
+shipped rule does not — *could this fragment stand alone as a reference?*
+
+| Signal | Hits | Status |
 |---|---|---|
-| `C:place-tail` — bare publisher/city, no year | 20 | **100% precision**, all in superseded files. Safe to promote to fatal. |
-| `B:no-year+no-author` | 18 | ~89%. Two false positives: `U.S. Geological Survey. National Water Information System…`, a legitimate year-less government data citation — the `AUTHORISH` regex does not handle corporate authors with initials. Needs tightening first. |
+| `C:place-tail` | 20 | **Promoted to fatal as `K.place-tail`.** 100% precision. Zero live-head hits today — it is a guard against future merges, which is the point. |
+| `B:no-year+no-author` | 15 | **Report-only.** Was 18 with 2 false positives; the `CORPORATE` author guard removed them. Re-measure before promoting. |
 | `A:shipped-rule` | 8 | Already fatal. |
-| `E:continuation-word` | 3 | **Removed.** 0-for-3, all `von Neumann, J. (1928)…` — a lowercase nobiliary particle is not evidence of a tail. |
+| `E:continuation-word` | 3 | **Dropped.** 0-for-3, all `von Neumann, J. (1928)…`, flagged only for a lowercase nobiliary particle. |
 
-Real defect this found that the gate missed: **paper11 v64** had a second
-detached pair, `Texas Water Development Board.` (L3761) and
-`Water Data for Texas, well 6837203 (J-17)…` (L3778), 17 lines apart.
-Repaired.
+False positives fixed in `B` (both legitimate year-less government data
+citations): `U.S. Geological Survey. National Water Information System, site
+08168710, Comal Springs at New Braunfels, Texas.` in paper11 v64 and paper11b
+v2. `AUTHORISH` did not handle corporate authors with initials; it now defers
+to the `CORPORATE` list in `phase0_scan.py` so the two rules agree.
 
-**Recommendation:** promote `C` to fatal now; keep `B` report-only until
-`AUTHORISH` handles corporate authors.
+**A near-miss worth recording.** The `CORPORATE` guard was first applied to
+`K.place-tail` as well, and that was wrong: it suppressed five genuine tails —
+`Cambridge University Press, Cambridge.`, `Eurostat, Luxembourg.`, `OECD
+Publishing, Paris.`, `Princeton University Press, Princeton, NJ.`,
+`Fisheries and Oceans Canada, Ottawa.` — because publisher names end in the
+same words institutional authors do. `PLACE_TAIL` alone is 20/20 precise. The
+guard applies **only** to the no-year/no-author signal, where the USGS false
+positive actually arose. A guard added to fix one signal can silently blind
+another.
 
-## 5. Gate counts — **DONE, but with a caveat**
+## 6. Gate counts: the unexplained delta — **RECORDED, NOT RESOLVED**
 
-The gate counted *findings* and printed them as "failure(s)", while the reports
-counted *files*, so "32" and "12" looked contradictory. It now prints both,
-labelled, and fails only on live heads:
+Current gate output, and the only figures that should be cited:
 
 ```
 LIVE HEADS failing  : 0 file(s), 0 finding(s)   <-- exit status
-superseded, ignored : 9 file(s), 21 finding(s)
+superseded, ignored : 9 file(s), 34 finding(s)
 scanned             : 59 file(s)
 ```
 
-**Caveat, stated because it bears on whether to trust the earlier number:** the
-historical figure of 32 does not fully reconcile. Measured deltas account for
-7 of the 11-finding drop (6 removed by the three repairs, 1 by the rule I
-rewrite; 2 more if the count predated the v46 repair), leaving ~2 unexplained.
-The most likely explanation is that "32" was recorded from a partial run
-mid-turn in an earlier session. **Treat the current numbers as the baseline and
-disregard 32** — it is not reproducible and should not be cited again.
+**The historical figure of 32 does not reconcile.** Measured deltas account for
+7 of the 11-finding drop: 6 removed by the three live-head repairs (counted
+directly off the pre-repair copies still in `mtest/`), 1 by the rule I rewrite
+(count-based → identity-based), and 2 more if the count predated the v46
+repair. That leaves **roughly 2 findings unexplained**.
+
+Most likely "32" was recorded from a partial run mid-turn in an earlier
+session. It is not reproducible and **must not be cited again**. If someone
+later asks why the count changed, the answer is here:
+
+- unit mismatch (findings vs files) — the largest single cause of apparent
+  contradiction;
+- 6 findings removed by repairs, 1 by the rule I rewrite;
+- ~2 unaccounted, presumed a stale partial-run figure.
+
+## 7. Gate semantics — **DONE**
+
+- Reports **files and findings separately**, labelled, instead of one number
+  that silently meant findings.
+- **Fails only on live heads.** Merging always writes a NEW version, so a
+  superseded version is never re-merged and never repaired; nine dead files
+  failing on every run is how a gate trains people to stop reading it.
+  Superseded files are reported as informational.

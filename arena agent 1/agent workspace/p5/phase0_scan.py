@@ -118,6 +118,34 @@ SUPP_OPEN = re.compile(r'^\s*(?:\\textbf\{\s*Supplementary material\s*\}|Supplem
 
 DECL_HEAD = re.compile(r'\\(?:sub)*section\*?\{Declarations\}')
 
+# a bare publisher/city tail left behind by the splitter, e.g.
+# "Birkhaeuser, Boston." / "Prentice-Hall, Upper Saddle River, NJ." /
+# "Fisheries and Oceans Canada, Ottawa." Two to five capitalised words,
+# comma-separated, carrying no year of its own.
+#
+# Promoted to FATAL 2026-10-01 after triage in report-only mode: 20 hits across
+# 59 files, 100% precision, every one a genuine detached tail. It currently has
+# ZERO live-head hits, so it does not change the exit status today -- it is a
+# guard against future merges, which is the point.
+PLACE_TAIL = re.compile(
+    r'^[A-ZÄÖÅ][\w\'\-]*'
+    r'(?:\s+(?:and|of|for|the|de|van|der)\s+[a-zA-Z\'\-]*'
+    r'|\s+[A-Z][\w\'\-]*){0,4}'
+    r'(?:,\s*[A-ZÄÖÅ][\w\'\-]*(?:\s+[A-Z][\w\'\-]*){0,3}){1,3}\.?$')
+
+# institutional / corporate authors. Needed because these are legitimate
+# year-less citations (a data portal has no publication year), and without
+# them the "no year, no author" signal reports them as detached tails.
+CORPORATE = re.compile(
+    r'^(?:U\.?\s?S\.?|U\.?\s?K\.?|UNFCCC|UNEP|UN\s|FAO|ICES|DFO|NOAA|USGS|NASA|'
+    r'EPA|OECD|Eurostat|Statistics\s+Canada|World\s+Bank|'
+    r'Texas\s+Water\s+Development\s+Board|Edwards\s+Aquifer\s+Authority|'
+    r'National\s+Research\s+Council|Fisheries\s+and\s+Oceans\s+Canada|'
+    r'Geological\s+Survey'
+    r'|[A-Z][A-Za-z\'\-]*\s+(?:University|Institute|Department|Ministry|Agency|'
+    r'Bureau|Survey|Council|Commission|Authority|Board|Centre|Center|Service|'
+    r'Laboratory|Observatory|Administration)s?\b)')
+
 # a reference entry must carry a year; a fragment left behind by the splitter
 # ("Academic Press, Boston." / "Ambio 49, 1067--1075.") never does
 YEAR = re.compile(r'\b(?:1[89]\d{2}|20\d{2})\b')
@@ -186,6 +214,83 @@ def ref_entries(c):
 
 def norm_key(e):
     return re.sub(r'[^a-z0-9]', '', e.lower())[:110]
+
+
+def _norm_text(t):
+    """Lowercased, LaTeX-stripped, alphanumeric words -- for title similarity."""
+    t = re.sub(r'\\[A-Za-z]+', ' ', t)
+    t = t.replace('{', ' ').replace('}', ' ')
+    t = t.lower()
+    t = re.sub(r'[^a-z0-9 ]', ' ', t)
+    return re.sub(r'\s+', ' ', t).strip()
+
+
+_DOI = re.compile(r'\b(10\.\d{4,9}/[^\s,;"\}]+)', re.I)
+# "2016/026", "Rep.~2016/026", "Report 2011/037", "No. 3328", "Circular 1186"
+_REPORT = re.compile(
+    r'\b(\d{4}/\d{2,4})\b'
+    r'|\b(?:rep(?:ort)?\.?|no\.?|circular|advis(?:ory)?)\s*~?\s*'
+    r'(\d{1,4}(?:/\d{2,4})?)\b', re.I)
+
+
+def fingerprints(e):
+    """-> set of identity fingerprints for a reference entry.
+
+    A DOI or a report number identifies a work outright. A year alone does
+    not, but year + title does.
+    """
+    fps = set()
+    d = _DOI.search(e)
+    if d:
+        fps.add('doi:' + d.group(1).rstrip('.').lower())
+    r = _REPORT.search(e)
+    if r:
+        v = r.group(1) or r.group(2)
+        if v:
+            fps.add('rep:' + v.lower())
+    y = YEAR.search(e)
+    if y:
+        fps.add('yr:' + y.group(0))
+    return fps
+
+
+def same_work(a, b):
+    r"""Do two entries cite the SAME work?
+
+    This replaces byte-identity, which is the wrong test: two entries citing
+    one report routinely differ in citation style and nothing else, so a
+    byte comparison reports "they differ" and leaves a human to notice that
+    the report number is identical. Identity of work is decided by:
+
+      - a shared DOI, or
+      - a shared report number            (decisive either way)
+      - else the same year AND >=60% title-token overlap
+
+    The DFO 2016 pair that motivated this was:
+
+        DFO, 2016. Stock Assessment of Northern cod (NAFO Divs. 2J3KL) in
+        2016. DFO Can. Sci. Advis. Sec. Sci. Advis. Rep.~2016/026.
+        DFO (2016). Stock assessment of Northern cod (NAFO 2J3KL).
+        \emph{Can. Sci. Advis. Sec. Sci. Advis. Rep.} 2016/026.
+
+    Not byte-identical. Same report, 2016/026. One work.
+    """
+    fa, fb = fingerprints(a), fingerprints(b)
+    for p in ('doi:', 'rep:'):
+        sa = set(x for x in fa if x.startswith(p))
+        sb = set(x for x in fb if x.startswith(p))
+        if sa and sb:
+            # both carry this kind of identifier: agreement is decisive, and
+            # so is disagreement
+            return bool(sa & sb)
+    ya = set(x for x in fa if x.startswith('yr:'))
+    yb = set(x for x in fb if x.startswith('yr:'))
+    if not (ya and yb and (ya & yb)):
+        return False
+    ta, tb = set(_norm_text(a).split()), set(_norm_text(b).split())
+    if not ta or not tb:
+        return False
+    return len(ta & tb) / float(len(ta | tb)) >= 0.60
 
 
 def surname_year(e):
@@ -303,6 +408,22 @@ def scan_structural(path, c, stem):
     # K -- split bibliography entries
     ents = ref_entries(c)
     for ln, e in ents:
+        # a bare publisher/city fragment is a detached tail on its own
+        # evidence -- it does not need the "no year" test below, and it does
+        # not need to open with a known journal name either.
+        # NOTE: CORPORATE is deliberately NOT consulted here. Triage showed
+        # PLACE_TAIL alone is 20/20 precise, while adding the corporate guard
+        # suppressed five genuine tails -- "Cambridge University Press,
+        # Cambridge.", "Eurostat, Luxembourg.", "OECD Publishing, Paris.",
+        # "Princeton University Press, Princeton, NJ." and "Fisheries and
+        # Oceans Canada, Ottawa." -- because publisher names end in the same
+        # words institutional authors do. The guard belongs only on the
+        # no-year/no-author signal, where the USGS false positive arose.
+        if PLACE_TAIL.match(e) and not YEAR.search(e):
+            out.append(('K.place-tail', e[:52],
+                        'detached publisher/city tail: no year, and it is the '
+                        'place half of an entry whose head is elsewhere', ln))
+            continue
         if not YEAR.search(e):
             # Institutional data citations legitimately carry no year
             # ("Statistics Canada. Tables 38-10-0167-01 ...", "World Bank.
@@ -339,13 +460,22 @@ def scan_structural(path, c, stem):
         if k[1] is None:
             continue
         if k in bykey:
-            out.append(('L.dup-ref-key', '%s %s' % k,
-                        'same author+year as L%d but different text: if these are '
-                        'distinct works they need %s letters; if it is the same '
-                        'work entered twice, merge them'
-                        % (bykey[k], 'a/b/c'), ln))
-        else:
-            bykey[k] = ln
+            prev_ln, prev_txt = bykey[k]
+            # Same author and year is NOT enough to call two entries a
+            # duplicate: an author legitimately publishes two things in a
+            # year, and flagging those was most of this rule's output. It now
+            # fires only when the two entries are the same WORK by the
+            # semantic test (shared DOI, shared report number, or same year
+            # plus title overlap). That makes the finding actionable --
+            # "merge these", not "go and check whether these conflict".
+            if same_work(prev_txt, e):
+                out.append(('L.dup-ref-key', '%s %s' % k,
+                            'same author+year as L%d and the SAME WORK '
+                            '(shared DOI, report number, or year+title) -- '
+                            'merge to one entry' % prev_ln, ln))
+            # keep the FIRST entry as the comparison point
+            continue
+        bykey[k] = (ln, e)
     return out
 
 
@@ -367,6 +497,7 @@ def merge_gate(path):
 # that need a/b/c/d letters -- real, but not merge damage, and not grounds to
 # refuse to emit the file.
 FATAL = frozenset(['H.duplicate-declarations', 'I.duplicate-supplement',
+                   'K.place-tail',
                    'J.cross-unit-ref', 'K.split-refs', 'L.dup-ref'])
 
 
