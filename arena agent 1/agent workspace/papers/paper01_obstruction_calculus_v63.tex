@@ -836,14 +836,18 @@ policy cannot distinguish them before \(T_{\mathrm{obs}}\); between
 observations the information set evolves by the set-membership semantics
 of Section 2.3.
 
-(H3.2) There exist a constraint function \(q\) of class \(C^1\) (the class of Theorem~\ref{calc-thm:exit}'s proof, Section 3.5) with \(\mathcal{V} \subseteq \{ q \ge 0 \}\)
-and a constant \(\varepsilon > 0\) such that, \textbf{for every implementable blind-window control} --- every
-measurable \(u(\cdot)\) on \([0, T_{\mathrm{obs}})\) that is admissible at
+(H3.2) Fix the policy class being certified: by default all
+implementable measurable blind-window controls; an institutional
+whole-window hold or other proper subclass must be declared explicitly,
+and then only nonviability \emph{within that class} is concluded. There
+exist a constraint function \(q\) of class \(C^1\) (the class of Theorem~\ref{calc-thm:exit}'s proof, Section 3.5) with \(\mathcal{V} \subseteq \{ q \ge 0 \}\)
+and a constant \(\varepsilon > 0\) such that, \textbf{for every implementable blind-window control in the fixed class} ---
+each of its controls is measurable on \([0, T_{\mathrm{obs}})\) and admissible at
 every compatible state throughout the blind window, \(u(t) \in U^B(B_t)\)
 with \(B_t\) the set-membership belief propagated under \(u(\cdot)\) ---
-which is exactly the class of controls that an observation-based policy
-can realize before the first informative observation, where its actions
-are a fixed function of time --- there are a compatible initial state \(x^* \in B_0\) attaining
+which is the full class realizable before the first informative
+observation \emph{only in the unrestricted case}; a declared hold class
+is a proper subclass --- there are a compatible initial state \(x^* \in B_0\) attaining
 \(q(x^*) = \inf_{x \in B_0} q(x)\) (with \(B_0\) compact and \(q\) lower
 semicontinuous; otherwise replace the infimum by \(\inf q + \delta\) for
 an arbitrary \(\delta\)-minimizer, let \(\delta \downarrow 0\), and read
@@ -855,9 +859,12 @@ that open-loop control, the record remains compatible and
 (H3.3) The timing bound holds:
 \[T_{\mathrm{obs}} \;>\; \frac{\inf_{x \in B_0} q(x)}{\varepsilon}. \tag{3}\]
 
-Then, under hypotheses (H3.1)--(H3.3),
-\(B_0 \notin \mathrm{ERViab}_{\mathcal{I}}(\mathcal{V})\): information
-may be accurate but arrive too late.
+Then, under hypotheses (H3.1)--(H3.3), no policy \emph{in the
+fixed class} is viable from \(B_0\). When the fixed class is the
+unrestricted observation-based class of Definition~\ref{calc-def:kernel},
+this says \(B_0\notin\mathrm{ERViab}_{\mathcal I}(\mathcal V)\).
+For a proper declared institutional subclass, it asserts only
+class-relative nonviability; it does not exclude unrestricted viability.
 
 \end{theorem}
 
@@ -866,20 +873,24 @@ may be accurate but arrive too late.
 Hypothesis (2) is a condition on the data of the problem, not on the policies, and condition (3) is the timing bound: inverted, it is the design requirement that the first informative observation precede the enforced exit time. The complete discussion of both hypotheses, and the formal-zero-margin comparison with Theorem~\ref{calc-thm:common-action}, are given in the Supplementary Material (S1).
 
 \begin{remark}[threshold form of the timing obstruction]\label{calc-rem:sigma}
-The delayed-information obstruction has a sharp threshold. Let
-\(\sigma^*(B_0)\) be the guaranteed blind-window survival time: the
-largest duration such that some pre-observation policy keeps every
+The delayed-information obstruction has a sharp threshold. For a fixed declared blind-window class \(\Pi\), let
+\(\sigma^*_{\Pi}(B_0)\) be its guaranteed survival time: the
+largest duration such that some control in \(\Pi\) keeps every
 observation-equivalent branch in \(\mathcal{V}\) until then,
-\[\sigma^*(B_0) \;=\; \sup_{u(\cdot)} \inf_{x_0\in B_0,\, d(\cdot)} \tau(x_0,u,d),\]
+\[\sigma^*_{\Pi}(B_0) \;=\; \sup_{u(\cdot)\in\Pi} \inf_{x_0\in B_0,\, d(\cdot)} \tau(x_0,u,d),\]
 with the infimum over branches that remain observation-equivalent on
 \([0,T_{\mathrm{obs}})\) and \(\tau\) the first violation time under the
 convention of Theorem~\ref{calc-thm:delayed}. Then
-\[\sigma^*(B_0) < T_{\mathrm{obs}} \;\Longrightarrow\; B_0 \notin \mathrm{ERViab}_{\mathcal{I}}(\mathcal{V}),\]
-because before \(T_{\mathrm{obs}}\) a policy cannot condition its action
-on which branch realizes. Condition (3) certifies this threshold: under
-(H3.1)--(H3.2) every branch exits by time
-\(\inf_{x\in B_0}q(x)/\varepsilon\), hence
-\(\sigma^*(B_0)\le\inf_{x\in B_0}q(x)/\varepsilon\), and (3) states that
+\[\sigma^*_{\Pi}(B_0) < T_{\mathrm{obs}} \;\Longrightarrow\;
+\text{no policy in }\Pi\text{ is viable from }B_0.\]
+For the unrestricted observation-based class this implies
+\(B_0\notin\mathrm{ERViab}_{\mathcal I}(\mathcal V)\), but for a
+proper hold class it does not. Before \(T_{\mathrm{obs}}\), a policy
+cannot condition its action on which branch realizes. Condition (3)
+certifies the class-specific threshold: under (H3.1)--(H3.2),
+\emph{for every control in \(\Pi\), at least one compatible branch}
+exits by time \(\inf_{x\in B_0}q(x)/\varepsilon\), hence
+\(\sigma^*_{\Pi}(B_0)\le\inf_{x\in B_0}q(x)/\varepsilon\), and (3) states that
 this upper bound lies below \(T_{\mathrm{obs}}\); the threshold itself
 may be strictly smaller, in which case nonviability holds even when (3)
 fails. The threshold is the blind-window response correspondence of the
@@ -888,7 +899,7 @@ delayed-information analogue of the tube and common-action
 correspondences.
 \end{remark}
 
-\textbf{Checkability of the timing certificate.} The drift hypothesis (3) is finitely checkable whenever the blind-window control class is finite: if \(B_{0}\) is finite and the admissible blind-window controls form a finite family (hold-until-\(T_{\mathrm{obs}}\) controls with \(u\) in a finite set, or piecewise-constant controls on a finite partition), the certificate reduces to the finite check that every candidate control enforces exit before \(T_{\mathrm{obs}}\), each worst-case exit time computed by branchwise integration or by the recursion of Section 3.1. The hidden-regime instance of Section 9 is this check in closed form: the worst branch declines at unit rate, giving \(\sigma^{*}(B_{0}) = z_{0} - 1\), and the certificate fires exactly when \(T_{\mathrm{obs}} > z_{0} - 1\). For continuous control classes the check remains a template, part of
+\textbf{Checkability of the timing certificate.} The drift hypothesis (H3.2) is finitely checkable whenever the blind-window control class is finite: if \(B_{0}\) is finite and the admissible blind-window controls form a finite family (hold-until-\(T_{\mathrm{obs}}\) controls with \(u\) in a finite set, or piecewise-constant controls on a finite partition), the certificate reduces to the finite check that every candidate control enforces exit before \(T_{\mathrm{obs}}\), each worst-case exit time computed by branchwise integration or by the recursion of Section 3.1. The hidden-regime instance of Section 9 is this check \emph{for its explicitly declared whole-window hold class}: the worst branch declines at unit rate. For integer blind steps the maximal safe count is \(\sigma^{*}_{\mathrm{hold}}(B_0)=\lfloor z_0-1\rfloor\), so the hold-class certificate fires exactly when the integer \(T_{\mathrm{obs}}>z_0-1\). For per-step switching this calculation does not apply; in particular alternating actions can save both branches from \(z_0\ge2\). For continuous control classes the check remains a template, part of
 Open Problem~\ref{calc-op:dynamic}; over polytope-declared classes, however, the
 check is exact and finite (Theorem~\ref{calc-thm:lp-instant}), and the class
 declaration itself is load-bearing (Example~\ref{calc-ex:relax-gap}).
@@ -907,12 +918,18 @@ through precomputed support constants --- and with rational data every step is e
 the rows whose aggregate control projection vanishes and whose aggregate constant is negative
 --- the timing certificate in adjoint-row form. (iii) The program's feasible set is the
 declared class itself, so the computation is sound and complete over \(\Pi_{B}\): no relaxation
-gap arises. (iv) The declaration is load-bearing: the same computation over a polytope
-\(U \supseteq U_{\mathrm{fin}}\) holding a finite implementable class computes the relaxation,
-which remains sound but can be arbitrarily incomplete --- on the hidden-regime data with
-\(U_{\mathrm{fin}} = \{-1, +1\}\) one has \(\sigma^{*} = z_{0} - 1\), while \(U = [-1,1]\)
-admits \(u \equiv 0\), which holds both branches on the floor forever, so
-\(\sigma^{*}_{\mathrm{rel}} = \infty\) and the relaxed certificate never fires.
+gap arises. (iv) The declaration is load-bearing: a polytope-per-step program may be
+an outer relaxation of a \emph{separately declared whole-window hold class}
+\(\Pi_{\mathrm{hold}}=\{(u,\dots,u):u\in\{-1,+1\}\}\), not of a
+class allowing arbitrary per-step switching with the same two actions.
+For the non-decaying hidden-regime branches \(z^+=z\pm u\) at
+\(z_0=2\) and floor \(z\ge1\), either held action survives only one
+blind step, whereas the relaxation \(U=[-1,1]\) admits \(u\equiv0\)
+through every horizon. The gap grows without bound as \(K\) increases
+(the relaxed infinite-horizon survival time is infinite). Switching
+\(+1,-1,+1,\dots\) is allowed in the \emph{per-step} finite-action
+class and rescues it; the asserted gap is specifically between the
+whole-window hold class and its polytope-per-step relaxation.
 \end{theorem}
 
 \emph{Proof sketch.} Unrolling the affine dynamics makes each branch state
@@ -924,7 +941,7 @@ controls themselves. Claim (iv) is the computation displayed in
 Example~\ref{calc-ex:relax-gap}; the complete proof, including the duality computation, is in
 Supplementary S1.
 
-\begin{example}[the relaxation gap is unbounded]\label{calc-ex:relax-gap}
+\begin{example}[decaying LP threshold and a separate held-class relaxation gap]\label{calc-ex:relax-gap}
 Two branches share \(z^{+} = \tfrac{9}{10} z \pm u\) from a common \(z_{0}\), floor
 \(\mathcal{V} = \{z \ge 1\}\), declared class \(U = [-1,1]\) per step. The branch sum
 \(z^{+}_{k} + z^{-}_{k} = 2 (\tfrac{9}{10})^{k} z_{0}\) is invariant under the control, so both
@@ -933,10 +950,15 @@ feasible exactly when \(z_{0} \ge (\tfrac{10}{9})^{K}\). The level-\(k\) Farkas 
 the pair of floor rows summed --- their control coefficients cancel pairwise --- leaving
 \(2(\tfrac{9}{10})^{k} z_{0} \ge 2\); and \(u \equiv 0\) attains feasibility on the boundary
 \(z_{0} = (\tfrac{10}{9})^{K}\), keeping the branches balanced at
-\((\tfrac{10}{9})^{K-k} \ge 1\). The program is thus a complete characterization of the declared
-class. If instead the declared class is the finite set \(\{-1, +1\}\), the guaranteed survival
-time is \(\sigma^{*} = z_{0} - 1\): strictly smaller. The relaxation enlarges the class and, on
-the hidden-regime data, extinguishes the certificate altogether.
+\((\tfrac{10}{9})^{K-k} \ge 1\). The program is thus a complete characterization of this decaying
+polytope-declared class. The \emph{different} non-decaying hidden-regime
+example used for the unbounded gap in clause (iv) has
+\(z^+=z\pm u\), \(z_0=2\), and a whole-window finite hold class:
+either hold survives one step, while the relaxed action \(u=0\)
+survives arbitrarily many. Its gap is not a survival-time formula for
+the decaying system above. Nor does it apply to the per-step finite
+class, whose alternating actions are allowed; the two computations
+are separated in Supplementary S1.
 \end{example}
 
 \begin{remark}[adjoint-row correspondence]\label{calc-rem:adjoint-duality}
@@ -1158,24 +1180,36 @@ insufficient post-observation recourse. In that mode a common blind-window
 control keeps every branch safe, yet no observation-adapted control can
 recover every branch once the distinguishing observation arrives; the discrete
 instance of Supplementary A.3 exhibits the mode while no certificate fires.
-This subsection supplies a continuous-time certificate for the mode. Its
-soundness covers every measurable information-adapted policy. Completeness is
+This subsection supplies a continuous-time certificate for the mode under
+an affine-state, affine-input plant with affine safety facets and exogenous
+disturbances. Its soundness covers every measurable information-adapted policy
+\emph{within that plant class}. Completeness is
 not claimed, because the certificate relaxes the post-observation class
 upward: an oracle grants each stored branch its own controller whether or not
 the sensor reveals that much, and an oracle failure is only a sufficient
 condition for real failure.
 
 \begin{proposition}[oracle-recourse obstruction]\label{calc-prop:recourse}
-Let the dynamics be affine in the control,
-\(f(x,u,d) = f_0(x,d) + B(x)\,u\), with compact convex
-\(U \subseteq \mathbb{R}^m\), and let branches
-\(x_1, \dots, x_L \in B_0\) be observation-equivalent on \([0, \tau)\) with
-horizon \(T > \tau\) (disturbances admitted, \(D\) compact). Fix a label
-\(\ell = (\theta, j, t)\) --- branch \(\theta\), constraint \(j\), time
-\(t \in (\tau, T]\) --- and a disturbance realization \(d(\cdot)\). Let
-\(\bar x_\theta^d(\cdot)\) denote branch \(\theta\)'s zero-control
-realization under \(d(\cdot)\), \(X_\theta^d(\cdot, \cdot)\) its
-state-transition matrix, and \(B^d(\sigma) := B(\bar x_\theta^d(\sigma))\).
+Assume the controlled dynamics are affine in the \emph{state and input}
+for each branch and fixed disturbance scenario:
+\(\dot x_\theta = A_\theta^d(t)x_\theta + g_\theta^d(t)
++ B_\theta^d(t)u\), where the coefficients are bounded and measurable
+on \([0,T]\) and, once the scenario is fixed, do not depend on the
+controlled trajectory or control. Disturbance scenarios are exogenous:
+each admissible \(d(\cdot)\) remains admissible under every policy.
+Let the safety facets be affine,
+\(q_j(x)=c_j^\top x+b_j\), with safety \(q_j\ge0\), and let
+\(U\subseteq\mathbb{R}^m\) be compact and convex. Let branches
+\(x_1,\dots,x_L\in B_0\) be observation-equivalent on \([0,\tau)\)
+with horizon \(T>\tau\). Fix a label
+\(\ell=(\theta,j,t)\), \(t\in(\tau,T]\), and a fixed admissible
+scenario \(d(\cdot)\). Let \(\bar x_\theta^d\) be its zero-control
+trajectory, \(X_\theta^d(t,\sigma)\) the transition matrix of
+\(A_\theta^d\), and \(B^d(\sigma):=B_\theta^d(\sigma)\).
+The state-independent input coefficient and affine facet are
+load-bearing: a general state-dependent \(B(x)\) or nonlinear facet
+requires a validated one-sided remainder before the displayed certificate
+can be used.
 Define the input kernel
 \[k_\ell^d(\sigma) = \mathbf{1}_{\{\sigma \le t\}}\,
 \big(B^d(\sigma)\big)^{\top}
@@ -1184,10 +1218,10 @@ Define the input kernel
 let \(\beta_\ell^d = q_j\big(\bar x_\theta^d(t)\big)\) denote the
 zero-control facet margin at the label, and write
 \(\phi_U(g) := \min_{v \in U} g^{\top} v\). For weights
-\(\lambda_\ell \ge 0\), \(\sum_\ell \lambda_\ell = 1\), define the recourse certificate \[\begin{aligned} \Gamma_{h}(\lambda) = \inf_{d(\cdot)} \Big\{ &\sum_{\ell} \lambda_{\ell} \beta_{\ell}^{d} + \int_0^{\tau} h_U\Big(\sum_{\ell} \lambda_\ell k_\ell^d(\sigma)\Big) d\sigma \\ &\quad + \sum_{\ell} \int_{\tau}^{T} h_U\big(\lambda_\ell k_\ell^d(\sigma)\big) d\sigma \Big\}, \end{aligned}\] with \(h_U(g) := \max_{v \in U} g^{\top} v\) the support function of \(U\); the infimum runs over admissible disturbance realizations (for affine dynamics each bracket is computable in closed form by variation of constants). If \(\Gamma_{h}(\lambda) < 0\), then \(B_0 \notin \mathrm{ERViab}_{\mathcal{I}}(\mathcal{V})\): some stored facet is violated along some branch, for every policy in the stated class and every branch selection.
+\(\lambda_\ell \ge 0\), \(\sum_\ell \lambda_\ell = 1\), define the recourse certificate \[\begin{aligned} \Gamma_{h}(\lambda) = \inf_{d(\cdot)} \Big\{ &\sum_{\ell} \lambda_{\ell} \beta_{\ell}^{d} + \int_0^{\tau} h_U\Big(\sum_{\ell} \lambda_\ell k_\ell^d(\sigma)\Big) d\sigma \\ &\quad + \sum_{\ell} \int_{\tau}^{T} h_U\big(\lambda_\ell k_\ell^d(\sigma)\big) d\sigma \Big\}, \end{aligned}\] with \(h_U(g) := \max_{v \in U} g^{\top} v\) the support function of \(U\); the infimum runs over admissible disturbance realizations (for affine dynamics each bracket is computable in closed form by variation of constants). If \(\Gamma_{h}(\lambda) < 0\), then \(B_0 \notin \mathrm{ERViab}_{\mathcal{I}}(\mathcal{V})\): for every admissible policy, at least one compatible stored branch violates a facet under the chosen exogenous scenario (the violating branch may depend on the policy).
 \end{proposition}
 
-\emph{Proof sketch.} Fix a disturbance realization attaining the infimum and any admissible policy. Variation of constants expands the weighted facet sum at the stored labels into the \(\beta\)-term, the window pairing (one common measurable signal on \([0, \tau)\), by the blind-window reduction of Theorem~\ref{calc-thm:delayed}), and the branch pairings (separate post-reveal signals); each realized pairing is bounded above by the corresponding support value, so the weighted facet sum is at most \(\Gamma_{h}(\lambda)\). A strictly negative weighted sum forces some facet value strictly negative --- the facet is violated along its branch --- and the window signal was arbitrary, so every policy in the class fails. The complete proof, the comparison with the attainment-special \(\phi_{U}\)-variant, and the position of the pooling weights are given in the Supplementary Material (S1). \hfill\(\square\)
+\emph{Proof sketch.} If the infimum defining \(\Gamma_h\) is negative, choose one exogenous admissible scenario whose bracket is negative; it remains admissible against every policy. For that fixed scenario, variation of constants for the stated affine-state system and affine facets expands the weighted facet sum \emph{exactly} into the \(\beta\)-term, the window pairing (one common measurable signal on \([0, \tau)\), by the blind-window reduction of Theorem~\ref{calc-thm:delayed}), and the branch pairings (separate post-reveal signals); each pairing is bounded above by its support value, so the weighted facet sum is strictly negative. A strictly negative weighted sum forces some facet value strictly negative --- the facet is violated along its branch --- and the window signal was arbitrary, so every policy in the class fails. The complete proof, the comparison with the attainment-special \(\phi_{U}\)-variant, and the position of the pooling weights are given in the Supplementary Material (S1). \hfill\(\square\)
 
 \begin{example}[three branches, delayed recourse]\label{calc-ex:three-branch}
 A planar braking instance in which the obstruction is purely one of
@@ -1642,7 +1676,7 @@ measurable-selection theory beyond the explicit selections the
 certificates exhibit; completeness is therefore claimed only where
 backward recursion is exact (Section 3.1).
 \item
-  The timing obstruction of Theorem~\ref{calc-thm:delayed} (and its threshold form, Remark~\ref{calc-rem:sigma}) certifies failure by exit \emph{before} the first informative observation. It is blind to the complementary mode of nonviability --- \emph{insufficient post-observation recourse} --- in which a common blind-window control keeps every compatible branch safe, yet no observation-adapted control can recover every branch once the distinguishing observation arrives; the finite-horizon recursion (Section 3.1) captures that mode exactly, and the oracle-recourse certificate of Section 3.7 certifies it in continuous time --- soundly against every measurable information-adapted policy under an oracle relaxation of the post-observation class, with a worked three-branch instance whose delay threshold is exact; what remains open is a complete continuous-time characterization that does not relax the post-observation class. A discrete instance in which every one-step certificate is silent is given in the Supplementary Material (S3, A.3).
+  The timing obstruction of Theorem~\ref{calc-thm:delayed} (and its threshold form, Remark~\ref{calc-rem:sigma}) certifies failure by exit \emph{before} the first informative observation. It is blind to the complementary mode of nonviability --- \emph{insufficient post-observation recourse} --- in which a common blind-window control keeps every compatible branch safe, yet no observation-adapted control can recover every branch once the distinguishing observation arrives; the finite-horizon recursion (Section 3.1) captures that mode exactly, and the oracle-recourse certificate of Section 3.7 certifies it in the stated affine-state, affine-input and affine-facet class with exogenous disturbances --- soundly against every measurable information-adapted policy of that plant class under an oracle relaxation of the post-observation class, with a worked three-branch instance whose delay threshold is exact; what remains open is a complete continuous-time characterization that does not relax the post-observation class. A discrete instance in which every one-step certificate is silent is given in the Supplementary Material (S3, A.3).
 \item
   The information-set semantics is set-membership; probabilistic or belief-space formulations require separate statements, although the common-action obstruction transfers mutatis mutandis to any semantics in which the policy must choose a single action per information state.
 \item
@@ -1752,7 +1786,7 @@ with \(\mathcal{W}_{0} = \{B \subseteq \mathcal{V}\}\) and \(\mathcal{W}_{N} = \
 
 \paragraph{Exactness class.} Weak duality holds unconditionally: a dual witness certifies nonviability in the declared class. Strong duality --- emptiness if and only if a witness exists --- holds exactly in the classes of Theorem~\ref{calc-thm:onestep} (finite horizon, finite model), Theorem~\ref{calc-thm:static-complete} (static observation), and the delayed class of Remark~\ref{calc-rem:coverage}; beyond them the converse is Open Problem~\ref{calc-op:dynamic}, open. The causes are not unified: dynamic exit empties the selector under full information and is not epistemic; the fibre results are limits on certification, not on policy viability (Section 4); the trap is a class restriction and can fire under injective observation. Unifying the form while keeping the causes distinct is the strongest unifying statement the framework supports, and the companion unification statement carries the same discipline.
 
-\paragraph{Monitoring adequacy (the design converse).} Obstruction answers why nonviability is forced; design asks what must be measured. In the one-step exact class the converse is immediate: an observation structure is adequate on a target exactly when every fibre meeting the target has a nonempty common safe action --- the partition form of the fibre criterion (Proposition~\ref{calc-prop:fibre}); pairwise intersection is necessary and, off convexity, not sufficient (the three two-point codices of the companion monitoring paper). Four rules follow as identities on the audited systems. (i) \emph{Timing:} on the delayed hidden-regime hold class, viability at deadline \(T_{\mathrm{obs}}\) holds exactly when \(T_{\mathrm{obs}} \le \sigma^{*}(B_{0}) = z_{0} - 1\), equivalently \(z_{0} \ge 1 + T_{\mathrm{obs}}\); the boundary case \(z_{0} = 1 + T_{\mathrm{obs}}\) is viable --- the review must land no later than worst-case exit (Section~9's grid; the strict form fails at the boundary cell, as the verification script records). (ii) \emph{Coarseness:} a fibre merging states with disjoint safe-action sets obstructs at that information state while every branch remains viable (Theorem~\ref{calc-thm:common-action}); the remedy is a fibre split, not a finer threshold on the same index. (iii) \emph{Aggregation:} an index whose fibres cross a floor cannot support an exact safe/unsafe verdict; report the certainly-safe set or fall silent (Corollary~\ref{calc-cor:certainly-safe}). (iv) \emph{Bias:} the trap of Remark~\ref{calc-rem:ce-trap} empties a nonempty kernel under the uncorrected law; the remedy is structural correction of the observation map, not a better sensor. The consolidated statement, with every audited count cited to its system, is maintained in the supplementary material.
+\paragraph{Monitoring adequacy (the design converse).} Obstruction answers why nonviability is forced; design asks what must be measured. In the one-step exact class the converse is immediate: an observation structure is adequate on a target exactly when every fibre meeting the target has a nonempty common safe action --- the partition form of the fibre criterion (Proposition~\ref{calc-prop:fibre}); pairwise intersection is necessary and, off convexity, not sufficient (the three two-point codices of the companion monitoring paper). Four rules follow as identities on the audited systems. (i) \emph{Timing:} on the delayed hidden-regime \emph{whole-window hold} class, viability at integer deadline \(T_{\mathrm{obs}}\) holds exactly when \(T_{\mathrm{obs}} \le \sigma^{*}_{\mathrm{hold}}(B_{0}) = \lfloor z_{0} - 1\rfloor\), equivalently \(z_{0} \ge 1 + T_{\mathrm{obs}}\); the boundary case \(z_{0} = 1 + T_{\mathrm{obs}}\) is viable --- the review must land no later than worst-case exit (Section~9's grid; the strict form fails at the boundary cell, as the verification script records). (ii) \emph{Coarseness:} a fibre merging states with disjoint safe-action sets obstructs at that information state while every branch remains viable (Theorem~\ref{calc-thm:common-action}); the remedy is a fibre split, not a finer threshold on the same index. (iii) \emph{Aggregation:} an index whose fibres cross a floor cannot support an exact safe/unsafe verdict; report the certainly-safe set or fall silent (Corollary~\ref{calc-cor:certainly-safe}). (iv) \emph{Bias:} the trap of Remark~\ref{calc-rem:ce-trap} empties a nonempty kernel under the uncorrected law; the remedy is structural correction of the observation map, not a better sensor. The consolidated statement, with every audited count cited to its system, is maintained in the supplementary material.
 
 \subsection{9. A Calibrated Case Study and a Coverage Audit}\label{calc-case-study}
 
@@ -1769,14 +1803,48 @@ harvest \(u\), recruitment noise \(w\) read adversarially, and a sustainability 
 
 \textbf{Two-dimensional aggregation.} The fibre criterion also governs a multidimensional stock. Take a two-species state \((S_{1}, S_{2}) \in [0,1]^{2}\) with the floor \(S_{1} \ge 0.4\), and suppose the regulator observes only the aggregate \(I = S_{1} + S_{2}\). The states \((0.5, 0.5)\) and \((0.2, 0.8)\) are both compatible with the reading \(I = 1.0\), yet the first satisfies the floor and the second violates it, so by Proposition~\ref{calc-prop:fibre} no exact observation-only certifier exists; by Corollary~\ref{calc-cor:certainly-safe} the certainly-safe readings are exactly \(I \ge 1.4\) (the smallest \(S_{1}\) compatible with \(I\) is \(I - 1\), so \(I - 1 \ge 0.4\)). An aggregate reading below \(1.4\) must therefore fall silent, however carefully thresholded --- the two-dimensional form of the aggregation consequence of Section 6.4.
 
-\textbf{The delayed-information timing bound.} The timing obstruction is sharpest in the hidden-regime system of Section 3.3: regimes \(\theta \in \{-1, +1\}\), dynamics \(z^{+} = z + \theta u\), controls \(u \in \{-1, +1\}\), floor \(z \ge 1\), with \(\theta\) revealed only after a blind window of \(T_{\mathrm{obs}}\) steps. From \(z_{0} = 2\) the drift of \(q(z) = z - 1\) on the declining branch is \(-1\) under every admissible action, so the threshold of Theorem~\ref{calc-thm:delayed} and Remark~\ref{calc-rem:sigma} is \(\sigma^{*}(B_{0}) = z_{0} - 1 = 1\): nonviability is certified for every \(T_{\mathrm{obs}} > 1\), while \(T_{\mathrm{obs}} = 1\) is viable --- the regime is revealed in time, and \(u = \theta\) then restores growth. In the fishery above the same certificate is silent in the normal regime, because \(u_{0} = 0\) keeps every stock above the floor; the bound fires only when no blind action avoids decline, which is precisely its scope.
+\textbf{The delayed-information timing bound (declared hold class).}
+Regimes \(\theta\in\{-1,+1\}\) follow \(z^{+}=z+\theta u\),
+\(u\in\{-1,+1\}\), with floor \(z\ge1\). Here the institutional
+class fixes \emph{one action for the entire} \(T_{\mathrm{obs}}\)-step
+blind window; it may select a regime-specific action only after the
+reveal. At \(z_0=2\), either hold drives one branch down at one unit
+per step, giving one safe blind step; after reveal \(u=\theta\)
+restores growth. Thus the hold-class timing certificate fires for
+integer \(T_{\mathrm{obs}}>1\). This is an application of
+Theorem~\ref{calc-thm:delayed} to the \emph{restricted} implementable
+class, not an assertion that its (H3.2) holds under arbitrary blind
+switching: \(+1,-1,+1,\ldots\) can keep both branches safe from
+\(z_0\ge2\) without an informative observation. In the fishery above
+the same certificate is silent in the normal regime because \(u_0=0\)
+keeps every stock above the floor.
 
 \textbf{The certainty-equivalence trap.} With a biased index \(\hat{S} = S + 0.1\), \(g(S) = S^{2}\), and \(\mathcal{V} = [1,2]\), the certainty-equivalence policy \(u = g(\hat{S})\) produces \(\dot{S} = g(S+0.1) - g(S) = 0.2S + 0.01 > 0\), which reaches the upper bound from \(S = 1\) in \(\approx 3.3\) time units, while the bias-corrected policy \(u = g(\hat{S} - 0.1)\) keeps \(\dot{S} = 0\) and the kernel nonempty (Remark~\ref{calc-rem:ce-trap}).
 
-\textbf{A reproducible delayed hidden-regime model.} The audit runs on the exact instance specified here. The state is \((z, \theta)\) with \(\theta \in \{-1, +1\}\) a hidden regime and \(z \ge 0\); the action \(u \in \{-1, +1\}\) is common to both regimes; the transition is \(z^{+} = z + \theta u\); the safe set is \(\mathcal{V} = \{ z \ge 1 \}\); and the observation reveals nothing before \(T_{\mathrm{obs}}\) and reveals \(\theta\) exactly at time \(T_{\mathrm{obs}}\). From a known \(z_{0}\) with both regimes possible, the belief after \(k < T_{\mathrm{obs}}\) blind steps contains the two extreme histories \((z_{0} - k, -1)\) and \((z_{0} + k, +1)\), and a blind policy must choose the same \(u\) for both branches at every blind step. The guaranteed blind-window survival time is therefore \(\sigma^{*}(B_{0}) = z_{0} - 1\): the best blind policy drives one branch down at unit rate, so the declining branch reaches the floor \(1\) at time \(z_{0} - 1\), and after the reveal \(u = \theta\) keeps \(z \ge 1\) forever. Hence \(B_{0}\) is robustly epistemically viable if and only if \(z_{0} - 1 \ge T_{\mathrm{obs}}\), i.e.\ \(z_{0} \ge 1 + T_{\mathrm{obs}}\) --- the ground truth against which the certificates are audited. The one-step certificate of Theorem~\ref{calc-thm:common-action} fires exactly when \(z_{0} < 2\) (one blind step already forces \(z_{0} - 1 < 1\)), and the timing bound of Theorem~\ref{calc-thm:delayed} fires exactly when \(z_{0} \ge 2\) and \(T_{\mathrm{obs}} > z_{0} - 1\).
+\textbf{A reproducible delayed hidden-regime model, with its policy class.}
+The state is \((z,\theta)\), \(\theta\in\{-1,+1\}\), \(z\ge0\);
+\(z^{+}=z+\theta u\), \(u\in\{-1,+1\}\), and
+\(\mathcal V=\{z\ge1\}\). No regime is observed before the integer
+horizon \(T_{\mathrm{obs}}\); it is revealed exactly then. The \emph{audited
+institutional class} is
+\(\Pi_{\mathrm{hold}}=\{u_0=\cdots=u_{T_{\mathrm{obs}}-1}
+=+1\text{ or }-1\}\), with regime-adapted actions after the reveal.
+This is a whole-window hold, \emph{not} all per-step sequences over
+\(\{-1,+1\}\). From a known \(z_0\), the two held histories after
+\(k<T_{\mathrm{obs}}\) steps are \(z_0-k\) and \(z_0+k\).
+The maximal \emph{integer} number of jointly safe blind steps is
+\(\sigma^*_{\mathrm{hold}}(B_0)=\lfloor z_0-1\rfloor\); its linearly
+interpolated crossing time is \(z_0-1\). Once revealed, \(u=\theta\)
+keeps the surviving branch safe forever. Consequently viability
+\emph{in this hold class} is exactly \(z_0\ge1+T_{\mathrm{obs}}\).
+The one-step certificate covers \(z_0<2\); the hold-class timing
+bound covers \(z_0\ge2\) and integer
+\(T_{\mathrm{obs}}>z_0-1\). Under the broader per-step class,
+\(+1,-1,+1,\ldots\) keeps both branches safe from any \(z_0\ge2\),
+so the hold-class timing verdict does not transfer to that class.
 
 
-\textbf{A coverage audit.} To quantify the gap identified in Section 6.5, we audit the certificates against the exact recursion on the delayed hidden-regime system, over the grid \(z_{0} \in \{1.0, 1.1, \dots, 2.5\}\), \(T_{\mathrm{obs}} \in \{1,2,3\}\). Table~\ref{calc-tab:coverage} and Figure~\ref{calc-fig:coverage} report the true verdict, the one-step certificate, and the timing bound. The audit is reproduced by the script \texttt{paper2\_coverage\_audit.py}, publicly available at \url{https://github.com/MIKEAA2020/general-sustainability} (folder \texttt{arena agent 1/paper rewrites/latex}), which regenerates Table~\ref{calc-tab:coverage} and Figure~\ref{calc-fig:coverage} verbatim.
+\textbf{A coverage audit.} To quantify the gap identified in Section 6.5, we audit the certificates against the exact recursion \emph{restricted to the declared whole-window hold class} on the delayed hidden-regime system, over the grid \(z_{0} \in \{1.0, 1.1, \dots, 2.5\}\), \(T_{\mathrm{obs}} \in \{1,2,3\}\). Table~\ref{calc-tab:coverage} and Figure~\ref{calc-fig:coverage} report the true verdict, the one-step certificate, and the timing bound. The audit is reproduced by the script \texttt{paper2\_coverage\_audit.py}, publicly available at \url{https://github.com/MIKEAA2020/general-sustainability} (folder \texttt{arena agent 1/paper rewrites/latex}), which regenerates Table~\ref{calc-tab:coverage} and Figure~\ref{calc-fig:coverage} verbatim.
 
 \begin{table*}[t]
 \centering
@@ -1792,22 +1860,22 @@ harvest \(u\), recruitment noise \(w\) read adversarially, and a sustainability 
 3 & \(\bullet\) & \(\bullet\) & \(\bullet\) & \(\bullet\) & \(\bullet\) & \(\bullet\) & \(\bullet\) & \(\bullet\) & \(\bullet\) & \(\bullet\) & \(\ast\) & \(\ast\) & \(\ast\) & \(\ast\) & \(\ast\) & \(\ast\) \\
 \bottomrule
 \end{tabular}
-\caption{Coverage audit on the delayed hidden-regime system: \(\circ\) viable; \(\bullet\) nonviable, certified by the common-action certificate (Theorem~\ref{calc-thm:common-action}); \(\ast\) nonviable, certified only by the timing bound (Theorem~\ref{calc-thm:delayed}). Every nonviable cell is covered by exactly one certificate.}
+\caption{Coverage audit on the delayed hidden-regime system \emph{restricted to one action held throughout the blind window}: \(\circ\) viable; \(\bullet\) nonviable, certified by the common-action certificate (Theorem~\ref{calc-thm:common-action}); \(\ast\) nonviable in the hold class, certified only by the hold-class timing bound (Theorem~\ref{calc-thm:delayed} with this institutional restriction). All hold-class nonviable cells are covered. The \(\ast\) cells can be viable under per-step switching.}
 \label{calc-tab:coverage}
 \end{table*}
 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.82\linewidth]{figs_p2/fig_p2_coverage.png}
-\caption{The coverage audit of Table~\ref{calc-tab:coverage}: green = viable; red = nonviable, certified by the common-action certificate; orange = nonviable, certified only by the timing bound (the residual gap of Section 6.5). The dashed curve is the true boundary \(z_{0} = 1 + T_{\mathrm{obs}}\) and the solid vertical line the one-step boundary \(z_{0} = 2\).}
+\caption{Whole-window hold-class coverage of Table~\ref{calc-tab:coverage}: green = viable; red = nonviable under either class, certified by the common-action certificate; orange = nonviable \emph{only in the audited hold class}, certified there by the timing bound. With per-step alternating actions, the orange cells are viable. The dashed curve is the \emph{hold-class} boundary \(z_{0} = 1 + T_{\mathrm{obs}}\), not an unrestricted boundary; the solid vertical line marks the one-step boundary \(z_{0} = 2\).}
 \label{calc-fig:coverage}
 \end{figure*}
 
 \begin{remark}[joint completeness in the delayed class]\label{calc-rem:coverage}
-In every audited cell the true verdict is reproduced by exactly one of the two certificates: of the 42 nonviable cells, 30 are certified by the common-action certificate and the remaining 12 --- precisely those with \(z_{0} \ge 2\) and \(T_{\mathrm{obs}} > z_{0} - 1\) --- by the timing bound; none is uncovered. In this class the two certificates are jointly complete, and the Section 6.5 gap reduces to the timing cells.
+In the \emph{declared whole-window hold class}, of the 42 nonviable grid cells, 30 are certified by the common-action certificate and the remaining 12 --- those with \(z_{0}\ge2\) and integer \(T_{\mathrm{obs}}>z_{0}-1\) --- by the hold-class timing bound; none is uncovered. This is joint completeness \emph{only in that restricted class}. For comparison, in the broader per-step class only the 30 common-action cells are nonviable; the 12 hold-only timing cells are viable by alternating controls.
 \end{remark}
 
-\emph{Why joint completeness holds in this class.} The ground truth is the identity \(B_{0} \in \mathrm{ERViab}_{\mathcal{I}}(\mathcal{V}) \iff z_{0} \ge 1 + T_{\mathrm{obs}}\) established in the reproducible-model paragraph above, so nonviability holds exactly when \(z_{0} < 1 + T_{\mathrm{obs}}\). The two certificates partition that set: the common-action certificate fires exactly when \(z_{0} < 2\), and the timing bound fires exactly when \(z_{0} \ge 2\) and \(T_{\mathrm{obs}} > z_{0} - 1\), that is \(2 \le z_{0} < 1 + T_{\mathrm{obs}}\); the two conditions are disjoint and their union is \(\{z_{0} < 1 + T_{\mathrm{obs}}\}\). Every nonviable cell is therefore certified by exactly one certificate, so within the delayed hidden-regime class the pair \(\text{(common-action, timing)}\) is a complete characterization at every horizon, and the gap of Section 6.5 is exactly the timing cells.
+\emph{Why joint completeness holds in this hold class.} The hold-class viability condition is \(z_0\ge1+T_{\mathrm{obs}}\) at integer horizon. The common-action certificate covers \(z_0<2\); the restricted timing calculation covers \(2\le z_0<1+T_{\mathrm{obs}}\), since a whole-window hold then sends one branch below the floor. These disjoint sets partition exactly the hold-class nonviable cells. This partition is \emph{not} a completeness result for the unrestricted policy class, where switching within the blind window changes the verdict.
 
 \textbf{Calibration.} The certificate parameters correspond to quantities estimable from standard stock-assessment practice: the drift margin \(\varepsilon\) is a net growth rate at the floor; the first informative observation time \(T_{\mathrm{obs}}\) is the assessment or review periodicity; the bias \(b\) of the certainty-equivalence instance is the systematic error of the indicator; and the floor is the reference point of the management rule. Calibrating these four numbers from a published assessment is all the machinery the certificates require; the present section stays symbolic, and the empirical calibration is left to applied studies.
 
@@ -1868,13 +1936,46 @@ then \(V_{k}(b) \le 1 - \delta\) for every \(k \ge 1\), and the chance constrain
 
 \emph{Proof.} The one-step survival probability under action \(a\) is \(1 - \sum_{x} b(x)\, p(x,a) \le 1 - \delta\), so \(V_{1}(b) \le 1 - \delta\). Since \(V_{k+1} \le V_{k}\) --- more steps cannot raise the survival probability --- \(V_{k}(b) \le V_{1}(b) \le 1 - \delta\). \hfill\(\square\)
 
-\begin{proposition}[degenerate (deterministic) limit]\label{calc-prop:degenerate}
-Let \(X, A, D, Y\) be finite with the deterministic maps \(x^{+} = F(x,a,d)\) and \(y = O(x,a,x^{+})\) of Section 3.1, and let the stochastic transition and likelihood have supports \(\{F(x,a,d) : d \in D(x)\}\) and \(\{O(x,a,x^{+}) : x^{+} \text{ reachable}\}\). Then the posterior support under the belief-state update is exactly the set-valued post-state \(\mathrm{Post}(B,a,y)\) of Section 3.1, so the support of the belief-state recursion follows the set-valued recursion \(\mathcal{W}_{k}\). For a belief \(b\) carried by \(B \subseteq \mathcal{V}\) and the disturbance read adversarially within its support, \(V_{k}(b) = 1\) if \(B \in \mathcal{W}_{k}\), while if \(B \notin \mathcal{W}_{k}\) then \(V_{k}(b) \le 1 - \min_{x \in B} b(x) < 1\).
+\begin{proposition}[deterministic-kernel limit]\label{calc-prop:degenerate}
+Let \(X,A,Y\) be finite with \(X=\mathcal V\cup\{\bot\}\), where
+\(\bot\) is the unique absorbing unsafe state in \emph{both} models.
+In the set-valued model of Section 3.1, assume every admissible
+disturbance gives the \emph{same} successor
+\(F(x,a,d)=F(x,a)\) (equivalently, take a singleton disturbance set),
+and its observation is independent of \(d\):
+\(O(x,a,d,x^{+})=O(x,a,x^{+})\). Use this deterministic
+single-successor transition and deterministic observation in the
+stochastic model as well. Suppose
+\(T(x'\mid x,a)=\mathbf{1}[x'=F(x,a)]\), the observation likelihood is
+the corresponding point mass, and every action in \(A\) is admissible
+at each state under consideration, so the policy class in the stochastic
+value \(V_k\) agrees with the set-valued recursion \(\mathcal W_k\).
+Let \(b\) have full support \(B=\mathrm{supp}(b)\subseteq\mathcal V\).
+Then for every possible observation the posterior support is exactly
+\(\mathrm{Post}(B,a,y)\). For the unrestricted sequential policy class,
+\(V_k(b)=1\) if and only if \(B\in\mathcal W_k\), and if
+\(B\notin\mathcal W_k\) then
+\(V_k(b)\le 1-\min_{x\in B}b(x)<1\).
+This quantitative bound does \emph{not} follow merely because a
+stochastic transition has the same support as a set of possible
+adversarial disturbances; such a fixed stochastic kernel is governed
+instead by its transition probabilities and Proposition~\ref{calc-prop:chance}.
 \end{proposition}
 
-\emph{Proof.} Under the deterministic kernels the posterior is supported exactly on \(\mathrm{Post}(B,a,y)\), so the support of the belief evolves by the set-valued recursion. If \(B \in \mathcal{W}_{k}\), the witness actions of Theorem~\ref{calc-thm:finite-horizon} keep every compatible branch in \(\mathcal{V}\), giving \(V_{k}(b) = 1\). If \(B \notin \mathcal{W}_{k}\), every action leaves some compatible state \(x \in B\) of mass \(b(x)\) with a successor outside \(\mathcal{V}\) under an admissible disturbance, so the one-step survival probability under every action is at most \(1 - \min_{x \in B} b(x)\); since \(V_{k}\) is non-increasing in \(k\), \(V_{k}(b) \le 1 - \min_{x \in B} b(x) < 1\). \hfill\(\square\)
+\emph{Proof.} Under the point-mass transition and observation kernels,
+each initial state and deterministic observation-based policy generate a
+unique path. The posterior support is precisely the deterministic
+set-valued post-state. By the finite-horizon recursion of
+Theorem~\ref{calc-thm:finite-horizon}, \(B\in\mathcal W_k\) if and only if
+some such policy keeps \emph{every} state in \(B\) safe through step
+\(k\), equivalently \(V_k(b)=1\) because all \(b(x)>0\) on \(B\).
+If \(B\notin\mathcal W_k\), every policy loses at least one initial
+state \(x\in B\) by some stage \(t\le k\); its loss probability is
+therefore at least \(b(x)\ge\min_{z\in B}b(z)\). Maximizing expected
+survival over policies gives the displayed bound. A multi-step failure
+need not occur on the first action. \hfill\(\square\)
 
-Proposition~\ref{calc-prop:degenerate} is the sense in which the chance-constrained obstruction degenerates to the common-action obstruction: at the deterministic limit \(V_{1}(b) = 1\) exactly when the common safe-action set is nonempty, and the deficit from \(1\) is at least the smallest compatible mass \(\min_{x \in B} b(x)\). The bound is attained on the worked instances of the Supplementary Material (S1): the two-floor conflict at \(V_{k}(b_{0}) = \tfrac{1}{2}\) for all \(k\), and the delayed hidden regime on the audit grid of Section 9, where the script regenerates all 48 cells of the safety-value table verbatim.
+Proposition~\ref{calc-prop:degenerate} is the sense in which the chance-constrained obstruction degenerates to the common-action obstruction: at the deterministic limit \(V_{1}(b) = 1\) exactly when the common safe-action set is nonempty, and the deficit from \(1\) is at least the smallest compatible mass \(\min_{x \in B} b(x)\). The unrestricted deterministic-kernel bound is attained by the finite-action two-floor conflict at \(V_k(b_0)=\tfrac12\) for all \(k\) (Supplementary S1). The delayed hidden-regime grid of Section 9 is a \emph{different, held-policy-class} calculation: its class-relative safety values also have half-mass deficits, but they are not values of the unrestricted \(V_k\) or direct instances of this proposition. Supplementary S1 reports its 48-cell table with that policy restriction explicit.
 
 \subsection{11. Conclusion}\label{calc-conclusion}
 
@@ -1905,7 +2006,7 @@ certification, or the correction of a known bias. For sustainability
 governance, where observation is conducted through coarse indicators at
 discrete reviews, the calculus states the quantitative limits of what
 monitoring can deliver --- and converts each impossibility into a design
-specification. Four elements complete the picture: the certificates are complete in the one-step and static-observation classes, with the residual dynamic gap stated as an open problem (Section 7); the selector principle consolidates the certificates as dual witnesses of one correspondence, with the monitoring-adequacy converse and the design rules (Section 8); a calibrated case study and a coverage audit show the certificates reproducing the exact recursion verdict on a grid of delayed hidden-regime systems, with a two-patch audit carrying the aggregation obstruction to two dimensions (Section 9); and the probabilistic belief-state lift connects the calculus to the partially observable control literature, its safety values worked in closed form on the same grid (Section 10). A fourth completion is structural: over polytope-declared
+specification. Four elements complete the picture: the certificates are complete in the one-step and static-observation classes, with the residual dynamic gap stated as an open problem (Section 7); the selector principle consolidates the certificates as dual witnesses of one correspondence, with the monitoring-adequacy converse and the design rules (Section 8); a calibrated case study and a coverage audit reproduce the exact \emph{whole-window hold-class} verdict on a delayed hidden-regime grid, with a two-patch audit carrying aggregation to two dimensions (Section 9); and the probabilistic belief-state lift connects the calculus to partially observable control, with unrestricted values distinguished from the separate hold-class values tabulated on that grid (Section 10 and Supplementary S1). A fourth completion is structural: over polytope-declared
 blind-window classes the timing certificate is exactly computable as a linear
 program, sound beyond the declaration with an unbounded implementable-class gap
 (Section 3.3), and the residual dynamic gap decomposes exactly, its
