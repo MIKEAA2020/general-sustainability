@@ -1,11 +1,27 @@
 #!/usr/bin/env python3
 """Compile source-specific staged TeX in isolated asset-aware folders.
 Compiles paper01's current live main/supp as consistency baselines, not repairs.
-Requires /home/user/tools/tectonic, cached or network-accessible TeX bundle.
+Uses tools/tectonic if installed, otherwise verifies and unpacks the exact
+remote-backed tools/tectonic-0.15.0-x86_64-static.tar.gz to temporary space.
+Requires cached or network-accessible TeX bundle resources.
 """
 from pathlib import Path
-import subprocess, shutil, re, sys
+import subprocess, shutil, re, sys, tarfile, tempfile, hashlib
 root=Path('/home/user');base=root/'content_audit/claim_alignment';build=base/'compile';build.mkdir(exist_ok=True)
+def compiler():
+ exe=root/'tools/tectonic'
+ if exe.is_file():return exe
+ archive=root/'tools/tectonic-0.15.0-x86_64-static.tar.gz'
+ assert hashlib.sha256(archive.read_bytes()).hexdigest()=='b00fcaf562798fcaf92d4ee8391080bb0728b2309cea84f94efa06949417d450'
+ with tarfile.open(archive,'r:gz') as tf:
+  assert tf.getnames()==['tectonic']
+  binary=tf.extractfile('tectonic').read()
+ assert hashlib.sha256(binary).hexdigest()=='4df19452c202c5bef9f7c7e4a01a3f2b9d5199f0a1f73b70b4fe1bffbc9837f6'
+ scratch=Path(tempfile.mkdtemp(prefix='paper2-tectonic-'))/'tectonic'
+ scratch.write_bytes(binary);scratch.chmod(0o700)
+ print('Using SHA-verified compiler from remote-backed archive:',scratch,flush=True)
+ return scratch
+TECTONIC=compiler()
 assets={
  'ws': [('figs_ws4','content_audit/scientific_validity/ws/figs_ws4')],
  'comp': [('figs_comp2','content_audit/scientific_validity/comp/figs_comp2')],
@@ -50,7 +66,7 @@ for key,filename,is_live in jobs:
    if upper.is_symlink():upper.unlink()
    elif upper.exists():raise RuntimeError('Asset path already exists: '+str(upper))
    upper.symlink_to(root/target,target_is_directory=True)
- cmd=[str(root/'tools/tectonic'),'-p','--keep-logs',filename]
+ cmd=[str(TECTONIC),'-p','--keep-logs',filename]
  try:
   run=subprocess.run(cmd,cwd=folder,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,timeout=300)
   (folder/'compile.stdout.log').write_text(run.stdout)
