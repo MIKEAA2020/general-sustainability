@@ -30,6 +30,7 @@ The target is the Journal of Industrial Ecology, Springer Nature journal 44498. 
 The source-only ZIP was extracted into a clean temporary directory and compiled with Tectonic 0.15.0. Result: successful 11-page PDF; no fatal TeX error, undefined reference, missing asset or emergency stop.
 
 The main-paper and supplementary author lines both identify the affiliation as `Independent Researcher, Tehran, Iran`; the existing v2 supplement source was not overwritten. The updated main ZIP was re-extracted and compiled successfully, and the v3 supplementary source compiled successfully to 13 pages.
+The main paper now contains an explicit in-text `Fig.~\ref{fig:typed-ledger}` citation immediately before the figure environment; the figure label alone is not treated as a text citation by submission systems.
 
 ## Security check
 
