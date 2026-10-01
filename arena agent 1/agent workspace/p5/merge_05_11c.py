@@ -18,6 +18,17 @@ A = 'paper05_exact_belief_computation_v14.tex'
 B = 'paper11c_worked_systems_audit_v2.tex'
 OUT = 'paper05_exact_belief_computation_v15.tex'
 
+# This merger previously treated a post-AI bibliographic entry in B as
+# declaration text. Refuse the input before writing rather than silently
+# importing a citation into the declarations of the combined artifact.
+from pathlib import Path
+b_text = (Path(BASE) / B).read_text()
+ref_start = b_text.index('\\subsection*{References}')
+decl_start = b_text.index('\\subsection*{Declarations}', ref_start)
+assert b_text.count('Saint-Pierre, P., 1994.') == 1
+if not (ref_start < b_text.index('Saint-Pierre, P., 1994.') < decl_start):
+    raise RuntimeError('REFUSE merge: cited Saint-Pierre (1994) is not inside B References')
+
 TITLE = ("Exactness is not the limitation: belief-state computation at scale and the audits "
          "that bind the obstruction calculus to its worked systems")
 

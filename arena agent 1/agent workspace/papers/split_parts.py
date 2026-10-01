@@ -130,6 +130,13 @@ def write(out, preamble, title, author, body, note, need_maketitle=False, refs=N
         required = (r'\section*{Supplementary Material}', r'\section*{Declarations}',
                     'Dasgupta, P., and M', 'Net national product, wealth, and',
                     'Springer, New York, 953--986.')
+    elif os.path.basename(out).startswith('paper11c_'):
+        # The v15 container imported its cited Saint-Pierre (1994) entry
+        # after the AI declaration, and this split previously attached no
+        # bibliography to Part II. Refuse a citation-incomplete new v3.
+        required = (r'\subsection*{References}',
+                    'Saint-Pierre, P., 1994. Approximation of the viability kernel.',
+                    r'\subsection*{Declarations}')
     else:
         required = ()
     missing = [item for item in required if item not in assembled]
