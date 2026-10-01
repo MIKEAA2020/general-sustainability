@@ -137,4 +137,18 @@ HEAD_B = r"""
 \addcontentsline{toc}{part}{Part II --- Probabilistic sufficiency}
 """
 
+# Fail closed: mergelib.split_entries currently splits several v61 book
+# paragraphs at publisher comma + year (e.g. Viability Theory. Birkhauser,
+# Boston (1991)), yielding orphan entries that the old v62 sorted away from
+# their heads. A separately source-reconciled terminal v63 does NOT make v62
+# safe to regenerate. Preserve this check until a proven work-aware merger is
+# implemented and tested on both source bibliographies.
+from pathlib import Path
+import mergelib
+source = (Path(BASE) / A).read_text()
+refs = source[source.index('\\subsection{References}'):source.index('\\section*{Declarations}')]
+parsed = mergelib.split_entries(refs)
+source_full = 'Aubin, J.-P.: Viability Theory. Birkh\\"auser, Boston (1991)'
+if source_full in refs and source_full not in parsed:
+    raise RuntimeError('REFUSE paper01 v62 merge: source book head and publisher tail are split by reference parser')
 merge(BASE, A, B, OUT, TITLE, ABSTRACT, CROSS, HEAD_A, HEAD_B, 'calc-', 'prob-')
