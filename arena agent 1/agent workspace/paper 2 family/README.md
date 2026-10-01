@@ -1,0 +1,9 @@
+# Paper 2 family — Preprints.org preparation, NOT submitted
+
+These are **eight distinct, reviewed work families**, not a decided merged paper or a new numbering scheme. `01`, `02`, `03`, `04`, `05`, `09b`, `11` and `11c` retain the reviewed source identities. Families numbered 06–10 elsewhere are **not represented here as corrected submissions** merely because their numbers lie in the range. No submission or upload to Preprints.org has occurred.
+
+Each subfolder has a source-specific, compiled *corrected draft* (`.tex`), a typeset PDF, and the actually referenced figure assets. Paper 01 and comp also have their supplementary `.tex` and PDF. The original paper01 live head and other reviewed live heads remain unchanged; the paper01 main abstract and supplementary author additions here are the staged compatibility variants. The E1 composite inherits `\graphicspath{{../}}`; its referenced figures are copied both into its own folder and into the immediate parent so that this staging layout compiles unchanged. Normalize paths and deduplicate only when making a final submission bundle. Check each source's references and any submission portal requirements.
+
+**Before submission:** decide grouping; reconcile cross-paper terms using `content_audit/claim_alignment/TERMINOLOGY_AND_PAPER01_2026-10-01.md`; run a fresh Lean build with the pinned toolchain; rerun source-matched computations after regrouping, inspect rendered final artifacts, and obtain author approval. The checks and limitations are in `content_audit/claim_alignment/PRE_GROUPING_READINESS_2026-10-01.md`. Manuscript byline is Amin Abaee; no double-blind anonymization or new contribution role was added.
+
+`SHA256SUMS.tsv` covers packaged source, PDF and assets. For verbatim old abstracts and diffs against reviewed heads, consult `content_audit/claim_alignment/original_abstracts/` and `diffs/`. Do not mistake a successful TeX compile or verifier exit for whole-paper proof.
