@@ -149,6 +149,6 @@ source = (Path(BASE) / A).read_text()
 refs = source[source.index('\\subsection{References}'):source.index('\\section*{Declarations}')]
 parsed = mergelib.split_entries(refs)
 source_full = 'Aubin, J.-P.: Viability Theory. Birkh\\"auser, Boston (1991)'
-if source_full in refs and source_full not in parsed:
-    raise RuntimeError('REFUSE paper01 v62 merge: source book head and publisher tail are split by reference parser')
+if source_full not in refs or source_full not in parsed:
+    raise RuntimeError('REFUSE paper01 v62 merge: source book missing or head/publisher split by reference parser')
 merge(BASE, A, B, OUT, TITLE, ABSTRACT, CROSS, HEAD_A, HEAD_B, 'calc-', 'prob-')

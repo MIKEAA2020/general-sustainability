@@ -144,6 +144,14 @@ def write(out, preamble, title, author, body, note, need_maketitle=False, refs=N
         raise RuntimeError('REFUSE TO WRITE content-incomplete split %s; missing %s. '
                            'Restore from its documented source before splitting.'
                            % (os.path.basename(out), missing))
+    if os.path.basename(out).startswith('paper11c_'):
+        # Presence anywhere is insufficient: the original defect put the
+        # complete entry AFTER the final AI declaration.
+        r = assembled.index(r'\subsection*{References}')
+        cite = assembled.index('Saint-Pierre, P., 1994. Approximation of the viability kernel.')
+        d = assembled.index(r'\subsection*{Declarations}')
+        if not r < cite < d:
+            raise RuntimeError('REFUSE paper11c split: Saint-Pierre is outside References')
     open(out, 'w', encoding='utf-8').write(assembled)
     print('  wrote %-46s %7d chars' % (os.path.basename(out),
                                        os.path.getsize(out)))
