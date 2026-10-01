@@ -274,3 +274,48 @@ than a publisher token. Three of the seven tails repaired here were invisible to
 the gate and were found by reading. The rule needs a second signal: a fragment
 whose text is a plausible continuation of another entry (publisher, city, or
 report-number tail) should be reported whether or not it has a year.
+
+---
+
+# Follow-up: the gap, made measurable (2026-10-01)
+
+The detector gap recorded above was implemented as a SECOND SIGNAL and run in
+**report-only** mode across all 59 files before anything was made fatal, so its
+false-positive rate could be measured rather than assumed. `p5/scan_continuations.py`.
+
+The shipped rule asks "does this fragment open with a known journal name and
+have no year?" The second signal asks the question the shipped rule does not:
+**could this fragment stand alone as a reference?** A standalone reference needs
+an author-like opening and a year; a fragment with neither is a tail.
+
+| Signal | Hits | Verdict |
+|---|---|---|
+| `C:place-tail` | 20 | 100% precision, all in superseded files. Safe to promote to fatal. |
+| `B:no-year+no-author` | 18 | ~89%. Two false positives, both `U.S. Geological Survey. National Water Information System...` -- a legitimate year-less government data citation. `AUTHORISH` does not handle corporate authors with initials. Tighten first. |
+| `A:shipped-rule` | 8 | Already fatal. |
+| `E:continuation-word` | 3 | **Removed.** 0-for-3: all three were `von Neumann, J. (1928)...`, flagged only for starting with a lowercase nobiliary particle. |
+
+**It immediately found a real defect the gate had reported clean.** paper11 v64
+carried a SECOND detached pair -- `Texas Water Development Board.` (L3761) and
+`Water Data for Texas, well 6837203 (J-17)...` (L3778) -- seventeen lines apart.
+The earlier repair had joined the DFO 2009 tail and the gate then said v64 was
+clean. The same pair had already been repaired in paper09 v32, which is why it
+looked done. Repaired.
+
+## Gate corrected
+
+The gate counted *findings* and printed them as "failure(s)", while the prose
+reports counted *files*. "32" and "12" were therefore different units presented
+as if comparable. It now prints both, labelled, and **fails only on live
+heads** -- a superseded version is never re-merged, so nobody will ever repair
+it, and failing on it is how a gate trains people to stop reading it:
+
+    LIVE HEADS failing  : 0 file(s), 0 finding(s)   <-- exit status
+    superseded, ignored : 9 file(s), 21 finding(s)
+    scanned             : 59 file(s)
+
+**Caveat on the historical figure.** 32 does not fully reconcile. Measured
+deltas account for 7 of the 11-finding drop -- 6 removed by the three repairs,
+1 by the rule I rewrite, and 2 more if the count predated the v46 repair --
+leaving roughly 2 unexplained. Most likely it was recorded from a partial run
+mid-turn. Treat the current numbers as the baseline; disregard 32.
