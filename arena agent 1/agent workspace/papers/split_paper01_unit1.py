@@ -45,6 +45,8 @@ i_doc = find_line(r'^\\begin\{document\}')
 i_part1 = find_line(r'^\\part\*\{Part I')
 i_part2 = find_line(r'^\\part\*\{Part II')
 i_refs = find_line(r'\\label\{references\}')
+i_refs_heading = find_line(r'^\\(?:sub)*section\*?\{References\}')
+assert i_refs_heading < i_refs and i_refs - i_refs_heading <= 2, 'FATAL: References heading/label not adjacent'
 i_decl = find_line(r'\\section\*\{Declarations')
 i_end = find_line(r'^\\end\{document\}')
 
@@ -64,11 +66,7 @@ while body and not body[0].strip():
     body.pop(0)
 
 # ---- shared bibliography + declarations ------------------------------------------------
-back = L[i_refs - 0:i_end]     # from the references label to just before \end{document}
-# back off to the real start of the references section (a heading precedes the label)
-while back and not re.match(r'^\\(section|section\*)\{', back[0]):
-    back.insert(0, L[i_refs - (len(L[i_refs:i_end]) - len(back)) - 1]) if False else None
-    break
+back = L[i_refs_heading:i_end]  # include References heading; never start at its label
 
 out = '\n'.join(pre + body + [''] + back + ['\\end{document}'])
 
@@ -101,6 +99,28 @@ if dangling:
 
 if bal(out) != 0:
     raise SystemExit('FATAL: unbalanced braces; not writing.')
+
+# Fail closed until the v62 shared bibliography is reconstructed from BOTH
+# paragraph-delimited sources, and the paper01 v61 byline is carried over.
+# The old v62 list interleaves heads and detached publisher/year/page tails;
+# copying it intact is NOT equivalent to preserving references. The reviewed
+# terminal v63 repair is content_audit/repair_01.py, which reads v61 + paper02
+# v12 and compares works semantically. Never overwrite it with the broken list.
+required = ('\\author{Amin Abaee',
+            'Nagumo, M.:', 'Japan 24, 551--559',
+            'LNCS, vol.~2993, pp.~477--492.',
+            'Aubin, J.-P.: Viability Theory. Birkh\\"auser, Boston (1991)')
+missing = [x for x in required if x not in out]
+if missing or not re.search(r'\\(?:sub)*section\*?\{References\}', out):
+    raise SystemExit('FATAL: content-incomplete paper01 extraction; missing '
+                     + repr(missing) + '. Repair v62 bibliography and source author before regeneration.')
+# For entries documented as dislocated, physical proximity matters too.
+refs_text = '\n'.join(back)
+for head, tail in (('Nagumo, M.:', 'Japan 24, 551--559'),
+                   ('Prajna, S., Jadbabaie, A.:', 'LNCS, vol.~2993, pp.~477--492.')):
+    segment = refs_text[refs_text.index(head):refs_text.index(tail)] if head in refs_text and tail in refs_text else ''
+    if not segment or '\n\n' in segment:
+        raise SystemExit('FATAL: detached reference tail after ' + head + '; refusing output')
 
 io.open(BASE + OUT, 'w', encoding='utf-8').write(out)
 print('\nwritten: %s' % OUT)
