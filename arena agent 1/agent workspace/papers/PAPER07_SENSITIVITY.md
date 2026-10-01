@@ -29,19 +29,24 @@ Script: `/home/user/p7/sensitivity.py`.
 
 ### One-at-a-time (±1% / ±2%)
 
-| parameter | −2% | −1% | +1% | +2% | worst 1% swing |
+| parameter | −2% | −1% | +1% | +2% | worst finite 2% swing |
 |---|---|---|---|---|---|
 | K | none | 2.99 | 8.67 | 10.37 | 59.5% |
 | q | none | 3.44 | 8.50 | 10.10 | 55.4% |
 | Emax | none | 3.45 | 8.50 | 10.10 | 55.3% |
 | eta | 5.27 | 5.92 | 7.02 | 7.49 | 18.9% |
 | r | 7.35 | 6.94 | 6.04 | 5.55 | 14.6% |
-| dref | 10.78 | 8.89 | 2.35 | none | — |
+| dref | 10.78 | 8.89 | 2.35 | none | 65.7% |
 | tm | 6.60 | 6.55 | 6.45 | 6.39 | 1.6% |
 | d0 | 6.50 | 6.50 | 6.51 | 6.51 | 0.1% |
 | Zref | 6.51 | 6.50 | 6.50 | 6.50 | 0.1% |
 
-"none" = no unit-circle crossing anywhere on [0.2, 200] yr.
+The final column is the largest **finite** ±2% endpoint crossing shift as a
+percentage of the unperturbed 6.5013-year crossing. An endpoint marked "none"
+has no detected crossing on [0.2, 200] yr at the tested grid resolution; it is
+not a finite displacement. For dref the −2% endpoint supplies the 65.7% shift,
+while the +2% endpoint is "none". The K, q and Emax shifts exceed 50% at ±2%,
+not all at ±1% (actual ±1% values: 54.08%, 47.12%, 47.02%).
 
 ### Joint boxes over the six influential parameters (2^6 = 64 corners)
 
@@ -81,8 +86,10 @@ dressed as an inference.
 
 1. The **operator contrast** — Euler artefacts at 47.536 / 79.143 yr vs the exact update.
    Verified independently of the crossing location.
-2. The **protective channel** — stable at every tested interval, max rho 0.9967, a margin
-   three orders of magnitude larger than the mobilising channel's.
+2. The **protective channel** — stable at every tested interval, max rho 0.9967,
+   minimum tested-grid stability margin about 0.0033. The annual mobilising
+   instability excess is about 0.00035; these are different interval sets, not
+   evidence for a three-orders-of-magnitude ratio.
 3. The **multiplicity-controlled screen** finding no robust institutional cycles — a null
    result, independent of the crossing value.
 
