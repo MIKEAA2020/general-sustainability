@@ -219,6 +219,12 @@ script, actual-figure Tectonic compile, separate push and API reverse-sweep.
   declarations and inherited review masks. First measure report-only across
   the corpus and inspect false positives before promoting any broad fatal
   rule. Keep the manual reading pass; a detector alone is not the audit.
+- [ ] **Claim/evidence reading audit:** underway, NOT cleared. See
+  [`CLAIM_EVIDENCE_AUDIT_2026-10-01.md`](CLAIM_EVIDENCE_AUDIT_2026-10-01.md)
+  for source-executed partial paper07 review, copied paper08 findings,
+  remaining per-head statuses and the owner's grouping-before-rebuild
+  decision. The live-head generator discrepancy remains open by design
+  until the content review informs the final partition.
 
 Latest named checks after these repairs: `phase0_scan.py --gate` reports **0
 live failing files / 0 live findings**; `scan_continuations.py --live-only`
