@@ -8,6 +8,19 @@ Status key: **OPEN** = needs a human decision · **DONE** = resolved, with where
 
 ---
 
+## Eight-family last-versions preservation — **DONE WITH BOUNDARIES**
+
+The user-named obstr, ws, comp, minimax, ebc, psuff, ARV, and E1 source
+versions, PDFs, supplements, linked verifiers and E1 data were checked against
+the reviewed standalone heads. Paper03's cited complete-proofs supplement was
+absent and is now present in source-identical TeX/PDF, with a pointer in its
+main article; older versions with superseded continuity arguments were not
+restored. No other content repair was supported. E1's historical verifier
+passes 49/49 only after fetching its separate RAM-timeseries dependency;
+this is not an eight-family verification campaign. Figure-binary packaging
+and upstream reproducibility remain deferred. See
+[`FAMILY_DEPTH_PRESERVATION_REVIEW_2026-10-01.md`](FAMILY_DEPTH_PRESERVATION_REVIEW_2026-10-01.md).
+
 ## 0. Read this first: "the gate says clean" ≠ "clean"  — **STANDING RULE**
 
 **The gate's clean verdict has been wrong twice, in two consecutive turns.**
