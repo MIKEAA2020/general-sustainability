@@ -91,7 +91,10 @@ def main():
   history.append((key,cur,commit,len(entries)))
   cur=commit
   (R/'content_audit/push_tip.txt').write_text(cur+'\n')
-  (A/'PUSH_HISTORY.tsv').write_text('group\tparent\tcommit\tfiles\n'+''.join('\t'.join(map(str,row))+'\n' for row in history))
+  # Final metadata commit contains the preceding chain; avoid a self-referential
+  # history file changing after the very commit that uploads it.
+  if key!='99_alignment_meta':
+   (A/'PUSH_HISTORY.tsv').write_text('group\tparent\tcommit\tfiles\n'+''.join('\t'.join(map(str,row))+'\n' for row in history))
   print('PUSHED',key,len(entries),commit,'reverse sweep PASS',flush=True)
  print('REMOTE FINAL',cur,'groups',len(history),'files',sum(x[3] for x in history),flush=True)
 if __name__=='__main__':main()

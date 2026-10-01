@@ -1,0 +1,16 @@
+# Paper 2 family deposit and verified local pruning
+
+2026-10-01. Repository `MIKEAA2020/general-sustainability`, branch `e2-v3-source-year`, path prefix `arena agent 1/agent workspace/`. **This is a Git deposit, not a Preprints.org submission, grouping decision or replacement of the reviewed live heads.** The eight reviewed source-specific corrections, paper01 compatibility sources, assets and compiled PDFs are staged under `paper 2 family/`, with original source-head diffs and verbatim abstract archives under `content_audit/claim_alignment/`. `paper 2 family/README.md` explicitly marks the scientific/Lean limits.
+
+The Git data API was used without a local clone. For each source-family commit and each preservation commit, the branch tip was checked against the local checkpoint, changed bytes were staged as Git blobs, and a recursive committed tree was fetched to reverse-sweep each path's blob SHA. The source-family commits were separated per artifact rather than mixing repairs. The initial complete deposit reached `e141e36a2d196695e3f228c35ef10a1ccc8338cf` after 27 verified commits and 585 changed files; see `PUSH_HISTORY.tsv` for the chain. A small follow-up commit for this log, folder instructions and prune records may advance the final tip; its SHA must be read from the Git ref and checked again rather than assumed from the initial deposit.
+
+`PRUNE_MANIFEST.tsv` records every deleted local copy with size, Git blob SHA, and the exact reason. **122** files (**29,846,841 bytes**) were removed only after verifying that either (a) the same bytes already reside at the same path in the remote committed tree, (b) they are reproducible isolated compile outputs/LaTeX auxiliaries with the builder and packaged PDFs retained, or (c) the 14 MB release tar contains an executable byte-identical to the retained `tools/tectonic`. The removed set includes redundant source-matched Lean copies, some older-version TeX files that runnable scripts did not name, root-level duplicate source/PDF working copies, and generated compile intermediates. This was a local prune, **not a remote deletion**. The 16 EBC Lean modules and `latest/lean/Minimax_Dual.lean` remain because `reconcile_lean_counts.py` uses them; all live manuscript heads, live supplementary sources, witness scripts, source-year TeX snapshots, figure sources, staged abstracts, diffs, build scripts, the corrected submission-preparation folder and the compile summary are retained. The approved author text and source-specific provenance remain intact.
+
+Restore a pruned path by cloning the branch and copying its original workspace-relative path:
+
+```bash
+git clone -b e2-v3-source-year https://github.com/MIKEAA2020/general-sustainability.git /tmp/general-sustainability
+# for example: /tmp/general-sustainability/arena agent 1/agent workspace/papers/<older-version>.tex
+```
+
+Rebuild PDFs/logs locally with `python3 content_audit/claim_alignment/compile_drafts.py`, then repack if needed with `python3 content_audit/claim_alignment/pack_paper2_family.py`. Run `verify_alignment.py` and `reconcile_lean_counts.py` without restoring the pruned copies. A fresh Lean build under the actual pinned toolchain is still required before publication.

@@ -56,6 +56,6 @@ Each subfolder has a source-specific, compiled *corrected draft* (`.tex`), a typ
 
 **Before submission:** decide grouping; reconcile cross-paper terms using `content_audit/claim_alignment/TERMINOLOGY_AND_PAPER01_2026-10-01.md`; run a fresh Lean build with the pinned toolchain; rerun source-matched computations after regrouping, inspect rendered final artifacts, and obtain author approval. The checks and limitations are in `content_audit/claim_alignment/PRE_GROUPING_READINESS_2026-10-01.md`. Manuscript byline is Amin Abaee; no double-blind anonymization or new contribution role was added.
 
-`SHA256SUMS.tsv` covers packaged source, PDF and assets. For verbatim old abstracts and diffs against reviewed heads, consult `content_audit/claim_alignment/original_abstracts/` and `diffs/`. Do not mistake a successful TeX compile or verifier exit for whole-paper proof.
+Recreate isolated compile logs/PDFs first with `content_audit/claim_alignment/compile_drafts.py` before rerunning the packaging script; local per-run compile copies may be pruned after verification. `SHA256SUMS.tsv` covers packaged source, PDF and assets. For verbatim old abstracts and diffs against reviewed heads, consult `content_audit/claim_alignment/original_abstracts/` and `diffs/`. Do not mistake a successful TeX compile or verifier exit for whole-paper proof.
 ''')
 print('paper 2 family:',len(records),'families,',len(manifest),'source/PDF/asset files')
