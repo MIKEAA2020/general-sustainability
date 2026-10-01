@@ -1,0 +1,252 @@
+--- /home/user/papers/paper03_computational_certification_v16.tex
++++ /home/user/content_audit/claim_alignment/drafts/paper03_computational_certification_v16.tex
+@@ -115,12 +115,11 @@
+ \(\tau = 7/50\), the pairs past \(\approx 0.245\) and \(\approx
+ 0.397\), singletons never --- and the printed blind-window controls are
+ exactly the optimal shared-braking programs. The certificate is
+-prescriptive beyond the verdict: advancing observation buys margin at rate
+-one, dilating post-revelation braking authority buys half a unit of delay
+-tolerance per unit, and shared-window authority and the velocity budget buy
+-exactly nothing; belief-cell rows extend the sandwich to partial and noisy
+-observation with margins radius-bounded on both the witness and the
+-certificate side. The finite program is solved by a
++prescriptive beyond the verdict: the audited \(a=1\) observation-time margin changes at unit rate;
++post-revelation authority plots are algebraic expressions, not proved
++optimized delay sensitivities. Belief-cell rows yield conditional
++one-sided obstructions; an upper sandwich and two-sided margins require
++separately verified full label and held-policy errors. The finite program is solved by a
+ standard solver (HiGHS) across a five-point mesh refinement; optimality is
+ certified in exact rational arithmetic by independent primal and dual
+ witnesses, the solver agreeing with the exact values to at most
+@@ -189,7 +188,7 @@
+ identity, the oracle-recourse extension, and the belief-cell certificates
+ for partial and noisy observation (Section~\ref{erosion}); the
+ certificate's prescriptive decode into optimal shared braking authorities,
+-the induced pair-delay hierarchy, and the exact redesign sensitivities
++the induced pair-delay hierarchy, and the scoped redesign witness
+ (Section~\ref{ladder}); the
+ complexity and residual-bounded verification framework
+ (Section~\ref{computation}); and the reference library
+@@ -479,8 +478,7 @@
+ control mesh maximum length is \(h_u\);
+ \item[(H6)] the adversarial approximation satisfies the bound above.
+ \end{itemize}
+-Then:
+-\end{theorem}
++Then the following value and sign statements hold under (H1)--(H6):
+ 
+ \noindent\emph{(i) Certified value sandwich.}
+ \[
+@@ -488,6 +486,9 @@
+ + \max_{a \in \mathscr{S}_G} \bar{e}_a + \delta_\beta + L h_t.
+ \tag{8}
+ \]
++Here \(\delta_\beta\) must independently bound the full stored-label
++discrepancy in (H6), including any cell-label optimism; a cell position
++radius alone does not supply this bound.
+ With (4) --- the budget \(\delta_\beta = \delta_{\mathrm{init}} +
+ \delta_{\mathrm{dist}} + \delta_{\mathrm{num}}\) --- \(J_{\mathcal{I}}(T) -
+ \rho_{\mathcal{H},G} \le \max_{a} \bar{e}_a + R_D
+@@ -545,6 +546,8 @@
+ finite-dimensional space of dimension \(r_{\mathcal{I}}\), a continuous-time
+ obstruction admits one with at most \(r_{\mathcal{I}} + 1\) labels. The relevant
+ dimension is information--time rank, not \(m\).
++
++\end{theorem}
+ 
+ \emph{Proof (the complete steps are Steps 1--6 of the supplementary
+ material, verified by the verification script).} The lower bound holds because every admissible
+@@ -1029,41 +1032,39 @@
+ mode--state pair. --- a set-valued observer with a guaranteed error radius, in the sense
+ of the bounding approaches to estimation (Milanese et al., 1996).
+ 
+-\begin{proposition}[belief-cell certificates]\label{prop:beliefcells}
+-Endow each row \(a\) with the cell label
+-\(\beta_a^{C} = \sup_{(\theta,x) \in C} \beta_a(\theta,x) +
+-\delta_C\), the stored-scenario label replaced by its worst case over the
+-cell, with \(\delta_C \ge 0\) the certified enclosure radius of the
+-position part (the position rows are unit). Then:
+-\emph{(i)} program (5) under the cell labels remains a linear program
+-(conic wherever cell support functions enter), and the sandwich (8) and
+-part (ii)'s soundness hold verbatim with the cell-filtration value in the
+-middle: every policy adapted to the cell filtration is relaxed, and a
+-positive value certifies nonviability of the original system.
+-\emph{(ii)} Splitting \(C\) into \(C_1, \dots, C_k\) erodes a cell
+-witness by exactly (12), charged cell by cell, and refinement to singletons
+-recovers the stored-scenario labels (13): observation design is the same
+-refinement axis as mesh design. \emph{(iii)} Margins are radius-bounded on
+-both sides: a primal witness whose worst row slack is \(s\) remains a
+-viability witness for every \(\delta_C \le s\), and a dual certificate
+-of margin \(\Gamma\) survives every \(\delta_C < \Gamma\) (the
+-labels' weights sum to one, so radius \(\delta_C\) moves the margin to
+-\(\Gamma - \delta_C\)).
++\begin{proposition}[conditional belief-cell certificates]\label{prop:beliefcells}
++Let each cell label be an explicitly verified outer row enclosure for
++its compatible mode--state pairs. With the original bridge's (H6)
++checked for these labels, including a separate bound on the full
++label discrepancy, the corresponding finite program is linear (or
++conic for certified cell support functions) and the lower bound and
++positive-margin obstruction of Theorem~\ref{thm:bridge} apply to the
++cell-filtration policy class. An upper sandwich requires the same
++separately verified (H6) budget and an implementable held-policy
++comparison; it does not follow from a cell radius alone. Splitting
++cells can change both the row labels and the control-kernel grouping,
++so (12) accounts for the latter term only. A safety-margin claim for
++a primal witness requires its \emph{actual} held-policy row slack and
++an enclosure error no greater than that slack; a dual margin survives
++only after all enclosure errors charged by its normalized weights
++remain smaller than the margin.
+ \end{proposition}
+ 
+ \begin{proof}
+-(i) a cell-adapted policy must keep every certified pair in \(C\) safe, so
+-the cell-sup rows relax exactly the cell-adapted class from above; the
+-sandwich argument uses only the relaxation direction and the enclosure
+-bound, and the upper side's charges are realized by held controls as before.
+-(ii) the cell label is a pointwise supremum, so splitting replaces each sup
+-by the maximum of subcell sups; the resulting gap is the displayed
+-subadditivity \(\phi_U(\sum_j g_{C_j}) - \sum_j \phi_U(g_{C_j})\) of
+-(12), and singleton cells restore the stored labels of (13). (iii) shifting
+-the true state inside a radius-\(\delta_C\) ball translates every affine
+-row value by at most \(\delta_C\): a witness with slack \(s\) absorbs
+-it, and the dual combination's value drops by \(\delta_C \sum_j
+-\lambda_j = \delta_C\).
++Every real compatible pair obeys a valid one-sided outer row bound,
++so its policy supplies a feasible relaxation; a positive relaxed
++optimum obstructs the actual cell-adapted policy class. To turn the
++relaxation into an upper value bound, apply the bridge's held-policy
++comparison with an independently checked (H6) discrepancy. Splitting
++a cell also replaces its label by subcell labels, independently of
++any control-kernel subadditivity. For example, with \(\dot x=0\),
++\(x\in C=[0,1/2]\), upper facet \(x\le1\), and
++\(\beta_x=1-x\), the label \(\sup_C\beta_x+1/4=5/4\)
++becomes \(1/2\) on the singleton \(\{1/2\}\) even though the
++control kernel is zero. This changes the label term by \(3/4\)
++while the kernel term in (12) stays zero. The margin conditions follow
++by the row-wise enclosure inequality and nonnegative normalized
++dual weights, not by an unverified radius identification.
+ \end{proof}
+ 
+ On the instance the belief cells are the compatible-mode sets, and the
+@@ -1072,16 +1073,13 @@
+ \(\{1,2\}\) and \(\{2,3\}\) are viable to
+ \(\tfrac{15 - \sqrt{183}}{6}\) and \(\tfrac{10 - \sqrt{58}}{6}\),
+ and the singleton cells never obstruct (Proposition~\ref{prop:ladder}).
+-Noisy state cells price in the same units: at \(\tau = \tfrac15\) the
+-pair viability witnesses tolerate cell radius up to their worst row slacks
+-\(\tfrac{31}{1250}\) and \(\tfrac{81}{1250}\), and the triple's
+-obstruction certificate survives any state-cell radius \(\delta_C <
+-\Gamma(\tfrac15) = \tfrac3{50}\), the margin moving to
+-\(\tau - \tfrac7{50} - \delta_C\). On the exact-computation companion's
+-deadline instance the same law is exact: the radius-\(\delta_C\) cell
+-inherits the viability verdict precisely for
+-\(\delta_C \le z_0 - (1 + T/2)\), with the boundary cells zero-slack
+-(joint check archived; Abaee, 2026, Exact belief-state computation at scale II).
++The audited instance has pair-policy row slacks \(31/1250\) and
++\(81/1250\) at \(\tau=1/5\) and a triple dual margin \(3/50\).
++For a proposed noisy state cell these numbers can be used as budgets
++only after its actual held-policy slack and full row-label errors are
++enclosed separately; a nominal position radius is not itself a proof
++of the needed error bound. The companion deadline threshold concerns
++its stated exact-state schedule, not arbitrary noisy state cells.
+ 
+ \subsection{Reading the certificate prescriptively: the shared-authority ladder}\label{ladder}
+ 
+@@ -1156,62 +1154,53 @@
+ deadline. The decode is quantitative: each redesign lever carries an exact
+ rate.
+ 
+-\begin{proposition}[redesign sensitivities]\label{prop:redesign}
+-On the instance, dilate the post-revelation control set to \(aU\) (the
+-audited hexagon is \(a = 1\)) and let the observation time \(\tau\)
+-vary. \emph{(i) Timing:} \(\Gamma_a(\tau) = \tau - \tfrac7{50} -
+-\tfrac{a-1}{2}\): advancing observation by \(\delta\) buys margin
+-\(\delta\), at every \(a\). \emph{(ii) Post-revelation authority:}
+-the exact delay threshold is \(\tau_{\max}(a) = \tfrac7{50} +
+-\tfrac{a-1}{2}\) (equality viable: the safety set is closed), so each
+-unit of dilated braking authority buys exactly half a unit of delay
+-tolerance. \emph{(iii) Shared-window authority:} the pooled
+-pre-observation kernel is \(\sum_j \lambda_j k_j \equiv 0\) as a
+-vector identity and the witness's pre-observation stationarity is the
+-pooling identity alone, so the margin is invariant under \emph{any}
+-enlargement of the blind-window control set, however large: no shared
+-pre-observation authority moves the threshold. \emph{(iv) Velocity
+-budget:} the printed dual places no multipliers on the velocity rows
+-(their primal slacks are strictly positive at the witness), so any
+-relaxation of \(|v_1|, |v_2| \le \tfrac65\), up to deleting the rows
+-entirely, leaves the witness feasible with value \(\tau -
+-\tfrac7{50}\): the obstruction is positional, carried by braking
+-liability against position facets.
++\begin{proposition}[what the printed redesign witness establishes]\label{prop:redesign}
++On the audited \(a=1\) instance the delay threshold is
++\(\tau_{\max}=7/50\), with a separate viable equality witness.
++The original dual's pooled pre-window kernel vanishes because
++\(\sum_j\lambda_j n_j=0\); thus its pre-window dual expression
++is insensitive to a shared-control-set enlargement. Its velocity-row
++multipliers are zero. These are properties of that certificate, not
++an exact viability sensitivity law for arbitrary redesigns.
++For \(a>1\), the extrapolated expression
++\(\Gamma_a(\tau)=\tau-7/50-(a-1)/2\) and its zero locus are
++only algebraic plots of the selected expression, not an optimized
++viability threshold or a valid finite-horizon certificate on all
++plotted rungs. In particular, the equality-viable assertion for
++\(a=2,\tau=16/25\) is false at the fixed horizon \(T=6/5\).
+ \end{proposition}
+ 
+ \begin{proof}
+-Under \(U_a = aU\) the support values scale,
+-\(\max_{u \in aU}\langle u, n_j \rangle = -a\), so the
+-post-observation charge in (10) is \(-\tfrac{a}{2}\) and
+-\(\Gamma_a(\tau) = -\tfrac{a}{2} - (\tfrac{16}{25} - \tau - 1) =
+-\tau - \tfrac7{50} - \tfrac{a-1}{2}\); dual feasibility is preserved
+-on the dilated facets \(F_a = aF\), \(f_a = af\) by
+-\(\eta_j/a \ge 0\), which satisfy \(F_a^\top(\eta_j/a) = -n_j\)
+-and \(f_a^\top(\eta_j/a) = 1\); the threshold solves
+-\(\Gamma_a(\tau) = 0\), with equality viable as at \(a = 1\). (iii)
+-\(\sum_j \lambda_j k_j = (t_* - s)\sum_j \lambda_j n_j = 0\)
+-independent of the control set, and the printed dual uses no
+-pre-observation input facets --- stationarity there is
+-\(\sum_j \lambda_j n_j = 0\) alone. (iv) deleting rows removes no
+-dual term: the witness's velocity-row multipliers are zero and its value
+-is unchanged.
++The \(a=1\) identities and primal equality policy are the original
++instance's audited witnesses. For the dilated counterexample, let
++\(\lambda=(3/8,5/16,5/16)\); the weighted critical position is
++\(34/25+t\) throughout every common-control blind window because
++the weighted normals cancel. At \(\tau=16/25\) it equals the
++safety ceiling \(2\). For \(s=1/10\) after revelation, even granting
++each branch independent control in \(2U\), its weighted position is
++at least \(34/25+37/50-2(1/10)^2/2=209/100>2\), at time
++\(37/50<T\). Thus some branch exits before the declared horizon.
++The former proof's \(\max_{u\in aU}\langle u,n_j\rangle=-a\)
++is false (the \emph{minimum} is \(-a\)), and scaling both sides
++of \(Fu\le f\) to \(aF u\le af\) leaves \(U\) unchanged; a
++representation of \(aU\) instead uses \(Fu\le af\).
+ \end{proof}
+ 
+-The rates order the redesign options exactly: observation timing at one,
+-post-revelation authority at one half, shared-window authority and the
+-velocity budget at zero.
++These formal expression rates must not be interpreted as exact
++redesign effects on the optimized viability boundary.
+ 
+ \begin{figure}[t]
+ \centering
+ \includegraphics[width=0.94\linewidth]{figs_comp2/fig_hierarchy.pdf}
+-\caption{The delay hierarchy under authority dilation:
++\caption{Zeros of the selected algebraic dilation expression, not
++certified viability thresholds under authority dilation:
+ \(\Gamma_a(\tau) = \tau - \tfrac7{50} - \tfrac{a-1}{2}\) crosses zero
+ at \(\tfrac7{50}\), \(\tfrac{39}{100}\), \(\tfrac{16}{25}\) for
+-\(a = 1, \tfrac32, 2\) (rate one in \(\tau\), rate one half in
+-\(a\)); the pair delay thresholds
++\(a = 1, \tfrac32, 2\) (formal rates only; the \(a>1\) equality points are not
++viable under the stated full horizon); the pair delay thresholds
+ \(\tfrac{15-\sqrt{183}}{6}\) and \(\tfrac{10-\sqrt{58}}{6}\) mark the
+-shared-braking rungs of Proposition~\ref{prop:ladder}. Same assertion
+-script.}
++shared-braking rungs of Proposition~\ref{prop:ladder}. The original assertion script checks the plotted expression,
++not these dilated systems' optimized thresholds.}
+ \label{fig:hierarchy}
+ \end{figure}
+ 
