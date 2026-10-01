@@ -25,7 +25,7 @@ The unifying finding the three parts share, and none can state alone:
   three years, "an optimistic bound on a defect the out-of-sample audit exceeds."
   Two systems, two independent certification pipelines, the same limitation.
 """
-import io, re, sys
+import io, re, sys, os
 sys.path.insert(0, '/home/user/p5')
 from mergelib import (not_in_comment, find_real, split_body, strip_front, namespace,
                       merge_preamble, merge_refs, _match_brace)
@@ -199,6 +199,17 @@ for d in decls:
 doc.append('\n\\end{document}\n')
 
 out = ''.join(doc)
+# This historical producer does not yet reproduce the reviewed v32 front matter,
+# source-scoped declarations and corrected bibliography. Never replace the
+# reviewed head before a source-aware rebuild and diff have been approved.
+if os.path.exists(BASE + OUT):
+    reviewed = io.open(BASE + OUT, encoding='utf-8').read()
+    if out != reviewed:
+        raise RuntimeError(
+            'Paper09 unsafe remerge refused BEFORE write: output differs from '
+            'reviewed v32. Reconcile author/contribution, source-scoped '
+            'declarations and references upstream, then diff in scratch.'
+        )
 io.open(BASE + OUT, 'w', encoding='utf-8').write(out)
 
 c = "\n".join(re.sub(r'(?<!\\)%.*$', '', l) for l in out.split('\n'))
