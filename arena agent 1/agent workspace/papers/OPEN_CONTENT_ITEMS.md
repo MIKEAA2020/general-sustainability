@@ -169,3 +169,59 @@ later asks why the count changed, the answer is here:
   superseded version is never re-merged and never repaired; nine dead files
   failing on every run is how a gate trains people to stop reading it.
   Superseded files are reported as informational.
+
+## 8. Source-to-head content preservation — **CONFIRMED ITEMS REPAIRED; PRODUCER WORK REMAINS**
+
+Historical audit (15 live heads, five supplements, 39 source-to-head comparisons):
+[`CONTENT_PRESERVATION_AUDIT_2026-10-01.md`](CONTENT_PRESERVATION_AUDIT_2026-10-01.md).
+Its evidence reflects the **pre-repair** heads; it is not a current defect list.
+No manuscript edits or pushes occurred *during that audit*. The following are
+subsequent, one-artifact-at-a-time repairs on 2026-10-01. Each manuscript has a
+pre-repair snapshot and reviewed diff in `../content_audit/before/` and
+`../content_audit/diff*.patch` where applicable, a source-anchored repair
+script, actual-figure Tectonic compile, separate push and API reverse-sweep.
+
+- [x] **Paper05 v16:** source-specific declarations, code/verification caveats,
+  Chatterjee 2009, Stanley/Lovejoy detail, approved author/contribution; the
+  container splitter refuses unsafe regeneration. See
+  `../content_audit/commit05.txt`.
+- [x] **Paper06 v67:** actual supplement pointer, source declarations and
+  25-vs-24 caveat, Dasgupta–Mäler 2000 and nine publisher/page tails,
+  approved author/contribution; splitter refuses unsafe regeneration.
+  Commit `3f546425`.
+- [x] **Paper11 v64:** Edwards-specific data/code record beside cod's,
+  White 2000 in References, one title page and both source abstracts;
+  `merge_11_11b.py` repaired and scratch-tested. Commit `fdadffe0`.
+- [x] **Paper01 v63:** heading, v61's complete reference paragraphs plus
+  nine distinct paper02 works (overlap merged by work rather than byte),
+  approved source byline/contribution. Both v62 merger and v63 splitter
+  now refuse unsafe regeneration. Commits `f6966ede`, `bbd9bc0f`.
+- [x] **Paper07 v50:** restored literal unblinded-v46 author, companion
+  citation/DOI, nine source-revision hashes, source declarations and only
+  the approved contribution sentence; review-blinding was inherited from
+  the deliberately blinded v47 seed, not introduced by a merge script.
+  Commit `26c5b608`.
+- [x] **Paper08 v46:** restored sampled-channel citations, DOI, revision
+  hash and v45 author; replaced unfilled CRediT template with approved
+  sentence and collapsed repeated title pages without deleting abstracts.
+  `merge_08_07.py` fails closed on current unsafe remerge. Both existing
+  supplement pointers and both channels' data declarations retained.
+  Commit `dbec3656`.
+- [x] **Paper11c v2:** cited Saint-Pierre 1994 moved verbatim from below AI
+  into References; its merger checks source placement and its splitter
+  refuses bibliography-less paper11c output. Commit `4f4ca017`.
+- [ ] **Complete safe regeneration:** the paper05/06/11c splitters, the
+  paper01 shared-reference merger and the paper08 merger intentionally
+  **refuse** deficient output rather than fully regenerating the corrected
+  terminal heads. This protection is not a completed pipeline rewrite.
+- [ ] **Corpus-wide content tests:** generalize source-aware checks for missing
+  whole sections, citation title/venue/page tails, references after
+  declarations and inherited review masks. First measure report-only across
+  the corpus and inspect false positives before promoting any broad fatal
+  rule. Keep the manual reading pass; a detector alone is not the audit.
+
+Latest named checks after these repairs: `phase0_scan.py --gate` reports **0
+live failing files / 0 live findings**; `scan_continuations.py --live-only`
+reports **0 live candidate fragments**. These named zeroes are *not* a
+claim that every scientific or bibliographic claim has been verified. The
+unreconciled historical gate-count delta remains recorded in §6 above.
