@@ -1,0 +1,14 @@
+# Lean pin comparison: same current source, two compiler versions
+
+**Do not conflate source and compiler provenance.** The exact source archive is the v4.34.1-declared project tree from `SOURCE_COMMIT.txt` (`a36c84420206b83df9ae48c97dcbfe65959f1da7`). `SOURCE_MANIFEST.tsv` and the independently downloaded CI artifacts agree on the archive SHA-256 `a9e44130e38bc2d070f5af86422c613c99ad39bddb0a954213e8b32698556b5d`. The committed `lean/lean-toolchain` was not edited in Git. The old-pin runner changed its *temporary checkout* pin after source verification.
+
+| Same current source snapshot | GitHub Actions evidence | Outcome |
+|---|---|---|
+| Declared `leanprover/lean4:v4.34.1` | [run 36921544169](https://github.com/MIKEAA2020/general-sustainability/actions/runs/36921544169), [`ci_runs/36921544169/`](ci_runs/36921544169/) | **Default Lake target builds, 60/60.** 21 named footprints have no unexpected axioms; aggregate-import sweep identifies 10 distinct `native_decide`-generated axioms. Strict axiom gate **BLOCKED**. |
+| Comparator `leanprover/lean4:v4.14.0` | [run 36930739134](https://github.com/MIKEAA2020/general-sustainability/actions/runs/36930739134), [`ci_runs/36930739134/`](ci_runs/36930739134/) | **Current source fails to build** in `Formalizations.Prelude`, with 55 error lines including parser/elaboration/typeclass errors (first at line 85). No old-pin axiom check ran because the build stopped. |
+
+This comparison **does not reproduce or refute a historical v4.14.0 build**. That requires the *historical source commit and its exact pin*, not the 2026-10-01 current source forced through an older compiler. The current papers' claimed pin has been run and its build passed. The remaining publication gate is not merely environmental: the actual imported-project footprint includes generated native-evaluation axioms. Those are not `sorryAx` and do not establish false theorems, but they prevent an unqualified no-unexpected-axiom statement until separately adjudicated or replaced. The three historical modules outside the aggregate import closure also remain uncompiled in these default-target runs.
+
+`grep -rn "sorry|admit|axiom"` is neither a correct Lean lexer nor an axiom-footprint test: comments produce false positives, while `native_decide` emits axioms without source-level `axiom` declarations. The comment-aware scan of all 62 archived `.lean` files yielded zero explicit candidates, yet the Lean environment reported ten distinct generated axioms. Preserve both findings, not a misleading clean grep verdict.
+
+All CI artifacts were downloaded and checked against the committed source archive; small logs were copied into durable Git paths under `ci_runs/`. The multi-GB toolchains and compiled outputs remained on temporary runners and were not added to the ~72 MB workspace. No grouping or Preprints.org submission occurred.

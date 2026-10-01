@@ -1,0 +1,3 @@
+# Current sources under historical Lean 4.14.0 (comparison only)
+
+GitHub [Actions run 36930739134](https://github.com/MIKEAA2020/general-sustainability/actions/runs/36930739134) at commit `5a52054e9995526aa935a7af75e8098f00d551e0` independently fetched and SHA-verified the **same source archive** before changing only the temporary checkout pin from v4.34.1 to v4.14.0. The build **failed** in `Formalizations.Prelude` with parser/elaboration errors (see `build.log`); the job uploaded its logs and exited failure. No old-pin axiom check ran because the build did not reach that step. This result is a compiler comparison of **current sources**, not a reproduction or refutation of the historical v4.14.0 build on its original historical source tree.
