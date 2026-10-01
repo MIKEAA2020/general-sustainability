@@ -44,17 +44,20 @@ assert relaxed==F(9,5)>=1 and F(9,10)**7*z0<1
 print('§3.3 decaying model: z0=2, finite +/-1 fails at step 1 (worst=4/5), unlike claimed sigma*=z0-1=1; u=0 also exits by step 7')
 
 # §3.7 recourse proposition: f(x,u)=-1+x*u, q=x-1, U=[-1,1],
-# x0=1, T=1, tau=1/2, D singleton; X_f0(t,s)=1, xbar(s)=1-s.
-# Label time T, beta=q(xbar(T))=-1, k(s)=xbar(s)=1-s.
+# B0={1,2}, both branches have constant uninformative observation, T=1,
+# tau=1/2, D singleton. Store only the x0=1 label (weight 1; zero weights
+# on any other labels are allowed). X_f0(t,s)=1, xbar(s)=1-s on that branch.
+# beta=q(xbar(T))=-1, k(s)=xbar(s)=1-s.
 # h_U(k)=abs(k)=1-s, integral 0..1=1/2; Gamma_h=-1/2.
 beta=F(-1)
 int0tau=F(1,2)-F(1,8)  # integral_0^{1/2} (1-s) ds = 3/8
 inttau1=F(1,8)
 gamma=beta+int0tau+inttau1
 assert gamma==F(-1,2)
-# Actual control u=+1 at x0=1 has f(1,+1)=0, stays x(t)=1.
-assert -1+1*1==0
-print('§3.7 control-affine but state-dependent B(x)=x: Gamma_h=-1/2<0 although u=+1 keeps x(t)=1 safe for all t')
+# Actual control u=+1 has x(t)=1+(x0-1)*exp(t): the first branch
+# stays at 1 and the second (x0=2) stays >=2, both safe for all time.
+assert -1+1*1==0 and -1+2*1==1
+print('§3.7 control-affine B(x)=x: Gamma_h=-1/2<0 using a label from x0=1, while u=+1 keeps both x0=1 and x0=2 branches safe for all t')
 
 # §10 degenerate proposition: B={s}, b(s)=1, D={good,bad}; F(s,a,
 # good)=s, F(s,a,bad)=bottom, T(good)=99/100, T(bad)=1/100.
