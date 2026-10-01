@@ -116,7 +116,28 @@ def write(out, preamble, title, author, body, note, need_maketitle=False, refs=N
     if refs:
         parts.append('\n' + refs.rstrip() + '\n')
     parts.append('\n\\end{document}\n')
-    open(out, 'w', encoding='utf-8').write(''.join(parts))
+    assembled = ''.join(parts)
+    # Fail BEFORE writing. Previously this splitter silently discarded the
+    # source's declarations/supplement section and selected bibliography
+    # paragraphs by appearance, losing cited works and citation tails. It is
+    # unsafe to regenerate a head until those source-specific pieces are
+    # explicitly carried over and reconciled. A failing splitter is preferable
+    # to another plausible-looking, content-incomplete live manuscript.
+    if os.path.basename(out).startswith('paper05_'):
+        required = (r'\subsection*{Declarations}', 'Chatterjee, K., Doyen, L., Henzinger, T.A., 2009.',
+                    'Chapter 4, The Sperner', 'Operations Research 39, 162--175.')
+    elif os.path.basename(out).startswith('paper06_'):
+        required = (r'\section*{Supplementary Material}', r'\section*{Declarations}',
+                    'Dasgupta, P., and M', 'Net national product, wealth, and',
+                    'Springer, New York, 953--986.')
+    else:
+        required = ()
+    missing = [item for item in required if item not in assembled]
+    if missing:
+        raise RuntimeError('REFUSE TO WRITE content-incomplete split %s; missing %s. '
+                           'Restore from its documented source before splitting.'
+                           % (os.path.basename(out), missing))
+    open(out, 'w', encoding='utf-8').write(assembled)
     print('  wrote %-46s %7d chars' % (os.path.basename(out),
                                        os.path.getsize(out)))
 
