@@ -1,0 +1,161 @@
+--- /home/user/papers/paper11c_worked_systems_audit_v2.tex
++++ /home/user/content_audit/claim_alignment/drafts/paper11c_worked_systems_audit_v2.tex
+@@ -1,7 +1,7 @@
+ %% ============================================================
+ %% PAPER 11c -- Exact audits of worked systems for the obstruction calculus (Ws)
+ %% v1 (2026-09-30). RECOVERED from paper11_forecasting_baselines_v61.tex.
+-%% In v61 this half sat after the first \end{document} and was DEAD TEXT.
++%% In v61 this half sat after the first document terminator and was DEAD TEXT.
+ %% NOTE: 'ws' is a separate unit in the authoritative eight-paper scope.
+ %% PRIOR-ART GAP CLOSED: this half's bibliography had only SIX surnames -- Abaee,
+ %%   Baccelli, Cohen, Olsder, Quadrat, Wiley (four of which are one book). It cited
+@@ -180,8 +180,8 @@
+ counts of survivable pairs rather than subsets of a state space. Neither algorithm above
+ computes those, since both presuppose that the controller sees the state. What transfers is the
+ \emph{question} --- which states admit a control keeping every constraint satisfied --- and the
+-finding that the answer is not monotone in the observation structure, which is a statement about
+-the observation layer those methods do not model.
++observation refinement is monotone when the policy and register semantics are held fixed;
++comparisons changing several of those axes at once need not be ordered.
+ 
+ \paragraph{The classical instruments the audits exercise.} Three classical results recur and
+ are named where they are used: the alternative for systems of linear inequalities underlying
+@@ -737,7 +737,7 @@
+ Under every admissible hold-class control the adversarial regime realizes
+ the declining branch at each step, so the worst stock declines at unit
+ rate and remains safe exactly through time \(z_0 - 1\) --- the last
+-safe review, the first violation occurring at \(z_0\):
++safe review, the strict violation occurring immediately after time \(z_0-1\):
+ deadline-viability forces \(T \le z_0 - 1\). Conversely
+ the hold policy tracks the decline path \(z(t) = z_0 - t\) branchwise,
+ which stays admissible exactly on \([0,\, z_0 - 1]\) and terminates at
+@@ -766,7 +766,7 @@
+ cells (\(21, 16, 6\) at \(T = 1, 2, 3\)), zero mismatches between the
+ closed form and path enumeration. The max-plus dynamic program equals
+ path enumeration exactly on a three-regime graph with a forbidden
+-self-loop (all horizons to six).
++self-loop (horizons one through five in the deposited P21 check).
+ \end{proposition}
+ 
+ \begin{proof}
+@@ -845,8 +845,8 @@
+ \includegraphics[width=0.96\linewidth]{figs_ws4/fig_timing.pdf}
+ \caption{The timing grid. Cells viable at the deadline (green) satisfy \(T_{\mathrm{obs}} \le \tau^{*}(z_0)\); the identity is
+ boundary-inclusive, and the strict form \(T_{\mathrm{obs}} <
+-\tau^{*}(z_0)\) fails at exactly one cell,
+-\((z_0, T_{\mathrm{obs}}) = (2.0, 1)\) (circled); against the floored count \(\sigma^{*}(z_0) = \lfloor z_0 - 1 \rfloor\) the strict form fails on all six viable cells, which is why the inclusive predicate is the audited identity.}
++\tau^{*}(z_0)\) fails on three boundary cells,
++\((2.0,1),(3.0,2),(4.0,3)\) (the first is circled); against the floored count \(\sigma^{*}(z_0) = \lfloor z_0 - 1 \rfloor\) the strict form fails on 21 of the 33 viable cells, which is why the inclusive predicate is the audited identity.}
+ \label{fig:timing}
+ \end{figure}
+ 
+@@ -1021,11 +1021,12 @@
+ \(Y\)-fibre admits a feasible input (some \(u \in U\) with
+ \(u_i \le \mathrm{cap}_i(Y)\)) if and only if
+ \(\mathrm{cap}_1(Y) + \mathrm{cap}_2(Y) \ge 2\), which holds if and
+-only if \(Y \le 27/5\). For \(Y \ge 27/5\) the
++only if \(Y \le 27/5\). For \(Y > 27/5\) the
+ \(\ell_1\)-normalized dual measure \((1/2, 1/2)\) on the two cap rows
+ certifies the obstruction with the exact margin
+ \(\tfrac12\bigl(2 - \mathrm{cap}_1(Y) - \mathrm{cap}_2(Y)\bigr) =
+-(Y - 27/5)/10\).
++(Y - 27/5)/10\). At \(Y=27/5\) the margin is zero and the
++fibre remains feasible at the boundary.
+ \end{proposition}
+ 
+ \begin{proof}
+@@ -1141,13 +1142,14 @@
+ 
+ \begin{proof}
+ Intersect each constraint's halfspace with the domain: an infeasible
+-family of compact convex sets in \(\mathbb{R}^m\) has an infeasible
++finite family of convex sets in \(\mathbb{R}^m\) has an infeasible
+ subfamily of size at most \(m + 1\) (Helly's theorem), and \(m + 1\)
+ is tight: the reversed halfspaces \(\{u_i \ge 1\}\) and
+-\(\sum_i u_i \le 1\) in \(\mathbb{R}^m\) --- the facets of an
+-\(m\)-simplex, translated outward --- meet \(m\) at a time and never
+-all \(m+1\) (the facets themselves meet in the simplex, which is why
+-the reversal is needed). For the
++\(\sum_i u_i \le m-1\) in \(\mathbb{R}^m\) meet \(m\) at a time and never
++all \(m+1\): with the sum row omitted take every \(u_i=1\);
++with the row \(u_j\ge1\) omitted take \(u_j=0\) and the
++remaining \(u_i=1\). The full family demands \(m\le m-1\),
++a contradiction for every \(m\ge1\). For the
+ instance, each pair is feasible --- at \((1,1)\), \((1,0)\), and
+ \((0,1)\) respectively --- while all three give the contradiction
+ \(2 \le 1\); the verification script verifies each pair at its printed
+@@ -1261,7 +1263,7 @@
+ \(T_{\mathrm{obs}} \le \tau^{*}(z_0)\), the deadline at worst-case exit admissible under the audited endpoint convention (Section \ref{timing}). \emph{Coarseness:} (exact census, Section \ref{adequacy}) a fibre
+ merging states with disjoint safe-action sets obstructs at that
+ information state; the remedy is a fibre split, not a finer threshold
+-on the same index (Section \ref{adequacy}). \emph{Aggregation:} (exact census, Sections \ref{classes} and \ref{adequacy}) the aggregate index's fibres cross the safe boundary --- each mixes states of conflicting verdict --- and the aggregate kernel (\(26\) against the full \(28\)) certifies only a certainly-safe inner approximation; the certainly-safe set is the sound report.
++on the same index (Section \ref{adequacy}). \emph{Aggregation:} (exact census, Sections \ref{classes} and \ref{adequacy}) the aggregate index's fibres cross the safe boundary --- some mix states of conflicting state-safety verdict --- and the aggregate kernel (\(26\) against the full \(28\)) certifies only a certainly-safe inner approximation; the certainly-safe set is the sound report.
+ \emph{Bias:} (exact audit, Section \ref{drift}) the uncorrected law's drift is at least \(21/100\) on a
+ 101-point grid of \([1,2]\), while the corrected law's drift is
+ identically zero; a fixed bias is exactly correctable, and the remedy is
+@@ -1273,28 +1275,33 @@
+ 
+ The master monotonicity statement of Proposition~\ref{prop:master} is formalized in the
+ project's Lean~4 layer, in namespace \texttt{Formalizations.WS}
+-(\texttt{WS\_WorkedSystems}): \texttt{master\_monotone} is the theorem itself, and
+-\texttt{monotone\_action\_axis} the policy axis of it, both stated over the abstract audited
+-tuple rather than over any particular audited instance, so they hold for every system in the
+-family at once.
++(\texttt{WS\_WorkedSystems}): \texttt{master\_monotone} and \texttt{monotone\_action\_axis} prove
++monotonicity under pointwise inclusion of the admissible-action predicate in an
++abstract finite system. The separate observation-refinement declaration
++\texttt{Wk\_mono\_obs} requires its own refinement hypotheses.
++Neither signature encodes the audited no-repeat register threads or proves
++the table counts.
+ 
+ \noindent\textbf{No admitted gaps.} A comment-stripped source scan of the whole project finds
+ no \texttt{sorry}, \texttt{admit}, \texttt{axiom} or \texttt{constant} declaration anywhere.
+ 
+-\noindent\textbf{Scope, stated plainly.} What is machine-checked is the monotonicity
+-theorem --- the one abstract statement whose instances the audits tabulate. \textbf{The audits
++\noindent\textbf{Scope, stated plainly.} What is machine-checked is an action-inclusion monotonicity
++statement and, separately, a finite observation-refinement statement under
++their exact hypotheses; the register/count cases are not Lean instances. \textbf{The audits
+ themselves are not formalized}: the counts of survivable belief pairs, the kernel sizes under
+ policy-class restrictions, the partition-adequacy census and the dual certificates are
+ computations performed by the deposited scripts in integer and rational arithmetic, and are
+ regenerated rather than proved. This is the mirror image of the usual arrangement, and it is
+-worth being exact about it: the theorem that organises the table is proved, while the entries
+-in the table are computed.
++worth being exact about it: the action-inclusion and observation-refinement implications are
++proved under their respective hypotheses, while the register encoding
++and numeric entries are computed separately.
+ 
+ \subsection{Verification methods}\label{methods}
+ 
+ Every count, witness, identity, bound, figure, and tabulated entry in
+-this paper is regenerated by deterministic scripts in exact integer and
+-rational arithmetic, standard library only. The master verification
++this paper is checked by deterministic arithmetic scripts using exact integer
++and rational arithmetic and the standard library; the separate PDF figure
++renderer uses matplotlib. The master verification
+ script recomputes the counts of Sections \ref{master}--\ref{regimes}
+ from the shared system's primitives --- the transition, the fibre
+ partition function, and the backward recursion with the no-repeat
+@@ -1309,14 +1316,13 @@
+ primitives before drawing; the two scripts agree on every shared
+ quantity. The audited identities are additionally covered by the
+ per-system verification scripts of the companion papers (Abaee, 2026, An obstruction calculus;
+-see the Code availability statement). Two independent recomputation
+-paths guard the central recursions (checks P17--P18): an exhaustive
+-enumeration of all deterministic stationary policies --- \(2^{5} = 32\)
+-aggregate, \(2^{9} = 512\) full-information --- whose union of
+-safe-pair sets reproduces the kernels exactly (memoryless determinacy
+-on the instance, itself an exact verified fact), and a fixpoint
+-computation of each class's horizon family, whose stabilization equals
+-the audited kernel setwise. The recursion's cost is measured exactly:
++see the Code availability statement). Checks P17--P18 expose a distinction between stationary policies and
++the central recursions: enumerating all \(2^{5}=32\) aggregate stationary
++policies gives an empty union of safe-pair sets, while the aggregate
++time-varying kernel contains 26 pairs; enumerating all \(2^{9}=512\)
++full-information stationary policies reproduces its 28-pair kernel.
++The separate horizon fixpoint recomputes the audited kernels setwise.
++Memoryless sufficiency here is a full-information result, not an aggregate one. The recursion's cost is measured exactly:
+ the memoized backward recursion over the \(36\)-pair population uses
+ the distinct-subproblem counts printed by the script (states \(\times\)
+ horizon \(\times\) register per class), the policy enumerations use
