@@ -143,7 +143,10 @@ the examined documented lineages and intermediate split halves. This is not
 a declaration that every sentence in every historical repository file is
 equivalent: older Markdown ancestry (particularly sampled-governance v26 to
 v46), brief altered clauses, unlisted drafts, and bibliographic attribution
-require separate source-specific adjudication. The paper09 merge producer
-still does **not** regenerate the reviewed byline and previous bibliography
-repairs safely; **do not rerun it onto the live head**. Reproducible upstream
-build repair remains separate. No all-paper scientific claim audit was resumed.
+require separate source-specific adjudication. The paper09 merge producer still does **not** regenerate the reviewed
+byline and previous bibliography repairs safely. It now compares its proposed
+output with the reviewed v32 **before any write** and fails closed on the
+mismatch. An executed negative test returned the intended refusal while the
+reviewed head retained SHA-256 `26205a25da4b554c272e911ecf2c96e5e44ef9b50aa8c7fbeca8a1da57b0ffe7`.
+This is protection, **not a completed reproducible upstream rebuild**.
+No all-paper scientific claim audit was resumed.
