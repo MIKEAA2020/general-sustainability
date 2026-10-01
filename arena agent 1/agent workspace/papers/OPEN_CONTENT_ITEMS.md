@@ -36,32 +36,26 @@ Both times, **reading** caught what the gate did not.
 
 ---
 
-## 1. CRediT authorship contribution statement — **OPEN**
+## 1. Source-supported author identity — **DONE**
 
-Who did what is a fact about people, not about the manuscript. It cannot be
-inferred from the `.tex` and must not be invented. But a bare "to be completed"
-placeholder gives the author nothing to fill in and gets skipped at submission,
-so both files now carry the full CRediT taxonomy with blanks marked.
+The owner explicitly approved the byline **Amin Abaee**. Paper08's
+continuous-channel v45 and the unblinded sampled v46 identify this author;
+the current combined v46 restores the approved byline. All three paper09
+constituent studies (and the cod v29 seed) carry the **same exact** author,
+affiliation, ORCID and source email block; current paper09 v32 now restores
+that literal block on its combined title page. The versioned source dates
+differ, so **no date was invented** for the new combined work. This corrects
+the stale earlier instruction that its author name was deliberately blank.
+The predecessor's CRediT role template was *not* permission to attribute
+additional taxonomy roles. See
+[`UNVISITED_CONTENT_REVIEW_2026-10-01.md`](UNVISITED_CONTENT_REVIEW_2026-10-01.md).
 
-| File | Before | Now |
-|---|---|---|
-| `paper09_cod_certification_v32.tex` | `[To be completed at submission.]` | template, all 14 roles listed |
-| `paper08_governance_delay_v46.tex` | absent entirely | template added before the AI declaration |
+## 2. Approved prose contributions — **DONE; NO INFERRED CRediT ROLES**
 
-Two blanks to fill in each:
-
-- **Author name** — **deliberately left blank.** Neither file declares
-  `\author`. The self-citations read `Abaee, A.`, but the preferred name form
-  for the paper is not asserted anywhere in the manuscript. The git identity is
-  known and is still not a basis for guessing the byline.
-- **Which roles apply** — delete those that do not.
-
-## 2. Author contributions, prose form — **OPEN**
-
-Distinct from CRediT. `paper08_governance_delay_v46.tex` has no
-author-contributions paragraph of any kind. v45 had none and v50's was a
-placeholder, so there was nothing to merge and nothing to repair. If the venue
-wants prose as well as CRediT, this needs writing.
+The owner approved only “A.A. conceptualized the entire work, wrote, reviewed
+and edited the manuscript.” This exact statement now appears in both current
+paper08 v46 and paper09 v32; the latter replaces an unfilled template. No
+additional CRediT taxonomy roles or unapproved personal facts were added.
 
 ## 3. Supplement / declaration questions — **DONE, recorded**
 
@@ -226,6 +220,16 @@ script, actual-figure Tectonic compile, separate push and API reverse-sweep.
   ratio. Historical v49 remains unchanged as the origin witness. The
   source-executed check is `python3 content_audit/check_p7_sensitivity_addition.py`.
   Provenance and exact checks: [`CLAIM_EVIDENCE_AUDIT_2026-10-01.md`](CLAIM_EVIDENCE_AUDIT_2026-10-01.md).
+- [x] **Unvisited version/seed preservation pass and paper09 front matter:**
+  all 42 local intermediate→head pairs were screened report-only for shorter
+  losses; four older merged Part II bodies were traced to their standalone
+  destinations, and all five live supplements were compared with the correct
+  source lineages. The only omitted, source-agreed live front matter found was
+  paper09's byline and approved contribution, now restored without dropping
+  the four source abstracts. A check *behind* the LaTeX seeds against original
+  Markdown also found and corrected a conversion-mangled S16 lead-in in the
+  paper10 supplement; its four-row table was untouched. Evidence and limits:
+  [`UNVISITED_CONTENT_REVIEW_2026-10-01.md`](UNVISITED_CONTENT_REVIEW_2026-10-01.md).
 - [ ] **Source-to-head reproducibility:** reviewed live heads remain target
   artifacts; final grouping is an owner decision. Repair the upstream producer
   and compare scratch output with the reviewed heads. No new 15-head scientific
