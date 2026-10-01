@@ -63,12 +63,19 @@ pre_b, body_b, refs_b, decl_b = split_body(sb)
 
 
 def strip_front(x):
-    """remove the per-paper title / author / date / abstract / maketitle /
-    linenumbers, so the merged file has exactly one of each"""
-    for cmd in ['title', 'author', 'date', 'maketitle', 'linenumbers', 'tableofcontents']:
-        x = re.sub(r'\\' + cmd + r'\*\s*(?:\[[^\]]*\])?\s*\{[^\}]*\}', '', x)
+    """Keep the source abstract and study title/date; drop only duplicated front commands."""
+    from mergelib import strip_cmd, _match_brace
+    title = re.search(r'\\title\{', x)
+    date = re.search(r'\\date\{([^}]+)\}', x)
+    assert title and date, 'source front matter missing: cannot silently drop it'
+    end = _match_brace(x, title.end()-1)
+    original_title = x[title.end():end]
+    for cmd in ('title', 'author', 'date'):
+        x = strip_cmd(x, cmd)
+    x = re.sub(r'\\(?:maketitle|linenumbers|tableofcontents)\b', '', x)
     x = x.replace('\\end{document}', '')
-    return x
+    return (r'\noindent\textbf{Source study:} ' + original_title + '. ' +
+            date.group(1) + '.\n\n' + x.lstrip())
 
 
 body_a = strip_front(body_a)
@@ -89,25 +96,13 @@ for la in sorted(labels_a):
     body_a = re.sub(r'\\ref\{%s\}' % re.escape(la), lambda m: '\\ref{cod-%s}' % la, body_a)
     body_a = re.sub(r'\\eqref\{%s\}' % re.escape(la), lambda m: '\\eqref{cod-%s}' % la, body_a)
 
-# ---------------- merge references (union, de-duplicated, order-preserving) ----------------
-def split_entries(block):
-    body = re.sub(r'^\\subsection\{References\}.*?\n', '', block, flags=re.S)
-    # entries are separated by ". " before an Author-like capitalised surname
-    parts = re.split(r'(?<=\.)\s+(?=[A-ZÄÖÅ][\w\'{}\\\"~\^\- ]{1,30}?, )', body)
-    return [p.strip() for p in parts if p.strip()]
-
-def norm(e):
-    return re.sub(r'[^a-z0-9]', '', e.lower())[:110]
-
-ea, eb = split_entries(refs_a), split_entries(refs_b)
-merged, seen = [], set()
-for e in ea + eb:
-    k = norm(e)
-    if k in seen:
-        continue
-    seen.add(k)
-    merged.append(e)
-merged.sort(key=lambda e: re.sub(r'[^a-z]', '', e.lower())[:24])
+# ---------------- merge references (paragraph-delimited, conservatively) ----------
+# The old period+capital-comma splitter detached publishers and lost distinct
+# references. All source entries are paragraph-delimited; mergelib handles
+# genuinely glued seams without splitting publisher tails. Re-measure against
+# both source lists when changing this routine.
+from mergelib import merge_refs
+merged = merge_refs(refs_a, refs_b)
 
 # ---------------- new front matter ----------------
 TITLE = ("Forecasting under a locked retention rule: process models, naive benchmarks, "
@@ -227,6 +222,12 @@ doc.append(pre_a)                       # identical preambles
 doc.append('\\begin{document}\n')
 doc.append('\\title{' + TITLE + '}\n')
 doc.append(ABSTRACT.strip() + '\n')
+# Main byline from the declared source author; approved by the owner.
+from mergelib import _match_brace
+am = re.search(r'\\author\{', sa)
+assert am
+aj = _match_brace(sa, am.end()-1)
+doc.append(sa[am.start():aj+1] + '\n')
 doc.append('\\maketitle\n\n')
 doc.append('\\tableofcontents\n\n\\newpage\n\n')
 doc.append(HEAD.strip() + '\n\n')
@@ -236,11 +237,39 @@ doc.append(body_b.strip() + '\n\n')
 doc.append(CROSS.strip() + '\n\n')
 doc.append('\\subsection*{References}\n\\label{references}\n')
 doc.append('\n\n'.join(merged) + '\n\n')
-if decl_a.strip():
-    doc.append(decl_a.replace('\\end{document}', '').strip() + '\n')
+# Integrate system-specific declarations, rather than silently dropping B.
+assert decl_a.strip() and decl_b.strip(), 'both source declarations are required'
+b_data = decl_b[decl_b.index(r'\subsection*{Data Availability Statement}'):decl_b.index(r'\subsection*{Funding}')]
+b_code = decl_b[decl_b.index(r'\subsection*{Code availability}'):decl_b.index(r'\subsection*{AI declaration}')]
+b_data = b_data.replace(r'\subsection*{Data Availability Statement}',
+                        r'\paragraph{Edwards Aquifer data availability.}', 1)
+b_code = b_code.replace(r'\subsection*{Code availability}',
+                        r'\paragraph{Edwards Aquifer code availability.}', 1)
+b_code = b_code.replace('every cell\nof Tables~3, 4 and 7',
+     'every cell of the corresponding Edwards-source tables '
+     '(numbered 3, 4 and 7 in the standalone source)', 1)
+assert 'nClimDiv' in b_data and 'paperE3' in b_code
+cod_decl = decl_a.replace('\\end{document}', '').strip()
+ai = r'\subsection*{AI declaration}'
+assert cod_decl.count(ai)==1
+cod_decl = cod_decl.replace(ai, b_data.strip()+'\n\n'+b_code.strip()+'\n\n'+ai, 1)
+# The owner supplied this exact credit for the current combined work.
+cred = r'\subsection*{CRediT authorship contribution statement}'
+start = cod_decl.index(cred); stop = cod_decl.index(r'\subsection*{Funding}', start)
+cod_decl = (cod_decl[:start]+cred+'\n\n'
+            'A.A. conceptualized the entire work, wrote, reviewed and edited the manuscript.\n\n'
+            +cod_decl[stop:])
+doc.append(cod_decl + '\n')
 doc.append('\n\\end{document}\n')
 
 out = ''.join(doc)
+# Comment-free comparisons, not raw provenance-header mention counts.
+active = re.sub(r'(?m)^%.*$', '', out)
+assert len(re.findall(r'\\title\{', active)) == 1
+assert len(re.findall(r'\\author\{', active)) == 1
+assert len(re.findall(r'\\maketitle\b', active)) == 1
+assert 'Edwards Aquifer code availability.' in active and 'nClimDiv' in active
+assert active.count(r'\section*{Declarations}') == 1
 io.open(BASE + OUT, 'w', encoding='utf-8').write(out)
 
 # ---------------- checks ----------------
