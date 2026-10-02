@@ -20,7 +20,21 @@
  
  \paragraph{The classical instruments the audits exercise.} Three classical results recur and
  are named where they are used: the alternative for systems of linear inequalities underlying
-@@ -737,7 +737,7 @@
+@@ -278,8 +278,11 @@
+ \subsection{A master monotonicity theorem}\label{mtheorem}
+ 
+ The audited family is an instance of one abstract object, and its
+-kernel comparisons are instances of one theorem. An \emph{audited
+-tuple} is
++kernel comparisons are instances of one theorem. The finite-system
++and belief-kernel vocabulary here specializes the \texttt{FinSys} and
++\texttt{Wk} definitions of Abaee (2026, An obstruction calculus); the
++worked-system tuple below supplies its own finite data and audit frame.
++An \emph{audited tuple} is
+ \(\Theta = (X, \mathcal{V}, A, F, \mathrm{info}, \Pi, m)\): a finite
+ state set \(X\) with safe set \(\mathcal{V}\), action set \(A\),
+ transition \(F\), observation map, admissible policy class \(\Pi\)
+@@ -737,7 +740,7 @@
  Under every admissible hold-class control the adversarial regime realizes
  the declining branch at each step, so the worst stock declines at unit
  rate and remains safe exactly through time \(z_0 - 1\) --- the last
@@ -29,7 +43,7 @@
  deadline-viability forces \(T \le z_0 - 1\). Conversely
  the hold policy tracks the decline path \(z(t) = z_0 - t\) branchwise,
  which stays admissible exactly on \([0,\, z_0 - 1]\) and terminates at
-@@ -766,7 +766,7 @@
+@@ -766,7 +769,7 @@
  cells (\(21, 16, 6\) at \(T = 1, 2, 3\)), zero mismatches between the
  closed form and path enumeration. The max-plus dynamic program equals
  path enumeration exactly on a three-regime graph with a forbidden
@@ -38,7 +52,7 @@
  \end{proposition}
  
  \begin{proof}
-@@ -845,8 +845,8 @@
+@@ -845,8 +848,8 @@
  \includegraphics[width=0.96\linewidth]{figs_ws4/fig_timing.pdf}
  \caption{The timing grid. Cells viable at the deadline (green) satisfy \(T_{\mathrm{obs}} \le \tau^{*}(z_0)\); the identity is
  boundary-inclusive, and the strict form \(T_{\mathrm{obs}} <
@@ -49,7 +63,7 @@
  \label{fig:timing}
  \end{figure}
  
-@@ -1021,11 +1021,12 @@
+@@ -1021,11 +1024,12 @@
  \(Y\)-fibre admits a feasible input (some \(u \in U\) with
  \(u_i \le \mathrm{cap}_i(Y)\)) if and only if
  \(\mathrm{cap}_1(Y) + \mathrm{cap}_2(Y) \ge 2\), which holds if and
@@ -64,7 +78,7 @@
  \end{proposition}
  
  \begin{proof}
-@@ -1141,13 +1142,14 @@
+@@ -1141,13 +1145,14 @@
  
  \begin{proof}
  Intersect each constraint's halfspace with the domain: an infeasible
@@ -84,7 +98,7 @@
  instance, each pair is feasible --- at \((1,1)\), \((1,0)\), and
  \((0,1)\) respectively --- while all three give the contradiction
  \(2 \le 1\); the verification script verifies each pair at its printed
-@@ -1261,7 +1263,7 @@
+@@ -1261,7 +1266,7 @@
  \(T_{\mathrm{obs}} \le \tau^{*}(z_0)\), the deadline at worst-case exit admissible under the audited endpoint convention (Section \ref{timing}). \emph{Coarseness:} (exact census, Section \ref{adequacy}) a fibre
  merging states with disjoint safe-action sets obstructs at that
  information state; the remedy is a fibre split, not a finer threshold
@@ -93,7 +107,7 @@
  \emph{Bias:} (exact audit, Section \ref{drift}) the uncorrected law's drift is at least \(21/100\) on a
  101-point grid of \([1,2]\), while the corrected law's drift is
  identically zero; a fixed bias is exactly correctable, and the remedy is
-@@ -1273,28 +1275,33 @@
+@@ -1273,28 +1278,39 @@
  
  The master monotonicity statement of Proposition~\ref{prop:master} is formalized in the
  project's Lean~4 layer, in namespace \texttt{Formalizations.WS}
@@ -101,7 +115,11 @@
 -\texttt{monotone\_action\_axis} the policy axis of it, both stated over the abstract audited
 -tuple rather than over any particular audited instance, so they hold for every system in the
 -family at once.
-+(\texttt{WS\_WorkedSystems}): \texttt{master\_monotone} and \texttt{monotone\_action\_axis} prove
++(\texttt{WS\_WorkedSystems}). Its statement imports the earlier
++\texttt{Formalizations.P1\_Obstruction} definitions \texttt{FinSys} and
++\texttt{Wk} (Abaee, 2026, An obstruction calculus); this is a formal
++vocabulary dependency, not identity of the papers' results. In that
++vocabulary, \texttt{master\_monotone} and \texttt{monotone\_action\_axis} prove
 +monotonicity under pointwise inclusion of the admissible-action predicate in an
 +abstract finite system. The separate observation-refinement declaration
 +\texttt{Wk\_mono\_obs} requires its own refinement hypotheses.
@@ -109,10 +127,14 @@
 +the table counts.
  
  \noindent\textbf{No admitted gaps.} A comment-stripped source scan of the whole project finds
- no \texttt{sorry}, \texttt{admit}, \texttt{axiom} or \texttt{constant} declaration anywhere.
- 
+-no \texttt{sorry}, \texttt{admit}, \texttt{axiom} or \texttt{constant} declaration anywhere.
+-
 -\noindent\textbf{Scope, stated plainly.} What is machine-checked is the monotonicity
 -theorem --- the one abstract statement whose instances the audits tabulate. \textbf{The audits
++no \texttt{sorry}, \texttt{admit}, \texttt{axiom} or \texttt{constant} declaration anywhere. This scans explicit source syntax, not generated
++axiom footprints; the pinned build succeeds and the project's P3 support/value
++examples retain three \texttt{native\_decide} uses (nine generated axiom names).
++
 +\noindent\textbf{Scope, stated plainly.} What is machine-checked is an action-inclusion monotonicity
 +statement and, separately, a finite observation-refinement statement under
 +their exact hypotheses; the register/count cases are not Lean instances. \textbf{The audits
@@ -137,7 +159,7 @@
  script recomputes the counts of Sections \ref{master}--\ref{regimes}
  from the shared system's primitives --- the transition, the fibre
  partition function, and the backward recursion with the no-repeat
-@@ -1309,14 +1316,13 @@
+@@ -1309,14 +1325,13 @@
  primitives before drawing; the two scripts agree on every shared
  quantity. The audited identities are additionally covered by the
  per-system verification scripts of the companion papers (Abaee, 2026, An obstruction calculus;
