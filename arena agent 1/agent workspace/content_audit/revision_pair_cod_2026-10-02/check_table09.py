@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Compare every new paper09 Table 1 numeric cell to unrounded fit rerun."""
 from pathlib import Path
-import re,csv
-s=Path('/home/user/papers/paper09_cod_certification_v36.tex').read_text()
+import re,csv,sys
+source=Path(sys.argv[1]) if len(sys.argv)>1 else Path('/home/user/papers/paper09_cod_certification_v36.tex')
+s=source.read_text()
 s=s.split('\\textbf{Table 1.} Lower boundaries',1)[1].split('\\endlastfoot',1)[1].split('\\end{longtable}',1)[0]
 records=[]
 for chunk in re.split(r'\\\\',s):
