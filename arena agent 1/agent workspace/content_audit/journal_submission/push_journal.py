@@ -17,8 +17,10 @@ for rel,p in files:
  if old.get(target)!=sha:changed.append((rel,p,sha,len(data)))
 print('PLAN',len(changed),'files',sum(x[3] for x in changed),'bytes',flush=True)
 print('\n'.join(str(x[0]) for x in changed),flush=True)
-assert changed
 if '--plan' in sys.argv:sys.exit(0)
+if not changed:
+ print('NOTHING_UNPUSHED',remote,flush=True)
+ sys.exit(0)
 seen=set(old.values())
 entries=[]
 for i,(rel,p,sha,size) in enumerate(changed,1):
