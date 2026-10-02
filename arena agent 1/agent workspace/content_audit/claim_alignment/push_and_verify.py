@@ -3,7 +3,9 @@
 One family per correction commit, other recovered records grouped by provenance.
 Never upload credentials, generated compile caches, excluded dependencies, or mutate live heads.
 CAS-check the ref before every push, and reverse-sweep each updated commit's tree.
-Usage: python3 content_audit/claim_alignment/push_and_verify.py [--plan]
+Usage: python3 content_audit/claim_alignment/push_and_verify.py [--plan] [--atomic]
+Use --atomic for an interdependent manuscript/runner/evidence repair, to avoid
+triggering CI at inconsistent intermediate commits.
 """
 import sys,json,base64,urllib.request,urllib.error,hashlib,time
 from pathlib import Path
@@ -27,7 +29,7 @@ def files():
    if not f.is_file() or f.is_symlink():continue
    rel=f.relative_to(R)
    if any(x in rel.parts for x in ['__pycache__','.cache','.local','build','node_modules','ci_out']):continue
-   if str(rel)=='content_audit/push_tip.txt':continue  # mutable local checkpoint, not evidence
+   if str(rel) in ('content_audit/push_tip.txt','content_audit/claim_alignment/PUSH_HISTORY.tsv'):continue  # mutable local checkpoints, not immutable evidence
    if 'compile' in rel.parts and str(rel) not in ('content_audit/claim_alignment/compile/results.tsv','content_audit/claim_alignment/compile/all_compiles.log','content_audit/claim_alignment/compile/paper09_results.tsv','content_audit/claim_alignment/compile/paper09_compiles.log'):continue
    if f.suffix.lower() in ('.aux','.toc','.out','.pyc','.synctex.gz'):continue
    yield rel,f
@@ -63,6 +65,8 @@ def main():
   b=p.read_bytes();d=digest(b);path=ROOT+str(rel)
   if old.get(path)!=d:grouped[group(rel)].append((str(rel),p,d,len(b)))
  for v in grouped.values():v.sort()
+ if '--atomic' in sys.argv and grouped:
+  grouped={'09_cod_with_arv_atomic_review':sorted((x for v in grouped.values() for x in v),key=lambda x:x[0])}
  total=sum(map(len,grouped.values()));size=sum(x[3] for v in grouped.values() for x in v)
  print('PLAN',len(grouped),'commits',total,'changed files',size,'bytes',flush=True)
  for key in sorted(grouped):print(key,len(grouped[key]),sum(x[3] for x in grouped[key]),flush=True)

@@ -8,18 +8,18 @@ B=Path(os.environ.get('PAPER09_AUDIT_DIR','/home/user/content_audit/paper09_reru
 P=Path(os.environ.get('PAPER09_MAIN_TEX','/home/user/content_audit/claim_alignment/drafts/paper09_cod_certification_v32.tex'))
 t=P.read_text()
 start=t.index('\\subsubsection{3.11 Second specification');end=t.index('\\subsubsection{3.12 Is the reference point',start);s=t[start:end]
-base=list(csv.DictReader((B/'review_candidates/e2_xteNCAM_summary.csv').open()))[0]
-rows={(r['class_'],r['policy']):r for r in csv.DictReader((B/'review_candidates/e2_xteNCAM_row.csv').open())}
+base=list(csv.DictReader((B/'review_candidates/e2_xteNCAM_summary_stable.csv').open()))[0]
+rows={(r['class_'],r['policy']):r for r in csv.DictReader((B/'review_candidates/e2_xteNCAM_row_stable.csv').open())}
 items=[]
 def check(name,calc,text,part=s):
  status='match' if text in part else 'mismatch' if text else 'not-produced'
  items.append((name,calc,text,status))
 # Python-executed values (not the manuscript) drive the expected display.
-assert len(rows)==12 and base['constructive_own_q10']=='7.48'
+assert len(rows)==12 and base['K']=='4813.06' and base['constructive_own_q10']=='7.49'
 check('fit r',base['r'],r'\(r = 0.5023\)')
-check('fit K kt',base['K'],r'\(K = 4812.9\)')
+check('fit K kt',base['K'],r'\(K = 4813.1\)')
 check('source-year floor q10',base['e_q10'],r'\(|e_{q10}| = 123.2\)')
-check('constructive margin',base['constructive_own_q10'],r'\(7.48\) kt')
+check('constructive margin',base['constructive_own_q10'],r'\(7.49\) kt')
 check('source-year floor worst',base['e_min'],r'\(> 395.9\) kt')
 for pol in ('flat_0','BAU'):
  assert all(round(float(rows[('own_q10',pol)][h]),2)==276 for h in ('T1','T5','Tinf'))
@@ -33,8 +33,8 @@ for policy,t1 in [('flat_0','462.10'),('flat_50','548.05')]:
  check('worst '+policy+' T1',x['T1'],r'\('+t1+r'\) kt')
 assert round(float(rows[('own_q05','flat_0')]['T1']),2)==345
 check('q05 zero one-step',rows[('own_q05','flat_0')]['T1'],r'\(345.00\) kt')
-check('Table 7 source-year row',';'.join([base['constructive_own_q10'],rows[('own_q10','flat_0')]['T1'],rows[('own_q10','flat_0')]['Tinf']]),r'xteNCAM (this row) & 0.5023 & 4812.9 & 1.4447 & 7.48 & 276.0 & 276.0 \\')
-check('cod conclusion source-year margin',base['constructive_own_q10'],'is only \\(7.48\\) kt',t)
+check('Table 7 source-year row',';'.join([base['constructive_own_q10'],rows[('own_q10','flat_0')]['T1'],rows[('own_q10','flat_0')]['Tinf']]),r'xteNCAM (this row) & 0.5023 & 4813.1 & 1.4447 & 7.49 & 276.0 & 276.0 \\')
+check('cod conclusion source-year margin',base['constructive_own_q10'],'is only \\(7.49\\) kt',t)
 with (B/'xte_claim_crosswalk.tsv').open('w') as f:
  w=csv.writer(f,delimiter='\t');w.writerow(['claim','computed','manuscript_snippet','status']);w.writerows(items)
 from collections import Counter

@@ -33,7 +33,7 @@ assert len(re.findall(r'\\begin\{abstract\}.*?\\end\{abstract\}',main,re.S))==3
 pre=(A/'original_sections/paper09b_arv_v2_prehost.tex').read_text()
 assert re.search(r'\\begin\{abstract\}.*?\\end\{abstract\}',pre,re.S).group() in arv
 assert 'Part II --- Regime Viability' in arv and 'Part II --- Regime viability' not in main
-assert 'xteNCAM (this row) & 0.5023 & 4812.9 & 1.4447 & 7.48 & 276.0 & 276.0' in main
+assert 'xteNCAM (this row) & 0.5023 & 4813.1 & 1.4447 & 7.49 & 276.0 & 276.0' in main
 assert 'xteNCAM (this row) & 0.5023 & 4812.9 & 1.4447 & \\ensuremath{-}48.0' not in main
 assert (P/'POSTING_METADATA_2026-10-02.md').is_file()
 assert 'nine intended Preprints.org postings' in (P/'README.md').read_text()

@@ -43,7 +43,7 @@ for name,source,timeout in jobs:
   else:print('OUTPUT_MATCH',r['output'],actual,flush=True)
 # Run reviewed one-line correction in isolated temporary path, never replace
 # the historical tracked xte script or its old result files.
-src=(B/'review_candidates/campaign_e2_xteNCAM_row_sourceyear.py').read_text()
+src=(B/'review_candidates/campaign_e2_xteNCAM_row_sourceyear_stable.py').read_text()
 old='REPO = Path("/home/user/repo")';assert src.count(old)==1
 with tempfile.TemporaryDirectory(prefix='xte-sourceyear-ci-') as d:
  p=Path(d)/'campaign_e2_xteNCAM_row.py';p.write_text(src.replace(old,'REPO = Path('+repr(str(G))+')'))
@@ -51,7 +51,7 @@ with tempfile.TemporaryDirectory(prefix='xte-sourceyear-ci-') as d:
  (OUT/'xte_sourceyear.log').write_text(proc.stdout)
  assert proc.returncode==0,(proc.returncode,proc.stdout[-500:])
  for n in ('e2_xteNCAM_summary.csv','e2_xteNCAM_row.csv'):
-  generated=Path(d)/'results'/n;expected=B/'review_candidates'/n
+  generated=Path(d)/'results'/n;expected=B/'review_candidates'/n.replace('.csv','_stable.csv')
   assert generated.is_file(),n
   if sha(generated)!=sha(expected):
    dest=OUT/'generated/xte'/n;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(generated,dest)

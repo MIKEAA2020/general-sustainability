@@ -1,0 +1,39 @@
+--- source-year one-line candidate
++++ stable linear-LS candidate
+@@ -22,6 +22,7 @@
+ 
+ import numpy as np
+ import pandas as pd
++import math
+ 
+ REPO = Path("/home/user/repo")
+ COD = REPO / "wave_e_cod" / "src"
+@@ -68,9 +69,26 @@
+ def main():
+     years, ssb, cat = run_xte.load_xte()
+     m_tr = years <= 2007
++    # Solve the SAME source-year Schaefer one-step least-squares objective in
++    # the linear coordinates a=r and b=r/K, with stable compensated sums.
++    # An unconstrained interior solution is used only after validating the
++    # original box constraints and the original SciPy fit's objective.
++    S0 = ssb[m_tr][:-1]
++    response = np.diff(ssb[m_tr]) + cat[m_tr][:-1]
++    A = math.fsum(float(v*v) for v in S0)
++    B = -math.fsum(float(v*v*v) for v in S0)
++    C = math.fsum(float(v**4) for v in S0)
++    D = math.fsum(float(v*w) for v,w in zip(S0,response))
++    E = -math.fsum(float(v*v*w) for v,w in zip(S0,response))
++    det = A*C-B*B
++    assert det > 0
++    r_ = (D*C-B*E)/det
++    b = (A*E-B*D)/det
++    K_ = r_/b
++    assert 0.001 < r_ < 2.0 and ssb[m_tr][:-1].max()+10 < K_ < 5000.0
+     p = rl.fit_params(ssb[m_tr], cat[m_tr], allee=False)
+-    r_, K_ = float(p["r"]), float(p["K"])
+-    pinned = bool(K_ >= 5000.0 - 1e-9)
++    assert p['ok'] and abs(float(p['r'])-r_) < 1e-3 and abs(float(p['K'])-K_) < 2.0
++    pinned = False
+     S_hi = 2 * K_
+     print(f"xteNCAM Schaefer fit: r = {r_:.4f}, K = {K_:.2f} (pinned={pinned}), "
+           f"MSE = {p['sse']:.1f} kt^2, n = {p.get('n', '') or int(m_tr.sum()) - 1}")
