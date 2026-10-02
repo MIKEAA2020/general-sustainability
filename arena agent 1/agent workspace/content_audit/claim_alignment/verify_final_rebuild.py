@@ -5,6 +5,7 @@ abstracts, live-head preservation, ARV extraction and asset manifest.
 """
 from pathlib import Path
 from difflib import unified_diff
+from collections import Counter
 import csv,hashlib,re
 R=Path('/home/user');A=R/'content_audit/claim_alignment';P=R/'paper 2 family'
 expected={'01_obstruction','02_probabilistic_sufficiency','03_computational_certification','04_minimax_dual_certificates','05_exact_belief_computation','09_cod_with_arv','11_forecasting_baselines','11c_worked_systems'}
@@ -32,6 +33,10 @@ assert len(re.findall(r'\\begin\{abstract\}.*?\\end\{abstract\}',main,re.S))==3
 pre=(A/'original_sections/paper09b_arv_v2_prehost.tex').read_text()
 assert re.search(r'\\begin\{abstract\}.*?\\end\{abstract\}',pre,re.S).group() in arv
 assert 'Part II --- Regime Viability' in arv and 'Part II --- Regime viability' not in main
+assert 'xteNCAM (this row) & 0.5023 & 4812.9 & 1.4447 & 7.48 & 276.0 & 276.0' in main
+assert 'xteNCAM (this row) & 0.5023 & 4812.9 & 1.4447 & \\ensuremath{-}48.0' not in main
+assert (P/'POSTING_METADATA_2026-10-02.md').is_file()
+assert 'nine intended Preprints.org postings' in (P/'README.md').read_text()
 assert not re.search(r'\\(?:ref|eqref|pageref)\{regime-[^}]+\}',main)
 assert 'figs_arv/fig_record.pdf' not in main
 for fn,source,new,diffname in [('paper09_cod_certification_v32.tex',live,main,'paper09_cod_certification_v32_host_2026-10-02.diff'),('paper09b_arv_certification_v2.tex',pre,arv,'paper09b_arv_certification_v2_host_2026-10-02.diff')]:
@@ -41,4 +46,5 @@ for fn,source,new,diffname in [('paper09_cod_certification_v32.tex',live,main,'p
 for f in P.rglob('*.tex'):
  t='\n'.join(re.sub(r'(?<!\\)%.*$','',line) for line in f.read_text().splitlines())
  assert len(re.findall(r'\\begin\{document\}',t))==1 and len(re.findall(r'\\end\{document\}',t))==1,f
-print('FINAL_STAGING_PASS',len(expected),'submission units',len(rows),'SHA-verified package files',len(compiled)+2,'passing isolated TeX runs; no grouping/content/Lean publication proof inferred')
+ assert Counter(re.findall(r'\\begin\{([^}]+)\}',t))==Counter(re.findall(r'\\end\{([^}]+)\}',t)),f
+print('FINAL_STAGING_PASS',len(expected),'intellectual units / 9 intended postings',len(rows),'SHA-verified package files',len(compiled)+2,'passing isolated TeX runs; source-year xte review candidate, not publication proof')

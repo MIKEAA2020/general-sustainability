@@ -26,7 +26,7 @@ def files():
   for f in (R/d).rglob('*'):
    if not f.is_file() or f.is_symlink():continue
    rel=f.relative_to(R)
-   if any(x in rel.parts for x in ['__pycache__','.cache','.local','build','node_modules']):continue
+   if any(x in rel.parts for x in ['__pycache__','.cache','.local','build','node_modules','ci_out']):continue
    if str(rel)=='content_audit/push_tip.txt':continue  # mutable local checkpoint, not evidence
    if 'compile' in rel.parts and str(rel) not in ('content_audit/claim_alignment/compile/results.tsv','content_audit/claim_alignment/compile/all_compiles.log','content_audit/claim_alignment/compile/paper09_results.tsv','content_audit/claim_alignment/compile/paper09_compiles.log'):continue
    if f.suffix.lower() in ('.aux','.toc','.out','.pyc','.synctex.gz'):continue
@@ -34,7 +34,7 @@ def files():
 def group(rel):
  s=str(rel);parts=rel.parts
  if s.startswith('paper 2 family/'):
-  if parts[1] in ('README.md','SHA256SUMS.tsv','GROUPING_DECISION_2026-10-02.md'):return '99_alignment_meta'
+  if parts[1] in ('README.md','SHA256SUMS.tsv','GROUPING_DECISION_2026-10-02.md','POSTING_METADATA_2026-10-02.md'):return '99_alignment_meta'
   if parts[1] in ('figs_e1','figs_e3'):return '11_forecasting_baselines'
   if parts[1] in ('figs_e2_v3','figs_e4'):return '09_cod_with_arv'
   return parts[1]
