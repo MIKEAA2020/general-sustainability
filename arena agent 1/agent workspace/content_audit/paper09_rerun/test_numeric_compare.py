@@ -7,8 +7,13 @@ import tempfile
 from numeric_compare import compare, ABS_LIMIT, REL_LIMIT
 
 B=Path(__file__).resolve().parent
-root=B/'ci_runs/36958434317/artifact/arena agent 1/agent workspace/content_audit/paper09_rerun/ci_out'
-assert root.is_dir()
+root=B/'numeric_policy_fixture'
+manifest=json.loads((root/'MANIFEST.json').read_text())
+assert manifest['source_run']==36958434317 and len(manifest['files'])==10
+import hashlib
+for item in manifest['files']:
+ p=root/item['side']/item['path']
+ assert hashlib.sha256(p.read_bytes()).hexdigest()==item['sha256'],p
 core=[p for p in (root/'generated').rglob('*') if p.is_file() and 'xte' not in p.parts]
 assert len(core)==5
 for generated in sorted(core):
