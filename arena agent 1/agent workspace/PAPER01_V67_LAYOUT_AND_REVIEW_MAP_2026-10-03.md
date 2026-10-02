@@ -13,7 +13,7 @@
 
 ## Disposition of `uploads/01 audit.txt` against **v66/v67**, not against the superseded v65
 
-The uploaded audit reviews **v65** and expressly did **not** inspect its supplement. An item being listed there does not prove it remains defective; conversely v66's internal checks are not outside review. `uploads/` is not distributed. Priorities below are recommendations, not silent manuscript changes.
+The uploaded audit reviews **v65** and expressly did **not** inspect its supplement. An item being listed there does not prove it remains defective; conversely v66's internal checks are not outside review. The v67 deposit does not add `uploads/01 audit.txt` or any `uploads/` paths (older unrelated remote `uploads/` entries predate this commit). Priorities below are recommendations, not silent manuscript changes.
 
 ### Already substantially adopted in v66 (retain; review the actual repairs)
 
