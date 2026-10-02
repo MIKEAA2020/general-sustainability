@@ -10,7 +10,7 @@ remote=G.api('/git/ref/heads/'+BR)['object']['sha'];expected=(R/'content_audit/p
 assert remote==expected,(remote,expected)
 tree=G.api('/git/trees/'+remote+'?recursive=1');assert not tree['truncated']
 old={e['path']:e['sha'] for e in tree['tree'] if e['type']=='blob'}
-files=list(G.files())+[(Path(s),R/s) for s in ROOT_DOCS]
+files=[(rel,p) for rel,p in G.files() if str(rel)!='content_audit/journal_submission/PUSH_SESSION.log']+[(Path(s),R/s) for s in ROOT_DOCS]
 changed=[]
 for rel,p in files:
  data=p.read_bytes();sha=G.digest(data);target=ROOT+str(rel)
