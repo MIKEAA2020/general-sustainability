@@ -33,7 +33,7 @@ for i,(rel,p,sha,size) in enumerate(changed,1):
 assert G.api('/git/ref/heads/'+BR)['object']['sha']==remote,'remote moved before commit'
 base=G.api('/git/commits/'+remote)['tree']['sha']
 newtree=G.api('/git/trees',{'base_tree':base,'tree':entries})['sha']
-commit=G.api('/git/commits',{'message':'Prepare versioned preprint packages with conditional robustness bounds\n\nPaper03 v22 and paper09 v41 compile from self-contained source archives. The latter prints the exact local failure boundary and conditional epsilon-tolerance table while preserving experimental-method assumptions in the audit. Independent pair referee and physical coverage remain open; author review pending; no portal submission or DOI creation.','tree':newtree,'parents':[remote]})['sha']
+commit=G.api('/git/commits',{'message':'Refresh verified preprint author-review materials\n\nVersioned article sources and standalone packages remain author-review candidates, not posted preprints. Paper03 independent mathematical review, author rights approval, and physical error coverage are not asserted.','tree':newtree,'parents':[remote]})['sha']
 assert G.api('/git/ref/heads/'+BR)['object']['sha']==remote,'remote moved before ref update'
 G.api('/git/refs/heads/'+BR,{'sha':commit},method='PATCH')
 verified=G.api('/git/trees/'+commit+'?recursive=1');assert not verified['truncated']
