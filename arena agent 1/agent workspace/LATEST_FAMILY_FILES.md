@@ -1,6 +1,6 @@
 # Latest family-paper files — 2 October 2026
 
-**Papers 03 and 09 now have PDFs built from their latest sources (03 v21 and 09 v37); papers 02, 04, 05 and 06 remain source-only revisions whose PDF links below point to preceding versions.** Click a TeX link for an unbuilt revision; do not rely on an older PDF to judge it. These manuscripts are formatted for journal/preprint submission; no portal upload is asserted. For scope and validation limits, see `content_audit/journal_submission/JOURNAL_REVIEW_2026-10-02.md`. The older manuscript versions were removed **only from this workspace** after verifying their exact Git blobs on the repository branch; no Git history was deleted.
+**Papers 03 and 09 now have PDFs built from their latest sources (03 v21 and 09 v38); papers 02, 04, 05 and 06 remain source-only revisions whose PDF links below point to preceding versions.** Click a TeX link for an unbuilt revision; do not rely on an older PDF to judge it. These manuscripts are formatted for journal/preprint submission; no portal upload is asserted. For scope and validation limits, see `content_audit/journal_submission/JOURNAL_REVIEW_2026-10-02.md`. The older manuscript versions were removed **only from this workspace** after verifying their exact Git blobs on the repository branch; no Git history was deleted.
 
 | Paper | PDF (previous version for six revised papers) | Latest TeX source |
 |---|---|---|
@@ -12,7 +12,7 @@
 | **06 · Assessment separation, v70 (source-only)** | [paper06_assessment_separation_v69.pdf](papers/paper06_assessment_separation_v69.pdf) | [paper06_assessment_separation_v70.tex](papers/paper06_assessment_separation_v70.tex) |
 | **07 · Sampled governance, v52** | [paper07_sampled_governance_v52.pdf](papers/paper07_sampled_governance_v52.pdf) | [paper07_sampled_governance_v52.tex](papers/paper07_sampled_governance_v52.tex) |
 | **08 · Governance delay, v48** | [paper08_governance_delay_v48.pdf](papers/paper08_governance_delay_v48.pdf) | [paper08_governance_delay_v48.tex](papers/paper08_governance_delay_v48.tex) |
-| **09 · Cod/Edwards certification, v37 (compiled; model-coverage limits retained)** | [paper09_cod_certification_v37.pdf](papers/paper09_cod_certification_v37.pdf) | [paper09_cod_certification_v37.tex](papers/paper09_cod_certification_v37.tex) |
+| **09 · Cod/Edwards certification, v38 (compiled; fragility result central)** | [paper09_cod_certification_v38.pdf](papers/paper09_cod_certification_v38.pdf) | [paper09_cod_certification_v38.tex](papers/paper09_cod_certification_v38.tex) |
 | **09b · Exact-rational cod companion, v4** | [paper09b_arv_certification_v4.pdf](paper%202%20family/09_cod_with_arv/paper09b_arv_certification_v4.pdf) | [paper09b_arv_certification_v4.tex](paper%202%20family/09_cod_with_arv/paper09b_arv_certification_v4.tex) |
 
 **Also current in the same family:** [paper10_depletion_ledgers_v53.tex](papers/paper10_depletion_ledgers_v53.tex) (unchanged in this editorial pass); [paper11_forecasting_baselines_v66.pdf](paper%202%20family/11_forecasting_baselines/paper11_forecasting_baselines_v66.pdf) / [TeX](paper%202%20family/11_forecasting_baselines/paper11_forecasting_baselines_v66.tex); [paper11c_worked_systems_audit_v4.pdf](paper%202%20family/11c_worked_systems/paper11c_worked_systems_audit_v4.pdf) / [TeX](paper%202%20family/11c_worked_systems/paper11c_worked_systems_audit_v4.tex).
@@ -24,4 +24,4 @@ The matching new **live** 01–05/09/09b/11/11c sources and PDFs also remain in 
 
 **Six-revision validation:** [scope and release gates](SIX_MANUSCRIPT_REVISION_STATUS_2026-10-02.md). The original six source revisions were not portal-submitted; subsequent 03 and 09 heads have been compiled as noted above. The other revised heads still need builds.
 
-**Completed pair/certification follow-up:** [03 pair duals and 09 exact-parameter/feedback analysis](PAIR_CERTIFICATES_AND_COD_FEEDBACK_COMPLETION_2026-10-02.md). **Current review gates and compiled artifacts:** [pair-proof and model-class review](PAIR_AND_MODEL_CLASS_REVIEW_2026-10-02.md).
+**Completed pair/certification follow-up:** [03 pair duals and 09 exact-parameter/feedback analysis](PAIR_CERTIFICATES_AND_COD_FEEDBACK_COMPLETION_2026-10-02.md). **Review gates and compiled artifacts:** [pair-proof and model-class review](PAIR_AND_MODEL_CLASS_REVIEW_2026-10-02.md). **Additional conditional-modelling tests and literature scope:** [model-class/error-sensitivity report](CONDITIONAL_MODEL_CLASS_AND_ERROR_SCOPE_2026-10-02.md).
