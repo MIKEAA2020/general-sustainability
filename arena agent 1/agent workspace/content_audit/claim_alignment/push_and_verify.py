@@ -22,25 +22,26 @@ def api(path,data=None,method=None):
    time.sleep(1+retry)
 def digest(b):return hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
 def files():
- for d in ['papers','content_audit','latest','p5','family','b01','b08','b09','b11','paper 2 family']:
+ for d in ['papers','content_audit','latest','p5','family','b01','b08','b09','b11','paper 2 family','lean_repro']:
   for f in (R/d).rglob('*'):
    if not f.is_file() or f.is_symlink():continue
    rel=f.relative_to(R)
    if any(x in rel.parts for x in ['__pycache__','.cache','.local','build','node_modules']):continue
    if str(rel)=='content_audit/push_tip.txt':continue  # mutable local checkpoint, not evidence
-   if 'compile' in rel.parts and str(rel) not in ('content_audit/claim_alignment/compile/results.tsv','content_audit/claim_alignment/compile/all_compiles.log'):continue
+   if 'compile' in rel.parts and str(rel) not in ('content_audit/claim_alignment/compile/results.tsv','content_audit/claim_alignment/compile/all_compiles.log','content_audit/claim_alignment/compile/paper09_results.tsv','content_audit/claim_alignment/compile/paper09_compiles.log'):continue
    if f.suffix.lower() in ('.aux','.toc','.out','.pyc','.synctex.gz'):continue
    yield rel,f
 def group(rel):
  s=str(rel);parts=rel.parts
  if s.startswith('paper 2 family/'):
-  if parts[1] in ('README.md','SHA256SUMS.tsv'):return '99_alignment_meta'
+  if parts[1] in ('README.md','SHA256SUMS.tsv','GROUPING_DECISION_2026-10-02.md'):return '99_alignment_meta'
   if parts[1] in ('figs_e1','figs_e3'):return '11_forecasting_baselines'
+  if parts[1] in ('figs_e2_v3','figs_e4'):return '09_cod_with_arv'
   return parts[1]
  if s.startswith('content_audit/scientific_validity/'):
   return {'ws':'11c_worked_systems','comp':'03_computational_certification','minimax':'04_minimax_dual_certificates','ebc':'05_exact_belief_computation','psuff':'02_probabilistic_sufficiency','arv':'09b_regime_viability','e1':'11_forecasting_baselines','paper01':'01_obstruction'}.get(parts[2],'other-scientific-validity')
  if s.startswith('content_audit/claim_alignment/'):
-  for k,v in (('paper11c_','11c_worked_systems'),('paper03_','03_computational_certification'),('paper04_','04_minimax_dual_certificates'),('paper05_','05_exact_belief_computation'),('paper02_','02_probabilistic_sufficiency'),('paper09b_','09b_regime_viability'),('paper11_','11_forecasting_baselines'),('paper01_','01_obstruction')):
+  for k,v in (('paper11c_','11c_worked_systems'),('paper03_','03_computational_certification'),('paper04_','04_minimax_dual_certificates'),('paper05_','05_exact_belief_computation'),('paper02_','02_probabilistic_sufficiency'),('paper09b_','09_cod_with_arv'),('paper09_cod_','09_cod_with_arv'),('paper11_','11_forecasting_baselines'),('paper01_','01_obstruction')):
    if k in rel.name:return v
   for k,v in [('ws','11c_worked_systems'),('comp','03_computational_certification'),('minimax','04_minimax_dual_certificates'),('ebc','05_exact_belief_computation'),('psuff','02_probabilistic_sufficiency'),('arv','09b_regime_viability'),('e1','11_forecasting_baselines'),('paper01_compat','01_obstruction'),('paper01_supp_compat','01_obstruction')]:
    if rel.name==f'patch_{k}.py':return v
@@ -83,7 +84,7 @@ def main():
    tree.append({'path':ROOT+path,'mode':'100644','type':'blob','sha':sha})
   newtree=api('/git/trees',{'base_tree':bt,'tree':tree})['sha']
   msg=('Stage paper 2 family corrected '+key+' with source-specific provenance' if key[:2].isdigit() and not key.startswith(('80','85','90','99')) else 'Preserve recoverable source/audit records: '+key)
-  commit=api('/git/commits',{'message':msg+'\n\nNot a Preprints.org submission. Live heads unchanged; Lean build still pending.','tree':newtree,'parents':[cur]})['sha']
+  commit=api('/git/commits',{'message':msg+'\n\nNot a Preprints.org submission. Reviewed live heads unchanged; pinned Lean default build passed, strict generated-axiom gate remains.','tree':newtree,'parents':[cur]})['sha']
   api('/git/refs/heads/'+BRANCH,{'sha':commit},method='PATCH')
   chk=api('/git/trees/'+commit+'?recursive=1');assert not chk['truncated']
   look={x['path']:x['sha'] for x in chk['tree'] if x['type']=='blob'}

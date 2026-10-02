@@ -12,8 +12,8 @@ records={
  '03_computational_certification':(['paper03_computational_certification_v16.tex','paper03_computational_certification_v16_supplementary.tex'],{'figs_comp2':root/'content_audit/scientific_validity/comp/figs_comp2'}),
  '04_minimax_dual_certificates':(['paper04_minimax_dual_certificates_v16.tex'],{}),
  '05_exact_belief_computation':(['paper05_exact_belief_computation_v16.tex'],{}),
- '09b_regime_viability':(['paper09b_arv_certification_v2.tex'],{'figs_arv':root/'content_audit/scientific_validity/arv/figs_arv'}),
- '11_forecasting_baselines':(['paper11_forecasting_baselines_v64.tex'],{'figs_e1':root/'b11/figs_e1','figs_e3':root/'b11/figs_e3'}),
+ '09_cod_with_arv':(['paper09_cod_certification_v32.tex','paper09b_arv_certification_v2.tex'],{'figs_e2_v3':root/'b09/figs_e2_v3','figs_e4':root/'b09/figs_e4','figs_arv':root/'b09/figs_arv'}),
+ '11_forecasting_baselines':(['paper11_forecasting_baselines_v64.tex'],{'figs_e1':root/'paper 2 family/figs_e1','figs_e3':root/'paper 2 family/figs_e3'}),
  '11c_worked_systems':(['paper11c_worked_systems_audit_v2.tex'],{'figs_ws4':root/'content_audit/scientific_validity/ws/figs_ws4'}),
 }
 manifest=[]
@@ -29,7 +29,7 @@ for group,(filenames,figs) in records.items():
    'paper02_probabilistic_sufficiency_v12.tex':'psuff','paper03_computational_certification_v16.tex':'comp',
    'paper03_computational_certification_v16_supplementary.tex':'comp_supp',
    'paper04_minimax_dual_certificates_v16.tex':'minimax','paper05_exact_belief_computation_v16.tex':'ebc',
-   'paper09b_arv_certification_v2.tex':'arv','paper11_forecasting_baselines_v64.tex':'e1','paper11c_worked_systems_audit_v2.tex':'ws',
+   'paper09_cod_certification_v32.tex':'paper09_main','paper09b_arv_certification_v2.tex':'paper09_arv_companion','paper11_forecasting_baselines_v64.tex':'e1','paper11c_worked_systems_audit_v2.tex':'ws',
   }[name]
   pdf=a/'compile'/key/(name.removesuffix('.tex')+'.pdf');assert pdf.exists(),pdf
   shutil.copy2(pdf,target/pdf.name)
@@ -40,9 +40,15 @@ for group,(filenames,figs) in records.items():
    if not p.is_file():continue
    (dest/p.name).write_bytes(p.read_bytes())
    manifest.append((str((dest/p.name).relative_to(out)),sha256(p.read_bytes()).hexdigest()))
-# E1's inherited \\graphicspath{{../}} resolves sibling assets one level up.
+# E1's inherited \\graphicspath{{../}} resolves retained parent-level copies.
 for name in ('figs_e1','figs_e3'):
- source=root/'b11'/name;dest=out/name;dest.mkdir(exist_ok=True)
+ dest=out/name;assert dest.is_dir(),dest
+ for p in dest.iterdir():
+  if p.is_file():manifest.append((str(p.relative_to(out)),sha256(p.read_bytes()).hexdigest()))
+# The paper09 main likewise inherits \\graphicspath{{../}}. Supply its
+# exact remote-backed parent figure copies; no regenerated imagery is used.
+for name in ('figs_e2_v3','figs_e4'):
+ source=root/'b09'/name;dest=out/name;dest.mkdir(exist_ok=True)
  for p in source.iterdir():
   if p.is_file():
    (dest/p.name).write_bytes(p.read_bytes())
@@ -50,11 +56,11 @@ for name in ('figs_e1','figs_e3'):
 (out/'SHA256SUMS.tsv').write_text('path\tsha256\n'+''.join(f'{p}\t{digest}\n' for p,digest in manifest))
 (out/'README.md').write_text('''# Paper 2 family — Preprints.org preparation, NOT submitted
 
-These are **eight distinct, reviewed work families**, not a decided merged paper or a new numbering scheme. `01`, `02`, `03`, `04`, `05`, `09b`, `11` and `11c` retain the reviewed source identities. Families numbered 06–10 elsewhere are **not represented here as corrected submissions** merely because their numbers lie in the range. No submission or upload to Preprints.org has occurred.
+These are **eight adopted working submission units**, not eight unrelated PDF files or a new numbering scheme: `01`, `02`, `03`, `04`, `05`, `09` (paper09 cod+Edwards main with corrected ARV Part II companion), `11`, `11c`. The two paper09 documents are separately compiled within one unit; the live v32 source's embedded ARV section was extracted from the new main candidate, not erased from source history. Earlier `09b` standalone bytes remain retrievable from the remote Git history. See `GROUPING_DECISION_2026-10-02.md`. Families numbered 06–08/10 elsewhere are **not represented here as corrected submissions** merely because their numbers lie in the range. No submission or upload to Preprints.org has occurred.
 
-Each subfolder has a source-specific, compiled *corrected draft* (`.tex`), a typeset PDF, and the actually referenced figure assets. Paper 01 and comp also have their supplementary `.tex` and PDF. The original paper01 live head and other reviewed live heads remain unchanged; the paper01 main abstract and supplementary author additions here are the staged compatibility variants. The E1 composite inherits `\\graphicspath{{../}}`; its referenced figures are copied both into its own folder and into the immediate parent so that this staging layout compiles unchanged. Normalize paths and deduplicate only when making a final submission bundle. Check each source's references and any submission portal requirements.
+Each unit has source-specific, compiled *rebuild candidates* (`.tex`), typeset PDF(s), and referenced figure assets. Paper01 and paper03 attach supplements; paper09 attaches a separately titled ARV Part II companion. The original paper01 and paper09 live heads and other reviewed live heads remain unchanged; source-specific diffs and original abstracts are retained. The paper01 main abstract and supplementary author additions remain staged compatibility variants, not separately approved publication metadata. The E1 and paper09 main composites inherit `\\graphicspath{{../}}`; their referenced figures are copied both into their own folders and their immediate parent so this staging layout compiles unchanged. Normalize paths and deduplicate only when author-approved final submission bundles are made.
 
-**Before submission:** decide grouping; reconcile cross-paper terms using `content_audit/claim_alignment/TERMINOLOGY_AND_PAPER01_2026-10-01.md`; run a fresh Lean build with the pinned toolchain; rerun source-matched computations after regrouping, inspect rendered final artifacts, and obtain author approval. The checks and limitations are in `content_audit/claim_alignment/PRE_GROUPING_READINESS_2026-10-01.md`. Manuscript byline is Amin Abaee; no double-blind anonymization or new contribution role was added.
+**Before submission:** grouping is adopted as a working plan, but verify the terminology crosswalk (`content_audit/claim_alignment/TERMINOLOGY_AND_PAPER01_2026-10-01.md`), review all final-source diffs, rerun source-matched computations for the paper09 two-document unit, inspect rendered final artifacts, and obtain author approval. The declared-pin Lean default target was rebuilt in GitHub Actions (60/60); its remaining three P3 `native_decide` proof steps generate nine axiom names. The manuscript wording now separates no `sorryAx`/no explicit `axiom` declaration from this compiler/runtime trust extension; see `lean_repro/README.md`. This does not turn unformalized manuscript prose into Lean theorems. Manuscript byline is Amin Abaee; no double-blind anonymization or new contribution role was added.
 
 Recreate isolated compile logs/PDFs first with `content_audit/claim_alignment/compile_drafts.py` before rerunning the packaging script; it SHA-verifies and temporarily extracts the remote-backed `tools/tectonic-0.15.0-x86_64-static.tar.gz` if no local compiler binary is present. Local per-run compile copies may be pruned after verification. `SHA256SUMS.tsv` covers packaged source, PDF and assets. For verbatim old abstracts and diffs against reviewed heads, consult `content_audit/claim_alignment/original_abstracts/` and `diffs/`. Do not mistake a successful TeX compile or verifier exit for whole-paper proof.
 ''')

@@ -1,5 +1,7 @@
 # Pre-grouping readiness — follow-up to the staged alignment
 
+> **Dated follow-up (2026-10-02):** This is the historical pre-grouping checkpoint, not today's submission verdict. The declared-pin Lean v4.34.1 default build was rerun on the repaired source and passed 60/60; nine generated axiom names remain and the intentionally strict global gate still fails ([run 36946730855](https://github.com/MIKEAA2020/general-sustainability/actions/runs/36946730855)). The eight-unit plan has since been adopted and rebuilt as *candidates* with paper09 main + companion separately compiled. See `paper 2 family/GROUPING_DECISION_2026-10-02.md`, `paper 2 family/README.md` and `content_audit/claim_alignment/REBUILD_CHECK_2026-10-02.md`. No publication or upload is claimed.
+
 2026-10-01. This resolves the four pre-grouping questions raised after [the staged alignment report](ALIGNMENT_REPORT_2026-10-01.md), without choosing a grouping or publishing. The reviewed live heads and source-year snapshots were not edited. **Disposition: the corrected drafts now pass source-level count reconciliation, standalone TeX compilation and a paper01 terminology check; a fresh Lean build remains open before publication.** Passing these checks makes the drafts *usable candidates* for a grouping decision, not a scientific proof or a completed rebuild.
 
 ## 1. The theorem counts — corrected in the files

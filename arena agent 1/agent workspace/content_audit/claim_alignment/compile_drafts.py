@@ -27,7 +27,7 @@ assets={
  'comp': [('figs_comp2','content_audit/scientific_validity/comp/figs_comp2')],
  'psuff': [('figs_bs2','content_audit/scientific_validity/psuff/figs_bs2')],
  'arv': [('figs_arv','content_audit/scientific_validity/arv/figs_arv')],
- 'e1': [('figs_e1','b11/figs_e1'),('figs_e3','b11/figs_e3')],
+ 'e1': [('figs_e1','paper 2 family/figs_e1'),('figs_e3','paper 2 family/figs_e3')],
  'paper01': [('figs_p2','b01/figs_p2')],
  'paper01_compat': [('figs_p2','b01/figs_p2')],
  'paper01_supp': [('figs_p2','content_audit/claim_alignment/assets_paper01_supp/figs_p2')],
