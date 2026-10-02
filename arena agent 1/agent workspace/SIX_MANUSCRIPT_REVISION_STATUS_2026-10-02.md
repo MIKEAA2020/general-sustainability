@@ -1,5 +1,7 @@
 # Six new manuscript revisions — source and release status
 
+**Further versioned follow-up:** [03 v20's all-control pair certificates and 09 v36's exact-parameter/feedback analysis](PAIR_CERTIFICATES_AND_COD_FEEDBACK_COMPLETION_2026-10-02.md). The v19/v35 descriptions below document the earlier intermediate source heads; consult the family index for the latest TeX.
+
 **Versioned TeX sources:** [02 v15](papers/paper02_probabilistic_sufficiency_v15.tex) · [03 v19](papers/paper03_computational_certification_v19.tex) · [03 supplementary v19](papers/paper03_computational_certification_v19_supplementary.tex) · [04 v19](papers/paper04_minimax_dual_certificates_v19.tex) · [05 v19](papers/paper05_exact_belief_computation_v19.tex) · [06 v70](papers/paper06_assessment_separation_v70.tex) · [09 v35](papers/paper09_cod_certification_v35.tex). Previous heads and PDFs remain intact. **These are development-stage, source-only revisions; they have not been compiled or cleared for journal/preprint submission.** No TeX distribution was installed in this workspace. The v19 paper 03 supplement reproduces the prior mathematical supplement without claiming a newly checked proof.
 
 ## What this pass materially proves or repairs
