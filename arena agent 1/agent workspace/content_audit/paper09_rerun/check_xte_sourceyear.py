@@ -10,6 +10,10 @@ t=P.read_text()
 start=t.index('\\subsubsection{3.11 Second specification');end=t.index('\\subsubsection{3.12 Is the reference point',start);s=t[start:end]
 base=list(csv.DictReader((B/'review_candidates/e2_xteNCAM_summary_stable.csv').open()))[0]
 rows={(r['class_'],r['policy']):r for r in csv.DictReader((B/'review_candidates/e2_xteNCAM_row_stable.csv').open())}
+import json
+precision=json.loads((B/'review_candidates/xte_margin_precision.json').read_text())
+assert round(float(precision['analytic_fit']['Cstar_kt']),2)==float(base['constructive_own_q10'])
+assert round(float(precision['analytic_fit']['Cstar_kt']),4)==7.4898
 items=[]
 def check(name,calc,text,part=s):
  status='match' if text in part else 'mismatch' if text else 'not-produced'
@@ -19,7 +23,8 @@ assert len(rows)==12 and base['K']=='4813.06' and base['constructive_own_q10']==
 check('fit r',base['r'],r'\(r = 0.5023\)')
 check('fit K kt',base['K'],r'\(K = 4813.1\)')
 check('source-year floor q10',base['e_q10'],r'\(|e_{q10}| = 123.2\)')
-check('constructive margin',base['constructive_own_q10'],r'\(7.49\) kt')
+check('constructive margin before display rounding',precision['analytic_fit']['Cstar_kt'],r'\(7.4898\) kt before display rounding')
+check('constructive margin table precision',base['constructive_own_q10'],r'\(7.49\) kt in Table 7')
 check('source-year floor worst',base['e_min'],r'\(> 395.9\) kt')
 for pol in ('flat_0','BAU'):
  assert all(round(float(rows[('own_q10',pol)][h]),2)==276 for h in ('T1','T5','Tinf'))
@@ -34,7 +39,7 @@ for policy,t1 in [('flat_0','462.10'),('flat_50','548.05')]:
 assert round(float(rows[('own_q05','flat_0')]['T1']),2)==345
 check('q05 zero one-step',rows[('own_q05','flat_0')]['T1'],r'\(345.00\) kt')
 check('Table 7 source-year row',';'.join([base['constructive_own_q10'],rows[('own_q10','flat_0')]['T1'],rows[('own_q10','flat_0')]['Tinf']]),r'xteNCAM (this row) & 0.5023 & 4813.1 & 1.4447 & 7.49 & 276.0 & 276.0 \\')
-check('cod conclusion source-year margin',base['constructive_own_q10'],'is only \\(7.49\\) kt',t)
+check('cod conclusion source-year margin',precision['analytic_fit']['Cstar_kt'],'is only \\(7.4898\\) kt (\\(7.49\\) kt to two decimals)',t)
 with (B/'xte_claim_crosswalk.tsv').open('w') as f:
  w=csv.writer(f,delimiter='\t');w.writerow(['claim','computed','manuscript_snippet','status']);w.writerows(items)
 from collections import Counter

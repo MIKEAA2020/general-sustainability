@@ -5,6 +5,8 @@ on:
     branches: [e2-v3-source-year]
     paths:
       - 'arena agent 1/agent workspace/content_audit/paper09_rerun/ci_verify.py'
+      - 'arena agent 1/agent workspace/content_audit/paper09_rerun/numeric_compare.py'
+      - 'arena agent 1/agent workspace/content_audit/paper09_rerun/test_numeric_compare.py'
       - 'arena agent 1/agent workspace/content_audit/paper09_rerun/check_xte_sourceyear.py'
       - 'arena agent 1/agent workspace/content_audit/paper09_rerun/review_candidates/**'
       - 'arena agent 1/agent workspace/content_audit/paper09_rerun/fresh_inputs.tsv'
@@ -18,8 +20,13 @@ permissions:
 
 jobs:
   source-year-core-and-xte:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 25
+    env:
+      PYTHONHASHSEED: '0'
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -27,6 +34,10 @@ jobs:
           python-version: '3.13'
       - name: Install recorded computational dependencies
         run: python3 -m pip install numpy==2.3.5 pandas==2.2.3 scipy==1.17.1 matplotlib==3.10.9
+      - name: Check numeric envelope against archived drift and rejection mutations
+        run: |
+          set -o pipefail
+          python3 'arena agent 1/agent workspace/content_audit/paper09_rerun/test_numeric_compare.py' | tee paper09-numeric-policy-tests.log
       - name: Verify archived inputs and rerun source-year core plus repaired xte sensitivity
         run: |
           set -o pipefail
@@ -38,6 +49,8 @@ jobs:
           name: paper09-core-xte-${{ github.sha }}
           path: |
             paper09-ci-stdout.log
+            paper09-numeric-policy-tests.log
+            arena agent 1/agent workspace/content_audit/paper09_rerun/numeric_compare.py
             arena agent 1/agent workspace/content_audit/paper09_rerun/ci_out/**
             arena agent 1/agent workspace/content_audit/paper09_rerun/fresh_inputs.tsv
             arena agent 1/agent workspace/content_audit/paper09_rerun/core_outputs.tsv

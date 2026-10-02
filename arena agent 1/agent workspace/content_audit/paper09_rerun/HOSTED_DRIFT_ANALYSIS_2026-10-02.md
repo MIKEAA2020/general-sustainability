@@ -26,3 +26,17 @@ For xte, both candidate scripts use the same source-year residual definition and
 | Analytic interior minimizer | 130.67497006094996 | −123.18517527407535 | 7.4897947868746115 | **7.49 kt** |
 
 Thus the underlying C* difference is **0.0048391309626225 kt**; the two-decimal displays differ by 0.01 kt because the first value lies just below the **7.485** rounding boundary and the second above it. Do **not** subtract the separately rounded displayed `g(LRP)` and q10 to reconstruct C*. The analytic candidate is the one in the current review manuscript; this is a numerical-solver stabilization, **not** a reversal of the positive source-year verdict. It has one byte-identical hosted rerun at 36958930278, but the core machine-level drift needs a reproducibility policy and author sign-off before publication.
+
+## Chosen publication claim: measured numerical envelope, not portable byte identity
+
+The author requested a choice; the staged candidate **narrows** paper09's Data-availability language. It no longer says “every reported value to nine significant figures,” “one part in 10^9,” or “the elevation campaign regenerates exactly” across BLAS builds. The *observed divergent hosted artifact* (run 36958434317) contains five byte-drifted core files out of eleven, all with unchanged JSON schema/CSV rows/text. A report-only structural/numerical comparator measured:
+
+| Core outputs | Largest absolute difference (native file units) | Largest relative difference (nonzero values) |
+|---|---:|---:|
+| cod JSON and boundary CSV | 2.21577066×10⁻⁵ | 4.21678548×10⁻⁹ |
+| Edwards JSON and boundary CSV | 4.88853402×10⁻¹² | 7.42458890×10⁻¹⁵ |
+| seeded cod bootstrap CSV | 2.38639416×10⁻⁶ | 5.36286437×10⁻⁷ |
+
+The proposed comparison limits are **absolute ≤3×10⁻⁵ AND relative ≤10⁻⁶ for each differing numeric cell**, in that file's native units. It still requires exactly equal schemas, text, row counts, finite statuses and matching hashed input data; xte candidate CSVs remain **byte-identical** to their stable analytic-fit reference and manuscript claims are checked separately. The five historical changed core files all pass this report-only comparator, as do identical files. Injecting a changed fitted parameter, a sub-absolute-limit but relative-limit violation, a missing JSON key, a changed nested interval value and a changed CSV header each fails; log: `numeric_policy_report_only_tests.log`. An out-of-envelope future run must fail and preserve both files. This tested policy, **not** a silent whitelist, is being promoted to the hosted verifier. At this checkpoint it has **not** passed a new hosted workflow run. Record raw SHA mismatches as report-only; do not call a numeric gate a hash-identity gate. `OPENBLAS_NUM_THREADS`, `OMP_NUM_THREADS`, `MKL_NUM_THREADS` and `PYTHONHASHSEED` will be pinned cheaply in the new Ubuntu 24.04 CI job, in addition to the existing package-version pins; this does not assert exact architecture/BLAS build identity.
+
+For xte the current paper stages the unrounded diagnostic **C*=7.4897947868746115 kt**, displayed in prose to four decimals **7.4898 kt** and in Table 7 to two decimals **7.49 kt**. The extra digits describe the *algorithmic rounding boundary*, not physical measurement precision; the earlier one-line SciPy fit's 7.484955655911989 remains in the comparison record.

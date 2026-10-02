@@ -14,6 +14,7 @@ on:
       - 'lean_repro/check_all_footprints.py'
       - 'lean_repro/check_whitelisted_footprints.py'
       - 'lean_repro/allowed_native_axioms_v4341.txt'
+      - 'lean_repro/check_native_sites.py'
       - 'lean_repro/test_allowlist_policy.py'
       - '.github/workflows/lean-repro.yml'
   workflow_dispatch:
@@ -34,6 +35,7 @@ jobs:
           mkdir -p lean_repro/evidence
           git rev-parse HEAD | tee lean_repro/evidence/runner_commit.txt
           python3 lean_repro/verify_inputs.py | tee lean_repro/evidence/input_verification.log
+          python3 lean_repro/check_native_sites.py | tee lean_repro/evidence/approved_native_sites.log
           cp lean/lean-toolchain lean_repro/evidence/lean-toolchain.txt
       - name: Install toolchain manager on disposable runner
         shell: bash
@@ -81,6 +83,7 @@ jobs:
             lean_repro/SOURCE_COMMIT.txt
             lean_repro/allowed_native_axioms_v4341.txt
             lean_repro/check_whitelisted_footprints.py
+            lean_repro/check_native_sites.py
             lean_repro/test_allowlist_policy.py
             lean_repro/SOURCE_MANIFEST.tsv
             lean_repro/SOURCE_ARCHIVE.sha256
