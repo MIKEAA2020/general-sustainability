@@ -4,7 +4,7 @@
 
 | Paper | PDF (previous version for six revised papers) | Latest TeX source |
 |---|---|---|
-| **01 · Obstruction calculus, v65** | [paper01_obstruction_calculus_v65.pdf](paper%202%20family/01_obstruction/paper01_obstruction_calculus_v65.pdf) | [paper01_obstruction_calculus_v65.tex](paper%202%20family/01_obstruction/paper01_obstruction_calculus_v65.tex) |
+| **01 · Obstruction calculus, v65 (mathematical audit blockers; do not submit)** | [paper01_obstruction_calculus_v65.pdf](paper%202%20family/01_obstruction/paper01_obstruction_calculus_v65.pdf) | [paper01_obstruction_calculus_v65.tex](paper%202%20family/01_obstruction/paper01_obstruction_calculus_v65.tex) |
 | **02 · Probabilistic sufficiency, v15 (source-only)** | [paper02_probabilistic_sufficiency_v14.pdf](paper%202%20family/02_probabilistic_sufficiency/paper02_probabilistic_sufficiency_v14.pdf) | [paper02_probabilistic_sufficiency_v15.tex](papers/paper02_probabilistic_sufficiency_v15.tex) |
 | **03 · Computational certification, v22 (compiled; independent referee check pending)** | [paper03_computational_certification_v22.pdf](papers/paper03_computational_certification_v22.pdf) | [paper03_computational_certification_v22.tex](papers/paper03_computational_certification_v22.tex) |
 | **04 · Minimax dual certificates, v19 (source-only)** | [paper04_minimax_dual_certificates_v18.pdf](paper%202%20family/04_minimax_dual_certificates/paper04_minimax_dual_certificates_v18.pdf) | [paper04_minimax_dual_certificates_v19.tex](papers/paper04_minimax_dual_certificates_v19.tex) |
@@ -22,6 +22,6 @@
 The matching new **live** 01–05/09/09b/11/11c sources and PDFs also remain in `papers/`; their full inventory is in `REVISED_MANUSCRIPTS_2026-10-02.md`. For deleted earlier versions, see `content_audit/editorial_revisions/CLEANUP_CANDIDATES.json` (exact Git blob hashes and original paths).
 
 
-**Six-revision validation:** [scope and release gates](SIX_MANUSCRIPT_REVISION_STATUS_2026-10-02.md). The original six source revisions were not portal-submitted; subsequent 03 and 09 heads have been compiled as noted above. The other revised heads still need builds.
+**Paper01 release hold and repository location:** [adjudicated v65 audit and remote-branch reconciliation](PAPER01_REPOSITORY_AND_AUDIT_2026-10-02.md). **Six-revision validation:** [scope and release gates](SIX_MANUSCRIPT_REVISION_STATUS_2026-10-02.md). The original six source revisions were not portal-submitted; subsequent 03 and 09 heads have been compiled as noted above. The other revised heads still need builds.
 
 **Completed pair/certification follow-up:** [03 pair duals and 09 exact-parameter/feedback analysis](PAIR_CERTIFICATES_AND_COD_FEEDBACK_COMPLETION_2026-10-02.md). **Review gates and compiled artifacts:** [pair-proof and model-class review](PAIR_AND_MODEL_CLASS_REVIEW_2026-10-02.md). **Additional conditional-modelling tests and literature scope:** [model-class/error-sensitivity report](CONDITIONAL_MODEL_CLASS_AND_ERROR_SCOPE_2026-10-02.md). **Preprints.org preparation (no portal posting):** [author review and complete source/PDF packages](PREPRINTS_ORG_AUTHOR_REVIEW_2026-10-02.md).
