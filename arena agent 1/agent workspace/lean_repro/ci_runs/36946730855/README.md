@@ -1,0 +1,3 @@
+# P3_Binomial kernel-checked replacement: hosted rerun
+
+[Actions run 36946730855](https://github.com/MIKEAA2020/general-sustainability/actions/runs/36946730855) at `8f51818a7dfa7886a85ffadd7010e67feb6636dc` SHA-verified the patched source archive, built the default Lean v4.34.1 target 60/60, and checked named footprints. Aggregate-import sweep: 1,972 declarations, 90 unexpected references, **9 distinct** generated axioms (down from 10). The single `choose_six_three` native-decide axiom disappeared. Strict global gate still fails on the remaining three source-level `native_decide` uses in `P3_SupportValue.lean`. No other Lean source was changed. Logs from the expiring artifact are durably retained here.
