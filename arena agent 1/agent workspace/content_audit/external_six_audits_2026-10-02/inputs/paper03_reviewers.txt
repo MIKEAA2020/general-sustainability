@@ -1,0 +1,204 @@
+grok:
+**This paper develops a continuous-to-finite computational pipeline for obstruction certificates of linear systems under exogenous (mode) partial observation.** An outer moment relaxation of measurable information-adapted controls is paired with an inner finite adversarial discretization (stored labels/scenarios), producing a finite LP whose value \(\rho_{\mathcal{H},G}\) sandwiches the continuous-time minimax safety violation \(J_{\mathcal{I}}(T)\). Dual-feasible solutions are policy-independent finite certificates; a strictly positive margin is an obstruction certificate covering every measurable adapted policy. Completeness holds along refinements whose meshes and stored-scenario/enclosure widths vanish (though positivity is not monotone). Witness cardinality is governed by information–time rank of the safety-row matrix (at most \(r+1\) labels), not input dimension; a scalar-input construction saturates this with arbitrarily many modes. The pipeline is demonstrated end-to-end on a three-branch delayed-observation double-integrator instance (\(\tau^*=7/50\), exact shared-authority hierarchy, HiGHS agreeing with rationals to \(\sim 4.2\times 10^{-17}\)). A finite-side library `viacert` packages exact recursion and fibre-partition checks. Computations use exact rational arithmetic; the solver is only confirmation.
+
+The core identities (sandwich (8), atomic dual representation (9), \(\Gamma(\tau)=\tau-7/50\), \(\rho(h)=3/50-Th/4\) on aligned meshes, pair/triple delay thresholds, Farkas witnesses, residual certificate (11)) are internally consistent with the stated kernels, weights \(\lambda=(3/8,5/16,5/16)\), \(\sum\lambda_j n_j=0\), Table 1, and the verification claims. No catastrophic arithmetic or logical contradiction appears in the extracted text. Defects are overwhelmingly organizational, presentational, and copy-paste, plus a few wording/scope issues.
+
+### Structural and numbering flaws
+- Numbering is broken in the same pattern as the companion. The Introduction is unnumbered (or implicitly §1). “1. Related work” then contains its own 1.–4. (viability kernels, moment relaxations, scenario approach, verified numerics). “5. What is claimed” follows, after which development begins at “6. Model…”, “7. Adjoint safety rows…”, “8. The finite obstruction certificate”, “9. The continuous-to-finite theorem”. Later sections continue 10–18. The intro already points to Theorem 4 and Section 10; related-work subsections, claims, and the theorem statement do not form a consecutive sequence.
+- Date is 26 September 2026 (future); all Abaee 2026 companions, Figshare/Zenodo, and the GitHub revision are likewise 2026. This is a placeholder.
+- The abstract is a single dense block that already recites the sandwich formula, the \(r+1\) rank bound, \(\tau^*=7/50\), pair delays \(\approx 0.245\) and \(\approx 0.397\), the unit-rate \(a=1\) margin, HiGHS \(4.2\times 10^{-17}\), \(\rho(h)=3/50-Th/4\), and library details. It functions as an executive summary rather than a conventional abstract.
+- Extremely packed prose: long sentences, nested parentheticals, and verification asides (Lean pins, 60/60 GitHub Actions, SHA-256, “no sorry, admit, explicit axiom”, 21 footprints, native_decide, exception gates, v4.14.0 prelude failure). The Lean/GitHub provenance paragraph is essentially copied from the probabilistic-sufficiency companion, including the identical run ID 36990482599 and the sentence about v4.14.0 failing in the prelude.
+- Title is overly long. GitHub path (`MIKEAA2020/general-sustainability`, “arena agent 1/paper rewrites/latex”, specific commit) plus Independent Researcher + ut.ac.ir + identical AI declaration (GLM/Z.ai, Qwen, DeepSeek) again suggest a generated series.
+
+### Wording and conceptual issues
+- The sandwich \(\rho_{\mathcal{H},G}\le J_{\mathcal{I}}(T)\le\rho+\bar{e}+\delta_\beta+L h_t\) is correctly a certified lower bound on the violation (hence upper bound on safety) plus certified inflation. Related-work item 1 usefully distinguishes it from classical viability-kernel under/over-approximations and from moment-SOS exactness certificates. The phrasing “the two-sided structure is not new, and this paper does not claim it is” is accurate but abrupt.
+- “Worst-case” vs. scenario literature is handled well: the inner approximation is adversarial (finite stored labels/scenarios), the bound holds for every measurable information-adapted policy, and there is no confidence parameter. The parenthetical that \(\epsilon,\delta_\beta,L h_t\) are deterministic inflation certificates (not violation probabilities) and the flag on \(\beta\)-collision are helpful.
+- Solver status is stated clearly (“numerical confirmation… never proof objects”; primal-dual witnesses in exact arithmetic close the gap). Table 1 and the \(4.2\times 10^{-17}\) claim are consistent with that division of labour.
+- Dual-feasibility as a universal certificate (Remark 3, Theorem 4(ii), Corollary) is correctly policy-independent: the finite list of labels and weights does not depend on the policy; a violating realization may. The “prescriptive” reading (shared-authority ladder, conflict-interval decomposition (12), redesign levers) is instance-specific and the paper itself warns that algebraic dilation plots (\(\Gamma_a(\tau)=\tau-7/50-(a-1)/2\)) are not optimized thresholds (Proposition 8 counter-example at \(a=2\), \(\tau=16/25\)).
+- Rank vs. input dimension (Proposition 5) is the distinctive claim. The scalar-input, \(q+1\)-mode construction (interval-wise affine dynamics, terminal bounds producing a Helly-style contradiction only when all modes are present) is coherent; subsets of \(q\) modes remain viable. Helly’s theorem is correctly scoped as inapplicable to a common blind control function. The “negative half… most likely to surprise” sentence is informal.
+- Completeness (Theorem 4(iii)): positivity is not itself monotone under refinement, and detection requires the stored-scenario widths \(\delta_{\mathrm{init}},\delta_{\mathrm{num}}\) to vanish together with the mesh. This is stated; the dyadic schedule and \(\gamma/2\) margin example are clear.
+- Oracle-recourse and belief-cell extensions (Proposition 6, (13)) are labelled sound but incomplete; the paper does not claim they restore the exact theorem. That is honest.
+
+### Gaps in exposition
+- The three-branch plant (planar double integrator, hexagonal \(U\), seven facets, three unit vectors \(n_j\), initial \(p_j(0)=(34/25)n_j\), \(v_j(0)=n_j\)) is the sole running instance, yet it is introduced only in Section 10 with no geometric figure of the state-space, the three rays, or the hexagon. Figure 1 shows only the critical-position trajectories. A simple diagram of the three particles, the floor at 2, and the shared vs. individual braking would make the pairwise policies, the \(\sum\lambda_j n_j=0\) pooling, and the \(\tau^*=7/50\) calculation far more accessible.
+- No notation/glossary table despite a large load (\(J_{\mathcal{I}}(T)\), \(\mathcal{K}_{\mathcal{I}}^T\), \(\Gamma_{\mathcal{I}}(\lambda,a)\), \(k_a(\sigma)\), \(\beta_a\), \(\phi_U\), \(\mathcal{H}\), \(Q\), information partitions \(\mathcal{P}_r\), history \(I_r\), Lift, etc.). The shared-symbols table with companions is useful but paper-local meanings still proliferate.
+- The outer moment relaxation of *controls* (block averages \(\bar{k}_{a,\mathcal{H}}\), inequality (3)) is the technically distinctive step (measurable adapted policies are infinite-dimensional). The orientation “finite feasibility is a necessary condition for continuous-time safety” and the held-control exactness remark are present, but a short paragraph of intuition (why moments of the *input signals* rather than of the state, and why the averaging error \(e_{a,\mathcal{H}}\) is one-sided) would help readers coming from viability-kernel or scenario literature.
+- Proof of Theorem 4 is deferred (“complete steps 1–6 of the supplementary material”; Sion’s minimax for the atomic dual representation). The main-text sketch of (i)–(v) is readable but the \(L^1\) vs. \(L^\infty\) continuity hypotheses (H3) and the weak-* compactness argument are dense. A one-paragraph roadmap of the six steps would suffice for the main text.
+- Complexity is discussed (polynomial in the dimensions once enclosures are fixed; LP size \(mQ+1\) variables, \(Ms(N_t+1)+p_U Q\) inequalities; Table 1 up to 641 vars / 4461 rows / 1 s). There is no broader scalability statement or comparison with interval-reachability or SMT barrier tools (mentioned only as a future cross-tool study).
+- `viacert` (Section 15) is described by design principles (exactness, fidelity to the verified recursion, pluggability) and a list of twelve audited identities (kernel counts 24/26/25/28, census 15/7, \(Y^*=27/5\), etc.). Those numbers are inherited from companion audits; the library is explicitly *not* a reimplementation of the bridge. The distinction is clear but the identity list belongs in an appendix or the package documentation.
+
+### Minor local issues and consistencies that check out
+- Instance arithmetic is consistent: \(\int_0^1 u\,du=1/2\) yields \(\Gamma(\tau)=\tau-7/50\); \(\tau=1/5\) gives continuous margin 0.06; aligned-mesh law \(\rho(h)=3/50-Th/4\) with \(T=6/5\) reproduces Table 1 (\(h=0.20\to 0\), \(h=0.10\to 0.03\), \(h=0.05\to 0.045\), …); Farkas combination \(\lambda^\top(\beta+e)+\mu^\top f_{\mathrm{blk}}=-3/100<0\); primal endpoint row \(-1/2+14/25-3/100=-3/100\). Pair slacks 31/1250 and 81/1250, peaks 12345/6250 etc., match the caption of Figure 1.
+- Dual witness \(F\), \(f\), \(\eta_j\) and stationarity \(\sum\lambda_j a_k n_j+F^\top\mu_{j,k}=0\) are given explicitly; the verification script is claimed to check all 465 rows at the \(h=1/10\) mesh.
+- Proposition 5 construction (modes on successive intervals, terminal bounds, summing to \(-\varepsilon\)) is a valid demonstration that input dimension does not bound witness cardinality.
+- Residual certificate (11) and the sign convention for \(\beta_a^+\ge\beta_a\) (weakening the adversary) are sound for a lower bound on \(J_{\mathcal{I}}(T)\).
+- Delimitations (Section 16) correctly exclude control-dependent observations, nonlinear dynamics without enclosures, nonconvex \(U\) without extra relaxation, infinite-horizon, and unrestricted sensing after a blackout. The oracle-recourse formula (13) is labelled sound but incomplete.
+- Table 1 solver values (0.0000000000, 0.0300000000, …) and iteration/time counts are presented as confirmations; the text states agreement to \(4.2\times 10^{-17}\).
+
+### Proposed improvements
+- **Renumber and restructure.** Introduction §1, Related work §2 (with 2.1–2.4), Contributions §3, Model/information/quantifiers §4, Adjoint rows §5, Finite certificate §6, Continuous-to-finite theorem §7, then the instance, rank, refinement, prescriptive reading, library, delimitations, conclusion, verification. Move the seven-item roadmap into the introduction. Relocate the copied Lean/GitHub/SHA paragraph, most of Section 18, and the twelve-identity list to a verification appendix (or the computational companion). Keep only a short “all headline numbers are regenerated by scripts; solver is confirmation only” statement in the main text.
+- **Shorten the abstract.** Retain the five-claim outline (bridge, dual certificates, rank, prescriptive decode, exact verification paths) and one sentence on the three-branch campaign. Move \(\tau^*=7/50\), pair delays, \(4.2\times 10^{-17}\), \(\rho(h)\) law, and library name into the body or a “certified campaign” subsection.
+- **Add exposition aids.** (i) Notation table. (ii) Early geometric figure of the three-branch plant (rays, hexagon \(U\), floor at 2, shared vs. individual braking). (iii) One-paragraph intuition for why one relaxes *control* moments rather than the state, and why the averaging error is one-sided. (iv) Shorten run-on sentences; break the abstract and the Theorem 4 statement into labelled items.
+- **Fix metadata and copy-paste.** Correct the 2026 date (or explain it). Deduplicate the Lean provenance paragraph; if the formalizations differ across papers, say so. Verify that the GitHub revision and `viacert` package will be public. Consider a conventional affiliation or a clearer methods statement given the AI declaration and “arena agent” path.
+- **Tighten claims vs. formalization.** Keep the honest list of results cited rather than Lean-formalized (value identity, bridge theorem, belief-cell proposition). The “nothing verified in the companions is re-proved differently” sentence can be shorter.
+- **Optional extras.** A short complexity/practical-scalability paragraph (even if the theorem does not improve PSPACE-completeness). Move Table 1, the 465-row campaign, and per-mesh dimension counts to supplementary material. Add a “how to read the sandwich and the certificate” box. Consider whether the `viacert` public surface (FiniteSystem interface, twelve identities) needs a one-page API sketch.
+
+The mathematical core (outer control-moment relaxation + inner adversarial labels, dual certificates covering every measurable policy, information–time rank, exact three-branch campaign with closed-form \(\tau^*\) and \(\rho(h)\), residual certificates, sound but incomplete oracle/belief-cell extensions) is coherent and the verification claims are unusually strong. The main defects are organizational (broken numbering, density, copied Lean details, future date) and the lack of geometric intuition for the running instance. Addressing those would make a technically solid, highly specialized contribution far more readable.
+sonnet:
+I rechecked the three-branch instance by hand. The following all hold:
+- the hexagon facet description;
+- the pooling weights and η-vectors (F^Tη_j = −n_j, f^Tη_j = 1);
+- Γ(τ) = τ − 7/50 and the 3/100, 3/50, −53/100 chain;
+- the pair peaks 12345/6250 (= 2469/1250) and 2419/1250, with slacks 31/1250 and 81/1250;
+- the quadratics 6τ² − 30τ + 7 and 6τ² − 20τ + 7, with roots ≈ 0.2454 and ≈ 0.3974;
+- Table 1's block, variable and row counts, including the h = 1/15 mesh (Q = 48, 687 rows, ρ = 1/25);
+- the unequal-block value −1/5 and the 17/100 versus −6/25 example (h_t = h/2 = 1/20);
+- the arithmetic in Prop. 5 (margin ε/(q+1), kernel rank q);
+- the Prop. 8 counterexample (209/100).
+
+The main problems are in what surrounds those numbers.
+
+## A. Wrong, contradicted or unsupported statements
+
+1. **§17 contradicts §12.**
+   - §17 says the measure-dual companion reaches "the same conclusion … witness size is set by control dimension k with a tight k+1 bound".
+   - Prop. 5 and the Helly remark say the opposite: input dimension does not bound witnesses for blind control functions.
+   - The two results are about different objects (a static common action versus a control function). "Same conclusion, one moral" is wrong.
+
+2. **Pair thresholds are claimed as obstructions but only half-proved.**
+   - The abstract says "the pairs [are obstructed] past ≈0.245 and ≈0.397".
+   - Prop. 7 only computes where the shared-braking-then-brake policy's peak reaches 2. That gives viability below the thresholds and says nothing about nonviability above them.
+   - No pair dual certificate is given.
+   - Nonviability beyond the thresholds also needs optimality over all time-varying blind controls and all post-revelation controls.
+   - I believe the constant control is optimal. Peak_j is convex and decreasing in the deceleration profile, and the frontier slope argument closes it. The paper does not show this.
+   - "Exactly the optimal shared-braking programs" is true only inside the shared-braking family.
+   - Fix: compute the pair LPs and exhibit rational dual certificates, or downgrade to "viable up to".
+
+3. **Prop. 8 retracts what §5 and §14 still assert.**
+   - §14 says "each redesign lever carries an exact rate" and §5(4) says the certificate separates "what buys tolerance from what buys nothing".
+   - Prop. 8 says the a > 1 expression Γ_a is only an algebraic plot, not a valid certificate, and that the a = 2 equality claim is false.
+   - Fig. 2 still plots the a > 1 "zeros" as thresholds. The caption hedges, but the figure invites misreading.
+   - Reword §5(4) and §14, or drop Fig. 2.
+
+4. **"Unrestricted level ρ" and the leftover max{0,·}.**
+   - §10 refers to "the max{0,·} in the table's law", but no such max appears in any displayed law or in Table 1. This is a stale sentence.
+   - "ρ(h) = 3/50 − Th/4 for h < 1/5 and vanish at h = 1/5" is redundant, because the formula already gives 0 there.
+   - ρ is not truly unrestricted with exact per-label ē. The t = 0 velocity row for mode 1 is 1 − 6/5 = −1/5 independent of the controls, so ρ ≥ −1/5.
+   - The unequal-block value −1/5 is therefore exactly this floor. That coincidence should be said, since it is a floor and not a measure of safety slack.
+
+5. **§9: "held policy is continuously safe exactly when its moments satisfy the unrelaxed rows".**
+   - This holds only on the label grid G. Between grid times it needs the L·h_t term.
+   - Even with ē = 0 the equivalence is false as written.
+
+6. **Prop. 7 proof, off-critical drift.**
+   - It says the transverse drift "only decreases the noncritical coordinates".
+   - For the {1,2} blind control u = (−2/5, −4/5), the transverse velocity is −4/25 on both branches. With n₃ = (−3/5, −4/5), the n₃ᵀp coordinate of branch 1 and of branch 2 increases.
+   - The margin is large, so the conclusion survives, but the stated reason is wrong.
+
+7. **J_I(T) = τ − 7/50 and "τ > 7/50 ⇒ B₀ ∉ K_I" need T ≥ τ + 1.**
+   - With the fixed T = 6/5 this means τ ≤ 1/5.
+   - The "unit rate" claim and Fig. 2's τ-axis (to 0.7) are outside the regime where the label at t* = τ + 1 exists.
+
+8. **§4 versus Theorem 4(iii) and §11.**
+   - §4 says the paper "deliberately does not use" interval or validated methods.
+   - Semidecidability and the general rows (X_θ, ∫ of matrix exponentials, TV, L bounds) require certified enclosures.
+   - Exact rational arithmetic works here because the double integrator is nilpotent. The abstract's "finite, attainable, independently checkable" pipeline is demonstrated only in that setting.
+
+9. **Related-work mischaracterisations.**
+   - §1 attributes "the estimation-tube program" to Veliov (1993). That paper gives sufficient output-feedback conditions.
+   - §2 says moment–SOS values "converge monotonically". Here convergence is explicitly non-monotone (Thm 4(iii)).
+   - "Moment relaxation" is a stretch for a block-mean projection.
+   - "The direct ancestor" is overstated.
+   - I could not confirm the Saint-Pierre "open constraint sets" statement. Please check it.
+
+10. **§16: "Theorem 4 provides a justified continuous-to-finite bridge" for exact finite safety games.**
+    - Theorem 4 gives one-sided certificates and a sandwich. It does not give a sound abstraction in the sense used for finite games.
+
+## B. Proof gaps
+
+1. **Thm 4(ii), soundness of the finite dual as a continuous certificate, is stated, not proved.**
+   - Needed: Σ_j|J|ϕ_U(ḡ_j) − Σλē ≤ ∫ϕ_U(g).
+   - By subadditivity, ϕ_U(ḡ) − ϕ_U(g) ≤ h_U(g − ḡ) ≤ Σλ h_U(k − k̄).
+   - ē is defined via h_U(k̄ − k), so the two signs must agree. That holds only for centrally symmetric U, or if ē is defined for both signs. The hexagon is symmetric; Thm 4 is stated for general polytopes.
+   - Corollary (a)'s second inequality is attributed to "the weighted-average bound of the proof". It is simply the definition of J as a minimum over policies.
+
+2. **Thm 4(v), the r + 1 bound.**
+   - The argument is that a basic optimal solution of the λ-LP, with Σλ_aA_a = w and Σλ = 1, has at most r + 1 support points. This is correct but never written down. Give it.
+   - Contrary to "any prescribed margin strictly below ρ", the basic solution retains ρ itself.
+   - r is the rank of the discretised matrix and grows with the mesh. "Saturating r + 1" in Prop. 5 holds only for the aligned unit-block mesh.
+   - For r_I (span of lifted kernels), generic LTI rows have the cutoff 1{σ≤t}, which makes the span infinite-dimensional. The theorem is then vacuous in the continuous setting.
+   - "Governed by information–time rank" is therefore a statement about the discretisation. Define an intrinsic rank, or soften.
+
+3. **Prop. 5's example is degenerate.**
+   - Each x_j is forced to u ≡ 1 on I_j, so the obstruction is a covering counting argument.
+   - Say so, or give a non-tight example. Also fix "q + 1 witnesses are necessary" to "q + 1 labels".
+
+4. **Proof of (iv).**
+   - It is deferred to the supplement ("complete version") yet claimed "in full".
+   - Step counts conflict: "Steps 1–6" versus "complete seven-step … Step 5b".
+   - Sion needs semicontinuity hypotheses that are only gestured at.
+   - The "Arzelà–Ascoli consumes" phrasing is not a proof step.
+
+5. **Prop. 6 (belief cells) has no mathematical content beyond "sound relaxation".**
+   - The rest is hedging prose.
+   - The counterexample uses sup_C β where the worst case is inf_C β. It is a deliberately loose enclosure, not the true label, and this is not stated.
+
+6. **Prop. 2 repeats its proof verbatim inside the statement.** It also forward-references "(6)".
+
+7. **Positivity is "not monotone under refinement" (abstract, intro).** No example is given. The instance shows monotone increase.
+
+## C. Overclaims and scope
+
+- **The solver campaign adds little.**
+  - It covers five meshes of one symmetric instance with a closed-form law, and the exact witnesses already close the gap.
+  - "Agreement to 4.2 × 10⁻¹⁷" cannot be read from 9-digit entries. Report residuals and solver tolerances.
+- **The uniform ē = R_U V_U h_u is 4× loose here** (0.12 versus 0.03). Say so.
+- **The "ē = e + ½ counterexample" is a straw man.** It charges the wrong ē. It shows only that the charge must match the ē used.
+- **The reference library is not used by any result.**
+  - Its twelve identities (24/26/25/28, 15/7, Y* = 27/5, …) belong to other papers.
+  - I count fewer than twelve items in the description.
+  - Yet it appears in the title.
+  - "No third-party dependencies" is contradicted by the scipy campaign, and consolidation is "future work".
+  - Either integrate it (for example cross-check a finite abstraction of the hexagon instance) or drop it from the title.
+- **Lean paragraph.**
+  - It is word-for-word boilerplate from the companion paper.
+  - It mentions "P3 support/value examples", and "exponentials and logarithms" that nothing here uses.
+  - It does not say which statements of this paper are formalized (only the generic Farkas soundness?).
+  - "Value identity" is undefined.
+  - The module counts (60 modules, 62 source files, 3 historical outside) do not obviously add up.
+  - Run IDs and SHA manifests belong in a supplement.
+
+## D. Notation and housekeeping
+
+- **Symbol overloads.**
+  - β (scenario-approach β versus β_a).
+  - ρ ("mesh parameter" in the table, but it is the LP level).
+  - τ (observation time versus τ_r).
+  - h (mesh size, h_U support function, h_u/h_d/h_t).
+  - σ.
+  - The shared-symbols table is garbled.
+- **Counts.** "The contribution is five things" (§5) versus seven in the intro. The numbering also breaks ("1. Introduction", "1 Related work" with items 1–5, then §6).
+- **Fractions.** 12345/6250 is unreduced (= 2469/1250), unlike 2419/1250.
+- **Wording.** "Relax the controller, not the adversary" contradicts "weakens the adversary". Say instead that the controller is enlarged and the adversary shrunk.
+- **Versions.** The PDF is v18, but the cited script is …_v20_… and uses "paper2" naming. The master script, the figure script and certificate_exchange_v1.py are not all listed under Code availability.
+- **References.**
+  - Sion (1958) is listed but cited without a year in the text.
+  - The 2J3KL reference and "Exact belief-state computation at scale II" are uncited.
+  - "Supplementary … _supplementary.te" is truncated, and "preservation review" is unexplained.
+  - Overfull and cut-off text in the supplementary-material paragraph.
+- **Abstract.** At about 400 words with nested parentheses, it is unreadable. It should state the sandwich, one rank result and one instance.
+
+## E. Suggested improvements
+
+1. **Two-sided decisions.**
+   - The upper side already yields viability certificates: if ρ + ē + δβ + Lh_t < 0, the held policy is safe.
+   - For τ < 7/50, say τ = 0, h = 1/10 gives −0.03 < 0, so viability is certified.
+   - State the trichotomy (certified viable, certified nonviable, inconclusive near the boundary) and the boundary case τ = 7/50.
+2. **Better convergence.** Add first-order moments (mean plus first moment per block) to get O(h²) error, which would justify the word "moment".
+3. **Derive V_U, L and R_U from system data** for LTI classes, instead of assuming them. State the centre handling for h_U ≤ R_U‖·‖.
+4. **Intrinsic rank.** Define it, show when it is finite, and separate it from the mesh-dependent r.
+5. **Pair certificates.** Compute and print dual certificates for {1,2} and {2,3}, to substantiate the hierarchy.
+6. **Harder benchmarks.** Use asymmetric U (this tests the sign issue in B1), n ≥ 4, M ≥ 5 and random instances. Compare with a held-control LP and with a scenario-tree or oracle LP. Show scaling in 1/γ.
+7. **A genuine non-monotonicity example** for positivity under refinement.
+8. **Formalize Prop. 6** with explicit cell-label inequalities and a worked example.
+9. **Fix the scope statements** in §16 and §17, and cut the Lean boilerplate down to what this paper actually uses.

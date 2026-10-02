@@ -1,0 +1,210 @@
+grok:
+**The paper is a dense, technically ambitious preprint developing a quantitative (belief-state) counterpart to a set-valued “obstruction calculus” for viability under partial observation.** It ties \(V_k(b)\) (max survival probability over \(k\) steps) to support identities, \(\alpha\)-vectors as indicators of maximal jointly survivable sets (an antichain), exact piecewise-linear closed forms on a delayed hidden-regime instance, class lattices with realized gaps, deficit bounds from certificates, a stochastic layer, and one-stage distributional robustness. Computations are claimed exact (rational arithmetic, scripts, some Lean 4). The delayed-regime closed forms, tables (e.g., Table 1 values of \(1\) or \(1/2\)), witness census (384/348), jump loci, and many identities check out internally against the stated recurrences and Iverson-bracket formulas.
+
+However, there are presentation, structural, wording, and minor consistency issues, plus gaps in exposition. No catastrophic mathematical contradictions were found in the provided excerpts (the delayed-instance arithmetic, antichain/Sperner, survived-mass degeneration, weighted-path identity \(\Delta_1(b)=\sum b(x)p_x\), contamination infimum, and probe-count bound all align with the claims and tables/figures), but the writing is extremely packed, numbering is broken, and some phrases appear carried over from companion “robust/min” papers.
+
+### Structural and numbering flaws
+- Section numbering is inconsistent and jumps. The Introduction is unnumbered (or implicitly 1). Then “1 Related work” appears, with its own 1.–4. items, followed by “5. What is claimed”, then development starting at “6. The augmented model…”. The intro itself says the development “proceeds in seven steps” beginning at Section 6. Related-work subsections, claims, and later sections (7–17) do not form a clean sequence. “1 Related work” should be Section 2.
+- Date is 26 September 2026 (future); citations to Abaee 2026 companions and Figshare/Zenodo DOIs are likewise dated 2026. This looks like a placeholder.
+- The abstract is an overly long single block that already enumerates the six results, grid sizes (16×12), census numbers (36/156, 384/348), and specific fractions. It reads more like an extended executive summary than a conventional abstract.
+- Extremely dense prose: long sentences with many parentheticals, asides, and cross-references (“the 36/156 census”, “348 distinct after deduplication”, Lean “no sorryAx”/native_decide details, SHA-256, GitHub Actions 60/60, etc.). Verification/Lean provenance occupies disproportionate space in the claims section.
+- GitHub path (`MIKEAA2020/general-sustainability`, “arena agent 1/paper rewrites/latex”, specific commit) and AI-declaration (GLM/Z.ai, Qwen, DeepSeek) plus “Independent Researcher” + ut.ac.ir email suggest a generated or heavily AI-assisted series; the Lean/GitHub emphasis may be compensatory.
+
+### Wording and conceptual inconsistencies
+- **“Worst-case” vs. expectation mismatch.** Abstract and Definition 1 correctly describe \(V_k^\Pi(b)=\max_\pi\mathbb{P}_\pi(x_t\in\mathcal{V}\ \forall t=0\dots k\mid b)\) (a probability/mass). Theorem 2 recursion is the standard expected backup \(\max_a\sum_y\mathbb{P}(y\mid b,a)V(\tau(b,a,y))\). Yet the introduction and related-work paragraph 1 call it “the maximal worst-case probability” and state that “the recursion maximises over actions but minimises over the disturbance, so an object is a worst-case safety probability rather than an expected total reward.” This language matches a robust/min operator (companions, Remark 10, Section 14 contamination interpolating to \(\min_y\)) more than the \(\mathbb{P}\)/expectation actually defined and used. Prop. 11 further mixes “adversarially within its support — the robust operator” with the survived-mass formula that is just prior mass of states whose deterministic trajectories survive an open-loop sequence. Delimitations later correctly warn against conflating stochastic and robust readings, but the earlier wording does not.
+- Support-identity/deficit bound (Thm. 3, Prop. 13) is a lower bound \(1-V_k(b)\ge\min_{x\in\mathrm{supp}(b)}b(x)\) when the support is non-viable (lose at least one positive-mass branch). Equality is attained on the delayed instance (lose exactly the min-mass branch) and the two-floor chance instance (\(V_1=\max(b_0,b_1)\), deficit = min mass). The stochastic sensor example correctly shows the bound is not universal (\(1/20<1/2\)). The wording “attained on natural instances” is fine, but “every realized observation path (the loss can occur at any stage)” is slightly loose.
+- “\(\alpha\)-vectors are exactly the indicators of the maximal jointly survivable subsets” (Prop. 5) is consistent with the PL construction (masked Smallwood–Sondik backup, \(\alpha(\bot)=0\)) and the segment-form for open-loop classes. The Sperner bound is cited rather than Lean-formalized (explicitly admitted).
+- Class lattice (Thm. 15) \(\Pi_\mathrm{hold}\subseteq\Pi_\mathrm{ol}=V^{\mathrm{seq,blind}}\subseteq\Pi_\mathrm{seq}\) with exact gaps of \(1/2\) (flexibility vs. observation value) on the timing cells matches Table 1, Fig. 3 (36 red cells), and the closed forms of Prop. 6/Thm. 7. The “declared hold \(\subseteq\) open-loop \(\subseteq\) sequential \(\subseteq\) fully observed” ordering is realized.
+
+### Gaps in exposition and completeness
+- The delayed hidden-regime instance (two branches \(\theta=\pm1\), unit drift, floors, revelation at \(T_\mathrm{obs}\), prior \(w\) or \(1/2\)) is the workhorse for almost all closed forms, tables, jump loci, freeze, and class differences, yet it is introduced only at Prop. 6 with little geometric intuition or a state-space figure (only value plots in Fig. 1). A simple diagram of the two trajectories vs. the floor would help.
+- No notation table/glossary despite a large symbol load (\(V_k^\Pi\), \(\mathcal{W}_k^\mathrm{fb}\), \(\Gamma_k^\Pi\), \(\mathcal{S}_k\), \(\Pi_\mathrm{hold}/\mathrm{ol}/\mathrm{seq,blind}\), \(\tau\), Post, \(\alpha^{a,\gamma}\), contamination \(\mathcal{D}_\rho\), etc.).
+- Related work distinguishes Luc Doyen (viability) from Laurent Doyen (qualitative POMDPs) usefully, positions against Veliov (sufficient only) and estimation-space methods, and notes PSPACE-completeness, but the “two nearest neighbours” framing is a bit forced. Complexity is not improved (correctly admitted).
+- Lean/formalization covers support identity (repaired reading of Thm. 3), freeze, rationality of \(\alpha\)-vectors, and some native_decide examples, but Sperner is only cited and the deficit-bound reading of Prop. 13 is “the interface.” The extremely detailed “Current Lean provenance” paragraph (pins, jobs, SHA, “no sorry, admit…”, 21 footprints, exception gates) belongs in a verification appendix or companion, not the claims section.
+- Stochastic and robust layers (Props. 19–24, one-stage contamination exact, multi-stage not, probe-count Chernoff-style bound, additive deadline with aligned \(\theta^*\)) are correctly delimited as not extending the min-mass bound or the class-scoped timing obstruction. Explore–exploit, Bayesian updating beyond the exact probe split, and misaligned hidden parameters are out of scope (stated).
+- Verification (Sec. 15) is unusually thorough (brute-force trajectories, 2268 triples, 500 randomized cases, independent re-derivations, extended grid to \(z_0=4\), all headline numbers bound to scripts). This is a strength, but the main text still reads as if the scripts are the paper.
+
+### Minor local issues
+- Table 2 / Fig. 2 asymmetric audit: survived masses 3/10 vs. 7/10, best sequences save the heavier branch, deficit = min mass = 3/10. Column labels (“Lost branch”, “heavier/lighter”) are slightly confusing at first glance but consistent with \(V=7/10\).
+- Prop. 6/Thm. 7 Iverson forms, Table 1, Fig. 1 jumps at \(z_0=1+\min(k,T_\mathrm{obs})\), freeze for \(k\ge T_\mathrm{obs}\), and 16×3×4=192 cells all match.
+- Prop. 20 majority-of-3: \(3\varepsilon^2(1-\varepsilon)+\varepsilon^3=\varepsilon^2(3-2\varepsilon)=7/250\) at \(\varepsilon=1/10\) is correct; bound \((4\varepsilon(1-\varepsilon))^{n/2}\) is the usual loose estimate.
+- One-stage contamination infimum \((1-\rho)\mathbb{E}+\rho\min\) is exact (vertex); multi-stage continuation values depend on \(\rho\), so no general concavity (correctly stated). Prior-contamination closed form on the delayed class is a simple modification of Thm. 7.
+- Declarations (funding/competing/data none; code at the GitHub revision) and AI disclosure are present.
+
+### Proposed improvements
+- **Renumber and restructure.** Make Introduction §1, Related work §2 (with 2.1–2.4), Contributions/What is claimed §3, then Model/selector §4, Support identity §5, etc. Move the seven-step roadmap into the intro and keep development consecutive. Relocate the long Lean/GitHub/SHA paragraph and most of §15 to a verification appendix or the computational companion.
+- **Shorten and clarify the abstract.** Keep the six-result outline but drop the grid/census/fraction laundry list; put those in the body or a “certified campaign” subsection.
+- **Add exposition aids.** (i) Notation table. (ii) Early, self-contained description + diagram of the delayed hidden-regime instance (two particles, floors, drift, revelation, hold vs. open-loop vs. sequential). (iii) One simple numerical running example before the theorems. (iv) Shorten run-on sentences.
+- **Fix wording.** Consistently call \(V_k(b)\) a (maximal) survival probability / expected surviving mass. Reserve “worst-case”/“min over disturbance” for the robust operator, contamination \(\rho=1\), and companion papers. Align the related-work “structural change” sentence with Theorem 2.
+- **Date and metadata.** Correct the 2026 date (or explain it). Verify ORCID, email, and that the GitHub/Lean artifacts will be public at the cited revision. Consider whether “Independent Researcher” + heavy AI + arena-style GitHub path needs a more conventional affiliation or methods statement.
+- **Tighten claims vs. formalization.** Keep the honest admission that Sperner and some deficit readings are not (yet) in Lean. The “nothing verified in the companions is re-proved differently here” sentence is fine but can be shorter.
+- **Optional extras.** A small complexity/practical-scalability paragraph (even if hardness is unchanged). Move some of the 16×12 table, 384-vector census, and per-cell deficit profiles to supplementary material. Consider a short “how to read the closed forms” box.
+
+The mathematical core (support identity \(\iff\) value-one, \(\alpha\)-vectors = maximal survivable indicators, exact delayed-regime formulas, class gaps realized exactly on the timing cells, certificates as deficit lower bounds, stochastic weighted-path identity, one-stage contamination) is coherent and the verification claims are unusually strong. The main defects are organizational (numbering, density, misplaced Lean details) and a few wording carry-overs that blur expected vs. robust. Addressing those would make a technically solid (if highly specialized) contribution far more readable.
+sonnet:
+I checked the arithmetic and the proofs and cross-checked the statements against each other. The numbers I recomputed all hold:
+- the 36/156 census and the 384/348 vector counts;
+- the 30/12/6 split of the 48 cells, and the 12 timing cells per horizon;
+- 7/250 and the five exact majority values;
+- the 1/16 versus 1/8 counterexample;
+- Table 3 and the kernel sizes;
+- the sensor deficit 1/20.
+
+The problems are mostly in statements around the numbers: wrong or over-general claims, inconsistent models between propositions, undefined objects and broken cross-references. I list them by severity.
+
+## A. Statements that are wrong or contradicted elsewhere in the paper
+
+1. **"Bracketed" claim in §12 (Prop. 18, Fig. 4 caption, §17) is false.**
+   - Pinned-probe threshold: 2.1 + T/10. Free-probe threshold: 2.1 (flat). Probe-free threshold: 1 + T/10.
+   - The pinned threshold is at least both benchmarks (2.5 vs 2.1 vs 1.4 at T = 4). Both benchmarks lie on the same side.
+   - The same holds for kernel sizes: pinned 5…1, free 5, probe-free 16…12.
+   - "The certified family sits between the two" and "bound it from below and above" therefore fail.
+   - The free-probe benchmark is just the T_learn = 0 member of the family.
+   - Fix: state that both benchmarks are lower bounds on the cost, and say what each isolates (the price of the forced probe, and the price of probing at all).
+   - "|K| shrinks exactly linearly" is a grid artifact (step 0.1 equals slope 1/10). The linear statement belongs to the threshold.
+
+2. **Prop. 6, "in particular V = 1 exactly on z₀ ≥ 1+T_obs".**
+   - This is true only for k ≥ T_obs. For k < T_obs the closed form gives z₀ ≥ 1+k, as Thm. 7 and Thm. 14(c) say.
+   - Prop. 6 also omits the hypothesis z₀ ≥ 1. At z₀ = 0.5, k = 1 the formula gives 1/2 but the value is 0 (t = 0 is unsafe).
+
+3. **Jump loci (abstract, Thm. 14(c), Fig. 1).**
+   - By Thm. 7 the hold-class value also jumps by 1/2 at z₀ = 1, from 0 to 1/2. "Jump discontinuities exactly at z₀ = 1+min(k,T_obs)" is therefore incomplete.
+   - The grid starts at 1.0, so the jump is invisible there.
+   - Fig. 1's domain stops at 2.5, so only k = 1 (and T_obs = 1) jumps are visible. The caption's claim "jumps at 1+min(k,T_obs)" is not shown for k ≥ 2. Extend the axis to about 4.5.
+
+4. **Prop. 5 does not match the census it claims to explain.**
+   - The delayed-instance statement ("{+,−} exactly when z₀ ≥ 2") is the open-loop classification. The census (384 vectors, 36/156) is for the hold class, where the joint-survival threshold is 1+ℓ.
+   - "Empty, mirror-pair, and merged" lists three families. The census has three vector types: (1,1), (1,0), (0,1). "Empty" never occurs on the grid.
+   - Sperner gives at most C(2,1) = 2 maximal sets for n = 2. It does not explain why exactly these types occur. That follows from symmetry plus the thresholds.
+   - Drop "explains why the census realizes three types" from the abstract.
+   - Part (iv): the min-mass bound is not "the special case |S^c| = 1". It follows because S^c ≠ ∅, with equality iff some maximal set misses exactly a minimal-mass state.
+   - The α-vectors of Prop. 8 are global on V∪{⊥}, but the family S_k is defined relative to supp(b). Say which one is meant.
+
+5. **Thm. 15 proof: "rising control (drift +3/10)".** The instance has unit drift. 3/10 appears to be a leaked prior mass.
+   - "Gap = 1−max(w,1−w) *exactly* on …" is false at w ∈ {0,1}, where the gap is 0 everywhere. Add w ∈ (0,1).
+   - Π_obs (θ known at t = 0) is a different observation model, so "Π ⊆ Π′" monotonicity does not formally cover it.
+   - The "value of observation" gap is the value of *initial* information. The revelation at T_obs is already inside the "open-loop" value for k > T_obs. Rename it or define the classes after revelation (see B1).
+
+6. **Prop. 19 uses a different information structure from Thm. 2.**
+   - In Thm. 2 the action precedes the observation. In Prop. 19 the action a(y′) follows a reading of the current state. Then V₁ is not Thm. 2's V₁, and Prop. 19 needs a pre-action observation stage.
+   - "The min-mass bound is the case p_x ≡ 1" is wrong. Under deterministic readings p_x ∈ {0,1}. The bound holds because at least one p_x = 1.
+   - The sentence about Prop. 24 at d₀ = 1, e_p = 0 sits in the statement of a different proposition. It also needs a no-zero-control assumption: with u = 0 available, the delayed instance is trivially viable.
+
+7. **Prop. 20 conflicts with Prop. 18.**
+   - Prop. 18: a probe requires u = ±1 and costs an excursion of 11/10, so it moves the state.
+   - Prop. 20: a probe is a free reading, with no excursion in the formula.
+   - It also claims that "the min-mass bound survives as a bound" by redefining the reference mass as the post-probe mass ε. Relative to the prior (½,½), the deficit ε = 1/10 < 1/2 violates it, exactly as in Prop. 19.
+   - Abstract: "a second probe cuts 1/10 to 7/250". 7/250 is the three-probe majority (a two-probe majority has ties). §17 says "per extra probe pair". Three probes means two extra steps, costing 2/10 of margin, not 1/10.
+   - "The same display holds with p in place of ε" requires shifting z_p to z₀−(t_p+2)/10 and the horizon accordingly.
+   - Conditional independence of readings given θ is never stated.
+
+8. **Prop. 21: ρ = 1 does not recover the robust operator of Prop. 11.**
+   - D_ρ ranges over Δ(Y), so the adversary can place mass on observations with P(y|b,a) = 0. For those, τ(b,a,y) is undefined (or an empty support).
+   - It also changes the marginal of y while keeping the nominal posterior, which is not a coherent model of the belief dynamics.
+   - Restrict r to Δ(supp P(·|b,a)), or justify the incoherence.
+   - Part (iii) ("no general concavity claim follows") is not a proposition. The 1/16 versus 1/8 example refutes a claim nobody made.
+   - The two-floor indexing switches from (b₀,b₁) to (b₁,b₂).
+
+9. **Prop. 11 / Remark 10 / §16 are internally inconsistent.**
+   - "Deterministic kernels, x⁺ = F(x,a,d), disturbance read adversarially" contradicts itself: with a deterministic kernel there is no disturbance.
+   - For truly deterministic kernels the expectation and robust readings coincide, so it is not a "change of operator".
+   - The real statement concerns nondeterministic transitions resolved adversarially, versus the same transitions resolved by a distribution.
+
+10. **Prop. 13.**
+    - (i) is a chance-constrained, hence stochastic, statement but cites Thm. 3's monotonicity, which is stated under deterministic hypotheses. State monotonicity as a general lemma (absorption).
+    - The §10 preamble reverses the duality. α-vectors come from policies, so they give *upper* bounds on the deficit. Certificates give *lower* bounds. "Dual objects … lower-bound sides of the exact value" is confused.
+    - "Each companion certificate" and "systematically" overstate: only three items are treated, and (iii) is not a certificate.
+
+11. **Prop. 12.**
+    - "Stabilizes after at most 2^|supp b| strict decreases" bounds the number of decreases, not the freezing time. A plateau does not imply a fixed point unless the recursion is Markov on families.
+    - That holds for the blind recursion W_k but not obviously for the hold class.
+    - "Exact computable infinite-horizon value" needs (a) a bound on the plateau length or a fixed-point argument, and (b) the limit–max interchange lim V_k = sup_π P(safe forever). Both are true here by finiteness and König, but say so.
+    - "Every certified table already records the full-horizon value" holds only for the k ≥ T_obs columns.
+
+12. **Related-work claims contradicted by the body.**
+    - §1 says the recursion "minimises over the disturbance". Thm. 2 and §16 use expectation.
+    - "The identifying structure does not survive" overclaims. The survival indicator is a reward, so these are reward-derived α-vectors, and the indicator form holds only for deterministic kernels.
+    - §5.1 claims exactness over "the nearest sufficient condition [that] is only sufficient". §2 itself says Doyen's conditions are necessary and sufficient.
+    - §4 says DR and worst-case-over-support "neither subsumes the other". Worst-case over a support is the ρ = 1 member of a contamination family, and §14 develops that family itself.
+    - §5 says "five things and nothing more". The intro lists three contributions and the abstract six results.
+    - §16 says "no learning theory … repeated experiments out of scope" and lists "probe-count asymptotics" as future work. Props. 20 and 22 do exactly that.
+    - §16 says "a third item stood on that list", but the list has more than three items.
+
+13. **Prop. 22 and Remark 23.**
+    - The proof ("pairing with complement and Stirling") is muddled. The standard argument is shorter: for j ≥ n/2, ε^j(1−ε)^{n−j} ≤ (ε(1−ε))^{n/2}, and the number of such strings is ≤ 2^{n−1}. This even gives a factor 1/2.
+    - "Exact probe-count bound" in the abstract is wrong: it is an upper bound, loose by roughly 10× at n = 9 (0.6⁹ ≈ 0.010 versus 8.9×10⁻⁴). The "exact" verification checks an inequality.
+    - Remark 23: "the bound's exponent vanishes with ε". It is the base 4ε(1−ε) that vanishes. The ln(1/δ)/(2sep²) law is not sharp at ε → 0, so calling Prop. 18 its "degeneration" is rhetorical.
+
+14. **Prop. 24.**
+    - Continuous-time ż with a "one unit" probe duration is mixed with a discrete-step model.
+    - Identifiability of θ from the probe (injective revelation) is a hypothesis that is never stated. It is used in Prop. 18's proof.
+
+## B. Definition gaps and notation
+
+1. **Policy classes are never defined.**
+   - Π_hold, Π_ol, Π_seq (unrestricted in Def. 1/Thm. 3), Π_seq,blind (Thm. 15/16), Π_B (Remark 4/Prop. 11) and Π_obs are used, with Π_seq and Π_seq,blind colliding.
+   - Behaviour after revelation (k > T_obs) is only implicit. In the proof of Prop. 6 it is the optimal adaptive continuation.
+   - Define each class once, in a table.
+
+2. **Instances are not self-contained.** The two-floor instance (dynamics after step 1), the two-patch instance with g ∈ {1,2}, and the "two-window residue instance" (an unpublished manuscript) are referenced but not defined. Several "verified" claims rest on these.
+
+3. **Prop. 8 mixes Markov and non-Markov cases.**
+   - The backup-based statement is for Markov classes.
+   - For a finite class, convexity and piecewise linearity are immediate: V = max over policies of a functional that is linear in b.
+   - The segment form is the deterministic special case, not "rational T, g".
+   - The "worst-case growth law" is an upper bound, yet it is called "the exact complexity statement".
+   - The ⊥-anchoring is automatic from γ(⊥) = 0.
+
+4. **Smaller items.**
+   - "Normalization per (x,a)" should be per (x,a,x′).
+   - "Almost-sure nonviability" should read "V < 1, i.e. positive-probability loss under every policy".
+   - "Unsuperscripted values do not appear" is false: V_k is unsuperscripted in Thm. 3 and Props. 5, 11–13.
+   - Prop. 5 has a proof sketch before "Proof", and the Prop. 6 derivation follows its statement in a different order.
+   - W^fb "continuation" should be defined as Post(B,a,y) ∈ W^fb_{k−1}.
+   - W_k ⊆ W^fb_k is asserted before downward closure is established.
+   - Remark 9 says max(b₀,b₁) holds "for all certified horizons", but V₀ = 1.
+   - Check that the proof text reads θ² (not θ/2) in "−1/10 + θ² = 9/10" (p. 9).
+
+5. **"348 distinct vectors" is wrong as stated.** Globally there are 3 distinct vectors. 348 is the count after within-cell deduplication, so say that.
+
+## C. Claims versus evidence
+
+- **Thm. 3's content.** The value-one level equals the feedback viable-set recursion. This is essentially the definition of a winning observation-based strategy in a safety game (the knowledge-set construction). The paper cites this but still lists "exact sufficiency" as the first contribution. Say plainly that the new part is the deficit bound and the survivable-set formula, and compare with the standard subset construction (including its complexity).
+- **Scope of the closed forms.** "All initial states, windows, horizons and priors" holds for one two-branch toy family. The abstract's phrasing and the title ("sufficiency") suggest more.
+- **"Entirely in exact rational arithmetic".** Prop. 22 uses e^{−2n sep²} and z₀ is "arbitrary real".
+- **Lean claims.**
+  - "Rationality of the α-vectors" is trivial (finite sums of rationals; the delayed ones are 0/1 vectors).
+  - The "repaired reading" of Thm. 3 is never stated: what was wrong before?
+  - "The v4.14.0 comparison fails in the prelude" is unexplained.
+  - Run IDs, SHA manifests and the exit-2 "by design" are changelog material. Move them to a supplement.
+  - The macros leaked as "extttsorryAx / extttnative_decide".
+- **Verification.** Brute force that shares the model encoding with the closed forms is a regression test, not independent evidence. Say so, or add an independent implementation, for example a generic POMDP solver run on the instances.
+
+## D. Structure, citations, housekeeping
+
+- **Counts and roadmap.**
+  - The abstract has six results, the intro three contributions and §5 five.
+  - The roadmap ("seven steps", §6–12) omits §13–14, which are results five and six.
+  - The abstract is about 600 words. The sixth item lumps the probe-count bound and additive deadline under "distributionally robust interpolation", and a dash attaches them to the prior-contamination clause.
+- **Duplication.** The intro's "Relation to prior work" and §1–5 repeat the same Chatterjee/Papadimitriou/Nakao text three times.
+- **Numbering.** The intro is "1.", "1 Related work" has sub-items 1–5, and the body starts at "6.", so "Section 6." has no sections 2–5.
+- **Cross-references.**
+  - "Theorems 3 and 11" and "Theorem 15's V^ol" should read Proposition 11 and Theorem 15.
+  - "Propositions 8 and 13" for the deficit bound should point to Thm. 3 and Prop. 13.
+  - "Section 16 … ambiguity-set interpolation" should be §14.
+- **Dangling phrase.** "The observation layer, not the forecast layer" has no antecedent. Internal jargon ("campaign", "arena agent 1/paper rewrites") should go.
+- **References.**
+  - Sperner is not in the reference list (a stray entry sits in §7).
+  - The Abaee 2J3KL reference is uncited.
+  - Chatterjee–Doyen–Henzinger: I believe this is MFCS 2010, LNCS 6281, pp. 258–269, not 2009/LNCS 5734. Please verify.
+  - Prefer Doyen-L. versus Doyen-Luc disambiguation by full names in the references, as well as in the text.
+  - The date (26 Sept 2026) should be checked.
+- **Table 1 and figures.** Table 1 (192 entries of 1 or ½) carries no more information than a region diagram. Replace it with the region plot (z₀, ℓ) and keep the table in the supplement.
+
+## E. Suggested additions
+
+1. A single model-and-classes section with a table of Π_·, their information structure and post-revelation behaviour.
+2. A general-w, general-ε version of the Prop. 20 formula, plus an explicit probe-count-versus-margin optimum, which would make the "trade-off" a theorem rather than an assertion.
+3. A non-toy stochastic example (random POMDP) comparing V_k with the min-mass bound, to show how often it is loose.
+4. A proof that the support identity and the survivable-set formula survive the "hidden-nondeterminism" setting, or an explicit counterexample.
+5. A short "what is new" table against the subset construction, Chatterjee et al., Veliov and Doyen, replacing the repeated paragraphs.

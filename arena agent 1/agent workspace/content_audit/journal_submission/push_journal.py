@@ -5,7 +5,7 @@ import sys,base64,json
 sys.path.insert(0,'/home/user/content_audit/claim_alignment')
 import push_and_verify as G
 R=Path('/home/user');ROOT=G.ROOT;BR=G.BRANCH
-ROOT_DOCS=['LATEST_FAMILY_FILES.md','REVISED_MANUSCRIPTS_2026-10-02.md','JOURNAL_SUBMISSION_REVIEW_2026-10-02.md']
+ROOT_DOCS=['LATEST_FAMILY_FILES.md','REVISED_MANUSCRIPTS_2026-10-02.md','JOURNAL_SUBMISSION_REVIEW_2026-10-02.md','SIX_MANUSCRIPT_AUDIT_ADJUDICATION_2026-10-02.md']
 remote=G.api('/git/ref/heads/'+BR)['object']['sha'];expected=(R/'content_audit/push_tip.txt').read_text().strip()
 assert remote==expected,(remote,expected)
 tree=G.api('/git/trees/'+remote+'?recursive=1');assert not tree['truncated']
