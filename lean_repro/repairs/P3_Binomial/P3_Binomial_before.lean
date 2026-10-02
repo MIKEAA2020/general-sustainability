@@ -128,6 +128,6 @@ theorem choose_succ_self : ∀ n, choose (n + 1) n = n + 1 := by
       rw [choose_succ_succ, ih, choose_self]
 
 /-- A numerical check that the recursion really computes binomials. -/
-theorem choose_six_three : choose 6 3 = 20 := by decide
+theorem choose_six_three : choose 6 3 = 20 := by native_decide
 
 end Formalizations.P3
