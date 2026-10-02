@@ -1,0 +1,22 @@
+# Exact-native-axiom policy review (2026-10-02)
+
+## Ten → nine: source change, not counting drift
+
+The preserved baseline `a36c844...` had **four** source `native_decide` occurrences and **ten** distinct axiom names in **1,973** aggregate-import declarations / **92** unexpected references. The current archived/hosted source `8f51818...` differs in precisely one source line, `Formalizations/P3_Binomial.lean:choose_six_three` (`choose 6 3 = 20`): `by native_decide` → **`by decide`**. Its verified Lean v4.34.1 hosted run 36946730855 built 60/60, passed 21 named footprint checks and reported **three** remaining occurrences, **nine** distinct generated names in **1,972** aggregate-import declarations / **90** dependency references. The same Lean aggregate check and same Python strict parser were used; the decrease is from an actual source repair, not a revised counting method. The original baseline and the source diff remain archived.
+
+## Per-site classification and trust scope
+
+| Source site | Current tactic | Evidence and classification |
+|---|---|---|
+| `P3_Binomial.choose_six_three` | `decide` | Cheap kernel reduction succeeded; already repaired and rebuilt under the pinned toolchain. It contributes **zero** generated names now. |
+| `P3_SupportValue.wmBelief.nonneg`, after `cases x` | `native_decide` | Finite rational nonnegativity; **seven** distinct `wmBelief` generated names observed. A prior all-four-to-`decide` trial failed to reduce `Rat.instDecidableLe` (recorded error log). A structural rational-arithmetic proof is plausible but **has not been written or compiled** under this bare Lean-core project; retain the named exceptions for now. |
+| `P3_SupportValue.rat_half_ne_zero` | `native_decide` | One generated name. The previous `decide` trial failed to reduce rational equality. An elementary structural proof may exist, but no validated replacement exists yet; retain the exception rather than asserting proof. |
+| `P3_SupportValue.wmBelief_total` | `native_decide` | One generated name. Previous bulk `decide` trial failed in this module; exact site-level error and a structural proof have not been independently resolved. Retain the exception pending a small isolated proof experiment. |
+
+This is **three tactic uses / nine generated axiom names**, not nine independent source sites, not `sorryAx`, not evidence that every unformalized manuscript claim is a theorem. The default build imports neither `EBC_ExactBelief.lean` nor two historical P1 assessment modules, so the rule speaks only about the imported aggregate closure.
+
+## Report-only policy trial before promotion
+
+`allowed_native_axioms_v4341.txt` lists the **nine exact observed names**, with no wildcards. `check_whitelisted_footprints.py` independently checks the declared number of rows and axiom references against Lean's completion marker, rejects malformed or duplicate whitelist entries, reports stale entries, and admits **no other** names, including `sorryAx`. Its default mode is report-only; `--gate` promotes unknown names to exit 2. It does **not** replace the original strict zero-exception parser, which retains its separate blocked verdict. `test_allowlist_policy.py` ran on the actual archived 1,972-declaration corpus and injected a new similarly prefixed generated axiom, `sorryAx`, an explicit-looking new axiom and a malformed completion count. The genuine corpus has 0 unknown / 0 stale (report-only); every injected new-axiom trial fails under `--gate`. See `evidence/allowlist_report_only_tests.log`. This measured policy is narrower than accepting every `native_decide` output by prefix.
+
+**Pending hosted verification:** the updated Actions workflow will preserve both verdicts — strict zero-exception exit 2, plus the separate explicit-exception gate — and should pass only if pinned-source verification, build, named checks and exact-name gate all succeed. Never describe a passing explicit-exception gate as a zero-axiom proof. Manuscripts already say no `sorryAx` or explicit source `axiom` and disclose nine compiler/runtime-trusted generated names. No further source proof change is made in this policy revision.
