@@ -5,7 +5,7 @@ import sys,base64,json
 sys.path.insert(0,'/home/user/content_audit/claim_alignment')
 import push_and_verify as G
 R=Path('/home/user');ROOT=G.ROOT;BR=G.BRANCH
-ROOT_DOCS=['LATEST_FAMILY_FILES.md','REVISED_MANUSCRIPTS_2026-10-02.md','JOURNAL_SUBMISSION_REVIEW_2026-10-02.md','SIX_MANUSCRIPT_AUDIT_ADJUDICATION_2026-10-02.md']
+ROOT_DOCS=['LATEST_FAMILY_FILES.md','REVISED_MANUSCRIPTS_2026-10-02.md','JOURNAL_SUBMISSION_REVIEW_2026-10-02.md','SIX_MANUSCRIPT_AUDIT_ADJUDICATION_2026-10-02.md','SIX_AUDITS_REMAINING_POINTS_ADDENDUM_2026-10-02.md']
 remote=G.api('/git/ref/heads/'+BR)['object']['sha'];expected=(R/'content_audit/push_tip.txt').read_text().strip()
 assert remote==expected,(remote,expected)
 tree=G.api('/git/trees/'+remote+'?recursive=1');assert not tree['truncated']
@@ -33,7 +33,7 @@ for i,(rel,p,sha,size) in enumerate(changed,1):
 assert G.api('/git/ref/heads/'+BR)['object']['sha']==remote,'remote moved before commit'
 base=G.api('/git/commits/'+remote)['tree']['sha']
 newtree=G.api('/git/trees',{'base_tree':base,'tree':entries})['sha']
-commit=G.api('/git/commits',{'message':'Preserve submission-style family drafts and scoped journal review\n\nVersioned current sources/PDFs, scientific live/staged reconciliation, real figures, and build records. Continuous-delay fold theorem remains open. No portal submission or DOI creation.','tree':newtree,'parents':[remote]})['sha']
+commit=G.api('/git/commits',{'message':'Adjudicate remaining six-audit review points\n\nSource-checked addendum with corrected arithmetic, reviewer errors, proof/data deferrals, and refreshed verification log. No manuscript head changed, portal submission, or DOI creation.','tree':newtree,'parents':[remote]})['sha']
 assert G.api('/git/ref/heads/'+BR)['object']['sha']==remote,'remote moved before ref update'
 G.api('/git/refs/heads/'+BR,{'sha':commit},method='PATCH')
 verified=G.api('/git/trees/'+commit+'?recursive=1');assert not verified['truncated']

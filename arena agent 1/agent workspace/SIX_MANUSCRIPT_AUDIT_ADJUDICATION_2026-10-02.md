@@ -1,5 +1,7 @@
 # Adjudication of six external manuscript audits (02, 03, 04, 05, 06, 09)
 
+**Further audit dispositions:** [Remaining points—adopt, amend, reject, or defer](SIX_AUDITS_REMAINING_POINTS_ADDENDUM_2026-10-02.md).
+
 **Review date:** 2 October 2026. **Decision:** Do **not** treat these six current heads as cleared for journal/preprint submission on the strength of the earlier 25/25 compilation. There are source-confirmed mathematical/scope errors and unsupported claims, some with direct countercalculations. This document completes the *triage and adjudication of the supplied reviews*; it is not a new scientific proof or a claim that all six manuscripts have been repaired. The current versioned TeX/PDF heads have **not** been overwritten. A source-specific revision and revalidation pass is needed before posting.
 
 ## Method, evidence and terminology

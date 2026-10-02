@@ -79,6 +79,14 @@ put('09_q10_horizons_using_rounded_coefficients',horizon(5,80.87,328.9725))
 put('09_worst_horizons_using_rounded_coefficients',horizon(5,328.9725,328.9725))
 put('09_phi75_nonempty_margin_q10',(1-.75)*r*K/4-80.87)
 put('09_phi75_LRP_margin_q10',(1-.75)*g(LRP)-80.87)
+# Remaining-review checks for the addendum.
+put('04_reviewer_Y5_candidate_meets_demand',F(4,5)+F(4,5)>=2)
+put('05_radii_3_to_8_count',len(range(3,9)))
+tstar=2.82256976483
+put('06_interior_total_margin_window',{'anchor':707/250,'gap':707/250-tstar,'fraction_of_anchor':(707/250-tstar)/(707/250)})
+a=1-15.41/60.70
+put('09_flat50_institutional_Tempty_rounded',{'UC_min':log((710-631.52)/(660-631.52))/log(1/a),'UC_q10':log((710-642.09)/(660-642.09))/log(1/a)})
+put('09_class_specific_vacuity_catches_using_printed_gmax_296p09',{'worst':296.09-328.9725,'q05':296.09-287.36,'q10':296.09-80.87})
 # manifest links reviewer files with immutable hashes; never modify uploads.
 inputs={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in (R/'uploads').glob('*audit.txt')}
 manifest={'inputs_sha256':inputs,'source_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in (R/'papers').glob('paper0*_v*.tex') if any(p.name.startswith('paper0'+i+'_') for i in ['2','3','4','5','6','9'])},'results':v}
