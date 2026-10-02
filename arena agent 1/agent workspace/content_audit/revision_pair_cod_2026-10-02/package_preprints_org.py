@@ -4,7 +4,7 @@ from pathlib import Path
 from zipfile import ZipFile,ZIP_DEFLATED
 import re,shutil,hashlib,json
 R=Path('/home/user');O=R/'content_audit/journal_submission/preprints_org_ready_2026-10-02';O.mkdir(exist_ok=True)
-items=[('03','paper03_computational_certification_v22','paper 2 family/03_computational_certification'),('09','paper09_cod_certification_v42','paper 2 family/09_cod_with_arv')]
+items=[('03','paper03_computational_certification_v22','paper 2 family/03_computational_certification'),('09','paper09_cod_certification_v43','paper 2 family/09_cod_with_arv')]
 allout=[]
 for tag,stem,asset_root in items:
  dest=O/('paper'+tag);dest.mkdir(exist_ok=True)
