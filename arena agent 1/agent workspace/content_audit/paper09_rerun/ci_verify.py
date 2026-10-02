@@ -6,7 +6,7 @@ The slower supplemental campaigns are documented in RERUN_REPORT, not
 implicitly claimed by this shorter hosted job.
 """
 from pathlib import Path
-import csv,hashlib,json,os,platform,subprocess,sys,tempfile
+import csv,hashlib,json,os,platform,subprocess,sys,tempfile,shutil
 B=Path(__file__).resolve().parent
 WORK=Path(os.environ.get('PAPER09_WORKSPACE',B.parents[1]))
 G=Path(os.environ.get('PAPER09_REPO',WORK.parents[1]))
@@ -25,15 +25,22 @@ print('ENV Python',platform.python_version(),flush=True)
 arch=list(csv.DictReader((B/'core_outputs.tsv').open(),delimiter='\t'))
 by={r['output']:r['committed_sha256'] for r in arch};assert len(by)==11
 jobs=[('cod_core','wave_e_cod/src/run_intervention_v3.py',300),('edwards_core','wave_e_edwards/src/run_intervention_v2.py',300),('edwards_audit','wave_e_edwards/src/e4_audit_layer.py',400),('cod_campaign','wave_e_cod/src/campaign_e2_elevation_v3.py',800)]
+problems=[]
 for name,source,timeout in jobs:
  selected=[r for r in arch if r['runner']==name];assert selected
- for r in selected:assert sha(G/r['output'])==r['committed_sha256'],('checkout drift',r['output'])
+ for r in selected:
+  assert sha(G/r['output'])==r['committed_sha256'],('checkout drift',r['output'])
+  dest=OUT/'expected'/r['output'];dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(G/r['output'],dest)
  proc=subprocess.run([sys.executable,str(G/source)],cwd=G,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,timeout=timeout)
  (OUT/(name+'.log')).write_text(proc.stdout)
  assert proc.returncode==0,(name,proc.returncode,proc.stdout[-500:])
  for r in selected:
-  actual=sha(G/r['output']);assert actual==r['committed_sha256'],(name,r['output'],actual,r['committed_sha256'])
-  print('OUTPUT_MATCH',r['output'],actual,flush=True)
+  actual=sha(G/r['output'])
+  if actual!=r['committed_sha256']:
+   dest=OUT/'generated'/r['output'];dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(G/r['output'],dest)
+   problems.append((r['output'],r['committed_sha256'],actual))
+   print('OUTPUT_BYTE_DRIFT',r['output'],actual,'expected',r['committed_sha256'],flush=True)
+  else:print('OUTPUT_MATCH',r['output'],actual,flush=True)
 # Run reviewed one-line correction in isolated temporary path, never replace
 # the historical tracked xte script or its old result files.
 src=(B/'review_candidates/campaign_e2_xteNCAM_row_sourceyear.py').read_text()
@@ -45,8 +52,12 @@ with tempfile.TemporaryDirectory(prefix='xte-sourceyear-ci-') as d:
  assert proc.returncode==0,(proc.returncode,proc.stdout[-500:])
  for n in ('e2_xteNCAM_summary.csv','e2_xteNCAM_row.csv'):
   generated=Path(d)/'results'/n;expected=B/'review_candidates'/n
-  assert generated.is_file() and sha(generated)==sha(expected),(n,'source-year candidate output drift')
-  print('XTE_OUTPUT_MATCH',n,sha(generated),flush=True)
+  assert generated.is_file(),n
+  if sha(generated)!=sha(expected):
+   dest=OUT/'generated/xte'/n;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(generated,dest)
+   problems.append(('xte/'+n,sha(expected),sha(generated)))
+   print('XTE_OUTPUT_BYTE_DRIFT',n,sha(generated),'expected',sha(expected),flush=True)
+  else:print('XTE_OUTPUT_MATCH',n,sha(generated),flush=True)
 # The checker reads the packaged source too, so a later manuscript edit cannot
 # silently invalidate the numeric conclusion while the archived output stays.
 cmd=[sys.executable,str(B/'check_xte_sourceyear.py')]
@@ -55,5 +66,8 @@ proc=subprocess.run(cmd,cwd=G,env=env,stdout=subprocess.PIPE,stderr=subprocess.S
 (OUT/'xte_claim_crosswalk.log').write_text(proc.stdout)
 assert proc.returncode==0,(proc.returncode,proc.stdout)
 print(proc.stdout.strip(),flush=True)
-(OUT/'summary.json').write_text(json.dumps({'source_commit':head,'core_output_matches':11,'xte_output_matches':2,'xte_claim_checks':15,'scope':'core source-year and repaired xte only; see full local campaign report'},indent=2)+'\n')
+(OUT/'summary.json').write_text(json.dumps({'source_commit':head,'core_outputs_checked':11,'xte_outputs_checked':2,'xte_claim_checks':15,'byte_drifts':problems,'scope':'core source-year and repaired xte only; see full local campaign report'},indent=2)+'\n')
+if problems:
+ print('CI_PAPER09_BYTE_DRIFT_FAIL',len(problems),'outputs; generated and expected files saved for numeric adjudication',flush=True)
+ raise SystemExit(2)
 print('CI_PAPER09_CORE_XTE_PASS 11 archived core outputs, 2 source-year xte candidate outputs, 15 scoped manuscript comparisons',flush=True)
