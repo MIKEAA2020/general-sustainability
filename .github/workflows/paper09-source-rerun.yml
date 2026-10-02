@@ -1,0 +1,41 @@
+name: Paper09 source-year core and xte rerun
+
+on:
+  push:
+    branches: [e2-v3-source-year]
+    paths:
+      - 'arena agent 1/agent workspace/content_audit/paper09_rerun/**'
+      - 'arena agent 1/agent workspace/paper 2 family/09_cod_with_arv/**'
+      - '.github/workflows/paper09-source-rerun.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-year-core-and-xte:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install recorded computational dependencies
+        run: python3 -m pip install numpy==2.3.5 pandas==2.2.3 scipy==1.17.1 matplotlib==3.10.9
+      - name: Verify archived inputs and rerun source-year core plus repaired xte sensitivity
+        run: |
+          set -o pipefail
+          python3 'arena agent 1/agent workspace/content_audit/paper09_rerun/ci_verify.py' | tee paper09-ci-stdout.log
+      - name: Preserve logs and comparison evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: paper09-core-xte-${{ github.sha }}
+          path: |
+            paper09-ci-stdout.log
+            arena agent 1/agent workspace/content_audit/paper09_rerun/ci_out/**
+            arena agent 1/agent workspace/content_audit/paper09_rerun/fresh_inputs.tsv
+            arena agent 1/agent workspace/content_audit/paper09_rerun/core_outputs.tsv
+            arena agent 1/agent workspace/content_audit/paper09_rerun/review_candidates/e2_xteNCAM_*.csv
+          if-no-files-found: warn
