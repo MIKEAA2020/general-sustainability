@@ -1,0 +1,3 @@
+# Cod supporting information provenance
+
+The attached `paper11_forecasting_baselines_v66_SI.md` is an unchanged copy of `E1_SUPPLEMENTARY.md` from `MIKEAA2020/general-sustainability` revision `1d27e763c4b55d9d2c355ccc31b31689e435b772`, at `arena agent 1/paper rewrites/latex/E1_SUPPLEMENTARY.md`. SHA-256: `fb3f8bd2e1eb5590c20371a6107fe7a40670eb67c8f92ae73682e26c31a4f122`. Its headings SI-1 through SI-5 are the cod study’s own supporting material; it does not purport to supply the aquifer study’s records. Original: https://raw.githubusercontent.com/MIKEAA2020/general-sustainability/1d27e763c4b55d9d2c355ccc31b31689e435b772/arena%20agent%201/paper%20rewrites/latex/E1_SUPPLEMENTARY.md

@@ -1,0 +1,76 @@
+--- paper08_governance_delay_v47_supplementary_delay.md
++++ paper08_governance_delay_v48_supplementary_delay.md
+@@ -3,7 +3,7 @@
+ 
+ # Supplementary Material — Governance delay and the stability of harvested stocks
+ 
+-*Accompanies: "Governance latency: the delay, the clock, and the stability of periodically reviewed renewable resources" (version 47).*
++*Accompanies: "Governance latency: the delay, the clock, and the stability of periodically reviewed renewable resources" .*
+ 
+ This supplementary accompanies the main article on governance delay and the stability of harvested stocks. It carries four bodies of material that the main article only summarises: the computational protocol for the interval Hopf enclosures and the collocation formulation, the fold-certificate gap documentation, the stress-test frame that disciplines transfer of bifurcation readings to sustainability claims, and the registered open problems. Each item is reported at its declared status — theorem, conditional statement, re-execution-verified nominal computation, or open task — without escalation. Where a claim is provisional, the supplementary says so explicitly.
+ 
+@@ -33,7 +33,7 @@
+ 
+ **Definition S2.1** (Phase-fixed collocation map). With $m = 64$ Fourier nodes, $Y \in \mathbb{R}^{192}$ the coefficients of the three state variables, and $T > 0$ the unknown period, the phase-fixed collocation map is $F : \mathbb{R}^{192} \times \mathbb{R} \to \mathbb{R}^{193}$, with the phase equation among the 193 equations, removing the time-translation degeneracy; $D_{(Y,T)}F$ is $193 \times 193$. The map is a finite-dimensional collocation map; no continuous-DDE truncation bound is implied by its residual.
+ 
+-**Proposition S2.2** (Small-branch continuation). A Newton–Levenberg–Marquardt solver, initialised from the Hopf normal-form predictor at $\tau = \tau_- + 0.05$ and continued with a $\sqrt{\tau - \tau_-}$ predictor, finds one approximate periodic-orbit solution at each sampled $\tau \in [3.716, 5.58667]$ with discretised residual $\|F\|_2 \le 6\times10^{-14}$; the peak-to-peak amplitude of $N$ grows from $1.10$ to $21.80$ and the period from $250.0$ to $313.76$ yr. The solver fails at $\tau = 5.590$ under the stated budget with residual $2.8\times10^{-6}$: a solver-success/failure bracket, not a nonexistence result. The rebuilt fold pipeline at $m = 64/96/128$ gives nominal fold values $\tau_f = 5.587236198690$, $5.587236198663$, and $5.587236198663$, in cross-resolution agreement to $2.7\times10^{-11}$ — nominal values, re-execution-verified at the nominal level, not certificates.
++**Proposition S2.2** (Small-branch continuation). A Newton–Levenberg–Marquardt solver, initialised from the Hopf normal-form predictor at $\tau = \tau_- + 0.05$ and continued with a $\sqrt{\tau - \tau_-}$ predictor, finds one approximate periodic-orbit solution at each sampled $\tau \in [3.716, 5.58667]$ with discretised residual $\|F\|_2 \le 6\times10^{-14}$; the peak-to-peak amplitude of $N$ grows from $1.10$ to $21.80$ and the period from $250.0$ to $313.76$ yr. The solver fails at $\tau = 5.590$ under the stated budget with residual $2.8\times10^{-6}$: a solver-success/failure bracket, not a nonexistence result. The finite-collocation pipeline at $m = 64/96/128$ gives nominal fold values $\tau_f = 5.587236198690$, $5.587236198663$, and $5.587236198663$, in cross-resolution agreement to $2.7\times10^{-11}$ — nominal values, re-execution-verified at the nominal level, not certificates.
+ 
+ **Proposition S2.3** (Last collocation point). At $\tau = 5.586666666666667$ the computed orbit satisfies $\|F\|_2 = 5.43\times10^{-14}$, $\|J^{-1}F\|_2 = 5.69\times10^{-12}$, with $\sigma_{\min}(J) = 4.54\times10^{-7}$ and $\operatorname{cond}_2(J) = 1.25\times10^7$; the effort gate and filter floor are inactive ($E = 7.93 \ll E_{\max}$, $N \ge 72.2$). $\|J^{-1}F\|_2$ is the norm of a linearised Newton correction for the finite-dimensional collocation map; it is not a rigorous error bound for the continuous equation or for the fold location. The data do not establish uniqueness of the collocation zero at each $\tau$, and solver failure at $5.590$ does not exclude another zero or family there.
+ 
+@@ -41,27 +41,17 @@
+ 
+ ---
+ 
+-## S3. The Fold-Certificate Gap
+-
+-**Current status (read before the historical component list).** After the S3 assessment was drafted, the rebuilt Krawczyk stages certified the two fold candidates for the finite-dimensional collocation maps. The free-delay enclosure, interval transversality/curvature checks and continuous-DDE lift remain open; no validated continuous-time fold theorem is asserted. The component list below records the pre-rebuild state and is superseded at the discrete level by S12.
+-
+-This section documents the gap between the nominal fold computations of S2 and a validated fold theorem. The gap is structural and reported component by component; the headline status is stated at the end.
+-
+-**Definition S3.1** (Moore–Spence fold system). A practical validated fold computation uses the Moore–Spence system: with a right nullvector $v \in \mathbb{R}^{193}$ and normalisation $\ell$,
+-$$\mathcal{M}(Y, T, \tau, v) = \bigl( F(Y,T;\tau),\ J(Y,T;\tau)v,\ \ell^\top v - 1 \bigr) = 0,$$
+-387 unknowns and equations; a validated Krawczyk or interval-Newton inclusion would establish a unique fold of the $m = 64$ collocation equations inside the resulting box. For a simple fold one should additionally enclose a left nullvector $w$ and verify the nondegeneracy conditions $w^\top F_\tau \not\ni 0$ and $w^\top D^2F[v,v] \not\ni 0$ with the phase condition regular; a pseudo-arclength system continues through the turn but does not by itself certify fold nondegeneracy.
+-
+-**Status of the components.** The gap, component by component:
+-
+-- (i) The converged Moore–Spence zero: **not obtained**.
+-- (ii) A preliminary fixed-$\tau$ Krawczyk construction based on an inverse of $J$ does not provide a contracting free-$\tau$ enclosure near the ill-conditioned turning region — a limitation of that formulation, not an exclusion of the fold.
+-- (iii) The discrete Krawczyk inclusion: **not completed**.
+-- (iv) The interval transversality and curvature conditions: **not completed**.
+-- (v) The continuous-DDE bordered radii-polynomial lift: **not implemented**; the discrete collocation proof and the continuous-RFDE proof are correctly separated. The insufficiency is structural: the tail of $f(U, SU)$ does not vanish merely because $U$ has finite Fourier support — softplus, rational terms, and gated products generate infinitely many modes — so a periodic-orbit radii polynomial without the bordered fold equations is insufficient for the lift.
+-
+-**Headline status (updated; supersedes the historical component list above).** The later rebuilt Krawczyk stages certify the two finite-dimensional collocation fold candidates (S12). A free-delay enclosure, interval nondegeneracy checks, and the lift to the continuous delay equation are still open. Thus the main article does **not** claim a validated continuous-DDE fold theorem near $\tau \approx 5.587$. Rigorous saddle-node results for delay equations exist for specific classes (Beretka and Vas, 2020); none is claimed here.
+-
+-**Model-scope boundary.** All fold and branch statements concern the gated inner three-state equation and its collocation discretisation only. No transfer is claimed to the turnover-corrected working four-state core, the finite-donor primitive system, stage-structured models, or spatial systems. For institutional design this means that the qualitative "delay-driven fold" reading applies only within the gated inner core; transfer to four-state, stage-structured, or spatial governance models requires fresh analysis.
++## S3. Finite-collocation turning candidates and the continuous-delay gap
++
++The two periodic-orbit turning candidates are distinguished from folds of the infinite-dimensional delay equation. For the lower candidate, a Krawczyk inclusion encloses a zero of the phase-fixed Moore–Spence equations of the $m=64$ Fourier collocation map near $\tau_f=5.587236198690$. A separate interval-Krawczyk enclosure and reported finite-dimensional nondegeneracy constants pertain to the upper candidate near $\tau_{f2}=64.402327203370$ (S12). These statements are about finite algebraic discretisations, not continuous-time periodic orbits.
++
++**Definition S3.1** (Phase-fixed Moore–Spence system). With $m=64$ Fourier nodes, $Y\in\mathbb{R}^{192}$, unknown period $T$, phase-fixed residual $F(Y,T;\tau)\in\mathbb{R}^{193}$, right nullvector $v\in\mathbb{R}^{193}$ and normalisation $\ell$, the augmented system is
++$$\mathcal{M}(Y,T,\tau,v)=\bigl(F(Y,T;\tau),\ D_{(Y,T)}F(Y,T;\tau)v,\ \ell^\top v-1\bigr)=0.$$
++It has 387 unknowns and equations. Inclusion of a zero of $\mathcal M$ is not by itself an infinite-dimensional saddle-node theorem. Discrete nondegeneracy requires an enclosed left nullvector $w$ and exclusion of zero from both $w^\top F_\tau$ and $w^\top D^2F[v,v]$, with a regular phase condition; the upper candidate reports these checks, while their full enclosure is not established here for the lower candidate.
++
++**Open validation obligations.** A contracting free-$\tau$ enclosure suitable for the lower turning region, a complete interval nondegeneracy record for that candidate, off-grid Fourier residual bounds, and a bordered radii-polynomial or comparable lift to the continuous delay equation are not supplied. Truncation does not eliminate the tail of $f(U,SU)$: softplus, rational terms and gated products create infinitely many Fourier modes even when $U$ has finite support. Thus the finite-dimensional enclosures and numerical multipliers do not establish a fold of periodic orbits for the continuous-delay system. The global five-regime attractor interpretation remains numerical and basin-dependent; the local characteristic-spectrum and sampled-map stability analyses do not require this fold claim. Rigorous delay-equation saddle-node results for other specified classes (Beretka and Vas, 2020) do not close this gap.
++
++**Model scope.** The numerical branch concerns the gated inner three-state core. Nothing here transfers a fold to the turnover-corrected four-state core, the finite-donor primitive system, stage-structured models or spatial systems.
+ 
+ ---
+ 
+@@ -137,7 +127,7 @@
+ 
+ ## S7. Evidence-tier synopsis
+ 
+-This section is an evidence-tier synopsis, not a complete per-statement inventory. The latter is not supplied with this supplementary file; individual main-text claims must therefore be checked against their displayed proof or named computational record. The certification hierarchy of the main article is instantiated claim by claim: proved theorems (the cubic, the even-pairs algebra, the no-Hopf theorem, the monodromy formulas, the loop-gain exclusions); interval-certified local spectrum (the Hopf enclosures of S1); re-execution-verified nominal computations (continuation, multipliers, basins, Lyapunov coefficients); and declared-numerical or open items (the fold classification, the registry variants); the reduction conjecture's fast-block spectral condition is verified (S5), with the memory-kernel condition open.
++The classification below is a thematic evidence-tier synopsis rather than an exhaustive claim-by-claim table. The scope of each result is given in its statement, proof, interval record or computational protocol. The certification hierarchy of the main article is instantiated claim by claim: proved theorems (the cubic, the even-pairs algebra, the no-Hopf theorem, the monodromy formulas, the loop-gain exclusions); interval-certified local spectrum (the Hopf enclosures of S1); re-execution-verified nominal computations (continuation, multipliers, basins, Lyapunov coefficients); and declared-numerical or open items (the fold classification, the registry variants); the reduction conjecture's fast-block spectral condition is verified (S5), with the memory-kernel condition open.
+ 
+ ---
+ 
+@@ -237,6 +227,6 @@
+ 
+ ## S12. Status and Label Notes
+ 
+-**S3 status note.** S3's component list records the pre-rebuild state of the A025 fold computation. The rebuilt Krawczyk stage of the A025 pipeline (main text, Sections 5.1 and 8.2; the recovered compute core of S9.5) has since obtained the discrete-collocation certificates: items (i) and (iii) — the converged Moore–Spence zero and the discrete Krawczyk inclusion — are resolved at the discrete level for the lower fold (the enclosure $[5.587236198689, 5.587236198691]$) and the second fold carries its interval-Krawczyk certificate. Item (ii) (the free-$\tau$ contracting enclosure near the turning region), item (iv) (the interval transversality and curvature conditions), and item (v) (the continuous-DDE lift) remain open, so S3's headline 'The fold certificate is not obtained' is read as the status of the validated continuous fold theorem, which no main-text statement claims.
++**Collocation-certificate scope.** The lower candidate is enclosed as a Moore–Spence zero for the $m=64$ collocation map in $[5.587236198689,5.587236198691]$; the upper candidate has a finite-dimensional Krawczyk enclosure and reported nondegeneracy tests. Off-grid residual estimates and a lift to a continuous-delay periodic-orbit fold remain open. See S3 for the precise distinction.
+ 
+ **Statement-label mapping.** The following objects carry different labels in this file than in the main text: Proposition 2 → the hypothesis of Remark 5.1; Corollary 3 → Corollary 5.1; Proposition 5 → Proposition 6.1; Theorem 2 → Theorem 4.1; Proposition 1 → Lemma 2.1; Theorem 6 → Theorem 10.1. S10's heading ('Expanded Proofs: Corollary 3 and Proposition 5') refers to the objects the main text labels Corollary 5.1 and Proposition 6.1.
