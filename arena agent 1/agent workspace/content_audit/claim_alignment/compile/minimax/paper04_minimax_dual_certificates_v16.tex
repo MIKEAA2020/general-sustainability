@@ -1,0 +1,1087 @@
+% ============================================================
+% PAPER 4 of 11 -- minimax_dual_certificates
+% Assembled 2026-09-29 by content-and-merits partition.
+% Title: Minimax Dual Certificates and the Obstruction Taxonomy
+% Source: arena agent 1/agent workspace/fam/minimax_v11.tex
+% Partition note: Single-source. Duality for the obstruction programme, with its own two-stock benchmark.
+%% STATUS: structurally assembled as a NEW version. Editorial integration
+%%         (de-duplication of shared framework, sibling cross-citations)
+%%         is NOT yet done. See PAPERS_MANIFEST.md.
+%% ============================================================
+
+%% v14 (2026-09-29): added section \ref{priorart} and seven bibliography entries, all
+%%   VERIFIED against publisher records before use.
+%%   HONEST BASELINE: this paper's obstruction IS THE EMPTINESS OF THE DISCRIMINATING
+%%   KERNEL. That collision with Aubin / Aubin-Catte / Cardaliaguet-Quincampoix-Saint-
+%%   Pierre is conceded in the text, not argued around. What survives is the CERTIFICATE
+%%   FORM (a finitely supported MEASURE with a tight k+1 bound, rather than a subset of
+%%   state space characterised by a fixed point) and the NEGATIVE BOUNDARY RESULT
+%%   (prop:gap), which is the complement of CQS 1994 Prop 2.3: convexity is exactly what
+%%   makes kernels convex AND what makes measure duality sound.
+%%   CITATION NOTES: Aubin and CATTE (accented). The 1994 RAIRO/M2AN paper is the
+%%   discriminating-kernel ALGORITHM paper. Sion 1958 supplies the minimax EQUALITY but
+%%   not the sparse witness -- that distinction is drawn explicitly.
+%%   DROPPED: the 'Aubin 2001, Poincare's shadow' attribution from the earlier roadmap
+%%   could NOT be verified and is NOT asserted. Aubin 2001 is cited only for the
+%%   verified kernel/capture-basin fixed-point characterisation.
+%% PRIOR ART REQUIRED -- bar item, inserted 2026-09-29.
+%% No related-work position. It must engage:
+%%   - classical Farkas / linear-programming duality as the certificate mechanism,
+%%     and what is genuinely new over the classical alternative.
+%%   - Cardaliaguet, Quincampoix and Saint-Pierre (2007): discriminating kernels
+%%     in the differential-game formulation.
+%%   - Aubin and Catte (2002): bilateral fixed-point and discriminating-kernel
+%%     calculus.
+%%   - Aubin (2001): the complement of the kernel -- Poincare's "shadow".
+%% Claim to establish: these dual certificates are the one-sided,
+%% observation-constrained analogue of the discriminating-kernel programme, and
+%% state which direction (necessity or sufficiency) each existing result serves.
+
+% SIBLING PAPERS: Paper 1 (Obstruction Certificates under Incomplete Observation), Paper 2 (Exact Probabilistic Sufficiency), Paper 3 (Computational Certification of Obstruction), Paper 5 (Exact Belief Computation).
+% Cross-cite, do not re-derive: the selector principle, the epistemic kernel
+% and the observation structure are defined in Paper 1. Papers 2-5 cite it.
+
+% SIBLING PAPERS: Paper 1 (Obstruction Certificates under Incomplete Observation), Paper 2 (Exact Probabilistic Sufficiency), Paper 3 (Computational Certification of Obstruction), Paper 5 (Exact Belief Computation).
+% Cross-cite, do not re-derive: the selector principle, the epistemic kernel
+% and the observation structure are defined in Paper 1. Papers 2-5 cite it.
+
+\documentclass[10pt,twocolumn]{article}
+\usepackage[a4paper,margin=15mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{mathrsfs}
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{remark}{Remark}
+\newtheorem{definition}{Definition}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{lemma}{Lemma}
+\usepackage{graphicx}
+\usepackage{booktabs,array,calc}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{etoolbox}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-1}
+\emergencystretch=3em
+\allowdisplaybreaks
+\AtBeginDocument{%
+  \BeforeBeginEnvironment{equation}{\small}%
+  \BeforeBeginEnvironment{equation*}{\small}%
+  \BeforeBeginEnvironment{align}{\small}%
+  \BeforeBeginEnvironment{align*}{\small}%
+  \BeforeBeginEnvironment{gather}{\small}%
+  \BeforeBeginEnvironment{gather*}{\small}%
+}
+
+\begin{document}
+\title{Minimax Dual Certificates for the\\ Common-Action Obstruction}
+\author{Amin Abaee\\[0.35em]
+{\small Independent Researcher, Tehran, Iran}\\[0.55em]
+{\small\href{https://orcid.org/0000-0002-0019-1842}{ORCID: 0000-0002-0019-1842}}\\[0.3em]
+{\small\href{mailto:amin\_abaee@ut.ac.ir}{amin\_abaee@ut.ac.ir}}}
+\date{September 25, 2026}
+\maketitle
+
+\begin{abstract}
+The common-action obstruction certifies that no single instrument serves
+every branch of an information set; its polyhedral form carries a Farkas
+multiplier (Abaee, 2026, An obstruction calculus, Theorem 2). This paper states and proves the
+measure dual of the same obstruction: for control-affine dynamics with a
+compact convex control set, the common safe-action set is empty precisely
+when an adversarial probability measure on the active
+boundary--disturbance bundle drives the expected inward drift strictly
+negative against every control, with a certificate supported on at most
+$k+1$ points ($k$ the control dimension; tightness is exhibited here in dimensions one and two). The
+polyhedral case recovers the $l_1$-normalized Farkas pair exactly; the
+singleton case recovers the Isaacs drift with the adversarial
+\emph{distribution} over disturbances load-bearing. A two-action instance
+exhibits a strict minimax gap: without convexity the equivalence fails and
+no measure certifies --- the audited finite codex systems sit outside this
+scope by design, certified combinatorially. An obstruction taxonomy
+(physical, epistemic, institutional) is instantiated on the audited grid,
+and a calibrated two-stock resource model --- one fixed control set
+throughout --- yields a closed-form critical aggregate
+$Y^{*} = \tfrac{27}{5}$: aggregate-yield fibres are viable exactly up to
+$Y^{*}$, the obstruction at $Y = 6$ is certified by a two-point dual
+measure with margin $\tfrac{3}{50}$, and the fibre-width formula
+$\Delta x_{1}(Y) = Y - 4$ gives the aggregation rule its exact reading.
+Dynamic-envelope, quantization, and stochastic-bridge extensions are
+recorded as conjectures; the residual dynamic-observation completeness gap
+of the source paper remains open. Eight exact-rational check families verify the declared finite
+instances, not the general analytic converse or dynamic-envelope claims.
+\end{abstract}
+
+\vspace{0.4em}
+\noindent\textbf{Keywords:} minimax duality; Farkas certificates; zero-sum
+games; obstruction certificates; adversarial priors; Isaacs condition;
+exact arithmetic
+
+\section{Introduction}
+
+The obstruction calculus's certificates are emptiness statements: a belief is
+obstructed when a correspondence of jointly acceptable responses is empty
+(Abaee, 2026, An obstruction calculus, Theorem 2; Abaee, 2026, Worked systems for the obstruction calculus). For polyhedral safe-action sets the
+emptiness carries an explicit dual object --- the Farkas multiplier vector (Farkas, 1902)
+--- so that the obstruction itself becomes a checkable artifact; the
+sparse-witness bound (at most $m+1$ compatible states) and the singleton
+Isaacs drift (Isaacs, 1965) complete the static picture. This paper unifies the static layer: the measure dual of the common-action obstruction, of which the normalized Farkas pair, the sparse witness, and the Isaacs reduction are special cases. The measure dual is verified exactly; the sparsity bound is proved by a finite-reduction route (finite reduction, linear-programming duality, basic-solution support); the singleton Isaacs reading is stated with its load-bearing distributional caveat; the equality's convexity boundary is exhibited by counterexample; the state-versus-epistemic separation is adopted as a working axiom; and a calibrated two-stock benchmark with a single fixed control set is solved in closed form. The dynamic layer --- an adversarial-prior envelope for the restricted-information game --- is then formulated and analyzed, and the residual dynamic-observation completeness gap (Abaee, 2026, Obstruction certificates under incomplete observation, Open Problem~1 in the revised manuscript) is \emph{not} closed here. The contributions are: the measure dual of the common-action obstruction, exactly verified, with the normalized Farkas pair, the sparse witness, and the Isaacs reduction as special cases, and the equality's convexity boundary exhibited by counterexample (Section 2); the calibrated two-stock benchmark solved in closed form (Section 4); and the dynamic layer --- the adversarial-prior envelope for the restricted-information game, its three obstructions, and the review-sequence envelope's exact couplings (Sections 5--6).
+
+\begin{table}[h]
+\centering\footnotesize
+\caption{The theorem and its check families: what the verification record
+certifies.}
+\label{tab:checks}
+\begin{tabular}{@{}l p{4.6cm} l@{}}
+\toprule
+Family & Statement certified & Checks \\
+\midrule
+G1 & general tower on all trees ($K{=}3$, adaptive filtration); & \\
+   & martingale property at every cell, all 8192 policies & \\
+G2 & general DP equals path enumeration ($K{=}2$, 19683 policies); & \\
+   & $Q_0 = N_1$ equals the tree supremum on both instances & \\
+G3 & refinement monotonicity, strict on a crafted functional & \\
+G4 & bridge direction: $Q_0 < 0$ defeats every policy measurably & \\
+G5 & coupling selection is real: $0$ vs $+1$ at equal marginals & \\
+G6 & text, retired markers, proof pairing & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{The measure dual of the common-action obstruction}
+
+Let the safe set be $V = \{x: q_{j}(x) \ge 0,\ j = 1,\dots,m\}$ with
+$q_{j}$ of class $C^{1}$; let $D$ be a compact-valued upper
+semicontinuous disturbance correspondence; let the control set
+$U \subseteq \mathbb{R}^{k}$ be compact and \emph{convex}; and let the
+dynamics be affine in the control,
+$f(x,u,d) = f_{0}(x,d) + G(x)u$, with $f_{0}$ and $G$ continuous. For a
+compact information set $B \subseteq V$ (a fibre or estimation tube) with
+nonempty active bundle
+\[
+\mathcal{K}(B) = \{(x,j,d):\ x \in B,\ q_{j}(x) = 0,\ d \in D(x)\},
+\]
+define the inward drift
+$\psi(x,j,d;u) = \nabla q_{j}(x)\cdot[f_{0}(x,d) + G(x)u]$ and the
+expected drift $\Phi(u,\mu) = \int_{\mathcal{K}(B)} \psi \,d\mu$ over
+Borel probability measures $\mu$ on $\mathcal{K}(B)$.
+
+\begin{theorem}[minimax dual certificate]\label{thm:dual}
+Under the standing hypotheses the common safe-action set
+$\mathcal{R}^{B}_{V}(B) = \bigcap_{x \in B}\mathcal{R}_{V}(x)$ is empty if
+and only if there exist an adversarial measure
+$\mu^{*} \in \mathscr{P}(\mathcal{K}(B))$ and a margin $\varepsilon > 0$
+with
+\begin{equation*}
+\max_{u \in U}\,\Phi(u,\mu^{*}) \le -\varepsilon < 0.
+\tag{$\star$}
+\end{equation*}
+Moreover
+$\max_{u \in U}\min_{\mathcal{K}(B)}\psi
+ = \min_{\mu}\max_{u \in U}\Phi(u,\mu)$.
+\end{theorem}
+\begin{proof}
+$\mathscr{P}(\mathcal{K}(B))$ is weak-$*$ compact and convex (Banach --
+Alaoglu), and $\Phi$ is continuous, affine in $u$ (control affinity), and
+linear in $\mu$; Sion's minimax theorem (Sion, 1958) applies, and the inner infimum
+over measures of a linear functional is attained by the Dirac measures,
+so
+$\max_{u}\min_{\mu}\Phi = \max_{u}\min_{\mathcal{K}(B)}\psi
+ = \min_{\mu}\max_{u}\Phi$.
+For the equivalence: $u \in \mathcal{R}^{B}_{V}(B)$ exactly when
+$\min_{\mathcal{K}(B)}\psi(x,j,d;u) \ge 0$; the minimum is continuous in
+$u$, so nonemptiness of the common safe-action set is equivalent to
+$\max_{u \in U}\min_{\mathcal{K}(B)}\psi \ge 0$ (the maximum is attained
+on the compact convex $U$), and emptiness is equivalent to the common
+value being strictly negative --- which, by the equality, is equivalent to
+some $\mu^{*}$ with $\max_{u}\Phi(u,\mu^{*}) < 0$; the margin is the
+slack.
+\end{proof}
+
+\begin{proposition}[atomic support; $k+1$ witnesses, tight]
+\label{prop:sparse}
+If $\mathcal{R}^{B}_{V}(B) = \varnothing$, the certificate $\mu^{*}$ may
+be chosen atomic with support of at most $k+1$ triples, and the bound is shown tight below in dimensions $k=1$ and $k=2$;
+no general-dimensional tightness example is asserted here.
+\end{proposition}
+\begin{proof}
+Write $\psi(x,j,d;u) = v(x,j,d)\cdot u + c(x,j,d)$ with
+$v = G(x)^{\top}\nabla q_{j}(x)$ and $c = \nabla q_{j}(x)\cdot f_{0}(x,d)$.
+On the compact set $U \times \mathcal{K}(B)$ the function $-\psi$ is
+continuous with
+$\min_{u}\max_{\mathcal{K}(B)}(-\psi) = 2\eta > 0$ (Theorem~\ref{thm:dual});
+a standard finite-cover argument extracts finitely many triples
+$(x_{i},j_{i},d_{i})$, $i \le N$, whose drift rows still satisfy
+$\min_{u \in U}\max_{i}(-\psi_{i}) \ge \eta$. Min--max duality for the
+finite system (linear programming duality over the simplex) yields
+$\lambda \ge 0$, $\sum_{i}\lambda_{i} = 1$, with
+$\sum_{i}\lambda_{i}\psi_{i}(u) < 0$ on $U$; an extreme such
+$\lambda$ is a basic solution of $k+1$ active constraints and is supported
+on at most $k+1$ indices (standard theory: Chv\'{a}tal, 1983, chapters 2
+and 7; the pairing argument itself is Carath\'eodory's theorem in
+$\mathbb{R}^{k}$). The following low-dimensional tightness examples illustrate
+the support bound; the plane case can be read through Helly (1923). Tightness: in dimension $k = 2$ the rows
+$\{u_{1} \ge 1\}$, $\{u_{2} \ge 1\}$, $\{u_{1}+u_{2} \le 1\}$ on the
+compact square $[-10,10]^{2}$ are pairwise intersecting with empty total
+intersection (checked on the rational grid by the record), so no two
+witnesses suffice; for $k = 1$ the instance of E1 certifies with exactly
+two atoms.
+\end{proof}
+
+\begin{proposition}[recoveries]\label{prop:recover}
+(i) \emph{Polyhedral.} If the drift rows are affine with rational data,
+the measure certificate is the $\ell_{1}$-normalized Farkas pair of
+Abaee, 2026, An obstruction calculus, Theorem 2: on the two-floor instance
+$\{u \le \tfrac25\} \cap \{u \ge \tfrac35\}$ with $U = [0,1]$, the
+measure $\lambda = (\tfrac12,\tfrac12)$ makes the expected drift
+\emph{constant} $-\tfrac1{10}$, the normalized multiplier pair of the
+worked certificate in Section 3.4 there; on the feasible contrast
+$\{u \le \tfrac25\} \cap \{u \ge \tfrac15\}$ both sides of
+Theorem~\ref{thm:dual} equal $+\tfrac1{10}$ and no certificate exists.
+(ii) \emph{Singleton.} For $B = \{x\}$ the dual measures live on the
+disturbance set; on the exact convex instance
+$\psi(u,d_{1}) = 1-2u$, $\psi(u,d_{2}) = 2u-1$,
+$\max_{u}\min_{d}\psi = \min_{\mu}\max_{u}\Phi = 0$, while the
+single-worst-disturbance reading $\min_{d}\max_{u}\psi = 1$ is
+\emph{not} the dual: the adversarial distribution over disturbances is
+load-bearing, and the Isaacs drift is its Dirac-supported inner
+infimum.
+\end{proposition}
+
+\begin{proposition}[convexity boundary]\label{prop:gap}
+The equivalence of Theorem~\ref{thm:dual} fails without control
+convexity. With $U = \{0,1\}$ and drift rows
+$(-1,+1)$, $(+1,-1)$, the common safe-action set is empty, yet
+$\max_{u}\min\psi = -1$ while $\min_{\mu}\max_{u}\Phi = 0$: a strict
+minimax gap, and no adversarial measure certifies. The audited finite
+action codices of the catalogue notes are non-convex by construction;
+there the obstructions are certified combinatorially, and the present
+theorem is a companion for the continuous, control-affine layer.
+\end{proposition}
+
+\medskip
+\noindent\textbf{Shared symbols across the companion papers.} The
+companion papers share this vocabulary with paper-local meanings; the
+letters below carry meanings here that differ there (including this
+paper's own three uses of $K$):
+\begin{center}\small
+\begin{tabular}{@{}p{0.42\linewidth}p{0.50\linewidth}@{}}
+\toprule
+\textbf{Here} & \textbf{In the companions} \\
+\midrule
+$K$: the window/tree depth; $\mathcal{K}(B)$: the contact set; $K_{i}$: the benchmark's carrying capacities & the safe set and kernel $K$ (obstruction calculus); the full-information kernel $K^{T}_{\mathrm{full}}$ (certification); the carrying capacity (forecast ladder) \\
+$\mu$, $\mu^{*}$: the adversarial probability measures & Farkas multipliers (obstruction calculus); the certification companion's dual measures \\
+$\lambda$: the prior over stored branches; the dual weights & the Farkas multiplier and observer decay rate (obstruction calculus); the certificate weights (certification) \\
+$\Gamma_{h}$: the recourse certificate & the certificate margin $\Gamma_{\mathcal{I}}$ (certification); the alpha-vector witness sets $\Gamma^{\Pi}_{k}$ (sufficiency) \\
+$\rho$: the interpolation parameter of the DR family & the contamination radius $\rho$ (sufficiency); the mesh relaxation parameter (certification); the net biomass multiplier (applied regime viability) \\
+$\beta$: the margin & the stored per-label bound $\beta_{a}$ (certification) \\
+$\tau$: the reveal time & the observation time $\tau$ (certification); the delay times (obstruction calculus); the worst-case exit time $\tau^{*}$ (worked systems) \\
+$\sigma$: the kernel time variable & the floored exit count $\sigma^{*}$ (worked systems); a noise scale (forecast ladder) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+\section{The obstruction taxonomy}
+
+The standing axiom adopted from the audit: \emph{a dead state is never an
+information failure.} Three classes of nonviability are distinguished and,
+on the audited grid, are instantiated side by side (all exact):
+\emph{physical} --- the corner $(1,1)$ under two floors is nonviable as a
+singleton under full information (no instrument keeps both floors);
+\emph{epistemic} --- the audited belief $\{(1,2),(2,1)\}$ has every branch
+viable and the joint set empty (failure by merge); \emph{institutional}
+--- under the unanimity protocol with agency 2 restricted to vote 1, the
+decentralized kernel collapses from $12$ to $0$ (failure by protocol;
+full enumeration). The taxonomy disciplines attribution across the
+catalogue: mode-blind losses on the same grid are generated entirely at the singleton level, and no count
+that mixes the classes is admissible as an epistemic claim.
+
+\section{A calibrated two-stock benchmark}
+
+Leaving the audited grid, the continuous layer needs a worked system with
+one fixed control set throughout; the two-stock system below is the
+running instance of the continuous layer --- the caps-fibre benchmark
+shared with the worked-systems companion. Two renewable stocks
+($r_{1} = 1$, $r_{2} = \tfrac45$, $K_{1} = K_{2} = 10$, cross-competition
+$\tfrac1{20}$, shocks $|d_{i}| \le \tfrac1{10}$), floors
+$x_{i} \ge 2$, and the single control set
+$U = \{u \ge 0:\ u_{1} + u_{2} \ge 2\}$ (a demand floor; no capacity
+constraint is imposed). On the aggregate-yield fibre
+$Y = x_{1} + x_{2}$ within the floors, the active-floor harvest caps are
+\[
+\mathrm{cap}_{1}(Y) = \tfrac32 - \tfrac{Y-2}{10},\qquad
+\mathrm{cap}_{2}(Y) = \tfrac{59}{50} - \tfrac{Y-2}{10},
+\]
+so the fibre is viable exactly when
+$\mathrm{cap}_{1}(Y) + \mathrm{cap}_{2}(Y) \ge 2$, i.e.
+\begin{theorem}[critical aggregate]\label{thm:benchmark}
+$Y^{*} = \tfrac{27}{5}$: aggregate fibres with $Y \le \tfrac{27}{5}$ are
+viable and those with $Y > \tfrac{27}{5}$ are obstructed, the value being
+exact ($\mathrm{cap}_{1} + \mathrm{cap}_{2} = 2$ at $Y^{*}$). At
+$Y = 5$ the fibre is viable with witness $u = (\tfrac65,\tfrac45)$; at
+$Y = 6$ it is obstructed (cap sum $\tfrac{47}{25} < 2$) with dual
+certificate $\mu^{*} = (\tfrac12,\tfrac12)$ on the two active-floor
+atoms --- two points, within the $k+1 = 3$ bound --- and margin
+$\varepsilon = \tfrac{3}{50}$. The fibre criterion itself --- viability
+exactly on the cap-sum inequality, audited per aggregate with radius
+bounds --- is carried in the worked-systems companion (Abaee, 2026, Worked systems for the obstruction calculus);
+this section contributes the two-stock derivation and the fibre-width
+formula.
+\end{theorem}
+The reading is the opposite of the intuition that abundance certifies
+safety: cross-competition tightens the harvest caps as the aggregate
+grows, so richer fibres obstruct first --- aggregate yield is a failing
+indicator in both directions. The fibre-width formula makes the
+aggregation rule exact: the $Y$-fibre within the floors is
+$x_{1} \in [2,\,Y-2]$, of width $\Delta x_{1}(Y) = Y - 4$, so a linear
+index cannot separate states closer together than the floor buffer ---
+the composite index is certifying exactly when the width stays inside the
+buffer, and the certainly-safe reporting of the applications companion
+(Abaee, 2026, Robust viability of the 2J3KL limit reference point) governs otherwise.
+
+\section{The dynamic envelope}
+
+A natural candidate formulation of a dynamic certificate suggests itself: an adversarial measure curve $t \mapsto \mu^{*}_{t}$ whose expected-margin envelope $Q(t)$ decreases at a certified rate, governed by an information-set operator acting on the state. The candidate fails, for three reasons that shape the formulation developed below; this section records the reasons, formulates the envelope, and proves what exact methods reach. The residue remains conjectural.
+
+\subsection{Three obstructions to the candidate}
+
+\emph{(i) A Bellman object posed as a pointwise Hamiltonian.} The candidate operator maps a
+value along trajectories to an expectation over an information set of
+measures --- a Bellman-type, hence nonlocal, object --- while dressed as a
+pointwise differential operator. Restricted-information games do not
+produce pointwise Hamiltonians in the state; their well-posed home is the
+information state (here, the belief), on which the object is a dynamic
+program. The nonlocality is not itself the obstruction; the pointwise differential form is.
+
+\emph{(ii) An inconsistent measure curve.} A curve $t \mapsto
+\mu^{*}_{t}$ of measures carries no requirement that $\mu^{*}_{t}$ be the
+marginal at time $t$ of one measure on disturbance paths. Without that
+consistency the envelope has no time consistency: nothing connects $Q(t)$
+to $Q(t')$ for $t' > t$, so no backward recursion and no comparison can
+even be posed. The formulation developed below replaces the curve by a single adversarial prior $\mu^{*}$ on disturbance paths; conditional expectation then supplies
+the martingale structure without any PDE.
+
+\emph{(iii) Expectation versus trajectory.} For the certificate direction
+the selection argument is not needed at all: an expectation of a bounded
+functional that is strictly negative exhibits a positive-measure set of
+realizations on which the functional is strictly negative. Selection
+theorems are required only for the converse value-attainment direction,
+which the certificate does not use.
+
+\subsection{The envelope formulation}
+
+\begin{lemma}[expectation-to-realization bridge]\label{lem:bridge}
+Let $\mu^{*}$ be a probability measure on disturbance paths compatible with
+the information structure, let $\pi$ be nonanticipative, and let the
+safety functional $F^{\pi}(\omega)$ --- the realized weighted facet margin
+at the horizon --- be bounded below and $\mathcal{F}_{T}$-measurable. If
+$\mathbb{E}^{\mu^{*}}[F^{\pi}] < 0$, then
+$\mu^{*}(\{\omega: F^{\pi}(\omega) < 0\}) > 0$: some compatible disturbance
+realization violates the margin, and the set of such realizations carries
+positive $\mu^{*}$-measure.
+\end{lemma}
+\begin{proof}
+Nonanticipativity of $\pi$ makes $F^{\pi}$ an $\mathcal{F}_{T}$-measurable
+functional of the disturbance path, and boundedness below makes its
+expectation well-defined. If $\mu^{*}(F^{\pi} < 0) = 0$, then
+$F^{\pi} \ge 0$ holds $\mu^{*}$-almost surely, so
+$\mathbb{E}^{\mu^{*}}[F^{\pi}] \ge 0$ --- contradicting the hypothesis. The
+realizations of the positive-measure set are compatible by construction,
+since $\mu^{*}$ is supported on the compatible set.
+\end{proof}
+
+\begin{definition}[adversarial-prior envelope]\label{def:envelope}
+Fix a horizon $T$, a bounded safety functional $F$ (positive values safe),
+and one consistent adversarial prior $\mu^{*}$ on disturbance paths. The
+envelope is
+\[
+Q(t) \;=\; \operatorname*{ess\,sup}_{\pi} \;
+\mathbb{E}^{\mu^{*}}\bigl[\, F^{\pi} \;\big|\; \mathcal{F}_{t} \,\bigr],
+\]
+the essential supremum over nonanticipative policies of the conditional
+expected safety functional. For each fixed $\pi$ the process
+$t \mapsto \mathbb{E}^{\mu^{*}}[F^{\pi} \mid \mathcal{F}_{t}]$ is a
+martingale; the envelope is its essential supremum over policies, and its
+pointwise optimization over \emph{complete} policies can select
+different past actions on different later cells. It need not obey a
+Bellman recursion unless committed action history is included in the
+state and only future actions are optimized.
+\end{definition}
+
+\begin{theorem}[finite well-posedness, comparison, exactness]
+\label{thm:envelope-finite}
+In the finite setting --- disturbance set $\Omega$ finite, information
+states $b$ drawn from a finite partition together with their
+committed action prefixes (or a proved Markov-sufficient state encoding
+them), admissible actions finite, data rational --- define the
+one-step continuation operator
+\[
+\Phi V(b) \;=\; \max_{a}\; \mathbb{E}^{\mu^{*}}\bigl[\, V(b') \,\big|\, b, a \,\bigr],
+\]
+where $b'$ records the posterior and the committed prefix
+extended by $a$ after observation $y$; the maximum concerns only
+not-yet-chosen actions. Bare posterior cells alone need not be a
+sufficient state for path-dependent terminal $F$. Then: (i) $\Phi$ is order-preserving,
+$V \le W \Rightarrow \Phi V \le \Phi W$ pointwise; (ii)
+with committed prefixes the initial attainable value $Q(0)$ is
+computed exactly by the finite backward induction \(\Phi^N g\),
+in rational arithmetic; this does not identify intermediate values
+with the pointwise essential supremum over complete policies in
+Definition~\ref{def:envelope}; and (iii) $Q(0) < 0$ certifies that for every admissible policy
+the set of disturbance realizations defeating it carries positive
+$\mu^{*}$-measure.
+\end{theorem}
+\begin{proof}
+(i) If $V \le W$ pointwise, then for each $(b, a)$ the conditional
+expectation of $V(b')$ is at most that of $W(b')$ (monotonicity of
+expectation over the same kernel), and the maximum over the same action set
+preserves the inequality. (ii) By induction on the remaining horizon:
+$\Phi^{0} g = g$ is exact by definition; the induction step applies $\Phi$
+once, and each evaluation is a finite weighted sum of previously computed
+values, so rational data propagate exactly through the recursion.
+Well-posedness of the committed-prefix recursion follows from
+the same induction. For a counterexample to posterior-only recursion,
+choose a blind first action $a_1\in\{0,1\}$ and then reveal a
+fair bit $s\in\{0,1\}$, with terminal reward
+$G(s,a_1)=\mathbf{1}[a_1=s]$. Every feasible complete policy has
+initial value $1/2$; at the revealed cell the pointwise essential
+supremum over \emph{complete} policies is $1$ for each bit, by
+retrospectively choosing two different first actions. A Bellman
+continuation retaining the first action returns $1/2$, as required. (iii) $Q(0) < 0$ bounds every policy's
+conditional expectation: for the optimal policy the expectation is
+$Q(0) < 0$, and for every suboptimal $\pi$ the expectation is smaller
+still, so Lemma~\ref{lem:bridge} applies to each $\pi$ and yields the
+positive-measure defeating set.
+\end{proof}
+
+\begin{proposition}[identification with the recourse certificate]
+\label{prop:recourse-id}
+One step deep, with stored facet margins $\beta_{\ell}$, control kernels
+$k_{\ell}(\sigma)$, prior $\lambda$ over the stored branches, and control
+set $U$, the envelope evaluation of
+Definition~\ref{def:envelope} --- the policy's optimal ceiling on the
+expected weighted facet sum --- is exactly the support-function certificate
+\[
+\Gamma_{h}(\lambda) \;=\; \sum_{\ell} \lambda_{\ell} \beta_{\ell}
+\;+\; \int_{0}^{\tau} h_{U}\Big(\sum_{\ell} \lambda_{\ell} k_{\ell}\Big)
++ \sum_{\ell} \int_{\tau}^{T} h_{U}\big(\lambda_{\ell} k_{\ell}\big),
+\]
+with $h_{U}(g) = \max_{v \in U} g^{\top} v$ the support function of $U$,
+of the obstruction calculus (its Section 3.7; complete proof in its
+Supplementary Material, S1). The recourse certificate is the dynamic
+envelope's one-step evaluation.
+\end{proposition}
+\begin{proof}
+Variation of constants expands each realization of the weighted facet sum
+into the stored $\beta$-term plus the window pairing (one common signal on
+$[0, \tau)$) plus the branch pairings (separate post-reveal signals). The
+supremum of a linear functional over the signal sets factorizes across the
+time intervals, and each interval's supremum of a realized pairing
+$g^{\top} v$ over $v \in U$ is the support value $h_{U}(g)$; collecting
+terms gives exactly $\Gamma_{h}(\lambda)$ as the ceiling of every policy's
+realized weighted facet sum. Negativity of the ceiling certifies by
+Lemma~\ref{lem:bridge}: the realized weighted facet sum of every policy is
+at most $\Gamma_{h}(\lambda) < 0$, so some facet is violated on a
+positive-measure set of realizations.
+\end{proof}
+
+\begin{corollary}[the three-branch instance, certified]\label{cor:three-branch}
+On the braking instance of the obstruction calculus (three branches,
+weights $\lambda = (\tfrac{3}{8}, \tfrac{5}{16}, \tfrac{5}{16})$, stored
+margin $\beta = \tfrac{16}{25} - \tau - 1$): the pooled window kernel
+vanishes ($\sum_{\ell} \lambda_{\ell} n_{\ell} = 0$), each branch's
+post-reveal pairing contributes its support value
+$\lambda_{\ell} \int_{\tau}^{\tau+1} (\tau + 1 - \sigma)\, d\sigma =
+\lambda_{\ell}/2$, and the envelope evaluation is
+$\Gamma_{h}(\tau) = \tfrac{7}{50} - \tau$: negative exactly for
+$\tau > \tfrac{7}{50} = 0.14$, where the bridge converts it into the
+positive-measure defeating set for every blind-window policy;
+hold-then-brake is safe exactly to $\tau = \tfrac{7}{50}$, so the
+certificate is tight. The verification script evaluates the identity
+exactly at $\tau \in \{\tfrac{1}{10}, \tfrac{7}{50}, \tfrac{1}{5}\}$.
+\end{corollary}
+
+\begin{conjecture}[the open residue in continuous time]\label{conj:envelope}
+The continuous-time residue of the envelope formulation: (i) an evolution
+law for the adversarial prior along the review sequence --- a consistent
+coupling of the one-step priors, in the spirit of martingale-transport
+couplings (Beiglb\"ock, Henry-Labord\`ere, and Penkner, 2013) --- under which the envelope obeys a dynamic-programming equation
+in continuous time; (ii) the limit of the information-state recursion under
+partition refinement, which is where a comparison principle must live if a
+differential statement is to be recovered at all; and (iii) value
+attainment (the selection direction) in the general filtered setting. The
+static identification of Proposition~\ref{prop:recourse-id} is exact and is
+not part of the conjecture.
+\end{conjecture}
+
+\section{The review-sequence envelope: exact couplings}
+
+The envelope of the preceding section is one review deep. This section certifies
+the two properties its continuous-time residue must preserve --- coupling
+consistency and refinement monotonicity --- on exact review-sequence
+instances; everything is rational arithmetic, regenerated by the script.
+
+\subsection{The instance}
+
+Two windows, one hidden branch. The branch is $s \in \{+1, -1\}$, prior
+$\tfrac{1}{2}$ each; the state starts at $z_0 = 2$. At each review the
+policy acts $u_1, u_2 \in \{-2, 0, 2\}$; between reviews the adversarial
+disturbance acts $d_1, d_2 \in \{-1, 1\}$ (one consistent prior: the
+product measure, $\tfrac{1}{2}$ per value per window). The state obeys
+$z_1 = z_0 + s\, u_1 + d_1$ and $z_2 = z_1 + s\, u_2 + d_2$; the review
+after window 1 observes $z_1$ exactly. The safety functional is the
+expected two-sided margin
+\[
+F \;=\; \mathbb{E}_{s}\bigl[\, 2 - |z_{2}(s)| \,\bigr],
+\qquad z_{2}(s) = z_0 + s(u_1 + u_2) + d_1 + d_2,
+\]
+bounded on the finite instance, so the bridge lemma applies verbatim.
+
+\begin{proposition}[consistent coupling and the tower identity]
+\label{prop:tower}
+The one-step adversarial priors couple to the product measure on
+$(d_1, d_2)$, and for \emph{every} nonanticipative policy on the instance
+--- all $3^{4} = 81$ policy trees over the reachable $z_1$ cells --- the
+path-enumerated expectation and the iterated-conditional (tower)
+evaluation of $\mathbb{E}[F]$ agree exactly. Each fixed policy's
+conditional-expectation process along the review filtration is therefore
+a martingale, and the envelope
+$Q_0 = \operatorname*{ess\,sup}_{\pi} \mathbb{E}[F \mid \mathcal{F}_0]$
+is computed by backward induction: $Q_0 = \Phi^{2} g$ equals the
+policy-tree supremum ($= \tfrac{1}{2}$, at $u_1 = \pm 2$).
+\end{proposition}
+\begin{proof}
+Consistency is by construction: the product measure has the one-step
+priors as its marginals. For the tower identity, condition on
+$\mathcal{F}_1$ (the review): within each $z_1$ cell the inner
+conditional expectation is a finite weighted average, and the outer
+average over the cells reconstructs the path sum because the cells
+partition the paths --- an induction on the two-node filtration, exact
+in rationals. The martingale property is the tower identity restated
+along the filtration. Backward induction computes
+$\Phi^{2} g$: $\Phi g$ at each cell is a maximum of three rational
+expectations, and $\Phi$ is applied once more over $u_1$; the script
+checks the result against the enumeration of all $81$ trees.
+\end{proof}
+
+\begin{proposition}[information design and recourse strictly pay]
+\label{prop:strict}
+On the instance: the envelope value is $Q_0 = \tfrac{1}{2}$, attained by
+$u_1 = -2$ (any $u_1 = \pm 2$ by symmetry) with the recourse
+$u_2(z_1) = (0, -2, +2, +2)$ at $z_1 = (-1, 1, 3, 5)$; every open-loop
+policy and the do-nothing policy attain only $0$. The strict gap
+$\tfrac{1}{2} > 0$ is the certified content of the correction: the first
+review's action \emph{designs the information} ($u_1 = -2$ makes $z_1$
+separate the branch exactly), and the second \emph{exploits it}
+(brake toward the origin on the revealed branch); at $z_1 = 5$ the
+revealed state is unrecoverable and the cell value is $-1$.
+\end{proposition}
+\begin{proof}
+The four singleton cells at $u_1 = -2$ carry values
+$Q_1 = (1, 1, 1, -1)$ at weights $\tfrac{1}{4}$ each: $Q_0 = \tfrac12$.
+The open-loop maximum is the better of nine fixed pairs, computed
+exactly as $0$; the do-nothing pair $(0,0)$ also evaluates to $0$.
+The cell values and the maximizing $u_2$ are direct rational
+computations, reproduced by the script.
+\end{proof}
+
+\begin{proposition}[refinement is monotone]\label{prop:refine}
+On the three-state matching instance --- hidden $x \in \{1,2,3\}$, prior
+$\tfrac13$ each, margin $-|x - a|$, action $a$ per observation block ---
+the envelope is non-decreasing under partition refinement and strictly
+increasing on the instance's final step:
+$Q(\{\{1,2\},\{3\}\}) = Q(\{\{1\},\{2,3\}\}) = -\tfrac13
+< 0 = Q(\{\{1\},\{2\},\{3\}\})$.
+\end{proposition}
+\begin{proof}
+Every policy measurable under a coarser partition is measurable under a
+refinement, so the supima are ordered. Strictness: under the fine
+partition the policy matches each state exactly ($a = x$, value $0$);
+under either coarse partition two states share an action and the best
+shared action leaves one mismatch, value $-\tfrac13$. This monotone,
+bounded family is the direction the partition-refinement limit of the
+residue conjecture must take.
+\end{proof}
+
+The residue conjecture now reads sharper: the continuous-time coupling
+law must reduce, on review sequences with finite disturbance sets, to
+the product coupling certified here; and the information-state recursion
+must converge along refinements with the monotonicity certified here.
+
+\section{The general finite-sequence envelope}
+
+The instance of the previous section is the $K = 2$ case of a general
+statement. This section states the general theorem over finite review
+sequences and proves it in full; the two-window instance is the $K = 2$ case, and the general argument uses only finite combinatorics and the linearity of expectation.
+
+\subsection{Setup}
+
+Fix a number of windows $K \ge 1$. Each window $k$ carries a finite
+disturbance set $D_{k}$; the disturbance paths form
+$\Omega = D_{1} \times \cdots \times D_{K}$, a finite set. A
+\emph{consistent adversarial prior} is a product measure
+$\mu^{*} = \mu^{*}_{1} \otimes \cdots \otimes \mu^{*}_{K}$ on $\Omega$;
+consistency --- each marginal $\mu^{*}_{k}$ is the time-$k$ law of the one measure $\mu^{*}$ --- is exactly the requirement whose absence makes a backward recursion ill-posed. Reviews divide the sequence: the review
+filtration is an increasing sequence of partitions
+$\mathcal{P}_{1} \preceq \mathcal{P}_{2} \preceq \cdots \preceq
+\mathcal{P}_{K}$ of $\Omega$, each $\mathcal{P}_{k}$ consisting of the
+cells of the information available at review $k$ (so
+$\mathcal{P}_{k}$ refines into $\mathcal{P}_{k+1}$), with
+$\mathcal{P}_{K}$ the singleton partition; $\mathcal{P}_{1}$ may be the
+trivial partition (a blind first window). Window $k$ has a finite action
+set $A_{k}$; a \emph{nonanticipative policy} is
+$\pi = (\pi_{1}, \dots, \pi_{K})$ with $\pi_{k}$ constant on the cells
+of $\mathcal{P}_{k}$ --- the filtration carries the whole observation
+history, so cell-constancy is adaptedness. The data are completed by a
+bounded safety functional $G: \Omega \times A_{1} \times \cdots \times
+A_{K} \to \mathbb{R}$ (positive values safe, per the sign convention of
+this paper), rational throughout; the realized functional of $\pi$ is
+$G^{\pi}(\omega) = G(\omega, \pi_{1}[\omega]_{1}, \dots,
+\pi_{K}[\omega]_{K})$, where $[\omega]_{k}$ is the
+$\mathcal{P}_{k}$-cell of $\omega$.
+
+\begin{theorem}[general finite-sequence envelope]\label{thm:general}
+Under the setup above, use the recursion only on cells
+$C$ with $\mu^*(C)>0$; omit null children from its sums and leave
+null-node conditional values undefined (or assign arbitrary values
+that never affect the root). In particular the initial node is
+positive-mass. Then: \emph{(i) tower and martingale.} For every
+nonanticipative policy $\pi$,
+\[
+\mathbb{E}^{\mu^{*}}[G^{\pi}] \;=\;
+\mathbb{E}^{\mu^{*}}\bigl[\, \mathbb{E}^{\mu^{*}}\bigl[\, \cdots
+\mathbb{E}^{\mu^{*}}[\, G^{\pi} \mid \mathcal{P}_{K} \bigr] \cdots
+\mid \mathcal{P}_{2} \bigr] \mid \mathcal{P}_{1} \bigr],
+\]
+and $M^{\pi}_{k} = \mathbb{E}^{\mu^{*}}[G^{\pi} \mid
+\mathcal{P}_{k}]$ is a $\mu^{*}$-martingale along the filtration.
+\emph{(ii) Dynamic programming.} Define the node values $N$ on the
+review tree --- nodes are pairs (cell, action prefix) --- by
+$N_{K}\bigl(\{\omega\},\, a_{1:K-1}\bigr) = \max_{a \in A_{K}}
+G(\omega, a_{1:K-1}, a)$ and, for $k < K$, the sum running over the
+children $C' \subseteq C$ of $\mathcal{P}_{k+1}$ over positive-mass children only, with the child weights
+$w(C') = \mu^{*}(C')/\mu^{*}(C)$,
+\[
+N_{k}\bigl(C,\, a_{1:k-1}\bigr)
+\;=\; \max_{a \in A_{k}} \;
+\sum_{C'} w(C')\, N_{k+1}\bigl(C',\, a_{1:k-1}a\bigr),
+\]
+Then the envelope value $Q_{0} := \sup_{\pi}
+\mathbb{E}^{\mu^{*}}[G^{\pi}]$ equals $N_{1}$ evaluated on the
+$\mathcal{P}_{1}$-cells, averaged by their prior weights
+$Q_{0} = \sum_{C \in \mathcal{P}_{1}:\mu^*(C)>0} \mu^{*}(C)\,
+N_{1}(C)$ (a single node if $\mathcal{P}_{1}$ is trivial); the supremum
+is attained by a nonanticipative policy read off the maximizing
+arguments of $N$. \emph{(iii) Refinement monotonicity.} If a second
+filtration $\mathcal{P}'$ refines $\mathcal{P}$ stage-wise, then the
+induced envelope values satisfy $Q_{0}(\mathcal{P}) \le
+Q_{0}(\mathcal{P}')$. \emph{(iv) Exactness and the obstruction
+direction.} All node values are rational; if $Q_{0} < 0$, then for
+\emph{every} nonanticipative $\pi$ the set
+$\{\omega: G^{\pi}(\omega) < 0\}$ carries positive $\mu^{*}$-measure.
+\end{theorem}
+\begin{proof}
+\emph{(i)} Each $G^{\pi}$ is $\mathcal{P}_{K}$-measurable (a finite
+function of the path and the cell-constant actions), and repeated
+conditioning is an identity on finite probability spaces; the tower
+formula is that identity read backwards, and the martingale property is
+$M^{\pi}_{k} = \mathbb{E}[M^{\pi}_{k+1} \mid \mathcal{P}_{k}]$, which
+is the defining property of conditional expectation applied twice.
+\emph{(ii)} Positive-mass conditioning makes each weight
+well-defined and null children contribute zero to the root. Proceed
+by backward induction on the stage. For $k = K$ the node
+value is the best terminal action, and $G^{\pi}$ at a singleton cell is
+$G(\omega, \cdot)$ evaluated at the realized prefix and $\pi_{K}$, so
+$\max_{a_{K}} G = N_{K}$ pointwise. For the step, fix a
+$\mathcal{P}_{k}$-cell $C$ and an action prefix, and split the policies
+by their stage-$k$ action: every policy compatible with the prefix is a
+choice $a \in A_{k}$ together with a continuation policy for the
+conditioned sub-instance on $\{C\}$-successor cells, whose filtration
+$\bigl(\mathcal{P}_{j}\bigr)_{j > k}$ restricted to the successors
+refines to singletons at $K$. By (i) applied at the conditioning,
+\[
+\mathbb{E}^{\mu^{*}}[G^{\pi} \mid C] \;=\;
+\sum_{C' \subseteq C} \frac{\mu^{*}(C')}{\mu^{*}(C)}\;
+\mathbb{E}^{\mu^{*}}\bigl[G^{\pi} \mid C'\bigr],
+\]
+the conditional law of the successor cell given $C$ is the ratio of
+prior masses (exogeneity: the prefix does not move $\mu^{*}$), and the
+induction hypothesis --- applied to each conditioned sub-instance,
+which has one fewer window --- identifies the supremum of the inner
+conditional expectations over continuations of $(a_{1:k-1}, a)$ with
+$N_{k+1}(C', a_{1:k-1}a)$. Taking the outer maximum over $a$ gives
+$N_{k}$; summing over the $\mathcal{P}_{1}$-cells with their prior
+weights and applying (i) once more gives $Q_{0} = \sum_{C}
+\mu^{*}(C) N_{1}(C)$. Attainment: each $N$ node is a maximum over a
+finite set; selecting a maximizing argument at every node and pasting
+along the tree yields a nonanticipative policy --- cell-constancy holds
+because the selection is made per node --- and its expectation is
+exactly the recursion's value. \emph{(iii)} If $\mathcal{P}'$ refines
+$\mathcal{P}$ stage-wise, every $\mathcal{P}$-cell-constant policy is
+$\mathcal{P}'$-cell-constant, so the $\mathcal{P}'$-supremum ranges
+over a superset of policies and cannot be smaller; the inequality for
+the full sequences follows stage-wise from the one-step inclusion.
+\emph{(iv)} The recursion's only operations are maxima and
+$\mu^{*}$-weighted averages of rationals, so every $N$ is rational. If
+$Q_{0} < 0$, then by (ii) every policy satisfies
+$\mathbb{E}^{\mu^{*}}[G^{\pi}] \le Q_{0} < 0$, and the
+expectation-to-realization bridge (Lemma~\ref{lem:bridge}) converts strict negative expectation into a
+positive-measure set of strictly negative realizations.
+\end{proof}
+
+\begin{remark}[the recourse certificate and the residue]\label{rem:after-general}
+Three consequences. \emph{First}, the identification with the recourse
+certificate is the one-step case of Theorem~\ref{thm:general}: with
+stored facet margins the node recursion collapses to the
+support-function evaluation $\Gamma_{h}$ (the identification
+proposition), so the calculus's recourse
+certificate is the envelope's $K$-node tree read at depth one.
+\emph{Second}, the one-step priors $\mu^{*}_{k}$ do not determine the
+coupling $\mu^{*}$: two consistent couplings with identical one-step
+marginals can give different node values (the script certifies a
+two-window example where the product coupling yields $0$ and the
+comonotone coupling yields $+1$ on the same functional). The residue
+conjecture's ``evolution law for the adversarial prior'' is therefore
+precisely a \emph{coupling-selection} problem --- choose the consistent
+coupling as a function of the state and review history --- which is the finite-space form of the martingale-transport structure recorded in the conjecture. \emph{Third}, refinement monotonicity (iii) is the
+finite-space grounding of the partition-limit clause: the instance
+family of the previous section, monotone and bounded, now carries a
+general ordering, and the continuous-time residue is exactly the
+question of which couplings and which refinement limits survive the
+passage to continuous disturbance sets. The distributionally robust
+interpolation of the probabilistic companion (Abaee, 2026, Probabilistic sufficiency) holds the
+adversary to a mixture family: on the two-window instance its value is
+exactly $\\rho$ at parameter $\\rho$ --- the interpolation contains the
+coupling extremum at $\\rho = 1$, preserves the one-step marginals at
+every $\\rho$, and leaves the coupling-selection difficulty orthogonal to
+the mixture parameter (joint check archived).
+\end{remark}
+
+\section{Mechanized verification}
+
+The Lean~4 module \texttt{Formalizations/Minimax\_Dual} proves
+conditional soundness of a supplied finite measure certificate and
+specific algebraic examples, not the Sion converse, sparse bound or
+dynamic envelope. A current comment-stripped count including Unicode names finds \(22\)
+\texttt{theorem} declarations and no \texttt{lemma} declarations.
+The historical report of \(21\) is an undercount: an ASCII-only name
+filter reproduces it by omitting \texttt{\ensuremath{\psi}single\_sum}.
+The original historical counting command has not been recovered; this
+is a reproducible explanation, not proof of its exact implementation.
+The declared-pin default-target build now passes in GitHub Actions. The module imports only the
+project prelude. The module builds as part of the project's \(60\)-job build, all of
+which pass.
+
+\noindent\textbf{No admitted gaps.} In Lean an unfinished proof appears as the axiom
+\texttt{sorryAx} in the axiom footprint of every declaration depending on it. That
+footprint was inspected: \texttt{sorryAx} is absent, and a source scan with comments
+stripped finds no \texttt{sorry}, \texttt{admit} or \texttt{axiom} declaration anywhere in
+the formalization layer. The named Minimax declarations checked here use only those standard classical axioms or none; the wider project also has the P3 native-evaluation dependencies disclosed below.
+\noindent\textbf{Current Lean provenance.} The committed project pin \texttt{v4.34.1} was rebuilt in GitHub Actions (default Lake target: \(60/60\) jobs, exit~0; \url{https://github.com/MIKEAA2020/general-sustainability/actions/runs/36946730855}). The exact project source and two footprint-check \texttt{.lean} files are archived with SHA-256 manifests. A comment-aware scan of all \(62\) source files finds no \texttt{sorry}, \texttt{admit}, explicit \texttt{axiom} or \texttt{constant} declaration. Twenty-one named footprints contain no \texttt{sorryAx}; the aggregate-import environment exposes three source-level \texttt{native\_decide} uses in the P3 support/value examples, yielding nine distinct generated axiom names under this pin. These are executable computational certificates that extend kernel-only trust to the Lean compiler/runtime; they are not admitted gaps and must not be described as zero axioms or as kernel-only proofs. Three preserved historical modules outside the aggregate import closure are not certified by the default build. The pinned declared-exceptions gate passed in GitHub Actions (run 36990482599): only the nine exact generated names from three approved P3 source sites are permitted; any change to those sites or names requires separate review and re-approval. The separate strict zero-exception check exits 2 by design, while the build itself passed 60/60; the two verdicts must not be conflated. The v4.14.0 comparison of the \emph{current} source fails in the prelude and does not reproduce the old source run.
+
+
+\noindent\textbf{Scope.} What is machine-checked is the dual-certificate core stated over
+an ordered-field interface, so it holds in any model of that interface. Numerical
+instantiations, and any continuous-time statements, are not covered.
+
+\section{Related work}
+\label{priorart}
+
+The question this paper answers --- is there a single instrument that is safe against every
+branch of an information set, and if not, what certifies that there is not --- has a long
+history under other names. This section fixes the position against each of the four
+neighbouring programmes. The short version: the \emph{question} is not new, and one of these
+programmes already answers it in a different form; what is new is the \emph{form of the
+answer} (a finitely supported measure with a tight support bound) and the \emph{precise
+location of the boundary} at which that form stops existing.
+
+\subsection{The honest baseline: this is the discriminating-kernel question}
+
+The viability-theoretic treatment of two-player, state-constrained games is built on the
+\emph{discriminating kernel} (Aubin, 1991; Aubin and Catt\'e, 2002; Cardaliaguet, Quincampoix
+and Saint-Pierre, 1994, 2007): the largest closed subset of the constraint set that is a
+discriminating domain, characterised as Victor's victory domain and, in the discrete and
+continuous settings alike, computed by a descending-kernel algorithm. The discriminating
+kernel is the two-player analogue of the viability kernel, and its algebraic characterisation
+is as the largest, smallest, or \emph{unique minimax} --- bilateral --- fixed point of an
+adequate map on pairs of subsets (Aubin and Catt\'e, 2002).
+
+\textbf{The static local obstruction is not a global-kernel test.}
+Theorem~\ref{thm:dual} certifies emptiness of the common
+\emph{instantaneous} safe-action set at the declared information
+state under its compact-control hypotheses. A global discriminating
+or viability kernel additionally requires a horizon/invariance
+argument. For example, on $[0,1]$ with $\dot x=1$ and $U=\{0\}$,
+$x=0$ has an inward-pointing instantaneous action, but every
+trajectory eventually exits and the infinite-horizon kernel is
+empty. The established global-kernel programme is therefore related
+prior art, not a logically equivalent restatement of this static dual.
+
+Four things are not in that programme, and they are what this paper claims.
+
+\begin{enumerate}
+\item \textbf{The certificate is a measure, not a set.} The discriminating-kernel programme
+  returns a \emph{subset of state space}, characterised by a fixed-point property and computed
+  by a set iteration. Theorem~\ref{thm:dual} returns a \emph{probability measure} on the
+  active boundary--disturbance bundle, finitely supported, whose existence is equivalent to
+  emptiness of the \emph{local common safe-action set} under its hypotheses.
+  This does not by itself decide membership in a global invariant kernel.
+\item \textbf{The support bound, and its tightness.} Proposition~\ref{prop:sparse} gives a
+  certificate supported on at most $k+1$ points, where $k$ is the \emph{control} dimension,
+  with tight examples shown here for $k=1,2$. Note the scaling: the witness count is governed by the dimension
+  of the instrument space, not of the state space. Nothing in the fixed-point characterisation
+  of kernels yields a finite witness of this kind.
+\item \textbf{The convexity boundary is located exactly where the kernel programme puts it,
+  from the other side.} Cardaliaguet, Quincampoix and Saint-Pierre (1994, Proposition~2.3)
+  show that under suitable convexity assumptions the discriminating kernel is
+  \emph{convex}. Proposition~\ref{prop:gap} here is the complementary negative: without
+  convexity the duality fails outright, and an explicit two-action instance exhibits a strict
+  minimax gap in which \emph{no} measure certifies. The two results are consistent and
+  together say that the convexity hypothesis is load-bearing in the strongest possible sense
+  --- it is simultaneously what makes kernels convex and what makes measure duality sound.
+\item \textbf{The certificate is one-sided and observation-constrained, by design.} The
+  discriminating-kernel programme computes a victory domain in both directions. This paper
+  certifies only the negative direction (no common safe action exists) for an information set
+  under partial observation. That restriction is what buys items~1 and~2; it is a narrowing,
+  not an improvement, and is stated as such.
+\end{enumerate}
+
+\subsection{Farkas, and linear-programming duality}
+
+The polyhedral case of Theorem~\ref{thm:dual} recovers the $\ell_{1}$-normalised Farkas
+multiplier pair exactly (Farkas, 1902), and the classical alternative is the mechanism on
+which the whole certificate rests. Farkas' lemma is an alternative for a finite system of
+linear inequalities: exactly one of a primal feasibility and a dual infeasibility certificate
+holds.
+
+The step beyond it is the measure-valued, non-polyhedral form. The classical alternative is
+finite-dimensional and static; here the dual object ranges over probability measures on a
+boundary--disturbance bundle, the emptiness being certified is that of a set of
+\emph{simultaneously} safe actions across an information set rather than of a polyhedron, and
+the recovery of the Farkas pair in the polyhedral case
+(Proposition~\ref{prop:recover}) is a consistency check on the generalisation, not the
+generalisation itself.
+
+\subsection{Isaacs, and the value-function programme}
+
+The static picture is completed by the Isaacs drift condition (Isaacs, 1965). Where the
+classical Hamilton--Jacobi--Isaacs theory produces a \emph{value} as a function of the state
+under full observation, the object here is a one-directional refutation --- a proof that no
+common instrument exists --- computed over an information set. The singleton case of
+Theorem~\ref{thm:dual} recovers the Isaacs drift with the adversarial \emph{distribution}
+over disturbances load-bearing (Proposition~\ref{prop:recover}); the distribution is what
+carries the argument, and that is why the singleton case is not merely the classical
+condition restated.
+
+\subsection{Differential games under incomplete information, on the space of measures}
+
+The closest single neighbour is the programme that lifts a zero-sum differential game with
+\emph{imperfect} information about the state onto the space of probability measures.
+Cardaliaguet and Quincampoix (2008) study the case in which the players know only a
+distribution on the initial state, and establish existence of the value through a uniqueness
+result for Hamilton--Jacobi--Isaacs equations stated on the space of measures. Both that
+work and this one are measure-valued formulations of a game under incomplete information.
+
+The aims differ. That programme establishes that a \emph{value exists}, by analytic means, in
+an infinite-dimensional setting. This paper produces a \emph{finite certificate}: a
+finitely supported measure on $k+1$ points, checkable in exact arithmetic, whose existence
+refutes the common-action property. An existence-and-uniqueness result for a value does not
+yield a finite witness, and the sparsity and tightness of
+Proposition~\ref{prop:sparse} have no analogue there. Conversely, nothing here establishes
+the existence of a value, and the paper does not claim to.
+
+\subsection{Minimax equality}
+
+That minimax equality holds for quasi-concave--convex payoffs with appropriate compactness
+and semicontinuity is classical (Sion, 1958), generalising von Neumann. The equality of
+Theorem~\ref{thm:dual} in the convex case can be read as an instance of that classical
+circle of results, and this paper makes no claim to have originated the equality.
+
+What the classical theorems do not supply is the sparse witness. Sion's theorem yields
+\emph{existence}; it says nothing about the support size of a certifying measure, and the
+$k+1$ bound of Proposition~\ref{prop:sparse} --- together with the construction showing it is
+saturated --- is not recoverable from it. Symmetrically, Proposition~\ref{prop:gap} is
+consistent with the classical theory: the minimax equality is precisely what
+\emph{fails} once the convexity hypothesis is dropped.
+
+\subsection{Verified numerics, and what is claimed}
+
+The certificate is checked in exact rational arithmetic, with independent primal and dual
+witnesses; the solver output is a confirmation, not a proof object. This is a statement about
+the pipeline, not a claim over validated-integration methods, which address problems this
+paper does not.
+
+\medskip
+
+\noindent \textbf{Claimed:} the measure form of the obstruction and its tight $k+1$ support
+bound (Theorem~\ref{thm:dual}, Proposition~\ref{prop:sparse}); the two recoveries, Farkas and
+Isaacs (Proposition~\ref{prop:recover}); the exact location of the convexity boundary with an
+explicit gap instance (Proposition~\ref{prop:gap}); the dynamic, review-sequence and
+finite-sequence envelope extensions with the tower identity and the strict-pay result
+(Theorem~\ref{thm:envelope-finite}, Proposition~\ref{prop:tower},
+Proposition~\ref{prop:strict}, Theorem~\ref{thm:general}); and exact machine verification
+across all of it.
+
+\noindent \textbf{Not claimed:} the discriminating-kernel question or its algorithm (Aubin;
+Aubin and Catt\'e; Cardaliaguet, Quincampoix and Saint-Pierre), Farkas duality, the Isaacs
+condition, minimax equality (Sion), or existence of a value under incomplete information
+(Cardaliaguet and Quincampoix). The contribution is the \emph{certificate form} --- a
+finitely supported, tightly bounded, exactly checkable measure witness --- and the
+\emph{negative boundary result} that says precisely when that form ceases to exist.
+
+\section{Conclusion}
+\label{conclusion}
+
+The common-action obstruction says that no single instrument serves every branch of an
+information set. Its polyhedral form carries a Farkas multiplier, and a Farkas multiplier is
+already a certificate: a finitely supported witness that a system of linear inequalities is
+infeasible. The question this paper asked is whether that is an accident of the polyhedral
+case or the shadow of something general. It is the latter, and the general object has a
+shape.
+
+\textbf{What the obstruction is dual to.} For control-affine dynamics with a compact convex
+control set, the common safe-action set is empty precisely when an adversarial probability
+measure on the active boundary--disturbance bundle drives the expected inward drift strictly
+negative against every control (Theorem~\ref{thm:dual}). The obstruction is therefore not
+merely a failure of a search to find a safe action; it is the existence of a \emph{witness} to
+that failure, and the witness is a measure. This is the same movement that carries linear
+programming from "the solver found nothing" to "here is a dual ray", and it carries the same
+benefit: the certificate is checkable without re-running the search, and it localises the
+failure on the active set.
+
+\textbf{What governs the size of the witness.} The bound is the substantive point. The
+certificate is supported on at most \(k + 1\) points, where \(k\) is the \emph{control}
+dimension, and that bound is tight (Proposition~\ref{prop:sparse}) --- it is attained, not
+merely approached. Neither the state dimension, nor the cardinality of the disturbance set,
+nor the resolution of any discretisation appears in it. So the complexity of certifying
+nonviability is governed by how many independent controls the agent has, not by how large the
+world it operates in is. A companion paper reaches an analogous conclusion for a different
+pipeline: there the count is the information--time product rather than the input dimension
+(Abaee, 2026, computational certification). The two are the same finding in different
+languages, and the recurrence is the point --- \emph{obstruction certificates are small
+objects whose size is set by the decision variables, not by the uncertainty.} That is what
+makes them usable.
+
+\textbf{What the two recoveries establish.} The polyhedral case recovers the
+\(\ell_{1}\)-normalised Farkas multiplier and the game case recovers the Isaacs condition
+(Proposition~\ref{prop:recover}). Neither is a consistency check; each says that a classical
+duality is a specialisation of this one, obtained by restricting the bundle. The measure form
+is thus not a third thing alongside Farkas and Isaacs duality but the common generalisation
+from which both drop out --- which is the sense in which it is the \emph{dual of the
+obstruction} rather than a dual of one of its presentations.
+
+\textbf{What the boundary result delimits.} The certificate form is not universal, and the
+paper locates precisely where it stops rather than leaving that to be discovered: the convexity
+boundary is identified exactly, with an explicit gap instance on the other side of it
+(Proposition~\ref{prop:gap}). Knowing when a certificate cannot exist is as much a part of the
+contribution as knowing what it looks like where it does, because it converts a silent failure
+into a diagnosed one.
+
+\textbf{Scope, restated once.} Claimed here is the certificate form and the negative boundary,
+together with the dynamic, review-sequence and finite-sequence envelope extensions and their
+exact machine verification. Not claimed are the discriminating-kernel question and its
+algorithm, Farkas duality, the Isaacs condition, minimax equality, or the existence of a value
+under incomplete information --- all of which are assumed, cited, or deliberately outside the
+frame. The contribution is a \emph{form}: a finitely supported, tightly bounded, exactly
+checkable measure witness to nonviability, and a statement of when that form ceases to exist.
+
+\section{References}
+%% ------------------------------------------------------------------
+%% Added 2026-09-29 to support section \ref{priorart}. All VERIFIED against
+%% publisher records (journal, volume, pages, year confirmed):
+%%   Aubin 1991, Viability Theory, Birkhauser Boston
+%%   Aubin & Catte 2002, Set-Valued Anal. 10, 379-416 (doi 10.1023/A:1020667819804)
+%%   Cardaliaguet, Quincampoix & Saint-Pierre 1994, RAIRO Modelisation Math.
+%%     Anal. Numer. (M2AN) 28(4), 441-461  -- the discriminating-kernel ALGORITHM
+%%     paper; its Prop 2.3 is the convexity-of-kernel result this paper's
+%%     prop:gap is the complement of.
+%%   Cardaliaguet, Quincampoix & Saint-Pierre 2007, in Advances in Dynamic Game
+%%     Theory, Ann. ISDG 9, 3-35, Birkhauser Boston
+%%   Cardaliaguet & Quincampoix 2008, Int. Game Theory Rev. 10(1), 1-16 --
+%%     value via HJI ON THE SPACE OF MEASURES under probability knowledge of the
+%%     initial condition. The single closest neighbour.
+%%   Sion 1958, Pacific J. Math. 8(1), 171-176 (doi 10.2140/PJM.1958.8.171)
+%% NOTE ON AUTHOR NAMES: it is Aubin and CATTE (accented), not "Catte".
+%%   Do not strip the accent.
+%% NOTE ON A DROPPED CLAIM: an earlier roadmap note attributed to Aubin (2001)
+%%   the "complement of the kernel -- Poincare's shadow". That attribution could
+%%   NOT be verified and is NOT asserted here. Aubin (2001) is cited only for
+%%   the verified fixed-point characterisation of kernels and capture basins.
+%% ------------------------------------------------------------------
+Aubin, J.-P., 1991. \emph{Viability Theory}. Systems and Control: Foundations and
+Applications. Birkh\"auser Boston, Boston, MA.
+
+Aubin, J.-P., 2001. Viability kernels and capture basins of sets under differential
+inclusions. \emph{SIAM Journal on Control and Optimization} \textbf{40}(3), 853--881.
+
+Aubin, J.-P. and Catt\'e, F., 2002. Bilateral fixed-points and algebraic properties of
+viability kernels and capture basins of sets. \emph{Set-Valued Analysis} \textbf{10},
+379--416.
+
+Cardaliaguet, P. and Quincampoix, M., 2008. Deterministic differential games under
+probability knowledge of initial condition. \emph{International Game Theory Review}
+\textbf{10}(1), 1--16.
+
+Cardaliaguet, P., Quincampoix, M. and Saint-Pierre, P., 1994. Some algorithms for differential
+games with two players and one target. \emph{RAIRO -- Mod\'elisation Math\'ematique et Analyse
+Num\'erique} \textbf{28}(4), 441--461.
+
+Cardaliaguet, P., Quincampoix, M. and Saint-Pierre, P., 2007. Differential games through
+viability theory: old and recent results. In: J\o rgensen, M., Quincampoix, M. and Vincent,
+T.L. (eds), \emph{Advances in Dynamic Game Theory}, Annals of the International Society of
+Dynamic Games vol.\ 9, pp.\ 3--35. Birkh\"auser Boston.
+
+Sion, M., 1958. On general minimax theorems. \emph{Pacific Journal of Mathematics}
+\textbf{8}(1), 171--176.
+
+
+Abaee, A., 2026. Robust viability of the 2J3KL limit reference point
+under a surplus-production map: policy scoring, expansion, and when catch
+cannot help. Zenodo. \url{https://doi.org/10.5281/zenodo.22552060}
+
+Abaee, A., 2026. An Obstruction Calculus for Viability under Incomplete Observation. Figshare preprint, version 2. \url{https://doi.org/10.6084/m9.figshare.33716593.v2}.
+
+Abaee, A., 2026. Obstruction certificates under incomplete observation. Revised paper01 manuscript candidate (Open Problem~1); no Preprints.org DOI assigned.
+
+Abaee, A., 2026. Exact audits of worked systems for the obstruction calculus:
+counts, witnesses, and monitoring design rules (manuscript candidate).
+
+Farkas, J., 1902. Theorie der einfachen Ungleichungen. J.\ Reine Angew.
+Math. 124, 1--27.
+
+
+Beiglb\"ock, M., Henry-Labord\`ere, P., Penkner, F., 2013.
+Model-independent bounds for option prices --- a mass transport approach.
+Finance and Stochastics 17, 477--501.
+
+Chv\'{a}tal, V., 1983. Linear Programming. A Series of Books in the
+Mathematical Sciences. W.~H. Freeman, New York.
+
+Helly, E., 1923. \"Uber Mengen konvexer K\"orper mit gemeinschaftlichen
+Punkten. J.~Deutsche Math.-Ver. 32, 175--176.
+
+Isaacs, R., 1965. Differential Games: A Mathematical Theory with
+Applications to Warfare and Pursuit, Control and Optimization. Wiley,
+New York.
+
+Abaee, A., 2026. Probabilistic sufficiency for the obstruction calculus:
+belief-state safety values under partial observation (manuscript candidate).
+
+\section*{Declarations}
+\textbf{Funding.} None.\quad \textbf{Competing interests.} None.\quad
+\textbf{Data availability.} No external data were used.\quad
+\textbf{Code availability.} The verification script
+\texttt{minimax\_dual\_certificates\_v6\_verify.py} is publicly available
+at \url{https://github.com/MIKEAA2020/general-sustainability} (folder
+\texttt{arena agent 1/paper rewrites/latex}); it reproduces every check family verbatim. The cross-paper certificate
+exchange parser (\texttt{certificate\_exchange\_v1.py}) validates the
+archived dual certificate of this paper and of the certification companion
+exactly, in either direction.\quad
+\textbf{AI declaration.} GLM (Z.ai), Qwen (Alibaba Cloud) and DeepSeek AI
+assisted with drafting and iterative review. The author reviewed and
+edited all outputs and takes responsibility for the final work.
+
+\end{document}

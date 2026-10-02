@@ -1,0 +1,62 @@
+--- papers/paper01_obstruction_calculus_v63.tex
++++ papers/paper01_obstruction_calculus_v64.tex
+@@ -6,7 +6,7 @@
+ % Partition note: Single-source. The theory core: obstruction certificates, the necessity direction.
+ %% STATUS: structurally assembled as a NEW version. Editorial integration
+ %%         (de-duplication of shared framework, sibling cross-citations)
+-%%         is NOT yet done. See PAPERS_MANIFEST.md.
++%%         was reviewed for this editorial version; see the editorial change log.
+ %% ============================================================
+ 
+ %% v60 (2026-09-29): added subsection 3.8, mechanized verification of the discrete
+@@ -1165,7 +1165,7 @@
+ 
+ \end{proposition}
+ 
+-\emph{Proof sketch (construction).} Take \(X = [1,2]\), \(\dot S = u - r(S)\) with \(r\) continuous and injective, \(U(S) = \{0, r(S)\}\), \(\mathcal{V} = [1,2]\), and the constant observation \(O \equiv 0\). Under full information \(u = r(S)\) gives \(\dot S = 0\), so every state is viable. Under \(O \equiv 0\) the common control set over the fibre is \(\{0\}\) --- injectivity of \(r\) rules out a common \(r(S)\) --- so the policy must hold \(u = 0\), and \(\dot S = -r(S) < 0\) drives every compatible trajectory out of \(\mathcal{V}\) in finite time.
++\emph{Proof sketch (construction).} Take \(X = [1,2]\) with dynamics \(\dot S = u - r(S)\), and choose \(r(S)=S\) (continuous, injective, and bounded below by \(1\) on \([1,2]\)). Set \(U(S) = \{0, S\}\), \(\mathcal{V} = [1,2]\), and the constant observation \(O \equiv 0\). Under full information \(u = r(S)\) gives \(\dot S = 0\), so every state is viable. Under \(O \equiv 0\) the common control set over the fibre is \(\{0\}\) --- the only action shared by all \(U(S)\) is zero --- so every observation-based policy must hold \(u=0\). Then \(S(t)=S(0)e^{-t}\) crosses the lower boundary at \(t=\log S(0)\le\log 2\) for \(S(0)>1\), and leaves immediately from \(S(0)=1\).
+ 
+ The construction is the minimal instance of Theorem~\ref{calc-thm:common-action}'s admissibility mechanism --- with a constant control set in the same plant the fibre is epistemically viable --- so the empty-kernel phenomenon is epistemic rather than dynamic; the complete isolation of the mechanism is given in the Supplementary Material (S1).
+ 
+@@ -1266,7 +1266,7 @@
+ continuous-time characterization of the recourse mode remains open
+ (Section 6.5(ii)).
+ 
+-\subsubsection{3.7 A worked case: an exact obstruction on a continuum}
++\subsubsection{3.8 A worked case: an exact obstruction on a continuum}
+ \label{calc-worked-case}
+ 
+ The calculus is motivated by the regime in which the epistemic kernel cannot be computed.
+@@ -1332,7 +1332,7 @@
+ that is in principle undecidable. For the limits of what certificate pairs can decide in the
+ dynamic two-phase model, see Proposition~\ref{calc-prop:window-nogo}.
+ 
+-\subsubsection{3.8 Mechanized verification of the discrete core}
++\subsubsection{3.9 Mechanized verification of the discrete core}
+ \label{calc-mech}
+ 
+ The results above are proved by hand. The discrete core of the calculus is
+@@ -1363,21 +1363,8 @@
+ (\texttt{finite\_horizon\_sound}, \texttt{tree\_sound}, \texttt{Wk\_antitone},
+ \texttt{Wk\_descending}, \texttt{preOp\_mono}, \texttt{commonSafe}); the remainder depend
+ only on \texttt{Classical.choice}, \texttt{propext} and \texttt{Quot.sound}, the standard
+-axioms of Lean's classical logic. \texttt{sorryAx} appears nowhere.
+-\noindent\textbf{Verification provenance.} The project is pinned to Lean~4 in
+-\texttt{lean-toolchain} (currently \texttt{v4.34.1}). The mechanized checks reported in this
+-section were run under \texttt{v4.14.0}. On 2026-09-30 the source-level invariants were
+-re-verified against the current tree: a comment-stripped scan of all \texttt{.lean} files in
+-the project finds no \texttt{sorry}, \texttt{admit}, \texttt{axiom} or \texttt{constant}
+-declaration anywhere, and the declaration counts and named declarations quoted below were
+-re-counted and confirmed present. \textbf{The build has not been re-run since the toolchain
+-pin moved}, so the build-job figures below date from the \texttt{v4.14.0} run and should be
+-re-confirmed before submission.
+- A source-level scan
+-with comments stripped finds no \texttt{sorry}, \texttt{admit} or \texttt{axiom}
+-declaration anywhere in the formalization layer; the only modifier present is
+-\texttt{noncomputable}, which marks a definition as using classical choice and is not a
+-gap.
++axioms of Lean's classical logic. \texttt{sorryAx} is absent from the checked P1 declarations and the audited aggregate-import footprints; project-wide generated dependencies are disclosed below.
++\noindent\textbf{Current Lean provenance.} The committed project pin \texttt{v4.34.1} was rebuilt in GitHub Actions (default Lake target: \(60/60\) jobs, exit~0; \url{https://github.com/MIKEAA2020/general-sustainability/actions/runs/36946730855}). The exact project source and two footprint-check \texttt{.lean} files are archived with SHA-256 manifests. A comment-aware scan of all \(62\) source files finds no \texttt{sorry}, \texttt{admit}, explicit \texttt{axiom} or \texttt{constant} declaration. Twenty-one named footprints contain no \texttt{sorryAx}; the aggregate-import environment exposes three source-level \texttt{native\_decide} uses in the P3 support/value examples, yielding nine distinct generated axiom names under this pin. These are executable computational certificates that extend kernel-only trust to the Lean compiler/runtime; they are not admitted gaps and must not be described as zero axioms or as kernel-only proofs. Three preserved historical modules outside the aggregate import closure are not certified by the default build. The pinned declared-exceptions gate passed in GitHub Actions (run 36990482599): only the nine exact generated names from three approved P3 source sites are permitted; any change to those sites or names requires separate review and re-approval. The separate strict zero-exception check exits 2 by design, while the build itself passed 60/60; the two verdicts must not be conflated. The v4.14.0 comparison of the \emph{current} source fails in the prelude and does not reproduce the old source run.
+ 
+ \paragraph{Two scope limits, stated plainly.}
+ 

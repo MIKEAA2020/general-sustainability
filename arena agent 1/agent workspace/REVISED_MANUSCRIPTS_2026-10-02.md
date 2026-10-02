@@ -1,0 +1,29 @@
+# Revised manuscript versions — 2 October 2026
+
+**Local review package, not a submission.** New TeX/PDF versions correct the actionable findings in *both* editorial reports while retaining all previous heads. For the evidence, per-paper changes, isolated Lean-prose promotion and remaining limitations, see the [promotion and verification checklist](content_audit/editorial_revisions/PROMOTION_CHECKLIST_2026-10-02.md). The [final per-version diffs](content_audit/editorial_revisions/final_diffs/) and [scoped checks](content_audit/editorial_revisions/CLAIM_CHECK_RESULTS.json) are in the same audit folder.
+
+| Unit | New live version | New staged version |
+|:--|:--|:--|
+| 01 · Obstruction calculus | [PDF](papers/paper01_obstruction_calculus_v64.pdf) · [TeX](papers/paper01_obstruction_calculus_v64.tex) | [PDF](paper%202%20family/01_obstruction/paper01_obstruction_calculus_v64.pdf) · [TeX](paper%202%20family/01_obstruction/paper01_obstruction_calculus_v64.tex) |
+| 02 · Probabilistic sufficiency | [PDF](papers/paper02_probabilistic_sufficiency_v13.pdf) · [TeX](papers/paper02_probabilistic_sufficiency_v13.tex) | [PDF](paper%202%20family/02_probabilistic_sufficiency/paper02_probabilistic_sufficiency_v13.pdf) · [TeX](paper%202%20family/02_probabilistic_sufficiency/paper02_probabilistic_sufficiency_v13.tex) |
+| 03 · Computational certification | [PDF](papers/paper03_computational_certification_v17.pdf) · [TeX](papers/paper03_computational_certification_v17.tex) | [PDF](paper%202%20family/03_computational_certification/paper03_computational_certification_v17.pdf) · [TeX](paper%202%20family/03_computational_certification/paper03_computational_certification_v17.tex) |
+| 04 · Minimax certificates | [PDF](papers/paper04_minimax_dual_certificates_v17.pdf) · [TeX](papers/paper04_minimax_dual_certificates_v17.tex) | [PDF](paper%202%20family/04_minimax_dual_certificates/paper04_minimax_dual_certificates_v17.pdf) · [TeX](paper%202%20family/04_minimax_dual_certificates/paper04_minimax_dual_certificates_v17.tex) |
+| 05 · Exact belief computation | [PDF](papers/paper05_exact_belief_computation_v17.pdf) · [TeX](papers/paper05_exact_belief_computation_v17.tex) | [PDF](paper%202%20family/05_exact_belief_computation/paper05_exact_belief_computation_v17.pdf) · [TeX](paper%202%20family/05_exact_belief_computation/paper05_exact_belief_computation_v17.tex) |
+| 06 · Assessment separation | [PDF](papers/paper06_assessment_separation_v68.pdf) · [TeX](papers/paper06_assessment_separation_v68.tex) | — live-only finding |
+| 07 · Sampled governance | [PDF](papers/paper07_sampled_governance_v51.pdf) · [TeX](papers/paper07_sampled_governance_v51.tex) | — live-only finding |
+| 08 · Governance delay composite | [PDF](papers/paper08_governance_delay_v47.pdf) · [TeX](papers/paper08_governance_delay_v47.tex) | — live-only finding |
+| 09 · Cod/Edwards certification | [PDF](papers/paper09_cod_certification_v33.pdf) · [TeX](papers/paper09_cod_certification_v33.tex) | [PDF](paper%202%20family/09_cod_with_arv/paper09_cod_certification_v33.pdf) · [TeX](paper%202%20family/09_cod_with_arv/paper09_cod_certification_v33.tex) |
+| 09b · Separate exact-rational cod companion | [PDF](papers/paper09b_arv_certification_v3.pdf) · [TeX](papers/paper09b_arv_certification_v3.tex) | [PDF](paper%202%20family/09_cod_with_arv/paper09b_arv_certification_v3.pdf) · [TeX](paper%202%20family/09_cod_with_arv/paper09b_arv_certification_v3.tex) |
+| 11 · Forecasting baselines | [PDF](papers/paper11_forecasting_baselines_v65.pdf) · [TeX](papers/paper11_forecasting_baselines_v65.tex) | [PDF](paper%202%20family/11_forecasting_baselines/paper11_forecasting_baselines_v65.pdf) · [TeX](paper%202%20family/11_forecasting_baselines/paper11_forecasting_baselines_v65.tex) |
+| 11c · Worked systems | [PDF](papers/paper11c_worked_systems_audit_v3.pdf) · [TeX](papers/paper11c_worked_systems_audit_v3.tex) | [PDF](paper%202%20family/11c_worked_systems/paper11c_worked_systems_audit_v3.pdf) · [TeX](paper%202%20family/11c_worked_systems/paper11c_worked_systems_audit_v3.tex) |
+
+**Attachments to carry with their main texts:**
+
+- 01 proof supplement: [live PDF](papers/paper01_obstruction_calculus_v64_supplementary.pdf), [staged PDF](paper%202%20family/01_obstruction/paper01_obstruction_calculus_v64_supplementary.pdf).
+- 03 verification supplement: [live PDF](papers/paper03_computational_certification_v17_supplementary.pdf), [staged PDF](paper%202%20family/03_computational_certification/paper03_computational_certification_v17_supplementary.pdf).
+- 05 five-cube enumeration: [live artifact README](papers/artifacts/ebc_fivecube/README.md), [staged artifact README](paper%202%20family/05_exact_belief_computation/artifacts/ebc_fivecube/README.md), including separate scripts and dated logs. This is **not** a Lean proof of the five-cube result.
+- 06: [live Markdown supplement](papers/paper06_assessment_separation_v68_supplementary.md).
+- 08: [continuous-delay Markdown supplement](papers/paper08_governance_delay_v47_supplementary_delay.md) **and** [sampled-governance Markdown supplement](papers/paper08_governance_delay_v47_supplementary_governance.md); these are distinct S-section namespaces.
+- 11: [live recovered cod SI-1–SI-5](papers/paper11_forecasting_baselines_v65_SI.md), [staged SI](paper%202%20family/11_forecasting_baselines/paper11_forecasting_baselines_v65_SI.md), [source provenance and hash](papers/paper11_forecasting_baselines_v65_SI_PROVENANCE.md). The SI is an unchanged archived source, not newly written scientific evidence.
+
+**Checks:** 25/25 versioned TeX mains/supplements compiled with actual source figures; 16/16 scoped source-year xteNCAM checks on *each* v33 main; 22/22 editorial attachment/claim checks. These do not imply approval of every scientific claim. No push, DOI, deposit, or portal submission occurred.

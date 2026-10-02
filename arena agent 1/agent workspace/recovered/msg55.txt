@@ -1,0 +1,44 @@
+v38: README v14 + audit v38 - prop:ladder closed, DetMDP resolved, two corrections
+
+prop:ladder is complete on the EBC side. EBC_Ladder fixed the shape -
+set survivability as survivesSetAt (one in-alphabet policy of L actions
+keeping every member at or above the floor), which is P3's SurvivableAdm
+M S k verbatim - so heredity is one line and P3's VfamAdm_prune_eq
+(value = max over the maximal jointly survivable sets) supplies the value
+formula in the identical form. EBC_Ladder_v2 completed the cardinality
+facts that formula consumes:
+
+  heredity                                  survivesSetAt_mono
+  at the floor all members agree, M = 1     floor_survivable_all_agree
+  above the edge every pair adjacent, M<=2  pairs_adjacent_above
+  no three pairwise-distinct above          no_three_distinct_above
+  singleton or adjacent pair                survivor_is_singleton_or_adjacent_pair
+  M = 2 attained                            adjacent_pair_survives
+  subcube with a free coordinate            subcube_adjacent_pair
+  probe as index restriction                inSubcube, flip
+
+With value = M/|S| that is 1/|S| at the edge and min(1, 2/|S|) above it:
+the paper's two rows, |S| symbolic. pairs_adjacent_above is where the
+horizon bound earns its keep - far_pair_horizon_bound caps a distance-2
+pair at 10*(z0-1) <= 1 steps when z0 <= 1.1, so no such pair reaches a
+horizon of two or more.
+
+The DetMDP instantiation is resolved rather than left open, by the
+paper's wording. The rule is the paper's claim: type-identity ("is an
+instance of") would require it, shape-equivalence ("has the same value
+form") would not. prop:ladder's proof (ll. 266-282) says the companion
+theory's antichain formula "makes the kernel value of a prior the maximal
+survivable-set mass it charges" - it APPLIES the companion formula and
+never asserts the ladder is an instance of VfamAdm. So: no DetMDP.
+Building one would add mechanism without adding a theorem. Recorded as a
+structural bridge, to revisit only if a future edition claims
+type-identity.
+
+README v14 also carries two corrections, because acting on the stale
+versions would waste work:
+  * prop:bands closed at 2bf7d4b - all four clauses. It is not open,
+    and the RatArith helper that made its clauses cheap predates it.
+  * The README was one push stale, not four: v13 landed at 41d7079 and
+    only the EBC_Ladder push had followed.
+
+Build 57 -> 59 jobs, 51 -> 53 modules.

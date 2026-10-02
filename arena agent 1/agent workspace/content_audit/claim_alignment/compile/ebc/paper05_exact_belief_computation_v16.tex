@@ -1,0 +1,1045 @@
+% ============================================================
+% PAPER 5 of 11 -- exact_belief_computation
+% Assembled 2026-09-29 by content-and-merits partition.
+% Title: Exact Belief Computation on the Observation Ladder
+% Source: arena agent 1/paper rewrites/latex/paper2_exact_belief_computation_v13.tex
+% Partition note: Single-source. Short self-contained result: Hamming classification and the antichain census.
+%% STATUS: structurally assembled as a NEW version. Editorial integration
+%%         (de-duplication of shared framework, sibling cross-citations)
+%%         is NOT yet done. See PAPERS_MANIFEST.md.
+%% ============================================================
+
+%% v12 (2026-09-29): (a) SCOPE DECISION RESOLVED -- expand, do not fold into paper 3.
+%%   Paper 3 CITES this paper as "the exact-computation companion"; folding would join
+%%   two different mathematical cores and break that citation.
+%% (b) 'ebc' identification CONFIRMED, moderate->high: 16 Lean modules named EBC_*
+%%   (Bands/Classification/Deadline/Dynamics/ExactBelief/Hamming/Ladder/Pairs) in
+%%   namespace Formalizations.EBC map onto this paper's own sections.
+%% (c) 'Scale II' relation RESOLVED: the parent theory (belief-state safety value
+%%   V_k(b)) is paper2_belief_state_v2 -- paper 2 of this set in its later form,
+%%   32.6%% of its sentences appear verbatim in paper02. Stated in the text.
+%% (d) Added subsection priorart: concedes Sperner/Dedekind/Kleitman and Hamming
+%%   adjacency as classical, states this paper proves NO new theorem about
+%%   antichains, narrows the claim to four items. Added subsection mech (16 EBC
+%%   modules, historically reported as 134 bare theorem headers; see the
+%%   corrected 138-declaration census below. Census enumeration is NOT Lean-formalized.
+%% (e) Markups are \subsection to match this paper (it uses no \section).
+%% PRIOR ART AND SCOPE REQUIRED -- bar item, inserted 2026-09-29.
+%% This is the shortest paper in the family (~3.6k words) with no related-work
+%% position, and it is the furthest from "substantial methodological development".
+%% Two things must happen before it can stand:
+%%   (i) PRIOR ART: exact and rational-arithmetic computation of viability
+%%       objects -- Saint-Pierre's kernel algorithms and their successors -- and
+%%       the combinatorial content, i.e. Sperner and antichain bounds on the
+%%       observation ladder. The antichain census needs a comparator.
+%%   (ii) SCOPE: at this length it is a short-format result. Either expand it
+%%       beyond the cube instance to the general case, or fold it into Paper 3,
+%%       which is the other computational paper. Decide before submission; do not
+%%       submit at this length with neither done.
+
+% SIBLING PAPERS: Paper 1 (Obstruction Certificates under Incomplete Observation), Paper 2 (Exact Probabilistic Sufficiency), Paper 3 (Computational Certification of Obstruction), Paper 4 (Minimax Dual Certificates).
+% Cross-cite, do not re-derive: the selector principle, the epistemic kernel
+% and the observation structure are defined in Paper 1. Papers 2-5 cite it.
+
+% SIBLING PAPERS: Paper 1 (Obstruction Certificates under Incomplete Observation), Paper 2 (Exact Probabilistic Sufficiency), Paper 3 (Computational Certification of Obstruction), Paper 4 (Minimax Dual Certificates).
+% Cross-cite, do not re-derive: the selector principle, the epistemic kernel
+% and the observation structure are defined in Paper 1. Papers 2-5 cite it.
+
+% RESOURCED 2026-09-29: previous assembly (v10) was built from _v9 of this source,
+%   4 versions behind. Re-assembled against paper2_exact_belief_computation_v13.tex. Content is a superset:
+%   no labels dropped. See VERSION_CURRENCY.md.
+
+\documentclass[10pt,twocolumn]{article}
+\usepackage[a4paper,margin=15mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{amsthm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\usepackage{booktabs,array,calc}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[colorlinks=true]{hyperref}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\emergencystretch=3em
+\allowdisplaybreaks
+\usepackage{graphicx}
+
+
+\begin{document}
+\title{Exactness is not the limitation: belief-state computation at scale and the audits that bind the obstruction calculus to its worked systems}
+
+% Restored verbatim from paper05 v14 (source author block).
+\author{Amin Abaee\\[0.35em]
+{\small Independent Researcher, Tehran, Iran}\\[0.55em]
+{\small\href{https://orcid.org/0000-0002-0019-1842}{ORCID: 0000-0002-0019-1842}}\\[0.3em]
+{\small\href{mailto:amin\_abaee@ut.ac.ir}{amin\_abaee@ut.ac.ir}}}
+\maketitle
+
+\begin{abstract}
+This paper pushes the exact discipline of belief-state safety values into the curse-of-dimensionality regime: a four-parameter cube with
+\(2^{4} = 16\) hidden-parameter cells on \(16\) stock levels ---
+\(256\) augmented cells, \(17\) controls, every computation in exact
+integer and rational arithmetic. The structure is classified
+completely. A pairwise-Hamming lemma (every pair of distinct actions
+sums, over any two parameter cells, to at most twice their agreement
+count) forces every blind survivable set to consist of
+Hamming-adjacent cells, and no three cells of the four-cube are
+pairwise adjacent: no blind policy of any period keeps three or more
+cells safe. The bands are exact: \(16\) maximal singletons at the
+floor's edge, exactly the \(32\) Hamming-adjacent pairs at every level
+above it (the matched--singly-mismatched alternation rises at net
+\(\tfrac15\) per two steps with a \(\tfrac1{10}\) dip). The
+observation ladder doubles: each additional exact probe of one
+parameter doubles the conditional kernel mass ---
+\(\tfrac1{16} \to \tfrac18 \to \tfrac14 \to \tfrac12 \to 1\) at the
+edge, \(\tfrac18 \to \tfrac14 \to \tfrac12 \to 1 \to 1\) above it ---
+so three probes exhaust observation above the edge. Exact point-based
+evaluation is verified against definition-level enumeration at seven
+rational beliefs, three levels, four horizons; the four-step alpha-set
+deduplicates \(83{,}521\) action sequences to at most \(857\) distinct
+outcome vectors on the tested levels (\(545\) at \(z_0=2.5\)). The antichain census is the headline: \(1{,}048{,}576\) raw subset evaluations collapse to \(496\) stored maximal sets. The instance is then enlarged to five parameters (Section~\ref{scale-fivecube}), where the classification changes qualitatively and is given completely: the maximal blind-survivable sets are the \(32\) radius-one Hamming balls at every level, plus \(80\) four-cell sets appearing from \(z_{0} \ge 1.3\), so that \(16 \times 2^{32} = 68{,}719{,}476{,}736\) raw subsets collapse to \(1{,}552\) stored sets. The raw lattice grows \(65{,}536\times\) against a \(3.13\times\) growth in the stored object, improving compression by four orders of magnitude; and the pairwise-Hamming instrument, sharp at four parameters, is shown necessary but no longer sufficient at five. A third instance of the theory's additive deadline law closes the paper (threshold \(1 + T/2\), zero probe excursion).
+\end{abstract}
+
+\textbf{Keywords:} exact computation; partially observable control;
+zero-suppressed sets; survivable sets; Hamming structure; observation
+design; antichain compression
+
+\part*{Part I --- Exact belief-state computation at scale}
+\label{part:scale}
+\addcontentsline{toc}{part}{Part I --- Computation at scale}
+
+\subsection{Introduction}\label{scale-introduction}
+
+Two working disciplines govern the exact treatment of belief-state safety values: evaluate exactly where you probe, and store the antichain of maximal survivable sets rather than the lattice (Abaee, 2026, An obstruction calculus). This paper asks whether the exact discipline survives the curse of dimensionality, and what new structure appears there. On the instance studied here the answer is affirmative, and the structure changes: the four-parameter cube is not a larger version of the two-parameter instance but a different regime. The cube is the paper's running instance; every structural claim below is instantiated on it.
+Its survivable sets are governed by Hamming adjacency rather than by
+coordinate matching; its observation ladder is geometric rather than
+one-shot; and its raw subset lattice (\(2^{16}\) per level) is four
+orders of magnitude larger than its stored antichain. All claims below
+are regenerated by the paper's verification script in exact integer
+and rational arithmetic, standard library only. The contributions are:
+the pairwise-Hamming classification of the cube's survivable-set
+structure (Section \ref{scale-hamming}); the exact observation-ladder
+doubling and the point-based evaluation at four parameters (Sections
+\ref{scale-ladder}--\ref{scale-census}); and the antichain census with the
+audited-structure classification and the deadline instance (Sections
+\ref{scale-glance}--\ref{scale-deadline}).
+
+\subsection{The cube instance}\label{scale-instance}
+
+The cube's local vocabulary (\(z\), \(z_{0}\), \(T\), the cell
+structure) is disjoint from the companion papers' colliding letters;
+the horizon \(T\) carries the same meaning as the certification
+companion's \(J_{\mathcal{I}}(T)\). The state is \((z, \theta)\) with stock \(z\) on the grid
+\(z_{0} \in \{1.0, 1.1, \dots, 2.5\}\) and hidden parameter
+\(\theta = (\theta_{1}, \theta_{2}, \theta_{3}, \theta_{4}) \in
+\{+1, -1\}^{4}\): \(16\) parameter cells on \(16\) levels, \(256\)
+augmented cells. Controls are \(u \in \{+1,-1\}^{4} \cup \{(0,0,0,0)\}\)
+(\(17\) actions), and the one-step drift is
+\[
+\dot z \;=\; d(u, \theta) \;=\; -\tfrac12
+\;+\; \tfrac15\,\textstyle\sum_{i=1}^{4} u_{i}\theta_{i}:
+\]
+the matched action \(u = \theta\) rises at \(+\tfrac3{10}\); a single
+mismatch gives \(-\tfrac1{10}\), two give \(-\tfrac12\), three give
+\(-\tfrac9{10}\), the antimatched action \(-\tfrac{13}{10}\), and the
+hold action \(-\tfrac12\) for every cell. The floor is \(z \ge 1\).
+The sum over all sixteen cells of any action's drifts is \(-8\) per
+step: the cube as a whole always declines, and the blind controller
+declared here sees no observation of \(\theta\).
+
+\subsection{The pairwise-Hamming classification}\label{scale-hamming}
+
+\begin{lemma}[pair-sum bound and its survival cost]\label{scale-lem:pairsum}
+Fix the dimension \(m \ge 1\), cells \(\theta, \theta' \in
+\{+1,-1\}^{m}\) at Hamming distance \(h\), the action set
+\(U = \{+1,-1\}^{m} \cup \{(0,\dots,0)\}\), the drift
+\(d(u, \theta) = -\tfrac12 + \tfrac15\langle u, \theta\rangle\),
+the floor \(z \ge 1\), and the blind class: one action sequence for
+every parameter branch, of any period and possibly aperiodic. Then:
+(i) for every \(u \in \{+1,-1\}^{m}\),
+\(\langle u, \theta\rangle + \langle u, \theta'\rangle
+\le 2\,(m - h)\), and the hold action gives \(0\) for every pair;
+(ii) if a blind policy keeps both cells above the floor indefinitely,
+then the pair's long-run average inner product satisfies
+\(\liminf_{T \to \infty} \frac1T \sum_{t < T}
+\bigl(\langle u_{t}, \theta\rangle + \langle u_{t},
+\theta'\rangle\bigr) \ge 5\).
+\end{lemma}
+
+\begin{proof}
+(i) The coordinates split into \(m - h\) agreements and \(h\)
+disagreements; on an agreement \(u_{i}\theta_{i} = u_{i}\theta'_{i}
+\le 1\) and on a disagreement the two terms cancel, so the sum is
+\(2 \sum_{\text{agree}} u_{i}\theta_{i} \le 2(m-h)\); the hold
+action gives \(0\) termwise. (ii) Survival of cell \(\theta\) means
+\(z_{0} + \sum_{t < T} d(u_{t}, \theta) \ge 1\) for every \(T\);
+dividing by \(T\) and passing to the limit, the Ces\`aro average of
+the drifts has \(\liminf \ge 0\), and since
+\(d(u_{t}, \theta) = -\tfrac12 + \tfrac15\langle u_{t},
+\theta\rangle\), the \(\liminf\) of the average of
+\(\langle u_{t}, \theta\rangle\) is at least
+\(\tfrac52\); the same holds for \(\theta'\), and the two
+\(\liminf\)s add. For a periodic policy the average is the exact
+cycle average and no \(\liminf\) is needed.
+\end{proof}
+
+\begin{corollary}[the cube's pairs are Hamming-adjacent]
+\label{scale-cor:hamming}
+At \(m = 4\): (ii) forces the pair average to reach \(5\) while (i)
+caps it at \(2(4 - h)\), so \(5 \le 2(4 - h)\), i.e.\
+\(h \le \tfrac32\): every blind survivable pair has \(h \le 1\),
+and since survivability passes to subsets, every pair inside a blind
+survivable set is Hamming-adjacent. In general the argument gives
+\(h \le m - \tfrac52\) (Remark~\ref{scale-rem:scope}).
+\end{corollary}
+
+\begin{lemma}[no adjacency triangles]\label{scale-lem:triangle}
+No three distinct cells of \(\{+1,-1\}^{m}\) (any \(m\)) are
+pairwise at Hamming distance \(1\). Hence every blind survivable set
+at \(m = 4\) has at most two members, under every blind policy ---
+any period, and no period at all. The bound (i) of
+Lemma~\ref{scale-lem:pairsum} is verified for all \(120\) cell pairs and
+all \(17\) actions at \(m = 4\) (and for all \(496\) pairs and
+\(33\) actions at \(m = 5\)), and
+Lemma~\ref{scale-lem:triangle} over all \(\binom{16}{3} = 560\) triples, by the verification script.
+\end{lemma}
+
+\begin{proof}
+Flip coordinates so that the first cell is \(\mathbf{1}\) (flips
+preserve all Hamming distances). A second cell at distance \(1\) is
+\(\mathbf{1}\) with exactly one coordinate \(i\) flipped. A third
+distinct cell at distance \(1\) from \(\mathbf{1}\) is
+\(\mathbf{1}\) with exactly one coordinate \(j\) flipped: if
+\(j = i\) it is the second cell, and if \(j \neq i\) the two differ
+from each other in the two coordinates \(i, j\), so their Hamming
+distance is \(2\). No triangle exists. (Equivalently: the hypercube
+is bipartite by coordinate parity, so it has no odd cycle.)
+\end{proof}
+
+\begin{proposition}[bands and maximality]\label{scale-prop:bands}
+A singleton \(\{\theta\}\) is survivable from every \(z_{0} \ge 1\)
+(matched play rises at \(+\tfrac3{10}\)). A Hamming-adjacent pair
+\(\{\theta, \theta'\}\) is survivable exactly from
+\(z_{0} \ge 1.1\): the alternation \((\theta, \theta')\) gives each
+member drifts \(+\tfrac3{10}, -\tfrac1{10}\) per two steps --- net
+\(+\tfrac15\) with a within-cycle dip of \(\tfrac1{10}\) --- certified
+at \(60\) steps, and from \(z_{0} = 1.0\) the first cell to act under
+its mismatched action dips below the floor. The maximal survivable
+sets are therefore exactly the \(16\) singletons at \(z_{0} = 1.0\)
+and exactly the \(32\) Hamming-adjacent pairs at every
+\(z_{0} \ge 1.1\), and nothing larger under any blind policy. An
+exhaustive search over all \(5{,}219\) one-, two-, and three-periodic
+policies with \(60\)-step certificates reproduces this classification
+independently.
+\end{proposition}
+
+\begin{proof}
+Singletons: matched play has drift \(+\tfrac3{10}\) from every
+\(z_{0} \ge 1\). Pairs: let \(\{\theta, \theta'\}\) be
+Hamming-adjacent and alternate \((\theta, \theta')\); each member
+takes the matched drift \(+\tfrac3{10}\) and the mismatched drift
+\(-\tfrac1{10}\) once per cycle, a net of \(+\tfrac15\) per two
+steps with the cycle minimum \(z_{0} - \tfrac1{10}\) after the
+mismatched step --- survivable exactly from \(z_{0} \ge 1.1\)
+(the \(60\)-step certificates confirm the cycle arithmetic).
+No pair from \(z_{0} = 1.0\): for any first action \(u\), if
+\(u = \theta\) then \(\langle u, \theta'\rangle = 2\) and cell
+\(\theta'\) falls to \(z_{0} - \tfrac1{10} < 1\) in one step, while
+any other \(u\) drives at least one member below the floor in its
+first step (the hold gives \(-\tfrac12\) to both); no repair exists
+because the floor binds at every step. Nothing larger: any set of
+three or more cells contains two at Hamming distance \(\ge 2\)
+(Lemma~\ref{scale-lem:triangle}), and that pair violates
+Corollary~\ref{scale-cor:hamming}, so no blind policy keeps it above the
+floor --- and survivability passes to subsets, so the whole set fails
+with it. Maximality is immediate: singletons extend to pairs from
+\(1.1\), pairs extend to nothing.
+\end{proof}
+
+\begin{remark}[scope in dimension: the ball construction]
+\label{scale-rem:scope}
+The pairs-only census is the four-dimensional cube's, and the boundary
+is sharp. In general dimension the pair argument of
+Corollary~\ref{scale-cor:hamming} gives only \(h \le m - \tfrac52\); and
+the constant matched action \(u = \mathbf{1}\) gives a cell at
+Hamming distance \(k\) the constant drift
+\(-\tfrac12 + \tfrac{m - 2k}{5}\), nonnegative exactly when
+\(k \le \tfrac{2m-5}{4}\). Hence the Hamming ball of radius
+\(r^{*}(m) = \lfloor (2m - 5)/4 \rfloor\) around any cell is
+blind-survivable from every \(z_{0} \ge 1\):
+\(r^{*}(4) = 0\), \(r^{*}(5) = r^{*}(6) = 1\),
+\(r^{*}(7) = r^{*}(8) = 2\). At \(m = 5\) the radius-one ball ---
+\(1 + 5 = 6\) cells, drifts \(+\tfrac12\) and \(+\tfrac1{10}\)
+under constant matched play --- survives from the floor's edge, where
+the four-cube keeps only singletons: the classification changes
+qualitatively at \(m = 5\), and the maximal sets for \(m \ge 5\) are classified in Section~\ref{scale-fivecube} at \(m = 5\), and left open at \(m \ge 6\). All eight radii and the sign pattern are
+verified by the verification script, with \(60\)-step simulations of the
+radius-one ball at \(m = 5\) and the \(29\)-cell radius-two ball at
+\(m = 7\).
+\end{remark}
+
+\begin{remark}[the crude instrument is not sufficient]
+\label{scale-rem:crude}
+The averaging identity used on smaller instances --- a survivable set
+\(S\) needs \(\sum_{i} |\sum_{\theta \in S} \theta_{i}| \ge
+\tfrac52\,|S|\) --- is not sufficient here: the four-set
+\(\{++++, +++-, ++-+, +-++\}\) attains the bound with equality
+(\(4 + 2 + 2 + 2 = 10\)) yet is not survivable, since it pairs cells
+at Hamming distance \(2\). The pairwise instrument of
+Lemma~\ref{scale-lem:pairsum} is the sharp one.
+\end{remark}
+
+\subsection{The observation ladder doubles}\label{scale-ladder}
+
+\begin{proposition}[geometric ladder]\label{scale-prop:ladder}
+Prior \(b_{0}\) is uniform on the sixteen cells; a probe of one
+parameter refines the support to a subcube. The maximal conditional
+kernel mass doubles with each probe:
+\begin{align*}
+\tfrac1{16} \to \tfrac18 \to \tfrac14 \to \tfrac12 \to 1
+&\quad (z_{0} = 1.0),\\
+\tfrac18 \to \tfrac14 \to \tfrac12 \to 1 \to 1
+&\quad (z_{0} \ge 1.1),
+\end{align*}
+for zero, one, two, three, and four probes. Above the band's edge
+three probes exhaust observation --- the support is then a
+Hamming-adjacent pair, jointly survivable, and the fourth probe buys
+nothing --- while at the edge the fourth probe is worth
+\(\tfrac12\), the single-cell mass the pair's dip excludes.
+\end{proposition}
+
+\begin{proof}
+The companion theory's antichain formula makes the kernel value of a
+prior the maximal survivable-set mass it charges, and survivability is
+hereditary downward --- a policy keeping a set alive keeps every
+subset alive --- so the value at the uniform prior on a support
+\(S\) is \(\max_{A \subseteq S,\ A
+\text{ survivable}} |A|/|S|\), attained inside the support. By
+Proposition~\ref{scale-prop:bands} the survivable subsets of a subcube are
+singletons and Hamming-adjacent pairs, so a \(2^{j}\)-cell subcube
+has value \(2/2^{j}\) from \(z_{0} \ge 1.1\) and \(1/2^{j}\) at
+the edge. The supports after \(0, 1, 2, 3, 4\) probes of one
+parameter are subcubes with \(j = 4, 3, 2, 1, 0\), giving the two
+ladders exactly; the fourth edge probe buys the last cell because at
+the edge only singletons survive and the fully probed support is then
+itself the surviving cell. The script recomputes all ten values by
+exhaustive survivable-subset enumeration within each support.
+\end{proof}
+
+\subsection{Exact point-based evaluation at four parameters}
+\label{scale-pbvi}
+
+The evaluation is point-based in the POMDP literature's sense
+(Lovejoy, 1991), with the distinction that the values here are exact at
+the probed beliefs, not bounds.
+
+\begin{proposition}[exact alpha-set values]\label{scale-prop:pbvi}
+The alpha-vector representation of the underlying theory (its
+class-restricted rational alpha-vectors) evaluated at probed beliefs
+returns the exact value: for horizons \(k = 1, 2, 3, 4\), three stock
+levels, and seven random rational beliefs, the maximum over the
+deduplicated alpha-set equals the maximum over definition-level
+trajectory enumeration --- all \(84\) pairings equal. The four-step
+alpha-set deduplicates \(17^{4} = 83{,}521\) action sequences to at most \(857\) distinct outcome vectors on the tested levels
+(\(545\) at the top level) (and to a single
+vector at the top level's one-step horizon, where every action is
+safe --- the silent region of the cube). Point-based selection
+chooses where to evaluate, never what the value is.
+\end{proposition}
+
+\begin{proof}
+Both sides are maxima of the same linear functional over the same
+finite set of action sequences: the alpha-set is the image of the
+sequence set under the map that records, for each parameter cell,
+whether the sequence survives at the level; the maximum of a function
+over a finite set equals the maximum over its image, and
+deduplication removes only repeated vectors, never the attaining one.
+Exactness of each entry is the definition-level simulation; no
+discretization enters.
+\end{proof}
+
+\subsection{The antichain census}\label{scale-census}
+
+\begin{proposition}[the antichain, not the lattice]\label{scale-prop:census}
+The raw subset lattice carries \(2^{16} = 65{,}536\) subsets per
+level --- \(16 \times 65{,}536 = 1{,}048{,}576\) over the grid ---
+while the stored object is the antichain of maximal survivable sets --- the zero-suppressed
+discipline of representing combinatorial set families by their maximal
+elements (Minato, 1993):
+\(16\) sets at the edge and \(32\) per level above it, \(496\) stored
+sets in total. The per-level compression ratio is \(4{,}096\times\) at
+the edge and \(2{,}048\times\) above it; and by
+Lemma~\ref{scale-lem:triangle} nothing is lost --- the antichain is the
+whole classification, not a summarization of one.
+\end{proposition}
+
+\begin{proof}
+The raw count is \(16 \times (2^{16} - 1) = 1{,}048{,}560\) nonempty
+subsets; the headline uses the full lattice
+\(16 \times 2^{16} = 1{,}048{,}576\), the larger and therefore
+conservative figure. The stored count is
+\(16 + 15 \times 32 = 496\) by Proposition~\ref{scale-prop:bands}. The
+antichain is lossless by the theory's kernel formula: the
+value of any prior is the maximal survivable-set mass, read off the
+stored sets alone.
+\end{proof}
+
+\subsection{The audited structure at a glance}\label{scale-glance}
+
+\begin{table}[t]
+\centering\footnotesize
+\caption{The cube's audited structure, one row per layer; every entry is a
+verification-script output in exact rational arithmetic.}
+\label{scale-tab:glance}
+\begin{tabular}{@{}l p{4.9cm}@{}}
+\toprule
+Layer & Exact statement \\
+\midrule
+Per-step drift & matched $+\tfrac3{10}$; $k$ mismatches: $+\tfrac3{10}-\tfrac{2k}{5}$; hold $-\tfrac12$ \\
+Cube accounting & drifts sum to $-8$ per step over the 16 cells \\
+Singletons & $16$ survivable (exactly the floor's edge) \\
+Pairs & exactly the $32$ Hamming-adjacent pairs; no other pair \\
+Larger sets & none (three-set and four-set candidates fail) \\
+Raw vs stored & $2^{16} = 65{,}536$ raw subsets per level, $496$ stored maximal sets \\
+Observation ladder & ten probe schedules, values doubled at each rung \\
+Deadline law & $z_0 \ge 1 + T/2$, $T = 0, \dots, 4$ (all cells) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{A deadline instance}\label{scale-deadline}
+
+\begin{proposition}[the deadline law on the cube]\label{scale-prop:deadline}
+Hold for \(T\) steps (drift \(-\tfrac12\)), let the parameter be
+revealed exactly at \(T\), then play matched forever (drift
+\(+\tfrac3{10}\) on every branch). The companion theory's additive
+deadline law applies with blind-drift cost \(d_{0} = \tfrac12\) and
+zero probe excursion: viability holds exactly when
+\[
+z_{0} \;\ge\; 1 \;+\; \tfrac{T}{2}, \qquad T = 0, \dots, 4,
+\]
+verified by direct simulation on the grid and, independently, by a
+mechanized proof (Section~\ref{scale-methods}). The excursion vanishes
+because the learned act rises on every branch immediately --- the
+law's \(e_{p}\) term prices the probe step the free revelation does
+not need.
+\end{proposition}
+
+\begin{proof}
+Necessity: under the hold every cell drifts \(-\tfrac12\), so at
+revelation every branch sits at \(z_{0} - T/2\), and survival to
+revelation forces \(z_{0} - T/2 \ge 1\). Sufficiency: the hold keeps
+every branch at \(z_{0} - t/2 \ge 1\) for \(t \le T\) exactly
+under the same inequality, and after revelation the matched action
+rises at \(+\tfrac3{10}\) on every branch, so no later constraint
+binds. This is the theory's additive deadline law at
+\(d_{0} = \tfrac12\), \(e_{p} = 0\); the direct branchwise argument
+needs no scalar-additivity hypothesis, and the simulation certifies
+the identity cell by cell on the grid. The mechanized layer proves
+the same threshold as an \emph{equivalence} --- viability holds iff
+\(z_{0} \ge 1 + T/2\) --- over an arbitrary ordered field and with
+\(T\) symbolic, so neither the grid nor the restriction
+\(T \le 4\) is load-bearing for the argument.
+\end{proof}
+
+\medskip
+\noindent\textbf{Reciprocal check (computational-certification
+companion).} The deadline law's radius structure is certified
+externally by the certification companion (Abaee, 2026, Computational viability certification): on this
+instance's audited domain, a radius-\(\delta\) belief cell inherits
+the verdict exactly for \(\delta \le z_{0} - (1 + T/2)\), with
+\(\delta = 0\) recovering the stored per-state bound and the
+boundary cells zero-slack; the joint check is archived with the
+companion's verification record.
+
+\subsection{Beyond four parameters: the five-cube, completely classified}
+\label{scale-fivecube}
+
+Remark~\ref{scale-rem:scope} fixes the ball threshold and records that the classification changes
+qualitatively at \(m = 5\). This section carries the enlargement through: it gives every
+maximal blind-survivable set of the five-cube, at every level, together with the census and
+deduplication figures. Every claim below is settled by the safety game of
+Section~\ref{scale-methods} --- a greatest-fixed-point computation on the capped non-negative
+orthant, in exact integer arithmetic --- and not by an averaging bound. That distinction is
+load-bearing, and Remark~\ref{scale-rem:crude} is only the first place it bites.
+
+\subsubsection{The five-cube instance}
+
+Take \(m = 5\): \(2^{5} = 32\) hidden-parameter cells over the same sixteen stock levels, so
+\(512\) augmented cells against the four-cube's \(256\), and \(2^{5} + 1 = 33\) actions
+against \(17\). The drift law and the floor are unchanged, so from
+\(\langle u, \theta\rangle = m - 2\,\mathrm{dist}(u,\theta)\) the drift in tenths is
+\[
+D(h) \;=\; -5 + 2m - 4h \;=\; 5 - 4h \qquad (m = 5),
+\]
+namely \(+\tfrac12\) at distance \(0\), \(+\tfrac1{10}\) at distance \(1\), then
+\(-\tfrac3{10}, -\tfrac7{10}, -\tfrac{11}{10}, -\tfrac32\) at distances \(2,3,4,5\), with
+\(-\tfrac12\) for the hold. Two things change at once: the matched cell rises faster
+(\(+\tfrac12\) against \(+\tfrac3{10}\)), and --- the qualitative change --- a cell at
+Hamming distance \(1\) now \emph{rises}, where at \(m = 4\) it fell. That is the statement
+\(r^{*}(4) = 0\), \(r^{*}(5) = 1\) of Remark~\ref{scale-rem:scope} read at the drift table.
+
+\subsubsection{The maximal sets}
+
+\begin{proposition}[the five-cube's maximal blind-survivable sets]
+\label{scale-prop:five}
+For the five-cube instance above, the maximal blind-survivable sets are:
+\begin{enumerate}
+\item the \(32\) Hamming balls of radius \(1\), each of \(1 + 5 = 6\) cells, at \emph{every}
+level \(z_{0} \ge 1.0\);
+\item from \(z_{0} \in \{1.0, 1.1, 1.2\}\), \emph{nothing else} --- \(32\) maximal sets per
+level;
+\item from \(z_{0} \ge 1.3\), additionally one orbit of four-cell sets under the
+\(3{,}840\)-element automorphism group (XOR by any cell, then any permutation of the five
+coordinates), of size \(80\), with pairwise-distance multiset \(\{1,1,1,1,2,2\}\) ---
+\(32 + 80 = 112\) maximal sets per level.
+\end{enumerate}
+No set of five or more cells other than the balls is maximal, and no set of three or fewer
+is maximal.
+\end{proposition}
+
+\begin{proof}
+\textbf{Candidates.} By Corollary~\ref{scale-cor:hamming} generalised, survival of a pair needs
+\(h \le m - \tfrac52\), i.e. \(h \le 2\) at \(m = 5\), so every survivable set is a clique of
+the graph on the \(32\) cells with edges at distance \(\le 2\), and every such set lies in a
+maximal clique. That graph has \(192\) maximal cliques: \(32\) of size \(6\) and \(160\) of
+size \(4\).
+
+\textbf{Size \(6\).} The \(32\) size-\(6\) maximal cliques are exactly the radius-\(1\) balls.
+Under the constant matched action \(u = v\) on the ball \(B(v,1)\), the centre receives
+\(D(0) = +5\) and each of the five neighbours \(D(1) = +1\), all strictly positive, so the
+slack vector grows from \((L,\dots,L)\) at every level, \(L = 0\) included. All \(32\) are
+therefore survivable from the floor's edge.
+
+\textbf{Size \(4\).} The \(160\) size-\(4\) maximal cliques fall into exactly two orbits under
+the automorphism group, \(80\) each: the \emph{tetrahedral} orbit, all six pairwise
+distances equal to \(2\), and the orbit with distance multiset \(\{1,1,1,1,2,2\}\). The tetrahedral orbit is \emph{not} survivable at any finite starting stock:
+choose its representative \(00000,11000,10100,01100\). Across
+these four cells, the first three signed coordinates cancel and the
+remaining two contribute at most \(8\) to the aggregate; in
+integer-tenths units each sign action has aggregate drift at most
+\(-20+2(8)=-4\), and hold is still worse. Their total slack
+therefore decreases indefinitely under any common action sequence.
+The other orbit is the two-coordinate square face with representative
+\(00000,10000,01000,11000\). Every sign action has distance at
+least two from one square vertex, giving its first-step drift at most
+\(-3\) tenths; hold drifts \(-5\). Thus \(L<3\) cannot
+survive its first step. At \(L\ge3\), alternate the actions
+matching opposite corners \(00000\) and \(11000\). Every
+vertex gains \(2\) tenths per two steps, with initial dip at
+most \(3\); hence it survives indefinitely. Orbit symmetry
+transfers both arguments to all \(80+80\) four-cliques, with no
+artificial state cap.
+
+\textbf{Smaller sets.} All \(912\) cliques of size \(\le 3\) are contained in some
+radius-\(1\) ball, and survivability is hereditary downward, so none is maximal. A
+size-\(5\) clique would lie in a maximal clique of size \(\ge 5\), hence in a ball, hence is
+non-maximal.
+\end{proof}
+
+\begin{remark}[the pairwise instrument is necessary but no longer sufficient]
+\label{scale-rem:notsuff}
+At \(m = 4\) the pairwise-Hamming bound is sharp: it excludes every pair at distance
+\(\ge 2\), and everything it permits is survivable. At \(m = 5\) it is \emph{not} sharp. The
+tetrahedral orbit has all six pairwise distances equal to \(2\), which meets the bound
+\(h \le 2\) with equality, and no blind policy of any period keeps it above the floor. So
+the pair-sum condition of Lemma~\ref{scale-lem:pairsum} is necessary and not sufficient from
+dimension five onward, and the classification above cannot be recovered from pairwise data
+alone. Remark~\ref{scale-rem:crude} records the same failure for the cruder averaging instrument
+at \(m = 4\); the point here is that the sharper instrument inherits the failure one
+dimension later.
+\end{remark}
+
+\subsubsection{The census at five parameters}
+
+The raw subset lattice at \(m = 5\) carries \(2^{32} = 4{,}294{,}967{,}296\) subsets per
+level --- \(16 \times 2^{32} = 68{,}719{,}476{,}736\) over the grid --- against the
+four-cube's \(1{,}048{,}576\). By Proposition~\ref{scale-prop:five} the stored antichain is
+\[
+3 \times 32 \;+\; 13 \times 112 \;=\; 96 + 1{,}456 \;=\; 1{,}552
+\]
+maximal sets. Per level the compression is \(2^{32}/32 = 134{,}217{,}728\times\) at
+\(z_{0} \le 1.2\) and \(2^{32}/112 \approx 3.83 \times 10^{7}\) above it; overall
+\[
+\frac{16 \times 2^{32}}{1{,}552} \;=\; \frac{2^{32}}{97} \;\approx\; 4.43 \times 10^{7},
+\qquad\text{against}\qquad
+\frac{1{,}048{,}576}{496} \;\approx\; 2{,}114 \quad (m = 4).
+\]
+The scaling is the point of the exercise. Passing from four parameters to five multiplies
+the raw lattice by \(2^{16} = 65{,}536\) and the stored antichain by \(1{,}552/496 \approx
+3.13\): the object one must \emph{not} store grows exponentially, the object one must store
+grows by a factor a little over three, and the compression ratio improves by roughly
+\(2.1 \times 10^{4}\). Exactness at five parameters is therefore not a constant factor more
+expensive than at four; it is exponentially further out of reach of naive enumeration and
+essentially no further out of reach of the antichain.
+
+\subsubsection{Point-based evaluation at five parameters}
+
+The four-step \(\alpha\)-set at \(m = 5\) deduplicates \(33^{4} = 1{,}185{,}921\) action
+sequences to at most \(15{,}929\) distinct outcome vectors over the tested levels
+(\(11{,}145\) at the top level), against
+\(17^{4} = 83{,}521 \to 545\) at \(m = 4\) at the common top level: the raw
+enumeration grows \(14.2\times\) and the top-level deduplicated object
+\(20.4\times\), so the top-level compression ratio is \emph{lower}, not
+higher, at five parameters. Across the 16 levels the four-cube maximum
+is \(857\) (at \(z_0=2.2\)), and the five-cube maximum is
+\(15{,}929\) (at \(z_0=2.3\)); neither top-level count is a
+global ceiling. Five-cube counts are \(945\) at \(z_0\le1.2\)
+and \(11{,}145\) at \(z_0=2.5\), without monotonicity in between. The two endpoint behaviours of the four-cube persist: the
+one-step top-level collapse to a single outcome vector (\(33\) sequences, one vector, every
+action safe in the silent region), and the edge behaviour (\(33\) sequences, \(33\) distinct
+vectors, no collapse at all).
+
+\subsubsection{What is not claimed at six parameters and beyond}
+
+The ball construction gives \(r^{*}(6) = 1\), so the \(64\) seven-cell radius-one balls of
+the six-cube are blind-survivable from every level by the same constant-matched-play
+argument. What is \emph{not} determined at \(m = 6\) is whether they are maximal: the
+distance-\(\le 3\) graph there has \(10{,}752\) maximal cliques with maximum clique size
+\(12\), against the ball's \(7\), and resolving their survivability needs a safety game in
+\(12\) dimensions, which the present apparatus does not settle. The five-cube classification
+above is complete; the six-cube is open, and the gap between \(7\) and \(12\) is where the
+next qualitative change, if there is one, would have to appear.
+
+\subsection{Related work, and what this paper is}
+\label{scale-priorart}
+
+This paper is a computational companion, and the combinatorics it leans on is classical.
+Both facts are stated here rather than left for a reader to discover.
+
+\subsubsection{The place of this paper in the series}
+
+The title's ``Scale~II'' refers to a companion relation, not to a volume number. The
+theory being computed here is the belief-state safety value \(V_k(b)\) --- the maximal
+probability of remaining safe for \(k\) steps under the disturbance's worst case --- together
+with its support identity and \(\alpha\)-vector structure; that theory, and the
+Sperner-bounded antichain formula behind its witness census, is developed in the companion
+paper (Abaee, 2026, Belief-state safety values for viability under incomplete observation;
+in this set, Paper~2). The present paper takes that theory's objects into the
+curse-of-dimensionality regime on one explicit instance and classifies the instance
+completely in exact arithmetic. It proves no new result about the theory itself. A reader
+wanting the theorems should read that paper; a reader wanting the instance classified, and
+the cost of doing so exactly, should read this one.
+
+\subsubsection{Antichains, Sperner theory and Dedekind's problem}
+
+An antichain in the Boolean lattice is a family of pairwise incomparable subsets. Sperner's
+theorem (Sperner, 1927) gives the maximum size of an antichain on an \(n\)-set as
+\(\binom{n}{\lfloor n/2\rfloor}\); counting \emph{all} antichains is Dedekind's problem,
+with the asymptotic count \(2^{\binom{n}{\lfloor n/2\rfloor}(1+o(1))}\) due to Kleitman
+(1966) and exact values known only for small \(n\) (Stanley, 2013; Engel, 1997, for the
+standard treatments). Hamming adjacency, and the coding-theoretic machinery built on it, is
+likewise classical --- and the extremal role of Hamming balls on the cube is the subject of
+hypercube vertex isoperimetry: among all subsets of the cube of a given size, Hamming balls
+(the initial segments of the simplicial order) minimise the vertex boundary (Harper, 1966),
+with stability versions showing the extremal sets \emph{are} Hamming balls.
+
+That adjacency deserves one word of separation, because the present paper also finds Hamming
+balls extremal and reaches them by a different route. Here the balls arise \emph{radially}: the
+constant matched action \(u = \mathbf{1}\) gives a cell at Hamming distance \(k\) the constant
+drift \(-\tfrac12 + \tfrac{m-2k}{5}\), which depends on the cell only through \(k\), so the set
+on which it is nonnegative is a Hamming ball of radius \(r^{*}(m) = \lfloor (2m-5)/4\rfloor\)
+automatically. Nothing is being minimised. The coincidence with the isoperimetric extremal sets
+is therefore structural rather than consequential: the survivable region is a ball because the
+drift is radial, not because balls optimise any boundary functional, and no result of this
+paper depends on Harper's theorem.
+
+\textbf{This paper proves no new theorem about antichains.} The census of
+Section~\ref{scale-census} is a computation \emph{on one instance}: \(1{,}048{,}576\) raw subset
+evaluations collapsing to \(496\) stored maximal sets. That figure is an output, and its
+value is that it was obtained exactly and in full. The classical results are the scaffold,
+not the contribution.
+
+\subsection{Antichain algorithms in formal verification}
+
+A separate literature uses antichains not as objects to be counted but as a compact
+\emph{data structure}. When the sets an algorithm manipulates are downward closed under a
+preorder, storing only the maximal elements is canonical and can be exponentially more succinct
+than storing the set itself. That observation underlies the antichain algorithms introduced for
+checking universality and language inclusion of finite automata (De Wulf, Doyen, Henzinger and
+Raskin, 2006) and extended to B\"uchi automata and the automata-based approach to model
+checking (Doyen and Raskin), to LTL satisfiability and model checking (De Wulf, Doyen, Maquet
+and Raskin, 2008), and to LTL realizability and synthesis (Filiot, Jin and Raskin, 2009, 2011).
+The succinctness is a theorem rather than an empirical finding: De Wulf et al. exhibit families
+of automata on which the subset construction is exponential while the antichain algorithm is
+polynomial, and show that the basic operations stay polynomial in the size of the compact
+representation while that size may be exponentially smaller than the set represented. The same
+representation is used for games of imperfect information, where the winning belief states are
+downward closed and only the maximal elements are stored.
+
+This paper stores the antichain of maximal survivable subsets, so it uses the same
+representation, and \textbf{the compression itself should not be read as a new result}. Three
+things distinguish the uses. First, those algorithms compute \emph{fixed points} --- of a
+reachability, universality or realizability operator --- whereas there is no fixed point here:
+the object is a complete classification of one finite instance by exhaustive exact enumeration.
+Second, those settings are \emph{qualitative}: the question is whether a player wins, and the
+stored antichain is a winning region. Here the stored antichain is the identifying structure of
+a \emph{quantitative} worst-case value function \(V_k(b)\), a maximal probability of remaining
+safe; the stored sets are the supports of its \(\alpha\)-vectors rather than a winning set.
+Third, the figures reported below (\(1{,}048{,}576\) collapsing to \(496\);
+\(68{,}719{,}476{,}736\) to \(1{,}552\)) are \emph{measured costs of exhaustive exact
+classification at this size}, offered as cost figures; they are not a claimed asymptotic
+improvement on those algorithms, and nothing here bears on their complexity.
+
+\subsubsection{Point-based and exact computation for partially observed models}
+
+Point-based value iteration and its successors (Pineau, Gordon and Thrun, 2003; Shani,
+Pineau and Kaplow, 2013, for the survey) approximate belief-space value functions by
+propagating a finite set of belief points, with error bounds in the usual formulations. The
+distinction here is not the idea of a point set but the arithmetic: every quantity in this
+paper is an exact integer or rational, so the catalogue is not an approximation with a
+bound but a classification of the instance. That costs feasibility at scale --- which is why
+the instance is a four-parameter cube and not a larger one, and why
+Section~\ref{scale-scope} says so. On the qualitative side, the complexity and decidability
+landscape for partially observed models under qualitative objectives is established
+(Chatterjee, Doyen and Henzinger, 2009); the companion paper's position relative to that
+literature is stated there, and this paper adds nothing to it.
+
+\subsubsection{What is claimed}
+
+Given the above, the contribution is exactly five things.
+
+\begin{enumerate}
+\item \textbf{A complete classification of the four-parameter cube instance} --- every
+  maximal blind survivable set, every band, and the observation ladder, in exact integer
+  and rational arithmetic, with no approximation and no sampling.
+\item \textbf{The cost figures for doing so.} The census collapse
+  (\(1{,}048{,}576 \to 496\)), the four-step \(\alpha\)-set deduplication
+  (\(83{,}521 \to 857\) maximum, \(545\) at the top level), and the doubling of the observation ladder. These are the
+  empirical content of the paper: they say what exactness costs at this size.
+\item \textbf{The pairwise-Hamming structural restrictions as they apply here} --- that
+  every blind survivable set consists of Hamming-adjacent cells, and that no three cells of
+  the four-cube are pairwise adjacent, so no blind policy of any period keeps three or more
+  cells safe. The adjacency notion is classical; its consequence for this instance is the
+  result.
+\item \textbf{The complete classification of the five-parameter cube}
+  (Section~\ref{scale-fivecube}) --- the enlargement that Section~\ref{scale-scope} previously left open. The
+  maximal sets are the \(32\) radius-one balls at every level, plus one \(80\)-set orbit of
+  four-cell sets from \(z_{0} \ge 1.3\); the tetrahedral orbit meets the pairwise-Hamming bound
+  with equality and is nevertheless not survivable, so that instrument is necessary and not
+  sufficient from dimension five (Remark~\ref{scale-rem:notsuff}); and the census collapses
+  \(68{,}719{,}476{,}736\) raw subsets to \(1{,}552\) stored sets, a compression
+  \(2.1 \times 10^{4}\) times better than at four parameters.
+\item \textbf{Machine-checking of the layer}, described next.
+\end{enumerate}
+
+\subsection{Constrained and chance-constrained POMDPs}
+\label{scale-cpomdp}
+
+The objective computed here --- the maximal probability of remaining safe for a horizon,
+\(V_k(b)\) --- is not peculiar to this series, and the literature that studies that
+objective should be named. Constrained Markov decision processes, in which a policy
+maximises an expected return subject to constraints on expected or probabilistic
+quantities, were systematised by Altman (1999). Under partial observability the same
+question gives constrained POMDPs, and the methods available there are approximate by
+construction: approximate linear programming over a belief-sampled basis (Poupart,
+Malhotra, Pei, Kim, Goh and Bowling, 2015), online forward search from the current belief
+(Undurti and How, 2010), and heuristic search over a belief-space AND/OR graph (Santana,
+Thi\'ebaux and Williams, 2016). Chance-constrained dynamic programming carries the risk
+budget as an additional state variable and is likewise developed with continuous state
+spaces and discretisation in view (Ono, Pavone, Kuwata and Balaram, 2015).
+
+Three distinctions keep the present computation separate, and they are distinctions of
+object rather than of accuracy. First, those formulations \emph{optimise over policies}
+subject to a constraint; here \(V_k(b)\) is the value \emph{function}, computed as an
+object of study at every belief in a declared class, and the policy is a byproduct of the
+recursion rather than the object searched for. Second, the constraint there is a threshold
+a policy must meet --- a feasibility question, answered by the existence or non-existence
+of a feasible policy --- whereas what is tabulated here is the probability itself, as a
+function of the horizon, the prior weight and the initial state, whose \emph{shape} is the
+result: the piecewise-linear \(\alpha\)-vector support, and the antichain structure of
+Section~\ref{scale-census}. Third, every method named above is approximate --- the linear
+programming relaxation gives bounds, point-based methods give values at probed beliefs
+with bounds elsewhere, and heuristic search is admissible but incomplete. Nothing in this
+paper is approximate: the values are exact rationals, and the classification of the
+five-cube in Section~\ref{scale-fivecube} is exhaustive rather than sampled.
+
+The overlap should be stated plainly rather than minimised. The question ``what is the
+greatest probability of remaining safe under partial observation?'' is asked, and answered
+approximately, in that literature, so the \emph{question} is not new and this paper does
+not claim it is. What is contributed is the exact answer on a declared finite instance,
+together with the structure of the value function that makes an exact answer representable
+at all.
+
+\subsection{Mechanized verification}
+\label{scale-mech}
+
+Selected combinatorial components, not the whole manuscript, have
+Lean declarations. Sixteen modules of the project's
+Lean~4 formalization are devoted to this paper's objects, in namespace
+\texttt{Formalizations.EBC}: \texttt{EBC\_Bands}, \texttt{EBC\_Classification},
+\texttt{EBC\_Deadline}, \texttt{EBC\_Dynamics}, \texttt{EBC\_ExactBelief},
+\texttt{EBC\_Hamming}, \texttt{EBC\_Ladder} and \texttt{EBC\_Pairs}, with successive
+versions of several. A full comment-stripped header count of these 16 modules is
+\(138\) theorem declarations (zero \texttt{lemma} headers). The
+historical \(134\) counted only lines opening with \texttt{theorem}:
+it omitted four \texttt{@[simp] theorem} declarations,
+\texttt{EBC\_Deadline.holdRep\_zero},
+\texttt{EBC\_Deadline.matchedRep\_zero},
+\texttt{EBC\_Dynamics.natToK\_zero}, and
+\texttt{EBC\_Dynamics.natToK\_succ}. The prior provisional
+\(135\) report was also an incomplete static count; the
+reproducible source census supersedes it. Declaration-level coverage
+is narrower than section names: \texttt{pair\_sum\_bound} and
+\texttt{cor\_hamming\_m4} constrain four-cube pairs;
+\texttt{floor\_pair\_fails}, \texttt{pair\_survives}, and
+\texttt{survivor\_is\_singleton\_or\_adjacent\_pair}
+cover stated floor, threshold and finite-horizon conditions;
+\texttt{ladder\_doubling} is a conditional mass-ratio identity;
+\texttt{deadline\_law} proves the specified four-coordinate
+hold-then-matched schedule. No EBC declaration enumerates the
+16-level census, the 84 alpha comparisons or the five-cube orbit.
+
+\noindent\textbf{No admitted gaps.} The pinned default Lake target builds cleanly under Lean~4 v4.34.1 (\(60\) of \(60\) jobs). In Lean an unfinished proof surfaces as the axiom
+\texttt{sorryAx} in the axiom footprint of every declaration depending on it; a
+source-level scan with comments stripped finds no \texttt{sorry}, \texttt{admit} or
+\texttt{axiom} declaration anywhere in the formalization layer, all sixteen EBC modules
+included. The EBC declarations checked in this source family use only those standard classical axioms or none; this does not erase the separate P3 native-evaluation dependencies disclosed below.
+\noindent\textbf{Current Lean provenance.} The committed project pin \texttt{v4.34.1} was rebuilt in GitHub Actions (default Lake target: \(60/60\) jobs, exit~0; \url{https://github.com/MIKEAA2020/general-sustainability/actions/runs/36946730855}). The exact project source and two footprint-check \texttt{.lean} files are archived with SHA-256 manifests. A comment-aware scan of all \(62\) source files finds no \texttt{sorry}, \texttt{admit}, explicit \texttt{axiom} or \texttt{constant} declaration. Twenty-one named footprints contain no \texttt{sorryAx}; the aggregate-import environment exposes three source-level \texttt{native\_decide} uses in the P3 support/value examples, yielding nine distinct generated axiom names under this pin. These are executable computational certificates that extend kernel-only trust to the Lean compiler/runtime; they are not admitted gaps and must not be described as zero axioms or as kernel-only proofs. Three preserved historical modules outside the aggregate import closure are not certified by the default build. The pinned declared-exceptions gate passed in GitHub Actions (run 36990482599): only the nine exact generated names from three approved P3 source sites are permitted; any change to those sites or names requires separate review and re-approval. The separate strict zero-exception check exits 2 by design, while the build itself passed 60/60; the two verdicts must not be conflated. The v4.14.0 comparison of the \emph{current} source fails in the prelude and does not reproduce the old source run.
+
+
+\noindent\textbf{Scope.} What is machine-checked is the discrete combinatorial core --- the
+structure the enumeration walks. The enumeration itself, including the census of
+Section~\ref{scale-census}, is a computation performed by the deposited scripts and is
+\emph{not} formalized.
+
+\subsection{Verification methods}\label{scale-methods}
+
+The deposited verification script checks the four-cube core in exact
+integer and rational arithmetic, standard library only. The five-cube
+clique census and cross-level alpha-mask maxima require separate exact
+enumeration; the clique witness uses NetworkX for graph enumeration,
+and \texttt{alpha\_check.py} uses NumPy only to pack and deduplicate
+integer outcome masks. Their source-specific results accompany this
+alignment draft and are not covered by a green legacy script. The battery opens with the pair-sum bound over all \(120\) pairs and \(17\) actions; the
+adjacency-triangle check over all \(560\) triples; the exhaustive
+one-, two-, three-periodic classification with \(60\)-step
+certificates; the ten ladder values by survivable-subset enumeration
+within each support; the \(84\) point-based pairings against
+definition-level enumeration; the census counts; the deadline
+thresholds by direct simulation; the dimension-scope battery (the
+pair-sum bound at \(m = 5\) over all \(496\) pairs and \(33\)
+actions; the ball radii \(r^{*}(m)\) for \(m = 3, \dots, 8\) with
+the drift sign pattern and \(60\)-step simulations of the radius-one
+ball at \(m = 5\) and the \(29\)-cell radius-two ball at
+\(m = 7\)); and selected headline strings in the original source. A passing
+string check does not recompute the five-cube alpha masks or prove the
+classification.
+
+\textbf{A second, independent apparatus.} The script above enumerates the four-cube core; it does not prove
+the whole paper or independently cover every five-cube assertion. Alongside it, the results of
+The formal layer proves particular ordered-field combinatorial
+lemmas, not every statement in Sections~\ref{scale-hamming}--\ref{scale-deadline}.
+In particular \texttt{ladder\_doubling} assumes an already-proved
+probability ratio and \texttt{deadline\_law} treats the declared
+four-coordinate hold-then-matched sequence. Exact grid counts and
+point-based comparisons rest on separate finite arithmetic, not on
+the formal source. Agreement where hypotheses coincide is a
+cross-check, not a substitute for either apparatus.
+
+What each result now rests on, stated plainly:
+
+\begin{itemize}
+\item \textbf{Formalized components.} The declared four-cube
+pair-sum, far-pair exclusion, floor-pair impossibility, and adjacent-pair
+construction have Lean declarations with their stated dimension, stock
+and finite-horizon hypotheses. \texttt{ladder\_doubling} proves a
+conditional ratio, not the ten grid entries; \texttt{deadline\_law}
+proves the specified hold-then-matched schedule for four coordinates
+and symbolic natural deadline. These do not formalize the five-cube or
+the entire band, ladder and census text.
+
+\item \textbf{Enumerated, not proved.} The census, the \(84\)
+point-based pairings, the \(83{,}521 \to 857\) maximum across levels, and the
+dimension-scope battery at \(m \ne 4\). These are finite checks over
+the cube; their content is the count, and a count is what the script
+supplies.
+
+\item \textbf{Simulated.} The \(60\)-step ball certificates at
+\(m = 5\) and \(m = 7\), and the grid certification of the deadline
+thresholds. The five-cube orbit verdicts above instead use a
+whole-horizon aggregate-loss argument and a two-action witness. For the deadline the simulation is now redundant --- the
+threshold is proved --- and is retained as an independent cross-check.
+\end{itemize}
+
+\noindent Where this text previously attributed a result to simulation
+or enumeration alone, the attribution above governs.
+
+\subsection{Delimitations}\label{scale-scope}
+
+The blind class is declared and load-bearing: the policy may not
+depend on the belief, so a single action sequence governs every
+parameter branch and the pair-sum argument applies; a
+\(z\)-feedback policy could branch its actions across branches (the
+branches' stock paths diverge) and is outside the classification, as in the class discipline of the companion theory
+(Abaee, 2026, An obstruction calculus), where the blind and
+observation-dependent recursions are shown to differ --- the
+feedback family contains the blind one, strictly, under
+hypotheses of the same shape as this instance's. That result is
+proved \emph{in the companion's model}; the correspondence with
+the cube here is one of form, not of type, so it motivates
+restricting to the blind class rather than proving that
+restriction necessary. It does, however, fix the meaning of the
+open question recorded above: since the two disciplines differ
+strictly somewhere, whether a non-blind discipline beats the
+pairs \emph{on the cube} cannot be settled by transferring the
+companion's strictness, and is left open. Drifts are
+deterministic per branch; probes are exact and cost no stock beyond
+the blind decline they interrupt. The pairs-only classification is scoped to
+\(m = 4\): in dimension five the constant matched action already
+keeps the six-cell radius-one ball alive from every level
+(Remark~\ref{scale-rem:scope}), and the maximal sets for \(m \ge 5\) are classified in Section~\ref{scale-fivecube} at \(m = 5\), and left open at \(m \ge 6\). Whether some non-blind discipline
+beats the pairs on the cube is not claimed either way. Scaling beyond thirty-two cells --- where even the antichain's input enumeration becomes the bottleneck --- is the next step. Section~\ref{scale-fivecube} shows that the ball construction alone does not settle it: at \(m = 6\) the balls have seven cells while the maximal cliques of the pairwise-necessary graph reach twelve, and closing that gap needs a safety game the present apparatus does not carry.
+
+\subsection{Conclusion}\label{scale-conclusion}
+
+The exact discipline survives the curse of dimensionality and the
+cube repays it with structure a pencil would never find: Hamming
+governance of survivable sets, a doubling observation ladder, a
+silent region at the top of the stock grid, and a four-order
+antichain census. The stored object is the antichain; the argued instrument is the pairwise bound; and the two together are what make \(1{,}048{,}576\) subset evaluations collapse to \(496\) sets without loss. At five parameters the same two instruments, with the safety game in place of an averaging argument, carry \(68{,}719{,}476{,}736\) evaluations onto \(1{,}552\) sets --- and they carry the sharper news that the pairwise bound has stopped being sufficient.
+
+\subsection*{References}
+\label{references}
+Abaee, A. (2026). Computational viability certification under incomplete
+observation: a continuous-to-finite bridge with exact certificates, a
+solver-assisted certified campaign, and a finite-side reference library.
+Manuscript candidate.
+
+Abaee, A., 2026. Minimax dual certificates for the common-action
+obstruction. Manuscript candidate.
+
+Abaee, A. (2026). Probabilistic sufficiency for the obstruction calculus: belief-state safety values under partial observation. Manuscript candidate.
+
+Abaee, A., 2026. Robust viability of the 2J3KL limit reference point
+under a surplus-production map: policy scoring, expansion, and when
+catch cannot help. Zenodo.
+\url{https://doi.org/10.5281/zenodo.22552060}
+
+Abaee, A., 2026. An Obstruction Calculus for Viability under Incomplete Observation. Figshare preprint, version 2. \url{https://doi.org/10.6084/m9.figshare.33716593.v2}.
+
+Althoff, M., et al., 2020. ARCH-COMP20 category report: continuous and hybrid systems with
+linear continuous dynamics. In: \emph{ARCH20, 7th International Workshop on Applied
+Verification of Continuous and Hybrid Systems}, EPiC Series in Computing, vol.~74, pp.~16--48.
+
+Aubin, J.-P., 1991. \emph{Viability Theory}.
+
+Altman, E., 1999. \emph{Constrained Markov Decision Processes}. Chapman \& Hall/CRC. CRC
+reprint 2021, doi:10.1201/9781315140223.
+
+Baccelli, F., Cohen, G., Olsder, G.J. and Quadrat, J.-P., 1992. \emph{Synchronization and
+Linearity: An Algebra for Discrete Event Systems}.
+
+
+De Wulf, M., Doyen, L., Henzinger, T.A. and Raskin, J.-F., 2006. Antichains: a new
+algorithm for checking universality of finite automata. In: \emph{Computer Aided
+Verification (CAV 2006)}, Lecture Notes in Computer Science, vol.~4144, pp.~17--30.
+Springer.
+
+De Wulf, M., Doyen, L., Maquet, N. and Raskin, J.-F., 2008. Antichains: alternative
+algorithms for LTL satisfiability and model-checking. In: \emph{Tools and Algorithms
+for the Construction and Analysis of Systems (TACAS 2008)}, Lecture Notes in Computer
+Science, vol.~4963, pp.~63--77. Springer.
+
+Doyen, L. and Raskin, J.-F., 2009. Antichains for the automata-based approach to
+model-checking. \emph{Logical Methods in Computer Science}, 5(1).
+
+Chatterjee, K., Doyen, L., Henzinger, T.A., 2009. Qualitative analysis of
+partially-observable Markov decision processes. In: Int. Symp. Math. Found. Comput. Sci.
+(MFCS 2009). LNCS, vol. 5734, pp. 635--646.
+
+Engel, K., 1997. \emph{Sperner Theory}. Cambridge University Press.
+
+Farkas, J., 1902. Theorie der einfachen Ungleichungen. \emph{Journal f\"ur die Reine und
+Angewandte Mathematik} \textbf{124}, 1--27.
+
+Filiot, E., Jin, N. and Raskin, J.-F., 2009. An antichain algorithm for LTL
+realizability. In: \emph{Computer Aided Verification (CAV 2009)}, Lecture Notes in
+Computer Science, vol.~5643, pp.~263--277. Springer.
+
+Filiot, E., Jin, N. and Raskin, J.-F., 2011. Antichains and compositional algorithms
+for LTL synthesis. \emph{Formal Methods in System Design}, 39, 261--296.
+
+Geretti, L., Dit Sandretto, J.A., Althoff, M., et al., 2020. ARCH-COMP20 category report:
+continuous and hybrid systems with nonlinear dynamics. In: \emph{ARCH20, 7th International
+Workshop on Applied Verification of Continuous and Hybrid Systems}, EPiC Series in Computing,
+vol.~74, pp.~49--75.
+
+Harper, L.H., 1966. Optimal numberings and isoperimetric problems on graphs.
+\emph{Journal of Combinatorial Theory}, 1, 385--393.
+
+Helly, E., 1923. \"Uber Mengen konvexer K\"orper mit gemeinschaftlichen Punkten.
+\emph{Jahresbericht der Deutschen Mathematiker-Vereinigung} \textbf{32}, 175--176.
+
+Kleitman, D.J., 1969. On Dedekind's problem: the number of monotone Boolean functions.
+\emph{Proc. Amer. Math. Soc.} \textbf{21}, 677--682.
+
+Lovejoy, W.S., 1991. Computationally feasible bounds for partially
+observed Markov decision processes. Operations Research 39, 162--175.
+
+Minato, S. (1993). Zero-suppressed BDDs for set manipulation in combinatorial problems. In: Proceedings of the 30th Design Automation Conference (DAC '93), 272--277.
+
+Ono, M., Pavone, M., Kuwata, Y. and Balaram, J., 2015. Chance-constrained dynamic
+programming with application to risk-aware robotic space exploration. \emph{Autonomous
+Robots}, 39, 555--571. doi:10.1007/s10514-015-9467-7.
+
+
+Pineau, J., Gordon, G., Thrun, S., 2003. Point-based value iteration: an anytime algorithm
+for POMDPs. \emph{Proc. IJCAI 2003}.
+
+Poupart, P., Malhotra, A., Pei, P., Kim, K.-E., Goh, B. and Bowling, M., 2015.
+Approximate linear programming for constrained partially observable Markov decision
+processes. \emph{Proceedings of the AAAI Conference on Artificial Intelligence}, 29(1).
+doi:10.1609/aaai.v29i1.9655.
+
+Santana, P., Thi\'ebaux, S. and Williams, B., 2016. RAO*: an algorithm for
+chance-constrained POMDP's. \emph{Proceedings of the AAAI Conference on Artificial
+Intelligence}, 30(1). doi:10.1609/aaai.v30i1.10423.
+
+
+Shani, G., Pineau, J., Kaplow, R., 2013. A survey of point-based POMDP solvers.
+\emph{Autonomous Agents and Multi-Agent Systems} \textbf{27}(1), 1--51.
+
+Sperner, E., 1927. Ein Satz \"uber Untermengen einer endlichen Menge. \emph{Math. Z.}
+\textbf{27}, 544--548.
+
+Stanley, R.P., 2013. \emph{Topics in Algebraic Combinatorics}. Chapter 4, The Sperner
+property. \url{https://math.mit.edu/~rstan/algcomb/algcomb.pdf}.
+
+Undurti, A. and How, J.P., 2010. An online algorithm for constrained POMDPs. In:
+\emph{2010 IEEE International Conference on Robotics and Automation (ICRA)}, pp.~3966--3973.
+doi:10.1109/robot.2010.5509743.
+
+
+\subsection*{Declarations}
+
+\subsection*{Funding}
+None.
+
+\subsection*{Competing interests}
+None.
+
+\subsection*{Data availability}
+No external data were used.
+
+\subsection*{Code availability}
+The verification script
+\url{paper2_exact_belief_computation_v13_verification.py} is publicly
+available at \url{https://github.com/MIKEAA2020/general-sustainability}
+(folder \texttt{arena agent 1/paper rewrites/latex}). The source version reports that it reproduces the four-parameter bounds, bands, ladder values, pairings, census counts, and deadline thresholds. The five-parameter classification added after that version requires a separate verification record; coverage by this older script is not claimed.
+
+\subsection*{Author contributions}
+A.A. conceptualized the entire work, wrote, reviewed and edited the manuscript.
+
+\subsection*{AI declaration}
+GLM (Z.ai), Qwen (Alibaba Cloud) and DeepSeek AI assisted with drafting
+and iterative review. The author reviewed and edited outputs and takes
+responsibility for the final work.
+
+\end{document}

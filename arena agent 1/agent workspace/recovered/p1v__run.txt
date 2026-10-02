@@ -1,0 +1,49 @@
+[typed false-positive instantiation — exact integer arithmetic, scale 40]
+
+[T1] exact-tube machinery
+  [OK ] FAST breakpoint table exact (dip at t=1/2, recovery at t=1) :: (40, -40, 40)
+  [OK ] STAGED breakpoint table exact (linear spend/growth)
+  [OK ] per-coordinate exact ranges = breakpoint extremes (piecewise monotone)
+  [OK ] worst-case dip constants: benign 3/2, adverse 2, floor threshold 2
+
+[T2] Theorem B(1): typed region identity
+  [OK ] machine typed-feasibility == {x>=1} ∪ {s1>=2} ∪ {s2>=2} on every grid state :: 0 mismatches
+
+[T3] Theorem B(2): aggregate region identity (dense critical weights)
+  [OK ] machine all-weights admissibility == {x>=1} ∪ {s1+s2>=2} on every grid state :: 0 mismatches
+  [OK ] FAST/SLOW per-weight safety biconditionals confirmed on every grid state (dense r-grid) :: 0 mismatches
+  [OK ] boundary weights exact: FAST safe at r=rho_1, SLOW safe at r=rho_2 (witness state (1/2, 6/5, 6/5))
+
+[T4] Theorem B(3): endpoint-only region
+  [OK ] machine endpoint-only feasibility == all of X_0 on every grid state :: 0 mismatches
+
+[T5] Theorem A(i): hierarchy on every grid state
+  [OK ] typed ⇒ all-weights-aggregate ⇒ endpoint-only (no violations on the grid) :: 0 violations
+
+[T6] Theorem B(4): the false-positive set
+  [OK ] false-positive set nonempty on the grid :: 1900 grid states
+  [OK ] interior witness (1/2, 6/5, 6/5): aggregate-feasible for every critical weight, typed-INfeasible, endpoint-feasible
+  [OK ] witness is an interior point (all ±0.1 neighbors remain in FP)
+
+[T7] Theorem B(5): both inclusions strict
+  [OK ] endpoint-only witness (1/2, 1/10, 1/10): endpoint-feasible, aggregate-INfeasible (no action safe at w=(1,1))
+  [OK ] aggregate-vs-typed strictness witness (the FP interior point above)
+
+[T8] Theorem B(6): per-weight plan disagreement at (1/2, 6/5, 6/5)
+  [OK ] r=1/2: SLOW-only (FAST unsafe, SLOW safe)
+  [OK ] r=1: both plans safe
+  [OK ] r=2: FAST-only (SLOW unsafe, FAST safe)
+  [OK ] E_typ = ∩_w E_w = ∅ machine-verified (no action serves every critical weight) :: {'NO-SWITCH': False, 'FAST': False, 'SLOW': False, 'STAGED': False}
+
+[T9] Theorem B(7): the rescue split
+  [OK ] R witness (3/2, 6/5, 6/5): typed-transformable via STAGED (bridging plan at physical cost c=1)
+  [OK ] I witness (1/2, 6/5, 6/5): all four actions rejected, each with its exhibited violated constraint (negative-certificate form) :: {'NO-SWITCH': 'destination architecture not reached (successor q=0 ∉ G)', 'FAST': 'protected-service floor s1 violated during transit (s1 dips to -0.3 < 0)', 'SLOW': 'liability-coverage floor s2 violated during transit (s2 dips to -0.3 < 0)', 'STAGED': 'physical stock violated during transit (x dips to -0.5 < 0)'}
+  [OK ] rescue split verified on the whole grid: FP0∩{x>=1} typed-feasible via STAGED; FP0∩{x<1} typed-infeasible
+
+[T10] Theorem C: propagation through two prepended hold intervals
+  [OK ] stage-0 hierarchy holds and regions are preserved through two hold intervals (every grid state) :: 0 violations
+  [OK ] FP strictness witness survives the holds at stage 0
+  [OK ] endpoint-only strictness witness survives the holds at stage 0
+
+[25/25 checks passed] (45.418s) — artifact: typed_false_positive_instantiation.json
+ALL CHECKS PASS — Theorems A/B/C machine-confirmed on the witness datum.

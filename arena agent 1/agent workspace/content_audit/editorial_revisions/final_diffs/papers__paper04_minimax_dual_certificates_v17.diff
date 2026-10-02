@@ -1,0 +1,89 @@
+--- papers/paper04_minimax_dual_certificates_v16.tex
++++ papers/paper04_minimax_dual_certificates_v17.tex
+@@ -6,7 +6,7 @@
+ % Partition note: Single-source. Duality for the obstruction programme, with its own two-stock benchmark.
+ %% STATUS: structurally assembled as a NEW version. Editorial integration
+ %%         (de-duplication of shared framework, sibling cross-citations)
+-%%         is NOT yet done. See PAPERS_MANIFEST.md.
++%%         was reviewed for this editorial version; see the editorial change log.
+ %% ============================================================
+ 
+ %% v14 (2026-09-29): added section \ref{priorart} and seven bibliography entries, all
+@@ -110,8 +110,8 @@
+ $\Delta x_{1}(Y) = Y - 4$ gives the aggregation rule its exact reading.
+ Dynamic-envelope, quantization, and stochastic-bridge extensions are
+ recorded as conjectures; the residual dynamic-observation completeness gap
+-of the source paper remains open. All claims are machine-verified in exact
+-rational arithmetic (8 check families).
++of the source paper remains open. Eight exact-rational check families verify the declared finite
++instances, not the general analytic converse or dynamic-envelope claims.
+ \end{abstract}
+ 
+ \vspace{0.4em}
+@@ -134,18 +134,18 @@
+ \caption{The theorem and its check families: what the verification record
+ certifies.}
+ \label{tab:checks}
+-\begin{tabular}{@{}l p{4.6cm} l@{}}
++\begin{tabular}{@{}l p{0.82\linewidth}@{}}
+ \toprule
+-Family & Statement certified & Checks \\
++Family & Check family / reported scope \\
+ \midrule
+-G1 & general tower on all trees ($K{=}3$, adaptive filtration); & \\
+-   & martingale property at every cell, all 8192 policies & \\
+-G2 & general DP equals path enumeration ($K{=}2$, 19683 policies); & \\
+-   & $Q_0 = N_1$ equals the tree supremum on both instances & \\
+-G3 & refinement monotonicity, strict on a crafted functional & \\
+-G4 & bridge direction: $Q_0 < 0$ defeats every policy measurably & \\
+-G5 & coupling selection is real: $0$ vs $+1$ at equal marginals & \\
+-G6 & text, retired markers, proof pairing & \\
++G1 & general tower on all trees ($K{=}3$, adaptive filtration); \\
++   & martingale property at every cell, all 8192 policies \\
++G2 & general DP equals path enumeration ($K{=}2$, 19683 policies); \\
++   & $Q_0 = N_1$ equals the tree supremum on both instances \\
++G3 & refinement monotonicity, strict on a crafted functional \\
++G4 & bridge direction: $Q_0 < 0$ defeats every policy measurably \\
++G5 & coupling selection is real: $0$ vs $+1$ at equal marginals \\
++G6 & text, retired markers, proof pairing \\
+ \bottomrule
+ \end{tabular}
+ \end{table}
+@@ -742,24 +742,25 @@
+ 
+ \section{Mechanized verification}
+ 
+-The duality results above are formalized in Lean~4 in \texttt{Formalizations/Minimax\_Dual} (\(21\) theorems and lemmas, importing only the
+-project prelude). The module builds as part of the project's \(60\)-job build, all of
++The Lean~4 module \texttt{Formalizations/Minimax\_Dual} proves
++conditional soundness of a supplied finite measure certificate and
++specific algebraic examples, not the Sion converse, sparse bound or
++dynamic envelope. A current comment-stripped count including Unicode names finds \(22\)
++\texttt{theorem} declarations and no \texttt{lemma} declarations.
++The historical report of \(21\) is an undercount: an ASCII-only name
++filter reproduces it by omitting \texttt{\ensuremath{\psi}single\_sum}.
++The original historical counting command has not been recovered; this
++is a reproducible explanation, not proof of its exact implementation.
++The declared-pin default-target build now passes in GitHub Actions. The module imports only the
++project prelude. The module builds as part of the project's \(60\)-job build, all of
+ which pass.
+ 
+ \noindent\textbf{No admitted gaps.} In Lean an unfinished proof appears as the axiom
+ \texttt{sorryAx} in the axiom footprint of every declaration depending on it. That
+ footprint was inspected: \texttt{sorryAx} is absent, and a source scan with comments
+ stripped finds no \texttt{sorry}, \texttt{admit} or \texttt{axiom} declaration anywhere in
+-the formalization layer. Declarations using classical reasoning depend only on \texttt{Classical.choice}, \texttt{propext} and \texttt{Quot.sound}, the standard axioms of Lean's classical logic.
+-\noindent\textbf{Verification provenance.} The project is pinned to Lean~4 in
+-\texttt{lean-toolchain} (currently \texttt{v4.34.1}). The mechanized checks reported in this
+-section were run under \texttt{v4.14.0}. On 2026-09-30 the source-level invariants were
+-re-verified against the current tree: a comment-stripped scan of all \texttt{.lean} files in
+-the project finds no \texttt{sorry}, \texttt{admit}, \texttt{axiom} or \texttt{constant}
+-declaration anywhere, and the declaration counts and named declarations quoted below were
+-re-counted and confirmed present. \textbf{The build has not been re-run since the toolchain
+-pin moved}, so the build-job figures below date from the \texttt{v4.14.0} run and should be
+-re-confirmed before submission.
++the formalization layer. The named Minimax declarations checked here use only those standard classical axioms or none; the wider project also has the P3 native-evaluation dependencies disclosed below.
++\noindent\textbf{Current Lean provenance.} The committed project pin \texttt{v4.34.1} was rebuilt in GitHub Actions (default Lake target: \(60/60\) jobs, exit~0; \url{https://github.com/MIKEAA2020/general-sustainability/actions/runs/36946730855}). The exact project source and two footprint-check \texttt{.lean} files are archived with SHA-256 manifests. A comment-aware scan of all \(62\) source files finds no \texttt{sorry}, \texttt{admit}, explicit \texttt{axiom} or \texttt{constant} declaration. Twenty-one named footprints contain no \texttt{sorryAx}; the aggregate-import environment exposes three source-level \texttt{native\_decide} uses in the P3 support/value examples, yielding nine distinct generated axiom names under this pin. These are executable computational certificates that extend kernel-only trust to the Lean compiler/runtime; they are not admitted gaps and must not be described as zero axioms or as kernel-only proofs. Three preserved historical modules outside the aggregate import closure are not certified by the default build. The pinned declared-exceptions gate passed in GitHub Actions (run 36990482599): only the nine exact generated names from three approved P3 source sites are permitted; any change to those sites or names requires separate review and re-approval. The separate strict zero-exception check exits 2 by design, while the build itself passed 60/60; the two verdicts must not be conflated. The v4.14.0 comparison of the \emph{current} source fails in the prelude and does not reproduce the old source run.
+ 
+ 
+ \noindent\textbf{Scope.} What is machine-checked is the dual-certificate core stated over

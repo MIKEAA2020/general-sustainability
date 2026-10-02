@@ -1,0 +1,297 @@
+--- paper 2 family/03_computational_certification/paper03_computational_certification_v16.tex
++++ paper 2 family/03_computational_certification/paper03_computational_certification_v17.tex
+@@ -6,7 +6,7 @@
+ % Partition note: Single-source. The computational question: adjoint safety rows, the continuous-to-finite theorem, complexity.
+ %% STATUS: structurally assembled as a NEW version. Editorial integration
+ %%         (de-duplication of shared framework, sibling cross-citations)
+-%%         is NOT yet done. See PAPERS_MANIFEST.md.
++%%         was reviewed for this editorial version; see the editorial change log.
+ %% ============================================================
+ 
+ %% v12 (2026-09-29): added section \ref{priorart} and ten bibliography entries, all
+@@ -193,6 +193,127 @@
+ complexity and residual-bounded verification framework
+ (Section~\ref{computation}); and the reference library
+ (Section~\ref{library}).
++
++\section{Related work}
++\label{priorart}
++
++This paper builds a finite, solver-attainable, independently checkable certificate for a
++continuous-time safety value under partial observation. Each of those four properties has an
++established literature behind it, and this section says where the present construction sits
++relative to each.
++
++\subsection{Viability kernel computation, and the sandwich}
++
++The computation of viability kernels by discrete approximation is the classical route.
++Saint-Pierre's viability kernel algorithm (Saint-Pierre, 1994) approximates the finite-horizon
++kernel by a backward recursion on a grid, with a convergence statement: for open constraint
++sets, the union of the approximating sets over vanishing time step recovers the kernel.
++Level-set formulations compute the same objects through Hamilton--Jacobi equations
++(Mitchell, Bayen and Tomlin, 2005). Because these Eulerian schemes grid the state space,
++their cost grows exponentially with dimension, which motivated Lagrangian reformulations in
++terms of reachable sets that scale considerably further (Maidens, Kaynama, Mitchell, Oishi
++and Dumont, 2013).
++
++\textbf{The two-sided structure is not new, and this paper does not claim it is.} The
++reachability-based viability computations produce a guaranteed \emph{under}-approximation of
++the kernel together with a free \emph{over}-approximation, and use the latter to bound the
++error of the former (Maidens et al., 2013, Section~3). The present paper's sandwich,
++\[
++\rho_{\mathcal{H},G}\;\le\;J_{\mathcal{I}}(T)\;\le\;\rho_{\mathcal{H},G}+\bar{e}+\delta_{\beta}+L h_{t},
++\]
++is of that kind: a computable quantity, and a certified inflation that bounds the true value
++from the other side. What differs is the object being sandwiched and the approximations that
++generate it. The classical schemes discretise a \emph{state space} and approximate a
++\emph{kernel}, a set of states. Here the discretisation is over an outer moment relaxation of
++the admissible \emph{information-adapted controls} together with an inner adversarial
++selection of finitely many stored labels and scenarios, and the quantity bounded is a
++safety \emph{value} over an information state — not a set of initial conditions. The
++partial-observation structure, and the fact that the certificate must hold against every
++measurable policy rather than against one synthesised controller, is what forces that
++change.
++
++\subsection{Moment relaxations}
++
++Relaxing a hard optimisation problem into a sequence of convex problems whose optimal values
++converge monotonically to the true optimum is the moment--SOS programme (Lasserre, 2001;
++Parrilo, 2003), whose hierarchy produces nondecreasing lower bounds with asymptotic
++convergence and, importantly, \emph{checkable} conditions — rank and flat-extension criteria
++on the moment matrix — under which a relaxation is certified exact and minimisers can be
++extracted. That certification idea is the direct ancestor of the present one.
++
++The differences are concrete. The moment--SOS hierarchy applies to polynomial optimisation
++over semi-algebraic sets and is solved by \emph{semidefinite} programming; the relaxations
++here are \emph{linear} programs over moment variables for a linear system, and the programs
++are solved by a standard LP solver. Convergence in the hierarchy is in the relaxation
++degree; convergence here is along a refinement sequence whose mesh and stored-scenario and
++enclosure widths vanish (Theorem~\ref{thm:bridge}). And the certified object differs: an
++exactness certificate in the moment--SOS setting licenses the extraction of a global
++minimiser, whereas here a strictly positive certified margin is an \emph{obstruction}
++certificate — a proof of nonviability, not the recovery of an optimum.
++
++\subsection{The scenario approach, and why the guarantee here is not probabilistic}
++
++Sampling a finite set of uncertainty instances and solving the resulting finite program is
++the scenario approach (Calafiore and Campi, 2005, 2006), with sharp sample-complexity
++results (Campi and Garatti, 2008; Campi and Garatti, 2011, on sampling-and-discarding; Campi,
++Garatti and Prandini, 2009, for the systems-and-control setting). The inner approximation
++here — finitely many stored admissible labels and scenarios — is superficially the same
++move.
++
++It is not the same guarantee. The scenario approach is \emph{probabilistic}: for $N$ sampled
++constraints the returned solution violates the unsampled constraints with probability at most
++$\epsilon$, with confidence $1-\beta$, where $N$ is chosen to deliver that pair. The
++guarantee here is \emph{worst-case}: the scenarios are selected adversarially rather than
++sampled, and the bound holds for every measurable information-adapted policy, with no
++measure on the uncertainty and no confidence parameter. A reader who imports intuitions from
++the scenario literature should note that $\epsilon$ and $\beta$ have no counterpart here;
++the error terms $\bar{e}$, $\delta_{\beta}$ and $L h_t$ are deterministic inflation
++certificates, not violation probabilities. (The notational collision on $\beta$ is
++unfortunate and is flagged rather than resolved.)
++
++\subsection{Verified numerics, and the role of the solver}
++
++Enclosing the solution of a continuous problem in rigorously bounded intervals is the
++programme of interval arithmetic and validated ODE integration. This paper deliberately does
++not use it. Every exact verification path for the reported rational benchmark runs in integer
++and rational arithmetic, and optimality is certified by independent primal and dual witnesses
++checked exactly. \textbf{The solver is not a proof object}: the numerical optimum returned by
++the LP solver is a confirmation that agrees with the exact rational value to within
++$4.2\times10^{-17}$ on the reported cases, and the certificate rests on the exact witnesses,
++not on the floating-point output. This is a statement about the division of labour, not a
++claim that interval methods are inferior; they address problems this pipeline does not.
++
++\subsection{What is claimed}
++
++Given the above, the contribution is five things.
++
++\begin{enumerate}
++\item \textbf{A continuous-to-finite bridge for information states}: an outer moment
++  relaxation and an inner adversarial discretisation combine into a finite LP whose value and
++  whose error inflation bound the continuous-time safety value on both sides, with
++  convergence along any admissible refinement sequence (Theorem~\ref{thm:bridge}).
++\item \textbf{Dual-feasibility as a universal certificate}: every dual-feasible solution of
++  the finite program yields a finite lower-bound certificate covering \emph{every} measurable
++  policy, and a strictly positive certified margin is a finite obstruction certificate.
++\item \textbf{The witness count is governed by information--time rank, not input dimension}:
++  whenever a positive certificate exists one can be chosen with at most $r+1$ safety labels
++  at rank $r$, and a matching construction with scalar input produces obstructions whose
++  minimal certificates require arbitrarily many witnesses, saturating the bound
++  (Proposition~\ref{prop:rank}). The negative half — that a single input does not bound the
++  witness count — is the part most likely to surprise.
++\item \textbf{The certificate is prescriptive}, decoding into an exact shared-authority
++  hierarchy and into redesign sensitivities that separate what buys tolerance from what buys
++  nothing (Propositions~\ref{prop:ladder} and~\ref{prop:redesign}).
++\item \textbf{Exact verification paths by construction}: primal and dual witnesses checked in
++  rational arithmetic, with the solver demoted to a numerical confirmation.
++\end{enumerate}
++
++\noindent Not claimed: the sandwich idea as such (Maidens et al. and the reachability
++literature), moment relaxation as such (Lasserre; Parrilo), scenario discretisation as such
++(Calafiore and Campi; Campi and Garatti), or interval enclosure. The novelty, such as it is,
++lies in assembling these into a certificate that is valid against every measurable
++information-adapted policy under partial observation, and in the rank result of item~3.
++
+ 
+ \subsection{Model, information, and quantifiers}\label{model}
+ 
+@@ -1278,13 +1399,12 @@
+ \emph{The general finding first, because it is the one that survives the instance.} The cost of
+ certifying a system under incomplete observation is not governed by the size of the system, and it
+ is worth saying precisely what it \emph{is} governed by, because the two are routinely conflated.
+-The certificate produced by the pipeline of this paper has a size that scales with the
+-\emph{information--time product}: the product of how much the controller can learn and over how
+-long a horizon it must act. It does not scale with the input dimension --- the dimension of the
+-state, of the disturbance, or of the discretisation standing in for either. A high-dimensional
+-system about which little can be learned over a short horizon is cheap to certify; a
+-low-dimensional system observed richly over a long horizon is expensive. Dimensionality is the
+-wrong axis, and pipelines organised around reducing it are optimising the wrong quantity. This is
++The \emph{minimal support of this certificate} is bounded by the information--time rank
++of the declared relaxation. Proposition~\ref{prop:rank} shows that the number of scalar
++control inputs alone does not bound how many compatible modes a witness must involve.
++This is a statement about certificate support, not a dimension-independent bound on
++assembling or solving the linear program: the state, disturbance, and discretisation
++still affect computational cost. This is
+ the paper's transferable claim, and it is a claim about the \emph{shape} of the problem rather
+ than about any instance of it. The same conclusion is reached independently, in a different
+ language and for a different certificate form, in the measure-dual companion (Abaee, 2026,
+@@ -1387,126 +1507,6 @@
+ machine (Linux x86\_64, Intel Xeon @ 2.60 GHz, Python 3.13, SciPy 1.17
+ HiGHS dual-simplex interface, solver defaults otherwise).
+ 
+-\section{Related work}
+-\label{priorart}
+-
+-This paper builds a finite, solver-attainable, independently checkable certificate for a
+-continuous-time safety value under partial observation. Each of those four properties has an
+-established literature behind it, and this section says where the present construction sits
+-relative to each.
+-
+-\subsection{Viability kernel computation, and the sandwich}
+-
+-The computation of viability kernels by discrete approximation is the classical route.
+-Saint-Pierre's viability kernel algorithm (Saint-Pierre, 1994) approximates the finite-horizon
+-kernel by a backward recursion on a grid, with a convergence statement: for open constraint
+-sets, the union of the approximating sets over vanishing time step recovers the kernel.
+-Level-set formulations compute the same objects through Hamilton--Jacobi equations
+-(Mitchell, Bayen and Tomlin, 2005). Because these Eulerian schemes grid the state space,
+-their cost grows exponentially with dimension, which motivated Lagrangian reformulations in
+-terms of reachable sets that scale considerably further (Maidens, Kaynama, Mitchell, Oishi
+-and Dumont, 2013).
+-
+-\textbf{The two-sided structure is not new, and this paper does not claim it is.} The
+-reachability-based viability computations produce a guaranteed \emph{under}-approximation of
+-the kernel together with a free \emph{over}-approximation, and use the latter to bound the
+-error of the former (Maidens et al., 2013, Section~3). The present paper's sandwich,
+-\[
+-\rho_{\mathcal{H},G}\;\le\;J_{\mathcal{I}}(T)\;\le\;\rho_{\mathcal{H},G}+\bar{e}+\delta_{\beta}+L h_{t},
+-\]
+-is of that kind: a computable quantity, and a certified inflation that bounds the true value
+-from the other side. What differs is the object being sandwiched and the approximations that
+-generate it. The classical schemes discretise a \emph{state space} and approximate a
+-\emph{kernel}, a set of states. Here the discretisation is over an outer moment relaxation of
+-the admissible \emph{information-adapted controls} together with an inner adversarial
+-selection of finitely many stored labels and scenarios, and the quantity bounded is a
+-safety \emph{value} over an information state — not a set of initial conditions. The
+-partial-observation structure, and the fact that the certificate must hold against every
+-measurable policy rather than against one synthesised controller, is what forces that
+-change.
+-
+-\subsection{Moment relaxations}
+-
+-Relaxing a hard optimisation problem into a sequence of convex problems whose optimal values
+-converge monotonically to the true optimum is the moment--SOS programme (Lasserre, 2001;
+-Parrilo, 2003), whose hierarchy produces nondecreasing lower bounds with asymptotic
+-convergence and, importantly, \emph{checkable} conditions — rank and flat-extension criteria
+-on the moment matrix — under which a relaxation is certified exact and minimisers can be
+-extracted. That certification idea is the direct ancestor of the present one.
+-
+-The differences are concrete. The moment--SOS hierarchy applies to polynomial optimisation
+-over semi-algebraic sets and is solved by \emph{semidefinite} programming; the relaxations
+-here are \emph{linear} programs over moment variables for a linear system, and the programs
+-are solved by a standard LP solver. Convergence in the hierarchy is in the relaxation
+-degree; convergence here is along a refinement sequence whose mesh and stored-scenario and
+-enclosure widths vanish (Theorem~\ref{thm:bridge}). And the certified object differs: an
+-exactness certificate in the moment--SOS setting licenses the extraction of a global
+-minimiser, whereas here a strictly positive certified margin is an \emph{obstruction}
+-certificate — a proof of nonviability, not the recovery of an optimum.
+-
+-\subsection{The scenario approach, and why the guarantee here is not probabilistic}
+-
+-Sampling a finite set of uncertainty instances and solving the resulting finite program is
+-the scenario approach (Calafiore and Campi, 2005, 2006), with sharp sample-complexity
+-results (Campi and Garatti, 2008; Campi and Garatti, 2011, on sampling-and-discarding; Campi,
+-Garatti and Prandini, 2009, for the systems-and-control setting). The inner approximation
+-here — finitely many stored admissible labels and scenarios — is superficially the same
+-move.
+-
+-It is not the same guarantee. The scenario approach is \emph{probabilistic}: for $N$ sampled
+-constraints the returned solution violates the unsampled constraints with probability at most
+-$\epsilon$, with confidence $1-\beta$, where $N$ is chosen to deliver that pair. The
+-guarantee here is \emph{worst-case}: the scenarios are selected adversarially rather than
+-sampled, and the bound holds for every measurable information-adapted policy, with no
+-measure on the uncertainty and no confidence parameter. A reader who imports intuitions from
+-the scenario literature should note that $\epsilon$ and $\beta$ have no counterpart here;
+-the error terms $\bar{e}$, $\delta_{\beta}$ and $L h_t$ are deterministic inflation
+-certificates, not violation probabilities. (The notational collision on $\beta$ is
+-unfortunate and is flagged rather than resolved.)
+-
+-\subsection{Verified numerics, and the role of the solver}
+-
+-Enclosing the solution of a continuous problem in rigorously bounded intervals is the
+-programme of interval arithmetic and validated ODE integration. This paper deliberately does
+-not use it. Every exact verification path for the reported rational benchmark runs in integer
+-and rational arithmetic, and optimality is certified by independent primal and dual witnesses
+-checked exactly. \textbf{The solver is not a proof object}: the numerical optimum returned by
+-the LP solver is a confirmation that agrees with the exact rational value to within
+-$4.2\times10^{-17}$ on the reported cases, and the certificate rests on the exact witnesses,
+-not on the floating-point output. This is a statement about the division of labour, not a
+-claim that interval methods are inferior; they address problems this pipeline does not.
+-
+-\subsection{What is claimed}
+-
+-Given the above, the contribution is five things.
+-
+-\begin{enumerate}
+-\item \textbf{A continuous-to-finite bridge for information states}: an outer moment
+-  relaxation and an inner adversarial discretisation combine into a finite LP whose value and
+-  whose error inflation bound the continuous-time safety value on both sides, with
+-  convergence along any admissible refinement sequence (Theorem~\ref{thm:bridge}).
+-\item \textbf{Dual-feasibility as a universal certificate}: every dual-feasible solution of
+-  the finite program yields a finite lower-bound certificate covering \emph{every} measurable
+-  policy, and a strictly positive certified margin is a finite obstruction certificate.
+-\item \textbf{The witness count is governed by information--time rank, not input dimension}:
+-  whenever a positive certificate exists one can be chosen with at most $r+1$ safety labels
+-  at rank $r$, and a matching construction with scalar input produces obstructions whose
+-  minimal certificates require arbitrarily many witnesses, saturating the bound
+-  (Proposition~\ref{prop:rank}). The negative half — that a single input does not bound the
+-  witness count — is the part most likely to surprise.
+-\item \textbf{The certificate is prescriptive}, decoding into an exact shared-authority
+-  hierarchy and into redesign sensitivities that separate what buys tolerance from what buys
+-  nothing (Propositions~\ref{prop:ladder} and~\ref{prop:redesign}).
+-\item \textbf{Exact verification paths by construction}: primal and dual witnesses checked in
+-  rational arithmetic, with the solver demoted to a numerical confirmation.
+-\end{enumerate}
+-
+-\noindent Not claimed: the sandwich idea as such (Maidens et al. and the reachability
+-literature), moment relaxation as such (Lasserre; Parrilo), scenario discretisation as such
+-(Calafiore and Campi; Campi and Garatti), or interval enclosure. The novelty, such as it is,
+-lies in assembling these into a certificate that is valid against every measurable
+-information-adapted policy under partial observation, and in the rank result of item~3.
+-
+ \subsection*{References}
+ %% ------------------------------------------------------------------
+ %% Added 2026-09-29 to support section \ref{priorart}. All VERIFIED against
+@@ -1628,8 +1628,8 @@
+ \url{paper2_nonstandard_verification.py},
+ \url{paper2c_lp_campaign.py}, and the \texttt{viacert} package are publicly
+ available at \url{https://github.com/MIKEAA2020/general-sustainability}
+-(folder \texttt{arena agent 1/paper rewrites/latex}, at the commit
+-pinned to this article's submission); they reproduce all exact values,
++(folder \texttt{arena agent 1/paper rewrites/latex}, at the verified
++repository revision \texttt{1d27e763c4b55d9d2c355ccc31b31689e435b772}); they reproduce all exact values,
+ witnesses, bounds, and the solver campaign verbatim.
+ 
+ \subsection*{AI declaration}

@@ -1,0 +1,297 @@
+--- papers/paper02_probabilistic_sufficiency_v12.tex
++++ papers/paper02_probabilistic_sufficiency_v13.tex
+@@ -6,7 +6,7 @@
+ % Partition note: Single-source. Poses its own question: when is an observation-based policy sufficient, exactly.
+ %% STATUS: structurally assembled as a NEW version. Editorial integration
+ %%         (de-duplication of shared framework, sibling cross-citations)
+-%%         is NOT yet done. See PAPERS_MANIFEST.md.
++%%         was reviewed for this editorial version; see the editorial change log.
+ %% ============================================================
+ 
+ %% v12 (2026-09-29): added section \ref{priorart}. The four references named in the
+@@ -239,6 +239,128 @@
+ 
+ All certified computations are exact: integer and rational arithmetic,
+ standard library only, deterministic scripts (Section \ref{methods}).
++
++\section{Related work}
++\label{priorart}
++
++This paper asks when an observation-based policy is \emph{sufficient}, exactly, and what
++remains safe when it is not. Both halves have near neighbours, and this section names them
++before stating what is claimed.
++
++\subsection{The belief-state reduction and the $\alpha$-vector representation}
++
++That a partially observed problem can be written as a fully observed one on the space of
++beliefs is classical (Astr\"{o}m, 1965), and the finite-horizon value function of a
++partially observed Markov decision process is piecewise linear and convex in the belief,
++represented by a finite set of $\alpha$-vectors (Smallwood and Sondik, 1973; see Bertsekas
++and Shreve, 1978, for the measure-theoretic setting). The safety value $V_k(b)$ studied here
++is a belief-space value in that lineage, with one structural change: the recursion
++maximises over actions but \emph{minimises} over the disturbance, so the object is a
++worst-case safety probability rather than an expected total reward. Consequently the
++piecewise-linear representation survives but its identifying structure does not: here the
++$\alpha$-vectors are exactly the indicators of the maximal jointly survivable subsets of the
++support, an antichain (Proposition~\ref{prop:antichain}), rather than the
++reward-derived vectors of the expected-criterion theory.
++
++\subsection{Sufficiency under imperfect measurement: the two nearest neighbours}
++
++The closest work is the viability-theoretic treatment of imperfect information, and it comes
++in two forms that this paper sits between.
++
++\emph{Veliov (1993).} For a time-invariant system with incomplete and inexact measurement,
++Veliov gives a \textbf{sufficient} condition for the existence of an output feedback
++regulation map, and shows it is equivalent to Haddad's viability condition when the
++measurement is perfect. The condition is sufficient and not necessary: a system may admit an
++adequate output feedback that the condition does not detect.
++
++\emph{Doyen (2000).} \textbf{(Luc Doyen, the viability theorist --- not Laurent Doyen of the
++qualitative partially-observed literature cited below; the surnames coincide and the two
++should not be conflated.)} For uncertain nonlinear systems under state and control
++constraints with bounded disturbances on both the dynamics and the output, Doyen gives
++conditions that are \textbf{necessary and sufficient} for the guaranteed viability property
++--- defined as the existence of a \emph{Lipschitz closed-loop} maintaining the state
++\emph{exactly} in a given closed domain --- and derives equivalent geometric and
++Hamilton--Jacobi--Isaacs characterisations via the Lipschitz kernel of a set-valued map.
++
++These two delimit the contribution. Relative to Veliov, what is added is exactness: the
++condition here is necessary as well as sufficient, so its failure is informative rather than
++merely inconclusive. Relative to Doyen, what differs is the admissible policy class and the
++criterion. Doyen's loops are Lipschitz and \emph{memoryless}, of the form $u(h(x,w))$; the
++recursion here admits policies that depend on the whole observation history, and the
++distinction is strict --- the feedback viable-set recursion
++$\mathcal{W}^{\mathrm{fb}}_k$ contains the blind recursion $\mathcal{W}_k$, strictly in
++general (Remark~\ref{rem:feedback-strict}). And where Doyen's criterion is the exact
++maintenance of a closed domain, the safety value here is quantitative: when a belief is not
++fully safe, the deficit satisfies
++$1 - V_k(b) \ge \min_{x \in \mathrm{supp}(b)} b(x)$
++(Proposition~\ref{prop:deficit}), so near-misses are measured rather than discarded.
++
++\subsection{The estimation-space and qualitative programmes}
++
++A distinct strategy absorbs imperfect information into an enlarged state: the estimation-tube
++programme formulates the problem on a space of estimators or tubes rather than on the belief
++simplex (Cardaliaguet, Quincampoix and Saint-Pierre, 2007, for the survey of viability
++methods in this line). That programme is set in continuous time and targets differential
++games; the present development is discrete, finite-horizon, and computational, and it does
++not compete with it.
++
++On the qualitative side, the decidability and complexity landscape for partially observed
++Markov decision processes under qualitative objectives --- reachability, safety,
++B\"{u}chi --- is established (Chatterjee, Doyen and Henzinger, 2009), and it is known that
++almost-sure safety depends only on belief supports. What is added here is quantitative and
++structural: the deficit bound and its witness reading, the survivable-set (antichain) formula
++behind the witness census, the class lattice with its realized gaps, the parametric closed
++forms, and the class-scoped timing obstruction --- together with the observation that the
++support-only reduction, valid for almost-sure objectives, does \emph{not} extend to the
++quantitative criterion, which is why the value, not just the support, has to be carried.
++
++\subsection{Complexity, robustness and shielding}
++
++That finite-horizon partially observed problems are computationally hard is classical
++(Papadimitriou and Tsitsiklis, 1987), and the practical response has been bounds and
++approximations (Lovejoy, 1991). This paper does not improve those complexity results; it
++identifies classes on which exact answers are nonetheless available in closed form, and
++records where exactness stops. Distributionally robust formulations place an ambiguity set
++over the transition or the observation kernel (Nakao, Jiang and Shen, 2021); the disturbance
++model here is worst-case over a support rather than distributional, so the two are not
++comparable and neither subsumes the other. Safe reinforcement learning via shielding
++(Alshiekh, Bloem, Ehlers, K\"{o}nighofer, Niekum and Topcu, 2018) enforces safety by
++constraining a learner's actions; the setting there is learning with an unknown model, here
++the model is known and the question is exact sufficiency.
++
++\subsection{What is claimed}
++
++Given the above, the contribution is five things and nothing more.
++
++\begin{enumerate}
++\item \textbf{Exact sufficiency where the nearest sufficient condition is only sufficient.}
++  The value-one level of the recursion coincides with the feedback viable-set recursion, so
++  the condition is necessary as well as sufficient (Theorem~\ref{thm:support}).
++\item \textbf{Admission of history-dependent policies}, with the feedback/blind distinction
++  shown to be strict (Remark~\ref{rem:feedback-strict}) --- a repaired reading; the
++  mechanized support identity is checked on the repaired statement.
++\item \textbf{A quantitative deficit rather than a binary verdict}:
++  $1 - V_k(b) \ge \min_{x \in \mathrm{supp}(b)} b(x)$, with the witness reading of
++  Proposition~\ref{prop:deficit}.
++\item \textbf{The structural identification of the $\alpha$-vectors} as the indicators of
++  the maximal jointly survivable subsets of the support, Sperner-bounded
++  (Proposition~\ref{prop:antichain}), the class lattice with realized gaps
++  (Theorem~\ref{thm:lattice}), and parametric closed forms on named classes.
++\item \textbf{Machine-checking}: the support identity, the freeze count and its frozen value,
++  and the rationality of the $\alpha$-vectors are formalized in Lean~4 with no 	exttt{sorryAx} in the audited
++  aggregate-import environment. Three 	exttt{native\_decide} uses in the P3
++  support/value examples generate nine axiom names in this pinned source,
++  relying on compiled finite computation rather than kernel-only reduction. One bound remains cited rather than formalized: the Sperner bound of
++  Proposition~\ref{prop:antichain}(iii).
++\end{enumerate}
++
++\noindent\textbf{Current Lean provenance.} The committed project pin \texttt{v4.34.1} was rebuilt in GitHub Actions (default Lake target: \(60/60\) jobs, exit~0; \url{https://github.com/MIKEAA2020/general-sustainability/actions/runs/36946730855}). The exact project source and two footprint-check \texttt{.lean} files are archived with SHA-256 manifests. A comment-aware scan of all \(62\) source files finds no \texttt{sorry}, \texttt{admit}, explicit \texttt{axiom} or \texttt{constant} declaration. Twenty-one named footprints contain no \texttt{sorryAx}; the aggregate-import environment exposes three source-level \texttt{native\_decide} uses in the P3 support/value examples, yielding nine distinct generated axiom names under this pin. These are executable computational certificates that extend kernel-only trust to the Lean compiler/runtime; they are not admitted gaps and must not be described as zero axioms or as kernel-only proofs. Three preserved historical modules outside the aggregate import closure are not certified by the default build. The pinned declared-exceptions gate passed in GitHub Actions (run 36990482599): only the nine exact generated names from three approved P3 source sites are permitted; any change to those sites or names requires separate review and re-approval. The separate strict zero-exception check exits 2 by design, while the build itself passed 60/60; the two verdicts must not be conflated. The v4.14.0 comparison of the \emph{current} source fails in the prelude and does not reproduce the old source run.
++
++\noindent Not claimed: the belief-state reduction (Astr\"{o}m), the $\alpha$-vector
++representation as such (Smallwood and Sondik), the qualitative complexity landscape
++(Chatterjee, Doyen and Henzinger), or the hardness results that motivate approximation
++(Papadimitriou and Tsitsiklis; Lovejoy).
++
+ 
+ \subsection{The augmented model, the safety value, and the selector}\label{model}
+ 
+@@ -1568,14 +1690,15 @@
+ with rational solvers, survivable-set compression over the antichain of
+ Proposition \ref{prop:antichain}, and medium instances with several
+ hidden parameters --- the probe-count asymptotics of the repetition
+-trade-off, the general learning-deadline law for additively entering
++trade-off, extensions of the learning-deadline law to misaligned worst-loss
+ hidden parameters, are the natural next steps. A third item stood on that
+ list when this paper was drafted --- a proof-assistant
+-formalization of the closed forms --- and is now complete:
+-the support identity, the freeze count and its frozen value,
+-and the rationality of the \(\alpha\)-vectors are machine-checked
+-(Lean~4; no axioms, no admitted gaps, ordered-field interface
+-only), the first on the repaired reading of
++formalization of selected combinatorial statements --- and now
++covers the deterministic support identity under its declared kernel
++hypotheses, the freeze value for its specified action families, and
++rationality of the declared \(\alpha\)-vectors. These are machine-checked
++(Lean~4; no 	exttt{sorryAx} in the audited import environment,
++with generated 	exttt{native\_decide} trust dependencies scoped below), the first on the repaired reading of
+ Theorem~\ref{thm:support} recorded in
+ Remark~\ref{rem:feedback-strict}. One bound remains cited
+ rather than formalized: the Sperner bound of
+@@ -1609,123 +1732,6 @@
+ price attached and every number in the tables open to script-level
+ re-inspection.
+ 
+-\section{Related work}
+-\label{priorart}
+-
+-This paper asks when an observation-based policy is \emph{sufficient}, exactly, and what
+-remains safe when it is not. Both halves have near neighbours, and this section names them
+-before stating what is claimed.
+-
+-\subsection{The belief-state reduction and the $\alpha$-vector representation}
+-
+-That a partially observed problem can be written as a fully observed one on the space of
+-beliefs is classical (Astr\"{o}m, 1965), and the finite-horizon value function of a
+-partially observed Markov decision process is piecewise linear and convex in the belief,
+-represented by a finite set of $\alpha$-vectors (Smallwood and Sondik, 1973; see Bertsekas
+-and Shreve, 1978, for the measure-theoretic setting). The safety value $V_k(b)$ studied here
+-is a belief-space value in that lineage, with one structural change: the recursion
+-maximises over actions but \emph{minimises} over the disturbance, so the object is a
+-worst-case safety probability rather than an expected total reward. Consequently the
+-piecewise-linear representation survives but its identifying structure does not: here the
+-$\alpha$-vectors are exactly the indicators of the maximal jointly survivable subsets of the
+-support, an antichain (Proposition~\ref{prop:antichain}), rather than the
+-reward-derived vectors of the expected-criterion theory.
+-
+-\subsection{Sufficiency under imperfect measurement: the two nearest neighbours}
+-
+-The closest work is the viability-theoretic treatment of imperfect information, and it comes
+-in two forms that this paper sits between.
+-
+-\emph{Veliov (1993).} For a time-invariant system with incomplete and inexact measurement,
+-Veliov gives a \textbf{sufficient} condition for the existence of an output feedback
+-regulation map, and shows it is equivalent to Haddad's viability condition when the
+-measurement is perfect. The condition is sufficient and not necessary: a system may admit an
+-adequate output feedback that the condition does not detect.
+-
+-\emph{Doyen (2000).} \textbf{(Luc Doyen, the viability theorist --- not Laurent Doyen of the
+-qualitative partially-observed literature cited below; the surnames coincide and the two
+-should not be conflated.)} For uncertain nonlinear systems under state and control
+-constraints with bounded disturbances on both the dynamics and the output, Doyen gives
+-conditions that are \textbf{necessary and sufficient} for the guaranteed viability property
+---- defined as the existence of a \emph{Lipschitz closed-loop} maintaining the state
+-\emph{exactly} in a given closed domain --- and derives equivalent geometric and
+-Hamilton--Jacobi--Isaacs characterisations via the Lipschitz kernel of a set-valued map.
+-
+-These two delimit the contribution. Relative to Veliov, what is added is exactness: the
+-condition here is necessary as well as sufficient, so its failure is informative rather than
+-merely inconclusive. Relative to Doyen, what differs is the admissible policy class and the
+-criterion. Doyen's loops are Lipschitz and \emph{memoryless}, of the form $u(h(x,w))$; the
+-recursion here admits policies that depend on the whole observation history, and the
+-distinction is strict --- the feedback viable-set recursion
+-$\mathcal{W}^{\mathrm{fb}}_k$ contains the blind recursion $\mathcal{W}_k$, strictly in
+-general (Remark~\ref{rem:feedback-strict}). And where Doyen's criterion is the exact
+-maintenance of a closed domain, the safety value here is quantitative: when a belief is not
+-fully safe, the deficit satisfies
+-$1 - V_k(b) \ge \min_{x \in \mathrm{supp}(b)} b(x)$
+-(Proposition~\ref{prop:deficit}), so near-misses are measured rather than discarded.
+-
+-\subsection{The estimation-space and qualitative programmes}
+-
+-A distinct strategy absorbs imperfect information into an enlarged state: the estimation-tube
+-programme formulates the problem on a space of estimators or tubes rather than on the belief
+-simplex (Cardaliaguet, Quincampoix and Saint-Pierre, 2007, for the survey of viability
+-methods in this line). That programme is set in continuous time and targets differential
+-games; the present development is discrete, finite-horizon, and computational, and it does
+-not compete with it.
+-
+-On the qualitative side, the decidability and complexity landscape for partially observed
+-Markov decision processes under qualitative objectives --- reachability, safety,
+-B\"{u}chi --- is established (Chatterjee, Doyen and Henzinger, 2009), and it is known that
+-almost-sure safety depends only on belief supports. What is added here is quantitative and
+-structural: the deficit bound and its witness reading, the survivable-set (antichain) formula
+-behind the witness census, the class lattice with its realized gaps, the parametric closed
+-forms, and the class-scoped timing obstruction --- together with the observation that the
+-support-only reduction, valid for almost-sure objectives, does \emph{not} extend to the
+-quantitative criterion, which is why the value, not just the support, has to be carried.
+-
+-\subsection{Complexity, robustness and shielding}
+-
+-That finite-horizon partially observed problems are computationally hard is classical
+-(Papadimitriou and Tsitsiklis, 1987), and the practical response has been bounds and
+-approximations (Lovejoy, 1991). This paper does not improve those complexity results; it
+-identifies classes on which exact answers are nonetheless available in closed form, and
+-records where exactness stops. Distributionally robust formulations place an ambiguity set
+-over the transition or the observation kernel (Nakao, Jiang and Shen, 2021); the disturbance
+-model here is worst-case over a support rather than distributional, so the two are not
+-comparable and neither subsumes the other. Safe reinforcement learning via shielding
+-(Alshiekh, Bloem, Ehlers, K\"{o}nighofer, Niekum and Topcu, 2018) enforces safety by
+-constraining a learner's actions; the setting there is learning with an unknown model, here
+-the model is known and the question is exact sufficiency.
+-
+-\subsection{What is claimed}
+-
+-Given the above, the contribution is five things and nothing more.
+-
+-\begin{enumerate}
+-\item \textbf{Exact sufficiency where the nearest sufficient condition is only sufficient.}
+-  The value-one level of the recursion coincides with the feedback viable-set recursion, so
+-  the condition is necessary as well as sufficient (Theorem~\ref{thm:support}).
+-\item \textbf{Admission of history-dependent policies}, with the feedback/blind distinction
+-  shown to be strict (Remark~\ref{rem:feedback-strict}) --- a repaired reading; the
+-  mechanized support identity is checked on the repaired statement.
+-\item \textbf{A quantitative deficit rather than a binary verdict}:
+-  $1 - V_k(b) \ge \min_{x \in \mathrm{supp}(b)} b(x)$, with the witness reading of
+-  Proposition~\ref{prop:deficit}.
+-\item \textbf{The structural identification of the $\alpha$-vectors} as the indicators of
+-  the maximal jointly survivable subsets of the support, Sperner-bounded
+-  (Proposition~\ref{prop:antichain}), the class lattice with realized gaps
+-  (Theorem~\ref{thm:lattice}), and parametric closed forms on named classes.
+-\item \textbf{Machine-checking}: the support identity, the freeze count and its frozen value,
+-  and the rationality of the $\alpha$-vectors are formalized in Lean~4 with no axioms and no
+-  admitted gaps. One bound remains cited rather than formalized: the Sperner bound of
+-  Proposition~\ref{prop:antichain}(iii).
+-\end{enumerate}
+-
+-\noindent Not claimed: the belief-state reduction (Astr\"{o}m), the $\alpha$-vector
+-representation as such (Smallwood and Sondik), the qualitative complexity landscape
+-(Chatterjee, Doyen and Henzinger), or the hardness results that motivate approximation
+-(Papadimitriou and Tsitsiklis; Lovejoy).
+-
+ \subsection*{References}
+ %% ------------------------------------------------------------------
+ %% Added 2026-09-29 to support section \ref{priorart}. All three VERIFIED
+@@ -1811,8 +1817,8 @@
+ \url{hidden_parameter_learning_v1_verify.py} --- and the figure-and-table
+ generation script \url{paper2_belief_state_figures.py} are publicly
+ available at \url{https://github.com/MIKEAA2020/general-sustainability}
+-(folder \texttt{arena agent 1/paper rewrites/latex}, at the commit
+-pinned to this article's submission); they reproduce all values, bounds,
++(folder \texttt{arena agent 1/paper rewrites/latex}, at the verified
++repository revision \texttt{1d27e763c4b55d9d2c355ccc31b31689e435b772}); they reproduce all values, bounds,
+ thresholds, figures, and tabulated entries verbatim.
+ 
+ \subsection*{AI declaration}
