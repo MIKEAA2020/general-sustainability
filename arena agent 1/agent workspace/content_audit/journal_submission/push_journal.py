@@ -10,7 +10,7 @@ remote=G.api('/git/ref/heads/'+BR)['object']['sha'];expected=(R/'content_audit/p
 assert remote==expected,(remote,expected)
 tree=G.api('/git/trees/'+remote+'?recursive=1');assert not tree['truncated']
 old={e['path']:e['sha'] for e in tree['tree'] if e['type']=='blob'}
-files=[(rel,p) for rel,p in G.files() if str(rel)!='content_audit/journal_submission/PUSH_SESSION.log' and not any(part.startswith('build') for part in rel.parts)]+[(Path(s),R/s) for s in ROOT_DOCS]
+files=[(rel,p) for rel,p in G.files() if str(rel)!='content_audit/journal_submission/PUSH_SESSION.log' and (not any(part.startswith('build') for part in rel.parts) or str(rel)=='content_audit/paper01_v68_author_draft_2026-10-03/build_v68.py')]+[(Path(s),R/s) for s in ROOT_DOCS]
 changed=[]
 for rel,p in files:
  data=p.read_bytes();sha=G.digest(data);target=ROOT+str(rel)
@@ -33,7 +33,7 @@ for i,(rel,p,sha,size) in enumerate(changed,1):
 assert G.api('/git/ref/heads/'+BR)['object']['sha']==remote,'remote moved before commit'
 base=G.api('/git/commits/'+remote)['tree']['sha']
 newtree=G.api('/git/trees',{'base_tree':base,'tree':entries})['sha']
-commit=G.api('/git/commits',{'message':'Refresh verified preprint author-review materials\n\nVersioned article sources and standalone packages remain author-review candidates, not posted preprints. Paper03 independent mathematical review, author rights approval, and physical error coverage are not asserted.','tree':newtree,'parents':[remote]})['sha']
+commit=G.api('/git/commits',{'message':'Add coordinated unrefereed Paper01 v68 article and supplement sources\n\nHash-pinned builder, source validator, status and versioned figure accompany the TeX. No v68 PDF, independent mathematical review, Preprints.org deposit or author-rights approval is claimed.','tree':newtree,'parents':[remote]})['sha']
 assert G.api('/git/ref/heads/'+BR)['object']['sha']==remote,'remote moved before ref update'
 G.api('/git/refs/heads/'+BR,{'sha':commit},method='PATCH')
 verified=G.api('/git/trees/'+commit+'?recursive=1');assert not verified['truncated']
