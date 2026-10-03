@@ -16,7 +16,7 @@ The version-pinned `build_v70.py` asserts the two frozen v69 source hashes and a
 The runner `coverage_v70.py` runs from any current directory, using exact rational arithmetic for the 48-cell discrete whole-window hold grid. Repeated from `/tmp` with a different hash seed and obtained 6 viable / 30 first-step / 12 later-blind-step cells; the versioned TSV and plot hashes in `COVERAGE_RUN.md` matched. This is **not** a continuous drift proof and not an unrestricted switching verdict. Final files (SHA-256):
 
 - article TeX `bec96326e77d1b6bf0f808b9c264601dce8197958682c1b779901c4dedb85d4b`; PDF `46773fc4a3928d808eb0a578cd7ccbc1f870183e3810720f6967f5e2706b6dff`.
-- supplement TeX `338cde88b8419caecd637c520c1dd41623e89fcf2f83a9f222cf5665ea3c4491`; PDF `0ae223524a252c2d180a07f53d78157ba79d57b83eb3d51a884fc8ab9b2560af`.
+- supplement TeX `338cde88b8419caecd637c520c1dd41623e89fcf2f83a9f222cf5665ea3c4491`; PDF `8cb15f65d6b75853bd9ca10e3442312aac8d1200225daeedb8b044610432fbb4` (remote blob independently rechecked against the deposited PDF).
 - plot `e337b87b77098e899dd7cf34f90b8a7f7c124f781074583399b4569dcff2fdfe`; TSV `6f9611c2e64611dfb70744dbc5ba8b4194afe40335c0941615f9b78a0915c7d7`.
 
 Frozen v69 TeX/PDF hashes checked after edits and unchanged: article TeX `ce30c72500f6793b5faa6445540a839e1724e05e06ce5e1654bcb7dfb1b67763`, supplement TeX `24e138d143e8716d642e094e22ebafcf89aeca4320a230703b5fe49bb95a2d23`, article PDF `685c032af9cf2d46a4632dff0a75c6eed631ccdce411f92d2d3606adccae9575`, supplement PDF `96b223e2dfc6a2d9b79c583f0c3a89223d01f1186a1f6bb48e70721fa6b813b1`.
