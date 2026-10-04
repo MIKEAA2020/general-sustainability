@@ -90,8 +90,8 @@ All three are recoverable; none contained workspace-original content.
 
 ## Deliberately NOT committed
 
-- **`uploads/github_pat.txt`** — a credential. Never commit it. 94 bytes; replace with a fresh
-  token if lost.
+- **The GitHub PAT** — a credential, and this repository is **public**: it must never be
+  committed. It persists as local files only; see "GitHub PAT persistence" below.
 - **`p5/reps.pkl`** — a 40-byte pickle, referenced by no script in the workspace. Contents
   recorded here so nothing is lost: `[[0, 5, 9, 12], [1, 5, 9, 13]]`. Pickles are also an
   arbitrary-code-execution risk to anyone loading one from a public repository, so it stays out.
@@ -103,3 +103,33 @@ fetch returns a 9-byte non-gzip file. Deleting `tools/` removes the last local e
 checks on the papers remain static** (brace balance, environment balance, dangling `\ref`,
 8-gram content coverage). Compilation is unverified and this is recorded as residual risk in
 `papers/PRIOR_ART_PASS.md` §3.1 and `papers/PHASE0_MERGE_VERIFICATION.md`.
+
+---
+
+# 2026-10-04 — GitHub PAT persistence (owner directive)
+
+The repository is **public**, so the fine-grained GitHub PAT (Contents: read/write on this
+repo, 93-char format) is **never committed** — it persists as local files only, in three
+copies, all mode 600:
+
+| copy | location | survives |
+|---|---|---|
+| durable / tooling | `/home/z/my-project/.github_pat` | durable-volume snapshots (read by `gh_bootstrap.sh`) |
+| explicit backup | `/home/z/my-project/backup/.github_pat` | durable-volume snapshots |
+| workspace root | `arena agent 1/agent workspace/.github_pat` (untracked) | any reset that leaves the clone in place |
+
+Recovery after any reset, in order:
+
+1. If any copy survives: `cp <copy> /home/z/my-project/.github_pat && chmod 600 /home/z/my-project/.github_pat`
+2. `bash /home/z/my-project/gh_bootstrap.sh` — rebuilds `.git-credentials` (durable volume +
+   home mirror), re-applies the git config, verifies with `ls-remote`, and falls back
+   through the three copies above if the durable copy is missing.
+3. If the clone is gone: `git clone -b e2-v3-source-year https://github.com/MIKEAA2020/general-sustainability.git`
+4. If no copy survives: the owner must reissue a PAT (93-char fine-grained format,
+   Contents read/write on this repo). The 2026-10-03/04 failure mode — a stale 92-char
+   token restored by a durable-volume rollback — is documented in the worklogs.
+
+The `.gitignore` rule `.github_pat` is load-bearing: it keeps every local copy out of any
+future sweep. If this repository is ever made private and the owner then wants the token
+tracked in-git like other workspace files, that requires an explicit new directive; until
+then, never paste the token value into any committed file, worklog, or commit message.
