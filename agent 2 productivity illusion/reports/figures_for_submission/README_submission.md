@@ -1,16 +1,16 @@
 # ECOMOD submission package — the .tex is the Manuscript item
 
-**Owner directive (v39 round, 2026-10-04):** the portal requires the `.tex`
+**Owner directives (v39-v40 rounds, 2026-10-04):** the portal requires the `.tex`
 itself — a submitted PDF **cannot be relied on for display**. The upload must
 therefore be arranged so the portal's own server-side compile of the `.tex`
 succeeds and produces the displayed PDF. That is verified for
-`manuscript_ECOMOD_v39.tex` under every engine a portal might pick.
+`manuscript_ECOMOD_v40.tex` under every engine a portal might pick.
 
 ## The three files that constitute the manuscript item
 
 | File (upload under this exact name) | Role |
 |---|---|
-| `manuscript_ECOMOD_v39.tex` | **Manuscript** — the portal compiles this |
+| `manuscript_ECOMOD_v40.tex` | **Manuscript** — the portal compiles this |
 | `real_series_aggregation_face.png` | Fig. 1 — the aggregation face of the masking result (NFA, world, 1961–2022) |
 | `composition_attribution.png` | Fig. 2 — measured land-type composition of the aggregate change |
 
@@ -42,7 +42,7 @@ source since v38/v39:
    `iftex`: the pdfLaTeX branch uses `fontenc`/`inputenc`/`lmodern` only.
    *Verified:* Editorial-Manager simulation (flat directory: `.tex` + the two
    PNGs alone, `pdflatex -interaction=nonstopmode` x2): **0 errors / 0
-   overfull / 28 pages, both figures embedded.**
+   overfull (27 pages for v40), both figures embedded.**
 2. **System-font absence** — the Lua/XeTeX branch's `DejaVu Serif` /
    `DejaVu Sans Mono` / `Latin Modern Math` are system fonts portal servers
    do not have. Since v39 each `\set*font` is guarded by
@@ -57,11 +57,16 @@ file is self-contained, so even a single server pass yields a complete PDF.
 ## Optional companion PDF
 
 If the portal offers a separate slot for a compiled PDF (or the owner wants a
-copy for the record), upload `manuscript_ECOMOD_v39.pdf` (the 31-page
+copy for the record), upload `manuscript_ECOMOD_v40.pdf` (the 30-page
 LuaLaTeX/tectonic build) there — but the display must not depend on it; the
 `.tex` + PNGs above are what the portal compiles.
 
 ## Supplementary items (unchanged from the v38 round)
+
+(The v40 round restated the Declarations block per the owner: Data
+availability at the Zenodo record, no funding, no competing interests, a
+CRediT statement, and "AI declarations" --- none of which affects the
+compile or the upload list above.)
 
 The SI package (`03_SUPPLEMENTARY_INFORMATION_v2.md`,
 `04_FIGURE_CAPTIONS.md`, `05_REPRODUCTION_GUIDE.md`,

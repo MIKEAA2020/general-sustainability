@@ -1,6 +1,6 @@
 # Compiling the Manuscript
 
-**Manuscript:** `manuscript_ECOMOD_v39.tex`
+**Manuscript:** `manuscript_ECOMOD_v40.tex`
 
 **Since v38 the preamble is engine-adaptive** (via `iftex`) and the source is
 pure ASCII; **since v39 the fontspec branch is guarded** (`\IfFontExistsTF`),
@@ -24,13 +24,13 @@ pdfLaTeX produced no PDF at all ("manuscript not displayed"). v38 builds under
 all three engines; v39 additionally survives a Lua/XeTeX portal that lacks the
 system fonts.
 
-## Editorial-Manager simulation (verified for v39)
+## Editorial-Manager simulation (verified for v39 and v40)
 
 The portal stages uploads **flattened into one directory** and compiles the
 `.tex` server-side. Simulated exactly so (tex + the two exact-name PNGs alone,
 `pdflatex -interaction=nonstopmode`, twice): **0 errors / 0 overfull /
-28 pages, both figures embedded**. The `\graphicspath` now lists `{./}`
-first, so the flat layout resolves the PNGs explicitly (28 pp vs the 31 pp
+27 pages (v40), both figures embedded**. The `\graphicspath` now lists `{./}`
+first, so the flat layout resolves the PNGs explicitly (27 pp in v40 vs the 30 pp
 LuaLaTeX build because lmodern is narrower; pagination difference is expected
 and harmless).
 
@@ -41,7 +41,7 @@ and harmless).
 A `latexmkrc` is included that forces LuaLaTeX, so a plain `latexmk` just works:
 
 ```bash
-latexmk manuscript_ECOMOD_v39.tex
+latexmk manuscript_ECOMOD_v40.tex
 ```
 
 or, via the Makefile:
@@ -55,8 +55,8 @@ make clean      # remove build artifacts
 ## By hand
 
 ```bash
-lualatex manuscript_ECOMOD_v39.tex   # or: xelatex / pdflatex — all work
-lualatex manuscript_ECOMOD_v39.tex
+lualatex manuscript_ECOMOD_v40.tex   # or: xelatex / pdflatex — all work
+lualatex manuscript_ECOMOD_v40.tex
 ```
 
 (There are no `\ref`/`\cite` cross-references — citations are manual — so
@@ -66,11 +66,11 @@ even a single pass yields a complete PDF.)
 
 | Command | Works? | Why |
 |---|---|---|
-| `lualatex manuscript_ECOMOD_v39.tex` | ✅ | fontspec + unicode-math branch (recommended) |
-| `xelatex manuscript_ECOMOD_v39.tex` | ✅ | fontspec + unicode-math branch |
-| `pdflatex manuscript_ECOMOD_v39.tex` | ✅ | iftex picks the lmodern branch (portal-safe) |
+| `lualatex manuscript_ECOMOD_v40.tex` | ✅ | fontspec + unicode-math branch (recommended) |
+| `xelatex manuscript_ECOMOD_v40.tex` | ✅ | fontspec + unicode-math branch |
+| `pdflatex manuscript_ECOMOD_v40.tex` | ✅ | iftex picks the lmodern branch (portal-safe) |
 | `latexmk` (with the bundled `latexmkrc`) | ✅ | auto-selects LuaLaTeX |
-| pdflatex in a **flat upload dir** (EM simulation) | ✅ | verified 0 err / 0 overfull / 28 pp, figures embedded |
+| pdflatex in a **flat upload dir** (EM simulation) | ✅ | verified 0 err / 0 overfull / 27 pp, figures embedded |
 | Lua/XeTeX with the system fonts **absent** | ✅ | `\IfFontExistsTF` guards fall back to bundled LM (probe-verified) |
 
 (For v30–v37 the pdfLaTeX rows were ❌ — fontspec/unicode-math are

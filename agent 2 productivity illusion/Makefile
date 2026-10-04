@@ -1,4 +1,4 @@
-# Build the ECOMOD v39 manuscript (engine-adaptive: LuaLaTeX recommended).
+# Build the ECOMOD v40 manuscript (engine-adaptive: LuaLaTeX recommended).
 #   make          -> build PDF (latexmk -lualatex)
 #   make view     -> build then open the PDF
 #   make clean    -> remove build artifacts
@@ -9,7 +9,7 @@
 # back to lmodern. LuaLaTeX is the recommended engine (the shipped PDFs are
 # built with tectonic/lualatex).
 
-MAIN   := manuscript_ECOMOD_v39
+MAIN   := manuscript_ECOMOD_v40
 ENGINE := lualatex
 
 .PHONY: all view clean
