@@ -1,12 +1,13 @@
-# Build the ECOMOD v34 manuscript with the correct engine (LuaLaTeX).
+# Build the ECOMOD v38 manuscript (engine-adaptive: LuaLaTeX recommended).
 #   make          -> build PDF (latexmk -lualatex)
 #   make view     -> build then open the PDF
 #   make clean    -> remove build artifacts
 #
-# NOTE: this document uses fontspec + unicode-math, so it MUST be LuaLaTeX.
-# pdfLaTeX (pdflatex / latex) will fail. Do not use them.
+# NOTE: since v38 the preamble is engine-adaptive (iftex): LuaLaTeX/XeLaTeX
+# use fontspec + unicode-math; pdfLaTeX falls back to lmodern. LuaLaTeX is
+# the recommended engine (the shipped PDFs are built with it).
 
-MAIN   := manuscript_ECOMOD_v34
+MAIN   := manuscript_ECOMOD_v38
 ENGINE := lualatex
 
 .PHONY: all view clean

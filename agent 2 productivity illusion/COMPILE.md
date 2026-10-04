@@ -1,19 +1,21 @@
 # Compiling the Manuscript
 
-**Manuscript:** `manuscript_ECOMOD_v34.tex`
+**Manuscript:** `manuscript_ECOMOD_v38.tex`
 
-**The one thing to get right: this document is LuaTeX-only.** Its preamble uses
-`fontspec` and `unicode-math` and sets `\setmainfont{DejaVu Serif}` /
-`\setmathfont{Latin Modern Math}`. These packages *refuse* to run under pdfLaTeX
-(`pdflatex`) or plain `latex`. If you try, you get:
+**Since v38 the preamble is engine-adaptive** (via `iftex`), and the source is
+pure ASCII:
 
-```
-Fatal Package fontspec Error: The fontspec package requires either XeTeX or LuaTeX.
-You must change your typesetting engine to, e.g., "xelatex" or "lualatex"
-instead of "latex" or "pdflatex".
-```
+- **LuaLaTeX / XeLaTeX** (recommended; the shipped PDFs are built this way):
+  loads `fontspec` + `unicode-math` with DejaVu Serif / DejaVu Sans Mono /
+  Latin Modern Math, exactly as v30–v37 did.
+- **pdfLaTeX** (journal-portal servers such as Elsevier Editorial Manager):
+  loads `fontenc` T1 + `inputenc` + `lmodern` instead — the file compiles
+  cleanly with plain `pdflatex` (verified: 0 errors, 0 overfull boxes).
 
-Use **LuaLaTeX** (preferred, what this project is set up for) or XeLaTeX.
+This closes the v35 portal failure: v30–v37 were LuaTeX-only (`fontspec` is a
+fatal error under pdfLaTeX), so portals that typeset the uploaded `.tex` with
+pdfLaTeX produced no PDF at all ("manuscript not displayed"). v38 builds under
+all three engines.
 
 ---
 
@@ -22,7 +24,7 @@ Use **LuaLaTeX** (preferred, what this project is set up for) or XeLaTeX.
 A `latexmkrc` is included that forces LuaLaTeX, so a plain `latexmk` just works:
 
 ```bash
-latexmk manuscript_ECOMOD_v34.tex
+latexmk manuscript_ECOMOD_v38.tex
 ```
 
 or, via the Makefile:
@@ -33,55 +35,46 @@ make view       # build then open it
 make clean      # remove build artifacts
 ```
 
----
-
 ## By hand (run 2–3 times so `\ref`, `\label` and the figures resolve)
 
 ```bash
-lualatex manuscript_ECOMOD_v34.tex
-lualatex manuscript_ECOMOD_v34.tex
-lualatex manuscript_ECOMOD_v34.tex
+lualatex manuscript_ECOMOD_v38.tex   # or: xelatex / pdflatex — all work
+lualatex manuscript_ECOMOD_v38.tex
+lualatex manuscript_ECOMOD_v38.tex
 ```
-
-Run it a third time so the newly added Figure 1 (`\ref{fig:aggregation}`) and the
-table cross-references (`\ref{tab:...}`) settle.
-
----
 
 ## Engine notes
 
 | Command | Works? | Why |
 |---|---|---|
-| `lualatex manuscript_ECOMOD_v34.tex` | ✅ | fontspec + unicode-math supported |
-| `xelatex manuscript_ECOMOD_v34.tex` | ✅ | fontspec + unicode-math supported |
+| `lualatex manuscript_ECOMOD_v38.tex` | ✅ | fontspec + unicode-math branch (recommended) |
+| `xelatex manuscript_ECOMOD_v38.tex` | ✅ | fontspec + unicode-math branch |
+| `pdflatex manuscript_ECOMOD_v38.tex` | ✅ | iftex picks the lmodern branch (portal-safe) |
 | `latexmk` (with the bundled `latexmkrc`) | ✅ | auto-selects LuaLaTeX |
-| `pdflatex manuscript_ECOMOD_v34.tex` | ❌ | fontspec/unicode-math are XeTeX/LuaTeX-only |
-| `latex manuscript_ECOMOD_v34.tex` | ❌ | plain TeX — no fontspec |
 
----
+(For v30–v37 the pdfLaTeX row was ❌ — fontspec/unicode-math are
+XeTeX/LuaTeX-only. v38 removed that restriction.)
 
-## Fonts needed
-
-The config expects these fonts (standard in a full TeX Live install; if missing,
-LuaLaTeX will warn and fall back to a default):
+## Fonts needed (LuaLaTeX/XeLaTeX branch only)
 
 - `DejaVu Serif` — body text
 - `DejaVu Sans Mono` — `\verb`/`\texttt`
 - `Latin Modern Math` — math
 
-On a full Linux TeX Live these ship with the distribution (the `dejavu` and
-`lm` font packages). If a font is unavailable, either install it or temporarily
-edit the `\setmainfont` / `\setmathfont` lines in the preamble.
+On a full Linux TeX Live these ship with the distribution. If a font is
+unavailable, either install it or temporarily edit the `\setmainfont` /
+`\setmathfont` lines in the preamble. The pdfLaTeX branch needs **no** system
+fonts.
 
----
+## Figures
 
-## Suggested workflow
+The build expects `real_series_aggregation_face.png` (Fig. 1) and
+`composition_attribution.png` (Fig. 2), resolved through
+`\graphicspath{{reports/}{supplementary/FIGURES/}{graphical_abstract/}}` (and
+the current directory). If a PNG is missing the build errors on the
+corresponding `\includegraphics`; rebuild it with
+`python3 model_sims/real_series_aggregation_face.py` /
+`python3 model_sims/composition_attribution.py`.
 
-1. `latexmk manuscript_ECOMOD_v34.tex`
-2. Inspect `manuscript_ECOMOD_v34.pdf`.
-3. Run `make clean` if you want to clear build artifacts (they are git-ignored).
-
-The first build compiles the figure (`reports/real_series_aggregation_face.png`)
-into Figure 1; if that PNG is missing the build will error on
-`\includegraphics{real_series_aggregation_face.png}`. Rebuild it with
-`python3 model_sims/real_series_aggregation_face.py`.
+**Journal upload:** figures must be uploaded under these *exact* filenames
+(flattened next to the `.tex`), see `reports/figures_for_submission/`.
