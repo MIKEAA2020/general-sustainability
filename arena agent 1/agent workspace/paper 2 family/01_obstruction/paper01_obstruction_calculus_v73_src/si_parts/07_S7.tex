@@ -1,0 +1,55 @@
+\section{Mechanisation and verification record}\label{S:verification}
+
+\subsection{The Lean development}\label{S:lean}
+The finite core is formalised in Lean~4 in the file \texttt{P1\_Obstruction.lean} (775 lines), which imports only the project prelude and declares no \texttt{sorry}. The development comprises 58 declarations---33 theorems and 25 definitions---plus one \texttt{structure} (\texttt{FinSys}) and three \texttt{inductive} types (\texttt{PolicyTree}, \texttt{Mode}, \texttt{Act}); the count is reproduced by check V12. The committed project pin is Lean \texttt{v4.34.1}; the recorded default Lake build passes $60/60$ jobs. Table~\ref{tab:lean} maps the declarations to the results they support. Two scope limits hold. First, the formalisation covers the \emph{discrete} core: the Dini-derivative arguments, exit certificates, timing bounds and the recourse certificate live in an analysis setting the dependency-free layer does not reach and are supported by their displayed proofs only. Second, completeness is formalised with respect to policy \emph{trees} (\texttt{finite\_horizon\_complete} returns a \texttt{PolicyTree}, a history-dependent object); any assertion that a stationary policy suffices rests on the hand proof. The axiom footprint of the named declarations was inspected: several depend on no axioms (\texttt{finite\_horizon\_sound}, \texttt{tree\_sound}, \texttt{Wk\_antitone}, \texttt{Wk\_descending}, \texttt{preOp\_mono}, \texttt{commonSafe}); the remainder depend only on \texttt{Classical.choice}, \texttt{propext} and \texttt{Quot.sound}. \texttt{sorryAx} is absent from the P1 declarations. Nine generated \texttt{native\_decide} axiom names appear in the aggregate import footprint of a \emph{different} module of the project (the computational-certification paper), not in P1; the provenance note \texttt{LEAN\_PROVENANCE.md} records the release pin, CI identifiers and the failed old-toolchain comparison. No fresh Lean rebuild is claimed for this edition; the file is unchanged from v72.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}>{\ttfamily\raggedright\arraybackslash}p{0.40\textwidth}X@{}}
+\toprule
+\normalfont Lean declaration & Result supported\\
+\midrule
+FinSys, post, possible, commonAdm, beliefSafe, preOp, Wk & finite system, $\Post$, $U^B$, $\Pre$, $\cW_k$ (main Section~3)\\
+Wk\_antitone, Wk\_descending, preOp\_mono & $\cW_{k+1}\subseteq\cW_k$; monotonicity of $\Pre$\\
+finite\_horizon\_sound, finite\_horizon\_complete & Theorem~3.1 (soundness for a belief policy; completeness via a policy tree)\\
+PolicyTree, tree\_sound, Blocked, blocked\_iff & obstruction tree; $\mathrm{Blocked}(N,B)\iff B\notin\cW_N$ (\S\ref{S:trees})\\
+commonSafe, onestep\_char & Theorem~3.2: $B\in\cW_1\iff$ a common safe action exists\\
+epiPre, EpiK, epiK\_coind, epiK\_pre, policy\_soundness & coinductive infinite-horizon kernel; a policy that is safe at every reachable belief witnesses membership\\
+common\_action\_obstruction & Theorem~4.1 in the finite setting: no common safe action at a belief $\Rightarrow B\notin\mathrm{EpiK}$\\
+Wk\_mono\_adm, Wk\_mono\_disturb & Proposition~6.4, action and disturbance clauses (finite)\\
+farkas\_perturbed, sumRange\_const\_mul & Farkas margin robustness (\S\ref{S:farkas})\\
+ExactCertifier, FibreConst, fibre\_criterion & Definition~5.1, Proposition~5.2\\
+Ysafe, crossing\_denies, not\_Ysafe\_iff & Corollary~5.3\\
+Mode, Act, sysstep, SYS, Bjoint, commonSafe\_Bjoint\_empty, Qind, qind\_postfixed, hidden\_mode\_conflict & Example~3.3 as an instance: the joint belief has no common safe action and lies outside \texttt{EpiK}\\
+\bottomrule
+\end{tabularx}
+\caption{Lean declarations of \texttt{P1\_Obstruction.lean} and the main-text results they support. None formalises a continuous-time statement or independently checks Table~2 of the main text; that table is checked by the exhaustive script (V8).}
+\label{tab:lean}
+\end{table}
+
+\subsection{The exact-arithmetic verification record}\label{S:record}
+The script \texttt{paper01\_v73\_verification.py} recomputes every numerical claim of the paper in exact rational arithmetic (Python \texttt{fractions}; no floating point except the single logarithm of V7, reported to three decimals) and runs the exact backward recursion on every finite instance. It prints one line per check and exits nonzero on any failure; the current run reports $30/30$ passed. Table~\ref{tab:record} lists the record.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.27\textwidth}@{}}
+\toprule
+Check & Claim verified & Where used\\
+\midrule
+V1 & two-floor Farkas pair: $\lambda^\top A=0$, $\lambda^\top b=-\tfrac1{10}$ & Thm.~4.1 Farkas form; \S\ref{S:farkas}\\
+V2 & decaying LP threshold $z_0\ge(\tfrac{10}9)^K$ for $K\le6$; pairwise Farkas cancellation; $u\equiv0$ boundary witness & Ex.~4.9; \S\ref{S:lp}\\
+V3 & hold-class survival at $z_0=2$ is one step for either hold; $u\equiv0$ survives 50 steps under the relaxation; per-step alternation keeps both branches above the floor for 40 steps & Thm.~4.8(iv); Ex.~4.9\\
+V4 & coverage grid $48=30+12+6$; per-step class viable iff $z_0\ge2$; hold-class belief values on the audit slice & Table~1, Fig.~5, Rem.~7.1; Table~\ref{tab:beliefV}\\
+V5 & pooling weights annihilate the window kernel; $\Gamma_h(\tau)=\tfrac7{50}-\tau$; hold-then-brake safe exactly to $\tfrac7{50}$; pair controls in the hexagon; pair peaks $\tfrac{2469}{1250},\tfrac{2469}{1250},\tfrac{2419}{1250}<2$; $\Gamma_h(\tfrac15)=-\tfrac3{50}$; $u\equiv0$ strictly safe for $\tau<\tfrac{16}{25}$ & Ex.~4.13, Fig.~4; \S\ref{S:threebranch}\\
+V6 & aggregate LP: cap sum $=2$ at $Y^*=\tfrac{27}5$; $Y=5$ witness $(\tfrac65,\tfrac45)$; $Y=6$ margin $\tfrac3{50}$; margin identity at 200 aggregates & \S\ref{S:aggregateLP}\\
+V7 & certainty-equivalence exit time $5\ln(0.41/0.21)\approx3.345$ & Prop.~5.4; main Section~7\\
+V8 & two-patch fibres: $y=2,3,4$ nonviable, $y=5,6$ viable; $y=4$ certainly safe with no common safe first action; $y=2$ fails under full information & Table~2\\
+V9 & four-state instance: one-step viable, two-step nonviable; variant viable at horizons 2 and 5 & Prop.~6.3; \S\ref{S:A3}\\
+V10 & hidden-mode belief: every action sends one branch below the floor & Ex.~3.3; \S\ref{S:trees}\\
+V11 & two-patch logistic floors $\tfrac{31}{100},\tfrac1{10}$; patch 1 alone cannot sustain $\tfrac{31}{100}>\tfrac14$ & \S\ref{S:A1}\\
+V12 & Lean file: 33 theorems, 25 definitions, 1 structure, 3 inductives, no \texttt{sorry}; all named declarations of Table~\ref{tab:lean} present & \S\ref{S:lean}\\
+\bottomrule
+\end{tabularx}
+\caption{The verification record. Each row is one or more \texttt{PASS} lines of the script; the script is distributed with this Supplementary Material together with \texttt{counterexamples.py} (the control-affine recourse counterexample and the support-only stochastic witness of \S\ref{S:prob}) and the figure script \texttt{make\_figures\_v73.py}.}
+\label{tab:record}
+\end{table}

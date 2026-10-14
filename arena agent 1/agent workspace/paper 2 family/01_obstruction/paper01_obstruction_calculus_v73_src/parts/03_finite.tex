@@ -1,0 +1,37 @@
+\section{Finite systems: an exact calculus}\label{sec:finite}
+
+In the finite setting the calculus is complete, and the finite statements fix the shape that the continuous certificates approximate. Fix finite state, action, disturbance and observation spaces $X,A,D,Y$, a transition map $x^+=F(x,a,d)$, an observation map $y=O(x,a,d,x^+)$, a safe set $\cV\subseteq X$, and admissible-action sets $U(x)\subseteq A$. For a post-observation belief $B\subseteq X$ contained in one observation cell, an action $a$ and a successor observation $y$, the \emph{post-belief} is
+\[
+\Post(B,a,y)=\bigl\{x^+\in X:\ \exists\,x\in B,\ d\in D(x),\ x^+=F(x,a,d),\ y=O(x,a,d,x^+)\bigr\},
+\]
+and $y$ is \emph{possible} under $(B,a)$ if $\Post(B,a,y)\ne\varnothing$. The one-step predecessor of a collection $\mathcal C$ of beliefs is
+\[
+\Pre(\mathcal C)=\bigl\{B\subseteq\cV:\ \exists\,a\in U^B(B)\ \text{with}\ \Post(B,a,y)\in\mathcal C\ \text{for every possible }y\bigr\},
+\]
+and the finite-horizon kernels are $\cW_0=\{B:B\subseteq\cV\}$, $\cW_{k+1}=\Pre(\cW_k)$. The $N$-step \emph{recursive witness set} of a belief is $\cA_N(B)=\{a\in U^B(B):\Post(B,a,y)\in\cW_{N-1}\text{ for every possible }y\}$, so that $B\in\cW_N$ iff $\cA_N(B)\ne\varnothing$; this is the fourth, recursive response correspondence of the selector principle.
+
+\begin{theorem}[finite-horizon soundness and completeness]\label{thm:finite-horizon}
+A post-observation cell $B_0$ admits an observation-based policy keeping every compatible trajectory in $\cV$ for $N$ steps if and only if $B_0\in\cW_N$. A prior $P\in\mathfrak B$ is $N$-step viable if and only if every nonempty cell $P\cap O^{-1}(y)$ belongs to $\cW_N$.
+\end{theorem}
+
+\begin{proof}
+The initial reading partitions a prior into disjoint cells on which one policy may choose independently, so the post-observation statement suffices. ($\Rightarrow$) Induction on $N$; the case $N=0$ is $B_0\subseteq\cV$. A policy safe for $N$ steps plays a first action admissible at every compatible state, so $a\in U^B(B_0)$, and for every possible $y$ the successor belief $\Post(B_0,a,y)$ is safe for $N-1$ steps under the same policy, hence lies in $\cW_{N-1}$ by induction; so $B_0\in\Pre(\cW_{N-1})$. ($\Leftarrow$) Backward induction: from $B_k\in\cW_{N-k}$ choose a witness action $a_k\in\cA_{N-k}(B_k)$; after the observation $y_k$ the belief $\Post(B_k,a_k,y_k)$ lies in $\cW_{N-k-1}$, and every reachable state over $N$ steps lies in $\cV$.
+\end{proof}
+
+If $B_0\notin\cW_N$ the failure is certified by a finite \emph{obstruction tree}: at each node $(B,k)$ with $k\ge1$ and each $a\in U^B(B)$ the adversary selects a possible observation $y$ with $\Post(B,a,y)\notin\cW_{k-1}$, the tree alternating regulator and nature turns as in partial-information games (S2.2, Figure~S8.2). The recursion is exact but of worst-case complexity exponential in $|X|$, since the belief space has up to $2^{|X|}$ members; finite checkability is per belief, not a polynomial-time global procedure.
+
+\begin{theorem}[one-step completeness]\label{thm:onestep}
+Let $S_1(x)=\{a\in U(x):F(x,a,d)\in\cV\ \text{for all }d\in D(x)\}$ be the one-step safe set. A post-observation cell $B\subseteq\cV$ is one-step viable under $\cI$---some observation-based policy achieves $x_1\in\cV$ for every $x_0\in B$ and every admissible disturbance---if and only if $\bigcap_{x\in B}S_1(x)\ne\varnothing$. Hence $B\notin\cW_1$ exactly when the common safe-action set is empty.
+\end{theorem}
+
+\begin{proof}
+($\Rightarrow$) Every $x\in B$ produced the same record, so the policy plays a single $a\in U^B(B)$, and first-step safety forces $F(x,a,d)\in\cV$ for all $x\in B$ and $d\in D(x)$, i.e.\ $a\in\bigcap_{x\in B}S_1(x)$. ($\Leftarrow$) Any $a$ in the intersection keeps every successor in $\cV$.
+\end{proof}
+
+Combined with the recursion $\cW_{k+1}=\Pre(\cW_k)$, Theorem~\ref{thm:onestep} shows that the pair \emph{(common-action test, recursion)} is a complete characterisation at every finite horizon in finite systems: the test detects first-step emptiness and the recursion propagates the obstruction. The common-action test is the discrete form of the central continuous certificate (Theorem~\ref{thm:common-action}).
+
+\begin{example}[hidden-mode conflict]\label{ex:hidden-mode}
+An unobserved mode $\theta\in\{-1,+1\}$ drives $z^+=z+\theta u$ on $z\in\{-1,0,1\}$ with $u\in\{-1,+1\}$, safe set $\{z\ge0\}$ and observation $O(z,\theta)=z$. At the belief $B_0=\{(0,-1),(0,+1)\}$ both actions are admissible, but under $u=+1$ the branch $\theta=-1$ reaches $z=-1$ and under $u=-1$ the branch $\theta=+1$ does; so $\bigcap S_1=\varnothing$ and $B_0\notin\cW_1$, although each mode is viable on its own (play $u=\theta$). The obstruction tree is a root with two adversary edges, one per mode. This is the two-action skeleton of every ``the stock is either recovering or collapsing, and the safe policy differs between the two'' situation, and the failure is purely informational: no stochasticity and no estimation error is involved.
+\end{example}
+
+\paragraph{Mechanised verification.} The finite fragment---the predecessor recursion and its monotonicity, Theorem~\ref{thm:finite-horizon} in both directions (completeness returning a history-dependent policy tree), the one-step characterisation, a coinductive infinite-horizon kernel \texttt{EpiK} on which the finite common-action obstruction is proved, the fibre criterion of Section~\ref{sec:certification}, the monotonicity of the finite kernel in admissible actions and disturbances, a perturbed Farkas lemma, and Example~\ref{ex:hidden-mode}---is formalised in Lean~4 in the module \texttt{Formalizations/P1\_Obstruction}, which imports only the project prelude: 33 theorems and 25 definitions, with no \texttt{sorry}, and axiom footprints restricted to Lean's classical axioms. The continuous-time statements of Sections~\ref{sec:calculus}--\ref{sec:completeness} are \emph{not} formalised; they rest on the displayed proofs. Scope, declaration map and build provenance are recorded in S7.

@@ -1,0 +1,56 @@
+\section{The probabilistic counterpart: belief-state safety values}\label{S:prob}
+
+The main text uses set-membership semantics. This section records the stochastic counterpart---the belief-state safety value of partially observable control---and its obstruction certificate, connecting the calculus to the partially observable literature \citep{astrom1965,smallwood1973}, its computational bounds and complexity \citep{lovejoy1991,papadimitriou1987} and its distributionally robust variants \citep{nakao2021}.
+
+Let $X,A,D,Y$ be finite with a stochastic transition $T(x'\mid x,a)$ and observation likelihood $g(y\mid x,a,x')$. Augment the state space with an absorbing unsafe state $\bot$: for $x\in\cV$, $T(\bot\mid x,a)=1-\sum_{x'\in\cV}T(x'\mid x,a)$, and $T(\bot\mid\bot,a)=1$. A belief $b$ is a distribution over $X\cup\{\bot\}$, updated by Bayes' rule $\tau(b,a,y)$ with $\mathbb P(y\mid b,a)=\sum_{x,x'}b(x)T(x'\mid x,a)g(y\mid x,a,x')$. The \emph{safety value} is the maximal survival probability $V_k(b)=\max_\pi\mathbb P_\pi(x_t\in\cV,\ t=0,\dots,k\mid b)$.
+
+\begin{theorem}[belief-state safety value]\label{thm:pomdp}
+$V_0(b)=b(\cV)$ and, for $k\ge0$, $V_{k+1}(b)=\max_{a\in A}\sum_{y\in Y}\mathbb P(y\mid b,a)\,V_k(\tau(b,a,y))$, with the convention that the policy acts, observes $y$, then acts again. The recursion is exact on every finite horizon.
+\end{theorem}
+
+\begin{proof}
+Standard value iteration for the belief-state Markov decision process: conditioning on the observation after the action and applying the optimal continuation gives the identity, and the absorbing state makes $V_k$ the $k$-step survival probability \citep{smallwood1973}.
+\end{proof}
+
+\begin{proposition}[chance-constrained common-action obstruction]\label{prop:chance}
+Let $b\in\Delta(\cV)$ and $p(x,a)=1-\sum_{x'\in\cV}T(x'\mid x,a)$. If $\sum_{x\in\cV}b(x)p(x,a)\ge\delta$ for every $a\in A$, then $V_k(b)\le1-\delta$ for every $k\ge1$, and the chance constraint $\mathbb P_{b,\pi}(x_0,\dots,x_k\in\cV)\ge1-\varepsilon$ is infeasible under every policy whenever $\varepsilon<\delta$.
+\end{proposition}
+
+\begin{proof}
+The one-step survival probability under $a$ is $1-\sum_xb(x)p(x,a)\le1-\delta$, so $V_1(b)\le1-\delta$; since $V_{k+1}\le V_k$, $V_k(b)\le V_1(b)\le1-\delta$.
+\end{proof}
+
+\begin{proposition}[deterministic-kernel limit]\label{prop:degenerate}
+Let $X=\cV\cup\{\bot\}$ with $\bot$ the unique absorbing unsafe state in both models. In the set-valued model assume every admissible disturbance gives the same successor $F(x,a,d)=F(x,a)$ and the observation is independent of $d$; use the same deterministic single-successor transition and deterministic observation in the stochastic model, $T(x'\mid x,a)=\mathbf 1[x'=F(x,a)]$, with every action admissible at each state so that the two policy classes agree. Let $b$ have support $B=\supp(b)\subseteq\cV$. Then for every possible observation the posterior support is exactly $\Post(B,a,y)$; for the unrestricted sequential class $V_k(b)=1$ iff $B\in\cW_k$; and if $B\notin\cW_k$ then $V_k(b)\le1-\min_{x\in B}b(x)<1$.
+\end{proposition}
+
+\begin{proof}
+Under point-mass transition and observation kernels each initial state and deterministic observation-based policy generate a unique path, and the posterior support is the deterministic set-valued post-state. By Theorem~3.1, $B\in\cW_k$ iff some policy keeps every state of $B$ safe through step $k$, equivalently $V_k(b)=1$ because $b>0$ on $B$. If $B\notin\cW_k$, every policy loses at least one initial state $x\in B$ by some stage $t\le k$, with loss probability at least $b(x)\ge\min_{z\in B}b(z)$; maximising over policies gives the bound. A multi-step failure need not occur on the first action.
+\end{proof}
+
+The quantitative bound does \emph{not} follow merely because a stochastic transition has the same support as a set of adversarial disturbances. Witness: $B=\{s\}$, $b(s)=1$, $D=\{\text{good},\text{bad}\}$, $F(s,a,\text{good})=s$, $F(s,a,\text{bad})=\bot$, $T(\text{good})=\tfrac{99}{100}$. The robust recursion excludes $B$ from $\cW_1$, yet $V_1(b)=\tfrac{99}{100}>1-\min_xb(x)=0$; a fixed stochastic kernel is governed by its transition probabilities and Proposition~\ref{prop:chance}.
+
+\paragraph{Worked instance: the two-floor conflict.} Read a finite-action restriction of \S\ref{S:farkas} as a POMDP: $x_1,x_2$ share one observation, $A=\{0,1\}$, one-step violation probabilities $p(x_1,u)=1$ for $u>\tfrac25$ and $0$ otherwise, $p(x_2,u)=1$ for $u<\tfrac35$ and $0$ otherwise, prior $b_0=(\tfrac12,\tfrac12)$. Then $\sum_xb_0(x)p(x,u)\ge\tfrac12$ for every $u$, so $V_k(b_0)\le\tfrac12$ for all $k\ge1$ and the chance constraint is infeasible for $\varepsilon<\tfrac12$. The bound is attained: $V_1(b_0)=\tfrac12$ (each action sacrifices exactly one floor) and the surviving floor is kept safe thereafter, so $V_k(b_0)=\tfrac12$; at the deterministic limit this is $B_0=\{x_1,x_2\}\notin\cW_1$ with deficit $\min_xb_0(x)=\tfrac12$.
+
+\paragraph{Worked instance: the delayed hidden regime on the audit grid (class-restricted).} Read the audit model of main Section~7 over the declared whole-window hold class as a POMDP with prior $b_0=(\tfrac12,\tfrac12)$ on the two regimes from $z_0$, no observation before $\Tobs$, exact revelation at $\Tobs$, and blind actions restricted to the holds $u\equiv\pm1$. Define $V^{\mathrm{hold}}_{k,\Tobs}(b_0)$ by maximising survival over this class with regime-adapted continuation. For $k\le\Tobs$, $V^{\mathrm{hold}}_{k,\Tobs}(b_0)=\tfrac12(\mathbf 1[z_0-k\ge1]+\mathbf 1[z_0+k\ge1])$, since a hold drives one branch down at unit rate; for $k>\Tobs$, $V^{\mathrm{hold}}_{k,\Tobs}(b_0)=\tfrac12(1+\mathbf 1[z_0\ge1+\Tobs])$. Three alignments follow: $V^{\mathrm{hold}}_1=1$ exactly when $z_0\ge2$ (the one-step certificate's silent region); $V^{\mathrm{hold}}_k=1$ for every $k$ exactly when $z_0\ge1+\Tobs$ (the audit's viability boundary); every hold-class deficit equals $\tfrac12=\min_xb_0(x)$ (the declining branch is the lost mass). Table~\ref{tab:beliefV} tabulates a slice; the verification script evaluates all 48 cells exactly (check V4). This is not the unrestricted $V_k$ of Proposition~\ref{prop:degenerate}: over per-step blind policies the alternating sequence keeps both branches within $z_0\pm1$, so the unrestricted value equals $1$ exactly on $\{z_0\ge2\}$.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}ccccccl@{}}
+\toprule
+$z_0$ & $\Tobs$ & $V^{\mathrm{hold}}_1$ & $V^{\mathrm{hold}}_2$ & $V^{\mathrm{hold}}_3$ & audit verdict & covering certificate\\
+\midrule
+1.5 & 1 & $\tfrac12$ & $\tfrac12$ & $\tfrac12$ & $\bullet$ & one-step test\\
+1.5 & 2 & $\tfrac12$ & $\tfrac12$ & $\tfrac12$ & $\bullet$ & one-step test\\
+1.5 & 3 & $\tfrac12$ & $\tfrac12$ & $\tfrac12$ & $\bullet$ & one-step test\\
+2.0 & 1 & $1$ & $1$ & $1$ & $\circ$ viable & ---\\
+2.0 & 2 & $1$ & $\tfrac12$ & $\tfrac12$ & $\ast$ & hold-class threshold\\
+2.0 & 3 & $1$ & $\tfrac12$ & $\tfrac12$ & $\ast$ & hold-class threshold\\
+2.5 & 1 & $1$ & $1$ & $1$ & $\circ$ viable & ---\\
+2.5 & 2 & $1$ & $\tfrac12$ & $\tfrac12$ & $\ast$ & hold-class threshold\\
+2.5 & 3 & $1$ & $\tfrac12$ & $\tfrac12$ & $\ast$ & hold-class threshold\\
+\bottomrule
+\end{tabular}
+\caption{Hold-class belief-state safety values $V^{\mathrm{hold}}_{k,\Tobs}(b_0)$ on a slice of the audit grid (exact rationals). The deficit is $\tfrac12$ on every hold-class nonviable cell and the value is $1$ for every horizon exactly when $z_0\ge1+\Tobs$.}
+\label{tab:beliefV}
+\end{table}

@@ -1,0 +1,42 @@
+\section{Certification limits}\label{sec:certification}
+
+The certificates of Section~\ref{sec:calculus} concern \emph{policies}. Governance also uses \emph{verdicts}---safe or unsafe---computed from observations alone, without reference to a policy, and the question is when such verdicts can be exact. This is a static classification problem and is kept as a layer separate from viability: a fibre may fail exact certification while a policy is viable, and exact static certification does not imply dynamic viability.
+
+\begin{definition}[exact certifier]\label{def:certifier}
+For an admissible domain $Z\subseteq X$ and a safe set $K\subseteq Z$, an \emph{exact certifier} based on $O:Z\to Y$ is a function $C:Y\to\{0,1\}$ with $C(O(z))=1\iff z\in K$ for every $z\in Z$.
+\end{definition}
+
+\begin{proposition}[observation-fibre criterion]\label{prop:fibre}
+An exact certifier based on $O$ exists if and only if membership in $K$ is constant on every observation fibre,
+\begin{equation}\label{eq:fibre}
+O(z_1)=O(z_2)\ \Longrightarrow\ \bigl[z_1\in K\iff z_2\in K\bigr]\qquad\forall z_1,z_2\in Z,
+\end{equation}
+equivalently $K=O^{-1}(O(K))$ on the admissible domain.
+\end{proposition}
+
+\begin{proof}
+If $C$ exists and $O(z_1)=O(z_2)$ then $\mathbf 1_K(z_1)=C(O(z_1))=C(O(z_2))=\mathbf 1_K(z_2)$. Conversely, \eqref{eq:fibre} makes $C(y)=\mathbf 1_K(z)$ for any $z$ with $O(z)=y$ well defined and exact.
+\end{proof}
+
+The criterion applies verbatim to three certification problems that must not be conflated: constraint certification ($K=\cV$), robust-viability certification ($K=\RViab(\cV)$) and policy-specific safety certification ($K=\mathrm{Safe}^\Pi_T$). It is the zero-step, label-valued analogue of the common-action test: an observation-based verdict assigns one label to an entire fibre, exactly as an observation-based action assigns one action to an entire belief, so both are selector problems.
+
+\begin{corollary}[safety-crossing fibres and the certainly-safe set]\label{cor:certainly-safe}
+If two admissible states share an observation and one lies in $K$ while the other does not---for an intersection of floors, read $K$ as the single floor $\{q_j\ge0\}$ in question---then no exact observation-only certifier of $K$ exists. The largest set of observations that can soundly be labelled safe without further information is the \emph{certainly-safe set}
+\[
+\cY_{\mathrm{safe}}=\bigl\{y\in O(Z):\ O^{-1}(y)\subseteq K\bigr\}.
+\]
+\end{corollary}
+
+\begin{proof}
+A fibre meeting both $K$ and its complement violates \eqref{eq:fibre}. On $\cY_{\mathrm{safe}}$ every compatible state is safe, so the verdict ``safe'' is sound; outside it some compatible state is unsafe, so no sound ``safe'' verdict exists.
+\end{proof}
+
+A composite index whose fibres cross a floor boundary cannot support exact certification of that floor, however carefully it is thresholded; the certainly-safe set is the region in which the index may certify safety, outside which it must fall silent (Figure~S8.4; worked instances in Section~\ref{sec:casestudy}). The structural requirement is not that each floor be measured separately but that the observation separate every admissible pair lying on opposite sides of the floor; per-floor measurement is one sufficient design.
+
+\paragraph{Bias and the certainty-equivalence trap.} The obstructions above rely on information lost to a non-injective observation. The kernel can also empty under a fully \emph{injective} observation, for a single policy: the canonical certainty-equivalence controller that applies a perfect-information law to the uncorrected observation.
+
+\begin{proposition}[certainty-equivalence trap]\label{prop:ce-trap}
+Let $\dot S=u-g(S)$ with $u\in[0,\bar u]$, $g$ continuous and strictly increasing on $[S_{\min},S^*+b]$ with $g(0)=0$, $\cV=[S_{\min},S^*]$, and assume the range condition $g(S+b)\le\bar u$ on $\cV$. Under perfect information the zeroing feedback $u=g(S)$ makes every $S_0\in\cV$ viable. For the injective biased observation $\hat S=S+b$ with $b>0$, the certainty-equivalence controller $u=g(\hat S)=g(S+b)$ gives $\dot S=g(S+b)-g(S)>0$, bounded below by a positive constant on the compact interval, so $S$ exits above $S^*$ in finite time from every $S_0\in\cV$: the kernel of this controller is empty. The bias-corrected controller $u=g(\hat S-b)=g(S)$ restores $\dot S=0$.
+\end{proposition}
+
+The mechanism is the failure of one policy to use the observation map's structure, not a loss of information: for a known invertible observation the output-feedback class is as powerful as the state-feedback class, and the statement is policy-specific. No signalling or nonclassical-information phenomenon \citep{witsenhausen1968} is involved.
