@@ -1,0 +1,68 @@
+\section{Models and evaluation}\label{sec:methods}
+
+\subsection{The surplus-production map}\label{sec:map}
+
+All five modules are forecasters built on one difference equation.
+
+\begin{definition}[Surplus-production map]\label{def:map}
+With $S_t$ the SSB and $C_t$ the removals in year $t$,
+\begin{equation}\label{eq:map}
+S_{t+1} \;=\; \Spos{S_t + g(S_t) - C_t + \varepsilon_t}, \qquad
+g(S) \;=\; r\,S\Bigl(1-\frac{S}{K}\Bigr)\,a(S),
+\end{equation}
+where $[x]_+ = \max(x,\epsilon)$ with a numerical floor $\epsilon = 10^{-3}\kt$, $r>0$ and $K>0$ are the intrinsic rate and carrying capacity of the Schaefer form \citep{Schaefer1954,Pella1969}, and $a(S)\equiv 1$ (compensatory branch) or $a(S) = (S-\sA)/(K-\sA)$ with $0<\sA<0.8K$ (depensatory branch, production negative below $\sA$). Forecasts iterate \eqref{eq:map} with $\varepsilon\equiv 0$ unless an explicit residual term is carried (M3, M4).
+\end{definition}
+
+Parameters are estimated at each origin by one-step least squares on the training transitions: $(r,K)$, and $\sA$ for the depensatory branch, minimise the mean squared difference between the observed increments $S_{j+1}-S_j$ and $g(S_j)-C_j$ over the training window. The minimiser is a single L-BFGS-B run from $r_0 = 0.3$ and $K_0 = \max(1.5\max_j S_j,\,500\kt)$ with bounds $r\in[10^{-3},2]$, $K\in[\max_j S_j + 10,\,5000]$ and $\sA\in[0,\max_j S_j]$ (penalised outside $0<\sA<0.8K$). The residual autocorrelation $\phi$ used by M3 and M4 is the lag-one regression coefficient of the one-step training residuals, clipped to $[-0.95,0.95]$, and the last training residual is propagated as $\phi^k$ along the horizon. The fitted values at the windows and origins that matter for the argument are recorded in SI S5; $K$ rests on its initialiser or its upper bound in several fits, a point taken up in Section~\ref{sec:identification}.
+
+\subsection{The ladder}\label{sec:ladder}
+
+The modules differ only in what they take from the catch record and the state history (Table~\ref{tab:ladder}). M1 is the autonomous Schaefer forecaster: it holds the catch at the training mean and iterates. M1b adds depensation to M1. M2 is the stock-flow forecaster: identical dynamics, but the realised catch is supplied along the horizon. M3 adds the AR(1) residual correction to M2. M4 is M3 started from $S_{t-1}$ instead of $S_t$, a lagged-start variant that tests whether the forecast is sensitive to the assessment lag at the origin. Two baselines are evaluated on the identical origins: persistence, $\hat S_{t+h} = S_t$, and the training mean, $\hat S_{t+h} = \bar S_{1:t}$.
+
+\begin{table}[!htb]
+\centering\small
+\caption{The forecaster ladder. ``Comparator'' is the next-simpler module against which the module must win under hurdle (H1) of the retention rule; M1 has no comparator within the ladder and is tested against persistence only.}
+\label{tab:ladder}
+\begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}p{0.23\textwidth}>{\raggedright\arraybackslash}p{0.19\textwidth}LL@{}}
+\toprule
+ID & Class & Free parameters & Catch in the forecast & Comparator \\
+\midrule
+persist & baseline & none & none & --- \\
+mean & baseline & none & none & --- \\
+M1 & autonomous Schaefer & $r,K$ & constant: training-mean catch & (persistence only) \\
+M1b & autonomous, depensatory & $r,K,\sA$ & constant: training-mean catch & M1 \\
+M2 & stock-flow & $r,K$ & realised $C_{t+1..t+h}$ supplied & M1 \\
+M3 & stock-flow $+$ AR(1) residual & $r,K$; $\phi$ in a second stage & supplied & M2 \\
+M4 & M3 started from $S_{t-1}$ & as M3, refitted & supplied, indexed from $t-1$ & M3 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Scores, windows and origins}\label{sec:scores}
+
+The primary score is the root mean squared error of the point forecast of SSB in kilotonnes; mean absolute error is reported alongside. Two evaluation designs are used. The \emph{fixed windows} of Table~\ref{tab:specs} are diagnostic: each fits once on a training window and forecasts the following test window as a path, so that the behaviour of a module across a collapse or a recovery can be seen whole. The \emph{rolling-origin} design \citep{Tashman2000} is the one the retention rule is applied to: at every origin $t$ from the first admissible year to the last that leaves $h$ target years, each module is refitted on $S_1,\dots,S_t$ and a forecast of $S_{t+h}$ is scored; the errors are pooled across origins. Horizons are $h=1$ and $h=5$ years. The archived runner pairs the transition $S_t\to S_{t+1}$ with $C_t$ in estimation and applies $C_{t+1}$ to the same step when forecasting, a one-year offset between the two conventions that was not noticed until the re-execution for this revision; its effect is quantified in Section~\ref{sec:pooled} and SI S14, and all numbers in the tables are those of the archived runner. Baselines are always computed on exactly the origin set used for the modules at that horizon (``origin-matched''); where a variant pass changes the origin set, the baseline is recomputed on the new set. Secondary scores, the Brier score of the implied below-threshold indicator and a direction-of-change score, are reported in SI S7 and play no part in retention.
+
+\subsection{The retention rule}\label{sec:rule}
+
+The scoring core of the rule, hurdle (H2) with both horizons on the fixed windows and origin sets of Table~\ref{tab:specs}, was coded before the first scoring pass and applied unchanged. The 5\% tie band and the comparator declarations of Table~\ref{tab:ladder} for the non-nested modules were formalised after the scores of the first pass had been computed; neither decides any retention outcome, the smallest pooled deficit being 17.1\%. The pass order (coarse regime, annual landings and survey start, capelin variants, Specification B) is recorded in SI S1, and the ladder itself was defined once in the first driver script and imported unchanged by every later pass.
+
+\begin{center}
+\fbox{\parbox{0.93\textwidth}{\small
+\textbf{Retention rule.} A module $M$ with comparator $M'$ is \emph{retained} on a specification if and only if, in the rolling-origin design,
+\begin{enumerate}[label=(H\arabic*),leftmargin=3em,itemsep=1pt]
+\item $\RMSE(M) < 0.95\,\RMSE(M')$ at both $h=1$ and $h=5$ (comparator hurdle; vacuous for M1), and
+\item $\RMSE(M) < 0.95\,\RMSE(\pers)$ at both $h=1$ and $h=5$ (persistence hurdle), and
+\item both hold on the same specification; a win on Specification A does not carry to B or conversely.
+\end{enumerate}
+The 5\% band treats differences within it as ties. The rule is a decision rule on point estimates; the bootstrap intervals below describe its uncertainty but are not part of it.}}
+\end{center}
+
+The comparator hurdle is what makes the design a test of structure rather than of the class: a module that beats persistence only because its simpler parent already does is not credited for its addition. The rule is applied to the pooled score; the period decomposition of Section~\ref{sec:periods} is a post-hoc analysis and is labelled as such.
+
+\subsection{Uncertainty of the margins}\label{sec:uncertainty}
+
+For every module--benchmark pair the per-origin squared-error differences $d_t = e^2_{M,t} - e^2_{B,t}$ are summarised by the Diebold--Mariano statistic \citep{Diebold1995} with an autocorrelation-consistent variance truncated at lag $h-1$, the form appropriate to $h$-step forecast errors. The statistic is reported as a $z$-score without the small-sample correction of \citet{Harvey1997}, and it is not the primary uncertainty statement: $n$ is small on Specification A, the loss differences are heavy-tailed because a few collapse-year errors dominate the sums of squares, and the asymptotic reference is known to overstate significance in that setting \citep{Diebold2015}. The primary statement is a moving-block bootstrap \citep{Kunsch1989} of the RMSE gap, $\RMSE(M)-\RMSE(B)$: blocks of length $\max(h,3)$ are resampled from the origin sequence, the same block indices being applied to both loss series so that the resample is paired, and the 2.5--97.5 percentiles of the resampled gap over 20\,000 replicates give the interval; the two-sided bootstrap $p$-value is twice the smaller tail probability of a zero gap. Block lengths 2--8 are reported in SI S3; the conclusions are insensitive to the choice. In this revision the per-origin files were re-executed in a third software environment and the bootstrap was re-run from the archived per-origin errors; every archived number was reproduced (SI S13).
+
+\subsection{Operating characteristics by simulation}\label{sec:simdesign}
+
+Non-retention is informative only if the rule would have retained a module that was truly present. Seven data-generating processes were simulated at the fitted parameters of the fixed windows, 200 replicates each, with process noise $\sigma \in \{11.8, 33.8\}\kt$ (the residual standard deviations of the collapse- and recovery-window fits): D1 and D2, the autonomous Schaefer truth at collapse- and recovery-window parameters; D3, the stock-flow truth; D4, the depensatory truth with $\sA = 15\kt$; D5, a persistence-true null with no production structure; and, added after the first simulation round, D6, a drifting-productivity truth outside the class, and D7, a smooth path observed with error. Each replicate is scored by the full rule on the Specification A design. The pre-declared bars were power $\ge 0.80$ for the truth-matching module in D1--D4 and false retention $\le 0.10$ in D5--D7. Design details and the alternative decision rules examined are in SI S8.

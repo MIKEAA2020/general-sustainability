@@ -1,0 +1,122 @@
+\section{Verification record}\label{si:verification}
+
+\subsection{The grid verifier}
+
+The companion artifact implements the witness datum in exact integer arithmetic at scale 40 -- no floating point, no tolerances, no randomness. It (i) computes the four plans' worst-case tubes and successors for every state on a $31^3=29{,}791$-state grid; (ii) evaluates the typed, weighted and physical admissibility predicates; (iii) checks the region identities $\Vtyp,\Vweak,\Vphys,R,I,\FP$ of main-text Theorem~2; (iv) checks the threshold identities for $\rho_1,\rho_2$ at the analytically identified critical ratios and their midpoints; and (v) checks the propagation identities of main-text Proposition~3(i) on a hold-prefixed horizon. All 25 checks pass; re-execution reproduces outputs exactly. The certification level is exact finite rational verification -- rigorous for the finite rational computation and distinct from the analytic proofs of the continuum theorems.
+
+\begin{table}[!htbp]
+\centering\small
+\caption{Claim layers and what establishes each.}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.24\textwidth}XX@{}}
+\toprule
+Claim layer & What is established & By what \\
+\midrule
+Continuum statements & exact identities and inequalities on the datum & main-text Appendices A--B; SI S2 \\
+Finite rational instances & classifications on enumerated grids & deterministic exact computation (six check lists) \\
+Theorem layer & the core results at an ordered-field interface & Lean 4 module (199 theorems) \\
+Empirical claims & none & -- \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{The 25-check enumeration}
+
+Each entry quotes the check's recorded name from the committed results file (\texttt{research\_program/} \texttt{paper1\_instantiation/} \texttt{typed\_false\_positive\_instantiation.json}; execution of 2026-08-28; deterministic; exit 0) and the main-text claim it maps to. The artifact's tokens ``FP'' and ``FP0'' name the discrepancy region $\Q$.
+\begin{enumerate}[leftmargin=2em,itemsep=1pt]
+\item \emph{FAST breakpoint table exact (dip at t=1/2, recovery at t=1)} -- the \act{fast} row of main-text Table~5.
+\item \emph{STAGED breakpoint table exact (linear spend/growth)} -- the \act{staged} row.
+\item \emph{per-coordinate exact ranges = breakpoint extremes (piecewise monotone)} -- every worst-case tube is the exact visited set.
+\item \emph{worst-case dip constants: benign 3/2, adverse 2, floor threshold 2} -- the disturbance convention.
+\item \emph{machine typed-feasibility == \{x>=1\} $\cup$ \{s1>=2\} $\cup$ \{s2>=2\} on every grid state} -- Theorem~2(1).
+\item \emph{machine all-weights admissibility == \{x>=1\} $\cup$ \{s1+s2>=2\} on every grid state} -- Theorem~2(2).
+\item \emph{FAST/SLOW per-weight safety biconditionals confirmed on every grid state (dense r-grid)} -- Theorem~2(6).
+\item \emph{boundary weights exact: FAST safe at r=rho\_1, SLOW safe at r=rho\_2 (witness state (1/2, 6/5, 6/5))} -- Theorem~2(6).
+\item \emph{machine endpoint-only feasibility == all of X\_0 on every grid state} -- Theorem~2(3).
+\item \emph{typed $\Rightarrow$ all-weights-aggregate $\Rightarrow$ endpoint-only (no violations on the grid)} -- Proposition~1(i).
+\item \emph{false-positive set nonempty on the grid} -- Theorem~2(4); 1,900 grid states in the set.
+\item \emph{interior witness (1/2, 6/5, 6/5): aggregate-feasible for every critical weight, typed-INfeasible, endpoint-feasible} -- Theorem~2(4)--(5).
+\item \emph{witness is an interior point (all $\pm$0.1 neighbors remain in FP)} -- Theorem~2(4).
+\item \emph{endpoint-only witness (1/2, 1/10, 1/10): endpoint-feasible, aggregate-INfeasible (no action safe at w=(1,1))} -- Theorem~2(5).
+\item \emph{aggregate-vs-typed strictness witness (the FP interior point above)} -- Theorem~2(5).
+\item \emph{r=1/2: SLOW-only (FAST unsafe, SLOW safe)} -- Theorem~2(6).
+\item \emph{r=1: both plans safe} -- Theorem~2(6).
+\item \emph{r=2: FAST-only (SLOW unsafe, FAST safe)} -- Theorem~2(6).
+\item \emph{E\_typ = $\cap$\_w E\_w = $\varnothing$ machine-verified (no action serves every critical weight)} -- Proposition~1(ii) on the witness.
+\item \emph{R witness (3/2, 6/5, 6/5): typed-transformable via STAGED (bridging plan at physical cost c=1)} -- Theorem~2(7).
+\item \emph{I witness (1/2, 6/5, 6/5): all four actions rejected, each with its exhibited violated constraint (negative-certificate form)} -- Theorem~2(7).
+\item \emph{rescue split verified on the whole grid: FP0$\cap$\{x>=1\} typed-feasible via STAGED; FP0$\cap$\{x<1\} typed-infeasible} -- Theorem~2(4), (7); Proposition~5.
+\item \emph{stage-0 hierarchy holds and regions are preserved through two hold intervals (every grid state)} -- Proposition~3(i).
+\item \emph{FP strictness witness survives the holds at stage 0} -- Proposition~3(i).
+\item \emph{endpoint-only strictness witness survives the holds at stage 0} -- Proposition~3(i).
+\end{enumerate}
+
+\subsection{The other check lists and the Lean module}
+
+The six check lists are not pooled (the programme's non-pooling policy): grid verifier 25; benchmark script 24 (every quoted value of S5); $\sigma$-ladder verifier 57; off-diagonal closure 50; continuum slice closure 44; common-shock verifier 77 (with the 676-state handshake under the action-indexed class and $5{,}000$-state grids under the common class). Each is a fail-loud exact-arithmetic script with a committed byte-reproducible run log.
+
+The Lean~4 module \texttt{Formalizations/P1\_AssessmentSeparation.lean} (programme repository, directory \texttt{lean/}; 199 theorems; \texttt{lake build} green; zero \texttt{sorry}; zero added axioms) formalises: the witness datum exactly (worst-case tubes as predicates on visited states, endpoint sets, destination-labelled successors); main-text Theorem~2(1)--(7) in full (the three accepted-set identities, $\FP=I$ with its interior witness, both strictness witnesses, the thresholds with the overlap law $\rho_2\ge\rho_1\iff s_1+s_2\ge2$, the rescue split with all four exhibited violations); Lemma~2 and Proposition~1 (the fourfold chain and the full-cone identity) on the datum; Theorem~3(i),(iii) and Proposition~4; the handshake identity and the collapse convention with its rational witness; the master-equation reductions for $\theta>0$, $\theta<0$ (averaging argument at an abstract power interface) and $\theta=0$ (the swap-product identity $F\cdot S=s^2-1$, master row $s^2\ge2$); and Theorem~4(ii)--(iii): the $\theta=1$ rung accepts every gap state, the Leontief identification $\mathcal V^0=\Vtyp$, the false-certification witnesses (the harmonic member's Fibonacci pair and the whole interval $[13/8,2)$; the $\sigma=1/4$ rung at $9/5$; the $\forall m$ family, every $\sigma=1/(m+1)$ false-certifying $[2-2^{-(m+1)},2)$ via a Bernoulli bound; the $\sigma=2$ rung's exact floor $5/4$ as an iff; the $\sigma=3$ rung at the witness point with the bracket $\sigma^*\in(2,3]$; the $\sigma=1$ witness $3/2$ and the $\sqrt2$ floor's bracket $141/100$), and the two-sided summary that only Leontief is uniformly safe. The theorems are proved at an ordered-field interface of which the real-number statements are the instance; the module's comments use the previous edition's result numbers (map in S1).
+
+\section{Positioning notes, per literature}\label{si:positioning}
+
+\paragraph{Commensurability} The foundation statement that values may be only weakly comparable -- and that this incommensurability is constitutive of ecological economics -- is due to Martinez-Alier, Munda and O'Neill (1998). The main article's operators give one formal model of the distinction that paper draws between strong and weak commensurability.
+
+\paragraph{Maximin and indicator formulations} The characterisation of which sustainability criteria admit indicator representations, and the role of maximin and MSY-type reasoning in making strong sustainability operational, are developed in Martinet (2011), Cairns and Martinet (2014) and Doyen and Gajardo (2020). Doyen and Gajardo (2020) show that the multicriteria maximin value is the solution of a static Pareto problem over the viability kernel -- the strongest formal statement in the literature of the position, strong sustainability as constraint viability rather than optimality, that the typed operator formalises.
+
+\paragraph{Compensability in multi-criteria decision analysis} Compensability analysis is established in MCDA, including the explicit mapping of compensatory aggregation to weak sustainability and outranking methods to strong sustainability (Cinelli, Coles and Kirwan, 2014; Sch\"ar, Pohl and Geldermann, 2025). Scalarization-dependent optimal policies are a staple of multi-objective optimisation. Static scalarization limitations -- weighted sums cannot reach nonconvex parts of Pareto fronts (Das and Dennis, 1997) -- act through frontier geometry under a single optimisation, a mechanism distinct from the action-quantifier mechanism.
+
+\paragraph{Acceptance semantics and decision aiding} The protocols of main-text Table~1 are decision-aiding constructs: each specifies the rule by which a composite reading sorts a transition into the accepted or rejected category -- the sorting problematic of decision aiding (Roy, 1996; Vincke, 1992). Under the weight-adaptive rule a transition is accepted when every weighting licenses some plan, possibly a different plan for each weighting; the licensing thresholds are then the verdict's exact weight-sensitivity intervals, the acceptance-side analogue of the sensitivity analyses applied to composite-indicator rankings (Nardo et al., 2008). The preference-elicitation background is multi-attribute value theory's substitution rates (Keeney and Raiffa, 1976) and the incommensurable-criteria treatment of sustainable development (Munda, 2005).
+
+\paragraph{Viability and robust control} The backward recursion is a typed instance of robust-predecessor, reach--avoid, capture-basin and hybrid-reachability constructions (Aubin, 1991; Aubin, Bayen and Saint-Pierre, 2011; Saint-Pierre, 1994; Lygeros, Tomlin and Sastry, 1999; Aubin and Catt\'e, 2002), with fisheries a canonical application (De Lara and Doyen, 2008; Doyen et al., 2012). The blend/time-sharing pair is the pure/mixed structure of the assessor--planner game (von Neumann, 1928; Sion, 1958), whose reach--avoid form is the discriminating kernel of Cardaliaguet (1996), and the here-and-now/wait-and-see distinction of adjustable robust optimisation (Ben-Tal et al., 2004).
+
+\paragraph{Planetary boundaries and the safe-and-just space} The typed operator is a formal idealisation of the separate-boundary reading underlying the Planetary Boundaries framework (Rockstr\"om et al., 2009; Steffen et al., 2015), and the same separately-checked-floor logic underlies the safe-and-just-space literature (Raworth, 2012; O'Neill et al., 2018; Fanning et al., 2022). Boundary processes interact and amplify human impacts (Lade et al., 2020), which is why the coupled disturbance regime of S4 is not a remote possibility. The main theorem provides a formal model of \emph{one reason} a noncompensatory stance may be adopted; it does not prove that planetary boundaries ought to be noncompensatory, which is a normative and scientific-design question.
+
+\section{Framework extensions deposited at partial status}\label{si:framework}
+
+The previous supplementary file of this paper, \texttt{paper1\_supplementary\_v12.md} (deposited with the code), carries a set of framework extensions that the main article does not use in any proof. They are summarised here with their declared status; the full text remains in the deposit.
+
+\paragraph{The named record (status: definition)} A sustainability-assessment model declares a thirteen-field record $\mathfrak S=(T,Z,S_{st},B_{out},V,\Gamma,O,A,C,R,D,K,P)$: type system; state space; stock--flux structure; boundary interface; constitutive laws; service--technology correspondence; observation operator; assessment operator (the subject of the main article); command architecture; deployment/reset architecture; disturbance class; safe-and-just set; policy class. Four uncertainty levels (parameter, observation/assessment, process disturbance, structural) and four model maps (specialisation, exact projection, approximation, singular reduction) complete the layer; claims transfer only along declared maps. The witness datum instantiates the record field by field (three typed coordinates, the phase space $(q,x,s_1,s_2)$, the linear spend/growth flows, the four plans, exact observation, the typed operators, single-command architecture, the destination reset $s\mapsto s+e$, the two-element disturbance class, $K=S_0$, the four-element menu). Every statement carries a status (definition, identity, theorem, conditional theorem, conjecture, counterexample) under two rules: no promotion, no silent transfer. Ten typed failure classes (material inconsistency; physical, epistemic, authority, implementation and temporal infeasibility; recovery, architecture-transition and model-credibility failure; normative incompatibility) discipline verdicts to name the earliest discharged obstruction.
+
+\paragraph{Governance constructors (status: framework extension, partial)} Governance instruments enter as constructors with declared support -- the record fields they may alter -- so that composition is auditable and noncommutation can be proved; the primitive constructors are caps, floors, taxes, exclusions, leaks, observation reforms and restrictions. Restriction of the action correspondence obeys one-sided monotonicity of existential viability kernels, layered along an implementability ladder $U_{\mathrm{impl}}\subseteq U_{\mathrm{inst}}\subseteq U_{\mathrm{tech}}\subseteq U_{\mathrm{theor}}$; a viability result over a theoretical class does not transfer downward. A commons-obstruction theorem (scalar stock $\dot S=g(S)-H$; a uniform negative drift margin $\varepsilon>0$ on a strip above $S_{\min}$ under the implemented Nash feedback; every trajectory entering the strip reaches $S_{\min}$ within $a/\varepsilon$, and exits below it if the drift persists at the boundary) is summarised from the companion obstruction calculus with its conditions explicit.
+
+\paragraph{Intergenerational extension (status: framework extension)} A generation structure assigns closed per-generation constraint sets $V^{(k)}$. Stationary equivalence with ordinary viability holds only under stated restrictions (no inheritance, resets or generation-specific policy classes). Nested impossibility: if trajectories are forward complete and confined to a compact set, each $V^{(k)}$ is closed, and the sets are nested decreasing with empty intersection, then no intergenerationally viable path exists (an $\omega$-limit argument); the theorem does not establish that every finite horizon is satisfiable, which requires a separate example.
+
+\paragraph{Composition extension (status: conditional / incomplete)} An effort-scale invariance in a registered delay-dynamics family, a yield-gap soft-minimum estimate and a ``coupling creates viability'' example are recorded as conditional or not reproducible as written, each with the missing ingredients listed; the two-sided lesson -- composition can create or destroy viability -- is retained as the architectural point.
+
+\paragraph{Application note: planetary boundaries (status: interpretive)} The typed operator supplies a formal model of the separate-boundary reading only; see S8.
+
+\paragraph{Declared conjectures (status: conjecture; none executed)} Nine conjectures with falsification designs: compositional sustainability; transformability (a resource-cost characterisation analogous to $\kappa^*$); capacity-leading failure; bottleneck--robustness; boundary-expansion reversal; distributional dynamics (the gap is largest when floors are negatively correlated across the disturbance class); correlated-disturbance amplification; maintenance suppression; efficiency--scale interaction. Each is governed by preregistration restrictions; no conjecture is rescued by post-hoc state augmentation.
+
+\section*{References cited in the Supplementary Information}
+\begin{itemize}[leftmargin=1.5em,itemsep=1pt]
+\item Abaee, A. (2026a). An obstruction calculus for viability under incomplete observation. Zenodo. \url{https://doi.org/10.5281/zenodo.22552616}.
+\item Abaee, A. (2026c). Does a surplus-production ladder improve forecasts of Northern cod? A scored test on NAFO 2J3KL. Zenodo. \url{https://doi.org/10.5281/zenodo.22553609}.
+\item Abaee, A. (2026d). Verification code and figure pipeline for ``Aggregate indices and transition safety''. figshare. \url{https://doi.org/10.6084/m9.figshare.33764023}.
+\item Abaee, A. (2026e). Delay-induced regime change in harvested stocks: the mobilising and protective channels of institutional feedback, and the review interval as control. Zenodo. \url{https://doi.org/10.5281/zenodo.22554217}.
+\item Aubin, J.-P. (1991). \emph{Viability Theory}. Birkh\"auser, Boston. Aubin, J.-P., Bayen, A.~M., and Saint-Pierre, P. (2011). \emph{Viability Theory: New Directions}, 2nd ed. Birkh\"auser. Aubin, J.-P., and Catt\'e, F. (2002). \emph{Set-Valued Analysis}, 10(4), 379--416.
+\item Ben-Tal, A., Goryashko, A., Guslitzer, E., and Nemirovski, A. (2004). \emph{Mathematical Programming}, 99(2), 351--376.
+\item Cairns, R.~D., and Martinet, V. (2014). \emph{European Economic Review}, 69, 4--17.
+\item Cardaliaguet, P. (1996). \emph{SIAM Journal on Control and Optimization}, 34(4), 1441--1460.
+\item Cinelli, M., Coles, S.~R., and Kirwan, K. (2014). \emph{Ecological Indicators}, 46, 138--148.
+\item Das, I., and Dennis, J.~E. (1997). \emph{Structural Optimization}, 14, 63--69.
+\item Dearing, J.~A., et al. (2014). Safe and just operating spaces for regional social-ecological systems. \emph{Global Environmental Change}, 28, 227--238.
+\item De Lara, M., and Doyen, L. (2008). \emph{Sustainable Management of Natural Resources}. Springer. Doyen, L., et al. (2012). \emph{Ecological Economics}, 75, 32--42. Doyen, L., and Gajardo, P. (2020). \emph{Natural Resource Modeling}, 33(3), e12250.
+\item DFO (2016). \emph{Stock Assessment of Northern Cod (NAFO Divs.\ 2J3KL) in 2016}. CSAS Science Advisory Report 2016/026.
+\item Fanning, A.~L., O'Neill, D.~W., Hickel, J., and Roux, N. (2022). \emph{Nature Sustainability}, 5(1), 26--36.
+\item Keeney, R.~L., and Raiffa, H. (1976). \emph{Decisions with Multiple Objectives}. Wiley.
+\item Lade, S.~J., et al. (2020). \emph{Nature Sustainability}, 3(2), 119--128.
+\item Lygeros, J., Tomlin, C., and Sastry, S. (1999). \emph{Automatica}, 35(3), 349--370.
+\item Martinet, V. (2011). \emph{Journal of Environmental Economics and Management}, 61(2), 183--197.
+\item Martinez-Alier, J., Munda, G., and O'Neill, J. (1998). \emph{Ecological Economics}, 26(3), 277--286.
+\item Munda, G. (2005). In \emph{Multiple Criteria Decision Analysis: State of the Art Surveys}. Springer, 953--986.
+\item Nardo, M., et al. (2008). \emph{Handbook on Constructing Composite Indicators}. OECD.
+\item O'Neill, D.~W., Fanning, A.~L., Lamb, W.~F., and Steinberger, J.~K. (2018). \emph{Nature Sustainability}, 1(2), 88--95.
+\item Raworth, K. (2012). \emph{Oxfam Policy and Practice: Climate Change and Resilience}, 8(1), 1--26.
+\item Rockstr\"om, J., et al. (2009). \emph{Nature}, 461, 472--475. Steffen, W., et al. (2015). Planetary boundaries: Guiding human development on a changing planet. \emph{Science}, 347(6223), 1259855.
+\item Roy, B. (1996). \emph{Multicriteria Methodology for Decision Aiding}. Kluwer. Vincke, P. (1992). \emph{Multicriteria Decision-Aid}. Wiley.
+\item Saint-Pierre, P. (1994). \emph{Applied Mathematics and Optimization}, 29, 187--209.
+\item Schaefer, M.~B. (1954). \emph{Inter-American Tropical Tuna Commission Bulletin}, 1(2), 23--56.
+\item Sch\"ar, S., Pohl, E., and Geldermann, J. (2025). \emph{Journal of Multi-Criteria Decision Analysis}, 32, e70013.
+\item Sion, M. (1958). \emph{Pacific Journal of Mathematics}, 8(1), 171--176. von Neumann, J. (1928). \emph{Mathematische Annalen}, 100, 295--320.
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,122 @@
+\section{Pass order and protocol status}\label{si:passes}
+
+The study is a fixed computational protocol with a recorded execution order, not a prospective registration: no dated pre-scoring protocol file exists for the empirical passes. The order below is established from the analysis code and its archived metadata. Passes 1 and 2 are labelled in the driver script \texttt{run\_ladder.py} and distinguished in \texttt{results/meta.json} by the keys \texttt{catch\_pass1} and \texttt{catch\_pass2}; passes 3 and 4 are separate scripts that import from that driver, which fixes their order after it.
+
+\begin{table}[!htb]
+\centering\small
+\caption{Order in which the passes were run.}
+\begin{tabularx}{\textwidth}{@{}clLL@{}}
+\toprule
+\# & Pass & Data treatment & Script / archived output \\
+\midrule
+1 & Coarse-regime catch & 240/120/5\,kt (through 1991 / 1992 / from 1993) & \texttt{run\_ladder.py} (pass 1); \texttt{fixed\_window\_scores.csv}, \texttt{rolling\_summary.csv} (rows \texttt{catch = regime}), \texttt{rolling\_forecasts\_regime.csv} \\
+2 & Annual landings & Schijns et al.\ (2021) Table 1, t/1000 & \texttt{run\_ladder.py} (pass 2); same files, rows \texttt{catch = annual}; \texttt{rolling\_forecasts.csv} \\
+2b & Survey start & Forecast initiated at the survey-scaled state, annual catch & \texttt{run\_survey\_start()} within pass 2; \texttt{survey\_start\_forecasts.csv} \\
+3 & Capelin variants & Two-regime $r$ at the 1991 break; acoustic-index multiplier on observed years & \texttt{run\_capelin\_regime.py}, \texttt{run\_capelin\_index.py}; \texttt{capelin\_*\_summary.csv} \\
+4 & Specification B & The ladder on the xteNCAM series alone, not pooled & \texttt{run\_xte.py}; \texttt{xte\_rolling\_summary.csv}, \texttt{xte\_fixed\_window\_scores.csv} \\
+5 & Uncertainty layer & DM statistics and block bootstrap on the archived per-origin files & \texttt{campaign\_e1\_dm\_uncertainty\_regime.py}; \texttt{e1\_dm\_uncertainty\_regime.csv} \\
+6 & Simulation & D1--D5 per \texttt{SPECIFICATION\_v4.md} (locked 2026-09-10 before the code was written); D6--D7 per Amendment 1 (locked 2026-09-11) & \texttt{tools/sim\_retention\_power.py}; \texttt{sim\_retention\_power.csv}, \texttt{sim\_misspecified\_D6D7.csv} \\
+7 & This revision & Re-execution of passes 1--6 in a third environment; paired bootstrap confirmation; period decomposition; rolling parameter record; catch-timing sensitivity & \texttt{paperE1\_cod\_forecast\_ladder\_v69\_src/work/} in the repository \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Three points bear on how the scores should be read. The five ladder modules were fixed before any pass was scored: the \texttt{SPECS} list in \texttt{run\_ladder.py} defines M1, M1b, M2, M3 and M4 once, Specification B imports that list rather than redefining it, and none was altered after a score was seen. The scoring core, the fixed windows, the rolling-origin RMSE comparison and the persistence bar at both horizons, was coded before the first pass. Two elements of the retention rule were formalised after the pass-1 scores had been computed: the 5\% tie band and the comparator declarations for the non-nested modules (M2 against M1, M4 against M3). Neither decides any retention outcome, the smallest pooled deficit against persistence being 17.1\%. The capelin pass is the one place where a model was added after scoring began (the index multiplier), and it is reported as a variant, not as a member of the ladder. Specification B was run last and never pooled with Specification A; the constraint is recorded in the code's docstring and in \texttt{meta.json}.
+
+\section{Origin sets and windows}\label{si:origins}
+
+\begin{table}[!htb]
+\centering\small
+\caption{Origin sets. All baselines are evaluated on the module's own origin set at each horizon. The mixed-origin persistence values that the archived Specification B summary also carries (87.6 and 317.7\,kt on 63 and 59 origins) are not comparators and are not used.}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.36\textwidth}Lcc@{}}
+\toprule
+Pass & Origins & $n$ ($h=1$) & $n$ ($h=5$) \\
+\midrule
+Specification A, ladder (all catch passes, survey start, two-regime $r$) & 1990--2014 ($h=1$); 1990--2010 ($h=5$); minimum eight training years & 25 & 21 \\
+Specification A, capelin-index multiplier & 1991--2014; 1991--2010 (origins with a carried acoustic value) & 24 & 20 \\
+Specification B, ladder and two-regime $r$ & 1965--2023; 1965--2019; minimum twelve training years & 59 & 55 \\
+Specification B, capelin-index multiplier & 1988--2023; 1988--2019 & 36 & 32 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The capelin acoustic index is observed in 1982 and 1985--2023 with gaps (1983, 1984, 1993--1995, 1997, 1998, 2006, 2016, 2020--2022 missing; 2023 $= 331.3\kt$). The multiplier pass carries the last observed value across gaps and drops origins with no carried value; the two-regime pass uses the 1991 capelin collapse as a declared break and allows $r$ to differ before and after it, with the post-break value estimated only once post-break transitions are in the training window.
+
+\FloatBarrier
+\section{Uncertainty layer: full grids}\label{si:uncertainty}
+
+Table~\ref{tab:si_dm} gives every module--benchmark pair of the archived uncertainty layer: the DM statistic (loss differences of squared errors; autocorrelation-consistent variance truncated at lag $h-1$; reported as a $z$-score), the paired moving-block bootstrap interval of the RMSE gap (block $\max(h,3)$, 20\,000 replicates, seed 0) and its two-sided $p$-value. The bootstrap in the archived script draws block indices from a generator seeded identically for the two loss series, so the resample is paired; re-running it with an explicitly shared index draw reproduces every interval to the printed digit. Table~\ref{tab:si_blocks} gives the block-length sensitivity (5\,000 replicates per cell) for the M1 and M3 persistence margins.
+
+\begin{table}[!htb]
+\centering\scriptsize
+\setlength{\tabcolsep}{3.5pt}
+\caption{Archived uncertainty layer: all pairs. RMSE in kt; gap $=\RMSE(A)-\RMSE(B)$; CI is the 95\% paired block-bootstrap interval of the gap; $p$ is the two-sided bootstrap $p$-value. The M2-against-M1b rows are an alternative-comparator disclosure, not part of the rule.}
+\label{tab:si_dm}
+\begin{tabular}{@{}ccllrrrrrlr@{}}
+\toprule
+Spec. & $h$ & A & B & $n$ & RMSE(A) & RMSE(B) & gap & DM $z$ & 95\% CI & $p$ \\
+\midrule
+\input{si_parts/gen/tabS3_dm.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htb]
+\centering\scriptsize
+\setlength{\tabcolsep}{2.6pt}
+\caption{Block-length sensitivity of the paired bootstrap interval (kt) for the persistence margins of M1 and M3. The archived layer uses block 3 at $h=1$ and block 5 at $h=5$. One classification changes with the block: the M3 one-step margin on Specification B includes zero for blocks of four or more.}
+\label{tab:si_blocks}
+\begin{tabular}{@{}cclrcccccc@{}}
+\toprule
+Spec. & $h$ & Module & gap & block 2 & block 3 & block 4 & block 5 & block 6 & block 8 \\
+\midrule
+\input{si_parts/gen/tabS4_blocks.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+The DM $z$-statistic is less stable than the bootstrap under the truncation lag: for the M1 persistence margin at $h=1$ it moves from 1.14 at lag 0 to 2.30 at lag 3 on Specification A and from 2.81 to 1.70 on Specification B, crossing the conventional 1.96 in opposite directions, whereas the bootstrap $p$ moves within 0.17--0.19 (A) and 0.036--0.049 (B) over blocks 3--9. Four of the 28 persistence and comparator rows have a bootstrap interval excluding zero with $|z|<1.96$ (A, $h=1$, M4 vs M3; B, $h=1$, M3 vs persistence; B, $h=5$, M1b vs persistence; B, $h=5$, M4 vs M3). No verdict rests on either statistic where they disagree; the retention rule is applied to point estimates.
+
+\FloatBarrier
+\section{Period decomposition: five-year horizon, annual pass, pooled margins}\label{si:periods}
+
+\begin{table}[!htb]
+\centering\small
+\caption{Five-year rolling-origin RMSE (kt) by period of the forecast origin, with origin-matched persistence; superscripts are the number of origins at which the forecast sits at the numerical floor. Companion to Table 6.}
+\label{tab:si_h5}
+\begin{tabular}{@{}llrrrrrrr@{}}
+\toprule
+Spec. & Origins & $n$ & persist & M1 & M1b & M2 & M3 & M4 \\
+\midrule
+\input{si_parts/gen/tabS5_h5.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htb]
+\centering\small
+\caption{Specification A, annual-landings pass: rolling-origin RMSE (kt) by period at $h=1$ (upper block) and $h=5$ (lower block). The low-biomass band gives the same ordering as the coarse-regime pass.}
+\label{tab:si_annual}
+\begin{tabular}{@{}llrrrrrrr@{}}
+\toprule
+Spec. & Origins & $n$ & persist & M1 & M1b & M2 & M3 & M4 \\
+\midrule
+\input{si_parts/gen/tabS5b_annual.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htb]
+\centering\small
+\caption{Post-1995 pooled margins against persistence (origins 1996 onward), with paired block-bootstrap intervals (block $\max(h,3)$, 20\,000 replicates). Specification A: 1996--2014 ($h=1$) and 1996--2010 ($h=5$); Specification B: 1996--2023 and 1996--2019. The bands were chosen after the data were seen; this table describes, it does not test.}
+\label{tab:si_post1995}
+\begin{tabular}{@{}cccllrrrlr@{}}
+\toprule
+Spec. & $h$ & $n$ & Module & RMSE & persist & gap & rel. & 95\% CI (kt) & $p$ \\
+\midrule
+\input{si_parts/gen/tabS6_post1995.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+Band-level intervals for the collapse bands ($n=5$--6) are degenerate under a block bootstrap and are not reported. A leave-one-origin-out check on the Specification B collapse band confirms that the orderings there do not depend on a single origin: M1 and M1b are below persistence in all five leave-one-out sets and M3 in four of five, but these are the floor-forecast wins discussed in Section 4.3.

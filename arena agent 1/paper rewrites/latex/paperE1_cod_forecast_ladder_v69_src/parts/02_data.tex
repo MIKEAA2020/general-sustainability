@@ -1,0 +1,61 @@
+\section{Data and specifications}\label{sec:data}
+
+\subsection{Two assessment series, kept separate}\label{sec:specs}
+
+The predictand is spawning-stock biomass in kilotonnes. Two retrospective series are used, each as a separate specification with its own catch record, threshold, test windows and origin set (Table~\ref{tab:specs}, Fig.~\ref{fig:series}). They are never pooled, concatenated or spliced: the two models differ in structure, natural-mortality treatment and catch handling, and their overlap for 1983--2015 differs by 126\,kt RMSE with the NCAM series higher on average by 58\,kt, so a forecast scored across a junction would be scored partly on a vintage change.
+
+\textbf{Specification A} is the NCAM retrospective of \citet{Cadigan2016} in the M-shift formulation, as tabulated for the 2016 assessment \citep[Table A2]{DFO2016}: 33 annual SSB values for 1983--2015. Its limit reference point (LRP) is the 1983--1989 mean, $884.6\kt$ \citep{DFO2009,DFO2016}; the 2015 value, $298.65\kt$, is 33.8\% of it. Two catch records are used in two separate passes. The primary pass uses a coarse regime schedule declared before any model was fitted: 240\,kt per year through 1991, 120\,kt in 1992 and 5\,kt from 1993 onward, a stylised representation of the pre-moratorium fishery, the partial moratorium year and the residual removals thereafter. The second pass replaces it with the annual landings series of \citet{Schijns2021}, which matches the reported 2015 landings exactly but, like all landings series for this stock, remains below total removals. The coarse pass was executed and archived first; the annual pass is a variant (Section~\ref{sec:variants}).
+
+\textbf{Specification B} is the xteNCAM retrospective of the 2024 framework revision \citep[Table 17]{Regular2025}: 71 annual SSB values for 1954--2024 with published 95\% intervals. Its threshold is $\Blim = 276\kt$, defined as 40\% of $B_{\mathrm{MSY}}$ \citep{DFO2024a}. Catch is the official 2J3KL landings record \citep[Table 1]{Regular2025} for 1954--2023, with 2024 carried from 2023. For 1983--1993 the two landings sources are identical; the series is used as a point input although the assessment itself treats catch as bounded.
+
+Both specifications use a single retrospective vintage throughout: every forecast is scored against the value the same assessment later assigned to the target year, not against the value a contemporaneous assessment would have published. This is the standard practice in hindcast evaluation and it favours the models slightly, since retrospective revisions have smoothed the series the models are fitted to. The size of that effect is bounded in Section~\ref{sec:verdict}, where the NCAM and RAM Legacy vintages of the same years are compared.
+
+\begin{table}[!htb]
+\centering\small
+\caption{The two assessment specifications. Each is scored on its own; nothing is pooled across the two. Rolling-origin counts are for the ladder modules; the baselines are evaluated on the identical origin sets (``origin-matched'').}
+\label{tab:specs}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.2\textwidth}LL@{}}
+\toprule
+ & Specification A & Specification B \\
+\midrule
+Assessment & NCAM, M-shift formulation \citep{Cadigan2016}; \citet[Table A2]{DFO2016} & xteNCAM, revised framework; \citet[Table 17]{Regular2025} \\
+Years & 1983--2015 (33 states, 32 transitions) & 1954--2024 (71 states, 70 transitions) \\
+Predictand & SSB (kt), one retrospective vintage & SSB (kt), one retrospective vintage, with published 95\% interval \\
+Catch & primary pass: coarse regime 240/120/5\,kt (through 1991 / 1992 / from 1993); second pass: annual landings \citep{Schijns2021} & annual landings 1954--2023 \citep[Table 1]{Regular2025}, 2024 carried from 2023 \\
+Threshold (secondary score only) & LRP $=$ 1983--1989 mean $= 884.6\kt$ & $\Blim = 276\kt$ (40\% $B_{\mathrm{MSY}}$) \\
+Fixed windows & collapse: train 1983--1990, test 1991--1995; recovery: train 1995--2007, test 2008--2015 & collapse: train 1954--1989, test 1990--1995; recovery stall: train 1995--2012, test 2013--2024 \\
+Rolling origins & minimum 8 training years; origins 1990--2014 ($n=25$, $h=1$) and 1990--2010 ($n=21$, $h=5$) & minimum 12 training years; origins 1965--2023 ($n=59$) and 1965--2019 ($n=55$) \\
+Last common year & 2015: $298.65\kt$ (33.8\% of LRP) & 2015: $273\kt$ (0.99 $\Blim$) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{fig1_series}
+\caption{The two SSB series on which the ladder is scored. (a) Specification A: NCAM M-shift SSB 1983--2015, with the LRP (1983--1989 mean, 884.6\,kt), the July 1992 moratorium and the two fixed test windows. (b) Specification B: xteNCAM SSB 1954--2024 with its published 95\% interval, $\Blim = 276\kt$, and the NCAM series overlaid for 1983--2015 to show the vintage difference; the series are never pooled. Shading marks the Specification B fixed test windows.}
+\label{fig:series}
+\end{figure}
+
+\subsection{Information available at a forecast origin}\label{sec:infoset}
+
+A forecast issued at origin $t$ for target $t+h$ may use only quantities dated $t$ or earlier, with one declared exception: the stock-flow modules M2--M4 receive the realised catch $C_{t+1},\dots,C_{t+h}$ along the horizon (Table~\ref{tab:infoset}). This is a conditional forecast, the form in which surplus-production projections are issued in practice (``if removals are $C$, biomass will be $S$''), and it gives those modules information the baselines never see. The persistence benchmark is therefore conservative for M2--M4: if a catch-supplied module cannot beat the last observed value, the deficit cannot be attributed to ignorance of the catch. The autonomous modules M1 and M1b use the training-mean catch as a constant, which is the information a forecaster has when the future removals are unknown. Parameters are refitted at every origin on the expanding training window. The thresholds enter only the secondary indicator score (SI S7), never the forecast.
+
+\begin{table}[!htb]
+\centering\small
+\caption{Information set at origin $t$ for a forecast of $S_{t+h}$. ``Supplied'' means the realised value enters the forecast; ``no'' means it is unavailable to every forecaster.}
+\label{tab:infoset}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.3\textwidth}LL@{}}
+\toprule
+Quantity & Baselines & Ladder modules \\
+\midrule
+SSB history $S_1,\dots,S_t$ & persistence uses $S_t$; training mean uses all & all, as the fitting window \\
+Catch history $C_1,\dots,C_t$ & no & M1/M1b: training mean, held constant; M2--M4: used in fitting \\
+Future catch $C_{t+1},\dots,C_{t+h}$ & no & M1/M1b: no (training mean); M2--M4: supplied \\
+Previous state $S_{t-1}$ & no & M4 only (lagged start) \\
+Survey or capelin index at $t$ & no & variant passes only (Section~\ref{sec:variants}) \\
+Reference point & no & no (secondary score only) \\
+Future SSB $S_{t+1},\dots$ & no & no \\
+\bottomrule
+\end{tabularx}
+\end{table}

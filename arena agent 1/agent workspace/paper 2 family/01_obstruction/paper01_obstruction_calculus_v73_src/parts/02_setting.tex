@@ -1,0 +1,72 @@
+\section{Setting, conventions, and the selector principle}\label{sec:setting}
+
+\subsection{Dynamics, constraints, and the kernel hierarchy}\label{sec:kernels}
+
+Fix a state space $X\subseteq\R^n$, a control set $U$, a disturbance set $D$, and dynamics
+\begin{equation}\label{eq:dyn}
+\dot x(t)=f\bigl(x(t),u(t),d(t)\bigr),\qquad u(t)\in U(x(t)),\quad d(t)\in D(x(t)),
+\end{equation}
+with $f$ continuous, $U$ and $D$ set-valued with closed graph and nonempty compact values, and admissible controls and disturbances measurable selections. These are the \emph{standing solution-existence conditions}: every selection pair admits a Carath\'eodory solution, and the convexified relaxed inclusion satisfies the Marchaud conditions of the viability literature \citep{aubin1991}. They provide a solution for each fixed selection pair; they do \emph{not} by themselves provide an adversarial selection coupled to a policy, which is why the analytic certificates below carry an explicit adverse-path hypothesis. Let $\cV\subseteq X$ be a closed constraint set, described where needed by finitely many $C^1$ functions, $\cV=\{x:q_j(x)\ge0,\ j=1,\dots,m_q\}$. Strict floor violation means $q_j<0$.
+
+Three kernels organise the analysis. $\Viab(\cV)$ is the \emph{viability kernel} under state feedback without disturbance, the largest closed subset of $\cV$ from which some state-feedback control keeps the trajectory in $\cV$ for all time \citep{aubin1991}. $\RViab(\cV)$ is the \emph{robust kernel}, from which some state-feedback policy keeps every trajectory in $\cV$ for every admissible disturbance realisation \citep{aubinfrankowska1990}. The object of this paper is the \emph{robust epistemic kernel} $\ERViab_\cI(\cV)$ (Definition~\ref{def:kernel}), whose elements are \emph{information states}, not physical states. Writing $\mathrm{proj}_\exists(\mathfrak B)=\bigcup_{B\in\mathfrak B}B$ for the existential projection of a collection of information states, the informational hierarchy reads
+\begin{equation}\label{eq:hierarchy}
+\mathrm{proj}_\exists\bigl(\IRViab_\cJ(\cV)\bigr)\;\subseteq\;\mathrm{proj}_\exists\bigl(\ERViab_\cI(\cV)\bigr)\;\subseteq\;\RViab^{\mathrm{hist}}(\cV),
+\end{equation}
+where $\IRViab_\cJ(\cV)$ is the \emph{institutionally restricted} kernel---the epistemic kernel with the observations and actions restricted to those an institution $\cJ$ may receive and command (Section~\ref{sec:design})---and $\RViab^{\mathrm{hist}}$ permits nonanticipative full-information histories. Identifying $\RViab^{\mathrm{hist}}$ with the state-feedback kernel requires a comparison theorem matching admissibility, solution and policy classes, and none is assumed. Each inclusion can be strict for a distinct reason: robust contraction arises from disturbances, epistemic contraction from indistinguishability, institutional contraction from restricted authority. This paper characterises the epistemic contraction.
+
+\subsection{Observation structures and information states}\label{sec:information}
+
+An \emph{observation structure} $\cI=(Y,O)$ is a measurable space $Y$ with an observation map $O:X\to Y$; the policy observes $y(t)=O(x(t))$. The \emph{information state} (belief) at time $t$ of a regulator who knows the dynamics, the disturbance class, its own applied controls $(u(s))_{s<t}$ and the record $(y(s))_{s\le t}$ is the set of current states compatible with all of them,
+\begin{equation}\label{eq:belief}
+B_t=\bigl\{\xi(t):\ \xi(0)\in B_0,\ \dot\xi=f(\xi,u,d),\ d(s)\in D(\xi(s)),\ O(\xi(s))=y(s)\ \forall s\le t\text{ observed}\bigr\},
+\end{equation}
+the applied control history being the regulator's own and common to every candidate trajectory. This is the set-membership semantics of \citet{kurzhanski1997}. A \emph{prior} $B_0$ is a belief before the initial reading; the initial reading $y_0=O(x_0)$ is available before the first action, so the first decision is taken at the \emph{post-observation cell} $B_{0,y}=B_0\cap O^{-1}(y)$, and every later belief lies in one current observation cell. A policy is \emph{observation-based} when it is a measurable nonanticipative function of the available record; a \emph{belief-based} policy factors through $B_t$ and is a special case. The common admissible action set of a belief is
+\[
+U^B(B)=\bigcap_{x\in B}U(x),
+\]
+the only actions an observation-based policy can select without risking inadmissibility at some compatible state.
+
+\begin{definition}[robust epistemic kernel]\label{def:kernel}
+$B_0\in\ERViab_\cI(\cV)$ if there exists a nonanticipative observation-based policy $\pi$ such that, for every compatible initial state $x_0\in B_0$ and every admissible disturbance realisation $d(\cdot)$, every trajectory of \eqref{eq:dyn} generated from $x_0$ by $\pi$'s actions under $d(\cdot)$---the record being the one that $(\pi,d(\cdot))$ generates---remains in $\cV$ for all time.
+\end{definition}
+
+The quantifier order is the exists-strategy-for-all-realisations form and is essential: the record is generated by the realisation, so conditioning admissible realisations on the record would be circular. The ambient domain is $\mathfrak B=\{B\subseteq X:B\ne\varnothing\}$; compactness of beliefs or fibres is assumed only where a statement needs it. The non-robust counterpart $\EViab_\cI(\cV)$ (some policy and \emph{some} realisation keep every compatible trajectory safe) is a strictly weaker contrast class, and none of the results below transfers to it a fortiori. When $O$ is injective the record determines the state, the informational certificates reduce to the no-merge case, and only the dynamic obstruction can certify exclusion.
+
+\paragraph{Standing conventions.} Four conventions are used throughout and are collected here so that each statement can refer to them by name.
+\begin{description}[leftmargin=1.6em,itemsep=1pt]
+\item[\hyp{Fail}] An action outside $U(x)$ applied at a compatible state $x$ is itself failure.
+\item[\hyp{Hold}] A \emph{held-action review class} selects a command at each review and holds it over the review interval of positive length $\Delta$; within-review switching is excluded. Statements that need this class say so; a continuous record and time-varying controls are otherwise permitted.
+\item[\hyp{Record}] Policies are functions of the full nonanticipative record. Representing them by the set-valued belief is justified when the exact belief is a sufficient statistic and a measurable belief-policy selector exists, not by the definition of a record alone.
+\item[\hyp{Order}] The disturbance-information order is statement-specific: the common-action and delayed witnesses respond to a candidate policy ($\forall\pi\,\exists d$); the recourse witness is one exogenous scenario admissible against all policies ($\exists d\,\forall\pi$).
+\end{description}
+Under exact rectangular belief dynamics and a strategy class closed under nonanticipative concatenation, the epistemic kernel is a recursively viable family of information states; without those hypotheses this is an organising description rather than a greatest-fixed-point theorem. Observation error, hidden parameters and delays require their own information models (error: $y\in H(\xi,v)$; parameters: beliefs in $X\times\Theta$; delays: beliefs in a history space) and are noted as extensions in Section~\ref{sec:limitations}.
+
+\subsection{The safe-control correspondence}\label{sec:safecontrol}
+
+For $x\in\cV$ define the \emph{safe-control correspondence}
+\begin{equation}\label{eq:R}
+\cR_\cV(x)=\bigl\{u\in U(x):\ \forall d\in D(x),\ \forall j\text{ with }q_j(x)=0:\ \nabla q_j(x)\cdot f(x,u,d)\ge0\bigr\},
+\end{equation}
+the controls whose drift is inward on every active constraint face uniformly over the disturbance; at interior points $\cR_\cV(x)=U(x)$. Two readings must be kept apart. In the \emph{local} reading, the active-gradient inequalities are necessary for a contingent tangent velocity; they are also sufficient only under a representation regularity condition such as the Mangasarian--Fromovitz qualification ($q(x)=x^3$, $\cV=[0,\infty)$ and velocity $-1$ at $0$ satisfy $\nabla q(0)\cdot(-1)=0$ yet exit immediately). By contrast, a \emph{strictly negative} derivative along an admissible original-system path through an active constraint is a local obstruction with no qualification needed. In the \emph{kernel} reading, viability of $x_0\in\cV$ requires a selection in $\cR_G$ along the trajectory with $G=\RViab(\cV)$, since points of $\cV\setminus G$ may admit instantaneously safe controls while every trajectory exits later. The obstruction theorems below are local certificates against $\cR_\cV$: exhibiting a belief at which even the weaker pointwise condition fails, together with a realised exiting path, certifies exclusion from the kernel. The correspondence is the object on which the observation structure acts, through its common value $\cR^B_\cV(B)=\bigcap_{x\in B}\cR_\cV(x)$.
+
+\subsection{Response correspondences and the selector principle}\label{sec:selector}
+
+An observation-based regulator selects a single response for an entire information set. Three response correspondences are used in continuous time:
+\begin{align*}
+U^B(B)&=\textstyle\bigcap_{x\in B}U(x) &&\text{(admissibility)},\\
+\cR^B_\cV(B)&=\textstyle\bigcap_{x\in B}\cR_\cV(x) &&\text{(instantaneous safety)},\\
+\Atube(B,\Delta)&=\{a\in U^B(B):\ \mathrm{Safe}_{\mathrm{hold}}(B,a,\Delta)\} &&\text{(review-interval safety)},
+\end{align*}
+where $\mathrm{Safe}_{\mathrm{hold}}(B,a,\Delta)$ means that every compatible original-system trajectory under the held command $a$ exists, remains in $\cV$, and obeys $a\in U(x(t))$ throughout $[0,\Delta]$, quantified over all compatible initial states, admissible disturbances and solutions. The last condition matters when admissible controls depend on the state: initial common admissibility does not imply trajectory-wise admissibility. In finite systems a fourth, recursive correspondence $\cA_N(B)$ is defined in Section~\ref{sec:finite}. Write $\Reach_{[0,\Delta]}(B,a)$ for the set of states of these held-action trajectories.
+
+\begin{proposition}[selector principle]\label{prop:selector}
+Let $B\in\ERViab_\cI(\cV)$ be a post-observation cell of a held-action review class \hyp{Hold} and let $\pi$ witness its viability. Then at every review the action $a=\pi(B)$ is (i) \emph{admissible}, $a\in U^B(B)$; (ii) \emph{safe}, $\Reach_{[0,\Delta]}(B,a)\subseteq\cV$; and (iii) \emph{recursively viable}: every post-observation belief reached at the next review lies again in $\ERViab_\cI(\cV)$ under the continuation of $\pi$. Consequently, along every reachable branch, $U^B(B_k)\ne\varnothing$ and $\Atube(B_k,\Delta)\ne\varnothing$; in the sampled model of Section~\ref{sec:finite} the recursive predecessor is nonempty as well; and $\cR^B_\cV(B_k)\ne\varnothing$ holds under the adverse-path premise \hyp{C3} of Theorem~\ref{thm:common-action} at every failed active-gradient test. A certificate that any one of these correspondences is empty at a reachable belief therefore certifies nonviability under the hypotheses declared for that certificate.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+(i) The record through the review is common to the cell and the policy applies one action whatever the compatible true state; inadmissibility at any compatible state is failure by \hyp{Fail}. (ii) Over the review a run of $\pi$ applies the held command, so its review segment is a compatible held-action trajectory, and conversely every such trajectory is the review segment of a run (extend the disturbance selection measurably); all these states lie on runs that $\pi$ keeps in $\cV$. (iii) For $x'$ in a reached belief $B'$, the membership of $x'$ in $B'$ supplies a compatible candidate trajectory over the review; gluing its disturbance selection to any continuation realisation gives a run of $\pi$ from a compatible state whose conditioning at the end of the review is the realised one, and witnessing keeps it in $\cV$. The induction over reviews and the per-correspondence consequences are carried out in S2.1, together with a witness showing that the unconditional gradient clause is \emph{not} provable under the standing assumptions: a closed-graph $D$ may carry point values realised by no admissible trajectory, and where only such phantom values fail the gradient test, $\cR^B_\cV(B)=\varnothing$ can coexist with viability.
+\end{proof}
+
+The selector principle is the organising claim of the calculus and is used implicitly by every certificate of Sections~\ref{sec:calculus} and \ref{sec:certification}. In finite systems its converse is exact (Theorem~\ref{thm:finite-horizon}); in continuous time no general finite backward-recursion converse is claimed (Section~\ref{sec:completeness}).
+
+\paragraph{Notation.} $\cI$ is always the observation structure and $\cJ$ the institution. $\Tobs$ is the first time the record discriminates between compatible branches. $D^+q(x;v)=\limsup_{h\downarrow0}[q(x+hv)-q(x)]/h$ is the upper right Dini derivative, equal to $\nabla q(x)\cdot v$ for $C^1$ $q$. $h_U(g)=\sup_{v\in U}g^\top v$ is the support function of $U$. A few letters carry local meanings declared where they occur: $a$ is a held action, and also the strip width of Theorem~\ref{thm:exit}; $\lambda$ and $\mu$ are Farkas multipliers or pooling weights; $K$ is the safe set of Section~\ref{sec:certification} and the blind-window length of Theorem~\ref{thm:lp}. The companion manuscripts of this programme share this vocabulary; a concordance of letters whose meanings differ across them is given in S1.

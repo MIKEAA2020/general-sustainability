@@ -1,0 +1,204 @@
+\section{Complete proofs}\label{S:proofs}
+
+\subsection{The selector principle and the phantom-value witness}\label{S:selector}
+
+\begin{restated}{Proposition 2.2}{selector principle}
+Let $B\in\ERViab_\cI(\cV)$ be a post-observation cell and $\pi$ a policy witnessing viability on $B$. At every review the action $a=\pi(B)$ is (i) admissible, $a\in U^B(B)$; (ii) safe over the review, $\Reach_{[0,\Delta]}(B,a)\subseteq\cV$; (iii) recursively viable: every post-observation belief reached at the next review is again in $\ERViab_\cI(\cV)$ under the continuation of $\pi$. Consequently $U^B(B_k)\neq\varnothing$ and $\Atube(B_k,\Delta)\neq\varnothing$ along every reachable belief $B_k$; in the sampled model $\cA_N(B_k)\neq\varnothing$ for every $N$; and $\cR^B_\cV(B_k)\neq\varnothing$ under the original-path premise \hyp{C3} at every failed active-gradient test.
+\end{restated}
+
+\begin{proof}
+Throughout, $\pi$ witnesses viability on $B$: for every compatible $x\in B$ and every admissible realisation, every run generated from $x$ by $\pi$'s actions under that realisation---with the record the pair itself generates---remains in $\cV$ for all time. Three standing ingredients are used: (Fail); the memoryless selection model of (Record), under which a concatenation of selections along a glued trajectory is again a selection; and closure of the policy class under conditioning on a realised record (nonanticipative concatenation).
+
+\emph{(i) Admissibility.} At a review the record is common to the whole cell; every $x\in B$ is compatible with it, and $\pi$ selects one action $a$ for the entire cell. If $a\notin U(x)$ for some $x\in B$, then on the branch whose true state is $x$ the policy applies an inadmissible action at a compatible state, which is failure by (Fail), so $\pi$ would not witness viability. Hence $a\in\bigcap_{x\in B}U(x)=U^B(B)$.
+
+\emph{(ii) Safety.} Over the review a run of $\pi$ applies the constant held command $a$, whatever within-review record the pair generates; its review segment is an admissible original-system held-action trajectory $\dot x=f(x,a,d(t))$, $d(t)\in D(x(t))$. Conversely every such trajectory from $x\in B$ over $[0,\Delta]$ is the review segment of a full run: extend its selection beyond the review to a full-horizon admissible selection (measurable concatenation; the standing solution-existence conditions supply the continuation), and over the review the run coincides with the given trajectory, both solving the same equation under the same inputs. $\Reach_{[0,\Delta]}(B,a)$ is by definition the union of the states of these trajectories over all compatible $x$, admissible selections and $t\in[0,\Delta]$; each lies on a run that witnessing keeps in $\cV$. Hence $\Reach_{[0,\Delta]}(B,a)\subseteq\cV$.
+
+\emph{(iii) Recursive viability.} Let $B'$ be any post-observation cell reached at the next review and $\pi'$ the continuation of $\pi$ conditioned on the realised record through the end of the review. Fix $x'\in B'$ and a run $(\bar x,\bar d)$ from $x'$ governed by $\pi'$. By (Record), $x'\in B'$ exactly when $x'$ is the terminal state of a candidate trajectory $\xi$ compatible with the realised record: $\xi$ starts at some $x\in B$, solves the dynamics under the held $a$ with a measurable selection $d_\xi(t)\in D(\xi(t))$, and generates the realised record. Glue: $d''=d_\xi$ on the review and $d''(t)=\bar d(t-\Delta)$ beyond it. Under the memoryless model $d''$ is a selection of $D$ along the glued trajectory ($\xi$ then $\bar x$), and the glued path is a run of $\pi$ from $x\in B$ under $d''$: over the review its action is the held $a$ with identical inputs, so it generates the same record and $\pi$'s conditioning at the end of the review is the realised one; beyond the review it satisfies the closed-loop equations of $\pi'$ against $\bar d$. Witnessing on $B$ applied to $(x,d'')$ keeps the glued run in $\cV$ for all time, and its tail is $\bar x$. Since $x'$ and $(\bar x,\bar d)$ were arbitrary, $\pi'$ witnesses $B'\in\ERViab_\cI(\cV)$.
+
+\emph{The four correspondences.} Induction on the review index along any realisation: (iii) re-instantiates the hypothesis at every reached belief, so (i)--(iii) hold with $B$ replaced by each reachable $B_k$ and selection $a_k=\pi(B_k)$. Then $U^B(B_k)\ne\varnothing$ by (i). $\Atube(B_k,\Delta)\ne\varnothing$: every compatible held-action trajectory from $B_k$ under $a_k$ exists, remains in $\cV$ over $[0,\Delta]$ by (ii), and obeys $a_k\in U(x(t))$ throughout, because an action outside $U(x(t))$ at a state of a witnessed run---a state compatible with the record that run generates---is failure. In the sampled model (iii) is exactly the one-step condition that $\Post(B_k,a_k,y)$ is viable for every possible $y$, so $a_k\in\cA_N(B_k)$ for every $N$ and $B_k\in\bigcap_N\cW_N$ (Theorem~3.1, forward induction). Finally $\cR^B_\cV(B_k)\ne\varnothing$ under \hyp{C3}: were $a_k$ to fail an active-gradient inequality at a compatible boundary state, \hyp{C3} would supply an admissible original-system held-$a_k$ path from a compatible state on which the active constraint is strictly negative before the review ends, so $a_k\notin\Atube(B_k,\Delta)$, contradicting the previous item. Without such a premise this last necessity is false in general (\S\ref{S:phantom}). By contraposition, a certificate that one of the correspondences is empty at a reachable belief certifies nonviability under the hypotheses declared for that certificate. In finite systems the converse is exact at every finite horizon by the two inductions of Theorem~3.1 and at the infinite horizon by the nested intersection $\bigcap_N\cW_N$; in continuous time no general finite backward-recursion converse is claimed.
+\end{proof}
+
+\paragraph{The phantom-value witness.}\label{S:phantom}
+The unconditional form of the last necessity---viability implies $\cR^B_\cV(B)\ne\varnothing$ along every reachable branch---is not provable under the standing assumptions. A closed-graph $D$ can carry point values that no admissible trajectory realises; where only such values fail the gradient test, every tube-safe command fails the pointwise test while the belief remains viable. Take $X=\R$, $\cV=[0,\infty)=\{q\ge0\}$ with $q(x)=x$, $U(x)\equiv\{0\}$, $f(x,u,d)=d$, $D(0)=\{-1,1\}$ and $D(x)=\{1\}$ for $x\ne0$: closed graph, nonempty compact values, solutions exist. Every trajectory from $0$ stays nonnegative---on any interval where $x<0$ admissibility forces $d=1$, so $x$ increases at unit rate and cannot remain below zero---so the singleton belief $\{0\}$ is viable under the only policy; yet $\cR_\cV(0)=\varnothing$, because the value $-1\in D(0)$ fails the active gradient test while being realised by no admissible trajectory (a selection equal to $-1$ on a set of positive measure would have to keep $x=0$ there, contradicting $\dot x=-1$). This is why Theorem~4.1 and Proposition~4.2 carry \hyp{C3} explicitly: the bridge from a failed test to a certificate needs a selection converging to the failed value \emph{along a trajectory}, not pointwise approachability of the value; a constant $d\in D(x_0)$ need not remain admissible as $x(t)$ moves.
+
+\subsection{Finite systems: recursion, obstruction trees and the one-step instance}\label{S:trees}
+
+\begin{restated}{Theorem 3.1}{finite-horizon soundness and completeness}
+$B_0$ admits an observation-based policy keeping every compatible trajectory in $\cV$ for $N$ steps iff $B_0\in\cW_N$; a prior $P$ is viable iff every nonempty initial cell $P\cap O^{-1}(y)$ is in $\cW_N$.
+\end{restated}
+
+\begin{proof}
+The initial observation partitions a prior into disjoint cells on which one policy may choose independently, so the post-observation statement suffices. ($\Rightarrow$) Induction on $N$; $N=0$ is $B_0\subseteq\cV$. If a policy is safe for $N$ steps, its first action $a$ is admissible at every compatible state, so $a\in U^B(B_0)$; for every possible $y$ the successor $\Post(B_0,a,y)$ is safe for $N-1$ steps under the same policy, hence in $\cW_{N-1}$ by induction; so $B_0\in\Pre(\cW_{N-1})=\cW_N$. ($\Leftarrow$) Backward induction: if $B_k\in\cW_{N-k}=\Pre(\cW_{N-k-1})$ choose a witness $a_k\in U^B(B_k)$; after $y_k$ the successor $B_{k+1}=\Post(B_k,a_k,y_k)\in\cW_{N-k-1}$ and the recursion continues; every reachable state over $N$ steps lies in $\cV$.
+\end{proof}
+
+\paragraph{Obstruction trees.} If $B_0\notin\cW_N$, at each node $(B,k)$ with $k\ge1$ and each $a\in U^B(B)$ the adversary can choose a possible observation $y$ with $\Post(B,a,y)\notin\cW_{k-1}$; the branches are the compatible observation-and-disturbance choices forcing violation within $N$ steps. The tree alternates regulator and nature turns, the standard structure of partial-information games, and is the exact finite-horizon counterpart of the sufficient continuous certificates. In the mechanisation the tree is the inductive type \texttt{PolicyTree}/\texttt{Blocked} with \texttt{blocked\_iff}: $\mathrm{Blocked}(N,B)\iff B\notin\cW_N$ (\S\ref{S:lean}).
+
+\paragraph{The one-step instance.} The discrete abstraction of Example~3.3 on the grid $z\in\{-1,0,1\}$, $\theta\in\{-1,+1\}$, $u\in\{-1,+1\}$, $z^+=z+\theta u$, $\cV=\{z\ge0\}$, $O(z,\theta)=z$: the belief $B_0=\{(0,-1),(0,+1)\}$ has $U^B(B_0)=\{-1,+1\}$; under $u=+1$ the branch $\theta=-1$ reaches $z^+=-1$, so $\Post(B_0,+1,-1)=\{(-1,-1)\}\notin\cW_0$; under $u=-1$ the branch $\theta=+1$ does. Hence $B_0\notin\cW_1$, and the obstruction tree is the root $(B_0,1)$ with two adversary edges each terminating in $z<0$ (Figure~S8.2). This is Theorem~4.1 in finite-horizon language; it is the Lean theorem \texttt{hidden\_mode\_conflict}, proved on the coinductive infinite-horizon kernel \texttt{EpiK}.
+
+\subsection{The common-action obstruction, its Farkas form, the ladder and the sparse witness}\label{S:common}
+
+\begin{restated}{Theorem 4.1}{common-action obstruction}
+Under \hyp{C1} (held action), \hyp{C2} ($U^B(B)=\varnothing$, or $\cR^B_\cV(B)=\varnothing$ with $U^B(B)\ne\varnothing$) and, in the safety case, \hyp{C3} (for every $a\in U^B(B)$ an admissible original-system path from a compatible boundary state under $a$ with $q_{j_a}(x_a(t))\le-c_at<0$ on $(0,\tau_a)$ before any informative observation), $B\notin\ERViab_\cI(\cV)$ for the declared class.
+\end{restated}
+
+\begin{proof}
+Let $\pi$ be any policy of the class and $a=\pi(B)$. \emph{Admissibility case.} If $a\notin U^B(B)$, some compatible $x\in B$ has $a\notin U(x)$ and the policy fails on that branch by (Fail), independently of the safe set. \emph{Safety case.} Otherwise $a\in U^B(B)$; since the active-gradient response equals $U(x)$ at interior points, emptiness of the common intersection means $a$ fails an active boundary inequality at some compatible state, and \hyp{C3} supplies a realised original-system path from such a state whose active constraint becomes strictly negative at arbitrarily small positive times, before the next review. The policy fails on one admissible compatible path. $\pi$ was arbitrary within the hold class; no claim is made for within-review switching or for relaxed-only paths.
+\end{proof}
+
+\paragraph{Held-action consequence.} For each $a\in U^B(B)$ with an exiting path as in \hyp{C3} and any $\Delta>0$, that path contains an unsafe point before the review ends, so $a\notin\Atube(B,\Delta)$; this exhausts the common held commands and proves tube emptiness for the declared hold class only. The exit interval may depend on $a$; no uniform margin or exit time is supplied.
+
+\paragraph{Farkas form.} For polyhedral data the emptiness certificate is a Farkas pair: with the safe actions across compatible states given by finitely many affine inequalities stacked as $Au\le b$, the intersection is empty iff there is $\mu\ge0$ with $\mu^\top A=0$ and $\mu^\top b<0$ \citep{farkas1902,gale1960}. The certificate is finite when the safe-action constraints over the belief admit a finite representation; for infinite beliefs the reduction to finitely many states is Proposition~4.3 under its convexity hypotheses. The worked two-floor instance ($\lambda=(\tfrac12,\tfrac12)$, margin $\tfrac1{10}$) and its robustness are in \S\ref{S:farkas}.
+
+\begin{restated}{Proposition 4.2}{obstruction ladder}
+For the held-action class, assuming \hyp{C3} whenever an active-gradient test fails: $\Atube(B,\Delta)\subseteq\cR^B_\cV(B)\subseteq U^B(B)$ for all $\Delta>0$, and emptiness descends.
+\end{restated}
+
+\begin{proof}
+The second inclusion is $\cR_\cV(x)\subseteq U(x)$. For the first, if $a\in U^B(B)$ fails an active-gradient inequality at a compatible boundary state, \hyp{C3} gives an admissible original-system path with $q_j(x(t))<0$ arbitrarily soon, so $a$ is not tube-safe. Emptiness of the held-command tube rules out a policy \emph{required} to hold that command for the review; it does not rule out a time-varying input signal. The discrete $\cA_N$ is not included in the continuous tube without a sampled-transition bridge (Figure~S8.1). The rungs are strict in general: an instantaneously tangent action may still exit in finite time, which is the gap \hyp{C3} closes.
+\end{proof}
+
+\begin{restated}{Proposition 4.3}{sparse common-action witness}\label{S:helly}
+Let $B\subseteq\cV$, $U\subseteq\R^m$ compact, $U(x)\subseteq U$ closed and convex, $f$ control-affine, $q_j\in C^1$ and $D(x)$ compact. If $\bigcap_{x\in B}\cR_\cV(x)=\varnothing$ there are $x_1,\dots,x_\ell\in B$ with $\ell\le m+1$ and $\bigcap_{i\le\ell}\cR_\cV(x_i)=\varnothing$; the converse is immediate.
+\end{restated}
+
+\begin{proof}
+At fixed $x$ with active facets $J(x)$, $\cR_\cV(x)=\{u\in U(x):\nabla q_j(x)\cdot f(x,u,d)\ge0\ \forall j\in J(x),\ \forall d\in D(x)\}$. For each fixed $(x,j,d)$ the left side is affine in $u$ because $f(x,u,d)=f_0(x,d)+f_u(x,d)u$, so each inequality is a closed halfspace in control space, regardless of whether $q_j$ is convex in $x$. Intersecting over active facets and disturbances with the closed convex $U(x)$ gives a closed convex set, compact since $U$ is compact (including when empty). If every finite subfamily of $\{\cR_\cV(x)\}_{x\in B}$ had nonempty intersection, the finite-intersection property of compact sets would make the total intersection nonempty; so some finite subfamily has empty intersection, and Helly's theorem in $\R^m$ \citep{helly1923} extracts a subfamily of at most $m+1$ members with empty intersection. Convexity is required of $U(x)$ and of the resulting control sets, not of $q_j$; a discrete rule based on $q_j(F(x,u,d))\ge0$ need not produce convex control sets (Remark~4.4) and is not the statement proved here.
+\end{proof}
+
+\subsection{The minimal admissibility construction}\label{S:emptiness}
+
+\begin{restated}{Proposition 4.5}{epistemic emptiness by admissibility}
+There is a system whose perfect-information kernel is all of $\cV\ne\varnothing$, together with a non-injective observation $O$, such that every full-fibre initial belief $B_0=O^{-1}(O(S_0))$, $S_0\in\cV$, lies outside the kernel $\ERViab_\cI(\cV)$.
+\end{restated}
+
+\begin{proof}
+$X=[1,2]$, $\dot S=u-r(S)$ with $r:[1,2]\to\R_{++}$ continuous and injective (e.g.\ $r(S)=S-1+c$, $c>0$), the unrelaxed nonconvex $U(S)=\{0,r(S)\}$, $\cV=[1,2]$, $O\equiv0$. Under perfect information $u=r(S)$ gives $\dot S=0$, so $\Viab(\cV;U,\pi_{\mathrm{perf}})=\cV$. Under the constant observation the initial belief is the fibre $B_0=[1,2]$, propagated as $B_t=\Phi_t(B_0)\cap\cV$ under the applied control. $U^B(B_0)=\bigcap_{S}\{0,r(S)\}=\{0\}$ because $r>0$ and, by injectivity, no single value equals $r(S)$ for all $S$. A policy may vary its action in time, but robust admissibility requires $u(t)\in U^B(B_t)$ at every $t$, and while the state remains in $[1,2]$ the same computation gives $U^B(B_t)=\{0\}$ (the flow of $\dot S=-r(S)$ moves $B_t$ monotonically downward, preserving injectivity of $r$ on the surviving interval). Hence $u\equiv0$ a.e., $\dot S=-r(S)\le-\min_{[1,2]}r<0$, and every compatible trajectory exits downward in finite time. The argument applies to any initial fibre since $O$ is constant; a singleton prior under the same sensor can be viable and is not excluded. The system has no disturbance and no estimation error. The mechanism is admissibility, not hidden mode: with $r(S)=S$ and the constant control set $[0,2]$ in place of $U(S)$, any constant $u=m\in(1,2)$ gives $S(t)=m+(S(0)-m)e^{-t}\in[1,2]$ and the fibre is viable.
+\end{proof}
+
+\subsection{The delayed-information obstruction and its relation to the common-action test}\label{S:delayed}
+
+\begin{restated}{Theorem 4.6}{delayed-information obstruction}
+Under \hyp{D1} (common record on $[0,\Tobs)$ for every control of the declared class, up to first exit), \hyp{D2} (for every implementable blind control $u$ of the class there are a minimiser $x_u\in B_0$ of $q$ and an admissible realisation with an absolutely continuous solution from $x_u$, continued through first contact, with $\tfrac{d}{dt}q(x(t))\le-\varepsilon$ a.e.\ while $0\le q\le a$, including boundary contact) and \hyp{D3} ($\Tobs>\inf_{B_0}q/\varepsilon$), no policy of the class is viable from $B_0$.
+\end{restated}
+
+\begin{proof}
+Fix a policy of the class. \hyp{D1} gives it a common blind control $u$; an action inadmissible on a compatible branch already fails. Otherwise \hyp{D2} supplies a compatible minimiser and an adverse trajectory. Put $h(t)=q(x(t))$, $h(0)=m=\min_{B_0}q\ge0$, $t_*=m/\varepsilon<\Tobs$. Suppose no strict violation occurs by some $t_1\in(t_*,\Tobs)$. While $0\le h\le a$ the drift gives $h(t)\le m-\varepsilon t$; the trajectory cannot first leave the strip through $h=a$ because its derivative is strictly negative there a.e., and at a contact $h=0$ it cannot remain nonnegative through $t_1$ for the same reason. Nonviolation through $t_1$ would give $0\le h(t_1)\le m-\varepsilon t_1<0$, a contradiction. The case $m=0$ is included: contact alone does not violate the closed constraint, and the hypothesis demands negative drift while still safe at the boundary. Since the realisation continues through first contact, some $t<t_1<\Tobs$ has $q(x(t))<0$, contrary to safety. The quantifier is $\forall\pi\,\exists(x_u,d_u)$, not a demand that every trajectory drift downward; only an unrestricted blind-control class licenses the conclusion for the full kernel.
+\end{proof}
+
+\paragraph{The hypothesis and the bound.} Drift \hyp{D2} is a pathwise condition for each control of the declared class, not a pointwise minimax expression: the adversary selects the true state and the disturbance after the control, and the observations cannot expose the selection in time. \hyp{D1} converts the policy's actions into one open-loop control, \hyp{D2} supplies the drift against it, and \hyp{D3} makes the obstruction epistemic rather than dynamic; inverted, \hyp{D3} is the design requirement that the first informative observation precede $\inf q/\varepsilon$. The hypothesis is checkable in its special cases (constant observations; hold-until-$\Tobs$ classes) and is a template otherwise.
+
+\paragraph{Relation to the common-action test.} The common-action obstruction is a formal zero-margin counterpart of the delayed tube-safety obstruction, and the two remain distinct: one is a local action-feasibility condition at one information state, the other a finite-time survival condition over a window. They are not related as a $\Tobs\to\infty$ limit---letting $\Tobs$ grow in Theorem~4.6 weakens nothing in \hyp{D2}, whereas Theorem~4.1 has no time parameter at all. Under the closed-strip drift and genuine-trajectory hypotheses a blind window longer than the certified bound forces a violation; outside those hypotheses no such claim is made.
+
+\begin{restated}{Remark 4.7}{threshold form}
+$\sigma^*_\Pi(B_0)=\sup_{u\in\Pi}\inf_{x_0\in B_0,d}\tau(x_0,u,d)$; $\sigma^*_\Pi(B_0)<\Tobs$ implies that no policy in $\Pi$ is viable from $B_0$.
+\end{restated}
+
+\begin{proof}
+Before the first informative observation a policy of $\Pi$ cannot distinguish branches and is one control $u\in\Pi$; if $\sigma^*_\Pi(B_0)<\Tobs$ then for every $u$ some compatible branch is strictly violated before $\Tobs$. Under \hyp{D1}--\hyp{D2} every control has a branch exiting by $\inf q/\varepsilon$, so $\sigma^*_\Pi(B_0)\le\inf q/\varepsilon$, and \hyp{D3} says that this upper bound lies below $\Tobs$; the threshold may be strictly smaller, in which case nonviability holds even when \hyp{D3} fails.
+\end{proof}
+
+\subsection{The linear-programming instantiation and the class-declaration gap}\label{S:lp}
+
+\begin{restated}{Theorem 4.8}{linear-programming instantiation}
+For $K$ discrete blind steps, finitely many branches $x_{j,k+1}=A_jx_{j,k}+B_ju_k+E_jw_{j,k}$ with $w_{j,k}\in W_j$ (polytopes), common $u_k\in U$ (polytope), floors $Fx\le g$ and blind class $\Pi_B=U^K$: (i) $\sigma^*(B_0;\Pi_B)$ is computed by $\lceil\log_2K\rceil+1$ LPs; (ii) infeasibility at horizon $K'$ yields a Farkas certificate; (iii) the programme is sound and complete for $\Pi_B$; (iv) a different declared class can have a strictly smaller survival time, by an unbounded margin.
+\end{restated}
+
+\begin{proof}
+Unrolling, $x_{j,k}=A_j^kx_{j,0}+\sum_{i<k}A_j^{k-1-i}(B_ju_i+E_jw_{j,i})$. For branch $j$, step $k$ and floor row $r$, the robust inequality $F_rx_{j,k}\le g_r$ for all independently selectable $w_{j,t}\in W_j$ is equivalent to
+\[
+\sum_{t<k}F_rA_j^{k-1-t}B_ju_t\ \le\ g_r-F_rA_j^kx_{j,0}-\sum_{t<k}h_{W_j}\bigl(E_j^\top(A_j^{k-1-t})^\top F_r^\top\bigr),
+\]
+each support value a linear programme over $W_j$, precomputed exactly in rational arithmetic; with coupled disturbance paths the sum of independent support values is replaced by the support of the joint admissible path set. The horizon-$K'$ feasibility programme $\{Gu\le b\}$ in $u_0,\dots,u_{K'-1}$ has one row per (branch, step, floor) plus the box rows of $U$, of size polynomial in $K'$, $|J|$ and the description lengths; feasibility is monotone in $K'$ because the rows of a shorter horizon are a subset of those of a longer one, so $\sigma^*=\max\{K'\le K:\text{feasible}\}$ is found by bisection: (i). Infeasibility yields $\lambda\ge0$ with $\lambda^\top G=0$, $\lambda^\top b<0$, indexed by (branch, step, constraint): nonnegative adjoint rows whose aggregate control projection vanishes and whose aggregate constant is negative: (ii). The feasible set is by construction $\{(u_0,\dots,u_{K-1})\in\Pi_B:\text{every branch in }\cV\text{ through step }K\}$, with no relaxation: (iii).
+
+(iv) is witnessed by the hidden-regime hold-versus-relaxation gap: branches $z^+=z+u$ and $z^-=z-u$, floor $z\ge1$, class $\Pi_{\mathrm{hold}}=\{(u,\dots,u):u\in\{\pm1\}\}$ over the whole window. At $z_0=2$ either hold keeps both branches safe for exactly one step and one branch exits at step two, whereas the per-step polytope relaxation $u_k\in[-1,1]$ admits $u\equiv0$, which keeps both branches at $z_0$ through every horizon: the difference in maximal safe-step counts grows without bound with $K$. The comparison is between the declared hold class and the polytope, \emph{not} between all finite per-step sequences $u_k\in\{\pm1\}$ and the polytope: in that larger finite class alternation keeps both branches safe from $z_0=2$. For general real $z_0\ge1$ a whole-window hold survives $\lfloor z_0-1\rfloor$ integer blind steps.
+\end{proof}
+
+\paragraph{The decaying model (Example 4.9).} With branches $z^\pm_{k+1}=\tfrac9{10}z^\pm_k\pm u_k$, the level-$k$ rows are $z^\pm_k\ge1$ with $z^\pm_k=(\tfrac9{10})^kz_0\pm\sum_{i<k}(\tfrac9{10})^{k-1-i}u_i$. Summing the pair cancels the control terms (equal magnitudes, opposite signs) and leaves $2(\tfrac9{10})^kz_0\ge2$, a Farkas combination proving $z_0\ge(\tfrac{10}9)^k$ with the vanishing aggregate control projection visible as the pairwise cancellation. Sufficiency at the boundary $z_0=(\tfrac{10}9)^K$ is witnessed by $u\equiv0$, which keeps the branches balanced at $(\tfrac{10}9)^{K-k}\ge1$: the threshold is exact and the programme is a complete characterisation of the declared class. The decaying model and the hold-gap model are different systems and are verified separately (checks V2 and V3, \S\ref{S:record}).
+
+\subsection{Exit, comparison form and the oracle-recourse certificate}\label{S:recourse}
+
+\begin{restated}{Theorem 4.10}{finite-time exit certificate}
+Under \hyp{E1} ($\sup_{u}\inf_dD^+q(x;f(x,u,d))\le-\varepsilon$ on the strip $\cS_a$) and \hyp{E2} (for each admissible control of the declared class and each $x_0\in\cS_a$ an admissible original-system pair with $\dot q\le-\varepsilon$ a.e.\ while $0\le q\le a$, continued through first contact until strict exit or beyond $q(x_0)/\varepsilon$), the infimum of strict-violation times is at most $q(x_0)/\varepsilon$, and the class is nonviable from $\cS_a$.
+\end{restated}
+
+\begin{proof}
+Fix the control and the original pair. If it stayed in $q\ge0$ through any $t_1>q(x_0)/\varepsilon$ before the assured continuation ends, it could not exit the strip upward through $q=a$; integrating only on the safe part of the closed strip gives $0\le q(x(t_1))\le q(x_0)-\varepsilon t_1<0$. Thus a strict violation occurs before every later deadline; strict exit \emph{at} the bound is not asserted. No thresholded-correspondence semicontinuity inheritance and no unproved closed-loop selection is used.
+\end{proof}
+
+\begin{restated}{Remark 4.11}{comparison-function form}
+If $\dot q\le-\alpha(q)$ while $q>0$ with $\alpha>0$ on $(0,a]$, the comparison integral $\int_0^{q(x_0)}ds/\alpha(s)$ bounds first contact, not strict exit.
+\end{restated}
+
+The example $\dot q=-\sqrt q$, $q(0)=1$, reaches zero at time two and may remain there; strict exit needs compatible continuation with adverse drift at or through boundary contact, and a formal value $\alpha(0)>0$ without such a path is insufficient.
+
+\begin{restated}{Proposition 4.12}{oracle-recourse obstruction}
+For each fixed exogenous admissible scenario $d$, each branch $\theta$ has state dynamics affine in state and input with state-independent input coefficient, stored facets $g_j(x)=c_j^\top x+b_j$ with safety $g_j\ge0$, a blind window $[0,\tau)$ with common signal $w$ and post-reveal branch signals $u_\theta$ on $[\tau,T]$. For stored labels $\ell=(\theta_\ell,j_\ell,t_\ell)$ with zero-control facet values $\beta^d_\ell$ and kernels $k^d_\ell$, and weights $\lambda\ge0$, $\sum\lambda_\ell=1$,
+\[
+\Gamma_h(\lambda)=\inf_{d(\cdot)}\Bigl\{\sum_\ell\lambda_\ell\beta^d_\ell+\int_0^\tau h_U\Bigl(\sum_\ell\lambda_\ell k^d_\ell\Bigr)\dd\sigma+\sum_\ell\int_\tau^{T}h_U\bigl(\lambda_\ell k^d_\ell\bigr)\dd\sigma\Bigr\},\qquad h_U(g)=\max_{v\in U}g^\top v .
+\]
+If $\Gamma_h(\lambda)<0$ then $B_0\notin\ERViab_\cI(\cV)$.
+\end{restated}
+
+\begin{proof}
+Under the narrowed hypotheses, variation of constants and affinity of $g_j$ give the exact identity $g_j(x^{u,d}_\theta(t))=\beta^d_\ell+\int_0^\tau(k^d_\ell)^\top w+\int_\tau^t(k^d_\ell)^\top u_\theta$. Since $\Gamma_h<0$, some exogenous scenario $d^*$ has a strictly negative bracket; it is admissible against every policy and attainment of the infimum is unnecessary. For any admissible policy the window signal $w$ is one fixed measurable function (the blind-window reduction) and the post-reveal signals $u_{\theta}$ are arbitrary measurable functions. The realised weighted facet sum at $d^*$ equals $\sum_\ell\lambda_\ell\beta^{d^*}_\ell+\int_0^\tau(\sum_\ell\lambda_\ell k^{d^*}_\ell)^\top w+\sum_\ell\int_\tau^{t_\ell}(\lambda_\ell k^{d^*}_\ell)^\top u_{\theta_\ell}$, and each pairing is bounded by the support function, $g^\top v\le h_U(g)$ for $v\in U$ (extending the post-reveal integrals to $T$ only adds nonnegative support terms). Hence the realised weighted sum is at most the bracket, which is negative, so some facet value is strictly negative: the facet is violated along its branch. The window signal was arbitrary; the violating branch may depend on the policy.
+\end{proof}
+
+\paragraph{Why the input coefficient must be state-independent.} For control-affine dynamics $\dot x=f_0(x)+B(x)u$ the facet value along the controlled path is not an affine functional of the input signal, and the support-function bound no longer controls the realised pairing. The scripted counterexample (\texttt{counterexamples.py}) is the scalar system $\dot x=-1+xu$, $u\in[-1,1]$, facet $q(x)=x-1\ge0$, two branches $B_0=\{1,2\}$ with a constant uninformative observation, $T=1$, $\tau=\tfrac12$, no disturbance. Evaluating the formula of Proposition~4.12 with the coefficients read along the zero-control path of the $x_0=1$ branch, $\bar x(s)=1-s$, gives $\beta=q(\bar x(1))=-1$ and kernel $k(s)=\bar x(s)=1-s$, hence $\Gamma_h=-1+\int_0^{1/2}(1-s)\dd s+\int_{1/2}^1(1-s)\dd s=-1+\tfrac38+\tfrac18=-\tfrac12<0$: the ``certificate'' fires. But the admissible control $u\equiv+1$ gives $\dot x=x-1$, so $x\equiv1$ from $x_0=1$ and $x(t)=1+e^{t}$ from $x_0=2$; both branches are safe for all time and the fibre is viable. The identity used in the proof is exact only when $B$ does not depend on the controlled path; otherwise a separately validated one-sided remainder bound is required.
+
+\paragraph{The attainment-special variant.} Replacing $h_U$ by $\phi_U(g)=\min_{v\in U}g^\top v$ with the opposite firing sign is sound exactly when the realised pairings attain their pointwise minima; a chaining argument requires this attainment and fails for arbitrary admissible signals. The three-branch instance satisfies attainment in the window term because the weights pool the pre-observation kernel to zero ($\phi_U(0)=h_U(0)=0$), and the two forms share the exact threshold $\tau^*=7/50$ there; in general the sound form is $\Gamma_h$.
+
+\subsection{The certification layer}\label{S:cert}
+
+\begin{restated}{Proposition 5.2}{observation-fibre criterion}
+An exact certifier exists iff membership in $K$ is constant on every fibre.
+\end{restated}
+
+\begin{proof}
+($\Rightarrow$) If $C$ exists and $O(z_1)=O(z_2)$ then $\mathbf 1_K(z_1)=C(O(z_1))=C(O(z_2))=\mathbf 1_K(z_2)$. ($\Leftarrow$) Define $C(y)=\mathbf 1_K(z)$ for any $z$ with $O(z)=y$, well defined by fibre constancy and exact by construction; extend arbitrarily on $Y\setminus O(Z)$. A \emph{measurable} exact certifier exists under the same condition on standard Borel spaces when $O(K)$ is measurable, namely $C=\mathbf 1_{O(K)}$. The criterion is the Lean theorem \texttt{fibre\_criterion}; \texttt{crossing\_denies} and \texttt{not\_Ysafe\_iff} are Corollary~5.3.
+\end{proof}
+
+\begin{restated}{Corollary 5.3}{safety-crossing fibres and $\cY_{\mathrm{safe}}$}
+A fibre containing a state in $K$ and a state outside $K$ denies an exact certifier; $\cY_{\mathrm{safe}}=\{y:O^{-1}(y)\subseteq K\}$ is the largest soundly labellable set.
+\end{restated}
+
+Crossing one floor of an intersection $K=\bigcap_j\{q_j\ge0\}$ does not by itself put a pair on opposite sides of the intersection (the state satisfying floor $j$ may violate floor $i$), hence the single-floor scoping in the main text.
+
+\begin{restated}{Proposition 5.4}{certainty-equivalence trap}
+With $\dot S=u-g(S)$, $g$ continuous strictly increasing on $[S_{\min},S^*+b]$, range condition $g(S+b)\le\bar u$ on $\cV$, the uncorrected law $u=g(\hat S)$, $\hat S=S+b$, has empty kernel while $u=g(\hat S-b)$ is viable.
+\end{restated}
+
+\begin{proof}
+Under the uncorrected law $\dot S=g(S+b)-g(S)$, continuous and strictly positive on the compact interval $[S_{\min},S^*]$, hence bounded below by a positive constant $c$; so $S(t)\ge S_0+ct$ until it leaves $\cV$ above $S^*$, which happens by time $(S^*-S_0)/c$. The range condition keeps the controller admissible. The corrected law gives $\dot S=0$. For a known invertible observation the output-feedback class is as powerful as the state-feedback class, so the statement is policy-specific. With $g(S)=S^2$, $b=\tfrac1{10}$, $\cV=[1,2]$: $\dot S=\tfrac15S+\tfrac1{100}$ and the exit time from $S=1$ is $5\ln(0.41/0.21)\approx3.345$ (check V7).
+\end{proof}
+
+\subsection{Completeness results}\label{S:completeness}
+
+\begin{restated}{Theorem 6.1}{static-observation reduction}
+Under a static observation, $B_0\in\ERViab_\cI(\cV)$ iff some open-loop control keeps every trajectory from every $x_0\in B_0$ in $\cV$ under every admissible realisation; the constant-control robust Nagumo test is sufficient for invariance of all of $\cV$ but not necessary for viability from a proper subset $B_0$.
+\end{restated}
+
+\begin{proof}
+A static observation makes the record constant along every admissible trajectory, so a record-based policy is a function of time only on each initial cell; for a single-reading $B_0$ it is one open-loop control $u(\cdot)$. If $B_0$ is viable, the witnessing policy is such a control and keeps every trajectory from $B_0$ in $\cV$ under every realisation; conversely such a control is an observation-based policy. For the Nagumo clause: under the standing regularity and $U(x)\equiv U$, the robust tangency condition $\nabla q_j(x)\cdot f(x,u_0,d)\ge0$ for all $x\in\partial\cV$, active $j$, $d\in D(x)$ implies invariance of $\cV$ under $u\equiv u_0$ by the standard viability theorem for the (convexified) inclusion $\dot x\in\{f(x,u_0,d):d\in D(x)\}$ \citep{nagumo1942,aubin1991}; here it is applied to every initial state. It is not necessary for viability from a proper subset: with $\cV=[0,2]$, $\dot x=x-1$, $U=\{u_0\}$, $B_0=\{1\}$ the stationary trajectory is viable although the velocity is outward at both ends of $\cV$.
+\end{proof}
+
+\begin{restated}{Proposition 6.2}{two-phase decomposition}
+$B_0$ is viable for the two-phase game iff one blind control keeps every compatible branch in $\cV$ through step $K$ and places every possible terminal information state in the kernel of the post-reveal class.
+\end{restated}
+
+\begin{proof}
+A viable policy restricts to one blind control keeping every compatible trajectory safe through the window; for each possible terminal observation its continuation must be viable from that terminal information state---membership of each terminal state in the full-information state kernel under full revelation, membership of each branch-conditional belief in the post-reveal epistemic kernel under branch-only revelation with residual within-branch uncertainty. Conversely, if one blind sequence satisfies window safety and the terminal condition and the declared class admits nonanticipative pasting of the terminal strategies, concatenating the continuations gives a viable policy. Silence of an incomplete window certificate does not prove viability, and branch revelation does not automatically reveal the physical state.
+\end{proof}
+
+\begin{restated}{Proposition 6.3}{no window-measurable pair is complete}
+\end{restated}
+
+\begin{proof}
+The instance and variant of \S\ref{S:A3} share every window datum ($B_0=\{x_1,x_2\}$, the first-step transitions of $x_1$ and $x_2$, the floor, the schedule); both certificates are silent in each because every blind action keeps both branches safe through the window step. In the instance every post-reveal action from $x_4$ exits, so $x_4\notin\RViab(\cV)$, the backward pass misses $B_0$ at horizon two, and $B_0\notin\cW_2$---failure on the second clause of Proposition~6.2 (every window-surviving blind action lands a branch outside the kernel). In the variant $x_4$ is maintained, $x_4\in\RViab(\cV)$, action $a$ lands $x_1$ and $x_4$ in the kernel, and $B_0$ is viable. A window-measurable pair returns identical verdicts on the two instances (check V9).
+\end{proof}
+
+\begin{restated}{Proposition 6.4}{monotonicity}
+\end{restated}
+
+\begin{proof}
+Each inclusion is by restriction: a policy viable under the smaller action sets, larger disturbance sets, smaller policy class or coarser information remains admissible and nonanticipative under the enlargement or refinement, while the adversary's options are unchanged or reduced, so the same policy witnesses viability. The refinement inclusion compares kernels on the same domain of prior beliefs. The finite action and disturbance clauses are the Lean theorems \texttt{Wk\_mono\_adm} and \texttt{Wk\_mono\_disturb}.
+\end{proof}
