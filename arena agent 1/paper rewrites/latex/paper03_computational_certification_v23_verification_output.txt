@@ -1,0 +1,100 @@
+
+== A. Instance geometry
+PASS  n_1, n_2, n_3 are unit vectors
+PASS  hexagon facet description reproduces the six vertices +-n_j (all on the boundary, inside U)
+PASS  h_U(+-n_j) = 1 (vertices), h_U(e_1) = 1, h_U(e_2) = 4/5
+PASS  lambda = (3/8, 5/16, 5/16) is a probability vector with sum_j lambda_j n_j = 0
+PASS  eta_j >= 0, F^T eta_j = -n_j, f^T eta_j = 1 (input-facet decomposition of the brakes)
+PASS  blind controls (-2/5,-4/5), (-2/5,4/5), (1,0) and the brakes -n_j lie in U
+PASS  n_1.n_2 = n_1.n_3 = -3/5 and n_2.n_3 = -7/25: every normal makes an obtuse angle with the other two
+
+== B. The triple: exact delay threshold
+PASS  Gamma(tau) = tau - 7/50 at tau in {0, 7/50, 1/5, 1/4, 1/2}
+PASS  Gamma(1/5) = 3/50 and tau_max = 7/50 = 0.14
+PASS  hold-then-brake policy at tau = 1/5 peaks at 34/25 + 1/5 + 1/2 = 103/50 (so J(6/5) = 3/50 = 103/50 - 2)
+PASS  the same policy is safe exactly when 34/25 + tau + 1/2 <= 2, i.e. tau <= 7/50 (equality viable)
+PASS  full information: brake from t = 0 peaks at 93/50 < 2, delay-independent
+PASS  blind-window value at tau = 1/5 under u = 0: 34/25 + 1/5 = 39/25 < 2 (no exit before information arrives)
+
+== C. Pairs are viable at tau = 1/5
+PASS  pair {1,2}: window exit velocity 23/25, peak 2469/1250 = 12345/6250 = 1.9752, slack 31/1250
+PASS  pair {2,3}: window exit velocity 22/25, peak 2419/1250 = 1.9352, slack 81/1250
+PASS  both branches of each pair share the critical profile (branch 2 of {1,2}; branch 3 of {2,3})
+PASS  pair {1,2} policy: all seven facets hold on both in-belief branches on [0, 6/5] (worst position slack 31/1250; |v|_inf <= 1)
+PASS  pair {2,3} policy: all seven facets hold on both in-belief branches (worst position slack 81/1250; |v|_inf <= 4/5)
+PASS  falsified variants: blind hold u = 0 then braking peaks 103/50 > 2; the {2,3} -3/5 n_j mid-leg peaks 2501/1250 > 2 at t = 29/25
+PASS  off-belief branch 1 under the {2,3} blind control u = n_1 reaches |v_1| = 6/5 at tau and would peak at 23/10 > 2
+PASS  hence at tau = 1/5 six of the seven nonempty sub-beliefs are viable and only the triple is not
+
+== D. Shared authorities and the ladder
+PASS  t*({1,2}) = t*({1,3}) = 2/5 at (-2/5, -+4/5); t*({2,3}) = 3/5 at n_1; t*({1,2,3}) = 0
+PASS  pooled normals of the pair duals: (0,1/2), (0,-1/2), (-3/5,0) with h_U(v) = t*(B) and h_U(n_j) = 1
+PASS  ladder peak identity: 2 - peak(tau) = (6 tau^2 - 30 tau + 7)/50 for t* = 2/5 and (6 tau^2 - 20 tau + 7)/50 for t* = 3/5
+PASS  pair dual Gamma_B(tau) = -7/50 + (1-t) tau - t(1-t) tau^2/2 equals -(2 - peak)/1 ... same quadratic: Gamma_B = peak - 2
+PASS  exact thresholds: tau_12 = tau_13 = (15 - sqrt 183)/6 in (0.2453, 0.2454); tau_23 = (10 - sqrt 58)/6 in (0.3973, 0.3974)
+PASS  label times at the roots stay inside the horizon: s* = 1 + (1 - t) tau < 6/5
+PASS  Gamma_B is increasing on [0, 1/t): derivative (1-t)(1 - t tau) > 0 for tau < 1/t
+PASS  ordering of the ladder: 7/50 < tau_12 = tau_13 < tau_23, and the audited tau = 1/5 lies strictly inside both pair rungs
+
+== E. The finite program: dimensions, witnesses, mesh law, solver
+PASS  dimension identities Q = tau/h + 3 (T - tau)/h, variables mQ + 1, rows M s (N_t + 1) + p_U Q at the five meshes: (16,33,243), (32,65,465), (64,129,909), (160,321,2241), (320,641,4461)
+PASS  primal witness value = dual witness objective = 3/50 - Th/4 at every mesh: 0, 3/100, 9/200, 27/500, 57/1000
+PASS  HiGHS dual simplex returns the exact values at all five meshes (max |diff| = 4.16e-17 <= 4.2e-17)
+      h      Q   vars   rows   exact rho      solver rho    iters   time(s)
+    0.20    16     33    243          0   0.000000000      36   0.004
+    0.10    32     65    465      3/100   0.030000000      78   0.005
+    0.05    64    129    909      9/200   0.045000000     141   0.013
+    0.02   160    321   2241     27/500   0.054000000     501   0.081
+    0.01   320    641   4461    57/1000   0.057000000    1062   0.241
+PASS  h = 1/10: endpoint moment error e = 12 h^2/4 = 3/100; beta = 16/25 - 6/5 = -14/25; relaxed right-hand side -53/100
+PASS  Farkas contradiction at h = 1/10: lambda^T(beta + e) + mu^T f = -53/100 + 1/2 = -3/100 < 0; primal endpoint row -1/2 + 14/25 - 3/100 = 3/100
+PASS  dual objective telescopes: sum_k a_k = (T - tau)^2/2 = 1/2 on every aligned mesh
+   two-block {0,1/5,6/5}: Q=4 vars=9 rows=87 rho=-1/5 solver=-0.200000000 iters=7
+   1 + 5 equal post blocks: Q=16 vars=33 rows=243 rho=0 solver=0.000000000 iters=36
+   1 + 6 equal post blocks (smallest certifying aligned program): Q=19 vars=39 rows=282 rho=1/120 solver=0.008333333 iters=42
+   2 + 7: Q=23 vars=47 rows=348 rho=27/1400 solver=0.019285714 iters=57
+   irregular {0,1/10,1/5,1/2,9/10,6/5}: Q=11 vars=23 rows=192 rho=-3/100 solver=-0.030000000 iters=28
+   uniform h = 1/15: Q=48 vars=97 rows=687 rho=1/25 solver=0.040000000 iters=119
+   2^7-fold refinement of {0,1/5,6/5} (h = 1/128): Q=512 vars=1025 rows=8469 rho=371/6400 solver=0.057968750 iters=2170
+PASS  mesh law rho(H) = 3/50 - (1/4) sum_J |J|^2 holds (witness pair + solver) on seven further aligned meshes, uniform and not
+PASS  smallest certifying aligned program: one blind block + six post blocks, Q = 19, 39 variables, 282 rows, rho = 1/120 > 0; five post blocks give rho = 0
+PASS  coarsest aligned mesh: velocity rows are tight at the primal witness (-1/5 = rho), e_T = 13/50
+
+== F. Reading the sandwich on the instance
+PASS  hypothesis constants: R_U = 1, V_U = tau + 1 = 6/5, L = T + 1 = 11/5, delta_beta = 0
+PASS  sandwich at h = 1/10 (h_t = h/2): J <= rho + e + L h_t = 3/100 + 3/100 + 11/100 = 17/100 >= 3/50 (valid; realized gap exactly Th/4 = 3/100)
+PASS  loose but verified choice ebar = e + 1/2 at h = 1/10: rho = -47/100, bound rho + ebar + L h_t = 17/100 still valid, uniform special case R_U V_U h_u would claim -6/25 < 3/50 (false)
+PASS  a-priori halting resolution of Theorem 3.2(iii) with exact scenarios: (R_U V_U + L) h < gamma/2 iff h < 3/340; the 2^k-fold refinement of {0,1/5,6/5} first satisfies it at k = 7 (h = 1/128)
+PASS  realized resolution: margin gamma/2 = 3/100 is attained already at h = 1/10, and every uniform aligned h < 1/5 certifies (34/3 = 11.3x coarser than the a-priori bound 3/340; 12.8x against its first dyadic instance 1/128)
+PASS  certified upper bounds rho + Th/4 + L h/2 at the five meshes: 7/25, 17/100, 23/200, 41/500, 71/1000 (all >= 3/50, decreasing to it)
+
+== G. Support of certificates: rank, depth, the scalar-input construction
+PASS  safety-row matrix has full column rank: r = mQ = 64 at h = 1/10 (r + 1 = 65) and r = 32 at h = 1/5
+PASS  obstruction depth of the triple at tau = 1/5 is 3 (all pairs viable, triple not); the exhibited certificate uses 3 labels: minimal support 3 << r + 1 = 65
+PASS  scalar-input construction: for q in {1,2,3,5,8} the (q+1)-mode belief is nonviable, every proper sub-belief viable, kernel rank q, margin eps/(q+1) with equal weights
+
+== H. Pricing observers: the erosion identity on the instance
+PASS  erosion of the triple certificate under a time-zero observer: {1}|{2,3}: 33/200; {2}|{1,3} and {3}|{1,2}: 11/80; full revelation: 11/50
+PASS  eroded margins 3/50 - erosion: -21/200, -31/400, -31/400, -4/25 (all negative: each observer dissolves the certificate, consistent with pair viability)
+PASS  the observer ranking by erosion ({1}|{2,3} first) agrees with the ladder ranking by tolerance (tau_23 > tau_12)
+PASS  full-revelation erosion 11/50 = int_0^tau (tau + 1 - s) ds with tau = 1/5, and the eroded margin -4/25 <= J_full = -7/50
+PASS  phi_U superadditivity on 2025 deterministic rational pairs (software regression, not evidence for the identity)
+
+== I. An observer installed at tau_1: certified threshold bracket
+PASS  fixed-weight dual for the observer {1}|{2,3} installed at tau_1: Gamma(tau_1) = 3/50 - (3/8)[(6/5 - tau_1)^2 - 1]; Gamma(1/5) = 3/50, Gamma(0) = -21/200
+PASS  Gamma is increasing in tau_1 on [0, 1/5] and vanishes at tau_1 = (6 - sqrt 29)/5 in (0.1229, 0.1230)
+PASS  tau_1 = 3/25, w = (3/20, 0) in U: branch 1 peaks at 999621/500000 = 1.999242 < 2; branches 2, 3 peak at 24993709/12500000 = 1.99949672 < 2
+PASS  all seven facets hold on all three branches along that schedule (max velocity component 509/500 < 6/5; noncritical facets < 0)
+PASS  by information monotonicity the schedule also certifies viability for every tau_1 <= 3/25; the bracket [3/25, (6 - sqrt 29)/5] has width < 3/1000
+PASS  archived LP sweep (h = 1/100): rho(tau_1) > 0 for tau_1 >= 13/100 (certified nonviable) and rho(3/25) < 0, rho(0) = -0.0675
+PASS  archived LP values dominate the fixed-weight dual evaluated on the mesh, rho(tau_1) >= Gamma(tau_1) - Th/4, with equality at tau_1 = 1/5 (the triple's certificate is LP-optimal there)
+
+== J. Scope of the dilation extrapolation (supplementary)
+PASS  a = 2, tau = 16/25: weighted critical position 34/25 + t reaches 2 at t = 16/25; at 37/50 even with independent control in 2U it is >= 34/25 + 37/50 - (1/10)^2 = 209/100 > 2 (not viable at T = 6/5)
+PASS  the extrapolated expression Gamma_a(tau) = tau - 7/50 - (a-1)/2 crosses zero at 7/50, 39/100, 16/25 for a = 1, 3/2, 2 (formal rates only)
+
+== K. Residual-bounded test and library pointers
+PASS  residual-bounded test (18) at h = 1/10: stationarity makes r = 0, so the test reads c = -3/100 < 0
+PASS  rank-construction margin eps/(q+1) and the r + 1 bound coincide there (q + 1 = r + 1): the bound is saturated
+
+verification: 63/63 checks pass
