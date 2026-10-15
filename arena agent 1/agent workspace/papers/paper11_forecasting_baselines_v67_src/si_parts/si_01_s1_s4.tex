@@ -1,0 +1,187 @@
+\section{Pass order and protocol status}\label{si:passes}
+
+The study is a fixed computational protocol with a recorded execution order, not a prospective registration: no dated pre-scoring protocol file exists for the empirical passes. The order below is established from the analysis code and its archived metadata. Passes 1 and 2 are labelled in the driver script \texttt{run\_ladder.py} and distinguished in \texttt{results/meta.json} by the keys \texttt{catch\_pass1} and \texttt{catch\_pass2}; passes 3 and 4 are separate scripts that import from that driver, which fixes their order after it.
+
+\begin{table}[!htb]
+\centering\small
+\caption{Order in which the passes were run.}
+\begin{tabularx}{\textwidth}{@{}clLL@{}}
+\toprule
+\# & Pass & Data treatment & Script / archived output \\
+\midrule
+1 & Coarse-regime catch & 240/120/5\,kt (through 1991 / 1992 / from 1993) & \texttt{run\_\allowbreak{}ladder.py} (pass 1); \texttt{fixed\_\allowbreak{}window\_\allowbreak{}scores.csv}, \texttt{rolling\_\allowbreak{}summary.csv} (rows \texttt{catch = regime}), \texttt{rolling\_\allowbreak{}forecasts\_\allowbreak{}regime.csv} \\
+2 & Annual landings & Schijns et al.\ (2021) Table 1, t/1000 & \texttt{run\_\allowbreak{}ladder.py} (pass 2); same files, rows \texttt{catch = annual}; \texttt{rolling\_\allowbreak{}forecasts.csv} \\
+2b & Survey start & Forecast initiated at the survey-scaled state, annual catch & \texttt{run\_\allowbreak{}survey\_\allowbreak{}start()} within pass 2; \texttt{survey\_\allowbreak{}start\_\allowbreak{}forecasts.csv} \\
+3 & Capelin variants & Two-regime $r$ at the 1991 break; acoustic-index multiplier on observed years & \texttt{run\_\allowbreak{}capelin\_\allowbreak{}regime.py}, \texttt{run\_\allowbreak{}capelin\_\allowbreak{}index.py}; \texttt{capelin\_\allowbreak{}*\_\allowbreak{}summary.csv} \\
+4 & Specification B & The ladder on the xteNCAM series alone, not pooled & \texttt{run\_\allowbreak{}xte.py}; \texttt{xte\_\allowbreak{}rolling\_\allowbreak{}summary.csv}, \texttt{xte\_\allowbreak{}fixed\_\allowbreak{}window\_\allowbreak{}scores.csv} \\
+5 & Uncertainty layer & DM statistics and block bootstrap on the archived per-origin files & \texttt{campaign\_\allowbreak{}e1\_\allowbreak{}dm\_\allowbreak{}uncertainty\_\allowbreak{}regime.py}; \texttt{e1\_\allowbreak{}dm\_\allowbreak{}uncertainty\_\allowbreak{}regime.csv} \\
+6 & Simulation & D1--D5 per \texttt{SPECIFICATION\_\allowbreak{}v4.md} (locked 2026-09-10 before the code was written); D6--D7 per Amendment 1 (locked 2026-09-11) & \texttt{tools/\allowbreak{}sim\_\allowbreak{}retention\_\allowbreak{}power.py}; \texttt{sim\_\allowbreak{}retention\_\allowbreak{}power.csv}, \texttt{sim\_\allowbreak{}misspecified\_\allowbreak{}D6D7.csv} \\
+7 & Preceding edition & Re-execution of passes 1--6 in a third environment; paired bootstrap confirmation; period decomposition; rolling parameter record; catch-timing sensitivity & \texttt{paper11\_\allowbreak{}forecasting\_\allowbreak{}baselines\_\allowbreak{}v67\_\allowbreak{}src/\allowbreak{}work/\allowbreak{}cod/\allowbreak{}} in the repository \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Three points bear on how the scores should be read. The five ladder modules were fixed before any pass was scored: the \texttt{SPECS} list in \texttt{run\_ladder.py} defines M1, M1b, M2, M3 and M4 once, Specification B imports that list rather than redefining it, and none was altered after a score was seen. The scoring core, the fixed windows, the rolling-origin RMSE comparison and the persistence bar at both horizons, was coded before the first pass. Two elements of the retention rule were formalised after the pass-1 scores had been computed: the 5\% tie band and the comparator declarations for the non-nested modules (M2 against M1, M4 against M3). Neither decides any retention outcome, the smallest pooled deficit against persistence being 17.1\%. The capelin pass is the one place where a model was added after scoring began (the index multiplier), and it is reported as a variant, not as a member of the ladder. Specification B was run last and never pooled with Specification A; the constraint is recorded in the code's docstring and in \texttt{meta.json}.
+
+\section{Origin sets and windows}\label{si:origins}
+
+\begin{table}[!htb]
+\centering\small
+\caption{Origin sets. All baselines are evaluated on the module's own origin set at each horizon. The mixed-origin persistence values that the archived Specification B summary also carries (87.6 and 317.7\,kt on 63 and 59 origins) are not comparators and are not used.}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.36\textwidth}Lcc@{}}
+\toprule
+Pass & Origins & $n$ ($h=1$) & $n$ ($h=5$) \\
+\midrule
+Specification A, ladder (all catch passes, survey start, two-regime $r$) & 1990--2014 ($h=1$); 1990--2010 ($h=5$); minimum eight training years & 25 & 21 \\
+Specification A, capelin-index multiplier & 1991--2014; 1991--2010 (origins with a carried acoustic value) & 24 & 20 \\
+Specification B, ladder and two-regime $r$ & 1965--2023; 1965--2019; minimum twelve training years & 59 & 55 \\
+Specification B, capelin-index multiplier & 1988--2023; 1988--2019 & 36 & 32 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The capelin acoustic index is observed in 1982 and 1985--2023 with gaps (1983, 1984, 1993--1995, 1997, 1998, 2006, 2016, 2020--2022 missing; 2023 $= 331.3\kt$). The multiplier pass carries the last observed value across gaps and drops origins with no carried value; the two-regime pass uses the 1991 capelin collapse as a declared break and allows $r$ to differ before and after it, with the post-break value estimated only once post-break transitions are in the training window.
+
+\FloatBarrier
+\section{Uncertainty layer: full grids}\label{si:uncertainty}
+
+Table~\ref{tab:si_dm} gives every module--benchmark pair of the archived uncertainty layer: the DM statistic (loss differences of squared errors; autocorrelation-consistent variance truncated at lag $h-1$; reported as a $z$-score), the paired moving-block bootstrap interval of the RMSE gap (block $\max(h,3)$, 20\,000 replicates, seed 0) and its two-sided $p$-value. The bootstrap in the archived script draws block indices from a generator seeded identically for the two loss series, so the resample is paired; re-running it with an explicitly shared index draw reproduces every interval to the printed digit. Table~\ref{tab:si_blocks} gives the block-length sensitivity (5\,000 replicates per cell) for the M1 and M3 persistence margins.
+
+\begin{table}[!htb]
+\centering\scriptsize
+\setlength{\tabcolsep}{3.5pt}
+\caption{Archived uncertainty layer: all pairs. RMSE in kt; gap $=\RMSE(A)-\RMSE(B)$; CI is the 95\% paired block-bootstrap interval of the gap; $p$ is the two-sided bootstrap $p$-value. The M2-against-M1b rows are an alternative-comparator disclosure, not part of the rule.}
+\label{tab:si_dm}
+\scriptsize\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{@{}ccllrrrrrlr@{}}
+\toprule
+Spec. & $h$ & A & B & $n$ & RMSE(A) & RMSE(B) & gap & DM $z$ & 95\% CI & $p$ \\
+\midrule
+\input{si_parts/gen/tabS3_dm.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htb]
+\centering\scriptsize
+\setlength{\tabcolsep}{2.6pt}
+\caption{Block-length sensitivity of the paired bootstrap interval (kt) for the persistence margins of M1 and M3. The archived layer uses block 3 at $h=1$ and block 5 at $h=5$. One classification changes with the block: the M3 one-step margin on Specification B includes zero for blocks of four or more.}
+\label{tab:si_blocks}
+\scriptsize\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{@{}cclrcccccc@{}}
+\toprule
+Spec. & $h$ & Module & gap & block 2 & block 3 & block 4 & block 5 & block 6 & block 8 \\
+\midrule
+\input{si_parts/gen/tabS4_blocks.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+The DM $z$-statistic is less stable than the bootstrap under the truncation lag: for the M1 persistence margin at $h=1$ it moves from 1.14 at lag 0 to 2.30 at lag 3 on Specification A and from 2.81 to 1.70 on Specification B, crossing the conventional 1.96 in opposite directions, whereas the bootstrap $p$ moves within 0.17--0.19 (A) and 0.036--0.049 (B) over blocks 3--9. Four of the 28 persistence and comparator rows have a bootstrap interval excluding zero with $|z|<1.96$ (A, $h=1$, M4 vs M3; B, $h=1$, M3 vs persistence; B, $h=5$, M1b vs persistence; B, $h=5$, M4 vs M3). No verdict rests on either statistic where they disagree; the retention rule is applied to point estimates.
+
+\FloatBarrier
+\section{Period decomposition: five-year horizon, annual pass, pooled margins}\label{si:periods}
+
+\begin{table}[!htb]
+\centering\small
+\caption{Five-year rolling-origin RMSE (kt) by period of the forecast origin, with origin-matched persistence; superscripts are the number of origins at which the forecast sits at the numerical floor. Companion to Table 6.}
+\label{tab:si_h5}
+\begin{tabular}{@{}llrrrrrrr@{}}
+\toprule
+Spec. & Origins & $n$ & persist & M1 & M1b & M2 & M3 & M4 \\
+\midrule
+\input{si_parts/gen/tabS5_h5.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htb]
+\centering\small
+\caption{Specification A, annual-landings pass: rolling-origin RMSE (kt) by period at $h=1$ (upper block) and $h=5$ (lower block). The low-biomass band gives the same ordering as the coarse-regime pass.}
+\label{tab:si_annual}
+\begin{tabular}{@{}llrrrrrrr@{}}
+\toprule
+Spec. & Origins & $n$ & persist & M1 & M1b & M2 & M3 & M4 \\
+\midrule
+\input{si_parts/gen/tabS5b_annual.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htb]
+\centering\small
+\caption{Post-1995 pooled margins against persistence (origins 1996 onward), with paired block-bootstrap intervals (block $\max(h,3)$, 20\,000 replicates). Specification A: 1996--2014 ($h=1$) and 1996--2010 ($h=5$); Specification B: 1996--2023 and 1996--2019. The bands were chosen after the data were seen; this table describes, it does not test.}
+\label{tab:si_post1995}
+\begin{tabular}{@{}cccllrrrlr@{}}
+\toprule
+Spec. & $h$ & $n$ & Module & RMSE & persist & gap & rel. & 95\% CI (kt) & $p$ \\
+\midrule
+\input{si_parts/gen/tabS6_post1995.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+Band-level intervals for the collapse bands ($n=5$--6) are degenerate under a block bootstrap and are not reported. A leave-one-origin-out check on the Specification B collapse band confirms that the orderings there do not depend on a single origin: M1 and M1b are below persistence in all five leave-one-out sets and M3 in four of five, but these are the floor-forecast wins discussed in main-text Section 3.4.
+
+\FloatBarrier
+\subsection*{S4.1 Fixed windows (moved from the main text of the single-system edition)}
+
+The fixed windows are diagnostic, not retention. From the 1983--1990 training window, in which SSB varied between 835 and 942\,kt, every module forecasts continuation (Table~\ref{tab:si_fixed}, Fig.~\ref{fig:si_windows}). The autonomous modules place the stock at the fitted equilibrium, 888.6\,kt, and hold it there for five years; the catch-supplied modules, told that removals fall from 240 to 120 to 5\,kt, forecast growth to about 1050\,kt by 1993. The observed path falls from 862 to 9.7\,kt. Persistence (670\,kt RMSE) is the least bad because it at least does not grow; the autonomous modules (694) are close to it, and M2--M4 (819) are the worst because the catch cut, which in reality accompanied the collapse, is read by a stock-flow model as a reason for the stock to rise. On Specification B the pattern repeats from a 36-year training window (M1 817, M1b 906, M2 1898\,kt against persistence 633).
+
+The recovery window tells a different story. From 1995--2007, when SSB sat between 10 and 81\,kt, M1 and M2 coincide (training-mean catch and realised catch are both about 5\,kt) and over-predict the rebuild (120\,kt RMSE against 104 for persistence); M3 and M4 over-predict more (220 and 214), because the last training residual is a large positive increment ($+28\kt$ in 2006--2007) that the AR term with $\phi=0.95$ carries along the whole path. With annual landings the over-prediction is larger still (M3 609\,kt), since the fitted $K$ runs to its 5000-kt bound and production no longer saturates (Fig.~\ref{fig:si_windows_annual} in S14). The one module that beats persistence in this window, M1b (90 and 78\,kt), does so for a reason that undermines rather than supports it: its $\sA$ estimate descends to zero and its $K$ to 106--130\,kt, so it forecasts a flat line at a carrying capacity equal to the recent range. That is a persistence forecast produced by a production model whose parameters have lost their meaning (S5). On Specification B the recovery-stall window shows the same ordering: M1b 178, M1 254, M2--M4 about 268\,kt, persistence 262.
+
+\begin{table}[!htb]
+\centering\small
+\caption{Fixed-window path RMSE (kt). Specification A, coarse-regime catch; the annual-landings pass and Specification B are given for the same windows. Persistence is frozen at the last training value; the training mean is the mean of the training window. Bold marks the lowest value in each column.}
+\label{tab:si_fixed}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+ & \multicolumn{3}{c}{Specification A} & & \multicolumn{2}{c}{Specification B} \\
+\cmidrule(lr){2-4}\cmidrule(lr){6-7}
+ & collapse & recovery & recovery & & collapse & recovery stall \\
+ & 1991--95 & 2008--15 & 2008--15 & & 1990--95 & 2013--24 \\
+Forecaster & coarse & coarse & annual & & annual & annual \\
+\midrule
+persistence & \textbf{669.8} & 103.8 & 103.8 & & \textbf{632.7} & 261.7 \\
+training mean & 687.9 & 144.4 & 144.4 & & 591.2 & 320.7 \\
+M1 autonomous & 694.3 & 119.6 & 263.7 & & 817.3 & 254.3 \\
+M1b depensatory & 693.6 & \textbf{89.8} & \textbf{78.1} & & 905.6 & \textbf{178.0} \\
+M2 stock-flow & 819.4 & 119.6 & 302.8 & & 1897.7 & 268.8 \\
+M3 AR residual & 819.4 & 219.7 & 609.1 & & 1767.8 & 267.7 \\
+M4 lagged start & 819.1 & 214.1 & 586.3 & & 1871.9 & 268.8 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{fig3_windows}
+\caption{Fixed-window forecast paths on Specification A with the coarse-regime catch (the pass to which Table~\ref{tab:si_fixed} refers). (a) Collapse window: every module forecasts continuation or growth from the 1990 state; M1b lies under M1. (b) Recovery window: M1 and M2 coincide (training-mean and realised catch are both close to 5\,kt), M1b is a flat line at its fitted $K$, and M3 and M4 over-predict most because the last training residual, $+28\kt$ in 2006--2007, is carried forward with $\phi = 0.95$.}
+\label{fig:si_windows}
+\end{figure}
+
+\FloatBarrier
+\subsection*{S4.2 Variant passes}
+
+Four variant passes were added after the primary pass and declared in order (S1), each scored against persistence recomputed on its own origin set (Table~\ref{tab:si_variants}). Replacing the coarse catch regime by annual landings on Specification A leaves the ordering unchanged. Starting the stock-flow forecast from a survey-scaled index value instead of the assessed state gives 128.1 and 331.0\,kt. Allowing the intrinsic rate to differ before and after the 1991 capelin collapse, the mechanism most often proposed for the post-collapse productivity regime, gives 153.8 and 334.0\,kt on A and 146.8 and 894.4 on B. Multiplying production by a capelin acoustic-index factor, which restricts the origins to the years with an acoustic estimate, gives 150.0 and 262.3\,kt on A against 96.6 and 193.0 for persistence on the reduced set, and 132.0 and 491.7 on B against 78.6 and 287.9. No variant comes within the band on either horizon.
+
+\begin{table}[!htb]
+\centering\small
+\caption{Variant passes: rolling-origin RMSE (kt) of the variant module against persistence recomputed on the variant's origin set. $n$ is the number of origins at $h=1$ / $h=5$.}
+\label{tab:si_variants}
+\begin{tabular}{@{}llrrrr@{}}
+\toprule
+ & & \multicolumn{2}{c}{$h=1$} & \multicolumn{2}{c}{$h=5$} \\
+Variant & Spec.\ ($n$) & module & persist & module & persist \\
+\midrule
+Annual landings, M2 & A (25/21) & 160.4 & 98.0 & 393.8 & 264.7 \\
+Annual landings, M3 & A (25/21) & 153.6 & 98.0 & 351.5 & 264.7 \\
+Annual landings, M4 & A (25/21) & 206.3 & 98.0 & 486.4 & 264.7 \\
+Survey-start M2 & A (25/21) & 128.1 & 98.0 & 331.0 & 264.7 \\
+Two-regime $r$ (1991 break) & A (25/21) & 153.8 & 98.0 & 334.0 & 264.7 \\
+Two-regime $r$ (1991 break) & B (59/55) & 146.8 & 84.4 & 894.4 & 300.0 \\
+Capelin-index multiplier & A (24/20) & 150.0 & 96.6 & 262.3 & 193.0 \\
+Capelin-index multiplier & B (36/32) & 132.0 & 78.6 & 491.7 & 287.9 \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,202 @@
+\FloatBarrier
+\section{System I: Northern cod, NAFO 2J3KL}\label{sec:cod}
+
+\subsection{Two assessment series, kept separate}\label{sec:specs}
+
+The predictand is spawning-stock biomass in kilotonnes. Two retrospective series are used, each as a separate specification with its own catch record, threshold, test windows and origin set (Table~\ref{tab:specs}, Fig.~\ref{fig:series}). They are never pooled, concatenated or spliced: the two assessment models differ in structure, natural-mortality treatment and catch handling, and their overlap for 1983--2015 differs by 126\,kt RMSE with the NCAM series higher on average by 58\,kt, so a forecast scored across a junction would be scored partly on a vintage change.
+
+\textbf{Specification A} is the NCAM retrospective of \citet{Cadigan2016} in the M-shift formulation, as tabulated for the 2016 assessment \citep[Table A2]{DFO2016}: 33 annual SSB values for 1983--2015. Its limit reference point (LRP) is the 1983--1989 mean, $884.6\kt$ \citep{DFO2009,DFO2016}; the 2015 value, $298.65\kt$, is 33.8\% of it. Two catch records are used in two separate passes. The primary pass uses a coarse regime schedule declared before any model was fitted: 240\,kt per year through 1991, 120\,kt in 1992 and 5\,kt from 1993 onward, a stylised representation of the pre-moratorium fishery, the partial moratorium year and the residual removals thereafter. The second pass replaces it with the annual landings series of \citet{Schijns2021}, which matches the reported 2015 landings exactly but, like all landings series for this stock, remains below total removals. \textbf{Specification B} is the xteNCAM retrospective of the 2024 framework revision \citep[Table 17]{Regular2025}: 71 annual SSB values for 1954--2024 with published 95\% intervals. Its threshold is $\Blim = 276\kt$, defined as 40\% of $B_{\mathrm{MSY}}$ \citep{DFO2024a}. Catch is the official 2J3KL landings record \citep[Table 1]{Regular2025} for 1954--2023, with 2024 carried from 2023.
+
+Both specifications use a single retrospective vintage throughout: every forecast is scored against the value the same assessment later assigned to the target year, not against the value a contemporaneous assessment would have published. This is standard in hindcast evaluation and it favours the models slightly, since retrospective revisions have smoothed the series the models are fitted to; the size of the effect is bounded in Section~\ref{sec:verdict}. Parameters are refitted at every origin on the expanding training window. The thresholds enter only the secondary indicator score (SI S7), never a forecast.
+
+\begin{table}[!htb]
+\centering\small
+\caption{The two cod specifications. Each is scored on its own; nothing is pooled across the two. Rolling-origin counts are for the ladder modules; the baselines are evaluated on the identical origin sets.}
+\label{tab:specs}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.2\textwidth}LL@{}}
+\toprule
+ & Specification A & Specification B \\
+\midrule
+Assessment & NCAM, M-shift formulation \citep{Cadigan2016}; \citet[Table A2]{DFO2016} & xteNCAM, revised framework; \citet[Table 17]{Regular2025} \\
+Years & 1983--2015 (33 states, 32 transitions) & 1954--2024 (71 states, 70 transitions) \\
+Predictand & SSB (kt), one retrospective vintage & SSB (kt), one retrospective vintage, with published 95\% interval \\
+Catch & primary pass: coarse regime 240/120/5\,kt (through 1991 / 1992 / from 1993); second pass: annual landings \citep{Schijns2021} & annual landings 1954--2023 \citep[Table 1]{Regular2025}, 2024 carried from 2023 \\
+Threshold (secondary score only) & LRP $=$ 1983--1989 mean $= 884.6\kt$ & $\Blim = 276\kt$ (40\% $B_{\mathrm{MSY}}$) \\
+Fixed windows & collapse: train 1983--1990, test 1991--1995; recovery: train 1995--2007, test 2008--2015 & collapse: train 1954--1989, test 1990--1995; recovery stall: train 1995--2012, test 2013--2024 \\
+Rolling origins & minimum 8 training years; origins 1990--2014 ($n=25$, $h=1$) and 1990--2010 ($n=21$, $h=5$) & minimum 12 training years; origins 1965--2023 ($n=59$) and 1965--2019 ($n=55$) \\
+Last common year & 2015: $298.65\kt$ (33.8\% of LRP) & 2015: $273\kt$ (0.99 $\Blim$) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{fig1_series}
+\caption{The two SSB series on which the cod ladder is scored. (a) Specification A: NCAM M-shift SSB 1983--2015, with the LRP (1983--1989 mean, 884.6\,kt), the July 1992 moratorium and the two fixed test windows. (b) Specification B: xteNCAM SSB 1954--2024 with its published 95\% interval, $\Blim = 276\kt$, and the NCAM series overlaid for 1983--2015 to show the vintage difference; the series are never pooled. Shading marks the Specification B fixed test windows.}
+\label{fig:series}
+\end{figure}
+
+\subsection{The surplus-production ladder}\label{sec:ladder}
+
+All five modules are forecasters built on one difference equation.
+
+\begin{definition}[Surplus-production map]\label{def:map}
+With $S_t$ the SSB and $C_t$ the removals in year $t$,
+\begin{equation}\label{eq:map}
+S_{t+1} \;=\; \Spos{S_t + g(S_t) - C_t + \varepsilon_t}, \qquad
+g(S) \;=\; r\,S\Bigl(1-\frac{S}{K}\Bigr)\,a(S),
+\end{equation}
+where $[x]_+ = \max(x,\epsilon)$ with a numerical floor $\epsilon = 10^{-3}\kt$, $r>0$ and $K>0$ are the intrinsic rate and carrying capacity of the Schaefer form \citep{Schaefer1954,Pella1969}, and $a(S)\equiv 1$ (compensatory branch) or $a(S) = (S-\sA)/(K-\sA)$ with $0<\sA<0.8K$ (depensatory branch, production negative below $\sA$). Forecasts iterate \eqref{eq:map} with $\varepsilon\equiv 0$ unless an explicit residual term is carried (M3, M4).
+\end{definition}
+
+Parameters are estimated at each origin by one-step least squares on the training transitions: $(r,K)$, and $\sA$ for the depensatory branch, minimise the mean squared difference between the observed increments $S_{j+1}-S_j$ and $g(S_j)-C_j$ over the training window (a single L-BFGS-B run from $r_0=0.3$ and $K_0=\max(1.5\max_j S_j,\,500\kt)$, with bounds $r\in[10^{-3},2]$, $K\in[\max_j S_j+10,\,5000]$, $\sA\in[0,\max_j S_j]$). The residual autocorrelation $\phi$ used by M3 and M4 is the lag-one regression coefficient of the one-step training residuals, clipped to $[-0.95,0.95]$, and the last training residual is propagated as $\phi^k$ along the horizon. The modules differ only in what they take from the catch record and the state history (Table~\ref{tab:ladder}): M1 is the autonomous Schaefer forecaster, which holds the catch at the training mean and iterates; M1b adds depensation; M2 is the stock-flow forecaster, with identical dynamics but the realised catch supplied along the horizon; M3 adds the AR(1) residual correction; M4 is M3 started from $S_{t-1}$, a lagged-start variant that tests sensitivity to the assessment lag at the origin. Fitted values at the windows and origins that matter are in SI S5; $K$ rests on its initialiser or upper bound in several fits, a point taken up in Section~\ref{sec:identification}.
+
+\begin{table}[!htb]
+\centering\small
+\caption{The cod forecaster ladder. ``Comparator'' is the next-simpler module against which the module must win under (C1); M1 has no comparator within the ladder and is tested against persistence only.}
+\label{tab:ladder}
+\begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}p{0.23\textwidth}>{\raggedright\arraybackslash}p{0.19\textwidth}LL@{}}
+\toprule
+ID & Class & Free parameters & Catch in the forecast & Comparator \\
+\midrule
+persist & baseline & none & none & --- \\
+mean & baseline & none & none & --- \\
+M1 & autonomous Schaefer & $r,K$ & constant: training-mean catch & (persistence only) \\
+M1b & autonomous, depensatory & $r,K,\sA$ & constant: training-mean catch & M1 \\
+M2 & stock-flow & $r,K$ & realised $C_{t+1..t+h}$ supplied & M1 \\
+M3 & stock-flow $+$ AR(1) residual & $r,K$; $\phi$ in a second stage & supplied & M2 \\
+M4 & M3 started from $S_{t-1}$ & as M3, refitted & supplied, indexed from $t-1$ & M3 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+One property of the archived runner should be stated here because it affects the one-step margins of the catch-supplied modules: estimation pairs the transition $S_t\to S_{t+1}$ with the catch $C_t$, whereas the forecast path applies $C_{t+1}$ to the same step, a one-year offset between the two conventions that was not noticed until the re-execution for the previous edition. Its effect is quantified below and in SI S14; all tabulated numbers are those of the archived runner.
+
+\FloatBarrier
+\subsection{No module is retained on either specification}\label{sec:pooled}
+
+Table~\ref{tab:rolling} gives the pooled rolling-origin scores and Fig.~\ref{fig:gaps} the persistence margins with their bootstrap intervals. On Specification A persistence has one-step RMSE 98.0\,kt and five-year RMSE 264.7\,kt; the modules range from 114.8 to 195.6\,kt at one year and from 288.6 to 488.2\,kt at five. On Specification B persistence has 84.4 and 300.0\,kt; the modules range from 119.5 to 205.7 and from 431.9 to 1058.9\,kt. No module comes within the 5\% band of persistence at either horizon on either specification; the closest approach is M1b on Specification A, 9.0\% adrift at five years and 17.1\% at one year. Hurdle (C2) therefore fails for every module, and (C1) adds nothing that could rescue it: the only comparator margin that excludes zero is M4 against M3 on Specification A at one year, and it runs the wrong way (M4 worse by 60.9\,kt, interval $[4.4, 134.4]$). The training-mean baseline is far worse than persistence everywhere (ratios 1.7--5.4), for a reason Section~\ref{sec:synthesis} makes precise, and is not discussed further here.
+
+\begin{table}[!htb]
+\centering\small
+\caption{Cod: pooled rolling-origin scores (kt). RMSE with, in parentheses, the ratio to origin-matched persistence; MAE alongside. Specification A: coarse-regime catch, origins 1990--2014 ($n=25$, $h=1$) and 1990--2010 ($n=21$, $h=5$). Specification B: origins 1965--2023 ($n=59$) and 1965--2019 ($n=55$). A module is retained under Protocol C only if its ratio is below 0.95 at both horizons and it also beats its comparator (Table~\ref{tab:ladder}); none is.}
+\label{tab:rolling}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lrrrrrrrr@{}}
+\toprule
+ & \multicolumn{4}{c}{Specification A} & \multicolumn{4}{c}{Specification B} \\
+\cmidrule(lr){2-5}\cmidrule(lr){6-9}
+ & \multicolumn{2}{c}{$h=1$} & \multicolumn{2}{c}{$h=5$} & \multicolumn{2}{c}{$h=1$} & \multicolumn{2}{c}{$h=5$} \\
+Forecaster & RMSE & MAE & RMSE & MAE & RMSE & MAE & RMSE & MAE \\
+\midrule
+persistence & 98.0 (1.00) & 48.1 & 264.7 (1.00) & 137.2 & 84.4 (1.00) & 58.7 & 300.0 (1.00) & 217.3 \\
+training mean & 423.6 (4.32) & 375.2 & 507.4 (1.92) & 447.8 & 458.1 (5.43) & 397.3 & 521.6 (1.74) & 456.8 \\
+M1 autonomous & 120.5 (1.23) & 79.7 & 288.7 (1.09) & 158.2 & 119.5 (1.42) & 93.7 & 431.9 (1.44) & 335.7 \\
+M1b depensatory & 114.8 (1.17) & 79.6 & 288.6 (1.09) & 158.2 & 151.6 (1.80) & 117.6 & 445.5 (1.49) & 344.1 \\
+M2 stock-flow & 144.1 (1.47) & 60.6 & 398.2 (1.50) & 193.5 & 166.0 (1.97) & 106.2 & 1058.9 (3.53) & 758.7 \\
+M3 AR residual & 134.6 (1.37) & 52.9 & 366.4 (1.38) & 183.2 & 126.7 (1.50) & 80.2 & 930.1 (3.10) & 650.8 \\
+M4 lagged start & 195.6 (1.99) & 82.2 & 488.2 (1.84) & 223.6 & 205.7 (2.44) & 127.8 & 1030.7 (3.44) & 740.2 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{fig2_gaps}
+\caption{Cod: persistence margins, RMSE of each module minus RMSE of origin-matched persistence as a percentage of the persistence RMSE, with 95\% paired moving-block bootstrap intervals (block $\max(h,3)$, 20\,000 replicates). The dashed line is the 5\% tie band; retention under (C2) requires the point estimate to lie below it. On Specification A every interval contains zero; on Specification B every interval lies above zero at the block length of the archived layer.}
+\label{fig:gaps}
+\end{figure}
+
+The two specifications differ in what can be said about the margins. On Specification A every persistence margin has a bootstrap interval containing zero (M1 at one year: $+22.5\kt$, $[-13.4, +52.2]$, $p=0.19$; M3: $+36.6$, $[-16.8, +64.2]$, $p=0.93$), so the data do not show that the modules are worse than persistence, only that they are not demonstrably better; the five-year M3 margin is the nearest to significance ($+101.6$, $[-0.8, +151.4]$, $p=0.08$). On Specification B every persistence margin excludes zero at the archived block length (M1 at one year: $+35.0$, $[+2.7, +70.8]$, $p=0.03$; M3: $+42.3$, $[+1.0, +92.5]$, $p=0.04$; all five-year margins $p\le 0.02$). The M3 one-step margin on B is the only interval whose classification depends on the block length (SI S3). Re-running the catch-supplied modules with the consistent catch-timing convention, a sensitivity outside the archived protocol (SI S14), lowers their one-step RMSE by 20--75\,kt and their five-year RMSE by up to 16\%; M3 then stands 7\% above persistence at one year on A and 12\% on B, still outside the band, and every five-year margin remains far outside it. The verdict does not depend on the convention; the size of the one-step deficit does. The MAE columns show that the one-step deficit is concentrated in a few large errors: on Specification A the M3 MAE is 10\% above persistence where its RMSE is 37\% above. Where those errors sit is the next question.
+
+\FloatBarrier
+\subsection{Where the deficit arises}\label{sec:periods}
+
+Protocol C is applied to the pooled score, but pooling averages over regimes that the stock did not average over. Table~\ref{tab:periods} splits the one-step rolling errors into the periods visible in Fig.~\ref{fig:series} and Fig.~\ref{fig:period} shows the per-origin errors behind it; the decomposition is post hoc and is reported as a description of the data, not as a second test. Three features emerge.
+
+\begin{table}[!htb]
+\centering\small
+\caption{Cod: one-step rolling-origin RMSE (kt) by period of the forecast origin, with origin-matched persistence. Superscripts give the number of origins at which the module's forecast sits at the numerical floor ($<0.01\kt$), i.e.\ forecasts extinction; its absolute error is then the observed SSB. Bracketed values are paired bootstrap intervals for the module$-$persistence gap in kt (block 3, 20\,000 replicates; not shown for bands with $n<11$). Five-year values and the annual-landings pass are in SI S4.}
+\label{tab:periods}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}llrrrrrrr@{}}
+\toprule
+Spec. & Origins & $n$ & persist & M1 & M1b & M2 & M3 & M4 \\
+\midrule
+A & 1990--1995 (collapse) & 6 & 193.6 & 208.8$^{3}$ & 186.4$^{4}$ & 292.0 & 273.2$^{3}$ & 397.3 \\
+A & 1996--2012 (low biomass) & 17 & 19.6 & 64.8$^{12}$ & 69.7$^{13}$ & 17.2 & 14.7 & 19.4 \\
+A & 2013--2014 (early rebuild) & 2 & 66.7 & 122.7 & 138.9 & 32.4 & 28.6 & 38.1 \\
+A & 1996--2014 pooled & 19 & 28.5 & 73.1 & 79.8 & 19.4 & 16.7 & 22.1 \\
+ & \quad gap vs.\ persistence & & & $+44.6$ & $+51.3$ & $-9.1$ & $-11.8$ & $-6.4$ \\
+ & \quad 95\% interval & & & $[+29, +60]$ & $[+29, +69]$ & $[-17, +7]$ & $[-20, +3]$ & $[-14, +9]$ \\
+\midrule
+B & 1965--1990 (fished, pre-collapse) & 26 & 94.7 & 142.4$^{2}$ & 186.4$^{3}$ & 184.2 & 166.3 & 260.6 \\
+B & 1991--1995 (collapse) & 5 & 167.0 & 126.8$^{3}$ & 66.6$^{3}$ & 299.8 & 154.8$^{3}$ & 321.6$^{1}$ \\
+B & 1996--2012 (low biomass) & 17 & 20.7 & 75.0$^{17}$ & 75.0$^{17}$ & 26.3 & 19.7 & 24.0 \\
+B & 2013--2023 (rebuild) & 11 & 61.0 & 112.3 & 174.5$^{1}$ & 160.5 & 96.4 & 136.3 \\
+B & 1996--2023 pooled & 28 & 41.5 & 91.5 & 124.0 & 102.7 & 62.3 & 87.4 \\
+ & \quad gap vs.\ persistence & & & $+50.0$ & $+82.5$ & $+61.2$ & $+20.9$ & $+46.0$ \\
+ & \quad 95\% interval & & & $[+26, +79]$ & $[+53, +118]$ & $[-2, +93]$ & $[-11, +47]$ & $[-5, +73]$ \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{fig4_period}
+\caption{Cod: one-step absolute error by forecast origin (log scale, floored at 1\,kt for display) for persistence, M1, M2 and M3 on (top) Specification A and (bottom) Specification B. Shading marks the collapse band and the 1996--2012 low-biomass band. Open markers are forecasts at the numerical floor: at those origins M1's error is simply the observed SSB, which is why its curve traces the stock trajectory through 1996--2012 on both panels.}
+\label{fig:period}
+\end{figure}
+
+First, the pooled deficit is carried by the collapse band. On Specification A the six origins 1990--1995 contribute 94\% of the pooled one-step sum of squared persistence errors and 63--99\% of each module's; every forecaster is wrong by 130--590\,kt at the 1991 origin and by 140--710\,kt at the 1992 origin, because every forecaster, including persistence, extrapolates a state that is about to be removed. On Specification B the 26 fished pre-collapse origins add a second source of deficit: between 1965 and 1990 the catch-supplied modules are worse than persistence by 70--170\,kt, as a stock-flow model fitted to a series with 200--800\,kt removals mis-times the large swings of the 1960s and 1970s.
+
+Second, the apparent collapse-band wins of M1, M1b and M3 on Specification B, and of M1b on A, are not forecasts of the collapse. At the 1993--1995 origins these modules forecast the floor: their training-mean catch (317--333\,kt on B, 177--208\,kt on A) exceeds the production of a stock of 10--100\,kt by an order of magnitude, so the map drives the state to $10^{-3}\kt$ in one step and the absolute error equals the observed value, which is small only because the stock was nearly gone. A floor forecast is a correct sign with no magnitude; it is credited by RMSE and should not be read as skill.
+
+Third, the autonomous modules forecast extinction at every post-collapse origin, and the catch-supplied modules have one-step skill in the low-biomass regime on one specification only. Between 1996 and 2012 M1 and M1b sit at the floor at 17 of 17 origins on Specification B and at 12--13 of 17 on A; their RMSE in that band, 65--75\,kt against 20\,kt for persistence, is the root mean square of the observed SSB. Training-mean catch is a plug, not an estimate, and after a collapse it is a plug an order of magnitude above sustainable removals. In the same band M2, M3 and M4 forecast within 15--26\,kt, and on Specification A they beat persistence: pooling 1996--2014, M3 has one-step RMSE 16.7 against 28.5\,kt, a gap of $-11.8\kt$ ($-41\%$) with interval $[-20.5,+3.3]$, $p=0.19$. The intervals contain zero and the bands were chosen after the fact, but the point estimates are the right sign and the right order to be the residual signal that a catch-supplied production model should carry when the catch is small and the stock is far below $K$. On Specification B the same bands give the opposite answer: post-1995 every module is worse than persistence at one year and at five years by factors of 2--6, because the 2013--2023 rebuild, which Specification A does not contain, is forecast by the stock-flow modules as a rise several hundred kilotonnes above what occurred. The low-biomass skill does not transfer across the two series.
+
+\FloatBarrier
+\subsection{Why the collapse cannot be forecast from inside the class}\label{sec:identification}
+
+The fixed windows (SI S4) show the behaviour the pooled scores summarise: from the 1983--1990 training window, in which SSB varied between 835 and 942\,kt, every module forecasts continuation, the autonomous modules holding the stock at the fitted equilibrium of 888.6\,kt and the catch-supplied modules, told that removals fall from 240 to 120 to 5\,kt, forecasting growth to about 1050\,kt by 1993 while the observed path falls from 862 to 9.7\,kt. This has a structural explanation that does not depend on the fitted values. Write $F_C(S) = \Spos{S + g(S) - C}$ for the deterministic map at catch $C$.
+
+\begin{proposition}\label{prop:repeller}
+Let $g$ be continuous with $g(0)=0$, let $C>0$, and let $S_-(C) = \inf\{S>0 : g(S)\ge C\}$, with $S_-(C)=\infty$ if the set is empty.
+\begin{enumerate}[label=(\roman*),leftmargin=2.2em,itemsep=1pt]
+\item Every trajectory of $F_C$ started in $[0,S_-(C))$ is nonincreasing and remains in $[0,S_-(C))$; on any interval on which $g \ge C$, $F_C(S)\ge S$, so a trajectory cannot decline in one step from a state in that interval.
+\item A one-step decline larger than the removals, $S_{t+1} < S_t - C_t$, requires $g(S_t) < 0$. On the compensatory branch this is impossible for $0\le S_t\le K$, whatever $(r,K)$; on the depensatory branch it requires $S_t < \sA$.
+\end{enumerate}
+\end{proposition}
+
+The proof is in \ref{app:proofs}. For the Schaefer branch with $4C\le rK$, $S_-(C) = \tfrac{K}{2}\bigl(1-\sqrt{1-4C/(rK)}\bigr)$ is the lower, unstable equilibrium and $S_+(C)=K-S_-(C)$ the upper, stable one, with $g\ge C$ between them; for $4C>rK$ production never reaches the catch and every trajectory declines to the floor. Three consequences follow. First, the lower equilibrium is generated by the catch: it vanishes as $C\to 0$ and it exists on the compensatory branch with no depensation term at all, so a threshold below which the autonomous map declines is a statement about sustained removals, not about the biology of small populations. Second, the 1990 state, 862\,kt, lies between $S_-=144$ and $S_+=888.6\kt$ for the fitted map under 240\,kt, so by (i) the autonomous forecast cannot decline at all; it rises to the attractor, which is locally stable ($F_C'(S_+)=-0.39$). Third, and independently of any fit, the 1991, 1992 and 1993 transitions are declines larger than the recorded catch: apparent net production $S_{t+1}-S_t+C_t$ is $-113$, $-161$ and $-66\kt$ under the coarse regime and $-181$, $-240$ and $-59\kt$ under annual landings (Fig.~\ref{fig:production}). By (ii) no parameter value of the compensatory branch, and no catch-supplied module built on it, can reproduce these steps; the depensatory branch can do so only with a threshold $\sA$ above 735\,kt, which no fit approaches. The collapse lies outside the model class at the recorded catch. The assessment model itself accommodates these years through under-reported catch and an elevated natural mortality \citep{Cadigan2016}; a forecaster that takes the catch record as given cannot, and a forecaster that is told the catch is falling to 5\,kt forecasts growth.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.9\textwidth]{fig5_production}
+\caption{Cod: apparent net production $S_{t+1}-S_t+C_t$ against $S_t$ on Specification A, with the collapse-window fit ($r=1.935$, $K=1032.7$; maximum $rK/4=500\kt$ at $S=516$) and the two recovery-window fits. Under 240\,kt of removals the collapse-window map has its repeller at $S_-=144\kt$ and its attractor at $S_+=889\kt$. The 1991--1993 transitions lie below every nonnegative production curve: the stock lost more biomass than the recorded catch removed. The recovery-window fits are nearly linear through the low-biomass points, with $K$ at its initialiser (500\,kt, coarse regime) or at its upper bound (5000\,kt, annual landings).}
+\label{fig:production}
+\end{figure}
+
+The depensatory branch does not change this. In the fixed windows, which exclude the collapse transitions from training, M1b's $\sA$ estimate sits at its lower bound of zero, and the profile of the objective over $\sA$ changes by 3--7\% across its whole range (SI S5). In rolling fits whose training window contains the collapse, the estimate jumps to 585--734\,kt on Specification A at every origin from 1992 to 2010 and falls back to 5\,kt from 2011, while on Specification B it stays at zero throughout (SI S5). A depensation parameter that is zero, 700\,kt or 5\,kt depending on the window is not an estimate of an Allee threshold; it is the branch's only means of absorbing transitions the class cannot otherwise represent. Whether depensation has delayed the recovery \citep{Shelton1999,Hutchings1996,Rose2026} is therefore not a question this test can answer, and the usual difficulty of detecting depensation from assessment series \citep{Myers1995,Liermann1997} is compounded by a collapse that the class attributes to it by default. The compensatory fits are weakly identified as well: $K$ rests at its 5000-kt bound at 23 of the 25 Specification A origins from 1992 onward, so the post-collapse stock-flow forecaster is in effect linear, $S_{t+1}\approx(1+r)S_t-C$ with $r\approx0.25$ (A) and $0.50$ (B), the familiar outcome of fitting a production model to a series with little contrast \citep{HilbornWalters1992,LudwigWalters1985,Polacheck1993}. That linear growth term is the whole of the low-biomass skill reported in Section~\ref{sec:periods}.
+
+\FloatBarrier
+\subsection{Operating characteristics of Protocol C}\label{sec:operating}
+
+Fig.~\ref{fig:operating} reports the retention frequencies under the seven data-generating processes of Section~\ref{sec:power}. When the truth is the autonomous Schaefer module at collapse-window parameters (D1), the rule retains M1 in 96.5\% and 98.5\% of replicates at the two noise levels: the empirical non-retention of M1 is not a power failure. At recovery-window parameters (D2) power is 71\% at the lower noise and 13\% at the higher; for the stock-flow truth (D3) it is 9--11\% and for the depensatory truth (D4) 0.5--1.5\%. Under the persistence-true null (D5) false retention is 1.5--3.0\%, within the bar. The two processes outside the class fail the specificity bar badly: a drifting-productivity truth (D6) leads to retention of some module in 68--76\% of replicates and a smooth path observed with error (D7) in 93--98\%, most often M1. The rule is therefore specific against the absence of structure but not against the presence of structure of another kind; it detects that something beyond persistence is present, not that the retained module is that something. Alternative decision rules evaluated on the same replicates (SI S8) show that the 5\% band carries most of the specificity (removing it costs 0.21 of specificity for 0.06 of power), that the comparator hurdle costs 0.10 of power for 0.006 of specificity, that a MASE-type criterion alone \citep{HyndmanKoehler2006} is more powerful and far less specific, and that an information criterion penalising parameter count dominates the adopted rule on both axes within the class.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{fig6_operating}
+\caption{Cod: retention frequencies of Protocol C under seven data-generating processes (200 replicates each, two process-noise levels; Specification A design). D1--D4: fraction of replicates in which the truth-matching module is retained (power; pre-declared bar 0.80). D5: fraction in which any module is retained under a persistence-true null (false retention; bar 0.10). D6--D7: the same under truths outside the ladder's class.}
+\label{fig:operating}
+\end{figure}
+
+\FloatBarrier
+\subsection{Variant passes and the years after 2015}\label{sec:verdict}
+
+Four variant passes were added after the primary pass and declared in order (SI S1, S4), each scored against persistence recomputed on its own origin set: annual landings in place of the coarse regime (M2 160.4, M3 153.6, M4 206.3\,kt at one year against 98.0 for persistence); a survey-scaled start value (128.1 and 331.0\,kt); a two-regime intrinsic rate with a 1991 break at the capelin collapse \citep{Buren2014,DFO2024b} (153.8 and 334.0\,kt on A; 146.8 and 894.4 on B); and a capelin acoustic-index multiplier on the years with an acoustic estimate \citep{Murphy2025,NAFC2025} (150.0 and 262.3\,kt on A against 96.6 and 193.0 for persistence on the reduced set). No variant comes within the band at either horizon.
+
+Specification A ends in 2015, and the continuation of the same assessment family is published in the RAM Legacy database \citep[v4.66, stock COD2J3KL;][]{Ricard2012}, with xteNCAM reading the same years independently (SI S11). The outcome window is an increase regime: every year 2016--2021 lies above its 2015 origin in both vintages, so it contains no event of the kind the collapse test probes, and persistence from the 2015 origin errs low throughout (RMSE 133.3\,kt on the RAM vintage). The two vintages agree on the outcome years to within 1--26\,kt while on the historical overlap they do not (the Table A2 vintage runs 24.7\,kt above the RAM vintage on average over 1983--2015, with a maximum difference of 131\,kt), so that the LRP defined as the 1983--1989 mean is 884.6\,kt on one vintage and 790.0\,kt on the other; the two thresholds classify the same xteNCAM file differently in 29 of 71 years; and the 2023 framework revision moved the reported zone from critical to cautious without a change in the stock \citep{DFO2024a,Regular2025}. Over the same period the observing system lapsed: partial fall-survey coverage in 2021 and 2022 left the leading indicator uncomputable, no typical assessment update was possible in 2022 or 2023, and the survey vessel was condemned (SI S12). None of this touches the RMSE comparison, which never uses a threshold; all of it bears on the verdict any forecast is scored against, and after 2015 the reference-point and observation layers moved more than forecast skill did.
+
+\subsection{Reading the cod verdict}\label{sec:codreading}
+
+A negative verdict from a scored test carries the weight of the test's power, and Section~\ref{sec:operating} lets that weight be assigned per module. For M1 the verdict is strong: at the parameters of the series on which it was tested the rule retains a true autonomous Schaefer module in 97--99\% of replicates, so its non-retention on both specifications, with a persistence margin that excludes zero on Specification B, is evidence that an autonomous production model driven by mean historical catch does not describe this stock's year-to-year SSB transitions. For M2, M3 and M4 the verdict is weak: against a true stock-flow process at recovery-window parameters the rule has 9--11\% power, so non-retention is compatible with a catch-supplied structure being present and too faint to clear a 5\% band at both horizons; the low-biomass skill on Specification A is consistent with that reading, and its failure to extrapolate is evidence that what the modules carry is a short-memory growth term. For M1b the verdict is not about depensation at all: the parameter it adds is unidentified, and the test could not have retained a true depensatory module. Three features of assessment output make persistence a demanding benchmark on an assessed state, and they are the reason this paper scores on the state: the series is a retrospective estimate smoothed by the assessment's process-error structure, so the last value is an efficient summary of the recent past; the forecaster is fitted to the same smoothed series and learns slow dynamics, then adds a parametric shape and a catch plug the series does not demand; and the quantity that moves the series most, the collapse, is one that no member of the class can reproduce at the recorded catch, so the model carries the full persistence error there and adds its own. Hindcast cross-validation on the fitted index \citep{Kell2016,Kell2021,Carvalho2021} answers whether the assessment predicts its own data, which is a different and easier question than whether its dynamics predict next year's biomass.
