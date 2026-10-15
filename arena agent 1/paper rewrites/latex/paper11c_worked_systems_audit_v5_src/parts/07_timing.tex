@@ -1,0 +1,41 @@
+\section{Hidden regimes and review timing}\label{sec:timing}
+
+Two further variants of the worked system concern time rather than information: a regime that damages one stock and may or may not be known, and a review period during which the regime acts unobserved.
+
+\subsection{The hidden-regime model}
+
+\begin{definition}[regime dynamics]\label{def:regime}
+A regime $r\in\{1,2\}$ deals one unit of damage to stock $z_r$ per period (floor $0$); the instrument $u$ regenerates $z_u$ by one (cap $3$):
+$F^{r}_u(x)=\bigl(x+e_u\bigr)^{\wedge 3}-e_r$ with the floor at $0$, where $\wedge 3$ caps at $3$. Under a \emph{frozen} regime $r$ is fixed and known. Under \emph{mode-blind} operation the regime is unknown and may change every period, and the controller's instrument must be safe against both: the recursion is $W_{h+1}=\{x\in W_h:\exists u\ \forall r\ F^{r}_u(x)\in W_h\}$.
+\end{definition}
+
+\begin{proposition}[frozen against mode-blind]\label{prop:regime}
+Under either frozen regime every safe state, including the corner, is viable, and all $36$ pairs of safe states are viable: applying the regime's own instrument pins the state whenever $z_r<3$, and one step of the other instrument frees a capped coordinate. Under mode-blind operation the corner is lost and every other safe state is viable: the mode-blind kernel is the set of corner-free beliefs, the same set as $\Kfull$ of the coordinated system ($28$ pairs, $255$ beliefs).
+\end{proposition}
+
+\begin{proof}
+$F^{r}_r(x)=x$ when $z_r<3$; when $z_r=3$, $F^{r}_{3-r}(x)$ lowers $z_r$ to $2$ and raises the other stock, after which pinning resumes; the exact closed loop is checked on all nine states. For mode-blind operation the corner is lost because $F^{2}_1(\st{11})=\st{20}$ and $F^{1}_2(\st{11})=\st{02}$; the other eight states are sustained by the strategy ``regenerate the smaller stock'' (ties broken towards $1$): e.g.\ $\st{12}\xrightarrow{u=1}\{\st{12},\st{21}\}$, $\st{21}\xrightarrow{u=2}\{\st{21},\st{12}\}$, $\st{13}\xrightarrow{u=1}\{\st{13},\st{22}\}$, $\st{22}\xrightarrow{u=1}\{\st{22},\st{31}\}$, $\st{31}\xrightarrow{u=2}\{\st{31},\st{22}\}$, and the recursion of Definition~\ref{def:regime} stabilises after one application ($W_1=W_2$) with this kernel.
+\end{proof}
+
+\subsection{Review timing on regime graphs}
+
+Between two reviews the regime acts for $T$ periods without being observed, and the manager's question is the largest $T$ compatible with a given initial slack. Admissible regime sequences are paths in a \emph{regime graph} $(\mathcal{R},E)$ with per-period damages $d_r\ge 0$; free switching is the complete graph with loops.
+
+\begin{proposition}[worst damage is a max-plus hitting quantity]\label{prop:maxplus}
+Let $D_T$ be the worst cumulative damage over admissible regime paths of length $T$. Then $D_T=\max_{r}v_T(r)$ where $v_1(r)=d_r$ and $v_{t+1}(r)=d_r+\max\{v_t(q):(q,r)\in E\}$, i.e.\ $v_T$ is the $(T-1)$-st max-plus power of the weighted adjacency matrix applied to $d$. Closed forms: under free switching $D_T=T\max_r d_r$; under strict alternation of two regimes with damages $1$ and $\tfr12$, $D_T=\lceil T/2\rceil+\tfr12\lfloor T/2\rfloor$, i.e.\ $D_{2k}=3k/2$ and $D_{2k+1}=3k/2+1$. A review period $T$ is viable from initial slack $s=z_0-1$ (the distance of the damaged stock to its floor) if and only if $D_T\le s$.
+\end{proposition}
+
+\begin{proof}
+The recursion is the Bellman recursion for longest paths in the time-expanded graph, which is linear in the max-plus semiring; free switching chooses the worst regime every period; under alternation the worst path starts with the damage-$1$ regime. Viability is $s-D_T\ge 0$ with the non-strict inequality because the floor itself is safe. The recursion is checked against path enumeration for $T\le 6$ on a three-regime graph without self-loops (damages $1,\tfr12,\tfr14$; $D_1,\dots,D_6=1,\tfr32,\tfr52,3,4,\tfr92$).
+\end{proof}
+
+\begin{corollary}[the $93$-cell timing grid]\label{cor:grid}
+On the grid of Figure~\ref{fig:timing}, $z_0\in\{1.0,1.1,\dots,4.0\}$, $T\in\{1,2,3\}$ ($93$ cells): under free switching with unit damage $33$ cells are viable ($T\le z_0-1$); under alternation with damages $(1,\tfr12)$, $43$ cells are viable ($21$, $16$ and $6$ for $T=1,2,3$). The identity must be stated with the real slack and a non-strict inequality: the strict form $z_0-1>T$ fails exactly on the three boundary cells $(2.0,1)$, $(3.0,2)$, $(4.0,3)$, and the strict form against the integer count $\lfloor z_0-1\rfloor>T$ fails on $21$ cells, one in every row with $z_0\ge 2$.
+\end{corollary}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.9\textwidth]{fig4_timing.pdf}
+\caption{Review timing on the $93$-cell grid: viable cells (dark) under free switching with unit damage (left, $33$ cells) and under strict alternation of damages $1$ and $\tfr12$ (right, $43$ cells). The three boundary cells where the strict form of the identity fails are marked.}
+\label{fig:timing}
+\end{figure}

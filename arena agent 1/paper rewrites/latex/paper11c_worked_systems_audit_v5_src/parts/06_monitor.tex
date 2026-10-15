@@ -1,0 +1,72 @@
+\section{Monitoring design}\label{sec:monitor}
+
+A monitoring design is an observation map, that is, a partition of the states into cells the monitor cannot distinguish. Which partitions preserve viability, how coarse they may be, and whether the one-step compatibility of the cells is enough are questions about the structure of the sets $R(x)$.
+
+\subsection{One-step adequacy and the incompatibility graph}
+
+\begin{definition}[one-step adequacy]\label{def:adequacy}
+Let $T$ be a finite set of states with instrument sets $R(x)\subseteq A$. A partition $\calP$ of $T$ is \emph{one-step adequate} when every cell $C\in\calP$ has a common instrument, $\bigcap_{x\in C}R(x)\neq\emptyset$. The \emph{incompatibility graph} $G_T$ has vertex set $T$ and an edge $xy$ whenever $R(x)\cap R(y)=\emptyset$. The \emph{Helly number} of a family of sets is the largest size of an inclusion-minimal subfamily with empty intersection.
+\end{definition}
+
+\begin{theorem}[adequacy as graph structure]\label{thm:adequacy}
+\begin{enumerate}[label=(\alph*),leftmargin=2em,itemsep=1pt]
+\item Every cell of a one-step adequate partition is an independent set of $G_T$. If the family $\{R(x):x\in T\}$ has Helly number at most $2$---in particular whenever $|A|\le 2$---the converse holds: $\calP$ is one-step adequate if and only if it is a partition of $T$ into independent sets of $G_T$.
+\item The family of all nonempty subsets of an $a$-element instrument set has Helly number exactly $a$. Hence for $a\ge 3$ the graph criterion is necessary but not sufficient: $R(x)=\{1,2\}$, $R(y)=\{2,3\}$, $R(z)=\{1,3\}$ are pairwise compatible and have no common instrument.
+\item Let $C\subseteq T$ be the set of non-isolated vertices of $G_T$ and $I=T\setminus C$, $|I|=n_I$. The number of partitions of $T$ into independent sets is
+\begin{equation}\label{eq:count}
+N(G_T)=\sum_{\pi}\ \sum_{m=0}^{n_I}\binom{n_I}{m}\,B_m\,|\pi|^{\,n_I-m},
+\end{equation}
+the outer sum over the partitions $\pi$ of $C$ into independent sets and $B_m$ the Bell numbers. In particular, for the four-state target $T_4=\{\st{12},\st{21},\st{22},\st{31}\}$ of the worked system, $G_{T_4}$ is the path $\st{21}-\st{12}-\st{31}$ with $\st{22}$ isolated, and inclusion--exclusion over its two edges gives $15-(5+5-2)=7$ adequate partitions among the $B_4=15$, two of them with two cells: $\{\st{12}\}\,|\,\{\st{21},\st{22},\st{31}\}$ and $\{\st{12},\st{22}\}\,|\,\{\st{21},\st{31}\}$, the two proper $2$-colourings of the path.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(a) A cell containing an edge has two members with disjoint instrument sets, hence no common instrument. Conversely, if the Helly number is at most $2$, a subfamily with empty intersection contains a minimal one, which has at most two members, i.e.\ an edge; so an independent cell has a common instrument. For $|A|\le 2$ the Helly number is at most $2$ by (b). (b) The $a$ sets $A\setminus\{u\}$, $u\in A$, have empty intersection and every proper subfamily has a common element, so the Helly number is at least $a$; it is at most $a$ because a minimal subfamily with empty intersection of subsets of an $a$-set has at most $a$ members (removing a member must restore a common element, and distinct members must be restored by distinct elements). (c) An independent-set partition of $T$ restricts to one of $C$; given $\pi$, each isolated vertex either joins one of the $|\pi|$ blocks of $\pi$ or belongs to a block consisting of isolated vertices only; choosing the $m$ isolated vertices that form blocks among themselves ($B_m$ ways) and assigning the other $n_I-m$ to blocks of $\pi$ gives \eqref{eq:count}. For $T_4$, \eqref{eq:R} gives the two edges, and the partitions merging a given edge number $B_3=5$, those merging both $B_2=2$.
+\end{proof}
+
+The maximal common-action sets of $T_4$ are $\{\st{12},\st{22}\}$ and $\{\st{21},\st{22},\st{31}\}$; they overlap in $\st{22}$, so no coarsest adequate design is canonical: coarsening is a choice of where the compatible state $\st{22}$ is monitored. The finite Helly numbers $2$ and $3$ of the two- and three-instrument universes are checked by enumeration in the verifier.
+
+\subsection{Dynamic adequacy}
+
+One-step adequacy concerns a single period. The dynamic question is whether a partition keeps the whole set of individually viable states viable as a belief; by Lemma~\ref{lem:basic}(b), this is the same as asking whether \emph{every} belief of viable states is viable, i.e.\ whether the observation costs nothing.
+
+\begin{theorem}[dynamic adequacy of the viable set]\label{thm:dynamic}
+Consider the free protocol and let $\Vstar$ be the set of viable singletons, $\Rstar(x)=\{u\in A:F_u(x)\in\Vstar\}$ and $\Gstar$ the incompatibility graph of $(\Vstar,\Rstar)$. For every observation map $o$ the following are equivalent:
+\begin{enumerate}[label=(\roman*),leftmargin=2em,itemsep=1pt]
+\item $\Vstar$ is viable under $o$;
+\item $K(o,\free)=\{B\subseteq\Vstar:B\neq\emptyset\}$, the full-information kernel;
+\item every fibre of $\Vstar$ under $o$ has a common instrument in $\Rstar$, i.e.\ the partition of $\Vstar$ induced by $o$ is one-step adequate for $(\Vstar,\Rstar)$.
+\end{enumerate}
+When $\{\Rstar(x)\}$ has Helly number at most $2$ (in particular $|A|\le 2$), (iii) reads: $o$ induces a partition of $\Vstar$ into independent sets of $\Gstar$.
+\end{theorem}
+
+\begin{proof}
+(i)$\Leftrightarrow$(ii) is sub-belief closure together with Lemma~\ref{lem:basic}(c). (iii)$\Rightarrow$(i): let $a_y$ be a common instrument of the fibre $\Vstar_y$ with $F_{a_y}(\Vstar_y)\subseteq\Vstar$. The family $\calF=\{B\subseteq\Vstar: B\neq\emptyset\}$ is a post-fixed point of $\Phi$: for $B\in\calF$ each fibre $B_y\subseteq\Vstar_y$ admits $a_y$ (its image lies in $\Vstar\subseteq V$), the successor set $F_a(B)$ lies in $\Vstar$ and so do its fibres; hence $\calF\subseteq\calK$. (i)$\Rightarrow$(iii): if $\Vstar\in\calK=\Phi(\calK)$, some profile $a$ has all fibres of $F_a(\Vstar)$ in $\calK$, hence in $\calF$ by Lemma~\ref{lem:basic}(c); so $F_{a_y}(\Vstar_y)\subseteq\Vstar$ for every fibre, which is (iii). The last sentence is Theorem~\ref{thm:adequacy}(a).
+\end{proof}
+
+The theorem does not extend below $\Vstar$: a partition that is not adequate may still sustain many beliefs, and how many is a genuinely dynamic quantity (the aggregate partition sustains $143$ beliefs although it is not even one-step adequate). The census quantifies this.
+
+\begin{theorem}[monitoring-design census]\label{thm:censusP}
+On the worked system $\Vstar$ is the set of the eight corner-free states, $\Rstar=R$ on $\Vstar$, and $\Gstar$ is the complete bipartite graph $K_{2,2}$ between $\{\st{12},\st{13}\}$ and $\{\st{21},\st{31}\}$ with the four states $\st{22},\st{23},\st{32},\st{33}$ isolated. Over the $B_8=4{,}140$ partitions of $\Vstar$:
+\begin{enumerate}[label=(\alph*),leftmargin=2em,itemsep=1pt]
+\item exactly $1{,}694$ are dynamically adequate, in agreement with \eqref{eq:count}: $151$ for the two-block $\pi=\{\{\st{12},\st{13}\},\{\st{21},\st{31}\}\}$, $372$ for each of the two three-block $\pi$, and $799$ for the four-block $\pi$;
+\item the coarsest adequate designs have two cells; there are $16$ of them, $\{\st{12},\st{13}\}\cup S\ |\ \{\st{21},\st{31}\}\cup S^{c}$ for $S\subseteq\{\st{22},\st{23},\st{32},\st{33}\}$;
+\item the $4{,}140$ kernels take $18$ distinct sizes between $111$ and $255$ and form $74$ distinct sets; the minimum $111$ is the blind kernel and is attained by exactly the $52$ partitions that keep the four critical states $\st{12},\st{13},\st{21},\st{31}$ in one cell; every kernel has a maximal belief of size $6$, $7$ or $8$ ($927$, $1{,}519$ and $1{,}694$ partitions), and the pair kernels are $24$, $26$, $27$ or $28$;
+\item under the shared-ledger no-repeat protocol no partition is adequate, and the largest kernel over all partitions is the codex kernel ($119$).
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(a),(b) are Theorems~\ref{thm:adequacy}--\ref{thm:dynamic} with $n_I=4$: $\sum_m\binom4m B_m k^{4-m}$ equals $151,372,799$ for $k=2,3,4$; the two-cell adequate partitions are the independent-set partitions with two blocks, which must separate the two sides of $K_{2,2}$. (c) is the exact computation of all $4{,}140$ greatest fixed points (Section~\ref{sec:verification}); the characterisation of the minimum is checked setwise. (d) By Theorem~\ref{thm:closed}(a), $\Vstar$ viable requires a first-step profile with $F_a(\Vstar)\subseteq\bigcap_{r\in I(a)}\Phi_{3-r}$; $\st{12}$ forces $1\in I(a)$ and $\st{21}$ forces $2\in I(a)$, so $F_a(\Vstar)\subseteq\Phi_1\cap\Phi_2$, which fails at $F_1(\st{12})=\st{21}$. The maximum is attained at the finest partition by Theorem~\ref{thm:mono}(i).
+\end{proof}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig3_census.pdf}
+\caption{The monitoring-design census over the $4{,}140$ partitions of the eight viable states. Left: partitions by number of cells, split into dynamically adequate (kernel $255$) and not. Right: distribution of the kernel sizes; $18$ sizes occur, from the blind kernel ($111$, $52$ partitions) to the full kernel ($255$, $1{,}694$ partitions); the aggregate partition sits at $143$.}
+\label{fig:census}
+\end{figure}
+
+Table~\ref{tab:design} gives the census by number of cells and Figure~\ref{fig:census} the distribution of kernel sizes. Two features deserve emphasis. First, adequacy is decided by four states: any design that separates $\{\st{12},\st{13}\}$ from $\{\st{21},\st{31}\}$ is adequate however it treats the other four, and any design that merges a state of each side is not. Second, the shared ledger destroys the value of monitoring: under it the observation enters the kernel only through the first step (Theorem~\ref{thm:closed}), and no first step can serve the whole viable set.
+
+\input{si_parts/tab_design_main.tex}

@@ -1,0 +1,692 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{booktabs,array,tabularx,multirow}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{xcolor}
+\definecolor{linkblue}{rgb}{0,0.15,0.5}
+\usepackage[colorlinks=true,linkcolor=linkblue,citecolor=linkblue,urlcolor=linkblue]{hyperref}
+\usepackage{url}
+\graphicspath{{./}{figs/}{paper11c_worked_systems_audit_v5_src/figs/}}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{convention}[theorem]{Convention}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Qr}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\Vstar}{V^{\ast}}
+\newcommand{\Rstar}{R^{\ast}}
+\newcommand{\Gstar}{G^{\ast}}
+\newcommand{\tfr}[2]{\tfrac{#1}{#2}}
+\newcommand{\st}[1]{\mathsf{#1}}
+\newcommand{\led}{\ell}
+\newcommand{\priv}{\pi}
+\newcommand{\opt}{\ell^{+}}
+\newcommand{\free}{\mathrm{f}}
+\newcommand{\nr}{\mathrm{nr}}
+\newcommand{\ofull}{o_{\mathrm{id}}}
+\newcommand{\oagg}{o_{\Sigma}}
+\newcommand{\oblind}{o_{\mathrm{b}}}
+\newcommand{\Kinst}{K_{\mathrm{inst}}}
+\newcommand{\Kagg}{K_{\mathrm{agg}}}
+\newcommand{\Kcod}{K_{\mathrm{cod}}}
+\newcommand{\Kfull}{K_{\mathrm{full}}}
+\newcommand{\Kdec}{K_{\mathrm{dec}}}
+\newcommand{\NCHECKS}{64}
+\setlength{\parskip}{2pt}
+\emergencystretch=2em
+\allowdisplaybreaks
+
+\begin{document}
+
+\title{\textbf{Worked systems for viability under incomplete observation:\\ exact belief kernels across observation structures, protocols and decentralisation,\\ a monitoring-design census, and certified margins}}
+\author{Amin Abaee\\[0.3em]
+{\small Independent Researcher}\\[0.2em]
+{\small ORCID: \href{https://orcid.org/0000-0002-0019-1842}{0000-0002-0019-1842}\quad
+\href{mailto:amin_abaee@ut.ac.ir}{amin\_abaee@ut.ac.ir}}}
+\date{October 15, 2026}
+\maketitle
+
+\begin{abstract}
+\noindent
+A viability problem under incomplete observation is specified by much more than a dynamics and a safe set: the observation map, the protocol that constrains which instruments may follow which, the convention by which a shared record is kept, and the allocation of authority between agencies all enter the answer. This article develops an exact \emph{audit} of these choices on a small worked family and extracts the general theorems that the computations expose. The worked system has two regenerating stocks on the grid $\{0,\dots,3\}^2$, two instruments that each regenerate one stock while the other declines, and the floor $z_1,z_2\ge 1$; beliefs are sets of states, and viability is decided by an exact fibrewise belief game whose greatest fixed point is computed over all $511$ beliefs. A single monotonicity theorem orders the kernels along three axes---refinement of the observation, relaxation of the protocol, and horizon---and the worked system shows every axis strict and the two middle classes incomparable ($111$, $143$, $119$ and $255$ viable beliefs for the institutional, aggregate, codex and full classes). With two instruments the no-repeat protocol is strict alternation, and the two conventions for the register admit closed forms: the shared-ledger kernel depends on the observation only at the first step, while the private-register kernel is a phase-coherence condition; the conventions are incomparable, and the aggregate kernel is realised by the $32$ alternation policies although no memoryless policy sustains a single state. Decentralised unanimity factors statewise, so a belief is sustained if and only if its states share a sustaining law pair: $12$ of the $28$ coordinated-viable pairs survive, and the allocation of one vote moves the kernel between $12$ and $4$ pairs. Monitoring design is reduced to graph structure: one-step adequacy of a partition is adequacy against an incompatibility graph, and the whole set of individually viable states is dynamically viable under a partition if and only if the partition is one-step adequate on it; the census over all $4{,}140$ partitions of the eight viable states finds $1{,}694$ adequate designs, $16$ coarsest two-cell designs, $74$ distinct kernels, and no adequate design at all under the shared ledger. Review timing on regime graphs is a max-plus hitting time with $33$ and $43$ viable cells on a $93$-cell grid, and the continuous companion fibre is certified exactly (crossover $Y^{\ast}=27/5$, margin law $(Y-27/5)/10$, saddle value $-1/10$, Helly-tight triple). Every number is regenerated by an exact script with two independent implementations of the kernels; the monotonicity theorem is formalised in Lean~4.
+\end{abstract}
+
+\medskip
+\noindent\textbf{Keywords:} viability kernel; partial observation; belief games; information structures; protocols and memory; decentralised control; monitoring design; set partitions; max-plus algebra; LP duality; exact computation; Lean~4
+
+\medskip
+\noindent\textbf{MSC 2020:} 93B03, 93A14, 91A43, 05A18, 90C05, 68Q60, 15A80
+\section{Introduction}\label{sec:intro}
+
+A manager who must keep a system above a floor while observing it only partly faces a problem with several independent degrees of freedom that are usually fixed tacitly. Which function of the state is observed? May the same instrument be applied twice in a row, and if not, who remembers what was applied last? If two agencies each control one instrument, how is a disagreement resolved? How often may the regime be reviewed, and how coarse may the monitoring be before the floor is lost? Each of these choices changes the viability kernel, and the changes are not small: on the worked system of this article the number of viable beliefs varies between $111$ and $255$ across four natural information classes, and between $30$ and $255$ once decentralisation is included.
+
+The obstruction calculus developed in \cite{Abaee2026calc} states these problems as common-action problems on beliefs: a belief---a set of states the controller cannot tell apart---is viable when some action keeps every state in it safe and leads to viable beliefs again. The calculus is general, and its general statements are easy to prove; what is hard is to know which of the apparent phenomena are real. Is the ordering between information classes a theorem or an artefact of an example? Does a no-repeat protocol lose viability because of the protocol or because of how the record of the last instrument is kept? Is the loss under decentralisation a property of the voting rule or of the particular belief? Is one-step compatibility of a monitoring partition enough for dynamic viability? These questions are decided by \emph{audits}: exact computations on worked systems in which every claimed inclusion is recomputed from the primitives, every strictness is witnessed, and every closed form is confronted with an independent enumeration. This article is the audit layer of the calculus, rewritten as a research article: the computations are kept, but they are organised around the theorems they establish or refute.
+
+\paragraph{The worked system.}
+Two stocks $z_1,z_2\in\{0,1,2,3\}$ must each stay at or above $1$. Instrument $1$ raises $z_1$ by one (capped at $3$) while $z_2$ declines by one; instrument $2$ does the reverse. The corner $(1,1)$ is lost immediately whatever is done, and the other eight safe states are individually viable. Two observation maps are compared---the full state and the aggregate $z_1+z_2$---and two protocols: free choice, and the no-repeat rule that forbids applying the instrument used last period. The four combinations are the \emph{full}, \emph{codex} (full observation, no repeat), \emph{aggregate} and \emph{institutional} (aggregate observation, no repeat) classes. A decentralised variant gives each stock to an agency that votes by a law depending only on its own stock, with the idle instrument applied on disagreement. The same grid supports a hidden-regime variant, a review-timing grid, and a monitoring-design problem, and a continuous companion fibre with two capped instruments gives the calculus its linear-programming face.
+
+\paragraph{Contributions.}
+\begin{enumerate}[leftmargin=2em,itemsep=1pt]
+\item \emph{A fibrewise belief game and a monotonicity theorem} (Section~\ref{sec:frame}--\ref{sec:mono}). Viability under an observation map, a protocol and a register convention is the greatest fixed point of one operator on beliefs. Kernels are down-closed, stabilise in finitely many steps (three on the worked system), and are monotone along the observation, protocol and horizon axes (Theorem~\ref{thm:mono}); the worked system shows every axis strict and the two middle classes incomparable.
+\item \emph{A complete kernel census with closed forms} (Section~\ref{sec:census}). The kernels of the four classes on all $511$ beliefs are $111$, $143$, $119$ and $255$. With two instruments the no-repeat protocol is strict alternation (Lemma~\ref{lem:alt}); the shared-ledger kernel depends on the observation only through the first step and the private-register kernel is a phase-coherence condition (Theorem~\ref{thm:closed}); the two conventions are incomparable, the ledger institutional kernel equals the blind kernel, and the aggregate kernel is realised by the $32$ alternation policies although no memoryless policy sustains any state (Proposition~\ref{prop:stationary}).
+\item \emph{Decentralised unanimity factors statewise} (Section~\ref{sec:dec}). A belief is sustained if and only if its states share a sustaining law pair (Theorem~\ref{thm:factor}); $12$ of the $28$ coordinated-viable pairs and $30$ of the $255$ beliefs survive; fixing one agency's vote at the floor moves the kernel between $12$ and $4$ pairs.
+\item \emph{Monitoring design as graph structure} (Section~\ref{sec:monitor}). One-step adequacy of a partition is adequacy against an incompatibility graph, with an inclusion--exclusion count and the finite Helly numbers that delimit the graph criterion (Theorem~\ref{thm:adequacy}); the whole set of individually viable states is dynamically viable under a partition if and only if the partition is one-step adequate on it (Theorem~\ref{thm:dynamic}). The census over all $4{,}140$ partitions of the eight viable states gives $1{,}694$ adequate designs with a closed-form count, $16$ coarsest designs, $74$ distinct kernels, and none adequate under the shared ledger.
+\item \emph{Regimes, review timing and the continuous fibre} (Sections~\ref{sec:timing}--\ref{sec:continuous}). Mode-blind operation on the explicit hidden-regime model loses exactly the corner; review timing is a max-plus hitting time, with $33$ and $43$ viable cells on a $93$-cell grid and a demonstration that the identity must be stated with the real value and a non-strict inequality; the continuous fibre has crossover $27/5$, margin law $(Y-27/5)/10$, a saddle of value $-1/10$ with a nonconvex gap, and a Helly-tight triple, and the margins are robustness radii.
+\item \emph{Verification} (Section~\ref{sec:verification}). An exact Python core recomputes every number from the primitives; the ledger and private kernels are computed by two independent implementations (the generic game engine and the closed forms) that agree on all $511$ beliefs; the verifier runs \NCHECKS{} named checks; the monotonicity theorem is formalised in Lean~4.
+\end{enumerate}
+
+\paragraph{Organisation.}
+Section~\ref{sec:frame} fixes the worked system, the belief game and the register conventions. Section~\ref{sec:mono} proves the monotonicity theorem. Section~\ref{sec:census} gives the kernel census and the closed forms. Section~\ref{sec:dec} treats decentralised unanimity, Section~\ref{sec:monitor} monitoring design, Section~\ref{sec:timing} regimes and review timing, Section~\ref{sec:continuous} the continuous fibre and the margins. Section~\ref{sec:rules} collects the design rules the audit supports, Section~\ref{sec:verification} describes the verification, Section~\ref{sec:related} places the work, and Section~\ref{sec:conclusion} concludes. The supplementary material contains the master table of all $36$ pairs, the full census tables, the law tables, the timing grids, the benchmark tables, the scaling of the census to larger caps, and the list of checks.
+\section{The audit frame}\label{sec:frame}
+
+\subsection{The worked system}\label{sec:system}
+
+\begin{definition}[worked system]\label{def:system}
+The state is $x=(z_1,z_2)\in X=\{0,1,2,3\}^2$ and the safe set is $V=\{x: z_1\ge 1,\ z_2\ge 1\}$, nine states. The instruments are $A=\{1,2\}$ with deterministic transitions
+\[
+F_1(z_1,z_2)=\bigl(\min(3,z_1+1),\,\max(0,z_2-1)\bigr),\qquad
+F_2(z_1,z_2)=\bigl(\max(0,z_1-1),\,\min(3,z_2+1)\bigr),
+\]
+and an idle instrument $0$ with $F_0(x)=(\max(0,z_1-1),\max(0,z_2-1))$. For a set $C\subseteq X$ write $F_u(C)=\{F_u(x):x\in C\}$ and
+\[
+R(C)=\{u\in A: F_u(C)\subseteq V\}=\bigcap_{x\in C}R(x),\qquad R(x)=R(\{x\}),
+\]
+the \emph{common safe instruments} of $C$. We abbreviate the state $(z_1,z_2)$ as $\st{z_1z_2}$ and a belief $\{x,y\}$ as $\st{x|y}$.
+\end{definition}
+
+The corner $\st{11}$ has $R(\st{11})=\emptyset$: both instruments send it below the floor, and so does the idle instrument. For the eight remaining safe states,
+\begin{equation}\label{eq:R}
+R(\st{12})=R(\st{13})=\{1\},\qquad R(\st{21})=R(\st{31})=\{2\},\qquad R(\st{22})=R(\st{23})=R(\st{32})=R(\st{33})=\{1,2\}.
+\end{equation}
+Instrument $u$ preserves the aggregate $z_1+z_2$ unless the raised stock is at its cap, in which case the aggregate falls by one; the aggregate is therefore non-increasing along every trajectory that remains in the safe set (Figure~\ref{fig:system}). Away from the corner, a state is lost only when the same instrument is applied while the other stock is at $1$; this is the mechanism that all the kernels below negotiate.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig1_system.pdf}
+\caption{The worked system. Left: the nine safe states with the transitions of instrument $1$ (solid) and instrument $2$ (dashed); the corner $\st{11}$ (grey) has no safe instrument; transitions to unsafe states are omitted. The aggregate observation $\oagg$ reads the anti-diagonal index. Centre: the incompatibility graph $\Gstar$ on the eight viable states (Section~\ref{sec:monitor}); the four edges form $K_{2,2}$ between $\{\st{12},\st{13}\}$ and $\{\st{21},\st{31}\}$. Right: the two global alternation phases, with the states that survive the alternating schedule starting with instrument $1$ (phase $1$) and with instrument $2$ (phase $2$).}
+\label{fig:system}
+\end{figure}
+
+\begin{definition}[observation, beliefs, fibres]\label{def:obs}
+An \emph{observation map} is a function $o:X\to Y$ onto a finite set; its fibres $o^{-1}(y)$ partition $X$. A \emph{belief} is a nonempty set $B\subseteq V$; its \emph{fibres} under $o$ are the nonempty sets $B_y=B\cap o^{-1}(y)$. Three maps are used throughout: the full observation $\ofull(x)=x$, the aggregate observation $\oagg(x)=z_1+z_2$, and the blind observation $\oblind\equiv\ast$. An observation $o'$ \emph{refines} $o$ when every fibre of $o$ is a union of fibres of $o'$. Every observation map is a set partition of $V$ (restricted to the safe states) and conversely; in Section~\ref{sec:monitor} all partitions of the eight viable states are ranged over.
+\end{definition}
+
+The controller acts fibre by fibre: it sees $y=o(x)$, and must choose one instrument for the whole fibre $B_y$ because it cannot tell the states in it apart. Under the free protocol the admissible instruments for a fibre are $R(B_y)$. Under the \emph{no-repeat protocol} the instrument used last period may not be used again, which requires a record of that instrument; how the record is kept is a modelling choice that turns out to matter.
+
+\begin{definition}[protocols and register conventions]\label{def:protocol}
+The \emph{free protocol} $\free$ imposes no constraint beyond safety. The \emph{no-repeat protocol} $\nr$ keeps a register $r\in\{\emptyset,1,2\}$ holding the last instrument applied ($\emptyset$ initially) and admits, for a fibre with register value $r$, the instruments $R(B_y)\setminus\{r\}$. Three conventions are audited for how the register of a belief with several fibres evolves.
+\begin{enumerate}[leftmargin=2em,itemsep=1pt]
+\item \emph{Shared ledger} ($\led$). The register is a public record observed by the controller; when several fibres issue instruments in the same period the ledger records one of them, and the auditor requires the continuation to be viable for \emph{every} issued value (an adversarial recording). This is the convention of the earlier editions of the audit.
+\item \emph{Private register} ($\priv$). The register is the instrument actually applied on the realised trajectory. It is not observed: the belief is a set of \emph{tokens} $(x,l)$ carrying their own last instrument, the fibres are formed by the observation of $x$ only, and the instrument chosen for a fibre must differ from the last instrument of \emph{every} token in it.
+\item \emph{Optimistic ledger} ($\opt$). As the shared ledger, but the recorded value may be chosen favourably.
+\end{enumerate}
+\end{definition}
+
+\subsection{The fibrewise belief game}\label{sec:game}
+
+All conventions are instances of one object: a finite set of nodes, each with a finite family of \emph{options}, where an option is a set of successor nodes that must all be viable for the option to certify the node.
+
+\begin{definition}[belief game, kernel]\label{def:game}
+Fix an observation map $o$ and a protocol with a convention. The nodes $\calN$ and options are as follows.
+\begin{itemize}[leftmargin=2em,itemsep=1pt]
+\item \emph{Free protocol.} Nodes are beliefs. A \emph{profile} for $B$ assigns to each fibre $B_y$ an instrument $a_y\in R(B_y)$; its successor set is $F_a(B)=\bigcup_y F_{a_y}(B_y)$, and its option is the set of fibres of $F_a(B)$.
+\item \emph{Shared ledger.} Nodes are pairs $(B,r)$. A profile assigns $a_y\in R(B_y)\setminus\{r\}$; with $I(a)=\{a_y\}$ the set of issued instruments, its option is $\{(p,r'):\ p \text{ a fibre of } F_a(B),\ r'\in I(a)\}$. Under the optimistic ledger each $r'\in I(a)$ gives a separate option $\{(p,r'): p\}$.
+\item \emph{Private register.} Nodes are nonempty sets $T\subseteq V\times\{\emptyset,1,2\}$ of tokens. A profile assigns to each fibre $T_y$ (grouped by $o(x)$) an instrument $a_y\in\bigcap_{(x,l)\in T_y}R(x)$ with $a_y\neq l$ for every token in the fibre; the successor token set is $\{(F_{a_y}(x),a_y):(x,l)\in T_y\}$ and the option is the set of its fibres.
+\end{itemize}
+The \emph{operator} on families $\calW\subseteq\calN$ is
+\begin{equation}\label{eq:Phi}
+\Phi(\calW)=\{n\in\calN:\ \text{some option } O \text{ of } n \text{ satisfies } O\subseteq\calW\},
+\end{equation}
+the \emph{horizon family} is $\calW_0=\calN$, $\calW_{h+1}=\Phi(\calW_h)$, and the \emph{kernel} $\calK$ is the greatest fixed point of $\Phi$. A belief $B$ is \emph{viable} when its initial node ($B$, $(B,\emptyset)$, or $B\times\{\emptyset\}$ respectively) lies in $\calK$; $K(o,P)$ denotes the set of viable beliefs for observation $o$ and protocol $P$ (with the convention indicated when it matters).
+\end{definition}
+
+A node without admissible profile has no option and is never in $\Phi(\calW)$; nodes whose successor sets leave $V$ have no admissible profile because $R(\cdot)$ already enforces safety. The following properties are used throughout.
+
+\begin{lemma}[basic properties]\label{lem:basic}
+For every observation map, protocol and convention:
+\begin{enumerate}[label=(\alph*),leftmargin=2em,itemsep=1pt]
+\item $\calW_{h+1}\subseteq\calW_h$ for all $h$, the family stabilises at some $h^{\ast}\le|\calN|$, and $\calK=\calW_{h^{\ast}}=\bigcap_h\calW_h$.
+\item (sub-belief closure) If $B$ is viable and $\emptyset\neq B'\subseteq B$, then $B'$ is viable; every $\calW_h$ is closed under nonempty sub-beliefs (sub-token-sets for the private register). Hence $K(o,P)$ is determined by its inclusion-maximal members.
+\item (singletons) Under the free protocol, viability of a singleton $\{x\}$ does not depend on $o$. Write $\Vstar$ for the set of viable singletons; every viable belief is contained in $\Vstar$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(a) $\Phi$ is monotone ($\calW\subseteq\calW'$ implies $\Phi(\calW)\subseteq\Phi(\calW')$) and $\calW_1\subseteq\calW_0=\calN$; induction gives the chain, finiteness the stabilisation, and the stabilised family is the greatest fixed point by Knaster--Tarski since every fixed point is contained in every $\calW_h$.
+(b) By induction on $h$. If $B\in\calW_{h+1}$ with profile $a$, restrict $a$ to the fibres of $B'$ (a sub-fibre has at least the common instruments of its fibre; under no-repeat the register constraint is unchanged for the ledger and weaker for the private register since fewer tokens are present). The successor set of $B'$ is contained in that of $B$, each of its fibres is a sub-belief of a fibre of $F_a(B)$, and the issued set of the restricted profile is contained in $I(a)$, so every successor node of $B'$ under the restricted profile is a sub-belief of a successor node of $B$, which lies in $\calW_h$ and is closed under sub-beliefs by the induction hypothesis.
+(c) A singleton has one fibre and a singleton successor set whatever $o$ is, so the recursion on singletons is the same for all $o$. The last claim is (b).
+\end{proof}
+
+On the worked system $\Vstar$ is the set of eight corner-free safe states, for the free protocol as for the no-repeat protocol under all conventions (the corner has no safe instrument, and each other state is sustained by alternation, Lemma~\ref{lem:alt}). Beliefs are therefore subsets of these eight states, $255$ nonempty ones, of which $28$ are pairs; the audited population of the earlier editions, the $36$ pairs of safe states including the eight pairs through the corner, is retained in the master table of the supplement.
+
+\begin{definition}[the four classes]\label{def:classes}
+The \emph{full} class is $(\ofull,\free)$, the \emph{codex} class $(\ofull,\nr)$, the \emph{aggregate} class $(\oagg,\free)$ and the \emph{institutional} class $(\oagg,\nr)$; the no-repeat classes are read under the shared ledger unless the convention is written. Their kernels are $\Kfull,\Kcod,\Kagg,\Kinst$. The \emph{decentralised} kernel $\Kdec$ is defined in Section~\ref{sec:dec}.
+\end{definition}
+\section{The monotonicity theorem}\label{sec:mono}
+
+The first result orders the kernels along the three axes that the audit varies. It is elementary, but it is the statement against which every apparent phenomenon is tested: an inclusion that the theorem predicts is not a finding, and a strictness or an incomparability that the theorem leaves open is.
+
+\begin{theorem}[monotonicity along three axes]\label{thm:mono}
+Fix a convention among $\free$, $\led$, $\opt$, $\priv$.
+\begin{enumerate}[label=(\roman*),leftmargin=2em,itemsep=1pt]
+\item (\emph{observation}) If $o'$ refines $o$, then $K(o,P)\subseteq K(o',P)$ for every protocol $P$; more precisely $\calW_h(o,P)\subseteq\calW_h(o',P)$ for every horizon $h$, where a node of the coarser game is identified with the same belief (and register) in the finer one.
+\item (\emph{protocol}) If protocol $P$ admits, at every register value, a subset of the instruments admitted by $P'$, then $K(o,P)\subseteq K(o,P')$. In particular $K(o,\nr)\subseteq K(o,\free)$ under every convention, and $K(o,\nr)^{\led}\subseteq K(o,\nr)^{\opt}$.
+\item (\emph{horizon}) $\calW_{h+1}\subseteq\calW_h$, and the kernel is the common value of the family from $h^{\ast}$ on.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(iii) is Lemma~\ref{lem:basic}(a). For (i) and (ii) we prove $\calW_h\subseteq\calW'_h$ by induction on $h$, using the sub-belief closure of Lemma~\ref{lem:basic}(b) for the primed family; the case $h=0$ is trivial.
+
+(i) Let $B\in\calW_{h+1}(o)$ with profile $a$ on the $o$-fibres of $B$. Define the profile $a'$ on the $o'$-fibres by $a'_{y'}=a_y$ whenever $B_{y'}\subseteq B_y$; this is admissible because $R(B_{y'})\supseteq R(B_y)$ and the register constraint is the same (shared ledger: same register value; private register: the tokens of $B_{y'}$ are among those of $B_y$). The successor sets coincide, $F_{a'}(B)=F_a(B)$, and $I(a')=I(a)$ since every $o$-fibre is a union of $o'$-fibres. Every $o'$-fibre $p'$ of the successor set is a sub-belief of an $o$-fibre $p$, and every successor node $(p,r')$ of $B$ under $a$ lies in $\calW_h(o)\subseteq\calW'_h(o')$ by the induction hypothesis; by sub-belief closure $(p',r')\in\calW'_h(o')$. Thus the option of $a'$ is contained in $\calW'_h(o')$ and $B\in\calW_{h+1}(o')$. Under the optimistic ledger the same argument is applied to the option of the recorded value chosen for $B$.
+
+(ii) A profile admissible under $P$ is admissible under $P'$, with the same successor sets, the same issued sets and the same successor nodes; for the comparison $\nr\to\free$ map the node $(B,r)$ to $B$ (or the token set to its set of states): the successor nodes are mapped to successor nodes, and the induction hypothesis applies. For $\led\to\opt$ the option of a profile under $\led$ is the union over $r'\in I(a)$ of the options under $\opt$, so if it is contained in $\calW_h$ so is each of them.
+\end{proof}
+
+\begin{corollary}\label{cor:order}
+Under each convention the four classes satisfy $\Kinst\subseteq\Kagg\subseteq\Kfull$ and $\Kinst\subseteq\Kcod\subseteq\Kfull$; the blind kernel $K(\oblind,\free)$ is contained in every free-protocol kernel; and refining a monitoring partition never shrinks the kernel.
+\end{corollary}
+
+The theorem says nothing about $\Kagg$ against $\Kcod$, about the shared ledger against the private register, or about whether any of the inclusions is strict. These are the questions the census answers.
+
+\begin{proposition}[strictness and incomparability on the worked system]\label{prop:strict}
+On the worked system, under the shared ledger:
+\begin{enumerate}[label=(\alph*),leftmargin=2em,itemsep=1pt]
+\item every inclusion of Corollary~\ref{cor:order} is strict: $|\Kinst|=111$, $|\Kagg|=143$, $|\Kcod|=119$, $|\Kfull|=255$ on the $255$ beliefs, and $24$, $26$, $25$, $28$ on the $36$-pair population;
+\item the two middle classes are incomparable: the pairs $\st{12|31}$ and $\st{13|21}$ are aggregate-viable and codex-dead (the protocol axis), and $\st{13|31}$ is codex-viable and aggregate-dead (the observation axis);
+\item the meet of the middle classes is the institutional class, $\Kagg\cap\Kcod=\Kinst$, on pairs and on all beliefs; their join misses the full class by exactly the pair $\st{12|21}$ on the pair population, and on all beliefs $\Kfull\setminus(\Kagg\cup\Kcod)$ has $104$ members, namely the $64$ beliefs containing $\st{12|21}$ and the beliefs containing $\st{13|31}$ together with at least one of $\st{12},\st{21},\st{22}$ (minimal members $\st{12|21}$, $\st{12|13|31}$, $\st{13|21|31}$, $\st{13|22|31}$);
+\item the horizon families stabilise after at most two applications of $\Phi$ on the whole belief universe: $\calK=\calW_1$ for the free classes and $\calK=\calW_2$ for the ledger classes.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Exact computation of the greatest fixed points (Section~\ref{sec:verification}); the witnesses are explained in Section~\ref{sec:census}: $\st{12|21}$ is dead under aggregation because its two states share a fibre and have disjoint safe instruments; $\st{12|31}$ is dead under the codex because the first step issues two different instruments and the ledger may record the wrong one for the thread that must alternate; $\st{13|31}$ is dead under aggregation because both states land on $\st{22}$ in one step with opposite phases and the aggregate cannot separate them before the merge.
+\end{proof}
+
+\begin{remark}[mechanised layer]\label{rem:lean}
+The three axes of Theorem~\ref{thm:mono} are formalised in Lean~4 in the repository's \texttt{Formalizations} development (modules \texttt{WS\_\allowbreak{}WorkedSystems} and \texttt{WS\_\allowbreak{}WorkedSystems\_\allowbreak{}v2}; theorems \texttt{Wk\_\allowbreak{}mono\_\allowbreak{}obs}, \texttt{master\_\allowbreak{}action\_\allowbreak{}axis}, \texttt{master\_\allowbreak{}memory\_\allowbreak{}axis} and the canonical \texttt{master\_\allowbreak{}monotone}), on top of the finite-system framework of the obstruction-calculus module \texttt{P1\_Obstruction}; the formal statements are the horizon-indexed inclusions of the proof above. The instance-level counts are not formalised; they are reproduced by the exact script.
+\end{remark}
+\section{The kernel census and its closed forms}\label{sec:census}
+
+\subsection{The census}\label{sec:census_numbers}
+
+Table~\ref{tab:kernels} reports the kernels of the four classes under the three register conventions, on the $36$-pair population of the earlier audits and on all $255$ beliefs of viable states, together with their inclusion-maximal members. Figure~\ref{fig:lattice} draws the inclusions.
+
+\begin{table}[t]
+\centering\small
+\caption{Kernel census. For each class: viable pairs among the $36$ pairs of safe states and viable beliefs among the $255$ nonempty subsets of the eight viable states, under the shared ledger ($\led$), the private register ($\priv$) and the optimistic ledger ($\opt$); the last column counts the inclusion-maximal viable beliefs under the shared ledger by size (count$\times$size). The free-protocol classes do not involve a register. The blind row is the one-cell observation; the decentralised row is Section~\ref{sec:dec}.}
+\label{tab:kernels}
+\begin{tabular}{llccccccccl}
+\toprule
+ & & & \multicolumn{2}{c}{$\led$} & \multicolumn{2}{c}{$\priv$} & \multicolumn{2}{c}{$\opt$} & maximal \\
+\cmidrule(lr){4-5}\cmidrule(lr){6-7}\cmidrule(lr){8-9}
+class & $o$ & $P$ & pairs & beliefs & pairs & beliefs & pairs & beliefs & beliefs \\
+\midrule
+full & $\ofull$ & $\free$ & 28 & 255 & \multicolumn{2}{c}{(same)} & \multicolumn{2}{c}{(same)} & 1$\times$8 \\
+codex & $\ofull$ & $\nr$ & 25 & 119 & 27 & 191 & 27 & 191 & 2$\times$6, 1$\times$5 \\
+aggregate & $\oagg$ & $\free$ & 26 & 143 & \multicolumn{2}{c}{(same)} & \multicolumn{2}{c}{(same)} & 4$\times$6 \\
+institutional & $\oagg$ & $\nr$ & 24 & 111 & 26 & 143 & 26 & 127 & 2$\times$6 \\
+blind & $\oblind$ & $\free$ & 24 & 111 & \multicolumn{2}{c}{(same)} & \multicolumn{2}{c}{(same)} & 2$\times$6 \\
+decentralised & --- & unanimity & 12 & 30 & \multicolumn{2}{c}{---} & \multicolumn{2}{c}{---} & 2$\times$4 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.96\textwidth]{fig2_lattice.pdf}
+\caption{Inclusions between the kernels on the $255$ beliefs. Arrows are inclusions predicted by Theorem~\ref{thm:mono} (observation axis horizontal, protocol axis vertical); every arrow is strict, the aggregate and codex kernels are incomparable, and the blind kernel coincides with the shared-ledger institutional kernel. The private-register conventions (right) are incomparable with the shared ledger at full observation: $\st{13|31}$ is ledger-viable and private-dead, $\st{12|21}$ the reverse.}
+\label{fig:lattice}
+\end{figure}
+
+\begin{proposition}[the full class decomposes; the codex does not]\label{prop:full}
+Under full observation and the free protocol a belief is viable if and only if each of its states is: $\Kfull=\{B\subseteq\Vstar: B\neq\emptyset\}$, $|\Kfull|=255$, and every viable belief is sustained by one of the $512$ deterministic memoryless policies $V\to A$. Under full observation with the no-repeat protocol the game does not decompose over states under either convention: $\st{13|31}$ is viable under the shared ledger but not under the private register, and $\st{12|21}$ the reverse, although all four singletons are viable.
+\end{proposition}
+
+\begin{proof}
+Under $\ofull$ every fibre is a singleton, so a profile is a choice of a safe instrument per state and the successor fibres are singletons again; the recursion is the product of the singleton recursions, and Lemma~\ref{lem:basic}(c) gives the first claim. For the second, the union over the $512$ policies of the states they sustain for ever is $\Vstar$ (exact enumeration; the policy $\pi(\st{12})=\pi(\st{13})=\pi(\st{23})=\pi(\st{33})=1$, $\pi(\st{21})=\pi(\st{22})=\pi(\st{31})=\pi(\st{32})=2$ already sustains all eight states, on the cycles $\st{12}\leftrightarrow\st{21}$, $\st{13}\leftrightarrow\st{22}$, $\st{23}\leftrightarrow\st{32}$ and the entries $\st{31}\to\st{22}$, $\st{33}\to\st{32}$). The no-repeat claims are Theorem~\ref{thm:closed} below.
+\end{proof}
+
+\subsection{Two instruments: the no-repeat protocol is alternation}\label{sec:alt}
+
+\begin{lemma}[alternation]\label{lem:alt}
+With $A=\{1,2\}$, the no-repeat protocol admits, at register value $r\in\{1,2\}$, exactly the instrument $3-r$. Hence under every convention each thread alternates after its first instrument, and a thread started at $x$ with instrument $a$ follows the \emph{alternating trajectory} $x,F_a(x),F_{3-a}F_a(x),\dots$. Call $x$ \emph{$a$-alternation-safe} when this trajectory stays in $V$, and let $\Phi_a$ be the set of such states. On the worked system
+\begin{gather*}
+\Phi_1=\{\st{12},\st{13},\st{22},\st{23},\st{32},\st{33}\},\qquad
+\Phi_2=\{\st{21},\st{22},\st{23},\st{31},\st{32},\st{33}\},\\
+\Phi_1\cup\Phi_2=\Vstar,\qquad \Phi_1\cap\Phi_2=\{\st{22},\st{23},\st{32},\st{33}\},
+\end{gather*}
+and every alternating trajectory in $\Phi_a$ is periodic of period $2$ after at most one step.
+\end{lemma}
+
+\begin{proof}
+The first sentence is the definition of the protocol with two instruments; the rest is a four-step computation per state, e.g.\ $\st{13}\to\st{22}\to\st{13}$ under $1,2,1,\dots$ and $\st{13}\to\st{04}$ is unsafe under $2$, so $\st{13}\in\Phi_1\setminus\Phi_2$; $\st{33}\to\st{32}\to\st{23}\to\st{32}$ under $1,2,1,\dots$ and $\st{33}\to\st{23}\to\st{32}\to\st{23}$ under $2,1,2,\dots$.
+\end{proof}
+
+The lemma reduces both no-repeat conventions to statements about phases; it also shows that the observation map matters in a very specific way under each convention.
+
+\begin{theorem}[closed forms of the no-repeat kernels]\label{thm:closed}
+Let $o$ be any observation map and $A=\{1,2\}$.
+\begin{enumerate}[label=(\alph*),leftmargin=2em,itemsep=1pt]
+\item (\emph{shared ledger}) $B$ is viable if and only if there is a profile $a$ on the fibres of $B$, $a_y\in R(B_y)$, with
+\[
+F_a(B)\subseteq\bigcap_{r\in I(a)}\Phi_{3-r}.
+\]
+In particular the observation enters only through the first step; for the blind observation $K(\oblind,\nr)^{\led}=K(\oblind,\free)=(2^{\Phi_1}\cup 2^{\Phi_2})\setminus\{\emptyset\}$, of cardinality $2\cdot 2^{6}-2^{4}-1=111$.
+\item (\emph{private register}) $B$ is viable if and only if there is an assignment of a first instrument $a_y$ to each fibre of $B$ such that every state $x\in B_y$ is $a_y$-alternation-safe and the threads are \emph{phase-coherent}: whenever two threads occupy the same fibre of $o$ at the same time, their next instruments agree. Since all threads are eventually $2$-periodic, coherence needs to be checked for finitely many steps.
+\end{enumerate}
+On the worked system the formulas reproduce the kernels of Table~\ref{tab:kernels} on all $511$ beliefs of safe states for both $\ofull$ and $\oagg$, by an implementation independent of the game engine.
+\end{theorem}
+
+\begin{proof}
+(a) By Lemma~\ref{lem:alt}, a ledger node $(C,r)$ with $r\neq\emptyset$ has at most one admissible profile, the constant $3-r$ on every fibre, whatever $o$ is; so $(C,r)$ is in the kernel if and only if every state of $C$ survives the global alternating schedule $3-r,r,3-r,\dots$, that is $C\subseteq\Phi_{3-r}$ (the fibre decomposition of the successor set is immaterial because all fibres receive the same instrument). The initial node $(B,\emptyset)$ is viable if and only if some profile $a$ has all successor nodes $(p,r')$, $p$ a fibre of $F_a(B)$ and $r'\in I(a)$, in the kernel, i.e.\ $F_a(B)\subseteq\Phi_{3-r'}$ for every issued $r'$. For the blind observation the profile is a single instrument $a$ and $F_a(B)\subseteq\Phi_{3-a}$ is equivalent to $B\subseteq\Phi_a$; the free blind kernel is the same set because a belief with one fibre needs a common open-loop schedule, and on the worked system every schedule that repeats an instrument loses some state of any nonempty belief within three steps (the aggregate is non-increasing and a repeated instrument drives the other stock to $0$), so only alternating schedules sustain beliefs. The cardinality is inclusion--exclusion on $|\Phi_1|=|\Phi_2|=6$, $|\Phi_1\cap\Phi_2|=4$.
+(b) Under the private register the admissible instruments of a fibre exclude the last instrument of every token in it; with two instruments a fibre whose tokens carry both registers has no admissible instrument, and a fibre whose tokens all carry $l$ must use $3-l$. By induction every token follows the alternating trajectory of its initial phase, the profile at every later step is forced, and the only way to fail after the first step is a fibre containing tokens of opposite phase---exactly the negation of coherence---or a thread leaving $V$.
+The last sentence is the computation of Section~\ref{sec:verification}.
+\end{proof}
+
+\begin{corollary}[what the observation buys under each convention]\label{cor:conv}
+On the worked system:
+\begin{enumerate}[label=(\alph*),leftmargin=2em,itemsep=1pt]
+\item the shared-ledger institutional kernel equals the blind kernel, $\Kinst=K(\oblind,\free)$ ($111$ beliefs): observing the aggregate adds nothing once the ledger is shared; full observation adds exactly the $8$ beliefs $\{\st{13},\st{31}\}\cup S$, $S\subseteq\{\st{23},\st{32},\st{33}\}$, which are sustained by the mixed first step $(1,2)$ that lands both threads in $\Phi_1\cap\Phi_2$;
+\item under the private register the no-repeat protocol costs nothing at aggregate observation, $K(\oagg,\nr)^{\priv}=\Kagg$ ($143$ beliefs), and the codex kernel grows to $191$; the private and shared conventions are incomparable at full observation ($\st{13|31}$ against $\st{12|21}$);
+\item the optimistic ledger gives $127$, $143$, $191$, $255$; its codex kernel has the same size as the private codex kernel but differs from it as a set.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:closed} and exact computation; for (a), under $\oagg$ a mixed first step requires $F_a(B)\subseteq\Phi_1\cap\Phi_2$, and the states whose image under one instrument lies in $\Phi_1\cap\Phi_2$ with the other instrument needed elsewhere in the same fibre cannot be separated by the aggregate ($\st{13}$ and $\st{31}$ share the fibre $z_1+z_2=4$), so no mixed profile sustains a belief outside $2^{\Phi_1}\cup2^{\Phi_2}$.
+\end{proof}
+
+The earlier audits reported the institutional and codex kernels under two further conventions in which the ledger records the instrument of a fixed fibre (the first or the last in a fixed order); they give $(25,26,26,28)$ on the pair population, disagree with each other as sets, and are not used here (supplement, Section~S2).
+
+\subsection{Stationary policies and memory}\label{sec:stationary}
+
+The aggregate kernel is a kernel of time-varying policies: the recursion may choose different instruments for the same observation at different times. How much memory this requires is answered exactly.
+
+\begin{proposition}[stationary realisability]\label{prop:stationary}
+On the worked system:
+\begin{enumerate}[label=(\alph*),leftmargin=2em,itemsep=1pt]
+\item no deterministic memoryless policy $\pi:\oagg(V)\to A$ (there are $2^5=32$) sustains any state;
+\item the $32$ \emph{alternation policies}---a first instrument per aggregate value, then strict alternation---sustain exactly the aggregate kernel: the union over them of the sustained beliefs is $\Kagg$ ($143$ beliefs, with the four maximal beliefs of Table~\ref{tab:kernels} as the four sustained sets of maximal size); the union over all $2^{15}$ policies with one period of instrument memory is the same set;
+\item under full observation the $512$ memoryless policies realise $\Kfull$.
+\end{enumerate}
+Hence one bit of memory, the last instrument, is worth as much as the whole time-varying recursion at aggregate observation, and the no-repeat protocol under the private register is exactly this bit.
+\end{proposition}
+
+\begin{proof}
+(a) Along any trajectory in the safe set the aggregate $z_1+z_2$ is non-increasing, hence eventually constant; from then on a memoryless aggregate policy applies a constant instrument, and a constant instrument drives the unraised stock to $0$ within three steps. (b),(c) Exact enumeration of the closed loops (each policy determines a deterministic closed loop on $V$, so a belief is sustained if and only if each of its states is); the equality with the game kernel is checked setwise.
+\end{proof}
+
+\begin{remark}[larger caps]
+The census is not an artefact of the cap $3$. For caps $4$ and $5$ (safe states $16$ and $25$, pair populations $120$ and $300$) the shared-ledger pair kernels are $(98,102,100,105)$ and $(266,272,269,276)$ in the order institutional, aggregate, codex, full, with the full kernel again the corner-free pairs and the private-register institutional kernel again equal to the aggregate kernel (supplement, Section~S8).
+\end{remark}
+\section{Decentralised unanimity}\label{sec:dec}
+
+The coordinated classes assume one controller. In the decentralised variant each stock belongs to an agency that sees only its own stock and votes for an instrument; the instrument is applied when the votes agree and the idle instrument otherwise.
+
+\begin{definition}[laws and unanimity]\label{def:laws}
+A \emph{law} for agency $i$ is a map $l_i:\{0,1,2,3\}\to A$, read on $z_i$. Under the law pair $(l_1,l_2)$ the closed loop is the deterministic map
+\[
+T_{l_1,l_2}(x)=\begin{cases}F_{l_1(z_1)}(x) & \text{if } l_1(z_1)=l_2(z_2),\\ F_0(x) & \text{otherwise.}\end{cases}
+\]
+A belief $B$ is \emph{sustained} by $(l_1,l_2)$ when the orbit of every state of $B$ under $T_{l_1,l_2}$ stays in $V$; the decentralised kernel $\Kdec$ is the set of beliefs sustained by some law pair. There are $16$ laws per agency and $256$ law pairs; since the votes at $z_i=0$ are never consulted on a safe orbit, the law pairs fall into $64$ behavioural classes.
+\end{definition}
+
+\begin{theorem}[statewise factoring]\label{thm:factor}
+Let $\calS(x)$ be the set of law pairs sustaining the singleton $\{x\}$. Then
+\[
+B\in\Kdec\iff\bigcap_{x\in B}\calS(x)\neq\emptyset .
+\]
+In particular $\Kdec$ is closed under sub-beliefs, and it is \emph{not} determined by one-step common-action data: whether $B$ is sustained depends on whether its states share a sustaining law pair, not on whether they share an instrument.
+\end{theorem}
+
+\begin{proof}
+$T_{l_1,l_2}$ is a map on states, so the orbit of $B$ is the union of the orbits of its states and $B$ is sustained by $(l_1,l_2)$ if and only if every $x\in B$ is: $B$ is sustained by some law pair if and only if some law pair lies in every $\calS(x)$. The sub-belief closure is immediate. For the last claim, $\st{12}$ and $\st{21}$ have disjoint safe instruments yet are jointly sustained (Proposition~\ref{prop:deccensus}): the two agencies apply different instruments at different times along the two orbits.
+\end{proof}
+
+\begin{proposition}[decentralised census]\label{prop:deccensus}
+On the worked system:
+\begin{enumerate}[label=(\alph*),leftmargin=2em,itemsep=1pt]
+\item $|\Kdec|=30$ beliefs: the eight singletons, $12$ pairs, $8$ triples and the two maximal beliefs $\{\st{12},\st{21},\st{23},\st{32}\}$ and $\{\st{13},\st{22},\st{31},\st{33}\}$; the $12$ sustained pairs are exactly the pairs inside the two maximal beliefs, so the family $\{\calS(x)\}$ has the Helly property on this instance (a belief is sustained as soon as its pairs are). Of the $28$ coordinated-viable pairs, $16$ are lost to decentralisation. $\Kdec$ is not an information class: it contains $\st{12|21}$, which no coordinated aggregate controller sustains, and misses $\st{12|13}$, which every coordinated class sustains.
+\item The belief $\st{12|21}$ is sustained by exactly $16$ law pairs, the product $L_1\times L_2$ with $L_1=\{1121,1122,2121,2122\}$ and $L_2=\{1211,1212,2211,2212\}$ (laws written as the votes at $z=0,1,2,3$): agency $1$ must vote for its own instrument at $z_1=1$ and concede at $z_1=2$, agency $2$ symmetrically, and the remaining votes are free. The $16$ pairs form $4$ behavioural classes, each extended by the $4$ unconsulted votes at $z=0$.
+\item (\emph{authority}) Fixing agency $1$'s vote at the floor to instrument $1$ leaves $\Kdec$ unchanged on pairs ($12$) and leaves $16$ sustaining law pairs for $\st{12|21}$; fixing agency $2$'s floor vote to instrument $1$ shrinks the pair kernel to $\{\st{13|22},\st{13|33},\st{22|33},\st{23|32}\}$ and leaves no sustaining pair for $\st{12|21}$; the mirror fixings give the mirror images under the coordinate swap; fixing either agency's whole law to a constant leaves no sustained pair at all.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Exact enumeration of the $256$ closed loops on the nine safe states and the factoring of Theorem~\ref{thm:factor}; the factored computation and the direct orbit computation on beliefs agree on all $511$ beliefs of safe states. The interpretation in (b) reads off the fixed coordinates of $L_1$ and $L_2$.
+\end{proof}
+
+The audit answers the question asked in the introduction: the loss under decentralisation is a property of the \emph{allocation of authority at the floor}, not of the voting rule as such. A single vote assigned against the stock that owns it ($l_2(1)=1$) removes two thirds of the kernel, while the same vote assigned with the owner ($l_1(1)=1$) costs nothing.
+\section{Monitoring design}\label{sec:monitor}
+
+A monitoring design is an observation map, that is, a partition of the states into cells the monitor cannot distinguish. Which partitions preserve viability, how coarse they may be, and whether the one-step compatibility of the cells is enough are questions about the structure of the sets $R(x)$.
+
+\subsection{One-step adequacy and the incompatibility graph}
+
+\begin{definition}[one-step adequacy]\label{def:adequacy}
+Let $T$ be a finite set of states with instrument sets $R(x)\subseteq A$. A partition $\calP$ of $T$ is \emph{one-step adequate} when every cell $C\in\calP$ has a common instrument, $\bigcap_{x\in C}R(x)\neq\emptyset$. The \emph{incompatibility graph} $G_T$ has vertex set $T$ and an edge $xy$ whenever $R(x)\cap R(y)=\emptyset$. The \emph{Helly number} of a family of sets is the largest size of an inclusion-minimal subfamily with empty intersection.
+\end{definition}
+
+\begin{theorem}[adequacy as graph structure]\label{thm:adequacy}
+\begin{enumerate}[label=(\alph*),leftmargin=2em,itemsep=1pt]
+\item Every cell of a one-step adequate partition is an independent set of $G_T$. If the family $\{R(x):x\in T\}$ has Helly number at most $2$---in particular whenever $|A|\le 2$---the converse holds: $\calP$ is one-step adequate if and only if it is a partition of $T$ into independent sets of $G_T$.
+\item The family of all nonempty subsets of an $a$-element instrument set has Helly number exactly $a$. Hence for $a\ge 3$ the graph criterion is necessary but not sufficient: $R(x)=\{1,2\}$, $R(y)=\{2,3\}$, $R(z)=\{1,3\}$ are pairwise compatible and have no common instrument.
+\item Let $C\subseteq T$ be the set of non-isolated vertices of $G_T$ and $I=T\setminus C$, $|I|=n_I$. The number of partitions of $T$ into independent sets is
+\begin{equation}\label{eq:count}
+N(G_T)=\sum_{\pi}\ \sum_{m=0}^{n_I}\binom{n_I}{m}\,B_m\,|\pi|^{\,n_I-m},
+\end{equation}
+the outer sum over the partitions $\pi$ of $C$ into independent sets and $B_m$ the Bell numbers. In particular, for the four-state target $T_4=\{\st{12},\st{21},\st{22},\st{31}\}$ of the worked system, $G_{T_4}$ is the path $\st{21}-\st{12}-\st{31}$ with $\st{22}$ isolated, and inclusion--exclusion over its two edges gives $15-(5+5-2)=7$ adequate partitions among the $B_4=15$, two of them with two cells: $\{\st{12}\}\,|\,\{\st{21},\st{22},\st{31}\}$ and $\{\st{12},\st{22}\}\,|\,\{\st{21},\st{31}\}$, the two proper $2$-colourings of the path.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(a) A cell containing an edge has two members with disjoint instrument sets, hence no common instrument. Conversely, if the Helly number is at most $2$, a subfamily with empty intersection contains a minimal one, which has at most two members, i.e.\ an edge; so an independent cell has a common instrument. For $|A|\le 2$ the Helly number is at most $2$ by (b). (b) The $a$ sets $A\setminus\{u\}$, $u\in A$, have empty intersection and every proper subfamily has a common element, so the Helly number is at least $a$; it is at most $a$ because a minimal subfamily with empty intersection of subsets of an $a$-set has at most $a$ members (removing a member must restore a common element, and distinct members must be restored by distinct elements). (c) An independent-set partition of $T$ restricts to one of $C$; given $\pi$, each isolated vertex either joins one of the $|\pi|$ blocks of $\pi$ or belongs to a block consisting of isolated vertices only; choosing the $m$ isolated vertices that form blocks among themselves ($B_m$ ways) and assigning the other $n_I-m$ to blocks of $\pi$ gives \eqref{eq:count}. For $T_4$, \eqref{eq:R} gives the two edges, and the partitions merging a given edge number $B_3=5$, those merging both $B_2=2$.
+\end{proof}
+
+The maximal common-action sets of $T_4$ are $\{\st{12},\st{22}\}$ and $\{\st{21},\st{22},\st{31}\}$; they overlap in $\st{22}$, so no coarsest adequate design is canonical: coarsening is a choice of where the compatible state $\st{22}$ is monitored. The finite Helly numbers $2$ and $3$ of the two- and three-instrument universes are checked by enumeration in the verifier.
+
+\subsection{Dynamic adequacy}
+
+One-step adequacy concerns a single period. The dynamic question is whether a partition keeps the whole set of individually viable states viable as a belief; by Lemma~\ref{lem:basic}(b), this is the same as asking whether \emph{every} belief of viable states is viable, i.e.\ whether the observation costs nothing.
+
+\begin{theorem}[dynamic adequacy of the viable set]\label{thm:dynamic}
+Consider the free protocol and let $\Vstar$ be the set of viable singletons, $\Rstar(x)=\{u\in A:F_u(x)\in\Vstar\}$ and $\Gstar$ the incompatibility graph of $(\Vstar,\Rstar)$. For every observation map $o$ the following are equivalent:
+\begin{enumerate}[label=(\roman*),leftmargin=2em,itemsep=1pt]
+\item $\Vstar$ is viable under $o$;
+\item $K(o,\free)=\{B\subseteq\Vstar:B\neq\emptyset\}$, the full-information kernel;
+\item every fibre of $\Vstar$ under $o$ has a common instrument in $\Rstar$, i.e.\ the partition of $\Vstar$ induced by $o$ is one-step adequate for $(\Vstar,\Rstar)$.
+\end{enumerate}
+When $\{\Rstar(x)\}$ has Helly number at most $2$ (in particular $|A|\le 2$), (iii) reads: $o$ induces a partition of $\Vstar$ into independent sets of $\Gstar$.
+\end{theorem}
+
+\begin{proof}
+(i)$\Leftrightarrow$(ii) is sub-belief closure together with Lemma~\ref{lem:basic}(c). (iii)$\Rightarrow$(i): let $a_y$ be a common instrument of the fibre $\Vstar_y$ with $F_{a_y}(\Vstar_y)\subseteq\Vstar$. The family $\calF=\{B\subseteq\Vstar: B\neq\emptyset\}$ is a post-fixed point of $\Phi$: for $B\in\calF$ each fibre $B_y\subseteq\Vstar_y$ admits $a_y$ (its image lies in $\Vstar\subseteq V$), the successor set $F_a(B)$ lies in $\Vstar$ and so do its fibres; hence $\calF\subseteq\calK$. (i)$\Rightarrow$(iii): if $\Vstar\in\calK=\Phi(\calK)$, some profile $a$ has all fibres of $F_a(\Vstar)$ in $\calK$, hence in $\calF$ by Lemma~\ref{lem:basic}(c); so $F_{a_y}(\Vstar_y)\subseteq\Vstar$ for every fibre, which is (iii). The last sentence is Theorem~\ref{thm:adequacy}(a).
+\end{proof}
+
+The theorem does not extend below $\Vstar$: a partition that is not adequate may still sustain many beliefs, and how many is a genuinely dynamic quantity (the aggregate partition sustains $143$ beliefs although it is not even one-step adequate). The census quantifies this.
+
+\begin{theorem}[monitoring-design census]\label{thm:censusP}
+On the worked system $\Vstar$ is the set of the eight corner-free states, $\Rstar=R$ on $\Vstar$, and $\Gstar$ is the complete bipartite graph $K_{2,2}$ between $\{\st{12},\st{13}\}$ and $\{\st{21},\st{31}\}$ with the four states $\st{22},\st{23},\st{32},\st{33}$ isolated. Over the $B_8=4{,}140$ partitions of $\Vstar$:
+\begin{enumerate}[label=(\alph*),leftmargin=2em,itemsep=1pt]
+\item exactly $1{,}694$ are dynamically adequate, in agreement with \eqref{eq:count}: $151$ for the two-block $\pi=\{\{\st{12},\st{13}\},\{\st{21},\st{31}\}\}$, $372$ for each of the two three-block $\pi$, and $799$ for the four-block $\pi$;
+\item the coarsest adequate designs have two cells; there are $16$ of them, $\{\st{12},\st{13}\}\cup S\ |\ \{\st{21},\st{31}\}\cup S^{c}$ for $S\subseteq\{\st{22},\st{23},\st{32},\st{33}\}$;
+\item the $4{,}140$ kernels take $18$ distinct sizes between $111$ and $255$ and form $74$ distinct sets; the minimum $111$ is the blind kernel and is attained by exactly the $52$ partitions that keep the four critical states $\st{12},\st{13},\st{21},\st{31}$ in one cell; every kernel has a maximal belief of size $6$, $7$ or $8$ ($927$, $1{,}519$ and $1{,}694$ partitions), and the pair kernels are $24$, $26$, $27$ or $28$;
+\item under the shared-ledger no-repeat protocol no partition is adequate, and the largest kernel over all partitions is the codex kernel ($119$).
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(a),(b) are Theorems~\ref{thm:adequacy}--\ref{thm:dynamic} with $n_I=4$: $\sum_m\binom4m B_m k^{4-m}$ equals $151,372,799$ for $k=2,3,4$; the two-cell adequate partitions are the independent-set partitions with two blocks, which must separate the two sides of $K_{2,2}$. (c) is the exact computation of all $4{,}140$ greatest fixed points (Section~\ref{sec:verification}); the characterisation of the minimum is checked setwise. (d) By Theorem~\ref{thm:closed}(a), $\Vstar$ viable requires a first-step profile with $F_a(\Vstar)\subseteq\bigcap_{r\in I(a)}\Phi_{3-r}$; $\st{12}$ forces $1\in I(a)$ and $\st{21}$ forces $2\in I(a)$, so $F_a(\Vstar)\subseteq\Phi_1\cap\Phi_2$, which fails at $F_1(\st{12})=\st{21}$. The maximum is attained at the finest partition by Theorem~\ref{thm:mono}(i).
+\end{proof}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig3_census.pdf}
+\caption{The monitoring-design census over the $4{,}140$ partitions of the eight viable states. Left: partitions by number of cells, split into dynamically adequate (kernel $255$) and not. Right: distribution of the kernel sizes; $18$ sizes occur, from the blind kernel ($111$, $52$ partitions) to the full kernel ($255$, $1{,}694$ partitions); the aggregate partition sits at $143$.}
+\label{fig:census}
+\end{figure}
+
+Table~\ref{tab:design} gives the census by number of cells and Figure~\ref{fig:census} the distribution of kernel sizes. Two features deserve emphasis. First, adequacy is decided by four states: any design that separates $\{\st{12},\st{13}\}$ from $\{\st{21},\st{31}\}$ is adequate however it treats the other four, and any design that merges a state of each side is not. Second, the shared ledger destroys the value of monitoring: under it the observation enters the kernel only through the first step (Theorem~\ref{thm:closed}), and no first step can serve the whole viable set.
+
+\begin{table}[t]
+\centering\small
+\caption{The monitoring-design census by number of cells: partitions of the eight viable states, dynamically adequate partitions (kernel $255$), smallest and largest kernel, and range of the pair kernels (out of $28$).}
+\label{tab:design}
+\begin{tabular}{rrrrrc}
+\toprule
+cells & partitions & adequate & min kernel & max kernel & pair kernels \\
+\midrule
+1 & 1 & 0 & 111 & 111 & 24--24 \\
+2 & 127 & 16 & 111 & 255 & 24--28 \\
+3 & 966 & 227 & 111 & 255 & 24--28 \\
+4 & 1701 & 661 & 111 & 255 & 24--28 \\
+5 & 1050 & 577 & 111 & 255 & 24--28 \\
+6 & 266 & 188 & 135 & 255 & 26--28 \\
+7 & 28 & 24 & 191 & 255 & 27--28 \\
+8 & 1 & 1 & 255 & 255 & 28--28 \\
+\midrule
+all & 4140 & 1694 & 111 & 255 & 24--28 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\section{Hidden regimes and review timing}\label{sec:timing}
+
+Two further variants of the worked system concern time rather than information: a regime that damages one stock and may or may not be known, and a review period during which the regime acts unobserved.
+
+\subsection{The hidden-regime model}
+
+\begin{definition}[regime dynamics]\label{def:regime}
+A regime $r\in\{1,2\}$ deals one unit of damage to stock $z_r$ per period (floor $0$); the instrument $u$ regenerates $z_u$ by one (cap $3$):
+$F^{r}_u(x)=\bigl(x+e_u\bigr)^{\wedge 3}-e_r$ with the floor at $0$, where $\wedge 3$ caps at $3$. Under a \emph{frozen} regime $r$ is fixed and known. Under \emph{mode-blind} operation the regime is unknown and may change every period, and the controller's instrument must be safe against both: the recursion is $W_{h+1}=\{x\in W_h:\exists u\ \forall r\ F^{r}_u(x)\in W_h\}$.
+\end{definition}
+
+\begin{proposition}[frozen against mode-blind]\label{prop:regime}
+Under either frozen regime every safe state, including the corner, is viable, and all $36$ pairs of safe states are viable: applying the regime's own instrument pins the state whenever $z_r<3$, and one step of the other instrument frees a capped coordinate. Under mode-blind operation the corner is lost and every other safe state is viable: the mode-blind kernel is the set of corner-free beliefs, the same set as $\Kfull$ of the coordinated system ($28$ pairs, $255$ beliefs).
+\end{proposition}
+
+\begin{proof}
+$F^{r}_r(x)=x$ when $z_r<3$; when $z_r=3$, $F^{r}_{3-r}(x)$ lowers $z_r$ to $2$ and raises the other stock, after which pinning resumes; the exact closed loop is checked on all nine states. For mode-blind operation the corner is lost because $F^{2}_1(\st{11})=\st{20}$ and $F^{1}_2(\st{11})=\st{02}$; the other eight states are sustained by the strategy ``regenerate the smaller stock'' (ties broken towards $1$): e.g.\ $\st{12}\xrightarrow{u=1}\{\st{12},\st{21}\}$, $\st{21}\xrightarrow{u=2}\{\st{21},\st{12}\}$, $\st{13}\xrightarrow{u=1}\{\st{13},\st{22}\}$, $\st{22}\xrightarrow{u=1}\{\st{22},\st{31}\}$, $\st{31}\xrightarrow{u=2}\{\st{31},\st{22}\}$, and the recursion of Definition~\ref{def:regime} stabilises after one application ($W_1=W_2$) with this kernel.
+\end{proof}
+
+\subsection{Review timing on regime graphs}
+
+Between two reviews the regime acts for $T$ periods without being observed, and the manager's question is the largest $T$ compatible with a given initial slack. Admissible regime sequences are paths in a \emph{regime graph} $(\mathcal{R},E)$ with per-period damages $d_r\ge 0$; free switching is the complete graph with loops.
+
+\begin{proposition}[worst damage is a max-plus hitting quantity]\label{prop:maxplus}
+Let $D_T$ be the worst cumulative damage over admissible regime paths of length $T$. Then $D_T=\max_{r}v_T(r)$ where $v_1(r)=d_r$ and $v_{t+1}(r)=d_r+\max\{v_t(q):(q,r)\in E\}$, i.e.\ $v_T$ is the $(T-1)$-st max-plus power of the weighted adjacency matrix applied to $d$. Closed forms: under free switching $D_T=T\max_r d_r$; under strict alternation of two regimes with damages $1$ and $\tfr12$, $D_T=\lceil T/2\rceil+\tfr12\lfloor T/2\rfloor$, i.e.\ $D_{2k}=3k/2$ and $D_{2k+1}=3k/2+1$. A review period $T$ is viable from initial slack $s=z_0-1$ (the distance of the damaged stock to its floor) if and only if $D_T\le s$.
+\end{proposition}
+
+\begin{proof}
+The recursion is the Bellman recursion for longest paths in the time-expanded graph, which is linear in the max-plus semiring; free switching chooses the worst regime every period; under alternation the worst path starts with the damage-$1$ regime. Viability is $s-D_T\ge 0$ with the non-strict inequality because the floor itself is safe. The recursion is checked against path enumeration for $T\le 6$ on a three-regime graph without self-loops (damages $1,\tfr12,\tfr14$; $D_1,\dots,D_6=1,\tfr32,\tfr52,3,4,\tfr92$).
+\end{proof}
+
+\begin{corollary}[the $93$-cell timing grid]\label{cor:grid}
+On the grid of Figure~\ref{fig:timing}, $z_0\in\{1.0,1.1,\dots,4.0\}$, $T\in\{1,2,3\}$ ($93$ cells): under free switching with unit damage $33$ cells are viable ($T\le z_0-1$); under alternation with damages $(1,\tfr12)$, $43$ cells are viable ($21$, $16$ and $6$ for $T=1,2,3$). The identity must be stated with the real slack and a non-strict inequality: the strict form $z_0-1>T$ fails exactly on the three boundary cells $(2.0,1)$, $(3.0,2)$, $(4.0,3)$, and the strict form against the integer count $\lfloor z_0-1\rfloor>T$ fails on $21$ cells, one in every row with $z_0\ge 2$.
+\end{corollary}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.9\textwidth]{fig4_timing.pdf}
+\caption{Review timing on the $93$-cell grid: viable cells (dark) under free switching with unit damage (left, $33$ cells) and under strict alternation of damages $1$ and $\tfr12$ (right, $43$ cells). The three boundary cells where the strict form of the identity fails are marked.}
+\label{fig:timing}
+\end{figure}
+\section{The continuous companion fibre and its margins}\label{sec:continuous}
+
+The finite audits have a continuous companion in which the common-action obstruction is a linear-programming fact and its certificates are dual vectors. The instances below (Figure~\ref{fig:continuous}) are the smallest that exhibit the crossover, the saddle, the nonconvex gap and the Helly bound; the general theory, including the benchmark law of which Proposition~\ref{prop:bench} is the demand-$2$ instance, is developed in \cite{Abaee2026minimax}, and the continuous-to-finite bridge in \cite{Abaee2026cert}.
+
+\begin{proposition}[benchmark fibre: crossover, margin law, radius]\label{prop:bench}
+Two instruments $u_1,u_2\ge 0$ with caps $u_i\le c_i(Y)$, $c_1(Y)=\tfr32-\tfrac{Y-2}{10}$ and $c_2(Y)=\tfrac{59}{50}-\tfrac{Y-2}{10}$, must meet the demand $u_1+u_2\ge 2$; $Y$ is a pressure parameter. The problem is feasible if and only if $Y\le Y^{\ast}=\tfrac{27}{5}$. For $Y>Y^{\ast}$ the normalised dual vector $\lambda=(\tfr12,\tfr12)$ certifies infeasibility with margin
+\[
+\mu(Y)=1-\tfr12\bigl(c_1(Y)+c_2(Y)\bigr)=\frac{Y-27/5}{10}>0,
+\]
+e.g.\ at $Y=6$ the caps are $\tfrac{11}{10}$ and $\tfrac{39}{50}$, the cap sum $\tfrac{47}{25}$ and the margin $\tfrac{3}{50}$; at $Y=5$ the point $(\tfr65,\tfr45)$ is a feasibility witness. The margin is a robustness radius: raising both caps by $\delta$ restores feasibility at $Y$ if and only if $\delta\ge\mu(Y)$, so at $Y=6$ every per-cap increase below $\tfrac{3}{50}$ leaves the obstruction in place and the increase $\tfrac{3}{50}$ removes it.
+\end{proposition}
+
+\begin{proof}
+Feasibility is $c_1(Y)+c_2(Y)\ge 2$, and $c_1+c_2=\tfrac{67}{25}-\tfrac{Y-2}{5}$ equals $2$ at $Y=\tfrac{27}{5}$. For $Y>Y^{\ast}$, $\lambda\cdot u\le\tfr12(c_1+c_2)<1=\lambda\cdot(2,0)$ for every admissible $u$, so no admissible $u$ meets the demand; the identity for $\mu$ is the linear cap law, and the radius statement is the same inequality with $c_i+\delta$.
+\end{proof}
+
+\begin{proposition}[static duality on a two-floor instance]\label{prop:duality}
+Let $r_1(u)=\tfr25-u$ and $r_2(u)=u-\tfr35$ be two floor rows on $U=[0,1]$, and define the primal value $\max_{u\in U}\min_j r_j(u)$ and the dual value $\min_{\lambda\in\Delta}\max_{u\in U}\sum_j\lambda_j r_j(u)$.
+\begin{enumerate}[label=(\alph*),leftmargin=2em,itemsep=1pt]
+\item Both values equal $-\tfrac{1}{10}$, attained at the saddle $u=\tfr12$, $\lambda=(\tfr12,\tfr12)$; the negative value is the obstruction certificate: no $u$ satisfies both floors, and $\lambda$ prices the shortfall.
+\item Convexity is load-bearing: on $U=\{0,1\}$ with payoff rows $(-1,+1)$ and $(+1,-1)$ the primal value is $-1$ and the dual value $0$.
+\item A feasible contrast: with $r_2$ replaced by $u-\tfr15$ the two values are $+\tfrac1{10}$, attained at $u=\tfrac{3}{10}$; a certificate exists exactly where the value is negative, and a zero value is boundary-critical with no positive margin.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(a) $\min_j r_j(u)=\min(\tfr25-u,u-\tfr35)$ is maximised where the rows cross, $u=\tfr12$, with value $-\tfrac1{10}$; for $\lambda=(\tfr12,\tfr12)$ the combination is the constant $-\tfrac1{10}$, which bounds the dual value above, and weak duality bounds it below. (b) Each column has a $-1$, so the primal is $-1$; $\lambda=(\tfr12,\tfr12)$ gives the constant $0$ and no $\lambda$ does better since the rows sum to $0$. (c) The rows cross at $u=\tfrac3{10}$ with value $\tfrac1{10}$ and the same $\lambda$ gives the constant $\tfrac1{10}$. Weak duality holds unconditionally; equality in (a) and (c) is von Neumann's theorem for affine rows on a convex compact $U$ \cite{vonNeumann1928}, and (b) is its failure without convexity. All values are verified on the rational grids of step $\tfrac1{100}$.
+\end{proof}
+
+\begin{proposition}[sparse witnesses and quantifier order]\label{prop:helly}
+\begin{enumerate}[label=(\alph*),leftmargin=2em,itemsep=1pt]
+\item An infeasible finite family of affine constraints on a convex domain of $\R^m$ has an infeasible subfamily of at most $m+1$ members (Helly \cite{Helly1923}), and $m+1$ is tight: $\{u_i\ge 1\}_{i\le m}$ together with $\sum_i u_i\le m-1$ is infeasible while every $m$ of its members are feasible. On the plane the triple $\{u_1\ge 1,\ u_2\ge 1,\ u_1+u_2\le 1\}$ is pairwise feasible (at $(1,1)$, $(1,0)$, $(0,1)$) and jointly infeasible.
+\item Floors must be met by one instrument: with $f_1(u)=u-\tfr12$ and $f_2(u)=-u-\tfr12$ on $[-1,1]$, each floor is satisfiable ($u=1$, $u=-1$) but no $u$ satisfies both; $\forall j\,\exists u$ holds and $\exists u\,\forall j$ fails, with $\max_u\min_j f_j(u)=-\tfr12$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(a) is Helly's theorem applied to the half-spaces intersected with the domain; omitting $\sum u_i\le m-1$ take all $u_i=1$, omitting $u_j\ge 1$ take $u_j=0$ and the others $1$; the full family requires $m\le m-1$. (b) is a direct check; the value is attained at $u=0$.
+\end{proof}
+
+\begin{proposition}[certainty-equivalent drift]\label{prop:drift}
+Let the stock evolve by the nonlinear law $g(s)=s^2$ applied to a certainty-equivalent lead of $0.1$. The naive drift $g(s+\tfr1{10})-g(s)=\tfrac{s}{5}+\tfrac1{100}$ is positive at every audited level ($\tfrac{21}{100},\tfrac{13}{50},\tfrac{31}{100},\tfrac{9}{25},\tfrac{41}{100}$ at $s=1,\tfr54,\tfr32,\tfr74,2$); the corrected law that subtracts $2s\cdot\tfr1{10}+\tfrac1{100}$ has zero drift at every level; and a correction error $e$ leaves the drift $2se+e^2$, whose sign is the sign of $e$ for $|e|<2s$. A certainty-equivalent floor is therefore exact only with the quadratic correction, and the direction of its failure is the direction of the correction error.
+\end{proposition}
+
+\begin{proof}
+Expand $(s+\tfr1{10})^2$; the statements are polynomial identities, checked exactly.
+\end{proof}
+
+\paragraph{Margins as radii.}
+The three continuous certificates come with margins that are robustness radii rather than slack numbers: the benchmark obstruction at $Y=6$ survives every per-cap perturbation below $\tfrac3{50}$ and not beyond; the timing identity of Corollary~\ref{cor:grid} has zero slack at the boundary cells $(2.0,1)$, $(3.0,2)$, $(4.0,3)$, where any increase of the damage rate flips the verdict, and positive slack $z_0-1-D_T$ elsewhere; and the drift law has the sign law of Proposition~\ref{prop:drift}. The finite kernels have an analogous but discrete robustness: the inclusions of Theorem~\ref{thm:mono} are stable under every perturbation, while each strictness rests on a named witness ($\st{12|21}$, $\st{12|31}$, $\st{13|21}$, $\st{13|31}$) whose status changes with a single transition.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig5_continuous.pdf}
+\caption{The continuous fibre. Left: the cap sum $c_1(Y)+c_2(Y)$ against the demand $2$; the crossover $Y^{\ast}=27/5$ and the dual margin $\mu(Y)=(Y-27/5)/10$ beyond it. Right: the two floor rows of Proposition~\ref{prop:duality} and their lower envelope; the saddle at $u=1/2$ has value $-1/10$, and the feasible contrast (dotted) has value $+1/10$ at $u=3/10$.}
+\label{fig:continuous}
+\end{figure}
+\section{Design rules the audit supports}\label{sec:rules}
+
+The computations are small, but each of the following rules is a theorem or an exact count on the worked system rather than an impression, and each was at some point an open question of the calculus.
+
+\begin{enumerate}[leftmargin=2em,itemsep=2pt]
+\item \emph{State the register convention.} The same no-repeat protocol gives $111$ or $143$ viable beliefs at aggregate observation and $119$ or $191$ at full observation depending on whether the record of the last instrument is a shared ledger or a private register, and the two conventions are incomparable (Corollary~\ref{cor:conv}). A protocol specification that omits the convention does not determine a kernel.
+\item \emph{Under a shared ledger, monitoring is worth one step.} The ledger kernel depends on the observation only through the first instrument (Theorem~\ref{thm:closed}); the institutional kernel equals the blind kernel and no monitoring design is adequate (Theorem~\ref{thm:censusP}(d)). Investment in monitoring is wasted unless the record is private or the protocol is relaxed.
+\item \emph{Separate the critical states.} Adequacy of a monitoring design is decided by the incompatibility graph: separate $\{\st{12},\st{13}\}$ from $\{\st{21},\st{31}\}$ and every belief of viable states is viable, whatever is done with the other four states; merge one state of each side and the whole viable set is lost as a belief. The coarsest adequate designs have two cells and there are sixteen of them (Theorem~\ref{thm:censusP}).
+\item \emph{One bit of memory can replace information.} No memoryless aggregate policy sustains any state, but the thirty-two alternation policies realise the entire aggregate kernel (Proposition~\ref{prop:stationary}); the no-repeat protocol under the private register costs nothing at aggregate observation precisely because it supplies this bit.
+\item \emph{Allocate authority with the owner.} Under decentralised unanimity a single floor vote assigned against the owning agency removes two thirds of the pair kernel, the same vote assigned with the owner removes nothing, and a constant law removes everything (Proposition~\ref{prop:deccensus}).
+\item \emph{Write timing identities with the real slack and a non-strict inequality.} The review-period identity $D_T\le z_0-1$ is exact on the whole grid; its strict form fails on the boundary cells and its integer-count form fails in every row (Corollary~\ref{cor:grid}).
+\item \emph{Report margins as radii.} The benchmark margin $\tfrac3{50}$ is the exact per-cap perturbation that removes the obstruction; the timing boundary cells have radius zero; and the drift certificate fails in the direction of the correction error (Section~\ref{sec:continuous}).
+\end{enumerate}
+\section{Verification}\label{sec:verification}
+
+\paragraph{Exact core.}
+All quantities are computed by the module \texttt{ws\_core.py} from the primitives of Definition~\ref{def:system}: integers and bitmasks for the finite objects, \texttt{fractions.Fraction} for the continuous fibre. The belief game of Definition~\ref{def:game} is implemented once, generically, as a map from nodes to option families; the kernel is the greatest fixed point on the reachable node graph, obtained by iterating $\Phi$ from the set of all reachable nodes until stabilisation (Lemma~\ref{lem:basic}(a)), so no horizon is chosen by hand. The design census uses a second, bitmask implementation of the free-protocol game on subsets of the eight viable states; the two implementations agree on the four classes. The ledger and private no-repeat kernels are computed a third time from the closed forms of Theorem~\ref{thm:closed}, by code that never calls the game engine, and agree with it on all $511$ beliefs of safe states for both observation maps.
+
+\paragraph{What is checked.}
+The verifier \texttt{paper11c\_worked\_systems\_audit\_v5\_verification.py} recomputes everything from the core (about $70$ seconds on one processor) and evaluates \NCHECKS{} named checks, each a Boolean statement about the recomputed objects: the sizes and set identities of Table~\ref{tab:kernels}; the strictness witnesses; the stabilisation horizons; the closed-form agreements; the stationary-policy unions; the decentralised factoring (the factored computation against the direct orbit computation), the $4\times4$ product, the authority census and the behavioural quotient; the design census with the closed-form count \eqref{eq:count}, the sixteen coarsest designs, the number of distinct kernels and the characterisation of the minimum; the four-state census, the inclusion--exclusion count and the Helly numbers; the regime kernels; the timing grid with the three boundary cells and the $21$ failing cells of the floored strict form, and the max-plus recursion against path enumeration; the benchmark crossover, margin law and radius; the duality values and the nonconvex gap; the drift identities; and the scaling table for caps $4$ and $5$. A second group of checks reads the compiled manuscript and the supplement and confirms that every number quoted in them matches the recomputed value. The verifier exits with a nonzero status on any failure; its complete output is reproduced in the supplement (Section~S10).
+
+\paragraph{Mechanised layer.}
+The monotonicity theorem is formalised in the repository's Lean~4 development, modules \texttt{Formalizations/WS\_WorkedSystems.lean} and \texttt{WS\_WorkedSystems\_v2.lean}, on top of the finite-system framework of the obstruction-calculus module; the theorems \texttt{Wk\_mono\_obs} (observation axis), \texttt{master\_action\_axis} (protocol axis), \texttt{master\_memory\_axis} and the canonical \texttt{master\_monotone} state the horizon-indexed inclusions of Theorem~\ref{thm:mono}. The verifier checks that these declarations are present in the modules shipped with the article; the build itself is documented in the repository.
+
+\paragraph{Reproducibility.}
+The article, the supplement, the figures and all tables are generated from \texttt{results.json}, which is written by \texttt{run\_all.py}; no number in the text is typed by hand. The scripts, the Lean modules and the verifier output are part of the submission package and are available at \url{https://github.com/MIKEAA2020/general-sustainability}.
+\section{Related work and discussion}\label{sec:related}
+
+\paragraph{Viability and invariance.}
+The kernel of Definition~\ref{def:game} is the discrete-time viability kernel of Aubin \cite{Aubin1991} and the maximal controlled-invariant set of Bertsekas and Rhodes \cite{BertsekasRhodes1971} and Blanchini \cite{Blanchini1999}, computed on the finite lattice of beliefs instead of a continuous state space; the greatest-fixed-point iteration is the finite counterpart of the viability algorithm of Saint-Pierre \cite{SaintPierre1994}, and the exactness it affords is what the approximation methods of \cite{Deffuant2007} trade for scale. The audit's contribution is not the algorithm but the systematic variation of the information and protocol axes with exact certificates for each inclusion and each strictness.
+
+\paragraph{Games and processes with imperfect information.}
+Beliefs as sets of states and fibrewise control are the knowledge-based subset construction of Reif \cite{Reif1984} and the antichain algorithms for safety games with imperfect information of Chatterjee, Doyen, Henzinger and Raskin \cite{CDHR2007}; the down-closure of Lemma~\ref{lem:basic}(b) is the reason antichains suffice there, and the maximal beliefs of Table~\ref{tab:kernels} are these antichains. The qualitative (almost-sure or sure) analysis of partially observable Markov decision processes \cite{CDH2010} and the belief-state formulation of POMDPs \cite{SmallwoodSondik1973,Kaelbling1998} ask the same question with probabilities; the sure-safety question studied here is the one for which exact finite answers exist, and its probabilistic refinement on related systems is the subject of \cite{Abaee2026prob}. Observability and co-observability of partitions in supervisory control \cite{LinWonham1988,CassandrasLafortune2008} are the discrete-event precedent for Section~\ref{sec:monitor}: there a partition is adequate when a supervisor can enforce a specification through it, here when the belief game is won through it, and Theorem~\ref{thm:dynamic} shows the dynamic question collapsing to a one-step graph condition on the viable set.
+
+\paragraph{Information structures and teams.}
+That the register convention changes the kernel is a small instance of Witsenhausen's observation that the information structure, not only the information, determines a control problem \cite{Witsenhausen1971,Ho1980}; the private register is a classical (nested) information pattern, the shared ledger a non-classical one in which a public record is written by several threads. The decentralised variant is a team problem in the sense of Radner \cite{Radner1962}, with the hardness results of \cite{TsitsiklisAthans1985,Bernstein2002} explaining why the factoring of Theorem~\ref{thm:factor}---which makes the problem tractable---depends on unanimity being statewise.
+
+\paragraph{Max-plus, duality, Helly, partitions.}
+The timing recursion of Proposition~\ref{prop:maxplus} is linear in the max-plus semiring \cite{Baccelli1992,Heidergott2006}; the continuous certificates are instances of Farkas' lemma and von Neumann's minimax theorem \cite{Farkas1902,vonNeumann1928}, and the sparsity bound is Helly's theorem \cite{Helly1923,DanzerGrunbaumKlee1963}; the count \eqref{eq:count} is a restricted Bell number in the sense of set-partition enumeration \cite{Stanley2012}. The exact-reproducibility standard follows the verified-artifact practice of the ARCH competitions \cite{Althoff2020,Geretti2020}, and the mechanised layer uses Lean~4 \cite{MouraUllrich2021}.
+
+\paragraph{Limits.}
+The worked system has two instruments, and Lemma~\ref{lem:alt} uses this: with three or more instruments the no-repeat protocol is not alternation, the closed forms of Theorem~\ref{thm:closed} do not apply, and the Helly number of the instrument family rises above $2$, so the graph criterion of Theorem~\ref{thm:adequacy} becomes necessary only. Theorem~\ref{thm:dynamic} is general but concerns the viable set as a whole; the kernel below it is a dynamic object with no one-step description, as the $74$ distinct kernels of the census show. The ledger convention is an auditing convention---an adversarial recording of one of several issued instruments---and the private register is the physically natural one; the article keeps both because the earlier audits are stated in the former and because the comparison is itself informative. Finally, the counts are those of one small family; the scaling to caps $4$ and $5$ shows the qualitative picture stable, but no asymptotic claim is made.
+\section{Conclusion}\label{sec:conclusion}
+
+The audit of a small worked family turns a list of plausible claims about viability under incomplete observation into theorems with witnesses. The ordering of information classes is a theorem along three axes and strict along each; the two middle classes are incomparable; a no-repeat protocol with two instruments is alternation, and whether it costs anything depends on who keeps the record; decentralised unanimity factors statewise and loses viability through the allocation of a single floor vote; monitoring adequacy for the whole viable set is a graph condition with a closed-form count, with sixteen coarsest designs and none under a shared ledger; review timing is a max-plus hitting time whose identity must be written with the real slack; and the continuous fibre is certified with margins that are radii. Every number is regenerated from the primitives by exact code with independent implementations, and the ordering theorem is mechanised. The natural continuations are the three-instrument protocols, where alternation and the graph criterion both fail and new closed forms are needed, and the probabilistic refinement of the same audits.
+
+\section*{Declarations}
+\paragraph{Funding.} None.
+\paragraph{Competing interests.} None.
+\paragraph{Data availability.} No external data were used.
+\paragraph{Code availability.} The exact core (\texttt{ws\_core.py}, \texttt{run\_all.py}), the table and figure generators, the verifier \texttt{paper11c\_worked\_systems\_audit\_v5\_verification.py} with its output, and the Lean modules are included in the submission package and available at \url{https://github.com/MIKEAA2020/general-sustainability}.
+\paragraph{AI declaration.} Large language models assisted with drafting and iterative review of earlier editions; the author reviewed and edited all outputs and takes responsibility for the final work.
+
+\begin{thebibliography}{99}
+\footnotesize
+\bibitem{Abaee2026calc} Abaee, A., 2026. An obstruction calculus for viability under incomplete observation. Figshare preprint, version 2. \url{https://doi.org/10.6084/m9.figshare.33716593.v2}.
+
+\bibitem{Abaee2026cert} Abaee, A., 2026. Computational viability certification under incomplete observation: a continuous-to-finite bridge with exact certificates. Companion manuscript, \url{https://github.com/MIKEAA2020/general-sustainability}.
+
+\bibitem{Abaee2026minimax} Abaee, A., 2026. Minimax dual certificates for the common-action obstruction: sparsity, polyhedral recovery, a benchmark law, and the finite review envelope. Companion manuscript, \url{https://github.com/MIKEAA2020/general-sustainability}.
+
+\bibitem{Abaee2026prob} Abaee, A., 2026. Exactness is not the limitation: a linear criterion for blind survivable sets on the parameter cube and complete classifications for four, five and six parameters. Companion manuscript, \url{https://github.com/MIKEAA2020/general-sustainability}.
+
+\bibitem{Althoff2020} Althoff, M., Bak, S., Bao, Z., Forets, M., Frehse, G., Freire, D., Kochdumper, N., Li, Y., Mitra, S., Ray, R., Schilling, C., Schupp, S., Wetzlinger, M., 2020. ARCH-COMP20 category report: continuous and hybrid systems with linear continuous dynamics. In: \emph{ARCH20, 7th International Workshop on Applied Verification of Continuous and Hybrid Systems}, EPiC Series in Computing 74, 16--48.
+
+\bibitem{Aubin1991} Aubin, J.-P., 1991. \emph{Viability Theory}. Birkh\"auser, Boston.
+
+\bibitem{Baccelli1992} Baccelli, F., Cohen, G., Olsder, G.J., Quadrat, J.-P., 1992. \emph{Synchronization and Linearity: An Algebra for Discrete Event Systems}. Wiley, Chichester.
+
+\bibitem{Bernstein2002} Bernstein, D.S., Givan, R., Immerman, N., Zilberstein, S., 2002. The complexity of decentralized control of Markov decision processes. \emph{Mathematics of Operations Research} 27(4), 819--840.
+
+\bibitem{BertsekasRhodes1971} Bertsekas, D.P., Rhodes, I.B., 1971. On the minimax reachability of target sets and target tubes. \emph{Automatica} 7(2), 233--247.
+
+\bibitem{Blanchini1999} Blanchini, F., 1999. Set invariance in control. \emph{Automatica} 35(11), 1747--1767.
+
+\bibitem{CassandrasLafortune2008} Cassandras, C.G., Lafortune, S., 2008. \emph{Introduction to Discrete Event Systems}, 2nd ed. Springer, New York.
+
+\bibitem{CDHR2007} Chatterjee, K., Doyen, L., Henzinger, T.A., Raskin, J.-F., 2007. Algorithms for omega-regular games with imperfect information. \emph{Logical Methods in Computer Science} 3(3), paper 4.
+
+\bibitem{CDH2010} Chatterjee, K., Doyen, L., Henzinger, T.A., 2010. Qualitative analysis of partially-observable Markov decision processes. In: \emph{Mathematical Foundations of Computer Science (MFCS 2010)}, Lecture Notes in Computer Science 6281, Springer, 258--269.
+
+\bibitem{DanzerGrunbaumKlee1963} Danzer, L., Gr\"unbaum, B., Klee, V., 1963. Helly's theorem and its relatives. In: \emph{Convexity}, Proceedings of Symposia in Pure Mathematics 7, American Mathematical Society, 101--180.
+
+\bibitem{Deffuant2007} Deffuant, G., Chapel, L., Martin, S., 2007. Approximating viability kernels with support vector machines. \emph{IEEE Transactions on Automatic Control} 52(5), 933--937.
+
+\bibitem{Farkas1902} Farkas, J., 1902. Theorie der einfachen Ungleichungen. \emph{Journal f\"ur die reine und angewandte Mathematik} 124, 1--27.
+
+\bibitem{Geretti2020} Geretti, L., Alexandre dit Sandretto, J., Althoff, M., Benet, L., Chapoutot, A., Chen, X., Collins, P., Forets, M., Freire, D., Immler, F., Kochdumper, N., Sanders, D.P., Schilling, C., 2020. ARCH-COMP20 category report: continuous and hybrid systems with nonlinear dynamics. In: \emph{ARCH20, 7th International Workshop on Applied Verification of Continuous and Hybrid Systems}, EPiC Series in Computing 74, 49--75.
+
+\bibitem{Heidergott2006} Heidergott, B., Olsder, G.J., van der Woude, J., 2006. \emph{Max Plus at Work: Modeling and Analysis of Synchronized Systems}. Princeton University Press, Princeton.
+
+\bibitem{Helly1923} Helly, E., 1923. \"Uber Mengen konvexer K\"orper mit gemeinschaftlichen Punkten. \emph{Jahresbericht der Deutschen Mathematiker-Vereinigung} 32, 175--176.
+
+\bibitem{Ho1980} Ho, Y.-C., 1980. Team decision theory and information structures. \emph{Proceedings of the IEEE} 68(6), 644--654.
+
+\bibitem{Kaelbling1998} Kaelbling, L.P., Littman, M.L., Cassandra, A.R., 1998. Planning and acting in partially observable stochastic domains. \emph{Artificial Intelligence} 101(1--2), 99--134.
+
+\bibitem{LinWonham1988} Lin, F., Wonham, W.M., 1988. On observability of discrete-event systems. \emph{Information Sciences} 44(3), 173--198.
+
+\bibitem{MouraUllrich2021} de Moura, L., Ullrich, S., 2021. The Lean 4 theorem prover and programming language. In: \emph{Automated Deduction -- CADE 28}, Lecture Notes in Computer Science 12699, Springer, 625--635.
+
+\bibitem{Radner1962} Radner, R., 1962. Team decision problems. \emph{Annals of Mathematical Statistics} 33(3), 857--881.
+
+\bibitem{Reif1984} Reif, J.H., 1984. The complexity of two-player games of incomplete information. \emph{Journal of Computer and System Sciences} 29(2), 274--301.
+
+\bibitem{SaintPierre1994} Saint-Pierre, P., 1994. Approximation of the viability kernel. \emph{Applied Mathematics and Optimization} 29, 187--209.
+
+\bibitem{SmallwoodSondik1973} Smallwood, R.D., Sondik, E.J., 1973. The optimal control of partially observable Markov processes over a finite horizon. \emph{Operations Research} 21(5), 1071--1088.
+
+\bibitem{Stanley2012} Stanley, R.P., 2012. \emph{Enumerative Combinatorics, Volume 1}, 2nd ed. Cambridge University Press, Cambridge.
+
+\bibitem{TsitsiklisAthans1985} Tsitsiklis, J.N., Athans, M., 1985. On the complexity of decentralized decision making and detection problems. \emph{IEEE Transactions on Automatic Control} 30(5), 440--446.
+
+\bibitem{vonNeumann1928} von Neumann, J., 1928. Zur Theorie der Gesellschaftsspiele. \emph{Mathematische Annalen} 100, 295--320.
+
+\bibitem{Witsenhausen1971} Witsenhausen, H.S., 1971. Separation of estimation and control for discrete time systems. \emph{Proceedings of the IEEE} 59(11), 1557--1566.
+\end{thebibliography}
+
+\end{document}

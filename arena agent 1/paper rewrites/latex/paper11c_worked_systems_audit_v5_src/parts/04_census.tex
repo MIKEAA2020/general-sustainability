@@ -1,0 +1,96 @@
+\section{The kernel census and its closed forms}\label{sec:census}
+
+\subsection{The census}\label{sec:census_numbers}
+
+Table~\ref{tab:kernels} reports the kernels of the four classes under the three register conventions, on the $36$-pair population of the earlier audits and on all $255$ beliefs of viable states, together with their inclusion-maximal members. Figure~\ref{fig:lattice} draws the inclusions.
+
+\input{si_parts/tab_kernels_main.tex}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.96\textwidth]{fig2_lattice.pdf}
+\caption{Inclusions between the kernels on the $255$ beliefs. Arrows are inclusions predicted by Theorem~\ref{thm:mono} (observation axis horizontal, protocol axis vertical); every arrow is strict, the aggregate and codex kernels are incomparable, and the blind kernel coincides with the shared-ledger institutional kernel. The private-register conventions (right) are incomparable with the shared ledger at full observation: $\st{13|31}$ is ledger-viable and private-dead, $\st{12|21}$ the reverse.}
+\label{fig:lattice}
+\end{figure}
+
+\begin{proposition}[the full class decomposes; the codex does not]\label{prop:full}
+Under full observation and the free protocol a belief is viable if and only if each of its states is: $\Kfull=\{B\subseteq\Vstar: B\neq\emptyset\}$, $|\Kfull|=255$, and every viable belief is sustained by one of the $512$ deterministic memoryless policies $V\to A$. Under full observation with the no-repeat protocol the game does not decompose over states under either convention: $\st{13|31}$ is viable under the shared ledger but not under the private register, and $\st{12|21}$ the reverse, although all four singletons are viable.
+\end{proposition}
+
+\begin{proof}
+Under $\ofull$ every fibre is a singleton, so a profile is a choice of a safe instrument per state and the successor fibres are singletons again; the recursion is the product of the singleton recursions, and Lemma~\ref{lem:basic}(c) gives the first claim. For the second, the union over the $512$ policies of the states they sustain for ever is $\Vstar$ (exact enumeration; the policy $\pi(\st{12})=\pi(\st{13})=\pi(\st{23})=\pi(\st{33})=1$, $\pi(\st{21})=\pi(\st{22})=\pi(\st{31})=\pi(\st{32})=2$ already sustains all eight states, on the cycles $\st{12}\leftrightarrow\st{21}$, $\st{13}\leftrightarrow\st{22}$, $\st{23}\leftrightarrow\st{32}$ and the entries $\st{31}\to\st{22}$, $\st{33}\to\st{32}$). The no-repeat claims are Theorem~\ref{thm:closed} below.
+\end{proof}
+
+\subsection{Two instruments: the no-repeat protocol is alternation}\label{sec:alt}
+
+\begin{lemma}[alternation]\label{lem:alt}
+With $A=\{1,2\}$, the no-repeat protocol admits, at register value $r\in\{1,2\}$, exactly the instrument $3-r$. Hence under every convention each thread alternates after its first instrument, and a thread started at $x$ with instrument $a$ follows the \emph{alternating trajectory} $x,F_a(x),F_{3-a}F_a(x),\dots$. Call $x$ \emph{$a$-alternation-safe} when this trajectory stays in $V$, and let $\Phi_a$ be the set of such states. On the worked system
+\begin{gather*}
+\Phi_1=\{\st{12},\st{13},\st{22},\st{23},\st{32},\st{33}\},\qquad
+\Phi_2=\{\st{21},\st{22},\st{23},\st{31},\st{32},\st{33}\},\\
+\Phi_1\cup\Phi_2=\Vstar,\qquad \Phi_1\cap\Phi_2=\{\st{22},\st{23},\st{32},\st{33}\},
+\end{gather*}
+and every alternating trajectory in $\Phi_a$ is periodic of period $2$ after at most one step.
+\end{lemma}
+
+\begin{proof}
+The first sentence is the definition of the protocol with two instruments; the rest is a four-step computation per state, e.g.\ $\st{13}\to\st{22}\to\st{13}$ under $1,2,1,\dots$ and $\st{13}\to\st{04}$ is unsafe under $2$, so $\st{13}\in\Phi_1\setminus\Phi_2$; $\st{33}\to\st{32}\to\st{23}\to\st{32}$ under $1,2,1,\dots$ and $\st{33}\to\st{23}\to\st{32}\to\st{23}$ under $2,1,2,\dots$.
+\end{proof}
+
+The lemma reduces both no-repeat conventions to statements about phases; it also shows that the observation map matters in a very specific way under each convention.
+
+\begin{theorem}[closed forms of the no-repeat kernels]\label{thm:closed}
+Let $o$ be any observation map and $A=\{1,2\}$.
+\begin{enumerate}[label=(\alph*),leftmargin=2em,itemsep=1pt]
+\item (\emph{shared ledger}) $B$ is viable if and only if there is a profile $a$ on the fibres of $B$, $a_y\in R(B_y)$, with
+\[
+F_a(B)\subseteq\bigcap_{r\in I(a)}\Phi_{3-r}.
+\]
+In particular the observation enters only through the first step; for the blind observation $K(\oblind,\nr)^{\led}=K(\oblind,\free)=(2^{\Phi_1}\cup 2^{\Phi_2})\setminus\{\emptyset\}$, of cardinality $2\cdot 2^{6}-2^{4}-1=111$.
+\item (\emph{private register}) $B$ is viable if and only if there is an assignment of a first instrument $a_y$ to each fibre of $B$ such that every state $x\in B_y$ is $a_y$-alternation-safe and the threads are \emph{phase-coherent}: whenever two threads occupy the same fibre of $o$ at the same time, their next instruments agree. Since all threads are eventually $2$-periodic, coherence needs to be checked for finitely many steps.
+\end{enumerate}
+On the worked system the formulas reproduce the kernels of Table~\ref{tab:kernels} on all $511$ beliefs of safe states for both $\ofull$ and $\oagg$, by an implementation independent of the game engine.
+\end{theorem}
+
+\begin{proof}
+(a) By Lemma~\ref{lem:alt}, a ledger node $(C,r)$ with $r\neq\emptyset$ has at most one admissible profile, the constant $3-r$ on every fibre, whatever $o$ is; so $(C,r)$ is in the kernel if and only if every state of $C$ survives the global alternating schedule $3-r,r,3-r,\dots$, that is $C\subseteq\Phi_{3-r}$ (the fibre decomposition of the successor set is immaterial because all fibres receive the same instrument). The initial node $(B,\emptyset)$ is viable if and only if some profile $a$ has all successor nodes $(p,r')$, $p$ a fibre of $F_a(B)$ and $r'\in I(a)$, in the kernel, i.e.\ $F_a(B)\subseteq\Phi_{3-r'}$ for every issued $r'$. For the blind observation the profile is a single instrument $a$ and $F_a(B)\subseteq\Phi_{3-a}$ is equivalent to $B\subseteq\Phi_a$; the free blind kernel is the same set because a belief with one fibre needs a common open-loop schedule, and on the worked system every schedule that repeats an instrument loses some state of any nonempty belief within three steps (the aggregate is non-increasing and a repeated instrument drives the other stock to $0$), so only alternating schedules sustain beliefs. The cardinality is inclusion--exclusion on $|\Phi_1|=|\Phi_2|=6$, $|\Phi_1\cap\Phi_2|=4$.
+(b) Under the private register the admissible instruments of a fibre exclude the last instrument of every token in it; with two instruments a fibre whose tokens carry both registers has no admissible instrument, and a fibre whose tokens all carry $l$ must use $3-l$. By induction every token follows the alternating trajectory of its initial phase, the profile at every later step is forced, and the only way to fail after the first step is a fibre containing tokens of opposite phase---exactly the negation of coherence---or a thread leaving $V$.
+The last sentence is the computation of Section~\ref{sec:verification}.
+\end{proof}
+
+\begin{corollary}[what the observation buys under each convention]\label{cor:conv}
+On the worked system:
+\begin{enumerate}[label=(\alph*),leftmargin=2em,itemsep=1pt]
+\item the shared-ledger institutional kernel equals the blind kernel, $\Kinst=K(\oblind,\free)$ ($111$ beliefs): observing the aggregate adds nothing once the ledger is shared; full observation adds exactly the $8$ beliefs $\{\st{13},\st{31}\}\cup S$, $S\subseteq\{\st{23},\st{32},\st{33}\}$, which are sustained by the mixed first step $(1,2)$ that lands both threads in $\Phi_1\cap\Phi_2$;
+\item under the private register the no-repeat protocol costs nothing at aggregate observation, $K(\oagg,\nr)^{\priv}=\Kagg$ ($143$ beliefs), and the codex kernel grows to $191$; the private and shared conventions are incomparable at full observation ($\st{13|31}$ against $\st{12|21}$);
+\item the optimistic ledger gives $127$, $143$, $191$, $255$; its codex kernel has the same size as the private codex kernel but differs from it as a set.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:closed} and exact computation; for (a), under $\oagg$ a mixed first step requires $F_a(B)\subseteq\Phi_1\cap\Phi_2$, and the states whose image under one instrument lies in $\Phi_1\cap\Phi_2$ with the other instrument needed elsewhere in the same fibre cannot be separated by the aggregate ($\st{13}$ and $\st{31}$ share the fibre $z_1+z_2=4$), so no mixed profile sustains a belief outside $2^{\Phi_1}\cup2^{\Phi_2}$.
+\end{proof}
+
+The earlier audits reported the institutional and codex kernels under two further conventions in which the ledger records the instrument of a fixed fibre (the first or the last in a fixed order); they give $(25,26,26,28)$ on the pair population, disagree with each other as sets, and are not used here (supplement, Section~S2).
+
+\subsection{Stationary policies and memory}\label{sec:stationary}
+
+The aggregate kernel is a kernel of time-varying policies: the recursion may choose different instruments for the same observation at different times. How much memory this requires is answered exactly.
+
+\begin{proposition}[stationary realisability]\label{prop:stationary}
+On the worked system:
+\begin{enumerate}[label=(\alph*),leftmargin=2em,itemsep=1pt]
+\item no deterministic memoryless policy $\pi:\oagg(V)\to A$ (there are $2^5=32$) sustains any state;
+\item the $32$ \emph{alternation policies}---a first instrument per aggregate value, then strict alternation---sustain exactly the aggregate kernel: the union over them of the sustained beliefs is $\Kagg$ ($143$ beliefs, with the four maximal beliefs of Table~\ref{tab:kernels} as the four sustained sets of maximal size); the union over all $2^{15}$ policies with one period of instrument memory is the same set;
+\item under full observation the $512$ memoryless policies realise $\Kfull$.
+\end{enumerate}
+Hence one bit of memory, the last instrument, is worth as much as the whole time-varying recursion at aggregate observation, and the no-repeat protocol under the private register is exactly this bit.
+\end{proposition}
+
+\begin{proof}
+(a) Along any trajectory in the safe set the aggregate $z_1+z_2$ is non-increasing, hence eventually constant; from then on a memoryless aggregate policy applies a constant instrument, and a constant instrument drives the unraised stock to $0$ within three steps. (b),(c) Exact enumeration of the closed loops (each policy determines a deterministic closed loop on $V$, so a belief is sustained if and only if each of its states is); the equality with the game kernel is checked setwise.
+\end{proof}
+
+\begin{remark}[larger caps]
+The census is not an artefact of the cap $3$. For caps $4$ and $5$ (safe states $16$ and $25$, pair populations $120$ and $300$) the shared-ledger pair kernels are $(98,102,100,105)$ and $(266,272,269,276)$ in the order institutional, aggregate, codex, full, with the full kernel again the corner-free pairs and the private-register institutional kernel again equal to the aggregate kernel (supplement, Section~S8).
+\end{remark}
