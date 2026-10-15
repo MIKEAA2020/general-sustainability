@@ -1,0 +1,59 @@
+\section{Observation: blind values, the feedback game, the deadline}\label{sec:observation}
+
+\subsection{The blind value of a belief and the probe ladder}
+Let $b$ be a probability on the cells (a belief) and $L$ a level. The \emph{blind value} of $b$ is the largest $b$-mass that one blind word can keep alive for ever:
+\[\mathcal V_L(b)=\max_{(u_t)}\ b\big(\{\theta:\ \theta\text{ survives }(u_t)\text{ from }L\}\big).\]
+\begin{proposition}[antichain formula]\label{prop:antichain}
+$\mathcal V_L(b)=\max_{A\in\calS_m(L)}b(A)=\max_{A\in\calM_m(L)}b(A)$.
+\end{proposition}
+\begin{proof}
+The set of cells kept by a word is in $\calS_m(L)$, and every $A\in\calS_m(L)$ is kept by some word; heredity lets the maximum run over $\calM_m(L)$.
+\end{proof}
+This is the finite-cube form of the antichain formula of \cite{Abaee2026prob}, and it turns the classification of Section~\ref{sec:classification} into a value function: at $m=6$ a belief is evaluated by at most $1{,}632$ sums instead of a search over words. Applied to the uniform belief on a $j$-dimensional subcube---the information class after $m-j$ exact probes of individual parameters---it gives the \emph{probe ladder} of Table~\ref{tab:ladder}. At $m=4$ the values double at each probe ($\tfr1{16},\tfr18,\tfr14,\tfr12,1$ at the floor and $\tfr18,\tfr14,\tfr12,1,1$ from slack $1$), as in the earlier editions; at $m=5$ and $m=6$ the ladder is no longer geometric, because balls and cylinders meet subcubes in $1+j$, $2(1+j')$ or $2^j$ cells according to the level, and the last probe is worth nothing as soon as the remaining class is itself survivable.
+
+\begin{table}[t]
+\centering\small
+\caption{Probe ladder: blind value of the uniform belief on a $j$-dimensional subcube ($m-j$ parameters probed exactly), by level.}
+\label{tab:ladder}
+\begin{tabular}{llccccccc}
+\toprule
+$m$ & levels & $j{=}6$ & $5$ & $4$ & $3$ & $2$ & $1$ & $0$\\
+\midrule
+4 & $L=0$ & & & $\tfr1{16}$ & $\tfr18$ & $\tfr14$ & $\tfr12$ & $1$\\
+4 & $L\ge1$ & & & $\tfr18$ & $\tfr14$ & $\tfr12$ & $1$ & $1$\\
+5 & $L\le2$ & & $\tfr3{16}$ & $\tfr5{16}$ & $\tfr12$ & $\tfr34$ & $1$ & $1$\\
+5 & $L\ge3$ & & $\tfr3{16}$ & $\tfr5{16}$ & $\tfr12$ & $1$ & $1$ & $1$\\
+6 & $L=0$ & $\tfr7{64}$ & $\tfr3{16}$ & $\tfr5{16}$ & $\tfr12$ & $\tfr34$ & $1$ & $1$\\
+6 & $1\le L\le4$ & $\tfr3{16}$ & $\tfr5{16}$ & $\tfr12$ & $\tfr78$ & $1$ & $1$ & $1$\\
+6 & $L\ge5$ & $\tfr3{16}$ & $\tfr5{16}$ & $\tfr12$ & $1$ & $1$ & $1$ & $1$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{The feedback game}
+When the stock is observed, an action $u$ played in the information class $T$ reveals $D(u,\theta)$, hence $\dH(u,\theta)$, and splits $T$ into the classes $T_k=\{\theta\in T:D(u,\theta)=k\}$; each class then continues from its own slack $L+k$ with its own words. Survival of the \emph{true} cell, whichever it is, requires every class to be kept.
+\begin{definition}[feedback survivability]
+$F(T,L)$ holds iff $L\ge\Lstar(T)$, or there is an action $u$ that splits $T$ into at least two classes with $L+k\ge0$ and $F(T_k,L+k)$ for every class. The \emph{feedback threshold} $\Fstar(T)$ is the least $L$ with $F(T,L)$.
+\end{definition}
+Non-splitting actions need not be considered: one with nonnegative drift on all of $T$ places $T$ inside a ball, where $F$ already holds, and one with negative drift only lowers the slack. The recursion is finite (classes shrink) and is evaluated exactly with memoisation and the certified blind thresholds.
+
+\begin{proposition}[feedback thresholds]\label{prop:feedback}
+At $m=4$: $\Fstar(\Theta_4)=23$; for the $j$-dimensional subcubes $\Fstar=1,6,14$ ($j=1,2,3$); for the distance shells of a first action, $\Fstar=0,14,18,14,0$ (shells $h=0,\dots,4$). At $m=5$: $\Fstar(\Theta_5)=18$; subcubes $\Fstar=0,3,7,11$ ($j=1,\dots,4$); shells $\Fstar=0,0,11,11,0,0$. In both cubes $\Lstar(\Theta_m)=\infty$.
+\end{proposition}
+The whole four-cube is thus kept from $z_0=3.3$ with the stock observed, against never without observation; the price decomposes along the first split, which must be a sign action (the hold reveals nothing): the antipode of the first guess loses $2m+5$ tenths ($13$ at $m=4$) and the far shells, which are not blind-survivable, need $14$ and $18$ more after losing $9$ and $5$, whence $\max(13,\,9+14,\,5+18,\,1+14)=23$. At $m=5$ the shells at distance $1$ and $4$ are spheres of radius one, inside balls, and cost nothing further, so the two ten-cell shells decide: $\Fstar=\max(15,\ 3+11,\ 7+11,\ 11)=18$. The feedback thresholds are the exact ``price of observation'' on the cube; they are new to this edition and are checked by the script.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig_horizon.pdf}
+\caption{Left: maximal survival horizon of the far pairs at distance $\delta_m+1$ ($m=4,5,6$; the $m=4$ and $m=6$ lines coincide with the bound $L$) and of the whole cube (squares, $\lfloor L/5\rfloor$ for every $m$) against the slack $L$; dashed lines are the bound $\lfloor L/(5-2V)\rfloor$ of Corollary~\ref{cor:horizon}. Right: the price of observation---feedback threshold $\Fstar$ of the $j$-dimensional subcubes and of the whole cube ($j=m$) at $m=4,5$, with the blind threshold $\Lstar$ marked where it is finite.}
+\label{fig:horizon}
+\end{figure}
+
+\subsection{Total ignorance and the deadline}
+\begin{proposition}[deadline law]\label{prop:deadline}
+From common slack $L$ the whole cube can be kept for exactly $\lfloor L/5\rfloor$ steps and no more, by any blind word; the hold attains this. Equivalently, surviving $T$ periods without any information requires $z_0\ge1+T/2$, for every schedule.
+\end{proposition}
+\begin{proof}
+$V(\Theta_m)=0$ with the uniform certificate ($\sum_\theta\theta=0$), so Corollary~\ref{cor:horizon} gives at most $\lfloor L/5\rfloor$ steps; the hold costs exactly $5$ per step; the cell-sum identity gives the same average.
+\end{proof}
+The earlier editions proved the necessity half only for the hold schedule; the corollary removes that restriction. The forward search confirms the exact horizon $\lfloor L/5\rfloor$ for $L\le25$ at $m=4,5,6$ (Table~S5.3), and the first-split cost $2m+5$ is the second ingredient of $\Fstar$: at $m=4$ no information can be bought before slack $13$, so a deadline of $T\ge3$ periods ($L=15$) and a first split cannot both be afforded below $z_0=2.3$, and the Lean theorem \texttt{deadline\_law} is the four-cube case.

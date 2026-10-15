@@ -1,0 +1,67 @@
+\section{Thresholds: the slack game and its certificates}\label{sec:thresholds}
+
+Theorem~\ref{thm:criterion} decides survivability from \emph{some} level and bounds the threshold by the dip of one particular word. The threshold itself is a game-theoretic quantity, and this section computes it with a certificate on each side.
+
+\subsection{The slack game}
+\begin{definition}[slack game, winning region]\label{def:game}
+For a set $S$ of cells the \emph{slack game} has states $x\in\N^S$ (the slack of every cell) and moves $x\mapsto x+D(u)$, $D(u)=(D(u,\theta))_{\theta\in S}$, allowed when the result is nonnegative; the player loses when no move is allowed. The \emph{winning region} $\calW(S)\subseteq\N^S$ is the set of states from which some blind word avoids losing for ever, and $\calW_k(S)$ the set of states from which losing can be avoided for $k$ steps.
+\end{definition}
+
+\begin{proposition}[structure of the winning region]\label{prop:game}
+\begin{enumerate}[label=(\alph*),leftmargin=2.2em,itemsep=1pt]
+\item $\calW(S)$ and every $\calW_k(S)$ are up-sets of $\N^S$; $\calW_{k+1}=\{x:\exists u,\ x+D(u)\in\calW_k\cap\N^S\}$, and the minimal elements of $\calW_{k+1}$ are the minimal elements of $\{(w-D(u))^+:w\in\min\calW_k,\ u\in U_m\}$.
+\item $\calW(S)=\bigcap_k\calW_k(S)$ (K\"onig's lemma: the tree of surviving words is finitely branching).
+\item $\Lstar(S)=\min\{L:(L,\dots,L)\in\calW(S)\}$, and $(L,\dots,L)\in\calW(S)$ is equivalent to $S\in\calS_m(L)$.
+\item (saturated game) For $c\in\N$ let $\calW^{c}(S)$ be the winning region of the game in which every coordinate is clipped at $c$ after each move. Then $\calW^{c}(S)\subseteq\calW(S)\cap[0,c]^S$, with equality as soon as $c$ dominates every coordinate of every minimal element of $\calW(S)$. $\calW^{c}$ is computed exactly as the greatest fixed point of the operator in (a) restricted to the box, in finitely many iterations.
+\item (forward reachability) Let $R_0=\{x_0\}$ and $R_{t+1}=\max\{x+D(u)\ge0:x\in R_t,\ u\in U_m\}$ (maximal elements). If $R_t=\emptyset$ then $x_0\notin\calW_t(S)\supseteq\calW(S)$, and $t-1$ is the exact maximal survival horizon from $x_0$.
+\end{enumerate}
+\end{proposition}
+The proof is in the supplement (S1.2); (d) uses that from a state of $\calW\cap[0,c]^S$ the move into $\calW$ lands above a minimal element whose coordinates are at most $c$, so clipping keeps the state in $\calW$; (e) uses that the winning region is an up-set, so only maximal reachable states matter. The two statements are complementary: (d) gives a sound \emph{upper} bound on $\Lstar$ (a winning strategy that stays in a box is a winning strategy), (e) a sound \emph{lower} bound (a forced loss within $t$ steps from $(L-1,\dots,L-1)$ proves $\Lstar\ge L$).
+
+\begin{definition}[certified threshold]
+$\Lstar(S)=L$ is \emph{certified} when $(L,\dots,L)\in\calW^{c}(S)$ for some cap $c$ and the forward reachability from $(L-1,\dots,L-1)$ empties in finitely many steps (for $L=0$ nothing is to be shown).
+\end{definition}
+
+The exact module computes $\calW^{c}$ for $c=6,12,24,48,96$ until the forward certificate closes. Every threshold reported in this paper is certified: the $5{,}373$ nonempty subsets of the three representative maximal sets of the six-cube, the subsets of the representatives of the five- and four-cube, the shells and subcubes of Section~\ref{sec:observation}. Table~\ref{tab:game} shows the antichains for the maximal sets. The cap matters: for the ten-cell sets of the six-cube the saturated game at $c=6$ returns $5$, because winning from slack $3$ requires some cell to climb above $6$; at $c=12$ it returns $3$, and the forward certificate confirms that $2$ is losing within two steps. A cap-free iteration of the operator in (a) would not terminate for non-survivable sets, whose minimal elements grow without bound (Dickson's lemma \cite{Dickson1913} bounds antichains, not descending chains of up-sets); this is why the two-sided scheme is used rather than a single fixed point.
+
+\begin{table}[t]
+\centering\small
+\caption{Thresholds of the maximal survivable sets with their certificates: value $V$, first-step bound $f(S)$ of Proposition~\ref{prop:firststep}, certified threshold $\Lstar$, the cap at which the saturated game attains it, the size of the antichain of minimal winning vectors in that box, and the number of forward steps after which $(\Lstar-1,\dots)$ is lost (``--'' for $\Lstar=0$). The word column gives the period of the product word of Theorem~\ref{thm:criterion} and its dip, an upper bound on $\Lstar$ that is loose for the boundary sets.}
+\label{tab:game}
+\begin{tabular}{llrrrrrrrr}
+\toprule
+$m$ & set (orbit size) & $|S|$ & $V$ & $f(S)$ & $\Lstar$ & cap & antichain & lost after & word period / dip\\
+\midrule
+4 & singleton (16) & 1 & 4 & 0 & 0 & -- & 1 & -- & 1 / 0\\
+4 & adjacent pair (32) & 2 & 3 & 1 & 1 & 6 & 2 & 0 & 2 / 1\\
+5 & radius-one ball (32) & 6 & 3 & 0 & 0 & -- & 1 & -- & 1 / 0\\
+5 & square (80) & 4 & 3 & 3 & 3 & 6 & 4 & 0 & 4 / 3\\
+6 & cylinder (192) & 12 & 3 & 1 & 1 & 6 & 22 & 0 & 2 / 1\\
+6 & boundary ten-set (1{,}280) & 10 & $\tfr52$ & 1 & 3 & 12 & 57 & 2 & 64 / 48\\
+6 & three-subcube (160) & 8 & 3 & 5 & 5 & 6 & 8 & 0 & 8 / 7\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Two bounds and the boundary sets}
+\begin{proposition}[first-step bound]\label{prop:firststep}
+$\Lstar(S)\ge f(S):=\min_{u\in U_m}\max_{\theta\in S}\big(-D(u,\theta)\big)^+$. Equality holds for singletons, adjacent pairs ($f=1$), the squares of the five-cube ($f=3$), the cylinders ($f=1$) and the three-dimensional subcubes ($f=5$) of the six-cube; it fails for the boundary ten-sets of the six-cube ($f=1<\Lstar=3$).
+\end{proposition}
+\begin{proof}
+The first action must keep every cell: $L\ge-D(u_0,\theta)$ for all $\theta\in S$. Equality cases: exhibit a word from $f(S)$ (the antichain of Table~\ref{tab:game} contains $(f,\dots,f)$ or a vector below it); the failure case is the certified entry of the table.
+\end{proof}
+
+\begin{proposition}[boundary sets are pinned]\label{prop:pinned}
+Let $V(S)=\tfr52$ and let $q$ be a minimiser in Theorem~\ref{thm:criterion}(iii). Then $S$ is survivable, every feasible mixed action has $\langle y,\theta\rangle=\tfr52$ for all $\theta\in\supp q$, and along \emph{every} word that keeps $S$ from slack $L$,
+\[\sum_{\theta\in\supp q}q_\theta\,s_\theta(t)\ \le\ L\qquad\text{for all }t,\]
+so at every time some cell of $\supp q$ has slack at most $L$: the support cells cannot be lifted away from the floor.
+\end{proposition}
+\begin{proof}
+Feasibility of $y$ and $\langle y,\sum_\theta q_\theta\theta\rangle\le\|\sum_\theta q_\theta\theta\|_1=\tfr52$ force equality on the support. For the trajectory, $\sum_\theta q_\theta(s_\theta(t)-L)=\sum_{\tau<t}(2\langle u_\tau,\sum_\theta q_\theta\theta\rangle-5)\le t\,(2\cdot\tfr52-5)=0$.
+\end{proof}
+
+The boundary sets exist: $1{,}280$ maximal ten-cell sets of the six-cube and $143{,}360$ survivable sets in all have $V=\tfr52$ exactly (Section~\ref{sec:classification}). Their winning words are knife-edge objects. The exact module extracts an explicit eventually periodic winning word from the saturated game (play, from the current state, the first action whose clipped successor dominates a minimal winning vector; the state space is finite, so the play is eventually periodic): for the representative ten-set from $\Lstar=3$ it has a prefix of five actions and a period of four, along which two cells cycle through slacks $3,2,1,0$ and touch the floor every fourth step, while other cells grow by $8$ or $16$ per period. Section~\ref{sec:float} shows what floating-point arithmetic makes of this word.
+
+\begin{remark}[values of $\Lstar$ and the grid]
+All thresholds are integers in tenths, so the levels $z_0=1+\Lstar/10$ are on the tenth grid used in the earlier editions; the bands of those editions ($16$ singletons at $1.0$, $32$ pairs from $1.1$) are $\Lstar=0$ and $\Lstar=1$. The grid is a choice of initial stocks, not a discretisation of the dynamics, which are exact for any rational $z_0$.
+\end{remark}
