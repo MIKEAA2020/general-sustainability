@@ -1,0 +1,74 @@
+\section{Review-envelope records (main Section~\mref{sec:dynamic})}\label{si:review}
+
+\subsection{The two-window instance in full}
+Scenarios $\omega=(s,d_1,d_2)\in\{\pm1\}^3$ with the product prior ($\mu(\omega)=\tfr18$); $z_1=z_0+su_1+d_1$, $z_2=z_1+su_2+d_2$, $u_k\in\{-2,0,2\}$, $G=2-|z_2|$; the first action is blind, the second observes $z_1$. Table~\ref{tab:tree} lists, at $z_0=2$, every review cell reached after each first action: the compatible signs, the cell mass, the three second-stage values $Q_2(h,u_2)$, the maximisers and the node value $N_2(h)$ (checks D1.1--D1.2). The first-stage values are $Q_1(\pm2)=\tfr14(1+1+1-1)=\tfr12$ and $Q_1(0)=\tfr12(1-1)=0$, so $Q_0=\tfr12$.
+
+\begin{table}[H]
+\centering\small
+\caption{Two-window instance at $z_0=2$: all review cells.}
+\label{tab:tree}
+\begin{tabular}{ccccccc}
+\toprule
+$u_1$ & $z_1$ & compatible $s$ & mass & $Q_2(h,u_2)$ for $u_2=-2,0,+2$ & maximisers & $N_2$\\
+\midrule
+\input{si_parts/tab_tree.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Counting the trees.} After $u_1=\pm2$ there are four reachable cells with three actions each ($3^4=81$ trees per first action); after $u_1=0$ there are two cells ($3^2=9$); in total $81+9+81=171$ adapted trees. The script enumerates all of them, evaluates each by path enumeration and by the tower recursion along its own filtration, checks the martingale identity at every node, and finds the maximum $\tfr12$ attained by $8$ trees (checks D1.3--D1.4). The committed-prefix identity (check D1.6) compares, for each first action, the maximum over the trees that start with it against $Q_1$.
+
+\subsection{The coupling class and the sweep}
+$\calM$ is the set of laws on $\{\pm1\}^3$ with $\Prob(s=1)=\Prob(d_1=1)=\Prob(d_2=1)=\tfr12$: a polytope of dimension $4$ with the six vertices of Table~\ref{tab:vertices}, found by two independent enumerations (active-set and basic-feasible-solution), whose barycentre is the product prior (check D2.5). The robust values of main Proposition~\mref{prop:robust} are computed as follows: $R^-=\max_\pi\min_{\mu'\in\calM}\E_{\mu'}G^\pi$ exactly, since the inner minimum of a linear function over $\calM$ is attained at a vertex; $R^+$ by the linear programme $\min\{t:\ \E_{\mu'}G^\pi\le t\ \forall\pi,\ \mu'\in\calM\}$ solved by HiGHS, after which the primal solution $\mu^\ast$ is rationalised and checked to lie in $\calM$ (exact upper bound $\max_\pi\E_{\mu^\ast}G^\pi$) and the dual multipliers of the $171$ policy constraints are rationalised into a mixture $w^\ast$ whose guaranteed value $\min_{\mu'\in\operatorname{vert}\calM}\sum_\pi w^\ast_\pi\E_{\mu'}G^\pi$ is computed exactly; $R^+$ is \emph{certified} when the two exact bounds coincide, which happened at every $z_0$ (check D2.2).
+
+\begin{table}[H]
+\centering\small
+\caption{Extreme couplings of $\calM$ (columns: scenarios $(s,d_1,d_2)$ by sign).}
+\label{tab:vertices}
+\begin{tabular}{lcccccccc}
+\toprule
+\input{si_parts/tab_vertices.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Sweep over the initial distance (main Table~\mref{tab:sweep} with the worst couplings): envelope under the product prior, open-loop supremum, robust values, value of the review, support of the certified worst coupling $\mu^\ast$, and number of trees in the certifying mixture $w^\ast$ (checks D2.1--D2.4).}
+\begin{tabular}{cccccccc}
+\toprule
+$z_0$ & $Q_0$ & open-loop & $R^+$ & $R^-$ & $Q_0-$open-loop & worst coupling $\mu^\ast$ & $|\supp w^\ast|$\\
+\midrule
+\input{si_parts/tab_sweep.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+At $z_0=2$ the six extreme couplings give the controller the values $2,2,1,2,1,2$, all strictly above $R^+=\tfr12$: the worst coupling is the product prior, an interior point of $\calM$ (check D2.6). The dynamic obstruction at $z_0=4$ (check D3.1): all $171$ trees have negative expectation under the prior, and the smallest defeating mass $\mu\{G^\pi<0\}$ over all trees is $\tfr38$. At $z_0=3$ the envelope is $0$: some tree has zero expected loss, but every tree is defeated on a set of positive mass (check D3.2).
+
+\subsection{Inherited and auxiliary instances}
+The instances of the earlier verification campaign are re-implemented on the generic review-tree class (observation maps may depend on the action prefix; cells are computed from the scenario list) and re-counted; the counts correct two figures quoted in earlier versions of this manuscript ($8192$ and $19683$), which did not match what the campaign script actually enumerated ($2^{14}$ and $3\cdot3^4$).
+
+\begin{table}[H]
+\centering\small
+\caption{Review-tree instances: scenario space, stages, actions per stage, observation before each stage, number of adapted trees, recursion value and brute-force tree supremum (checks D4.1--D4.3, D1.7).}
+\begin{tabular}{llcclccc}
+\toprule
+instance & $\Omega$, law & $K$ & $|A_k|$ & observations & trees & $Q_0$ & tree sup.\\
+\midrule
+\input{si_parts/tab_instances.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\emph{Instance A}: $G(d,a)=-|d_1|a_1+\max(d_2,0)a_2+d_3-\tfr12$ with observations $\operatorname{sign}d_1$, then $(\operatorname{sign}d_1,\operatorname{sign}d_2)$, then the full scenario, actions $\{0,1\}$ at each of $K=3$ stages: $2+4+8=14$ decision cells, $2^{14}=16384$ trees, value $0$. \emph{Instance B}: $G(d,a)=a_1d_1+a_2d_2-\tfr14|a_1|$, blind first stage with three actions, full revelation before the second: $3\cdot3^4=243$ trees, value $1$ at $a_1=0$ (the blind actions $\pm1$ give $\tfr34$). \emph{Instance C}: $G(d,a)=a_1\,(2\cdot\ind{d_1>0,d_2>0}-1)+a_2d_2$ on $\{\pm1\}^3$ with a coarse first observation ($\operatorname{sign}d_1$) or a fine one ($(\operatorname{sign}d_1,\operatorname{sign}d_2)$), full revelation before the second stage: values $\tfr12$ and $\tfr34$, illustrating main Theorem~\mref{thm:envelope}(iii). \emph{Matching instance}: a hidden $x\in\{1,2,3\}$ uniform, one action $a\in\{1,2,3\}$ after observing the block of a partition, reward $-|x-a|$; the values below show that refinement is monotone but may add nothing (the partition $\{1,3\}|\{2\}$ is as useless as no observation) (check D4.4).
+\begin{center}\small
+\begin{tabular}{lc}
+\toprule
+partition & value\\
+\midrule
+\input{si_parts/tab_matching.tex}
+\bottomrule
+\end{tabular}
+\end{center}
+\emph{Posterior-only instance} (main Example~\mref{ex:posterior}): blind $a_1\in\{0,1\}$, then a fair bit $s$ is revealed, reward $\ind{a_1=s}$, one dummy second action: adapted value $\tfr12$; the clairvoyant evaluation $\E[\max_{a_1}\E[\ind{a_1=s}\mid s]]$ equals $1$ (check D1.7). \emph{Coupling selection} (check D4.5): $G=d_1d_2$ has value $0$ under the product coupling and $1$ under the comonotone coupling $\tfr12\delta_{(1,1)}+\tfr12\delta_{(-1,-1)}$, both with uniform one-step marginals; the $\rho$-mixture has value $\rho$.

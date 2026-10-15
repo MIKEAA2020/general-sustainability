@@ -1,0 +1,20 @@
+**To the Editors, *Journal of Optimization Theory and Applications***
+
+Dear Editors,
+
+I submit the manuscript *Minimax dual certificates for the common-action obstruction: sparsity, polyhedral recovery, a benchmark law, and the finite review envelope* for consideration as a research article.
+
+**Problem.** When a controller must choose one action for all the states that its observation cannot distinguish, safety can fail although every state is individually controllable: no action is safe for the whole information atom. Viability theory under output feedback offers sufficient conditions through set-valued observers; robust optimisation offers adjustability gaps measured in objective value. What has been missing is a necessary-and-sufficient first-order criterion with a *certificate* — an object a reviewer can check with one evaluation — together with an account of how sparse that certificate is, how it specialises to the classical Farkas and Isaacs readings, and how it extends to information that arrives over time.
+
+**Contribution.** (i) For control-affine plants with a compact convex action set, the atom is obstructed if and only if a probability measure on its active boundary–shock bundle makes the pooled constraint row strictly negative on the whole action set; the best margin equals minus the lower value of the atom's game (Sion), and the certificate is sound for arbitrary action sets. (ii) The certificate needs at most `min(dim aff U, rank) + 1` atoms — Helly's theorem rather than Carathéodory's count — and the bound is attained for every dimension by an explicit plant; a random study shows how rarely it is met. (iii) Without convexity a certificate exists exactly when the convexified atom is obstructed, so the gap between the action set and its hull is the only source of incompleteness. (iv) For polyhedral action sets the certificate is a Farkas pair whose facet multipliers locate the obstruction on specific constraints. (v) Three tests — physical, epistemic, institutional — are read off the certificate and priced on a two-stock harvesting benchmark with an aggregate observation and a demand floor, where the fibre margin is `(27 − 5Y)/50` and the critical stock obeys `Y*(D) = min(77/5 − 5D, 69/5)`. (vi) A dynamic layer proves that the node recursion of a finite review tree with action-dependent observation is the supremum over adapted policy trees, establishes a certified weak duality for the robust value over a class of couplings — whose worst coupling can be interior — and gives an integrated certificate for finite-horizon trajectories that reproduces a companion review threshold in one line.
+
+**Fit.** The paper is about minimax duality, Helly-type sparsity, Farkas certificates and robust values on polyhedral uncertainty classes, applied to a control question; the theorems are stated and proved at the level of generality the journal publishes, and the instances are small enough to be exact. The standard of evidence is unusual: a 66-check exact-rational script regenerates every number, witness, count and table (floating-point solvers only propose candidates, which are then confirmed exactly), and three statements are machine-checked in Lean 4 with their scope declared. The related-work section states precisely what is new relative to viability theory, differential games under incomplete information, semi-infinite duality, the scenario approach and adjustable robust optimisation.
+
+**Reproducibility.** The exact module, the verification script with its archived output, the figure and table scripts and the Lean module accompany the manuscript; the Supplementary Material (S1–S8) carries the proof details, the complete instance records, the verification record and a symbol table with sign conventions.
+
+The work is not under consideration elsewhere. Large language models assisted with drafting and code review, as declared in the manuscript; I reviewed and re-ran everything and take full responsibility for the content.
+
+Yours sincerely,
+
+Amin Abaee
+Independent Researcher — ORCID 0000-0002-0019-1842 — amin_abaee@ut.ac.ir

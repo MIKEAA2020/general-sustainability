@@ -1,0 +1,42 @@
+\section{Verification record}\label{si:verification}
+
+\subsection{Scripts and how to run them}
+\begin{itemize}[leftmargin=1.4em,itemsep=1pt]
+\item \texttt{work/p04\_core.py} --- the exact module: rational linear algebra and polytopes (vertex enumeration, support functions), lower values by vertex enumeration of the lifted polytope, exact simplex programmes for dual values, certificate margins, minimal infeasible subfamilies with an optional float screen, the tight family and its plant, the convex-hull programme, the benchmark model (caps from the drift equations, margin, demand-floor law), the two-patch codex, the generic review-tree class (node recursion, tree enumeration, tower and martingale checks, defeat masses), the two-window instance and the inherited instances, the coupling polytope and the robust values, the integrated certificate.
+\item \path{paper04_minimax_dual_certificates_v20_verification.py} --- runs the checks below, writes \texttt{work/results.json}; \texttt{--quick} skips the $k=4$ random study. Runtime about $100$\,s ($30$\,s quick) on one core.
+\item \texttt{work/make\_figs.py} --- the four figures, every plotted number recomputed from the module or read from \texttt{results.json}; \texttt{work/make\_si\_tables.py} --- the table bodies of this supplement; \texttt{work/make\_mainlabels.py} --- the main-text number table used by this supplement; \texttt{work/assemble.py} --- assembles the two \texttt{.tex} files from their parts.
+\item \texttt{Minimax\_Dual.lean} --- the Lean~4 module; it imports only the repository's prelude module (the ordered-field interface \texttt{OrdField} and the finitely supported measures \texttt{FinMass}), not Mathlib, and compiles in the repository's Lean~4.34.1 workspace (60/60 jobs, 0 \texttt{sorry} across the layer).
+\end{itemize}
+SciPy's HiGHS is used only inside \texttt{feasible\_fast} (a float proposal of a maximiser, confirmed exactly) and \texttt{robust\_values\_two\_window} (a float proposal of $(\mu^\ast,w^\ast)$, confirmed exactly on both sides); without SciPy the former falls back to the exact programme and the latter reports the robust values as unavailable, in which case checks D2.2--D2.4 and D2.6 are skipped and the remaining checks are unaffected.
+
+\subsection{Check list}
+Output of the full run (the identifiers are those quoted in the main text).
+\begin{footnotesize}
+\begin{longtable}{p{1.1cm}p{12.6cm}p{0.9cm}}
+\toprule
+id & statement verified & result\\
+\midrule
+\endfirsthead
+\toprule
+id & statement verified & result\\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+\input{si_parts/tab_checks.tex}
+\end{longtable}
+\end{footnotesize}
+
+\subsection{Lean scope list}
+Declarations of \texttt{Minimax\_Dual.lean} ($22$ theorems and $4$ definitions---\texttt{b2k}, \texttt{parity}$\psi$, $\psi$\texttt{single}, \texttt{unifMass}---no \texttt{sorry}; check L1.1):
+\begin{itemize}[leftmargin=1.4em,itemsep=0pt]\sloppy
+\item arithmetic helpers over the ordered-field interface ($13$): \texttt{one\_lt\_two}, \texttt{zero\_lt\_two}, \texttt{half\_pos}, \texttt{half\_add\_half}, \texttt{neg\_of\_pos}, \texttt{neg\_pos\_of\_neg}, \texttt{lt\_of\_neg\_pos}, \texttt{neg\_nonpos\_of\_nonpos}, \texttt{neg\_add\_dist}, \texttt{sub\_le\_sub}, \texttt{sub\_neg\_of\_lt}, \texttt{not\_zero\_le\_neg\_one}, \texttt{half\_mul\_neg};
+\item \texttt{dual\_certificate\_sound}: for any types of rows and actions and any finite-mass measure $\mu$ on the rows, if the $\mu$-pooled row is strictly negative at every action then no action is safe for all rows (main Proposition~\mref{prop:nonconvex}(i), soundness for arbitrary action sets);
+\item \texttt{parity\_common\_safe\_empty}, \texttt{parity\_no\_measure\_certifies}: on the parity rows over the two-point action type no common safe action exists, and no finite-mass measure certifies (main Proposition~\mref{prop:nonconvex}(iii));
+\item \texttt{two\_row\_average}, $\psi$\texttt{single\_sum} (the Lean name begins with the Greek letter), \texttt{singleton\_uniform}, \texttt{singleton\_every\_measure} and \texttt{singleton\_worst\_\allowbreak witnesses}: on a single-state atom with two shock rows, the uniform measure certifies iff the average row is negative, every measure certifies iff the worst row is negative, and the worst-row witnesses are the two shock values (the singleton recoveries behind the physical test);
+\item \texttt{benchmark\_obstruction}: if $c_1+c_2<2\le u_1+u_2$ then $\tfr12\bigl((c_1-u_1)+(c_2-u_2)\bigr)<0$ (the algebra of main Proposition~\mref{prop:benchmark}(iii); check L1.2 confirms the hypothesis at $Y=6$).
+\end{itemize}
+Not formalised: Sion's converse, Helly sparsity, the polyhedral recovery in general, the taxonomy proposition, the benchmark laws as functions of $Y$ and $D$, and the dynamic layer.
+
+\subsection{Figure provenance}
+Figure~1: panels (a)--(c) plot the rows named in the caption on $[0,1]$ and mark the values $-\tfr1{10}$, $+\tfr1{10}$, $-1$, $0$ returned by checks S1.1--S1.5; panel (d) draws the rows of the tight family for $k=2$ on $[0,2]^2$. Figure~2: caps and margins from \texttt{bench\_caps} and the closed forms verified by checks B1--B4; the demand-floor law from \texttt{bench\_Ystar}. Figure~3: panel (a) from the node values of check D1.2; panel (b) from the sweep stored in \texttt{results.json} (checks D2.1--D2.2). Figure~4: panel (a) from the histograms of checks S3.1--S3.5; panel (b) from \texttt{gamma\_h} (check G1.1). The figure script asserts nothing itself; it reads the numbers the verification script has already asserted.
