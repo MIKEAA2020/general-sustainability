@@ -1,0 +1,155 @@
+/-
+  Formalizations.EBC_Classification_v3
+  ====================================
+
+  **The arithmetic reduction that closes `prop:bands` (iii).**
+
+  `EBC_Classification_v2.far_pair_sum_bound` leaves
+
+      `5 · ((1 − z₀) + (1 − z₀) + L) ≤ L · 4`
+
+  for two cells at Hamming distance `≥ 2` that both survive `us` from
+  `z₀`, with `L = |us|`. This module turns that into
+
+      `L ≤ 10 · (z₀ − 1)`,
+
+  which is the statement with content: at `z₀ = 1` it says `L ≤ 0`, so
+  nothing nonempty survives (how `cor_hamming_m4` goes through); at
+  `z₀ = 1.1` it says `L ≤ 1`, so such a pair survives at most one step
+  and cannot appear in any set that survives at *all* horizons. For
+  larger `z₀` it bounds the horizon by `10·(z₀ − 1)`, which is still
+  fatal to a claim of survival at every horizon.
+
+  The route, all of it by rearrangement and scaling:
+
+  1. distribute the `5` and collect `A + A` into `10·A`
+     (`far_pair_sum_bound_expanded`);
+  2. move `5·L` to the right and simplify `4·L − 5·L = −L`;
+  3. negate.
+
+  No division anywhere — as throughout the layer.
+
+  Contents:
+
+  * `two_tenths` — `tenth + tenth = 2/10`, used only for the record.
+  * `five_add_five_eq_ten`, `four_sub_five_eq_neg_one` — the two numeral
+    facts the rearrangement needs.
+  * **`far_pair_sum_bound_expanded`** — step 1.
+  * **`far_pair_horizon_bound`** — steps 2–3: `L ≤ 10·(z₀ − 1)`.
+-/
+
+import Formalizations.Prelude
+import Formalizations.EBC_ExactBelief_v2
+import Formalizations.EBC_ExactBelief_v3
+import Formalizations.EBC_Dynamics
+import Formalizations.EBC_Hamming
+import Formalizations.EBC_Bands
+import Formalizations.EBC_Bands_v2
+import Formalizations.EBC_Pairs
+import Formalizations.EBC_Pairs_v2
+import Formalizations.EBC_Pairs_v3
+import Formalizations.EBC_Classification
+import Formalizations.EBC_Classification_v2
+import Formalizations.RatArith
+
+open Formalizations.EBC
+
+namespace Formalizations.EBC
+
+variable {K : Type} [OrdField K]
+
+/-- `5 + 5 = 10`. -/
+theorem five_add_five_eq_ten : five (K := K) + five = ten := by
+  change natToK (K := K) 5 + natToK (K := K) 5 = natToK (K := K) 10
+  rw [← natToK_add]
+
+/-- `4 − 5 = −1`: adding `5` to both sides gives `4 = 5 + (−1) = 4`. -/
+theorem four_sub_five_eq_neg_one : four (K := K) - five = -(1 : K) := by
+  apply add_left_cancel (a := natToK (K := K) 5)
+  calc
+    natToK (K := K) 5 + (natToK (K := K) 4 - natToK (K := K) 5)
+        = natToK (K := K) 4 := by rw [add_comm, sub_add_cancel]
+    _ = natToK (K := K) 5 + (-(1 : K)) := by
+        apply add_left_cancel (a := (1 : K))
+        calc
+          (1 : K) + natToK (K := K) 4 = natToK (K := K) 5 := by
+              rw [show (1 : K) = natToK (K := K) 1 by simp [natToK]]
+              rw [← natToK_add]
+          _ = (1 : K) + (natToK (K := K) 5 + (-(1 : K))) := by
+              rw [← add_assoc, add_comm (1 : K) (natToK (K := K) 5), add_assoc]
+              have hz : (1 : K) + (-(1 : K)) = 0 := by rw [← sub_eq, sub_self]
+              rw [hz]
+              simp
+
+/-- `1 − z = −(z − 1)`. -/
+theorem one_sub_eq_neg_sub {z : K} : (1 : K) - z = -(z - (1 : K)) := by
+  rw [sub_eq, sub_eq, neg_add, neg_neg, add_comm]
+
+/-! ## Step 1: distribute and collect -/
+
+/-- **The bound with the `5` distributed and `A + A` collected into
+`10·A`**:
+
+    `10·(1 − z₀) + 5·L ≤ L·4`
+
+from `5·((1 − z₀) + (1 − z₀) + L) ≤ L·4`. -/
+theorem far_pair_sum_bound_expanded (I : List Nat) (θ θ' : Nat → Bool)
+    (us : List (Nat → Tri)) (z0 : K)
+    (hlen : I.length = 4) (hfar : 2 ≤ hamming I θ θ')
+    (hs : survivesTo I θ us z0) (hs' : survivesTo I θ' us z0) :
+    ten * ((1 : K) - z0) + five * natToK (K := K) us.length ≤
+      natToK (K := K) us.length * four := by
+  have hb := far_pair_sum_bound I θ θ' us z0 hlen hfar hs hs'
+  have hexp : five * (((1 : K) - z0) + ((1 : K) - z0) +
+      natToK (K := K) us.length) =
+      ten * ((1 : K) - z0) + five * natToK (K := K) us.length := by
+    rw [left_distrib, left_distrib]
+    rw [← right_distrib]
+    rw [five_add_five_eq_ten]
+  rwa [hexp] at hb
+
+/-! ## Steps 2–3: rearrange to a horizon bound -/
+
+/-- **The horizon bound.** Two cells at Hamming distance `≥ 2` that both
+survive `us` from `z₀` obey
+
+    `|us| ≤ 10 · (z₀ − 1)`
+
+(embedded, then read off). At `z₀ = 1` this forces `|us| = 0`; at
+`z₀ = 1.1`, `|us| ≤ 1`; in general the horizon is capped, so no such
+pair survives at every horizon. -/
+theorem far_pair_horizon_bound (I : List Nat) (θ θ' : Nat → Bool)
+    (us : List (Nat → Tri)) (z0 : K)
+    (hlen : I.length = 4) (hfar : 2 ≤ hamming I θ θ')
+    (hs : survivesTo I θ us z0) (hs' : survivesTo I θ' us z0) :
+    natToK (K := K) us.length ≤ ten * (z0 - (1 : K)) := by
+  have hb := far_pair_sum_bound_expanded I θ θ' us z0 hlen hfar hs hs'
+  rw [mul_comm (natToK (K := K) us.length) (four (K := K))] at hb
+  -- move the `5·L` across
+  have hA : ten * ((1 : K) - z0) ≤
+      four * natToK (K := K) us.length - five * natToK (K := K) us.length := by
+    have h := add_le_add_right hb (-(five * natToK (K := K) us.length))
+    have hleft : (ten * ((1 : K) - z0) + five * natToK (K := K) us.length) +
+          (-(five * natToK (K := K) us.length)) = ten * ((1 : K) - z0) := by
+        rw [add_assoc, add_neg_cancel, add_zero]
+    calc
+      ten * ((1 : K) - z0)
+          = (ten * ((1 : K) - z0) + five * natToK (K := K) us.length) +
+              (-(five * natToK (K := K) us.length)) := by rw [hleft]
+      _ ≤ four * natToK (K := K) us.length +
+              (-(five * natToK (K := K) us.length)) := h
+      _ = four * natToK (K := K) us.length -
+              five * natToK (K := K) us.length := by rw [sub_eq]
+  -- `4·L − 5·L = −L`
+  have hsub : four * natToK (K := K) us.length -
+      five * natToK (K := K) us.length = -natToK (K := K) us.length := by
+    rw [← sub_mul, four_sub_five_eq_neg_one, ← neg_mul]
+    simp
+  rw [hsub] at hA
+  -- negate: `L ≤ −(10·(1 − z₀)) = 10·(z₀ − 1)`
+  have hneg := neg_le_neg hA
+  have hEq : -(ten * ((1 : K) - z0)) = ten * (z0 - (1 : K)) := by
+    rw [one_sub_eq_neg_sub, mul_neg, neg_neg]
+  rwa [neg_neg, hEq] at hneg
+
+end Formalizations.EBC

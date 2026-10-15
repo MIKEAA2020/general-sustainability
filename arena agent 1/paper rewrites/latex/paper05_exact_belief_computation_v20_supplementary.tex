@@ -1,0 +1,693 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs,array,tabularx}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{graphicx}
+\usepackage{microtype}
+\usepackage{xcolor}
+\definecolor{linkblue}{rgb}{0,0.15,0.5}
+\usepackage[colorlinks=true,linkcolor=linkblue,citecolor=linkblue,urlcolor=linkblue]{hyperref}
+\usepackage{url}
+\allowdisplaybreaks
+\emergencystretch=2em
+
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\theequation}{S.\arabic{equation}}
+\renewcommand{\thetable}{S\arabic{section}.\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{section}.\arabic{figure}}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Qr}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calW}{\mathcal{W}}
+\let\GreekTheta\Theta
+\renewcommand{\Theta}{\boldsymbol{\GreekTheta}}
+\newcommand{\dH}{d_{\mathrm{H}}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Ball}{\operatorname{B}}
+\newcommand{\tfr}[2]{\tfrac{#1}{#2}}
+\newcommand{\Lstar}{L^{\ast}}
+\newcommand{\Fstar}{F^{\ast}}
+\newcommand{\mref}[1]{\csname mainlab@#1\endcsname}
+\newcommand{\meqref}[1]{(\mref{#1})}
+\setlength{\parskip}{2pt}
+\renewcommand{\arraystretch}{1.25}
+
+\begin{document}
+
+\title{\textbf{Supplementary material for}\\ \emph{Exactness is not the limitation: a linear criterion for blind survivable sets on the parameter cube and complete classifications for four, five and six parameters}}
+\author{Amin Abaee\\[0.3em]{\small Independent Researcher}\\[0.2em]{\small ORCID: \href{https://orcid.org/0000-0002-0019-1842}{0000-0002-0019-1842}\quad \href{mailto:amin_abaee@ut.ac.ir}{amin\_abaee@ut.ac.ir}}}
+\date{October 15, 2026}
+\maketitle
+
+\section*{Contents of the supplement}
+S1 proofs omitted from the main text (the slack game, the finite-horizon corollary in its sharp form, the feedback recursion); S2 the four-cube record and the pair tables for $m=4,5,6$; S3 the five-cube record; S4 the six-cube record (clique orbits, maximal survivable orbits with representative cells and certificates, census, obstructions, boundary sets); S5 observation tables (probe ladders, feedback game, deadline horizons); S6 alpha-set tables and values at probed beliefs; S7 floating-point study and runtimes; S8 verification record (check list, Lean inventory, figure provenance); S9 symbols and conventions. Main-text theorem and equation numbers are quoted as ``main Theorem~\mref{thm:criterion}'' etc.; they are read from the compiled main text, and the verification script confirms the correspondence (check TXT.2). All tables are generated from \texttt{results.json} by \texttt{make\_si\_tables.py}.
+% generated from the main-text .aux file: main-text numbers used by \mref / \meqref
+\expandafter\def\csname mainlab@sec:intro\endcsname{1}
+\expandafter\def\csname mainlab@tab:drift\endcsname{1}
+\expandafter\def\csname mainlab@sec:model\endcsname{2}
+\expandafter\def\csname mainlab@eq:drift\endcsname{1}
+\expandafter\def\csname mainlab@eq:D\endcsname{2}
+\expandafter\def\csname mainlab@def:blind\endcsname{2.1}
+\expandafter\def\csname mainlab@sec:criterion\endcsname{3}
+\expandafter\def\csname mainlab@eq:V\endcsname{3}
+\expandafter\def\csname mainlab@thm:criterion\endcsname{3.1}
+\expandafter\def\csname mainlab@cor:horizon\endcsname{3.2}
+\expandafter\def\csname mainlab@cor:pairs\endcsname{3.3}
+\expandafter\def\csname mainlab@cor:balls\endcsname{3.4}
+\expandafter\def\csname mainlab@cor:kleitman\endcsname{3.5}
+\expandafter\def\csname mainlab@prop:incomparable\endcsname{3.6}
+\expandafter\def\csname mainlab@sec:thresholds\endcsname{4}
+\expandafter\def\csname mainlab@def:game\endcsname{4.1}
+\expandafter\def\csname mainlab@tab:game\endcsname{2}
+\expandafter\def\csname mainlab@prop:game\endcsname{4.2}
+\expandafter\def\csname mainlab@prop:firststep\endcsname{4.4}
+\expandafter\def\csname mainlab@prop:pinned\endcsname{4.5}
+\expandafter\def\csname mainlab@sec:classification\endcsname{5}
+\expandafter\def\csname mainlab@thm:m4\endcsname{5.1}
+\expandafter\def\csname mainlab@thm:m5\endcsname{5.2}
+\expandafter\def\csname mainlab@thm:m6\endcsname{5.3}
+\expandafter\def\csname mainlab@tab:census\endcsname{3}
+\expandafter\def\csname mainlab@fig:census\endcsname{1}
+\expandafter\def\csname mainlab@cor:uniform\endcsname{5.4}
+\expandafter\def\csname mainlab@tab:ladder\endcsname{4}
+\expandafter\def\csname mainlab@sec:observation\endcsname{6}
+\expandafter\def\csname mainlab@prop:antichain\endcsname{6.1}
+\expandafter\def\csname mainlab@fig:horizon\endcsname{2}
+\expandafter\def\csname mainlab@prop:feedback\endcsname{6.3}
+\expandafter\def\csname mainlab@prop:deadline\endcsname{6.4}
+\expandafter\def\csname mainlab@sec:pbvi\endcsname{7}
+\expandafter\def\csname mainlab@tab:alpha\endcsname{5}
+\expandafter\def\csname mainlab@prop:pbvi\endcsname{7.1}
+\expandafter\def\csname mainlab@sec:float\endcsname{8}
+\expandafter\def\csname mainlab@fig:knife\endcsname{3}
+\expandafter\def\csname mainlab@tab:runtime\endcsname{6}
+\expandafter\def\csname mainlab@sec:verification\endcsname{9}
+\expandafter\def\csname mainlab@sec:related\endcsname{10}
+\section{Proofs omitted from the main text}\label{S:proofs}
+
+\subsection{Conventions}
+Cells $\theta\in\{\pm1\}^m$, actions $u\in\{\pm1\}^m\cup\{0\}$ (the hold is the zero vector), drift $D(u,\theta)=2\langle u,\theta\rangle-5$ in tenths, slack $s_\theta(t)=L+\sum_{\tau<t}D(u_\tau,\theta)$. A set $S$ is kept by a word from $L$ iff $s_\theta(t)\ge0$ for all $t$ and all $\theta\in S$.
+
+\subsection{The slack game (main Proposition~\mref{prop:game})}
+\begin{proof}
+(a) If $x$ is winning (for $k$ steps) and $x'\ge x$ componentwise, the same word keeps $x'$, since slacks only shift upward. The recursion for $\calW_{k+1}$ is the definition; for the minimal elements note that $x\in\calW_{k+1}$ iff $x+D(u)\ge w$ for some $u$ and some $w\in\min\calW_k$, i.e. $x\ge(w-D(u))^+$, because $x\ge0$ anyway.
+
+(b) $\calW\subseteq\bigcap_k\calW_k$ is trivial. Conversely, if $x\in\calW_k$ for every $k$, the tree of words that keep $x$ alive for their length is infinite and finitely branching ($|U_m|=2^m+1$), so it has an infinite branch by K\"onig's lemma, which is a word keeping $x$ for ever.
+
+(c) By definition of $\Lstar$ and of blind survivability at level $L$ (all cells start at the common slack $L$).
+
+(d) Let $x\in\calW^{c}$: a word keeps the clipped trajectory nonnegative for ever. The clipped trajectory is dominated by the unclipped one (clipping only lowers slacks, and the drifts do not depend on the state), so the same word keeps the unclipped trajectory nonnegative: $x\in\calW$. Now let $c$ dominate every coordinate of every minimal element of $\calW$ and let $x\in\calW\cap[0,c]^S$. Choose $u$ with $x+D(u)\in\calW$ (exists because $\calW$ is the greatest fixed point of the one-step operator, by (b) and the recursion in (a)); then $x+D(u)\ge w$ for some minimal $w\in\calW$, and $\min(x+D(u),c)\ge\min(w,c)=w$, so the clipped successor is again in $\calW\cap[0,c]^S$. Repeating, the player stays in $\calW\cap[0,c]^S$ for ever in the clipped game, i.e. $x\in\calW^{c}$. The computation: $\calW^{c}$ is the greatest fixed point of $X\mapsto\{x\in[0,c]^S:\exists u,\ \min(x+D(u),c)\in X\}$ on up-sets of the finite box, and the predecessor of an up-set with minimal elements $M$ has minimal elements $\min\{(w-D(u))^+:w\in M,u\}\cap[0,c]^S$: since $w_i\le c$ for every minimal $w$ of the box, $\min(x_i+D_i(u),c)\ge w_i$ iff $x_i+D_i(u)\ge w_i$, so the predecessor condition is $x\ge(w-D(u))^+$ exactly as in the unclipped game, intersected with the box. The iteration from $X_0=[0,c]^S$ is decreasing in a finite lattice and stabilises.
+
+(e) If a word keeps $x_0$ for $t$ steps, its state after $\tau\le t$ steps is dominated by an element of $R_\tau$ (induction: the successor of a dominated state is dominated by the successor of the dominating state, which is dominated by a maximal element of $R_{\tau+1}$). So $R_t=\emptyset$ means no word survives $t$ steps, and the last nonempty $R_{t-1}$ witnesses $t-1$ steps.
+\end{proof}
+
+\subsection{The certified thresholds}
+For a set $S$ the module computes $\calW^{c}(S)$ for $c=6,12,24,48,96$ in turn, records the least $L$ with $(L,\dots,L)\in\calW^{c}(S)$, and then runs the forward reachability of (e) from $(L-1,\dots,L-1)$ with a budget of $400$ steps. If the frontier empties, $\Lstar(S)=L$ is certified; otherwise the next cap is tried. For every set of this paper the first cap at which the game won was already certified except for the subsets of the boundary ten-sets, where cap $6$ returned $5$ and cap $12$ returned the certified $3$. The number of sets with an uncertified threshold is $0$ for $m=4,5,6$ (Table~S4.5).
+
+\subsection{The sharp form of the finite-horizon corollary}
+Main Corollary~\mref{cor:horizon} bounds the horizon by $\lfloor L/(5-2V)\rfloor$. The bound uses only the pooled inequality, so it is attained exactly when some word keeps the pooled slack $\sum_\theta q_\theta s_\theta(t)$ falling at the slowest rate $5-2V$ per step while no single cell of the support dies earlier. For a far pair at even $m$ the constant action at distance $\tfr{m-2}2$ from both cells gives both the drift $2m-5-4\cdot\tfr{m-2}{2}=-1$, so each cell loses exactly one tenth per step and the horizon is $L$. For $m=5$ and $h=3$ every action is at distances $(d_a,d_b)$ with $d_a+d_b\ge3$, so the drifts are $(1,-3)$, $(-3,1)$, $(-3,-3)$ or worse, and no action costs both cells exactly one tenth; the forward search gives $2\lfloor(L-1)/2\rfloor$ for $L\le20$ (Table~S2.2). For the whole cube ($V=0$) the hold attains the bound exactly.
+
+\subsection{The feedback recursion (main Proposition~\mref{prop:feedback})}
+Let $F(T,L)$ be as defined in the main text. Soundness: if $L\ge\Lstar(T)$ a blind word keeps every cell of $T$; otherwise the splitting action $u$ is played, the observed stock $L+D(u,\theta)$ identifies the class $T_k$ of the true cell, and by induction (classes are strictly smaller) a strategy keeps every cell of every class from its slack. Completeness: consider any strategy that keeps every cell of $T$ with the stock observed and let $u$ be its first action. If $u$ does not split $T$, the observation is uninformative and the strategy continues as a feedback strategy on $T$ from slack $L+D(u,\cdot)$, which is constant on $T$; if that drift is nonnegative then $T\subseteq\Ball(u,r^\ast)$ is blind-survivable at the floor, and if it is negative the continuation shows $F(T,L')$ for some $L'<L$, hence $F(T,L)$ by monotonicity. If $u$ splits $T$, the continuation is a feedback strategy on each class from its slack, so $F(T_k,L+k)$ holds for every class by induction, and $F(T,L)$ follows. The recursion is evaluated with memoisation on $(T,L)$ and the certified blind thresholds as the base case; the thresholds of the information classes met in the recursion at $m=4,5$ are all in $\{0,1,3,\infty\}$.
+\section{The four-cube record and the pair tables}\label{S:four}
+
+\subsection{Cube constants}
+Table~\ref{tab:S2cube} lists, for $m=4,\dots,8$, the drift by number of mismatches, the radius $r^\ast(m)$ and size of the floor balls, the pair bound $\delta_m$, Kleitman's bound $K(m)$ and the first-split cost $2m+5$ (main Table~\mref{tab:drift} and Corollaries~\mref{cor:pairs}--\mref{cor:kleitman}).
+\begin{table}[H]\centering\small
+\caption{Cube constants.}\label{tab:S2cube}
+\begin{tabular}{rrrrrrrrrr|rrrrr}
+\toprule
+$m$ & $h{=}0$ & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & $r^\ast$ & ball & $\delta_m$ & $K(m)$ & $2m+5$\\
+\midrule
+4 & 3 & -1 & -5 & -9 & -13 &  &  &  &  & 0 & 1 & 1 & 2 & 13\\
+5 & 5 & 1 & -3 & -7 & -11 & -15 &  &  &  & 1 & 6 & 2 & 6 & 15\\
+6 & 7 & 3 & -1 & -5 & -9 & -13 & -17 &  &  & 1 & 7 & 3 & 12 & 17\\
+7 & 9 & 5 & 1 & -3 & -7 & -11 & -15 & -19 &  & 2 & 29 & 4 & 29 & 19\\
+8 & 11 & 7 & 3 & -1 & -5 & -9 & -13 & -17 & -21 & 2 & 37 & 5 & 58 & 21\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Pairs}
+Table~\ref{tab:S2pairs} gives, for every distance $h$ and $m=4,5,6$, the value $V=m-h$, survivability, the certified threshold of survivable pairs, and for the others the exact maximal survival horizon from $L=0,5,10,15,20$ (forward reachability) against the LP bound $\lfloor L/(5-2V)\rfloor$ (main Corollary~\mref{cor:horizon}). The far pairs at distance $\delta_m+1$ attain the bound at $m=4,6$ and fall short by one or two steps at $m=5$ (S1.4).
+\begin{table}[H]\centering\scriptsize
+\caption{Pairs by distance: value, threshold, exact horizon versus LP bound.}\label{tab:S2pairs}
+\begin{tabular}{rrrlll}
+\toprule
+$m$ & $h$ & $V$ & survivable & $L^\ast$ & exact horizon (LP bound) from $L=0,5,10,15,20$\\
+\midrule
+4 & 0 & $4$ & yes & 0 & -- \\
+4 & 1 & $3$ & yes & 1 & -- \\
+4 & 2 & $2$ & no & -- & 0: 0 (0); 5: 5 (5); 10: 10 (10); 15: 15 (15); 20: 20 (20)\\
+4 & 3 & $1$ & no & -- & 0: 0 (0); 5: 1 (1); 10: 2 (3); 15: 4 (5); 20: 6 (6)\\
+4 & 4 & $0$ & no & -- & 0: 0 (0); 5: 1 (1); 10: 2 (2); 15: 3 (3); 20: 4 (4)\\
+5 & 0 & $5$ & yes & 0 & -- \\
+5 & 1 & $4$ & yes & 0 & -- \\
+5 & 2 & $3$ & yes & 0 & -- \\
+5 & 3 & $2$ & no & -- & 0: 0 (0); 5: 4 (5); 10: 8 (10); 15: 14 (15); 20: 18 (20)\\
+5 & 4 & $1$ & no & -- & 0: 0 (0); 5: 1 (1); 10: 3 (3); 15: 5 (5); 20: 6 (6)\\
+5 & 5 & $0$ & no & -- & 0: 0 (0); 5: 1 (1); 10: 2 (2); 15: 3 (3); 20: 4 (4)\\
+6 & 0 & $6$ & yes & 0 & -- \\
+6 & 1 & $5$ & yes & 0 & -- \\
+6 & 2 & $4$ & yes & 0 & -- \\
+6 & 3 & $3$ & yes & 1 & -- \\
+6 & 4 & $2$ & no & -- & 0: 0 (0); 5: 5 (5); 10: 10 (10); 15: 15 (15); 20: 20 (20)\\
+6 & 5 & $1$ & no & -- & 0: 0 (0); 5: 1 (1); 10: 2 (3); 15: 4 (5); 20: 6 (6)\\
+6 & 6 & $0$ & no & -- & 0: 0 (0); 5: 1 (1); 10: 2 (2); 15: 3 (3); 20: 4 (4)\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{The four-cube}
+$G_4$ is the four-cube graph; its $32$ maximal cliques are the edges. The maximal survivable sets are the $32$ adjacent pairs ($V=3$, $\Lstar=1$ certified: the saturated game at cap $6$ has the antichain $\{(0,1),(1,0)\}$, and $(0,0)$ is lost in the first step). Table~\ref{tab:S2max} is the certificate record; the census is in Table~S4.4 together with the other cubes. The adjacent pair $\{a,b\}$ from $L=1$ under the alternating word $a,b,a,b,\dots$ has the slack trajectories $1,4,3,6,5,\dots$ and $1,0,3,2,5,\dots$; the matched action gives $+3$, the mismatched $-1$.
+\begin{table}[H]\centering\small
+\caption{Four-cube maximal survivable orbits with certificates.}\label{tab:S2max}
+\begin{tabular}{rrrrrrrrlr}
+\toprule
+size & orbit & $V$ & $f(S)$ & $L^\ast$ & cap & antichain & lost after & word period / dip & boundary subsets\\
+\midrule
+2 & 32 & $3$ & 1 & 1 & 6 & 2 & 0 & 2 / 1 & 0\\
+\bottomrule
+\end{tabular}
+\end{table}
+\section{The five-cube record}\label{S:five}
+
+Table~\ref{tab:S3cl} lists the three orbits of maximal cliques of $G_5$ (distance $\le2$) with the exact value and a maximiser; Table~\ref{tab:S3max} the two orbits of maximal survivable sets with their certificates. The tetrahedron orbit ($80$ cliques of four cells pairwise at distance $2$) has $V=2$ with the uniform certificate: for the representative $\{(1,1,1,1,1),(1,1,1,-1,-1),(1,1,-1,1,-1),(1,1,-1,-1,1)\}$ the pooled cell is $(1,1,0,0,0)$. The square (a two-dimensional face) has $V=3$ with the maximiser listed in Table~\ref{tab:S3cl}, first-step bound $3$ and certified threshold $3$; the product word of the maximiser has period $4$ and dip $3$, and the opposite-corner alternation of the earlier editions is one of its orderings. Every clique of at most three cells of $G_5$ lies in a radius-one ball, so the census changes only at $L=3$: $1{,}616$ survivable sets (the nonempty subsets of the $32$ balls, which overlap) for $L\le2$ and $1{,}696$ for $L\ge3$, against $1{,}776$ pairwise-admissible sets.
+\begin{table}[H]\centering\small
+\caption{Maximal cliques of $G_5$ by orbit.}\label{tab:S3cl}
+\begin{tabular}{rrrll}
+\toprule
+size & orbit & $V$ & maximiser $y$ & survivable\\
+\midrule
+6 & 32 & $3$ & $(-1,1,-1,-1,1)$ & yes\\
+4 & 80 & $3$ & $(-1,1,0,0,1)$ & yes\\
+4 & 80 & $2$ & $(0,1,0,0,1)$ & no\\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{table}[H]\centering\small
+\caption{Five-cube maximal survivable orbits with certificates.}\label{tab:S3max}
+\begin{tabular}{rrrrrrrrlr}
+\toprule
+size & orbit & $V$ & $f(S)$ & $L^\ast$ & cap & antichain & lost after & word period / dip & boundary subsets\\
+\midrule
+6 & 32 & $3$ & 0 & 0 & -- & 1 & -- & 1 / 0 & 0\\
+4 & 80 & $3$ & 3 & 3 & 6 & 4 & 0 & 4 / 3 & 0\\
+\bottomrule
+\end{tabular}
+\end{table}
+\section{The six-cube record}\label{S:six}
+
+\subsection{Maximal cliques and their orbits}
+$G_6$ (distance $\le3$) has $10{,}752$ maximal cliques in seven orbits of $B_6$ ($|B_6|=46{,}080$); Table~\ref{tab:S4cl} gives size, orbit size, exact value and a maximiser. The orbit decomposition is certified by comparing the orbit size of each representative (computed by counting stabilising group elements) with the size of its invariant class.
+\begin{table}[H]\centering\small
+\caption{Maximal cliques of $G_6$ by orbit (main Theorem~\mref{thm:m6}).}\label{tab:S4cl}
+\begin{tabular}{rrrll}
+\toprule
+size & orbit & $V$ & maximiser $y$ & survivable\\
+\midrule
+12 & 192 & $3$ & $(-1,-1,0,1,1,-1)$ & yes\\
+10 & 1{,}280 & $\tfrac{5}{2}$ & $(-1,-1/2,1/2,1/2,1,-1)$ & yes\\
+8 & 160 & $3$ & $(0,-1,0,0,1,-1)$ & yes\\
+8 & 2{,}880 & $2$ & $(0,0,0,0,1,-1)$ & no\\
+8 & 3{,}840 & $2$ & $(0,0,0,0,1,-1)$ & no\\
+8 & 1{,}920 & $2$ & $(0,0,0,0,1,-1)$ & no\\
+8 & 480 & $2$ & $(0,0,0,0,1,-1)$ & no\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Maximal survivable sets}
+Table~\ref{tab:S4max} is the certificate record of the three maximal survivable orbits; the representatives, maximisers and the thresholds of all their nonempty subsets follow.
+\begin{table}[H]\centering\small
+\caption{Six-cube maximal survivable orbits with certificates; the last column counts the nonempty subsets of the representative with $V=\tfrac52$ exactly.}\label{tab:S4max}
+\begin{tabular}{rrrrrrrrlr}
+\toprule
+size & orbit & $V$ & $f(S)$ & $L^\ast$ & cap & antichain & lost after & word period / dip & boundary subsets\\
+\midrule
+12 & 192 & $3$ & 1 & 1 & 6 & 22 & 0 & 2 / 1 & 0\\
+10 & 1{,}280 & $\tfrac{5}{2}$ & 1 & 3 & 12 & 57 & 2 & 64 / 48 & 112\\
+8 & 160 & $3$ & 5 & 5 & 6 & 8 & 0 & 8 / 7 & 0\\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{description}[leftmargin=1.5em,style=nextline]
+\item[12 cells, orbit 192.] $y=(-1,-1,0,1,1,-1)$. Cells: \texttt{----+-}, \texttt{---+--}, \texttt{---++-}, \texttt{---+++}, \texttt{--+-+-}, \texttt{--++--}, \texttt{--+++-}, \texttt{--++++}, \texttt{-+-++-}, \texttt{-++++-}, \texttt{+--++-}, \texttt{+-+++-}. Nonempty subsets by threshold: $L^\ast=0$: 266, $L^\ast=1$: 3{,}829.
+\item[10 cells, orbit 1{,}280.] $y=(-1,-1/2,1/2,1/2,1,-1)$. Cells: \texttt{----+-}, \texttt{---++-}, \texttt{--+-+-}, \texttt{--++--}, \texttt{--+++-}, \texttt{--++++}, \texttt{-+-++-}, \texttt{-++-+-}, \texttt{-++++-}, \texttt{+-+++-}. Nonempty subsets by threshold: $L^\ast=0$: 161, $L^\ast=1$: 750, $L^\ast=3$: 112.
+\item[8 cells, orbit 160.] $y=(0,-1,0,0,1,-1)$. Cells: \texttt{----+-}, \texttt{---++-}, \texttt{--+-+-}, \texttt{--+++-}, \texttt{+---+-}, \texttt{+--++-}, \texttt{+-+-+-}, \texttt{+-+++-}. Nonempty subsets by threshold: $L^\ast=0$: 72, $L^\ast=1$: 182, $L^\ast=5$: 1.
+\end{description}
+\medskip
+The maximal sets at each level (main Table~\mref{tab:census}) are: $L=0$ the $64$ radius-one balls; $L=1,2$ the $192$ cylinders and $1{,}280$ punctured subcubes (a three-dimensional subcube minus one vertex; $V=3$ with $y=(-1,-1,-1,0,0,0)$ for the subcube $\theta_1=\theta_2=\theta_3=-1$ minus $(-1,-1,-1,1,1,1)$; first-step bound and threshold $1$; each lies in one full subcube and in one boundary ten-set); $L=3,4$ the cylinders and the boundary ten-sets; $L\ge5$ all three maximal orbits.
+
+\subsection{Census, thresholds, obstructions}
+\begin{table}[H]\centering\small
+\caption{Level census for $m=4,5,6$ (main Table~\mref{tab:census} with all levels).}\label{tab:S4census}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{rrrrlrl}
+\toprule
+$m$ & $L$ & survivable & maximal & sizes & admissible & power set\\
+\midrule
+4 & 0 & 16 & 16 & $1\times16$ & 48 & $2^{16}$\\
+4 & 1 & 48 & 32 & $2\times32$ & 48 & $2^{16}$\\
+5 & 0 & 1{,}616 & 32 & $6\times32$ & 1{,}776 & $2^{32}$\\
+5 & 1 & 1{,}616 & 32 & $6\times32$ & 1{,}776 & $2^{32}$\\
+5 & 2 & 1{,}616 & 32 & $6\times32$ & 1{,}776 & $2^{32}$\\
+5 & 3 & 1{,}696 & 112 & $4\times80$, $6\times32$ & 1{,}776 & $2^{32}$\\
+6 & 0 & 7{,}072 & 64 & $7\times64$ & 853{,}680 & $2^{64}$\\
+6 & 1 & 631{,}440 & 1{,}472 & $7\times1{,}280$, $12\times192$ & 853{,}680 & $2^{64}$\\
+6 & 2 & 631{,}440 & 1{,}472 & $7\times1{,}280$, $12\times192$ & 853{,}680 & $2^{64}$\\
+6 & 3 & 774{,}800 & 1{,}472 & $10\times1{,}280$, $12\times192$ & 853{,}680 & $2^{64}$\\
+6 & 4 & 774{,}800 & 1{,}472 & $10\times1{,}280$, $12\times192$ & 853{,}680 & $2^{64}$\\
+6 & 5 & 774{,}960 & 1{,}632 & $8\times160$, $10\times1{,}280$, $12\times192$ & 853{,}680 & $2^{64}$\\
+\bottomrule
+\end{tabular}}
+\end{table}
+\begin{table}[H]\centering\small
+\caption{Threshold histograms over all survivable sets, number of sets with $V=\tfrac52$ exactly, and number of thresholds left uncertified by the two-sided scheme.}\label{tab:S4thr}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{rrlrr}
+\toprule
+$m$ & survivable sets & threshold histogram & $V=\tfrac52$ exactly & uncertified\\
+\midrule
+4 & 48 & $L^\ast=0$: 16, $L^\ast=1$: 32 & 0 & 0\\
+5 & 1{,}696 & $L^\ast=0$: 1{,}616, $L^\ast=3$: 80 & 0 & 0\\
+6 & 774{,}960 & $L^\ast=0$: 7{,}072, $L^\ast=1$: 624{,}368, $L^\ast=3$: 143{,}360, $L^\ast=5$: 160 & 143{,}360 & 0\\
+\bottomrule
+\end{tabular}}
+\end{table}
+\begin{table}[H]\centering\small
+\caption{Obstructions: far pairs by distance with their values, admissible non-survivable sets, minimal obstructions inside the admissible family by size and value, and the largest value of any minimal obstruction (main Corollary~\mref{cor:uniform}).}\label{tab:S4obs}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{rp{4.2cm}rp{4.5cm}r}
+\toprule
+$m$ & far pairs by distance & admissible non-survivable & minimal obstructions inside the admissible family & $\max V$\\
+\midrule
+4 & $h=2$: 48 ($V=2$), $h=3$: 32 ($V=1$), $h=4$: 8 ($V=0$) & 0 & none & $2$\\
+5 & $h=3$: 160 ($V=2$), $h=4$: 80 ($V=1$), $h=5$: 16 ($V=0$) & 80 & 4 cells: 80 ($V=2$) & $2$\\
+6 & $h=4$: 480 ($V=2$), $h=5$: 192 ($V=1$), $h=6$: 32 ($V=0$) & 78{,}720 & 4 cells: 1{,}440 ($V=2$), 5 cells: 960 ($V=2$) & $2$\\
+\bottomrule
+\end{tabular}}
+\end{table}
+Representative minimal obstructions of the six-cube are the four-cell and five-cell sets
+\begin{gather*}
+\{(1,1,-1,1,-1,1),\ (1,1,-1,1,1,-1),\ (1,1,1,-1,-1,-1),\ (1,1,1,-1,1,1)\},\\
+\{(1,1,-1,-1,1,1),\ (1,1,-1,1,-1,1),\ (1,1,-1,1,1,-1),\ (1,1,1,-1,-1,-1),\ (1,1,1,1,1,1)\},
+\end{gather*}
+both with $V=2$; for the four-set the uniform certificate pools to $(1,1,0,0,0,0)$, for the five-set the certificate $q=(\tfr16,\tfr16,\tfr16,\tfr13,\tfr16)$ (in the order listed) pools to $(1,1,0,0,0,0)$ as well.
+\section{Observation tables}\label{S:obs}
+
+\begin{table}[H]\centering\small
+\caption{Probe ladder for all levels at which it changes: blind value of the uniform belief on a $j$-dimensional subcube (main Table~\mref{tab:ladder}).}\label{tab:S5ladder}
+\begin{tabular}{rrccccccc}
+\toprule
+$m$ & $L$ & $j=6$ & $5$ & $4$ & $3$ & $2$ & $1$ & $0$\\
+\midrule
+4 & 0 &  &  & $\tfrac{1}{16}$ & $\tfrac{1}{8}$ & $\tfrac{1}{4}$ & $\tfrac{1}{2}$ & $1$\\
+4 & 1 &  &  & $\tfrac{1}{8}$ & $\tfrac{1}{4}$ & $\tfrac{1}{2}$ & $1$ & $1$\\
+5 & 0 & $\tfrac{3}{16}$ & $\tfrac{5}{16}$ & $\tfrac{1}{2}$ & $\tfrac{3}{4}$ & $1$ & $1$\\
+5 & 1 & $\tfrac{3}{16}$ & $\tfrac{5}{16}$ & $\tfrac{1}{2}$ & $\tfrac{3}{4}$ & $1$ & $1$\\
+5 & 2 & $\tfrac{3}{16}$ & $\tfrac{5}{16}$ & $\tfrac{1}{2}$ & $\tfrac{3}{4}$ & $1$ & $1$\\
+5 & 3 & $\tfrac{3}{16}$ & $\tfrac{5}{16}$ & $\tfrac{1}{2}$ & $1$ & $1$ & $1$\\
+6 & 0 & $\tfrac{7}{64}$ & $\tfrac{3}{16}$ & $\tfrac{5}{16}$ & $\tfrac{1}{2}$ & $\tfrac{3}{4}$ & $1$ & $1$\\
+6 & 1 & $\tfrac{3}{16}$ & $\tfrac{5}{16}$ & $\tfrac{1}{2}$ & $\tfrac{7}{8}$ & $1$ & $1$ & $1$\\
+6 & 2 & $\tfrac{3}{16}$ & $\tfrac{5}{16}$ & $\tfrac{1}{2}$ & $\tfrac{7}{8}$ & $1$ & $1$ & $1$\\
+6 & 3 & $\tfrac{3}{16}$ & $\tfrac{5}{16}$ & $\tfrac{1}{2}$ & $\tfrac{7}{8}$ & $1$ & $1$ & $1$\\
+6 & 4 & $\tfrac{3}{16}$ & $\tfrac{5}{16}$ & $\tfrac{1}{2}$ & $\tfrac{7}{8}$ & $1$ & $1$ & $1$\\
+6 & 5 & $\tfrac{3}{16}$ & $\tfrac{5}{16}$ & $\tfrac{1}{2}$ & $1$ & $1$ & $1$ & $1$\\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{table}[H]\centering\small
+\caption{Feedback game: blind and feedback thresholds of the whole cube, of subcubes and of the distance shells of a first action, $m=4,5$ (main Proposition~\mref{prop:feedback}).}\label{tab:S5fb}
+\begin{tabular}{rlrrr}
+\toprule
+$m$ & class & cells & blind $L^\ast$ & feedback $F^\ast$\\
+\midrule
+4 & whole cube & $2^4$ & $\infty$ & 23\\
+4 & subcube $j=1$ & $2^1$ & 1 & 1\\
+4 & subcube $j=2$ & $2^2$ & $\infty$ & 6\\
+4 & subcube $j=3$ & $2^3$ & $\infty$ & 14\\
+4 & shell $h=0$ & 1 & 0 & 0\\
+4 & shell $h=1$ & 4 & $\infty$ & 14\\
+4 & shell $h=2$ & 6 & $\infty$ & 18\\
+4 & shell $h=3$ & 4 & $\infty$ & 14\\
+4 & shell $h=4$ & 1 & 0 & 0\\
+5 & whole cube & $2^5$ & $\infty$ & 18\\
+5 & subcube $j=1$ & $2^1$ & 0 & 0\\
+5 & subcube $j=2$ & $2^2$ & 3 & 3\\
+5 & subcube $j=3$ & $2^3$ & $\infty$ & 7\\
+5 & subcube $j=4$ & $2^4$ & $\infty$ & 11\\
+5 & shell $h=0$ & 1 & 0 & 0\\
+5 & shell $h=1$ & 5 & 0 & 0\\
+5 & shell $h=2$ & 10 & $\infty$ & 11\\
+5 & shell $h=3$ & 10 & $\infty$ & 11\\
+5 & shell $h=4$ & 5 & 0 & 0\\
+5 & shell $h=5$ & 1 & 0 & 0\\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{table}[H]\centering\small
+\caption{Total ignorance: exact maximal horizon of the whole cube from slack $L$, the LP bound and the number of holds affordable (main Proposition~\mref{prop:deadline}).}\label{tab:S5dl}
+\begin{tabular}{rrrrr}
+\toprule
+$m$ & $L$ & exact horizon & LP bound $\lfloor L/5\rfloor$ & hold steps\\
+\midrule
+4 & 0 & 0 & 0 & 0\\
+4 & 5 & 1 & 1 & 1\\
+4 & 10 & 2 & 2 & 2\\
+4 & 13 & 2 & 2 & 2\\
+4 & 15 & 3 & 3 & 3\\
+4 & 20 & 4 & 4 & 4\\
+4 & 25 & 5 & 5 & 5\\
+5 & 0 & 0 & 0 & 0\\
+5 & 5 & 1 & 1 & 1\\
+5 & 10 & 2 & 2 & 2\\
+5 & 13 & 2 & 2 & 2\\
+5 & 15 & 3 & 3 & 3\\
+5 & 20 & 4 & 4 & 4\\
+5 & 25 & 5 & 5 & 5\\
+6 & 0 & 0 & 0 & 0\\
+6 & 5 & 1 & 1 & 1\\
+6 & 10 & 2 & 2 & 2\\
+6 & 13 & 2 & 2 & 2\\
+6 & 15 & 3 & 3 & 3\\
+6 & 20 & 4 & 4 & 4\\
+6 & 25 & 5 & 5 & 5\\
+\bottomrule
+\end{tabular}
+\end{table}
+The cell-sum identity $\sum_\theta D(u,\theta)=-5\cdot2^m$ holds for all $2^m+1$ actions at $m=4,5,6$ (values $-80,-160,-320$), i.e. $-\tfrac12$ per cell per period in stock units.
+\section{Alpha-set tables and values at probed beliefs}\label{S:alpha}
+
+Tables~\ref{tab:S6a4}--\ref{tab:S6a5} give $|\calA_k(L)|$ for $k=1,\dots,4$ and $L=0,\dots,15$ at $m=4$ ($17^k$ words) and $m=5$ ($33^k$ words), with the number of masks that are blind-survivable sets in parentheses; the $k=4$ columns reproduce the counts of the earlier scripts (\texttt{fivecube\_alpha\_check}). Tables~\ref{tab:S6v4}--\ref{tab:S6v5} give, for seven beliefs, the four finite-horizon values $\mathcal V^{(1)}_L/\mathcal V^{(2)}_L/\mathcal V^{(3)}_L/\mathcal V^{(4)}_L$ followed by the indefinite value $\mathcal V_L$. The beliefs: uniform; a far pair (mass $\tfr12$ on a cell and on a cell at distance $m-2$); an antipodal pair; a radius-one ball (mass $\tfr12$ spread uniformly) plus its antipode (mass $\tfr12$); three random beliefs with integer weights in $\{1,\dots,20\}$ drawn with \texttt{random.Random(7)} (the first three of the five computed). The equality $\mathcal V^{(4)}_L=\mathcal V_L$ holds for all beliefs at $L\le3$ at $m=4$ and at $L\le4$ at $m=5$ in these tables and fails at the next level, consistent with main Proposition~\mref{prop:pbvi}: at $m=5$ no non-survivable set outlives $2\lfloor(L-1)/2\rfloor$ steps, which is below $4$ for $L\le4$.
+\begin{table}[H]\centering\small
+\caption{$|\calA_k(L)|$ (survivable masks) at $m=4$.}\label{tab:S6a4}
+\begin{tabular}{rllll}
+\toprule
+$L$ & $k=1$ & $k=2$ & $k=3$ & $k=4$\\
+\midrule
+0 & 17 (16) & 17 (16) & 17 (16) & 17 (16)\\
+1 & 17 (0) & 49 (48) & 49 (48) & 49 (48)\\
+2 & 17 (0) & 161 (48) & 49 (48) & 49 (48)\\
+3 & 17 (0) & 161 (48) & 209 (48) & 49 (48)\\
+4 & 17 (0) & 161 (48) & 209 (48) & 209 (48)\\
+5 & 17 (0) & 89 (48) & 161 (48) & 161 (48)\\
+6 & 17 (0) & 137 (0) & 161 (48) & 161 (48)\\
+7 & 17 (0) & 137 (0) & 313 (48) & 185 (48)\\
+8 & 17 (0) & 137 (0) & 313 (48) & 361 (48)\\
+9 & 17 (0) & 81 (0) & 249 (48) & 297 (48)\\
+10 & 17 (0) & 97 (0) & 153 (48) & 249 (48)\\
+11 & 17 (0) & 97 (0) & 417 (0) & 249 (48)\\
+12 & 17 (0) & 97 (0) & 417 (0) & 857 (48)\\
+13 & 1 (0) & 81 (0) & 401 (0) & 793 (48)\\
+14 & 1 (0) & 89 (0) & 241 (0) & 729 (48)\\
+15 & 1 (0) & 89 (0) & 321 (0) & 545 (48)\\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{table}[H]\centering\small
+\caption{$|\calA_k(L)|$ (survivable masks) at $m=5$.}\label{tab:S6a5}
+\begin{tabular}{rllll}
+\toprule
+$L$ & $k=1$ & $k=2$ & $k=3$ & $k=4$\\
+\midrule
+0 & 33 (32) & 465 (464) & 625 (624) & 945 (944)\\
+1 & 33 (32) & 465 (464) & 945 (944) & 945 (944)\\
+2 & 33 (32) & 705 (704) & 945 (944) & 945 (944)\\
+3 & 33 (0) & 545 (144) & 1{,}185 (1{,}184) & 1{,}345 (1{,}344)\\
+4 & 33 (0) & 513 (112) & 1{,}185 (1{,}184) & 1{,}505 (1{,}504)\\
+5 & 33 (0) & 513 (112) & 3{,}185 (1{,}344) & 5{,}265 (1{,}504)\\
+6 & 33 (0) & 945 (32) & 3{,}185 (1{,}344) & 5{,}265 (1{,}504)\\
+7 & 33 (0) & 425 (32) & 2{,}345 (1{,}104) & 3{,}505 (1{,}344)\\
+8 & 33 (0) & 393 (0) & 2{,}025 (784) & 6{,}065 (1{,}664)\\
+9 & 33 (0) & 393 (0) & 5{,}385 (752) & 9{,}625 (1{,}664)\\
+10 & 33 (0) & 705 (0) & 4{,}105 (752) & 7{,}705 (1{,}664)\\
+11 & 33 (0) & 275 (0) & 2{,}867 (224) & 6{,}937 (1{,}536)\\
+12 & 33 (0) & 307 (0) & 2{,}707 (224) & 14{,}649 (1{,}696)\\
+13 & 33 (0) & 307 (0) & 4{,}595 (0) & 15{,}929 (1{,}216)\\
+14 & 33 (0) & 265 (0) & 2{,}035 (0) & 12{,}937 (1{,}104)\\
+15 & 1 (0) & 233 (0) & 2{,}195 (0) & 11{,}145 (1{,}072)\\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{table}[H]\centering\tiny
+\caption{Values at probed beliefs, $m=4$: $\mathcal V^{(1)}/\mathcal V^{(2)}/\mathcal V^{(3)}/\mathcal V^{(4)}\mid\mathcal V_L$.}\label{tab:S6v4}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{rlllllll}
+\toprule
+$L$ & uniform & far pair & antipodal pair & ball + antipode & random 1 & random 2 & random 3\\
+\midrule
+0 & $\tfrac{1}{16}/\tfrac{1}{16}/\tfrac{1}{16}/\tfrac{1}{16} \mid \tfrac{1}{16}$ & $\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{19}{146}/\tfrac{19}{146}/\tfrac{19}{146}/\tfrac{19}{146} \mid \tfrac{19}{146}$ & $\tfrac{19}{161}/\tfrac{19}{161}/\tfrac{19}{161}/\tfrac{19}{161} \mid \tfrac{19}{161}$ & $\tfrac{19}{178}/\tfrac{19}{178}/\tfrac{19}{178}/\tfrac{19}{178} \mid \tfrac{19}{178}$\\
+1 & $\tfrac{5}{16}/\tfrac{1}{8}/\tfrac{1}{8}/\tfrac{1}{8} \mid \tfrac{1}{8}$ & $1/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{35}{73}/\tfrac{18}{73}/\tfrac{18}{73}/\tfrac{18}{73} \mid \tfrac{18}{73}$ & $\tfrac{67}{161}/\tfrac{38}{161}/\tfrac{38}{161}/\tfrac{38}{161} \mid \tfrac{38}{161}$ & $\tfrac{75}{178}/\tfrac{37}{178}/\tfrac{37}{178}/\tfrac{37}{178} \mid \tfrac{37}{178}$\\
+2 & $\tfrac{5}{16}/\tfrac{5}{16}/\tfrac{1}{8}/\tfrac{1}{8} \mid \tfrac{1}{8}$ & $1/1/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{35}{73}/\tfrac{35}{73}/\tfrac{18}{73}/\tfrac{18}{73} \mid \tfrac{18}{73}$ & $\tfrac{67}{161}/\tfrac{67}{161}/\tfrac{38}{161}/\tfrac{38}{161} \mid \tfrac{38}{161}$ & $\tfrac{75}{178}/\tfrac{75}{178}/\tfrac{37}{178}/\tfrac{37}{178} \mid \tfrac{37}{178}$\\
+3 & $\tfrac{5}{16}/\tfrac{5}{16}/\tfrac{5}{16}/\tfrac{1}{8} \mid \tfrac{1}{8}$ & $1/1/1/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{35}{73}/\tfrac{35}{73}/\tfrac{35}{73}/\tfrac{18}{73} \mid \tfrac{18}{73}$ & $\tfrac{67}{161}/\tfrac{67}{161}/\tfrac{67}{161}/\tfrac{38}{161} \mid \tfrac{38}{161}$ & $\tfrac{75}{178}/\tfrac{75}{178}/\tfrac{75}{178}/\tfrac{37}{178} \mid \tfrac{37}{178}$\\
+4 & $\tfrac{5}{16}/\tfrac{5}{16}/\tfrac{5}{16}/\tfrac{5}{16} \mid \tfrac{1}{8}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{35}{73}/\tfrac{35}{73}/\tfrac{35}{73}/\tfrac{35}{73} \mid \tfrac{18}{73}$ & $\tfrac{67}{161}/\tfrac{67}{161}/\tfrac{67}{161}/\tfrac{67}{161} \mid \tfrac{38}{161}$ & $\tfrac{75}{178}/\tfrac{75}{178}/\tfrac{75}{178}/\tfrac{75}{178} \mid \tfrac{37}{178}$\\
+5 & $1/\tfrac{5}{16}/\tfrac{5}{16}/\tfrac{5}{16} \mid \tfrac{1}{8}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $1/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/\tfrac{35}{73}/\tfrac{35}{73}/\tfrac{35}{73} \mid \tfrac{18}{73}$ & $1/\tfrac{67}{161}/\tfrac{67}{161}/\tfrac{67}{161} \mid \tfrac{38}{161}$ & $1/\tfrac{75}{178}/\tfrac{75}{178}/\tfrac{75}{178} \mid \tfrac{37}{178}$\\
+6 & $1/\tfrac{1}{2}/\tfrac{5}{16}/\tfrac{5}{16} \mid \tfrac{1}{8}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $1/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/\tfrac{7}{10}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/\tfrac{45}{73}/\tfrac{35}{73}/\tfrac{35}{73} \mid \tfrac{18}{73}$ & $1/\tfrac{96}{161}/\tfrac{67}{161}/\tfrac{67}{161} \mid \tfrac{38}{161}$ & $1/\tfrac{59}{89}/\tfrac{75}{178}/\tfrac{75}{178} \mid \tfrac{37}{178}$\\
+7 & $1/\tfrac{1}{2}/\tfrac{5}{16}/\tfrac{5}{16} \mid \tfrac{1}{8}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $1/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/\tfrac{7}{10}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/\tfrac{45}{73}/\tfrac{35}{73}/\tfrac{35}{73} \mid \tfrac{18}{73}$ & $1/\tfrac{96}{161}/\tfrac{67}{161}/\tfrac{67}{161} \mid \tfrac{38}{161}$ & $1/\tfrac{59}{89}/\tfrac{75}{178}/\tfrac{75}{178} \mid \tfrac{37}{178}$\\
+8 & $1/\tfrac{1}{2}/\tfrac{5}{16}/\tfrac{5}{16} \mid \tfrac{1}{8}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $1/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/\tfrac{7}{10}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/\tfrac{45}{73}/\tfrac{35}{73}/\tfrac{35}{73} \mid \tfrac{18}{73}$ & $1/\tfrac{96}{161}/\tfrac{67}{161}/\tfrac{67}{161} \mid \tfrac{38}{161}$ & $1/\tfrac{59}{89}/\tfrac{75}{178}/\tfrac{75}{178} \mid \tfrac{37}{178}$\\
+9 & $1/\tfrac{1}{2}/\tfrac{5}{16}/\tfrac{5}{16} \mid \tfrac{1}{8}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $1/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/\tfrac{7}{10}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/\tfrac{45}{73}/\tfrac{35}{73}/\tfrac{35}{73} \mid \tfrac{18}{73}$ & $1/\tfrac{96}{161}/\tfrac{67}{161}/\tfrac{67}{161} \mid \tfrac{38}{161}$ & $1/\tfrac{59}{89}/\tfrac{75}{178}/\tfrac{75}{178} \mid \tfrac{37}{178}$\\
+10 & $1/1/\tfrac{5}{16}/\tfrac{5}{16} \mid \tfrac{1}{8}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $1/1/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/1/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/1/\tfrac{35}{73}/\tfrac{35}{73} \mid \tfrac{18}{73}$ & $1/1/\tfrac{67}{161}/\tfrac{67}{161} \mid \tfrac{38}{161}$ & $1/1/\tfrac{75}{178}/\tfrac{75}{178} \mid \tfrac{37}{178}$\\
+11 & $1/1/\tfrac{1}{2}/\tfrac{5}{16} \mid \tfrac{1}{8}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $1/1/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/1/\tfrac{7}{10}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/1/\tfrac{45}{73}/\tfrac{35}{73} \mid \tfrac{18}{73}$ & $1/1/\tfrac{96}{161}/\tfrac{67}{161} \mid \tfrac{38}{161}$ & $1/1/\tfrac{59}{89}/\tfrac{75}{178} \mid \tfrac{37}{178}$\\
+12 & $1/1/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{8}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $1/1/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/1/\tfrac{7}{10}/\tfrac{7}{10} \mid \tfrac{1}{2}$ & $1/1/\tfrac{45}{73}/\tfrac{45}{73} \mid \tfrac{18}{73}$ & $1/1/\tfrac{96}{161}/\tfrac{96}{161} \mid \tfrac{38}{161}$ & $1/1/\tfrac{59}{89}/\tfrac{59}{89} \mid \tfrac{37}{178}$\\
+13 & $1/1/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{8}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $1/1/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/1/\tfrac{7}{10}/\tfrac{7}{10} \mid \tfrac{1}{2}$ & $1/1/\tfrac{45}{73}/\tfrac{45}{73} \mid \tfrac{18}{73}$ & $1/1/\tfrac{96}{161}/\tfrac{96}{161} \mid \tfrac{38}{161}$ & $1/1/\tfrac{59}{89}/\tfrac{59}{89} \mid \tfrac{37}{178}$\\
+14 & $1/1/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{8}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $1/1/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/1/\tfrac{7}{10}/\tfrac{7}{10} \mid \tfrac{1}{2}$ & $1/1/\tfrac{45}{73}/\tfrac{45}{73} \mid \tfrac{18}{73}$ & $1/1/\tfrac{96}{161}/\tfrac{96}{161} \mid \tfrac{38}{161}$ & $1/1/\tfrac{59}{89}/\tfrac{59}{89} \mid \tfrac{37}{178}$\\
+15 & $1/1/1/\tfrac{1}{2} \mid \tfrac{1}{8}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $1/1/1/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/1/1/\tfrac{7}{10} \mid \tfrac{1}{2}$ & $1/1/1/\tfrac{45}{73} \mid \tfrac{18}{73}$ & $1/1/1/\tfrac{96}{161} \mid \tfrac{38}{161}$ & $1/1/1/\tfrac{59}{89} \mid \tfrac{37}{178}$\\
+\bottomrule
+\end{tabular}}
+\end{table}
+\begin{table}[H]\centering\tiny
+\caption{Values at probed beliefs, $m=5$.}\label{tab:S6v5}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{rlllllll}
+\toprule
+$L$ & uniform & far pair & antipodal pair & ball + antipode & random 1 & random 2 & random 3\\
+\midrule
+0 & $\tfrac{3}{16}/\tfrac{3}{16}/\tfrac{3}{16}/\tfrac{3}{16} \mid \tfrac{3}{16}$ & $\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{73}{307}/\tfrac{73}{307}/\tfrac{73}{307}/\tfrac{73}{307} \mid \tfrac{73}{307}$ & $\tfrac{97}{383}/\tfrac{97}{383}/\tfrac{97}{383}/\tfrac{97}{383} \mid \tfrac{97}{383}$ & $\tfrac{3}{11}/\tfrac{3}{11}/\tfrac{3}{11}/\tfrac{3}{11} \mid \tfrac{3}{11}$\\
+1 & $\tfrac{3}{16}/\tfrac{3}{16}/\tfrac{3}{16}/\tfrac{3}{16} \mid \tfrac{3}{16}$ & $\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{73}{307}/\tfrac{73}{307}/\tfrac{73}{307}/\tfrac{73}{307} \mid \tfrac{73}{307}$ & $\tfrac{97}{383}/\tfrac{97}{383}/\tfrac{97}{383}/\tfrac{97}{383} \mid \tfrac{97}{383}$ & $\tfrac{3}{11}/\tfrac{3}{11}/\tfrac{3}{11}/\tfrac{3}{11} \mid \tfrac{3}{11}$\\
+2 & $\tfrac{3}{16}/\tfrac{3}{16}/\tfrac{3}{16}/\tfrac{3}{16} \mid \tfrac{3}{16}$ & $\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{73}{307}/\tfrac{73}{307}/\tfrac{73}{307}/\tfrac{73}{307} \mid \tfrac{73}{307}$ & $\tfrac{97}{383}/\tfrac{97}{383}/\tfrac{97}{383}/\tfrac{97}{383} \mid \tfrac{97}{383}$ & $\tfrac{3}{11}/\tfrac{3}{11}/\tfrac{3}{11}/\tfrac{3}{11} \mid \tfrac{3}{11}$\\
+3 & $\tfrac{1}{2}/\tfrac{5}{16}/\tfrac{3}{16}/\tfrac{3}{16} \mid \tfrac{3}{16}$ & $1/1/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{3}{4}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{190}{307}/\tfrac{116}{307}/\tfrac{73}{307}/\tfrac{73}{307} \mid \tfrac{73}{307}$ & $\tfrac{237}{383}/\tfrac{159}{383}/\tfrac{97}{383}/\tfrac{97}{383} \mid \tfrac{97}{383}$ & $\tfrac{113}{187}/\tfrac{81}{187}/\tfrac{3}{11}/\tfrac{3}{11} \mid \tfrac{3}{11}$\\
+4 & $\tfrac{1}{2}/\tfrac{5}{16}/\tfrac{3}{16}/\tfrac{3}{16} \mid \tfrac{3}{16}$ & $1/1/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{3}{4}/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $\tfrac{190}{307}/\tfrac{116}{307}/\tfrac{73}{307}/\tfrac{73}{307} \mid \tfrac{73}{307}$ & $\tfrac{237}{383}/\tfrac{159}{383}/\tfrac{97}{383}/\tfrac{97}{383} \mid \tfrac{97}{383}$ & $\tfrac{113}{187}/\tfrac{81}{187}/\tfrac{3}{11}/\tfrac{3}{11} \mid \tfrac{3}{11}$\\
+5 & $1/\tfrac{5}{16}/\tfrac{5}{16}/\tfrac{5}{16} \mid \tfrac{3}{16}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $1/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/\tfrac{116}{307}/\tfrac{116}{307}/\tfrac{116}{307} \mid \tfrac{73}{307}$ & $1/\tfrac{159}{383}/\tfrac{159}{383}/\tfrac{159}{383} \mid \tfrac{97}{383}$ & $1/\tfrac{81}{187}/\tfrac{81}{187}/\tfrac{81}{187} \mid \tfrac{3}{11}$\\
+6 & $1/\tfrac{1}{2}/\tfrac{5}{16}/\tfrac{5}{16} \mid \tfrac{3}{16}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $1/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/\tfrac{3}{4}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/\tfrac{190}{307}/\tfrac{116}{307}/\tfrac{116}{307} \mid \tfrac{73}{307}$ & $1/\tfrac{237}{383}/\tfrac{159}{383}/\tfrac{159}{383} \mid \tfrac{97}{383}$ & $1/\tfrac{113}{187}/\tfrac{81}{187}/\tfrac{81}{187} \mid \tfrac{3}{11}$\\
+7 & $1/\tfrac{1}{2}/\tfrac{5}{16}/\tfrac{5}{16} \mid \tfrac{3}{16}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $1/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/\tfrac{3}{4}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/\tfrac{194}{307}/\tfrac{116}{307}/\tfrac{116}{307} \mid \tfrac{73}{307}$ & $1/\tfrac{249}{383}/\tfrac{159}{383}/\tfrac{159}{383} \mid \tfrac{97}{383}$ & $1/\tfrac{227}{374}/\tfrac{81}{187}/\tfrac{81}{187} \mid \tfrac{3}{11}$\\
+8 & $1/\tfrac{1}{2}/\tfrac{5}{16}/\tfrac{5}{16} \mid \tfrac{3}{16}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $1/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/\tfrac{3}{4}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/\tfrac{194}{307}/\tfrac{116}{307}/\tfrac{116}{307} \mid \tfrac{73}{307}$ & $1/\tfrac{249}{383}/\tfrac{159}{383}/\tfrac{159}{383} \mid \tfrac{97}{383}$ & $1/\tfrac{227}{374}/\tfrac{81}{187}/\tfrac{81}{187} \mid \tfrac{3}{11}$\\
+9 & $1/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{5}{16} \mid \tfrac{3}{16}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $1/\tfrac{1}{2}/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/\tfrac{3}{4}/\tfrac{3}{4}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/\tfrac{194}{307}/\tfrac{190}{307}/\tfrac{116}{307} \mid \tfrac{73}{307}$ & $1/\tfrac{249}{383}/\tfrac{237}{383}/\tfrac{159}{383} \mid \tfrac{97}{383}$ & $1/\tfrac{227}{374}/\tfrac{113}{187}/\tfrac{81}{187} \mid \tfrac{3}{11}$\\
+10 & $1/1/\tfrac{1}{2}/\tfrac{5}{16} \mid \tfrac{3}{16}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $1/1/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/1/\tfrac{3}{4}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/1/\tfrac{190}{307}/\tfrac{116}{307} \mid \tfrac{73}{307}$ & $1/1/\tfrac{237}{383}/\tfrac{159}{383} \mid \tfrac{97}{383}$ & $1/1/\tfrac{113}{187}/\tfrac{81}{187} \mid \tfrac{3}{11}$\\
+11 & $1/1/\tfrac{1}{2}/\tfrac{5}{16} \mid \tfrac{3}{16}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $1/1/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/1/\tfrac{3}{4}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/1/\tfrac{194}{307}/\tfrac{116}{307} \mid \tfrac{73}{307}$ & $1/1/\tfrac{249}{383}/\tfrac{159}{383} \mid \tfrac{97}{383}$ & $1/1/\tfrac{227}{374}/\tfrac{81}{187} \mid \tfrac{3}{11}$\\
+12 & $1/1/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{3}{16}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $1/1/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/1/\tfrac{3}{4}/\tfrac{3}{4} \mid \tfrac{1}{2}$ & $1/1/\tfrac{194}{307}/\tfrac{190}{307} \mid \tfrac{73}{307}$ & $1/1/\tfrac{249}{383}/\tfrac{237}{383} \mid \tfrac{97}{383}$ & $1/1/\tfrac{227}{374}/\tfrac{113}{187} \mid \tfrac{3}{11}$\\
+13 & $1/1/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{3}{16}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $1/1/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/1/\tfrac{5}{6}/\tfrac{3}{4} \mid \tfrac{1}{2}$ & $1/1/\tfrac{201}{307}/\tfrac{194}{307} \mid \tfrac{73}{307}$ & $1/1/\tfrac{253}{383}/\tfrac{249}{383} \mid \tfrac{97}{383}$ & $1/1/\tfrac{237}{374}/\tfrac{227}{374} \mid \tfrac{3}{11}$\\
+14 & $1/1/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{3}{16}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $1/1/\tfrac{1}{2}/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/1/\tfrac{5}{6}/\tfrac{3}{4} \mid \tfrac{1}{2}$ & $1/1/\tfrac{201}{307}/\tfrac{194}{307} \mid \tfrac{73}{307}$ & $1/1/\tfrac{253}{383}/\tfrac{249}{383} \mid \tfrac{97}{383}$ & $1/1/\tfrac{237}{374}/\tfrac{227}{374} \mid \tfrac{3}{11}$\\
+15 & $1/1/1/\tfrac{1}{2} \mid \tfrac{3}{16}$ & $1/1/1/1 \mid \tfrac{1}{2}$ & $1/1/1/\tfrac{1}{2} \mid \tfrac{1}{2}$ & $1/1/1/\tfrac{3}{4} \mid \tfrac{1}{2}$ & $1/1/1/\tfrac{194}{307} \mid \tfrac{73}{307}$ & $1/1/1/\tfrac{249}{383} \mid \tfrac{97}{383}$ & $1/1/1/\tfrac{227}{374} \mid \tfrac{3}{11}$\\
+\bottomrule
+\end{tabular}}
+\end{table}
+\section{Floating-point study and runtimes}\label{S:float}
+
+The representative boundary ten-set (the first in the sorted record) has exact value $\tfr52$; SciPy's HiGHS returned $2.5$ with error $0.0$ for it. Its certified winning word from $L=3$ (prefix of five actions, period four) is simulated in stock units ($z_0=1.3$, floor test $z\ge1$) for $10^5$ steps in \texttt{float64} and \texttt{float32}, with the drift coded as $-0.5+0.2\langle u,\theta\rangle$ (``affine'') or as $(2\langle u,\theta\rangle-5)/10$ (``ratio''); Table~\ref{tab:S7sim} reports false collapses, their first step and the maximal absolute deviation from the exact trajectory, together with the adjacent pair of the four-cube from $z_0=1.1$. Table~\ref{tab:S7sweep} is the sweep over all $1{,}280$ boundary ten-sets, each with its own certified word from $L=3$, for $2{,}000$ steps in \texttt{float64}. Table~\ref{tab:S7rt} gives the runtimes.
+\begin{table}[H]\centering\small
+\caption{Floating-point simulation of certified winning words.}\label{tab:S7sim}
+\begin{tabular}{llrrr}
+\toprule
+instance & arithmetic / coding & false collapses & first at step & max.\ deviation\\
+\midrule
+ten-set, $L=3$ & float64 affine & 0 & -- & 2.70e-08\\
+ten-set, $L=3$ & float64 ratio & 0 & -- & 2.70e-08\\
+ten-set, $L=3$ & float32 affine & 3 & 3 & 1.15e+01\\
+ten-set, $L=3$ & float32 ratio & 3 & 3 & 1.15e+01\\
+adjacent pair $m=4$, $L=1$ & float64 affine & 0 & -- & 1.08e-08\\
+adjacent pair $m=4$, $L=1$ & float64 ratio & 0 & -- & 1.08e-08\\
+adjacent pair $m=4$, $L=1$ & float32 affine & 0 & -- & 6.13e+00\\
+adjacent pair $m=4$, $L=1$ & float32 ratio & 0 & -- & 6.13e+00\\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{table}[H]\centering\small
+\caption{Sweep over the $1{,}280$ boundary ten-sets ($2{,}000$ steps, \texttt{float64}).}\label{tab:S7sweep}
+\begin{tabular}{lrr}
+\toprule
+coding (float64) & sets with a false collapse & earliest step\\
+\midrule
+$-0.5+0.2\langle u,\theta\rangle$ & 0 & --\\
+$(2\langle u,\theta\rangle-5)/10$ & 1{,}120 & 3\\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{table}[H]\centering\small
+\caption{Runtimes (seconds, single core) of the full run of \texttt{run\_all.py} and two sub-stages.}\label{tab:S7rt}
+\begin{tabular}{lr}
+\toprule
+Stage & seconds\\
+\midrule
+Classification $m=4,5,6$ (cliques, orbits, LPs, certified thresholds, census) & 147.1\\
+Pair tables and horizons & 0.1\\
+Observation (ladders, feedback game $m=4,5$, deadline horizons) & 10.1\\
+Point-based sweeps and obstructions & 443.9\\
+Floating-point study ($10^5$-step simulations, $1{,}280$-set sweep) & 191.7\\
+Total & 792.9\\
+\bottomrule
+\end{tabular}
+\qquad\begin{tabular}{lr}
+\toprule
+Six-cube classification stage & seconds\\
+\midrule
+Complete six-cube classification (inside the stage above) & 146.9\\
+Float sweep over the $1{,}280$ boundary sets & 175.8\\
+\bottomrule
+\end{tabular}
+\end{table}
+\section{Verification record}\label{S:verif}
+
+\subsection{Check list}
+The verification script \path{paper05_exact_belief_computation_v20_verification.py} runs the checks of Table~\ref{tab:S8checks}; the full mode recomputes the six-cube classification, the six-cube clique family by an independent algorithm, the five-cube alpha-sets and the floating-point sweep (about five minutes on one core), the \texttt{--quick} mode reuses the stored stage outputs for the expensive items. Every check is a boolean on exact rational or integer quantities; the final text checks parse the compiled main text and supplement and compare quoted numbers with \texttt{results.json}.
+{\scriptsize
+\begin{longtable}{@{}l p{0.80\textwidth} l@{}}
+\caption{Verification checks of the full run (identifier, statement, result). Items marked [full] are recomputed only in the full mode and read from the record in \texttt{--quick} mode.}\label{tab:S8checks}\\
+\toprule id & check & result\\ \midrule
+\endfirsthead
+\toprule id & check (continued) & result\\ \midrule
+\endhead
+\bottomrule
+\endfoot
+A1.1 & drift table: D = 2m-5-4h for m = 4..8 and all h; equals 10 d with d = -1/2 + $<$u,theta$>$/5 & PASS\\
+A1.2 & floor balls: r*(m) = 0,1,1,2,2 and ball sizes 1,6,7,29,37 for m = 4..8 & PASS\\
+A1.3 & cell-sum identity: sum over cells of D(u,theta) = -5*2\^{}m for every action incl. the hold, m = 4,5,6 & PASS\\
+A1.4 & the hold is the zero mixed action: D(hold) = -5 = 2$<$0,theta$>$ - 5; first-split cost 2m+5 = cost of the antipode under a sign action & PASS\\
+B1.1 & exact LP: for every maximal-clique orbit representative (m = 4,5,6) the maximiser y and the certificate q attain the same value V, which equals the recorded V & PASS\\
+B1.2 & pairs: V(\{a,b\}) = m - h and survivable iff h $<$= floor(m - 5/2) (= 1, 2, 3 for m = 4, 5, 6) & PASS\\
+B1.3 & product mixture of the maximiser has mean y and nonnegative expected drift on S; its periodic word (recorded period/dip) keeps every cell for three periods from the dip, for the three six-cube maximal orbits & PASS\\
+B1.4 & finite-horizon corollary on pairs: exact forward horizon $<$= floor(L/(5-2V)) for every non-survivable pair, L in \{0,5,10,15,20\}, m = 4,5,6, as recorded & PASS\\
+B1.5 & far pairs at distance delta\_m + 1: horizon exactly L for L $<$= 20 at m = 4,6 (middle action costs -1 to both); 2*floor((L-1)/2) at m = 5 & PASS\\
+B1.6 & deadline law: V(cube) = 0, the LP certificate and the uniform distribution both pool to the origin; exact horizon of the whole cube = floor(L/5) for L in \{0,5,10,13,15,20,25\}, m = 4,5,6 & PASS\\
+B1.7 & tetrahedron: pairwise distance 2, every 3-subset inside a radius-one ball, V = 2 with pooled cell (1,1,0,0,0); exact horizon 2*floor((L-1)/2) for L $<$= 20 (as for the far pairs of the five-cube) & PASS\\
+B1.8 & Kleitman: K(m) = 2,6,12,29,58 for m = 4..8; extremal balls (odd m) are floor balls, extremal doubled balls (even m) have min $<$y,theta$>$ = 3, first-step bound 1 and survive from slack 1 (certified for m = 4,6) & PASS\\
+B1.9 & support of the certificate q has at most m+1 cells for every maximal-clique representative & PASS\\
+B1.10 & floor census: the maximal sets at L = 0 are 2\^{}m sets of the floor-ball size for m = 4,5,6 (Corollary on balls) & PASS\\
+C1.1 & adjacent pair (m = 4): antichain of minimal winning vectors \{(0,1),(1,0)\}, certified threshold 1, lost from 0 in the first step & PASS\\
+C1.2 & five-cube: square certified threshold 3 = first-step bound; ball threshold 0 & PASS\\
+C1.3 & six-cube maximal orbits: certified thresholds 1 (cylinder), 3 (boundary ten-set), 5 (subcube) with the recorded caps and antichain sizes; first-step bounds 1, 1, 5 & PASS\\
+C1.4 & cap artefact: the saturated game on the boundary ten-set returns 5 at cap 6 and 3 at cap 12; forward reachability from 2 empties within 2 steps & PASS\\
+C1.5 & boundary ten-set: extracted winning word from L = 3 has prefix 5 and period 4, keeps all cells for 50 periods, two zero-net cells touch the floor; pinned inequality sum q s(t) $<$= L holds for 200 steps & PASS\\
+C1.6 & boundary value: V(ten-set) = 5/2 exactly and every feasible maximiser is tight on supp q (checked for the LP maximiser) & PASS\\
+C1.7 & punctured subcube: V = 3, first-step bound 1, certified threshold 1; the full subcube has first-step bound 5 and threshold 5 & PASS\\
+D1.1 & maximal cliques: 32 (m=4, all edges), 192 (m=5: 32 of size 6 + 160 of size 4), 10,752 (m=6: 192 x 12, 1,280 x 10, 9,280 x 8) & PASS\\
+D1.2 & orbit decomposition certified: invariant classes of maximal cliques (3 at m=5, 7 at m=6) each equal one orbit (orbit size of the representative = class size) & PASS\\
+D1.3 & maximal survivable sets recomputed from the clique representatives (certificate-support branching + global maximality): sizes \{2\}, \{6,4\}, \{12,10,8\}; orbit sizes 32; 32,80; 192,1280,160; totals 32, 112, 1,632 & PASS\\
+D1.4 & six-cube census record: survivable sets 7,072 / 631,440 / 774,800 / 774,960 at L = 0 / 1-2 / 3-4 / $>$= 5; maximal 64 / 1,472 / 1,472 / 1,632 with the recorded sizes & PASS\\
+D1.5 & census consistency: threshold histogram sums to the number of survivable sets and its partial sums reproduce the census at every level; 143,360 = 1,280 x 112 boundary sets all at threshold 3 & PASS\\
+D1.6 & four- and five-cube census: 16 / 48 (m=4, L = 0 / $>$= 1) and 1,616 / 1,696 (m=5, L $<$= 2 / $>$= 3); admissible families 48 and 1,776; maximal 16 singletons then 32 pairs; 32 balls then + 80 squares & PASS\\
+D1.7 & admissible families by an independent clique enumeration: 48 (m=4, also by direct subset enumeration) and 1,776 (m=5) & PASS\\
+D1.8 & [full] admissible family of the six-cube by independent enumeration: 853,680 & PASS\\
+D1.9 & [full] complete six-cube classification recomputed: census, threshold histogram, knife-edge count and maximal orbits agree with the record & PASS\\
+D1.10 & minimal obstructions: none inside the admissible family at m=4, the 80 tetrahedra at m=5, 2,400 at m=6 (1,440 four-cell + 960 five-cell), all with V = 2; far pairs at distance delta\_m+1 have V = 2; hence the uniform horizon L & PASS\\
+D1.11 & recorded six-cube obstruction examples: V = 2 and every proper subset survivable (minimality), pooled cell (1,1,0,0,0,0) & PASS\\
+E1.1 & probe ladder m=4: 1/16,1/8,1/4,1/2,1 at the floor and 1/8,1/4,1/2,1,1 from slack 1 (j = 4..0) & PASS\\
+E1.2 & probe ladder m=5: 3/16,5/16,1/2,3/4,1,1 for L $<$= 2 and 3/16,5/16,1/2,1,1,1 for L $>$= 3; m=6: 7/64,...,3/4,1,1 at the floor, 3/16,5/16,1/2,7/8,1,1,1 for 1 $<$= L $<$= 4, 3/16,5/16,1/2,1,1,1,1 for L $>$= 5 & PASS\\
+E1.3 & ladders m = 4,5 recomputed from the stored maximal families census\_m4/5.npz (max over subcubes of the mass of a maximal set) agree with the record & PASS\\
+E1.4 & feedback game recomputed: F*(cube) = 23 (m=4) and 18 (m=5); subcubes 1,6,14 and 0,3,7,11; shells 0,14,18,14,0 and 0,0,11,11,0,0 & PASS\\
+E1.5 & first-split decomposition: 23 = max(13, 9+14, 5+18, 1+14) at m=4 and 18 = max(15, 3+11, 7+11, 11) at m=5; the shells at m=5 with h in \{1,4\} are blind-survivable (threshold 0) & PASS\\
+E1.6 & blind thresholds of the whole cube and of antipodal sets are infinite (V $<$ 5/2); subcube blind thresholds: m=4: 1, inf, inf; m=5: 0, 3, inf, inf & PASS\\
+F1.1 & alpha-set sizes m=4, k=4, L = 0..15 recomputed over 17\^{}4 words: 17,49,49,49,209,161,161,185,361,297,249,249,857,793,729,545 & PASS\\
+F1.2 & [full] alpha-set sizes m=5, k=4 recomputed over 33\^{}4 words equal the record and the earlier fivecube log & PASS\\
+F1.3 & values at probed beliefs: V\^{}(k) nonincreasing in k and $>$= indefinite value; equal at k = 4 for L $<$= 3 (m=4) and L $<$= 4 (m=5) and not at the next level; far-pair belief V\^{}(4) = 1 for L $>$= 4 and indefinite 1/2; uniform indefinite 1/8 (m=4, L $>$= 1) & PASS\\
+F1.4 & m=4, L=15: survivable masks among the k-step alpha-sets are 0, 0, 0, 48 for k = 1..4; uniform V\^{}(4) = 1/2 vs indefinite 1/8; m=5, L=15: uniform 1/2 vs 3/16 & PASS\\
+F1.5 & definition-level value at the uniform belief (m=4, L=15, k=2) by direct enumeration of 17\^{}2 words equals the alpha-set value (1) & PASS\\
+F1.6 & pairs of the four-cube by distance: 32 adjacent, 48 at 2, 32 at 3, 8 antipodal (120 in all) & PASS\\
+G1.1 & arithmetic of the pinned cell: three drifts of -1 tenth from z = 1.3 give exactly the floor in exact arithmetic; float32 and float64 with (2k-5)/10 land below 1, float64 with -0.5+0.2k lands at or above 1 & PASS\\
+G1.2 & recorded simulations: float32 false collapse at step 3 for the representative ten-set; float64 none in 10\^{}5 steps (both codings); float LP value 2.5 for V = 5/2 & PASS\\
+G1.3 & [full] float64 sweep over the 1,280 boundary ten-sets recomputed: ratio coding 1,120 false collapses (earliest step 3), affine coding 0 & PASS\\
+G1.4 & runtimes recorded for every stage; total within 2 s of the sum of the stages & PASS\\
+L1.1 & Lean layer: 8 modules, 80 theorem declarations (Dynamics 28, Deadline 19, Pairs 11, Hamming 6, Classification 5, ExactBelief 5, Bands 4, Ladder 2), no sorry, no axiom declarations; the ten named footprints present & PASS\\
+TXT.1 & compiled numbering of the results quoted in captions and the supplement: thm:criterion = 3.1, cor:horizon = 3.2, cor:pairs = 3.3, cor:balls = 3.4, cor:kleitman = 3.5, prop:incomparable = 3.6, prop:game = 4.2, prop:firststep = 4.4, prop:pinned = 4.5, thm:m4 = 5.1, thm:m5 = 5.2, thm:m6 = 5.3, cor:uniform = 5.4, prop:antichain = 6.1, prop:feedback = 6.3, prop:deadline = 6.4, prop:pbvi = 7.1, fig:census = 1, fig:horizon = 2, fig:knife = 3 & PASS\\
+TXT.2 & supplement's main-text number table agrees with the compiled .aux on every label & PASS\\
+TXT.3 & headline tokens present in the assembled main text: 774\{,\}960, 853\{,\}680, 143\{,\}360, 1\{,\}120, 10\{,\}752, 631\{,\}440, 774\{,\}800, 7\{,\}072, 1\{,\}632, 2\{,\}400, 1\{,\}616, 1\{,\}696, 1\{,\}776, $\textbackslash\{\}Fstar(\textbackslash\{\}Theta\_4)=23$, $\textbackslash\{\}Fstar(\textbackslash\{\}Theta\_5)=18$, $5T$, 857, 15\{,\}929, 5\{,\}373, $80$ theorem, K(8)=58 & PASS\\
+TXT.4 & the number of checks quoted in the manuscript (\textbackslash\{\}NCHECKS) equals the number of checks of this script & PASS\\
+\end{longtable}
+}
+
+\subsection{Lean inventory}
+\begin{table}[H]\centering\small
+\caption{Lean modules: theorem declarations (including \texttt{@[simp]}-attributed ones) and \texttt{sorry} count; the modules declare no axioms.}\label{tab:S8lean}
+\begin{tabular}{lrr}
+\toprule
+module & theorem declarations & \texttt{sorry}\\
+\midrule
+\texttt{EBC\_Bands\_v2.lean} & 4 & 0\\
+\texttt{EBC\_Classification\_v3.lean} & 5 & 0\\
+\texttt{EBC\_Deadline.lean} & 19 & 0\\
+\texttt{EBC\_Dynamics.lean} & 28 & 0\\
+\texttt{EBC\_ExactBelief\_v3.lean} & 5 & 0\\
+\texttt{EBC\_Hamming.lean} & 6 & 0\\
+\texttt{EBC\_Ladder\_v2.lean} & 2 & 0\\
+\texttt{EBC\_Pairs\_v3.lean} & 11 & 0\\
+\textbf{total} & 80 & 0\\
+\bottomrule
+\end{tabular}
+\end{table}
+\paragraph{Declared theorems by module.}
+\footnotesize
+\textbf{EBC\_Bands\_v2.lean}: \texttt{matched\_\allowbreak{}drift\_\allowbreak{}scale\_\allowbreak{}m4}, \texttt{matched\_\allowbreak{}drift\_\allowbreak{}pos\_\allowbreak{}m4}, \texttt{drift\_\allowbreak{}matched\_\allowbreak{}pos}, \texttt{singleton\_\allowbreak{}survives}.
+
+\textbf{EBC\_Classification\_v3.lean}: \texttt{five\_\allowbreak{}add\_\allowbreak{}five\_\allowbreak{}eq\_\allowbreak{}ten}, \texttt{four\_\allowbreak{}sub\_\allowbreak{}five\_\allowbreak{}eq\_\allowbreak{}neg\_\allowbreak{}one}, \texttt{one\_\allowbreak{}sub\_\allowbreak{}eq\_\allowbreak{}neg\_\allowbreak{}sub}, \texttt{far\_\allowbreak{}pair\_\allowbreak{}sum\_\allowbreak{}bound\_\allowbreak{}expanded}, \texttt{far\_\allowbreak{}pair\_\allowbreak{}horizon\_\allowbreak{}bound}.
+
+\textbf{EBC\_Deadline.lean}: \texttt{holdRep\_\allowbreak{}zero}, \texttt{matchedRep\_\allowbreak{}zero}, \texttt{holdRep\_\allowbreak{}length}, \texttt{matchedRep\_\allowbreak{}length}, \texttt{holdAct\_\allowbreak{}drift}, \texttt{matched\_\allowbreak{}drift\_\allowbreak{}nonneg}, \texttt{deadline\_\allowbreak{}half\_\allowbreak{}pos}, \texttt{deadline\_\allowbreak{}half\_\allowbreak{}nonneg}, \texttt{totalDrift\_\allowbreak{}holdRep}, \texttt{deadline\_\allowbreak{}necessity}, \texttt{matchedRep\_\allowbreak{}survives}, \texttt{holdRep\_\allowbreak{}survives}, \texttt{survivesTo\_\allowbreak{}append}, \texttt{deadline\_\allowbreak{}sufficiency}, \texttt{deadline\_\allowbreak{}law}, \texttt{holdAct\_\allowbreak{}isFullHold}, \texttt{matchedRep\_\allowbreak{}mem\_\allowbreak{}inAlphabet}, \texttt{deadlineSeq\_\allowbreak{}mem\_\allowbreak{}inAlphabet}, \texttt{deadlineSeq\_\allowbreak{}inAlphabet}.
+
+\textbf{EBC\_Dynamics.lean}: \texttt{natToK\_\allowbreak{}zero}, \texttt{natToK\_\allowbreak{}succ}, \texttt{natToK\_\allowbreak{}nonneg}, \texttt{natToK\_\allowbreak{}add}, \texttt{natToK\_\allowbreak{}mono}, \texttt{lsum\_\allowbreak{}ones}, \texttt{natToK\_\allowbreak{}le\_\allowbreak{}one}, \texttt{neg\_\allowbreak{}add}, \texttt{two\_\allowbreak{}pos}, \texttt{two\_\allowbreak{}ne\_\allowbreak{}zero}, \texttt{five\_\allowbreak{}pos}, \texttt{five\_\allowbreak{}ne\_\allowbreak{}zero}, \texttt{half\_\allowbreak{}mul\_\allowbreak{}two}, \texttt{half\_\allowbreak{}add\_\allowbreak{}half}, \texttt{five\_\allowbreak{}mul\_\allowbreak{}fifth}, \texttt{stateAfter\_\allowbreak{}eq}, \texttt{survivesTo\_\allowbreak{}final}, \texttt{survivesTo\_\allowbreak{}totalDrift\_\allowbreak{}lower}, \texttt{lsum\_\allowbreak{}neg\_\allowbreak{}ones}, \texttt{drift\_\allowbreak{}pair}, \texttt{totalDrift\_\allowbreak{}pair}, \texttt{lsum\_\allowbreak{}const}, \texttt{pairIpSum\_\allowbreak{}upper}, \texttt{pairIpSum\_\allowbreak{}lower\_\allowbreak{}of\_\allowbreak{}survive}, \texttt{le\_\allowbreak{}of\_\allowbreak{}mul\_\allowbreak{}le\_\allowbreak{}mul\_\allowbreak{}pos}, \texttt{agreeMass\_\allowbreak{}add\_\allowbreak{}natToK\_\allowbreak{}hamming}, \texttt{cor\_\allowbreak{}hamming}, \texttt{cor\_\allowbreak{}hamming\_\allowbreak{}dist}.
+
+\textbf{EBC\_ExactBelief\_v3.lean}: \texttt{hamming\_\allowbreak{}eq\_\allowbreak{}zero}, \texttt{hamming\_\allowbreak{}ne\_\allowbreak{}zero\_\allowbreak{}exists}, \texttt{hamming\_\allowbreak{}zero\_\allowbreak{}of\_\allowbreak{}agree}, \texttt{no\_\allowbreak{}adjacency\_\allowbreak{}triangle}, \texttt{no\_\allowbreak{}three\_\allowbreak{}pairwise\_\allowbreak{}adjacent}.
+
+\textbf{EBC\_Hamming.lean}: \texttt{natToK\_\allowbreak{}mul}, \texttt{two\_\allowbreak{}mul\_\allowbreak{}two\_\allowbreak{}eq\_\allowbreak{}four}, \texttt{two\_\allowbreak{}mul\_\allowbreak{}four\_\allowbreak{}eq\_\allowbreak{}five\_\allowbreak{}add\_\allowbreak{}three}, \texttt{le\_\allowbreak{}of\_\allowbreak{}add\_\allowbreak{}le\_\allowbreak{}add\_\allowbreak{}left}, \texttt{three\_\allowbreak{}lt\_\allowbreak{}four}, \texttt{cor\_\allowbreak{}hamming\_\allowbreak{}m4}.
+
+\textbf{EBC\_Ladder\_v2.lean}: \texttt{no\_\allowbreak{}three\_\allowbreak{}distinct\_\allowbreak{}above}, \texttt{survivor\_\allowbreak{}is\_\allowbreak{}singleton\_\allowbreak{}or\_\allowbreak{}adjacent\_\allowbreak{}pair}.
+
+\textbf{EBC\_Pairs\_v3.lean}: \texttt{add\_\allowbreak{}lt\_\allowbreak{}add\_\allowbreak{}right'}, \texttt{eq\_\allowbreak{}of\_\allowbreak{}mul\_\allowbreak{}eq\_\allowbreak{}mul\_\allowbreak{}pos}, \texttt{fifth\_\allowbreak{}pos}, \texttt{tenth\_\allowbreak{}le\_\allowbreak{}half}, \texttt{half\_\allowbreak{}fifth\_\allowbreak{}two\_\allowbreak{}eq\_\allowbreak{}neg\_\allowbreak{}tenth}, \texttt{ipi\_\allowbreak{}cell\_\allowbreak{}le\_\allowbreak{}two}, \texttt{drift\_\allowbreak{}cell\_\allowbreak{}le\_\allowbreak{}neg\_\allowbreak{}tenth}, \texttt{step\_\allowbreak{}fails\_\allowbreak{}cell}, \texttt{ipi\_\allowbreak{}hold\_\allowbreak{}zero}, \texttt{step\_\allowbreak{}fails\_\allowbreak{}hold}, \texttt{pair\_\allowbreak{}first\_\allowbreak{}step\_\allowbreak{}fails}.
+
+\subsection{Figure provenance}
+Figure~\mref{fig:census} (census by level) is drawn from the \texttt{classification} record; Figure~\mref{fig:knife} (knife-edge word and floating-point deviations) recomputes the certified word of the first two boundary ten-sets of the sorted record with the exact module and simulates the pinned cell in \texttt{float64} with both codings; Figure~\mref{fig:horizon} (horizons and the feedback price) is drawn from the \texttt{pairs} and \texttt{observation} records. All three are produced by \texttt{make\_figs.py}.
+\section{Symbols and conventions}\label{S:symbols}
+\begin{center}\small
+\begin{tabular}{ll}
+\toprule
+$m$; $\Theta_m=\{\pm1\}^m$ & number of uncertain signs; cells\\
+$U_m=\{\pm1\}^m\cup\{\circ\}$ & actions (sign vectors and the hold, identified with $0\in\R^m$)\\
+$\dH$ & Hamming distance; $h$ = number of mismatched signs\\
+$d(u,\theta)=-\tfr12+\tfr15\langle u,\theta\rangle$ & drift in stock units; floor $z\ge1$\\
+$D(u,\theta)=2\langle u,\theta\rangle-5=2m-5-4h$ & drift in tenths; $D(\circ,\theta)=-5$\\
+$L=10(z_0-1)$; $s_\theta(t)$ & initial slack in tenths; slack of cell $\theta$ at time $t$\\
+$\calS_m(L)$; $\calM_m(L)$ & blind-survivable sets at level $L$; their maximal members\\
+$\Lstar(S)$; $f(S)$ & threshold; first-step bound $\min_u\max_\theta(-D)^+$\\
+$V(S)=\max_y\min_\theta\langle\theta,y\rangle$ & value of the linear criterion; survivable iff $V\ge\tfr52$\\
+$q\in\Delta(S)$; $\sum_\theta q_\theta\theta$ & certificate of non-survivability; pooled cell\\
+$r^\ast(m)=\lfloor(2m-5)/4\rfloor$ & radius of the floor balls\\
+$\delta_m=\lfloor m-\tfr52\rfloor$; $K(m)$ & pair bound on the distance; Kleitman's bound\\
+$G_m$ & graph on cells with edges at distance $\le\delta_m$ (admissible pairs)\\
+$B_m$ & hyperoctahedral group, $|B_m|=2^mm!$\\
+$\calW(S)$, $\calW_k(S)$, $\calW^{c}(S)$ & winning regions: indefinite, $k$-step, saturated at cap $c$\\
+$\mathcal V_L(b)$; $\mathcal V^{(k)}_L(b)$ & blind value of a belief; $k$-step value\\
+$\calA_k(L)$ & alpha-set of $k$-step outcome masks\\
+$F(T,L)$; $\Fstar(T)$ & feedback survivability; feedback threshold\\
+\bottomrule
+\end{tabular}
+\end{center}
+Sign conventions: slacks and drifts are integers in tenths; ``survives'' means $s_\theta(t)\ge0$ for all $t$; a ``false collapse'' is a floating-point stock below $1$ at a time when the exact stock is $\ge1$. The cells of a representative are written as sign strings (\texttt{+} for $+1$, \texttt{-} for $-1$).
+
+\end{document}

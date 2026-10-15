@@ -1,0 +1,32 @@
+\section{Exact versus floating-point computation, and runtimes}\label{sec:float}
+
+\subsection{Where exactness is needed}
+The title of this article and of its predecessors is a claim: exact arithmetic is not what limits belief-state computation on the cube. The classification of Section~\ref{sec:classification} makes the claim precise in both directions. On one side, the whole pipeline---linear programmes, games, census---runs in exact rational arithmetic in minutes (Table~\ref{tab:runtime}). On the other side, the problem contains a large boundary on which floating-point arithmetic gives wrong answers for reasons that no tolerance repairs.
+
+\paragraph{The boundary.}
+$143{,}360$ survivable sets of the six-cube, among them the $1{,}280$ maximal ten-sets, have $V(S)=\tfr52$ exactly. For them the decision ``$V\ge\tfr52$'' is an equality test. A floating-point linear programme returned $V=2.5$ with zero error on the representative ten-set (HiGHS \cite{HuangfuHall2018} through SciPy), and so classified it correctly, but only by luck of the rounding: the certificate of correctness is the exact dual $q$, not the float value, and a solver tolerance applied in the wrong direction would reclassify $143{,}360$ sets. The exact simplex of the module costs about five milliseconds on these instances.
+
+\paragraph{The words.}
+Proposition~\ref{prop:pinned} says that along every winning word of a boundary set some support cell has slack at most $L$ at every time, and the extracted word of Section~\ref{sec:thresholds} has two cells returning to slack exactly $0$ every four steps. Simulating this word in stock units from $z_0=1.3$ with the floor test $z\ge1$:
+\begin{itemize}[leftmargin=2em,itemsep=1pt]
+\item in \texttt{float32}, with either coding of the drift, a cell is declared below the floor at step $3$ ($1.3-0.1-0.1-0.1<1$ in single precision), and the deviation from the exact trajectory reaches $11.5$ units after $10^5$ steps for the growing cells;
+\item in \texttt{float64} with the drift coded as $-0.5+0.2\,\langle u,\theta\rangle$, no false collapse occurs in $10^5$ steps (maximal deviation $2.7\cdot10^{-8}$);
+\item in \texttt{float64} with the drift coded as $(2\langle u,\theta\rangle-5)/10$, the same rational numbers, $1{,}120$ of the $1{,}280$ maximal boundary sets suffer a false collapse within $2{,}000$ steps of their own certified winning words, the earliest at step $3$; the first coding gives none in the same sweep.
+\end{itemize}
+The verdict of a floating-point simulation on a boundary set therefore depends on the spelling of the drift formula, which is the strongest form of the point made by the title: the \emph{answer} is at a knife edge, so only the arithmetic that represents the edge exactly is admissible. At $m=4$ the adjacent pair from $z_0=1.1$ shows the same touch-the-floor pattern ($1.1\to1.0\to1.3\to1.2\to\dots$) and happens to survive in both \texttt{float64} codings and in \texttt{float32} for $10^5$ steps; luck of this kind is exactly what cannot be relied on.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig_knife.pdf}
+\caption{Left: exact slack trajectories of the ten cells of a boundary ten-set ($V=\tfr52$) under the certified winning word from $\Lstar=3$ (prefix of five actions, period four); two cells return to the floor every fourth step, as Proposition~\ref{prop:pinned} requires. Right: the pinned cell of the second boundary ten-set of the sorted record simulated in \texttt{float64}, shown as the deviation from the exact stock in units of $10^{-16}$ for the two codings of the same drift; dotted lines mark the steps at which the exact slack is $0$, where the floor test is decided by the sign of the rounding error. The coding $(2k-5)/10$ declares the stock below the floor at step $3$; in \texttt{float32} the error at step $3$ is $-1.2\cdot10^{-7}$ under either coding.}
+\label{fig:knife}
+\end{figure}
+
+\subsection{Runtimes}
+\begin{table}[t]
+\centering\small
+\caption{Wall-clock times of the exact pipeline (single core, Python with exact fractions and NumPy for the bit-mask census). ``Classification'' includes the maximal cliques, the orbit decomposition, all linear programmes, the $5{,}373$ certified subset thresholds of the six-cube and the census; ``point-based'' the alpha-sets for $k\le4$ at $m=4,5$, $k\le3$ at $m=6$, and the obstruction analysis; ``float'' the simulations of Section~\ref{sec:float}.}
+\label{tab:runtime}
+\input{si_parts/tab_runtime.tex}
+\end{table}
+Table~\ref{tab:runtime} reports the times. The largest items are the six-cube census and the point-based sweeps; the linear programmes themselves are negligible, and the exact game certificates for all $5{,}373$ subsets of the six-cube representatives take under a minute. The earlier editions reported ``four orders of magnitude'' of compression at $m=4$ against the $2^{16}$ power set, which is not the relevant comparison (the admissible family has $48$ members, and the reduction $17^4\to857$ is a count of masks); the relevant statement is that the complete, certified classification of the six-cube, with $2^{64}$ subsets of cells, $853{,}680$ admissible candidates and $774{,}960$ survivable sets, takes two and a half minutes exactly.

@@ -1,0 +1,44 @@
+\section{The cube model and its information classes}\label{sec:model}
+
+\subsection{Cells, actions, drift}
+Fix $m\ge2$. A \emph{cell} is a sign vector $\theta\in\Theta_m=\{\pm1\}^m$; there are $2^m$ cells. An \emph{action} is a sign vector $u\in\{\pm1\}^m$ or the hold $\circ$; the action set $U_m$ has $2^m+1$ elements. The stock $z$ obeys
+\begin{equation}\label{eq:drift}
+z_{t+1}=z_t+d(u_t,\theta),\qquad d(u,\theta)=-\tfr12+\tfr15\langle u,\theta\rangle,\qquad d(\circ,\theta)=-\tfr12,
+\end{equation}
+and the viability constraint is $z_t\ge1$ for all $t$. In tenths above the floor, $s_t=10(z_t-1)$ is an integer when $z_0$ is on the tenth grid, and
+\begin{equation}\label{eq:D}
+D(u,\theta)=10\,d(u,\theta)=2\langle u,\theta\rangle-5=2m-5-4\,\dH(u,\theta),\qquad D(\circ,\theta)=-5,
+\end{equation}
+where $\dH$ is the Hamming distance. The drift depends only on the number of mismatched signs: at $m=4$ it is $+3,-1,-5,-9,-13$ for $0,1,2,3,4$ mismatches; Table~\ref{tab:drift} lists $m=4,\dots,8$. The initial \emph{slack} is $L=10(z_0-1)\in\N$; the levels $z_0=1.0,1.1,\dots$ of the earlier editions are $L=0,1,\dots$. The hold never gains and never splits a class; it is nevertheless the best blind action for a class that contains a cell together with its antipode (a sign action costs the antipode $2m+5$ tenths, the hold only $5$), and the deadline law of Section~\ref{sec:observation} is about it.
+
+\begin{table}[t]
+\centering\small
+\caption{Per-step drift $D(u,\theta)=2m-5-4h$ in tenths as a function of the number $h$ of mismatched signs; $r^\ast(m)=\lfloor(2m-5)/4\rfloor$ is the largest $h$ with nonnegative drift, so a constant matched action keeps exactly the Hamming ball of radius $r^\ast$; the last row is the size of that ball.}
+\label{tab:drift}
+\begin{tabular}{lrrrrrrrrr|rr}
+\toprule
+$m$ & $h{=}0$ & $1$ & $2$ & $3$ & $4$ & $5$ & $6$ & $7$ & $8$ & $r^\ast(m)$ & $|\Ball(\theta,r^\ast)|$\\
+\midrule
+4 & 3 & $-1$ & $-5$ & $-9$ & $-13$ & & & & & 0 & 1\\
+5 & 5 & 1 & $-3$ & $-7$ & $-11$ & $-15$ & & & & 1 & 6\\
+6 & 7 & 3 & $-1$ & $-5$ & $-9$ & $-13$ & $-17$ & & & 1 & 7\\
+7 & 9 & 5 & 1 & $-3$ & $-7$ & $-11$ & $-15$ & $-19$ & & 2 & 29\\
+8 & 11 & 7 & 3 & $-1$ & $-5$ & $-9$ & $-13$ & $-17$ & $-21$ & 2 & 37\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Blind survival}
+\begin{definition}[blind survivability, threshold]\label{def:blind}
+Let $S\subseteq\Theta_m$ be nonempty and $L\in\N$. A \emph{blind word} is a sequence $(u_t)_{t\ge0}$ in $U_m$ that does not depend on $\theta$. $S$ is \emph{blind-survivable at level $L$} if there is a blind word with
+\[L+\sum_{\tau<t}D(u_\tau,\theta)\ \ge\ 0\qquad\text{for all }t\ge0\text{ and all }\theta\in S .\]
+$\calS_m(L)$ denotes the family of such sets. The \emph{threshold} $\Lstar(S)\in\N\cup\{\infty\}$ is the least $L$ with $S\in\calS_m(L)$; $S$ is \emph{survivable} (from some level) if $\Lstar(S)<\infty$.
+\end{definition}
+
+Two monotonicity properties are immediate and are used throughout: $\calS_m(L)$ is hereditary (a word that keeps $S$ keeps every subset), and $\calS_m(L)\subseteq\calS_m(L')$ for $L\le L'$. Hence each $\calS_m(L)$ is a down-set of the Boolean lattice of cells, determined by its antichain $\calM_m(L)$ of maximal members, and the \emph{census} of a level is the triple (number of survivable sets, number of maximal sets, their sizes). The reference against which this census should be read is not the power set of the cells---almost all of its members are excluded by the pair law alone---but the family of \emph{pairwise-admissible} sets, the cliques of the graph in which two cells are joined when their pair is survivable (Section~\ref{sec:criterion}). All three families are counted in Section~\ref{sec:classification}.
+
+\subsection{Information classes and why the problem is blind}
+In the calculus of \cite{Abaee2026calc} the manager's information at time $t$ is the set of cells consistent with the observations so far; the controller is \emph{blind within a class} because one action must be chosen for the class. If nothing is observed, the class is the whole cube and the manager plays one blind word for all $2^m$ cells; if the stock is observed, the first action $u$ reveals $D(u,\theta)$, hence the Hamming distance $\dH(u,\theta)$, and splits the cube into the distance shells of $u$, after which the manager plays blindly within each shell until the next split. Blind survivability of a set is therefore the primitive of every observation model on the cube: the no-observation model asks for $\Lstar(\Theta_m)$ (which is $\infty$, Corollary~\ref{cor:pairs}), the stock-feedback model of Section~\ref{sec:observation} composes blind thresholds along a tree of splits, and the exact probe models of the earlier editions reduce the class to subcubes before playing blindly. Two conventions used below: a word is \emph{periodic} when $u_{t+p}=u_t$, and a \emph{mixed action} is a probability $p$ on $\{\pm1\}^m$, identified with its mean $y=\sum_u p(u)u\in[-1,1]^m$; the expected drift of a mixed action is $\sum_up(u)D(u,\theta)=2\langle y,\theta\rangle-5$.
+
+\subsection{The cell-sum identity}
+For every action, including the hold, $\sum_{\theta\in\Theta_m}D(u,\theta)=-5\cdot2^m$, because $\sum_\theta\langle u,\theta\rangle=0$. Averaged over the cube, every action loses half a unit of stock per cell per period; at $m=4$ this is the ``$-8$ per step'' identity of the earlier editions ($16$ cells at $-\tfr12$). It explains at once why the whole cube cannot be kept blindly for long: Section~\ref{sec:observation} makes the horizon exact.
