@@ -1,0 +1,41 @@
+\section{Between expectation and worst case: contamination ambiguity}\label{sec:dr}
+
+Remark~\ref{rem:operators} supplies two endpoints: the expected operator \eqref{eq:recursion} and the adversarial reading of the observation. A contamination ambiguity set \cite{Huber1964} interpolates between them. Fix a nominal law $p$ on the outcomes of a stage and the set
+\[
+\calD_\rho(p)=\{\,q=(1-\rho)\,p+\rho\,r:\ r\in\Delta(Y^{\bot})\,\},\qquad \rho\in[0,1],
+\]
+and define the contaminated recursion $V^{\rho}_0(b)=b(\calV)$,
+\begin{equation}\label{eq:rho}
+V^{\rho}_{k+1}(b)=\max_{a}\ \inf_{q\in\calD_\rho(\Prob(\cdot\mid b,a))}\ \sum_{y\in Y^{\bot}}q(y)\,V^{\rho}_k\bigl(\tau(b,a,y)\bigr),
+\end{equation}
+with $V^{\rho}_k(\delta_\bot)=0$. The operator needs a continuation at \emph{every} outcome on which contamination may concentrate; outcomes that are nominally null must either be removed from the contaminating support or be given an explicit off-support continuation, and the construction---fixing the nominal posteriors while perturbing the outcome probabilities---is a rectangular stress operator in the sense of robust Markov decision processes \cite{Iyengar2005,NilimElGhaoui2005}, not the Bayesian update of a single coherent perturbed joint law.
+
+\begin{proposition}[one-stage contamination and its limits]\label{prop:dr}
+\begin{enumerate}[leftmargin=1.6em,itemsep=1pt]
+\item[(i)] The inner infimum in \eqref{eq:rho} is exact: for continuation values $(v_y)$,
+\begin{equation}\label{eq:contam}
+\inf_{q\in\calD_\rho(p)}\sum_y q(y)\,v_y=(1-\rho)\sum_y p(y)\,v_y+\rho\,\min_y v_y ,
+\end{equation}
+the adversary spending the whole budget on the worst outcome; $\rho=0$ recovers the expected operator and $\rho=1$ the worst-case reading.
+\item[(ii)] The interpolation is not affine across stages: with one safe state $s$, one action, $T(s\mid s)=\tfr12$, and an observation that reveals survival or exit, the recursion gives $V^{\rho}_k(\delta_s)=\bigl(\tfr{1-\rho}2\bigr)^{k}$, so $V^{1/2}_2=\tfr1{16}$ while $(1-\rho)V^{0}_2+\rho V^{1}_2=\tfr18$ at $\rho=\tfr12$.
+\item[(iii)] $V^{\rho}_k$ is piecewise linear in $b$ for every $\rho$, convex at $\rho=0$ (Proposition~\ref{prop:alpha}), and in general not convex for $\rho>0$, the minimum in \eqref{eq:contam} being a concave operation; no concavity holds either, the two-floor value $\max(b_0,b_1)$ at $\rho=0$ being a counterexample.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i) The objective is linear in $r$ over the simplex, so the infimum is attained at a vertex $r=\delta_{y^{*}}$ with $y^{*}$ a minimizer of $v_y$. (ii) $V^{\rho}_1(\delta_s)=(1-\rho)\bigl(\tfr12\cdot1+\tfr12\cdot0\bigr)+\rho\cdot0=\tfr{1-\rho}2$, and the same step applied to the continuation $V^{\rho}_{k}(\delta_s)$ gives the product form; the endpoint values are $V^{0}_2=\tfr14$ and $V^{1}_2=0$. (iii) Piecewise linearity: \eqref{eq:contam} is a maximum over actions of a sum of piecewise linear functions and a pointwise minimum of piecewise linear functions; convexity fails because the minimum of convex functions need not be convex, and concavity fails already at $\rho=0$.
+\end{proof}
+
+\begin{proposition}[prior contamination on the delayed class]\label{prop:priorcontam}
+On the instance \eqref{eq:delayed} let the prior itself be contaminated, $q(+1)=(1-\rho)w+\rho r$ with $r\in[0,1]$ chosen adversarially after the hold is announced. Then, for $k\ge1$ and $\ell=\min(k,\Tobs)$,
+\begin{equation}\label{eq:priorcontam}
+V^{\rho,\hold}_k(b_0)=\begin{cases}0,&z_0<1,\\ 1,&z_0\ge1+\ell,\\ (1-\rho)\max(w,1-w),&1\le z_0<1+\ell,\end{cases}
+\end{equation}
+the adversary pouring the contamination onto the falling branch; at the symmetric prior the three levels are $0$, $\tfr{1-\rho}2$ and $1$.
+\end{proposition}
+
+\begin{proof}
+Off the middle band the hold saves nothing or everything regardless of the prior. On the band the hold $u\equiv+1$ saves the $\theta=+1$ branch, of contaminated mass $(1-\rho)w+\rho r$, minimized at $r=0$; the hold $u\equiv-1$ saves the other branch, of mass $(1-\rho)(1-w)+\rho(1-r)$, minimized at $r=1$. The controller takes the better of $(1-\rho)w$ and $(1-\rho)(1-w)$.
+\end{proof}
+
+The contamination family is the formal home of the worst-case wording used informally across the companion papers: at $\rho=1$ the adversary chooses the observation, which under deterministic kernels is the robust operator of Remark~\ref{rem:operators}; at $\rho=0$ the nominal law is trusted. Moment- and distance-based ambiguity sets over the transition or observation kernel \cite{Osogami2015,Nakao2021,Saghafian2018}, under which the value stays piecewise linear, are the natural next ring and are not developed here.

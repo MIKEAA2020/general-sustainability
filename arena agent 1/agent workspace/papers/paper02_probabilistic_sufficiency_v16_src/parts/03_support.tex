@@ -1,0 +1,87 @@
+\section{Exact sufficiency: the support identity and the survivable-set antichain}\label{sec:support}
+
+Throughout this section the kernels and observation maps are deterministic, so that the model is the set-valued model of the obstruction calculus with a prior on the compatible states. Write $\supp b=\{x\in\calV:b(x)>0\}$.
+
+\subsection{The two set-valued recursions}
+
+The calculus works with families of subsets of $\calV$. The \emph{feedback viable-set recursion} is $\Wfb_0=2^{\calV}$ and, for $k\ge1$,
+\begin{multline*}
+B\in\Wfb_k\iff\exists a\in A:\ F(x,a)\in\calV\ \text{for all }x\in B\\ \text{and }\ \Post(B,a,y)\in\Wfb_{k-1}\ \text{for every }y\text{ with }\Post(B,a,y)\neq\varnothing ;
+\end{multline*}
+the continuation may depend on the observation. The \emph{blind recursion} $\Wbl_k$ is the special case in which it may not: $B\in\Wbl_k$ iff some $a$ keeps every $x\in B$ in $\calV$ and the whole successor set $F(B,a)=\bigcup_y\Post(B,a,y)$ lies in $\Wbl_{k-1}$. Both families are closed under taking subsets, and $\Wbl_k\subseteq\Wfb_k$ by induction.
+
+\begin{theorem}[support identity and exact sufficiency]\label{thm:support}
+Let the kernels and observation maps be deterministic. For every belief $b$, action $a$ and observation $y\in Y$ with $\Prob(y\mid b,a)>0$,
+\begin{equation}\label{eq:support}
+\supp\,\tau(b,a,y)=\Post(\supp b,a,y);
+\end{equation}
+the unnormalized observation-weighted successor of a zero-probability observation has empty support, which is the convention adopted when \eqref{eq:support} is read for all $y$. Consequently, for the sequential class and every $k\ge0$,
+\begin{enumerate}[leftmargin=1.6em,itemsep=1pt]
+\item[(i)] $V_k(b)=1$ if and only if $\supp b\in\Wfb_k$;
+\item[(ii)] if $\supp b\notin\Wfb_k$, every policy loses an initial state of positive mass along its realized observation path, so
+\begin{equation}\label{eq:minmass}
+1-V_k(b)\;\ge\;\min_{x\in\supp b}b(x);
+\end{equation}
+\item[(iii)] $V_k(b)$ is non-increasing in $k$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+A state $x'$ carries posterior mass after $(a,y)$ exactly when some $x\in\supp b$ has $T(x'\mid x,a)\,g(y\mid x,a,x')>0$; with point-mass rows and observation maps this says $x'=F(x,a)\in\calV$ and $h(x,a,x')=y$, which is the definition of $\Post(\supp b,a,y)$. This proves \eqref{eq:support}.
+
+(i, sufficiency) If $\supp b\in\Wfb_k$, let the policy play a witnessing action at each stage and continue, after each observation, with a witnessing action for the posterior support, which by \eqref{eq:support} is the post-state and by the recursion lies in $\Wfb_{k-1}$. Every initial state in the support stays in $\calV$ for $k$ stages, so $V_k(b)=1$.
+
+(i, necessity) and (ii) by induction on $k$. For $k=0$, $\supp b\notin\Wfb_0$ is impossible. Let $k\ge1$, $\supp b\notin\Wfb_k$, and let $\pi$ be any policy with first action $a$. Either some $x\in\supp b$ exits under $a$, in which case $\pi$ loses the branch $x$ immediately; or every $x$ stays, and then, since $\supp b\notin\Wfb_k$, some observation $y$ produced with positive probability has $\Post(\supp b,a,y)\notin\Wfb_{k-1}$. By \eqref{eq:support} the posterior after $(a,y)$ has exactly that support, and by the induction hypothesis the continuation of $\pi$ loses a branch of that posterior of positive mass. A branch of the posterior is the image of an initial state $x\in\supp b$ under the deterministic dynamics, so $\pi$ loses the initial state $x$, of mass $b(x)\ge\min_{x'\in\supp b}b(x')$. Hence $V_k(b)\le1-\min b$, which proves \eqref{eq:minmass} and the necessity in (i).
+
+(iii) Absorption at $\bot$ is permanent, so a policy that survives $k+1$ stages survives $k$.
+\end{proof}
+
+The theorem is the quantitative form of the support-only reduction known for almost-sure objectives in partially observable Markov decision processes \cite{Chatterjee2010,Chatterjee2016}: almost-sure safety depends on the belief support alone. What the value adds is the deficit \eqref{eq:minmass} with its witness reading, and---as Section~\ref{sec:stochastic} shows---the fact that the support-only reduction does \emph{not} extend to the quantitative criterion, which is why the value and not merely the support must be carried.
+
+\subsection{Feedback against blind control}
+
+\begin{proposition}[the value of observation]\label{prop:feedback}
+Let the kernels and observation maps be deterministic.
+\begin{enumerate}[leftmargin=1.6em,itemsep=1pt]
+\item[(i)] $\Wbl_k\subseteq\Wfb_k$, and the inclusion is strict in general even under the hypotheses of Theorem~\ref{thm:support}; for a belief whose support separates the two families, $V^{\seq}_k(b)=1>V^{\ol}_k(b)$.
+\item[(ii)] If every singleton $\{x\}$, $x\in\supp b$, belongs to $\Wbl_k$, then $V^{\ol}_k(b)\ge\max_{x}b(x)$ and therefore
+\begin{equation}\label{eq:voi}
+V^{\seq}_k(b)-V^{\ol}_k(b)\;\le\;1-\max_{x\in\supp b}b(x).
+\end{equation}
+\item[(iii)] The bound \eqref{eq:voi} is attained for every $n\ge2$: there is a model $\mathcal F_n$ with $2n$ safe states and $n+1$ actions and a belief with support of size $n$ such that $V^{\seq}_2(b)=1$ and $V^{\ol}_2(b)=\max_x b(x)$; at the uniform prior the value of observation is $1-\tfrac1n$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i) Inclusion was noted above. For strictness take $\mathcal F_2$ of (iii). (ii) A blind segment that keeps $x$ alive has witness $\alpha^u\ge\mathbf 1_{\{x\}}$, so $V^{\ol}_k(b)\ge b(x)$ for every individually survivable $x$; subtracting from $V^{\seq}_k\le1$ gives \eqref{eq:voi}. (iii) Let $\mathcal F_n$ have states $p_1,\dots,p_n,p_1^+,\dots,p_n^+$, actions $a_0,c_1,\dots,c_n$, and observations $y_1,\dots,y_n$ announcing the index of the successor. Under $a_0$, $p_i\mapsto p_i^+$ and every $p_i^+$ exits; under $c_j$, $p_j^+\mapsto p_j^+$ and every other state exits. With support $\{p_1,\dots,p_n\}$ the feedback policy ``play $a_0$, read $y_i$, play $c_i$'' keeps every branch alive, so $\{p_1,\dots,p_n\}\in\Wfb_2$ and $V^{\seq}_2(b)=1$; a blind sequence must open with $a_0$ and then commit to a single $c_j$, keeping only $p_j$ alive, so $V^{\ol}_2(b)=\max_j b(p_j)$, and $\{p_1,\dots,p_n\}\notin\Wbl_2$. Each singleton is in $\Wbl_2$, so (ii) applies with equality.
+\end{proof}
+
+The two recursions agree when no information arrives---on a blind window $\Wfb_k=\Wbl_k$---which is the set-level content of the middle equality in Theorem~\ref{thm:lattice} below. The distinction matters for the positioning of the paper: the necessary-and-sufficient output-feedback criterion of \cite{Doyen2000} is formulated for memoryless loops, whereas Theorem~\ref{thm:support} admits the whole history, and Proposition~\ref{prop:feedback} shows that this admission is not cosmetic.
+
+\subsection{The survivable-set antichain}
+
+\begin{theorem}[survivable sets, witnesses and the census]\label{thm:antichain}
+Let the kernels and observation maps be deterministic, fix a class $\Pi$ and a horizon $k$, and let $\calS^{\Pi}_k(b)$ be the family of subsets $S\subseteq\supp b$ that some single policy $\pi\in\Pi$ keeps alive for $k$ stages. Then:
+\begin{enumerate}[leftmargin=1.6em,itemsep=1pt]
+\item[(i)] $V^{\Pi}_k(b)=\max_{S\in\calS^{\Pi}_k(b)}b(S)$;
+\item[(ii)] the witnesses produced by the backup \eqref{eq:backup} are $\{0,1\}$-vectors, and after removal of dominated vectors the witness set is exactly the set of indicators of the maximal elements of $\calS^{\Pi}_k(b)$;
+\item[(iii)] the maximal elements form an antichain, so their number is at most $\binom{n}{\lfloor n/2\rfloor}$ for $|\supp b|=n$ (Sperner \cite{Sperner1928}); the bound is attained at $k=1$ by a model with one action per $\lfloor n/2\rfloor$-subset, each keeping exactly that subset alive, and for a blind class with $m$ actions the number of maximal elements is also at most $m^{k}$;
+\item[(iv)] the deficit is $1-V^{\Pi}_k(b)=\min_S b(S^{c})$, the minimum over the maximal survivable sets; the minimal-mass bound \eqref{eq:minmass} is the case in which some maximal set misses exactly one state, and it is an equality whenever a maximal set misses exactly a lightest state.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Under deterministic kernels and observation maps every initial state $x$ generates, under a fixed policy, a single history and a single trajectory, so the set $S(\pi)$ of initial states kept alive is well defined and $\Prob_\pi(\text{survive}\mid b)=b(S(\pi))$; maximizing over $\pi$ gives (i), since $\calS^{\Pi}_k(b)$ consists of the sets $S(\pi)$ and their subsets and $b$ is monotone. By induction on the backup, $\alpha^{a,\gamma_\cdot}(x)=\ind{F(x,a)\in\calV}\,\gamma_{h(x,a,F(x,a))}(F(x,a))\in\{0,1\}$, and the witness of a policy tree is $\mathbf 1_{S(\pi)}$; a non-maximal $S(\pi)$ is pointwise dominated by a maximal one, which gives (ii). Inclusion-maximal sets are pairwise incomparable, so (iii) follows from Sperner's theorem; in the attaining model each $\lfloor n/2\rfloor$-subset is survivable and no larger set is; a blind class of horizon $k$ has at most $m^{k}$ segments, each contributing one set. (iv) is $1-\max_S b(S)=\min_S b(S^{c})$ over the same maximal sets.
+\end{proof}
+
+\begin{remark}[the robust operator]\label{rem:operators}
+Under deterministic kernels the stochastic expectation over the kernel disappears and (i) becomes the \emph{survived-mass formula}: the value is the largest prior mass that one admissible policy keeps alive. This is also the value of the \emph{robust} operator of the companion papers, in which the disturbance is read adversarially within its support, so that the common-action verdicts and the minimal-mass deficit bound of \cite{Abaee2026calc} are recovered as exact values. The agreement is a theorem about the deterministic degeneration and not a claim about a stochastic plant, whose expected and worst-case readings differ (Section~\ref{sec:dr}).
+\end{remark}
+
+\begin{proposition}[stabilization on the survivable-set lattice]\label{prop:freeze}
+Let the kernels be deterministic and the class prefix-closed. Then $\calS^{\Pi}_{\ell+1}(b)\subseteq\calS^{\Pi}_{\ell}(b)$, so $V^{\Pi}_\ell(b)$ is non-increasing in $\ell$ and takes at most $2^{|\supp b|}$ distinct values; the frozen value is $\max_S b(S)$ over the maximal sets of the frozen family and is a well-defined infinite-horizon value. Finiteness of the lattice alone gives no computable bound on the index of the last strict decrease for a nonstationary class; for a stationary finite model the fixed point of the set-valued recursion supplies one. On the delayed instance of Section~\ref{sec:delayed} the open-loop family is frozen from $\ell=1$ and the hold-class family from $\ell=\Tobs$.
+\end{proposition}
+
+\begin{proof}
+A policy surviving $\ell+1$ stages survives its $\ell$-stage prefix, which is admissible by prefix-closure; hence the inclusion, and monotonicity by Theorem~\ref{thm:antichain}(i). A non-increasing sequence of subfamilies of the finite lattice $2^{\supp b}$ changes at most $2^{|\supp b|}$ times. The instance statements are Theorem~\ref{thm:closed}: the open-loop closed form does not depend on $\ell$, and the hold-class closed form depends on $\ell=\min(k,\Tobs)$ only.
+\end{proof}

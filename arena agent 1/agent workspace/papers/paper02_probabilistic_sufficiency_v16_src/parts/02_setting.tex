@@ -1,0 +1,78 @@
+\section{Setting: safety POMDPs, policy classes and the safety value}\label{sec:setting}
+
+\subsection{The augmented model}
+
+\begin{definition}[safety POMDP with absorbing unsafe state]\label{def:model}
+A \emph{safety POMDP} consists of a finite safe set $\calV$, the augmented state space $X^{\bot}=\calV\cup\{\bot\}$ with an absorbing unsafe state $\bot$, a finite action set $A$, a finite observation set $Y^{\bot}=Y\cup\{y_{\bot}\}$, a transition kernel $T$ and an observation law $g$, all with rational data:
+\begin{enumerate}[leftmargin=1.6em,itemsep=1pt]
+\item for $x\in\calV$ and $a\in A$ the row $T(\cdot\mid x,a)$ is sub-stochastic on $\calV$, with \emph{exit probability} $p(x,a)=1-\sum_{x'\in\calV}T(x'\mid x,a)=T(\bot\mid x,a)$, and $T(\bot\mid\bot,a)=1$;
+\item for $x,x'\in\calV$ the law $g(\cdot\mid x,a,x')$ is a probability distribution on $Y$, and the exit is announced: $g(y_{\bot}\mid\cdot,\cdot,\bot)=1$.
+\end{enumerate}
+A \emph{belief} is a probability distribution $b$ on $X^{\bot}$; only its restriction to $\calV$ matters for safety, and $b(\calV)=\sum_{x\in\calV}b(x)$ is the mass still alive. For $y\in Y$ the observation likelihood and the Bayes update are
+\begin{gather*}
+\Prob(y\mid b,a)=\sum_{x,x'\in\calV}b(x)\,T(x'\mid x,a)\,g(y\mid x,a,x'),\\
+\tau(b,a,y)(x')=\frac{\sum_{x\in\calV}b(x)\,T(x'\mid x,a)\,g(y\mid x,a,x')}{\Prob(y\mid b,a)}\qquad(x'\in\calV),
+\end{gather*}
+defined when $\Prob(y\mid b,a)>0$, while $\tau(b,a,y_{\bot})=\delta_{\bot}$. Since every row sums to one and every transition emits exactly one observation, $\sum_{y\in Y^{\bot}}\Prob(y\mid b,a)=1$ at every belief: no sub-probability bookkeeping is needed, and exit from $\calV$ is absorption with no re-entry.
+\end{definition}
+
+The kernels are \emph{deterministic} if every row $T(\cdot\mid x,a)$ is a point mass, at some $F(x,a)\in\calV$ or at $\bot$; the observation maps are deterministic if $g(\cdot\mid x,a,x')$ is a point mass $\delta_{h(x,a,x')}$. Under both hypotheses the model is the set-valued model of the obstruction calculus \cite{Abaee2026calc} with a prior placed on the compatible states, and the \emph{post-state} of a set $B\subseteq\calV$ under $(a,y)$ is
+\[
+\Post(B,a,y)=\{F(x,a):x\in B,\ F(x,a)\in\calV,\ h(x,a,F(x,a))=y\}.
+\]
+
+\subsection{Policy classes and the safety value}
+
+A history at stage $t$ is $h_t=(a_0,y_1,\dots,a_{t-1},y_t)$, and a (deterministic) policy maps the initial belief and the history to an action. Four classes recur.
+\begin{itemize}[leftmargin=1.6em,itemsep=1pt]
+\item $\Pi_{\seq}$: all history-dependent policies (the \emph{sequential} or feedback class).
+\item $\Pi_{\ol}(\ell)$: policies whose actions on the window $t=0,\dots,\ell-1$ are fixed in advance, $a_t=u_t$, and unrestricted afterwards (\emph{open-loop} on the window). When the window is \emph{blind}---no observation other than the exit announcement arrives before stage $\ell$---the sequential and the open-loop classes coincide on the window, because the only history available is the observation-free one.
+\item $\Pi_{\hold}(\ell)\subseteq\Pi_{\ol}(\ell)$: policies that hold one action $u_0=\dots=u_{\ell-1}=u$ on the window and are unrestricted afterwards (the \emph{hold} class, the institutional reading of a regulator who sets a rule and reviews it only at the end of the window).
+\item $\Pi_{\obs}$: the sequential class under a finer information pattern in which the state is observed from the start; its value is the stochastic viability value under full observation \cite{DoyenDeLara2010} and serves as the upper benchmark.
+\end{itemize}
+
+\begin{definition}[safety value and its levels]\label{def:value}
+For a class $\Pi$ and a horizon $k\ge0$ the \emph{safety value} is
+\[
+V^{\Pi}_{k}(b)=\max_{\pi\in\Pi}\ \Prob_{\pi}\bigl(x_t\in\calV\text{ for }t=0,\dots,k\;\big|\;b\bigr),
+\]
+the horizon counting the current state; the maximum exists because for finite horizon, action and observation sets finitely many deterministic policies compete, and randomization cannot increase a probability that is linear in the policy's stagewise mixtures. The \emph{deficit} is $\Delta^{\Pi}_k(b)=1-V^{\Pi}_k(b)$. The superscript is dropped for the sequential class. Two action sets at a belief must be distinguished: the \emph{attaining set} $\Gamma^{\mathrm s}_k(b)$ of actions achieving the maximum in the recursion below, which is nonempty at every belief and carries no viability content, and the \emph{value-one level} $S_k(b)$ of actions after which the continuation value is one, whose nonemptiness is equivalent to $V_k(b)=1$. Obstruction certificates correspond to $S_k(b)=\varnothing$.
+\end{definition}
+
+\begin{proposition}[belief-state recursion]\label{prop:recursion}
+$V_0(b)=b(\calV)$ and, for $k\ge0$,
+\begin{equation}\label{eq:recursion}
+V_{k+1}(b)=\max_{a\in A}\ \sum_{y\in Y}\Prob(y\mid b,a)\,V_{k}\bigl(\tau(b,a,y)\bigr),
+\end{equation}
+the exit observation contributing zero. The same recursion with the stagewise admissible set $A_t(\Pi)$ in place of $A$ computes $V^{\Pi}_k$ for every class defined by stagewise action restrictions; for the window classes $\Pi_{\ol}(\ell)$ and $\Pi_{\hold}(\ell)$, whose constraint couples the stages of the window, the equivalent segment form of Proposition~\ref{prop:alpha} applies on the window and \eqref{eq:recursion} after it.
+\end{proposition}
+
+\begin{proof}
+This is value iteration for the belief-state Markov decision process \cite{Astrom1965,SmallwoodSondik1973,BertsekasShreve1978} with the multiplicative survival objective: conditioning on the first action and observation, the probability of surviving $k+1$ stages is the probability of surviving the first transition and the observation-weighted probability of surviving $k$ further stages from the posterior, and $\bot$ is absorbing, so the exit branch contributes zero. The partially observed multiplicative recursion is the finite-state case of the sufficient-statistic construction of \cite{LesserOishi2014}. For a window class, enumerate the admissible window segments and apply \eqref{eq:recursion} to the continuation.
+\end{proof}
+
+\subsection{Exact $\alpha$-vector representation}
+
+\begin{proposition}[rational $\alpha$-vectors]\label{prop:alpha}
+Fix a class $\Pi$ with stagewise admissible sets. At every horizon $k$ the value is piecewise linear and convex in $b$,
+\[
+V^{\Pi}_k(b)=\max_{\alpha\in\Gamma^{\Pi}_k}\ \sum_{x\in\calV}\alpha(x)\,b(x),
+\]
+for a finite set $\Gamma^{\Pi}_k\subset\Qr^{\calV}$ of \emph{witnesses} built by the masked backup
+\begin{equation}\label{eq:backup}
+\begin{gathered}
+\Gamma^{\Pi}_0=\{\mathbf 1_{\calV}\},\qquad
+\alpha^{a,\gamma_{\cdot}}(x)=\sum_{x'\in\calV}T(x'\mid x,a)\sum_{y\in Y}g(y\mid x,a,x')\,\gamma_y(x'),\\
+\Gamma^{\Pi}_{k+1}=\{\alpha^{a,\gamma_{\cdot}}:a\in A_t(\Pi),\ \gamma_y\in\Gamma^{\Pi}_k\},
+\end{gathered}
+\end{equation}
+in which the coordinate at $\bot$ is anchored at zero (no backup can revive a lost branch). Over rational data every witness is a rational vector and every value at a rational belief is a rational number, with the attaining witness part of the computation. Removing pointwise dominated witnesses does not change the value, and the worst-case growth is $|\Gamma^{\Pi}_{k+1}|\le|A|\,|\Gamma^{\Pi}_k|^{|Y|}$. For an open-loop window the \emph{segment form} holds: each admissible segment $u=(u_0,\dots,u_{\ell-1})$ contributes the witness $\alpha^{u}(x)=\Prob(x\text{ survives the window under }u\mid x_0=x)$, and $V^{\Pi_{\ol}(\ell)}_{\ell}(b)=\max_u\sum_x b(x)\alpha^u(x)$; under deterministic kernels $\alpha^u$ is the indicator of the states the segment keeps alive.
+\end{proposition}
+
+\begin{proof}
+Induction on $k$: $V_0(b)=\mathbf 1_{\calV}^{\!\top}b$. Substituting the induction hypothesis into \eqref{eq:recursion}, the maximum over witness selections $(\gamma_y)_y$ commutes with the finite observation sum, and the coefficient of $b(x)$ is exactly $\alpha^{a,\gamma_\cdot}(x)$, a finite sum of products of rationals; the finite maximum of linear functionals is piecewise linear and convex. This is the Smallwood--Sondik representation \cite{SmallwoodSondik1973} specialized to the absorbing safety reward, with exact arithmetic replacing floating point. For the segment form, survival of a fixed segment is the probability that the initial state's trajectory stays in $\calV$, a rational computed by forward propagation, and the open-loop value is the maximum of these linear functionals over segments.
+\end{proof}
+
+\begin{remark}[complexity]\label{rem:complexity}
+The exponential growth law in Proposition~\ref{prop:alpha} is the general behaviour: finite-horizon partially observed problems are PSPACE-complete and their unobservable variant NP-complete \cite{PapadimitriouTsitsiklis1987}, and the practical response has been bounds and point-based approximations \cite{Lovejoy1991,Pineau2003}. Exact pruning of dominated witnesses is the incremental-pruning strategy of \cite{Cassandra1997}; the present paper does not improve the complexity picture but identifies classes on which the witness set collapses to a small antichain (Theorem~\ref{thm:antichain}) and closed forms are available (Theorem~\ref{thm:closed}).
+\end{remark}

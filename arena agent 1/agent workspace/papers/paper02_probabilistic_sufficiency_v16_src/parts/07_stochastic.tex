@@ -1,0 +1,66 @@
+\section{The stochastic layer: noisy sensing}\label{sec:stochastic}
+
+Everything so far has deterministic kernels and observation maps; the values are prior masses of surviving branches and take finitely many values dictated by the prior. This section opens the stochastic layer, where the values cease to be prior masses and the minimal-mass bound ceases to be universal.
+
+\subsection{The weighted-path identity}
+
+For a fixed policy $\pi$ the exit probability from the belief $b$ is linear in $b$: $\Prob_\pi(\text{exit by stage }k\mid b)=\sum_x b(x)\,q^{\pi}_k(x)$, with $q^{\pi}_k(x)$ the exit probability from the initial state $x$. The deficit is therefore the prior mass weighted by \emph{fatal-path probabilities} under the optimal policy; under deterministic kernels $q^{\pi}_k\in\{0,1\}$ and the identity collapses to the survived-mass formula. The one-step read-then-act case already separates the two layers.
+
+\begin{proposition}[weighted-path deficit and the sensor instance]\label{prop:pathdeficit}
+Let a reading $y$ of the initial state be available before the first action, with a normalized law $g_0(y\mid x)$, and let the controller choose $a=a(y)$. Then
+\begin{equation}\label{eq:pathdeficit}
+\Delta_1(b)=\min_{a(\cdot)}\ \sum_{x}b(x)\,p^{a(\cdot)}_x,\qquad p^{a(\cdot)}_x=\sum_y g_0(y\mid x)\,p(x,a(y)),
+\end{equation}
+the minimum over deterministic reading-to-action maps; randomization cannot lower it. In the two-state sensor instance---safe states $x_1,x_2$, action $a_i$ safe only at $x_i$, reading error $\Prob(\text{reads }j\neq i\mid x_i)=\varepsilon$ with $0<\varepsilon<\tfr12$---the four maps give the deficits $\varepsilon$ (read-own), $1-\varepsilon$ (read-opposite), $b(x_2)$ (always $a_1$) and $b(x_1)$ (always $a_2$), so
+\begin{equation}\label{eq:sensor}
+\Delta_1(b)=\min\{\varepsilon,\ b(x_1),\ b(x_2)\}.
+\end{equation}
+At $b=(\tfr12,\tfr12)$ and $\varepsilon=\tfr1{20}$ the deficit is $\tfr1{20}$, strictly below the minimal mass $\tfr12$ (Figure~\ref{fig:deficits}b).
+\end{proposition}
+
+\begin{proof}
+For a fixed map, one-step survival is $\sum_x b(x)\sum_y g_0(y\mid x)(1-p(x,a(y)))$, which is \eqref{eq:pathdeficit} after optimizing; a randomized map is a convex combination of deterministic ones and the objective is linear in it. In the sensor instance the four maps are enumerated directly; for $\varepsilon<\tfr12$ the read-opposite map is never optimal, giving \eqref{eq:sensor}.
+\end{proof}
+
+The identity delimits the reach of the deterministic layer. The minimal-mass bound \eqref{eq:minmass} requires every admissible policy to lose some whole branch of positive prior mass; with noisy readings an optimal policy loses an $\varepsilon$-fraction of \emph{every} branch and no branch entirely, and the deficit can be far below the smallest prior mass. The calculus's probabilistic development, in which the deficit from unity is bounded below by the smallest compatible mass under adversarial disturbance readings, is exact at the deterministic degeneration of Remark~\ref{rem:operators} and is scoped to it.
+
+\subsection{Noisy probes and the repetition trade-off}
+
+\begin{proposition}[noisy probe and majority reading]\label{prop:noisyprobe}
+On the declining instance \eqref{eq:declining}, hold $u=0$ to stage $t_p$, take at stage $t_p$ an instantaneous reading of $\theta$ that is correct with probability $1-\varepsilon$ and flipped with probability $\varepsilon$, and play $u=$ reading from $t_p$ to the horizon $k\ge t_p$. With $z_p=z_0-\tfr{t_p}{10}$,
+\begin{equation}\label{eq:noisyprobe}
+V_k(b_0)=(1-\varepsilon)\,\ind{z_p\ge1}+\varepsilon\,\ind{z_p\ge1+\tfr{11}{10}(k-t_p)} ,
+\end{equation}
+exactly: the correct reading acts under drift $\tfr9{10}$ and the flipped reading under drift $-\tfr{11}{10}$. The value takes exactly the three levels $\{0,1-\varepsilon,1\}$ and the deficit equals the post-reading minimal mass $\varepsilon$ precisely on the middle band $1\le z_p<1+\tfr{11}{10}(k-t_p)$. With three readings at $t_p,t_p+1,t_p+2$ ($u=0$ meanwhile) and a majority decision at $t_p+2$, the wrong-majority probability is
+\begin{equation}\label{eq:majority3}
+p_3=3\varepsilon^{2}(1-\varepsilon)+\varepsilon^{3}=\varepsilon^{2}(3-2\varepsilon),
+\end{equation}
+equal to $\tfr7{250}$ at $\varepsilon=\tfr1{10}$ against $\tfr1{10}$ for one reading, and \eqref{eq:noisyprobe} holds with $p_3$ in place of $\varepsilon$ and $z_0-\tfr{t_p+2}{10}$ in place of $z_p$: each additional reading costs $\tfr1{10}$ of floor margin to the blind drift---the exact exploration--safety exchange at this scale (Figure~\ref{fig:probes}a).
+\end{proposition}
+
+\begin{proof}
+Condition on $(\theta,\text{reading})$, the four cases having probabilities $\tfr12(1-\varepsilon)$ and $\tfr12\varepsilon$ per branch. Before $t_p$ the state falls monotonically, so survival to $t_p$ is $z_p\ge1$. A correct reading then plays $u=\theta$, with drift $\tfr9{10}$, and never exits; a flipped reading plays $u=-\theta$, with drift $-\tfr1{10}-1=-\tfr{11}{10}$, and survives to $k$ exactly when $z_p-\tfr{11}{10}(k-t_p)\ge1$. Summing gives \eqref{eq:noisyprobe}; both branches contribute symmetrically, so the prior weight does not appear. The wrong-majority event is two or three flipped readings, with probability \eqref{eq:majority3}; the two extra blind stages lower the state by $\tfr2{10}$ before the decision. Both displays are re-derived by exhaustive enumeration over $(\theta,\text{readings})$ in the verification script.
+\end{proof}
+
+\begin{proposition}[probe-count bound]\label{prop:probecount}
+Let $n=2m+1$ readings with per-reading error $\varepsilon<\tfr12$ be decided by majority. Then
+\begin{equation}\label{eq:probecount}
+p_{\mathrm{wrong}}(n)=\sum_{j=m+1}^{n}\binom nj\varepsilon^{j}(1-\varepsilon)^{n-j}\ \le\ \bigl(4\varepsilon(1-\varepsilon)\bigr)^{n/2}\ \le\ e^{-2n\,\mathrm{sep}^{2}},\qquad \mathrm{sep}=\tfr12-\varepsilon,
+\end{equation}
+so $n\ge\ln(1/\delta)/(2\,\mathrm{sep}^{2})$ readings achieve a wrong-majority probability at most $\delta$: the reading count grows like $\log(1/\delta)$ over the squared separation, and on the declining instance each reading costs $\tfr1{10}$ of floor margin. At $\varepsilon=\tfr1{10}$ the bound reads $(3/5)^{n}$, against the exact values $\tfr1{10},\tfr7{250},\tfr{107}{12500},\tfr{341}{125000},\tfr{22273}{25000000}$ at $n=1,3,5,7,9$ (Figure~\ref{fig:probes}b, Table~S5.1).
+\end{proposition}
+
+\begin{proof}
+For $j>n/2$, $\varepsilon^{j}(1-\varepsilon)^{n-j}=(\varepsilon(1-\varepsilon))^{n/2}\bigl(\tfrac{\varepsilon}{1-\varepsilon}\bigr)^{j-n/2}\le(\varepsilon(1-\varepsilon))^{n/2}$ because $\varepsilon<1-\varepsilon$; summing the binomial coefficients over all $j$ bounds the sum by $2^{n}(\varepsilon(1-\varepsilon))^{n/2}$, which is the first inequality. The second is $4\varepsilon(1-\varepsilon)=1-4\,\mathrm{sep}^{2}\le e^{-4\,\mathrm{sep}^{2}}$ \cite{Hoeffding1963}.
+\end{proof}
+
+\begin{remark}[noiseless limit]\label{rem:eps0}
+The exact split of Proposition~\ref{prop:deadline} is the $\varepsilon\to0$ degeneration of Proposition~\ref{prop:probecount}: the separation rises to $\tfr12$, $p_{\mathrm{wrong}}(1)=\varepsilon$ falls to zero, and one reading already achieves $\delta=0$---the branch split of size $2$ needs no statistics precisely because the base of the exponential tends to zero with $\varepsilon$. For $\varepsilon>0$ the count law prices what the exact split obtains for free, and each reading additionally pays its unit of floor margin.
+\end{remark}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{fig4_probes.pdf}
+\caption{Noisy probes on the declining instance. (a) Values of Proposition~\ref{prop:noisyprobe} at $\varepsilon=\tfr1{10}$ with a single reading at $t_p=0$ and horizon $k=2$ (three levels $0,\tfr9{10},1$ with jumps at $z_0=1$ and $z_0=1+\tfr{11}{10}\cdot2$), and with three readings decided by majority at stage $2$ and horizon $k=4$ (levels $0,\tfr{243}{250},1$, both jumps shifted right by the $\tfr2{10}$ of floor margin spent on the two extra blind stages). (b) The exact wrong-majority probability against the bound $(3/5)^{n}$ of Proposition~\ref{prop:probecount}.}
+\label{fig:probes}
+\end{figure}
