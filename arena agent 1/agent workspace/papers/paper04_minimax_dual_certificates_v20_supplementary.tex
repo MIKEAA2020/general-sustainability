@@ -1,0 +1,538 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs,array,tabularx}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{microtype}
+\usepackage{xcolor}
+\definecolor{linkblue}{rgb}{0,0.15,0.5}
+\usepackage[colorlinks=true,linkcolor=linkblue,citecolor=linkblue,urlcolor=linkblue]{hyperref}
+\usepackage{url}
+\allowdisplaybreaks
+\emergencystretch=2em
+
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\theequation}{S.\arabic{equation}}
+\renewcommand{\thetable}{S\arabic{section}.\arabic{table}}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Qr}{\mathbb{Q}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\conv}{\operatorname{conv}}
+\newcommand{\aff}{\operatorname{aff}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\capi}[1]{\operatorname{cap}_{#1}}
+\newcommand{\ind}[1]{\mathbf{1}[#1]}
+\newcommand{\tfr}[2]{\tfrac{#1}{#2}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\mref}[1]{\csname mainlab@#1\endcsname}
+\newcommand{\meqref}[1]{(\mref{#1})}
+\setlength{\parskip}{2pt}
+\renewcommand{\arraystretch}{1.3}
+
+\begin{document}
+
+\title{\textbf{Supplementary material for}\\ \emph{Minimax dual certificates for the common-action obstruction: sparsity, polyhedral recovery, a benchmark law, and the finite review envelope}}
+\author{Amin Abaee\\[0.3em]{\small Independent Researcher}\\[0.2em]{\small ORCID: \href{https://orcid.org/0000-0002-0019-1842}{0000-0002-0019-1842}\quad \href{mailto:amin_abaee@ut.ac.ir}{amin\_abaee@ut.ac.ir}}}
+\date{October 15, 2026}
+\maketitle
+
+\section*{Contents of the supplement}
+S1 proof details for the static theory (Sion hypotheses, Helly for infinite families and the rank reduction, the finite convex-hull programme, the polyhedral duality); S2 static instance records (one-dimensional instances, the tight family, the benchmark atoms, margin and demand-floor tables); S3 the two-patch codex enumeration; S4 the random Helly-size study; S5 review-envelope records (the complete two-window tree, the coupling polytope, the sweep with worst couplings, the inherited instances); S6 the integrated certificate and its sign convention; S7 the verification record (check list, Lean scope list, figure provenance); S8 symbol table and sign conventions. Theorem and equation numbers of the main text are quoted as ``main Theorem~\mref{thm:dual}'' etc.; they are read from the compiled main text, and the verification script confirms the correspondence (check TXT.2). The exact module \texttt{p04\_core.py}, the verification script \path{paper04_minimax_dual_certificates_v20_verification.py} with its output, and the figure and table scripts accompany the manuscript.
+
+% generated from the main-text .aux file: main-text numbers used by \mref / \meqref
+\expandafter\def\csname mainlab@sec:intro\endcsname{1}
+\expandafter\def\csname mainlab@sec:setting\endcsname{2}
+\expandafter\def\csname mainlab@eq:plant\endcsname{1}
+\expandafter\def\csname mainlab@eq:R\endcsname{2}
+\expandafter\def\csname mainlab@eq:common\endcsname{3}
+\expandafter\def\csname mainlab@eq:values\endcsname{4}
+\expandafter\def\csname mainlab@def:certificate\endcsname{2.1}
+\expandafter\def\csname mainlab@eq:cert\endcsname{5}
+\expandafter\def\csname mainlab@sec:static\endcsname{3}
+\expandafter\def\csname mainlab@thm:dual\endcsname{3.1}
+\expandafter\def\csname mainlab@eq:sion\endcsname{6}
+\expandafter\def\csname mainlab@rem:isaacs\endcsname{3.2}
+\expandafter\def\csname mainlab@thm:helly\endcsname{3.3}
+\expandafter\def\csname mainlab@fig:dual\endcsname{1}
+\expandafter\def\csname mainlab@rem:random\endcsname{3.4}
+\expandafter\def\csname mainlab@prop:nonconvex\endcsname{3.5}
+\expandafter\def\csname mainlab@thm:polyhedral\endcsname{3.6}
+\expandafter\def\csname mainlab@eq:farkas\endcsname{7}
+\expandafter\def\csname mainlab@rem:search\endcsname{3.7}
+\expandafter\def\csname mainlab@sec:taxonomy\endcsname{4}
+\expandafter\def\csname mainlab@prop:taxonomy\endcsname{4.1}
+\expandafter\def\csname mainlab@ex:patch\endcsname{4.2}
+\expandafter\def\csname mainlab@sec:benchmark\endcsname{5}
+\expandafter\def\csname mainlab@eq:bench\endcsname{8}
+\expandafter\def\csname mainlab@eq:benchU\endcsname{9}
+\expandafter\def\csname mainlab@eq:caps\endcsname{10}
+\expandafter\def\csname mainlab@prop:benchmark\endcsname{5.1}
+\expandafter\def\csname mainlab@fig:bench\endcsname{2}
+\expandafter\def\csname mainlab@prop:floor\endcsname{5.2}
+\expandafter\def\csname mainlab@eq:floorlaw\endcsname{11}
+\expandafter\def\csname mainlab@rem:aggregate\endcsname{5.3}
+\expandafter\def\csname mainlab@sec:dynamic\endcsname{6}
+\expandafter\def\csname mainlab@def:tree\endcsname{6.1}
+\expandafter\def\csname mainlab@eq:N\endcsname{12}
+\expandafter\def\csname mainlab@thm:envelope\endcsname{6.2}
+\expandafter\def\csname mainlab@cor:prefix\endcsname{6.3}
+\expandafter\def\csname mainlab@ex:posterior\endcsname{6.4}
+\expandafter\def\csname mainlab@sec:twowindow\endcsname{6.2}
+\expandafter\def\csname mainlab@prop:robust\endcsname{6.5}
+\expandafter\def\csname mainlab@eq:robust\endcsname{13}
+\expandafter\def\csname mainlab@fig:review\endcsname{3}
+\expandafter\def\csname mainlab@ex:sweep\endcsname{6.6}
+\expandafter\def\csname mainlab@tab:sweep\endcsname{1}
+\expandafter\def\csname mainlab@sec:integrated\endcsname{6.4}
+\expandafter\def\csname mainlab@prop:integrated\endcsname{6.7}
+\expandafter\def\csname mainlab@eq:slack\endcsname{14}
+\expandafter\def\csname mainlab@eq:gammah\endcsname{15}
+\expandafter\def\csname mainlab@eq:gamma3\endcsname{16}
+\expandafter\def\csname mainlab@fig:helly\endcsname{4}
+\expandafter\def\csname mainlab@sec:verification\endcsname{7}
+\expandafter\def\csname mainlab@sec:related\endcsname{8}
+\expandafter\def\csname mainlab@op:continuous\endcsname{8.1}
+\expandafter\def\csname mainlab@op:robust\endcsname{8.2}
+\expandafter\def\csname mainlab@op:integrated\endcsname{8.3}
+\expandafter\def\csname mainlab@op:nonconvex\endcsname{8.4}
+\section{Proof details for the static theory}\label{si:proofs}
+
+\subsection{Hypotheses of Sion's theorem in main Theorem~\mref{thm:dual}}
+Sion's theorem requires a function $\Phi:X\times Y\to\R$ with $X$ compact convex, $Y$ convex, $\Phi(\cdot,y)$ upper semicontinuous and quasi-concave for each $y$, and $\Phi(x,\cdot)$ lower semicontinuous and quasi-convex for each $x$; then $\sup_x\inf_y\Phi=\inf_y\sup_x\Phi$. Here $X=U$ (compact convex), $Y=\calP(\calA)$ (convex; compact in the weak$^\ast$ topology because $\calA$ is compact, by Prokhorov), and $\Phi(u,\mu)=\int(c_a+v_a^\top u)\dd\mu(a)$ is affine in $u$ and affine and weak$^\ast$-continuous in $\mu$ (the integrand is continuous in $a$ for fixed $u$). Hence both sides are attained: the left side because $u\mapsto\min_a\psi_a(u)$ is continuous on the compact $U$, the right side because $\mu\mapsto\max_u\Phi(u,\mu)=\int c\dd\mu+h_U(\int v\dd\mu)$ is continuous on the compact $\calP(\calA)$. For finite $\calA$ all of this is finite-dimensional and the right-hand side is a linear programme over the simplex.
+
+\subsection{Helly's theorem for infinite families}
+The finite Helly theorem states that if a finite family of convex sets in $\R^e$ has the property that every $e+1$ members intersect, the whole family intersects. For an infinite family of \emph{compact} convex sets the same conclusion holds: by the finite theorem every finite subfamily intersects, and a family of compact sets with the finite intersection property has non-empty intersection. This is the version used in the proof of main Theorem~\mref{thm:helly}(i); compactness of the sets $C_a=\{u\in U:\psi_a(u)\ge0\}$ comes from the compactness of $U$ and the continuity of $\psi_a$.
+
+\paragraph{The rank reduction.} Let $W=\operatorname{span}\{v_a\}$ with $\dim W=r$ and let $P$ be the orthogonal projection onto $W$. Since $v_a^\top u=v_a^\top Pu$, the row $\psi_a$ depends on $u$ only through $w=Pu\in P(U)$, a compact convex subset of $W$. Define $C_a'=\{w\in P(U):c_a+v_a^\top w\ge0\}$. If $u\in\bigcap_aC_a$ then $Pu\in\bigcap_aC_a'$; conversely if $w\in\bigcap_aC'_a$, pick any $u\in U$ with $Pu=w$ (exists by definition of $P(U)$); then $u\in\bigcap_aC_a$. So the two intersections are empty together and Helly can be applied in $W$. The same argument with $\aff U$ in place of $\R^k$ gives the $\dim\aff U$ bound; the minimum of the two applies because both reductions can be composed (project $\aff U$ onto $W$).
+
+\paragraph{The $k+1$ versus $k+2$ count.} Carath\'eodory's theorem applied to the point $(\int c\dd\mu,\int v\dd\mu)\in\conv\{(c_a,v_a)\}\subset\R^{k+1}$ yields a representation with $k+2$ atoms having the same pooled row and hence the same margin. The Helly route gives $k+1$ because it uses the structure of the sets $C_a$ (half-spaces intersected with $U$) rather than only the convexity of the set of rows; the tight family of main Theorem~\mref{thm:helly}(ii) shows that $k+1$ cannot be improved.
+
+\paragraph{The tight family: the dual value.} For $k=2$ the exact simplex programme
+\[
+\min_{\lambda\in\Delta_3}\ \max_{u\in[0,2]^2}\ \sum_i\lambda_i\psi_i(u)
+\]
+has the unique solution $\lambda=(\tfr13,\tfr13,\tfr13)$ with value $-\tfr13$ (check S2.5, by vertex enumeration of the lifted polytope in $(\lambda,t)$). For general $k$ the uniform measure is optimal by the weak-duality argument given in the main proof; uniqueness for every $k$ is not needed and not claimed.
+
+\subsection{The finite convex-hull programme (main Proposition~\mref{prop:nonconvex})}
+For a finite action set $U=\{u_1,\dots,u_m\}$ and finitely many rows, the value over $\conv U$ is
+\[
+\max_{\theta\in\Delta_m}\ \min_a\ \sum_j\theta_j\psi_a(u_j),
+\]
+a linear programme in $\theta$. The script solves it exactly by eliminating $\theta_m=1-\sum_{j<m}\theta_j$ and enumerating the vertices of the lifted polytope in $(\theta_1,\dots,\theta_{m-1},t)$ (function \texttt{value\_over\_hull}). On the parity instance ($m=2$, rows $2u-1$ and $1-2u$) the programme returns $0$ at $\theta=(\tfr12,\tfr12)$, while the maximum over the two points is $-1$ (check S1.5). Check S1.6 confirms directly that no $\lambda$ in the simplex has a positive margin over $[0,1]$: the best margin is $0$, attained at $\lambda=(\tfr12,\tfr12)$, which pools the rows to the zero function.
+
+\subsection{Polyhedral duality (main Theorem~\mref{thm:polyhedral})}
+The identity $h_U(g)=\min\{b^\top\nu:A^\top\nu=g,\ \nu\ge0\}$ for $U=\{Au\le b\}\neq\emptyset$ bounded is linear programming duality for $\max\{g^\top u:Au\le b\}$ (the primal is feasible and bounded, so the dual is feasible with the same value). Consequently, for a certificate $\lambda$ with pooled coefficients $\bar v=\sum_a\lambda_av_a$ and optimal $\nu$, the Farkas scalar $\sum_a\lambda_ac_a+b^\top\nu$ equals $\sum_a\lambda_ac_a+h_U(\bar v)=-\varepsilon(\lambda)$, and for a non-optimal $\nu$ it is larger (so the Farkas pair certifies a smaller margin, still positive if the pair satisfies \meqref{eq:farkas}). On the benchmark at $Y=6$ the facet matrix of $U_2$ has rows $e_1,e_2,-e_1,-e_2,(-1,-1)$ with right-hand sides $2,2,0,0,-2$; the pooled coefficients $(-\tfr12,-\tfr12)$ are reproduced by $\nu=(0,0,0,0,\tfr12)$, $b^\top\nu=-1$, and the Farkas scalar is $\tfr12(\tfr{11}{10}+\tfr{39}{50})-1=-\tfr3{50}$ (check B3.1).
+\section{Static instance records}\label{si:static}
+
+\subsection{One-dimensional instances}
+All on $U=[0,1]$; values exact (checks S1.1--S1.6).
+\begin{center}\footnotesize
+\begin{tabularx}{\textwidth}{llcc>{\raggedright\arraybackslash}X}
+\toprule
+instance & rows & $V^-$ & maximiser & dual / certificate\\
+\midrule
+two-floor & $\tfr25-u,\ u-\tfr35$ & $-\tfr1{10}$ & $\tfr12$ & $\mu^\ast=(\tfr12,\tfr12)$, pooled row $\equiv-\tfr1{10}$, margin $\tfr1{10}$\\
+feasible contrast & $\tfr25-u,\ u-\tfr15$ & $+\tfr1{10}$ & $\tfr3{10}$ & no certificate (dual value $+\tfr1{10}$)\\
+Isaacs & $1-2u,\ 2u-1$ & $0$ & $\tfr12$ & dual value $0$; upper value $V^+=1$\\
+parity ($U=\{0,1\}$) & $2u-1,\ 1-2u$ & $-1$ over $U$ & -- & value $0$ over $\conv U$; no certificate\\
+\bottomrule
+\end{tabularx}
+\end{center}
+The two-floor instance is the active bundle of two states with floors at $\tfr25$ and $\tfr35$ and drifts of opposite sign: state $1$ needs $u\le\tfr25$, state $2$ needs $u\ge\tfr35$. The Isaacs instance separates the lower value (common action $u=\tfr12$, both rows at $0$) from the upper value (each row alone is satisfied with margin $1$ at $u=0$ or $u=1$).
+
+\subsection{The tight family (main Theorem~\mref{thm:helly}(ii))}
+Rows $u_i-1\ge0$ $(i\le k)$ and $(k-1)-\sum_iu_i\ge0$ on $U=[0,k]^k$ (checks S2.1--S2.5).
+\begin{center}\footnotesize
+\begin{tabular}{cccccl}
+\toprule
+$k$ & rows & every $k$-subfamily feasible & lower value & uniform margin & plant\\
+\midrule
+1 & 2 & yes & $-\tfr12$ & $\tfr12$ & $\dot x_1=-1+u_1,\ \dot x_2=-u_1$\\
+2 & 3 & yes & $-\tfr13$ & $\tfr13$ & $\dot x_i=-1+u_i,\ \dot x_3=1-u_1-u_2$\\
+3 & 4 & yes & $-\tfr14$ & $\tfr14$ & $\dot x_i=-1+u_i,\ \dot x_4=2-\sum u_i$\\
+4 & 5 & yes & $-\tfr15$ & $\tfr15$ & $\dot x_i=-1+u_i,\ \dot x_5=3-\sum u_i$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The lower value is attained at $u=(\tfr{k}{k+1},\dots,\tfr{k}{k+1})$; the plant realisation evaluates $\nabla q_j^\top f$ at $x=0$ with $q_j(x)=x_j$, all $k+1$ constraints active, and the script checks that the rows read off the plant coincide with the listed rows.
+
+\subsection{The benchmark atoms}
+At the corner $x^{(1)}=(2,Y-2)$ the active constraint is $q_1$ and the row is $\dot x_1=r_1\cdot2\cdot(1-\tfr2{10})-\tfr{2(Y-2)}{20}-u_1+d_1$; at $x^{(2)}=(Y-2,2)$ the row is $\dot x_2=r_2\cdot2\cdot\tfr45-\tfr{2(Y-2)}{20}-u_2+d_2$. With both shock values kept the bundle has four atoms,
+\[
+\bigl(x^{(1)},1,\mp\tfr1{10}\bigr),\qquad \bigl(x^{(2)},2,\mp\tfr1{10}\bigr),
+\]
+with constants $\capi1(Y)$ and $\capi1(Y)+\tfr15$ for the first pair, $\capi2(Y)$ and $\capi2(Y)+\tfr15$ for the second, and coefficient vectors $(-1,0)$ and $(0,-1)$ respectively. The exact simplex programme over the four atoms returns the same value as over the two worst-shock atoms and charges only the latter: $\lambda=(\tfr12,0,\tfr12,0)$ (check B2.3). Caps and margins at the quoted aggregates (checks B1.1--B2.2):
+\begin{center}\footnotesize
+\begin{tabularx}{\textwidth}{cccccc>{\raggedright\arraybackslash}X}
+\toprule
+$Y$ & $\capi1$ & $\capi2$ & $\capi1+\capi2$ & margin $\varepsilon^\ast(Y)$ & maximiser & status\\
+\midrule
+$4$ & $\tfrac{13}{10}$ & $\tfrac{49}{50}$ & $\tfrac{57}{25}$ & $\tfrac{7}{50}$ & $(\tfrac{29}{25},\tfrac{21}{25})$ & viable\\
+$5$ & $\tfrac{6}{5}$ & $\tfrac{22}{25}$ & $\tfrac{52}{25}$ & $\tfrac{1}{25}$ & $(\tfrac{29}{25},\tfrac{21}{25})$ & viable; $(\tfrac65,\tfrac45)$ also safe\\
+$\tfrac{27}{5}$ & $\tfrac{29}{25}$ & $\tfrac{21}{25}$ & $2$ & $0$ & $(\tfrac{29}{25},\tfrac{21}{25})$ & boundary\\
+$6$ & $\tfrac{11}{10}$ & $\tfrac{39}{50}$ & $\tfrac{47}{25}$ & $-\tfrac{3}{50}$ & -- & obstructed, certificate $(\tfrac12,\tfrac12)$\\
+$\tfrac{69}{5}$ & $\tfrac{8}{25}$ & $0$ & $\tfrac{8}{25}$ & $-\tfrac{21}{25}$ & -- & corner 2 at its cap\\
+\bottomrule
+\end{tabularx}
+\end{center}
+The maximiser $(\tfr{29}{25},\tfr{21}{25})$ is independent of $Y$ because the caps shift together; the margin sweep on $Y\in[4,7]$ in steps of $\tfr1{20}$ agrees with $(27-5Y)/50$ at every point and the dual measure is $(\tfr12,\tfr12)$ at every point (check B2.1).
+
+\subsection{The demand-floor law}
+$Y^\ast(D)=\min(\tfr{77}5-5D,\tfr{69}5)$ for $D\le\tfr{57}{25}$ (checks B4.1--B4.4). Selected values:
+\begin{center}\footnotesize
+\begin{tabular}{cccl}
+\toprule
+$D$ & $\tfr{77}5-5D$ & $Y^\ast(D)$ & binding obstruction at $Y^\ast$\\
+\midrule
+$0$ & $\tfrac{77}{5}$ & $\tfrac{69}{5}$ & physical: $\operatorname{cap}_2=0$ at corner 2\\
+$\tfrac{8}{25}$ & $\tfrac{69}{5}$ & $\tfrac{69}{5}$ & both regimes meet\\
+$\tfrac{1}{2}$ & $\tfrac{129}{10}$ & $\tfrac{129}{10}$ & epistemic + institutional\\
+$1$ & $\tfrac{52}{5}$ & $\tfrac{52}{5}$ & epistemic + institutional\\
+$2$ & $\tfrac{27}{5}$ & $\tfrac{27}{5}$ & epistemic + institutional (main text)\\
+$\tfrac{57}{25}$ & $4$ & $4$ & last viable fibre is the corner fibre $Y=4$\\
+$>\tfrac{57}{25}$ & $<4$ & none & every fibre obstructed\\
+\bottomrule
+\end{tabular}
+\end{center}
+The slope $-5$ is $-(2\cdot\text{comp}\cdot\text{floor})^{-1}$ with comp $=\tfr1{20}$ and floor $=2$: the cap sum decreases by $\tfr15$ per unit of $Y$, so one unit of demand floor is worth five units of aggregate stock. The script checks, for $D$ on the grid $\tfr8{25},\tfr9{25},\dots,\tfr{57}{25}$, that the margin is zero at $Y^\ast(D)$, positive at $Y^\ast(D)-\tfr1{100}$ and negative at $Y^\ast(D)+\tfr1{100}$, and that for $D=0$ the sign change happens at $\tfr{69}5$.
+\section{The two-patch codex (main Example~\mref{ex:patch})}\label{si:patch}
+
+States $(x_1,x_2)\in\{0,1,2,3\}^2$, safe set $x_1,x_2\ge1$; action ``spare $i$'': patch $i$ becomes $\min(3,x_i+1)$, the other patch becomes $\min(3,x_j+1)-2$. The table lists every safe state with both successors, its safe actions (successor safe) and its membership in the kernel under both actions (checks T1.1--T1.4).
+\begin{center}\small
+\begin{tabular}{ccccc}
+\toprule
+state & spare 1 $\to$ & spare 2 $\to$ & safe actions & in kernel\\
+\midrule
+$(1,1)$ & $(2,0)$ & $(0,2)$ & none & no\\
+$(1,2)$ & $(2,1)$ & $(0,3)$ & spare 1 & yes\\
+$(1,3)$ & $(2,1)$ & $(0,3)$ & spare 1 & yes\\
+$(2,1)$ & $(3,0)$ & $(1,2)$ & spare 2 & yes\\
+$(2,2)$ & $(3,1)$ & $(1,3)$ & spare 1, spare 2 & yes\\
+$(2,3)$ & $(3,1)$ & $(1,3)$ & spare 1, spare 2 & yes\\
+$(3,1)$ & $(3,0)$ & $(1,2)$ & spare 2 & yes\\
+$(3,2)$ & $(3,1)$ & $(1,3)$ & spare 1, spare 2 & yes\\
+$(3,3)$ & $(3,1)$ & $(1,3)$ & spare 1, spare 2 & yes\\
+\bottomrule
+\end{tabular}
+\end{center}
+The kernel under both actions is the set of the $8$ safe states other than $(1,1)$: each of them has a safe action whose successor is again one of the $8$ (the successors listed are $(2,1),(1,2),(3,1),(1,3)$, all in the set). Under a single fixed action the kernel iteration empties: with ``spare 1'' only, the states $(2,1),(3,1)$ leave the safe set immediately, then $(2,2),(2,3),(3,2),(3,3)$ map to $(3,1)$ and are removed, then $(1,2),(1,3)$ map to $(2,1)$ and are removed; symmetrically for ``spare 2''. Hence the three tests of main Proposition~\mref{prop:taxonomy}: $\{(1,1)\}$ physical; $\{(1,2),(2,1)\}$ epistemic (safe sets $\{\text{spare }1\}$ and $\{\text{spare }2\}$); every atom institutional relative to the full codex when the manager is restricted to one action. Under the codex $\{\text{spare }2\}$ the singleton $\{(1,2)\}$ is physical and institutional at once; $\{(1,1),(2,2)\}$ is physical under every codex. The codex is finite, so the measure dual of the main text does not apply to it; the tests are combinatorial, and the probabilistic layer of the companion paper on belief-state safety values treats the same two-patch structure with hidden regeneration.
+\section{The random Helly-size study (main Remark~\mref{rem:random})}\label{si:random}
+
+\paragraph{Protocol.} For each dimension $k$, $m=k+3$ rows $\psi_a(u)=c_a+v_a^\top u$ are drawn with independent integer coefficients uniform in $\{-3,\dots,3\}$ (both $c_a$ and the entries of $v_a$), on the action set $U=[-1,1]^k$; the pseudo-random seed is fixed in the script. A system is \emph{infeasible} when its lower value $\max_{u\in U}\min_a\psi_a(u)$ is negative; for every infeasible system the smallest $s$ such that some $s$-subfamily is infeasible is located by enumerating subfamilies in order of increasing size. For $k\le3$ every feasibility test is the exact lower-value programme (vertex enumeration of the lifted polytope in $(u,t)$). For $k=4$ the tests use a float screen: HiGHS proposes a maximiser, the maximiser is rationalised and checked exactly against every row and every facet of $U$ (a rational point that passes is an exact feasibility certificate); whenever the screen does not produce an exact certificate the exact programme decides. Check S3.6 confirms that on $k=3$ the screened and the fully exact protocols return identical histograms. In the rank-one variant all coefficient vectors are integer multiples of one random vector $g\in\{-3,\dots,3\}^3$.
+
+\begin{table}[H]
+\centering\footnotesize
+\caption{Minimal infeasible subfamily sizes among the infeasible systems drawn (checks S3.1--S3.5).}
+\begin{tabular}{lccccccccl}
+\toprule
+case & $m$ & draws & infeasible & size 1 & size 2 & size 3 & size 4 & size 5 & tests\\
+\midrule
+$k=1$ & 4 & 300 & 217 & 163 & 54 & 0 & 0 & 0 & exact\\
+$k=2$ & 5 & 300 & 214 & 89 & 116 & 9 & 0 & 0 & exact\\
+$k=3$ & 6 & 150 & 86 & 12 & 52 & 20 & 2 & 0 & exact\\
+$k=3$ (rank-one) & 6 & 100 & 85 & 38 & 47 & 0 & 0 & 0 & exact\\
+$k=4$ & 7 & 120 & 65 & 2 & 29 & 29 & 5 & 0 & float screen + exact\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Reading.} The Helly bound $k+1$ is attained in every dimension where enough systems were drawn ($k\le3$) but with decreasing frequency; for $k=4$ no size-$5$ witness appeared among $65$ infeasible systems, while main Theorem~\mref{thm:helly}(ii) shows that such systems exist. In the rank-one variant the bound of the theorem is $r+1=2$ and the observed maximum is $2$. The frequencies depend on the sampling law (integer coefficients in a small range produce many single-row infeasibilities, i.e. rows negative on all of $U$) and are reported as observations, not as a claim about typical certificates in applications. The search cost of this protocol---$\sum_{j\le s}\binom{m}{j}$ feasibility tests per system---is what main Remark~\mref{rem:search} contrasts with the single linear programme that returns a maximal-margin certificate directly.
+\section{Review-envelope records (main Section~\mref{sec:dynamic})}\label{si:review}
+
+\subsection{The two-window instance in full}
+Scenarios $\omega=(s,d_1,d_2)\in\{\pm1\}^3$ with the product prior ($\mu(\omega)=\tfr18$); $z_1=z_0+su_1+d_1$, $z_2=z_1+su_2+d_2$, $u_k\in\{-2,0,2\}$, $G=2-|z_2|$; the first action is blind, the second observes $z_1$. Table~\ref{tab:tree} lists, at $z_0=2$, every review cell reached after each first action: the compatible signs, the cell mass, the three second-stage values $Q_2(h,u_2)$, the maximisers and the node value $N_2(h)$ (checks D1.1--D1.2). The first-stage values are $Q_1(\pm2)=\tfr14(1+1+1-1)=\tfr12$ and $Q_1(0)=\tfr12(1-1)=0$, so $Q_0=\tfr12$.
+
+\begin{table}[H]
+\centering\small
+\caption{Two-window instance at $z_0=2$: all review cells.}
+\label{tab:tree}
+\begin{tabular}{ccccccc}
+\toprule
+$u_1$ & $z_1$ & compatible $s$ & mass & $Q_2(h,u_2)$ for $u_2=-2,0,+2$ & maximisers & $N_2$\\
+\midrule
+$-2$ & $-1$ & $+1$ & $\tfrac{1}{4}$ & $-1$, $1$, $1$ & $0$, $+2$ & $1$\\
+$-2$ & $1$ & $+1$ & $\tfrac{1}{4}$ & $1$, $1$, $-1$ & $-2$, $0$ & $1$\\
+$-2$ & $3$ & $-1$ & $\tfrac{1}{4}$ & $-3$, $-1$, $1$ & $+2$ & $1$\\
+$-2$ & $5$ & $-1$ & $\tfrac{1}{4}$ & $-5$, $-3$, $-1$ & $+2$ & $-1$\\
+$0$ & $1$ & $-1$, $+1$ & $\tfrac{1}{2}$ & $0$, $1$, $0$ & $0$ & $1$\\
+$0$ & $3$ & $-1$, $+1$ & $\tfrac{1}{2}$ & $-1$, $-1$, $-1$ & $-2$, $0$, $+2$ & $-1$\\
+$+2$ & $-1$ & $-1$ & $\tfrac{1}{4}$ & $1$, $1$, $-1$ & $-2$, $0$ & $1$\\
+$+2$ & $1$ & $-1$ & $\tfrac{1}{4}$ & $-1$, $1$, $1$ & $0$, $+2$ & $1$\\
+$+2$ & $3$ & $+1$ & $\tfrac{1}{4}$ & $1$, $-1$, $-3$ & $-2$ & $1$\\
+$+2$ & $5$ & $+1$ & $\tfrac{1}{4}$ & $-1$, $-3$, $-5$ & $-2$ & $-1$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Counting the trees.} After $u_1=\pm2$ there are four reachable cells with three actions each ($3^4=81$ trees per first action); after $u_1=0$ there are two cells ($3^2=9$); in total $81+9+81=171$ adapted trees. The script enumerates all of them, evaluates each by path enumeration and by the tower recursion along its own filtration, checks the martingale identity at every node, and finds the maximum $\tfr12$ attained by $8$ trees (checks D1.3--D1.4). The committed-prefix identity (check D1.6) compares, for each first action, the maximum over the trees that start with it against $Q_1$.
+
+\subsection{The coupling class and the sweep}
+$\calM$ is the set of laws on $\{\pm1\}^3$ with $\Prob(s=1)=\Prob(d_1=1)=\Prob(d_2=1)=\tfr12$: a polytope of dimension $4$ with the six vertices of Table~\ref{tab:vertices}, found by two independent enumerations (active-set and basic-feasible-solution), whose barycentre is the product prior (check D2.5). The robust values of main Proposition~\mref{prop:robust} are computed as follows: $R^-=\max_\pi\min_{\mu'\in\calM}\E_{\mu'}G^\pi$ exactly, since the inner minimum of a linear function over $\calM$ is attained at a vertex; $R^+$ by the linear programme $\min\{t:\ \E_{\mu'}G^\pi\le t\ \forall\pi,\ \mu'\in\calM\}$ solved by HiGHS, after which the primal solution $\mu^\ast$ is rationalised and checked to lie in $\calM$ (exact upper bound $\max_\pi\E_{\mu^\ast}G^\pi$) and the dual multipliers of the $171$ policy constraints are rationalised into a mixture $w^\ast$ whose guaranteed value $\min_{\mu'\in\operatorname{vert}\calM}\sum_\pi w^\ast_\pi\E_{\mu'}G^\pi$ is computed exactly; $R^+$ is \emph{certified} when the two exact bounds coincide, which happened at every $z_0$ (check D2.2).
+
+\begin{table}[H]
+\centering\small
+\caption{Extreme couplings of $\calM$ (columns: scenarios $(s,d_1,d_2)$ by sign).}
+\label{tab:vertices}
+\begin{tabular}{lcccccccc}
+\toprule
+vertex & $(+,-,-)$ & $(+,-,+)$ & $(+,+,-)$ & $(+,+,+)$ & $(-,-,-)$ & $(-,-,+)$ & $(-,+,-)$ & $(-,+,+)$\\ \midrule
+$\mu^{(1)}$ & $0$ & $0$ & $0$ & $\tfrac{1}{2}$ & $\tfrac{1}{2}$ & $0$ & $0$ & $0$\\
+$\mu^{(2)}$ & $0$ & $0$ & $\tfrac{1}{2}$ & $0$ & $0$ & $\tfrac{1}{2}$ & $0$ & $0$\\
+$\mu^{(3)}$ & $0$ & $\tfrac{1}{4}$ & $\tfrac{1}{4}$ & $0$ & $\tfrac{1}{4}$ & $0$ & $0$ & $\tfrac{1}{4}$\\
+$\mu^{(4)}$ & $0$ & $\tfrac{1}{2}$ & $0$ & $0$ & $0$ & $0$ & $\tfrac{1}{2}$ & $0$\\
+$\mu^{(5)}$ & $\tfrac{1}{4}$ & $0$ & $0$ & $\tfrac{1}{4}$ & $0$ & $\tfrac{1}{4}$ & $\tfrac{1}{4}$ & $0$\\
+$\mu^{(6)}$ & $\tfrac{1}{2}$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $\tfrac{1}{2}$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Sweep over the initial distance (main Table~\mref{tab:sweep} with the worst couplings): envelope under the product prior, open-loop supremum, robust values, value of the review, support of the certified worst coupling $\mu^\ast$, and number of trees in the certifying mixture $w^\ast$ (checks D2.1--D2.4).}
+\begin{tabular}{cccccccc}
+\toprule
+$z_0$ & $Q_0$ & open-loop & $R^+$ & $R^-$ & $Q_0-$open-loop & worst coupling $\mu^\ast$ & $|\supp w^\ast|$\\
+\midrule
+$0$ & $1$ & $1$ & $1$ & $0$ & $0$ & 4 paths & 2\\
+$1$ & $\tfrac{3}{4}$ & $\tfrac{1}{2}$ & $\tfrac{1}{2}$ & $0$ & $\tfrac{1}{4}$ & 4 paths & 4\\
+$2$ & $\tfrac{1}{2}$ & $0$ & $\tfrac{1}{2}$ & $0$ & $\tfrac{1}{2}$ & product prior & 4\\
+$3$ & $0$ & $-1$ & $0$ & $-1$ & $1$ & 4 paths & 2\\
+$4$ & $-\tfrac{1}{2}$ & $-2$ & $-\tfrac{1}{2}$ & $-1$ & $\tfrac{3}{2}$ & 6 paths & 2\\
+$5$ & $-\tfrac{5}{4}$ & $-3$ & $-\tfrac{3}{2}$ & $-2$ & $\tfrac{7}{4}$ & 4 paths & 2\\
+$6$ & $-2$ & $-4$ & $-2$ & $-2$ & $2$ & 2 paths & 2\\
+$7$ & $-3$ & $-5$ & $-3$ & $-3$ & $2$ & 2 paths & 2\\
+$8$ & $-4$ & $-6$ & $-4$ & $-4$ & $2$ & 2 paths & 2\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+At $z_0=2$ the six extreme couplings give the controller the values $2,2,1,2,1,2$, all strictly above $R^+=\tfr12$: the worst coupling is the product prior, an interior point of $\calM$ (check D2.6). The dynamic obstruction at $z_0=4$ (check D3.1): all $171$ trees have negative expectation under the prior, and the smallest defeating mass $\mu\{G^\pi<0\}$ over all trees is $\tfr38$. At $z_0=3$ the envelope is $0$: some tree has zero expected loss, but every tree is defeated on a set of positive mass (check D3.2).
+
+\subsection{Inherited and auxiliary instances}
+The instances of the earlier verification campaign are re-implemented on the generic review-tree class (observation maps may depend on the action prefix; cells are computed from the scenario list) and re-counted; the counts correct two figures quoted in earlier versions of this manuscript ($8192$ and $19683$), which did not match what the campaign script actually enumerated ($2^{14}$ and $3\cdot3^4$).
+
+\begin{table}[H]
+\centering\small
+\caption{Review-tree instances: scenario space, stages, actions per stage, observation before each stage, number of adapted trees, recursion value and brute-force tree supremum (checks D4.1--D4.3, D1.7).}
+\begin{tabular}{llcclccc}
+\toprule
+instance & $\Omega$, law & $K$ & $|A_k|$ & observations & trees & $Q_0$ & tree sup.\\
+\midrule
+two-window ($z_0=2$) & $\{\pm1\}^3$, product & 2 & 3, 3 & blind; $z_1$ & 171 & $\tfrac12$ & $\tfrac12$ (8 trees)\\
+A & $\{\pm1\}^3$, uniform & 3 & 2, 2, 2 & $\operatorname{sign}d_1$; $(d_1,d_2)$; $d$ & 16384 & 0 & 0\\
+B & $\{\pm1\}^2$, uniform & 2 & 3, 3 & blind; $d$ & 243 & 1 & 1\\
+C coarse & $\{\pm1\}^3$, uniform & 2 & 2, 2 & $\operatorname{sign}d_1$; $d$ & 1024 & $\tfrac12$ & $\tfrac12$\\
+C fine & $\{\pm1\}^3$, uniform & 2 & 2, 2 & $(d_1,d_2)$; $d$ & 4096 & $\tfrac34$ & $\tfrac34$\\
+posterior-only & $\{0,1\}$, uniform & 2 & 2, 1 & blind; $s$ & 2 & $\tfrac12$ & $\tfrac12$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\emph{Instance A}: $G(d,a)=-|d_1|a_1+\max(d_2,0)a_2+d_3-\tfr12$ with observations $\operatorname{sign}d_1$, then $(\operatorname{sign}d_1,\operatorname{sign}d_2)$, then the full scenario, actions $\{0,1\}$ at each of $K=3$ stages: $2+4+8=14$ decision cells, $2^{14}=16384$ trees, value $0$. \emph{Instance B}: $G(d,a)=a_1d_1+a_2d_2-\tfr14|a_1|$, blind first stage with three actions, full revelation before the second: $3\cdot3^4=243$ trees, value $1$ at $a_1=0$ (the blind actions $\pm1$ give $\tfr34$). \emph{Instance C}: $G(d,a)=a_1\,(2\cdot\ind{d_1>0,d_2>0}-1)+a_2d_2$ on $\{\pm1\}^3$ with a coarse first observation ($\operatorname{sign}d_1$) or a fine one ($(\operatorname{sign}d_1,\operatorname{sign}d_2)$), full revelation before the second stage: values $\tfr12$ and $\tfr34$, illustrating main Theorem~\mref{thm:envelope}(iii). \emph{Matching instance}: a hidden $x\in\{1,2,3\}$ uniform, one action $a\in\{1,2,3\}$ after observing the block of a partition, reward $-|x-a|$; the values below show that refinement is monotone but may add nothing (the partition $\{1,3\}|\{2\}$ is as useless as no observation) (check D4.4).
+\begin{center}\small
+\begin{tabular}{lc}
+\toprule
+partition & value\\
+\midrule
+$\{1\}\,|\,\{2\}\,|\,\{3\}$ & $0$\\
+$\{1,2\}\,|\,\{3\}$ & $-\tfrac{1}{3}$\\
+$\{1\}\,|\,\{2,3\}$ & $-\tfrac{1}{3}$\\
+$\{1,3\}\,|\,\{2\}$ & $-\tfrac{2}{3}$\\
+$\{1,2,3\}$ & $-\tfrac{2}{3}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\emph{Posterior-only instance} (main Example~\mref{ex:posterior}): blind $a_1\in\{0,1\}$, then a fair bit $s$ is revealed, reward $\ind{a_1=s}$, one dummy second action: adapted value $\tfr12$; the clairvoyant evaluation $\E[\max_{a_1}\E[\ind{a_1=s}\mid s]]$ equals $1$ (check D1.7). \emph{Coupling selection} (check D4.5): $G=d_1d_2$ has value $0$ under the product coupling and $1$ under the comonotone coupling $\tfr12\delta_{(1,1)}+\tfr12\delta_{(-1,-1)}$, both with uniform one-step marginals; the $\rho$-mixture has value $\rho$.
+\section{The integrated certificate and its sign convention (main Proposition~\mref{prop:integrated})}\label{si:integrated}
+
+\paragraph{Instance data.} Planar double integrator $\dot p=v$, $\dot v=u$, $u\in U=\conv\{\pm n_1,\pm n_2,\pm n_3\}$ with $n_1=(1,0)$, $n_2=(-\tfr35,\tfr45)$, $n_3=(-\tfr35,-\tfr45)$ (a hexagon with $h_U(\pm n_\ell)=1$); position facets $n_\ell^\top p\le2$; branch $\ell$ starts at $p_\ell(0)=\tfr{34}{25}n_\ell$, $v_\ell(0)=n_\ell$; the branch is revealed at $\tau$; horizon $T=\tau+1$. (The companion instance also carries velocity facets $|v_i|\le\tfr65$; they are not needed for the certificate direction and are omitted here.) The critical coordinate of branch $\ell$ is
+\[
+\zeta_\ell(T)=n_\ell^\top p_\ell(T)=\tfr{34}{25}+T+\int_0^T(T-\sigma)\,n_\ell^\top u_\ell(\sigma)\dd\sigma,
+\]
+so the terminal slack is $F_\ell=\beta_\ell-\int_0^Tk_\ell(\sigma)^\top u_\ell(\sigma)\dd\sigma$ with $\beta_\ell=\tfr{16}{25}-T$ and $k_\ell(\sigma)=(T-\sigma)n_\ell$.
+
+\paragraph{The computation.} With $\lambda=(\tfr38,\tfr5{16},\tfr5{16})$: $\sum_\ell\lambda_\ell n_\ell=(\tfr38-\tfr3{16}-\tfr3{16},\ \tfr14-\tfr14)=(0,0)$, so the blind-window integrand $h_U(-(T-\sigma)\sum_\ell\lambda_\ell n_\ell)$ vanishes; after $\tau$ each branch is its own cell and $h_U(-(T-\sigma)n_\ell)=(T-\sigma)$; $\int_\tau^{T}(T-\sigma)\dd\sigma=\tfr12(T-\tau)^2=\tfr12$. Hence
+\[
+\Gamma_h(\tau)=\sum_\ell\lambda_\ell\beta_\ell+\sum_\ell\lambda_\ell\cdot\tfr12=\tfr{16}{25}-(\tau+1)+\tfr12=\tfr7{50}-\tau ,
+\]
+negative for $\tau>\tfr7{50}$, which is the obstruction (checks G1.1, G1.4). The script evaluates $\Gamma_h$ at $\tau\in\{0,\tfr1{10},\tfr7{50},\tfr15,\tfr12\}$ from the general formula (function \texttt{gamma\_h}, which integrates the kernels exactly and evaluates $h_U$ over the hexagon's vertices).
+
+\paragraph{Sign convention.} Main \meqref{eq:gammah} evaluates $h_U$ at the \emph{negative} pooled kernel because $-g^\top u\le h_U(-g)$ is the bound used on each cell. On the hexagon $h_U(g)=h_U(-g)$ (central symmetry), and since $\sum_\ell\lambda_\ell n_\ell=0$ even an unbalanced evaluation would give the same number on this instance (check G1.2). The convention is not vacuous: for the translated set $U+(\tfr1{10},0)$ one has $h(-n_1)=\tfr9{10}$ and $h(n_1)=\tfr{11}{10}$, and with the unbalanced weights $(\tfr12,\tfr14,\tfr14)$ the two conventions give different values of $\Gamma_h$ (check G1.3). The companion paper's certificate $\Gamma(\tau)=\tau-\tfr7{50}$ is the value of a \emph{minimisation} programme (minimal maximal facet violation), positive when obstructed; the present $\Gamma_h$ is an upper bound on the worst terminal slack, negative when obstructed; $\Gamma_h=-\Gamma$ on the instance (check G1.4). Earlier versions of this manuscript wrote $h_U(+\,\cdot)$ in the integrated formula; the change is recorded in the change log.
+
+\paragraph{Sharpness.} The policy ``hold $u=0$ on $[0,\tau)$, then $u=-n_\ell$ for one second'' keeps $\zeta_\ell\le\tfr{34}{25}+\tau+\tfr12$ on every branch, which is $\le2$ exactly when $\tau\le\tfr7{50}$ (companion paper, Section on the three-branch instance); so the certificate threshold is the viability threshold. The companion's velocity facets are respected by this policy ($|v|\le1<\tfr65$).
+\section{Verification record}\label{si:verification}
+
+\subsection{Scripts and how to run them}
+\begin{itemize}[leftmargin=1.4em,itemsep=1pt]
+\item \texttt{work/p04\_core.py} --- the exact module: rational linear algebra and polytopes (vertex enumeration, support functions), lower values by vertex enumeration of the lifted polytope, exact simplex programmes for dual values, certificate margins, minimal infeasible subfamilies with an optional float screen, the tight family and its plant, the convex-hull programme, the benchmark model (caps from the drift equations, margin, demand-floor law), the two-patch codex, the generic review-tree class (node recursion, tree enumeration, tower and martingale checks, defeat masses), the two-window instance and the inherited instances, the coupling polytope and the robust values, the integrated certificate.
+\item \path{paper04_minimax_dual_certificates_v20_verification.py} --- runs the checks below, writes \texttt{work/results.json}; \texttt{--quick} skips the $k=4$ random study. Runtime about $100$\,s ($30$\,s quick) on one core.
+\item \texttt{work/make\_figs.py} --- the four figures, every plotted number recomputed from the module or read from \texttt{results.json}; \texttt{work/make\_si\_tables.py} --- the table bodies of this supplement; \texttt{work/make\_mainlabels.py} --- the main-text number table used by this supplement; \texttt{work/assemble.py} --- assembles the two \texttt{.tex} files from their parts.
+\item \texttt{Minimax\_Dual.lean} --- the Lean~4 module; it imports only the repository's prelude module (the ordered-field interface \texttt{OrdField} and the finitely supported measures \texttt{FinMass}), not Mathlib, and compiles in the repository's Lean~4.34.1 workspace (60/60 jobs, 0 \texttt{sorry} across the layer).
+\end{itemize}
+SciPy's HiGHS is used only inside \texttt{feasible\_fast} (a float proposal of a maximiser, confirmed exactly) and \texttt{robust\_values\_two\_window} (a float proposal of $(\mu^\ast,w^\ast)$, confirmed exactly on both sides); without SciPy the former falls back to the exact programme and the latter reports the robust values as unavailable, in which case checks D2.2--D2.4 and D2.6 are skipped and the remaining checks are unaffected.
+
+\subsection{Check list}
+Output of the full run (the identifiers are those quoted in the main text).
+\begin{footnotesize}
+\begin{longtable}{p{1.1cm}p{12.6cm}p{0.9cm}}
+\toprule
+id & statement verified & result\\
+\midrule
+\endfirsthead
+\toprule
+id & statement verified & result\\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+S1.1 & two-floor instance: lower value max\_u min\_i psi\_i(u) = -1/10, attained at u = 1/2 & PASS\\
+S1.2 & two-floor: lambda = (1/2,1/2) pools to the constant -1/10 (margin 1/10); dual value = lower value & PASS\\
+S1.3 & feasible contrast (floors 1/5, 2/5): lower value +1/10 at u = 3/10; no certificate exists (dual value +1/10) & PASS\\
+S1.4 & Isaacs instance psi in \{1-2u, 2u-1\}: lower value 0 (u = 1/2) $<$ upper value 1; the measure dual equals the lower value & PASS\\
+S1.5 & parity instance U = \{0,1\}: value over U is -1, value over conv U = [0,1] is 0 (gap 1); dual value over conv U = 0 & PASS\\
+S1.6 & soundness is unconditional: no lambda in the simplex certifies the parity instance over conv U (best margin 0, not $>$ 0) & PASS\\
+S2.1 & tight family k = 1: every k-subfamily consistent, all k+1 inconsistent with lower value -1/2; uniform lambda has margin 1/2; plant realization reproduces the rows & PASS\\
+S2.2 & tight family k = 2: every k-subfamily consistent, all k+1 inconsistent with lower value -1/3; uniform lambda has margin 1/3; plant realization reproduces the rows & PASS\\
+S2.3 & tight family k = 3: every k-subfamily consistent, all k+1 inconsistent with lower value -1/4; uniform lambda has margin 1/4; plant realization reproduces the rows & PASS\\
+S2.4 & tight family k = 4: every k-subfamily consistent, all k+1 inconsistent with lower value -1/5; uniform lambda has margin 1/5; plant realization reproduces the rows & PASS\\
+S2.5 & tight family k = 2: the two-dimensional dual value is attained at the uniform measure (exact simplex LP) & PASS\\
+S3.1 & random study k1 (m = 4, 300 draws): 217 infeasible systems, minimal infeasible subfamily sizes \{1: 163, 2: 54\} all $<$= 2 & PASS\\
+S3.2 & random study k2 (m = 5, 300 draws): 214 infeasible systems, minimal infeasible subfamily sizes \{1: 89, 2: 116, 3: 9\} all $<$= 3 & PASS\\
+S3.3 & random study k3 (m = 6, 150 draws): 86 infeasible systems, minimal infeasible subfamily sizes \{1: 12, 2: 52, 3: 20, 4: 2\} all $<$= 4 & PASS\\
+S3.4 & random study k3\_rank1 (m = 6, 100 draws): 85 infeasible systems, minimal infeasible subfamily sizes \{1: 38, 2: 47\} all $<$= 2 & PASS\\
+S3.5 & random study k4 (m = 7, 120 draws): 65 infeasible systems, minimal infeasible subfamily sizes \{1: 2, 2: 29, 3: 29, 4: 5\} all $<$= 5 & PASS\\
+S3.6 & random study k = 3 is identical with and without the float screen (exact confirmation of the screen) & PASS\\
+B1.1 & caps from the model drift at the two corner states: cap1(Y) = 3/2 - (Y-2)/10, cap2(Y) = 59/50 - (Y-2)/10 (Y = 4, 5, 27/5, 6) & PASS\\
+B1.2 & closed forms agree with the model on a rational sweep & PASS\\
+B2.1 & fibre margin eps*(Y) = max\_u min(cap1-u1, cap2-u2) over U = (27-5Y)/50 on Y in [4,7] (step 1/20); dual attained at mu* = (1/2,1/2) throughout & PASS\\
+B2.2 & Y* = 27/5 is the unique zero; Y = 5 feasible: common action (6/5,4/5) is safe and the maximizer (29/25,21/25) has margin 1/25; Y = 6 obstructed with margin -3/50 and cap sum 47/25 & PASS\\
+B2.3 & keeping both shock atoms per corner (four atoms) gives the same margin at Y = 6; the certificate charges only the worst-shock atoms & PASS\\
+B3.1 & polyhedral recovery at Y = 6: pooled drift coefficients (-1/2,-1/2) = nu * (-1,-1) with nu = 1/2 on the demand facet; margin -(sum lam\_i c\_i + nu*(-2)) = 3/50 & PASS\\
+B3.2 & the fibre is viable iff its width Y-4 $<$= 7/5 (Y $<$= 27/5) & PASS\\
+B4.1 & demand-floor law: for D in [8/25, 57/25] the critical aggregate is Y*(D) = 77/5 - 5D (zero margin at Y*, positive below, negative above) & PASS\\
+B4.2 & regime boundaries: cap2(Y) = 0 at Y = 69/5 (physical corner obstruction) so Y*(D) = 69/5 for D $<$= 8/25; Y*(D) $<$ 4 for D $>$ 57/25 & PASS\\
+B4.3 & D = 2 recovers Y* = 27/5; D = 0 lifts the obstruction on the whole band Y in [4, 69/5] (margin min(cap1,cap2) $>$ 0 at Y = 6: 39/50) & PASS\\
+B4.4 & taxonomy of the benchmark: on Y in (27/5, 69/5) each corner is first-order viable alone (cap\_i $>$= 0) and the pair is not (epistemic); the pair is viable once the floor is lifted (institutional) & PASS\\
+T1.1 & two-patch codex: 9 safe states, kernel of 8 under both actions; (1,1) has no safe action (physical) & PASS\\
+T1.2 & epistemic test: the belief \{(1,2),(2,1)\} has disjoint safe-action sets \{spare 1st\} and \{spare 2nd\} & PASS\\
+T1.3 & institutional test: restricting the codex to a single action empties the kernel (8 -$>$ 0) for either fixed action & PASS\\
+T1.4 & the tests overlap: under the codex \{spare 2\} the atom \{(1,2)\} is physical and institutional (full codex saves it); \{(1,1),(2,2)\} is physical under every codex & PASS\\
+D1.1 & two-window instance (z0 = 2): envelope Q0 = 1/2; first-stage values \{-2: 1/2, 0: 0, +2: 1/2\} & PASS\\
+D1.2 & after u1 = +2 the review cells z1 in \{-1,1,3,5\} have values (1,1,1,-1); ties \{0,-2\} at z1 = -1 and \{0,+2\} at z1 = 1; unique u2 = -2 at z1 = 3 and 5 & PASS\\
+D1.3 & policy-tree enumeration: 171 = 81 + 9 + 81 adapted trees; the tree supremum equals Q0 = 1/2, attained by 8 trees & PASS\\
+D1.4 & tower identity and martingale property hold for every one of the 171 trees & PASS\\
+D1.5 & open-loop (blind) supremum is 0 (attained by (-2,+2), (0,0), (+2,-2)); value of the review = 1/2 & PASS\\
+D1.6 & committed-prefix corollary: the tree supremum with a fixed first action equals the node value of that action & PASS\\
+D1.7 & posterior-only evaluation is not an envelope: the adapted value is 1/2 while conditioning the blind action on the later posterior would give 1 & PASS\\
+D2.1 & initial-distance sweep z0 = 0..8: Q0 = 1, 3/4, 1/2, 0, -1/2, -5/4, -2, -3, -4 and open-loop 1, 1/2, 0, -1, ..., -6 & PASS\\
+D2.2 & robust values over the coupling class M (uniform coordinate marginals): R- $<$= R+ $<$= Q0 at every z0, R+ certified exactly on both sides & PASS\\
+D2.3 & at z0 = 2: R+ = 1/2 is attained by the product coupling itself (mu* uniform) while R- = 0; the gap is closed by a mixture of four trees with weights 1/4 & PASS\\
+D2.4 & at z0 = 3: R+ = 0 = Q0 with a non-product worst coupling (support on four paths), R- = -1 & PASS\\
+D2.5 & the coupling class M has exactly 6 extreme couplings (two independent enumerations agree); the product coupling is their barycentre & PASS\\
+D2.6 & at z0 = 2 every extreme coupling is strictly better for the controller than the product coupling (vertex values $>$ 1/2): the worst coupling is interior & PASS\\
+D3.1 & dynamic obstruction at z0 = 4: every one of the 171 trees has negative expectation; the defeating set has mass $>$= 3/8 under every tree; Q0 = -1/2 & PASS\\
+D3.2 & z0 = 3 is the boundary: Q0 = 0 and some tree is never defeated in expectation but every tree is defeated on a set of positive mass & PASS\\
+D4.1 & instance A (K = 3, partitions 2 -$>$ 4 -$>$ 8, two actions): 2\^{}14 = 16384 adapted trees; recursion value 0 = tree supremum & PASS\\
+D4.2 & instance B (K = 2, blind first stage, three actions, full revelation at the second stage): 3 * 3\^{}4 = 243 trees; value 1 at the blind action 0; tower identity on all trees & PASS\\
+D4.3 & refinement instance: coarse first observation (1024 trees) has value 1/2, the finer one (4096 trees) has value 3/4; both equal their tree suprema & PASS\\
+D4.4 & matching instance: values 0 (singletons), -1/3 (\{1,2\}$|$\{3\} and \{1\}$|$\{2,3\}), -2/3 (\{1,3\}$|$\{2\} and blind): refinement is monotone but may add nothing & PASS\\
+D4.5 & coupling selection: G = d1 d2 has value 0 under the product coupling and 1 under the comonotone coupling with identical one-step marginals; the rho-mixture gives rho & PASS\\
+G1.1 & three-branch instance: Gamma\_h(tau) = 7/50 - tau for tau in \{0, 1/10, 7/50, 1/5, 1/2\}; zero at tau = 7/50 & PASS\\
+G1.2 & the hexagon is centrally symmetric, so h\_U(-g) = h\_U(g) and the sign of the argument is immaterial on this instance & PASS\\
+G1.3 & for the translated hexagon U + (1/10,0) and unbalanced weights (1/2,1/4,1/4) the two sign conventions differ (h\_U(-n\_1) = 9/10 vs h\_U(n\_1) = 11/10): the formula must charge h\_U(-sum lambda\_l n\_l) & PASS\\
+G1.4 & sign convention: Gamma\_h(tau) = -Gamma(tau) of the companion certificate (tau - 7/50); pooled normal sum lambda\_l n\_l = 0 and sum lambda = 1 & PASS\\
+L1.1 & Lean module Minimax\_Dual.lean present: 22 theorem declarations = 13 arithmetic helpers + the 9 named footprints (all present); no sorry & PASS\\
+L1.2 & benchmark\_obstruction hypothesis holds at Y = 6: cap1 + cap2 = 47/25 $<$ 2 $<$= u1 + u2 on U & PASS\\
+TXT.1 & compiled numbering of the results quoted in figure captions and the supplement: thm:dual = 3.1, thm:helly = 3.3, prop:nonconvex = 3.5, thm:polyhedral = 3.6, prop:taxonomy = 4.1, prop:benchmark = 5.1, prop:floor = 5.2, thm:envelope = 6.2, prop:robust = 6.5, prop:integrated = 6.7 & PASS\\
+TXT & headline token present in manuscript: (27-5Y)/50 & PASS\\
+TXT & headline token present in manuscript: 77\}\{5\}-5D & PASS\\
+TXT & headline token present in manuscript: 2\^{}\{14\} & PASS\\
+TXT & headline token present in manuscript: 171 & PASS\\
+TXT & headline token present in manuscript: 7\}\{50\}-\textbackslash\{\}tau & PASS\\
+TXT & headline token present in manuscript: 47\}\{25\} & PASS\\
+TXT.2 & supplement's main-text number table agrees with the compiled .aux on every label & PASS\\
+\end{longtable}
+\end{footnotesize}
+
+\subsection{Lean scope list}
+Declarations of \texttt{Minimax\_Dual.lean} ($22$ theorems and $4$ definitions---\texttt{b2k}, \texttt{parity}$\psi$, $\psi$\texttt{single}, \texttt{unifMass}---no \texttt{sorry}; check L1.1):
+\begin{itemize}[leftmargin=1.4em,itemsep=0pt]\sloppy
+\item arithmetic helpers over the ordered-field interface ($13$): \texttt{one\_lt\_two}, \texttt{zero\_lt\_two}, \texttt{half\_pos}, \texttt{half\_add\_half}, \texttt{neg\_of\_pos}, \texttt{neg\_pos\_of\_neg}, \texttt{lt\_of\_neg\_pos}, \texttt{neg\_nonpos\_of\_nonpos}, \texttt{neg\_add\_dist}, \texttt{sub\_le\_sub}, \texttt{sub\_neg\_of\_lt}, \texttt{not\_zero\_le\_neg\_one}, \texttt{half\_mul\_neg};
+\item \texttt{dual\_certificate\_sound}: for any types of rows and actions and any finite-mass measure $\mu$ on the rows, if the $\mu$-pooled row is strictly negative at every action then no action is safe for all rows (main Proposition~\mref{prop:nonconvex}(i), soundness for arbitrary action sets);
+\item \texttt{parity\_common\_safe\_empty}, \texttt{parity\_no\_measure\_certifies}: on the parity rows over the two-point action type no common safe action exists, and no finite-mass measure certifies (main Proposition~\mref{prop:nonconvex}(iii));
+\item \texttt{two\_row\_average}, $\psi$\texttt{single\_sum} (the Lean name begins with the Greek letter), \texttt{singleton\_uniform}, \texttt{singleton\_every\_measure} and \texttt{singleton\_worst\_\allowbreak witnesses}: on a single-state atom with two shock rows, the uniform measure certifies iff the average row is negative, every measure certifies iff the worst row is negative, and the worst-row witnesses are the two shock values (the singleton recoveries behind the physical test);
+\item \texttt{benchmark\_obstruction}: if $c_1+c_2<2\le u_1+u_2$ then $\tfr12\bigl((c_1-u_1)+(c_2-u_2)\bigr)<0$ (the algebra of main Proposition~\mref{prop:benchmark}(iii); check L1.2 confirms the hypothesis at $Y=6$).
+\end{itemize}
+Not formalised: Sion's converse, Helly sparsity, the polyhedral recovery in general, the taxonomy proposition, the benchmark laws as functions of $Y$ and $D$, and the dynamic layer.
+
+\subsection{Figure provenance}
+Figure~1: panels (a)--(c) plot the rows named in the caption on $[0,1]$ and mark the values $-\tfr1{10}$, $+\tfr1{10}$, $-1$, $0$ returned by checks S1.1--S1.5; panel (d) draws the rows of the tight family for $k=2$ on $[0,2]^2$. Figure~2: caps and margins from \texttt{bench\_caps} and the closed forms verified by checks B1--B4; the demand-floor law from \texttt{bench\_Ystar}. Figure~3: panel (a) from the node values of check D1.2; panel (b) from the sweep stored in \texttt{results.json} (checks D2.1--D2.2). Figure~4: panel (a) from the histograms of checks S3.1--S3.5; panel (b) from \texttt{gamma\_h} (check G1.1). The figure script asserts nothing itself; it reads the numbers the verification script has already asserted.
+\section{Symbol table and sign conventions}\label{si:symbols}
+
+\begin{footnotesize}
+\begin{longtable}{p{3.0cm}p{11.6cm}}
+\toprule
+symbol & meaning and convention\\
+\midrule
+\endfirsthead
+\toprule
+symbol & meaning and convention\\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+$U$, $h_U(g)$ & compact action set in $\R^k$; support function $\max_{u\in U}g^\top u$ \\
+$x$, $\calS$, $q_j$, $J(x)$ & state, constraint set $\{q_j\ge0\}$, constraint functions, active index set at $x$ \\
+$\psi_a(u)=c_a+v_a^\top u$ & row (first-order safe-action constraint) of atom index $a=(x,j,d)$; \emph{safe iff $\psi_a(u)\ge0$} \\
+$\calR(x)$, $\calR(B)$, $\calK(B)$ & first-order safe-action set of a state, common safe-action set and active bundle of an information atom $B$ \\
+$V^-$, $V^+$ & lower value $\max_u\min_a\psi_a(u)$ (common action), upper value $\min_a\max_u\psi_a(u)$ (full information); $V^-\le V^+$; obstructed iff $V^-<0$ \\
+$\Phi(u,\mu)$ & mixed-adversary payoff $\int\psi_a(u)\dd\mu(a)$ \\
+$\varepsilon(\mu)$ & certificate margin $-\max_u\Phi(u,\mu)$; \emph{certificate iff $\varepsilon(\mu)>0$}; best margin $=-V^-$ \\
+$(\lambda,\nu)$ & Farkas pair for polyhedral $U=\{Au\le b\}$: $\sum\lambda_av_a=A^\top\nu$, $\sum\lambda_ac_a+b^\top\nu<0$ \\
+$d=\dim\aff U$, $r=\rank\{v_a\}$ & dimensions in the Helly bound $\min(d,r)+1$ \\
+(P), (E), (I) & physical, epistemic, institutional tests (main Proposition~\mref{prop:taxonomy}) \\
+$Y$, $B_Y$, $x^{(i)}$ & aggregate stock, its fibre atom, the corner where $x_i=2$ \\
+$\capi{i}(Y)$ & corner caps $\tfr32-\tfr{Y-2}{10}$ and $\tfr{59}{50}-\tfr{Y-2}{10}$ (worst shock included) \\
+$U_D$, $D$ & action set $\{u\in[0,2]^2:u_1+u_2\ge D\}$ and the demand floor \\
+$\varepsilon^\ast(Y)$ & fibre margin $(27-5Y)/50$ at $D=2$; positive $=$ viable \\
+$Y^\ast(D)$ & critical aggregate $\min(\tfr{77}5-5D,\tfr{69}5)$ for $D\le\tfr{57}{25}$ \\
+$\Omega,\mu,K,A_k,o_k,G$ & scenario space, law, number of stages, action sets, observation maps (may depend on earlier actions), terminal functional; \emph{defeated iff $G<0$} \\
+$h_k$, $C(h_k)$, $\pi$, $J(\pi)$ & history, its cell, adapted policy tree, its value $\E_\mu G^\pi$ \\
+$Q_k(h_k,a)$, $N_k(h_k)$, $Q_0$ & node values of the recursion and the envelope (main \meqref{eq:N}) \\
+$\calM$, $R^-$, $R^+$ & coupling class; lower robust value $\max_\pi\min_{\mu'}$ and upper robust value $\min_{\mu'}\max_\pi$; $R^-\le R^+\le Q_0$ \\
+$z_0,z_1,z_2,s,d_k,u_k$ & two-window instance: initial distance, states, hidden sign, shocks, actions; $G=2-|z_2|$ \\
+$L,\ell$, $F_\ell$, $\beta_\ell$, $k_\ell$ & branches, terminal slack of branch $\ell$ (\emph{positive $=$ satisfied}), its margin and kernel \\
+$\calP_\sigma$ & information schedule (partition of $L$ at time $\sigma$); adapted controls agree within a cell \\
+$\Gamma_h(\lambda)$, $\Gamma_h(\tau)$ & integrated certificate (main \meqref{eq:gammah}); \emph{negative $=$ obstructed}; on the three-branch instance $\tfr7{50}-\tau$ \\
+$\Gamma(\tau)$ & the companion paper's certificate $\tau-\tfr7{50}$ (value of a minimisation programme); \emph{positive $=$ obstructed}; $\Gamma=-\Gamma_h$ on the instance \\
+$n_\ell$, $\lambda=(\tfr38,\tfr5{16},\tfr5{16})$ & facet normals and pooling weights of the three-branch instance; $\sum\lambda_\ell n_\ell=0$ \\
+\end{longtable}
+\end{footnotesize}
+
+\paragraph{Sign conventions in one line.} Rows, margins, slacks and envelopes are \emph{good when non-negative}: $\psi_a\ge0$ safe, $\varepsilon(\mu)>0$ certifies, $F_\ell\ge0$ satisfied, $G\ge0$ not defeated, $\Gamma_h<0$ obstructed. The companion's $\Gamma$ is the one quantity with the opposite orientation, and it is only quoted for comparison.
+
+\end{document}

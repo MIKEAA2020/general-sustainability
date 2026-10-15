@@ -1,0 +1,37 @@
+\section{Setting: plants, information atoms and the row bundle}\label{sec:setting}
+
+\paragraph{Plant and constraints.} The state $x\in\R^n$ obeys the control-affine dynamics
+\begin{equation}\label{eq:plant}
+\dot x=f(x,u,d)=f_0(x,d)+G(x)\,u,\qquad u\in U\subset\R^k,\quad d\in D\subset\R^m,
+\end{equation}
+with $U$ compact and convex, $D$ compact, $f_0$ continuous and $G$ continuous. The constraint set is $\calS=\{x:\ q_j(x)\ge0,\ j\in J\}$ with finitely many $C^1$ functions $q_j$. For $x\in\calS$ let $J(x)=\{j:\ q_j(x)=0\}$ be the active index set. The \emph{first-order safe-action set} at $x$ is
+\begin{equation}\label{eq:R}
+\begin{gathered}
+\calR(x)=\bigl\{u\in U:\ \psi_{x,j,d}(u)\ge0\ \text{ for all } j\in J(x),\ d\in D\bigr\},\\
+\psi_{x,j,d}(u)=\nabla q_j(x)^{\!\top}f_0(x,d)+\nabla q_j(x)^{\!\top}G(x)\,u .
+\end{gathered}
+\end{equation}
+Each $\psi_{x,j,d}$ is affine in $u$: $\psi_{x,j,d}(u)=c_a+v_a^{\top}u$ with $a=(x,j,d)$, $c_a=\nabla q_j(x)^\top f_0(x,d)$ and $v_a=G(x)^\top\nabla q_j(x)$. The set $\calR(x)$ collects the actions whose worst-case drift is sub-tangential to every active constraint. If the active gradients satisfy a constraint qualification at $x$ (for instance linear independence, or $\calS$ polyhedral near $x$), the contingent cone of $\calS$ at $x$ is the linearised cone, and $\calR(x)\neq\emptyset$ is necessary for $x$ to belong to the viability kernel of \eqref{eq:plant} \cite{Aubin1991,Nagumo1942}; without a qualification it remains a necessary condition for the linearised problem and we use it as such. When $\psi_{x,j,d}\equiv0$ on $U$ for an active constraint (a tangential drift of second order) the first-order test is silent, and higher-order conditions are needed; such atoms are outside the scope of the first-order theory and are flagged, not classified, by the tests below.
+
+\paragraph{Information atoms.} An observation does not reveal $x$ but an \emph{atom} $B\subset\calS$, the set of states compatible with it. The controller chooses one $u$ for the whole atom. The \emph{common safe-action set} and the \emph{active bundle} of $B$ are
+\begin{equation}\label{eq:common}
+\calR(B)=\bigcap_{x\in B}\calR(x),\qquad \calK(B)=\{(x,j,d):\ x\in B,\ j\in J(x),\ d\in D\}.
+\end{equation}
+Throughout, $B$ is a compact set on which the active index set is locally constant on finitely many pieces, so that $\calK(B)$ is a compact index set on which $a\mapsto(c_a,v_a)$ is continuous (in the examples $B$ is finite or a segment). We say that $B$ is \emph{obstructed} when $\calR(B)=\emptyset$.
+
+\paragraph{The row abstraction.} All statements of Sections~\ref{sec:static}--\ref{sec:taxonomy} concern only the family of affine rows $\{\psi_a(u)=c_a+v_a^\top u:\ a\in\calA\}$ indexed by a compact set $\calA$ (in the application $\calA=\calK(B)$), and the action set $U$. We write
+\begin{equation}\label{eq:values}
+V^-=\max_{u\in U}\ \min_{a\in\calA}\psi_a(u),\qquad V^+=\min_{a\in\calA}\ \max_{u\in U}\psi_a(u),\qquad
+\Phi(u,\mu)=\int_{\calA}\psi_a(u)\dd\mu(a)
+\end{equation}
+for the lower and upper values of the zero-sum game in which the controller picks $u$ and the adversary picks the row, and for the mixed-adversary payoff with $\mu\in\calP(\calA)$, the probability measures on $\calA$. The common safe-action set is $\{u\in U:\ \min_a\psi_a(u)\ge0\}$, so $B$ is obstructed exactly when $V^-<0$; the maxima and minima in \eqref{eq:values} are attained by compactness and continuity. The \emph{support function} of $U$ is $h_U(g)=\max_{u\in U}g^\top u$.
+
+\begin{definition}[measure certificate]\label{def:certificate}
+A probability measure $\mu\in\calP(\calA)$ is a \emph{certificate} for the row family if
+\begin{equation}\label{eq:cert}
+\varepsilon(\mu)\;:=\;-\max_{u\in U}\Phi(u,\mu)\;=\;-\Bigl(\int c_a\dd\mu+h_U\Bigl(\int v_a\dd\mu\Bigr)\Bigr)\;>\;0 ;
+\end{equation}
+$\varepsilon(\mu)$ is its \emph{margin}. Since $\Phi(\cdot,\mu)$ is affine, the maximum in \eqref{eq:cert} is a single support-function evaluation at the pooled coefficient vector $\bar v=\int v_a\dd\mu$: checking a certificate costs one evaluation of $h_U$, which for polyhedral $U$ is a maximum over vertices and for an ellipsoid is a norm.
+\end{definition}
+
+Soundness of a certificate is one line and holds for \emph{every} $U$, convex or not: if $u\in\calR(B)$ then $\psi_a(u)\ge0$ for all $a$, hence $\Phi(u,\mu)\ge0$, contradicting $\varepsilon(\mu)>0$. This is the direction formalised in Lean (Section~\ref{sec:verification}). The content of the theory is the converse, the size of certificates, and what they say about the obstruction.

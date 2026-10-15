@@ -1,0 +1,27 @@
+\section{Proof details for the static theory}\label{si:proofs}
+
+\subsection{Hypotheses of Sion's theorem in main Theorem~\mref{thm:dual}}
+Sion's theorem requires a function $\Phi:X\times Y\to\R$ with $X$ compact convex, $Y$ convex, $\Phi(\cdot,y)$ upper semicontinuous and quasi-concave for each $y$, and $\Phi(x,\cdot)$ lower semicontinuous and quasi-convex for each $x$; then $\sup_x\inf_y\Phi=\inf_y\sup_x\Phi$. Here $X=U$ (compact convex), $Y=\calP(\calA)$ (convex; compact in the weak$^\ast$ topology because $\calA$ is compact, by Prokhorov), and $\Phi(u,\mu)=\int(c_a+v_a^\top u)\dd\mu(a)$ is affine in $u$ and affine and weak$^\ast$-continuous in $\mu$ (the integrand is continuous in $a$ for fixed $u$). Hence both sides are attained: the left side because $u\mapsto\min_a\psi_a(u)$ is continuous on the compact $U$, the right side because $\mu\mapsto\max_u\Phi(u,\mu)=\int c\dd\mu+h_U(\int v\dd\mu)$ is continuous on the compact $\calP(\calA)$. For finite $\calA$ all of this is finite-dimensional and the right-hand side is a linear programme over the simplex.
+
+\subsection{Helly's theorem for infinite families}
+The finite Helly theorem states that if a finite family of convex sets in $\R^e$ has the property that every $e+1$ members intersect, the whole family intersects. For an infinite family of \emph{compact} convex sets the same conclusion holds: by the finite theorem every finite subfamily intersects, and a family of compact sets with the finite intersection property has non-empty intersection. This is the version used in the proof of main Theorem~\mref{thm:helly}(i); compactness of the sets $C_a=\{u\in U:\psi_a(u)\ge0\}$ comes from the compactness of $U$ and the continuity of $\psi_a$.
+
+\paragraph{The rank reduction.} Let $W=\operatorname{span}\{v_a\}$ with $\dim W=r$ and let $P$ be the orthogonal projection onto $W$. Since $v_a^\top u=v_a^\top Pu$, the row $\psi_a$ depends on $u$ only through $w=Pu\in P(U)$, a compact convex subset of $W$. Define $C_a'=\{w\in P(U):c_a+v_a^\top w\ge0\}$. If $u\in\bigcap_aC_a$ then $Pu\in\bigcap_aC_a'$; conversely if $w\in\bigcap_aC'_a$, pick any $u\in U$ with $Pu=w$ (exists by definition of $P(U)$); then $u\in\bigcap_aC_a$. So the two intersections are empty together and Helly can be applied in $W$. The same argument with $\aff U$ in place of $\R^k$ gives the $\dim\aff U$ bound; the minimum of the two applies because both reductions can be composed (project $\aff U$ onto $W$).
+
+\paragraph{The $k+1$ versus $k+2$ count.} Carath\'eodory's theorem applied to the point $(\int c\dd\mu,\int v\dd\mu)\in\conv\{(c_a,v_a)\}\subset\R^{k+1}$ yields a representation with $k+2$ atoms having the same pooled row and hence the same margin. The Helly route gives $k+1$ because it uses the structure of the sets $C_a$ (half-spaces intersected with $U$) rather than only the convexity of the set of rows; the tight family of main Theorem~\mref{thm:helly}(ii) shows that $k+1$ cannot be improved.
+
+\paragraph{The tight family: the dual value.} For $k=2$ the exact simplex programme
+\[
+\min_{\lambda\in\Delta_3}\ \max_{u\in[0,2]^2}\ \sum_i\lambda_i\psi_i(u)
+\]
+has the unique solution $\lambda=(\tfr13,\tfr13,\tfr13)$ with value $-\tfr13$ (check S2.5, by vertex enumeration of the lifted polytope in $(\lambda,t)$). For general $k$ the uniform measure is optimal by the weak-duality argument given in the main proof; uniqueness for every $k$ is not needed and not claimed.
+
+\subsection{The finite convex-hull programme (main Proposition~\mref{prop:nonconvex})}
+For a finite action set $U=\{u_1,\dots,u_m\}$ and finitely many rows, the value over $\conv U$ is
+\[
+\max_{\theta\in\Delta_m}\ \min_a\ \sum_j\theta_j\psi_a(u_j),
+\]
+a linear programme in $\theta$. The script solves it exactly by eliminating $\theta_m=1-\sum_{j<m}\theta_j$ and enumerating the vertices of the lifted polytope in $(\theta_1,\dots,\theta_{m-1},t)$ (function \texttt{value\_over\_hull}). On the parity instance ($m=2$, rows $2u-1$ and $1-2u$) the programme returns $0$ at $\theta=(\tfr12,\tfr12)$, while the maximum over the two points is $-1$ (check S1.5). Check S1.6 confirms directly that no $\lambda$ in the simplex has a positive margin over $[0,1]$: the best margin is $0$, attained at $\lambda=(\tfr12,\tfr12)$, which pools the rows to the zero function.
+
+\subsection{Polyhedral duality (main Theorem~\mref{thm:polyhedral})}
+The identity $h_U(g)=\min\{b^\top\nu:A^\top\nu=g,\ \nu\ge0\}$ for $U=\{Au\le b\}\neq\emptyset$ bounded is linear programming duality for $\max\{g^\top u:Au\le b\}$ (the primal is feasible and bounded, so the dual is feasible with the same value). Consequently, for a certificate $\lambda$ with pooled coefficients $\bar v=\sum_a\lambda_av_a$ and optimal $\nu$, the Farkas scalar $\sum_a\lambda_ac_a+b^\top\nu$ equals $\sum_a\lambda_ac_a+h_U(\bar v)=-\varepsilon(\lambda)$, and for a non-optimal $\nu$ it is larger (so the Farkas pair certifies a smaller margin, still positive if the pair satisfies \meqref{eq:farkas}). On the benchmark at $Y=6$ the facet matrix of $U_2$ has rows $e_1,e_2,-e_1,-e_2,(-1,-1)$ with right-hand sides $2,2,0,0,-2$; the pooled coefficients $(-\tfr12,-\tfr12)$ are reproduced by $\nu=(0,0,0,0,\tfr12)$, $b^\top\nu=-1$, and the Farkas scalar is $\tfr12(\tfr{11}{10}+\tfr{39}{50})-1=-\tfr3{50}$ (check B3.1).
