@@ -1,0 +1,98 @@
+% =====================================================================
+% paper11_forecasting_baselines_v67.tex
+% Forecasting against naive benchmarks: a scored test of process-based
+% modules on Northern cod and the Edwards Aquifer
+% Author: Amin Abaee (Independent Researcher, Tehran, Iran)
+%
+% Lineage: paper11_forecasting_baselines_v66 (two-part article: Part I cod =
+% paperE1 v60 + related-work subsection; Part II Edwards J-17 = paper11b v2;
+% cross-system conclusion) -> v67 (this file): one research article with a
+% shared design section, two system sections, a cross-system synthesis that
+% states and proves the increment decomposition (Proposition 2) and the
+% horizon-crossover criterion (Remark 2), a merged related-work section and a
+% combined Supplementary Information. The cod half carries the research-article
+% restructuring of paperE1_cod_forecast_ladder_v69 (period decomposition,
+% identification result, operating characteristics); that v69 file was built
+% from the stale v59/v60 base and is superseded by this edition.
+% No archived score was changed. New computations in this edition (the
+% horizon profile h = 1..5 of the two baselines on all three series, the
+% autocorrelations used by Proposition 2 and Fig. 7) are reproduced by
+% work/make_fig_mechanism.py and work/horizon_profile.py from the registered
+% data files (SI S16, S23).
+% Target: Environmental Modelling & Software (elsarticle, author-year).
+% Compiles with pdfLaTeX / XeLaTeX / LuaLaTeX / tectonic.
+% =====================================================================
+\documentclass[preprint,11pt,authoryear]{elsarticle}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{graphicx}
+\graphicspath{{./}{figs/}{paper11_forecasting_baselines_v67_src/figs/}}
+\usepackage{enumitem}
+\usepackage{placeins}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.7}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\floatpagefraction}{0.75}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue,citecolor=blue]{hyperref}
+\emergencystretch=3em
+\setlength{\tolerance}{2000}
+
+\newtheorem{proposition}{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\newcommand{\kt}{\,\mathrm{kt}}
+\newcommand{\ft}{\,\mathrm{ft}}
+\newcommand{\Blim}{B_{\mathrm{lim}}}
+\newcommand{\Spos}[1]{\left[#1\right]_{+}}
+\newcommand{\RMSE}{\mathrm{RMSE}}
+\newcommand{\MAE}{\mathrm{MAE}}
+\newcommand{\MSE}{\mathrm{MSE}}
+\newcommand{\pers}{\mathrm{persist}}
+\newcommand{\sA}{\mathfrak{s}}
+\newcommand{\E}{\mathbb{E}}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\journal{Environmental Modelling \& Software}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Forecasting against naive benchmarks: a scored test of process-based modules on Northern cod and the Edwards Aquifer}
+
+\author[1]{Amin Abaee\corref{cor1}}
+\ead{amin_abaee@ut.ac.ir}
+\cortext[cor1]{Corresponding author. ORCID: 0000-0002-0019-1842.}
+\affiliation[1]{organization={Independent Researcher}, city={Tehran}, country={Iran}}
+
+\begin{abstract}
+Adding a mechanism to a forecasting model is a claim that the mechanism helps to predict the system, and the claim can be scored against the forecast that nothing changes. We report one such test on two unrelated systems: a five-module surplus-production ladder on the spawning-stock biomass of Northern cod (\emph{Gadus morhua}, NAFO 2J3KL; the 1983--2015 NCAM and the 1954--2024 xteNCAM series) and a one-pool water-balance ladder on annual-mean head at the Edwards Aquifer index well J-17 (1934--2023). Both ladders are scored by rolling-origin RMSE against last-value persistence and the training mean, each under its own disclosed retention protocol, and the two systems' scores are never pooled. No structural module is retained on either system. On cod, persistence has one-year RMSE 98\,kt against 115--196\,kt for the modules (84 against 119--206\,kt on the longer series); the deficit is carried by the 1991--1995 collapse, which no member of the class can reproduce at the recorded catch, and under known truth the rule retains a true autonomous module in 97\% of replicates, so the verdict is a property of the series rather than of the test. On J-17, a balance that persists last year's recharge loses to persistence (14.70 against 13.23\,ft) because annual recharge is near-white ($r=0.17$) while the head increment tracks it ($r=0.74$); a univariate AR(1) is retained by the aquifer protocol by a 0.39-ft margin whose bootstrap interval covers zero; the same map given the year's realised fluxes nowcasts at 7.55\,ft; and the training mean beats persistence from two years ahead. An elementary decomposition explains both outcomes: a one-step structural forecaster gains on persistence only through what its mechanism fits of the realised increment and loses whatever its substituted driver fails to persist, the persisted-driver term being negative whenever the driver's lag-one autocorrelation is below one half; and the training mean overtakes persistence at the horizon at which the predictand's autocorrelation falls below one half. The two systems fail on the two different terms of that decomposition, which is why one test and two protocols yield one lesson: mechanistic fidelity is a hypothesis about accuracy, to be scored rather than assumed.
+\end{abstract}
+
+\begin{keyword}
+forecast evaluation \sep persistence benchmark \sep rolling-origin scoring \sep model retention \sep surplus production \sep Northern cod \sep water balance \sep Edwards Aquifer \sep Diebold--Mariano test
+\end{keyword}
+
+\end{frontmatter}
+
+\section{Introduction}\label{sec:intro}
+
+A process-based forecasting model earns its structure by predicting better than a model without it. The forecasting literature has made that requirement operational: a candidate is held to beat a naive benchmark, usually last-value persistence and the training mean, out of sample at the horizons that matter \citep{Makridakis2000,HyndmanKoehler2006,HyndmanAthanasopoulos2021}; the evaluation is run on a rolling origin so that each forecast uses only what was available when it would have been issued \citep{Tashman2000,Bergmeir2012}; and differences in accuracy are tested rather than eyeballed \citep{Diebold1995,Harvey1997,Diebold2015}. Applied to environmental systems these standards have produced a consistent and uncomfortable result. Simple time-series models forecast fish populations about as well as complex ones \citep{Ward2014}, model-free methods have outperformed the mechanistic models that generated the data when the mechanism is unstable \citep{Perretti2013}, and in the largest forecasting competitions the sophisticated entries have rarely beaten the simple statistical ones \citep{Makridakis2000,Makridakis2018}. Yet in the applied literatures that build process models for management, the added mechanism is still widely treated as a reason to prefer the model, and the benchmark comparison, where it is made at all, is seldom made under a rule fixed before the scores are seen.
+
+This paper reports one scored test on two systems that share nothing but the question. The first is the spawning-stock biomass (SSB) of Northern cod (\emph{Gadus morhua}) in NAFO Divisions 2J3KL, the archetype of a fishery collapse \citep{Hutchings1994,Myers1997} and of a contested recovery \citep{RoseRowe2015,Rose2026}, on which two retrospective assessment series exist: the 1983--2015 NCAM series \citep{Cadigan2016,DFO2016} and the 1954--2024 xteNCAM series of the 2024 framework revision \citep{Regular2025}. The candidate structure is a ladder of nested surplus-production forecasters \citep{Schaefer1954,Pella1969}: an autonomous module driven by the training-mean catch, a depensatory variant, a stock-flow module that receives the realised catch along the horizon, an autoregressive-residual correction and a lagged-start variant. The second system is the annual-mean head of the Edwards (Balcones Fault Zone) Aquifer at index well J-17, San Antonio, Texas, 1934--2023, one of the longest managed groundwater records in North America, on which drought-stage declarations and springflow protection key \citep{EAA2024}. The candidate structure is a one-pool water balance in which the head increment is a weighted sum of recharge and pumpage plus a linear drain, with residual, delay and climate-informed variants, scored beside a univariate AR(1). Both ladders are deliberately simple, and both are of a kind that practitioners use and defend on mechanistic grounds; neither is a straw man, and neither is a state-of-the-art model. The question asked of each is the same: does any structural step lower the out-of-sample error of the predictand that management actually uses, relative to persistence and to the step below it, at the horizons at which advice is issued?
+
+The two systems are evaluated by one scoring core and two retention protocols, and the distinction matters for how the results should be read. The scoring core, shared, is rolling-origin RMSE on the predictand at one- and five-year horizons against origin-matched persistence and training-mean baselines, with Diebold--Mariano statistics and moving-block bootstrap intervals on every load-bearing margin. The retention protocols are system-specific and are reported as they were applied: on cod, a module is kept only if it beats both its comparator and persistence by more than a 5\% band at both horizons; on the aquifer, a module is kept if it beats persistence and the next-simpler causal model on the point one-year RMSE, with no band. Each protocol had its scoring core coded before the first pass and had elements completed after scores were seen (the cod tie band and non-nested comparator declarations; the aquifer class clause and climate-rung comparator), and each completion is disclosed with its effect on the verdict, which in every case is nil. The design is a fixed computational protocol with a recorded pass order, not a prospective registration, and we do not call it one. The two systems' scores are never pooled, no retention verdict is transferred between them, and each system also reports what the test could have detected: by simulation under known truth on cod, and by the oracle and nowcast diagnostics on the aquifer.
+
+The result is uniform and, we argue, instructive beyond the two systems. No structural module is retained on either. On cod the modules' one-year RMSE is 17--100\% above persistence on the first series and 42--144\% above it on the second; the pooled deficit is carried by the 1991--1995 collapse, which no member of the surplus-production class can reproduce at the recorded catch because those years removed more biomass than the catch record accounts for; the autonomous modules forecast the numerical floor at every post-collapse origin because training-mean catch exceeds the production of a depleted stock; and under known truth the rule retains a true autonomous module in 97\% of replicates, so its non-retention is evidence about the series. On J-17 the balance that persists last year's recharge loses to persistence at one year (14.70 against 13.23\,ft) because annual recharge is near-white ($r(R_t,R_{t-1})=0.17$) while the head increment is strongly coupled to same-year recharge ($r(\Delta H_t,R_t)=0.74$); the univariate AR(1) is retained by the aquifer protocol by 0.39\,ft, a margin whose bootstrap interval covers zero and which reverses at five years; the same balance given the realised fluxes nowcasts the year at 7.55\,ft; climate predictors known at the origin recover at most 0.13\,ft of the gap; and the training mean beats persistence at every horizon from two years. The two failures have different proximate causes, a class failure in the fishery and a driver-persistence failure in the aquifer, and part of the contribution of this paper is to show that they are the two terms of one elementary decomposition rather than two unrelated anecdotes.
+
+Three things are new relative to the two single-system studies from which this article descends and to their earlier two-part combination. First, the cross-system reading is formalised. Proposition~\ref{prop:increment} decomposes the one-step mean squared error of any forecaster of the form ``last value plus a mechanism evaluated at a substituted driver'' relative to persistence into a term that depends only on what the mechanism fits of the realised increment and a term that depends only on how the substituted driver fails to persist; the second term is negative whenever the driver's lag-one autocorrelation is below one half, and the climatological-flux forecaster never loses to persistence. Remark~\ref{rem:crossover} states the companion criterion for the baselines: under stationarity the training mean overtakes persistence at the horizon at which the predictand's autocorrelation falls below one half. On J-17 both statements are quantitatively borne out; on cod the increment decomposition locates the failure in the mechanism term and the crossover criterion fails, as it should for a non-stationary series. An earlier combination of the two studies attributed the cod failure to a ``weakly autocorrelated'' surplus production; the apparent net production of the assessed series has lag-one autocorrelation 0.71--0.91, and the attribution is withdrawn here in favour of the class argument of Proposition~\ref{prop:repeller}. Second, the aquifer results are reported under both protocols, so that the reader sees that the AR(1) is retained under the aquifer's point rule and not under the cod band-and-two-horizon rule, and sees why. Third, the horizon profile of the two baselines is computed at every horizon from one to five years on all three series from the registered data, which turns the five-year climatology result into a crossover with a predicted location.
+
+The paper is organised as a single argument. Section~\ref{sec:design} sets out the shared scoring core, the two protocols and the operating-characteristic designs. Sections~\ref{sec:cod} and \ref{sec:edwards} report the two systems, each with its data, ladder, verdict and diagnostics. Section~\ref{sec:synthesis} states and verifies the decomposition and the crossover criterion, and tabulates what transfers between the systems and what does not. Section~\ref{sec:related} positions the work in the forecast-evaluation, fisheries and groundwater literatures. Section~\ref{sec:discussion} discusses the limits of the findings and Section~\ref{sec:conclusions} concludes. Proofs are in \ref{app:proofs}. Material that supports but does not carry the argument (pass orders, origin sets, full test grids, fitted parameters, fixed-window and variant passes, the simulation design, the aquifer service-series and pumpage layers, the horizon profiles, the vintage and suspension records and the verification record) is in the Supplementary Information (SI), whose sections are cited as S1--S23.
