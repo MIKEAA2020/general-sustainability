@@ -1,0 +1,268 @@
+\section{The two frozen protocols}\label{si:protocols}
+The two intervention-selection protocols are reproduced below exactly as archived in the repository (\path{wave_e_cod/protocol_intervention.md} and \path{wave_e_edwards/protocol_intervention.md}), transliterated to ASCII and re-wrapped for the page; both were frozen on 2026-08-26 before any kernel, boundary, replay or retention score was computed. The main text follows them in every declared quantity; the exact bounded-defect kernels and the Lipschitz-versus-exact identity are additions that leave the declared classes unchanged.
+\subsection{Northern cod (NAFO 2J3KL)}
+\begin{footnotesize}\begin{verbatim}
+# Wave E intervention-selection protocol -- Northern cod (NAFO 2J3KL), Omega_2016
+
+**Frozen 2026-08-26, before any kernel, boundary, replay, or retention score was computed.**
+This is the cod-side analogue of `wave_e_edwards/protocol_intervention.md` (G1 Track 2,
+G1a). It executes Sec.15's intervention-selection leg on the **governed surplus-production
+object** of `wave_e_cod` -- the ladder's own model class, not NCAM. The ladder's
+forecast verdicts (persistence wins; no module retained) are inputs, not outputs, of
+this protocol and are not re-litigated.
+
+## 1. Object (declared)
+
+| Field | Contents | Type |
+|---|---|---|
+| System | Northern cod 2J3KL as represented by NCAM M-shift SSB, 1983-2015 (the locked
+  Omega_2016 series; not pooled with xteNCAM) | D |
+| Map | Discrete surplus with catch: `S_{t+1} = [S_t + r*S_t(1-S_t/K) - C_t + e_t]+` (the
+  ladder's M2 class, Allee off: s = 0) | M |
+| Fit window | 1983-2007, one-step least squares on Schijns annual catch (the ladder's own
+  `fit_params`, bounds r in (0.001, 2], K in (max train, 5000]) | E |
+| OOS audit window | 2008-2015 (recovery era): residuals audited, no refit | E |
+| Safe set | K* = LRP = 884.6 kt (the 1983-1989 mean, the declared [N] threshold of
+  Omega_2016). Omega_2016 declares **no second threshold** -- there is no cod analogue of
+  the Edwards phys/inst pair, and the 2023 40% B_MSY LRP belongs to Omega_xte and is not
+  pooled | N |
+| State domain | [1e-3, 10000] kt (the ladder's clip floor; upper bound declared at twice
+  the fitted K) | M |
+| Governance family | Sec.4 below | E/[N] |
+
+**Declared defects carried by the object.** (i) K is expected to pin at its
+optimization upper bound (the series never approaches carrying capacity) -- all upper
+edges inherit it; the LRP-boundary results depend chiefly on r, which is identified.
+(ii) The residual conflates productivity shocks and Schaefer-class model error -- there
+is no independent input channel (unlike Edwards' recharge), so the disturbance classes
+and the defect declaration below are the **same measured quantity in two roles**;
+disclosed, not repaired. (iii) One pool, no age structure, no migration (A014-L list).
+
+## 2. Defect declaration (Cor2 triple, first element)
+
+eps = max |residual| over the **fit window** 1983-2007, in kt yr-1, together with the
+residual SD and the lower-tail quantiles (the UC classes below). The OOS audit
+(2008-2015) is reported alongside; no refit is permitted whatever it shows.
+
+## 3. Uncertainty classes (persistent productivity shocks)
+
+Mirroring the Edwards recharge floors (perpetual 1956 / q05 / q10 of training
+recharge), the disturbance classes are **persistent additive productivity floors**
+drawn from the fit-window residual distribution:
+
+| Class | Floor e (kt yr-1) | Reading |
+|---|---|---|
+| UC-min | min(fit residuals) | perpetual worst observed one-step productivity shock |
+| UC-q05 | 5th percentile of fit residuals | perpetual 5th-percentile shock |
+| UC-q10 | 10th percentile of fit residuals | perpetual 10th-percentile shock |
+
+The worst-case closed loop is `F(S) = [S + r*S(1-S/K) - C(S) + e]+` with e the class
+floor (a constant -- the persistent reading, deliberately harsher than i.i.d.).
+
+## 4. Governance-operator family
+
+| ID | Rule | Type |
+|---|---|---|
+| BAU | C ? 5 kt (moratorium-level inshore removals; the declared implementable U post-1992)
+  | E |
+| flat_100 ... flat_0 | C ? rho*240 kt, rho in {1.0, 0.75, 0.5, 0.25, 0.0} (240 kt =
+  pre-1992 directed-fishery level) | E |
+| S1 | C = 60 kt if S >= LRP, else 0 (DFO 2009 PA critical-zone rule at a modest declared
+  cap) | E/[N] |
+| cpm | cascade: C = 60 kt if S >= LRP; 30 kt if S in [0.75*LRP, LRP); 5 kt if S in
+  [0.5*LRP, 0.75*LRP); 0 below 0.5*LRP | [N] (declared scenario) |
+
+Stage thresholds below the LRP are declared scenarios, not verified institutions
+(the Edwards analogue: stages II-IV declared [N]).
+
+## 5. Kernels
+
+Robust T-step viability kernel of the safe set [K*, S_HI] under the persistent floor:
+K_0 = [K*, 10000]; K_{n+1} = {S in K_n : F(S) in K_n} with F the worst-case closed loop
+(policies act on the current state; the catch jump thresholds split the domain into
+pieces, on each of which F is a concave quadratic -- preimages are computed by interval
+arithmetic on the quadratic roots). Horizons T in {1, 2, 3, 5, 8, 10, 15, 20, inf}; the
+infinite-horizon kernel is the fixpoint with a one-step stability re-check.
+
+## 6. Certified layer (Cor2/Cor5 erosion conversion)
+
+r_T = eps*(1 - a^T)/(1 - a) if the closed loop contracts with rate a < 1 on the safe
+domain; **otherwise** the expansive form r_T = eps*(a_max^T - 1)/(a_max - 1) with
+a_max = sup|F'| over the safe domain. The form that applies is computed from the
+fitted map and **recorded** -- if the map is expansive at the safe-set boundary (as the
+Schaefer map is below K/2), the contraction form is inapplicable and the certified
+kernel is the nominal kernel of K* + r_T with the expansive r_T. No certified claim at
+any horizon where K* + r_T exceeds the nominal kernel's reach.
+
+## 7. Replays
+
+1. **Supply replay** (no dynamics): mean allowed catch C(S_t^obs) over the fit-window
+   states 1983-2006, per policy; cut-active fraction reported.
+2. **Stress replay** (the 1990s analogue of the Edwards 1950s replay): closed-loop
+   model replay from the observed 1990 SSB with the **observed** 1991-1995 residuals,
+   per policy; whether the path stays >= LRP reported. (The ladder already established
+   that catch cannot produce the 1992-94 pulse; this replay records what governance
+   does against the *observed* shock class.)
+3. **T=5 classification**: which observed SSB values lie outside each policy's T=5
+   nominal kernel, per UC class.
+
+## 8. Retention rule (frozen; mirrors the Edwards rule)
+
+A non-BAU policy is **retained** iff:
+
+- (a) its robust kernel is at least as protective as BAU's at **every** (UC, T)
+  reading -- compared on the kernel lower boundary, empty = worst; and
+- (b) it improves on BAU somewhere (strictly lower boundary at some reading); and
+- (c) at some reading where it improves, its supply-replay mean catch exceeds that of
+  every at-least-as-protective flat cap (the "matched protection" clause).
+
+No forecast module is promoted or demoted. The oracle, the survey-start variant, and
+capelin modules play no role. No Omega_xte row is produced.
+
+## 9. Outputs
+
+`results/intervention_results.json` (fit, UC, kernels, steady states, maximal robust
+flat catch, supply, stress replay, classification, retention at nominal and certified
+levels, certified horizons), `results/intervention_boundaries.csv` (per policy x UC x T
+kernel lower boundaries, nominal and certified), admission row
+`admission/R04_Cor2_cod_kernel.md`, manuscript `manuscript/wave_E_cod_intervention.md`.
+Deterministic; no randomness anywhere.
+
+\end{verbatim}\end{footnotesize}
+\subsection{Edwards Aquifer (J-17)}
+\begin{footnotesize}\begin{verbatim}
+# Wave E -- Edwards San Antonio Pool. Intervention-selection protocol
+
+**Locked 2026-08-26, before the intervention scores were generated.**
+Companion to `protocol.md` (the forecast-ladder protocol, locked 2026-08-25).
+This is the Sec.15 **intervention-selection leg** -- never before exercised on a
+real system in this programme. It shares the locked data object of
+`protocol.md` and adds a governance-operator comparison with viability
+kernels. It does **not** reopen any forecast-ladder retention decision.
+
+## Protocol sentence (frozen)
+
+Intervention retention is decided solely by robust viability kernels and
+replayed supply under the declared uncertainty classes, against the
+business-as-usual baseline. No forecast module is promoted or demoted by
+this leg; the fibre and the oracle stay excluded; no two-pool claim is made.
+
+## Object (unchanged from `protocol.md`)
+
+| Field | Contents | Type |
+|---|---|---|
+| \(S\) | Edwards Aquifer, San Antonio Pool, as indexed by well J-17 | D |
+| \(z_t\) | Calendar-year mean of daily-high J-17 elevation, ft AMSL | D |
+| \(B\) | San Antonio Pool management region; calendar years 1934-2023 | D |
+| Data | `data/annual_panel.csv` only (locked 20-column panel); no new data | D |
+| \(K^*_{\mathrm{phys}}\) | 618 ft (Comal cessation proximity; declared, not certified) | N
+  / E |
+| \(K^*_{\mathrm{inst}}\) | 660 ft (post-2007 Stage I trigger; not applied pre-2007) | N |
+| Not \(z\) | Comal, GRACE, J-27, San Marcos, MODFLOW/GWSIM heads | D |
+
+## Dynamics (the scored ladder's M2 class, one pool, affine)
+
+\[
+\Delta H_t = \alpha + \beta R_t + \gamma P_t + \delta H_{t-1},
+\qquad a = 1+\delta,
+\]
+fitted by ordinary least squares on the training window 1934-1990
+(transitions with both endpoints \(\le\) 1990). Out-of-sample years
+1991-2023 are used **only** for the defect audit; no refitting.
+
+Model domain (declared compact set, the ladder's clip bounds):
+\(H \in [610, 710]\) ft. Upward exits above 710 ft under extreme recharge
+are out-of-domain for the *model* and are not violations of the
+lower-threshold constraint; this caveat is carried in the admission record.
+
+## Information pattern (causal, matches the H0 record's map (5))
+
+At the end of year \(t\) the manager observes \((H_t, R_t, P_t)\) and sets
+next year's pumping \(P_{t+1} = \pi(H_t)\) (annual-mean approximation to the
+intra-year CPM adjustment). Next year's recharge \(R_{t+1}\) is unknown at
+decision time and is treated adversarially.
+
+## Uncertainty classes (declared, robust, persistent recharge floors)
+
+Computed on the training window only:
+
+| Class | Declaration | Value (103 acre-ft yr-1) |
+|---|---|---|
+| UC-min | \(R \ge \min_{\text{train}} R\) (1956 drought-of-record year, held forever) |
+  43.7 |
+| UC-q05 | \(R \ge\) 5th percentile of train \(R\) | 166.5 |
+| UC-q10 | \(R \ge\) 10th percentile of train \(R\) | 179.1 |
+
+For the lower-threshold constraint the adversarial realisation is the floor
+(\(\beta > 0\) verified on the fit). These floors are **persistent**
+(forever), which is harsher than any recorded drought; the classes are
+declared for certification geometry, not as recharge forecasts.
+
+## Governance operators (declared family)
+
+\( \bar P \) = training-mean pumping (1934-1990). Stage thresholds and the
+Stage I reduction are from `data/SOURCES.md`; Stage II-IV reductions are
+**declared [N] scenarios**, not verified in-repo.
+
+| ID | Rule | Note |
+|---|---|---|
+| BAU | \(P \equiv \bar P\) | baseline (the persistence analogue) |
+| flat-\(\rho\) | \(P \equiv \rho\,\bar P\), \(\rho \in \{0.9, 0.8, 0.7, 0.6, 0.5, 0.0\}\) |
+  flat caps |
+| S1 | \(P(H) = 0.8\,\bar P\) if \(H < 660\), else \(\bar P\) | post-2007 Stage I, 20%
+  (verified) |
+| cpm | cumulative cuts 20/30/35/40% at \(H<660/650/640/630\) | cascade, stages II-IV [N] |
+
+## Scores (frozen)
+
+1. **Nominal robust kernel boundary** \(b_T(\pi)\) (ft; lower = more
+   protective): the infimum of the \(T\)-year robustly viable set
+   \(\mathrm{Viab}_T(\pi, K^*)\) under each UC, computed by backward
+   recursion \(K_0 = [K^*, 710]\),
+   \(K_{n+1} = \{H \ge K^* : aH + \alpha + \beta R_{\mathrm{lo}} + \gamma\pi(H) \in K_n\}\),
+   \(T \in \{1,2,3,5,8,10,15,20,\infty\}\). Empty set recorded as `null`.
+2. **Certified boundary** after the R04.Cor2 / R03.Cor5 erosion
+   (discrete-contraction form):
+   \(b^{\mathrm{cert}}_T = b_T(\pi; K^* + r_T)\) with
+   \(r_T = \varepsilon (1-a^T)/(1-a)\),
+   \(\varepsilon = \max_{\text{train}} |\text{residual}|\) (uniform defect
+   declaration). Audits, not used for certification: the out-of-sample max
+   residual (defect-adequacy check) and the training residual SD
+   (non-uniform reading).
+3. **Supply**: mean annual pumping under (i) the deterministic replay of
+   the historical train recharge sequence 1934-1990 from \(H_{1934}\) and
+   (ii) the OOS sequence 1991-2023 from \(H_{1990}\) (audit only).
+4. **Stress replays**: the 1950-1956 recharge sequence from \(H_{1950}\)
+   under each policy -- minimum head reached, and whether it stays
+   \(\ge 618\) ft; plus classification of the actual 1956 and 2011-2014
+   annual states against the nominal and certified kernels.
+
+## Retention rule (frozen; mirrors the ladder's persistence benchmark)
+
+BAU is the baseline. A governance module is **retained** iff
+
+(a) it is at least as protective as BAU on the nominal kernel boundary at
+    **every** declared horizon under **every** declared UC and both declared
+    \(K^*\) readings (no horizon/class/threshold where it is strictly
+    worse), **and**
+
+(b) it supplies strictly more water (train replay) than the most protective
+    flat cap with the same nominal protection profile.
+
+Otherwise the flat cap (or BAU) suffices -- "complexity not earned".
+A module that improves only horizons where BAU is already certified earns
+no certified-increment claim. A policy whose certified kernel is empty at
+every horizon earns no certified claim at all (a nominal-only row).
+
+## Prohibitions (frozen)
+
+- No forecast-module promotion (M2 stays rejected, M1 thin; oracle and
+  Comal fibre stay excluded from every score here).
+- No two-pool, karst, or solute claim; no pooling with Northern cod or any
+  phosphorus catchment.
+- \(K^*_{\mathrm{inst}}\) is not applied to pre-2007 history.
+- Nothing here is `EXACT_SPECIALIZATION` of A005; every kernel statement
+  carries the Cor2 triple (defect, horizon, erosion) and the
+  `APPROXIMATION` mapping type.
+
+\end{verbatim}\end{footnotesize}
