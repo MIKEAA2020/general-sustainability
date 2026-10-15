@@ -1,0 +1,84 @@
+\section{The delayed hidden-regime class: closed forms and the class lattice}\label{sec:delayed}
+
+\subsection{The instance}
+
+A scalar state $z$ measures the distance above a floor, the safe set being $\{z\ge1\}$. A hidden regime $\theta\in\{-1,+1\}$, with prior mass $w\in[0,1]\cap\Qr$ on $\theta=+1$, gates the effect of a binary control $u_t\in\{-1,+1\}$:
+\begin{equation}\label{eq:delayed}
+z_{t+1}=z_t+\theta\,u_t .
+\end{equation}
+No observation other than the exit announcement arrives before stage $\Tobs\ge1$, at which $\theta$ is revealed exactly. The prior places mass $w$ and $1-w$ on the two branches $(z_0,+1)$ and $(z_0,-1)$; under a segment $u$ the $\theta=+1$ branch sits at $z_0+\sum_t u_t$ and the $\theta=-1$ branch at $z_0-\sum_t u_t$, so the support follows two mirror-image trajectories. From a fixed $z_0$ only the states $z_0+j$, $|j|\le k$, are reachable within $k$ stages, so the reachable model is a finite safety POMDP in the sense of Definition~\ref{def:model}, with deterministic kernels and observation maps. The instance is the delayed-observation instance of the calculus \cite{Abaee2026calc}: its \emph{timing certificate} asserts nonviability of the hold-until-review regulator exactly when $\Tobs$ exceeds the exit time $\sigma^{*}=z_0-1$ of the falling branch, i.e.\ when $z_0<1+\Tobs$.
+
+The effective window at horizon $k$ is $\ell=\min(k,\Tobs)$: after revelation the controller plays the rising control $u=\theta$ and never exits, so survival to horizon $k$ is survival of the first $\ell$ stages.
+
+\subsection{Closed forms}
+
+\begin{theorem}[parametric closed forms]\label{thm:closed}
+On the instance \eqref{eq:delayed}, for every $z_0\in\R$, every rational $w\in[0,1]$, every $\Tobs\ge1$ and every horizon $k\ge1$ with $\ell=\min(k,\Tobs)$,
+\begin{align}
+V^{\hold}_k(b_0)&=\begin{cases}0,&z_0<1,\\ 1,&z_0\ge1+\ell,\\ \max(w,1-w),&1\le z_0<1+\ell,\end{cases}\label{eq:hold}\\[2pt]
+V^{\ol}_k(b_0)=V^{\seq}_k(b_0)&=\begin{cases}0,&z_0<1,\\ 1,&z_0\ge2,\\ \max(w,1-w),&1\le z_0<2,\end{cases}\label{eq:ol}\\[2pt]
+V^{\obs}_k(b_0)&=\ind{z_0\ge1},\label{eq:obs}
+\end{align}
+and $V_0(b_0)=\ind{z_0\ge1}$ for every class. The value-one region of the hold class is $z_0\ge1+\ell$; at and after revelation its boundary is $1+\Tobs$, the locus of the timing certificate.
+\end{theorem}
+
+\begin{proof}
+Survival requires $z_0\ge1$ at stage $0$, so all values vanish for $z_0<1$. \emph{Hold class.} Under the hold $u\equiv+1$ the $\theta=+1$ branch rises and is safe, while the $\theta=-1$ branch sits at $z_0-t$ at stage $t$ and survives the window exactly when $z_0-\ell\ge1$; the surviving mass is $w+(1-w)\ind{z_0\ge1+\ell}$. The hold $u\equiv-1$ is the mirror image, with surviving mass $(1-w)+w\ind{z_0\ge1+\ell}$. Maximizing over the two holds gives \eqref{eq:hold}. \emph{Open-loop class.} Whatever the first move, one branch is sent to $z_0-1$, so joint survival requires $z_0\ge2$; conversely the alternating segment $(+1,-1,+1,\dots)$ has partial sums in $\{0,1\}$, keeps both branches in $[z_0-1,z_0+1]$, and is safe whenever $z_0\ge2$. A single branch is kept alive by the constant segment that makes it rise, so off the joint region the value is the larger prior mass. \emph{Sequential class.} Inside the window the only observation is the exit announcement. On the event that both branches survive, the two histories coincide (``no exit'' at every stage), so a sequential policy plays the same segment on both branches and the joint-survival condition is the open-loop one; a single branch is already savable open-loop. Hence $V^{\seq}_k=V^{\ol}_k$. \emph{Observed class.} With $\theta$ known at stage $0$ the control $u=\theta$ makes every branch rise from $z_0\ge1$.
+\end{proof}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{fig2_closedforms.pdf}
+\caption{The delayed hidden-regime class. (a) Closed forms of Theorem~\ref{thm:closed} at the symmetric prior: the hold-class value jumps from $0$ to $\tfr12$ at $z_0=1$ and from $\tfr12$ to $1$ at $z_0=1+\ell$, $\ell=\min(k,\Tobs)$; the open-loop value (dashed, coinciding with the hold value for $\ell=1$) jumps to $1$ at $z_0=2$. The shaded band $[1,2)$ is where the value of observation is $\tfr12$; the vertical arrow marks the value of flexibility on $[2,1+\ell)$. (b) The certified grid ($z_0\in\{1.0,\dots,2.5\}$, $\Tobs\in\{1,2,3\}$, $k\in\{1,\dots,4\}$): green cells have value one in both classes, orange cells are the $36$ cell--horizon combinations on which open-loop time variation lifts the hold-class value $\tfr12$ to one (Corollary~\ref{cor:timing}), pink cells have value $\tfr12$ in both classes.}
+\label{fig:closed}
+\end{figure}
+
+\subsection{The class lattice and its realized gaps}
+
+\begin{theorem}[class lattice]\label{thm:lattice}
+For the value of Definition~\ref{def:value}, $\Pi\subseteq\Pi'$ implies $V^{\Pi}_k\le V^{\Pi'}_k$. On the instance \eqref{eq:delayed}, for $k\ge1$, $\ell=\min(k,\Tobs)$ and $z_0\ge1$,
+\[
+V^{\hold}_k\ \le\ V^{\ol}_k\ =\ V^{\seq}_k\ \le\ V^{\obs}_k ,
+\]
+and both gaps are realized exactly on disjoint cells:
+\begin{align}
+V^{\ol}_k(b_0)-V^{\hold}_k(b_0)&=\min(w,1-w)\cdot\ind{2\le z_0<1+\ell}\qquad\text{(the value of flexibility)},\label{eq:flex}\\
+V^{\obs}_k(b_0)-V^{\ol}_k(b_0)&=\min(w,1-w)\cdot\ind{1\le z_0<2}\qquad\ \ \text{(the value of observation)}.\label{eq:voi2}
+\end{align}
+At the symmetric prior each gap equals $\tfr12$ on its cells and $0$ elsewhere.
+\end{theorem}
+
+\begin{proof}
+Monotonicity in the class is immediate from the maximizing definition, and the chain is $\Pi_{\hold}(\ell)\subseteq\Pi_{\ol}(\ell)\subseteq\Pi_{\seq}$ together with the information refinement defining $\Pi_{\obs}$. The middle equality is part of Theorem~\ref{thm:closed}. Subtracting the case displays \eqref{eq:hold}--\eqref{eq:obs}: the hold and open-loop forms differ exactly where $2\le z_0<1+\ell$, by $1-\max(w,1-w)=\min(w,1-w)$; the open-loop and observed forms differ exactly where $1\le z_0<2$, by the same amount. The two regions are disjoint.
+\end{proof}
+
+\begin{corollary}[the timing obstruction is class-scoped]\label{cor:timing}
+The hold class and the sequential class coincide at the one-step horizon. For $k\ge2$ they differ exactly on $\{2\le z_0<1+\min(k,\Tobs)\}$, where an alternating open-loop segment keeps both branches at or above the floor while no constant hold does. In particular, the timing certificate of the calculus---firing exactly when $z_0<1+\Tobs$---is exact for the hold class at every horizon $k>\Tobs$ and over-fires relative to the sequential class exactly on $\{2\le z_0<1+\Tobs\}$; it certifies nonviability \emph{within the declared hold-until-review class}, and nothing more. On the certified grid of Figure~\ref{fig:closed}b the difference set consists of the $12$ timing cells $(\Tobs\in\{2,3\},\ z_0\in\{2.0,\dots,2.5\})$ at each of $k=2,3,4$, i.e.\ $36$ cell--horizon combinations.
+\end{corollary}
+
+\begin{proof}
+At $k=1$ both classes choose one blind action. For $k\ge2$ the difference set is \eqref{eq:flex}; the alternating segment and the falling-branch exit at $z_0-\ell<1$ are the two mechanisms named in the proof of Theorem~\ref{thm:closed}. On the grid, $1+\min(k,\Tobs)\ge3>2.5$ for $k\ge2$ and $\Tobs\ge2$, so the difference set is $\{z_0\ge2\}\times\{\Tobs\ge2\}\times\{k\ge2\}$, of size $6\times2\times3=36$; for $\Tobs=1$ the set $\{2\le z_0<2\}$ is empty.
+\end{proof}
+
+\begin{remark}[reading the declaration]\label{rem:declaration}
+The class declaration is part of the model, not a defect of the certificate. A regulator who sets a harvest rule and reviews it only at the end of a reporting window is the hold class; one who may pre-commit to a time-varying schedule is the open-loop class; one who receives the regime report early is the observed class. Theorem~\ref{thm:lattice} prices the three institutional designs on the same instance and separates two distinct levers: flexibility within a blind window buys $\min(w,1-w)$ on the timing cells, and earlier observation buys the same amount on the common-action cells, where no blind schedule can help. The word ``adaptive'' is avoided for blind windows: while no observation arrives, the only available distinction is between constant and time-varying open-loop control.
+\end{remark}
+
+\subsection{The certified grid}
+
+The calculus certifies the instance on the grid $z_0\in\{1.0,1.1,\dots,2.5\}$, $\Tobs\in\{1,2,3\}$ (48 cells) at horizons $k\le4$ and the symmetric prior. Theorem~\ref{thm:closed} turns the certified records into corollaries.
+
+\begin{corollary}[the certified grid]\label{cor:grid}
+On the certified grid at $w=\tfr12$:
+\begin{enumerate}[leftmargin=1.6em,itemsep=1pt]
+\item[(a)] the hold-class value is $1$ exactly when $z_0\ge1+\min(k,\Tobs)$ and $\tfr12$ otherwise: $36$ unit values and $156$ half values among the $192$ cell--horizon combinations (Table~S1.1), and the segment-form enumeration of the class returns the closed form on every combination;
+\item[(b)] the two hold-direction witnesses per combination give $384$ exact vectors of three types, $(1,1)$ with $72$ occurrences and the mirror pair $(1,0)$, $(0,1)$ with $156$ occurrences each; after exact deduplication $348$ distinct vectors remain, one per unit-value combination and two per half-value combination---the three-type census is the antichain of Theorem~\ref{thm:antichain} read off the grid, the maximal survivable sets being $\{+,-\}$ when $z_0\ge1+\ell$ and the two singletons otherwise;
+\item[(c)] the certificate partition coincides with the value boundaries: $6$ viable cells ($V_k\equiv1$), $30$ common-action cells ($V_1<1$), $12$ timing cells ($V_1=1$, $V_{\Tobs+1}<1$);
+\item[(d)] as a function of $z_0$ the hold-class value has exactly two jump loci, $z_0=1$ (from $0$ to $\tfr12$) and $z_0=1+\min(k,\Tobs)$ (from $\tfr12$ to $1$), the witness family changing at the same loci (Section~S3);
+\item[(e)] on the $42$ nonviable cells the hold-class deficit is $\tfr12$ at every horizon with $k>z_0-1$ and $0$ before: on the timing cells $0$ at $k=1$ and $\tfr12$ at $k\ge2$, on the common-action cells $\tfr12$ at every $k\ge1$---the minimal-mass bound attained from the first horizon at which the falling branch exits.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+All items are the case analysis of \eqref{eq:hold} on the grid; the counts are enumerated by the verification script (Section~\ref{sec:verification}). For (a), $z_0\ge1+\ell$ on the grid forces $\ell=1$, i.e.\ $k=1$ or $\Tobs=1$, and $z_0\ge2$: $6$ states $\times$ ($4$ horizons at $\Tobs=1$, plus $k=1$ at $\Tobs=2,3$) $=36$. For (b), each unit-value combination has both witnesses equal to $(1,1)$, so $2\times36=72$ coincide; the remaining $156$ combinations contribute the mirror pair. For (c), $V_1<1$ iff $z_0<2$ ($10$ states $\times3$ windows), and $V_{\Tobs+1}<1$ with $V_1=1$ iff $2\le z_0<1+\Tobs$ ($6$ states at $\Tobs=2,3$).
+\end{proof}
