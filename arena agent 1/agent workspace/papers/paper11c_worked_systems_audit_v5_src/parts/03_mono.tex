@@ -1,0 +1,44 @@
+\section{The monotonicity theorem}\label{sec:mono}
+
+The first result orders the kernels along the three axes that the audit varies. It is elementary, but it is the statement against which every apparent phenomenon is tested: an inclusion that the theorem predicts is not a finding, and a strictness or an incomparability that the theorem leaves open is.
+
+\begin{theorem}[monotonicity along three axes]\label{thm:mono}
+Fix a convention among $\free$, $\led$, $\opt$, $\priv$.
+\begin{enumerate}[label=(\roman*),leftmargin=2em,itemsep=1pt]
+\item (\emph{observation}) If $o'$ refines $o$, then $K(o,P)\subseteq K(o',P)$ for every protocol $P$; more precisely $\calW_h(o,P)\subseteq\calW_h(o',P)$ for every horizon $h$, where a node of the coarser game is identified with the same belief (and register) in the finer one.
+\item (\emph{protocol}) If protocol $P$ admits, at every register value, a subset of the instruments admitted by $P'$, then $K(o,P)\subseteq K(o,P')$. In particular $K(o,\nr)\subseteq K(o,\free)$ under every convention, and $K(o,\nr)^{\led}\subseteq K(o,\nr)^{\opt}$.
+\item (\emph{horizon}) $\calW_{h+1}\subseteq\calW_h$, and the kernel is the common value of the family from $h^{\ast}$ on.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(iii) is Lemma~\ref{lem:basic}(a). For (i) and (ii) we prove $\calW_h\subseteq\calW'_h$ by induction on $h$, using the sub-belief closure of Lemma~\ref{lem:basic}(b) for the primed family; the case $h=0$ is trivial.
+
+(i) Let $B\in\calW_{h+1}(o)$ with profile $a$ on the $o$-fibres of $B$. Define the profile $a'$ on the $o'$-fibres by $a'_{y'}=a_y$ whenever $B_{y'}\subseteq B_y$; this is admissible because $R(B_{y'})\supseteq R(B_y)$ and the register constraint is the same (shared ledger: same register value; private register: the tokens of $B_{y'}$ are among those of $B_y$). The successor sets coincide, $F_{a'}(B)=F_a(B)$, and $I(a')=I(a)$ since every $o$-fibre is a union of $o'$-fibres. Every $o'$-fibre $p'$ of the successor set is a sub-belief of an $o$-fibre $p$, and every successor node $(p,r')$ of $B$ under $a$ lies in $\calW_h(o)\subseteq\calW'_h(o')$ by the induction hypothesis; by sub-belief closure $(p',r')\in\calW'_h(o')$. Thus the option of $a'$ is contained in $\calW'_h(o')$ and $B\in\calW_{h+1}(o')$. Under the optimistic ledger the same argument is applied to the option of the recorded value chosen for $B$.
+
+(ii) A profile admissible under $P$ is admissible under $P'$, with the same successor sets, the same issued sets and the same successor nodes; for the comparison $\nr\to\free$ map the node $(B,r)$ to $B$ (or the token set to its set of states): the successor nodes are mapped to successor nodes, and the induction hypothesis applies. For $\led\to\opt$ the option of a profile under $\led$ is the union over $r'\in I(a)$ of the options under $\opt$, so if it is contained in $\calW_h$ so is each of them.
+\end{proof}
+
+\begin{corollary}\label{cor:order}
+Under each convention the four classes satisfy $\Kinst\subseteq\Kagg\subseteq\Kfull$ and $\Kinst\subseteq\Kcod\subseteq\Kfull$; the blind kernel $K(\oblind,\free)$ is contained in every free-protocol kernel; and refining a monitoring partition never shrinks the kernel.
+\end{corollary}
+
+The theorem says nothing about $\Kagg$ against $\Kcod$, about the shared ledger against the private register, or about whether any of the inclusions is strict. These are the questions the census answers.
+
+\begin{proposition}[strictness and incomparability on the worked system]\label{prop:strict}
+On the worked system, under the shared ledger:
+\begin{enumerate}[label=(\alph*),leftmargin=2em,itemsep=1pt]
+\item every inclusion of Corollary~\ref{cor:order} is strict: $|\Kinst|=111$, $|\Kagg|=143$, $|\Kcod|=119$, $|\Kfull|=255$ on the $255$ beliefs, and $24$, $26$, $25$, $28$ on the $36$-pair population;
+\item the two middle classes are incomparable: the pairs $\st{12|31}$ and $\st{13|21}$ are aggregate-viable and codex-dead (the protocol axis), and $\st{13|31}$ is codex-viable and aggregate-dead (the observation axis);
+\item the meet of the middle classes is the institutional class, $\Kagg\cap\Kcod=\Kinst$, on pairs and on all beliefs; their join misses the full class by exactly the pair $\st{12|21}$ on the pair population, and on all beliefs $\Kfull\setminus(\Kagg\cup\Kcod)$ has $104$ members, namely the $64$ beliefs containing $\st{12|21}$ and the beliefs containing $\st{13|31}$ together with at least one of $\st{12},\st{21},\st{22}$ (minimal members $\st{12|21}$, $\st{12|13|31}$, $\st{13|21|31}$, $\st{13|22|31}$);
+\item the horizon families stabilise after at most two applications of $\Phi$ on the whole belief universe: $\calK=\calW_1$ for the free classes and $\calK=\calW_2$ for the ledger classes.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Exact computation of the greatest fixed points (Section~\ref{sec:verification}); the witnesses are explained in Section~\ref{sec:census}: $\st{12|21}$ is dead under aggregation because its two states share a fibre and have disjoint safe instruments; $\st{12|31}$ is dead under the codex because the first step issues two different instruments and the ledger may record the wrong one for the thread that must alternate; $\st{13|31}$ is dead under aggregation because both states land on $\st{22}$ in one step with opposite phases and the aggregate cannot separate them before the merge.
+\end{proof}
+
+\begin{remark}[mechanised layer]\label{rem:lean}
+The three axes of Theorem~\ref{thm:mono} are formalised in Lean~4 in the repository's \texttt{Formalizations} development (modules \texttt{WS\_\allowbreak{}WorkedSystems} and \texttt{WS\_\allowbreak{}WorkedSystems\_\allowbreak{}v2}; theorems \texttt{Wk\_\allowbreak{}mono\_\allowbreak{}obs}, \texttt{master\_\allowbreak{}action\_\allowbreak{}axis}, \texttt{master\_\allowbreak{}memory\_\allowbreak{}axis} and the canonical \texttt{master\_\allowbreak{}monotone}), on top of the finite-system framework of the obstruction-calculus module \texttt{P1\_Obstruction}; the formal statements are the horizon-indexed inclusions of the proof above. The instance-level counts are not formalised; they are reproduced by the exact script.
+\end{remark}

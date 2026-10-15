@@ -1,0 +1,85 @@
+\section{The audit frame}\label{sec:frame}
+
+\subsection{The worked system}\label{sec:system}
+
+\begin{definition}[worked system]\label{def:system}
+The state is $x=(z_1,z_2)\in X=\{0,1,2,3\}^2$ and the safe set is $V=\{x: z_1\ge 1,\ z_2\ge 1\}$, nine states. The instruments are $A=\{1,2\}$ with deterministic transitions
+\[
+F_1(z_1,z_2)=\bigl(\min(3,z_1+1),\,\max(0,z_2-1)\bigr),\qquad
+F_2(z_1,z_2)=\bigl(\max(0,z_1-1),\,\min(3,z_2+1)\bigr),
+\]
+and an idle instrument $0$ with $F_0(x)=(\max(0,z_1-1),\max(0,z_2-1))$. For a set $C\subseteq X$ write $F_u(C)=\{F_u(x):x\in C\}$ and
+\[
+R(C)=\{u\in A: F_u(C)\subseteq V\}=\bigcap_{x\in C}R(x),\qquad R(x)=R(\{x\}),
+\]
+the \emph{common safe instruments} of $C$. We abbreviate the state $(z_1,z_2)$ as $\st{z_1z_2}$ and a belief $\{x,y\}$ as $\st{x|y}$.
+\end{definition}
+
+The corner $\st{11}$ has $R(\st{11})=\emptyset$: both instruments send it below the floor, and so does the idle instrument. For the eight remaining safe states,
+\begin{equation}\label{eq:R}
+R(\st{12})=R(\st{13})=\{1\},\qquad R(\st{21})=R(\st{31})=\{2\},\qquad R(\st{22})=R(\st{23})=R(\st{32})=R(\st{33})=\{1,2\}.
+\end{equation}
+Instrument $u$ preserves the aggregate $z_1+z_2$ unless the raised stock is at its cap, in which case the aggregate falls by one; the aggregate is therefore non-increasing along every trajectory that remains in the safe set (Figure~\ref{fig:system}). Away from the corner, a state is lost only when the same instrument is applied while the other stock is at $1$; this is the mechanism that all the kernels below negotiate.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig1_system.pdf}
+\caption{The worked system. Left: the nine safe states with the transitions of instrument $1$ (solid) and instrument $2$ (dashed); the corner $\st{11}$ (grey) has no safe instrument; transitions to unsafe states are omitted. The aggregate observation $\oagg$ reads the anti-diagonal index. Centre: the incompatibility graph $\Gstar$ on the eight viable states (Section~\ref{sec:monitor}); the four edges form $K_{2,2}$ between $\{\st{12},\st{13}\}$ and $\{\st{21},\st{31}\}$. Right: the two global alternation phases, with the states that survive the alternating schedule starting with instrument $1$ (phase $1$) and with instrument $2$ (phase $2$).}
+\label{fig:system}
+\end{figure}
+
+\begin{definition}[observation, beliefs, fibres]\label{def:obs}
+An \emph{observation map} is a function $o:X\to Y$ onto a finite set; its fibres $o^{-1}(y)$ partition $X$. A \emph{belief} is a nonempty set $B\subseteq V$; its \emph{fibres} under $o$ are the nonempty sets $B_y=B\cap o^{-1}(y)$. Three maps are used throughout: the full observation $\ofull(x)=x$, the aggregate observation $\oagg(x)=z_1+z_2$, and the blind observation $\oblind\equiv\ast$. An observation $o'$ \emph{refines} $o$ when every fibre of $o$ is a union of fibres of $o'$. Every observation map is a set partition of $V$ (restricted to the safe states) and conversely; in Section~\ref{sec:monitor} all partitions of the eight viable states are ranged over.
+\end{definition}
+
+The controller acts fibre by fibre: it sees $y=o(x)$, and must choose one instrument for the whole fibre $B_y$ because it cannot tell the states in it apart. Under the free protocol the admissible instruments for a fibre are $R(B_y)$. Under the \emph{no-repeat protocol} the instrument used last period may not be used again, which requires a record of that instrument; how the record is kept is a modelling choice that turns out to matter.
+
+\begin{definition}[protocols and register conventions]\label{def:protocol}
+The \emph{free protocol} $\free$ imposes no constraint beyond safety. The \emph{no-repeat protocol} $\nr$ keeps a register $r\in\{\emptyset,1,2\}$ holding the last instrument applied ($\emptyset$ initially) and admits, for a fibre with register value $r$, the instruments $R(B_y)\setminus\{r\}$. Three conventions are audited for how the register of a belief with several fibres evolves.
+\begin{enumerate}[leftmargin=2em,itemsep=1pt]
+\item \emph{Shared ledger} ($\led$). The register is a public record observed by the controller; when several fibres issue instruments in the same period the ledger records one of them, and the auditor requires the continuation to be viable for \emph{every} issued value (an adversarial recording). This is the convention of the earlier editions of the audit.
+\item \emph{Private register} ($\priv$). The register is the instrument actually applied on the realised trajectory. It is not observed: the belief is a set of \emph{tokens} $(x,l)$ carrying their own last instrument, the fibres are formed by the observation of $x$ only, and the instrument chosen for a fibre must differ from the last instrument of \emph{every} token in it.
+\item \emph{Optimistic ledger} ($\opt$). As the shared ledger, but the recorded value may be chosen favourably.
+\end{enumerate}
+\end{definition}
+
+\subsection{The fibrewise belief game}\label{sec:game}
+
+All conventions are instances of one object: a finite set of nodes, each with a finite family of \emph{options}, where an option is a set of successor nodes that must all be viable for the option to certify the node.
+
+\begin{definition}[belief game, kernel]\label{def:game}
+Fix an observation map $o$ and a protocol with a convention. The nodes $\calN$ and options are as follows.
+\begin{itemize}[leftmargin=2em,itemsep=1pt]
+\item \emph{Free protocol.} Nodes are beliefs. A \emph{profile} for $B$ assigns to each fibre $B_y$ an instrument $a_y\in R(B_y)$; its successor set is $F_a(B)=\bigcup_y F_{a_y}(B_y)$, and its option is the set of fibres of $F_a(B)$.
+\item \emph{Shared ledger.} Nodes are pairs $(B,r)$. A profile assigns $a_y\in R(B_y)\setminus\{r\}$; with $I(a)=\{a_y\}$ the set of issued instruments, its option is $\{(p,r'):\ p \text{ a fibre of } F_a(B),\ r'\in I(a)\}$. Under the optimistic ledger each $r'\in I(a)$ gives a separate option $\{(p,r'): p\}$.
+\item \emph{Private register.} Nodes are nonempty sets $T\subseteq V\times\{\emptyset,1,2\}$ of tokens. A profile assigns to each fibre $T_y$ (grouped by $o(x)$) an instrument $a_y\in\bigcap_{(x,l)\in T_y}R(x)$ with $a_y\neq l$ for every token in the fibre; the successor token set is $\{(F_{a_y}(x),a_y):(x,l)\in T_y\}$ and the option is the set of its fibres.
+\end{itemize}
+The \emph{operator} on families $\calW\subseteq\calN$ is
+\begin{equation}\label{eq:Phi}
+\Phi(\calW)=\{n\in\calN:\ \text{some option } O \text{ of } n \text{ satisfies } O\subseteq\calW\},
+\end{equation}
+the \emph{horizon family} is $\calW_0=\calN$, $\calW_{h+1}=\Phi(\calW_h)$, and the \emph{kernel} $\calK$ is the greatest fixed point of $\Phi$. A belief $B$ is \emph{viable} when its initial node ($B$, $(B,\emptyset)$, or $B\times\{\emptyset\}$ respectively) lies in $\calK$; $K(o,P)$ denotes the set of viable beliefs for observation $o$ and protocol $P$ (with the convention indicated when it matters).
+\end{definition}
+
+A node without admissible profile has no option and is never in $\Phi(\calW)$; nodes whose successor sets leave $V$ have no admissible profile because $R(\cdot)$ already enforces safety. The following properties are used throughout.
+
+\begin{lemma}[basic properties]\label{lem:basic}
+For every observation map, protocol and convention:
+\begin{enumerate}[label=(\alph*),leftmargin=2em,itemsep=1pt]
+\item $\calW_{h+1}\subseteq\calW_h$ for all $h$, the family stabilises at some $h^{\ast}\le|\calN|$, and $\calK=\calW_{h^{\ast}}=\bigcap_h\calW_h$.
+\item (sub-belief closure) If $B$ is viable and $\emptyset\neq B'\subseteq B$, then $B'$ is viable; every $\calW_h$ is closed under nonempty sub-beliefs (sub-token-sets for the private register). Hence $K(o,P)$ is determined by its inclusion-maximal members.
+\item (singletons) Under the free protocol, viability of a singleton $\{x\}$ does not depend on $o$. Write $\Vstar$ for the set of viable singletons; every viable belief is contained in $\Vstar$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(a) $\Phi$ is monotone ($\calW\subseteq\calW'$ implies $\Phi(\calW)\subseteq\Phi(\calW')$) and $\calW_1\subseteq\calW_0=\calN$; induction gives the chain, finiteness the stabilisation, and the stabilised family is the greatest fixed point by Knaster--Tarski since every fixed point is contained in every $\calW_h$.
+(b) By induction on $h$. If $B\in\calW_{h+1}$ with profile $a$, restrict $a$ to the fibres of $B'$ (a sub-fibre has at least the common instruments of its fibre; under no-repeat the register constraint is unchanged for the ledger and weaker for the private register since fewer tokens are present). The successor set of $B'$ is contained in that of $B$, each of its fibres is a sub-belief of a fibre of $F_a(B)$, and the issued set of the restricted profile is contained in $I(a)$, so every successor node of $B'$ under the restricted profile is a sub-belief of a successor node of $B$, which lies in $\calW_h$ and is closed under sub-beliefs by the induction hypothesis.
+(c) A singleton has one fibre and a singleton successor set whatever $o$ is, so the recursion on singletons is the same for all $o$. The last claim is (b).
+\end{proof}
+
+On the worked system $\Vstar$ is the set of eight corner-free safe states, for the free protocol as for the no-repeat protocol under all conventions (the corner has no safe instrument, and each other state is sustained by alternation, Lemma~\ref{lem:alt}). Beliefs are therefore subsets of these eight states, $255$ nonempty ones, of which $28$ are pairs; the audited population of the earlier editions, the $36$ pairs of safe states including the eight pairs through the corner, is retained in the master table of the supplement.
+
+\begin{definition}[the four classes]\label{def:classes}
+The \emph{full} class is $(\ofull,\free)$, the \emph{codex} class $(\ofull,\nr)$, the \emph{aggregate} class $(\oagg,\free)$ and the \emph{institutional} class $(\oagg,\nr)$; the no-repeat classes are read under the shared ledger unless the convention is written. Their kernels are $\Kfull,\Kcod,\Kagg,\Kinst$. The \emph{decentralised} kernel $\Kdec$ is defined in Section~\ref{sec:dec}.
+\end{definition}
