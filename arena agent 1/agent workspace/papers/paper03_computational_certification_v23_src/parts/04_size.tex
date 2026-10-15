@@ -1,0 +1,35 @@
+\section{How large is a certificate?}\label{sec:size}
+
+Theorem~\ref{thm:bridge}(v) bounds the support of a positive certificate by $r+1$, where $r$ is the rank of the finite safety-row matrix in the information--time product. The natural question is whether something smaller---the instantaneous input dimension $m$---would do. It does not.
+
+\begin{proposition}[arbitrarily large minimal obstructions with one input]\label{prop:rank}
+For every integer $q\ge1$ there is a continuous-time system with scalar input $u(t)\in[0,1]$ and $q+1$ indistinguishable modes such that every proper sub-belief is viable, the full $(q{+}1)$-mode belief is not, and every obstruction certificate involves all $q+1$ modes.
+\end{proposition}
+
+\begin{proof}
+Let $T=q$ and $I_j=[j-1,j]$. Mode $j\le q$ carries the scalar state $\dot x=\mathbf 1_{I_j}(t)(u-1)$, $x(0)=0$; mode $q+1$ carries $\dot x=-u$, $x(0)=q-\varepsilon$ with $0<\varepsilon<1$. Require $0\le x\le q$ (the terminal bounds are the binding ones, each $x$ being monotone along its mode) and let there be no observations. With $w_j=\int_{I_j}u$, safety requires $w_j\ge1$ for $j\le q$ and $\sum_jw_j\le q-\varepsilon$; summing gives $0\le-\varepsilon$, a contradiction. If mode $q+1$ is removed, $u\equiv1$ is safe; if mode $j\le q$ is removed, $u=0$ on $I_j$ and $u=1$ elsewhere is safe. A certificate supported on fewer than $q+1$ modes would certify the corresponding proper sub-belief (Proposition~\ref{prop:depth} below), contradicting its viability. Equal weights give margin $\varepsilon/(q+1)$; the kernel rank is $q$, so $q+1$ witnesses are necessary and the bound of Theorem~\ref{thm:bridge}(v) is saturated.
+\end{proof}
+
+The bound $r+1$ is an upper bound. The following elementary observation supplies the matching lower bound and explains why, on a concrete instance, the realised support can be far below $r+1$.
+
+\begin{definition}[obstruction depth]\label{def:depth}
+For a belief $B$ with mode set $\Theta_B$, the \emph{obstruction depth} is
+$\depth_\calI(B)=\min\{|\Theta'|:\ \Theta'\subseteq\Theta_B,\ B|_{\Theta'}\notin\calK^T_\calI\}$, the smallest number of compatible modes whose joint presence is already nonviable ($+\infty$ if $B$ is viable). Here $B|_{\Theta'}$ is $B$ restricted to the modes in $\Theta'$, with the induced information structure.
+\end{definition}
+
+\begin{proposition}[two-sided support bounds]\label{prop:depth}
+Let $(\lambda,a)$ be a positive certificate for $B$ and let $\Theta_\lambda$ be the set of modes carrying positive weight. Then $(\lambda,a)$ is a positive certificate for $B|_{\Theta_\lambda}$, so $|\Theta_\lambda|\ge\depth_\calI(B)$. Consequently every positive certificate uses at least $\depth_\calI(B)$ labels, and under the hypotheses of Theorem~\ref{thm:bridge}
+\[
+\depth_\calI(B)\;\le\;\min\{q:\ \Gam(\lambda,a)>0\text{ for some }(\lambda,a)\text{ with }q\text{ labels}\}\;\le\;r+1 .
+\]
+\end{proposition}
+
+\begin{proof}
+Restricting the belief to $\Theta_\lambda$ intersects every information cell with $\Theta_\lambda$; the pooled kernels $g_{r,C}$ of the labels with positive weight are unchanged, cells that lose all weight contribute $\phi_U(0)=0$ before and after, and the margins $\beta_{a_\ell}$ are unchanged. Hence $\Gam$ computed for $B|_{\Theta_\lambda}$ equals $\Gam$ computed for $B$, which is positive, and Lemma~\ref{lem:semantics} makes $B|_{\Theta_\lambda}$ nonviable. Each mode in $\Theta_\lambda$ carries at least one label. The upper bound is Theorem~\ref{thm:bridge}(v).
+\end{proof}
+
+In the construction of Proposition~\ref{prop:rank} both bounds coincide ($\depth=q+1=r+1$). On the instance of Section~\ref{sec:instance} they do not: at the audited delay the safety-row matrix has full column rank $r=64$, so Theorem~\ref{thm:bridge}(v) allows 65 labels, while the depth is $3$ (every pair is viable) and the exhibited certificate uses exactly three labels. The support of a certificate is governed by the belief's conflict structure, which both bounds measure in the information--time product.
+
+\begin{remark}[why Helly's theorem does not apply]\label{rem:helly}
+A statement such as ``at most $m+1$ compatible states suffice to witness nonviability'' is Helly's theorem \cite{Helly1923} for convex common-action sets in $\R^m$. It is valid when the decision is a single vector and false for a common blind control \emph{function}: Proposition~\ref{prop:rank} has $m=1$ and needs $q+1$ witnesses. The correct dimension counts independent temporal and informational control decisions---the rank $r$ of Theorem~\ref{thm:bridge}(v)---and the distinction is consequential for review intervals, delayed sensing and any certificate-size claim; its discrete counterpart is a scoping caveat of the finite audits in \cite{Abaee2026worked}.
+\end{remark}

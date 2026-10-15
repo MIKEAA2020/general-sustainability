@@ -1,0 +1,139 @@
+\section{A three-branch delayed-observation instance carried exactly}\label{sec:instance}
+
+The instance is chosen so that every quantity---threshold, policies, certificate, finite program, witnesses---is an exact rational (or quadratic-irrational) number, and so that the three standard tests that are \emph{not} sufficient for the information-constrained question all pass: full-information viability, blind-window safety, and pairwise viability.
+
+\subsection{Plant and exact delay threshold}
+
+Consider the planar double integrator $\dot p=v$, $\dot v=u$ with unit vectors $n_1=(1,0)$, $n_2=(-\tfr35,\tfr45)$, $n_3=(-\tfr35,-\tfr45)$ (so $n_1^\top n_2=n_1^\top n_3=-\tfr35$ and $n_2^\top n_3=-\tfr7{25}$), the hexagonal input set
+\[
+U=\conv\{\pm n_1,\pm n_2,\pm n_3\}=\{u:\ |u_2|\le\tfr45,\ |2u_1+u_2|\le2,\ |2u_1-u_2|\le2\},
+\]
+safety $n_i^\top p\le2$ ($i=1,2,3$) and $|v_1|,|v_2|\le\tfr65$ (seven facets, $s=7$), three possible initial states $p_j(0)=\tfr{34}{25}n_j$, $v_j(0)=n_j$ (mode $j$ heads along $n_j$ at unit speed), no disturbance, and the mode unobserved until time $\tau$, when it is revealed exactly. The horizon is $T=\tau+1$ unless stated otherwise. Write $\zeta_j(t)=n_j^\top p_j(t)$ for the critical coordinate of branch $j$.
+
+Under full information the instance is comfortably viable: $u=-n_j$ for one second and then $u=0$ holds $\zeta_j$ at $\tfr{34}{25}+\tfr12=\tfr{93}{50}<2$, with $\|v\|_\infty\le1<\tfr65$ throughout and the noncritical facets negative along the $n_j$-ray.
+
+\begin{proposition}[exact delay threshold of the triple]\label{prop:triple}
+For $T\ge\tau+1$, $\J=\tau-\tfr7{50}$. In particular the three-branch belief is viable if and only if $\tau\le\tau^\ast:=\tfr7{50}$.
+\end{proposition}
+
+\begin{proof}
+\emph{Certificate.} Take one label per branch on its own position facet at $t_\ast=\tau+1$, with kernels $k_j(s)=\mathbf 1_{\{s\le t_\ast\}}(t_\ast-s)n_j$, margins $\beta_j=\tfr{16}{25}-t_\ast$, and weights $\lambda=(\tfr38,\tfr5{16},\tfr5{16})$, which satisfy $\sum_j\lambda_j=1$ and $\sum_j\lambda_jn_j=0$. Before observation the pooled kernel vanishes identically; after observation each mode has its own cell and $\phi_U(\lambda_j(t_\ast-s)n_j)=-\lambda_j(t_\ast-s)$ because $h_U(\pm n_j)=1$. Hence
+\begin{equation}\label{eq:gamma-tau}
+\Gamma(\tau)=-\int_\tau^{\tau+1}(\tau+1-s)\dd s-\Bigl(\tfr{16}{25}-\tau-1\Bigr)=\tau-\tfr7{50},
+\end{equation}
+so $\Gamma(\tau)\le\J$ by Lemma~\ref{lem:semantics}. \emph{Policy.} Holding $u=0$ until $\tau$ and braking with $u=-n_j$ for one second afterwards keeps $\zeta_j\le\tfr{34}{25}+\tau+\tfr12$ and every other facet strictly satisfied, so every row value is at most $\tau-\tfr7{50}$ and $\J\le\tau-\tfr7{50}$. Equality at $\tau=\tfr7{50}$ is viable because $\calV$ is closed.
+\end{proof}
+
+\subsection{Pairs are viable, and the blind-window exit test misses}
+
+Fix $\tau=\tfr15$ and $T=\tfr65$, where $\Gamma=\tfr3{50}>0$. The common control $u=0$ keeps all three branches safe throughout the blind window ($\zeta_j(\tfr15)=\tfr{39}{25}<2$): the obstruction is \emph{not} that information arrives after an unavoidable physical exit. Nor is it visible pairwise.
+
+\begin{proposition}[pairwise viability at $\tau=1/5$]\label{prop:pairs}
+At $\tau=\tfr15$, $T=\tfr65$, every two-mode sub-belief is viable:
+\begin{enumerate}[label=\textup{(\alph*)},leftmargin=2.2em,itemsep=1pt]
+\item for $\{1,2\}$ (and $\{1,3\}$ by the reflection $v_2\mapsto-v_2$): brake through the blind window with the common control $u=-(n_1+n_2)=(-\tfr25,-\tfr45)\in U$, which decelerates both branches along their normals at rate $\tfr25$, then brake each branch along its own normal to rest; the critical coordinate peaks at $\tfr{2469}{1250}=\tfr{12345}{6250}=1.9752$ on both branches, slack $\tfr{31}{1250}$;
+\item for $\{2,3\}$: hold $u=n_1$ through the blind window (both branches decelerate at rate $\tfr35$), then brake each branch along its own normal; the peak is $\tfr{2419}{1250}=1.9352$, slack $\tfr{81}{1250}$.
+\end{enumerate}
+All seven facets hold at every time on every in-belief branch; the velocity components stay within $1$ (resp.\ $\tfr45$), strictly below $\tfr65$.
+\end{proposition}
+
+The proof is a closed-form computation (SM~S3): the window exit velocities are $\tfr{23}{25}$ and $\tfr{22}{25}$, braking to rest adds half their squares. Two tempting variants fail and are shown in Figure~\ref{fig:traj}: holding $u=0$ through the blind window and braking fully afterwards peaks at $\tfr{103}{50}>2$, and inserting a $-\tfr35n_j$ leg after $\tau$ in $\{2,3\}$ peaks at $\tfr{2501}{1250}>2$ at $t=\tfr{29}{25}$. The blind control $u=n_1$ of the pair $\{2,3\}$ drives the \emph{off-belief} branch~1 to $|v_1|=\tfr65$ exactly at $\tau$ and would let it peak at $\tfr{23}{10}$; this is irrelevant to the pair claim and is the geometric reason the triple is obstructed. In words: the obstruction is that information arrives after some indistinguishable branch has necessarily accumulated more braking liability than the remaining control authority can discharge.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.92\linewidth]{fig1_trajectories.pdf}
+\caption{The audited policies on the critical coordinate $\zeta_j(t)=n_j^\top p_j(t)$ at $\tau=\tfr15$, every peak the exact rational of the text: the full-information singleton peaks at $\tfr{93}{50}$; the pair policies of Proposition~\ref{prop:pairs} peak below the ceiling ($\tfr{12345}{6250}$, $\tfr{2419}{1250}$); the two falsified variants cross it ($\tfr{103}{50}$; $\tfr{2501}{1250}$ at $t=\tfr{29}{25}$). Generated by a recompute-then-assert script: every plotted peak is recomputed in rational arithmetic and asserted before the figure is written.}
+\label{fig:traj}
+\end{figure}
+
+\subsection{The finite program and its exact witnesses}
+
+Set $\tau=\tfr15$, $T=\tfr65$ and the uniform mesh $h=\tfr1{10}$: two common pre-observation blocks and ten post-observation blocks for each of three modes, so $Q=32$ and $mQ=64$; the time labels are the mesh points. For the endpoint position rows the kernel $(T-s)n_j$ is affine on every block, so the exact moment error is $e=\sum_J|J|^2/4=12\cdot h^2/4=\tfr3{100}$; the endpoint margin is $\beta=\tfr{16}{25}-\tfr65=-\tfr{14}{25}$, relaxed to $\beta+e=-\tfr{53}{100}$. The exact continuous certificate has margin $\tfr3{50}$; the finite program returns $\tfr3{100}$.
+
+\emph{Dual witness.} Order the input facets as $F=[(0,1);(0,-1);(2,1);(2,-1);(-2,1);(-2,-1)]$, $f=(\tfr45,\tfr45,2,2,2,2)$, and set $\eta_1=(0,0,0,0,\tfr14,\tfr14)$, $\eta_2=(0,\tfr12,0,\tfr3{10},0,0)$, $\eta_3=(\tfr12,0,\tfr3{10},0,0,0)$, which satisfy $F^\top\eta_j=-n_j$ and $f^\top\eta_j=1$. For a post-observation block $J_k$ put $a_k=\int_{J_k}(T-s)\dd s$ and $\mu_{j,k}=\lambda_ja_k\eta_j$. Before observation, stationarity holds because $\sum_j\lambda_jn_j=0$; after observation, because $\lambda_ja_kn_j+F^\top\mu_{j,k}=0$. Since $\sum_ka_k=(T-\tau)^2/2=\tfr12$, the Farkas combination is $\lambda^\top(\beta+e)+\mu^\top f_{\mathrm{blk}}=-\tfr{53}{100}+\tfr12=-\tfr3{100}<0$: an exact rational certificate of infeasibility of the shifted system, i.e.\ a dual objective of $\tfr3{100}$.
+
+\emph{Primal witness.} Hold the pre-observation blocks at $0$ and the post-observation blocks of mode $j$ at $-n_j$. The endpoint row then reads $-\tfr12+\tfr{14}{25}-\tfr3{100}=\tfr3{100}$, and every other row lies at or below that value: the velocity and noncritical position rows are continuously safe at the witness, the endpoint critical rows attain $\tfr3{100}$ with equality, and the remaining critical rows interpolate monotonically (the braking profile increases to its endpoint maximum). All $465$ rows are checked exactly by the verification script.
+
+\subsection{The mesh law}
+
+The witness pair is mesh-generic, and this gives a closed form for the finite value on every admissible mesh.
+
+\begin{proposition}[mesh law on aligned meshes]\label{prop:meshlaw}
+Let $\calH$ be any mesh of $[0,\tfr65]$ containing $\tau=\tfr15$, with time labels at the mesh points and exact moment errors. Then
+\begin{equation}\label{eq:meshlaw}
+\rho(\calH)=\tfr3{50}-\tfr14\sum_{J\in\calH}|J|^2 ,
+\end{equation}
+certified by the primal and dual witnesses above. In particular $\rho(h)=\tfr3{50}-Th/4$ on uniform meshes, $\rho(\calH)>0$ if and only if $\sum_J|J|^2<\tfr6{25}$, and the finite value converges to $\J=\tfr3{50}$ from below with the gap equal to the endpoint moment error.
+\end{proposition}
+
+\begin{proof}
+Write $e_T=\tfr14\sum_J|J|^2$ for the endpoint moment error. The dual objective is $-(\beta+e_T)-\sum_ka_k=\tfr{14}{25}-e_T-\tfr12=\tfr3{50}-e_T$ on every aligned mesh, because $\sum_ka_k$ telescopes to $(T-\tau)^2/2$ independently of the blocks; stationarity is blockwise and does not involve the mesh. For the primal witness the endpoint critical rows attain exactly $\tfr3{50}-e_T$. A critical row at a label time $t\ge\tau$ has value $\zeta(t)-2-e_t$ with $e_T-e_t=\tfr14\sum_{J\subset[t,T]}|J|^2\le\tfr14(T-t)^2$ and $2-\zeta(t)+\tfr3{50}=\tfr12(T-t)^2$, so it lies below the endpoint value; for $t\le\tau$ the same bound gives $e_T-e_t\le\tfr9{25}<\tfr7{10}-t$. Noncritical position rows are at most $\tfr{18}{25}-2$. Velocity rows have zero moment error and value at most $1-\tfr65=-\tfr15$, which is below $\tfr3{50}-e_T$ because $e_T\le\tfr14(\tau^2+(T-\tau)^2)=\tfr{13}{50}$---with equality exactly on the two-block mesh $\{0,\tau,T\}$, where $\rho=-\tfr15$ and the velocity rows are tight. Primal value and dual objective coincide, so both are optimal.
+\end{proof}
+
+\begin{table}[t]
+\centering\small
+\caption{Solver-assisted, exactly certified mesh campaign on the three-branch instance ($\tau=\tfr15$, $T=\tfr65$): program dimensions ($mQ+1$ variables; $Ms(N_t{+}1)+p_UQ$ inequalities with $s=7$, $p_U=6$, $N_t=T/h$), exact optimal value from \eqref{eq:meshlaw}, value returned by the HiGHS dual simplex \cite{HuangfuHall2018} through SciPy, simplex iterations and wall-clock time (single runs on the verification machine, Linux x86\_64, Intel Xeon @ 2.60\,GHz, Python~3.13, SciPy~1.17; counts and times may vary with solver version). Optimality of each exact value is certified by the mesh-independent primal--dual witness pair, independently of the solver. At $h=\tfr15$ the witness certifies the value zero; at the finer meshes it is a positive obstruction certificate.}
+\label{tab:mesh}
+\begin{tabular}{@{}rrrrrrrr@{}}
+\toprule
+$h$ & blocks $Q$ & variables & rows & exact $\rho(h)$ & solver $\rho$ & iterations & time (s)\\
+\midrule
+$1/5$   & 16  & 33  & 243  & $0$                    & 0.000000000 & 36   & 0.004\\
+$1/10$  & 32  & 65  & 465  & $\tfr{3}{100}=0.030$   & 0.030000000 & 78   & 0.006\\
+$1/15$  & 48  & 97  & 687  & $\tfr{1}{25}=0.040$    & 0.040000000 & 119  & 0.008\\
+$1/20$  & 64  & 129 & 909  & $\tfr{9}{200}=0.045$   & 0.045000000 & 141  & 0.013\\
+$1/50$  & 160 & 321 & 2241 & $\tfr{27}{500}=0.054$  & 0.054000000 & 501  & 0.062\\
+$1/100$ & 320 & 641 & 4461 & $\tfr{57}{1000}=0.057$ & 0.057000000 & 1062 & 0.243\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering\small
+\caption{The mesh law off the uniform family: aligned meshes with unequal blocks, their exact values from \eqref{eq:meshlaw}, and the solver's returned values (agreement to $10^{-9}$ or better in every case). ``$1+6$'' denotes one blind block and six equal post-observation blocks. The last row is the $2^7$-fold refinement of $\{0,\tau,T\}$ that first meets the a-priori halting resolution of Remark~\ref{rem:apriori}.}
+\label{tab:nonuniform}
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+mesh & $Q$ & variables & rows & exact $\rho(\calH)$ & solver $\rho$\\
+\midrule
+two blocks $\{0,\tfr15,\tfr65\}$ & 4 & 9 & 87 & $-\tfr15$ & $-0.200000000$\\
+$1+5$ & 16 & 33 & 243 & $0$ & $0.000000000$\\
+$1+6$ (smallest certifying program) & 19 & 39 & 282 & $\tfr1{120}$ & $0.008333333$\\
+$2+7$ & 23 & 47 & 348 & $\tfr{27}{1400}$ & $0.019285714$\\
+irregular $\{0,\tfr1{10},\tfr15,\tfr12,\tfr9{10},\tfr65\}$ & 11 & 23 & 192 & $-\tfr3{100}$ & $-0.030000000$\\
+$2^7$-fold refinement ($h=\tfr1{128}$) & 512 & 1025 & 8469 & $\tfr{371}{6400}$ & $0.057968750$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:mesh} reports the campaign on uniform meshes and Table~\ref{tab:nonuniform} the law off the uniform family. The solver agrees with the exact values to at most $4.2\times10^{-17}$ on the campaign meshes; the agreement is a confirmation of a proved optimum, not evidence for it. Two consequences of \eqref{eq:meshlaw} are worth recording. First, because equal blocks minimise $\sum_J|J|^2$ at fixed count, the smallest aligned program with a positive certificate has one blind block and six post-observation blocks ($Q=19$, $39$ variables, $282$ rows, $\rho=\tfr1{120}$); five post-observation blocks give exactly zero. Second, time refinement on this instance has no conflict structure to target---the error is the same $|J|^2/4$ per block whatever the block---so the lever that \emph{does} have structure is the information axis, which Section~\ref{sec:ladder} reads.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.88\linewidth]{fig2_meshlaw.pdf}
+\caption{Mesh study on uniform aligned meshes: the finite value $\rho(h)=\tfr3{50}-Th/4$ (exact; solver agreement to $4.2\times10^{-17}$) converges to the continuous value $\tfr3{50}$ from below, while the certified upper bound $\rho(h)+\ebar+Lh_t$ of Theorem~\ref{thm:bridge}(i) (with $\ebar=Th/4$, $L=\tfr{11}5$, $h_t=h/2$) converges from above. The dotted line marks the a-priori halting resolution $h<\tfr3{340}$ of Theorem~\ref{thm:bridge}(iii); every uniform aligned mesh with $h<\tfr15$ already certifies.}
+\label{fig:mesh}
+\end{figure}
+
+\subsection{Reading the sandwich on the instance}\label{sec:sandwich}
+
+The hypothesis constants are $R_U=1$ (the hexagon's circumradius), $V_U=\tau+1=\tfr65$ (the endpoint kernels are unit-slope ramps of height $t_\ast$), $\delta_\beta=0$ (margins exact; no stored-scenario error) and $L=T+1=\tfr{11}5$: the kernel difference $k_t-k_{t'}$ has $L^1$ norm at most $T|t-t'|$ (it is \emph{not} supported on $[t',t]$; the position rows also differ by $(t-t')n_j$ on $[0,t']$), while $|\beta_t-\beta_{t'}|=|t-t'|$. With labels at the mesh points the covering radius is $h_t=h/2$. The sandwich \eqref{eq:sandwich} at $h=\tfr1{10}$ therefore bounds $J\le\tfr3{100}+\tfr3{100}+\tfr{11}{100}=\tfr{17}{100}$, while the witness pair proves that the realised gap is exactly $Th/4=\tfr3{100}$; Figure~\ref{fig:mesh} shows both sides closing.
+
+\paragraph{Why the $\max_a\ebar_a$ form is load-bearing.}
+Suppose the program had been fed the loose but verified bound $\ebar=e+\tfr12$ on every row. It then returns $\rho=-\tfr{47}{100}$ at $h=\tfr1{10}$, and the certified bound $J\le\rho+\ebar+\delta_\beta+Lh_t=\tfr{17}{100}\ge\tfr3{50}$ remains valid, whereas the uniform special case $R_UV_Uh_u$ would claim $J\le-\tfr6{25}$---false at $J=\tfr3{50}$. A loose relaxation must inflate the charged bound with it.
+
+\begin{remark}[a-priori versus realised resolution]\label{rem:apriori}
+Theorem~\ref{thm:bridge}(iii) guarantees a certificate of margin at least $\gamma/2=\tfr3{100}$ once $(R_UV_U+L)h<\gamma/2$, i.e.\ $h<\tfr3{340}\approx0.0088$; on the dyadic refinements of $\{0,\tau,T\}$ this is first met at $h=\tfr1{128}$ (Table~\ref{tab:nonuniform}, $\rho=\tfr{371}{6400}$). The realised law \eqref{eq:meshlaw} attains the same margin already at $h=\tfr1{10}$ and certifies on every uniform aligned mesh with $h<\tfr15$. The a-priori bound is thus conservative here by a factor of about $11$ in mesh width ($\tfr1{10}$ against $\tfr3{340}$)---expected, since it charges the time-interpolation term $Lh_t$ that the witness pair shows to be inactive on this instance. The a-priori bound is what makes nonviability \emph{semidecidable} in the class; the realised law is what makes it \emph{cheap}.
+\end{remark}
+
+\subsection{Support of the certificates on the instance}
+
+\begin{corollary}[minimal support]\label{cor:support}
+At $\tau=\tfr15$ every positive certificate of the triple involves all three modes, and three labels suffice: the minimal support is exactly $3=\depth_\calI(B_0)$, while the finite safety-row matrix at $h=\tfr1{10}$ has full column rank $r=64$, so Theorem~\ref{thm:bridge}(v) allows $65$.
+\end{corollary}
+
+\begin{proof}
+Proposition~\ref{prop:depth} with Proposition~\ref{prop:pairs} (every pair viable) gives the lower bound; the certificate of Proposition~\ref{prop:triple} gives the upper bound; the rank is computed exactly by Gaussian elimination in the verification script.
+\end{proof}
+
+The three-label support of each positive finite certificate in Table~\ref{tab:mesh} is therefore not an accident of the symmetric campaign but the depth of the belief, and the gap between $3$ and $65$ illustrates the remark after Proposition~\ref{prop:depth}: the rank bound is a worst case over all row systems of the given dimensions, the depth is the instance's own conflict structure.

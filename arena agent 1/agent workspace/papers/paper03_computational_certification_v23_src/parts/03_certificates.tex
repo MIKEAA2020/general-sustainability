@@ -1,0 +1,87 @@
+\section{Finite certificates and the continuous-to-finite theorem}\label{sec:certificates}
+
+\subsection{The atomic certificate}
+
+Let $\phi_U(g):=\min_{v\in U}g^\top v=-h_U(-g)$. Choose finitely many labels $a_\ell=(\theta_\ell,i_\ell,t_\ell)$, $\ell=1,\dots,q$, and weights $\lambda\in\Delta_q$ (nonnegative, summing to one). For each information cell $C\in\calP_r$ pool the kernels of the labels whose mode lies in the cell, $g_{r,C}(\sigma)=\sum_{\ell:\theta_\ell\in C}\lambda_\ell k_{a_\ell}(\sigma)$, and define the \emph{certificate margin}
+\begin{equation}\label{eq:margin}
+\Gam(\lambda,a)=\sum_{r=0}^{R-1}\int_{I_r}\sum_{C\in\calP_r}\phi_U\bigl(g_{r,C}(\sigma)\bigr)\dd\sigma-\sum_{\ell=1}^q\lambda_\ell\beta_{a_\ell}.
+\end{equation}
+The pooling is where the information structure enters: on an interval during which two modes are indistinguishable, their kernels are summed before the controller's best response is taken, because a single control signal must serve both.
+
+\begin{lemma}[semantics and tightness of the margin]\label{lem:semantics}
+For every policy $\pi$, $\sum_\ell\lambda_\ell\calF_{a_\ell}(\pi)\ge\Gam(\lambda,a)$, with equality for the policy that selects, in each cell and at almost every time, a minimising vertex of $v\mapsto g_{r,C}(\sigma)^\top v$ in a fixed vertex order. Consequently, if $\Gam(\lambda,a)>0$ then no admissible information-adapted policy is safe: for every $\pi$ some stored label satisfies $\calF_{a_\ell}(\pi)\ge\Gam(\lambda,a)>0$, i.e.\ an admissible realisation violates facet $i_\ell$ at time $t_\ell$ by at least $\Gam$.
+\end{lemma}
+
+The violating label may depend on the policy; the finite list and its weights do not. A positive margin is thus a finite, policy-independent set of adversarial tests combined by an adjoint identity---not an adversarial tree. The proof is in SM~S1.
+
+\subsection{Outer moments, inner adversary, and the finite program}
+
+\paragraph{Outer control moments.}
+Choose a control mesh $\calH=\{J_1,\dots,J_H\}$ of $[0,T]$ containing every sensing time, so that each block $J_j$ lies in one observation interval $I_{r(j)}$. Introduce one vector $v_{j,C}\in U$ for every cell $C\in\calP_{r(j)}$ active during $J_j$; $Q=\sum_j|\calP_{r(j)}|$ is the number of information--time blocks. For a label $a$ define the finite row $A_{a,j,C}=\mathbf 1_{\{\theta\in C\}}\int_{J_j}k_a(\sigma)\dd\sigma$, the block average $\bar k_{a,\calH}=|J_j|^{-1}\int_{J_j}k_a$ on $J_j$, and the \emph{moment error}
+\begin{equation}\label{eq:momerr}
+e_{a,\calH}=\int_0^T h_U\bigl(\bar k_{a,\calH}(\sigma)-k_a(\sigma)\bigr)\dd\sigma,
+\end{equation}
+for which any verified upper bound $\ebar_a\ge e_{a,\calH}$ may be used. For every measurable policy the block averages of its cell signals belong to $U$ (convexity), and
+\begin{equation}\label{eq:outer}
+\sum_{j,C}A_{a,j,C}^\top v_{j,C}-\int_0^T k_a(\sigma)^\top u^\pi_{\theta(a)}(\sigma)\dd\sigma\;\le\;\ebar_a .
+\end{equation}
+Inequality \eqref{eq:outer} is the crucial orientation: \emph{finite feasibility is a necessary condition for continuous-time safety}. The moments do not restrict the real controller to held inputs; they relax it. For a policy held constant on the blocks the averaging term vanishes identically, but the program remains a relaxation even then, because the error bounds are charged to every row (the instance makes this concrete: the held witness policy attains the continuous value $3/50$ while the program returns $3/50-Th/4$).
+
+\paragraph{Inner adversarial approximation.}
+On the right-hand side one may use $\beta^+_a\ge\beta_a$ obtained from an explicit admissible initial state and disturbance rather than from exact worst-case optimisation. If $0\le\beta^+_a-\beta_a\le\delta_\beta$ uniformly over the labels used, the approximation is \emph{safe for nonviability}: it weakens the adversary and enlarges the feasible controller set. For instance, with $w_a(\sigma)=\mathbf 1_{\{\sigma\le t\}}E_\theta(\sigma)^\top X_\theta(t,\sigma)^\top c_i$, a piecewise-constant disturbance choosing $d_{a,J}\in\arg\max_{d\in D_\theta}(\int_Jw_a)^\top d$ on a disturbance mesh of width $h_d$ satisfies
+\begin{equation}\label{eq:distbound}
+0\le\beta^+_a-\beta_a\le R_DV_Dh_d
+\end{equation}
+when $D_\theta$ has radius $R_D$ about a fixed centre and $\TV(w_a)\le V_D$; the general budget is $\delta_\beta=\delta_{\mathrm{init}}+\delta_{\mathrm{dist}}+\delta_{\mathrm{num}}$ for separately accounted initial-state, disturbance and numerical errors.
+
+\paragraph{The finite program.}
+Let $G\subset[0,T]$ be a finite time grid containing $0$, $T$ and every observation time, with covering radius $h_t=\sup_{t}\min_{\hat t\in G}|t-\hat t|$, and let $\calS_G=\Theta\times\{1,\dots,s\}\times G$. Solve
+\begin{equation}\label{eq:lp}
+\rhoHG=\min_{v,\rho}\ \rho\quad\text{s.t.}\quad A_av-\beta^+_a-\ebar_a\le\rho\ \ (a\in\calS_G),\qquad v_{j,C}\in U .
+\end{equation}
+The level $\rho$ is an unrestricted real variable; negative values record strict safety slack. The program has $mQ+1$ variables and at most $Ms\,|G|+p_UQ$ inequalities, $p_U$ the number of facets of $U$.
+
+\subsection{The theorem}
+
+\begin{theorem}[continuous-to-finite]\label{thm:bridge}
+Assume
+\begin{enumerate}[label=\textup{(H\arabic*)},leftmargin=3em,itemsep=1pt]
+\item uniformly over policies, modes and facets, $|\calF_{\theta,i,t}(\pi)-\calF_{\theta,i,t'}(\pi)|\le L|t-t'|$;
+\item the input kernels satisfy $\TV(k_a)\le V_U$;
+\item the label maps $a\mapsto k_a$ (in $L^1$) and $a\mapsto\beta_a$ are continuous on the compact label set $\calS$;
+\item $U$ has radius $R_U$ about some fixed centre;
+\item the time grid has covering radius at most $h_t$ and the control mesh has maximum block length $h_u$;
+\item the stored adversarial data satisfy $0\le\beta^+_a-\beta_a\le\delta_\beta$ for every label used.
+\end{enumerate}
+Then:
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.4em,itemsep=2pt]
+\item \textup{(Certified value sandwich.)}
+\begin{equation}\label{eq:sandwich}
+\rhoHG\;\le\;\J\;\le\;\rhoHG+\max_{a\in\calS_G}\ebar_a+\delta_\beta+Lh_t .
+\end{equation}
+The uniform choice $\ebar_a\equiv R_UV_Uh_u$ is valid under \textup{(H2), (H4)} and gives the announced special case; the $\max_a\ebar_a$ form is the one that must be used when a looser verified bound was fed to the program.
+\item \textup{(Sound finite certificates.)} If $\rhoHG>0$, the dual of \eqref{eq:lp} supplies a finite certificate of nonviability of the continuous-time system, covering every measurable information-adapted policy.
+\item \textup{(Completeness under refinement.)} If $B_0\notin\calK^T_\calI$, then along every admissible refinement sequence with $h_u,h_d,h_t\to0$ and stored-scenario widths $\delta_{\mathrm{init}},\delta_{\mathrm{num}}\to0$, the programs eventually return a positive certificate. With exactly stored scenarios, a schedule with block, disturbance and grid widths at most $h$ halts with margin at least $\gamma/2$ as soon as $(R_UV_U+R_DV_D+L)\,h<\gamma/2$, where $\gamma=\J>0$.
+\item \textup{(Exact atomic dual representation.)}
+\begin{equation}\label{eq:atomic}
+\J=\sup\bigl\{\Gam(\lambda,a):\ q\in\N,\ a_1,\dots,a_q\in\calS,\ \lambda\in\Delta_q\bigr\}.
+\end{equation}
+In particular, nonviability is equivalent to the existence of a positive finite atomic certificate.
+\item \textup{(Sparse witnesses.)} Let $r$ be the rank of the safety-row coefficient matrix of \eqref{eq:lp} (the rows $A_a$, excluding the $\rho$-column and the actuator inequalities). Whenever $\rhoHG>0$, a positive certificate exists using at most $r+1\le mQ+1$ safety labels, and it can retain any prescribed margin strictly below $\rhoHG$. If the lifted continuous-time kernels span a space of dimension $r_\calI$, a continuous-time obstruction admits a certificate with at most $r_\calI+1$ labels.
+\end{enumerate}
+\end{theorem}
+
+The proof is given in Appendix~\ref{app:bridge}; the moduli $L$, $V_U$, $V_D$ and the $L^1$ label-continuity modulus are computed from the primitive data of \eqref{eq:dyn} in SM~S2, so that (H1)--(H3) are not free assumptions.
+
+\begin{corollary}[complete dual calculus]\label{cor:dual}
+Under the hypotheses of Theorem~\ref{thm:bridge}:
+\textup{(a)} every pair $(\lambda,a)$ satisfies $\Gam(\lambda,a)\le\J\le\max_a\calF_a(\pi)$ for every policy $\pi$;
+\textup{(b)} $\J$ is the supremum of $\Gam$ over finite atomic pairs; the supremum over all probability measures on $\calS$ is attained, and attainment by an atomic maximiser is an instance-level fact (three atoms attain it in Section~\ref{sec:instance}), not a general claim;
+\textup{(c)} $B_0\notin\calK^T_\calI$ if and only if some finite atomic pair has $\Gam(\lambda,a)>0$; every such pair obstructs every measurable information-adapted policy, and every obstruction arises in this way.
+\end{corollary}
+
+The duals therefore form a \emph{complete} certificate system for the class: positivity is the only decision, and the finite program of \eqref{eq:lp} is a mechanical way of searching for a positive pair at a prescribed resolution.
+
+\subsection{The asymmetry at the core of the proof}
+
+Two directions carry the sandwich and they are not symmetric. \emph{Averaging arbitrary controls proves the lower bound}: the block moments of any admissible policy are feasible for \eqref{eq:lp} at objective $\max_a\calF_a(\pi)$, so the relaxed minimum cannot exceed the continuous value. \emph{Implementing piecewise-constant controls proves the upper bound}: the held control read off an optimiser of \eqref{eq:lp} attains its finite rows exactly, and its exit from the continuous value is charged by the error bounds the program actually used, the stored-scenario error, and the grid interpolation error $Lh_t$. Confusing the two directions---using a discretised controller class to prove \emph{infeasibility}---is what makes naive arguments unsound; the finite program is sound for nonviability precisely because its controller class is an outer relaxation while its adversarial tests are genuinely admissible scenarios.

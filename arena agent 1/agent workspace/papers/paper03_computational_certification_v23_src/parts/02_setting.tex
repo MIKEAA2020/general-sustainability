@@ -1,0 +1,65 @@
+\section{Setting: dynamics, information, and the safety value}\label{sec:setting}
+
+\subsection{Dynamics and constraints}
+
+A hidden mode $\theta\in\Theta:=\{1,\dots,M\}$ selects a linear system
+\begin{equation}\label{eq:dyn}
+\dot x(t)=A_\theta(t)x(t)+g_\theta(t)+B_\theta(t)u(t)+E_\theta(t)d(t),\qquad t\in[0,T],
+\end{equation}
+with $A_\theta,g_\theta,B_\theta,E_\theta$ bounded and piecewise continuous, and $B_\theta,E_\theta$ of bounded variation. The initial set in mode $\theta$ is a nonempty compact polytope $P_\theta\subset\R^n$; the input and disturbance sets are nonempty compact polytopes $U=\{v:Fv\le f\}\subset\R^m$ and $D_\theta\subset\R^p$; safety is the closed polyhedron $\calV=\{x:c_i^\top x\le b_i,\ i=1,\dots,s\}$. The initial information state $B_0=\bigcup_\theta\{\theta\}\times P_\theta$ is assumed initially safe, $P_\theta\subseteq\calV$ for every $\theta$ (otherwise a time-zero certificate suffices). For every admissible measurable pair $(u,d)$ the dynamics admit unique Carath\'eodory solutions. Throughout, $X_\theta(t,s)$ denotes the state-transition matrix of $A_\theta$ and $h_Q(v)=\sup_{q\in Q}v^\top q$ the support function of a set $Q$.
+
+\subsection{Information}
+
+At known times $0=\tau_0<\tau_1<\dots<\tau_R=T$ the controller receives exogenous information about the mode: a refining sequence of \emph{history partitions} $\calP_0\preceq\calP_1\preceq\dots\preceq\calP_{R-1}$ of $\Theta$ (for $r'>r$ every cell of $\calP_{r'}$ lies inside a cell of $\calP_r$), the observation history during $I_r=[\tau_r,\tau_{r+1})$ identifying the cell $C_r(\theta)\in\calP_r$ that contains the true mode. Observations do not depend on $x$, $u$ or $d$; active sensing and endogenous observation branching are outside the exact theorem (Section~\ref{sec:extensions} gives sound extensions). We write $\calI$ for the pair (times, partitions) and call it the information structure.
+
+\subsection{Policies, beliefs, and the kernel}
+
+Policies are deterministic, measurable, nonanticipative and adapted to the observation history. Every such policy is represented exactly by cell signals $u_{r,C}\in L^\infty(I_r;U)$, $C\in\calP_r$, the realised control in mode $\theta$ being $u^\pi_\theta(t)=u_{r,C_r(\theta)}(t)$ on $I_r$. Write $\Pol$ for the set of policies. The robust quantifier order is
+\begin{equation}\label{eq:quantifiers}
+\exists\,\pi\in\Pol\ \ \forall\,\theta\ \ \forall\,x_0\in P_\theta\ \ \forall\,d\in L^\infty([0,T];D_\theta)\ \ \forall\,t\in[0,T]:\quad x^\pi_{\theta,x_0,d}(t)\in\calV ,
+\end{equation}
+the adversary selecting mode, initial state and disturbance with knowledge of the announced policy; randomised policies are not included.
+
+\begin{definition}[beliefs and the information-constrained kernel]\label{def:kernel}
+A \emph{belief} is a nonempty set $B\subseteq\Theta\times\R^n$ of mode--state possibilities (not a probability distribution). The \emph{information-constrained viability kernel} is the set of beliefs for which \eqref{eq:quantifiers} holds with $B$ in place of $B_0$,
+\[
+\calK^T_\calI=\bigl\{B:\ \exists\pi\ \forall(\theta,x_0)\in B\ \forall d\ \forall t\ \ x^\pi_{\theta,x_0,d}(t)\in\calV\bigr\}.
+\]
+$B_0$ is \emph{viable} when $B_0\in\calK^T_\calI$ and \emph{obstructed} (nonviable) otherwise.
+\end{definition}
+
+Writing $\Lift(K^T_{\mathrm{full}})=\{B:\varnothing\ne B\subseteq K^T_{\mathrm{full}}\}$ for the belief lifting of the full-information kernel, one has $\calK^T_\calI\subseteq\Lift(K^T_{\mathrm{full}})$, and the inclusion is strict in general: the instance of Section~\ref{sec:instance} has every two-state sub-belief viable while the three-state belief is not. Full-information viability is therefore necessary but not sufficient for the information-constrained question.
+
+\subsection{Adjoint safety rows and the safety value}
+
+A \emph{label} is a triple $a=(\theta,i,t)\in\calS:=\Theta\times\{1,\dots,s\}\times[0,T]$: a mode, a facet, and a time. To each label attach the input kernel and the margin
+\begin{align}
+k_a(\sigma)&=\mathbf 1_{\{\sigma\le t\}}\,B_\theta(\sigma)^\top X_\theta(t,\sigma)^\top c_i,\label{eq:kernel}\\
+\beta_a&=b_i-h_{P_\theta}\!\bigl(X_\theta(t,0)^\top c_i\bigr)-\int_0^t c_i^\top X_\theta(t,\sigma)g_\theta(\sigma)\dd\sigma-\int_0^t h_{D_\theta}\!\bigl(E_\theta(\sigma)^\top X_\theta(t,\sigma)^\top c_i\bigr)\dd\sigma,\label{eq:beta}
+\end{align}
+and to a policy $\pi$ the row functional $\calF_a(\pi)=\int_0^T k_a(\sigma)^\top u^\pi_\theta(\sigma)\dd\sigma-\beta_a$. The margin $\beta_a$ is the worst-case slack of facet $i$ at time $t$ in mode $\theta$ once the adversary has optimised initial state and disturbance; the kernel is the adjoint of the control's influence on that facet.
+
+\begin{proposition}[robust rows]\label{prop:rows}
+A policy $\pi$ satisfies \eqref{eq:quantifiers} on $[0,T]$ if and only if $\calF_a(\pi)\le0$ for every $a\in\calS$.
+\end{proposition}
+
+The proof (SM~S1) is the linear solution formula: the initial-state and disturbance maximisations separate from the control term because the control signal in a mode does not depend on $x_0$ or $d$, and for polytopic $D_\theta$ a maximising disturbance can be chosen measurably by a fixed vertex order. Define the \emph{minimax safety violation}
+\begin{equation}\label{eq:value}
+\J=\min_{\pi\in\Pol}\ \max_{a\in\calS}\ \calF_a(\pi).
+\end{equation}
+
+\begin{proposition}[value and nonviability]\label{prop:value}
+Under hypothesis \textup{(H1)} of Theorem~\ref{thm:bridge} the minimum in \eqref{eq:value} exists, and $B_0\notin\calK^T_\calI$ if and only if $\J>0$.
+\end{proposition}
+
+Existence follows from weak-$\ast$ compactness of the policy space (each factor $L^\infty(I_r;U)$ is weak-$\ast$ closed and bounded because $U$ is a compact convex polytope) and weak-$\ast$ continuity of the affine functionals $\calF_a$; the maximum over labels is attained because $a\mapsto\calF_a(\pi)$ is continuous in $t$ under (H1). The equivalence is the definition of the kernel together with closedness of $\calV$: safety at the margin is viability, so $J=0$ still admits a safe policy and nonviability is the \emph{strict} inequality (SM~S1).
+
+\begin{lemma}[information monotonicity]\label{lem:mono}
+Let $\calI'$ refine $\calI$ (observations arrive no later and partitions are no coarser at every time). Then $\calK^T_\calI\subseteq\calK^T_{\calI'}$ and $J_{\calI'}(T)\le\J$.
+\end{lemma}
+
+\begin{proof}
+Every $\calI$-adapted policy is $\calI'$-adapted: a controller with finer information may ignore it. The minimum in \eqref{eq:value} is therefore taken over a larger set.
+\end{proof}
+
+The lemma is elementary but load-bearing: it turns a certificate at one delay into certificates at all larger delays (Theorem~\ref{thm:pairs}) and a viable schedule at one observer installation time into viability at all earlier ones (Proposition~\ref{prop:observer}).
