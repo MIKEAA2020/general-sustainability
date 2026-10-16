@@ -222,3 +222,10 @@ A fresh all-branch/tag scan found Paper09b v4 as the latest existing edition on 
 ## Paper10 v54 — MCS 2026 and typed depletion indicators (2026-10-16)
 
 All-branch/tag scan found v53 as the latest Paper10 before numbering; no v54 existed on checked refs. The v53 main source's internal header incorrectly read v52 (2026-09-30); v53 and its SI remain preserved, and v54 corrects metadata in a new edition. V54 distinguishes static reserve/production quotients, anomaly-trend extrapolations, frozen-rate local ratios, and model-conditioned barrier-hitting times; corrects G3P's scope as reference-period anomalies rather than absolute aquifer volume or index-well measurement; and refreshes phosphate values to USGS MCS 2026 (world snapshot 73,000,000/250,000 = 292 yr, not a forecast). Its source package includes the snapshot CSV and arithmetic checker. Static checks pass; no TeX engine was available, so no PDF is claimed.
+
+
+---
+
+## Paper08 v49 — scoped two-operator synthesis (2026-10-16)
+
+The all-branch/tag scan found v48 as the latest Paper08; v48 is preserved. V49 keeps the merged continuous-delay and sampled-review study but corrects the abstract and cross-regime synthesis to distinguish a declared baseline parameterization from empirical calibration, to treat `tau` and `T_r` as distinct operators, and to state that the stock-agnostic model class does not establish cross-system transportability. Existing sensitivity results are made explicit in the abstract and the 42-stock and 32-system nulls are separated. The v49 supplementary companions carry forward v48 calculations without revision and include provenance notes. Static checks pass; no TeX engine was installed, so no compiled PDF is claimed.
