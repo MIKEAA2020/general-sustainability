@@ -1,8 +1,8 @@
 # Paper07 v52 → v53 coverage crosswalk
 
-**Audit date:** 2026-10-16  
-**Comparison:** the recoverable v52 main manuscript and deposited source records against v53 main text plus Supplementary Information (S1–S14).  
-**Status:** content-level mapping completed for the recoverable record; the separate v52 SI could not be recovered, so this is not represented as a complete paragraph-by-paragraph comparison of the full historical package.
+- **Audit date:** 2026-10-16
+- **Comparison:** the recoverable v52 main manuscript and deposited source records against v53 main text plus Supplementary Information (S1–S14).
+- **Status:** content-level mapping completed for the recoverable record; the separate v52 SI could not be recovered, so this is not represented as a complete paragraph-by-paragraph comparison of the full historical package.
 
 ## Bottom line
 
