@@ -139,3 +139,10 @@ This has now happened twice.
 Northern cod forecasting (20,048 w), Edwards Aquifer forecasting (8,819 w), and Exact Audits
 of Worked Systems for the Obstruction Calculus (10,374 w, `\part{Ws}`). `ws` is a separate unit
 in the authoritative eight-paper scope.
+
+
+---
+
+## Paper10 v54 follow-up — 2026-10-16
+
+The v52 split result above remains a historical record. The latest source on `e2-v3-source-year` was v53, but its main-file header still said v52 (2026-09-30); v54 now corrects this mismatch in a new edition without overwriting v53. V54 updates the depletion-indicator taxonomy and G3P measurement description, pins phosphate arithmetic to USGS MCS 2026, and replaces the invalid large-`g tau` first-order reserve-crossover reading with the exact threshold. V53 and its SI are preserved. The v54 source package contains the selected source rows and a standard-library arithmetic verifier; a PDF is not included because no TeX engine was installed.

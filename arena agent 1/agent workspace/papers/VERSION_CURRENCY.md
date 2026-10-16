@@ -215,3 +215,10 @@ The detailed fresh audit, including all branch tips, tag/release status, and the
 ## Paper09b v5 — conditional accounting revision (2026-10-16)
 
 A fresh all-branch/tag scan found Paper09b v4 as the latest existing edition on `e2-v3-source-year`; no higher Paper09b edition was present on the checked refs, and the previously checked release inventory contained no paper-specific Paper09b asset. The v4 source and PDF are preserved. The new v5 is a separate path on the same branch. It distinguishes assessed SSB from DFO 2025 Table 1 reported total landings, carries unknown nonnegative `kappa`, shows both adjacent-year assignments, and limits contraction statements to the strict row-specific threshold condition. The v5 checker and five source extracts are in `paper09b_arv_certification_v5_src/`. Static source checks pass; compilation was not possible because no TeX engine is installed.
+
+
+---
+
+## Paper10 v54 — MCS 2026 and typed depletion indicators (2026-10-16)
+
+All-branch/tag scan found v53 as the latest Paper10 before numbering; no v54 existed on checked refs. The v53 main source's internal header incorrectly read v52 (2026-09-30); v53 and its SI remain preserved, and v54 corrects metadata in a new edition. V54 distinguishes static reserve/production quotients, anomaly-trend extrapolations, frozen-rate local ratios, and model-conditioned barrier-hitting times; corrects G3P's scope as reference-period anomalies rather than absolute aquifer volume or index-well measurement; and refreshes phosphate values to USGS MCS 2026 (world snapshot 73,000,000/250,000 = 292 yr, not a forecast). Its source package includes the snapshot CSV and arithmetic checker. Static checks pass; no TeX engine was available, so no PDF is claimed.
