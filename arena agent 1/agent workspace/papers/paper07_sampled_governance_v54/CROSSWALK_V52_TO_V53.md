@@ -1,8 +1,8 @@
 # Paper07 v52 → v53 coverage crosswalk
 
 - **Audit date:** 2026-10-16
-- **Comparison:** the recoverable v52 main manuscript and deposited source records against v53 main text plus Supplementary Information (S1–S14).
-- **Status:** content-level mapping completed for the recoverable record; the separate v52 SI could not be recovered, so this is not represented as a complete paragraph-by-paragraph comparison of the full historical package.
+- **Comparison:** the recoverable v52 main manuscript and deposited source records against v53 main text plus Supplementary Information (S1–S14), with a separate version-specific map to a recovered historical supplement candidate.
+- **Status:** the recoverable v52 main manuscript has been mapped to v53/v54. A historical, old-numbered Paper5 v19 supplement has now been recovered and mapped section by section; exact attachment to the v52 build remains unverified.
 
 ## Bottom line
 
@@ -10,13 +10,15 @@ V53 is stronger on evidence status and reproducibility: it corrects the interpre
 
 The omissions are not all equivalent. The old policy-facing Box 2 and its eight implications were dropped; several are stronger than the evidence supports. They should not be restored as empirical findings. Their defensible modelling lessons are retained in qualified form in v54 Supplementary S7.6. The v52 AI-use declaration was also dropped and is restored generically in v54. Several v53 section citations had become stale when the SI was renumbered; v54 corrects those and the one-at-a-time sensitivity wording.
 
-One explicit v52 promise remains unresolved: its closing inventory names a “dimensionless identifiability chart” in S2. No such v52 SI file or chart was found in the audited repository trees. V53's joint-parameter sensitivity analysis is related to parameter fragility, but it is not claimed to be the same chart or a substitute for structural identifiability analysis.
+A follow-up retrieval correction changes the archival conclusion. The historical old-numbered file `paper5_supplementary_v19_NatSustain.md` is present in `main` and `e2-v3-source-year`. Its front matter names the exact v52 article title; it contains S1–S13.3 and S2.3's named dimensionless-identifiability chart. The v52 main source directly points to S2.3 and reports the same baseline fixed point. This is a strong content match, but no version-bound manifest, deposit record, or source-to-PDF build record establishes that this exact v19 revision accompanied the v52 PDF. See `PAPER07_V52_TO_HISTORICAL_V19_CLAIM_SECTION_CROSSWALK.md`. The chart content is recovered; the unresolved issue is exact version attribution, not chart retrieval. The separate v54 SI remains a reconstructed v54 supplement, not a retroactive claim about v52.
 
-## Retrieval limit: the v52 SI is not in the audited repository
+## Retrieval update: historical supplement recovered; exact v52 attachment unresolved
 
-The recovered v52 source is `paper07_sampled_governance_v52.tex` on `e2-v3-source-year`; its PDF is 36 pages. The final PDF pages and TeX source explicitly refer to a separate Supplementary file. The final inventory lists S1–S10, but citations in the body also refer to S11, S12, and S13.1–S13.3. The inventory is therefore internally stale or incomplete; the historical SI may have extended beyond S10.
+The v52 source is `paper07_sampled_governance_v52.tex` on `e2-v3-source-year`; its main PDF is 36 pages. The main source explicitly describes an accompanying Supplementary file. Its closing inventory lists S1–S10, while the body cites S11, S12, and S13.1–S13.3, indicating that the inventory is stale or underinclusive. The 36-page PDF is the recoverable main article, not a verified complete article-plus-SI package.
 
-The all-ref inspection covered all six repository branches, both tags, and both prereleases. No standalone Paper07/v52 supplementary file, nor a file containing the promised dimensionless-identifiability chart, was present in those trees. The v52 data-availability text supplies no separate DOI for that SI. Consequently, 36 pages is the recoverable v52 main PDF length—not the length of the complete v52 package—and the old SI's detailed contents cannot be certified. The map below distinguishes confirmed carryover from inferred or unrecoverable coverage.
+A targeted follow-up found `paper5_supplementary_v19_NatSustain.md` on both `main` and `e2-v3-source-year` as the same Git blob; e2 also carries the same blob in its `content_audit/seeds/` directory. The file's front matter names “The decision clock: review intervals as a design lever for stable resource governance,” the exact v52 main title, and the file contains S1–S13.3, including the promised chart in S2.3. The v52 main text's Appendix A directly points to S2.3 and gives the matching baseline fixed point.
+
+The section-by-section claim map is in `PAPER07_V52_TO_HISTORICAL_V19_CLAIM_SECTION_CROSSWALK.md`. It finds strong structural and topical alignment, but it does not certify the exact v19 revision as the SI compiled/deposited with the particular v52 PDF: no version-bound manifest, deposit record, or source-to-PDF build record was found. The old-numbered file must not be relabeled as “Paper07 v52 SI” on the strength of content match alone. A Paper08 v48 governance supplement preserves the S2.3 block verbatim but has Paper08-specific front matter and other edits; this corroborates shared lineage, not the exact v52 attachment.
 
 ## Content map
 
@@ -36,7 +38,7 @@ The all-ref inspection covered all six repository branches, both tags, and both 
 | Appendix B and §4.6 distributive constraints | SI S6 | Retained at measurement level: constituency mismatch, available community series, unoperationalised floors, and instrument limits. |
 | §4.8 Box 2 (four design principles) and eight management implications | No verbatim v53 counterpart; qualified treatment added in v54 S7.6 | The old wording should not be restored as policy findings. Claims that protective rules generally tolerate rigidity, extractive rules require frequent review, or emergency triggers improve outcomes exceed the tested model/evidence. V54 retains the defensible lessons as requirements for modelling and evaluation, with explicit non-inference boundaries. |
 | v52 AI-use declaration | Omitted in v53; a general disclosure is restored in v54 Declarations | This is a transparency omission, not a scientific result; v54 states AI-assisted drafting/code/review without guessing a model identity. |
-| Promised “dimensionless identifiability chart” (v52 closing inventory, S2) | Not recovered; v53 has a distinct joint-box sensitivity figure/table in S11 | Unresolved. The joint-box result concerns deterministic parameter perturbations of a crossing; it is not evidence of structural identifiability and is not labelled as the missing chart. |
+| Promised “dimensionless identifiability chart” (v52 closing inventory, S2; Appendix A points to Supplementary S2.3) | Historical v19 S2.3 recovered; v53/v54 joint-box figure remains a different object | The chart content is recovered and strongly matches the v52 pointer and baseline. Exact v19-to-v52 build binding remains unverified. Do not call the chart missing or use the joint-box figure as its replacement. |
 
 ## v54 corrections made after the crosswalk
 
@@ -48,4 +50,4 @@ The all-ref inspection covered all six repository branches, both tags, and both 
 
 ## Decision
 
-Complete the crosswalk rather than silently accepting all omissions. Accept the removal of overconfident policy prescriptions, but preserve the useful design lessons in a qualified supplement. Treat the missing v52 SI and its promised chart as an explicit archival gap; do not claim full historical-package equivalence until that source is recovered.
+Complete the crosswalk rather than silently accepting omissions. Accept the removal of overconfident policy prescriptions, but preserve the useful design lessons in a qualified supplement. Treat v19 as a strong content-matched historical companion candidate, not as a verified version-specific v52 SI. The exact v52 package linkage remains open; the chart itself is recovered. Do not claim full historical-package equivalence until version binding is established.

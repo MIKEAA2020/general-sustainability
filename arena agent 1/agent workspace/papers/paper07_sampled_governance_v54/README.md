@@ -2,7 +2,7 @@
 
 - **Edition:** standalone Paper07 v54, based on Paper07 v53. Paper07 v52/v53 and parallel Paper08 v48 remain preserved.
 - **Build date:** 2026-10-16.
-- **Status:** new edition following the v52→v53 coverage crosswalk and correction of stale SI pointers; no numerical analysis was represented as a new rerun. The fresh all-ref lineage audit selected `e2-v3-source-year` in the public repository `MIKEAA2020/general-sustainability`. See `VERSION_AUDIT_2026-10-16.md` and `CROSSWALK_V52_TO_V53.md`.
+- **Status:** new edition following the v52→v53 coverage crosswalk and correction of stale SI pointers; no numerical analysis was represented as a new rerun. A later targeted audit recovered an old-numbered v19 supplement candidate and mapped it to the v52 main text, but did not verify the exact historical build pairing. See `VERSION_AUDIT_2026-10-16.md`, `CROSSWALK_V52_TO_V53.md`, and `CROSSWALK_V52_TO_HISTORICAL_V19.md`.
 
 ## Contents
 
@@ -12,7 +12,8 @@
 - `work/`: retained v53 analysis scripts, outputs, and logs. They are not described as new v54 reruns. Preview renders and transient inspection text are omitted from the portable ZIP.
 - `src/`: empirical inputs, archived scripts/results, and historical context notes used or cited by the paper. Older dated context notes are archival and are not a substitute for the final all-ref lineage audit.
 - `source_material/`: a limited archive of v52 empirical inputs, figures, scripts, and tables; the predecessor PDF is omitted from the portable ZIP.
-- `CROSSWALK_V52_TO_V53.md`: recovered-content map, including explicit limits caused by the unrecovered v52 Supplementary file.
+- `CROSSWALK_V52_TO_V53.md`: v52-to-v53/v54 recovered-content map, updated with the historical supplement retrieval correction.
+- `CROSSWALK_V52_TO_HISTORICAL_V19.md`: section-by-section mapping from v52 main-text claims/pointers to the recovered old-numbered Paper5 v19 supplement; it does not label v19 as the exact v52 SI.
 - `VERSION_AUDIT_2026-10-16.md`: all-branch/tag/release and split/merge lineage record for the v54 numbering decision.
 - `VERSION_AUDIT_2026-10-16_v53.md`: preserved historical pre-v53 audit.
 - `paper07_sampled_governance_v54.pdf`, `paper07_sampled_governance_v54_SI.pdf`: compiled main and Supplementary PDFs.
@@ -64,6 +65,6 @@ The empirical stock scripts use paths relative to `src/p7_empirical/`; run them 
 - The portable screen-battery run did not finish within the 180-second execution window. Its retained log is archived output, not a completed fresh rerun.
 - The 17-cell white-noise power table is assembled from archived output plus a two-cell follow-up; the full driver did not finish. Comparator records with missing noise/seed metadata are labelled as archived.
 - Dense-grid non-crossing results are numerical classifications, not proofs between grid points. No invariant-circle continuation or nonlinear bifurcation theorem is claimed.
-- The v52 PDF is 36 pages, but its final pages explicitly refer to a separate Supplementary file that is not present in any audited repository ref. The v52 source's final inventory says S1–S10 while its body also cites S11–S13.3. See the crosswalk; v54 does not claim complete equivalence to an unavailable SI or recreate its promised identifiability chart.
+- The v52 PDF is 36 pages and is the main article, not a verified article-plus-SI package. A historical old-numbered v19 supplement with the exact v52 article title and sections S1–S13.3 is now mapped in the crosswalks; the named S2.3 identifiability chart is recovered there. The exact v19-to-v52 build binding remains unverified, so v19 is not labeled as “Paper07 v52 SI.” V54's 29-page, 14-section SI is a reconstructed v54 deliverable, not a retroactive version claim.
 
 See `PROVENANCE.md` for the v54 change record and verification status, and `VERSION_AUDIT_2026-10-16.md` for the fresh branch/tag/release and split/merge audit.
