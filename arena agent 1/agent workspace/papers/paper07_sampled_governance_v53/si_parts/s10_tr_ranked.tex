@@ -1,0 +1,30 @@
+\section{Recovered \texorpdfstring{\(\Tr\)}{Tr}-ranked test: procedure, output, and limits}\label{si:tr}
+
+\subsection{Procedure and estimands}
+
+The executable \texttt{\detokenize{p7_empirical/tr_ranked_test.py}} implements a pre-specified cross-sectional test on RAM v4.66 stocks. It uses the same series loader and spectral functions as the main stock screen: discard stocks with fewer than 20 non-missing annual SSB observations; linearly detrend; compute a normalized Lomb--Scargle spectrum on the declared frequency grid; integrate powers in bands A (2.5--5 years), B (5--9 years), C (9--14 years), and D (14--30 years); fit a per-stock AR(1) null; and estimate 95\% thresholds from 200 simulations with seed 7. The table retains A--D power but the ranked estimands below use bands A and B.
+
+For each stock, the code assigns \(\Tr=0.5\) years to the seven Peru/Chile annual-quota/in-season-closure group cases and \(\Tr=1.0\) year to 35 annual-TAC proxy cases. The 4-year anchovy-class and 8-year sprat-class windows are both above either assigned value. The South African OMP's 4--5-year rule review is explicitly excluded from \(\Tr\); implementation lag is not \(\Tr\). The assignments are group-coded and not individually primary-verified.
+
+The prespecified null-excess estimand is band power divided by that stock's AR(1) 95\% threshold, \(A/A_{95}\) or \(B/B_{95}\). Raw power is reported only as a confound diagnostic. Test 1 is Spearman association of the assigned \(\Tr\) rank with each null-excess ratio; Test 2 is a two-sided Mann--Whitney comparison of the 0.5- and 1-year groups in band A, on raw power and null-excess; Test 3 counts nominal 95\% threshold flags by broad stock class. The reported p-values are nominal and do not adjust for the several reported contrasts. Spearman has only two distinct \(\Tr\) values and extensive ties; it is not a continuous dose-response test.
+
+\subsection{Results and the corrected interpretation}
+
+The output contains 42 stocks: 7 at the subannual 0.5-year proxy and 35 at the annual 1-year proxy. Both groups are below the modeled 4- and 8-year windows. Therefore, this cohort has no observed proxy value near or beyond either window, and it cannot identify how the response changes as \(\Tr\) approaches a window. The correct finding is \textbf{no identifiable window-approach gradient}.
+
+The script does reproduce opposite-direction two-group associations. Median band-A null-excess is 0.529 in the 0.5-year group and 0.257 in the annual group (Mann--Whitney \(U=200\), \(p=0.007\)). On raw band-A power the medians are 0.193 and 0.069 (\(U=219\), nominal \(p<0.001\)). Spearman association is negative for band-A null-excess (\(\rho=-0.408, p=0.007\)) and band-B null-excess (\(\rho=-0.340, p=0.028\)); raw-power associations are \(\rho=-0.509, p=0.001\) for band A and \(\rho=-0.393, p=0.010\) for band B. These signs are opposite a simple prediction that excess rises as the review interval approaches the modeled response window: the shorter proxy group is farther below both windows and has the larger observed ratios.
+
+These two-group associations are reproduced outputs, but they are not evidence of an institutional effect. All seven shorter-interval observations are Peru/Chile cases; proxy intervals are group-level and unverified stock by stock; other annual cases form the comparison group; regional ecology and data-generation differences are not randomized. ENSO-related quasi-periodicity is a plausible candidate confound, not a cause established by this test. AR(1) surrogates account for fitted red-noise persistence but do not remove quasi-periodic forcing. No causal adjustment, region-stratified estimate, or multi-year responsive comparison is available here.
+
+At the nominal 95\% threshold, there are 0/42 band-A flags and 1/42 band-B flag. By broad class, anchovy has 0/18 A and 1/18 B flags; sprat 0/4 in both; herring 0/20 in both. These are not BH-adjusted discoveries from a new test family. They agree with the main screen's adjusted-zero result, but are not independent replications.
+
+\subsection{Per-stock values}
+
+Table~\ref{tab:tr-stock} gives every stock's sample size, group-coded proxy, A/B band powers, per-stock AR(1) 95\% thresholds, and nominal threshold flags. The null-excess ratios are calculated directly from the displayed powers and thresholds. The underlying CSV additionally retains regime and coding-source text.
+
+\input{si_parts/s10_tr_stock_table.tex}
+
+\subsection{Reproduction and status reconciliation}
+
+The recovered output table and reproduction log match the script to the reported precision. The historical query-log entry R4 records that, at that time, a search found only a recommendation memo marked ``never executed.'' Later repository state contains the implemented script and archived output. The v53 reproduction was run against the current local RAM v4.66 series and produced the same 42-stock output and test summary. The stale memo is retained in the provenance record; it does not overwrite the executed script/log evidence. The source bundle carries the script, CSV, stdout, and a reconciliation note.
+

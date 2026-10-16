@@ -1,0 +1,18 @@
+\section{Archived nonlinear comparator and trajectory-distortion records}\label{si:comparator}
+
+\subsection{Executed logistic-core comparator design}
+
+The retained comparator script simulates the same illustrative logistic plant with the four feedback/update combinations (mobilising or protective; forward Euler or nonlinear frozen-assessment controller flow) and a fixed-plan controller with effort frozen at \(E^*\). The initial state is \(N_0=0.95N^*\), \(Z_0=Z^*=\delta\), and \(E_0=E^*\); the horizon is 800 reviews; metrics use the last 60\% of simulated reviews; and divergence is recorded if the stock leaves \((0,2K)\). The stock follows the held logistic flow; the memory signal is integrated with RK4 at \(dt=0.2\). The noisy run perturbs the assessment as \(\widehat Z=Z(1+\epsilon\xi)\), with standard-normal \(\xi\), as implemented in the retained script. The intended robustness value is \(\epsilon=0.3\).
+
+A single-seed deterministic/noisy table (\path{p5_comparator_mse.csv}) and a ten-seed summary (\path{p5_comparator_mse_mc.csv}) are archived. The ten-seed CSV has no \(\epsilon\), per-seed, or seed-map columns; the earlier manuscript labels it as the 30\% error run. We therefore retain the 10-seed figures as archived, not as a v53 rerun, and flag the missing table metadata. Metrics are normalized by \(K\) for stock deviation and by \(E_{\max}\) for effort deviation; depletion frequency is the fraction of post-transient reviews with \(N<0.5N^*\).
+
+\input{si_parts/s11_comparator_table.tex}
+
+The archived ten-seed summary reports divergence in all 10 Euler-mobilising runs at \(\Tr=8,12,20\) years; the Euler-protective controller diverges in all 10 runs at 20 years and has mean depletion 0.9996 at 12 years. The nonlinear frozen-assessment-flow protective and fixed-plan runs have zero recorded depletion at the displayed intervals. Nonlinear frozen-assessment-flow mobilising is intermediate: it avoids divergence in these cells, but the mean depletion frequencies are nonzero (for example 0.066 at one-year review and 0.0823 at eight years). This is a model-level robustness comparison, not evidence that one real policy class dominates across stocks or operating models.
+
+\subsection{Linear trajectory-distortion record}
+
+The retained \texttt{\detokenize{p5_linear_trajectory_mse.csv}} compares Euler and exponential-update linear trajectories under the same initial perturbation and interval grid. In the mobilising channel, the scaled RMSD is 1.913 at \(\Tr=0.5\) years, 13.111 at 1 year, 189.020 at 2 years, and exceeds \(10^4\) for many longer intervals; Euler trajectories diverge in several intervals where the exponential-update map is stable. In the protective channel, the two updates are close at 0.5--2 years (scaled RMSD 0.0028--0.0172), but Euler divergence occurs from 3 years upward in the retained scan while the nonlinear frozen-assessment-flow trajectory remains bounded. The norm is defined by the archived analysis and should not be interpreted as a universal operational loss function.
+
+Both trajectory records explain why the linear crossing comparison matters, but their status is narrower than the main spectral computation: one uses an illustrative plant and fixed perturbation; the noisy multi-seed table has a missing metadata field; and neither tests field performance. These results are not included in the main-text abstract or used to recommend a policy.
+

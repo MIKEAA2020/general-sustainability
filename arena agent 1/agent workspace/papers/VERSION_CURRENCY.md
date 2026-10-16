@@ -181,3 +181,17 @@ and `thm:finite-horizon`, `def:kernel`, `thm:common-action`, `prop:monotone`,
   (inserted before References; that paper has no Conclusion section).
 
 Neither claim was written before the checks above had run.
+
+---
+
+## Current Paper07/Paper08 lineage status — 2026-10-16 all-ref audit
+
+This section supersedes the historical Paper07 line above for current version numbering; it does not rewrite the earlier audit conclusions for the other papers.
+
+- The repository is `MIKEAA2020/general-sustainability`. All six remote branches, both tags, and both GitHub prereleases were checked. Immediately before this update, the latest existing standalone Paper07 edition was v52 on `e2-v3-source-year` (pre-release tip `fe1eabdc9ffb`, 2026-10-15); no branch, tag, or release contained Paper07 v53 or a higher Paper07 edition.
+- The other branches contained older Paper5 sampled-governance material (up to v47 blinded on `main`/`lean-audit-v4`, and v46 on the E1 branches); `archive/paper3-v48-workspace` had no Paper07 candidate. The older `paper5_sampled_governance` name is a historical lineage path, not a newer Paper07 edition.
+- The v53 standalone continuation is stored at `paper07_sampled_governance_v53/` under this directory, based on `paper07_sampled_governance_v52.tex`. Its complete source, supplementary information, analysis records, build artifacts, and audit are in that versioned package.
+- Paper08 v48 remains the parallel combined manuscript at `paper08_governance_delay_v48.tex` with its existing PDF and supplementary files. It is preserved unchanged. `PAPER_MERGE_08_07.md` records the historical v46 merge; it is not an instruction to replace v48 or to merge v53.
+- The repository has no Paper07-specific tag or release. This v53 update continues the existing `e2-v3-source-year` branch lineage; it does not move or renumber prior editions.
+
+The detailed pre-publication branch/tag/release and split/merge audit, including hashes of the preserved v52/v48 artifacts, is retained in `paper07_sampled_governance_v53/VERSION_AUDIT_2026-10-16.md`.
