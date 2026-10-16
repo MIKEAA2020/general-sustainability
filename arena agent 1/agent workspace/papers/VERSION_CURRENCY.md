@@ -236,3 +236,12 @@ The all-branch/tag scan found v48 as the latest Paper08; v48 is preserved. V49 k
 ## Paper10b v2 — J-17 scope and companion-citation update (2026-10-16)
 
 All-ref scan found Paper10b v1 as the latest split edition. The same study appears as `paperE4_edwards_intervention_v16.tex` in the LaTeX lineage; v1 is the later split copy and adds the related-work section and bibliography, so v2 is based on v1. V2 updates the published forecast-companion status (Zenodo 22552680), classifies the realized-flux 7.55-ft score as a conditional diagnostic rather than a forecast, and scopes the 660-ft result to the annual-mean map and persistent drought floor rather than the live 10-day CPM implementation. Source code, data, and dated protocol are stored under `comp/wave_e_edwards/`, not in a Paper10b-specific `push_src`. Static checks pass; no TeX engine was available and no PDF is claimed.
+
+
+---
+
+## Paper11b/E3 v25 — same-study lineage and source audit (2026-10-16)
+
+The pre-versioning all-ref scan found Paper11b v2 on `e2-v3-source-year` and same-study E3 v24/SI v2 on `edwards-framework-e1-audit-implementation`; Paper11b v2 is the recovered Edwards half of the older combined v61/v66 lineage. The current standalone line is E3 v25/SI v3, pushed to the E3 branch at `3b3b87b6858d`; its updated claim crosswalk and computational-source audit are at `e3/PAPER11B_E3_V24_V67_CLAIM_CROSSWALK_2026-10-16.md` (refresh commit `9f3a3842795d`). Paper11b v2 and Paper11 v67/SI S15–S22 remain preserved historical/complementary editions; no duplicate Paper11b v3 was made.
+
+The lineage disposition separates the H1/H2 point-score gate from M2m's broader class clause; class demotion is not a point-gate failure. The realized-future-flux score is a conditional diagnostic, not a nowcast/forecast. The five-year result is specific to the tested J-17 rolling origins, not policy advice. Source audit: `paper11_forecasting_baselines_v67_src/work/edw` carries derived panels/results, while the full scripts and raw inputs are under root `wave_e_edwards/src/` and `wave_e_edwards/data/`; the broader protocol is `wave_e_edwards/protocol_pass2.md`, and `SPECIFICATION.md`/`SPECIFICATION_v2.md` record the separate M2m class disposition.
