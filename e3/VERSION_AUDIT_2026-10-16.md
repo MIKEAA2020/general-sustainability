@@ -1,0 +1,5 @@
+# PaperE3 v25 lineage audit (2026-10-16)
+
+- All six remote branches and both tags were scanned before numbering. The latest standalone E3 source was v24 with Supplement v2 at `e3/paperE3_edwards_forecast_ladder_v24.tex` and `e3/paperE3_supplement_v2.tex` on `edwards-framework-e1-audit-implementation` (tip `8cf4ab0c6515aeb9c7a3dd55fb1e67eff299283a`). Other refs contained only older E3 versions; no v25 or Supplement v3 was present.
+- E3 v25 and Supplement v3 are new sibling files on that same branch/path. V24 and SI v2 remain preserved. The v25/SI figure inputs are included under `e3/figs/`; the claim-level comparison with Paper11b v2 and Paper11 v67/SI S15--S22 is included in `PAPER11B_E3_V24_V67_CLAIM_CROSSWALK_2026-10-16.md`.
+- Static checks pass for both TeX documents: one document structure, balanced environments/braces, unique labels, and resolved internal references. All five referenced PNG assets are present. No TeX engine is installed in the workspace, so no v25/SI v3 PDF is claimed.
