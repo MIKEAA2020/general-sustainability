@@ -146,3 +146,10 @@ in the authoritative eight-paper scope.
 ## Paper10 v54 follow-up — 2026-10-16
 
 The v52 split result above remains a historical record. The latest source on `e2-v3-source-year` was v53, but its main-file header still said v52 (2026-09-30); v54 now corrects this mismatch in a new edition without overwriting v53. V54 updates the depletion-indicator taxonomy and G3P measurement description, pins phosphate arithmetic to USGS MCS 2026, and replaces the invalid large-`g tau` first-order reserve-crossover reading with the exact threshold. V53 and its SI are preserved. The v54 source package contains the selected source rows and a standard-library arithmetic verifier; a PDF is not included because no TeX engine was installed.
+
+
+---
+
+## Paper10b v2 lineage update — 2026-10-16
+
+The all-branch/tag review found no Paper10b edition after v1. The `paperE4_edwards_intervention_v16.tex` source is the same study lineage (same title, abstract, model, and results); Paper10b v1 is the later split edition and contributes the related-work section and verified references, so v2 starts from v1 rather than replacing it with E4 v16. V2 corrects the companion forecast paper's now-published status, labels its 7.55-ft realized-flux score as a conditional diagnostic, and restricts the 660-ft no-invariance statement to the fitted annual-mean map under the persistent drought floor. The actual Stage-I threshold is retained, but the simulated 20%-at-660 rule is explicitly identified as an annual-mean sketch, not the live 10-day CPM algorithm. No numerical results were recalculated.

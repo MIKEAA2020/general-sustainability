@@ -229,3 +229,10 @@ All-branch/tag scan found v53 as the latest Paper10 before numbering; no v54 exi
 ## Paper08 v49 — scoped two-operator synthesis (2026-10-16)
 
 The all-branch/tag scan found v48 as the latest Paper08; v48 is preserved. V49 keeps the merged continuous-delay and sampled-review study but corrects the abstract and cross-regime synthesis to distinguish a declared baseline parameterization from empirical calibration, to treat `tau` and `T_r` as distinct operators, and to state that the stock-agnostic model class does not establish cross-system transportability. Existing sensitivity results are made explicit in the abstract and the 42-stock and 32-system nulls are separated. The v49 supplementary companions carry forward v48 calculations without revision and include provenance notes. Static checks pass; no TeX engine was installed, so no compiled PDF is claimed.
+
+
+---
+
+## Paper10b v2 — J-17 scope and companion-citation update (2026-10-16)
+
+All-ref scan found Paper10b v1 as the latest split edition. The same study appears as `paperE4_edwards_intervention_v16.tex` in the LaTeX lineage; v1 is the later split copy and adds the related-work section and bibliography, so v2 is based on v1. V2 updates the published forecast-companion status (Zenodo 22552680), classifies the realized-flux 7.55-ft score as a conditional diagnostic rather than a forecast, and scopes the 660-ft result to the annual-mean map and persistent drought floor rather than the live 10-day CPM implementation. Source code, data, and dated protocol are stored under `comp/wave_e_edwards/`, not in a Paper10b-specific `push_src`. Static checks pass; no TeX engine was available and no PDF is claimed.
