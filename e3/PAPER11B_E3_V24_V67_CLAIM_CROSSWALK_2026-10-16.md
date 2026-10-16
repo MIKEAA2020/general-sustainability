@@ -2,7 +2,7 @@
 
 ## Lineage decision
 
-The refreshed all-branch/tag scan found no E3 v25 or Paper11b v3. The latest standalone Edwards forecasting manuscript is `e3/paperE3_edwards_forecast_ladder_v24.tex` with `e3/paperE3_supplement_v2.tex` on `origin/edwards-framework-e1-audit-implementation` (tip `8cf4ab0c6515aeb9c7a3dd55fb1e67eff299283a`). The older recovered `paper11b_edwards_forecast_v2.tex` on `origin/e2-v3-source-year` is the Edwards half of the v61/v66 combined lineage, not a later standalone edition. Paper11 v67 is a separately merged two-system article on `origin/main`/`origin/e2-v3-source-year`; its Edwards SI S15–S22 is a high-quality companion record, not a replacement for E3 v24 by filename alone. No paper-specific release asset was found in the already-audited releases. Continue the standalone line as E3 v25 on the branch/path where v24 lives; retain Paper11b v2 and Paper11 v67 unchanged.
+The all-branch/tag scan found E3 v24/SI v2 as the latest standalone Edwards forecasting edition on `origin/edwards-framework-e1-audit-implementation` and Paper11b v2 as the latest recovered split edition on `origin/e2-v3-source-year`; no E3 v25 existed before versioning. E3 v25 and SI v3 were then pushed to the same E3 branch/path at commit `3b3b87b6858d`; the current standalone line is now E3 v25/SI v3. Paper11b v2 is preserved as the earlier Edwards half of the v61/v66 combined lineage, not as a later standalone edition, so it is not duplicated as a new Paper11b version. Paper11 v67 remains a separately merged two-system article on `origin/main`/`origin/e2-v3-source-year`; its Edwards SI S15–S22 is a complementary record, not a replacement for E3. The audited release listing showed no paper-specific asset; the large workspace ZIP payloads were not unpacked.
 
 ## Claim map and disposition
 
@@ -25,3 +25,13 @@ The refreshed all-branch/tag scan found no E3 v25 or Paper11b v3. The latest sta
 ## Restoration decision
 
 The earlier E3 content that merits retention is the standalone statement of the aquifer question, the J-17-specific driver mechanism, the Comal-service diagnostic, pumpage scenario layer, and the full climate-window record. The latter three are not unique claims missing from v67: their useful quantitative detail is already preserved in SI S20–S22, with better scope limits than E3 v24’s main text. Therefore v25 should keep concise signposts in the main article and retain the detailed record in the supplement rather than promote those layers to independent policy findings. The distinct addition supported by the v67 crosswalk is the increment-error decomposition, restricted to a single-system derivation and application.
+
+## Source-package location audit
+
+The Paper11 v67 publication staging directory `push_src/work/edw` contains the derived panel and result tables, but not the complete analysis scripts or raw source inputs. In the repository tree, the corresponding packaged results are under `arena agent 1/agent workspace/papers/paper11_forecasting_baselines_v67_src/work/edw/`; that folder is not a complete executable archive. The authoritative working source is stored elsewhere at the repository root:
+
+- `wave_e_edwards/src/` contains the analysis scripts; `wave_e_edwards/data/` contains raw/source inputs and the source manifest.
+- `wave_e_edwards/protocol_pass2.md` is the broader frozen protocol. The separate M2m class disposition is documented in `wave_e_edwards/SPECIFICATION.md` and `wave_e_edwards/SPECIFICATION_v2.md`; it is not the same rule as passing H1/H2's point-score gate.
+- Ten local analysis-script hashes were matched against the remote copies during the source audit. The E3 main/SI path is the manuscript edition; it should not be treated as the sole location of the complete code/data record.
+
+**Disposition:** retain Paper11b v2 and Paper11 v67 unchanged as historical editions. E3 v25/SI v3 is the current standalone Edwards forecasting line; its claim status follows the crosswalk above, and the staged source/result bundle must be read together with the root `wave_e_edwards/` package for a complete computational audit.
