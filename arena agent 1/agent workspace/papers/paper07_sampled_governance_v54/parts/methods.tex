@@ -1,0 +1,85 @@
+\section{Materials and methods}\label{sec:methods}
+
+\subsection{Sample-and-hold model}\label{sec:model}
+
+Let review times be \(t_n=n\Tr\), where \(\Tr\) is the time between opportunities to revise a management command. Raw observations and decision opportunities need not share a cadence. The seven time objects used here are kept distinct (Table~\ref{tab:clocks}).
+
+\begin{table}[htbp]
+\centering\small
+\caption{Institutional and ecological time objects. The quantities are not collapsed into one governance lag unless the data cannot resolve them and an aggregation rule is stated.}
+\label{tab:clocks}
+\begin{tabularx}{\linewidth}{@{}lX@{}}
+\toprule
+Object & Definition \\
+\midrule
+Observation interval \(T_{\rm obs}\) & Time between raw measurements. \\
+Assessment interval \(T_{\rm assess}\) & Time between formal state estimates. \\
+Review interval \(\Tr\) & Time between opportunities to change the command. \\
+Decision lag \(\tau_{\rm dec}\) & Assessment completion to formal decision. \\
+Deployment lag \(\tau_{\rm dep}\) & Decision to implemented change in extraction pressure. \\
+Ecological response lag \(\tau_{\rm eco}\) & Implementation to detectable ecological response. \\
+Memory timescale \(\tau_m\) & Relaxation time of a filtered institutional signal; not a discrete delay. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+In fisheries language, the controller is a harvest-control rule, its command is the catch or effort limit, the review interval is the advice cycle, and the hold is the period between revisions. Consider a resource stock \(N(t)\), a nonnegative institutional deficit signal \(Z(t)\), and effort \(E_n\) held fixed on \([t_n,t_{n+1})\). The plant and signal evolve as
+\begin{align}
+\dot N(t)&=rN(t)\left(1-\frac{N(t)}{K}\right)-qE_nN(t),\label{eq:plant}\\
+\dot Z(t)&=\frac{\Phi_k\!\left(qE_nN(t)-S(N(t))\right)-Z(t)}{\tau_m},\qquad
+S(N)=rN\left(1-\frac{N}{K}\right),\quad \tau_m>0.\label{eq:signal}
+\end{align}
+The signal map is a shifted, floored softplus,
+\[
+\Phi_k(s)=\max\!\left\{0,\frac{1}{k}\log(1+e^{ks})-\frac{\log 2}{k}+\delta\right\},
+\qquad \delta=\frac{\log 2}{10},\quad k=10.
+\]
+At each review the contemporaneous end-of-interval assessment \(\widehat Z_{n+1}=Z(t_{n+1}^{-})\) is read. The mobilising effort law below defines a controller rate, and two command-update operators are compared:
+\begin{align}
+E_{n+1}^{\rm exp}&=\Pi_{[0,E_{\max}]}\!\left(\varphi_{\Tr}^{F_B}(E_n,\widehat Z_{n+1})\right),\label{eq:review-exp}\\
+E_{n+1}^{\rm Euler}&=\Pi_{[0,E_{\max}]}\!\left(E_n+\Tr F_B(E_n,\widehat Z_{n+1})\right),\label{eq:review}\\
+F_B(E,Z)&=\left(1-\frac{E}{E_{\max}}\right)
+\left[\eta E\left(\frac{Z}{\Delta_{\rm ref}}-\frac{E}{E_{\max}}\right)
++\delta_0\frac{Z}{Z_{\rm ref}+Z}\right].\label{eq:effort}
+\end{align}
+Here \(\varphi_T^{F_B}(E,\widehat Z)\) is the time-\(T\) flow of \(d\mathcal E/ds=F_B(\mathcal E,\widehat Z)\), initialized at \(\mathcal E(0)=E\), with the endpoint assessment held fixed during the controller update. Thus the exponential update exactly integrates the frozen-assessment controller ODE; it is not an exact solution of the coupled ecological-governance system. The Euler update is its one-step forward-Euler alternative. In both cases, the plant and signal have first evolved for \(\Tr\) with effort \(E_n\) held constant. The law is a declared illustrative controller, not a generic harvest-control rule. Since the command update uses \(\Tr\), changing the review interval changes both the hold duration and the controller-update horizon. The same-plant protective comparator is
+\[
+F_B^{\rm prot}(E,Z)=\left(1-\frac{E}{E_{\max}}\right)\eta_p\bigl(E_{\rm cap}(Z)-E\bigr),\qquad
+E_{\rm cap}(Z)=E_0\frac{Z_{\rm ref}}{Z_{\rm ref}+Z},
+\]
+with \(\eta_p=\eta\) and \(E_0=E^*(Z_{\rm ref}+\delta)/Z_{\rm ref}\), so the interior rest coincides with that of the extractive rule. Projection, flow, and update ordering are fixed as written; reversing the order defines another hybrid system.
+
+For the local stability calculation, let \(e_n=E_n-E^*\), \(\hat z_{n+1}=\widehat Z_{n+1}-Z^*\), and \(C_E=\partial_EF_B(E^*,Z^*)\), \(C_Z=\partial_ZF_B(E^*,Z^*)\). Linearizing the exact frozen-assessment controller flow and the Euler update gives, respectively,
+\begin{align}
+e_{n+1}^{\rm exp}&=e^{C_E\Tr}e_n+\frac{e^{C_E\Tr}-1}{C_E}C_Z\hat z_{n+1},\\
+e_{n+1}^{\rm Euler}&=e_n+\Tr\left(C_Ee_n+C_Z\hat z_{n+1}\right).
+\end{align}
+The quotient has its continuous limit \(\Tr\) when \(C_E=0\). In the exponential case this is the exact local flow of \(\dot e=C_Ee+C_Z\hat z_{n+1}\) with the endpoint assessment fixed; it is not the exact nonlinear controller flow written in closed form. The full monodromy composes this post-flow command update with the held-plant flow, so the dependence of \(\hat z_{n+1}\) on the pre-review state is included. The review map is denoted \(\mathcal P_{\Tr}\), with monodromy \(D\mathcal P_{\Tr}(X^*)\). Local asymptotic stability requires all its eigenvalues to lie inside the unit disk.
+
+The illustrative numerical baseline vector is:
+\[
+(r,K,q,\eta,E_{\max})=(0.02,100,0.001,0.914,30),\qquad
+(\delta_0,Z_{\rm ref},\Delta_{\rm ref},\tau_m)=(0.01,1,1,5),
+\]
+in model units, with \(Z^*=\delta\). It gives \((N^*,Z^*,E^*)=(89.55188,0.069315,2.08962)\) and \(F^*=qE^*=0.002090\,\mathrm{yr}^{-1}\). The institutional coefficients are not identified from field data; \(\eta=0.914\) is an inherited illustrative baseline. The full vector, equilibrium derivation, gains, and stage-map conventions are in Supplementary S8 and S11.
+
+\subsection{Structural results and numerical protocol}\label{sec:structural-methods}
+
+The admissible state set is \(N\geq0\), \(Z\geq0\), and \(E\in[0,E_{\max}]\). The signal map is nonnegative and effort commands are projected onto the admissible interval. Supplementary Proposition S2.1 establishes forward invariance for held or convex-interpolated effort. Separately, if the continuous vector field is \(C^1\) with bounded derivative on a compact neighborhood of compared trajectories, assessment is contemporaneous, projection is locally inactive, and there are no additional queues or stochastic updates, the flow-then-update map has local one-step defect \(O(\Tr^2)\). Discrete Gronwall then gives uniform \(O(\Tr)\) error on each fixed finite horizon as \(\Tr\to0\). This is a finite-horizon approximation statement, not a finite-interval stability theorem.
+
+For the logistic core, the linearised held-flow matrix is combined with the exponential frozen-assessment or Euler review update; its spectral radius \(\Rho(\Tr)\) is scanned over \([0.2,200]\) years on a 200,001-point grid, with bisection refinement at sign changes. The crossing scan was re-executed against the deposited campaign and agrees with the archived crossing table. A separate high-resolution sensitivity implementation evaluates the six-parameter joint boxes on 20,001 review-interval points. Numerical scans are not presented as analytic global stability theorems. A finite-difference audit of the full nonlinear plant plus frozen-assessment controller flow reproduces the local Jacobian and crossing; details and limitations are given in Supplementary S11. No invariant-circle continuation was completed.
+
+A second plant, a delayed-recruitment two-stage map, is included only as a distinct structural comparison. The archived trajectory-classified windows are provisional because their original solver configuration and histories are not attached. The pre-registered stage-map reconstruction is a newly specified object: its comparison with those windows is a consistency check, not a validation. The state dimension, plant, and effort scale differ from the logistic core, so cross-plant response regions do not isolate an operator effect; that contrast is made only on the common logistic plant.
+
+\subsection{Empirical and case procedures}\label{sec:empirical-methods}
+
+\paragraph{Stock screen and power.} The input is the RAM Legacy Stock Assessment Database v4.66. Of 58 forage-fish stock series, 42 have at least 20 non-missing annual spawning-stock-biomass (SSB) points (range 20--77 years). The analysis linearly detrends each SSB series, computes a unit-total-power Lomb--Scargle periodogram on 1,500 frequencies, and integrates power in bands A (2.5--5 years) and B (5--9 years). For each stock and band, an AR(1) null is fitted to the detrended series and simulated 200 times with seed 7; empirical \(p=(k+1)/201\) values are adjusted by Benjamini--Hochberg over the 84 stock-by-band tests. These are SSB periodicity diagnostics, not controller-sign tests. The annual-review label and the review-interval proxies are analyst assignments, not database fields or per-stock primary-verified classifications. Sensitivity variants, end-point trims, and alternative bands are reported in Supplementary S9.
+
+The separate \(\Tr\)-proxy test uses the group-documented coding in the recovered script: seven Peru/Chile stocks receive \(\Tr=0.5\) years (annual quota with in-season responsive closures), and 35 annual-TAC proxies receive \(\Tr=1\) year. The 4-year anchovy and 8-year sprat response windows are both above these two proxy values. Thus the cohort contains no documented multi-year responsive review interval with which to estimate a window-approach gradient. The proxy assignments are coarse and not primary-verified; the seven short-interval cases are geographically concentrated, which limits any cross-sectional interpretation.
+
+A separate injected-signal exercise runs the committed sampled-governance effort model with multiplicative lognormal observation noise. The canonical white-noise table comprises 17 cells, 50 trials per cell, trial seeds 0--49, and a 120-replicate seed-7 AR(1) detection null. It quantifies conditional detection under the specified simulation grid; it is not a per-stock minimum-power guarantee.
+
+\paragraph{Structured case search.} The 32-system inventory is curated rather than systematic. Each candidate is assessed against four requirements: (i) responsive governance rather than a one-time cap or ban; (ii) an independently dateable response or implementation lag; (iii) no competing ecological or structural driver supported for the same outcome; and (iv) individual-resource or station-level data. The evidential rule for (iii) is comparative: institutional feedback must outperform prespecified alternatives on held-out prediction, phase order, or intervention response. The search log and full row-level dispositions are in Supplementary S4.
+
+\paragraph{Northern cod.} The northern cod (NAFO 2J3KL) record is treated as an assessment-based descriptive case. The strong-Allee surplus equation and its phase-line result are model-class diagnostics, not a fitted explanation of the stock trajectory. Assessment-table values from DFO CSAS SAR 2016/026 are used to distinguish the 1991--1995 crash window from the later non-recovery record. Mortality allocation differs across assessment formulations, and the constrained-mortality quantities are not reproduced here; they remain hypotheses and open reconstruction requirements (Supplementary S14.2).
+

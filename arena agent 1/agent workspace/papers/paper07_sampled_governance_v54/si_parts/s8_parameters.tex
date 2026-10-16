@@ -1,0 +1,48 @@
+\section{Model parameters and reconstruction conventions}\label{si:parameters}
+
+\subsection{Illustrative logistic hold-map baseline}
+\begin{table}[htbp]
+\centering\small
+\caption{Logistic-core and controller parameter vector. Values are model conventions; no field calibration is claimed.}
+\label{tab:logistic-parameters}
+\begin{tabularx}{\linewidth}{@{}l l r X@{}}
+\toprule Symbol & Meaning & Baseline & Status / units \\
+\midrule
+\(r\) & Intrinsic growth rate & 0.020 & \(\mathrm{yr}^{-1}\); illustrative \\
+\(K\) & Logistic carrying capacity & 100 & Model abundance units; illustrative \\
+\(q\) & Catchability & 0.001 & Model effort-to-mortality scale \\
+\(\eta\) & Mobilising effort-law gain & 0.914 & Inherited Candidate-A convention; uncalibrated \\
+\(E_{\max}\) & Upper effort bound & 30 & Model effort units \\
+\(\delta_0\) & Effort-law offset gain & 0.010 & Distinct from softplus shift \(\delta\) \\
+\(Z_{\rm ref}\) & Signal reference scale & 1 & Signal units \\
+\(\Delta_{\rm ref}\) & Deficit reference scale & 1 & Signal units \\
+\(\tau_m\) & Signal-memory timescale & 5 & Years \\
+\(k\) & Softplus sharpness & 10 & Signal-map units inverse \\
+\(\delta\) & Shift in floored softplus & \(\log(2)/10=0.0693147\) & \(Z^*=\delta\) at zero deficit \\
+\(\eta_p\) & Protective gain & \(\eta\) & Same numerical gain as mobilising baseline \\
+\(E_0\) & Protective target scale & \(E^*(Z_{\rm ref}+\delta)/Z_{\rm ref}\) & Chosen to share the interior rest \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The equilibrium is \(N^*=89.5518830\), \(Z^*=0.0693147181\), \(E^*=2.08962340\), and \(F^*=qE^*=0.00208962340\,\mathrm{yr}^{-1}\). The exploitation ratio is \(qE^*/r=0.10448117\). The coefficients are not posterior estimates or quantities extracted from a specific stock. In particular, comparisons of model \(F^*\) with empirical assessed \(F\) are scale-placement diagnostics only; model effort units and stock-specific reference points are not jointly calibrated.
+
+At the interior equilibrium, the local effort-law gains from the independent core are \((C_E,C_Z)_{\rm mobilising}=(-0.05951801,1.78501871)\) and \((C_E,C_Z)_{\rm protective}=(-0.85033614,-1.66170190)\). The exact machine-precision record is in \texttt{\detokenize{work/results.json}}.
+
+\subsection{Stage-structured reconstruction parameterization}
+\begin{table}[htbp]
+\centering\small
+\caption{Frozen ecological values in the preregistered stage reconstruction. The scale \(A_0=100\) is a convention, not a fitted abundance.}
+\label{tab:stage-parameters}
+\begin{tabularx}{\linewidth}{@{}l r r r X@{}}
+\toprule Class & \(M\;(\mathrm{yr}^{-1})\) & Recruitment delay \(\tau\) (yr) & Steepness \(h\) & Source / status \\
+\midrule
+Anchovy & 0.90 & 1 & 0.75 & Pauly and Tsukayama (1987); IFOP range; default steepness convention \\
+Sprat & 0.40 & 2 & 0.75 & ICES sprat keyrun / maturity ogive; default steepness convention \\
+Cod & 0.20 & 5 & 0.75 & ICES fixed-\(M\) convention; DFO northern-cod maturity; default steepness convention \\
+Slow stock & 0.045 & 25 & 0.75 & Branch (2001) orange-roughy range; default steepness convention \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+For this reconstruction, \(s_A=s_J=e^{-M}\), \(A_0=100\), and Beverton--Holt recruitment parameters are \(c=4h/(1-h)\), \(\beta=(c-1)/A_0\), and \(\alpha=c(1-s_A)/s_J\). Primary catchability is \(q=0.001\), with a declared sensitivity at \(q=0.1\); controller parameters are carried over unchanged from the logistic core. A separate steepness sensitivity uses \(h\in\{0.6,0.9\}\). No stage parameter was tuned against archived response windows.

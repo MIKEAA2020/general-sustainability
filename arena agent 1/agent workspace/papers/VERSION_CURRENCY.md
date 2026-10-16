@@ -195,3 +195,16 @@ This section supersedes the historical Paper07 line above for current version nu
 - The repository has no Paper07-specific tag or release. This v53 update continues the existing `e2-v3-source-year` branch lineage; it does not move or renumber prior editions.
 
 The detailed pre-publication branch/tag/release and split/merge audit, including hashes of the preserved v52/v48 artifacts, is retained in `paper07_sampled_governance_v53/VERSION_AUDIT_2026-10-16.md`.
+
+
+---
+
+## Paper07 v54 and the v52-to-v53 coverage crosswalk — 2026-10-16
+
+A fresh check of all six remote branches, both tags, both GitHub prereleases, tree metadata, and this version-currency file was completed before assigning v54. The latest Paper07 before the decision was v53 at `556240fda8498d11efa8921b7aa5d469da2e9140` on `e2-v3-source-year`; no v54 or higher existed in any checked ref. The parallel Paper08 v48 remains unchanged.
+
+Paper07 v54 is now a new standalone continuation at `paper07_sampled_governance_v54/` on `e2-v3-source-year`. It does not overwrite v52 or v53, alter Paper08 v48, or create a tag/release. The new version corrects stale Supplementary pointers, distinguishes the archived crossing-only sensitivity table from its full CSV record, restores a general AI-use disclosure, and adds bounded modelling implications rather than the unsupported policy prescriptions removed from v52.
+
+`PAPER07_V52_TO_V53_COVERAGE_CROSSWALK.md` and the v54 package's `CROSSWALK_V52_TO_V53.md` record the content map. The v52 main PDF is 36 pages, but its final pages and source refer to a separately deposited Supplementary file; the source's closing inventory says S1–S10 while body citations extend through S13.3. No such SI file or the promised dimensionless identifiability chart was found in the audited repository refs. Therefore the crosswalk is complete for recovered material, not a claim of full equivalence to the missing historical SI.
+
+The detailed fresh audit, including all branch tips, tag/release status, and the preservation decision, is in `paper07_sampled_governance_v54/VERSION_AUDIT_2026-10-16.md`.

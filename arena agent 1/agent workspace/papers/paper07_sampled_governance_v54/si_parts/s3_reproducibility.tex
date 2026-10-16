@@ -1,0 +1,48 @@
+\section{Data provenance, coding rules, and reproducibility register}\label{si:repro}
+
+\subsection{Input and record inventory}
+
+\begin{longtable}{@{}p{0.22\linewidth}p{0.25\linewidth}p{0.22\linewidth}p{0.24\linewidth}@{}}
+\caption{Primary analysis inputs and status. Repository-relative paths are given in the v53 source bundle.}\label{tab:inputs}\\
+\toprule
+Object & Source / version & Local file family & Use and limitation \\
+\midrule
+\endfirsthead
+\toprule
+Object & Source / version & Local file family & Use and limitation \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+Forage-fish SSB & RAM Legacy Stock Assessment Database v4.66 & \path{src/p7_empirical/ram_target_stocks.csv} and screen outputs & 42-stock primary screen; the extracted series and derived summary are preserved. \\
+ADH cohort & RAM v4.66 and archived v4.44 cohorts & \path{src/p7_empirical/recovered/ram_adh_fisheries/} & Local recomputation of buffer-years and stock/group summary; version differences retained. \\
+Fishing mortality & RAM fisheries-ADH input plus cohort records & \path{src/p7_empirical/recovered/ram_adh_fisheries/} & F placement and quartile verification; one stock does not match the last-F record. \\
+Northern cod & DFO CSAS SAR 2016/026 assessment table & \path{src/p7_empirical/recovered/ices_cod_27_5a.csv} & SSB and reported \(M\) descriptive plot; not a raw mortality-decomposition archive. \\
+Stage-structured plant & Archived parameter and trajectory records & \path{src/p7_empirical/recovered/}; \path{src/results/} & Archived windows and new reconstruction have distinct status. \\
+Logistic sensitivity & Archived one-at-a-time battery & \path{src/p7_empirical/recovered/sens_table.csv} and log & Wider \(\pm5\%/\pm10\%\) record; distinct from the v53 \(\pm2\%\) rerun. \\
+Case search & Curated primary-source query record & \path{src/p7_empirical/u5_case_table.csv}, \path{src/p7_empirical/u5_query_log.md} & 32 rows; not an exhaustive review. \\
+Power grid & Archived run log plus two-cell follow-up & \path{work/power_table_white_noise.csv/.json} & 17-cell table assembled; complete simulation driver run did not finish. \\
+\end{longtable}
+
+\subsection{Reproduction entry points}
+
+The source bundle README provides command lines and expected outputs. Principal entry points are:
+\begin{itemize}
+\item \texttt{\detokenize{work/p07_core.py --grid 4001}}: logistic fixed point, local multipliers, crossing scans, the v53 \(\pm2\%\) one-at-a-time sensitivity, and the baseline record; use \texttt{\detokenize{--joint-only --grid 20001}} for the full 128-corner rerun;
+\item \texttt{\detokenize{src/p7_empirical/ram_crosssection.py}} and \texttt{\detokenize{src/p7_empirical/tr_ranked_test.py}}: stock-level spectra and the \(\Tr\)-ranked test; run from \texttt{\detokenize{src/p7_empirical/}} so the relative RAM input path resolves;
+\item \texttt{\detokenize{work/screen_battery_v53.py}}: screen sensitivity battery; run from \texttt{\detokenize{src/p7_empirical/}};
+\item \texttt{\detokenize{work/adh_verify_v53.py}} and \texttt{\detokenize{work/qcal_fplacement_v53.py}}: local ADH, F-placement, and calibration checks using the recovered cohort inputs;
+\item \texttt{\detokenize{work/nonlinear_flow_check_v53.py}}: full nonlinear-plant/controller-flow finite-difference check against the local monodromy;
+\item \texttt{\detokenize{work/make_figures_v53.py}}: the joint sensitivity figure from the retained full-grid JSON;
+\item \texttt{\detokenize{work/make_rho_figure_v53.py}}: the baseline multiplier plot with explicit exponential-update labels;
+\item \texttt{\detokenize{work/make_supplement_tables.py}}: per-stock, case, power, comparator, and F-placement LaTeX tables.
+\end{itemize}
+Exact working directories, dependency versions, seeds, and stdout/log files are retained in the source bundle rather than inferred from this list.
+
+\subsection{Local ADH and fishing-mortality verification}
+
+Recovered cohort inputs resolved a previous missing-file issue. The ADH script was rerun locally against the recovered files. Recomputed ADH values agree with deposited values to numerical precision, and archived descriptives and cohort/group summaries reproduce. A fresh 20,000-draw seed-11 resampling run placed 2.33\% of broader-pool median draws below the archived cohort median of 1.7902 buffer-years; the archived run gives 2.12\%. This checks the resampling calculation and shows a similar tail fraction, not a calibrated probability that any fishery is unsustainable.
+
+The F-calibration and placement script reproduces the 42-stock screen cohort. For 43 intersected stocks, fisheries-ADH \(F\) agrees with last-\(F\) for 42; \texttt{\detokenize{SPRBLKGSA29}} is the exception. For the broader pool of 454 stocks, the F quartiles and all 13 taxonomic-group quartiles match the archived summaries. Among 38 screen-cohort stocks with F series, the mean of stock-level F medians is 0.3663 (IQR 0.2701--0.7243); broader-pool \(F_{\rm now}\) has median 0.2143 (IQR 0.0800--0.4639). These are descriptive calibration and placement checks, not proof that F or an ADH buffer is a valid proxy for institutional pressure.
+
+

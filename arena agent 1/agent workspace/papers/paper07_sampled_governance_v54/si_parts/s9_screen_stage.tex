@@ -1,0 +1,111 @@
+\section{Screen sensitivity and stage-map reconstruction}\label{si:screen-stage}
+
+\subsection{42-stock baseline and eleven-variant sensitivity battery}
+
+The baseline cohort contains 42 of 58 forage-fish series with at least 20 non-missing annual SSB observations. SSB is linearly detrended; normalized Lomb--Scargle power is integrated in bands A (2.5--5 years) and B (5--9 years). Each stock-specific AR(1) null uses 200 simulations and seed 7; the empirical tail probability is \((k+1)/201\). Benjamini--Hochberg correction is applied to all 84 stock-by-band cells within each specification. In the baseline run, the minimum raw p-value is 0.0448 (PANCHNCHSP, band B) and the adjusted rejection count is zero.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Eleven registered/recovered sensitivity specifications for the 42-stock screen. All have 84 tests and zero BH rejections; the minimum nominal p-value is reported to show resolution, not to select a winner.}
+\label{tab:screen-battery}
+\begin{tabularx}{\linewidth}{@{}lXrr@{}}
+\toprule Specification & Null / preprocessing & Minimum nominal \(p\) & BH rejections \\
+\midrule
+Base & AR(1) surrogates; linear detrend & 0.0448 & 0 \\
+ARMA & ARMA(1,1) surrogate; linear detrend & 0.0697 & 0 \\
+Trend-stationary & Trend-stationary series; no detrending step & 0.0299 & 0 \\
+Block 5 & Circular block bootstrap, block length 5 & 0.0547 & 0 \\
+Block 10 & Circular block bootstrap, block length 10 & 0.1692 & 0 \\
+Block 15 & Circular block bootstrap, block length 15 & 0.2239 & 0 \\
+HP cycle & Hodrick--Prescott cycle plus AR(1) surrogate & 0.0100 & 0 \\
+First difference & First-difference preprocessing plus AR(1) & 0.0100 & 0 \\
+Regime median & Regime-median break surrogate & 0.0547 & 0 \\
+Regime low & Regime-tercile-1 break surrogate & 0.0498 & 0 \\
+Regime up & Regime-tercile-2 break surrogate & 0.0746 & 0 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The HP and first-difference variants have minimum attainable nominal p-values at 0.0100 at the retained simulation resolution; none of their cells survives BH correction. The result is a stable adjusted-zero decision under the specified battery, not a universal absence claim. The variant family includes distinct nulls and preprocessing, so it should not be interpreted as eleven independent replications.
+
+An exploratory alternative-band check also returns zero BH-significant cells for a broad 2--10-year band and cadence bands 1--3, 3--8, and 8--20 years. An effort-proxy band of 8--80 years is unresolvable for every stock because no eligible series spans three times the upper period. These alternative-band outputs are screening checks, not preregistered tests of the institution-specific mechanism. The full per-stock SSB tables, q-values, null thresholds, and scripts are in the source bundle.
+
+\subsection{Archived stage-response regions and separate \texorpdfstring{\(\tau_0\)}{tau0} decomposition}\label{si:legacy-stage}
+
+The following stage-model response regions are transcribed from the earlier project record. Their original generating computation, solver configuration, and initial histories are unavailable; they are therefore archived and provisional, not re-executed v53 findings.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Archived exploratory stage-map classifications. They are reported at their original status and are not validated by the new reconstruction.}
+\label{tab:legacy-stage-windows}
+\begin{tabularx}{\linewidth}{@{}lXl@{}}
+\toprule Class & Archived trajectory classification & Status / scope \\
+\midrule
+Anchovy & Persistent tail oscillation near \(\Tr=3\)--4 years; weak response at 2 years; annual-review trajectories converge across tested response values. & Solver and histories not attached. \\
+Sprat & Persistent tail oscillation near \(\Tr=6\)--12 years. & Solver and histories not attached. \\
+Cod & Convergence for every tested \(\Tr\in[1,20]\) years. & Tested-grid record only; not a theorem for all histories. \\
+Slow stock & For \(r\in(0.01,0.05)\,\mathrm{yr}^{-1}\), oscillation on part of the grid below about 20--30 years and convergence at longer intervals, with transition brackets about 30--50 years; archived cycle periods about 250--360 years. & Extremely long period; most governance records cannot resolve repeated cycles. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The same archive reports observable-specific dominant peaks near 4 years in anchovy biomass and 12 years in effort, and near 8 years in sprat biomass and 60 years in effort. Components of one stationary periodic orbit cannot have different fundamental periods; harmonics, modulation, transient spectral content, and measurement windows remain unresolved. Archived amplitudes are described only as percent-scale biomass and order-one effort excursions because the record does not say whether amplitude means half-range or peak-to-peak. The archive also reports robustness of the anchovy-class region to 30\% multiplicative assessment error, but the generating record is not available for independent verification.
+
+A separate stage-delay diagnostic treats \(g\) as maturation delay and \(\tau\) as an institutional delay. It distinguishes raw characteristic-root crossings from crossings at parameter points classified as stable when \(\tau=0\). The table below is transcribed from \texttt{\detokenize{stage_tau0.log}}; \(r\)-windows are finite-grid root-search summaries, and fish-range counts include only scanned \(r\geq0.2\,\mathrm{yr}^{-1}\). This is not the later preregistered two-stage Beverton--Holt reconstruction and is not a cross-operator causal comparison.
+
+\begin{landscape}\small
+\begin{longtable}{@{}r r p{3.2cm}p{3.2cm}r r@{}}
+\caption{Archived \(\tau=0\) decomposition by maturation delay \(g\) and controller gain \(\eta\).}\label{tab:tau0-decomp}\\
+\toprule \(\eta\) & \(g\) (yr) & Raw \(r\)-window & \(\tau=0\)-stable-only window & Raw fish-range counts & Institutional-only counts \\
+\midrule\endfirsthead
+\toprule \(\eta\) & \(g\) (yr) & Raw \(r\)-window & \(\tau=0\)-stable-only window & Raw fish-range counts & Institutional-only counts \\
+\midrule\endhead
+\bottomrule\endfoot
+0.914 & 0.5 & [0.0079, 0.0225] & Empty & 0 & 0 \\
+0.914 & 1 & [0.0079, 1.5719] & [1.5719, 1.5719] & 1 & 1 \\
+0.914 & 2 & [0.0079, 0.8105] & [0.7865, 0.7865] & 2 & 1 \\
+0.914 & 5 & [0.0076, 0.3705] & [0.2660, 0.3285] & 12 & 8 \\
+0.914 & 10 & [0.0072, 0.7865] & [0.0873, 0.7865] & 6 & 1 \\
+0.914 & 20 & [0.0068, 0.7185] & Empty & 9 & 0 \\
+3.0 & 0.5 & [0.0068, 0.0646] & [0.0627, 0.0646] & 0 & 0 \\
+3.0 & 1 & [0.0068, 1.5719] & [0.0686, 1.5719] & 1 & 1 \\
+3.0 & 2 & [0.0068, 0.8608] & [0.0798, 0.8105] & 7 & 5 \\
+3.0 & 5 & [0.0066, 1.5719] & [1.5719, 1.5719] & 29 & 1 \\
+3.0 & 10 & [0.0064, 1.4361] & [0.3093, 1.4361] & 23 & 9 \\
+3.0 & 20 & [0.0062, 1.0628] & [0.3285, 0.4574] & 32 & 12 \\
+\end{longtable}
+\end{landscape}
+
+The archived log's nonlinear RK4 check does not independently certify the claimed decomposition: its printed rightmost-root values are positive even for entries labelled as cases where \(\tau=0\) ``should be stable.'' This internal inconsistency is unresolved; the decomposition table is retained as a provisional finite-grid diagnostic, not as a verified separation of biological cohort resonance from institutional delay. The full source log and the root-search script are included for audit.
+
+\subsection{Pre-registered two-stage reconstruction}
+
+The original stage-map generating code, solver settings, and initial histories were not found in the repository. To avoid inventing a reconstruction as though it were the original object, a plan was frozen on 2026-09-01 before simulation. It specifies a new annual two-stage Beverton--Holt delayed-recruitment map with adults \(A\), juveniles \(J\), a recruitment lag, filtered signal \(Z\), and held effort \(E\). Ecological parameter values are in Table~\ref{tab:stage-parameters}; the exact pre-registration, code, data tables, and logs are retained. No parameter was fitted to archived response windows.
+
+The trajectory rule uses 2,000 review steps and the last 500 as the tail. Persistent oscillation is relative tail SD of adult abundance \(\geq2\%\), weak response is 0.1--2\%, and convergence is below 0.1\%. A separate finite integer grid records the local multiplier spectral radius. These two records are not interchangeable: a finite simulated trajectory classification and a local multiplier scan answer different questions, and the discrete stage map is not the three-state logistic continuous-flow map.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Frozen comparison criteria and post-run verdicts for the new stage-map reconstruction. ``Match'' is agreement with the stated criterion on its declared grid; it does not validate the unavailable legacy solver.}
+\label{tab:stage-reconstruction-verdict}
+\begin{tabularx}{\linewidth}{@{}lXl@{}}
+\toprule Class & Legacy criterion & Reconstruction verdict \\
+\midrule
+Anchovy & Persistent oscillation at \(\Tr=3\)--4 & Mismatch \\
+Anchovy & Weak response at \(\Tr=2\), below the 3--4 window & Mismatch \\
+Anchovy & Convergence at annual review & Match \\
+Sprat & Persistent oscillation at \(\Tr=6\)--12 & Mismatch \\
+Cod & Convergence for every integer \(\Tr\in[1,20]\) & Match \\
+Slow stock & Oscillation below roughly 20--30 years; convergence around 30--50 years & Match \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The mismatch is reported without retuning. The archived window remains provisional, and a reconstruction mismatch does not adjudicate the legacy numbers because their generating object is unavailable. Full trajectory samples are \texttt{\detokenize{results/p5_stage_trajectories.csv}}; equilibrium and multiplier records are in the adjacent \texttt{\detokenize{results/}} files.
+
+The local multiplier record at primary \(q=0.001\) has annual-review radii 0.8948 (anchovy), 0.9231 (sprat), 0.9560 (cod), and 0.9939 (slow stock). On the integer \(\Tr=1\)--50 grid, the extractive multiplier crosses above unity between years 33 and 34 for anchovy and sprat, and between 34 and 35 for cod; the slow-stock multiplier remains below unity throughout. The protective channel remains stable on the integer grid. These linear records are distinct from the finite-horizon trajectory classifier: at \(\Tr=10\), the slow-stock trajectory is labelled persistent oscillation despite a stable local multiplier, leaving bistability, a non-decayed transient, or threshold sensitivity unresolved.
+
+At the declared sensitivity \(q=0.1\), the extractive annual multipliers exceed one for all four classes (\(\rho(1)=2.229,2.128,1.904,1.292\), respectively). On the integer grid, anchovy is below one at 19--35 years, sprat at 23--36, cod at 32--41, and slow stock remains above one; the protective channel is stable throughout. Crossings are bracketed by integer intervals, not refined to a continuous-time boundary. A declared steepness sensitivity \(h=0.6,0.9\) is retained in \texttt{\detokenize{p5_stage_h_sensitivity.csv}}; it is a local stability diagnostic, not the trajectory-classification criterion.
+
+Under 30\% multiplicative assessment error, anchovy and sprat remain converged at their tested legacy-window cells (maximum relative tail SD 0.00086). Cod is converged at \(\Tr=1,5\) and weak at 10,20 years (maximum relative tail SD 0.00249). The slow-stock cells are converged at 5 years, weak at 10 and 20, and exceed the 2\% persistence threshold at 30--50 years (0.02126--0.02645). Because the trajectory threshold is not noise-adjusted, these long-horizon labels may reflect noise-driven variance rather than a persistent deterministic oscillation. These checks remain specific to the reconstructed plant and do not validate the archived windows.
+
