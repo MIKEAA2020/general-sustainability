@@ -151,3 +151,10 @@ evidence.
 
 Papers 10 (depletion ledgers, 43,147 w — typology needs a measurable consequence) and
 11 (forecasting baselines, 39,704 w) remain.
+
+
+---
+
+## Part II v5 qualification — 2026-10-16
+
+The “Prior art — Part II (v1)” section above is retained as a historical record of the original framing; its unconditional “harvest-free contraction” wording is superseded by Paper09b v5. DFO 2025 Table 1 reports total landings, not all fishing removals, and the assessed SSB series is a separate model output. V5 defines an unknown nonnegative `kappa` to SSB-equivalent removals, displays both `C_t` and `C_{t+1}` assignments, and reports only conditional thresholds under the two stated accounting placements. No biological or causal conclusion follows without the conversion and timing assumptions. V4 remains preserved; v5 is a new edition on `e2-v3-source-year`.

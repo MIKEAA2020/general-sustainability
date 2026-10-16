@@ -208,3 +208,10 @@ Paper07 v54 is now a new standalone continuation at `paper07_sampled_governance_
 `PAPER07_V52_TO_V53_COVERAGE_CROSSWALK.md` and the v54 package's `CROSSWALK_V52_TO_V53.md` record the content map. The v52 main PDF is 36 pages, but its final pages and source refer to a separately deposited Supplementary file; the source's closing inventory says S1–S10 while body citations extend through S13.3. No such SI file or the promised dimensionless identifiability chart was found in the audited repository refs. Therefore the crosswalk is complete for recovered material, not a claim of full equivalence to the missing historical SI.
 
 The detailed fresh audit, including all branch tips, tag/release status, and the preservation decision, is in `paper07_sampled_governance_v54/VERSION_AUDIT_2026-10-16.md`.
+
+
+---
+
+## Paper09b v5 — conditional accounting revision (2026-10-16)
+
+A fresh all-branch/tag scan found Paper09b v4 as the latest existing edition on `e2-v3-source-year`; no higher Paper09b edition was present on the checked refs, and the previously checked release inventory contained no paper-specific Paper09b asset. The v4 source and PDF are preserved. The new v5 is a separate path on the same branch. It distinguishes assessed SSB from DFO 2025 Table 1 reported total landings, carries unknown nonnegative `kappa`, shows both adjacent-year assignments, and limits contraction statements to the strict row-specific threshold condition. The v5 checker and five source extracts are in `paper09b_arv_certification_v5_src/`. Static source checks pass; compilation was not possible because no TeX engine is installed.
