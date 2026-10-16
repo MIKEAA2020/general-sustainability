@@ -153,3 +153,9 @@ The v52 split result above remains a historical record. The latest source on `e2
 ## Paper10b v2 lineage update — 2026-10-16
 
 The all-branch/tag review found no Paper10b edition after v1. The `paperE4_edwards_intervention_v16.tex` source is the same study lineage (same title, abstract, model, and results); Paper10b v1 is the later split edition and contributes the related-work section and verified references, so v2 starts from v1 rather than replacing it with E4 v16. V2 corrects the companion forecast paper's now-published status, labels its 7.55-ft realized-flux score as a conditional diagnostic, and restricts the 660-ft no-invariance statement to the fitted annual-mean map under the persistent drought floor. The actual Stage-I threshold is retained, but the simulated 20%-at-660 rule is explicitly identified as an annual-mean sketch, not the live 10-day CPM algorithm. No numerical results were recalculated.
+
+---
+
+## Paper10b v3 follow-up — 2026-10-16
+
+V3 follows the preserved Paper10b v2 on the same `e2-v3-source-year` lineage; it does not undo or merge the 2026-09-30 Paper10 split. A fresh shallow blob-filtered scan of all current branch/tag tips found v2 as the latest Paper10b-named manuscript and no v3. V3 adds a post-freeze coefficient-uncertainty extension of the existing attractor bootstrap at 660 ft, makes the positive-margin qualification explicit, and packages the copied annual panel, verifier, and CSV outputs. The 660-ft result remains a point-fit, fixed-map result; 6.88% of UC-min residual-bootstrap zero-pumping attractors meet/exceed 660 ft. This does not re-score the frozen retention protocol or change v2. No TeX build was possible in the workspace.

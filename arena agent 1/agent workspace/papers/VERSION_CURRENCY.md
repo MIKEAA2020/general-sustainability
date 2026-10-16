@@ -240,6 +240,12 @@ All-ref scan found Paper10b v1 as the latest split edition. The same study appea
 
 ---
 
+## Paper10b v3 — post-freeze 660-ft coefficient sensitivity (2026-10-16)
+
+The branch/tag scan found v2 as the latest Paper10b edition on `e2-v3-source-year` (base head `248e8b9f7969`); no Paper10b v3 existed on any of the six branch tips or two tag tips inspected. V3 is based on v2 and preserves v1/v2 unchanged. It adds a post-freeze extension of the existing 5,000-draw iid residual bootstrap at the 660-ft threshold, reports both 618-ft and 660-ft refit shares, and separates CPM from flat-60% in Table 7 because their bootstrap distributions differ. The coefficient theorem remains conditional on its fitted-map hypotheses; under UC-min, the zero-pump attractor is at or above 660 ft in 344/5,000 refits (6.88%), so the point-fit positive-margin premise is not coefficient-robust. The extension does not re-score frozen retention, recalculate viability kernels, evaluate the live 10-day CPM, or estimate real-world safety probabilities. Source/data/output package: `paper10b_edwards_aquifer_v3_src/`; full audit: `PAPER10B_V3_AUDIT_2026-10-16.md`. Static structure/cross-reference checks and deterministic reruns pass; no TeX engine was available, so no PDF is claimed. Release ZIP payloads were not unpacked.
+
+---
+
 ## Paper11b/E3 v25 — same-study lineage and source audit (2026-10-16)
 
 The pre-versioning all-ref scan found Paper11b v2 on `e2-v3-source-year` and same-study E3 v24/SI v2 on `edwards-framework-e1-audit-implementation`; Paper11b v2 is the recovered Edwards half of the older combined v61/v66 lineage. The current standalone line is E3 v25/SI v3, pushed to the E3 branch at `3b3b87b6858d`; its updated claim crosswalk and computational-source audit are at `e3/PAPER11B_E3_V24_V67_CLAIM_CROSSWALK_2026-10-16.md` (refresh commit `9f3a3842795d`). Paper11b v2 and Paper11 v67/SI S15–S22 remain preserved historical/complementary editions; no duplicate Paper11b v3 was made.
