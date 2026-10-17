@@ -9,7 +9,7 @@ The dated crosswalk `PAPER11B_E3_V24_V67_CLAIM_CROSSWALK_2026-10-16.md` remains 
 
 The 2026-10-17 base scan found:
 
-- E3 v25/SI v3 on `edwards-framework-e1-audit-implementation`, branch tip `9f3a3842795df6bc34db379d797c46b01c8948f1` before this addition. The main and SI sources matched their remote blobs: `3b9380c6c35ec077c5943e47303fdf4ea2950bc2` and `5d9e3362a5fbecf5a2fbf5b37ff3b60c9f220ec52c`.
+- E3 v25/SI v3 on `edwards-framework-e1-audit-implementation`, branch tip `9f3a3842795df6bc34db379d797c46b01c8948f1` before this addition. The main and SI sources matched their remote blobs: `3b9380c6c35ec077c5943e47303fdf4ea2950bc2` and `5d9e3362a5fbecf5a2f5b37ff3b60c9f220ec52c`.
 - Paper11 v68 main/SI on `main`, branch tip `1ba3d3c8a286a055b1342b5102731b601ec3d428`. Sources matched remote blobs `8908b04a28a988068a8f49a6f56c959adfcd8723` and `40045ff13a89b42f9ae645c73dfe486bf156f9a2`.
 - Paper11 v68's expanded verifier recorded 237/237 checks passing. The current E3 build makes no claim that it reruns the archived forecasting pipeline.
 
