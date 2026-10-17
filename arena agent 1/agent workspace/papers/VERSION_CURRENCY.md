@@ -273,3 +273,15 @@ The previous entries dated 2026-10-16 accurately recorded that no TeX engine was
 - **Paper11 page count:** the current `papers/` v66 PDF is 60 pages; v67 is 49 pages and its SI is 35 pages; v68 remains 49 pages (36-page SI). The v66-to-v67 changelog maps substantial technical detail to SI S1--S24, consolidates duplicate sections, and withdraws an unsupported cross-system claim. The evidence does not support restoring content merely to recover 60 main-text pages.
 
 Paper07 v54 already had its main/SI PDFs and logs and was not rebuilt. Paper11b v2 remains preserved as historical material and was not part of the active build batch. No existing source or edition was overwritten or deleted.
+
+---
+
+## Paper08 v50, Paper09b v6, and Paper10b v4 — layout successors (2026-10-17)
+
+A fresh all-ref scan checked all six branches, both tags, and the two GitHub releases at `e2-v3-source-year` head `e8367e820cb75f3f609ac7b43c47b5b7d689ea87`. It found Paper08 v49, Paper09b v5, and Paper10b v3 as the latest editions; no v50/v6/v4 paths existed on the checked refs. The three base sources were byte-identical to their recorded remote blobs. The earlier editions remain preserved.
+
+- **Paper08 v50** is a layout-only successor to v49. It replaces the overlapping interval table with readable point-value and certified-interval tables, reflows long equations/parameter tuples, and clarifies that both v49 supplementary companions are carried forward unchanged. The v50 PDF builds to 87 pages, with zero overfull boxes.
+- **Paper09b v6** is a layout-only successor to v5. It reflows the conditional-accounting lemma and gives summary Table 3 a full-width, non-overlapping layout. The existing verifier passes; the PDF builds to 9 pages, with zero overfull boxes. The source continues to distinguish SSB from reported landings/catch, convert tonnes to kt, keep nonnegative `kappa` unknown, show both adjacent-year assignments, and state only the strict conditional `kappa < kappa*` certificate.
+- **Paper10b v4** is a layout-only successor to v3. It makes both long EAA URLs breakable and renders the code filename/relative v3 package paths without clipping. The 5,000-draw verifier reproduces the unchanged v3 CSV outputs byte-for-byte; the PDF builds to 18 pages, with zero overfull boxes.
+
+All three sources pass normalized exact-content comparisons after reverting only version/date, layout, and path-rendering edits. Tectonic 0.15.0 logs, per-paper changelogs/audits, PDFs, and a combined build audit accompany these editions. See `LAYOUT_SUCCESSOR_BUILD_AUDIT_2026-10-17.md` and `LAYOUT_SUCCESSOR_PUBLICATION_RECEIPT_2026-10-17.md` for the full build and remote-byte verification record.
