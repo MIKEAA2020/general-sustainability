@@ -1,0 +1,50 @@
+\section{One scoring core, two retention protocols}\label{sec:design}
+
+\subsection{The object scored}\label{sec:object}
+
+In both systems the predictand is the quantity that management reads, not a fitted index of it: assessed SSB in kilotonnes for cod, and the calendar-year mean of daily-high J-17 elevation in feet above mean sea level for the aquifer. Each candidate forecaster is a \emph{module} on a \emph{ladder}: a forward-ordered set of models in which each rung adds one structural element to the rung below, so that the contribution of each element can be isolated by comparing a module with its comparator (the next-simpler module) and not only with a naive benchmark. Two baselines are scored on every origin set: last-value persistence, $\hat y_{t+h}=y_t$, and the training mean, $\hat y_{t+h}=\bar y_{1:t}$ (``climatology''). Baselines are always computed on exactly the origin set used for the modules at that horizon, so that every comparison is origin-matched.
+
+\subsection{Scores, origins and horizons}\label{sec:scores}
+
+The primary score is the root mean squared error of the point forecast in the predictand's own units; mean absolute error is reported alongside, and indicator (Brier) scores for the management threshold are secondary and play no part in retention (SI S7, S19). Two evaluation designs are used in both systems. \emph{Fixed windows} fit once on a training window and forecast the following test window as a path; they are diagnostic, and show how a module behaves across an event (a collapse, a recovery, a drought of record) whole. The \emph{rolling-origin} design \citep{Tashman2000} is the one the retention protocols are applied to: at every origin $t$ from the first admissible year to the last that leaves $h$ target years, each module is refitted on the data through $t$ and a forecast of $y_{t+h}$ is scored; the errors are pooled across origins. Horizons are $h=1$ and $h=5$ years in both systems, representing short- and longer-lead forecasts; the horizon profile $h=1,\dots,5$ of the two baselines is added in Section~\ref{sec:synthesis}. Minimum training lengths are 8 years (cod, Specification A), 12 years (cod, Specification B) and 15 years (J-17), giving origin counts of 25/21, 59/55 and 75/71 at $h=1$/$h=5$ (SI S2, S16).
+
+\subsection{The information set at the origin}\label{sec:info}
+
+A forecast issued at origin $t$ for target $t+h$ may use only quantities dated $t$ or earlier, with declared exceptions that are the structural claim under test. On cod, the stock-flow modules receive the realised catch $C_{t+1},\dots,C_{t+h}$ along the horizon: the forecast is conditional on removals, the form in which surplus-production projections are issued (``if removals are $C$, biomass will be $S$''), and it gives those modules information the baselines never see, so that the persistence benchmark is conservative for them. The autonomous cod modules hold catch at its training mean. On J-17 the causal modules must substitute something for the unknown year-$(t+1)$ fluxes: last year's values (M2), the training-mean fluxes (M2m), or a one-step recharge forecast from climate indices known in year $t$ (climate-informed variants); an \emph{oracle} that receives the realised fluxes is scored as a diagnostic and excluded from retention. The contrast between the two systems is deliberate. On cod the driver (catch) is supplied; on J-17 the driver (recharge) must be forecast. Section~\ref{sec:synthesis} shows that this difference decides which term of the error decomposition each system fails on.
+
+\subsection{The two retention protocols}\label{sec:protocols}
+
+Each system is judged by the protocol under which it was scored. Both protocols share a scoring core, coded before the first scoring pass of the respective system and applied unchanged: compare the module's rolling-origin RMSE with origin-matched persistence and with its comparator, on declared windows and origin sets. They differ in the decision predicate.
+
+\begin{center}
+\fbox{\parbox{0.95\textwidth}{\small
+\textbf{Protocol C (cod).} A module $M$ with comparator $M'$ is \emph{retained} on a specification if and only if, in the rolling-origin design,
+\begin{enumerate}[label=(C\arabic*),leftmargin=3em,itemsep=1pt]
+\item $\RMSE(M) < 0.95\,\RMSE(M')$ at both $h=1$ and $h=5$ (comparator hurdle; vacuous for the first rung), and
+\item $\RMSE(M) < 0.95\,\RMSE(\pers)$ at both $h=1$ and $h=5$ (persistence hurdle), and
+\item both hold on the same specification; a win on Specification A does not carry to B or conversely.
+\end{enumerate}
+The 5\% band treats differences within it as ties.
+
+\medskip
+\textbf{Protocol E (Edwards).} A causal module $M$ is \emph{retained} if and only if, at $h=1$ on the point rolling-origin RMSE,
+\begin{enumerate}[label=(E\arabic*),leftmargin=3em,itemsep=1pt]
+\item $\RMSE(M) < \RMSE(\pers)$, and
+\item $\RMSE(M) < \RMSE(M_{\text{next-simpler causal}})$.
+\end{enumerate}
+No tie tolerance and no minimum margin is imposed; diagnostic oracles and the service series are excluded from retention.}}
+\end{center}
+
+Both protocols are decision rules on point estimates; the uncertainty layer of Section~\ref{sec:uncertainty} describes their margins but is not part of either. Protocol C's 5\% band is a relative decision margin, not a multiple-testing adjustment. When the J-17 scores are restated under Protocol C, no module clears its two-horizon gate. Under Pass~1 H1/H2, M1 and M2m pass the one-year point inequalities; M1 is retained as the output-only rung, while the broader frozen specification separately excludes M2m from the count of additional function classes. Pass~2's H1/H2 point gate, against persistence and M1, lists Renso, Rprecip and combo; Rar fails. The archived class assessment demotes those three passes as M2m-plus-intercept variants, leaving no additional structure retained. Using M2m as an alternative Pass~2 comparator would make all four fail the strict point gate, but would not change that separate class outcome. The point advantages over M1 are only 0.02--0.13\,ft; the reported combined-rung bootstrap interval includes zero, and all four variants lose to persistence at $h=5$. These uncertainty and horizon results qualify interpretation; they are not retroactive gate criteria.
+
+\paragraph{Protocol chronology and separate class disposition.} The scoring documents are frozen and archived before their respective Edwards passes, but neither is a prospective registration; they are dated computational protocols with recorded execution order. On cod, the 5\% band and comparator declarations for non-nested modules were formalised after the first pass had been scored; they change no cod result because the smallest pooled deficit is 17.1\% (SI S1). For Edwards, \texttt{protocol.md} and \texttt{protocol\_pass2.md}, both locked 2026-08-25 before their corresponding scores, state the H1/H2 point gates; Pass~2 names persistence and M1. The broader frozen \texttt{SPECIFICATION.md}, issued 2026-08-27, records M2m's class reduction but does not create or change a score gate. M2m passes H1/H2 and is separately excluded from the count of additional function classes. The archived Pass~2 result metadata likewise separates modules listed by the H1/H2 point gate from those class-demoted, leaving \texttt{retained\_as\_structure} empty. Neither empty structure count is a score-gate failure. A direction-of-change score listed in an earlier design was struck and is not reported (SI S15).
+
+\paragraph{No pooling.} The two systems are never pooled, concatenated or averaged; nor are the two cod specifications, whose 1983--2015 overlap differs by 126\,kt RMSE between vintages. Every number in this paper belongs to one series under one protocol, and the cross-system statements of Section~\ref{sec:synthesis} are statements about mechanisms, not about pooled skill.
+
+\subsection{Uncertainty of the margins}\label{sec:uncertainty}
+
+For every load-bearing module--benchmark pair the per-origin squared-error differences $d_t = e^2_{M,t}-e^2_{B,t}$ are summarised by the Diebold--Mariano statistic \citep{Diebold1995} with an autocorrelation-consistent variance truncated at lag $h-1$, the form appropriate to $h$-step errors, reported as a $z$-score without the small-sample correction of \citet{Harvey1997}. It is not the primary uncertainty statement: samples are small, the loss differences are heavy-tailed because a few event-year errors dominate the sums of squares, and the asymptotic reference overstates significance in that setting \citep{Diebold2015}. The primary statement is a paired moving-block bootstrap \citep{Kunsch1989} of the RMSE gap, with the same block indices applied to both loss series; block length $\max(h,3)$ and 20\,000 replicates on cod, block length 8 and 10\,000 replicates on J-17 with an independent second implementation at block length $h$ and 20\,000 replicates (SI S3, S18). Block-length sensitivity is reported in both systems and no conclusion depends on it.
+
+\subsection{What the test could have seen}\label{sec:power}
+
+A non-retention can mean that a structure is absent or that a test has low sensitivity. On cod, seven data-generating processes were simulated at the fitted parameters of the fixed windows (200 replicates each, two process-noise levels): autonomous truths at collapse- and recovery-window parameters, a stock-flow truth, a depensatory truth, a persistence-true null, and two truths outside the class. Each replicate was scored by Protocol C against pre-declared power and false-retention bars (SI S8). On J-17, the realised-flux oracle scores 7.55\,ft against persistence's 13.23\,ft, but it conditions on fluxes unavailable at the origin. It is an ex-post conditional diagnostic showing that the fitted map can track transitions when its drivers are supplied; it is not an operating-characteristic estimate or a forecast-skill result (Section~\ref{sec:edw_mech}).
