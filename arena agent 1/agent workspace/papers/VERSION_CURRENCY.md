@@ -285,3 +285,5 @@ A fresh all-ref scan checked all six branches, both tags, and the two GitHub rel
 - **Paper10b v4** is a layout-only successor to v3. It makes both long EAA URLs breakable and renders the code filename/relative v3 package paths without clipping. The 5,000-draw verifier reproduces the unchanged v3 CSV outputs byte-for-byte; the PDF builds to 18 pages, with zero overfull boxes.
 
 All three sources pass normalized exact-content comparisons after reverting only version/date, layout, and path-rendering edits. Tectonic 0.15.0 logs, per-paper changelogs/audits, PDFs, and a combined build audit accompany these editions. See `LAYOUT_SUCCESSOR_BUILD_AUDIT_2026-10-17.md` and `LAYOUT_SUCCESSOR_PUBLICATION_RECEIPT_2026-10-17.md` for the full build and remote-byte verification record.
+
+The 17-file package was published on `e2-v3-source-year` in commit `5226a9bf5214fed4246409fe08ed65a1ed018f9d` (parent `e8367e820cb75f3f609ac7b43c47b5b7d689ea87`). Each remote Git blob was fetched and byte-verified against the local file; the previous v49/v5/v3 source blobs remain unchanged. The follow-up verification commit adds the publication receipt and this currency refresh.

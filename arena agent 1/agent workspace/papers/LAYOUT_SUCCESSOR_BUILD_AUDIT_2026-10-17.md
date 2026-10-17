@@ -67,3 +67,8 @@ No LaTeX errors or unresolved explicit references/citations were found. Underful
 ## Output files
 
 The three source/PDF pairs, dated build logs, per-paper change logs, and per-paper layout audits are stored in the corresponding `paper08/`, `paper09b/`, and `paper10b/` workspace folders. The living `VERSION_CURRENCY.md` now records the authorized successors without removing the prior edition history.
+
+
+## Publication and remote verification
+
+The 17-file successor package was published on `e2-v3-source-year` in commit `5226a9bf5214fed4246409fe08ed65a1ed018f9d`, parent `e8367e820cb75f3f609ac7b43c47b5b7d689ea87`. Every published Git blob was fetched and decoded; remote byte length and SHA-256 matched the local source/PDF/log/audit/changelog file. The v49, v5, and v3 base source blobs were rechecked in the post-publication tree and remain unchanged. No prior edition was overwritten or deleted. The full 17-path blob/SHA-256 manifest is `LAYOUT_SUCCESSOR_PUBLICATION_RECEIPT_2026-10-17.md`.
