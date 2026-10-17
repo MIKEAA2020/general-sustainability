@@ -251,3 +251,14 @@ The branch/tag scan found v2 as the latest Paper10b edition on `e2-v3-source-yea
 The pre-versioning all-ref scan found Paper11b v2 on `e2-v3-source-year` and same-study E3 v24/SI v2 on `edwards-framework-e1-audit-implementation`; Paper11b v2 is the recovered Edwards half of the older combined v61/v66 lineage. The current standalone line is E3 v25/SI v3, pushed to the E3 branch at `3b3b87b6858d`; its updated claim crosswalk and computational-source audit are at `e3/PAPER11B_E3_V24_V67_CLAIM_CROSSWALK_2026-10-16.md` (refresh commit `9f3a3842795d`). Paper11b v2 and Paper11 v67/SI S15–S22 remain preserved historical/complementary editions; no duplicate Paper11b v3 was made.
 
 The lineage disposition separates the H1/H2 point-score gate from M2m's broader class clause; class demotion is not a point-gate failure. The realized-future-flux score is a conditional diagnostic, not a nowcast/forecast. The five-year result is specific to the tested J-17 rolling origins, not policy advice. Source audit: `paper11_forecasting_baselines_v67_src/work/edw` carries derived panels/results, while the full scripts and raw inputs are under root `wave_e_edwards/src/` and `wave_e_edwards/data/`; the broader protocol is `wave_e_edwards/protocol_pass2.md`, and `SPECIFICATION.md`/`SPECIFICATION_v2.md` record the separate M2m class disposition.
+
+## Paper11b/E3 v26/SI v4 — current standalone Edwards line (2026-10-17)
+
+The all-ref audit found E3 v25/SI v3 as the latest standalone Edwards version before this edition. E3 v26 and SI v4 are now published on `edwards-framework-e1-audit-implementation` (commit `2bdf39ff1c13357a44c48b5ed7385c9945aff0b5`) at the established paths:
+
+- `e3/paperE3_edwards_forecast_ladder_v26.tex` / `.pdf` (remote source blob `b5dc7d44991713c0afe7d0e53ada3e4c0dbf2b91`; PDF blob `050306783274c8053a36172e31b283df5b27ce51`).
+- `e3/paperE3_supplement_v4.tex` / `.pdf` (remote source blob `540aa14e1f10209aae870433f34b532960678b7e`; PDF blob `79fab734973e05ecdec66240b0b099a02ca4bb38`).
+
+E3 v25 and published SI v3 are unchanged and byte-verified against their remote blobs (`3b9380c6c35ec077c5943e47303fdf4ea2950bc2` and `5d9e3362a5fbecf5a2f5b37ff3b60c9f220ec52c`). SI v4 fixes v3's `No counter 'none' defined` longtable compile failure without overwriting v3. The v26/v4 PDFs build to 10 and 8 pages; logs have no LaTeX errors, unresolved references/citations, or overfull boxes.
+
+The dated E3 v24/SI v2 versus Paper11 v67/SI S15--S22 crosswalk remains preserved at `e3/PAPER11B_E3_V24_V67_CLAIM_CROSSWALK_2026-10-16.md`. The new v25/v68 alignment/build audit is `e3/PAPER11B_E3_V25_V68_ALIGNMENT_BUILD_AUDIT_2026-10-17.md`; the version scan is `e3/VERSION_AUDIT_2026-10-17_v26.md`. Paper11 v68 remains the current combined two-system edition on `main`; no Paper11 version was created for bookkeeping.
