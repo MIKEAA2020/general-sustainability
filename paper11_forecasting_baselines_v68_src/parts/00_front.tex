@@ -1,0 +1,89 @@
+% =====================================================================
+% paper11_forecasting_baselines_v68.tex
+% Forecasting against naive benchmarks: a scored test of process-based
+% modules on Northern cod and the Edwards Aquifer
+% Author: Amin Abaee (Independent Researcher, Tehran, Iran)
+%
+% Lineage: v67 is preserved unchanged. This v68 working edition separates the
+% Edwards H1/H2 point-score gates from the M2m and Pass-2 function-class
+% dispositions, corrects the clipped-path record, and replaces the archived
+% cod operating-characteristic estimates with a deterministic, fail-loudly
+% rerun. Historical rolling scores and all v67 sources remain preserved.
+% Target: Environmental Modelling & Software (elsarticle, author-year).
+% Build route and checks are recorded in the v68 README.
+% Compiles with pdfLaTeX / XeLaTeX / LuaLaTeX / tectonic.
+% =====================================================================
+\documentclass[preprint,11pt,authoryear]{elsarticle}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{graphicx}
+\graphicspath{{./}{figs/}{paper11_forecasting_baselines_v68_src/figs/}}
+\usepackage{enumitem}
+\usepackage{placeins}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.7}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\floatpagefraction}{0.75}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue,citecolor=blue]{hyperref}
+\emergencystretch=3em
+\setlength{\tolerance}{2000}
+
+\newtheorem{proposition}{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\newcommand{\kt}{\,\mathrm{kt}}
+\newcommand{\ft}{\,\mathrm{ft}}
+\newcommand{\Blim}{B_{\mathrm{lim}}}
+\newcommand{\Spos}[1]{\left[#1\right]_{+}}
+\newcommand{\RMSE}{\mathrm{RMSE}}
+\newcommand{\MAE}{\mathrm{MAE}}
+\newcommand{\MSE}{\mathrm{MSE}}
+\newcommand{\pers}{\mathrm{persist}}
+\newcommand{\sA}{\mathfrak{s}}
+\newcommand{\E}{\mathbb{E}}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\journal{Environmental Modelling \& Software}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Forecasting against naive benchmarks: a scored test of process-based modules on Northern cod and the Edwards Aquifer}
+
+\author[1]{Amin Abaee\corref{cor1}}
+\ead{amin_abaee@ut.ac.ir}
+\cortext[cor1]{Corresponding author. ORCID: 0000-0002-0019-1842.}
+\affiliation[1]{organization={Independent Researcher}, city={Tehran}, country={Iran}}
+
+\begin{abstract}
+Adding a mechanism to a forecasting model is a claim about predictive value, and it can be tested against forecasts that assume little or no change. We report retrospective rolling-origin hindcasts on two unrelated systems: a five-module surplus-production ladder for Northern cod spawning-stock biomass (\emph{Gadus morhua}, NAFO 2J3KL; retrospective NCAM and xteNCAM vintages) and a one-pool water-balance ladder for annual-mean head at Edwards Aquifer index well J-17 (1934--2023). Each ladder is scored against persistence and the training mean under its own disclosed protocol; the systems are never pooled. On cod, no module clears the two-horizon rule: persistence RMSE is 98\,kt versus 115--196\,kt on the shorter series and 84\,kt versus 119--206\,kt on the longer one, with the deficit concentrated in the 1991--1995 collapse. Reproducible simulations show high sensitivity only for the D1 collapse-fit truth, not uniformly across the tested model classes. On J-17, the map that persists last year's recharge scores worse than persistence (14.70 versus 13.23\,ft), while conditioning on realised target-year fluxes gives a 7.55-ft ex-post diagnostic, not an admissible forecast. The Edwards H1/H2 point gate is passed by M1, M2m and three Pass~2 climate variants; the broader frozen specification separately classifies M2m as the same affine-AR(1) function class, and the archived Pass~2 assessment classifies its three point-gate passes as M2m-plus-intercept variants, leaving no additional structure retained. The climate variants' 0.02--0.13-ft point margins over M1 are small; the reported combined-rung interval covers zero, and all four lose to persistence at five years. Score-gate status, class disposition and evidence of incremental skill are reported separately. An elementary decomposition separates what a mechanism fits of the realised increment from what is lost when an unobserved driver is substituted; a companion stationary benchmark identity locates the horizon at which the training mean can overtake persistence. These two hindcasts illustrate why mechanism, information set, score gate and model class must be assessed separately; mechanistic fidelity is a hypothesis about predictive accuracy, not evidence of it.
+\end{abstract}
+
+\begin{keyword}
+forecast evaluation \sep persistence benchmark \sep rolling-origin scoring \sep model retention \sep surplus production \sep Northern cod \sep water balance \sep Edwards Aquifer \sep Diebold--Mariano test
+\end{keyword}
+
+\end{frontmatter}
+
+\section{Introduction}\label{sec:intro}
+
+A process-based forecasting model earns its structure by predicting better than a model without it. The forecasting literature has made that requirement operational: a candidate is held to beat a naive benchmark, usually last-value persistence and the training mean, out of sample at the horizons that matter \citep{Makridakis2000,HyndmanKoehler2006,HyndmanAthanasopoulos2021}; the evaluation is run on a rolling origin so that each forecast uses only what was available when it would have been issued \citep{Tashman2000,Bergmeir2012}; and differences in accuracy are tested rather than eyeballed \citep{Diebold1995,Harvey1997,Diebold2015}. Applied to environmental systems these standards have produced a consistent and uncomfortable result. Simple time-series models forecast fish populations about as well as complex ones \citep{Ward2014}, model-free methods have outperformed the mechanistic models that generated the data when the mechanism is unstable \citep{Perretti2013}, and in the largest forecasting competitions the sophisticated entries have rarely beaten the simple statistical ones \citep{Makridakis2000,Makridakis2018}. Yet in the applied literatures that build process models for management, the added mechanism is still widely treated as a reason to prefer the model, and the benchmark comparison, where it is made at all, is seldom made under a rule fixed before the scores are seen.
+
+This paper reports one scored test on two systems that share nothing but the question. The first is the spawning-stock biomass (SSB) of Northern cod (\emph{Gadus morhua}) in NAFO Divisions 2J3KL, the archetype of a fishery collapse \citep{Hutchings1994,Myers1997} and of a contested recovery \citep{RoseRowe2015,Rose2026}, on which two retrospective assessment series exist: the 1983--2015 NCAM series \citep{Cadigan2016,DFO2016} and the 1954--2024 xteNCAM series of the 2024 framework revision \citep{Regular2025}. The candidate structure is a ladder of nested surplus-production forecasters \citep{Schaefer1954,Pella1969}: an autonomous module driven by the training-mean catch, a depensatory variant, a stock-flow module that receives the realised catch along the horizon, an autoregressive-residual correction and a lagged-start variant. The second system is the annual-mean head of the Edwards (Balcones Fault Zone) Aquifer at index well J-17, San Antonio, Texas, 1934--2023, one of the longest managed groundwater records in North America, on which drought-stage declarations and springflow protection key \citep{EAA2024}. The candidate structure is a one-pool water balance in which the head increment is a weighted sum of recharge and pumpage plus a linear drain, with residual, delay and climate-informed variants, scored beside a univariate AR(1). Both ladders are deliberately simple, and both are of a kind that practitioners use and defend on mechanistic grounds; neither is a straw man, and neither is a state-of-the-art model. The question asked of each is the same: does any structural step lower the out-of-sample error of the predictand that management actually uses, relative to persistence and to the step below it, at the declared one- and five-year forecast horizons?
+
+The systems share a rolling-origin scoring core but not a common retention rule. Cod uses RMSE against persistence and a next-simpler comparator at $h=1$ and $h=5$, with a 5\% relative-margin band. Edwards Pass~1 applies the frozen H1/H2 point-score rule at $h=1$: beat persistence and the next-simpler causal model; M1 has no such comparator, while M2m beats both persistence and M1. The broader frozen specification separately excludes M2m from the count of additional function classes because constant-flux substitution reduces its affine map to an AR(1); this is a class disposition, not an H1/H2 failure. Pass~2 has its own pre-score H1/H2 gate against persistence and M1. Three climate variants pass that point gate and Rar fails, but the archived Pass~2 class assessment demotes the three as M2m-plus-intercept variants, leaving \texttt{retained\_as\_structure} empty. If M2m were used as the alternative comparator, none would clear the strict point gate; this changes the point-gate count, not the final class disposition. The rules are dated computational protocols with recorded execution order, not prospective registrations. The climate variants' point margins are 0.02--0.13\,ft; the reported combined-rung uncertainty interval covers zero, and all four lose to persistence at $h=5$. The cod 5\% band is a decision margin, not a multiple-testing adjustment. All scores remain system-specific; cod operating characteristics are assessed by simulation, whereas J-17's realized-flux result is an ex-post conditional diagnostic using inputs unavailable at the forecast origin.
+
+The empirical pattern is not a uniform null. On cod, the modules' one-year RMSE is 17--100\% above persistence on the shorter series and 42--144\% above it on the longer one; the pooled deficit is concentrated in the 1991--1995 collapse, which the tested surplus-production class cannot reproduce at the recorded catch. Autonomous modules also forecast the numerical floor after the collapse because training-mean catch exceeds production at depleted states. The operating-characteristic study is highly sensitive only for its D1 collapse-fit truth, not for every in-class mechanism. On J-17, the map that persists last year's recharge loses to persistence at one year (14.70 versus 13.23\,ft), consistent with recharge's low lag-one autocorrelation ($r=0.17$) and the stronger coupling of the head increment to same-year recharge ($r=0.74$). M1 passes Protocol E by 0.39\,ft, although its bootstrap interval covers zero and the ordering reverses at five years. M2m also passes the point inequalities but is separately declined as the same affine-AR(1) function class. Under Pass~2, Renso, Rprecip and the combined climate rung pass the one-year point gate by 0.02--0.13\,ft; the reported uncertainty interval for the combined rung covers zero, and the archived class assessment leaves no additional structure retained. All four climate variants lose to persistence at $h=5$. Conditioning on realised target-year fluxes yields 7.55\,ft as an ex-post diagnostic, not a forecast. On this J-17 record, the training mean beats persistence from $h=2$ onward. The two cases therefore illustrate different terms in the increment decomposition, while also showing why a point-score pass, uncertainty and a structural-class decision are not interchangeable.
+
+Three things are new relative to the two single-system studies from which this article descends and to their earlier two-part combination. First, the cross-system reading is formalised. Proposition~\ref{prop:increment} gives an exact one-step MSE identity for a forecaster of the form ``last value plus a mechanism evaluated at a substituted driver.'' Its half-autocorrelation result is a special case: for a weakly stationary, mean-zero mechanism with zero residual cross-term, a driver autocorrelation below one half creates a positive substitution penalty; a constant-increment corollary applies only when the entire forecast increment is constant. Remark~\ref{rem:crossover} gives the companion baseline criterion: under stationarity the training mean overtakes persistence when the predictand's autocorrelation falls below one half. On J-17, the exact rolling-origin identity shows a positive substitution term partly offset by a residual cross-term, while the separate baseline crossover occurs at $h=2$; the simplified threshold is not treated as a full numerical prediction for the fitted water balance. On cod, the supplied-catch identity locates the failure in the mechanism term, and the crossover criterion fails as expected for a non-stationary series. An earlier combination attributed the cod failure to ``weakly autocorrelated'' surplus production; the apparent net production instead has lag-one autocorrelation 0.71--0.91, so that attribution is withdrawn in favour of the class argument of Proposition~\ref{prop:repeller}. Second, the aquifer results are reported under both point-score protocols, with the M2m and Pass~2 class dispositions reported separately. Third, the horizon profile of the two baselines is computed at every horizon from one to five years on all three series, locating the J-17 crossover on the tested origins rather than generalising the five-year result.
+
+The paper is organised as a single argument. Section~\ref{sec:design} sets out the shared scoring core, the two protocols and the operating-characteristic designs. Sections~\ref{sec:cod} and \ref{sec:edwards} report the two systems, each with its data, ladder, verdict and diagnostics. Section~\ref{sec:synthesis} states and verifies the decomposition and the crossover criterion, and tabulates what transfers between the systems and what does not. Section~\ref{sec:related} positions the work in the forecast-evaluation, fisheries and groundwater literatures. Section~\ref{sec:discussion} discusses the limits of the findings and Section~\ref{sec:conclusions} concludes. Proofs are in \ref{app:proofs}. Material that supports but does not carry the argument (pass orders, origin sets, full test grids, fitted parameters, fixed-window and variant passes, the simulation design, the aquifer service-series and pumpage layers, the horizon profiles, the vintage and suspension records and the verification record) is in the Supplementary Information (SI), whose sections are cited as S1--S23.
