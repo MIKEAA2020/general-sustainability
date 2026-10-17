@@ -6,6 +6,6 @@ This package carries forward the unchanged USGS MCS 2026 phosphate snapshot and 
 - `verify_mcs2026_snapshot.py` uses only the Python standard library. Run `python3 verify_mcs2026_snapshot.py` to recompute the vintage-specific R/P quotients, the 90%-of-resources arithmetic lower bound, and the explicitly illustrative reserve-crossover values. It does not fit a forecast or estimate production-growth/reclassification parameters.
 - `VERSION_AUDIT_2026-10-18.md` records the all-ref version scan and the v55 build checks.
 
-The v54 supplementary source/PDF are carried forward unchanged as the current companion. See `PAPER10_V55_CHANGELOG_2026-10-18.md` in the parent papers directory for the exact source delta.
+The current companion is the Paper10 v55 supplementary source/PDF, published as `paper10_depletion_ledgers_v55_supplementary.tex` and `.pdf`. The v54 supplementary source/PDF remain preserved unchanged; they were the companion at the initial v55 main-text publication, before the metadata-only SI follow-up. See `PAPER10_V55_SI_CHANGELOG_2026-10-18.md` and `PAPER10_V55_SI_FOLLOWUP_AUDIT_2026-10-18.md` in the parent papers directory for the follow-up details.
 
 Source: https://pubs.usgs.gov/periodicals/mcs2026/mcs2026-phosphate.pdf
