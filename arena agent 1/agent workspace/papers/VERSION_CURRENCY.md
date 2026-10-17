@@ -287,3 +287,13 @@ A fresh all-ref scan checked all six branches, both tags, and the two GitHub rel
 All three sources pass normalized exact-content comparisons after reverting only version/date, layout, and path-rendering edits. Tectonic 0.15.0 logs, per-paper changelogs/audits, PDFs, and a combined build audit accompany these editions. See `LAYOUT_SUCCESSOR_BUILD_AUDIT_2026-10-17.md` and `LAYOUT_SUCCESSOR_PUBLICATION_RECEIPT_2026-10-17.md` for the full build and remote-byte verification record.
 
 The 17-file package was published on `e2-v3-source-year` in commit `5226a9bf5214fed4246409fe08ed65a1ed018f9d` (parent `e8367e820cb75f3f609ac7b43c47b5b7d689ea87`). Each remote Git blob was fetched and byte-verified against the local file; the previous v49/v5/v3 source blobs remain unchanged. The follow-up verification commit adds the publication receipt and this currency refresh.
+
+---
+
+## Paper08 v51 — first-page title/abstract correction (2026-10-17)
+
+A fresh all-ref scan on 2026-10-17 checked all six branches, both tags, and both GitHub releases/assets before assigning v51. The highest Paper08 edition was v50 on `e2-v3-source-year` at `ae4abeb0f0dd2d9e30d1c013d0c2179b7a688a64`; no higher Paper08 version was found. Paper07 v54 is a separate lineage and does not supersede Paper08 v50. The user authorized this narrow correction and publication; v50 and all earlier editions remain unchanged.
+
+Paper08 v51 is a layout-only correction at the existing Paper08 publication path, `arena agent 1/agent workspace/papers/`, on `e2-v3-source-year`. It moves the date and `\maketitle` before the abstract, so the title/author block is printed first. The abstract is byte-identical, and a normalized source check found no other manuscript-content change. The Tectonic 0.15.0 build is 86 pages (v50: 87); the table of contents updates and the main text begins on page 4. Visual QA confirms the title precedes the abstract on page 1 without clipping or overlap. There are zero overfull boxes; inherited underfull boxes and package warnings are recorded in `PAPER08_V51_LAYOUT_AUDIT_2026-10-17.md` and `paper08_governance_delay_v51_BUILD_LOG_2026-10-17.txt`.
+
+The source, PDF, build log, changelog, and layout audit are published as `paper08_governance_delay_v51.tex`, `paper08_governance_delay_v51.pdf`, `paper08_governance_delay_v51_BUILD_LOG_2026-10-17.txt`, `PAPER08_V51_CHANGELOG_2026-10-17.md`, and `PAPER08_V51_LAYOUT_AUDIT_2026-10-17.md`. No tag or GitHub release was created.
