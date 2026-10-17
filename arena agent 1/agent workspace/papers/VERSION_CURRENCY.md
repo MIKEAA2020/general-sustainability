@@ -262,3 +262,14 @@ The all-ref audit found E3 v25/SI v3 as the latest standalone Edwards version be
 E3 v25 and published SI v3 are unchanged and byte-verified against their remote blobs (`3b9380c6c35ec077c5943e47303fdf4ea2950bc2` and `5d9e3362a5fbecf5a2f5b37ff3b60c9f220ec52c`). SI v4 fixes v3's `No counter 'none' defined` longtable compile failure without overwriting v3. The v26/v4 PDFs build to 10 and 8 pages; logs have no LaTeX errors, unresolved references/citations, or overfull boxes.
 
 The dated E3 v24/SI v2 versus Paper11 v67/SI S15--S22 crosswalk remains preserved at `e3/PAPER11B_E3_V24_V67_CLAIM_CROSSWALK_2026-10-16.md`. The new v25/v68 alignment/build audit is `e3/PAPER11B_E3_V25_V68_ALIGNMENT_BUILD_AUDIT_2026-10-17.md`; the version scan is `e3/VERSION_AUDIT_2026-10-17_v26.md`. Paper11 v68 remains the current combined two-system edition on `main`; no Paper11 version was created for bookkeeping.
+
+
+## 2026-10-17 source-only build refresh and Paper11 page-count check
+
+The previous entries dated 2026-10-16 accurately recorded that no TeX engine was then available; this refresh supersedes their build-status statements without changing any versioned source. On `e2-v3-source-year` at audited head `1488e61f5c0e92452805ac9deaba6240d78d466f`, the source-only candidates were byte-checked against the branch, their remote figure dependencies located and staged, and builds run with the verified Tectonic 0.15.0 binary. The results and page-count evidence are in `papers/SOURCE_ONLY_EDITION_BUILD_AND_PAGECOUNT_AUDIT_2026-10-17.md`.
+
+- **Paper10 v54 main/SI:** compiled and visually checked; 56/19 pages. The MCS 2026 arithmetic checker passes; the main has no layout warnings and the SI has only underfull boxes. PDFs and dated logs were published at the established v54 paths in commit `1616013fb8a94a390c59f17cbf188b39551f30c9`.
+- **Paper08 v49, Paper09b v5, Paper10b v3:** all compile and their source/data checks pass where applicable, but no canonical PDF was published because visual checks found materially overlapping/clipped content. Their sources remain unchanged; no new version numbers were assigned.
+- **Paper11 page count:** the current `papers/` v66 PDF is 60 pages; v67 is 49 pages and its SI is 35 pages; v68 remains 49 pages (36-page SI). The v66-to-v67 changelog maps substantial technical detail to SI S1--S24, consolidates duplicate sections, and withdraws an unsupported cross-system claim. The evidence does not support restoring content merely to recover 60 main-text pages.
+
+Paper07 v54 already had its main/SI PDFs and logs and was not rebuilt. Paper11b v2 remains preserved as historical material and was not part of the active build batch. No existing source or edition was overwritten or deleted.
