@@ -1,7 +1,7 @@
 # E3 v25 → v26 alignment with Paper11 v68 and build audit
 
 **Date:** 2026-10-17  
-**Disposition:** E3 v26 and SI v4 are the proposed current standalone Edwards edition. The preceding E3 v25/SI v3 files are preserved unchanged. This audit extends, and does not replace, the historical v24/SI v2 versus Paper11 v67/SI S15–S22 comparison.
+**Disposition:** E3 v26 and SI v4 were pushed to the established E3 filenames on `edwards-framework-e1-audit-implementation` and their remote bytes were verified. The preceding E3 v25/SI v3 files are preserved unchanged. This audit extends, and does not replace, the historical v24/SI v2 versus Paper11 v67/SI S15–S22 comparison.
 
 ## 1. Lineage and source basis
 
@@ -47,4 +47,4 @@ Built separately from the candidate source using official Tectonic 0.15.0 GNU x8
 
 ## 5. Version and disposition
 
-E3 v26/SI v4 are based on the latest standalone E3 v25/SI v3 and current Paper11 v68 sources, not on Paper11b v2 or the historical v64 merged draft. The all-ref audit found no pre-existing E3 v26 or SI v4. The old E3 v25 and SI v3 are preserved. The proposed target is the same E3 path and branch as v25: `e3/v26.tex`, `e3/supplement_v4.tex`, and their PDFs and dated audit notes on `edwards-framework-e1-audit-implementation`.
+E3 v26/SI v4 are based on the latest standalone E3 v25/SI v3 and current Paper11 v68 sources, not on Paper11b v2 or the historical v64 merged draft. The all-ref audit found no pre-existing E3 v26 or SI v4. The old E3 v25 and SI v3 are preserved. The target follows the current E3 filename lineage and branch: `e3/paperE3_edwards_forecast_ladder_v26.tex` / `.pdf` and `e3/paperE3_supplement_v4.tex` / `.pdf`, plus the dated audit notes, on `edwards-framework-e1-audit-implementation`.

@@ -38,5 +38,5 @@ A ZIP tail-range request for each asset returned HTTP 501 (“Unsupported client
 
 - **Main:** E3 v26 is justified by current Paper11 v68 alignment, a corrected abstract/impact-statement page flow, and incorporation of the archived rolling-origin increment attribution. It is not a bookkeeping-only version.
 - **Supplement:** SI v4 is justified by the real compile defect in published SI v3 and the clarified raw-proposal versus clipped-emission record. SI v3 remains unchanged.
-- **Target:** same path/branch as v25: `e3/` on `edwards-framework-e1-audit-implementation`.
+- **Target:** same path/branch as v25, with the established descriptive filenames: `e3/paperE3_edwards_forecast_ladder_v26.tex` / `.pdf` and `e3/paperE3_supplement_v4.tex` / `.pdf` on `edwards-framework-e1-audit-implementation`.
 - **Preservation:** E3 v25, SI v3, Paper11 v67, Paper11 v68, Paper11b v2, prior tags/releases, and the dated v24/v67 crosswalk are not overwritten, renumbered, or deleted.

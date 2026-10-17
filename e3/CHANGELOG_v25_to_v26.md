@@ -1,7 +1,7 @@
 # E3 v25 → v26 / Supplement v3 → v4
 
 **Edition date:** 2026-10-17  
-**Status:** built and visually checked; not yet pushed at the time this changelog was drafted.
+**Status:** built and visually checked; pushed to `edwards-framework-e1-audit-implementation` under the established E3 filenames, then remote content-verified.
 
 ## Why a new main-text version was justified
 
