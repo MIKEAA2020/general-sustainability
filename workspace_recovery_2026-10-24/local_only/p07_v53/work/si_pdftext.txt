@@ -1,0 +1,1420 @@
+                              Supplementary Information
+ for “Sample-and-hold governance: review intervals as a design variable in resource stability”
+                                                   Amin Abaee
+                                                  October 16, 2026
+
+ Scope note. This file records methods, proofs, inputs, per-stock results, reconstruction details, sensitivity
+ outputs, and unresolved evidence. “Reproduced” means that a deposited computation or table was rerun
+ and matched within the stated tolerance; “archived” means an existing output is transcribed or preserved;
+“reconstructed” means a new implementation was specified and run; and “prospective” means the design has not
+ been executed. A deterministic grid result is not a continuous-parameter proof. A cross-sectional proxy is not a
+ measured institutional treatment.
+
+
+Contents
+    S1     Claim, evidence, and limitations register . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      3
+    S2     Mathematical statements, proofs, and the review-map operator . . . . . . . . . . . . . . . . .             4
+           S2.1      Forward invariance . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     4
+           S2.2      Finite-horizon rapid-review consistency . . . . . . . . . . . . . . . . . . . . . . . . .        4
+           S2.3      Local stability and crossing conventions . . . . . . . . . . . . . . . . . . . . . . . . .       5
+           S2.4      Nonlinear crossing check and unresolved invariant-curve claim . . . . . . . . . . . . .          5
+    S3     Data provenance, coding rules, and reproducibility register . . . . . . . . . . . . . . . . . . . .        5
+           S3.1      Input and record inventory . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       5
+           S3.2      Reproduction entry points . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      6
+           S3.3      Local ADH and fishing-mortality verification . . . . . . . . . . . . . . . . . . . . . .         6
+    S4     Structured case-search record . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      7
+           S4.1      Eligibility criteria and adjudication rule . . . . . . . . . . . . . . . . . . . . . . . . .     7
+           S4.2      Search provenance and query-log reconciliation . . . . . . . . . . . . . . . . . . . . .        10
+    S5     Ecosystem context, proxy risks, and case-level audits . . . . . . . . . . . . . . . . . . . . . . .       10
+           S5.1      Peru and Chile: a plausible confound is not an identified cause . . . . . . . . . . . .         10
+           S5.2      Icelandic cod and haddock: numerical audit of an earlier forensics note . . . . . . . .         10
+           S5.3      Northern cod ecosystem evidence . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       10
+           S5.4      Model-class diagnostic for scalar autonomous surplus production . . . . . . . . . . .           11
+           S5.5      Interpretive guardrails . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   11
+    S6     Distributive constraints and measurement-level social indicators . . . . . . . . . . . . . . . . .        11
+           S6.1      Candidate constituency and observed measurement . . . . . . . . . . . . . . . . . . .           11
+           S6.2      External measurement frameworks and limits . . . . . . . . . . . . . . . . . . . . . .          11
+    S7     Prospective empirical programme and falsification rules . . . . . . . . . . . . . . . . . . . . .         12
+           S7.1      Design 1: governance-event panel . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      12
+           S7.2      Design 2: quasi-experimental schedule variation . . . . . . . . . . . . . . . . . . . . .       12
+           S7.3      Design 3: out-of-sample mechanism comparison . . . . . . . . . . . . . . . . . . . . .          12
+           S7.4      Design 4: randomized human-in-the-loop experiment . . . . . . . . . . . . . . . . . .           12
+           S7.5      Design 5: closed-loop management strategy evaluation . . . . . . . . . . . . . . . . .          13
+           S7.6      Cross-cutting preregistration and displacement discipline . . . . . . . . . . . . . . . .       13
+    S8     Model parameters and reconstruction conventions . . . . . . . . . . . . . . . . . . . . . . . . .         13
+           S8.1      Illustrative logistic hold-map baseline . . . . . . . . . . . . . . . . . . . . . . . . . . .   13
+           S8.2      Stage-structured reconstruction parameterization . . . . . . . . . . . . . . . . . . . .        14
+           S8.3      Notation and time scales . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    14
+    S9     Screen sensitivity and stage-map reconstruction . . . . . . . . . . . . . . . . . . . . . . . . . .       15
+           S9.1      42-stock baseline and eleven-variant sensitivity battery . . . . . . . . . . . . . . . . .      15
+           S9.2     Archived stage-response regions and separate τ0 decomposition . . . . . . . . . . . .            15
+           S9.3      Pre-registered two-stage reconstruction . . . . . . . . . . . . . . . . . . . . . . . . . .     18
+    S10    Recovered Tr -ranked test: procedure, output, and limits . . . . . . . . . . . . . . . . . . . . .        18
+           S10.1     Procedure and estimands . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       18
+           S10.2     Results and the corrected interpretation . . . . . . . . . . . . . . . . . . . . . . . . .      19
+           S10.3     Per-stock values . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    19
+           S10.4     Reproduction and status reconciliation . . . . . . . . . . . . . . . . . . . . . . . . . .      21
+    S11    Logistic core: crossing, precision, and parameter sensitivity . . . . . . . . . . . . . . . . . . .       21
+           S11.1     Equilibrium and linear map . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      21
+           S11.2     Baseline operator record . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    21
+
+
+                                                           1
+      S11.3   Re-run one-at-a-time ±2% sensitivity . . . . . . . . . . . . . . . . . . . . . . . . . .      21
+      S11.4   Archived one-at-a-time ±5% battery . . . . . . . . . . . . . . . . . . . . . . . . . . .      22
+      S11.5   Six-parameter joint perturbation: 20,001-point rerun . . . . . . . . . . . . . . . . . .      22
+      S11.6   Independent numerical and nonlinear checks . . . . . . . . . . . . . . . . . . . . . . .      22
+      S11.7   F-grid placement convention . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   23
+S12   Archived nonlinear comparator and trajectory-distortion records . . . . . . . . . . . . . . . .       23
+      S12.1   Executed logistic-core comparator design . . . . . . . . . . . . . . . . . . . . . . . .      23
+      S12.2   Linear trajectory-distortion record . . . . . . . . . . . . . . . . . . . . . . . . . . . .   25
+S13   ADH, fishing-mortality placement, and northern-cod records . . . . . . . . . . . . . . . . . . .      25
+      S13.1   ADH buffer-years recomputation . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      25
+      S13.2   Fishing-mortality data verification and placement . . . . . . . . . . . . . . . . . . . .     25
+      S13.3   Northern-cod assessment table . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     28
+S14   Power record and unreproduced items . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     28
+      S14.1   Injected-signal power: 17 archived white-noise cells . . . . . . . . . . . . . . . . . . .    28
+      S14.2   Northern-cod constrained-mortality formulation: not reproduced . . . . . . . . . . .          29
+      S14.3   Prospective work is not completed work . . . . . . . . . . . . . . . . . . . . . . . . .      29
+
+
+
+
+                                                    2
+S1     Claim, evidence, and limitations register
+                             Table S1: Evidence-status register for Paper07 v53.
+
+ Claim / object         Status                     Auditable record          Limitation retained in v53
+ Forward invariance     Proved under stated as- Proposition S2.1            Positivity and effort bounds do
+                        sumptions                                           not imply persistence, viability, or
+                                                                            stability.
+ Rapid-review consis- Proved on fixed finite Lemma S2.2                     Does not establish stability for
+ tency                   horizons under regularity                          any fixed positive Tr .
+ Logistic-core crossing Reproduced determinis- Core output, baseline Illustrative, uncalibrated parame-
+                         tic computation; full tables, nonlinear-flow ter vector; no invariant-circle con-
+                         nonlinear-flow Jacobian check in S11               tinuation or nonlinear bifurcation
+                         checked independently                              theorem.
+ Joint six-parameter Re-run for all 128 corners Full-grid JSON, script, Non-crossing is dense-grid numer-
+ boxes                   on 20,001-point grid      and logs in bundle       ical stability, not a proof between
+                                                                            grid points; boxes are not confi-
+                                                                            dence sets.
+ Stage-structured re- Archived trajectory clas- Stage log; reconstruction Archived          solver    configura-
+ sponse window           sifications plus new re- and comparison in S9.2 tion/histories absent; new map
+                         construction                                       does not reproduce all archived
+                                                                            windows.
+ 42-stock SSB screen Re-executed, multiplic- RAM v4.66 inputs and Screening diagnostic, not a
+                         ity controlled            screen outputs in source governance-sign or causal test;
+                                                   bundle                   AR(1) null is incomplete for
+                                                                            forcing and regime changes.
+ Tr -ranked test         Script and outputs recov- Ranked-test script, per- Only two group-coded proxy val-
+                         ered and rerun            stock CSV, reproduction ues; all below windows; no ap-
+                                                   log                      proach gradient identifiable. Re-
+                                                                            produced opposite-direction two-
+                                                                            group association is confounded
+                                                                            and non-causal.
+ ADH       /    fishing- Re-executed locally on ADH/F logs and recov- Matching archived tables verifies
+ mortality verification recovered RAM cohorts ered cohort inputs            arithmetic and inputs, not the va-
+                                                                            lidity of ADH as a management
+                                                                            response measure.
+ White-noise power ta- 17 cells assembled from Power CSV and JSON           Fifteen cells come from archived
+ ble                     archived records                                   run log; two cod H = 400 cells
+                                                                            from follow-up JSON. The com-
+                                                                            plete driver did not finish.
+ Nonlinear compara- Archived deterministic Archived             comparator The single-run script is retained;
+ tor trajectories        and 10-seed summaries CSVs                         the 10-seed summary CSV omits
+                                                                            its own noise/seed metadata and
+                                                                            is not independently rerun here.
+ 32-system case search Curated inventory / doc- Case table and query log Not a systematic review; no qual-
+                         umentary review           in S4                    ifying case found is not evidence
+                                                                            of non-existence.
+ Northern cod parti- Descriptive assessment- DFO table values and No causal allocation among gov-
+ tion                    table reconstruction      cod figure               ernance, ecology, predation, cli-
+                                                                            mate, recruitment, and assess-
+                                                                            ment. Constrained-M values are
+                                                                            not reproduced.
+ Distributive       con- Measurement-level inven- S6                        No operational floor or licence-
+ straints                tory only                                          holder panel; no normative thresh-
+                                                                            old inferred.
+ Cross-sector designs Prospective                  S7 and S13.3             Not executed; no effect estimates.
+
+
+Change in the interpretation of the Tr test. The recovered test is executable and its output has been
+regenerated. It reports both (a) no identifiable window-approach gradient because the only assigned values are
+
+
+                                                       3
+0.5 and 1.0 years while the sampled windows are 4 and 8 years, and (b) reproducible two-group associations in
+the opposite direction from a simple approach prediction. Those statements are not contradictory. The first is
+an identification limit; the second describes a proxy-group contrast. Neither supports an institutional causal
+interpretation. The Peru/Chile clustering makes regional ecology, including ENSO-related quasi-periodicity, a
+plausible confound, but the present test does not establish that ENSO caused the contrast.
+
+Reproducibility. The executable ranked-test script, per-stock output table, and reproduction log are included
+in the source bundle. The local rerun reproduces the logged values to the displayed precision. The inference
+reported here follows the current executable record and its two-proxy limitation.
+
+
+S2      Mathematical statements, proofs, and the review-map operator
+S2.1     Forward invariance
+Let the flow on a review interval be
+
+                    Ṅ = rN (1 − N/K) − qE(t)N,                Ż = {Φ(qE(t)N − S(N )) − Z}/τm ,
+
+where r, K, q, τm > 0, Φ ≥ 0, and E(t) ∈ [0, Emax ]. At each review, the effort command is projected onto
+[0, Emax ]. Between reviews effort is either held at an admissible endpoint or interpolated convexly between
+consecutive admissible commands.
+Proposition S2.1 (Forward invariance of the sampled state space). If N (0) ≥ 0, Z(0) ≥ 0, and E0 ∈ [0, Emax ],
+then every solution that exists remains in N ≥ 0, Z ≥ 0, and E ∈ [0, Emax ].
+Proof. The effort statement follows from projection and convexity. For a fixed admissible effort path, the stock
+equation is locally Lipschitz and has the factorised form Ṅ = N {r(1 − N/K) − qE(t)}. If N (t0 ) > 0, then
+                                               Z t                            
+                            N (t) = N (t0 ) exp     [r(1 − N (s)/K) − qE(s)] ds > 0;
+                                                     t0
+
+if N (t0 ) = 0, uniqueness gives the zero solution. For the signal, variation of constants gives
+                                                     Z t
+                                                 1
+                 Z(t) = e−(t−t0 )/τm Z(t0 ) +              e−(t−s)/τm Φ(qE(s)N (s) − S(N (s))) ds ≥ 0.
+                                                τm    t0
+
+These facts hold interval by interval. Projection places each next command in the same effort interval, completing
+the induction. The logistic field also gives Ṅ ≤ 0 at N = K, so on a finite interval N (t) ≤ max{N (t0 ), K}. No
+lower bound strictly above zero, persistence, viability, or stability follows from this proposition.
+
+S2.2     Finite-horizon rapid-review consistency
+Lemma S2.2 (Finite-horizon rapid-review consistency). Let u̇ = G(u), u = (N, Z, E), be the no-queue
+continuous system, with the effort component evolving under the same local controller law. Suppose G is
+continuously differentiable with bounded derivative on a compact neighbourhood of the trajectories over a
+fixed horizon [0, T ]; assessments are contemporaneous and exact; projection is inactive on that neighbourhood;
+and no deployment queue, stochastic jump, or unmodelled reset is added. Let ΨTr be either the exponential
+frozen-assessment or forward-Euler flow-then-update map. Then, uniformly on the compact set,
+
+                                         ΨTr (u) = u + Tr G(u) + O(Tr2 ),
+
+and, for a common initial state, the sampled trajectory differs from the continuous trajectory by at most CT Tr at
+review times with nTr ≤ T . This is a fixed finite-horizon statement; it does not imply that any fixed positive Tr
+has the same stability classification as the continuous system.
+
+Proof. Taylor expansion of the held ecological flow and endpoint effort update gives the displayed one-step
+expansion. The exact flow of G has the same first-order expansion, so the local defect is O(Tr2 ). If L bounds the
+Lipschitz constant of G, the global error ϵn = un − u(nTr ) satisfies
+
+                                         ∥ϵn+1 ∥ ≤ (1 + LTr )∥ϵn ∥ + CTr2 .
+
+Discrete Gronwall gives maxnTr ≤T ∥ϵn ∥ ≤ CT Tr , establishing the claimed uniform convergence at review times.
+No infinite-horizon convergence or finite-interval stability result follows.
+
+
+                                                               4
+   Let zbn+1 = Zbn+1 − Z ∗ be the endpoint assessment deviation after the ecological state has flowed for one
+review interval with effort held at En . The nonlinear exponential update integrates dE/ds = FB (E, Zbn+1 ) for
+0 ≤ s ≤ Tr , holding that assessment fixed. Linearizing this controller flow at the interior equilibrium, with
+CE = ∂E FB (E ∗ , Z ∗ ) and CZ = ∂Z FB (E ∗ , Z ∗ ), gives
+
+                                                                eCE Tr − 1
+                                       eexp
+                                        n+1 = e
+                                                CE Tr
+                                                      en + CZ              zbn+1 ,
+                                                                   CE
+with limiting coefficient CZ Tr when CE = 0. The corresponding forward-Euler update is eEuler
+                                                                                            n+1 = en + Tr (CE en +
+CZ zbn+1 ). Their difference is second order as Tr → 0, but can be material at finite Tr . In the monodromy, this
+post-flow command update is composed with the held ecological flow, which supplies the dependence of zbn+1 on
+the pre-review state.
+
+S2.3     Local stability and crossing conventions
+                                                                               −
+Let X ∗ = (N ∗ , Z ∗ , E ∗ ) be an interior fixed point of the pre-review map Xn+1 = PTr (Xn− ). The local multipliers
+                                    ∗
+are the eigenvalues of DPTr (X ). Local asymptotic stability requires all multipliers to have modulus below one.
+A crossing is counted when a computed multiplier reaches the unit circle along the scanned interval branch. A
+complex-pair crossing, a real +1 crossing, and a real −1 crossing are distinguished; the values in this paper are
+numerical crossings refined by bisection and high-precision evaluation.
+    The baseline values at Tr = 1 year are ρ = 1.0003506565 for exponential frozen-assessment mobilising,
+1.0005452356 for forward-Euler mobilising, 0.9838095183 for exponential frozen-assessment protective, and
+0.9837962340 for forward-Euler protective. The exponential-update mobilising crossing is a complex pair with
+eigenvalue approximately 0.98464047 ± 0.17459425i, modulus one, and angle 0.175494 radians. Forward-Euler
+mobilising crosses as a complex pair at 47.535982 years and at a real multiplier −1 at 79.142688 years. Forward-
+Euler protective crosses at a real multiplier −1 at 2.306354 years. The exponential protective update has no
+crossing on the tested [0.2, 200] interval and has maximum sampled radius 0.996740. The forward-Euler crossings
+are properties of that distinct command update, not numerical estimates of the exponential-update boundary.
+
+S2.4     Nonlinear crossing check and unresolved invariant-curve claim
+A fresh finite-difference audit now evaluates the full nonlinear map: DOP853 integrates (N, Z) under effort
+held over the review interval, then integrates the nonlinear effort-rate ODE with the endpoint assessment fixed
+for duration Tr . Projection is inactive at the interior fixed point. The fixed-point residual is zero at printed
+precision. At relative finite-difference step h = 3 × 10−5 , the Jacobian agrees with the exponential monodromy
+to maximum absolute error 6.93 × 10−11 at Tr = 1 year and 1.67 × 10−9 at the monodromy crossing; the
+corresponding spectral radii are 1.000350656546 and 1.000000000031. The finite-difference crossing estimates
+across h = 10−4 , 3 × 10−5 , 10−5 , 3 × 10−6 , 10−6 are shown below. These are numerical step-size diagnostics, not
+uncertainty intervals.
+
+Table S2: Finite-difference crossing of the full nonlinear plant plus exponential frozen-assessment controller flow.
+The reference linear-monodromy crossing is 6.5012949481 years.
+
+                                    Relative step h Finite-difference crossing (yr)
+                                              10−4                      6.501299288
+                                          3 × 10−5                      6.501295007
+                                              10−5                      6.501293726
+                                          3 × 10−6                      6.501289941
+                                              10−6                      6.501276055
+
+
+    The earlier archived normal-form script differentiated a map with a nonlinear plant but a linearized exponential
+controller update; its “supercritical” classification is not a normal-form result for the full nonlinear controller flow
+and is not treated as established here. No invariant-circle continuation or independent orbit confirmation was
+completed. The local crossing is therefore verified, but a nonlinear bifurcation theorem or stable invariant-circle
+claim is not made. The procedure, full outputs, and code are retained in work/nonlinear_flow_check_v53.py
+and work/nonlinear_flow_check_v53.json.
+
+
+S3      Data provenance, coding rules, and reproducibility register
+S3.1     Input and record inventory
+
+
+                                                           5
+ Table S3: Primary analysis inputs and status. Repository-relative paths are given in the v53 source bundle.
+
+ Object                   Source / version               Local file family       Use and limitation
+ Forage-fish SSB          RAM Legacy Stock Assess- src/p7_empirical/             42-stock primary screen;
+                          ment Database v4.66      ram_target_stocks.            the extracted series and
+                                                   csv and screen outputs        derived summary are pre-
+                                                                                 served.
+ ADH cohort               RAM v4.66 and archived src/p7_empirical/               Local        recomputation
+                          v4.44 cohorts          recovered/ram_adh_              of     buffer-years      and
+                                                 fisheries/                      stock/group summary; ver-
+                                                                                 sion differences retained.
+ Fishing mortality        RAM fisheries-ADH input src/p7_empirical/              F placement and quar-
+                          plus cohort records     recovered/ram_adh_             tile verification; one stock
+                                                  fisheries/                     does not match the last-F
+                                                                                 record.
+ Northern cod             DFO CSAS SAR 2016/026 src/p7_empirical/                SSB and reported M
+                          assessment table      recovered/ices_cod_              descriptive plot; not a raw
+                                                27_5a.csv                        mortality-decomposition
+                                                                                 archive.
+ Stage-structured plant   Archived parameter and tra- src/p7_empirical/          Archived windows and new
+                          jectory records             recovered/;                reconstruction have dis-
+                                                      src/results/               tinct status.
+ Logistic sensitivity     Archived one-at-a-time bat- src/p7_empirical/          Wider ±5%/ ± 10% record;
+                          tery                        recovered/sens_            distinct from the v53 ±2%
+                                                      table.csv and log          rerun.
+ Case search              Curated      primary-source src/p7_empirical/          32 rows; not an exhaustive
+                          query record                u5_case_table.csv,         review.
+                                                      src/p7_empirical/u5_
+                                                      query_log.md
+ Power grid               Archived run log plus two- work/power_table_     17-cell table assembled;
+                          cell follow-up              white_noise.csv/     complete simulation driver
+                                                      .json                run did not finish.
+
+
+S3.2      Reproduction entry points
+The source bundle README provides command lines and expected outputs. Principal entry points are:
+  work/p07_core.py --grid 4001: logistic fixed point, local multipliers, crossing scans, the v53 ±2% one-
+   at-a-time sensitivity, and the baseline record; use --joint-only --grid 20001 for the full 128-corner
+   rerun;
+  src/p7_empirical/ram_crosssection.py and src/p7_empirical/tr_ranked_test.py: stock-level spec-
+   tra and the Tr -ranked test; run from src/p7_empirical/ so the relative RAM input path resolves;
+  work/screen_battery_v53.py: screen sensitivity battery; run from src/p7_empirical/;
+  work/adh_verify_v53.py and work/qcal_fplacement_v53.py: local ADH, F-placement, and calibration
+   checks using the recovered cohort inputs;
+  work/nonlinear_flow_check_v53.py: full nonlinear-plant/controller-flow finite-difference check against
+   the local monodromy;
+  work/make_figures_v53.py: the joint sensitivity figure from the retained full-grid JSON;
+  work/make_rho_figure_v53.py: the baseline multiplier plot with explicit exponential-update labels;
+  work/make_supplement_tables.py: per-stock, case, power, comparator, and F-placement LaTeX tables.
+Exact working directories, dependency versions, seeds, and stdout/log files are retained in the source bundle
+rather than inferred from this list.
+
+S3.3      Local ADH and fishing-mortality verification
+Recovered cohort inputs resolved a previous missing-file issue. The ADH script was rerun locally against the
+recovered files. Recomputed ADH values agree with deposited values to numerical precision, and archived
+descriptives and cohort/group summaries reproduce. A fresh 20,000-draw seed-11 resampling run placed 2.33%
+of broader-pool median draws below the archived cohort median of 1.7902 buffer-years; the archived run gives
+2.12%. This checks the resampling calculation and shows a similar tail fraction, not a calibrated probability
+that any fishery is unsustainable.
+
+
+                                                     6
+    The F-calibration and placement script reproduces the 42-stock screen cohort. For 43 intersected stocks,
+fisheries-ADH F agrees with last-F for 42; SPRBLKGSA29 is the exception. For the broader pool of 454 stocks,
+the F quartiles and all 13 taxonomic-group quartiles match the archived summaries. Among 38 screen-cohort
+stocks with F series, the mean of stock-level F medians is 0.3663 (IQR 0.2701–0.7243); broader-pool Fnow has
+median 0.2143 (IQR 0.0800–0.4639). These are descriptive calibration and placement checks, not proof that F
+or an ADH buffer is a valid proxy for institutional pressure.
+
+
+S4      Structured case-search record
+S4.1     Eligibility criteria and adjudication rule
+The inventory contains 32 candidate systems. It is a curated query-driven search, not a systematic review. A
+candidate was eligible only if all four criteria were supported by evidence:
+ 1. an operative, repeatedly responsive governance rule (not a one-time cap, ban, fixed path, coordination
+    deadlock, or nominal rule with no effective response);
+ 2. an independently dateable response or implementation lag at the scale relevant to the ecological outcome;
+ 3. no competing ecological or structural driver supported for that same outcome, or comparative evidence that
+    institutional feedback predicts the outcome better than prespecified competing mechanisms; and
+ 4. individual-resource or station-level observations adequate to order the response signal, decision, implementa-
+    tion, and ecological effect.
+The third condition is not satisfied merely because an institutional mechanism is plausible. If ecology, recruitment,
+climate, predation, cohort resonance, or assessment structure is supported for the same outcome and no
+discriminating comparison exists, the case is coded as confounded or unresolved. “Yes” in the table means
+that the available record supports the item; “no” means the criterion fails; a dot denotes no determination or
+inapplicability; “partial” denotes incomplete evidence. The binding-fail column is the recorded failure, not a
+composite score.
+    Twenty cases are coded as having a responsive rule, with one additional case coded partial; 21 rows record
+criterion (iii) as unmet. Two produced-capital examples are out of the regenerating-resource scope. No row
+satisfies all four criteria simultaneously. The closest candidates—Bangkok groundwater and La Mancha Oriental
+groundwater—remain confounded by subsidence/rainfall and crop/water substitution, respectively. These
+decisions should be read as limits of this inventory, not as proof that no qualifying system exists.
+
+
+
+
+                                                         7
+    Table S4: Curated 32-system inventory and four-criterion dispositions. A dot denotes no assessment or not applicable; the binding-fail column records the criterion or
+    scope exclusion that prevents full eligibility.
+
+          ID   System                      Domain        C1    C2 lag           C3   C4    Binding Evidence note
+                                                                                           fail
+          1    Baltic sprat (SPRAT22-32    fisheries     yes   yes   (˜1-1.5 no      yes   iii     Annual TAC responsive; variance is low-frequency trend/regime (no robust cycle); tau-
+               EU MAP)                                         yr)                                 window screen row; RAM SSB series
+          2    European anchovy Adriatic   fisheries     no    .                .    .     i       2022-2026 fixed predetermined reduction path: no deficit feedback (GFCM/44/2021/20;
+               (GFCM MAP)                                                                          GFCM/48/2025/2)
+          3    European anchovy Bay of     fisheries     yes   yes (˜1-1.5 no        yes   iii     Annual TAC; recruitment/environment-driven variability; closed 2005-2009
+               Biscay                                          yr)
+          4    Peruvian anchoveta          fisheries     yes   yes     (sub- no      yes   iii     ENSO driver: 3.7-yr peak Granger-caused by ENSO (section 3.7 battery)
+                                                               annual)
+          5    Pacific   sardine   (US fisheries         yes   yes  (˜0.5-1 no       yes   iii     Annual HCR; environmentally forced regime variability
+               /Mexico)                                        yr)
+          6    Atlantic       menhaden fisheries         yes   yes (˜1-1.5 no        yes   iii     Annual quota; environmentally forced recruitment variability
+               (ASMFC)                                         yr)
+          7    Gulf menhaden (GSMFC) fisheries           yes   yes (˜1-1.5 no        yes   iii     Annual quota (5-state commission); environmentally forced variability
+                                                               yr)
+          8    North Sea herring (ICES)    fisheries     yes   yes (˜1-1.5 no        yes   iii     Annual TAC; recruitment/climate confounds
+                                                               yr)
+          9    Atlanto-Scandian herring    fisheries     no    .             .       .     i       Coastal-state sharing deadlock since ˜2014; unilateral quotas above advice: coordination
+                                                                                                   failure not a rule
+          10   NE Atlantic mackerel / fisheries          no    .                .    .     i       Coastal-state deadlock (MSC suspended 2019-2020): no operative responsive rule
+               blue whiting
+          11   Iberian sardine (PT/ES) fisheries         yes   yes (˜1-1.5      no   yes   iii     Annual TAC + rebuilding measures; environmentally forced variability
+                                                               yr)
+          12   South    Africa  anchovy fisheries        yes   yes (˜1-1.5 yr   no   yes   iii     Annual TAC within OMP (rule review 4-5 yr is not effort-response lag); environmentally
+8
+
+
+
+
+               /sardine (OMP)                                  TAC)                                forced
+          13   Namibian sardine/anchovy fisheries        yes   yes (˜1-1.5      no   yes   iii     Annual TAC; environmentally forced variability
+                                                               yr)
+          14   Chilean anchovy / jack fisheries          yes   yes (˜1 yr)      no   yes   iii     Annual TAC + seasonal management; environmentally forced variability
+               mackerel
+          15   Japanese sardine        fisheries         yes   yes (˜1 yr)      no   yes   iii     Annual TAC; regime-shift-driven variability
+          16   West African sardinella fisheries         no    no               .    .     i,ii    Annual TACs exist but enforcement/implementation weak and irregular (CECAF): no
+                                                                                                   dateable responsive lag
+          17   NZ QMS pelagics             fisheries     no    .                .    .     i       TACs held between sparse 3-10 yr assessments (57% never changed): discontinuous not
+                                                                                                   delayed-continuous (Mace et al. 2013/2014)
+          18   Barents / Icelandic capelin fisheries     yes   yes (¡1-1 yr) no      yes   iii     Annual quotas + in-season surveys; dynamics cod-driven/environmentally forced
+          19   North Sea sandeel           fisheries     yes   yes (˜1-1.5 no        yes   iii     Annual TAC seasonal; environmentally forced + seabird-driven closures
+                                                               yr)
+          20   India/Philippines           fisheries     no    .             .       .     i       No TAC; seasonal closures/mesh regulations only: fails responsive-feedback criterion
+               /Indonesia small pelagics
+          21   Icelandic cod (1995 HCR)    fisheries     yes   yes (0.2-0.3 no       yes   iii     25% HCR responsive; cohort resonance alternative (section 3.7/S4); post-rule SSB CV
+                                                               yr impl. lag)                       0.387 (audit-confirmed)
+          22   Icelandic haddock (2013 fisheries         yes   yes (˜1 yr no         yes   iii     35%-of-B45cm+ HCR adopted Apr 2013 (Iceland govt); recruitment-forced variability (R
+               HCR)                                            TAC cycle)                          CV 0.89)
+          23   Sheridan-6 groundwater  groundwater       no    .             .       yes   i       55 acre-inch block allocation over five-year first period: not continuously adjusted feedback
+                                                                                                   (S4)
+          24   Bangkok groundwater         groundwater   yes   yes    (post- no      yes   iii     Pumping declines after 1999 but subsidence/recovery confounded by heterogeneous con-
+                                                               1999      re-                       solidation + rainfall (S4)
+                                                               sponse)
+          25   La    Mancha     Oriental groundwater .         .             no      .     iii     2019-2023 extraction relapse; attribution complicated by crops/ET/surface-water substi-
+               groundwater                                                                         tution (S4)
+          26   Murray-Darling surface wa- surface water yes    yes (annual no        yes   iii     Allocations responsive to storage/inflows (SA DEW; BoM NWA 2024) but availability is
+               ter                                             announce-                           rainfall-driven: climate confound
+                                                               ments)
+    ID   System                        Domain     C1        C2 lag      C3    C4    Binding Evidence note
+                                                                                    fail
+    27   US BLM rangeland grazing rangeland       partial   no          .     .     ii      Responsive adjustments only via recent flexibility pilots (IM 2018-109; outcome-based
+                                                                                            grazing); historically rigid permits with NEPA-gated irregular lags: no dateable response
+                                                                                            lag
+    28   Scandinavian moose har- wildlife         yes       yes          no   yes   iii     Responsive quotas (SE annual county; NO 3-5 yr plans) but recruitment climate-driven
+         vest                                               (annual/3-5                     (hot dry springs/snow) + wolf predation confounds
+                                                            yr plans)
+    29   Norwegian salmon aquacul- aquaculture    yes       yes   (dated no   yes   iii     Biomass responsive to lice-induced wild-smolt mortality (TLS 13 areas) but lice signal
+         ture (TLS)                                         evaluations                     biologically/environmentally forced + farm economics joint: institutional channel not
+                                                            2017+)                          isolated
+    30   Spruce budworm forestry       forestry   no        .            .    .     i       30-40 yr cycle is endogenous predator-prey outbreak dynamics (Ludwig Jones Holling
+                                                                                            1978): no institutional feedback at all
+    31   Hog/livestock cycles          produced   .         .           .     .     scope   Unconfounded delay oscillators but no autonomously regenerating stock: outside the
+                                       capital                                              resource-model scope (section 3.7/S4)
+    32   Electricity-capacity cycles   produced   .         .           .     .     scope   Unconfounded delay oscillators but no autonomously regenerating stock: outside the
+                                       capital                                              resource-model scope (section 3.7/S4)
+9
+S4.2     Search provenance and query-log reconciliation
+The retained u5_query_log.md is dated 2026-09-11. It records (i) repository tree and code searches; (ii) targeted
+extraction of relevant release files; (iii) RAM Legacy v4.66 re-execution and the cod/haddock data audit; (iv)
+ICES stock-data pulls for northern cod and haddock; and (v) primary-source web searches for water allocation,
+grazing, moose harvest, salmon-lice governance, and Icelandic harvest-control rules. The table’s first 20 rows
+were re-adjudicated under the four criteria rather than mechanically inherited from an earlier delay-window
+screen. Row-level notes and search queries are preserved verbatim in the source bundle.
+    The query log’s search R4 found a memo that called the Tr -ranked test “never executed.” That was a
+historical snapshot of the analysis status, not the final repository state: the executable test script and outputs
+were subsequently recovered and re-run. The discrepancy is documented in S1 and the source reconciliation
+note; it does not change the case-screening result.
+
+
+S5      Ecosystem context, proxy risks, and case-level audits
+S5.1     Peru and Chile: a plausible confound is not an identified cause
+The seven stocks assigned Tr = 0.5 years in the ranked test are Peruvian or Chilean anchovy stocks with annual
+quotas and group-described in-season responsive closures. The code does not verify each stock’s specific closure
+trigger, decision date, or state-assessment cadence. The shorter proxy is therefore a regional group classification.
+It is not a measured stock-specific treatment.
+    A retained anchoveta catch series and prior analysis notes associate a roughly 3.7-year feature with ENSO-
+related environmental variation. That association motivates a confound check, but the v53 ranked test does not
+re-estimate a causal ENSO model on a fully verified primary-source governance panel. The per-stock AR(1)
+surrogate reproduces fitted red-noise persistence but not quasi-periodic forcing. Consequently, the observed
+negative Tr -rank association and the higher two-group null-excess in Peru/Chile are compatible with regional
+forcing, cohort composition, assessment differences, or other omitted factors; they do not establish which factor
+produced the contrast. The correct result remains: no identifiable approach gradient, plus an opposite-direction
+proxy-group association with unresolved confounding.
+    This matters because ENSO and longer regime shifts can structure anchoveta abundance, and oceanographic
+change has been documented off Peru (Chávez et al., 2003; Gutiérrez et al., 2009). Those references provide
+ecological context, not an instrumental variable or proof that ENSO caused the v53 contrast.
+
+S5.2     Icelandic cod and haddock: numerical audit of an earlier forensics note
+A recovered cod/haddock audit used current-vintage ICES standard-graph source-data tables, covering cod
+1955–2026 and haddock 1979–2026. For 1996–2023, cod SSB has n = 28, CV 0.394, catch CV 0.150, fishing-
+mortality CV 0.199, and recruitment CV 0.208. The previously archived cod CV of 0.387 is confirmed as the
+same post-1995 concept under an earlier vintage; the current-vintage value is 0.394. For haddock over the same
+years, SSB CV is 0.359 and recruitment CV is 0.894. The earlier value 0.143 for haddock is not reproduced
+under standard SSB-CV definitions: detrended-residual CV is 0.345, log-difference volatility is 0.171, and the
+observed SSB CV is 0.359. That number is therefore not used in v53.
+    A post-1995 detrended cod spectrum has its strongest peak near 19.58 years; the 10–15-year band contains
+14.9% of the power under the retained calculation. The peak is not a stable, narrow institutional signature
+and the series is trend-dominated. The numerical audit confirms the earlier coding note’s broad environmen-
+tal/recruitment confound, but neither this CV comparison nor the spectral summary identifies an HCR effect.
+The haddock recruitment variability result is descriptive and does not adjudicate the governor’s review cycle.
+
+S5.3     Northern cod ecosystem evidence
+The northern-cod SSB and mortality values used in Fig. 3 and Table S12.1 are copied from the DFO CSAS
+2016/026 assessment record. The 1991–1995 crash window has assessment SSB values 735, 382, 101, 31, and
+10 kt for 1991–1995, respectively; the full transcribed table is in S12.1. The post-1995 portion contains later
+declines and recoveries, so it is called a non-recovery record, not a monotone trend. Tam and Bundy (2019)
+provide mass-balance descriptions of harp-seal and capelin changes on the Newfoundland and Labrador Shelf;
+those are ecosystem context only. No seal-predation mortality rate is estimated here, and the constrained-M
+decomposition is not reproduced.
+
+
+
+
+                                                        10
+S5.4     Model-class diagnostic for scalar autonomous surplus production
+A simple scalar autonomous surplus-production equation with constant removals has the form
+                                                                r
+                               Ṡ = f (S) − C,      f (S) =        (K − S)(S − s),
+                                                              K −s
+where 0 < s < K, C ≥ 0, and S is the modeled stock. The phase-line shape of f limits the equilibrium
+structure. If C > 0, the vector field at zero is −C, so the state requires an explicit nonnegativity constraint or a
+different low-stock removal rule. For extra mortality Mx ≥ 0, write fM (S) = f (S) − Mx S = S(h(S) − Mx ) with
+h(S) = f (S)/S. The zero equilibrium remains; positive equilibria solve h(S) = Mx . When 0 < Mx < max h,
+the quadratic h can have two positive roots, including a lower threshold shifted above s; at the maximum the
+roots coalesce and above it positive equilibria disappear.
+    This is a model-class observation, not an empirical test of northern cod. The assessment series is not an
+error-free trajectory and removals and mortality are not constant, so no contradiction between this scalar model
+and the real stock is claimed. The lemma says what this class would imply if its assumptions held; it does not
+establish those assumptions.
+
+S5.5     Interpretive guardrails
+The contexts above are used to motivate competing mechanisms and the need for discriminating data. They
+do not turn the spectral screen, the review-interval proxy, a coefficient of variation, or a visual event sequence
+into evidence of institutional causation. The classification of an environmental mechanism as “plausible” is
+intentionally weaker than a causal finding.
+
+
+S6       Distributive constraints and measurement-level social indicators
+S6.1     Candidate constituency and observed measurement
+For the northern-cod case, a candidate worst-off constituency is registered inshore harvesters and licence holders.
+Available community-level data do not measure that population directly. The mismatch is retained rather than
+resolved by substituting a convenient scalar:
+
+                    Table S5: Measurement mismatches in the cod social-indicator record.
+
+Object      Candidate definition     Available measure         Mismatch                     Data needed
+Population Registered licence hold- Census-subdivision resi- Different population     Licence-holder micro-
+           ers                      dents                                             data or administrative
+                                                                                      panel
+Income      Fishing income of the All-resident sector in- Includes non-fishing income Administrative fishing-
+            named constituency      come, including aqua- and other activities        income records with
+                                    culture and processing                            linkage and privacy pro-
+                                                                                      tection
+Floor       Specified    instrument No operational cutoff  Normative and measurement Named instrument, ref-
+            and cutoff (Ik , ck )                          rule absent                erence period, deflator,
+                                                                                      cutoff, and authority
+
+
+    Statistics Canada Tables 38-10-0167-01 and 38-10-0168-01 report community-level series for 43 fishing-
+dependent census subdivisions; the mean share of employment income from fishing falls from 32.2% to 25.6%
+between 2016 and 2021. The statistic is all-resident employment income, not an inshore licence-holder panel. It
+includes aquaculture and processing categories and cannot by itself identify which households rely on the cod
+fishery or who bears a policy transition.
+    A measured floor is a pair (Ik , ck ): an instrument and its cutoff. For groups G and times t, define margin
+mk (G, t) = Ik (G, t) − ck . A componentwise constraint is violated if any required margin is negative; it does not
+permit a favourable aggregate indicator to compensate for a household or group falling below a different floor. No
+such floor is operationalized in v53. Non-decline is a normative choice, not automatically an empirically justified
+threshold. A defensible instrument must state baseline, cohort, inflation and purchasing-power treatment,
+uncertainty, attrition, acceptable variation, authority, and structural diversification.
+
+S6.2     External measurement frameworks and limits
+The global Multidimensional Poverty Index (Alkire and Foster, 2011) and the World Bank Poverty and Inequality
+Platform are potential reference frameworks, but their release and vintage must be locked before use. Neither
+
+
+                                                         11
+substitutes for a local distributional record of who pays for persistence, who may use remaining resource diversity,
+whose knowledge counts, or how future persons are represented. These issues are left open as measurement
+and governance questions, not filled by a composite score. No distributional causal effect is estimated in this
+manuscript.
+
+
+S7      Prospective empirical programme and falsification rules
+The designs below are proposals, not completed tests. No registration identifier, locked protocol, or field
+intervention is claimed. Each should be registered before outcome inspection, with data provenance, estimand,
+decision rule, and deviations recorded.
+
+S7.1     Design 1: governance-event panel
+Unit and data. Resource–jurisdiction–assessment cycle. Link dated raw observation, assessment data freeze,
+advice release, committee decision, legal instrument, implementation, compliance, and ecological response.
+Record date uncertainty and source document for each event. Separate Tobs , Tassess , Tr , τdec , τdep , and τeco ; do
+not impute one “governance lag” from another.
+   Estimand. Distribution of effective responsive-review intervals and the impulse/phase response of command,
+extraction, and stock to a measured assessment innovation, conditional on operating-model class.
+   Identification. The panel is descriptive until independent variation or a design-based assumption identifies
+the effect. Use date ranges where records are incomplete; do not encode a scheduled annual TAC as a 0.5-year
+response merely because in-season closures exist without trigger evidence.
+   Falsification. A hypothesised sample-and-hold mechanism is weakened if decisions precede the information
+they are said to respond to, if implementation does not follow the decision, or if the predicted command–stock
+phase order fails on held-out cycles.
+
+S7.2     Design 2: quasi-experimental schedule variation
+Identify an external schedule change plausibly independent of current ecological innovations. Candidate
+approaches include event studies, difference-in-differences, synthetic controls, interrupted time series, and
+state-space interventions, selected according to the institutional change and comparison structure. Define
+treatment as a change in responsive decision opportunities, not simply a change in implementation lag. A
+nominal calendar reform is not a treatment if the same rule is still applied to the same information on the same
+effective schedule.
+    Estimand. Change in extraction and ecological outcomes attributable to a change in the review operator,
+with pre-specified direct and lagged effects.
+    Identification checks. Pre-trends, concurrent rule and data changes, ecological shocks, serial correlation,
+spillovers, anticipatory behaviour, implementation/compliance, and measurement-vintage changes. Use placebo
+dates and placebo stocks where feasible.
+    Falsification. If estimated schedule variation is explained by an ecological shock or if outcomes move before
+the schedule change, the causal interpretation is rejected or narrowed.
+
+S7.3     Design 3: out-of-sample mechanism comparison
+Fit competing models with distinct causal orderings: (i) ecological forcing only; (ii) cohort resonance or
+recruitment structure; (iii) institutional feedback with a pre-specified rule sign and sample-and-hold operator;
+(iv) combined ecology and governance; and (v) a non-periodic or regime-shift null. Freeze training and test
+windows, transformations, priors, and scoring rules before fitting. Compare held-out log predictive density
+or another proper score; report phase-order checks and posterior predictive discrepancies, not only in-sample
+spectral fit.
+    Estimand. Relative out-of-sample predictive performance of the institutional mechanism versus its alterna-
+tives, and the estimated timing/gain parameters conditional on the winning model class.
+    Falsification. The delay mechanism is weakened when it fails to predict held-out phase ordering or performs
+worse than an ecological/cohort competitor. It is displaced for that case when the competitor predicts held-out
+observations better under the pre-specified score. A significant spectrum by itself is not the decision rule.
+
+S7.4     Design 4: randomized human-in-the-loop experiment
+In a laboratory or advisory-interface setting, randomize review cadence and feedback sign or timing in a common
+renewable-resource simulator. Participants receive a controlled stream of noisy observations and implement
+
+
+
+                                                         12
+decisions through the simulated institution. Randomize treatment assignment, mask the hypothesis where
+possible, and measure state, command, decision latency, revisions, and errors. A live fishery is not randomized
+by this proposal.
+   Estimand. Intention-to-treat effects of assigned review cadence and rule architecture on stability, transient
+stock loss, command volatility, and decision quality.
+   Falsification. The proposed gain–phase signature is weakened if randomized cadence does not alter
+outcomes in the predicted direction or if observed behavioural adaptation eliminates the modeled distinction.
+Any laboratory result remains externally limited until field validation.
+
+S7.5     Design 5: closed-loop management strategy evaluation
+Construct an MSE with an operating-model ensemble that crosses review interval, decision lag, deployment
+lag, observation error, rule gain and sign, stock productivity, age structure, environmental forcing, assessment
+structure, compliance, and process-noise regime. Compare, at minimum, a responsive extractive rule, a
+responsive protective rule, and a fixed-plan controller; keep catch/effort constraints and objectives identical
+where meaningful. Use common random numbers across policies and report both local spectral margins and
+long-run performance metrics.
+    Estimands. Probability of breaching biological reference points, expected yield and variability, recovery
+time, implementation burden, distributional indicators, and regret relative to an explicitly stated benchmark.
+    Falsification. The result does not generalize beyond the MSE if rankings reverse across plausible operating
+models or if the claimed stability signature does not predict the prespecified performance outcomes. Robustness
+is reported across model classes, not just parameter draws from one operating model.
+
+S7.6     Cross-cutting preregistration and displacement discipline
+Every design should state whether it tests mechanism, prediction, or policy performance. It should lock data
+vintage, response windows, rule coding, exclusions, the unit of analysis, multiplicity, uncertainty, and an
+alternative-model set before outcomes are inspected. The cod case contributes two dated governance events
+(moratorium announcement 2 July 1992; reopening 26 June 2024 with an 18 kt TAC), but these dates alone
+do not supply a counterfactual or a governance lead. A fast ecological response does not establish adequacy;
+annual SSB data do not establish a governance lag.
+    Three broader hypotheses motivate, but are not tested by, the present work: (a) observation aggregation can
+change the apparent feedback phase; (b) governance phase ordering can be more diagnostic than periodicity
+alone; and (c) a substitution certificate can identify when continuous-delay and sampled-data models cease to
+be interchangeable. Testing them requires the event-linked, high-frequency, independently varied data described
+above.
+
+
+S8     Model parameters and reconstruction conventions
+S8.1     Illustrative logistic hold-map baseline
+
+Table S6: Logistic-core and controller parameter vector. Values are model conventions; no field calibration is
+claimed.
+
+Symbol Meaning                                    Baseline Status / units
+r       Intrinsic growth rate                         0.020    yr−1 ; illustrative
+K       Logistic carrying capacity                      100    Model abundance units; illustrative
+q       Catchability                                  0.001    Model effort-to-mortality scale
+η       Mobilising effort-law gain                    0.914    Inherited Candidate-A convention; uncalibrated
+Emax    Upper effort bound                               30    Model effort units
+δ0      Effort-law offset gain                        0.010    Distinct from softplus shift δ
+Zref    Signal reference scale                            1    Signal units
+∆ref    Deficit reference scale                           1    Signal units
+τm      Signal-memory timescale                           5    Years
+k       Softplus sharpness                               10    Signal-map units inverse
+δ       Shift in floored softplus  log(2)/10 = 0.0693147       Z ∗ = δ at zero deficit
+ηp      Protective gain                                   η    Same numerical gain as mobilising baseline
+E0      Protective target scale         E ∗ (Zref + δ)/Zref    Chosen to share the interior rest
+
+
+
+
+                                                          13
+    The equilibrium is N ∗ = 89.5518830, Z ∗ = 0.0693147181, E ∗ = 2.08962340, and F ∗ = qE ∗ =
+0.00208962340 yr−1 . The exploitation ratio is qE ∗ /r = 0.10448117. The coefficients are not posterior estimates
+or quantities extracted from a specific stock. In particular, comparisons of model F ∗ with empirical assessed
+F are scale-placement diagnostics only; model effort units and stock-specific reference points are not jointly
+calibrated.
+    At the interior equilibrium, the local effort-law gains from the independent core are (CE , CZ )mobilising =
+(−0.05951801, 1.78501871) and (CE , CZ )protective = (−0.85033614, −1.66170190). The exact machine-precision
+record is in work/results.json.
+
+S8.2       Stage-structured reconstruction parameterization
+
+Table S7: Frozen ecological values in the preregistered stage reconstruction. The scale A0 = 100 is a convention,
+not a fitted abundance.
+
+Class           M (yr−1 ) Recruitment delay τ (yr) Steepness h Source / status
+Anchovy               0.90                      1         0.75 Pauly and Tsukayama (1987); IFOP range; default steep-
+                                                               ness convention
+Sprat                 0.40                      2         0.75 ICES sprat keyrun / maturity ogive; default steepness
+                                                               convention
+Cod                   0.20                      5         0.75 ICES fixed-M convention; DFO northern-cod maturity;
+                                                               default steepness convention
+Slow stock           0.045                     25         0.75 Branch (2001) orange-roughy range; default steepness
+                                                               convention
+
+
+    For this reconstruction, sA = sJ = e−M , A0 = 100, and Beverton–Holt recruitment parameters are
+c = 4h/(1 − h), β = (c − 1)/A0 , and α = c(1 − sA )/sJ . Primary catchability is q = 0.001, with a declared
+sensitivity at q = 0.1; controller parameters are carried over unchanged from the logistic core. A separate
+steepness sensitivity uses h ∈ {0.6, 0.9}. No stage parameter was tuned against archived response windows.
+
+S8.3       Notation and time scales
+                       Table S8: Notation used in the main text and Supplementary Information.
+
+        Symbol                    Definition
+        N                         Logistic-core resource abundance.
+        A, J                      Adult and juvenile states in the distinct two-stage reconstruction.
+        Z                         Nonnegative filtered institutional deficit signal.
+        E                         Effort, held between reviews and projected to [0, Emax ].
+        S(N )                     Logistic surplus production rN (1 − N/K). Northern-cod SSB is a separate
+                                  measured quantity and is not substituted into this equation.
+        Φk                        Shifted, floored softplus signal map with sharpness k.
+        Tr                        Interval between opportunities to revise the command.
+        Tobs                      Raw observation interval.
+        Tassess                   Assessment interval.
+        τdec                      Decision lag after assessment.
+        τdep                      Deployment lag after formal decision.
+        τeco                      Ecological response lag after implementation.
+        τm                        Memory timescale of the filtered deficit signal.
+        F ∗ = qE ∗                Model equilibrium fishing-mortality proxy in the illustrative core.
+        ρ(Tr )                    Spectral radius of the local review-map Jacobian.
+        A, B                      Integrated periodogram power in 2.5–5-year and 5–9-year SSB bands.
+        A95 , B95                 Per-stock AR(1) 95% null thresholds for bands A and B.
+
+
+
+
+                                                          14
+S9      Screen sensitivity and stage-map reconstruction
+S9.1     42-stock baseline and eleven-variant sensitivity battery
+The baseline cohort contains 42 of 58 forage-fish series with at least 20 non-missing annual SSB observations. SSB
+is linearly detrended; normalized Lomb–Scargle power is integrated in bands A (2.5–5 years) and B (5–9 years).
+Each stock-specific AR(1) null uses 200 simulations and seed 7; the empirical tail probability is (k + 1)/201.
+Benjamini–Hochberg correction is applied to all 84 stock-by-band cells within each specification. In the baseline
+run, the minimum raw p-value is 0.0448 (PANCHNCHSP, band B) and the adjusted rejection count is zero.
+
+Table S9: Eleven registered/recovered sensitivity specifications for the 42-stock screen. All have 84 tests and
+zero BH rejections; the minimum nominal p-value is reported to show resolution, not to select a winner.
+
+Specification      Null / preprocessing                                         Minimum nominal p BH rejections
+Base               AR(1) surrogates; linear detrend                                           0.0448              0
+ARMA               ARMA(1,1) surrogate; linear detrend                                        0.0697              0
+Trend-stationary   Trend-stationary series; no detrending step                                0.0299              0
+Block 5            Circular block bootstrap, block length 5                                   0.0547              0
+Block 10           Circular block bootstrap, block length 10                                  0.1692              0
+Block 15           Circular block bootstrap, block length 15                                  0.2239              0
+HP cycle           Hodrick–Prescott cycle plus AR(1) surrogate                                0.0100              0
+First difference   First-difference preprocessing plus AR(1)                                  0.0100              0
+Regime median      Regime-median break surrogate                                              0.0547              0
+Regime low         Regime-tercile-1 break surrogate                                           0.0498              0
+Regime up          Regime-tercile-2 break surrogate                                           0.0746              0
+
+
+    The HP and first-difference variants have minimum attainable nominal p-values at 0.0100 at the retained
+simulation resolution; none of their cells survives BH correction. The result is a stable adjusted-zero decision
+under the specified battery, not a universal absence claim. The variant family includes distinct nulls and
+preprocessing, so it should not be interpreted as eleven independent replications.
+    An exploratory alternative-band check also returns zero BH-significant cells for a broad 2–10-year band and
+cadence bands 1–3, 3–8, and 8–20 years. An effort-proxy band of 8–80 years is unresolvable for every stock
+because no eligible series spans three times the upper period. These alternative-band outputs are screening
+checks, not preregistered tests of the institution-specific mechanism. The full per-stock SSB tables, q-values,
+null thresholds, and scripts are in the source bundle.
+
+S9.2     Archived stage-response regions and separate τ0 decomposition
+The following stage-model response regions are transcribed from the earlier project record. Their original
+generating computation, solver configuration, and initial histories are unavailable; they are therefore archived
+and provisional, not re-executed v53 findings.
+    The same archive reports observable-specific dominant peaks near 4 years in anchovy biomass and 12 years
+in effort, and near 8 years in sprat biomass and 60 years in effort. Components of one stationary periodic orbit
+cannot have different fundamental periods; harmonics, modulation, transient spectral content, and measurement
+windows remain unresolved. Archived amplitudes are described only as percent-scale biomass and order-one
+effort excursions because the record does not say whether amplitude means half-range or peak-to-peak. The
+archive also reports robustness of the anchovy-class region to 30% multiplicative assessment error, but the
+generating record is not available for independent verification.
+    A separate stage-delay diagnostic treats g as maturation delay and τ as an institutional delay. It distinguishes
+raw characteristic-root crossings from crossings at parameter points classified as stable when τ = 0. The
+table below is transcribed from stage_tau0.log; r-windows are finite-grid root-search summaries, and fish-
+range counts include only scanned r ≥ 0.2 yr−1 . This is not the later preregistered two-stage Beverton–Holt
+reconstruction and is not a cross-operator causal comparison.
+
+
+
+
+                                                        15
+Table S10: Archived exploratory stage-map classifications. They are reported at their original status and are
+not validated by the new reconstruction.
+
+Class       Archived trajectory clas- Status / scope
+            sification
+Anchovy    Persistent tail oscilla-      Solver and histories not attached.
+           tion near Tr = 3–4
+           years; weak response at 2
+           years; annual-review tra-
+           jectories converge across
+           tested response values.
+Sprat      Persistent tail oscillation   Solver and histories not attached.
+           near Tr = 6–12 years.
+Cod        Convergence for every         Tested-grid record only; not a theorem for all histories.
+           tested Tr ∈ [1, 20] years.
+Slow stock For r ∈ (0.01, 0.05) yr−1 ,   Extremely long period; most governance records cannot resolve repeated cycles.
+           oscillation on part of the
+           grid below about 20–30
+           years and convergence
+           at longer intervals, with
+           transition brackets about
+           30–50 years; archived cy-
+           cle periods about 250–360
+           years.
+
+
+
+
+                                                            16
+             Table S11: Archived τ = 0 decomposition by maturation delay g and controller gain η.
+
+        η g (yr) Raw r-window           τ = 0-stable-only win- Raw fish-range counts Institutional-only counts
+                                        dow
+     0.914   0.5   [0.0079, 0.0225]     Empty                                      0                        0
+     0.914     1   [0.0079, 1.5719]     [1.5719, 1.5719]                           1                        1
+     0.914     2   [0.0079, 0.8105]     [0.7865, 0.7865]                           2                        1
+     0.914     5   [0.0076, 0.3705]     [0.2660, 0.3285]                          12                        8
+     0.914    10   [0.0072, 0.7865]     [0.0873, 0.7865]                           6                        1
+     0.914    20   [0.0068, 0.7185]     Empty                                      9                        0
+       3.0   0.5   [0.0068, 0.0646]     [0.0627, 0.0646]                           0                        0
+       3.0     1   [0.0068, 1.5719]     [0.0686, 1.5719]                           1                        1
+       3.0     2   [0.0068, 0.8608]     [0.0798, 0.8105]                           7                        5
+       3.0     5   [0.0066, 1.5719]     [1.5719, 1.5719]                          29                        1
+       3.0    10   [0.0064, 1.4361]     [0.3093, 1.4361]                          23                        9
+       3.0    20   [0.0062, 1.0628]     [0.3285, 0.4574]                          32                       12
+17
+    The archived log’s nonlinear RK4 check does not independently certify the claimed decomposition: its
+printed rightmost-root values are positive even for entries labelled as cases where τ = 0 “should be stable.” This
+internal inconsistency is unresolved; the decomposition table is retained as a provisional finite-grid diagnostic,
+not as a verified separation of biological cohort resonance from institutional delay. The full source log and the
+root-search script are included for audit.
+
+S9.3     Pre-registered two-stage reconstruction
+The original stage-map generating code, solver settings, and initial histories were not found in the repository.
+To avoid inventing a reconstruction as though it were the original object, a plan was frozen on 2026-09-01 before
+simulation. It specifies a new annual two-stage Beverton–Holt delayed-recruitment map with adults A, juveniles
+J, a recruitment lag, filtered signal Z, and held effort E. Ecological parameter values are in Table S7; the exact
+pre-registration, code, data tables, and logs are retained. No parameter was fitted to archived response windows.
+    The trajectory rule uses 2,000 review steps and the last 500 as the tail. Persistent oscillation is relative tail
+SD of adult abundance ≥ 2%, weak response is 0.1–2%, and convergence is below 0.1%. A separate finite integer
+grid records the local multiplier spectral radius. These two records are not interchangeable: a finite simulated
+trajectory classification and a local multiplier scan answer different questions, and the discrete stage map is not
+the three-state logistic continuous-flow map.
+
+Table S12: Frozen comparison criteria and post-run verdicts for the new stage-map reconstruction. “Match” is
+agreement with the stated criterion on its declared grid; it does not validate the unavailable legacy solver.
+
+Class        Legacy criterion                                                                 Reconstruction verdict
+Anchovy      Persistent oscillation at Tr = 3–4                                               Mismatch
+Anchovy      Weak response at Tr = 2, below the 3–4 window                                    Mismatch
+Anchovy      Convergence at annual review                                                     Match
+Sprat        Persistent oscillation at Tr = 6–12                                              Mismatch
+Cod          Convergence for every integer Tr ∈ [1, 20]                                       Match
+Slow stock   Oscillation below roughly 20–30 years; convergence around 30–50 years            Match
+
+
+    The mismatch is reported without retuning. The archived window remains provisional, and a reconstruction
+mismatch does not adjudicate the legacy numbers because their generating object is unavailable. Full trajectory
+samples are results/p5_stage_trajectories.csv; equilibrium and multiplier records are in the adjacent
+results/ files.
+    The local multiplier record at primary q = 0.001 has annual-review radii 0.8948 (anchovy), 0.9231 (sprat),
+0.9560 (cod), and 0.9939 (slow stock). On the integer Tr = 1–50 grid, the extractive multiplier crosses above
+unity between years 33 and 34 for anchovy and sprat, and between 34 and 35 for cod; the slow-stock multiplier
+remains below unity throughout. The protective channel remains stable on the integer grid. These linear
+records are distinct from the finite-horizon trajectory classifier: at Tr = 10, the slow-stock trajectory is labelled
+persistent oscillation despite a stable local multiplier, leaving bistability, a non-decayed transient, or threshold
+sensitivity unresolved.
+    At the declared sensitivity q = 0.1, the extractive annual multipliers exceed one for all four classes
+(ρ(1) = 2.229, 2.128, 1.904, 1.292, respectively). On the integer grid, anchovy is below one at 19–35 years,
+sprat at 23–36, cod at 32–41, and slow stock remains above one; the protective channel is stable throughout.
+Crossings are bracketed by integer intervals, not refined to a continuous-time boundary. A declared steepness
+sensitivity h = 0.6, 0.9 is retained in p5_stage_h_sensitivity.csv; it is a local stability diagnostic, not the
+trajectory-classification criterion.
+    Under 30% multiplicative assessment error, anchovy and sprat remain converged at their tested legacy-window
+cells (maximum relative tail SD 0.00086). Cod is converged at Tr = 1, 5 and weak at 10,20 years (maximum
+relative tail SD 0.00249). The slow-stock cells are converged at 5 years, weak at 10 and 20, and exceed the 2%
+persistence threshold at 30–50 years (0.02126–0.02645). Because the trajectory threshold is not noise-adjusted,
+these long-horizon labels may reflect noise-driven variance rather than a persistent deterministic oscillation.
+These checks remain specific to the reconstructed plant and do not validate the archived windows.
+
+
+S10       Recovered Tr -ranked test: procedure, output, and limits
+S10.1        Procedure and estimands
+The executable p7_empirical/tr_ranked_test.py implements a pre-specified cross-sectional test on RAM
+v4.66 stocks. It uses the same series loader and spectral functions as the main stock screen: discard stocks with
+
+
+                                                         18
+fewer than 20 non-missing annual SSB observations; linearly detrend; compute a normalized Lomb–Scargle
+spectrum on the declared frequency grid; integrate powers in bands A (2.5–5 years), B (5–9 years), C (9–14
+years), and D (14–30 years); fit a per-stock AR(1) null; and estimate 95% thresholds from 200 simulations with
+seed 7. The table retains A–D power but the ranked estimands below use bands A and B.
+     For each stock, the code assigns Tr = 0.5 years to the seven Peru/Chile annual-quota/in-season-closure group
+cases and Tr = 1.0 year to 35 annual-TAC proxy cases. The 4-year anchovy-class and 8-year sprat-class windows
+are both above either assigned value. The South African OMP’s 4–5-year rule review is explicitly excluded from
+Tr ; implementation lag is not Tr . The assignments are group-coded and not individually primary-verified.
+     The prespecified null-excess estimand is band power divided by that stock’s AR(1) 95% threshold, A/A95 or
+B/B95 . Raw power is reported only as a confound diagnostic. Test 1 is Spearman association of the assigned Tr
+rank with each null-excess ratio; Test 2 is a two-sided Mann–Whitney comparison of the 0.5- and 1-year groups
+in band A, on raw power and null-excess; Test 3 counts nominal 95% threshold flags by broad stock class. The
+reported p-values are nominal and do not adjust for the several reported contrasts. Spearman has only two
+distinct Tr values and extensive ties; it is not a continuous dose-response test.
+
+S10.2     Results and the corrected interpretation
+The output contains 42 stocks: 7 at the subannual 0.5-year proxy and 35 at the annual 1-year proxy. Both
+groups are below the modeled 4- and 8-year windows. Therefore, this cohort has no observed proxy value near
+or beyond either window, and it cannot identify how the response changes as Tr approaches a window. The
+correct finding is no identifiable window-approach gradient.
+    The script does reproduce opposite-direction two-group associations. Median band-A null-excess is 0.529 in
+the 0.5-year group and 0.257 in the annual group (Mann–Whitney U = 200, p = 0.007). On raw band-A power
+the medians are 0.193 and 0.069 (U = 219, nominal p < 0.001). Spearman association is negative for band-A
+null-excess (ρ = −0.408, p = 0.007) and band-B null-excess (ρ = −0.340, p = 0.028); raw-power associations are
+ρ = −0.509, p = 0.001 for band A and ρ = −0.393, p = 0.010 for band B. These signs are opposite a simple
+prediction that excess rises as the review interval approaches the modeled response window: the shorter proxy
+group is farther below both windows and has the larger observed ratios.
+    These two-group associations are reproduced outputs, but they are not evidence of an institutional effect.
+All seven shorter-interval observations are Peru/Chile cases; proxy intervals are group-level and unverified stock
+by stock; other annual cases form the comparison group; regional ecology and data-generation differences are
+not randomized. ENSO-related quasi-periodicity is a plausible candidate confound, not a cause established by
+this test. AR(1) surrogates account for fitted red-noise persistence but do not remove quasi-periodic forcing. No
+causal adjustment, region-stratified estimate, or multi-year responsive comparison is available here.
+    At the nominal 95% threshold, there are 0/42 band-A flags and 1/42 band-B flag. By broad class, anchovy
+has 0/18 A and 1/18 B flags; sprat 0/4 in both; herring 0/20 in both. These are not BH-adjusted discoveries from
+a new test family. They agree with the main screen’s adjusted-zero result, but are not independent replications.
+
+S10.3     Per-stock values
+Table S13 gives every stock’s sample size, group-coded proxy, A/B band powers, per-stock AR(1) 95% thresholds,
+and nominal threshold flags. The null-excess ratios are calculated directly from the displayed powers and
+thresholds. The underlying CSV additionally retains regime and coding-source text.
+
+
+
+
+                                                       19
+     Table S13: Per-stock output of the recovered and re-executed Tr -ranked test. Band power and AR(1) 95% threshold are shown separately; the null-excess ratio is their
+     quotient. The Tr value is a group-coded proxy, not a stock-level verified field.
+
+                                                    Stock ID             n    Tr (yr)       A      A95    A flag       B      B95    B flag
+                                                    ANCHIXa              33       1.0   0.2663   0.4465    no      0.4306   0.4390    no
+                                                    ANCHMEDGSA17-18      48       1.0   0.0091   0.1709    no      0.0541   0.2576    no
+                                                    ANCHMEDGSA29         34       1.0   0.0264   0.2626    no      0.1097   0.3316    no
+                                                    ANCHMEDGSA7          20       1.0   0.1933   0.5233    no      0.1977   0.5112    no
+                                                    ANCHOBAYB            34       1.0   0.2408   0.4166    no      0.1400   0.4297    no
+                                                    ANCHOSA              36       1.0   0.1263   0.3532    no      0.2441   0.3687    no
+                                                    ARGANCHONARG         30       1.0   0.0930   0.3801    no      0.3203   0.4207    no
+                                                    ARGANCHOSARG         30       1.0   0.1047   0.4073    no      0.3841   0.4347    no
+                                                    HERR2224IIIa         31       1.0   0.0664   0.3267    no      0.1381   0.3919    no
+                                                    HERR2529-32          48       1.0   0.0365   0.1945    no      0.0525   0.2563    no
+                                                    HERR2532             38       1.0   0.0839   0.2337    no      0.0440   0.3069    no
+                                                    HERR30               44       1.0   0.0601   0.3646    no      0.0682   0.3800    no
+                                                    HERR30-31            61       1.0   0.0301   0.1486    no      0.0244   0.2130    no
+                                                    HERR31               31       1.0   0.0755   0.3456    no      0.1581   0.3968    no
+                                                    HERR4RFA             53       1.0   0.0251   0.1749    no      0.0231   0.1963    no
+                                                    HERR4RSP             53       1.0   0.0409   0.1871    no      0.0939   0.2381    no
+                                                    HERR4TFA             41       1.0   0.0463   0.2402    no      0.1088   0.3095    no
+                                                    HERR4TSP             41       1.0   0.0317   0.2457    no      0.1237   0.3120    no
+                                                    HERR4VWX             42       1.0   0.0319   0.2372    no      0.1596   0.3453    no
+                                                    HERRIsum             37       1.0   0.0845   0.2966    no      0.1912   0.3437    no
+                                                    HERRNIRS             63       1.0   0.0288   0.1538    no      0.0261   0.2222    no
+                                                    HERRNORSS            74       1.0   0.0352   0.1142    no      0.0592   0.1520    no
+                                                    HERRNS-IIIa-VIId     77       1.0   0.0272   0.1123    no      0.0399   0.1577    no
+                                                    HERRNWATLC           58       1.0   0.0806   0.1907    no      0.0590   0.2376    no
+20
+
+
+
+
+                                                    HERRRIGA             47       1.0   0.0576   0.2838    no      0.1716   0.3372    no
+                                                    HERRSIRS             64       1.0   0.0615   0.1751    no      0.0466   0.2172    no
+                                                    HERRVIa              57       1.0   0.0594   0.1884    no      0.0554   0.2473    no
+                                                    HERRVIaVIIbc         62       1.0   0.0694   0.2127    no      0.0819   0.2685    no
+                                                    JANCHOPJPN           36       1.0   0.1744   0.3416    no      0.1181   0.3666    no
+                                                    JANCHOSETO           38       1.0   0.2361   0.5016    no      0.1117   0.4083    no
+                                                    JANCHOTSST           42       1.0   0.0872   0.2987    no      0.1959   0.3861    no
+                                                    PANCHCCH             36       0.5   0.3217   0.4890    no      0.2913   0.4082    no
+                                                    PANCHCHVX            23       0.5   0.1123   0.4350    no      0.1433   0.4433    no
+                                                    PANCHCSCH            31       0.5   0.1046   0.3494    no      0.1116   0.3997    no
+                                                    PANCHNCH             29       0.5   0.4633   0.6086    no      0.2410   0.3586    no
+                                                    PANCHNCHSP           36       0.5   0.1927   0.4796    no      0.4247   0.4075    yes
+                                                    PANCHPERUNC          47       0.5   0.1471   0.2782    no      0.1726   0.3290    no
+                                                    PANCHSCH             28       0.5   0.2715   0.4673    no      0.3221   0.4459    no
+                                                    SPRAT22-32           50       1.0   0.0978   0.2209    no      0.0464   0.2823    no
+                                                    SPRATIIIa-IV         48       1.0   0.1030   0.2150    no      0.1004   0.2731    no
+                                                    SPRATNS              45       1.0   0.2171   0.3542    no      0.0954   0.3690    no
+                                                    SPRBLKGSA29          30       1.0   0.1014   0.3993    no      0.3536   0.4312    no
+S10.4     Reproduction and status reconciliation
+The recovered output table and reproduction log match the script to the reported precision. The historical
+query-log entry R4 records that, at that time, a search found only a recommendation memo marked “never
+executed.” Later repository state contains the implemented script and archived output. The v53 reproduction
+was run against the current local RAM v4.66 series and produced the same 42-stock output and test summary.
+The stale memo is retained in the provenance record; it does not overwrite the executed script/log evidence.
+The source bundle carries the script, CSV, stdout, and a reconciliation note.
+
+
+S11      Logistic core: crossing, precision, and parameter sensitivity
+S11.1     Equilibrium and linear map
+The logistic core uses S(N ) = rN (1 − N/K) and the zero-deficit equilibrium Z ∗ = δ = log(2)/10. Solving the
+interior root of the effort law yields E ∗ = 2.089623397737668; the stock equilibrium is N ∗ = K(1 − qE ∗ /r) =
+89.55188301131166. The equilibrium fishing mortality is F ∗ = qE ∗ = 0.002089623397737668 yr−1 .
+Local effort gains are (CE , CZ ) = (−0.0595180098426, 1.7850187149850) for the mobilising law and
+(−0.850336140482, −1.661701896635) for the protective comparator.
+    For held effort, the plant’s linearisation is the matrix Ahold retained in work/results.json and regenerated
+by work/p07_core.py. The review matrix composes the held plant flow with either (i) the exponential frozen-
+assessment controller-flow update, whose local linearization is exact for the controller ODE with the endpoint
+assessment fixed, or (ii) the separately defined forward-Euler update. Eigenvalues are calculated for the product
+in the registered flow-then-update ordering. The full state dimension is three; no continuous-delay approximation
+is used in this matrix calculation.
+
+S11.2     Baseline operator record
+
+Table S14: Baseline radii at annual review and all computed crossings on the interval scan. Values are from the
+retained full-precision core output.
+
+Map                                             ρ(1 yr) Crossing record / grid interpretation
+Mobilising, exponential frozen assessment 1.0003506565 One complex-pair crossing at 6.5012949481 yr, unstable →
+                                                       stable.
+Mobilising, Euler command step            1.0005452356 Complex-pair crossing at 47.5359822758 yr, unstable → stable;
+                                                       real −1 crossing at 79.1426878068 yr, stable → unstable.
+Protective, exponential frozen assessment 0.9838095183 No crossing on [0.2, 200] yr; maximum sampled ρ = 0.996740.
+Protective, Euler command step            0.9837962340 Real −1 crossing at 2.3063544244 yr, stable → unstable.
+
+
+    At the exponential-update mobilising crossing, the unit-modulus pair is approximately 0.9846404664 ±
+0.1745942495i, with angle 0.175494 radians. The exponential-update crossing estimate is unchanged to the
+printed digits on 2,001-, 20,001-, and 200,001-point preliminary scans; each reported value is then refined by 70
+bisection iterations. The sign of ρ(1) − 1 is only about 3.5066 × 10−4 at baseline. Euler crossings at 47.536 and
+79.143 years, and the Euler protective −1 crossing at 2.306 years, are properties of the Euler update; they are
+not numerical approximations to the exponential-update boundary at those intervals.
+    A continuous-delay comparator from the archived companion calculation has approximate crossings at 3.666
+and 150.358 years. It is retained as an operator contrast, not as a third discretization of the same review
+map. The exponential frozen-assessment result and the continuous-delay result have different state/operator
+constructions; their separation cannot be attributed to a single parameter while changing all architecture at
+once.
+
+S11.3     Re-run one-at-a-time ±2% sensitivity
+The most sensitive directions among this scalar battery are K, q, Emax , ∆ref . A missing crossing is a qualitative
+change in this scanned result, not simply a displaced point estimate. The signs are not symmetric: for example,
+a 2% increase in ∆ref removes the crossing from the scan, while a 2% decrease moves it to 10.775 years. The
+table is deterministic parameter perturbation, not statistical uncertainty.
+
+
+
+
+                                                        21
+Table S15: Re-run first exponential-update mobilising crossing (years) after one-at-a-time changes in each
+parameter. “None” means no crossing was found on the registered [0.2, 200]-year scan.
+
+                                         Parameter    −2%      −1%    +1%      +2%
+                                         K            None    2.986   8.665   10.371
+                                         q            None    3.438   8.502   10.100
+                                         Emax         None    3.445   8.499   10.096
+                                         η            5.270   5.924   7.021    7.494
+                                         r            7.349   6.936   6.041    5.549
+                                         ∆ref        10.775   8.891   2.353    None
+                                         τm           6.599   6.551   6.449    6.394
+                                         δ0           6.495   6.498   6.505    6.508
+                                         Zref         6.506   6.504   6.499    6.497
+
+
+
+S11.4     Archived one-at-a-time ±5% battery
+A separate archived sensitivity battery varied ten parameters at factors 0.90, 0.95, 1.05, and 1.10. It is retained
+as an archived record, not described as the current v53 rerun. The crossing-only summary is reproduced from
+src/p7_empirical/recovered/sens_table.csv; the file also retains equilibrium values, annual radii, crossing
+angles, crossing types, and protective-grid maxima. “None” denotes no crossing on the archived interval scan.
+The re-run ±2% table above and this archived wider perturbation record are distinct analyses.
+
+Table S16: Archived one-at-a-time ±5% and ±10% sensitivity battery. Entries are first exponential-update
+mobilising crossings in years; “None” means no crossing on the archived interval scan.
+
+                                  Parameter      −10%          −5%       +5%       +10%
+                                  r             10.1844 8.4928 3.7490    None
+                                  K               None    None 14.2825 19.0977
+                                  q               None    None 13.7973 18.3769
+                                  Emax            None    None 13.7899 18.3665
+                                  η               None 2.1944 8.7154 10.3140
+                                  δ0             6.4676 6.4845 6.5181 6.5348
+                                  Zref           6.5268 6.5136 6.4897 6.4788
+                                  ∆ref          20.8565 15.1725  None    None
+                                  τm             6.9012 6.7279 6.2138 5.8545
+                                  δ               None 4.6883 7.6905 8.5444
+
+
+
+S11.5     Six-parameter joint perturbation: 20,001-point rerun
+The six jointly perturbed parameters are (r, K, q, η, Emax , ∆ref ), each independently set to the lower or upper
+edge of its stated relative box, producing 64 corners per box. Both boxes were recomputed from scratch on
+20,001 evenly spaced review intervals in [0.2, 200] years (grid spacing about 0.00999 years) and crossings were
+bisected. The full per-corner JSON is retained as work/joint_box_fullgrid.json.
+
+Table S17: Full-grid joint-box results. “Stable no crossing” means ρ < 1 at all 20,001 points; it is not a proof of
+stability on the continuum.
+
+          Box     Corners Crossing No crossing Crossing range (yr) Max ρ among no-crossing corners
+          ±0.5%         64        60             4 0.871965–10.670425                      0.9999712801
+          ±1%           64        44            20 4.423192–13.653242                      0.9999952956
+
+
+    Every no-crossing corner in both boxes is stable at all evaluated grid points; no no-crossing corner is
+grid-unstable. Because the maximum radii are close to one, the status is numerically delicate. These boxes are
+not posterior or confidence intervals, and no sampling distribution is assigned to the parameters. The results
+show that a single baseline crossing should not be reported as a robust institutional threshold.
+
+S11.6     Independent numerical and nonlinear checks
+The retained precision-certificate log reports a high-precision root Tr,c = 6.50129494807546836889974861684,
+consistent with the double-precision monodromy crossing. A fresh independent audit of the full nonlinear
+plant and nonlinear frozen-assessment controller flow is in work/nonlinear_flow_check_v53.py and its JSON
+output. With DOP853 integration and central differences, the full-map Jacobian agrees with the monodromy to
+
+
+                                                              22
+maximum absolute error 1.67 × 10−9 at the crossing for relative step 3 × 10−5 ; finite-difference crossing estimates
+across five steps range from 6.501276 to 6.501299 years. The prior normal-form script used a linearized controller
+update and therefore does not establish a normal-form coefficient for the full nonlinear map; its supercritical
+label is not relied on here. No invariant-circle continuation or independent orbit confirmation was completed, so
+no nonlinear bifurcation theorem is claimed.
+
+S11.7     F-grid placement convention
+The model’s equilibrium fishing-mortality proxy is swept as F ∗ = qE ∗ within its illustrative parameter grid.
+For the cross-system placement summaries in S12, the code uses fixed categories: below-stable if F < 0.001;
+marginal if 0.001 ≤ F ≤ 0.004; unstable-range if 0.004 < F ≤ 0.02; beyond-feasible if F > 0.02. These names
+describe placement relative to the model grid and its maximum intrinsic growth rate, not assessed stock status.
+Their ecological scale is not calibrated to the 42-stock cohort; treat the categories as exploratory diagnostics
+only.
+
+
+S12      Archived nonlinear comparator and trajectory-distortion
+         records
+S12.1     Executed logistic-core comparator design
+The retained comparator script simulates the same illustrative logistic plant with the four feedback/update
+combinations (mobilising or protective; forward Euler or nonlinear frozen-assessment controller flow) and a
+fixed-plan controller with effort frozen at E ∗ . The initial state is N0 = 0.95N ∗ , Z0 = Z ∗ = δ, and E0 = E ∗ ;
+the horizon is 800 reviews; metrics use the last 60% of simulated reviews; and divergence is recorded if the
+stock leaves (0, 2K). The stock follows the held logistic flow; the memory signal is integrated with RK4 at
+dt = 0.2. The noisy run perturbs the assessment as Z  b = Z(1 + ϵξ), with standard-normal ξ, as implemented in
+the retained script. The intended robustness value is ϵ = 0.3.
+    A single-seed deterministic/noisy table (p5_comparator_mse.csv) and a ten-seed summary (p5_comparator_
+mse_mc.csv) are archived. The ten-seed CSV has no ϵ, per-seed, or seed-map columns; the earlier manuscript
+labels it as the 30% error run. We therefore retain the 10-seed figures as archived, not as a v53 rerun, and flag
+the missing table metadata. Metrics are normalized by K for stock deviation and by Emax for effort deviation;
+depletion frequency is the fraction of post-transient reviews with N < 0.5N ∗ .
+
+
+
+
+                                                        23
+     Table S18: Archived 10-seed nonlinear comparator summary. The retained CSV does not contain an ϵ or per-seed field; the earlier manuscript describes this summary as
+     the 30% assessment-error run. Values are preserved as archived and are not presented as a new re-execution.
+
+                                        Controller               Tr   Seeds   Mean depletion   Mean min N/K    Mean RMSD N/K    Diverged seeds
+                                        extractive-euler        1.0     10            0.2179          0.2229           0.3156               0
+                                        extractive-exact        1.0     10             0.066          0.5406           0.1402               0
+                                        protective-euler        1.0     10               0.0           0.895           0.0002               0
+                                        protective-exact        1.0     10               0.0           0.895           0.0002               0
+                                        fixed                   1.0     10               0.0          0.8954              0.0               0
+                                        extractive-euler        8.0     10                 –               –                –              10
+                                        extractive-exact        8.0     10            0.0823          0.2608           0.1996               0
+                                        protective-euler        8.0     10               0.0          0.5952            0.275               0
+                                        protective-exact        8.0     10               0.0          0.8939           0.0005               0
+                                        fixed                   8.0     10               0.0          0.8955              0.0               0
+                                        extractive-euler       12.0     10                 –               –                –              10
+                                        extractive-exact       12.0     10            0.0315          0.2997           0.1524               0
+                                        protective-euler       12.0     10            0.9996          0.3769           0.4854               0
+                                        protective-exact       12.0     10               0.0          0.8935           0.0006               0
+                                        fixed                  12.0     10               0.0          0.8955              0.0               0
+                                        extractive-euler       20.0     10                 –               –                –              10
+                                        extractive-exact       20.0     10             0.001          0.5123           0.0662               0
+                                        protective-euler       20.0     10                 –               –                –              10
+                                        protective-exact       20.0     10               0.0          0.8928           0.0008               0
+                                        fixed                  20.0     10               0.0          0.8955              0.0               0
+24
+    The archived ten-seed summary reports divergence in all 10 Euler-mobilising runs at Tr = 8, 12, 20 years; the
+Euler-protective controller diverges in all 10 runs at 20 years and has mean depletion 0.9996 at 12 years. The
+nonlinear frozen-assessment-flow protective and fixed-plan runs have zero recorded depletion at the displayed
+intervals. Nonlinear frozen-assessment-flow mobilising is intermediate: it avoids divergence in these cells, but
+the mean depletion frequencies are nonzero (for example 0.066 at one-year review and 0.0823 at eight years).
+This is a model-level robustness comparison, not evidence that one real policy class dominates across stocks or
+operating models.
+
+S12.2     Linear trajectory-distortion record
+The retained p5_linear_trajectory_mse.csv compares Euler and exponential-update linear trajectories under
+the same initial perturbation and interval grid. In the mobilising channel, the scaled RMSD is 1.913 at Tr = 0.5
+years, 13.111 at 1 year, 189.020 at 2 years, and exceeds 104 for many longer intervals; Euler trajectories diverge
+in several intervals where the exponential-update map is stable. In the protective channel, the two updates
+are close at 0.5–2 years (scaled RMSD 0.0028–0.0172), but Euler divergence occurs from 3 years upward in the
+retained scan while the nonlinear frozen-assessment-flow trajectory remains bounded. The norm is defined by
+the archived analysis and should not be interpreted as a universal operational loss function.
+    Both trajectory records explain why the linear crossing comparison matters, but their status is narrower
+than the main spectral computation: one uses an illustrative plant and fixed perturbation; the noisy multi-seed
+table has a missing metadata field; and neither tests field performance. These results are not included in the
+main-text abstract or used to recommend a policy.
+
+
+S13       ADH, fishing-mortality placement, and northern-cod records
+S13.1     ADH buffer-years recomputation
+The archived ADH measure is defined stock by stock as
+                                                                  
+                                                     ln(SSB/Blim )
+                                    ADH = max 0,                     ,
+                                                          F
+
+where SSB is the current assessed spawning-stock biomass, Blim is the stock-specific limit reference point, and
+F is the current fishing mortality. It is an algebraic buffer-years proxy, not a direct measurement of institutional
+response or a guarantee of time to recovery.
+    The recovered input cohorts include an archived 43-stock table, a 454-stock RAM v4.66 broader pool, a
+415-row v4.44 pool, and the screen-cohort summaries. Recalculation matches deposited ADH to numerical
+precision (maximum absolute difference 1.14 × 10−13 in the v4.66 broad pool; the archived 43-stock values
+match exactly to printed precision). Descriptive medians and zero fractions reproduce: 43-stock archived median
+1.7902 years with 18.60% zero values; v4.66 broad-pool median 3.3893 years with 15.20% zero values; v4.66
+forage-fish subset median 2.6962 years with 18.75% zero values. In the 33-stock paired vintage comparison, the
+v4.44 and v4.66 medians are 2.7901 and 2.3442 years, respectively; across 396 paired broader stocks, median
+absolute ADH change is 0.7958 years. Data vintage and cohort definition therefore matter.
+    A fresh 20,000-draw seed-11 resampling run from the v4.66 broad pool yields median-of-pool draws with mean
+3.3452 years and percentile range 1.8423–5.5307 years; 2.33% of draws fall below the archived 43-stock median
+of 1.7902. The archived resampling record gives 2.12%. The forage subset’s new seed-11 run has median-of-pool
+draw mean 2.7916 years, percentile range 2.3081–3.5649, and 0.39% below the archived median (archived value
+0.29%). This resampling describes a particular cohort-vintage construction; it is not a probability that a given
+stock is sustainable.
+
+S13.2     Fishing-mortality data verification and placement
+The local F script first checks three gates. (G1) It reproduces the screen cohort: 42 stocks with at least
+20 valid SSB observations. (G2) It compares fisheries-ADH F with both mean F and last F: the archived
+fisheries-ADH values match last F for 42 of 43 intersected stocks; SPRBLKGSA29 is the exception (archived
+fisheries-ADH F 0.2100, series mean F 0.2344, and last-F 0.0400, with 32 F observations). (G3) It reproduces
+the v4.66 broader-pool F quartiles (0.0800, 0.2143, 0.4639) and all 13 taxonomic-group quartile triples. These
+are arithmetic and source-cohort checks.
+    Among 38 of the 42 screen stocks with usable F series, the mean of stock-level F medians is 0.3663 (IQR
+0.2701–0.7243; range 0.0053–2.6776). In the 454-stock broader pool, Fnow has median 0.2143 (IQR 0.0800–
+0.4639). The 1170 paired TC/SSB and F observations have Spearman ρ = 0.8243, p = 7.88 × 10−291 , showing
+that the two exploitation summaries are strongly associated in this merged record. A comparison of model
+
+
+                                                        25
+F ∗ = 0.00209 with empirical F values places most empirical values outside the illustrative model’s low-F grid;
+because the model scale is not calibrated to these stocks, this is an explicit scale-mismatch warning rather than
+evidence that real fisheries are infeasible.
+    The exploratory rank association between stock-level mean F and target-band null-excess is positive but
+not conventionally significant in the screen cohort: band A ρ = 0.3069, p = 0.0609, band B ρ = 0.2017, p =
+0.2247. Excluding the seven Peru/Chile cases reduces these to band A ρ = 0.0339, p = 0.8565 and band B
+ρ = 0.0327, p = 0.8615. The attenuation is consistent with region-linked confounding, but it does not identify
+the confound or establish a causal effect. The per-stock F series and model-placement labels are shown below.
+
+
+
+
+                                                       26
+     Table S19: Screen-cohort fishing-mortality series and placement categories. Values are retained as the local v53 output; a dash indicates no usable F series.
+
+                                              Stock ID               SSB n   Fn    Mean F    Median F   Max F    Placement
+                                              ANCHIXa                   33    32    1.0000     0.9697   1.8305   beyond-feasible
+                                              ANCHMEDGSA17-18           48    48    0.6385     0.5540   1.5400   beyond-feasible
+                                              ANCHMEDGSA29              34    34    1.2613     1.1854   1.9805   beyond-feasible
+                                              ANCHMEDGSA7               20    20    0.1085     0.1060   0.2310   beyond-feasible
+                                              ANCHOBAYB                 34    27    0.3336     0.3640   0.6810   beyond-feasible
+                                              ANCHOSA                   36     0         -          -        -   no-F
+                                              ARGANCHONARG              30    30    0.0437     0.0420   0.0960   beyond-feasible
+                                              ARGANCHOSARG              30    30    0.0053     0.0040   0.0140   unstable-range
+                                              HERR2224IIIa              31    29    0.4220     0.4070   0.7010   beyond-feasible
+                                              HERR2529-32               48    47    0.2451     0.2190   0.4600   beyond-feasible
+                                              HERR2532                  38    37    0.2701     0.2430   0.4820   beyond-feasible
+                                              HERR30                    44    42    0.1411     0.1425   0.2060   beyond-feasible
+                                              HERR30-31                 61    60    0.0841     0.0587   0.2564   beyond-feasible
+                                              HERR31                    31    31    0.3294     0.2880   0.6400   beyond-feasible
+                                              HERR4RFA                  53    30    0.0841     0.0705   0.1990   beyond-feasible
+                                              HERR4RSP                  53    39    0.2128     0.1750   0.5780   beyond-feasible
+                                              HERR4TFA                  41    36    0.3270     0.3275   0.9060   beyond-feasible
+                                              HERR4TSP                  41    36    0.4930     0.4240   1.7400   beyond-feasible
+                                              HERR4VWX                  42    41    0.7083     0.5700   2.4600   beyond-feasible
+                                              HERRIsum                  37    31    0.2701     0.2600   0.4400   beyond-feasible
+                                              HERRNIRS                  63    62    0.4352     0.3830   0.9930   beyond-feasible
+                                              HERRNORSS                 74    73    0.2945     0.1500   3.4900   beyond-feasible
+                                              HERRNS-IIIa-VIId          77    76    0.3384     0.2520   1.2100   beyond-feasible
+                                              HERRNWATLC                58    57    0.3777     0.2750   0.7980   beyond-feasible
+                                              HERRRIGA                  47    45    0.4185     0.4240   0.7080   beyond-feasible
+27
+
+
+
+
+                                              HERRSIRS                  64    63    0.4734     0.4500   0.9740   beyond-feasible
+                                              HERRVIa                   57    57    0.3549     0.2720   1.0800   beyond-feasible
+                                              HERRVIaVIIbc              62    61    0.3409     0.2760   1.0400   beyond-feasible
+                                              JANCHOPJPN                36     0         -          -        -   no-F
+                                              JANCHOSETO                38     0         -          -        -   no-F
+                                              JANCHOTSST                42     0         -          -        -   no-F
+                                              PANCHCCH                  36    36    0.5616     0.5025   1.7000   beyond-feasible
+                                              PANCHCHVX                 23    23    1.3357     1.3700   3.1100   beyond-feasible
+                                              PANCHCSCH                 31    31    1.2472     1.0500   3.6200   beyond-feasible
+                                              PANCHNCH                  29    15    2.6776     2.9800   4.0200   beyond-feasible
+                                              PANCHNCHSP                36    36    2.6179     1.9250   7.9800   beyond-feasible
+                                              PANCHPERUNC               47    47    0.7297     0.6150   2.1000   beyond-feasible
+                                              PANCHSCH                  28    28    0.8514     0.7800   2.7800   beyond-feasible
+                                              SPRAT22-32                50    48    0.3179     0.3189   0.5320   beyond-feasible
+                                              SPRATIIIa-IV              48    47    1.2363     1.2750   2.2030   beyond-feasible
+                                              SPRATNS                   45    44    1.0598     1.0185   2.3200   beyond-feasible
+                                              SPRBLKGSA29               30    32    0.2344     0.2050   0.6400   beyond-feasible
+S13.3      Northern-cod assessment table
+
+Table S20: Northern-cod assessment values shown in the descriptive two-window figure. The reported instanta-
+neous natural mortality M comes from the assessment table; e−M is a transformation, not a separate observed
+survival series.
+
+                                          Year SSB (kt) M (yr−1 )         e−M
+                                          1991     735.00         1.002   0.367
+                                          1992     382.00         2.214   0.109
+                                          1993     101.00         2.575   0.076
+                                          1994      31.00         2.331   0.097
+                                          1995      10.00         0.288   0.750
+                                          1996      16.05         0.341   0.711
+                                          2000      34.42         0.717   0.488
+                                          2004      20.07         0.362   0.696
+                                          2005      25.18         0.288   0.750
+                                          2010      96.91         0.696   0.499
+                                          2015     298.65         0.278   0.757
+
+
+    The values were cross-checked against the DFO CSAS SAR 2016/026 table. The crash window is 1991–1995;
+the later plotted interval extends to 2015 and includes low-stock persistence and subsequent increases. The plot
+partitions the chronology but does not decompose causation. No numerical constrained-M allocation is included
+in v53: the raw source quantities and a fully reproducible calculation were not recovered. Claims about the size
+of a seal-attributable, fishing-attributable, or governance-attributable component are therefore not made.
+
+
+S14       Power record and unreproduced items
+S14.1      Injected-signal power: 17 archived white-noise cells
+The committed driver specifies a sampled-governance operating model, generates annual effort, adds multiplicative
+observation error Etobs = Et exp(εt ), and tests target-band periodogram power against a per-series AR(1) red-
+noise null. The null uses 120 simulations and seed 7. Each power cell has 50 trial seeds 0–49. White-noise
+draws use εt ∼ N (0, σ 2 ), with σ ∈ {0.1, 0.3}. The analyzed record spans H years after burn-in; the cell-specific
+integrator horizon is retained in the CSV.
+    The model cells are: sprat class (r, g, Tr ) = (0.8, 2, 7) with target band 30–120 years; anchovy class (1.6, 1, 3)
+with band 8–20 years; and a cod-labelled false-positive class (0.3, 5, 5) with band 8–20 years. The archived
+17-cell design is not a complete Cartesian grid: sprat H = 400, σ = 0.1 is not among the specified cells. Fifteen
+cell outputs are present in the recovered run log; the two cod H = 400 values were recovered from a follow-up
+JSON. The complete driver previously stopped after 15/17 cells, so the consolidated table is an assembly of
+archived outputs, not a claim of a successful full driver rerun.
+Table S21: Archived white-noise injected-signal power table (17 cells). Each cell has 50 trials; power is detections
+divided by trials.
+
+                             Class       H Horizon T         σ    Detections / 50 Power
+                             sprat      100          120    0.1            50 / 50   1.00
+                             sprat      100          120    0.3            12 / 50   0.24
+                             sprat      200          220    0.1            50 / 50   1.00
+                             sprat      200          220    0.3            35 / 50   0.70
+                             sprat      400          420    0.3            50 / 50   1.00
+                             anchovy    100          120    0.1             5 / 50   0.10
+                             anchovy    100          120    0.3             4 / 50   0.08
+                             anchovy    200          220    0.1             5 / 50   0.10
+                             anchovy    200          220    0.3             3 / 50   0.06
+                             anchovy    400          420    0.1             0 / 50   0.00
+                             anchovy    400          420    0.3             4 / 50   0.08
+                             cod        100          120    0.1             4 / 50   0.08
+                             cod        100          120    0.3             4 / 50   0.08
+                             cod        200          220    0.1             2 / 50   0.04
+                             cod        200          220    0.3             4 / 50   0.08
+
+
+                                                            28
+                            Class       H Horizon T      σ    Detections / 50 Power
+                            cod        400         420 0.1             1 / 50     0.02
+                            cod        400         420 0.3             2 / 50     0.04
+
+   The sprat signal is detected in 50/50 trials at H = 100 and 200 when σ = 0.1; at σ = 0.3, power rises from
+12/50 to 35/50 across those horizons, and is 50/50 in the single retained H = 400 cell. Anchovy power ranges
+0/50–5/50 (0.00–0.10), and the cod-labelled false-positive rate ranges 1/50–4/50 (0.02–0.08). These conditional
+proportions are based on 50 trials and the declared model/null pairing. They do not certify adequate power for
+empirical fisheries or a specific stock. The sprat-class high detection at low noise can be driven by a growth
+transient in a broad 30–120-year band, not necessarily a stable cycle; power falls substantially at higher noise
+and shorter records. The empirical screen’s null therefore cannot be interpreted as a strong mechanism test for
+every ecological class.
+
+S14.2     Northern-cod constrained-mortality formulation: not reproduced
+The constrained-M formulation in earlier project notes proposes a mortality allocation that could distinguish
+fishing from other losses. In v53, its underlying table, uncertainty structure, and complete executable calculation
+were not recovered. The DFO assessment table used here reports SSB and natural mortality estimates, but
+does not by itself identify the causes of mortality. Consequently, v53 does not report numerical constrained-M
+estimates, attributed mortality shares, or a causal seal-versus-fishing decomposition. Those values must not be
+reconstructed from the plotted series alone. The open item is to recover the original input table, document
+the model definition and priors/constraints, and reproduce the calculation against alternative assessment
+formulations before drawing a mortality-allocation conclusion.
+
+S14.3     Prospective work is not completed work
+The five research designs and their estimands, identification checks, and falsification rules are specified in S7.
+The source bundle also retains model-comparison, governance-event, human-in-the-loop, and MSE proposals.
+None has an executed data analysis, registered protocol identifier, field intervention, or effect estimate in v53.
+The 17-cell conditional power table can inform a future simulation plan; it is not itself a completed prospective
+field test.
+
+
+
+
+                                                        29
+

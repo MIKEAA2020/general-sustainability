@@ -1,0 +1,1883 @@
+1      The decision clock: review intervals as a design lever for stable
+2                            resource governance
+3                                                  Amin Abaee
+                                              Independent Researcher
+
+                                           ORCID: 0000-0002-0019-1842
+                                                amin_abaee@ut.ac.ir
+
+4                                              September 12, 2026
+
+
+5                                                     Abstract
+6              Environmental governance runs on clocks: institutions observe resource systems at dis-
+7          crete times and hold the resulting controls until the next review. Formal models routinely
+8          substitute this sampled architecture with a continuous delay or a single annual step. We
+9          show the substitution matters. Modelling periodic review as sample-and-hold governance —
+10         a loop that observes and updates only at review times — we establish two exact properties,
+11         forward invariance of the sampled state space and rapid-review consistency over finite hori-
+12         zons only, and compute stability review-interval by review-interval, demonstrated on fish-
+13         eries. Stability boundaries move or vanish when the operator is changed: at an illustrative
+14         baseline the exact map crosses once near a 6.5-year interval while one-step approximations
+15         report artefact crossings, and the protective channel is stable at every tested interval. That
+16         crossing is reported as a band, not a threshold: under a half-percent joint perturbation of
+17         the model parameters it ranges from under one year to nearly eleven, and under a one-
+18         percent perturbation the instability verdict itself fails in a third of cases (Section 3.4.1), so
+19         the robust content of the paper is the operator contrast and the protective-channel result
+20         rather than the location of the crossing. A multiplicity-controlled screen of 42 fish stocks
+21         finds no robust institutional cycles and a 32-system cross-sector case search no unconfounded
+22         oscillator, showing periodicity alone cannot diagnose governance feedback; the northern cod
+23         record splits into a formulation-dependent crash and an unresolved post-collapse identifi-
+24         cation problem. What decides whether management stabilises or destabilises a renewable
+25         resource is therefore not biology alone but the decision clock — the timing and form of
+26         policy revision — a design variable with stability consequences for any periodically reviewed
+27         regime, from fisheries assessment to climate stocktakes.
+
+28      Keywords: sample-and-hold governance; review interval; decision clock; institutional delay;
+29   management strategy evaluation; fisheries management; environmental governance
+30      Evidential status. Every central claim carries its exact status — exact, conditional,
+31   archived, provisional, or prospective — in the statement inventory (Supplementary S1); the
+32   main text states each result once with its record pointer, and Section 4.7 collects the limitations.
+
+33   1 Introduction
+34   Fisheries governance is periodic. Surveys are scheduled, assessments are produced at fixed ca-
+35   dences, advice is delivered at review points, and the resulting catch or effort controls are held
+36   in force until the next review. The review interval — the time between successive opportunities
+37   to revise the command — is sometimes a single year, sometimes a multi-year plan, sometimes
+38   a moratorium of indefinite length (Punt and Donovan, 2007; DFO, 2016). The formal litera-
+39   ture treats this institutional clock in two ways, neither of which matches the operating object.
+
+
+                                                          1
+40   Population-dynamic theory models institutional response either as a continuous-time lag, that
+41   is, a delayed signal entering an evolving control law, in the lineage of Gurney, Blythe, and
+42   Nisbet (1980); or as an annual discrete-time decision appended to a surplus-production model,
+43   in which the between-decision dynamics are compressed into a single annual step. Real insti-
+44   tutions do neither. They observe and assess at discrete times, choose a rule-based command,
+45   and then hold or interpolate that command until the next decision opportunity. This paper
+46   calls that architecture sampled governance — a governance loop in which state observation and
+47   control update occur at discrete review times, not continuously. It is the same architecture
+48   the title and abstract call sample-and-hold governance: one object under two names — sampled
+49   governance names the institutional loop, sample-and-hold its control-theoretic update law —
+50   and the article body uses sample-and-hold (with sampled for its maps and loops) throughout.
+51       Two failure modes follow from this mismatch. The first is architecture substitution. Replac-
+52   ing the sample-and-hold architecture by a continuous delay, or by an annual difference equation,
+53   can move or delete stability boundaries. Conclusions about a governance system then depend on
+54   an operator that the institution does not implement. The second is causal promotion. Spectral
+55   peaks, cohort cycles, and crisis-driven monitoring records circulate as evidence for institutional-
+56   feedback mechanisms when they carry no information about the controller’s sign, cadence, or
+57   timing at all. The marine-science literature already contains the disciplinary template for re-
+58   sisting this promotion. The skeptical re-analysis of the Russell Cycle (McManus, Licandro, and
+59   Coombs, 2016) showed that an 88-year zooplankton series long treated as a cycle failed to show
+60   a resolvable true periodicity. This article extends that discipline from climate-forced cycles to
+61   governance-feedback claims.
+62       The contribution is fivefold. First, a sample-and-hold model of periodic review is specified,
+63   in which the governance clock is decomposed into seven time objects (observation interval, as-
+64   sessment interval, review interval, decision lag, deployment lag, ecological response lag, and
+65   memory timescale) and the extractive controller is an explicit discretisation with specified com-
+66   parator classes. Second, two properties of the sampled process are established exactly: forward
+67   invariance of the sampled state space, and the precise scope of the rapid-review limit — a
+68   finite-horizon numerical-consistency statement that implies nothing about stability at positive
+69   review intervals. Third, the review-interval spectrum is computed under the discipline that the
+70   sample-and-hold map and the continuous-delay equation are different operators. A stability
+71   window located on one map does not transfer to the other, and the paper states which oper-
+72   ator carries which statement. Fourth, an empirical layer is reported: a multiplicity-controlled
+73   spectral screen of 42 annually assessed stocks, a power analysis of that screen, and a structured
+74   case search across more than thirty resource systems. Fifth, the northern cod case (NAFO
+75   2J3KL) is carried through the resulting falsification discipline. These five are retrospective; the
+76   paper’s constructive content is the prospective programme — five prospective designs specified
+77   as preregistration targets — that could convert or refute the mechanism.
+78       The model class examined here is the extractive controller: a rule that raises extraction
+79   effort in response to a perceived decline. This is the demand-side form of the overshoot loop.
+80   The response to a perceived shortfall falls on the productive stock itself rather than on its
+81   regeneration. Extraction is raised precisely because the base has declined, which accelerates the
+82   decline it is reacting to. Its protective counterpart (effort reduced in response to decline), fixed
+83   multi-year plans, and hybrid rules serve as comparators.
+84       The extractive rule is not proposed as desirable management. It is a diagnostic repre-
+85   sentation of perverse pressure: when a perceived shortfall threatens short-term employment
+86   or revenue, the political-economic response — subsidies that sustain effort, pressure to hold
+87   catches up — can push extraction upward as the base declines. Capacity-enhancing subsidies
+88   are the documented form of this pressure (Sumaila et al., 2019). The protective controller is the
+89   policy-relevant comparator; the pair exists to show how controller sign interacts with review
+90   timing, not to recommend the extractive rule.
+
+
+                                                      2
+ 91       Conclusions drawn inside the extractive class are not generalised to governance as a whole,
+ 92   and the screen below asks whether such a channel is empirically resolvable at all. The im-
+ 93   plication for institutional design is direct: an annual-review extractive rule and a multi-year
+ 94   protective plan are not interchangeable instruments, and a sampled-data analysis must state
+ 95   which operator a given stability claim is computed on.
+ 96       The architecture is not unique to fisheries. National climate pledges under the Paris Agree-
+ 97   ment are communicated every five years and informed by five-yearly global stocktakes (UN-
+ 98   FCCC, 2015, Articles 4.9 and 14): held commands under periodic review (Figure 1A). Failures
+ 99   then take a common form across sectors: the governance clock (the review interval), the eco-
+100   logical clock (the recovery rate), and the environmental clock (exogenous cycles such as ENSO,
+101   Section 3.7) fall out of phase. The timing and form of policy revision — the review interval
+102   together with the revision rule — is the decision clock. This article develops the fisheries case
+103   in full; Section 4.8 returns to the cross-sector reading.
+
+
+
+
+      Figure 1: The decision clock. A: Three institutional architectures: continuous-delay feedback, the
+      annual-step compression, and sample-and-hold governance, which observes at review times and holds the
+      command between them. B: Review-interval stability slice (schematic): the extractive exact update is
+      marginally unstable at annual review (ρ = 1.00035) and crosses once near a 6.5-year interval (unstable
+      → stable), while the protective update is stable throughout (ρ = 0.9838 at annual review). Curves are
+      schematic; markers show computed values (Section 3.4).
+
+
+
+104   Related work
+105   Sampled-data control. That a controller which samples, computes and holds is a different
+106   dynamical object from one that acts continuously is foundational in control engineering, not a
+107   refinement of it: the sampled-data theory of Chen and Francis (1995) and the digital-control
+108   treatment of Åström and Wittenmark (1997) are built on the distinction, and the framework of
+109   Nešić and Teel (2004) exists precisely because stability of a continuous design does not transfer
+110   automatically to its sampled implementation. The zero-order hold appears there as an operator
+111   with spectral properties of its own. Little of that machinery is routinely imported into resource-
+112   governance modelling. The two exact properties established below — forward invariance of the
+113   sampled state space (Section 3.1) and rapid-review consistency over finite horizons only (Section
+114   3.2) — are the governance analogues of facts that are standard in that literature and, to our
+115   knowledge, are not stated in this one.
+
+                                                        3
+116   Periodic review as practice, and the interval as a design variable. Real institutions do
+117   review periodically and hold. Management procedures are evaluated by closed-loop simulation
+118   and then applied on multi-year cycles (Butterworth and Punt, 1999; Butterworth, 2007; Punt
+119   et al., 2016), with review intervals of a few years the norm and the interval itself a choice the
+120   institution makes rather than a constant of nature. Practice is therefore sampled by construc-
+121   tion, while the modelling literature reaches for the continuous-time delay or the single annual
+122   step. This paper treats the review interval as the design lever it already is in practice.
+123   Delay, and the substitution this paper questions. Where lag is modelled in fisheries it
+124   is usually continuous. Shertzer and Prager (2007) simulate a spectrum of fisheries and find
+125   that management delay requires deeper catch reductions sustained for more years to recover
+126   benchmark status, and causes collapse most often under depensatory recruitment or density-
+127   dependent catchability. Brown et al. (2012) find that delays beyond about five years raise
+128   collapse probability under environmental decline, and that the long-run cost of delay exceeds
+129   the short-term benefit of overfishing. Adamson and Hilker (2020) model delayed knowledge
+130   of the stock and show it can induce harvester–resource cycles. Karlsson and Gilek (2020)
+131   treat delay as a governance pathology to be managed. Each of these is a statement about a
+132   continuous lag. The question asked here is prior to theirs: whether substituting a continuous
+133   lag for a sampled review is admissible at all. Sections 3.3 and 4.1 show that it is not — response
+134   regions and stability boundaries move or vanish when the operator is changed — so the delay
+135   literature and this paper concern different operators, and a result about one is not automatically
+136   a result about the other.
+137   Position. The contribution is therefore not the observation that institutions act periodically,
+138   which is old, nor that delay is costly, which is well established. It is that the sampled operator
+139   has properties the continuous surrogate does not; that two of those properties can be stated
+140   exactly and proved; and that the review interval consequently carries a stability signature that
+141   can be computed rather than negotiated.
+
+142   2 Material and methods
+143   2.1 The sample-and-hold model of periodic review
+144   The model treats periodic review as a sample-and-hold control architecture: the command set
+145   at a review instant is held fixed until the next review, and only the between-review ecological
+146   dynamics are continuous in time. Seven time objects are kept distinct, and no two are col-
+147   lapsed into a single “governance lag” unless the empirical record cannot resolve them and the
+148   aggregation rule is stated (Table 1).
+149       For fisheries readers, the control-theoretic vocabulary maps onto management-procedure
+150   language: the controller is the harvest control rule; the command is the catch or effort limit
+151   it sets; the review interval is the advice cycle; the hold is the plan period between revisions;
+152   and the operator — the decision architecture on which a stability claim is computed — is
+153   the management procedure itself. Assessment error and implementation error enter where
+154   observation meets advice and where decisions meet deployment (Table 1).
+155       Table 1. The governance-time ontology.
+
+      Object                                              Definition
+      Observation interval Tobs                           Time between raw measurements
+      Assessment interval Tassess                         Time between formal state estimates
+      Review interval Tr                                  Time between opportunities to change the
+                                                          command
+      Decision lag τdec                                   Assessment completion to formal decision
+      Deployment lag τdep                                 Decision to implemented change in extraction
+                                                          pressure
+      Ecological response lag τeco                        Implementation to detectable ecological response
+
+
+                                                      4
+      Object                                                  Definition
+      Memory timescale τm                                     Relaxation time of a filtered institutional signal;
+                                                              not a discrete delay
+
+
+
+
+156      observation → assessment → advice → decision → implementation → ecological response
+
+157   The chain is the sequence Table 1 resolves into distinct objects; collapsing any two stages
+158   without a stated aggregation rule is the measurement-level form of architecture substitution.
+159       Reviews can be annual while deployment is delayed; observations can be frequent while de-
+160   cisions are legally fixed for several years; and stock and realised-effort series alone may identify
+161   only a combined closed-loop phase shift rather than the separate τdec and τdep . Separating them
+162   empirically requires dated observation releases, assessment products, commands, and imple-
+163   mentation records. Alternatively, a proved structural-identifiability argument for the specified
+164   observation model can serve. Two further conventions apply. The review opportunity is not
+165   the same as the response sign: the extractive command studied here raises effort in response
+166   to a perceived decline, and the protective controller enters only as a comparator. The fixed-τ
+167   form is also an idealisation. Real institutions confronting visible scarcity typically change their
+168   instrument set — buyouts, engineered transfers, new infrastructure — rather than hold a single
+169   response law with constant delay. Any estimated τ therefore summarises a changing control
+170   architecture, not a structural constant.
+171       Box 1. Management regimes as sample-and-hold architectures.
+172       Four institutional regimes in the review–hold vocabulary.
+
+      Regime                Review               Instrument                Hold               Emergency clause
+      Annual TAC            1 yr                 TAC (quota)               1 yr               in-year adjustment
+      fishery                                                                                 where provided
+      Multiannual plan      3–5 yr               fishing-mortality         multi-year         trigger review
+                                                 rule
+      Moratorium            indefinite           closure                   until review       reopening rule
+                                                                                              (Section 3.8)
+      Data-limited          irregular            effort controls           variable           crisis response
+      system
+
+
+173       Notation. Throughout, N denotes the resource stock, Z the institutional deficit signal,
+174   and E the extraction effort. The review Poincaré map — the discrete-time map obtained by
+175   sampling the continuous flow at review instants — is written PTr ; its Jacobian at the fixed
+176   point X ∗ , the monodromy matrix of the sampled loop, is DPTr (X ∗ ) (Section 2.3’s multiplier
+177   condition is written on it); the projection onto the admissible effort interval [0, Emax ] is Π[0,Emax ] .
+178   The signal map Φ is a nonnegative functional of the deficit, with memory timescale τm > 0;
+179   its softplus realisation is Φk , with shift δ = log 2/10 ≈ 0.069 and sharpness k (the shift is the
+180   equilibrium memory level, distinct from and unrelated to the effort-law gain δ0 , as the display
+181   below states). The effort law is FB . The assessment operator is An and the observation operator
+182   is O. In the control sections S(·) is surplus production — S(N ) on the logistic plant (defined
+183   after equation (2)) and S(A) on the stage plant (Section 3.4) — while g (Section 3.3), CE
+184   and CZ (Section 3.4), and the four-state loop (Section 3.7) are defined where they are used.
+185   In the northern cod case (Sections 2.7 and 3.8, Table 2) S is instead spawning stock biomass
+186   (reported as SSB in Table 2), s the unstable threshold, K the unexploited carrying capacity,
+187   C(t) removals, M instantaneous natural mortality (with extra mortality Mx in Lemma 2.2),
+188   and F fishing mortality. The two scopes of S never share an equation, and no other symbol
+189   serves two sorts: the monodromy is written DPTr (X ∗ ) throughout, and Lemma 2.2’s production
+
+                                                          5
+190   maximum is written fmax , leaving M to natural mortality alone. Symbols are tabulated with
+191   their definition sites in Table 4 of Appendix A.
+192       Let review times be tn = nTr . Between reviews, extraction effort is held at En and the
+193   resource stock follows the logistic process under held effort:
+                                                    
+                                               N (t)
+194                        Ṅ (t) = rN (t) 1 −         − qEn N (t),  t ∈ [tn , tn+1 ),        (1)
+                                                K
+195      while the institutional signal Z is the filtered nonnegative deficit
+                                                            
+                                    Φ qEn N (t) − S(N (t)) − Z(t)
+196                         Ż(t) =                                 ,     τm > 0,                    (2)
+                                                   τm
+197      with S(N ) = rN (1 − N/K) the surplus production and Φ ≥ 0 a nonnegative signal map
+198   with memory timescale τm . The assessment available at review n is
+                                                                             
+199                      Zbn = An ({Yj : tj ≤ tn − τdec }) ,   Yj = O N (tj ) + εj ,                 (3)
+
+200       which separates the latent process N , the observations Y , and the assessments Z.   b Mea-
+201   surement and assessment errors need not be independent or Gaussian, but the admissible error
+202   support is restricted to Zbn ≥ 0. The multiplicative-error robustness experiment of Section 3.3
+203   satisfies this by construction. In the executed calibration all parameters entering the effort law
+204   are positive (r, K, q, Emax , ∆ref , Zref , τm > 0); because Zref > 0 and Zbn ≥ 0, the rational
+205   term is well defined on the admissible state space. The effort law’s rational term is undefined
+206   at Zbn = −Zref and changes sign beyond it, and projection of the final command does not repair
+207   an undefined update. In the baseline deterministic record the assessment operator is exact and
+208   contemporaneous, Zbn = Z(t−   n ): each command uses the just-flowed end-of-period state, indexed
+209   by the review that reads it (Zbn+1 in (4)); the exact update holds this same flowed value. The
+210   review map is the projected forward-Euler step
+                                                     n                        o
+211
+                                    cmd
+                                  En+1   = Π[0,Emax ] En + Tr FB (En , Zbn+1 ) ,                      (4)
+
+212        — one specific reviewed controller among many (direct command rules, exact integration
+213   under held assessment, incremental rules with fixed step). Because the increment scales with
+214   Tr , a sweep in Tr changes both the hold duration and the accumulated gain per review. The
+215   separating computation is the exact held-assessment update (the exact update), reported in
+216   Section 3.4 with attribution to the companion delay study (Abaee, 2026). The effort law is
+                                                                             
+                                           E           Z      E             Z
+217                    FB (E, Z) = 1 −           ηE       −         + δ0            ,
+                                         Emax        ∆ref    Emax        Zref + Z
+218      The protective comparator is the quota-tracking law
+                                        
+                 prot                E                                                Zref
+219            FB (E, Z) = 1 −             ηp Ecap (Z) − E ,         Ecap (Z) = E0            ,
+                                   Emax                                              Zref + Z
+220      with ηp = η and E0 = E ∗ (Zref + δ)/Zref , calibrated so its unique interior rest coincides
+221   with the extractive fixed point; its linearised gains there are CE = −0.850336, CZ = −1.661702
+222   (Abaee, 2026, equation (3)), reviewed through the same projection Π[0,Emax ] . At E = 0 the law
+223   commands ηp Ecap (Z) > 0, so zero effort is not absorbing; saturation at Emax is through the
+224   gate and the projection.
+225      together with the shifted, floored softplus signal map
+                                                                           
+                                                    1             log 2
+226                            Φk (s) = max 0, log 1 + e      ks
+                                                                  −      +δ .
+                                                    k                 k
+
+
+
+                                                       6
+227        with shift δ = log 2/10 ≈ 0.069, the equilibrium memory level (Z ∗ = Φ(0) = δ; distinct from
+228   and unrelated to the effort-law gain δ0 ) and sharpness k — the value used in the computed
+229   records, k = 10, is stated where it is used in Section 3.4 and collected in Table 3 of Appendix A.
+230   The multiplier records of Section 3.4 presuppose a fixed point interior to the nonsmooth regions
+231   of Φk and Π[0,Emax ] : Φk (0) = δ gives the equilibrium deficit s∗ = 0 uniquely, with softplus slope
+232   sp′k (0) = 1/2, and E ∗ = 2.09 lies in the interior (0, Emax ); the coordinates (89.55188, δ, 2.08962)
+233   are listed in Table 3 of Appendix A.
+234        Equations (1)–(4) with Φ = Φk constitute the extractive controller studied throughout.
+235   It is an explicit controller discretisation, not a generic harvest-control rule and not a model of
+236   protective quota reduction. Three comparators are distinctly specified: the protective controller
+237   (the quota-tracking law above, the same machinery with the response to decline entering with
+238   the opposite sign), the fixed-plan controller (no state-responsive update between scheduled
+239   resets), and the hybrid controller (annual-change limits, emergency triggers, or legal overrides).
+240   The comparators are specified for the prospective management-strategy evaluation (Section
+241   4.5), not presented as completed experiments. A fixed plan and a state-responsive plan with
+242   the same nominal review period are not the same intervention. The model-level run of the
+243   comparator evaluation on the logistic hold-map core — the plant of the closed-form operator
+244   results — is executed and reported in Section 3.4 at the stated evidential status (deterministic,
+245   seed-fixed, on the specified architecture only). The prospective real-system design of Section
+246   4.5 remains unexecuted.
+
+247   2.2 Registration conventions
+248   The deterministic record fixes a one-step flow-then-update convention, stated in pre-
+249   review/post-review terms. On [tn , tn+1 ) effort is held at En . At the review instant tn+1 the
+250   contemporaneous, exact assessment Zbn+1 = Z(t−       n+1 ) of the flowed state is read (τdec = τdep = 0),
+251   and equation (4) computes the command En+1 held on the following interval. The pre-review
+252   state is Xn− = (N (t−            −
+                               n ), Z(tn ), En−1 ) and the map used is the pre-review Poincaré map
+         −              −
+253   Xn+1 = PTr (Xn ). The reversed ordering (command first, flow second) is a different hybrid
+254   system and is not used. No decision or deployment queue is present, and multiplicative
+255   assessment error enters only the designated robustness experiment. A positive τdep requires an
+256   explicitly specified hold or interpolation rule.
+257        The computational status of the response-region records is stated with the same care. Clas-
+258   sification used long-horizon trajectories, tail amplitudes, multiple histories, and integration-step
+259   refinement. It did not use Poincaré-map multipliers, monodromy matrices, or Floquet multi-
+260   pliers. The reported bands are therefore finite-grid, trajectory-classified response regions, and
+261   no Neimark–Sacker, flip, or other multiplier-crossing classification is claimed. Until the solver
+262   configuration and initial histories are attached (Appendix A), the stage-output values carry
+263   provisional status. For the logistic hold-map core the multiplier-based boundary calculation
+264   is reported in Section 3.4. For the stage-structured map the boundary record is supplied by
+265   the labelled reconstruction of Section 3.4 — a newly specified, pre-registered object whose full
+266   specification (flow/update ordering, information pattern, derivative construction, multiplier tra-
+267   jectories, nonlinear trajectories, solver configuration) is given there. The original stage record
+268   remains unattached, and its output values keep provisional status. The computational require-
+269   ments of this section and of Sections 2.4, 2.5, 3.3, and 3.4 — solver configurations, initial
+270   histories, stock identifiers, the eligibility table, the null-calibration record, simulation code and
+271   seeds, and the reconstruction’s plan, code, and output tables — are consolidated in Appendix
+272   A, which also fixes the pre-registration convention.
+
+
+
+
+                                                         7
+273   2.3 The review-map operators
+274   Three objects are in play: the continuous-delay equation, the logistic hold map, and the stage-
+275   structured review map. The continuous delay equation and the logistic sample-and-hold map
+276   are the same feedback loop under two delay operators. The stage-structured map is a different
+277   ecological plant (delayed-recruitment stage structure against scalar logistic surplus production)
+278   with a different state dimension; it is not an operator substitution on the logistic plant. A valid
+279   architecture comparison holds the ecological plant, controller linearisation, equilibrium, and
+280   parameter vector fixed while changing only the timing operator. The 3–4 yr windows and the
+281   ≈ 6.5 yr exact-update crossing below are therefore reported as a comparison across plants and
+282   operators, which does not isolate the operator effect; the one-plant operator contrast in Section
+283   3.4 isolates the operator for the logistic plant. Changing the operator can move or delete a
+284   crossing, and that relocation is a property of the review map’s spectrum, not a refutation of
+285   the loop mechanism. The discipline throughout is that every stability statement names its
+286   operator, and statements computed on the hold map, on the stage-structured review map, and
+287   on the continuous-delay equation do not transfer to one another. The operative condition is
+288   det(DPTr (X ∗ ) − eiθ I) = 0 on the map to which the statement refers, with DPTr (X ∗ ) the
+289   Jacobian of the review map at its fixed point (the monodromy matrix of the sampled loop).
+290       For a deterministic sampled system, the inter-review flow and the review update combine
+291   into a Poincaré map Xn+1 = PTr (Xn ), where Xn includes the ecological state, memory, held
+292   command, and any explicitly modelled queue. A fixed point is locally asymptotically stable if
+293   and only if every eigenvalue of DPTr (X ∗ ) lies inside the unit disk. A verified crossing through
+294   the unit circle as the fixed parameter Tr changes is a sampled-data parameter bifurcation. It is
+295   not rate-induced tipping, which requires a nonautonomous parameter path and a loss of tracking
+296   as the ramp speed changes (Ashwin, Wieczorek, Vitolo, and Cox, 2012).
+
+297   2.4 The cross-sectional spectral screen
+298   The screen’s input layer is a fixed 42-stock cohort of the RAM Legacy Stock Assessment
+299   Database v4.66 (Ricard, Minto, Jensen, and Baum, 2012): the annual-review designation (ap-
+300   plied from general regime knowledge, not per-stock primary verification) covers the full 58-stock
+301   panel, and 42 stocks pass the n ≥ 20 valid-point filter (series lengths 20–77 yr). The release
+302   records stock and assessment metadata and series such as biomass, fishing mortality or exploita-
+303   tion rate, total allowable catch, catch advice, and effort. It does not encode controller sign,
+304   the decision rule, or dated decision and deployment queues. The annual-review designation is
+305   therefore a criterion applied in this analysis, not a database classification of a stock as extractive
+306   or protective.
+307       For each eligible biomass (spawning-stock biomass) series, the analysis removes a linear
+308   trend, computes a Lomb–Scargle periodogram (Lomb, 1976; Scargle, 1982), normalises it to
+309   unit total power, and integrates power in prespecified bands: target bands A (2.5–5 yr, an-
+310   chovy class) and B (5–9 yr, sprat class), bracketing the observable-specific dominant biomass
+311   peaks near 4 and 8 yr of the archived stage-map diagnostics (provisional records, Section 3.3),
+312   with contextual bands C (9–14 yr, cohort/recruitment) and D (14–30 yr, trend/regime). No
+313   multiplier-crossing verdict depends on the archived diagnostics. The tested statistic is band-
+314   integrated power, compared with a per-series AR(1) red-noise null (coeﬀicient by lag-1 autocor-
+315   relation of the linearly detrended series; 200 replicates, seed 7, detrending inside each replicate;
+316   Lomb-Scargle on 1,500 frequencies from 1/(2 · span) to 0.5 yr−1 ). Empirical p-values over the 84
+317   target-band cells (42 stocks by bands A and B) are adjusted by the Benjamini–Hochberg false-
+318   discovery-rate procedure (Benjamini and Hochberg, 1995), which controls the false discovery
+319   rate, not the familywise error rate. Dependence across stocks (shared climate forcing, shared
+320   assessment methods) is acknowledged (Benjamini and Yekutieli, 2001). The reported zero count
+321   is the BH-adjusted result. A peak is classified as robust only if it survives the null comparison
+
+
+                                                        8
+322   and the multiplicity adjustment. The cohort table, screen routine, and multiplicity reconstruc-
+323   tion (ram_target_stocks.csv, ram_crosssection.py, verify_bh.py) are deposited with the
+324   article. The screen is a restricted result: its weight is limited to the refutation stated in Section
+325   4.2, and its null verdict survives the eleven-variant sensitivity battery of Supplementary S9.1.
+
+326   2.5 Power analysis
+327   Power experiments inject the model-generated effort signal into white noise (multiplicative log-
+328   normal, fractional σ) and apply the same band-power statistic. Formally the reported power
+329   is P (reject | injected signal) at the 5% level over the design grid (the conventional power-
+330   analysis framing of Cohen, 1988). Power is estimated on 100–200 yr synthetic records across
+331   noise scales. The demonstration routine and grid driver with the executed configuration and
+332   seeds (power_demo.py, power_driver_v2.py) are deposited with the article. The executed grid
+333   configuration is Supplementary S13.1.
+
+334   2.6 The structured case search
+335   The case search is a curated inventory, not a systematic review. It considered more than thirty
+336   systems spanning fisheries, aquaculture, groundwater, surface water, rangeland, wildlife harvest,
+337   forestry, and produced-capital markets, under four criteria:
+
+338     (i) a responsive institutional feedback rather than a one-time cap or ban;
+339    (ii) an independently dateable response or implementation lag;
+340   (iii) no major environmental, biological, or structural driver empirically supported as gen-
+341         erating the same outcome, where the comparative rule is that a candidate institutional
+342         mechanism must outperform pre-registered alternatives on held-out prediction, phase or-
+343         dering, or intervention response (since “capable of generating” is not a falsifiable exclusion
+344         in open ecological systems);
+345   (iv) individual-resource or individual-station data rather than an aggregate series.
+
+346       Behind criterion (iii) is an explicit list of the alternative mechanisms that can mimic or
+347   replace an institutional cycle: stage/maturation delays and cohort resonance; recruitment
+348   suppression versus stock culling; support-pool/nutrient limitation; pollution/waste feedback;
+349   predator–prey or climatic forcing; and direct abiotic mining and slow-store exhaustion. The
+350   rule is that a candidate institutional mechanism must be compared with these alternatives
+351   rather than identified from periodicity alone. No system in the searched set meets all four
+352   criteria; the case-screening table (32 systems) and query log are recorded in Supplementary S4.
+
+353   2.7 The northern cod case: constitutive model and evidence
+354   The northern cod case (NAFO 2J3KL) is treated as a bounded empirical object. Its illustrative
+355   constitutive model is the strong-Allee surplus equation:
+                                                      
+                                     dS              S S−s
+356                                     = rS 1 −               − C(t),                          (5)
+                                     dt             K K −s
+357        with S the spawning stock biomass, r the intrinsic growth rate, K the unexploited carrying
+358   capacity, s the unstable threshold, and C(t) the removals. The Schaefer model is the formal
+359   limit of this family (s → −∞) in which the factor (S − s)/(K − s) is replaced by 1. No value of s
+360   makes the displayed factor identically 1 (it tends to 1 only in the limit s → −∞), so the Schaefer
+361   comparison is a change of growth law, not a parameter specialisation. The constitutive equation
+362   is illustrative, not a fit — and the obstruction class is the one-dimensional autonomous equation
+363   with fixed parameters and fixed removals. The displayed equation is autonomous exactly when
+364   removals are fixed.
+
+                                                       9
+365       Remark 2.1 (Phase-line obstruction). Let f : R → R be locally Lipschitz, and let x(·) be a
+366   nonconstant solution of the scalar autonomous ODE ẋ = f (x). Then x is strictly monotone; it
+367   never attains an equilibrium value and cannot cross an equilibrium in either direction. Conse-
+368   quently, an exact path that repeatedly rises and falls across a common interval is incompatible
+369   with any single fixed scalar autonomous model.
+370       Proof. If x is nonconstant on an interval and x(t1 ) = x(t2 ) with t1 < t2 , then by Rolle’s
+371   theorem there exists τ ∈ (t1 , t2 ) with ẋ(τ ) = 0, i.e. f (x(τ )) = 0. By uniqueness the solution
+372   through (τ, x(τ )) is the constant equilibrium solution, a contradiction. Hence every solution is
+373   strictly monotone or constant. If a trajectory met an equilibrium value x∗ at any time, it would
+374   be constant thereafter and, by uniqueness applied backwards, before; a nonconstant solution
+375   therefore never attains an equilibrium value and cannot cross one in either direction. A path
+376   that rises and falls across a common interval attains some level twice with opposite directions,
+377   contradicting monotonicity. □
+378       Lemma 2.2 (Extra-loss threshold shift, conditional).
+379       Statement. Assume 0 < s < K. (i) Constant loss. In the constitutive model with an
+380   additional constant removal C > 0, the production function is replaced by fC (S) = f (S) − C;
+381   the positive equilibria of the modified function are the solutions of f (S) = C, the smaller one
+382   (the effective threshold) lies to the right of s, and at the production maximum the two positive
+383   equilibria coalesce and beyond it disappear — all conditional on the solutions existing, i.e. on
+384   C being below the production maximum. For C = 0 the smaller positive equilibrium is s; the
+385   strict rightward shift holds for C > 0.
+
+386    (ii) Proportional mortality. With extra mortality Mx > 0 the modified production is fM (S) =
+387         f (S) − Mx S; positive equilibria solve f (S)/S = Mx , S = 0 remains an equilibrium (unlike
+388         case (i), where Ṡ|0 = −C < 0 drives the model below zero unless the removal is constrained
+389         near zero or the state equation is modified), and the smaller modified positive root lies
+390         strictly above s (in (s, Sh ), where Sh is the vertex of the per-capita curve h(S) = f (S)/S).
+
+391       Proof. The constitutive production f (S) = rS(1 − S/K)(S − s)/(K − s) vanishes exactly at
+392   0, s, K; it is negative on (0, s) ∪ (K, ∞), positive on (s, K), and its derivative vanishes exactly
+393   at                                  √
+                               K + s ± K 2 − sK + s2
+394                      S± =                             ,    0 < S− < s < S+ < K,
+                                            3
+395   so f has exactly one critical point in (s, K) — the unique maximum S ∗ = S+ with value
+396   fmax = f (S ∗ ) > 0 — and f is strictly increasing on (s, S ∗ ) and strictly decreasing on (S ∗ , K).
+
+397     (i) The equilibria of fC (S) = f (S) − C solve f (S) = C, so none lie outside (s, K), where
+398         f ≤ 0 < C. For 0 < C < fmax , the intermediate value theorem on [s, S ∗ ] (f (s) = 0 < C <
+399         fmax = f (S ∗ )) and on [S ∗ , K] (f (K) = 0 < C < fmax ) supplies one root in each interval,
+400         and strict monotonicity makes each root unique. The smaller root satisfies S1 (C) ∈ (s, S ∗ )
+401         — the effective threshold lies strictly to the right of s. As C ↑ fmax the two roots approach
+402         S ∗ from either side (coalescence), and for C > fmax the equation f (S) = C has no solution:
+403         the two positive equilibria have disappeared.
+
+404    (ii) Write fM (S) = f (S)−Mx S = S (h(S)−Mx ) with h(S) = f (S)/S = K−s  r
+                                                                                   (1−S/K)(S −s),
+405         a quadratic with roots s and K, negative on (0, s) ∪ (K, ∞), and unique maximum H =
+406         h(Sh ) at the vertex Sh = (s+K)/2. Then fM (0) = 0: zero remains an equilibrium in every
+407         case. The positive equilibria solve h(S) = Mx ; for 0 < Mx < H the same two-interval
+408         argument gives exactly two roots, the smaller in (s, Sh ) — the threshold shift — with
+409         coalescence at Mx = H and disappearance for Mx > H, where fM (S) = S(h(S)−Mx ) < 0
+410         on (0, ∞).
+
+
+
+                                                       10
+411       In case (i), by contrast, fC (0) = −C < 0, so Ṡ|0 = −C drives the state below zero unless
+412   the removal is constrained near zero or the state equation is modified — as claimed. □
+413       The case evidence is the assessment record (the recovery-potential and sequential stock
+414   assessments: DFO, 2011, 2016, 2022, 2024). The crash window (1991–1995) and the subsequent
+415   windows are documented by the assessment table of DFO CSAS SAR 2016/026 (Table A2),
+416   produced by the Northern Cod Assessment Model (NCAM; Cadigan, 2016), together with the
+417   dated governance events (the moratorium announcement of 2 July 1992; the reopening of 26 June
+418   2024 with a total allowable catch of 18 kt). The survival column exp(−M ) is a transformation
+419   of the reported instantaneous mortality estimate, not an independently observed survival series.
+
+420   3 Results
+421   3.1 Forward invariance of the sampled process
+422   A first well-posedness check on the sampled controller is that the state space on which the
+423   sample-and-hold dynamics act — nonnegative stock, nonnegative memory signal, admissible
+424   effort — is preserved by the review map. This check comes first because every later result relies
+425   on the state remaining inside this set between reviews.
+426       Proposition 3.1 (Forward invariance of the sampled process). Assume:
+427       (H0) r, K, q, Emax , τm , Zref , ∆ref > 0.
+428       (H1) N (0) ≥ 0, Z(0) ≥ 0, E0 ∈ [0, Emax ].
+429       (H2) The signal map Φ is non-negative.
+430       (H3) Every effort command is projected by Π[0,Emax ] .
+431       (H4) Any between-review deployment interpolation remains in the convex interval joining
+432   consecutive commands. The main model takes E(t) = En , which satisfies (H4) trivially; the
+433   proposition is stated for the hold-or-interpolate class.
+434       Then N (t) ≥ 0, Z(t) ≥ 0, and E(t) ∈ [0, Emax ] for every time at which the sampled solution
+435   exists.
+436       Proof. Proceed by induction over review intervals. Suppose that at a review time tn one
+437   has N (tn ) ≥ 0, Z(tn ) ≥ 0, and that the command to be held or interpolated lies in [0, Emax ].
+438   Projection places the next command in the same closed interval; a hold retains an endpoint of
+439   that interval, and any convex interpolation E(t) = (1 − θ(t))En + θ(t)En+1 with 0 ≤ θ(t) ≤ 1
+440   also remains in [0, Emax ]. On [tn , tn+1 ], Eq. (1) gives
+                                                 Z t                      
+                                                              N (s)
+441                       N (t) = N (tn ) exp           r 1−          − qE(s) ds > 0
+                                                     tn        K
+442       for a positive initial value, while if N (tn ) = 0, uniqueness gives the identically zero solution
+443   on the interval; N cannot become negative. Set ν(t) = Φ(qE(t)N (t) − S(N (t))) ≥ 0. Variation
+444   of constants in Eq. (2) with τm > 0 gives
+                                                             Z t
+                                     −(t−tn )/τm           1
+445                        Z(t) = e              Z(tn ) +        e−(t−s)/τm ν(s) ds ≥ 0.
+                                                          τm t n
+446       Boundedness from above holds automatically on the stock equation and is used in the
+447   induction: on [tn , tn+1 ) the stock solves the logistic equation under held effort, and Ṅ ≤ 0 at
+448   N = K (the harvest term is non-negative), so N (t) ≤ max{N (tn ), K} throughout the interval.
+449   All three inequalities therefore hold through tn+1 ; they hold at t0 = 0 by hypothesis, and
+450   induction proves them on every review interval for which the sampled solution exists. □
+451       Positivity, boundedness, persistence above a threshold, and viability are distinct properties;
+452   Proposition 3.1 establishes positivity and effort admissibility only. The institutional implication
+453   is modest but essential: the projected Euler step does not push the state outside its specified
+454   admissible set on a single review interval, and any later stability or instability claim is therefore
+455   a statement about dynamics inside that set, not about escape from it.
+
+                                                       11
+456   3.2 The rapid-review limit and what it does not establish
+457   Define u = (N, Z, E) and the continuous no-delay system u̇ = G(u) assembled from Eqs. (1)–
+458   (2) with the effort law evaluated continuously. Suppose G is continuously differentiable with
+459   bounded derivative on a compact neighbourhood containing the compared trajectories on [0, T ],
+460   assessments equal the contemporaneous state, no additional decision or deployment queue is
+461   present, projection is inactive, and the sampled and continuous systems share the initial state.
+462   The frozen-effort flow followed by the explicit effort step then has a one-step defect of order
+463   O(Tr2 ) relative to the exact flow of G. The usual discrete Gronwall estimate yields an O(Tr )
+464   review-time error and uniform convergence on every fixed finite horizon as Tr → 0 (the sampled-
+465   data approximation framework of Nešić and Teel, 2004).
+466        This is a numerical-approximation property, not a finite-review stability theorem. It gives
+467   no uniform-in-time estimate, does not preserve stability automatically, and does not control
+468   any trajectory-classified response region reported below. It excludes active projection, delayed
+469   or erroneous assessment, a deployment queue, and stochastic updates. In particular, it nei-
+470   ther identifies a finite Tr with a continuous discrete delay nor implies that suﬀiciently small
+471   positive Tr is stable when the continuous target is unstable. The converse caution is equally
+472   important. Under the additional assumptions of hyperbolicity of the continuous equilibrium
+473   and C 1 -consistency of the sampled map with projection inactive locally, the multipliers sat-
+474   isfy µj (Tr ) = 1 + Tr λj (A) + O(Tr2 ) (Stuart and Humphries, 1996), so local stability persists
+475   for all suﬀiciently small positive review intervals provided every continuous eigenvalue satisfies
+476   ℜλj < 0; if any ℜλj > 0, the sampled equilibrium inherits instability for suﬀiciently small
+477   Tr . The finite-horizon result therefore neither proves nor refutes stability transfer; the transfer
+478   hypotheses are what any such claim would have to supply. The institutional reading is that
+479   “rapid review” is not a stability guarantee — a governance loop that reviews frequently approx-
+480   imates a continuous controller only on finite horizons, and the question of whether short review
+481   intervals stabilise or destabilise the equilibrium is decided by the spectrum of the map, not by
+482   the rapid-review limit.
+
+483   3.3 Response regions of the delayed-recruitment review maps
+484   The delayed-recruitment records, classified from long-horizon trajectories on the stage-
+485   structured review map, locate exploratory response regions by stock class (the delayed-
+486   recruitment oscillation literature of Gurney, Blythe, and Nisbet, 1980, supplies the classical
+487   reference point). These are archived records whose generating computation was never attached
+488   (Section 2.2): they are reported below at provisional status, and the pre-registered stage-map
+489   reconstruction of Section 3.4 does not reproduce the multi-year windows on the anchovy-
+490   or sprat-class parameterisation of that plant (reporting convergence there, with a separate
+491   long-horizon band that has no archived counterpart). The regions below are therefore archived,
+492   unreproduced records, not results of the reconstructed object:
+
+493     • Anchovy-class: persistent tail oscillation near Tr ≈ 3–4 yr, with a weak response at
+494       Tr = 2 yr; annual-review trajectories converge over the tested grids for every tested effort-
+495       response value.
+496     • Sprat-class: persistent tail oscillation near Tr ≈ 6–12 yr.
+497     • Cod-class: trajectories converge to equilibrium for every tested Tr ∈ [1, 20] yr, al-
+498       though the corresponding continuous-delay calculation has an oscillatory interval — a
+499       convergence-over-tested-grid record, not a stability theorem for every history.
+500     • Slow-stock class: for r ∈ (0.01, 0.05) yr−1 , oscillation over part of the tested grid
+501       below approximately 20–30 yr and convergence at longer review intervals, with transition
+502       brackets between approximately 30 and 50 yr depending on r. This one-sided pattern does
+503       not contradict rapid-review consistency: the continuous no-delay target is itself unstable
+
+
+                                                      12
+504        over part of the slow-r regime, so small-Tr trajectories may approximate an unstable target
+505        on finite horizons. The record is conditional on the delayed-recruitment variant and is
+506        not a general claim that slower review stabilises governance; the dominant timescales are
+507        centuries (the archived slow-stock cohort cycle: P ≈ 250−360 yr), beyond the length
+508        needed to resolve multiple cycles in most institutional records.
+
+509       The corresponding continuous-delay calculations on the delayed-recruitment parameterisa-
+510   tion — g is its maturation delay, and the response regions are located through the product rg
+511   — locate response regions near rg ≈ 1.5–1.6: for g = 2 yr, r ∈ (0.77, 0.81) yr−1 at η = 0.914
+512   (the uncalibrated Candidate-A baseline; Appendix A) with a delay interval of approximately
+513   2.6–7.8 yr; for g = 1 yr, the high-r interval is approximately 1.565–1.585 yr−1 with a delay
+514   interval of 1.6–3.5 yr. These are finite-grid trajectory summaries, not closed analytical stability
+515   regions.
+516       A τ0 decomposition separates, within the delayed-recruitment operator, cohort-driven from
+517   institutional-delay-induced crossings: at g = 5 yr and η = 0.914 the raw r-window [0.0076,
+518   0.3705] narrows to the institutional-only [0.2660, 0.3285], and fish-range crossings from 12 to 8,
+519   under τ0 -stable classification by nonlinear ground truth. The separation is within one operator;
+520   it does not isolate the cross-operator effect compared in Section 4.1. The g = 5 middle band
+521   overlaps slow cod-class growth rates but remains confounded with cohort resonance. That
+522   operator differs from Section 3.7’s four-state loop. Full windows, the twelve-cell decomposition
+523   grid, and the middle-band table are tabulated in Supplementary S9.2.
+524       Multiplicative assessment-error experiments preserve the anchovy-class trajectory region
+525   through 30% error and produce no noise-induced persistent tail oscillation at annual review in
+526   the tested ensemble. This is a robustness summary for the specified multiplicative perturbation
+527   only. The archived diagnostics carry observable-specific dominant peaks — approximately 4 yr
+528   in anchovy-class biomass with 12 yr in effort, and approximately 8 yr in sprat-class biomass
+529   with 60 yr in effort. These are reported only as observable-specific dominant peaks over the
+530   analysed windows: components of one stationary periodic orbit cannot have different funda-
+531   mental periods, and harmonics, subharmonics, modulation, or transient spectral content are
+532   unresolved; no decomposition has established whether the baseline term, signal regularisation,
+533   or another controller component dominates these responses. The archived amplitudes indicate
+534   percent-scale biomass excursions and order-one effort excursions relative to equilibrium. The
+535   exact percentages are not used as effect-size estimates, because the archived record does not
+536   distinguish peak-to-peak range from half-range and the approach to the large effort response
+537   contains a long transient.
+
+538   3.4 The operator spectra
+539   The logistic hold-map core permits a closed-form expression for the held logistic flow; the
+540   linearised review map is then constructed from this flow, the signal dynamics, and the update
+541   derivatives. With effort held at E, the logistic flow over one review interval is, for a(E) =
+542   r − qE ̸= 0,
+                                                   a(E) N (t−
+                                                            n)e
+                                                                a(E)Tr
+543                               N (t−
+                                      n+1 ) =                               ,
+                                              a(E) + Kr N (t−
+                                                            n) e
+                                                                 a(E)Tr − 1
+                                  
+544   and N (t−          r     −
+               n ) 1 + K N (tn )Tr for a(E) = 0. In computations, the limit branch is used when
+545   |a(E)| < 10−12 . The signal flow enters through equation (2) with this forcing, and the lin-
+546   earised pre-review monodromy is assembled from the held-flow state transition, the assessment
+547   derivative at Z(t−n+1 ), and the update derivative of equation (4). The exact held-assessment
+548   controller — the separating comparator that isolates the Euler step — is the exponential update
+      (the exact update; its review map the exact map) en+1 = eCE Tr en + e ECE −1 CZ zn for CE ̸= 0,
+                                                                               C Tr
+549
+
+550   and en+1 = en + Tr CZ zn for CE = 0, with en = En − E ∗ and zn = Zn − Z ∗ the deviations
+
+
+                                                      13
+551   from the compared fixed point — the exact solution, over one review interval, of the linearised
+552   effort law ė = CE e + CZ z with the flowed end-of-period assessment z held, where CE and CZ
+553   are the coeﬀicients of that linearisation (the partial derivatives of FB with respect to E and
+554   Z at the compared fixed point; unrelated to the removals C of the cod case), and equation
+555   (4)’s increment is the forward-Euler discretisation of the same linear object. This comparator is
+556   analytical, not a proposed institutional rule. Comparing its monodromy with the forward-Euler
+557   map’s separates review cadence, zero-order holding, and Euler discretisation. That compari-
+558   son is reported here: executed and verified on the companion delay study’s identical hold map
+559   (Abaee, 2026; same effort-law bracket, same softplus signal, same forward-Euler monodromy
+560   reproducing the 47.536 yr crossing reported here), the exact-update annual spectral radius is
+561   ρ = 1.00035 (Euler 1.00055); the 47.536 yr and 79.143 yr crossings are command-step artefacts
+562   of the forward-Euler update; the exact map’s single unit-circle crossing is ≈ 6.5 yr; and the
+563   restabilising direction is preserved.
+564        On the logistic hold-map core, the undelayed equilibrium is already unstable, so annual
+565   review is unstable. On the computed crossing set, the sampled equilibrium has a complex
+566   unit-circle crossing — the spectral signature of a Neimark–Sacker bifurcation, nonlinear non-
+567   degeneracy not verified — at TrUC = 47.536 yr under the forward-Euler command step and
+568   at ≈ 6.5 yr under the exact update, with the same restabilising direction. For an institution
+569   implementing the incremental Euler rule these crossings are dynamically real; they are artefacts
+570   only relative to the exact update.
+571        The complete crossing record. On the logistic hold-map core the unit-circle crossing
+572   record over [0.2, 200] yr is complete (Figure 2). It is computed from the linearised pre-review
+573   monodromy on a 200,001-point scan with bisection refinement (deterministic; it reproduces the
+574   numbers reported here on the range they cover). The forward-Euler update crosses twice on
+575   the extractive channel — a complex pair at Tr = 47.536 yr (unstable → stable) and a real −1
+576   multiplier at 79.143 yr (stable → unstable), stable band [47.536, 79.143] yr — and once on the
+577   protective channel — a real −1 at 2.306 yr (stable → unstable), stable only on [0.2, 2.306] yr.
+578   The exact update crosses once on the extractive channel — a complex pair at 6.501 yr (unstable
+579   → stable) at the baseline parameter vector (Table 3), stable on [6.501, 200] yr — and never on
+580   the protective channel, which is stable at every tested interval with maximum spectral radius
+581   0.9967. Both Euler crossings of the extractive channel are therefore command-step artefacts
+582   relative to the exact map’s single crossing, and the Euler protective instability beyond 2.306 yr
+583   is likewise an artefact: the exact protective map is stable throughout.
+584        Spectral margins of the annual-review verdict. The annual-review instability is a
+585   near-unit-circle record, and its margins are part of the record. The exact update’s annual
+586   spectral radius is ρ = 1.00035 — a modulus exceeding unity by 3.5 × 10−4 — with the forward-
+587   Euler update at 1.00055 and the protective channel at 0.9838 (maximum 0.9967 over the tested
+588   range). The multiplier types are reported with the crossings — a complex pair at the exact
+589   map’s single 6.501 yr crossing (the Neimark–Sacker signature) and at the Euler extractive
+590   crossing (47.536 yr), and real −1 multipliers at the Euler crossings (79.143 yr extractive, 2.306
+591   yr protective) — while the dominant multiplier’s angle θ at the crossing and the continuous
+592   eigenvalue λ to which Section 3.2’s transfer relation refers are listed in Table 3 (Appendix A). At
+593   a margin of this size the verdict is conditional on the monodromy’s numerical construction —
+594   the stated precision record is the 200,001-point scan with bisection refinement; the linearisation
+595   construction and floating-point detail are archive items — and on the parameter vector listed
+596   in Table 3. What the margin does not affect is the ordering across updates and channels
+597   (exact 1.00035 below Euler 1.00055; protective 0.9838 below both) or the crossing directions;
+598   the annual-instability verdict is read at that status. Near-unit-circle behaviour of this size is
+599   read as high sensitivity of the verdict to the parameter vector, not as a robust claim about
+600   annual-review institutions in general.
+601        The one-plant operator contrast. With the crossing record complete, the operator
+
+
+                                                      14
+      Figure 2: Crossing record of the logistic hold map: stable (green) and unstable (red) review-interval
+      ranges for the four update × channel combinations (forward-Euler and exact updates on the extractive
+      and protective channels), with crossing markers (diamond: complex unit-circle pair; triangle: real −1
+      multiplier). Annual review is nominally unstable on both extractive updates (ρ = 1.00035 exact, 1.00055
+      Euler; protective 0.9838), conditional on the numerical construction and parameter vector (Spectral
+      margins paragraph); the Euler-reported 47.536 and 79.143 yr crossings are command-step artefacts
+      relative to the exact update’s single 6.501 yr crossing, and the protective Euler crossing at 2.306 yr
+      is likewise an artefact — the exact protective map is stable at every tested interval (maximum spectral
+      radius 0.9967).
+
+
+602   comparison can be made on one plant rather than across plants. The same extractive loop under
+603   continuous delay carries the companion delay study’s certified Hopf pair at 3.666 and 150.358 yr
+604   (Abaee, 2026); the sampled operator’s exact crossing sits at 6.501 yr. The companion’s window
+605   is delay-stabilising, not delay-destabilising: the undelayed loop is already unstable, the lower
+606   crossing at τ− = 3.666 yr is stabilising, the upper crossing at τ+ = 150.358 yr destabilising, and
+607   the loop is linearly unstable for 0 < τ < τ− (Abaee, 2026). Annual review is nominally unstable
+608   under sampling (ρ = 1.00035, conditional on the numerical construction and parameter vector
+609   as stated above), and the same loop under continuous delay is likewise unstable at τ = 1 yr; at
+610   Tr = 8 yr both operators are stable (the sampled loop restabilised above its 6.501-yr crossing,
+611   the continuous loop inside its stabilised window). The operator contrast on one plant is an
+612   edge contrast: the sampled operator’s restabilising crossing (6.501 yr) sits above the continuous
+613   operator’s stabilising entry (3.666 yr), and the sampled loop’s stability persists to the 200-yr
+614   scan ceiling where the continuous loop has already destabilised at τ+ — the operator moves
+615   both edges of the stability window on the same plant, and the cross-plant observation of Section
+616   2.3 is a same-plant one.
+617       The undelayed limit, reconciled explicitly. Three statements about the undelayed
+618   loop must be read together. Section 2.3 states the continuous-delay equation and the logistic
+619   hold map to be the same feedback loop under two delay operators; Section 3.2 states that
+620   under hyperbolicity the sampled multipliers satisfy µj (Tr ) = 1 + Tr λj + O(Tr2 ), so that small-
+621   Tr sampled stability follows the sign of Re λj ; and this section records that the undelayed
+622   equilibrium of the hold-map core is already unstable (annual ρ = 1.00035). The companion’s
+623   undelayed record fixes the remaining sign: the undelayed linearisation of the same loop violates
+624   the Routh–Hurwitz condition, so Re λ > 0 — the direction the sampled record suggests through
+625   Section 3.2’s relation, with the sampled instability persisting down to Tr = 0.2 yr. Under that
+626   sign the records close at the zero-delay limit: the loop is unstable under both operators at zero
+
+
+                                                        15
+627   delay and at τ = 1 yr, and the stabilising crossing at 3.666 yr is the first crossing (there are
+628   no crossings in (0, τ− ); this even count is consistent with the stability-switch principle because
+629   the stability state does not change between zero delay and the first crossing) — no additional
+630   crossings are required. On this plant, the two operators differ only in where they place the
+631   window’s edges, as the one-plant contrast above shows. The eigenvalue λ is listed in Table 3; it
+632   is a derived eigenvalue, not a parameter, and its sign is read from the companion’s undelayed
+633   record, and the operator-scoped records stand as stated — annual instability under sampling,
+634   instability under continuous delay at τ = 1 yr, and the same-plant edge contrast — with Section
+635   2.3’s same-loop statement and Section 3.2’s transfer statement consistent with both records.
+636       The protective controller on the same maps. The protective comparator run (sign-
+637   reversed response; linearised gains CE = −0.850336, CZ = −1.661702) on the same plant gives
+638   exact-update spectral radius 0.9838 at annual review and stability at every Tr ∈ [0.2, 200] yr
+639   (maximum 0.9967). The Euler-run protective instability is an artefact band, not a property of
+640   the protective architecture.
+641       Executed comparator evaluation at model level. The protective and fixed-plan
+642   comparators are run through the closed loop on the logistic hold-map core (nonlinear plant,
+643   N0 = 0.95 N ∗ , 800 reviews, metrics on the last 60%, multiplicative assessment error {0, 0.3},
+644   seeds fixed; the spectral record remains the authoritative result, and the prospective real-system
+645   design of Section 4.5 remains unexecuted). Under 30% assessment error with ten seeds per cell:
+646   the extractive Euler core crashes to extinction in all ten seeds at Tr = 8, 12, and 20 yr, and at
+647   annual review its mean depletion frequency (fraction of post-transient reviews with N < N ∗ /2)
+648   is 0.22 with mean minimum stock 0.22 N ∗ ; the extractive exact update never crashes, with
+649   mean depletion falling from 0.07 (Tr = 1) to 0.001 (Tr = 20); the protective exact update holds
+650   the equilibrium at every interval (depletion 0, mean minimum 0.89 N ∗ , rms stock deviation
+651   ≤ 0.001K); the protective Euler update crashes in all ten seeds at Tr = 20 yr and shows de-
+652   pletion 0.9996 at Tr = 12 — the artefact operating at the trajectory level; in the deterministic
+653   baseline with fixed effort set at the equilibrium value, the fixed plan remains at equilibrium —
+654   a baseline rest point, not a robust performance result. The linear trajectory distortion between
+655   the Euler and exact updates grows with Tr (scaled-norm RMSD ≈ 2 at Tr = 0.5 yr, 104 –105
+656   at Tr = 5–40 yr, with the Euler path diverging in its artefact bands): the command step is
+657   not a small distortion. The stage-map inputs to this evaluation are the archived, unreproduced
+658   records of Section 3.3 — annual stability, the anchovy-class 3–4 yr and sprat-class 6–12 yr win-
+659   dows, and robustness to 30% multiplicative assessment error — read at that section’s status,
+660   not as results of the reconstructed object.
+661       Two consequences follow. First, in the reported simulations relative effort excursions were
+662   larger than relative biomass excursions, and any quota-utilisation reading of the signal would
+663   require a quota, realised catch, and compliance model, which are not part of the model core.
+664   Second, no qualifying example was found in the case search of Section 2.6 of a real small-pelagic
+665   system operating a responsive 3–4 yr review, so the window prediction is untested, not falsified.
+666   The corresponding qualitative test for slow-regenerating resources is whether a responsive multi-
+667   year plan, adjusted against measured change, produces large-amplitude extraction cycles that
+668   a frozen multi-year cap does not (Section 4.5).
+669       The stage-map reconstruction record. The stage-output values carry a stated lim-
+670   itation: the stage map’s computational record — solver configuration, initial histories, stage
+671   registration — is not attached, so those values are not reproducible numerical propositions (Sec-
+672   tion 2.2). To supply the stage operator’s boundary record, a new stage map was specified and
+673   pre-registered (plan dated and fixed 2026-09-01, before any run; parameter values and compar-
+674   ison criteria fixed in the plan), and its complete multiplier and trajectory records are reported
+675   here. The archived stage-output records are trajectory-classified only (Section 2.2). The re-
+676   construction is a newly specified object: it is not claimed to be the object that produced the
+677   archived windows, and the comparison below is a post-hoc consistency check, not a validation
+
+
+                                                      16
+678   of those windows.
+679       Plant. A two-stage delayed-recruitment map with annual steps, At+1 = sA At +sJ Jt −qEAt ,
+680   Jt+1 = f (At−τ ) with Beverton–Holt recruitment f (A) = αA/(1 + βA), sA = sJ = e−M , and the
+681   pair (α, β) fixed by steepness and scale: β = (c − 1)/A0 , α = c(1 − sA )/sJ , c = 4h/(1 − h), A0 =
+682   100 — a scale convention matching the logistic core’s carrying capacity. Surplus production
+683   S(A) = sJ f (A)−(1−sA )A replaces the logistic surplus in the deficit signal of equation (2). Every
+684   parameter is a cited literature value or a stated convention; none was chosen with reference to
+685   the archived windows. The class parameter sets: anchovy M = 0.90 yr-1 and recruitment delay
+686   τ = 1 yr (Pauly and Tsukayama, 1987); sprat M = 0.40 yr-1 (mid-range of the Baltic SMS
+687   keyrun values, 0.3–0.8 yr-1 ; ICES, 2020) and τ = 2 yr (age at 50% maturity in the Baltic sprat
+688   assessment); cod M = 0.20 yr-1 (the fixed cod-assessment convention; ICES, 2021) and τ = 5
+689   yr (northern cod age at 50% maturity; DFO, 2011); slow-stock M = 0.045 yr-1 and τ = 25
+690   yr (orange roughy; Branch, 2001). Steepness h = 0.75 throughout — the standard default
+691   convention when no stock-specific estimate is available — with a sensitivity layer h ∈ {0.6, 0.9}.
+692   The controller of Section 2.1 is unchanged: equations (3)–(4) in discrete form with Tr varied over
+693   {1, . . . , 50} yr at annual internal steps, softplus sharpness k = 10 (the comparator machinery’s
+694   value), contemporaneous exact assessment, and catchability q = 0.001 (the hold-map core’s
+695   value) with a sensitivity case q = 0.1 (the archived stage record states no q; both values are
+696   reported for the reconstruction). The derivative construction is central finite differences of the
+697   review map at the fixed point (step 10−6 , chain-rule cross-check to 10−4 ), and the scan grid
+698   is Tr ∈ {1, . . . , 50} yr at annual internal steps — finite-grid by construction, as the archived
+699   record itself was. The extractive channel is primary; the protective channel is computed with
+700   quota-tracking gains of Section 2.1 in the linearised review map, the same convention as the
+701   logistic protective record.
+702       Records. At the specified controller value every class is stable at annual review — spectral
+703   radii ρ(1) = 0.895 (anchovy), 0.923 (sprat), 0.956 (cod), 0.994 (slow-stock) — reproducing the
+704   archived stage map’s annual stability at the tested response value. The protective channel is
+705   stable everywhere on the grid (maximum spectral radius 0.968), mirroring the logistic protec-
+706   tive record. The extractive channel’s only instability at the specified value is a long-horizon
+707   band from Tr = 34–35 yr to the grid’s end for the three faster classes (maximum spectral ra-
+708   dius ≈ 1.98 at Tr = 50), with no crossings anywhere for the slow-stock class (ρ(50) = 0.67);
+709   the band is insensitive to the steepness layer. The trajectory classification (2000 review-steps
+710   from the specified initial condition — plant at the unfished equilibrium, memory filled, effort
+711   at half the equilibrium — tail of 500, relative tail standard-deviation thresholds 2% and 0.1%)
+712   agrees with the spectral record for the three faster classes, which converge at every Tr ∈ [1, 20].
+713   In the multiplier-unstable long-horizon band (Tr ≥ 34 yr) the faster-class trajectories remain
+714   biomass-converged or weak (relative tail standard deviation at most 0.6%) while effort excur-
+715   sions grow from approximately 7–15% at band entry to approximately 190% at Tr = 50: the
+716   instability manifests in the effort channel, to which the classifier — a biomass-tail threshold —
+717   is insensitive. The slow-stock class does not agree with its own multiplier record: it shows a
+718   persistent oscillation at Tr = 10 yr only (relative tail standard deviation 5.5%; dominant period
+719   ≈ 24 yr in both stock and effort; effort excursion 537% against a biomass excursion of 18%),
+720   converging at every other grid point, against a multiplier record with no crossings anywhere on
+721   the grid. A persistent oscillation at a linearly stable fixed point is bistability, a non-decayed
+722   transient, or a classification-threshold artefact; the record does not distinguish among them,
+723   and the cell is reported as a disagreement between the reconstruction’s two records, not as
+724   an agreement, and is not used inferentially. Under 30% multiplicative assessment error the
+725   anchovy and sprat cells remain converged (maximum relative tail standard deviation 0.0009);
+726   the cod cells weaken at Tr = 10 and 20 yr (converged → weak, maximum 0.0025) while its
+727   annual-review cell stays converged (0.0004); and the slow-stock class oscillates persistently at
+728   the long-horizon cells Tr = 30–50 yr (2.1–2.6%, against a stable multiplier record without error
+
+
+                                                      17
+729   — cells read as noise-driven variance rather than oscillation, since the 2% relative tail thresh-
+730   old is not noise-adjusted) while its Tr = 10 cell weakens from its error-free oscillation and its
+731   Tr = 20 cell weakens (0.017). The catchability sensitivity analysis is informative: at q = 0.1
+732   every class is unstable at annual review (ρ(1) ≥ 1.29); the three faster classes destabilise on
+733   [1, 18−31] yr, restabilise, and re-enter an unstable band at 36–42 yr, while the slow-stock class
+734   is unstable across the entire grid (ρ(50) = 7.8) — the reconstructed stage loop’s stability profile
+735   depends strongly on the catchability scale, which is unspecified for this plant.
+736        Comparison with the archived windows (criteria pre-registered; verdicts from the first
+737   complete run):
+
+      Criterion (archive)                 Reconstruction                 Verdict
+      anchovy persistent oscillation at   converged at both              MISMATCH
+      Tr = 3–4 yr
+      anchovy weak response at Tr = 2     converged                      MISMATCH
+      yr
+      anchovy annual convergence          ρ(1) = 0.895                   MATCH
+      sprat persistent oscillation at     converged throughout           MISMATCH
+      Tr = 6–12 yr
+      cod convergence for every           converged throughout           MATCH
+      Tr ∈ [1, 20]
+      slow-stock oscillation below        oscillation at Tr = 10,        MATCH
+      20–30 yr, convergence at 30–50      convergence at 30–50
+      yr
+
+
+738       Reading. The reconstruction reproduces the archived record’s qualitative features — an-
+739   nual stability on the stage map, the protective channel’s stability, cod-class convergence over the
+740   1–20 yr grid, the slow-stock oscillation-then-convergence pattern, and the effort-versus-biomass
+741   excursion ordering — but not the anchovy 3–4 yr or the sprat 6–12 yr response regions: on this
+742   specified plant family those classes converge at every review interval, and the only instability the
+743   reconstructed loop produces is its own long-horizon band, entering at 34–35 yr and extending to
+744   the grid’s end, which has no counterpart among the archived windows. The comparison, how-
+745   ever, is uninformative rather than a non-reproduction. The stage map states no catchability;
+746   the table is computed at the imported value q = 0.001; and at the sensitivity case q = 0.1 every
+747   verdict in the table flips — every class unstable at annual review (ρ(1) ≥ 1.29), the slow-stock
+748   class unstable across the entire grid — so a match or a mismatch at either value is a statement
+749   about this specified family at an unspecified scale, not an adjudication of the archived values,
+750   whose generating computation is not available. The reconstruction therefore supplies the stage
+751   operator’s boundary record as a new, fully specified object, whose comparison with the archived
+752   windows is a consistency check rather than a validation.
+753       Three verification records qualify the crossing record. First, a one-at-a-time sensitivity
+754   battery perturbs each baseline parameter (r, K, q, Emax , η, δ0 , Zref , ∆ref , τm , δ) by ±5%
+755   and ±10%, reproducing all eight committed values before extension (Supplementary S11). The
+756   exact-map crossing is highly sensitive to r, K, q, Emax , η, and ∆ref — several ±10% cells
+757   remove the crossing or move it past 13 yr — moderately sensitive to τm , affected by δ (removed
+758   at −10%), and insensitive to δ0 and Zref (crossing moves < 0.07 yr). The protective channel
+759   is stable in every battery cell (maximum ρ = 0.9971), so the channel contrast survives uniform
+760   ±10% perturbation. The spectral-radius curves for all four update–channel combinations are
+761   Figure 3.
+762       Second, the equilibrium fishing mortality F ∗ = qE ∗ organises the q-sensitivity: q and Emax
+763   perturbations act on the crossing almost entirely through F ∗ (q×1.05 and Emax ×1.05 give F ∗ =
+764   0.00219 with crossings at 13.797 and 13.790 yr respectively; ×1.10 gives 18.377 and 18.367 yr),
+765   and a decade-spanning q grid shows review-instability turning on as F ∗ rises through the baseline
+
+
+                                                           18
+766   0.00209, with the equilibrium infeasible (N ∗ < 0) once F ∗ > r (Supplementary S11). Assessed
+767   fishing mortality across the 42-stock cohort (median mean-F 0.37) and a 454-stock broader
+768   pool (median 0.21) exceeds the illustrative baseline F ∗ by two orders of magnitude, sitting
+769   beyond the model feasibility boundary; quantitative thresholds are therefore scale-conditional
+770   (Supplementary S12).
+771       Third, the 6.501 yr crossing is a verified Neimark–Sacker bifurcation of the nonlinear sampled
+772   map: the finite-difference Jacobian matches the monodromy to 10−6 , the crossing is transver-
+773   sal (d|µ|/dTr = −0.000683) and non-resonant through fourth order, and the first Lyapunov
+774   coeﬀicient is sign-definite across a sevenfold finite-difference step range (a(0) ≈ −0.0008, super-
+775   critical). Long-horizon iterates rotate at the predicted frequency (rotation number 0.027–0.029
+776   against θ0 /2π = 0.0279); the invariant circle itself is not directly exhibited because convergence
+777   at |ρ − 1| ∼ 10−4 is too slow for the tested horizons (Supplementary S11).
+
+
+
+
+      Figure 3: Spectral radius ρ(Tr ) against review interval at the baseline parameter vector (Table 3)
+      for the four update–channel combinations. Horizontal line: the unit circle; dotted verticals: the 6.501,
+      47.536, 79.143, and 2.306 yr crossings and the annual review (1 yr). The exact mobilising curve crosses
+      once; the Euler mobilising curve reports two artefact crossings; the exact protective curve never reaches
+      unity.
+
+
+
+778   3.4.1 Sensitivity of the crossing: why 6.5 is reported as a band
+779   Section 3.4 reports the exact-update mobilising crossing at 6.501 yr. That number is repro-
+780   ducible but it is not identifiable, and reporting it to four significant figures implies a precision
+781   the system does not possess. This subsection quantifies the sensitivity and replaces the point
+782   with a band.
+
+783   Why it is ill-conditioned. At the baseline the annual spectral radius is ρ(1) = 1.00035 —
+784   three and a half parts in ten thousand above unity — and the crossing is where a complex
+785   multiplier pair crosses the unit circle with d|µ|/dTr = −6.83 × 10−4 per year. Inverting that
+786   slope: an error of 10−3 in ρ near the crossing displaces the crossing interval by approximately
+787   1.5 yr. Any quantity located by a near-tangential unit-circle crossing of this kind inherits that
+788   conditioning.
+
+                                                         19
+789   One-at-a-time sensitivity. Each parameter was perturbed by ±1% and ±2% with all others
+790   held at the baseline, and the exact-update mobilising crossing recomputed (Table 4). The
+791   crossing moves by more than half its baseline value under a 2% change in K, q or Emax .
+
+      Table 4: Sensitivity of the exact-update mobilising crossing to one-at-a-time parameter perturbation.
+      Baseline crossing 6.501 yr. The last column is the largest finite crossing shift among the ±2% endpoints,
+      as a percentage of baseline; a non-crossing endpoint is excluded from that percentage. “none” indicates
+      that no unit-circle crossing occurs on [0.2, 200] yr at the tested grid resolution.
+
+                                                             crossing (yr)         worst 2%
+                             parameter               −2% −1% +1%             +2%      swing
+                             K (carrying capacity)   none     2.99   8.67 10.37      59.5%
+                             q (catchability)        none     3.44   8.50 10.10      55.4%
+                             Emax (effort cap)       none     3.45   8.50 10.10      55.3%
+                             η (control gain)         5.27    5.92   7.02 7.49       18.9%
+                             r (intrinsic growth)     7.35    6.94   6.04 5.55       14.6%
+                             dref (reference)        10.78    8.89   2.35 none       65.7%
+                             tm (memory timescale) 6.60       6.55   6.45 6.39        1.6%
+                             d0 (baseline mortality)  6.50    6.50   6.51 6.51        0.1%
+                             Zref (reference)         6.51    6.50   6.50 6.50        0.1%
+
+
+
+792   The verdict itself is fragile, not merely the number. Four of the nine parameters,
+793   perturbed by 2% in the directions shown in Table 4, remove the crossing altogether: the loop is
+794   stable at every tested review interval, so the claim that annual review is unstable and the loop
+795   restabilises above a threshold is not merely numerically displaced but qualitatively false. This
+796   is the more serious finding, and it concerns the sign of ρ(1) − 1, which is 3.5 × 10−4 at baseline.
+
+797   Joint perturbation.        Perturbing the six influential parameters jointly over the corners of a
+798   box gives the band:
+
+                  box      corners with a crossing crossing range range as % of baseline
+799
+                  ±0.5%             60 of 64           0.87 – 10.67 yr         −87% to +64%
+                  ±1%               44 of 64           4.42 – 13.65 yr         −32% to +110%
+
+800      At ±1%, twenty of sixty-four corners lose the crossing entirely. At ±0.5%, the crossing
+801   ranges from under one year to nearly eleven.
+
+802   What is reported, and what is not. The crossing is therefore reported as approximately
+803   6.5 yr at the baseline parameter vector, with a plausible range of roughly 1–11 yr under a
+804   half-percent joint parameter perturbation, and with the instability verdict itself not robust to a
+805   2% change in four of the parameters. We do not report a confidence interval: the parameter
+806   uncertainties here are not measurements with a stated sampling distribution but conventions,
+807   so any interval would be an assumption dressed as an inference. The honest statement is the
+808   range swept under stated perturbations, which is what Table 4 and the box above give.
+
+809   What survives. Three findings of Section 3.4 are unaffected, and they are the ones this paper
+810   rests on. (i) The operator contrast: the forward-Euler command step reports crossings at 47.536
+811   and 79.143 yr that are artefacts relative to the exact update, and this was verified separately
+812   from the crossing location. (ii) The protective channel is stable at every tested interval under
+813   the exact update (maximum spectral radius 0.9967), and its smallest stability margin on that
+814   grid is approximately 0.0033 (1 − 0.9967). At annual review the mobilising instability excess
+
+
+                                                         20
+815   is approximately 0.00035 (1.00035 − 1); these two margins refer to different interval sets. (iii)
+816   The multiplicity-controlled screen of Section 3 finds no robust institutional cycles, which is a
+817   null result and does not depend on the crossing value. The 6.5-year figure is a property of one
+818   illustrative parameter vector. It is reported as such, not as a threshold for institutions.
+
+819   3.5 The selected 42-stock spectral screen
+820   No stock in the screened cohort has a peak in the specified biomass target bands meeting all
+821   robustness criteria. Baltic sprat, for example, has a biomass coeﬀicient of variation of 0.40,
+822   but its variation is low-frequency and regime-dominated rather than a robust target-band peak.
+823   The null carries a three-way restriction: it is not proof of absence, not a comparison of controller
+824   signs, and not causal evidence that annual review stabilises anything. On the stage-structured
+825   review map (Section 3.3), annual-review stability at every tested response value is consistent
+826   with this null; consistency is not a test. The institutional reading is therefore limited: under
+827   this screen, target-band cycles are not common in assessed-stock records, and any claim that
+828   periodicity itself diagnoses an institutional feedback is unsupported by this cohort. That null
+829   verdict is robust: an eleven-variant sensitivity battery — the AR(1) baseline plus ARMA(1,1),
+830   trend-stationary-no-detrend, circular block bootstrap at three block lengths, Hodrick–Prescott-
+831   cycle and first-difference pretreatments, and piecewise-AR(1) regime surrogates at three break
+832   dates, each at the published 200-replicate, seed-7 resolution — returns the BH-adjusted zero
+833   count in every variant (smallest nominal p 0.0100, Hodrick–Prescott variant; details and the
+834   resolution bound in Supplementary S9.1; the screen’s restricted-result status is stated in Section
+835   2.4).
+836       The screen’s zero count holds under exploratory alternative bands: a broad 2–10 yr band,
+837   management-cadence bands (1–3, 3–8, 8–20 yr), and an 8–80 yr effort-proxy band all return
+838   zero Benjamini–Hochberg-significant cells, with the effort-proxy band unresolvable (record span
+839   below three upper periods) on all 42 records (Supplementary S11). Figure 4 shows the baseline
+840   q-value distribution and per-stock null excess. Exploitation intensity carries no spectral excess
+841   once the ENSO confound is removed (Spearman 0.03 with Peru/Chile excluded, against 0.31
+842   before; Supplementary S12). Across a 454-stock broader pool, the archived cohort median
+843   buffer-years (1.79) sits at the second percentile of resampled medians, independently re-executed
+844   (Supplementary S12).
+
+
+
+
+      Figure 4: Baseline screen diagnostics. Left: Benjamini–Hochberg q-values over the 84 target-band cells
+      (dashed line: 0.05; no cell significant). Right: per-stock band power relative to the 95% per-stock AR(1)
+      threshold in bands A and B (horizontal line: unity).
+
+
+
+
+                                                         21
+845   3.6 Power of the injected-signal screen
+846   On 100–200 yr synthetic records, the sprat-class signal has estimated power 1.0 at noise scale
+847   σ = 0.1 and approximately 0.24–0.58 at σ = 0.3. The anchovy-class effort signal has power
+848   approximately 0.02–0.14 over the tested horizons and noise levels; its longer effort peak and slow
+849   amplitude growth can offset its larger relative excursion. These are conditional simulations:
+850   no minimum-power guarantee holds per empirical stock, and the 100–200 yr horizons exceed
+851   many eligible series. The anchovy-class null is consequently weakly informative under this test,
+852   and the sprat-class result is informative only in favourable noise and record-length regimes.
+853   The empirical screen is therefore a selected-cohort consistency check and the baseline for a
+854   prospective design, not a general test of the extractive mechanism. The sprat-class 1.0 at
+855   σ = 0.1 is trend detection (growth-transient run-up in the 30–120 yr band), not cycle detection,
+856   and is fragile at σ = 0.3.
+857      The evidentiary separation is complete: the stage-dependent regions, noise experiments, and
+858   power estimates do not establish population-wide frequencies or policy effects and cannot be
+859   transferred to the extractive hold-map controller or to protective control. The complementary
+860   prospective design is specified in Section 4.5 (detail in Supplementary S13.3).
+
+861   3.7 Structured case search: no qualifying cases
+862   No candidate satisfied all four criteria after primary-source and station-level review. The zero
+863   count is an evidential gap, not a disconfirmation: it records that no unconfounded oscilla-
+864   tor was found, not that none exists. Bangkok (durably responsive institutional feedback: the
+865   groundwater-extraction control regime persisted across multiple review cycles rather than be-
+866   ing a one-time cap or ban) and La Mancha Oriental (on the stabilising side before its 2019–
+867   2023 extraction relapse) are the closest cases. The unconfounded delay oscillators identified
+868   in produced-capital systems (livestock and electricity-capacity cycles) do not contain the au-
+869   tonomously regenerating stock the resource model assumes. The per-system calculations use
+870   archived input series and are reported at that status in the Supplementary material (S4); three
+871   groups illustrate the screening logic.
+872       Sheridan-6 groundwater (hydrological driver without a feedback rule) and Icelandic cod and
+873   haddock under harvest-control rules (rule present, no review-cycle identification) illustrate the
+874   confound patterns at case level (Supplementary S4). The four-state prediction is the stage-
+875   structured review map’s closed loop of four state components (adults A, juveniles J, memory
+876   signal Z, held effort E), whose slow-stock class carries the centuries-scale dominant timescales
+877   of Section 3.3.
+878       Peruvian anchoveta provides a further discriminator: a robust 3.7 yr catch periodicity with
+879   ENSO as candidate driver, evidence of shared periodicity rather than an identified mechanism
+880   (Supplementary S4 for the battery, multiplicity family, and confirmatory tests). The subannual
+881   review regime lies below the anchovy-class review-interval response region, so the unclassified
+882   controller prevents that comparison from testing the mechanism. The 3.7 yr catch periodicity
+883   is not a review interval.
+884       Two structural hypotheses may help explain the zero count. The long records needed to
+885   test the claim exist primarily for visible crises, and visibility is correlated with a fast non-
+886   institutional driver. And on the continuous-delay parameterisation that produces the instability
+887   window (rg ≈ 1.5–1.6) the predicted period is centuries — longer than any institution has held
+888   a fixed response rule — while the 3–12 yr windows belong to the stage-structured map. The
+889   two period scales are properties of different operators and should not be read as one prediction.
+890   The visible-record pattern — long series repeatedly associated with climate variability, cohort
+891   effects, infrastructure changes, or emergency interventions — suggests, without establishing,
+892   a selection mechanism in which systems receive intensive monitoring after complex crises; no
+893   causal identification of selection bias is claimed.
+
+
+                                                     22
+894       One documented system sits at the window’s edge rather than inside it: the spruce budworm
+895   30–40 yr outbreak cycle is endogenous predator–prey outbreak dynamics rather than institu-
+896   tionally driven (Supplementary S4 for the rate mapping and window comparison). The system
+897   corroborates the mechanism class, not the institutional claim.
+
+898   3.8 The northern cod two-window split
+899   The case’s positive content is a descriptive partition, offered as a consistency check of the
+900   assessment-window mechanics rather than an empirical rejection of scalar autonomous or single-
+901   driver dynamics. The data split the phenomenon into two events — the crash in-
+902   terpretation is formulation-dependent, and the post-collapse dynamics expose a
+903   second identification problem not resolved by the mortality-allocation comparison.
+904   The split is the positive content, not a new mechanism.
+905       The crash window (1991–1995) is documented by the assessment table (DFO CSAS SAR
+906   2016/026, Table A2; Table 2): spawning stock biomass falls from 735 to 10 kt across the five
+907   calendar years 1991–1995 while estimated natural mortality reaches 2.2–2.6 yr−1 , roughly ten
+908   times pre-collapse levels (the pre-collapse reference period, estimator, and uncertainty interval
+909   for this ratio are documented with the assessment table; Table 2 begins in 1991). The displayed
+910   values are rounded values from the assessment table . The interpretation of the crash is a
+911   formulation attribution, not a causal claim. The NCAM M-shift formulation allocates most
+912   estimated mortality to natural death, and NCAM’s M is an estimated unobserved-death com-
+913   ponent conditional on model structure — assessment-framework proceedings explicitly caution
+914   that unreported fishing deaths may enter de-facto M (Cadigan, 2016). The constrained-M
+915   formulation attributes the crash to unreported catch. The constrained-M quantities are unre-
+916   produced (Supplementary S13.2 for the quantities and reproduction requirements): they are
+917   listed as open problems and stated here as hypotheses, not results.
+918       Table 2. Northern cod spawning stock biomass (SSB) and estimated instantaneous nat-
+919   ural mortality (M ) from DFO CSAS SAR 2016/026 (Table A2, NCAM M-shift formulation),
+920   rounded from the assessment table. The survival column exp(−M ) is a transformation of the
+921   reported M — annual survival conditional on the estimated natural-mortality component alone,
+922   since fishing mortality and other modelled removals also apply — not an independently observed
+923   survival series.
+
+                                    Year SSB (kt) M (yr−1 ) exp(−M )
+                                    1991   735      1.002      0.367
+                                    1992   382      2.214      0.109
+                                    1993   101      2.575      0.076
+                                    1994   31       2.331      0.097
+                                    1995   10       0.288      0.750
+                                    1996   16.05    0.341      0.711
+                                    2000   34.42    0.717      0.488
+                                    2004   20.07    0.362      0.696
+                                    2005   25.18    0.288      0.750
+                                    2010   96.91    0.696      0.499
+                                    2015   298.65   0.278      0.757
+
+
+924       The non-recovery window is the second event. After the moratorium, the series both rises
+925   and falls across tens of thousands of tonnes (Table 2; the full annual record with uncertainty
+926   intervals is the assessment table). The phase-line obstruction of Section 2.7 applies as a model-
+927   class diagnostic (not an empirical rejection of scalar autonomous models for northern cod):
+928   an error-free trajectory with repeated direction reversals cannot arise from a fixed scalar au-
+929   tonomous model with constant removals. The assessment record does not satisfy the diagnostic’s
+930   two conditions — the SSB series is an assessment estimate rather than an exact trajectory, and
+
+                                                     23
+931   removals were not fixed through the window — so the proposition is a statement about model
+932   adequacy for this class, not a direct empirical rejection. Two scope statements govern the re-
+933   sult. The reliable contradiction is repeated direction reversal: convergence toward K can be
+934   arbitrarily slow near degeneracy, so failure to reach an unspecified biomass by an unspecified
+935   deadline is not a contradiction. And the obstruction must be separated from rejection under
+936   measurement error, process noise, age structure, migration, time-varying mortality, and state-
+937   space observation models — the incompatibility is a property of the exact trajectory class,
+938   nothing broader.
+939       The subsequent record does not close the second window. Rose (2026), comparing two
+940   surplus-production reconstructions spanning 1983–2023 (Rose and Walters, 2019; DFO, 2024),
+941   documents that surplus production and stock growth stalled after 2015, with some years nega-
+942   tive, and that the stall-point biomass remains controversial. Structural-equation analyses in the
+943   same review attribute the production deficit to capelin limitation and harp seal predation rather
+944   than fishing alone. For the present analysis the key point is the persistence of the non-recovery:
+945   a decade after the rebound reported by Rose and Rowe (2015), the post-2015 production stall
+946   is inconsistent with the simplest fixed-parameter surplus-production interpretation considered
+947   here, which is precisely what the split’s second window — a second identification problem not
+948   resolved by the mortality-allocation comparison — states. Read through Lemma 2.2(ii), the
+949   seal-predation attribution carries a directional consequence: to the extent predation acts as
+950   additional mortality on the stock, the effective threshold facing recovery lies above s, so pre-
+951   dation raises the threshold for re-establishment rather than merely slowing convergence. No
+952   predation-mortality rate is estimated here; the lemma is used for the direction of the effect, not
+953   its magnitude.
+954       The ecosystem context (Supplementary S5) is background only: the harp seal increase and
+955   capelin decline in the mass-balance record (Tam and Bundy, 2019) are descriptive inputs, not
+956   causal tests.
+957       Figure 5 plots the Table-2 SSB and mortality series against the two windows.
+
+
+
+
+      Figure 5: Northern cod Table-2 series by window. Black: spawning stock biomass; red steps: instanta-
+      neous natural mortality; shaded: the crash (1991–1995) and non-recovery (1995–2015) windows.
+
+958      Table 5 collects the Section 3 results with their evidential status; Supplementary S1 is the
+959   complete inventory.
+960      Table 5. Results at a glance: each Section 3 result with its evidential status.
+
+                                                      24
+      Forward invariance (Section 3.1)                 theorem
+      Rapid-review consistency (Section 3.2)           conditional theorem (finite horizons)
+      Response regions (Section 3.3)                   archived records (provisional)
+      Crossing record; battery, F-grid, NS records     re-execution-verified computation; nominal-tier
+      (Section 3.4)                                    records (S11)
+      Screen null; alternative bands; F-excess; ADH    re-execution-verified zero count; nominal-tier
+      (Section 3.5)                                    records (S9.1, S11, S12)
+      Power analysis (Section 3.6)                     independently re-executed computation
+      Case search (Section 3.7)                        executed search (evidential gap, not
+                                                       disconfirmation)
+      Cod two-window split (Section 3.8)               descriptive partition; hypotheses, not results
+
+
+961   4 Discussion
+962   4.1 Architecture substitution: what changes when the operator changes
+963   The operator-spectra results of Section 3.4 are the paper’s core methodological finding. Stability
+964   windows are operator-specific: they do not transfer across review-map operators. The same
+965   feedback loop — surplus production, an institutional deficit signal, an effort law — carries an
+966   archived, unreproduced instability record near 3–4 yr of review under the stage-structured map,
+967   convergence over a 1–20 yr grid under that map’s cod-class parameterisation, and instability
+968   at annual review with a complex crossing near 6.5 yr under the exact logistic hold map (full
+969   records, the Euler command-step artefact, and the q-sensitivity caveat in Section 3.4 and its
+970   Reading; the plant–operator confound is stated alongside and the operator effect is not claimed
+971   isolated).
+972       The complete crossing record sharpens the operator finding: on one plant the exact and
+973   Euler updates disagree on the number and location of crossings (Section 3.4). The review
+974   cadence is a local spectral design parameter, and the command step is a second, independent
+975   one. None of these statements can be obtained from the continuous-delay equation, and none
+976   transfers to it. Any empirical or theoretical claim about institutional feedback must therefore
+977   state its operator: a stability window located under continuous delay is not a prediction about
+978   an institution that reviews periodically, and an annual-review result does not generalise to
+979   multi-year plans. The governance architecture itself is a testable component of the hypothesis,
+980   not a re-parameterisation detail.
+
+981   4.2 What the null does and does not establish
+982   The 42-stock screen returns a spectral null, and its value lies in what it refutes: the claim, im-
+983   plicit in treating periodicity as evidence, that robust target-band cycles are common in assessed-
+984   stock records. It does not establish the contrary. With anchovy-class power between 0.02 and
+985   0.14 across tested noise and record-length regimes, the screen cannot adjudicate the extractive
+986   mechanism for that class; the sprat-class result is informative only in favourable regimes; and
+987   no screen of retrospective series can compare controller signs, because the sign is not in the
+988   data. This is the same null discipline that the skeptical re-analysis of the Russell Cycle applied
+989   to climate-forced cycles (McManus, Licandro, and Coombs, 2016), transferred to governance-
+990   feedback claims: a diagnostic is not a causal claim, and no accumulation of diagnostics converts
+991   to causal evidence.
+
+992   4.3 The cod case at its exact status
+993   The cod case contributes a descriptive partition, not a mechanism: crash-window mortality
+994   is formulation-dependent (Section 3.8), and the post-collapse record is not resolved by either
+
+
+
+                                                      25
+ 995   mortality-allocation formulation, with the post-2015 production stall persisting under inde-
+ 996   pendent reconstructions (Rose, 2026). The obstruction mathematics applies within the scope
+ 997   stated in Sections 3.8 and 4.7(vii). What the case supplies is a falsification benchmark: a well-
+ 998   documented collapse-and-stall record against which prospective designs can be powered and
+ 999   scored.
+
+1000   4.4 A falsification standard for institutional-feedback claims
+1001   The model family gains empirical content by specifying the outcomes that count against its
+1002   mechanism and parameterisation. Five outcomes:
+1003     1. If independently measured implementation and deployment lags do not covary with the
+1004        instability bands predicted under fitted resource parameters, the quantitative delay claim
+1005        is weakened.
+1006     2. If an observed oscillation remains after climate, cohort, and regime forcing are modelled,
+1007        but its phase relation between decline signal, effort, and biomass contradicts the con-
+1008        troller’s causal ordering, the mechanism is rejected for that case.
+1009     3. If sampled-data analysis removes a continuous-delay band under realistic review rules, the
+1010        continuous model cannot be used for that institution.
+1011     4. If a protective controller dominates the extractive controller across uncertainty without
+1012        inducing the claimed volatility, no anti-regulation conclusion may be drawn.
+1013     5. If realistic record lengths have low power for the predicted signal, field spectral nulls cannot
+1014        adjudicate the mechanism; prospective or experimental evidence is required. The Icelandic
+1015        cod case illustrates the bind: its post-1995 variability (coeﬀicient of variation 0.37–0.39; no
+1016        dominant spectral peak, Supplementary S11) overlaps the continuous-delay band (9.9–20.3
+1017        yr) in timescale yet carries no institutional signature, because a competing environmental
+1018        driver is empirically supported for the same outcome (criterion (iii); Supplementary S4).
+
+1019   4.5 Prospective designs
+1020   The retrospective evidence does not identify the institutional mechanism; the constructive con-
+1021   tent of this paper is the programme that could. Retrospective evidence can still discipline the
+1022   mechanism where a prespecified contrast exists: the Tr -ranked cross-sectional test across the
+1023   42-stock cohort is executed in Supplementary S10 and returns a controlled null — no window-
+1024   approach gradient, with Tr ≈ 1 dormancy holding at 0/42 and 1/42 flags in the two bands. Five
+1025   designs are specified as preregistration targets; none has been executed, and each is intended
+1026   for preregistration before outcome inspection — no registration identifier or archived protocol
+1027   exists yet, and none is claimed.
+1028       Governance-event panels. For each resource–jurisdiction unit, a source-linked event
+1029   record dates each stage from raw observation to ecological response, with date uncertainty kept
+1030   distinct rather than collapsed to one lag (full specification in Supplementary S13.3). The cod
+1031   case supplies two dated decision events — the moratorium announcement of 2 July 1992 and the
+1032   reopening of 26 June 2024 with an 18 kt total allowable catch — with two negative constraints:
+1033   no governance lead is inferred from annual biomass data, and a fast response does not establish
+1034   adequacy.
+1035       Quasi-experimental timing. Event-study, difference-in-differences, synthetic-control,
+1036   interrupted-time-series, or state-space intervention designs on schedule variation plausibly
+1037   independent of the outcome innovation, with preregistered estimands (full specification in
+1038   Supplementary S13.3). Two coding rules are binding: a change in implementation lag is not
+1039   coded as a change in Tr , and a nominal schedule change is not a treatment unless it changes a
+1040   responsive decision opportunity.
+1041       Out-of-sample mechanism comparison and the displacement discipline. Held-
+1042   out comparison across environmental-forcing, cohort-resonance, institutional-delay (specified
+
+                                                       26
+1043   controller sign), combined, and null time-series models, with frozen splits and declared outcomes
+1044   (full specification in Supplementary S13.3). The displacement rule: a delay explanation is
+1045   weakened when it cannot reproduce the pre-registered phase ordering, and displaced when a
+1046   competitor predicts the held-out observations better.
+1047       Controlled and randomized human-in-the-loop experiments. Randomised review
+1048   cadence and feedback timing or sign in a common simulated renewable-resource environment,
+1049   with the gain–phase signature as the diagnostic target (full specification in Supplementary
+1050   S13.3). The randomisation described is a laboratory or advisory-interface design, not a field
+1051   intervention on a live stock; mechanism-class precedent exists (Costantino, Cushing, Dennis,
+1052   and Desharnais, 1995; Moxnes, 1998) but is not validation of the institutional equations.
+1053       Closed-loop management strategy evaluation. Policy comparison in a closed loop
+1054   keeping six uncertainty classes distinct (the management-procedure tradition: Punt and Dono-
+1055   van, 2007), crossing review timing, delays, controller sign, observation error, parameter draws,
+1056   operating-model class, and process-noise regime (full specification in Supplementary S13.3). At
+1057   minimum, responsive extractive, responsive protective, and fixed-plan controllers are compared;
+1058   a conclusion that compares only two review intervals inside the extractive class cannot be gener-
+1059   alised to governance as a whole. Three wider empirical hypotheses of the programme’s general
+1060   theory — observation aggregation, governance phase ordering, and substitution certificate —
+1061   are adopted here only as motivation, and otherwise explicitly deferred: governance phase or-
+1062   dering supplies the gain–phase diagnostic target the designs above inherit, while testing any
+1063   of the three requires prospective, adequately powered designs this paper specifies but does not
+1064   execute.
+
+1065   4.6 Distributive constraints where reproducible
+1066   The social side of the cod case is presented at measurement level (Appendix B): the constituency-
+1067   definition mismatch table (licence holders against census-subdivision residents; fishing income
+1068   against all-resident sector income; the unspecified floor), the Statistics Canada community-
+1069   level series (tables 38-10-0167-01 and 38-10-0168-01), the measured-floor construction (Ik , ck )
+1070   with its componentwise non-decline rule, and the admitted world-hook instruments are given
+1071   in Appendix B, with the full instrument detail and the unreproduced pipeline register in the
+1072   Supplementary material (S6). What the case does not measure is the point: no licence-holder
+1073   panel exists, the community series is not one, and no measured floor is operational — the
+1074   distributive constraints remain stated rather than resolved (Section 4.7 (viii)).
+
+1075   4.7 Limitations
+1076     (i) Diagnostics are not causal claims: the spectral null, the response regions, the power values,
+1077         the case calculations, and the cod split carry their stated types and no more.
+1078    (ii) The stage-structured response regions are exploratory finite-grid, trajectory-classified
+1079         records pending complete stage registration and multiplier analysis; the logistic hold-map
+1080         multiplier record is complete (Section 3.4), and the stage operator’s multiplier and tra-
+1081         jectory record is supplied by the reconstruction of Section 3.4 — a newly specified object
+1082         whose comparison with the archived windows is a consistency check, not a validation.
+1083         No Poincaré-map multiplier classification is claimed for the archived stage-output values,
+1084         and they are not reproducible numerical propositions until the original computational
+1085         record is attached. The effort scale is uncalibrated: results are reported at imported
+1086         catchability values, and reparameterising the controller in fishing mortality (F = qE) is
+1087         the stated next step for the stage operator.
+1088   (iii) The two review-map operators are distinct: statements computed on the hold map, on
+1089         the stage-structured map, and on the continuous-delay equation do not transfer to one
+1090         another.
+
+
+                                                      27
+1091     (iv) The screen is a selected-cohort consistency check whose power is high only in favourable
+1092          noise and record-length regimes; the null is not proof of absence and adjudicates
+1093          nothing about controller sign; the AR(1) null may understate low-frequency power. The
+1094          eleven-variant battery of Supplementary S9.1 holds the zero count under ARMA(1,1),
+1095          trend-stationary, block-bootstrap, detrending, and regime-shift nulls; the remaining
+1096          masked-peak risk runs via overestimated null power (unmodelled observation-error or
+1097          retrospective-bias variance raising the threshold), not the underestimation above.
+1098      (v) The structured case search does not independently disconfirm the mechanism: finding no
+1099          eligible cases under these criteria is not evidence against it.
+1100     (vi) The cod case establishes a descriptive partition, and no mechanism is identified.
+1101    (vii) The obstruction mathematics concerns exact trajectories of the fixed-parameter, fixed-
+1102          removals autonomous class and is not a rejection under measurement error, process noise,
+1103          age structure, migration, time-varying mortality, or state-space observation models.
+1104   (viii) The social object is not operationalised: the human series is not assembled, the normative
+1105          floors are unoperationalised, and documenting the gap is the finding.
+1106     (ix) The prospective designs are preregistration targets, not executed studies, and they do not
+1107          retroactively change the status of the retrospective results.
+
+1108   4.8 Design principles for the governance clock
+1109   The results support four design principles for the decision clock (Box 2).
+1110      Box 2. Design principles for the governance clock.
+
+        Principle                          Content
+        Treat timing as a control variable The review interval is optimised alongside harvest limits in
+                                           management strategy evaluation; annual review is not assumed
+                                           stabilising.
+        Match the rule to the clock        Protective rules tolerate institutional rigidity; extractive rules
+                                           require frequent review to contain destabilisation.
+        Decouple observation from          High-frequency monitoring does not require high-frequency
+        decision                           revision; multi-year plans are stable under protective rules.
+        Design for structural breaks       Scheduled review is paired with asynchronous emergency triggers
+                                           (circuit breakers) that bypass the review clock during regime
+                                           shifts.
+
+
+1111      Implications for management design. Eight implications follow for review-interval
+1112   choice.
+
+1113     (1) The review interval is a control variable: stability is computed per interval, not per loop
+1114         (Section 3.4).
+1115     (2) Annual review is not automatically stabilising: the baseline annual verdict is unstable
+1116         with a near-unit-circle margin (Section 3.4).
+1117     (3) Protective rules are more robust across review intervals than extractive rules: the exact
+1118         protective map is stable at every tested interval (Section 3.4).
+1119     (4) Fixed and responsive plans are not equivalent instruments: a held multi-year command
+1120         and an annually revised rule are different operators (Sections 2.6 and 4.4).
+1121     (5) Emergency triggers are modelled separately from scheduled reviews: structural breaks
+1122         between reviews are invisible to the fixed clock (Sections 3.8 and 4.5).
+1123     (6) Management strategy evaluation treats the review interval as an explicit factor alongside
+1124         the control rule (Section 4.5).
+1125     (7) Spectral periodicity is not evidence of institutional cycles: the screen’s null carries no
+1126         controller-sign information (Sections 3.5–3.7).
+
+
+                                                         28
+1127    (8) Observation, assessment, decision, deployment, and response lags are not collapsed into
+1128        one governance lag (Section 2.1).
+
+1129       Beyond fisheries, the framework is reusable as a modelling discipline: it answers how periodic
+1130   governance should be represented in ecological models, how the stages of the advice chain should
+1131   be kept distinct, and how modellers can test whether a stability claim survives a change of
+1132   decision operator.
+1133       The logistic core is illustrative; the structural results are the operator-dependence of the
+1134   stability verdict, the finite-horizon scope of the rapid-review limit, and the non-equivalence of
+1135   one-step and exact updates as a caution within the studied class.
+1136       Sample-and-hold architectures beyond fisheries face the same clock-mismatch failure mode:
+1137   five-yearly climate pledges held between global stocktakes (UNFCCC, 2015) align a political
+1138   review clock with ecological and environmental clocks only by design, not by default.
+
+1139   5 Conclusion
+1140   Periodic review is the operating architecture of fisheries governance, and it is not well represented
+1141   by either of its standard formalisations. The sample-and-hold model specified here makes the
+1142   governance clock an explicit object: seven time objects, a projected explicit controller, and a
+1143   spectrum computed per operator rather than per loop. Its empirical layer contains one case
+1144   whose positive content is a descriptive split — the northern cod two-window partition — and
+1145   a falsification discipline for the rest: a selected-cohort screen with no target-band discoveries
+1146   and stated power, a zero-count case search with its structural hypotheses, and a falsification
+1147   standard with five outcomes that count against the mechanism. The mechanism is falsifiable,
+1148   and the five prospective designs specify how it would be falsified, comparatively supported, or
+1149   left unresolved. Until those designs are executed, the empirical layer stands as stated here: a
+1150   well-posed mechanism, an exploratory computational record, limited screen power, a case search
+1151   that does not disconfirm, and one descriptive split. The decision clock — the timing and form
+1152   of policy revision — is therefore a design variable with stability consequences.
+
+1153   Appendix A. Registration and reproducibility record (consolidated)
+1154   This appendix collects the registration and reproducibility requirements stated in Sections 2.2,
+1155   2.4, 2.5, 3.3, and 3.4. The convention: an analysis is pre-registered when its plan is dated and
+1156   fixed before any run, as the stage-map reconstruction of Section 3.4 is; computational artifacts
+1157   (solver configuration, seeds, identifiers, calibration records) are archived with the materials.
+1158   The consolidated requirements:
+
+1159      • The solver configuration and initial histories are registration requirements; until that com-
+1160        putational record is complete, the stage-output values carry provisional status (Sections
+1161        2.2 and 3.3).
+1162      • The RAM stock identifiers and the eligibility table are archived with the computational
+1163        materials (Section 2.4).
+1164      • The full null-calibration record — AR(1) coeﬀicient estimation, detrending inside each
+1165        null replicate, missing-data treatment, and the number of Monte Carlo replicates — is
+1166        archived with the computational materials (Section 2.4).
+1167      • The simulation code and seeds are archived with the computational materials (Section
+1168        2.5).
+
+1169       Two further consolidated records. First, the logistic-core parameter vector (r, K, Emax , δ0 ,
+1170   Zref , ∆ref , τm ; δ = log 2/10 is stated in Section 2.1) and the linearised fixed point (N ∗ , E ∗ , Z ∗ )
+1171   with its interiority to the nonsmooth regions of Φk and Π[0,Emax ] are printed in Table 3, with
+1172   the code constants block pinned per row; the monodromy’s numerical construction and the
+
+                                                           29
+1173   continuous eigenvalue λ and crossing angle θ of Section 3.4’s records remain part of the compu-
+1174   tational record. Second, the Data availability statement records the deposit status of the same
+1175   requirements (including the reconstruction’s dated plan, campaign code, and output tables); the
+1176   prospective designs of Section 4.5 remain preregistration targets with no registration identifier
+1177   or archived protocol. The full discharge register is Supplementary S8.
+1178       Table 3. Parameter values for the logistic hold-map core and the stage-structured recon-
+1179   struction. No value here is newly computed except the linearised-gains, crossing-angle, eigen-
+1180   value, and solver rows, which are computed in Supplementary S11; the baseline-core vector is
+1181   printed here, with the code constants block pinned per row, and values not stated remain in
+1182   the computational record (this appendix). Time is in years; biomass, effort, and signal scales
+1183   are bare model units (K, Emax , Zref , and ∆ref set the scales).
+
+       Object                   Parameter                 Value as stated        Stated at
+       Logistic hold-map core   catchability q            0.001                  Section 3.4 (stage Plant
+                                                                                 paragraph, as the
+                                                                                 hold-map core’s value)
+       Logistic hold-map core   softplus sharpness k      10                     Section 3.4 (Plant
+                                                                                 paragraph)
+       Logistic hold-map core   effort-response           0.914                  This table; constants
+                                coeﬀicient η                                     block droop_test.py
+                                                                                 L49–58 @ 24c980cd;
+                                                                                 inherited illustrative
+                                                                                 baseline (Candidate-A
+                                                                                 value from the
+                                                                                 companion delay study,
+                                                                                 whose institutional
+                                                                                 coeﬀicients are explicitly
+                                                                                 uncalibrated: Abaee,
+                                                                                 2026); the delay-Hopf
+                                                                                 window opens between
+                                                                                 η = 0.5 and 0.7 and the
+                                                                                 r = 0.02 inclusion
+                                                                                 threshold sits at
+                                                                                 η ∗ ≈ 0.85, so 0.914 is
+                                                                                 neither threshold (basis
+                                                                                 runs deposited;
+                                                                                 Supplementary S9.2)
+       Logistic hold-map core   growth rate r (yr−1 )     0.02 (validation       This table; constants
+                                                          argument)              block droop_test.py
+                                                                                 L49–58 @ 24c980cd
+       Logistic hold-map core   carrying capacity K       100                    This table; constants
+                                                                                 block droop_test.py
+                                                                                 L49–58 @ 24c980cd
+       Logistic hold-map core   effort ceiling Emax       30                     This table; constants
+                                                                                 block droop_test.py
+                                                                                 L49–58 @ 24c980cd
+       Logistic hold-map core   effort-law gain δ0        0.01                   This table; constants
+                                                                                 block droop_test.py
+                                                                                 L49–58 @ 24c980cd
+       Logistic hold-map core   reference deficit Zref    1                      This table; constants
+                                                                                 block droop_test.py
+                                                                                 L49–58 @ 24c980cd
+       Logistic hold-map core   reference scale ∆ref      1                      This table; constants
+                                                                                 block droop_test.py
+                                                                                 L49–58 @ 24c980cd
+
+
+
+                                                         30
+Object                   Parameter                          Value as stated               Stated at
+Logistic hold-map core   memory timescale τm                5                             This table; constants
+                         (yr)                                                             block droop_test.py
+                                                                                          L49–58 @ 24c980cd
+Logistic hold-map core   memory shift δ                     log 2/10 ≈ 0.069              Section 2.1
+                                                            (equilibrium memory
+                                                            level)
+Logistic hold-map core   linearised fixed point             (89.55188, δ, 2.08962);       This table; equilibrium
+                         (N ∗ , E ∗ , Z ∗ ); interiority    E ∗ ∈ (0, Emax ),             routine
+                                                            Φk (0) = δ, sp′k (0) = 1/2    base_equilibrium,
+                                                                                          droop_test.py L86–93
+                                                                                          @ 24c980cd; closed form
+                                                                                          in Supplementary S2.3
+Logistic hold-map core   crossing record                    47.536, 79.143, 2.306,        Section 3.4
+                                                            6.501 yr; ρ = 1.00035,
+                                                            1.00055, 0.9838, 0.9967
+Logistic hold-map core   scan construction                  200,001-point scan with       Section 3.4
+                                                            bisection over [0.2, 200]
+                                                            yr
+Logistic hold-map core   linearised mobilising              (−0.059518, +1.785019)        Supplementary S11
+                         gains (CE , CZ )                                                 (sensitivity battery)
+Logistic hold-map core   crossing angle θ0 (exact           0.175494 rad                  Supplementary S11
+                         map, 6.501 yr)
+Logistic hold-map core   continuous eigenvalues λ           −0.278147,                    Supplementary S11
+                         (undelayed loop)                   +0.000360 ± 0.027683i
+Logistic hold-map core   derivative construction            closed-form monodromy         Section 3.4
+                                                            (no finite differences)
+Logistic hold-map core   solver; precision; grid            matrix exponential            Supplementary S11
+                         check                              (expm); IEEE-754
+                                                            double; 2k/20k/200k
+                                                            scans identical; 50-digit
+                                                            certificate (S12)
+Stage reconstruction     class natural mortality            anchovy (0.90, 1), sprat      Section 3.4 (Plant
+                         M and recruitment                  (0.40, 2), cod (0.20, 5),     paragraph, with
+                         delay τ                            slow-stock (0.045, 25) yr     sources)
+Stage reconstruction     steepness h                        0.75; sensitivity layer       Section 3.4
+                                                            {0.6, 0.9}
+Stage reconstruction     scale and survival                 A0 = 100;                     Section 3.4
+                                                            sA = sJ = e−M ;
+                                                            β = (c − 1)/A0 ,
+                                                            α = c(1 − sA )/sJ ,
+                                                            c = 4h/(1 − h)
+Stage reconstruction     catchability q                     0.001; sensitivity 0.1        Section 3.4
+Stage reconstruction     softplus sharpness k               10                            Section 3.4
+Stage reconstruction     derivative construction            central finite differences,   Section 3.4
+                                                            step 10−6 , chain-rule
+                                                            cross-check to 10−4
+Stage reconstruction     scan grid                          Tr ∈ {1, . . . , 50} yr at    Section 3.4
+                                                            annual internal steps
+
+
+
+
+                                                           31
+       Stage reconstruction        trajectory classification    2000 review-steps, tail      Section 3.4
+                                                                500, relative tail
+                                                                standard-deviation
+                                                                thresholds 2% and
+                                                                0.1%; initial condition
+                                                                at the unfished plant
+                                                                equilibrium, memory
+                                                                filled, effort at half the
+                                                                equilibrium
+
+
+1184      Table 4. Notation: every symbol with its definition site. No row introduces a symbol; rows
+1185   without a site would be gaps, and all rows resolve.
+
+       Symbol                       Meaning                                            Defined at
+       N                            resource stock                                     Section 2.1
+       Z                            institutional deficit signal                       Section 2.1
+       E                            extraction effort                                  Section 2.1
+       PTr                          review Poincaré map (sampled flow at               Section 2.1
+                                    review instants)
+       DPTr (X ∗ )                  monodromy matrix (Jacobian at the fixed            Section 2.1
+                                    point)
+       Π                            projection onto [0, Emax ]                         Section 2.1
+       Φ, Φk                        signal map; softplus realisation (shift δ,         Section 2.1
+                                    sharpness k)
+       δ; δ0                        equilibrium memory level log 2/10; effort-law      Section 2.1
+                                    gain (unrelated)
+       FB ; FBprot                  extractive effort law; protective comparator       Section 2.1
+       An ; O                       assessment operator; observation operator          Section 2.1
+       S(·); S                      surplus production (control sections);             Section 2.1; Sections 2.7, 3.8
+                                    spawning stock biomass (cod sections, Table
+                                    2)
+       g                            maturation delay (delayed-recruitment              Section 3.3
+                                    parameterisation)
+       CE , CZ                      linearised effort-law coeﬀicients (per channel;    Section 3.4 (Abaee, 2026,
+                                    protective values in Section 2.1)                  equation (3))
+       A, J, Z, E                   four-state loop: adults, juveniles, memory         Section 3.7
+                                    signal, held effort
+       s, K, C(t), M , Mx , F       cod case: unstable threshold, unexploited          Sections 2.7, 3.8; Table 2
+                                    capacity, removals, natural mortality, extra
+                                    mortality, fishing mortality
+
+
+1186   Appendix B. Distributive constraints where reproducible
+1187   Where the social side of the cod case can be presented, it is presented at measurement level.
+1188   The worst-off relevant population is a modelling choice — a named constituency — and the
+1189   candidate constituency for 2J3KL is the registered inshore harvesters and licence holders. The
+1190   measurement record against that candidate is the following mismatch table, each row stated
+1191   rather than resolved:
+
+                              Candidate
+       Object                 definition            Available measure       Mismatch                Required data
+       Population             registered licence    census-subdivision      not the same            licence microdata
+                              holders               residents               population
+
+
+
+
+                                                               32
+                          Candidate
+       Object             definition          Available measure     Mismatch             Required data
+       Income             fishing income      all-resident sector   includes             administrative
+                                              income                non-fishing income   income
+                                              (incl. aquaculture,
+                                              processing)
+       Floor              specified cutoff    none operational      not specified        specified
+                          (Ik , ck )                                                     instrument and
+                                                                                         cutoff
+
+
+1192       The available community-level series (Statistics Canada tables 38-10-0167-01 and 38-10-
+1193   0168-01; mean income from fishing falling from 32.2% to 25.6% across 43 fishing-dependent
+1194   census subdivisions, 2016–2021) is all-resident employment income including aquaculture and
+1195   processing. The constituency must therefore either be redefined to the census-subdivision popu-
+1196   lations, or licence-holder microdata or administrative data must be obtained — the community
+1197   table is not a licence-holder panel. A measured floor is a pair (Ik , ck ) — an instrument and a
+1198   cutoff — a measurement object distinct from the norm that motivates it, and the componentwise
+1199   rule is that the arrangement fails as soon as any measured margin mk (G, t) = Ik (G, t)−ck is neg-
+1200   ative; the conjunction admits no compensatory master scalar. Non-decline is a normative rule,
+1201   not automatically an empirically justified floor: baseline, cohort, inflation and purchasing-power
+1202   treatment, uncertainty, attrition, acceptable variation, authority, and structural diversification
+1203   all must be specified before a floor measures anything. The instruments admitted as world-
+1204   hooks (the global Multidimensional Poverty Index of Alkire and Foster, 2011; the World Bank
+1205   Poverty and Inequality Platform) carry release and vintage locks, and what they cannot capture
+1206   — who pays for persistence, who may use remaining variety, whose knowledge counts, future
+1207   persons — is stated as a boundary and left open rather than filled with a scalar score. The
+1208   full instrument detail and the unreproduced pipeline register are in the Supplementary material
+1209   (S6).
+
+1210   References
+1211   Abaee, A. 2026. Delay-induced regime change in harvested stocks: the mobilising and
+1212   protective channels of institutional feedback, and the review interval as control. Zenodo.
+1213   https://doi.org/10.5281/zenodo.22554217.
+1214       Adamson, M. W., and Hilker, F. M. 2020. Resource-harvester cycles caused by delayed
+1215   knowledge of the harvested population state can be dampened by harvester forecasting. Theo-
+1216   retical Ecology, 13: 425–434. Åstr”om, K. J., and Wittenmark, B. 1997. Computer-Controlled
+1217   Systems: Theory and Design, 3rd edn. Prentice Hall, Upper Saddle River, NJ. Alkire, S.,
+1218   and Foster, J. 2011. Counting and multidimensional poverty measurement. Journal of Public
+1219   Economics, 95: 476–487.
+1220       Ashwin, P., Wieczorek, S., Vitolo, R., and Cox, P. 2012. Tipping points in open systems:
+1221   bifurcation, noise-induced and rate-dependent examples in the climate system. Philosophical
+1222   Transactions of the Royal Society A, 370: 1166–1184.
+1223       Benjamini, Y., and Hochberg, Y. 1995. Controlling the false discovery rate: a practical and
+1224   powerful approach to multiple testing. Journal of the Royal Statistical Society B, 57: 289–300.
+1225       Benjamini, Y., and Yekutieli, D. 2001. The control of the false discovery rate in multiple
+1226   testing under dependency. Journal of the Royal Statistical Society B, 63: 425–441.
+1227       Branch, T. A. 2001. A review of orange roughy Hoplostethus atlanticus fisheries, estimation
+1228   methods, biology and stock structure. South African Journal of Marine Science, 23: 181–203.
+1229       Brown, C. J., Fulton, E. A., Possingham, H. P., and Richardson, A. J. 2012. How long can
+1230   fisheries management delay action in response to ecosystem and climate change? Ecological
+1231   Applications, 22: 298–310. Butterworth, D. S. 2007. Why a management procedure approach?
+
+                                                      33
+1232   Some positives and negatives. ICES Journal of Marine Science, 64: 613–617. Butterworth, D.
+1233   S., and Punt, A. E. 1999. Experiences in the evaluation and implementation of management
+1234   procedures. ICES Journal of Marine Science, 56: 985–998. Cadigan, N. G. 2016. A state-space
+1235   stock assessment model for northern cod, including under-reported catches and variable natural
+1236   mortality rates. Canadian Journal of Fisheries and Aquatic Sciences, 73: 296–308.
+1237       Chávez, F. P., Ryan, J., Lluch-Cota, S. E., and Niquen, M. 2003. From anchovies to sardines
+1238   and back: multidecadal change in the Pacific Ocean. Science, 299: 217–221.
+1239       Chen, T., and Francis, B. A. 1995. Optimal Sampled-Data Control Systems. Springer,
+1240   London. Cohen, J. 1988. Statistical Power Analysis for the Behavioral Sciences, 2nd edn.
+1241   Lawrence Erlbaum, Hillsdale, NJ.
+1242       Costantino, R. F., Cushing, J. M., Dennis, B., and Desharnais, R. A. 1995. Experimentally
+1243   induced transitions in the dynamic behaviour of insect populations. Nature, 375: 227–230.
+1244       DFO. 2011. Recovery potential assessment for the Newfoundland and Labrador Designat-
+1245   able Unit (NAFO Divs. 2GHJ, 3KLNO) of Atlantic Cod. DFO Canadian Science Advisory
+1246   Secretariat Science Advisory Report 2011/037.
+1247       DFO. 2016. Stock Assessment of Northern cod (NAFO Divs. 2J3KL) in 2016. DFO
+1248   Canadian Science Advisory Secretariat Science Advisory Report 2016/026.
+1249       DFO. 2022. Stock Assessment of Northern cod (NAFO Divs. 2J3KL) in 2022. DFO
+1250   Canadian Science Advisory Secretariat Science Advisory Report 2022/041.
+1251       DFO. 2024. NAFO Divisions 2J3KL Northern cod (Gadus morhua) stock assessment to
+1252   2024. DFO Canadian Science Advisory Secretariat Science Advisory Report.
+1253       Forssell, U., and Ljung, L. 1999. Closed-loop identification revisited. Automatica, 35: 1215–
+1254   1241.
+1255       Gurney, W. S. C., Blythe, S. P., and Nisbet, R. M. 1980. Nicholson’s blowflies revisited.
+1256   Nature, 287: 17–21.
+1257       Gutiérrez, D., Sifeddine, A., Field, D. B., Ortlieb, L., Vargas, G., Chávez, F. P., Velazco,
+1258   F., Ferreira, V., Tapia, P., Salvatteci, R., Boucher, H., Morales, M. C., Valdés, J., Reyss, J.-L.,
+1259   Campusano, A., Boussafir, M., Mandeng-Yogo, M., García, M., and Baumgartner, T. 2009.
+1260   Rapid reorganization in ocean biogeochemistry off Peru towards the end of the Little Ice Age.
+1261   Biogeosciences, 6: 835–848.
+1262       ICES. 2020. Inter-Benchmark Process on BAltic Sprat (Sprattus sprattus) and Herring
+1263   (Clupea harengus) (IBPBash). ICES Scientific Reports. 2:34. 44 pp.
+1264       ICES. 2021. Arctic Fisheries Working Group (AFWG). ICES Scientific Reports. 3:58. 817
+1265   pp.
+1266       Karlsson, M., and Gilek, M. 2020. Mind the gap: Coping with delay in environmental
+1267   governance. Ambio, 49: 1067–1075. Lomb, N. R. 1976. Least-squares frequency analysis of
+1268   unequally spaced data. Astrophysics and Space Science, 39: 447–462.
+1269       Ludwig, D., Jones, D. D., and Holling, C. S. 1978. Qualitative analysis of insect outbreak
+1270   systems: the spruce budworm and forest. Journal of Animal Ecology, 47: 315–332.
+1271       McManus, M. C., Licandro, P., and Coombs, S. H. 2016. Is the Russell Cycle a true cycle?
+1272   Multidecadal zooplankton and climate trends in the western English Channel. ICES Journal of
+1273   Marine Science, 73: 227–238.
+1274       Moxnes, E. 1998. Not only the tragedy of the commons: misperceptions of bioeconomics.
+1275   Management Science, 44: 1234–1248.
+1276       Nešić, D., and Teel, A. R. 2004. A framework for stabilisation of nonlinear sampled-data
+1277   systems based on their approximate discrete-time models. IEEE Transactions on Automatic
+1278   Control, 49: 1103–1122.
+1279       Pauly, D., and Tsukayama, I. (eds) 1987. The Peruvian anchoveta and its upwelling ecosys-
+1280   tem: three decades of change. ICLARM Studies and Reviews, 15.
+1281       Punt, A. E., and Donovan, G. P. 2007. Developing management procedures that are robust
+1282   to uncertainty: lessons from the International Whaling Commission. ICES Journal of Marine
+
+
+                                                       34
+1283   Science, 64: 603–612.
+1284       Punt, A. E., Butterworth, D. S., de Moor, C. L., De Oliveira, J. A. A., and Haddon, M. 2016.
+1285   Management strategy evaluation: best practices. Fish and Fisheries, 17: 303–334. Ricard, D.,
+1286   Minto, C., Jensen, O. P., and Baum, J. K. 2012. Examining the knowledge base and status of
+1287   commercially exploited marine species with the RAM Legacy Stock Assessment Database. Fish
+1288   and Fisheries, 13: 380–398.
+1289       Rose, G. A. 2026. Northern cod comeback: 10 years after. Canadian Journal of Fisheries
+1290   and Aquatic Sciences, 83: 1–14. https://doi.org/10.1139/cjfas-2025-0141
+1291       Rose, G. A., and Rowe, S. 2015. Northern cod comeback. Canadian Journal of Fisheries
+1292   and Aquatic Sciences, 72: 1789–1798.
+1293       Rose, G. A., and Walters, C. J. 2019. The state of Canada’s iconic Northern cod: a second
+1294   opinion. Fisheries Research, 219: 105314.
+1295       Scargle, J. D. 1982. Studies in astronomical time series analysis. II. Statistical aspects of
+1296   spectral analysis of unevenly spaced data. The Astrophysical Journal, 263: 835–853.
+1297       Statistics Canada. Tables 38-10-0167-01 and 38-10-0168-01, CANSIM database. Shertzer,
+1298   K. W., and Prager, M. H. 2007. Delay in fishery management: diminished yield, longer rebuild-
+1299   ing, and increased probability of stock collapse. ICES Journal of Marine Science, 64: 149–159.
+1300   Statistics Canada, Ottawa.
+1301       Stuart, A. M., and Humphries, A. R. 1996. Dynamical Systems and Numerical Analysis.
+1302   Cambridge University Press, Cambridge.
+1303       Sumaila, U. R., Ebrahim, N., Schuhbauer, A., Skerritt, D., Li, Y., Kim, H. S., Mallory, T.
+1304   G., Lam, V. W. L., and Pauly, D. 2019. Updated estimates and analysis of global fisheries
+1305   subsidies. Marine Policy, 109: 103695.
+1306       Tam, J. C., and Bundy, A. 2019. Mass-balance models of the Newfoundland and Labrador
+1307   Shelf ecosystem for 1985–1987 and 2013–2015. Canadian Technical Report of Fisheries and
+1308   Aquatic Sciences, 3328.
+1309       UNFCCC. 2015. Paris Agreement. United Nations Framework Convention on Climate
+1310   Change.
+1311       World Bank. Poverty and Inequality Platform. World Bank, Washington, DC.
+
+1312
+
+
+
+1313        Supplementary material is deposited with this article (the accompanying Supplementary
+1314   file): the statement inventory with the status of every main-text statement (S1), the remain-
+1315   ing proofs and identification results, including the dimensionless identifiability chart (S2), the
+1316   epistemic-layer results (S3), the case-screening records at full detail (S4), the ecosystem context
+1317   and toy tests (S5), the distributive-layer detail (S6), the empirical hypotheses with specified
+1318   tests (S7), the reproducibility register (S8), and the screen-sensitivity battery and stage-scan
+1319   decomposition records (S9), and the Tr -ranked test record (S10). The register itself accompanies
+1320   the article; the computational artifacts it inventories (stage registration, solver configuration,
+1321   query log, nonlinear exact-update comparison) are registration requirements tracked in the
+1322   register. The stage operator’s boundary record is supplied by the pre-registered reconstruc-
+1323   tion of Section 3.4 — a newly specified object with archived plan, code, and outputs — while
+1324   the archived stage-output values keep their provisional status until the original computational
+1325   record is attached.
+
+
+1326   Declarations
+1327   Data availability
+1328   The stock and assessment series analysed in the spectral screen are drawn from the RAM
+1329   Legacy Stock Assessment Database v4.66 (public release). The northern cod assessment values
+
+                                                       35
+1330   are published in DFO CSAS SAR 2016/026. The computational record of the response-region
+1331   analyses (solver configuration, initial histories, stage registration), the nonlinear exact-update
+1332   comparison of Section 3.4 are registration requirements; the case-screening table and query log
+1333   are deposited with the article; the corresponding stage-output values carry provisional status
+1334   until those artifacts are attached. The analysis datasets (RAM stock identifiers and eligibility
+1335   table; processed spectral series; case-screening table and query log; Tr -ranked test table; ICES
+1336   cod and haddock series; η-basis window runs) and the analysis code (spectral-screen routines;
+1337   power-simulation code and seeds; sensitivity-battery code and logs; case-screen, Tr -ranked test,
+1338   Icelandic-cod audit, and η-basis scripts with their logs) are deposited with the article. The stage-
+1339   map reconstruction of Section 3.4 is fully specified and will be deposited with the article: the
+1340   dated preregistration plan (parameter table, comparison criteria), the campaign code, and the
+1341   five output tables (equilibria, multiplier record, trajectory classification, robustness experiment,
+1342   steepness sensitivity). Community-level social values are drawn from Statistics Canada tables
+1343   38-10-0167-01 and 38-10-0168-01 with the population-mismatch caveat stated in the text.
+
+1344   Author contributions
+1345   A.A. conceptualized the entire work, wrote, reviewed and edited the manuscript.
+
+1346   Funding
+1347   No funding was received.
+
+1348   Conflicts of interest
+1349   The author declares no competing interests.
+
+1350   AI declaration
+1351   GLM (Z.ai), Qwen (Alibaba Cloud) and DeepSeek AI assisted with drafting and iterative re-
+1352   view. The author reviewed and edited the work and takes responsibility for the content of the
+1353   manuscript.
+
+
+
+
+                                                       36
+

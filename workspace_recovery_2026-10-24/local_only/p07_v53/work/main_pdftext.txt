@@ -1,0 +1,664 @@
+Sample-and-hold governance: review intervals as a design variable in
+                       resource stability
+                                               Amin Abaee
+                                          Independent Researcher
+
+                                       ORCID: 0000-0002-0019-1842
+                                            amin abaee@ut.ac.ir
+
+                                            October 16, 2026
+
+
+                                                  Abstract
+         Institutions observe renewable resources at discrete times, revise rules at scheduled reviews,
+     and hold commands between them. We model this architecture as sample-and-hold governance
+     and distinguish it from both continuous-delay feedback and an annual-step approximation. We
+     prove forward invariance of the nonnegative state space and finite-horizon consistency as the
+     review interval tends to zero; neither result implies stability at any fixed positive interval. On an
+     illustrative logistic core, the exponential frozen-assessment update has one unit-circle crossing
+     at 6.501 years, whereas a forward-Euler command update reports crossings at 47.536 and 79.143
+     years. The exponential protective comparator is stable on the tested interval grid. The 6.501-
+     year value is not a calibrated institutional threshold: across six-parameter joint perturbation
+     boxes, a crossing is found at 60 of 64 corners at ±0.5% and 44 of 64 at ±1%; every no-crossing
+     corner is stable on a 20,001-point scan. In a 42-stock screen, the Benjamini–Hochberg-adjusted
+     target-band count is zero. A recovered review-interval proxy test has only two proxy values,
+     both below the modeled response windows, and its negative association is opposite the predicted
+     approach gradient and confounded by region. A 32-system case inventory identifies no candidate
+     meeting all four eligibility criteria. Northern cod contributes a descriptive two-window partition,
+     not an identified governance mechanism. The results support operator-specific stability analysis,
+     not a general claim that a particular review cadence stabilizes real fisheries.
+
+Keywords: sample-and-hold control; review interval; resource governance; sampled-data stability;
+fisheries; management strategy evaluation.
+Evidence status. The analytic propositions, deterministic multiplier calculations, archived
+trajectory classifications, empirical screens, and prospective designs have distinct evidential status.
+Supplementary Table S1 inventories the claims and limitations; parameter values in the numerical
+core are illustrative and uncalibrated.
+
+
+1    Introduction
+Renewable-resource institutions operate on schedules. Surveys generate observations; assessments
+translate observations into advice; a rule sets a catch or effort command; and that command is
+held, or updated only at the next authorized review. In fisheries, the review interval may be annual
+or multi-year, while the ecological state evolves continuously between decisions (Butterworth and
+Punt, 1999; Butterworth, 2007; Punt et al., 2016). The institutional clock is therefore part of the
+dynamical system, not merely a reporting convention.
+    Two common mathematical substitutes discard that architecture. A continuous-delay equation
+lets feedback act continuously on a lagged signal. An annual difference equation compresses all
+between-review dynamics into one step. Neither is generally the map implemented by an institution
+that samples, decides, and holds. Sampled-data control has long treated the zero-order hold as an
+
+
+                                                      1
+operator with its own spectral properties (Chen and Francis, 1995; Åström and Wittenmark, 1997;
+Nešić and Teel, 2004). Resource-governance models do not always preserve that distinction, even
+though stability can change when the decision operator changes.
+    A second problem is causal promotion: a spectral peak, cohort cycle, or crisis-driven monitoring
+record does not by itself identify the sign, timing, or responsiveness of a governance rule. The
+skeptical re-analysis of the Russell Cycle, for example, found that a long record treated as periodic
+did not resolve a true periodicity (McManus, Licandro, and Coombs, 2016). Here the same
+diagnostic discipline is applied to claims about institutional feedback. Periodicity is not treated as
+a mechanism label.
+    This paper makes four contributions. First, it specifies a sample-and-hold model in which
+observation, assessment, review, decision, deployment, ecological-response, and memory times are
+kept separate. Second, it proves forward invariance of the nonnegative state space and states precisely
+what the rapid-review limit does establish: finite-horizon approximation under regularity conditions,
+not finite-interval stability. Third, it compares an exponential frozen-assessment controller update
+with forward Euler on a common illustrative ecological plant and records how crossings move with
+the operator and parameter vector. Fourth, it re-examines the empirical layer: a multiplicity-
+controlled 42-stock spectral screen, a documented but coarse review-interval proxy test, a curated
+32-system case search, and the northern-cod record.
+    The focal controller is deliberately diagnostic rather than normative. It raises extraction effort
+in response to a perceived shortfall, representing a mobilising or extractive feedback. A protective
+comparator reduces effort when the perceived deficit rises. The numerical coefficients are inherited
+illustrative conventions, not field estimates; the exercise therefore identifies operator dependence
+within a specified model class, not a calibrated review interval for a real fishery. This distinction
+matters especially because the baseline crossing lies close to the unit circle and moves substantially
+under small parameter perturbations.
+    The paper proceeds as follows. Section 2 defines the model and evidence procedures. Section 3
+reports the two mathematical properties, the operator-specific crossing record, sensitivity, and
+empirical results. Section 4 states what transfers to management design and what remains
+unidentified. Detailed proofs, case records, data tables, and computational audits are in the
+Supplementary Information.
+
+
+2     Materials and methods
+2.1      Sample-and-hold model
+Let review times be tn = nTr , where Tr is the time between opportunities to revise a management
+command. Raw observations and decision opportunities need not share a cadence. The seven time
+objects used here are kept distinct (Table 1).
+
+Table 1: Institutional and ecological time objects. The quantities are not collapsed into one
+governance lag unless the data cannot resolve them and an aggregation rule is stated.
+
+Object                         Definition
+Observation interval Tobs      Time between raw measurements.
+Assessment interval Tassess    Time between formal state estimates.
+Review interval Tr             Time between opportunities to change the command.
+Decision lag τdec              Assessment completion to formal decision.
+Deployment lag τdep            Decision to implemented change in extraction pressure.
+Ecological response lag τeco   Implementation to detectable ecological response.
+Memory timescale τm            Relaxation time of a filtered institutional signal; not a discrete delay.
+
+    In fisheries language, the controller is a harvest-control rule, its command is the catch or effort
+limit, the review interval is the advice cycle, and the hold is the period between revisions. Consider
+
+
+                                                       2
+Figure 1: Three representations of institutional timing. Continuous-delay feedback acts on a
+lagged signal; an annual-step model compresses the between-decision dynamics; sample-and-hold
+governance observes and revises at review times and holds the command between them. Panel B is
+schematic: the computed markers identify the annual spectral radii and the exponential-update
+crossing, not a universal institutional response curve.
+
+
+a resource stock N (t), a nonnegative institutional deficit signal Z(t), and effort En held fixed on
+[tn , tn+1 ). The plant and signal evolve as
+                                       
+                                  N (t)
+             Ṅ (t) = rN (t) 1 −          − qEn N (t),                                            (1)
+                                    K
+                                                                            
+                      Φk (qEn N (t) − S(N (t))) − Z(t)                     N
+              Ż(t) =                                  , S(N ) = rN 1 −         , τm > 0.         (2)
+                                     τm                                    K
+The signal map is a shifted, floored softplus,
+                                                      
+                                1          ks  log 2                   log 2
+             Φk (s) = max 0, log(1 + e ) −           +δ ,         δ=         ,   k = 10.
+                                k                k                      10
+
+At each review the contemporaneous end-of-interval assessment Z          bn+1 = Z(t− ) is read. The
+                                                                                      n+1
+mobilising effort law below defines a controller rate, and two command-update operators are
+compared:
+                                                            
+                        exp
+                      En+1   = Π[0,Emax ] φFTrB (En , Zbn+1 ) ,                                  (3)
+                                                                  
+                       Euler
+                     En+1    = Π[0,Emax ] En + Tr FB (En , Zbn+1 ) ,                             (4)
+                                                                                
+                                       E                 Z       E             Z
+                  FB (E, Z) = 1 −                ηE          −         + δ0            .         (5)
+                                     Emax               ∆ref    Emax        Zref + Z
+
+Here φFT B (E, Z)                                      b initialized at E(0) = E, with the endpoint
+               b is the time-T flow of dE/ds = FB (E, Z),
+assessment held fixed during the controller update. Thus the exponential update exactly integrates
+the frozen-assessment controller ODE; it is not an exact solution of the coupled ecological-governance
+system. The Euler update is its one-step forward-Euler alternative. In both cases, the plant and
+signal have first evolved for Tr with effort En held constant. The law is a declared illustrative
+controller, not a generic harvest-control rule. Since the command update uses Tr , changing the
+
+                                                  3
+review interval changes both the hold duration and the controller-update horizon. The same-plant
+protective comparator is
+                                     
+              prot                E                                          Zref
+            FB (E, Z) = 1 −             ηp Ecap (Z) − E ,     Ecap (Z) = E0          ,
+                                Emax                                        Zref + Z
+
+with ηp = η and E0 = E ∗ (Zref + δ)/Zref , so the interior rest coincides with that of the extractive
+rule. Projection, flow, and update ordering are fixed as written; reversing the order defines another
+hybrid system.
+                                                                    bn+1 −Z ∗ , and CE = ∂E FB (E ∗ , Z ∗ ),
+    For the local stability calculation, let en = En −E ∗ , ẑn+1 = Z
+               ∗    ∗
+CZ = ∂Z FB (E , Z ). Linearizing the exact frozen-assessment controller flow and the Euler update
+gives, respectively,
+
+                                                   eCE Tr − 1
+                                  eexp
+                                   n+1 = e
+                                           CE Tr
+                                                 en +         CZ ẑn+1 ,                                     (6)
+                                                      CE
+                                 eEuler
+                                  n+1 = en + Tr (CE en + CZ ẑn+1 ) .                                        (7)
+
+The quotient has its continuous limit Tr when CE = 0. In the exponential case this is the exact
+local flow of ė = CE e + CZ ẑn+1 with the endpoint assessment fixed; it is not the exact nonlinear
+controller flow written in closed form. The full monodromy composes this post-flow command
+update with the held-plant flow, so the dependence of ẑn+1 on the pre-review state is included. The
+review map is denoted PTr , with monodromy DPTr (X ∗ ). Local asymptotic stability requires all its
+eigenvalues to lie inside the unit disk.
+    The illustrative numerical baseline vector is:
+
+       (r, K, q, η, Emax ) = (0.02, 100, 0.001, 0.914, 30),    (δ0 , Zref , ∆ref , τm ) = (0.01, 1, 1, 5),
+
+in model units, with Z ∗ = δ. It gives (N ∗ , Z ∗ , E ∗ ) = (89.55188, 0.069315, 2.08962) and F ∗ =
+qE ∗ = 0.002090 yr−1 . The institutional coefficients are not identified from field data; η = 0.914 is
+an inherited illustrative baseline. The full vector, equilibrium derivation, gains, and stage-map
+conventions are in Supplementary S8 and S11.
+
+2.2    Structural results and numerical protocol
+The admissible state set is N ≥ 0, Z ≥ 0, and E ∈ [0, Emax ]. The signal map is nonnegative
+and effort commands are projected onto the admissible interval. Supplementary Proposition S2.1
+establishes forward invariance for held or convex-interpolated effort. Separately, if the continuous
+vector field is C 1 with bounded derivative on a compact neighborhood of compared trajectories,
+assessment is contemporaneous, projection is locally inactive, and there are no additional queues or
+stochastic updates, the flow-then-update map has local one-step defect O(Tr2 ). Discrete Gronwall
+then gives uniform O(Tr ) error on each fixed finite horizon as Tr → 0. This is a finite-horizon
+approximation statement, not a finite-interval stability theorem.
+    For the logistic core, the linearised held-flow matrix is combined with the exponential frozen-
+assessment or Euler review update; its spectral radius ρ(Tr ) is scanned over [0.2, 200] years on a
+200,001-point grid, with bisection refinement at sign changes. The crossing scan was re-executed
+against the deposited campaign and agrees with the archived crossing table. A separate high-
+resolution sensitivity implementation evaluates the six-parameter joint boxes on 20,001 review-
+interval points. Numerical scans are not presented as analytic global stability theorems. A
+finite-difference audit of the full nonlinear plant plus frozen-assessment controller flow reproduces
+the local Jacobian and crossing; details and limitations are given in Supplementary S11. No
+invariant-circle continuation was completed.
+    A second plant, a delayed-recruitment two-stage map, is included only as a distinct structural
+comparison. The archived trajectory-classified windows are provisional because their original solver
+configuration and histories are not attached. The pre-registered stage-map reconstruction is a newly
+
+
+                                                      4
+specified object: its comparison with those windows is a consistency check, not a validation. The
+state dimension, plant, and effort scale differ from the logistic core, so cross-plant response regions
+do not isolate an operator effect; that contrast is made only on the common logistic plant.
+
+2.3   Empirical and case procedures
+Stock screen and power. The input is the RAM Legacy Stock Assessment Database v4.66. Of 58
+forage-fish stock series, 42 have at least 20 non-missing annual spawning-stock-biomass (SSB) points
+(range 20–77 years). The analysis linearly detrends each SSB series, computes a unit-total-power
+Lomb–Scargle periodogram on 1,500 frequencies, and integrates power in bands A (2.5–5 years) and
+B (5–9 years). For each stock and band, an AR(1) null is fitted to the detrended series and simulated
+200 times with seed 7; empirical p = (k + 1)/201 values are adjusted by Benjamini–Hochberg over
+the 84 stock-by-band tests. These are SSB periodicity diagnostics, not controller-sign tests. The
+annual-review label and the review-interval proxies are analyst assignments, not database fields
+or per-stock primary-verified classifications. Sensitivity variants, end-point trims, and alternative
+bands are reported in Supplementary S9.
+    The separate Tr -proxy test uses the group-documented coding in the recovered script: seven
+Peru/Chile stocks receive Tr = 0.5 years (annual quota with in-season responsive closures), and 35
+annual-TAC proxies receive Tr = 1 year. The 4-year anchovy and 8-year sprat response windows are
+both above these two proxy values. Thus the cohort contains no documented multi-year responsive
+review interval with which to estimate a window-approach gradient. The proxy assignments are
+coarse and not primary-verified; the seven short-interval cases are geographically concentrated,
+which limits any cross-sectional interpretation.
+    A separate injected-signal exercise runs the committed sampled-governance effort model with
+multiplicative lognormal observation noise. The canonical white-noise table comprises 17 cells,
+50 trials per cell, trial seeds 0–49, and a 120-replicate seed-7 AR(1) detection null. It quantifies
+conditional detection under the specified simulation grid; it is not a per-stock minimum-power
+guarantee.
+
+Structured case search. The 32-system inventory is curated rather than systematic. Each
+candidate is assessed against four requirements: (i) responsive governance rather than a one-time cap
+or ban; (ii) an independently dateable response or implementation lag; (iii) no competing ecological
+or structural driver supported for the same outcome; and (iv) individual-resource or station-level
+data. The evidential rule for (iii) is comparative: institutional feedback must outperform prespecified
+alternatives on held-out prediction, phase order, or intervention response. The search log and full
+row-level dispositions are in Supplementary S4.
+
+Northern cod. The northern cod (NAFO 2J3KL) record is treated as an assessment-based
+descriptive case. The strong-Allee surplus equation and its phase-line result are model-class
+diagnostics, not a fitted explanation of the stock trajectory. Assessment-table values from DFO
+CSAS SAR 2016/026 are used to distinguish the 1991–1995 crash window from the later non-recovery
+record. Mortality allocation differs across assessment formulations, and the constrained-mortality
+quantities are not reproduced here; they remain hypotheses and open reconstruction requirements
+(Supplementary S13.2).
+
+
+3     Results
+3.1   Invariance and the scope of the rapid-review limit
+Under the admissibility conditions in Section 2.2, the interval N ≥ 0, Z ≥ 0, 0 ≤ E ≤ Emax is
+forward invariant. The logistic boundary has zero population growth at N = 0; the signal derivative
+cannot point outward through Z = 0 because its forcing is nonnegative; and projection keeps effort
+in its prescribed bounds. This is a state-space result, not a stability result.
+
+                                                  5
+    As Tr → 0, the held flow and contemporaneous update converge on fixed finite horizons to the
+corresponding continuous-time system when the vector field is regular and no nonsmooth boundary
+is crossed. For a fixed positive Tr , local stability is decided by the eigenvalues of the complete
+review map, including the plant flow and update law. It is therefore possible for the rapid-review
+approximation to be accurate at short horizons while a finite-interval map has a different stability
+classification. The formal statement and proof are in Supplementary S2.
+
+3.2   Response windows and operator-specific crossings
+The archived trajectory-classified stage model reports persistent oscillation near a 3–4-year anchovy
+review interval and across a 6–12-year sprat interval for its baseline parameterisation. These
+are provisional classifications: the original solver and initial histories were not deposited. A
+newly specified, preregistered stage-map reconstruction did not reproduce those anchovy or sprat
+oscillation criteria; it did reproduce annual-review convergence for anchovy and convergence for the
+cod and slow-stock criteria. This mismatch is not averaged away: the reconstruction and archived
+classification are different evidence objects, and a mismatch does not adjudicate the unavailable
+legacy generating object (Supplementary S9.2).
+    On the common illustrative logistic plant, the exponential frozen-assessment mobilising update
+has a single complex-pair unit-circle crossing at Tr = 6.50129495 years. The controller update
+exactly integrates the effort-rate ODE with the endpoint assessment fixed; the multiplier calculation
+uses its local linearization. The crossing angle is 0.175494 radians, or about 0.05586π. The sampled
+multipliers are outside the unit circle immediately below the crossing and inside immediately above
+it. The forward-Euler implementation, on the same plant and baseline vector, has a complex-pair
+crossing at 47.535982 years and a second, real −1 crossing at 79.142688 years. Thus the transition
+pattern is update-operator dependent; the Euler values are not estimates of an institutional threshold.
+A continuous-delay comparator from the companion analysis gives crossings near 3.666 and 150.358
+years (Abaee, 2026), further illustrating that a continuous lag, a frozen-assessment controller update,
+and a forward-Euler command step are different models (Fig. 2; the common-plant scope is detailed
+in Supplementary S11).
+    The exponential frozen-assessment protective comparator has no crossing on the tested [0.2, 200]-
+year grid, with maximum sampled spectral radius 0.996740. This numerical statement is specific to
+the stated gain convention, equilibrium, projection-inactive local map, and grid. It is not a general
+theorem that protective policies are stable.
+
+Table 2: Baseline local stability record on the illustrative logistic plant. A crossing is a numerical
+unit-circle crossing of the specified map; it is not a field-estimated review interval.
+
+Controller/update               Computed transition                Interpretation
+Mobilising, exponential frozen- 6.501295 yr; one complex pair     Unstable below, stable above the cross-
+assessment                                                        ing on the scanned branch.
+Mobilising, forward Euler       47.535982 yr and 79.142688 yr     Complex-pair crossing, then real −1
+                                                                  crossing; distinct Euler map.
+Protective, exponential frozen- No crossing on [0.2, 200] yr; max Stable on the tested grid only.
+assessment                      ρ = 0.996740
+Continuous-delay comparator     About 3.666 and 150.358 yr        Different continuous-lag operator;
+                                                                  shown for contrast.
+
+
+
+3.3   Parameter sensitivity and joint perturbations
+The baseline exponential-update crossing is fragile to some scalar parameters. In the archived
+one-at-a-time ±5% battery, increasing K, q, or Emax can move the crossing to about 13.8–14.3 years,
+while decreasing these parameters can remove the crossing from the tested interval; perturbing η
+produces crossings from about 2.19 to 8.72 years. Changes to the offset d0 move the crossing only
+
+                                                   6
+Figure 2: Baseline spectral-radius scans for exponential frozen-assessment and Euler mobilising and
+protective maps. The exponential mobilising crossing is near 6.50 years; the plotted vertical range is
+restricted to 0.9 ≤ ρ ≤ 1.4 for readability. Curves are model outputs, not empirical response curves.
+
+
+modestly, from about 6.47 to 6.53 years, while the reference scale and memory time have smaller
+but non-negligible effects. Full one-at-a-time results are tabulated in Supplementary S11.
+    A separate joint-box analysis perturbs six parameters (r, K, q, η, Emax , ∆ref ) simultaneously. At
+±0.5%, 60 of 64 corners have a crossing, with the first-crossing values spanning 0.871965–10.670425
+years; at ±1%, 44 of 64 have a crossing, spanning 4.423192–13.653242 years. All 4 and 20 no-crossing
+corners, respectively, remain inside the unit circle at every point on the 20,001-point review-interval
+grid. The largest sampled radii among these no-crossing corners are 0.9999713 and 0.9999953.
+These are dense-grid numerical classifications, not proofs of stability between grid points, and the
+perturbation boxes are not confidence regions. They show that the 6.50-year baseline value should
+not be read as a robust threshold.
+
+3.4   Forage-fish screen: no multiplicity-adjusted target-band detections
+Among 42 RAM Legacy v4.66 forage-fish stocks with at least 20 annual SSB points, no stock-band
+cell is significant after Benjamini–Hochberg adjustment across 84 tests in the baseline 2.5–5-year
+and 5–9-year bands. The smallest raw empirical p-value is 0.0448, but its adjusted value is 1.00. A
+wider sensitivity battery varying detrending, end-point trimming, red-noise simulation counts, seeds,
+and band definitions also yields no adjusted target-band detections; one nominal baseline band-B
+flag does not survive multiplicity control. The result is evidence about this particular diagnostic
+and cohort, not evidence that governance feedback is absent.
+    The screen’s null-excess distribution has many values below its AR(1) 95% thresholds, but an
+AR(1) null controls only the fitted red-noise structure. It does not remove quasi-periodic external
+forcing, regime shifts, observation error, or assessment changes. In particular, the stock screen does
+not estimate the sign of a harvest-control rule or the causal effect of its review interval. A separate
+17-cell synthetic power table detects sprat-class signals at 1.00 in the low-noise H = 100, 200
+cells and at 0.24–0.70 in the corresponding high-noise cells; anchovy-class power is 0.00–0.10 and
+the cod-labelled false-positive rate 0.02–0.08. These are conditional simulation proportions, not
+per-stock power guarantees, and the table was assembled from archived outputs rather than a
+
+
+                                                  7
+Figure 3: Six-parameter (r, K, q, η, Emax , ∆ref ) joint-box sensitivity of the exponential-update first
+crossing. Points show the minimum and maximum crossing among corners that cross; the annotated
+no-crossing corners were stable at all 20,001 tested review intervals. Boxes are deterministic
+perturbation sets, not probability or confidence intervals.
+
+
+complete driver rerun (Supplementary S13.1). Fig. 4 displays the baseline adjusted values and
+stock-level null comparisons; full per-stock results and variants are in Supplementary S9.
+
+
+
+
+Figure 4: Baseline SSB periodicity screen. Left: Benjamini–Hochberg q-values for 84 stock-by-band
+tests; the dashed line denotes 0.05. Right: per-stock band power relative to the fitted AR(1) 95%
+null threshold (A: 2.5–5 years; B: 5–9 years). A high ratio is a diagnostic exceedance measure, not
+a causal governance signal.
+
+
+3.5   Review-interval proxy test: no approach gradient is identifiable
+The re-executed Tr -ranked test contains 42 stocks but only two assigned proxy values: seven
+Peru/Chile cases at 0.5 years and 35 annual-TAC cases at 1 year. Both proxy values lie below both
+sampled response windows (4 years for the anchovy-class window and 8 years for the sprat-class
+window). There are no documented responsive multi-year cases in this cohort from which to
+estimate how spectral excess changes as Tr approaches a modeled window. The correct inference
+is therefore no identifiable window-approach gradient, not a supported gradient and not a direct
+empirical confirmation of a particular threshold.
+
+                                                   8
+    The two-group contrasts do reproduce: the 0.5-year Peru/Chile group has greater median band-A
+null-excess than the annual group (0.529 versus 0.257; two-sided Mann–Whitney p = 0.007), and
+the rank association with assigned Tr is negative for band A (Spearman ρ = −0.408, p = 0.007) and
+band B (ρ = −0.340, p = 0.028). The sign is opposite to a simple approach-to-window prediction:
+the group assigned the shorter interval is farther from either modeled window. These reproduced
+two-group associations must not be described as an approach gradient or as an institutional effect.
+The 0.5-year assignments are group-level proxies for in-season responsive closures, not primary-
+verified stock-specific review intervals; all seven are Peru/Chile cases. Regional ecology, including
+ENSO-related quasi-periodic forcing, is a plausible confound, but is not established as the cause
+by this analysis. The AR(1) null absorbs fitted red noise, not quasi-periodic forcing. At nominal
+95% thresholds, the test records 0/42 band-A flags and 1/42 band-B flag; these are not additional
+BH-adjusted discoveries. Per-stock intervals, thresholds, and coding notes are in Supplementary
+S10.
+    The companion F-placement audit locally reproduces the 42-stock cohort, matches fisheries-ADH
+F to last-F for 42 of 43 intersected stocks, and matches all 13 broader-pool taxonomic-group F
+quartiles. Mean stock-level F is associated with band-A null-excess before excluding Peru/Chile
+(ρ = 0.3069, p = 0.0609) but not after exclusion (ρ = 0.0339, p = 0.8565); band-B results show the
+same attenuation. This is consistent with regional confounding, not proof of its cause. The archived
+ADH formula and cohort summaries also reproduce, but ADH remains a calculated buffer-years
+proxy rather than a direct institutional-response measure (Supplementary S12).
+
+3.6   Northern cod: a descriptive two-window record
+The assessment record separates a 1991–1995 decline from the post-1995 low-stock period. SSB
+falls from about 730 kt in 1991 to 11 kt in 1995; the later assessment values remain low through the
+mid-2000s before increasing to about 300 kt in 2015. Natural mortality varies substantially across
+assessment years and is not a monotone proxy for governance. The window split is descriptive: it
+does not identify a switch in institutional timing, nor adjudicate environmental, predation, model,
+and management explanations. The constrained-mortality formulation supplies useful hypotheses
+but its underlying quantities are not reproduced in this edition. Fig. 5 and Supplementary S12
+preserve the values and period definitions.
+
+
+4     Discussion
+4.1   The transferable result is an operator distinction, not a cadence threshold
+The exponential frozen-assessment and forward-Euler controller updates, and the continuous-delay
+comparator, yield different spectral transitions on the same illustrative ecological plant. This is
+the central mathematical result. It cautions against transferring a stability boundary from one
+representation to another without matching (i) what is observed and when, (ii) which state estimate
+enters the rule, (iii) when the command changes, (iv) whether it is held between reviews, and (v)
+how command gain scales with the interval. In a management-strategy evaluation, those items
+should be explicit alongside operating-model uncertainty and implementation error (Punt et al.,
+2016).
+    The comparison does not show that real fisheries are unstable under annual reviews or that a
+longer interval is generally safer. The baseline exponential-update crossing is parameter-sensitive,
+the controller is uncalibrated, and the exponential protective result is only a scan over a finite
+interval grid. A fitted institutional threshold would require independent estimates of ecological
+response, observation and assessment error, decision and deployment lags, and the effective rule
+gain. Without them, the reported years are reproducible properties of a stated model, not policy
+prescriptions.
+
+
+
+
+                                                 9
+Figure 5: Northern cod assessment SSB and reported natural mortality by assessment year, with
+the 1991–1995 crash interval separated from the later record. The partition is descriptive and does
+not estimate a governance effect.
+
+
+4.2   Empirical diagnostics constrain stronger claims
+The baseline forage-fish screen contains no multiplicity-adjusted target-band detection, and the
+sensitivity variants do not change that decision. This is a useful negative diagnostic but not a test
+of a causal governance mechanism. Lomb–Scargle band power can be elevated by external forcing
+and structural change; an AR(1) null does not model all such alternatives. Nor does a spectrum
+alone reveal whether management responded to a signal before or after the ecological change.
+    The corrected reading of the review-interval test is particularly important. There is no observed
+interval spanning the modeled response windows, so there is no identifiable window-approach
+gradient. What is reproduced is an opposite-direction contrast between two proxy groups: seven
+regionally clustered 0.5-year assignments have larger null-excess than 35 annual assignments. Since
+the shorter proxy is farther from both modeled windows, this contrast does not support the proposed
+approach mechanism. The two-value coding, group-level rather than stock-level verification, and
+regional concentration leave confounding unresolved. ENSO-related quasi-periodicity is a candidate
+explanation, not a demonstrated cause. This distinction replaces any earlier shorthand suggesting
+that the cross-sectional test found a predicted gradient.
+    The 32-system search likewise has a narrow interpretation. No inventory candidate satisfies
+all four evidential requirements, but the inventory is a curated search rather than an exhaustive
+review, and missing station-level data could exclude otherwise relevant cases. The result is that a
+qualifying demonstration was not found in this search, not that institutional feedback cannot occur.
+
+4.3   A descriptive cod partition is not a causal decomposition
+Northern cod provides an instructive record because the collapse and subsequent low-stock period
+are well documented. However, a two-window plot cannot identify the causal contribution of
+harvest rules, predation, climate, recruitment, observation, or assessment structure. The strong-
+Allee surplus model is a local mathematical lens; unless fitted against alternatives and validated
+out of sample, it does not establish an Allee mechanism. Likewise, the constrained-mortality
+formulation discussed in prior notes cannot support numerical conclusions here until its source
+table, uncertainty, and complete computation are recovered. The manuscript therefore retains
+
+                                                 10
+only the reproducible descriptive partition and lists the unreproduced mortality claims as open
+hypotheses in Supplementary S13.2.
+
+4.4   Requirements for a governance-feedback test
+A stronger empirical design should treat institutions as measured mechanisms rather than inferred
+labels. At minimum, it would require:
+ 1. dated observations, assessment releases, rule decisions, implementation, and ecological response
+    at a resolution finer than the candidate response window;
+ 2. stock-specific evidence about the operative rule, compliance, command persistence, and the
+    timing of responsive revisions;
+ 3. a state-space model that separates observation error, process noise, external forcing, regime
+    shifts, and structural assessment changes;
+ 4. pre-specified comparisons among no-feedback, delayed-feedback, sample-and-hold, and ecological-
+    only models, with held-out predictive scoring or a credible intervention design; and
+ 5. uncertainty propagation for the estimated review map, rather than reporting only a single point
+    crossing.
+These requirements are compatible with management-strategy evaluation and adaptive management
+practice (Walters, 1986; Punt et al., 2016), but are more demanding than detecting a spectral
+peak. Supplementary S7 sets out five prospective designs with estimands and decision rules; none
+is reported as executed.
+
+4.5   Limitations
+This edition has six important limitations. First, the focal numerical parameters are illustrative,
+with no joint field calibration. Second, local eigenvalue stability does not imply global nonlinear
+stability or acceptable transient performance. Third, dense-grid non-crossing results are numerical
+evidence only. Fourth, the RAM screen and Tr -proxy assignments inherit database coverage and
+analyst coding; stock-specific primary verification is incomplete. Fifth, the stage-map reconstruction
+does not reproduce all archived trajectory windows, which remain provisional. Sixth, the case
+inventory and cod analysis do not identify a causal governance effect. Supplementary materials
+retain complete outputs and provenance so that these limitations are not hidden by a concise main
+text.
+
+
+5     Conclusion
+Review cadence is a dynamical design variable when decisions are sampled and commands are
+held, but a cadence threshold is meaningful only for a fully specified and empirically supported
+update map. In the illustrative system, exponential frozen-assessment, Euler, and continuous-delay
+operators produce different crossings, while small joint parameter perturbations move or remove
+them. The analytic invariance and rapid-review results do not supply a stability guarantee at finite
+review intervals. The empirical screens do not reveal a window-approach gradient; the reproduced
+two-group association points in the opposite direction and is confounded by coarse, regionally
+clustered proxies. Northern cod remains a descriptive case. These findings motivate operator-aware,
+data-rich evaluations rather than a general claim that any particular governance interval stabilizes
+real resources.
+
+
+References
+Abaee, A. 2026. Delay-induced regime change in harvested stocks: the mobilising and
+protective channels of institutional feedback, and the review interval as control. Zenodo.
+https://doi.org/10.5281/zenodo.22554217.
+
+
+                                                 11
+    Adamson, M. W., and Hilker, F. M. 2020. Resource-harvester cycles caused by delayed knowledge
+of the harvested population state can be dampened by harvester forecasting. Theoretical Ecology,
+13: 425–434.
+    Åstr”om, K. J., and Wittenmark, B. 1997. Computer-Controlled Systems: Theory and Design,
+3rd edn. Prentice Hall, Upper Saddle River, NJ.
+    Alkire, S., and Foster, J. 2011. Counting and multidimensional poverty measurement. Journal
+of Public Economics, 95: 476–487.
+    Ashwin, P., Wieczorek, S., Vitolo, R., and Cox, P. 2012. Tipping points in open systems:
+bifurcation, noise-induced and rate-dependent examples in the climate system. Philosophical
+Transactions of the Royal Society A, 370: 1166–1184.
+    Benjamini, Y., and Hochberg, Y. 1995. Controlling the false discovery rate: a practical and
+powerful approach to multiple testing. Journal of the Royal Statistical Society B, 57: 289–300.
+    Benjamini, Y., and Yekutieli, D. 2001. The control of the false discovery rate in multiple testing
+under dependency. Journal of the Royal Statistical Society B, 63: 425–441.
+    Branch, T. A. 2001. A review of orange roughy Hoplostethus atlanticus fisheries, estimation
+methods, biology and stock structure. South African Journal of Marine Science, 23: 181–203.
+    Brown, C. J., Fulton, E. A., Possingham, H. P., and Richardson, A. J. 2012. How long
+can fisheries management delay action in response to ecosystem and climate change? Ecological
+Applications, 22: 298–310.
+    Butterworth, D. S. 2007. Why a management procedure approach? Some positives and negatives.
+ICES Journal of Marine Science, 64: 613–617.
+    Butterworth, D. S., and Punt, A. E. 1999. Experiences in the evaluation and implementation of
+management procedures. ICES Journal of Marine Science, 56: 985–998.
+    Cadigan, N. G. 2016. A state-space stock assessment model for northern cod, including under-
+reported catches and variable natural mortality rates. Canadian Journal of Fisheries and Aquatic
+Sciences, 73: 296–308.
+    Chávez, F. P., Ryan, J., Lluch-Cota, S. E., and Niquen, M. 2003. From anchovies to sardines
+and back: multidecadal change in the Pacific Ocean. Science, 299: 217–221.
+    Chen, T., and Francis, B. A. 1995. Optimal Sampled-Data Control Systems. Springer, London.
+    Cohen, J. 1988. Statistical Power Analysis for the Behavioral Sciences, 2nd edn. Lawrence
+Erlbaum, Hillsdale, NJ.
+    Costantino, R. F., Cushing, J. M., Dennis, B., and Desharnais, R. A. 1995. Experimentally
+induced transitions in the dynamic behaviour of insect populations. Nature, 375: 227–230.
+    DFO. 2011. Recovery potential assessment for the Newfoundland and Labrador Designatable
+Unit (NAFO Divs. 2GHJ, 3KLNO) of Atlantic Cod. DFO Canadian Science Advisory Secretariat
+Science Advisory Report 2011/037.
+    DFO. 2016. Stock Assessment of Northern cod (NAFO Divs. 2J3KL) in 2016. DFO Canadian
+Science Advisory Secretariat Science Advisory Report 2016/026.
+    DFO. 2022. Stock Assessment of Northern cod (NAFO Divs. 2J3KL) in 2022. DFO Canadian
+Science Advisory Secretariat Science Advisory Report 2022/041.
+    DFO. 2024. NAFO Divisions 2J3KL Northern cod (Gadus morhua) stock assessment to 2024.
+DFO Canadian Science Advisory Secretariat Science Advisory Report.
+    Forssell, U., and Ljung, L. 1999. Closed-loop identification revisited. Automatica, 35: 1215–1241.
+    Gurney, W. S. C., Blythe, S. P., and Nisbet, R. M. 1980. Nicholson’s blowflies revisited. Nature,
+287: 17–21.
+    Gutiérrez, D., Sifeddine, A., Field, D. B., Ortlieb, L., Vargas, G., Chávez, F. P., Velazco,
+F., Ferreira, V., Tapia, P., Salvatteci, R., Boucher, H., Morales, M. C., Valdés, J., Reyss, J.-
+L., Campusano, A., Boussafir, M., Mandeng-Yogo, M., Garcı́a, M., and Baumgartner, T. 2009.
+Rapid reorganization in ocean biogeochemistry off Peru towards the end of the Little Ice Age.
+Biogeosciences, 6: 835–848.
+    ICES. 2020. Inter-Benchmark Process on BAltic Sprat (Sprattus sprattus) and Herring (Clupea
+harengus) (IBPBash). ICES Scientific Reports. 2:34. 44 pp.
+
+
+                                                 12
+    ICES. 2021. Arctic Fisheries Working Group (AFWG). ICES Scientific Reports. 3:58. 817 pp.
+    Karlsson, M., and Gilek, M. 2020. Mind the gap: Coping with delay in environmental governance.
+Ambio, 49: 1067–1075.
+    Lomb, N. R. 1976. Least-squares frequency analysis of unequally spaced data. Astrophysics
+and Space Science, 39: 447–462.
+    Ludwig, D., Jones, D. D., and Holling, C. S. 1978. Qualitative analysis of insect outbreak
+systems: the spruce budworm and forest. Journal of Animal Ecology, 47: 315–332.
+    McManus, M. C., Licandro, P., and Coombs, S. H. 2016. Is the Russell Cycle a true cycle?
+Multidecadal zooplankton and climate trends in the western English Channel. ICES Journal of
+Marine Science, 73: 227–238.
+    Moxnes, E. 1998. Not only the tragedy of the commons: misperceptions of bioeconomics.
+Management Science, 44: 1234–1248.
+    Nešić, D., and Teel, A. R. 2004. A framework for stabilisation of nonlinear sampled-data systems
+based on their approximate discrete-time models. IEEE Transactions on Automatic Control, 49:
+1103–1122.
+    Pauly, D., and Tsukayama, I. (eds) 1987. The Peruvian anchoveta and its upwelling ecosystem:
+three decades of change. ICLARM Studies and Reviews, 15.
+    Punt, A. E., and Donovan, G. P. 2007. Developing management procedures that are robust to
+uncertainty: lessons from the International Whaling Commission. ICES Journal of Marine Science,
+64: 603–612.
+    Punt, A. E., Butterworth, D. S., de Moor, C. L., De Oliveira, J. A. A., and Haddon, M. 2016.
+Management strategy evaluation: best practices. Fish and Fisheries, 17: 303–334.
+    Ricard, D., Minto, C., Jensen, O. P., and Baum, J. K. 2012. Examining the knowledge base and
+status of commercially exploited marine species with the RAM Legacy Stock Assessment Database.
+Fish and Fisheries, 13: 380–398.
+    Rose, G. A. 2026. Northern cod comeback: 10 years after. Canadian Journal of Fisheries and
+Aquatic Sciences, 83: 1–14. https://doi.org/10.1139/cjfas-2025-0141
+    Rose, G. A., and Rowe, S. 2015. Northern cod comeback. Canadian Journal of Fisheries and
+Aquatic Sciences, 72: 1789–1798.
+    Rose, G. A., and Walters, C. J. 2019. The state of Canada’s iconic Northern cod: a second
+opinion. Fisheries Research, 219: 105314.
+    Scargle, J. D. 1982. Studies in astronomical time series analysis. II. Statistical aspects of
+spectral analysis of unevenly spaced data. The Astrophysical Journal, 263: 835–853.
+    Statistics Canada. Tables 38-10-0167-01 and 38-10-0168-01, CANSIM database. Statistics
+Canada, Ottawa.
+    Shertzer, K. W., and Prager, M. H. 2007. Delay in fishery management: diminished yield,
+longer rebuilding, and increased probability of stock collapse. ICES Journal of Marine Science, 64:
+149–159.
+    Stuart, A. M., and Humphries, A. R. 1996. Dynamical Systems and Numerical Analysis.
+Cambridge University Press, Cambridge.
+    Sumaila, U. R., Ebrahim, N., Schuhbauer, A., Skerritt, D., Li, Y., Kim, H. S., Mallory, T. G.,
+Lam, V. W. L., and Pauly, D. 2019. Updated estimates and analysis of global fisheries subsidies.
+Marine Policy, 109: 103695.
+    Tam, J. C., and Bundy, A. 2019. Mass-balance models of the Newfoundland and Labrador
+Shelf ecosystem for 1985–1987 and 2013–2015. Canadian Technical Report of Fisheries and Aquatic
+Sciences, 3328.
+    UNFCCC. 2015. Paris Agreement. United Nations Framework Convention on Climate Change.
+    Walters, C. J. 1986. Adaptive Management of Renewable Resources. Macmillan, New York.
+    World Bank. Poverty and Inequality Platform. World Bank, Washington, DC.
+
+
+
+
+                                                 13
+Declarations
+Funding No external funding was received for this work.
+Conflicts of interest
+           The author declares no competing interests.
+Data and code availability
+           The source bundle contains the model core, analysis scripts, archived tables, recovered
+           local inputs used for re-execution, and the Supplementary Information. The RAM
+           Legacy database is identified by version and source; upstream data remain subject to
+           their original terms. A reconstruction register distinguishes newly reproduced outputs
+           from archived records and unresolved inputs. The full 17-cell white-noise power table is
+           assembled from the archived 15-cell run log and the two-cell cod follow-up JSON; a
+           complete rerun of the driver did not finish. This limitation is stated in Supplementary
+           S13.1.
+Author contributions
+           A.A. conceived the analysis, developed the model, conducted the re-analysis, and wrote
+           the manuscript.
+Ethics approval
+           Not applicable.
+
+
+
+
+                                                14
+
