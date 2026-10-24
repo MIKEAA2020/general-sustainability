@@ -1,0 +1,89 @@
+% =====================================================================
+% Manuscript ECOMOD v43 (GFN/NFA accounting-convention revision of v42)
+% How aggregation can conceal composition: aggregate biocapacity and the
+% identifiability of modelled ecological-capital drawdown
+% Author: Amin Abaee (Independent Researcher, Tehran, Iran)
+%
+% v43 (2026-10-24): adopts the GFN/NFA-facing dimensional convention throughout
+% equations, parameter and symbol tables, empirical descriptions, figures and
+% comparator material. Annual account values are in gha; the leaky debt integral
+% is in gha yr. Model equations, numerical parameter values and trajectories are
+% unchanged from v42. Abstract typography is compacted so the full abstract and
+% keywords remain together on the title page.
+%
+% v42 (2026-10-14): full restructuring into a research article (Introduction
+% with questions and contributions -> Methods -> Results organised around three
+% propositions and the measured NFA decomposition -> Discussion -> Conclusions).
+% Content moved to the Supplementary Information: full symbol table, proofs,
+% numerics and verification protocol, extended result tables (b_f sweep,
+% drawdown-depth ladder, recovery metric, gate-sign phase dependence), empirical
+% details (vintages, alpha-robustness, level fallback, observation-operator
+% hierarchy, regeneration anchors), policy extensions, one-stock comparator.
+% New in v42: Figure 3 (model dynamics, regenerated from the deposited code),
+% the affine-closure derivation of the constant leading eigenvalue, the
+% continuous drawdown-depth result, the bounded (not unbounded) debt statement
+% with the crossover deficit S^dagger, and the restoration-inertness check.
+% All numbers are either carried over verbatim from v41 or regenerated from
+% model_sims/twoland_fixed.py at the baseline registry (see CHANGELOG_v41_to_v42).
+% Compiles with pdfLaTeX / XeLaTeX / LuaLaTeX / tectonic (elsarticle class).
+% =====================================================================
+\documentclass[preprint,12pt,authoryear]{elsarticle}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\graphicspath{{./}{figures/}}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue,citecolor=blue]{hyperref}
+\emergencystretch=3em
+\setlength{\tolerance}{2000}
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newcommand{\pos}[1]{\left[#1\right]_+}
+\newcommand{\dconv}{\Delta b_{\mathrm{conv}}}
+\newcommand{\Ups}{\Upsilon_c}
+\newcommand{\Eceil}{E_{\mathrm{ceil}}}
+\newcommand{\Acmin}{A_c^{\min}}
+\newcommand{\tconv}{\tau_{\mathrm{conv}}}
+
+\journal{Ecological Modelling}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{How aggregation can conceal composition: aggregate biocapacity and the identifiability of modelled ecological-capital drawdown}
+
+\author[1]{Amin Abaee\corref{cor1}}
+\ead{amin_abaee@ut.ac.ir}
+\cortext[cor1]{Corresponding author. ORCID: 0000-0002-0019-1842.}
+\affiliation[1]{organization={Independent Researcher}, city={Tehran}, country={Iran}}
+
+\begin{abstract}
+\footnotesize
+Total biocapacity, the headline index of annual bioproductive supply, is a single number assembled from heterogeneous land accounts whose yields and regeneration rates differ by an order of magnitude. We ask what such an aggregate can and cannot reveal about the land it summarises. We formulate a minimal two-land delay-differential model in which demand above the human-available biocapacity account amount triggers conversion of ecological-capital land into fast-provisioning land, with area conserved one-to-one, capital quality carried as a separate state, and degradation acting through an accumulated ecological debt. Three results are proved and verified numerically. (i) Conversion raises the measured aggregate while the capital book falls whenever the fast-land yield exceeds the per-hectare value of capital land (a composition mask), and the aggregate alone cannot distinguish this from genuine growth: with only the total, the capital loss is unidentified. (ii) Under frozen demand the balance point is unique and the capital book is driven to its viability floor above a demand ceiling ($\Eceil\approx1.14$\,gha at the baseline); because the deficit-side dynamics are affine, the leading eigenvalue ($-0.054\,\mathrm{yr}^{-1}$) is constant along the branch, so the drawdown is a floor collision without a fold, without hysteresis and without critical slowing down; with endogenous demand the drawdown depth is a continuous function of initial demand. (iii) The mask is bounded: technology lifts the fast yield by at most a fixed factor, whereas debt erosion is limited only by the sustained deficit. Applied to the National Footprint and Biocapacity Accounts (1961--2022), an exact Divisia decomposition shows that aggregate biocapacity grew $+23\%$ while cropland biocapacity grew $2.85\times$ and the non-cropland book was flat, and per-capita biocapacity halved. The results motivate component reporting alongside any aggregate biocapacity total.
+\end{abstract}
+
+\begin{keyword}
+\footnotesize
+biocapacity \sep ecological footprint \sep land-use conversion \sep aggregation \sep identifiability \sep critical slowing down \sep delay differential equations \sep carrying capacity
+\end{keyword}
+
+\end{frontmatter}
+
+\section{Introduction}\label{sec:intro}
+
+Carrying capacity is one of ecology's most enduring and most elusive ideas. In classical population biology it is a fixed ceiling; imported into global human ecology it is usually treated as a static boundary, the maximum number of people the Earth can support \citep[cf.][]{Cohen1995}. Treating the ceiling as fixed overlooks a feedback that matters: a population that overshoots its resource base degrades the base and lowers the future ceiling. This paper is concerned with a subtler failure than a fixed ceiling. It concerns the \emph{measurement} on which monitoring and policy depend.
+
+The standard aggregate measure of annual regenerative supply is biocapacity, expressed in the National Footprint and Biocapacity Accounts (NFA) in global hectares (gha) for each annual account. Under the Global Footprint Network (GFN) convention, annual Ecological Footprint and biocapacity values are reported in gha, not gha\,yr$^{-1}$ \citep{GFNStandards2009,GFNGuidebook2019}. A global hectare is a productivity-normalised hectare whose value incorporates yield and equivalence factors \citep{Borucke2013,Lin2018}. Because the weighting sits \emph{inside} the unit, an aggregate biocapacity series does not tell a monitor whether capacity rose because land became more productive, because more land was brought into provision, or because ecological capital was converted into provisioning land. The composite-indicator literature warns that additive aggregation turns weights into trade-offs, so that a deficit in one dimension can be offset by a surplus in another \citep{Nardo2008,Becker2017,Fischer2022}; biocapacity is exactly such a composite, and the footprint framework has been criticised on related grounds \citep{Blomqvist2013,GiampietroSaltelli2014,vdBerghGrazi2015,Galli2016}. The aggregate remains useful as a headline, but only if its components are reported alongside it. What has been missing is a dynamical account of \emph{how} a rising aggregate and a falling capital base can coexist, for how long, and what would be needed to tell them apart.
+
+Coupled human--environment models have largely treated the environment as a single stock or a single aggregate balance: the World3 system \citep{Meadows1972,Meadows1974,Meadows2004}, the Ricardo--Malthus models of Easter Island \citep{BranderTaylor1998,Anderies2000}, and more recent bidirectionally coupled Earth-system frameworks \citep{Motesharrei2016,Donges2017,CalvinBondLamberty2018,HendersonLoreau2018}. Estimates of Earth's carrying capacity span several orders of magnitude \citep{Cohen1995,vdBerghRietveld2004}, some authors reject the notion for humans altogether \citep{Simon1996}, and others let the ceiling itself vary logistically \citep{Meyer1994,MeyerAusubel1999} or treat natural capital as a depreciating asset \citep{Dasgupta2021}. Demographic projections used in most global assessments assume that population unfolds independently of environmental constraints \citep{UN2022}. Within this literature the environment has one book; the question of what an aggregate over two books with different yields and regeneration times can conceal has not been posed as a modelling problem, although the land-use literature has documented the historical operator -- conversion of forest, grassland and wetland into cropland -- in detail \citep{Haberl2007,Krausmann2013,Erb2017}.
+
+Consider an orchard with two kinds of ground. Fast provisioning land -- cropland and intensively managed systems -- yields much and is quickly restored, but has little standing regenerative value. Ecological-capital land -- forest, soil, wetland, long-rotation systems -- has a large standing value and a regenerative flow that is slowly rebuilt. Demand is evaluated against the human-available annual account total; any remaining account shortfall triggers conversion from capital land into fast provision. Because aggregate biocapacity is a value-weighted sum over the two land books, conversion can raise the account total while the capital book shrinks. A harvest that looks stable, or a rising aggregate measure of capacity, can therefore mask a shrinking ecological-capital account. Neither the orchard nor its harvesters respond instantly -- forest loss, soil degradation and demographic adjustment unfold over decades -- which is why societies can prosper for long periods while quietly undermining their productive base, only to decline abruptly \citep{Tainter1988,Diamond2005}. The companion ledger work calls the general phenomenon the \emph{productivity illusion} \citep{Abaee2026c}; the specific form addressed here is the \emph{composition} illusion, in which the aggregate rises not because technology outpaces degradation but because the books are re-weighted.
+
+We address three questions. \textbf{(Q1)} Under what conditions does conversion of ecological-capital land raise the aggregate while the capital book falls, how long does the mask last, and can the composition be identified from the aggregate? \textbf{(Q2)} Is the resulting capital drawdown a catastrophic shift in the sense of the alternative-stable-states literature \citep{Scheffer2001}, with a fold, hysteresis and early-warning signals, or something structurally different? \textbf{(Q3)} Is the mask self-limiting, and what does recovery require?
+
+The paper makes four contributions. First, it formulates a minimal two-land model (Section~\ref{sec:model}) in which area is conserved one-to-one across three land books, per-hectare capital quality is a separate state, conversion is a rate with an explicit time constant, and degradation acts on the surviving yield through an accumulated ecological debt; the model is a delay differential equation with ecological (regeneration) and demographic delays \citep{Kuang1993,Hutchinson1948}. Second, it proves three propositions (Section~\ref{sec:results}): a composition identity that gives the exact condition for the mask and shows that the aggregate does not identify the capital loss (Proposition~\ref{prop:mask}); the uniqueness of the frozen-demand balance point, the location of the demand ceiling, and the absence of a fold and of critical slowing down, derived from the affine structure of the deficit-side dynamics (Proposition~\ref{prop:ceiling}); and a boundedness asymmetry between the technology and debt channels that makes the mask transient (Proposition~\ref{prop:bounded}). Third, it applies the composition identity to the measured NFA series for 1961--2022 with an exact logarithmic-mean (Divisia) decomposition and the measured land-type accounts (Section~\ref{sec:empirical}). Fourth, it states the falsifiable content of the model as five predictions and draws the reporting implication for sustainability indicators (Sections~\ref{sec:predictions} and \ref{sec:discussion}). The model is deliberately simple and most of its parameters are representative rather than fitted; it is not a forecast. Its purpose is to make the composition logic of aggregate biocapacity explicit and to state which outcomes are structural and which are conditional on effective parameters that are not separately identified.

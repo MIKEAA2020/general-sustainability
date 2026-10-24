@@ -1,0 +1,101 @@
+\section{Methods}\label{sec:model}
+
+\subsection{A two-land model with conserved area and a separate quality state}\label{sec:equations}
+
+The bioproductive area $A_{tot}$ is divided into three books: fast-provisioning land $A_f$ (cropland and intensively managed systems), ecological-capital land $A_c$ (forest, soil, wetland and long-rotation systems, consolidated into one effective class), and a reserve $A_r$ (fallow, retired or not yet allocated land), with $A_f+A_c+A_r=A_{tot}$ at all times. Capital land carries a per-hectare quality index $q\in[0,q_{\max}]$ (a capacity state, not an area), which regenerates logistically,
+\begin{equation}\label{eq:Gc}
+G_c(q)=\rho_c\,q\left(1-\frac{q}{q_{\max}}\right),
+\end{equation}
+so that the per-hectare value of capital land, in annual NFA-account-yield units, is
+\begin{equation}\label{eq:Ups}
+\Ups(q)=b_c+b_{G,c}\,G_c(q),
+\end{equation}
+the sum of a direct per-hectare yield $b_c$ and the regeneration-value coefficient $b_{G,c}$ times the quality growth $G_c(q)$. Biocapacity is the additive two-book aggregate
+\begin{equation}\label{eq:B}
+B=Y_f+Y_c=b_f A_f+\Ups(q)\,A_c ,
+\end{equation}
+in gha, the annual NFA account unit \citep{GFNStandards2009,GFNGuidebook2019}. Demand is the footprint $E=eP$ of a population $P$ with constant per-capita footprint $e$ (gha\,cap$^{-1}$), and the shortfall above the human-available amount is
+\begin{equation}\label{eq:S}
+S=\pos{E-\sigma_f Y_f-\sigma_c Y_c},
+\end{equation}
+with $\pos{x}=\max(x,0)$ exact (never smoothed) and $\sigma_f=\sigma_c=1$ in the baseline. The shortfall is closed by converting capital land into fast land at a finite rate,
+\begin{equation}\label{eq:uc}
+u_c=\frac{1}{\tconv}\min\!\left(\frac{S}{b_f},\;A_c-\Acmin\right)\qquad[\mathrm{ha\,yr^{-1}}],
+\end{equation}
+where $S/b_f$ is the area that would close the shortfall at the fast-land yield, $\Acmin$ is a typed viability floor, and $\tconv$ is the conversion time constant. The land books evolve by one-to-one area transfers only,
+\begin{align}
+\dot A_c&=-u_c+R_{rc},\label{eq:Ac}\\
+\dot A_f&=u_c+\mu A_r-\eta_f A_f,\label{eq:Af}\\
+\dot A_r&=-\mu A_r+\eta_f A_f-R_{rc},\label{eq:Ar}
+\end{align}
+where $\mu A_r$ is cropland maintenance (replanting from the reserve), $\eta_f A_f$ is fast-land retirement to the reserve, and $R_{rc}$ is an explicit, surplus-gated restoration flow from reserve to capital land,
+\begin{equation}\label{eq:Rrc}
+R_{rc}=\chi_r\,A_r\,\pos{B-E},
+\end{equation}
+which is the only route back into the capital book. Equations \eqref{eq:Ac}--\eqref{eq:Ar} sum to zero, so the reserve is a constrained balance rather than an independent state. Quality regenerates with a recruitment delay, population follows a delayed logistic law \citep{Pearl1925,Hutchinson1948} on the carrying capacity $K=B/e$, and degradation acts on the surviving fast-land yield through an accumulated ecological debt $D$:
+\begin{align}
+\dot q&=G_c\big(q(t-\tau_g)\big),\label{eq:q}\\
+\dot P&=rP\left(1-\frac{P}{K(t-\tau_p)}\right),\qquad K=\max(B/e,\,K_{\min}),\label{eq:P}\\
+b_f&=\big(b_{f0}+T_b(t)\big)\,e^{-\alpha D},\label{eq:bf}\\
+\dot D&=\pos{E-B}-\eta D,\label{eq:D}\\
+T_b(t)&=\frac{\Delta b}{1+e^{-\kappa_w(t-t_{wave})}}.\label{eq:Tb}
+\end{align}
+Because model time $t$ is measured in years and $E-B$ is an annual account amount in gha, the leaky shortfall accumulator $D$ has units gha\,yr: both $\dot D$ and $\eta D$ have units gha. This is a model-internal time-integrated liability, not an NFA-reported footprint or biocapacity item.
+
+The technology wave $T_b$ is a bounded logistic yield step (off unless stated). The state is $(A_f,A_c,q,P,D)$ with one delay each in regeneration and demography; a timber-liquidation channel and a direct fast-to-capital restoration flow are stated extensions that are off in every reported run (Supplementary Information, SI~\S S1).
+
+Five conventions are essential. (i) \emph{The positive part is exact.} A smoothed ramp would leak conversion when $E<B$; the one-sided deficit mechanism is the model's content, so $\pos{\cdot}$ is never regularised and stability at $S=0$ is one-sided. (ii) \emph{Conversion is a rate.} $S/b_f$ is a stock (ha); it becomes a rate only through $\tconv$, so $u_c$ is dimensionally ha\,yr$^{-1}$ and conversion is never instantaneous. (iii) \emph{Area is conserved one-to-one and capacity is a separate book.} Every area flow in \eqref{eq:Ac}--\eqref{eq:Ar} moves hectares between books; regeneration $G_c$ is a flow of capacity into $q$ and never transfers land, so conservation is a property of the equations, not an identity imposed afterwards. (iv) \emph{Annual account amounts and their time-integral are never interchanged.} $B$, $E$, $Y_f$, $Y_c$ and $S$ are annual NFA account amounts in gha; $D$ is a leaky time-integral of shortfall in gha\,yr, repaid at rate $\eta$; $b_f,b_c$ are in gha\,ha$^{-1}$ and $b_{G,c}$ is a regeneration-value coefficient in gha\,yr\,ha$^{-1}$. (v) \emph{A sustainable cropland equilibrium exists.} Because \eqref{eq:Af} contains the maintenance term $\mu A_r$, a positive fast book $A_f^*$ is sustained without conversion; without it the fast book would decay to zero at every equilibrium.
+
+Two positive feedback loops act on different books. The \emph{conversion loop} reallocates area: $A_c\downarrow\to A_f\uparrow\to B\uparrow$ (if $b_f>\Ups$) $\to K\uparrow\to P\uparrow\to S\uparrow\to A_c\downarrow$; it raises the aggregate while the capital book falls and is the composition mechanism of this paper. The \emph{debt loop} erodes the surviving yield: $D\uparrow\to b_f\downarrow\to B\downarrow\to S\uparrow\to D\uparrow$; it later turns against the aggregate and is one reason the mask is bounded (Proposition~\ref{prop:bounded}).
+
+\subsection{Parameters and their status}\label{sec:params}
+
+Table~\ref{tab:params} lists the baseline registry. The capital book is a strategic reduction: real ecological capital is a vector of land types with their own yields, values and regeneration times, and the two-book model treats them as one effective class. Consequently most parameters are representative, effective quantities rather than estimates, and the results are stated with that status attached. Two quantities are empirically anchored: the capital-land regeneration timescale, which we bound from raw recovery curves in two ecosystem classes (secondary forest, \citealp{Poorter2016}; collapsed fish stocks, RAM Legacy, cf.\ \citealp{HutchingsReynolds2004,Neubauer2013}; with soil organic carbon, \citealp{Poeplau2011}, between them; SI~\S S5.5), and the provisioning-book yield and area, which we calibrate against NFA cropland biocapacity and the FAO crop-yield index (SI~\S S5.3). The regeneration anchors bound a \emph{band} of effective timescales ($\approx$25--33\,yr, representative $\approx$29\,yr; forest $t_{50}\approx30$\,yr, fishery $t_{50}\approx5.6$\,yr) and are statements about the regeneration rate, not the lag $\tau_g$; the two are kept distinct throughout. The baseline sits in the composition-premium regime, $\dconv=b_f-\Ups(q)>0$, which is the regime in which the mask is possible (Section~\ref{sec:mask}); Table~\ref{tab:params} therefore fixes a regime, not a prediction.
+
+\begin{table}[!htbp]
+\centering\footnotesize
+\caption{Baseline parameter registry (single source of truth for all reported runs) and the status of each parameter. ``Representative'' values are effective, lumped quantities that are not individually identified; ``anchored'' values are bounded by independent data (SI~\S S5); ``extension'' parameters are stated but off in the base model. Full symbol table with units in SI~\S S1.}
+\label{tab:params}
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.13\textwidth} >{\raggedright\arraybackslash}p{0.2\textwidth} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.26\textwidth}@{}}
+\toprule
+Parameter & Value & Meaning & Status \\
+\midrule
+$\rho_c$ & $0.08$\,yr$^{-1}$ & quality regeneration rate of capital land & representative; timescale band anchored \\
+$b_{f0}$ & $0.85$\,gha\,ha$^{-1}$ & base fast-land yield per hectare & representative (NFA cropland book $\approx0.93$ in 1961) \\
+$b_c$ & $0.05$\,gha\,ha$^{-1}$ & capital-land direct yield & representative \\
+$b_{G,c}$ & $0.8$\,gha\,yr\,ha$^{-1}$ & regeneration-value coefficient for capital land & representative \\
+$q_{\max}$ & $1.0$ (dimensionless) & normalised quality ceiling & normalisation \\
+$\mu$ & $0.06$\,yr$^{-1}$ & cropland maintenance (reserve$\to$fast) & representative \\
+$\eta_f$ & $0.05$\,yr$^{-1}$ & fast-land retirement (fast$\to$reserve) & representative \\
+$\tconv$ & $1.0$\,yr & conversion time constant & representative \\
+$\alpha$ & $0.03$\,gha$^{-1}$\,yr$^{-1}$ & degradation of $b_f$ per unit debt & representative \\
+$\eta$ & $0.05$\,yr$^{-1}$ & debt-repayment rate ($>0$) & representative \\
+$e$ & $0.55$\,gha\,cap$^{-1}$ & per-capita footprint (constant) & representative \\
+$r$ & $0.02$\,yr$^{-1}$ & intrinsic population growth & representative \\
+$\tau_g,\ \tau_p$ & $20,\ 25$\,yr & regeneration and demographic delays & representative; $\tau_p$ lumps institutional lags \\
+$A_{tot}$ & $2.5$\,ha & total bioproductive area & normalisation \\
+$\sigma_f,\ \sigma_c$ & $1,\ 1$ (dimensionless) & human-available shares of annual account amounts & baseline ($<1$: reservation extension) \\
+$\chi_r$ & $0.10$\,gha$^{-1}$\,yr$^{-1}$ & surplus-gated restoration coefficient & on with endogenous demand; off under frozen demand \\
+$\Acmin$, $A_r^{\min}$,\newline $K_{\min}$ & $0.05$\,ha, $0.10$\,ha,\newline $0.02$\,cap & typed floors & domain constraints \\
+$\Delta b$, $\kappa_w$,\newline $t_{wave}$ & $1.0$\,gha\,ha$^{-1}$, $0.1$\,yr$^{-1}$,\newline $40$\,yr & technology wave & extension; off in all reported runs \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Data and the observation operator}\label{sec:data}
+
+The empirical analysis uses the world series of the National Footprint and Biocapacity Accounts (2025 edition): aggregate biocapacity and footprint account values ($B,E$ in gha) for 1961--2022, the land-type biocapacity matrix (cropland, grazing land, forest products, fishing grounds, built-up land), and population (cap). The normalized indices, ratios and log changes used below are dimensionless. The land-type vintage incorporates a retroactive re-basing and gives a slightly higher aggregate growth ($+24.5\%$, $\Delta\ln B=+0.219$) than the aggregate series ($+23.0\%$, $\Delta\ln B=+0.207$); rather than blend the vintages we report the attribution across both (SI~\S S5.2). The independent proxies that advance past the aggregate are FAOSTAT cropland area (arable plus permanent crops; $A_f$ in ha) and a normalised FAO crop-yield index calibrated to the model account yield $b_f$ (gha\,ha$^{-1}$) at the base year either by a nominal, dimensionless cropland share $\phi_0$ of 1961 biocapacity or directly against measured NFA cropland biocapacity \citep{FAO2023}; forest area \citep{FAO2020}, historical land-use reconstructions \citep{Hurtt2011,KleinGoldewijk2017}, remote-sensing land cover \citep{ESA2017,Copernicus2019} and cropland-productivity maps \citep{Monfreda2008} form the hierarchy of extensions described in SI~\S S5.4.
+
+The decomposition instrument is the exact logarithmic-mean (Divisia) identity. Writing $B_t=X_t+C_t$ with a proxy fast-book component $X_t=\hat b_{f,t}A_{f,t}$ and residual $C_t=B_t-X_t$,
+\begin{equation}\label{eq:divisia}
+\begin{split}
+\Delta\ln B&=w_X\big(\Delta\ln b_f+\Delta\ln A_f\big)+w_C\,\Delta\ln C,\\
+w_X&=\frac{L(X_T,X_0)}{L(B_T,B_0)},\qquad w_C=\frac{L(C_T,C_0)}{L(B_T,B_0)},
+\end{split}
+\end{equation}
+with the logarithmic mean $L(a,b)=(a-b)/(\ln a-\ln b)$ for $a\neq b$ and $L(a,a)=a$. The identity holds exactly whenever $X$ and $C$ are positive at both endpoints; average-share weights do not (they overshoot by $\approx11\%$ here), and the level decomposition $\Delta B=\Delta X+\Delta C$ is the exact fallback when the residual is not positive (SI~\S S5.2). The extensive/intensive split uses the exact identity $d\ln B=d\ln(B/P)+d\ln P$.
+
+\subsection{Numerical solution and verification}\label{sec:numerics}
+
+The delay system is integrated by the method of steps with an explicit first-order scheme ($\Delta t=0.05$\,yr for the demonstration run, $0.1$ and $0.05$\,yr for the drawdown sweeps), the exact positive part, clamps enforcing $A_c\ge\Acmin$, $A_f\ge0$, $q\in[0,q_{\max}]$, $K\ge K_{\min}$, and delay histories populated with the initial state rather than zero (a zero history produces spurious early collapses). Area conservation is verified at every step ($\max|A_f+A_c+A_r-A_{tot}|=2.2\times10^{-16}$\,ha). Every analytic quantity below (balance points, ceiling, eigenvalues, composition diagnostic) is recomputed from the deposited code and asserted against the stated value before a figure is written. Drawdown thresholds are reported as bands because the operational floor-contact criterion depends on the tolerance and step size (Section~\ref{sec:ceiling}). The deposited solver evaluates the regeneration term of \eqref{eq:q} at the current rather than the delayed quality; because $q$ is monotone and the regenerative term is small at the baseline ($b_{G,c}G_c\le0.016$\,gha\,ha$^{-1}$ against $b_c=0.05$\,gha\,ha$^{-1}$), applying the delay changes the reported quantities by less than $1\%$ (window $149$ vs.\ $150$\,yr; initial-population thresholds within $0.001$\,cap), and both variants are reported in SI~\S S3. Code and data are deposited (Zenodo record 22554480).
