@@ -19,4 +19,4 @@ The manuscript and SI are Americanized, the requested acknowledgments are added,
 
 ## Publication verification
 
-The v44 package commit and remote tree/blob checks are recorded in the final release receipt and README after publication. The v43 package remains available at its original repository path and was not overwritten.
+The v44 package was published to `main` at commit `36ef7a6bde047e3f555dae9ba8d2cf2aa4f10a2b`, under `agent 2 productivity illusion/manuscript_ECOMOD_v44_src/`. The release tree contains 50 files, including `SHA256SUMS.txt`; all 49 listed file digests matched the corresponding remote Git blobs. The main PDF is 36 pages and the SI is 22 pages. The v43 package remains available at its original path and was not overwritten.
