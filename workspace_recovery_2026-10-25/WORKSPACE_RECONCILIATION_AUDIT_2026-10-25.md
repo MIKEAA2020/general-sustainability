@@ -30,4 +30,12 @@ Only after the archive and updated audit are remotely verified may the listed ca
 
 - `/home/user/secrets/` was not read into the inventory or archived. User uploads remain untouched and excluded. Caches, toolchain files, and the temporary clone are outside the content archive.
 - The stale `SHA256SUMS_v45_working.txt` is included as part of the candidate snapshot but is **not** treated as a release manifest; `REVIEW_STATUS_v45.md` already records that it must be regenerated before any release.
-- No commit/push/deletion has occurred at the time this pre-deletion audit was generated.
+- This audit was generated before any push or deletion; the subsequent archive push and byte verification are recorded in the addendum below. No deletion has yet occurred.
+
+
+## Archive push verification (2026-10-25)
+
+- The complete ECOMOD v45 working tree, the per-file CSV, and this report were pushed to `workspace-recovery-2026-10-24` at commit `a40ec7db0f22cf80cde76f55ac4f912beea43efc`.
+- A fresh fetch confirmed that the remote branch tip equals that commit. The archive tree contains all **553/553** local v45 files at their planned paths; every Git blob was compared byte-for-byte with its local file: **85,930,999 bytes, 426 unique blobs, zero missing or mismatched files**.
+- The 40 v45 files that also match current remote blobs are retained in the dated snapshot for complete path reconstruction; Git reuses identical blob content. The 513 previously unmatched files are now recoverable from the archive branch.
+- The current v45 PDFs/sources are archived as a working candidate only. The official v44 package on `main` was not touched. **No cleanup or deletion has occurred yet.**

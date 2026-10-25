@@ -1,9 +1,9 @@
-# ECOMOD v45 working candidate — recovery snapshot
+# ECOMOD v45 working candidate — verified recovery snapshot
 
-This directory is a byte-preserving recovery copy of `/home/user/ecomod_v45/` as audited on 2026-10-25. It is stored on the separate `workspace-recovery-2026-10-24` branch under a dated `local_only` path so the working materials are recoverable without representing them as an official release.
+This directory is a byte-preserving recovery copy of `/home/user/ecomod_v45/` as audited on 2026-10-25. It is on the separate `workspace-recovery-2026-10-24` branch under a dated `local_only` path. It is **not** an official release.
 
-The snapshot includes the current editable sources, data, figures, all candidate-build outputs, the latest readability PDFs, and QA renders. `ECOMOD_VERSION_CURRENCY_v45.md` records the full-history version scan; `REVIEW_STATUS_v45.md` and `CHANGELOG_v44_to_v45.md` describe the candidate's status and changes. The working checksum list is stale and is not a release manifest.
+The snapshot contains all 553 files from the working tree, including editable sources, data, figures, candidate-build outputs, current readability PDFs, and QA renders. The adjacent per-file audit records local paths, sizes, SHA-256 values, Git blob IDs, remote matches, archive paths, and cleanup disposition.
 
-**Release state:** working candidate only; this recovery snapshot is not the official ECOMOD v45 package and does not change or replace published v44. No official v45 release path was added to `main`. The per-file workspace reconciliation manifest and audit report sit in the parent dated recovery directory.
+**Remote verification:** commit `a40ec7db0f22cf80cde76f55ac4f912beea43efc`; 553/553 paths match; 85,930,999 bytes and 426 unique blobs were compared byte-for-byte with the local files, with zero mismatches.
 
-Local source path for this snapshot: `/home/user/ecomod_v45/`.
+The included `ECOMOD_VERSION_CURRENCY_v45.md` and `REVIEW_STATUS_v45.md` describe the candidate state; `SHA256SUMS_v45_working.txt` is a stale working checksum list, not a release manifest. The candidate has not been published to the official v45 path on `main`. Published v44 remains unchanged.
