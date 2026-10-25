@@ -1,6 +1,18 @@
-# Paper 3 latest deliverables — 2026-09-19
+# Paper 3 latest deliverables — full-length article v50
 
-This directory is the re-cloneable snapshot of the latest Paper 3 work. It contains the article sources, target-specific journal cuts, supplementary material, figure assets, validation records and deposit archives.
+**Snapshot chronology:** This folder was initially assembled on 2026-09-19. The current full-length article files (v50 Markdown, TeX, and PDF) were added on 2026-09-21. This metadata reconciliation is dated 2026-10-25.
+
+## Current full-length article
+
+The current full-length article is v50:
+
+- `manuscript/paper3_material_ledgers_v50.md` — Markdown source.
+- `manuscript/paper3_material_ledgers_v50.tex` — corresponding TeX source.
+- `manuscript/paper3_material_ledgers_v50.pdf` — 54-page PDF cited as v50.
+
+The v50 revision updates the titles of the linked companion-work references; the v50 PDF reflects those updates. The v49 Markdown, TeX, and PDF are retained in `manuscript/` as historical prior files. They have not been overwritten and are not the current full-length citation target.
+
+`CHECKSUMS.sha256` is a directory-wide SHA-256 manifest for all regular files in this folder except the manifest itself. It covers both the retained v49 files and current v50 files. To verify, run `sha256sum -c CHECKSUMS.sha256` from this directory.
 
 ## Contents
 
