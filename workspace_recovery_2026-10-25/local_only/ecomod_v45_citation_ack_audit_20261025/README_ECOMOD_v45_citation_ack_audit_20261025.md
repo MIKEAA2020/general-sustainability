@@ -10,8 +10,9 @@ The editable source parts in `source_parts/` and the assembled TeX/PDF files her
 
 - Restored the acknowledgment wording from v44, including the editors' “trust and support” and Arena.ai's “ingenuity and online tools.”
 - Updated the three companion citations to the latest located versions: Paper4 v41, assessment Paper06 v71, and material-ledgers Paper3 v50. Paper06's current title and current theorem locators replace the older v59 title and supplementary theorem locator.
-- Kept the existing ECOMOD author-year key mapping (`Abaee2026a` governance; `Abaee2026b` assessment; `Abaee2026c` ledger companion).
-- Corrected two abstract phrasings that had compressed the model too far: conversion is triggered when supply available to people falls short of demand—not when fast-land supply alone is insufficient—and the reduced fixed-demand model has at most one balance point, with the demand ceiling distinguished from the above-ceiling approach to the area floor.
+- Applied consistent same-author/year suffix ordering by title: Paper06 v71 (*Aggregation…*) is `Abaee2026a`, Paper4 v41 (*Governance delay…*) is `Abaee2026b`, and Paper3 v50 (*Typed Flux Ledgers…*) is `Abaee2026c`. The Our World in Data pair is likewise ordered: *Cereal yield* 2026a, *Cropland area* 2026b.
+- Corrected two abstract phrasings that had compressed the model too far: conversion is triggered when supply available to people falls short of demand—not when fast-land supply alone is insufficient—and the reduced fixed-demand model has at most one balance point, with the demand ceiling distinguished from the above-ceiling approach to the area floor. The abstract now scopes the nonzero slowest return rate to the reduced system.
+- Clarified one Results sentence: capital-land area approaches its lower balance value; the separately evolving quality state may continue changing its per-hectare contribution during that approach.
 - The intentional ECOMOD title, data vintage, equations, numerical results, propositions, and disclosure statements were not changed.
 
 See `AUDIT_NOTES_ECOMOD_v45_citation_ack_audit_20261025.md` for the branch/version scan, title decisions, readability findings, and the separate Paper3 v50 package-metadata note.
