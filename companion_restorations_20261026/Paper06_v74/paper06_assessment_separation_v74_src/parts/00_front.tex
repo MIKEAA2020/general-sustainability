@@ -1,0 +1,138 @@
+% =====================================================================
+% paper06_assessment_separation_v74
+% Parent: Paper06 v73 (preserved unchanged); earlier lineage is recorded in v72.
+% v74 (2026-10-27): source-checked revision of §§1.1–1.2, with shared physical,
+% destination and disturbance conditions stated explicitly; adds the full-cone
+% axis-weight cases to the witness narration. Inherits the v73 Figure 2 correction.
+% No model, numerical value, or theorem result is changed.
+% Build: tectonic paper06_assessment_separation_v74.tex (elsarticle, authoryear)
+% =====================================================================
+\documentclass[preprint,11pt,authoryear]{elsarticle}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\graphicspath{{./}{figs/}{paper06_assessment_separation_v74_src/figs/}}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue,citecolor=blue]{hyperref}
+\emergencystretch=3em
+\setlength{\tolerance}{2000}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\newcommand{\Etyp}{E_{\mathrm{typ}}}
+\newcommand{\Eend}{E_{\mathrm{end}}}
+\newcommand{\Ephys}{E_{\mathrm{tube,phys}}}
+\newcommand{\Vtyp}{\mathcal{V}_{\mathrm{typ}}}
+\newcommand{\Vweak}{\mathcal{V}_{\mathrm{weak}}}
+\newcommand{\Vphys}{\mathcal{V}_{\mathrm{phys}}}
+\newcommand{\Vend}{\mathcal{V}_{\mathrm{end}}}
+\newcommand{\Wp}{W_+}
+\newcommand{\FP}{\mathrm{FP}_{\mathrm{agg}}}
+\newcommand{\Tube}{\mathrm{Tube}}
+\newcommand{\Succ}{\mathrm{Succ}}
+\newcommand{\End}{\mathrm{End}}
+\newcommand{\conv}{\operatorname{conv}}
+\newcommand{\Rp}{\mathbb{R}^n_+}
+\newcommand{\Q}{\mathcal{Q}}
+\newcommand{\act}[1]{\textsc{#1}}
+
+\journal{Journal of Multi-Criteria Decision Analysis}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Transition Certification with Composite Indices: The Acceptance Gap Between Compensatory and Noncompensatory Rules}
+
+\author[1]{Amin Abaee\corref{cor1}}
+\ead{amin_abaee@ut.ac.ir}
+\cortext[cor1]{Corresponding author. ORCID: 0000-0002-0019-1842.}
+\affiliation[1]{organization={Independent Researcher}, city={Tehran}, country={Iran}}
+
+\begin{abstract}
+Composite indices certify transitions under weight-adaptive or common-plan rules. We compare them as robust finite-horizon problems with path-wise constraints and disturbances. The full-cone aggregate is lossless at a fixed trajectory, yet the plan/weight quantifiers need not commute. For finite menus of required-margin vectors, the gap is $\conv(\mathcal D)+\Rp$ outside the union of single-plan acceptance orthants; convexifying the menu closes it.
+
+An exact rational witness has a nonempty gap interior: at its canonical point both floors are $6/5$ and the equal-weight aggregate $12/5$ clears $2$, though no primitive plan meets both. A closed-form reserve threshold separates rescuable from impossible states; exact weight ratios identify the licensed plan on the gap interior. Blending closes the action-indexed gap, not the shared-shock gap; full-depth alternation does not implement a blend. On the witness-defined diagonal gap slice, every positive-elasticity CES index falsely certifies an exact interval; the Leontief limit is typed-safe. The shared-shock gap survives the exact $1/2$-cut; the distinct replace reading with identical plan- and weight-independent dips collapses the distinction (SI S4). Published DFO biomass/LRP figures are a limited scale/context anchor. Per-floor path minima, reserve and protocol reconstruct the typed verdict; the aggregate alone does not.
+\end{abstract}
+
+\begin{keyword}
+multi-criteria decision analysis \sep compensatory and noncompensatory aggregation \sep composite indicators \sep scalarization \sep robustness \sep sustainability assessment \sep viability
+\end{keyword}
+
+\end{frontmatter}
+
+\section{Introduction}\label{sec:intro}
+
+\subsection{Compensability as an acceptance question}
+
+A multi-criteria assessment of a sustainability transition begins with a familiar question: may a gain on one criterion compensate for a loss on another? Multi-attribute value theory makes trade-offs explicit in its value structure \citep{KeeneyRaiffa1976}. Outranking methods instead limit compensation through concordance and veto conditions \citep{Roy1996,Vincke1992}, while decision-aiding work on sustainable development has emphasized the incommensurability of some criteria \citep{Munda2005,MartinezAlier1998}.
+
+In environmental assessment, a related distinction appears between weak sustainability, where substitution among forms of capital is represented through an aggregate that must not decline, and strong sustainability, where selected stocks are treated as separately binding \citep{WorldBank2011,Neumayer2013,Boos2015,Daly1990,Ekins2003}. The indicator theory of these positions is well developed, as is the analysis of compensability in methods used for sustainability assessment \citep{Hanley1999,Martinet2011,CairnsMartinet2014,DoyenGajardo2020,Usubiaga2025,Cinelli2014,Schar2025}.
+
+Much of this work classifies aggregation at a fixed profile of criterion values. This paper asks a different question, about \emph{transitions}: when a plan must be carried out over time under disturbances and several criteria must hold along the entire path, when can a compensatory aggregate certify a transition that a noncompensatory assessment rejects? The question is not how weights should be elicited; that methodology is itself well developed \citep{Nardo2008,Becker2017}. Nor is it the familiar limitation of weighted sums in recovering nonconvex parts of a Pareto front \citep{DasDennis1997}. It instead concerns the acceptance rule, or sorting rule, applied to a composite reading of a transition: the rule that classifies it as accepted or rejected \citep{Roy1996}.
+
+\subsection{Two acceptance semantics}
+
+Fix a transition datum at state $z$, with typed-margin coordinates $s_i$ normalised so that zero is each binding floor, a finite menu $\mathcal A$, a declared disturbance set $D$, and common physical safe and destination sets $S^{\mathrm{phys}}$ and $G^{\mathrm{phys}}$. Write $s(p)=(s_1(p),\dots,s_n(p))$ for the typed-margin vector at any state $p$. Under exact-tube semantics, a plan is admissible only if, for every $d\in D$, its full tube lies in $S^{\mathrm{phys}}$ and its successor set lies in $G^{\mathrm{phys}}$.
+
+\begin{samepage}
+For each weight $w$ in the full nonnegative cone $\Wp=\Rp\setminus\{0\}$, let $E_w(z)$ be the menu plans that also keep $w\cdot s(p)\ge0$ at every tube state and every successor state, for every $d\in D$. Let $\Etyp(z)$ be the plans that meet those same physical, destination, and disturbance requirements but keep each typed floor $s_i(p)\ge0$ at every such state. Thus only the test applied to the typed margins differs: one rule checks their weighted sum, the other checks each margin separately.
+\end{samepage}
+
+The two acceptance rules differ only in the order of the quantifiers:
+\begin{itemize}[leftmargin=2em]
+\item \emph{Common-plan acceptance}: $\exists a\in\mathcal A\;\forall w\in\Wp:\ a\in E_w(z)$. One plan must serve every weight.
+\item \emph{Weight-adaptive acceptance}: $\forall w\in\Wp\;\exists a_w\in\mathcal A:\ a_w\in E_w(z)$. A plan may differ from one weight to another.
+\end{itemize}
+The first rule implies the second, but the converse can fail. On the full cone, $\Etyp(z)=\bigcap_{w\in\Wp}E_w(z)$: because $\Wp$ contains every coordinate weight, the aggregate tests recover each typed-floor constraint at every tube state and successor state. The physical and destination conditions are the same in both plan sets. Thus common-plan acceptance is exactly $\exists a\in\Etyp(z)$; any gap arises at the state level, where weight-adaptive acceptance may use different plans for different weights while common-plan acceptance requires one plan for all of them. Table~\ref{tab:protocols} places these rules among the four protocols considered in the paper.
+
+
+\begin{table}[!htbp]
+\centering\small
+\caption{Four acceptance protocols for a composite index on a transition datum. Protocols 3 (common-plan robustness) and 4 (typed acceptance) have the same accepted-plan and accepted-state sets on the full cone (Proposition~\ref{prop:hierarchy}(ii)); they are shown separately to distinguish the common-plan and typed formulations. The separation is Protocol 2 against either equivalent form.}
+\label{tab:protocols}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.25\textwidth} >{\raggedright\arraybackslash}p{0.27\textwidth} X}
+\toprule
+Protocol & Quantifier form & Reading \\
+\midrule
+1. Fixed-weight assessment & $a\in E_w(z)$ at a declared $w$ & one index, one selected plan: ordinary fixed-weight certification \\
+2. Weight-adaptive (per-weight) acceptance & $\forall w\ \exists a_w\in E_w(z)$ & for each weighting $w$, some plan $a_w$ is licensed; the plan may vary with $w$: the compensatory reading, $\Vweak=\bigcap_w\mathcal V_w$ \\
+3. Common-plan robustness & $\exists a\ \forall w:\ a\in E_w(z)$ & one plan serves every weighting; equivalent to Protocol 4 on the full cone \\
+4. Coordinate-wise (typed) acceptance & $\exists a:\ a\in\Etyp(z)$ & separately binding floors enforced path-wise; equivalent to Protocol 3 on the full cone \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+This comparison is analogous to the here-and-now versus wait-and-see distinction in adjustable robust optimisation, with the assessment weight playing the role of the parameter relative to which the plan is fixed \citep{BenTal2004}. The result concerns a certification protocol applied to a composite index, not the suitability of composite indices as descriptive summaries.
+
+In the witness, \act{fast} risks the first typed floor and \act{slow} the second. \act{staged} preserves both typed floors but consumes one unit of reserve, so it is physically feasible only when that reserve remains nonnegative throughout the bridge; \act{no-switch} is a status-quo baseline and misses the destination. At $(x,s_1,s_2)=(\tfrac12,\tfrac65,\tfrac65)$, every weight licenses at least one of the two principal transition plans, yet no plan in the declared menu is typed-admissible. This is a result for the stated datum and exact tubes, not a claim about an observed policy menu.
+
+
+\pagebreak
+\subsection{Contributions}
+
+The paper makes five contributions, stated in the order of the text.
+\begin{enumerate}[leftmargin=2em,label=(\roman*)]
+\item \emph{Localisation and hierarchy} (Section~\ref{sec:general}). On the full cone the typed operator is exactly the common-plan intersection, $\Etyp(z)=\bigcap_{w\in\Wp}E_w(z)$, and at any fixed trajectory the aggregate is lossless (Lemma~\ref{lem:cone}); the chain typed $\subseteq$ scalarized $\subseteq$ physical $\subseteq$ endpoint holds for every weight, and restricting the weight family can only enlarge the compensatory accepted set (Propositions~\ref{prop:hierarchy}--\ref{prop:monotone}). The separation is therefore dynamic -- a property of the quantifier over plans -- and the full cone is its strictest case.
+\item \emph{A geometric characterisation for any finite menu} (Theorem~\ref{thm:menu}). For plans whose coordinate-wise admissibility is governed by a required-margin vector $d_a$, weight-adaptive acceptance is $\conv(\mathcal D)+\Rp$ and common-plan acceptance is $\bigcup_a(d_a+\Rp)$; the acceptance gap is the part of the up-closed convex hull $\conv(\mathcal D)+\Rp$ not covered by any single plan, and convexifying the menu closes it. A synchronisation lemma (Lemma~\ref{lem:sync}) fixes the scope: the margin-vector geometry describes the protocol that scalarizes within-path maxima exactly, and is conservative for a protocol that scalarizes first and maximises afterwards.
+\item \emph{An explicit rational witness} (Theorem~\ref{thm:witness}). On a four-plan datum the gap is a region with nonempty interior, equal to the \emph{impossibility region} $I$; the aggregate-versus-floor discrepancy region splits at the reserve level $x=1$ into $I$ and a \emph{rescue set} $R$ that a reserve-financed staged plan already serves; exact thresholds $\rho_1=(2-s_1)/s_2$ and $\rho_2=s_1/(2-s_2)$ locate the licensing regions of the two principal plans, with coordinate-axis weights classified separately; and the minimal reserve increment that converts impossibility into rescue is $\kappa^*(z)=(1-x)\,\mathbf 1[z\notin\Vtyp]$ (Proposition~\ref{prop:rescue}). The separation persists under hold-prefix extension of the horizon and can be erased by a later stage with coincident terminal sets (Proposition~\ref{prop:persist}). The quantifier gap is sufficient but not necessary for false acceptance: at the canonical point $(x,s_1,s_2)=(1/2,6/5,6/5)$ the single fixed weight $(1,1)$ already accepts a primitive plan, because $12/5\ge2$, while no primitive plan meets both typed floors (Remark~\ref{rem:fixedweight}).
+\item \emph{What closes the gap and what does not} (Theorem~\ref{thm:blend}, Proposition~\ref{prop:timeshare}). Fractional blending of the primitive plans -- menu convexification at the level of control flows -- makes the typed accepted set of the action-indexed margin class coincide exactly with the compensatory region, so that gap is a property of the finite deterministic menu, not of either doctrine. The statement is class-specific: under the shared-shock class the blend window is empty at the canonical point ($12/5<5/2$), so blending does not close that gap (Proposition~\ref{prop:commonshock}). Full-depth alternation between the primitive plans does not implement a blend and closes the gap only where both dips are separately survivable; arbitrarily fine duty cycling is a different control class, which the alternation result does not rule out.
+\item \emph{Robustness of the separation to the aggregator and to the disturbance class} (Theorem~\ref{thm:ladder}, Proposition~\ref{prop:commonshock}). Replacing the linear index by a constant-elasticity-of-substitution (CES) aggregator with elasticity $\sigma$ changes the gap but does not remove it: the accepted rungs are nested, on the witness-defined diagonal gap slice, each positive-elasticity member falsely certifies an exact interval with critical floors $1<5/4<\sqrt2<\varphi<\sqrt3<\dots\to2$; therefore no positive elasticity is uniformly safe over the full gap, while the Leontief member ($\sigma=0$), which is the typed operator, is uniformly safe. Under a shared environmental shock striking every plan the gap survives, reduced by an exact $1/2$-cut, with the licensing thresholds unshifted on the surviving region; the reserve route then fails on an exact band of states.
+\end{enumerate}
+Every continuum statement is proved (\ref{app:general}--\ref{app:witness}; Supplementary Information, SI~S2); the exact-arithmetic check counts and the scope of the artifacts available for independent reproduction are recorded in SI~S7 and Data Availability. The core theorems are additionally formalised in Lean~4 (Section~\ref{sec:verification}). A resource-transition benchmark (Section~\ref{sec:benchmark}) realises the datum as a fishery transition with units anchored to a regulated biomass limit.
+
+\paragraph{What is not claimed} No ranking of weak and strong sustainability as doctrines; no proof that any particular set of boundaries ought to be treated noncompensatorily; no empirical fit, forecast, validation, or performance result for a resource system (published DFO values are a limited scale/context anchor only); no infinite-horizon, stochastic or partially observed extension. The impossibility region is a negative certificate relative to the specified plan menu, and the separation is exhibited for a declared disturbance class.
+
+\subsection{Position in the literature}
+
+The backward constructions used here are typed instances of robust-predecessor, capture-basin and reach--avoid constructions \citep{Aubin1991,Aubin2011,SaintPierre1994,Lygeros1999,AubinCatte2002}; the hierarchy of Proposition~\ref{prop:hierarchy}(i) is constraint-set monotonicity of viability kernels \citep{Aubin1991,Frankowska1989}; viability methods are established in natural-resource management \citep{DeLaraDoyen2008,Doyen2012}. The blend-collapse pair is the pure-versus-mixed-strategy structure of the assessor--planner game \citep{vonNeumann1928,Sion1958}, whose reach--avoid form is the discriminating kernel of \citet{Cardaliaguet1996}. In composite-indicator practice the critique of weights as value judgements presented as measurement \citep{Hickel2020,Fischer2022} and the construction of indices without weights from Pareto fronts \citep{Gao2023} both concern the index; the result here is orthogonal -- even with weights elicited faithfully, the quantifier order produces the gap. We do not assert priority over the elementary fact $\exists a\,\forall w\ne\forall w\,\exists a_w$, nor over the scalarization gap of multi-objective optimisation of which Theorem~\ref{thm:menu}(ii) is an instance; Section~\ref{sec:related} places the results against adjustable robust optimisation, the fixed-order and path-wise worst cases of multi-stage decision theory, randomisation-receptive assessment and the weak/strong sustainability debate, and states exactly which four claims are made as new and which are not.
