@@ -12,7 +12,7 @@ https://footprint.info.yorku.ca/files/2026/04/NEFBA_Data_global_national_ecologi
 Its `readme` sheet specifies **Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)**:
 https://creativecommons.org/licenses/by-sa/4.0/
 
-`world_data_extracted.csv` reformats the workbook's world sheet as CSV without changing its numerical data. That extraction is provided under the same CC BY-SA 4.0 license. The NFA-derived numerical transformations in `verification_results.json` and `verification_stdout.txt` retain that attribution and license. No provider endorsement is implied.
+`world_data_extracted.csv` reformats the workbook's world sheet as CSV without changing its numerical data. That extraction is provided under the same CC BY-SA 4.0 license. The NFA-derived numerical transformations in `verification_results.json`, `verification_stdout.txt`, `si_verification_results.json` and `si_verification_stdout.txt` retain that attribution and license. No provider endorsement is implied.
 
 ## OWID/FAOSTAT inputs
 

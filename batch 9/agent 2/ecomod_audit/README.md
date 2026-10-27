@@ -1,6 +1,6 @@
 # ECOMOD continued 10: independent audit
 
-Start with [the audit report](AUDIT_ECOMOD_C10.md). This package reviews the submitted `ecomod_continued_10.txt`, whose bytes match the pinned main `.tex` included under `reference/`.
+Start with [the main-paper audit](AUDIT_ECOMOD_C10.md) and [the standalone SI audit](AUDIT_ECOMOD_C10_SI.md). This package reviews the submitted `ecomod_continued_10.txt` and separately uploaded `ecomod_continued_10_SI.txt`. Both uploads are byte-identical to their pinned `.tex` reference copies under `reference/`.
 
 ## Main findings
 
@@ -15,6 +15,7 @@ Tested with Python 3.13 and the versions in `requirements.txt`:
 ```sh
 python -m pip install -r requirements.txt
 python verify_ecomod.py
+python verify_ecomod_si.py
 ```
 
 The script uses files relative to its own directory. If the original upload exists in the Arena workspace it also compares that source; otherwise it uses the pinned reference source. It writes `verification_results.json` and `world_data_extracted.csv` and prints the results. To refresh the recorded stdout:
@@ -22,6 +23,8 @@ The script uses files relative to its own directory. If the original upload exis
 ```sh
 python verify_ecomod.py > verification_stdout.txt
 ```
+
+The separate SI checker writes `si_verification_results.json` and prints its results. Refresh its log with `python verify_ecomod_si.py > si_verification_stdout.txt`. It adds reserve/gate counterexamples, debt-bound and boundary-reduction checks, a finite-difference Jacobian check, one-stock characteristic roots, all proxy-anchor rows, and label/citation-key checks. It does not rerun the author's comparator basin experiment or regeneration-data fits.
 
 The numerical integrator is an independent Euler reconstruction of the disclosed clipped model. Sub-percent differences from some author-reported outputs are not represented as exact reproduction. A numerical trajectory is not a continuum stability proof.
 
@@ -34,7 +37,7 @@ Repository: MIKEAA2020/general-sustainability, pinned commit `6f626ee48b2a3a5928
 Directory:
 https://github.com/MIKEAA2020/general-sustainability/tree/6f626ee48b2a3a59282b5df5adda76c8d5993fdc/agent%202%20productivity%20illusion/output_v45_ecomod_continued_10_gemini38_v4base_si_review_20261026
 
-The main reference `.tex` is byte-identical to the uploaded `.txt`; the companion SI was retrieved from that same directory.
+The main reference `.tex` is byte-identical to its uploaded `.txt`. The companion SI was retrieved from that same directory and is byte-identical to the later separate SI upload (SHA-256 `7e815ab3c5e384448c871d05cc71a735798c4ac265e66f8a068260cc10fb3aab`).
 
 ### NFA workbook
 
