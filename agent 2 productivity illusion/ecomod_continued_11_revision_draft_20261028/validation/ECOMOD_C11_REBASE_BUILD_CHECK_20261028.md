@@ -15,7 +15,7 @@ The canonical C11 main and SI were rebuilt from the actual assembled C10 pair:
 
 The editable C11 modules are under `parts/`; `assemble.py` concatenates them and inlines the maintained SI table fragments. The assembled outputs were checked against the modules by `check_c11_sources.py`; there are no residual `\\input{...}` commands. `C11_REBASE_DIFF_vs_ASSEMBLED_C10_20261028.patch` is a direct diff against the two authoritative files above.
 
-The earlier draft based on the v45 working-tree TeX is preserved in `../ecomod_continued_11_misbased_v45_superseded_20261028/`. It is not a source for this canonical C11. The copied v45 model implementation is used only as a legacy comparator/test-harness or as documented producer-package reference where appropriate; it is not the manuscript/SI base. The separate C10 results-provenance report distinguishes producer-package reproduction from revised-model outputs and records the unresolved historical run links.
+The earlier draft based on the v45 working-tree TeX is preserved in the pushed branch at `agent 2 productivity illusion/ecomod_continued_11_misbased_v45_superseded_20261028/`; its duplicate workspace copy was removed after byte verification. It is not a source for this canonical C11. The copied v45 model implementation is used only as a legacy comparator/test-harness or as documented producer-package reference where appropriate; it is not the manuscript/SI base. The separate C10 results-provenance report distinguishes producer-package reproduction from revised-model outputs and records the unresolved historical run links.
 
 SHA-256 of the final assembled C11 sources:
 

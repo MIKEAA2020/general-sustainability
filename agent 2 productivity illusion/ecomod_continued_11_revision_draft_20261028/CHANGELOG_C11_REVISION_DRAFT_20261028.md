@@ -7,7 +7,7 @@
 
 ## Source-lineage correction
 
-An earlier C11 attempt used the old v45 working-tree TeX as its source throughout. That attempt was not merely mislabeled. It is preserved at `../ecomod_continued_11_misbased_v45_superseded_20261028/` and is **superseded**. The canonical C11 main and SI were rebuilt from the actual assembled C10 files listed in `README.md`, then split into the modular sources under `parts/`. `C11_REBASE_DIFF_vs_ASSEMBLED_C10_20261028.patch` records the full source diff. The original v45 package and archived C10/C8/C9 artifacts remain unchanged.
+An earlier C11 attempt used the old v45 working-tree TeX as its source throughout. That attempt was not merely mislabeled. It is preserved in the pushed branch at `agent 2 productivity illusion/ecomod_continued_11_misbased_v45_superseded_20261028/` and is **superseded**; its duplicate workspace copy was removed after byte verification. The canonical C11 main and SI were rebuilt from the actual assembled C10 files listed in `README.md`, then split into the modular sources under `parts/`. `C11_REBASE_DIFF_vs_ASSEMBLED_C10_20261028.patch` records the full source diff. The original v45 package and archived C10/C8/C9 artifacts remain unchanged.
 
 The v45 solver remains relevant only as part of the separately documented producer-package/implementation comparison. It is not the manuscript/SI base. Fresh C11 simulation outputs generated after the rebase are identified separately from the archived C10 results; no matching number or plot is treated as proof of the historical C10 run path.
 

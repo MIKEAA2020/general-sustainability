@@ -21,12 +21,14 @@
 
 The current C11 **manuscript and SI TeX** were split and revised from the actual assembled C10 pair—not from the old v45 working-tree TeX:
 
-- Main: `../output_v45_ecomod_continued_10_gemini38_v4base_si_review_20261026/ecomod_continued_10.tex`  
+- Repository main: `../output_v45_ecomod_continued_10_gemini38_v4base_si_review_20261026/ecomod_continued_10.tex`  
+  Matching workspace copy: `../ecomod_v45/output_v45_ecomod_continued_10_gemini38_v4base_si_review_20261026/ecomod_continued_10.tex`  
   SHA-256 `9a5970ff26851f3b5495aff1341a484ecdfc7f33877c24493aff11bce596c971`
-- SI: `../output_v45_ecomod_continued_10_gemini38_v4base_si_review_20261026/ecomod_continued_10_SI.tex`  
+- Repository SI: `../output_v45_ecomod_continued_10_gemini38_v4base_si_review_20261026/ecomod_continued_10_SI.tex`  
+  Matching workspace copy: `../ecomod_v45/output_v45_ecomod_continued_10_gemini38_v4base_si_review_20261026/ecomod_continued_10_SI.tex`  
   SHA-256 `7e815ab3c5e384448c871d05cc71a735798c4ac265e66f8a068260cc10fb3aab`
 
-The C11 diff and rebase/build record identify the ported edits. The earlier C11 attempt based on the v45 working-tree TeX is preserved, clearly marked superseded, at `../ecomod_continued_11_misbased_v45_superseded_20261028/`; it is not a source for the canonical draft. The `output_v45_*`, v45 history, `output_revision_projected/` pre-cleanup logs, and older checksum files retained here are reference/archive material, not alternative C11 source modules or the current C11 checksum manifest; the final build logs are under `output_submission_cleanup_20261028/`. The repository C10 source files at the path above, C8/C9, `main`, pins, checksums, and DOI deposits were not modified. The separate v45 package snapshot was also left unchanged.
+The C11 diff and rebase/build record identify the ported edits. The earlier, misbased attempt is preserved in the pushed branch at `agent 2 productivity illusion/ecomod_continued_11_misbased_v45_superseded_20261028/`; its duplicate workspace directory (which contained same-named PDFs with an older title and no contact-link annotations) was removed after byte-for-byte verification against the pushed commit. The branch retains the complete v45/C10 archive directories. Redundant local copies of those archives inside this C11 workspace were removed after exact comparison with the separate v45 package; that package remains unchanged. Current C11 sources, data, figures, work scripts, PDFs, QA evidence, manifests, and validation records remain here. Final build logs are under `output_submission_cleanup_20261028/`. The repository C10 source files at the path above, C8/C9, `main`, pins, checksums, and DOI deposits were not modified.
 
 ## Selected model and corrections
 
