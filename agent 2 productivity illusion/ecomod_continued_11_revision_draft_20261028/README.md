@@ -6,15 +6,16 @@
 
 ## Canonical files
 
-- `ecomod_continued_11_revision_draft_20261028.pdf` — current main draft (35 pages).
-- `ecomod_continued_11_revision_draft_20261028_SI.pdf` — current Supplementary Information (21 pages).
+- `ecomod_continued_11_revision_draft_20261028.pdf` — current main draft (36 pages).
+- `ecomod_continued_11_revision_draft_20261028_SI.pdf` — current Supplementary Information (23 pages).
 - `ecomod_continued_11_revision_draft_20261028.tex` and `_SI.tex` — assembled TeX sources.
 - `parts/` — editable modular TeX. `assemble.py` rebuilds the assembled files.
-- `build_c11.sh` — assembles, runs source checks, and builds both PDFs in ordered three-pass pdfLaTeX runs.
+- `build_c11.sh` — assembles, runs source checks, and builds both PDFs in three ordered passes (`pdflatex` by default; Tectonic is supported as a portable fallback).
 - `C11_REBASE_DIFF_vs_ASSEMBLED_C10_20261028.patch` — current source diff against the authoritative assembled C10 main/SI pair.
 - `CHANGELOG_C11_REVISION_DRAFT_20261028.md` — revision history and scope.
-- `validation/ECOMOD_C11_REBASE_BUILD_CHECK_20261028.md` — rebase, model-test, build, and PDF-contact-link record.
-- `validation/ECOMOD_C10_RESULTS_PROVENANCE_20261028.md` — separate audit of historical C10 code/output links and unresolved items.
+- `validation/ECOMOD_C11_REBASE_BUILD_CHECK_20261028.md` — original rebase, model-test, and build record.
+- `validation/ECOMOD_C11_REVIEW_FOLLOWUP_20261028.md` — version-matched follow-up to the targeted C11 review, including the revised findings, numerical verification, and rebuild.
+- `validation/ECOMOD_C10_RESULTS_PROVENANCE_20261028.md` — separate, unchanged audit of historical C10 code/output links and unresolved items.
 - `check_c11_sources.py` — deterministic source, title/contact-link, label/reference/citation, TeX-balance, and revision-regression checks.
 
 ## Correct source base and immutable boundary
@@ -51,10 +52,15 @@ The revisions also:
 - reconcile the delayed-quality recovery endpoint to `A_c(T)=0.677 ha`, recovery fraction `0.46`;
 - report the local projected-implementation and timestep checks at their tested scope, without claiming historical C10 producer-to-output provenance;
 - frame outside ecological records/frameworks as measurement and future-modeling precedents only, not validation or calibration of the present equation/parameters.
+- clarify that the conversion term determines the sign of net biocapacity change only when the other terms vanish; maintenance balance is not invariant during active conversion;
+- replace the broad B-only impossibility statement with the exact floor inequality, distinguish information limits from universal control impossibility, and scope any service-constrained claim to a stated controller class;
+- recompute both debt roots and numerical integrations from the same unrounded demand inputs, distinguish multiplicative `alpha` from the additive comparator coefficient, and retain `D(0)` in transient debt bounds;
+- relabel the reserve minimum as a monitored threshold rather than an enforced hard floor, report the actual tested reserve minima, and make SI gate-table endpoint/extrema windows explicit;
+- qualify finite-grid monotonicity as tested-run evidence and remove un-reproduced cross-study recovery-fit medians; scope supply-only observations to the `b_G,c rho_c` product; dynamic identification would require informative quality-trajectory data.
 
 ## Output provenance: keep revised runs and C10 history distinct
 
-`figures/fig1_model_dynamics.png`, `si_drawdown_depth.csv`, and the SI drawdown/recovery table fragments were freshly regenerated in this local draft using the projected solver. The Figure 1 PNG and drawdown CSV are byte-identical to the archived C10/v45-producer copies; the regenerated drawdown/recovery table fragments match the C10 displayed table bodies exactly. The fresh SI delay-sensitivity table was generated separately and reproduces the archived displayed precision, but it does not prove which historical run generated C10 Table S2. Other unchanged empirical figures and retained SI outputs remain C10 account/reproduction artifacts, not newly validated model outputs. See the two separate records under `validation/` for the tested implementation and the remaining historical run-to-output gaps.
+`figures/fig1_model_dynamics.png`, `si_drawdown_depth.csv`, and the SI drawdown/recovery table fragments were freshly generated or updated in this local draft using the projected solver. Figure 1's substantive values remain unchanged. The CSV now includes post-hoc minimum-reserve and maximum-fast-land diagnostics for both restoration settings, so it is not byte-identical to the earlier producer-package CSV; the existing drawdown/recovery table bodies retain their displayed model values. The fresh SI delay-sensitivity table was generated separately and reproduces the archived displayed precision, but it does not prove which historical run generated C10 Table S2. Other unchanged empirical figures and retained SI outputs remain C10 account/reproduction artifacts, not newly validated model outputs. See the two separate records under `validation/` for the tested implementation and the remaining historical run-to-output gaps.
 
 ## Rebuild and checks
 
@@ -64,6 +70,6 @@ From this directory, run:
 ./build_c11.sh
 ```
 
-The script runs `assemble.py`, `check_c11_sources.py`, and three pdfLaTeX passes for the main paper followed by three passes for the SI. Build logs and contact-link verification are retained under `output_submission_cleanup_20261028/`. The source checker verifies title restoration, clickable email and ORCID in both assembled documents, modular/assembled synchronization, labels/references/citations, balance, and revision-specific claims. The final PDFs are 35 pages (main) and 21 pages (SI); no unresolved labels/citations or overfull boxes were found. The main PDF has nonfatal `hyperref` title-author-note warnings; dense-table/bibliography underfull boxes are recorded in the build logs. `mutool` inspection confirms valid mailto and ORCID annotations in both PDFs. Exact current file hashes are listed in `SHA256SUMS_C11_LOCAL_20261028.txt`; that is a local-draft manifest, not a refresh of any archived v45/C10 checksum list.
+The script runs `assemble.py`, `check_c11_sources.py`, and three ordered passes for the main paper followed by three for the SI. `pdflatex` remains the default; set `TEX_ENGINE=tectonic` (or an executable path to Tectonic) if pdfLaTeX is unavailable. Build logs and contact-link verification are retained under `output_submission_cleanup_20261028/`. The source checker verifies title restoration, clickable email and ORCID in both assembled documents, modular/assembled synchronization, labels/references/citations, balance, and revision-specific claims. The latest build used Tectonic 0.17.0 because `pdflatex` is not installed in this workspace; the follow-up record gives the 36-page main and 23-page SI hashes and diagnostics. No unresolved labels or citations remain. There is one 2.608 pt front-page overfull box under Tectonic, several underfull boxes in dense tables/bibliography, and nonfatal `hyperref` title/author-note warnings; the parameter-table float now fits. `pypdf` inspection confirms the mailto and ORCID annotations in both PDFs. Exact current file hashes are listed in `SHA256SUMS_C11_LOCAL_20261028.txt`; that is a local-draft manifest, not a refresh of any archived v45/C10 checksum list.
 
 **Repository snapshot:** pushed on branch `agent/p06-ecomod-c11-local-draft-20261028`. This is not a DOI deposit, publication, or issued release.

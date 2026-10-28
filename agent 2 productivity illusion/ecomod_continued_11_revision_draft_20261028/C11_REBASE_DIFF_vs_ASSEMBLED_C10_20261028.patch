@@ -42,15 +42,22 @@
  Areas $A_f$, $A_c$, and $A_r$ are measured in hectares; $B$, $E$, and $S$ are annual account amounts in gha, with the annual basis implicit. $D$ is measured in gha\,yr; both $\dot D$ and $\eta D$ are in gha. It is an internal model state driven by aggregate deficit, not an area, a physical stock, or an NFA-reported quantity. The optional technology boost $T_b$ raises fast-land yield along a bounded logistic curve. It is off in the baseline, figures, and tables, and appears only in the matched comparison in SI~\S S8. The dynamic states are $A_f$, $A_c$, $q$, $P$, and $D$; timber liquidation and direct restoration from fast land to capital land are not active in the reported runs (SI~\S S1).
  
  \paragraph{Core system feedbacks} The equations permit two conditional feedbacks:
-@@ -138,7 +138,7 @@
+@@ -138,13 +138,13 @@
  
  \subsection{Parameter selection and empirical grounding}\label{sec:params}
  
 -Table~\ref{tab:params} summarizes the baseline parameter values and their evidence status. Parameters are representative rather than econometrically fitted; the model is designed to isolate structural mechanisms, not to generate precise historical forecasts. To keep the model tractable, it consolidates forests, soils, wetlands, and other slow-renewing systems into one effective capital-land class, although their extent, condition, yields, and recovery times differ substantially. Empirical records provide timescale context: secondary forest biomass reaches half its reference level after a median of about $30$\,yr; trajectories for 33 collapsed fish stocks give a median time to half-recovery of about $5.6$\,yr; and soil organic carbon approaches a new balance over roughly $17$--$23$\,yr (SI~\S S5.5) \citep{Poorter2016,HutchingsReynolds2004,Neubauer2013,Poeplau2011}. These heterogeneous records do not define a pooled global average, estimate $\rho_c$, or determine the model delay $\tau_g$.
-+Table~\ref{tab:params} summarizes the baseline parameter values and their evidence status. Parameters are representative rather than econometrically fitted; the model is designed to isolate structural mechanisms, not to generate precise historical forecasts. To keep the model tractable, it consolidates forests, soils, wetlands, and other slow-renewing systems into one effective capital-land class, although their extent, condition, yields, and recovery times differ substantially. Empirical records provide timescale context: secondary forest biomass reaches half its reference level after a median of about $30$\,yr; trajectories for 33 collapsed fish stocks give a median time to half-recovery of about $5.6$\,yr; and soil organic carbon approaches a new balance over roughly $17$--$23$\,yr (SI~\S S5.5) \citep{Poorter2016,HutchingsReynolds2004,Neubauer2013,Poeplau2011}. These heterogeneous records do not define a pooled global average, estimate $\rho_c$, or determine the model delay $\tau_g$. They are measurement and future-modeling precedents only; they do not validate the present generic quality equation or identify its parameters.
++Table~\ref{tab:params} summarizes the baseline parameter values and their evidence status. Parameters are representative rather than econometrically fitted; the model is designed to isolate structural mechanisms, not to generate precise historical forecasts. To keep the model tractable, it consolidates forests, soils, wetlands, and other slow-renewing systems into one effective capital-land class, although their extent, condition, yields, and recovery dynamics differ substantially. Published forest, fish-stock, and soil studies use heterogeneous recovery definitions and document system-specific responses (SI~\S S5.5) \citep{Poorter2016,HutchingsReynolds2004,Neubauer2013,Poeplau2011}. We do not refit a common recovery curve or compute harmonized $t_{50}$ or $\tau_r$ values from those records here. They are measurement and future-modeling precedents only; they do not estimate $\rho_c$ or $\tau_g$, validate the present generic quality equation, or identify its parameters.
  
  Two data-based quantities provide context for cropland but do not calibrate the model: the NFA cropland account value per unit area and a separate cereal-yield/cropland-area proxy (SI~\S S5). Their boundaries do not map one-to-one onto model fast land, and neither is a fitted value of $b_f$ or a direct measure of ecological capital. Finally, the baseline assumes $b_f-\Ups(q)>0$. This is an explicit conditional modeling regime for examining when a short-term contribution premium can mask a change in land composition, not a universal empirical claim.
  
+ \begin{table}[!htbp]
+ \centering\footnotesize
+-\renewcommand{\arraystretch}{0.95}
++\renewcommand{\arraystretch}{0.80}
+ \caption{Baseline parameter values and evidence status. Representative values are effective, lumped quantities; the NFA account/area quotient is descriptive, not a physical-yield measurement. Extension parameters are active only in scenarios specified in this table or the SI. Symbols and units are listed in SI~\S S1.}
+ \label{tab:params}
+ \setlength{\tabcolsep}{4pt}
 @@ -152,11 +152,11 @@
  \toprule
  Parameter & Value & Meaning & Status \\
@@ -65,7 +72,7 @@
  $\mu$ & $0.06$\,yr$^{-1}$ & cropland maintenance (reserve$\to$fast) & representative \\
  $\eta_f$ & $0.05$\,yr$^{-1}$ & fast-land retirement (fast$\to$reserve) & representative \\
  $\tconv$ & $1.0$\,yr & conversion time constant & representative \\
-@@ -164,7 +164,7 @@
+@@ -164,11 +164,13 @@
  $\eta$ & $0.05$\,yr$^{-1}$ & debt-repayment rate ($>0$) & representative \\
  $e$ & $0.55$\,gha\,cap$^{-1}$ & per-capita footprint (constant) & representative \\
  $r$ & $0.02$\,yr$^{-1}$ & intrinsic population growth & representative \\
@@ -74,7 +81,14 @@
  $A_{tot}$ & $2.5$\,ha & total bioproductive area & normalization \\
  $\sigma_f,\ \sigma_c$ & $1,\ 1$ (dimensionless) & human-available shares of annual account amounts & baseline ($<1$: reservation extension) \\
  $\chi_r$ & $0.10$\,gha$^{-1}$\,yr$^{-1}$ & surplus-gated restoration coefficient & on with endogenous demand; off under frozen demand \\
-@@ -192,18 +192,13 @@
+-$\Acmin$, $A_r^{\min}$,\newline $K_{\min}$ & $0.05$\,ha, $0.10$\,ha,\newline $0.02$\,cap & typed floors & domain constraints \\
++$\Acmin$ & $0.05$\,ha & capital-land area floor & enforced by conversion-rate law \\
++$A_r^{\min}$ & $0.10$\,ha & reserve monitoring threshold & not enforced by the update \\
++$K_{\min}$ & $0.02$\,cap & carrying-capacity floor & imposed in definition of $K$ \\
+ $\Delta b$, $\kappa_w$,\newline $t_{wave}$ & $1.0$\,gha\,ha$^{-1}$, $0.1$\,yr$^{-1}$,\newline $40$\,yr & technology wave & off in baseline; active only in the matched SI S8 experiment \\
+ \bottomrule
+ \end{tabularx}
+@@ -192,18 +194,13 @@
  
  \subsection{Numerical implementation}\label{sec:numerics}
  
@@ -85,10 +99,10 @@
 -  \item $P\ge0$ and $D\ge0$;
 -  \item $K\ge K_{\min}$.
 -\end{itemize}
-+We integrate the delay equations by the method of steps with an explicit first-order Euler scheme. At step $k$, current states are read at $t_{k-1}$; time-dependent inputs and delayed values are evaluated at $t_k$, with linear interpolation of the delayed $q$ and $B$ histories. The raw delayed quality velocity is projected onto $T_{K_q}(q(t_{k-1}))$ before the Euler update; the updated quality is then clipped to $K_q$ as a finite-step safeguard. Other state bounds are applied, reserve area is reconstructed as $A_r=A_{tot}-A_f-A_c$, and the updated $B$ is stored in the delay history. The positive-part operator is evaluated exactly. Baseline demonstration and high-resolution threshold runs use $\Delta t=0.05$\,yr; broader drawdown sweeps use $0.1$\,yr, with selected thresholds rechecked at $0.05$\,yr.
++We integrate the delay equations by the method of steps with an explicit first-order Euler scheme. At step $k$, current states are read at $t_{k-1}$; time-dependent inputs and delayed values are evaluated at $t_k$, with linear interpolation of the delayed $q$ and $B$ histories. The raw delayed quality velocity is projected onto $T_{K_q}(q(t_{k-1}))$ before the Euler update; the updated quality is then clipped to $K_q$ as a finite-step safeguard. The explicitly enforced state bounds are applied, reserve area is reconstructed as $A_r=A_{tot}-A_f-A_c$, and the updated $B$ is stored in the delay history. The reserve threshold $A_r^{\min}$ is monitored rather than projected; the optional $A_f^{\max}$ ceiling is not active in reported runs. The positive-part operator is evaluated exactly. Baseline demonstration and high-resolution threshold runs use $\Delta t=0.05$\,yr; broader drawdown sweeps use $0.1$\,yr, with selected thresholds rechecked at $0.05$\,yr.
  
 -We initialize the pre-run histories over the full longest active delay window, $\max\{\tau_g,\tau_p\}$, from the initial state, not at zero: $q(t)=q_0$ and $B(t)=B_0$, with $B_0$ calculated from $A_{f0}$, $A_{c0}$, $q_0$, and $D_0$. In the matched technology-wave experiment (SI~\S S8), both runs share this no-wave prehistory; the wave run's current $B(0)$ is evaluated with $T_b(0)$, and its subsequent $B(t)$ values enter the delayed carrying-capacity input $K(t-\tau_p)$. Floor-proximity values depend on the step size and numerical tolerance, so we report interval bands rather than artificially precise scalar thresholds.
-+Pre-run histories are initialized over the full longest active delay window, $[-\max\{\tau_g,\tau_p\},0]$, as $q(s)=q_0$ and $B(s)=B_0$, with $B_0$ calculated from the initial state. In the matched technology-wave experiment (SI~\S S8), both runs share the no-wave prehistory; the active $T_b(0)$ changes current $B(0)$ and subsequent wave-adjusted $B(t)$ enters the delayed carrying-capacity input $K(t-\tau_p)$. The enforced state bounds are $A_c\ge\Acmin$, $A_f\ge0$, $q\in K_q$, $P,D\ge0$, and $K\ge K_{\min}$.
++Pre-run histories are initialized over the full longest active delay window, $[-\max\{\tau_g,\tau_p\},0]$, as $q(s)=q_0$ and $B(s)=B_0$, with $B_0$ calculated from the initial state. In the matched technology-wave experiment (SI~\S S8), both runs share the no-wave prehistory; the active $T_b(0)$ changes current $B(0)$ and subsequent wave-adjusted $B(t)$ enters the delayed carrying-capacity input $K(t-\tau_p)$. The enforced state bounds are $A_c\ge\Acmin$, $A_f\ge0$, $q\in K_q$, $P,D\ge0$, and $K\ge K_{\min}$. The reserve threshold $A_r^{\min}=0.10$\,ha is a post-hoc monitoring criterion, not an invariant enforced by the update; $A_f^{\max}$ is not imposed in the reported runs.
  
 -All primary trajectories use delayed ecological regeneration, $G_c(q(t-\tau_g))$. SI~\S S3 compares the instantaneous-quality alternative $G_c(q(t))$; SI~\S S8 reports the matched technology-wave experiment and step-size checks.
 +A finite-step consistency test compared post-Euler quality clipping with explicit tangent-cone projection before the Euler update. At $\Delta t=0.05$\,yr and $T=100$\,yr, using the Figure~\ref{fig:model} initial state and parameters, the tested arrays for $A_f$, $A_c$, $q$, $P$, $D$, $A_r$, $B$, $E$, and $T_b$ were exactly equal at $\tau_g=5,20,40$\,yr. For the continuous baseline quality path at $\tau_g=20$ or $40$\,yr, $q(t)=\min(1,0.9+0.0072t)$; its maximum piecewise-linear error fell from $7.1\times10^{-5}$ at $\Delta t=0.1$\,yr to $8.8\times10^{-6}$ at $0.0125$\,yr. In the full frozen-demand Figure~\ref{fig:model} case, halving $\Delta t$ from $0.05$ to $0.025$\,yr reduced maximum absolute differences against a $0.003125$\,yr reference from $0.00221$ to $0.00102$\,ha for $A_c$, $0.00180$ to $0.000831$\,gha for $B$, $0.000252$ to $0.000118$\,cap for $P$, and $0.00200$ to $0.000924$\,gha\,yr for $D$ (SI~\S S3). These checks establish equality only for the enumerated cases and show smaller differences under timestep refinement; they are not a universal error bound or proof of convergence for all settings.
@@ -97,7 +111,35 @@
  \section{Results}\label{sec:results}
  
  \subsection{When conversion raises the total as capital land declines}\label{sec:mask}
-@@ -256,12 +251,12 @@
+@@ -222,14 +219,14 @@
+ \dot B=\dconv(q)\,u_c+b_f\big(\mu A_r-\eta_f A_f\big)+b_{G,c}\,G_c'(q)\,A_c\,\dot q .
+ \end{equation}
+ \begin{enumerate}[label=(\roman*)]
+-\item During conversion ($u_c>0$), $A_c$ falls when restoration is off. The conversion component of $\dot B$ is $\dconv(q)u_c$, positive exactly when $\dconv(q)>0$. It determines the sign of net $\dot B$ only if maintenance balances retirement ($\mu A_r=\eta_fA_f$) and quality is unchanged ($\dot q=0$).
+-\item In the reduced comparison—with fixed demand and debt, baseline availability shares, balanced maintenance and retirement, and no quality change—a positive $\dconv$ makes the shortfall shrink during conversion. The shortfall closes if the balance point is reached before the area floor binds. If the floor binds first, $A_c$ approaches $\Acmin$ and a shortfall may persist. Other active terms in the full model can change this result.
+-\item At fixed $b_f>0$ and $q$, $B=b_fA_f+\Ups(q)A_c$ supplies one equation for the two land areas. Near an interior state, a small change in $A_c$ can be offset by $\delta A_f=-(\Ups/b_f)\delta A_c$ and $\delta A_r=-\delta A_f-\delta A_c$, preserving both $B$ and total area as long as the land bounds are respected. Thus several nearby allocations can have the same $B$; the aggregate alone does not identify $A_c$. For a finite observed change $\Delta B$, the offset is $\Delta A_f=(\Delta B-\Ups\Delta A_c)/b_f$. It is feasible only if all resulting areas remain within bounds, so the feasible range depends on the starting state. If $A_f$ and $b_f$ are observed independently, the residual $C=B-b_fA_f=\Ups(q)A_c$ identifies their product, not its two factors. An independent observation of $A_c$ would give $\Ups(q)=C/A_c$. A single value of $\Ups$ cannot separate $b_c$, $b_{G,c}$, $\rho_c$, and $q$. Even with informative observations of $q$, it identifies at most $b_c$ and the product $b_{G,c}\rho_c$, not $b_{G,c}$ and $\rho_c$ separately.
++\item During conversion ($u_c>0$), $A_c$ falls when restoration is off. The conversion component of $\dot B$ is $\dconv(q)u_c$, positive exactly when $\dconv(q)>0$. When maintenance balances retirement ($\mu A_r=\eta_fA_f$) and quality is unchanged ($\dot q=0$), it is the only term in \eqref{eq:identity} and determines the sign of net $\dot B$. These restrictions are sufficient, not necessary; otherwise the net sign depends on the magnitudes of all active terms, including the conversion contribution.
++\item At any instant in the reduced comparison—with fixed demand and debt, baseline availability shares, balanced maintenance and retirement, and no quality change—a positive $\dconv$ makes the shortfall shrink while conversion is active. This is a pointwise statement: with $R_{rc}=0$, $M=\mu A_r-\eta_fA_f$ evolves as $\dot M=-(\mu+\eta_f)M-\eta_fu_c$, so $M=0$ is not invariant when $u_c>0$. The pointwise identity therefore does not imply that the shortfall closes or that the trajectory reaches the area floor under the displayed land flows.
++\item At fixed $b_f>0$ and $q$, $B=b_fA_f+\Ups(q)A_c$ supplies one equation for the two land areas. Near an interior state, a small change in $A_c$ can be offset by $\delta A_f=-(\Ups/b_f)\delta A_c$ and $\delta A_r=-\delta A_f-\delta A_c$, preserving both $B$ and total area as long as the land bounds are respected. Thus several nearby allocations can have the same $B$; the aggregate alone does not identify $A_c$. For a finite observed change $\Delta B$, the offset is $\Delta A_f=(\Delta B-\Ups\Delta A_c)/b_f$. It is feasible only if all resulting areas remain within bounds, so the feasible range depends on the starting state. If $A_f$ and $b_f$ are observed independently, the residual $C=B-b_fA_f=\Ups(q)A_c$ identifies their product, not its two factors. An independent observation of $A_c$ would give $\Ups(q)=C/A_c$. From the supply observation relation alone, a single $\Ups$ value cannot separate $b_c$, $b_{G,c}$, $\rho_c$, and $q$. Observations of $\Ups(q)$ at multiple interior $q$ values constrain $b_c$ and the product $b_{G,c}\rho_c$ once $q_{\max}$ is specified. This does not rule out dynamic identification of $\rho_c$ from a calibrated quality trajectory with known delay and history and interior observations; that would use \eqref{eq:q}, not the supply relation alone.
+ \end{enumerate}
+ \end{proposition}
+ 
+ \begin{proof}
+-Differentiate \eqref{eq:B} with $b_f$ constant and substitute \eqref{eq:Ac}--\eqref{eq:Af} with $R_{rc}=0$: $\dot B=b_f(u_c+\mu A_r-\eta_fA_f)-\Ups u_c+b_{G,c}G_c'(q)A_c\dot q$, which is \eqref{eq:identity}. (i) Follows from \eqref{eq:identity} with $R_{rc}=0$; when the maintenance--retirement imbalance and quality-growth terms vanish, only the conversion term remains. (ii) Under the reduced-case conditions in the statement, $S=E-B$ and $\dot S=-\dot B=-\dconv u_c<0$ on $S>0$. Since $S$ is bounded below by zero and $A_c$ is bounded below by $\Acmin$, conversion either closes the shortfall or is limited by the floor. (iii) At fixed $b_f$ and $q$, the observation map is linear; an interior feasible point admits the stated small perturbations along a level set of $B$, while finite changes must also obey the area bounds. The residual $C$ identifies only $\Ups(q)A_c$ unless $A_c$ is independently observed; the parameter combination follows from the definition of $\Ups(q)$.
++Differentiate \eqref{eq:B} with $b_f$ constant and substitute \eqref{eq:Ac}--\eqref{eq:Af} with $R_{rc}=0$: $\dot B=b_f(u_c+\mu A_r-\eta_fA_f)-\Ups u_c+b_{G,c}G_c'(q)A_c\dot q$, which is \eqref{eq:identity}. (i) Follows from \eqref{eq:identity} with $R_{rc}=0$; when the maintenance--retirement imbalance and quality-growth terms vanish, only the conversion term remains. (ii) At an instant satisfying its restrictions, $S=E-B$ and $\dot S=-\dot B=-\dconv u_c<0$. With $M=\mu A_r-\eta_fA_f$ and $R_{rc}=0$, Eqs.~\eqref{eq:Ac}--\eqref{eq:Ar} give $\dot M=-(\mu+\eta_f)M-\eta_fu_c$; hence $M=0$ is not maintained under active conversion. This pointwise identity makes no claim that conversion closes the shortfall before the area floor binds. (iii) At fixed $b_f$ and $q$, the observation map is linear; an interior feasible point admits the stated small perturbations along a level set of $B$, while finite changes must also obey the area bounds. The residual $C$ identifies only $\Ups(q)A_c$ unless $A_c$ is independently observed; the parameter combination follows from the definition of $\Ups(q)$.
+ \end{proof}
+ 
+ Figure~\ref{fig:model}a follows the baseline run with demand fixed at $E=0.825$\,gha and restoration off. Initial states are $A_f=0.6$\,ha, $A_c=1.5$\,ha, $A_r=0.4$\,ha, and $q=0.9$. During conversion, model biocapacity $B$ rises from $0.594$ to $0.825$\,gha ($39\%$); capital-land area falls from $1.500$ to $0.808$\,ha ($46\%$), while fast-land area grows from $0.600$ to $0.923$\,ha.
+@@ -247,7 +244,7 @@
+ \begin{figure}[!htbp]
+ \centering
+ \includegraphics[width=\textwidth]{fig1_model_dynamics}
+-\caption{Baseline model results (Table~\ref{tab:params}). Account amounts $B$ and $E$ are in gha, land areas are in ha, and population is in cap. (a) Frozen demand ($E=0.825$\,gha), restoration off, and initial conditions $A_{f0}=0.6$\,ha, $A_{c0}=1.5$\,ha, and $q_0=0.9$. $B$ rises from $0.594$ to $0.825$\,gha as $A_c$ falls from $1.500$ to $0.808$\,ha and $A_f$ rises from $0.600$ to $0.923$\,ha. Shading marks the interval with $\dot B>0$ and $\dot A_c<0$ (about $149$\,yr; only the first $60$\,yr are shown). Within $25$\,yr, $98\%$ of the rise in $B$ and $85\%$ of the fall in $A_c$ occur. (b) Fixed-demand balance relation $B_{eq}(A_c)$; the listed balance areas are $A_c^*(E)=1.110$, $0.626$, $0.385$, $0.143$, and $0.070$\,ha at $E=0.70$, $0.90$, $1.00$, $1.10$, and $1.13$\,gha. The curve meets the minimum $A_c=0.05$\,ha at $\Eceil\approx1.138$\,gha; no balance point is admissible at higher demand. (c) Endogenous-demand runs with $\tau_g=20$\,yr, $\tau_p=25$\,yr, and $\chi_r=0.10$\,gha$^{-1}$\,yr$^{-1}$. For each initial area $A_{c0}$, the minimum area reached varies continuously and monotonically with $P_0$ ($E_0=eP_0$). The floor is approached asymptotically. Triangles mark the proximity values in Table~\ref{tab:model}, defined as within $10^{-6}$\,ha of the floor; no discontinuity is observed.}
++\caption{Baseline model results (Table~\ref{tab:params}). Account amounts $B$ and $E$ are in gha, land areas are in ha, and population is in cap. (a) Frozen demand ($E=0.825$\,gha), restoration off, and initial conditions $A_{f0}=0.6$\,ha, $A_{c0}=1.5$\,ha, and $q_0=0.9$. $B$ rises from $0.594$ to $0.825$\,gha as $A_c$ falls from $1.500$ to $0.808$\,ha and $A_f$ rises from $0.600$ to $0.923$\,ha. Shading marks the interval with $\dot B>0$ and $\dot A_c<0$ (about $149$\,yr; only the first $60$\,yr are shown). Within $25$\,yr, $98\%$ of the rise in $B$ and $85\%$ of the fall in $A_c$ occur. (b) Fixed-demand balance relation $B_{eq}(A_c)$; the listed balance areas are $A_c^*(E)=1.110$, $0.626$, $0.385$, $0.143$, and $0.070$\,ha at $E=0.70$, $0.90$, $1.00$, $1.10$, and $1.13$\,gha. The curve meets the minimum $A_c=0.05$\,ha at $\Eceil\approx1.138$\,gha; no balance point is admissible at higher demand. (c) Endogenous-demand runs with $\tau_g=20$\,yr, $\tau_p=25$\,yr, and $\chi_r=0.10$\,gha$^{-1}$\,yr$^{-1}$. In the tested runs, the sampled minimum area varies monotonically with $P_0$ for each initial area $A_{c0}$ ($E_0=eP_0$); the finite grid does not establish a general continuity theorem. The floor is approached asymptotically. Triangles mark the proximity values in Table~\ref{tab:model}, defined as within $10^{-6}$\,ha of the floor; no discontinuity is observed.}
+ \label{fig:model}
+ \end{figure}
+ 
+@@ -256,12 +253,12 @@
  Once population reaches carrying capacity, $P=K=B/e$ and demand $E=eP$ equals biocapacity $B$; the shortfall then closes. Conversion is therefore transient in the endogenous-population runs. To isolate how the balance point changes with demand, we also fix $E$ and analyze a reduced land system. The constraint $A_c\ge\Acmin$ is a \emph{typed floor}: it protects one land class, not the aggregate.
  
  \begin{proposition}[Balance point, demand ceiling and affine deficit-side dynamics]\label{prop:ceiling}
@@ -112,7 +154,7 @@
  \begin{equation}\label{eq:Acstar}
  A_c^*(E)=\frac{b_{f0}kA_{tot}-E}{b_{f0}k-b_c}.
  \end{equation}
-@@ -280,7 +275,7 @@
+@@ -280,23 +277,23 @@
  (i) With $S=0$ and $R_{rc}=0$, \eqref{eq:Af} gives $\mu A_r=\eta_fA_f$, hence $A_r/A_f=\eta_f/\mu$ and, with $A_r=A_{tot}-A_f-A_c$, $A_f=k(A_{tot}-A_c)$; substituting into \eqref{eq:B} with $q=q_{\max}$ ($\Ups=b_c$) and $D=0$ gives $B=B_{eq}(A_c)$, and $S=0$ requires $B\ge E$. Strict monotonicity and \eqref{eq:Acstar} follow from $b_{f0}k>b_c$. (ii) On the deficit side $u_c=(E-b_fA_f-b_cA_c)/(b_f\tconv)$ is affine in $z$; substituting into \eqref{eq:Ac}--\eqref{eq:Af} with $A_r=A_{tot}-A_f-A_c$ gives $J$ and a constant vector $c$ by direct differentiation; $\det J$ follows by expansion, and $\operatorname{tr}J=-\tconv^{-1}(1-b_c/b_f)-\mu-\eta_f<0$ for $b_c<b_f$. The fixed point solves $u_c=0$ and $\mu A_r=\eta_fA_f$, i.e.\ it is the balance point. Because $J$ is constant, convergence rates are constant along the branch. (iii) The map $D\mapsto\eta D+B_{eq}(\Acmin;D)-E$ is continuous, negative at $D=0$ when $E>\Eceil$, tends to $+\infty$, and is strictly increasing when $\eta>\alpha b_{f0}k(A_{tot}-\Acmin)\ge-\partial_DB_{eq}$; hence it has a unique root, which increases with $E$.
  \end{proof}
  
@@ -121,7 +163,13 @@
  
  At baseline, $k=0.5455$, the balance-branch slope parameter is $b_{f0}k-b_c=0.414$\,gha\,ha$^{-1}$, and the demand ceiling is $\Eceil=1.138$\,gha. Equation~\eqref{eq:Acstar} predicts balance areas of $1.110$, $0.626$, $0.385$, $0.143$, and $0.070$\,ha at demands of $0.70$, $0.90$, $1.00$, $1.10$, and $1.13$\,gha; these match the integrated equilibria (Fig.~\ref{fig:model}b). The eigenvalues of $J$ are real and negative ($\lambda_1=-0.0537$, $\lambda_2=-0.998$\,yr$^{-1}$). Across the tested fast-land yields, $\lambda_1$ shifts only from $-0.0522$ at $b_f=0.60$ to $-0.0556$\,yr$^{-1}$ at $b_f=2.00$ and never changes sign (Table~\ref{tab:model}a).
  
-@@ -292,7 +287,7 @@
+-Above the ceiling, the calculated debt equilibria are $D^*=1.19$ and $5.38$\,gha\,yr at $E=1.158$ and $1.238$\,gha; numerical integration gives $1.21$ and $5.39$\,gha\,yr. The uniqueness condition holds with margin: $\alpha b_{f0}k(A_{tot}-\Acmin)=0.034$\,yr$^{-1}$, below $\eta=0.05$\,yr$^{-1}$. Under fixed demand, debt therefore saturates rather than growing without bound.
++Above the ceiling, using the same unrounded inputs in both calculations, $E_{\mathrm{ceil}}=1.138409091$\,gha, and $E=E_{\mathrm{ceil}}+0.02=1.158409091$ and $E_{\mathrm{ceil}}+0.10=1.238409091$\,gha give $D^*=1.209655$ and $5.394538$\,gha\,yr. Integration from the maintenance-balanced allocation at $A_c=\Acmin$, with $D(0)=0$, $q=q_{\max}$, $\Delta t=0.1$\,yr and $T=1200$\,yr gives the same values to the displayed precision (SI~\S S2.4). The uniqueness condition holds with margin: $\alpha b_{f0}k(A_{tot}-\Acmin)=0.034$\,yr$^{-1}$, below $\eta=0.05$\,yr$^{-1}$. Under fixed demand, debt therefore saturates rather than growing without bound.
+ 
+ \emph{Critical slowing down} refers to a fold approach in which the slowest return rate tends to zero and the return time $T_{ret}\approx-1/\lambda_1$ grows. That does not occur along this reduced balance branch: its linearization is constant, $\lambda_1$ stays away from zero, and the return time remains near $19$\,yr as $E$ approaches $\Eceil$. The modeled signal is instead $A_c$ approaching its minimum—information an aggregate-only observation cannot provide.
+ 
+-When population responds to supply, the minimum $A_c$ reached varies continuously and monotonically with initial population $P_0$ for each starting area $A_{c0}$ (Fig.~\ref{fig:model}c). The trajectory approaches, but does not cross, the floor because $u_c\le(A_c-\Acmin)/\tconv$. A larger initial capital-land area supports a larger $P_0$ before the run approaches that floor.
++In the tested runs, the sampled minimum $A_c$ varies monotonically with initial population $P_0$ for each starting area $A_{c0}$ (Fig.~\ref{fig:model}c); the finite grid and selected bisections do not establish a general continuity result. The trajectory approaches, but does not cross, the floor because $u_c\le(A_c-\Acmin)/\tconv$. A larger initial capital-land area supports a larger $P_0$ before the run approaches that floor.
  
  Table~\ref{tab:model}b gives the initial populations for which $A_c$ comes within $10^{-2}$, $10^{-4}$, or $10^{-6}$\,ha of its minimum. These tolerance-based values are proximity markers, not abrupt thresholds. At the tightest tolerance, $P_0\approx2.41$, $2.70$, $2.98$, and $3.14$\,cap for $A_{c0}=0.40$, $0.70$, $1.00$, and $1.18$\,ha, respectively. They rise with starting area; no jump appears at any tested tolerance.
  
@@ -130,7 +178,29 @@
  
  \begin{table}[!htbp]
  \centering\small
-@@ -350,7 +345,7 @@
+-\caption{Model results at the baseline parameter set. (a) At $q^*=q_{\max}/2$ ($\Ups(q^*)=0.066$\,gha\,ha$^{-1}$), the table reports $\dconv(q^*)$, the eigenvalues of the deficit-side matrix $J$ in \eqref{eq:J}, and the demand ceiling across a sweep of $b_f$; all other parameters are at baseline. (b) For endogenous-demand runs with $A_{f0}=0.6$\,ha, $q_0=0.9$, $\tau_g=20$\,yr, and $\tau_p=25$\,yr, the table reports the initial population $P_0$ at which the minimum $A_c$ comes within the stated distance of the floor $\Acmin=0.05$\,ha. The first two columns use a $P_0$ grid with step $0.1$ ($\Delta t=0.1$\,yr, $T=400$\,yr); the final column uses bisection with the $10^{-6}$\,ha proximity criterion ($\Delta t=0.05$\,yr, $T=1000$\,yr). Because drawdown depth varies continuously with $P_0$ (Fig.~\ref{fig:model}c), these values define proximity bands, not a single threshold.}
++\caption{Model results at the baseline parameter set. (a) At $q^*=q_{\max}/2$ ($\Ups(q^*)=0.066$\,gha\,ha$^{-1}$), the table reports $\dconv(q^*)$, the eigenvalues of the deficit-side matrix $J$ in \eqref{eq:J}, and the demand ceiling across a sweep of $b_f$; all other parameters are at baseline. (b) For endogenous-demand runs with $A_{f0}=0.6$\,ha, $q_0=0.9$, $\tau_g=20$\,yr, and $\tau_p=25$\,yr, the table reports the initial population $P_0$ at which the minimum $A_c$ comes within the stated distance of the floor $\Acmin=0.05$\,ha. The first two columns use a $P_0$ grid with step $0.1$ ($\Delta t=0.1$\,yr, $T=400$\,yr); the final column uses bisection with the $10^{-6}$\,ha proximity criterion ($\Delta t=0.05$\,yr, $T=1000$\,yr). In the tested runs, sampled drawdown depth is monotone across the $P_0$ grid (Fig.~\ref{fig:model}c); neither the finite grid nor selected bisections establish general continuity. These values define proximity bands, not a single threshold.}
+ \label{tab:model}
+ \begin{tabular}{l l l l l}
+ \toprule
+@@ -335,14 +332,14 @@
+ \item Debt satisfies $D(t)\le\max\{D(0),\ \sup_{s\le t}\pos{E-B}(s)/\eta\}$. If the shortfall settles at $S^*$, then $D$ tends to $S^*/\eta$. The resulting reduction in fast-land yield depends on the size of that sustained shortfall.
+ \item The debt-related yield loss exceeds the largest possible technology gain once the sustained shortfall exceeds $S^\dagger=(\eta/\alpha)\ln(1+\Delta b/b_{f0})$, which is $1.30$\,gha at baseline.
+ \end{enumerate}
+-With additive degradation, $b_f=b_{f0}+T_b-\alpha D$, the two effects enter symmetrically; the comparison in (iii) then reduces to $\Delta b$ versus $\alpha D^*$. The asymmetry above follows from the model's multiplicative form.
++For the additive comparator $b_f=b_{f0}+T_b-\alpha_{\mathrm{add}}D$, where $\alpha_{\mathrm{add}}$ is a distinct coefficient with units ha$^{-1}$\,yr$^{-1}$, the two effects enter symmetrically; the comparison in (iii) then reduces to $\Delta b$ versus $\alpha_{\mathrm{add}}D^*$. The asymmetry above follows from the model's multiplicative form.
+ \end{proposition}
+ 
+ \begin{proof}
+ (i) is $0\le T_b\le\Delta b$. (ii) From \eqref{eq:D}, $\dot D\le\bar S-\eta D$ with $\bar S=\sup_{s\le t}\pos{E-B}$, so $D(t)\le\max\{D(0),\bar S/\eta\}$ by comparison; if $\pos{E-B}\to S^*$ then $D\to S^*/\eta$. (iii) compares $\alpha S^*/\eta$ with $\ln(1+\Delta b/b_{f0})$.
+ \end{proof}
+ 
+-With fixed demand and a persistent shortfall, $D$ approaches $S^*/\eta$; larger shortfalls imply higher debt. At baseline, the crossover $S^\dagger\approx1.3$\,gha exceeds baseline $B$. Under this parameterization, the minimum-area constraint limits conversion before debt-related yield loss exceeds the largest possible technology gain. Debt nevertheless reduces fast-land yield over time.
++With fixed demand and a persistent shortfall, $D$ approaches $S^*/\eta$; larger shortfalls imply higher debt. At baseline, the asymptotic sustained-shortfall crossover is $S^\dagger\approx1.3$\,gha. It is a scenario-specific comparison, not a transient trajectory threshold: the relative effect along a run depends on $D(0)$, demand history, and the summary window. Debt nevertheless reduces fast-land yield over time.
+ 
+ A technology boost can raise $B$ and carrying capacity; delayed population growth may raise demand too. Peak debt therefore depends on initial population and the summary window. In the matched SI~\S S8 experiment, for $P_0=1.0$\,cap, peak debt over $0$--$250$\,yr is $0.02020$\,gha\,yr with the boost and $0.00813$\,gha\,yr without it (ratio $2.49$). For $P_0=1.2$\,cap, the full-run maximum is lower with the boost ($0.05104$ versus $0.06122$\,gha\,yr), but the maximum after the $40$\,yr wave midpoint is higher ($0.02518$ versus $0.01085$\,gha\,yr; ratio $2.32$). These are conditional model results, not forecasts or empirical estimates.
+ 
+@@ -350,7 +347,7 @@
  
  Conversion moves land from capital to fast use. The model has no route back to capital land unless restoration $R_{rc}$ is active; fast-land retirement returns land to reserve instead. Lowering population, footprint, or shortfall therefore does not, by itself, reverse earlier conversion. With $\chi_r=0$, $A_c$ stays at its post-conversion level.
  
@@ -139,7 +209,7 @@
  
  The two restoration gates operate under different conditions. Surplus-gated restoration is inactive during a shortfall, but may continue after a surplus opens while population adjusts. Reaching a specified endpoint therefore requires a target-limited rule (SI~\S S4.4). Deficit-gated restoration acts during shortfall, when supply is already insufficient. At the tested rates, conversion outpaces restoration and drawdown continues. The result depends on timing and rates; neither gate is universally preferable.
  
-@@ -409,7 +404,7 @@
+@@ -409,7 +406,7 @@
  \item \textbf{Conversion can raise the total under a specific condition.} In the baseline frozen-demand run, $\dot A_c<0$ while $\dot B>0$ for a finite interval (Fig.~\ref{fig:model}a). Conversion adds to $B$ exactly when $\dconv>0$, although other flows, quality, debt, technology, and restoration determine the net change. With baseline shares $\sigma_f=\sigma_c=1$, conversion requires demand to exceed total biocapacity ($R_B=E/B>1$). The reserved-share extension can permit conversion when $R_B\le1$, but that is not a baseline result. A composition mask is rising $B$ with falling $A_c$; a liquidation mask is steady $E$ with falling $A_c$. The two patterns may overlap but are not interchangeable. The sign of $\dconv$ describes conversion's contribution, not necessarily the net change in $B$.
  \item \textbf{The duration depends on model rates, not a universal horizon.} The slow return rate $\lambda_1$ (along with $\tconv$, $\mu$, $\eta_f$, and $b_c/b_f$) sets the timescale; $\dconv$ and the initial shortfall affect the size of the change. In the baseline, most conversion occurs within one to two e-folding times, when the remaining gap shrinks by a factor of $e$.
  \item \textbf{The reduced model has no fold-type early warning.} Return time does not grow as demand approaches the ceiling, and drawdown depth changes continuously with demand (Fig.~\ref{fig:model}c). The model instead signals that $A_c$ is approaching its minimum. It predicts no fold-related warning before that boundary.
@@ -148,7 +218,7 @@
  \item \textbf{Recovery requires a return flow.} Lower demand alone does not restore capital-land area. The model needs an explicit restoration flow. A surplus-gated flow is inactive during shortfall, whereas a deficit-gated flow can further reduce provision.
  \end{enumerate}
  \clearpage
-@@ -419,7 +414,7 @@
+@@ -419,7 +416,7 @@
  
  The two-land model yields three results relevant to human--environment models \citep{Schaefer1954,May1973,Meadows1972,Meadows2004,WackernagelRees1996,BranderTaylor1998}. First, conversion can add to total biocapacity while $A_c$ falls. Whether $B$ rises overall also depends on other land flows and quality change; Proposition~\ref{prop:mask} gives the exact condition for the conversion term. The technology boost is capped, while debt depends on the magnitude and duration of shortfall (Proposition~\ref{prop:bounded}).
  
@@ -157,20 +227,30 @@
  
  SI~\S S7 gives a separate one-stock comparator. Its state $A$ has comparator-specific units; it is not $A_c$. With constant parameters and no debt, its equilibrium relation is $B(A)=(b+b_G\rho)A-(b_G\rho/A_{\max})A^2$, with $P=B(A)/e$. At the illustrated settings, $b_G\rho<b$, so the relation is monotone; an interior maximum would require other parameters. Its neutral equilibrium family and selected delay trajectories belong only to that formulation. They establish neither a fold nor a universal critical delay or collapse mechanism in the two-land model.
  
-@@ -435,10 +430,10 @@
+@@ -435,10 +432,10 @@
  \midrule
  Fold on the reduced frozen-demand branch & Absent & $B_{eq}(A_c)$ is strictly monotone; the balance point collides with the typed floor at $\Eceil\approx1.138\,\mathrm{gha}$ (Proposition~\ref{prop:ceiling}) \\
  Critical slowing as $E\to\Eceil$ & Absent & The slow eigenvalue remains negative and constant along the reduced branch \\
 -Hysteresis of the frozen-demand equilibrium relation & Absent & There is at most one feasible balance point; this does not imply history independence of realized states \\
 +Hysteresis of the reduced equality relation & Absent on this relation & There is at most one feasible equality point; fixed-demand surplus no-conversion allocations form a separate family, and the deficit-side eigenvalues are one-sided \\
  Path dependence of realized $A_c$ & Present, conditional & With $R_{rc}=0$, one-way conversion leaves $A_c$ below its pre-overshoot level after shortfall closure, while $\dot A_c=0$ at equilibrium \\
- Discontinuous response to endogenous demand & Not observed & In the reported runs, minimum $A_c$ varies continuously and monotonically with initial population; proximity thresholds depend on tolerance \\
+-Discontinuous response to endogenous demand & Not observed & In the reported runs, minimum $A_c$ varies continuously and monotonically with initial population; proximity thresholds depend on tolerance \\
 -Regeneration-delay sensitivity ($\tau_g$, with $\tau_p=25$\,yr) & Small in tested range & At $A_{c0}=1.0$\,ha, the delayed-quality $10^{-6}$\,ha threshold varies by $0.001$\,cap across $\tau_g=5,20,40$\,yr (SI Table S2); this does not establish invariance outside that range \\
++Discontinuous response to endogenous demand & Not observed & The sampled minimum $A_c$ varies monotonically across tested initial populations; proximity thresholds depend on tolerance. The finite runs do not establish a general continuity theorem \\
 +Regeneration-delay comparison ($\tau_g$, with $\tau_p=25$\,yr) & Degenerate at 20/40\,yr & Baseline quality reaches its imposed ceiling before either delay elapses, so those paths coincide; $\tau_g=5$\,yr is distinct. This is not general delay robustness (SI Table S2) \\
  \bottomrule
  \end{tabularx}
  \end{table}
-@@ -474,15 +469,15 @@
+@@ -464,7 +461,7 @@
+ 
+ \subsection{Policy controls and limits}
+ 
+-We compare three controls. A conversion stop triggered at $A_c=\Acmin$ preserves the capital-land floor. A ceiling on fast-land area $A_f$ does not guarantee that floor unless the stop rule is explicitly tied to it and to the remaining-area constraints. Nor can a heuristic governor that monitors only total $B$ guarantee the floor: the aggregate does not identify $A_c$.
++We compare three controls. The rate law in Eq.~(5) already preserves the capital-land floor from safe initial states: for $y=A_c-\Acmin\ge0$, $0\le u_c\le y/\tconv$ and $R_{rc}\ge0$ imply $\dot y\ge-y/\tconv$, hence $y(t)\ge y(0)e^{-t/\tconv}$. The floor is approached asymptotically; a stop is an operational safeguard, not an additional continuous-time guarantee in this model. A ceiling on fast-land area $A_f$ does not by itself enforce the capital-land constraint. Total $B$ cannot reconstruct $A_c$ or implement arbitrary $A_c$-dependent policies, but this information limitation is not a universal control impossibility: a constant no-conversion policy also preserves the floor. Any claim of impossibility while meeting a provision objective must specify the admissible controller class, state uncertainty, and objective.
+ 
+ The restoration gates also behave differently. Surplus-gated restoration is inactive during a shortfall; deficit-gated restoration acts during the shortfall and can reduce provision further. This comparison echoes the distinction between protective and mobilizing institutional feedback in related work \citep{Abaee2026a}. With a common reserved share, $\sigma_f=\sigma_c=\sigma<1$, conversion is inactive while $E\le\sigma B$. With separate shares, the condition is $E\le\sigma_fY_f+\sigma_cY_c$. This reservation applies to annual human-available flow, not to spatially protected area. Half-Earth, by contrast, is a spatial conservation target \citep{Wilson2016}. The connection is only the abstract idea of reservation: the model neither maps protected areas nor evaluates that proposal. Robustness to disturbances and parameter uncertainty remains untested.
+ 
+@@ -474,15 +471,15 @@
  
  \subsection{Limitations}
  
@@ -189,7 +269,7 @@
  
  Separately, NFA Edition 2026 world account values rise $24.86\%$ between 1961 and 2023, while biocapacity per person $B/P$ falls $52.71\%$ and the production footprint per person rises $16.73\%$. Cropland contributes $+24.06$ percentage points, Forest biocapacity $-5.95$, and Built-up land $+7.44$ as an accounting class. These normalized annual account values are not observations of physical stocks or model $A_c$.
  
-@@ -508,9 +503,9 @@
+@@ -508,9 +505,9 @@
  
  \paragraph{Declaration of generative AI in scientific writing} DeepSeek AI and Claude (Anthropic) assisted with computational-reproducibility checks under the author's supervision; the author reviewed and edited the content and takes full responsibility for the publication.
  \begin{thebibliography}{99}
@@ -202,7 +282,7 @@
  \bibitem[{Anderies(2000)}]{Anderies2000} Anderies, J. M. (2000). On modeling human behavior and institutions in simple ecological economic systems. \emph{Ecological Economics}, 35(3), 393--412.
  \bibitem[{Becker et al.(2017)}]{Becker2017} Becker, W., Saisana, M., Paruolo, P. \& Vandecasteele, I. (2017). Weights and importance in composite indicators: Closing the gap. \emph{Ecological Indicators}, 80, 12--22.
  \bibitem[{Blomqvist et al.(2013)}]{Blomqvist2013} Blomqvist, L., Brook, B. W., Ellis, E. C., Kareiva, P. M., Nordhaus, T. \& Shellenberger, M. (2013). Does the shoe fit? Real versus imagined ecological footprints. \emph{PLoS Biology}, 11(11), e1001700.
-@@ -529,7 +524,6 @@
+@@ -529,7 +526,6 @@
  \bibitem[{Haberl et al.(2007)}]{Haberl2007} Haberl, H., Erb, K.-H., Krausmann, F., Gaube, V., Bondeau, A., Plutzar, C., Gingrich, S., Lucht, W. \& Fischer-Kowalski, M. (2007). Quantifying and mapping the human appropriation of net primary production in earth's terrestrial ecosystems. \emph{PNAS}, 104(31), 12942--12947.
  \bibitem[{Henderson and Loreau(2018)}]{HendersonLoreau2018} Henderson, K. \& Loreau, M. (2018). How ecological feedbacks between human population and land cover influence sustainability. \emph{PLoS Computational Biology}, 14(8), e1006389.
  \bibitem[{Hutchings and Reynolds(2004)}]{HutchingsReynolds2004} Hutchings, J. A. \& Reynolds, J. D. (2004). Marine fish population collapses: consequences for recovery and extinction risk. \emph{BioScience}, 54(4), 297--309.
@@ -210,7 +290,7 @@
  \bibitem[{Krausmann et al.(2013)}]{Krausmann2013} Krausmann, F., Erb, K.-H., Gingrich, S., Haberl, H., Bondeau, A., Gaube, V., Lauk, C., Plutzar, C. \& Searchinger, T. D. (2013). Global human appropriation of net primary production doubled in the 20th century. \emph{PNAS}, 110(25), 10324--10329.
  \bibitem[{Lo et al.(2026)}]{Lo2026NFA} Lo, K., Basnet, N., Miller, E., Srikanthalingam, B., Foley, B., Van Berkum, J. L., Long, A. H., Toneva, P., Ermina, M. \& Klinkenberg, C. (2026). \emph{National Ecological Footprint and Biocapacity Accounts, Edition 2026 (1961--2025): Results and metadata, version 1.0.} Prepared for Footprint Data Foundation by researchers at York University and the University of Iceland. Workbook: \url{https://footprint.info.yorku.ca/files/2026/04/NEFBA_Data_global_national_ecological_footprint_biocapacity.xlsx}; release notes: \url{https://footprint.info.yorku.ca/files/2026/04/NEFBA_ReleaseNotes.pdf}; data page: \url{https://footprint.info.yorku.ca/data/}.
  \bibitem[{May(1973)}]{May1973} May, R. M. (1973). \emph{Stability and Complexity in Model Ecosystems.} Princeton: Princeton University Press.
-@@ -543,7 +537,6 @@
+@@ -543,7 +539,6 @@
  \bibitem[{Neubauer et al.(2013)}]{Neubauer2013} Neubauer, P., Jensen, O. P., Hutchings, J. A. \& Baum, J. K. (2013). Resilience and recovery of overexploited marine populations. \emph{Science}, 340(6130), 347--349.
  \bibitem[{Our~World~in~Data(2026a)}]{OWIDCereal2026} Our~World~in~Data (2026a). \emph{Cereal yield.} FAOSTAT data accessed through Our World in Data; grapher page last updated 25 February 2026; accessed 24 October 2026. \url{https://ourworldindata.org/grapher/cereal-yield}.
  \bibitem[{Our~World~in~Data(2026b)}]{OWIDCropland2026} Our~World~in~Data (2026b). \emph{Cropland area.} FAOSTAT data accessed through Our World in Data; grapher page last updated 25 February 2026; accessed 24 October 2026. \url{https://ourworldindata.org/grapher/cropland-area}.
@@ -239,7 +319,7 @@
  $P$ & human population & cap & state \\
  $D$ & leaky-debt state driven by aggregate deficit $E-B$ & gha\,yr & state \\
  $b_f$ & fast-land account yield per hectare, $(b_{f0}+T_b)e^{-\alpha D}$ & gha\,ha$^{-1}$ & derived \\
-@@ -75,14 +76,14 @@
+@@ -75,24 +76,28 @@
  $K$ & carrying capacity, $\max(B/e,K_{\min})$ & cap & algebraic \\
  $e$ & per-capita footprint & gha\,cap$^{-1}$ & parameter \\
  $r$ & intrinsic population growth rate & yr$^{-1}$ & parameter \\
@@ -250,15 +330,23 @@
  $\mu$ & cropland maintenance rate (reserve$\to$fast) & yr$^{-1}$ & parameter \\
  $\eta_f$ & fast-land retirement rate (fast$\to$reserve) & yr$^{-1}$ & parameter \\
  $\tconv$ & conversion time constant & yr & parameter \\
- $\alpha$ & degradation rate of $b_f$ per unit debt & gha$^{-1}$\,yr$^{-1}$ & parameter \\
+-$\alpha$ & degradation rate of $b_f$ per unit debt & gha$^{-1}$\,yr$^{-1}$ & parameter \\
++$\alpha$ & degradation rate of $b_f$ per unit debt in the multiplicative law & gha$^{-1}$\,yr$^{-1}$ & parameter \\
++$\alpha_{\mathrm{add}}$ & coefficient in the additive comparator $b_f=b_{f0}+T_b-\alpha_{\mathrm{add}}D$ & ha$^{-1}$\,yr$^{-1}$ & comparator only; distinct from $\alpha$ \\
  $\eta$ & debt-repayment rate & yr$^{-1}$ & parameter \\
 -$\tau_g,\ \tau_p$ & regeneration and demographic delays & yr & parameter \\
 +$\tau_g,\ \tau_p$ & regeneration and demographic delay scenarios & yr & scenario parameters \\
  $\sigma_f,\ \sigma_c$ & human-available shares of the two flows & dimensionless & parameter \\
  $R_{rc}$ & surplus-gated restoration, $\chi_rA_r\pos{B-E}$ (reserve$\to$capital) & ha\,yr$^{-1}$ & gated flow \\
  $\chi_r$ & restoration coefficient & gha$^{-1}$\,yr$^{-1}$ & parameter \\
-@@ -92,7 +93,7 @@
- $\Acmin$, $A_r^{\min}$, $A_f^{\max}$, $K_{\min}$ & capital viability floor, reserve floor, arable ceiling, carrying-capacity floor & ha, ha, ha, cap & typed floors \\
+ $T_b$ & technology yield increment, $\omega_{Tb}\Delta b/(1+e^{-\kappa_w(t-t_{wave})})$ & gha\,ha$^{-1}$ & off except in SI S8 \\
+ $\omega_{Tb}$ & activation flag for the technology wave & dimensionless & $0$ baseline; $1$ in SI S8 \\
+ $\Delta b$, $\kappa_w$, $t_{wave}$ & amplitude, steepness and center of the wave & gha\,ha$^{-1}$;\newline yr$^{-1}$; yr & active only in SI S8 \\
+-$\Acmin$, $A_r^{\min}$, $A_f^{\max}$, $K_{\min}$ & capital viability floor, reserve floor, arable ceiling, carrying-capacity floor & ha, ha, ha, cap & typed floors \\
++$\Acmin$ & capital-land area floor & ha & enforced by conversion-rate law \\
++$A_r^{\min}$ & reserve monitoring threshold ($0.10$) & ha & monitored post hoc, not enforced \\
++$A_f^{\max}$ & optional fast-land ceiling & ha & not active in reported runs \\
++$K_{\min}$ & carrying-capacity floor & cap & imposed in definition of $K$ \\
  $A_{tot}$ & total bioproductive area & ha & parameter \\
  $k$ & $\mu/(\mu+\eta_f)$, fast share of non-capital land at equilibrium & dimensionless & derived \\
 -$B_{eq}(A_c)$ & frozen-demand balance branch, $b_{f0}kA_{tot}-(b_{f0}k-b_c)A_c$ & gha & derived \\
@@ -266,16 +354,16 @@
  $\Eceil$ & demand ceiling, $B_{eq}(\Acmin)$ & gha & derived \\
  $\lambda_{1,2}$ & deficit-side Jacobian eigenvalues & yr$^{-1}$ & derived \\
  $R_B,R_A,\psi_f$ & $E/B$, $E/Y_f$, $Y_f/B$ (so $R_A=R_B/\psi_f$) & dimensionless & diagnostics \\
-@@ -106,7 +107,7 @@
+@@ -106,7 +111,7 @@
  
  \paragraph{Model extensions.} The reported simulations do not include timber liquidation or direct restoration from fast land to capital land. SI~\S S6 considers reservations of the human-available shares as a policy extension. The technology wave is off in the baseline and gate-sign comparison; it is switched on only for the matched experiment in SI~\S S8.
  
 -\paragraph{Conventions.} The positive-part operator is exact, conversion runs at the rate set by $\tconv$, and transfers conserve area across $A_f$, $A_c$, and $A_r$. Quality $q$ changes independently of area. Maintenance at rate $\mu A_r$ allows fast-land area to remain positive at equilibrium. The reserve floor $A_r^{\min}$ and arable ceiling $A_f^{\max}$ are domain constraints; all reported trajectories stay within them, and reserve land remains at least $0.80\,ha$ in the drawdown sweeps. We also enforce $A_c\ge\Acmin$, $A_f\ge0$, $q\in[0,q_{\max}]$, and $K\ge K_{\min}$.
-+\paragraph{Conventions.} The positive-part operator is exact, conversion runs at the rate set by $\tconv$, and transfers conserve area across $A_f$, $A_c$, and $A_r$. The quality index $q$ is uncalibrated and model-defined. Its continuous specification is $K_q=[0,q_{\max}]$ and $\dot q(t)=\Pi_{T_{K_q}(q(t))}G_c(q(t-\tau_g))$, where $G_c(x)=\rho_cx(1-x/q_{\max})$, $\rho_c>0$, and $q_{\max}>0$. We use an admissible continuous history $q(s)=\phi(s)\in K_q$ for $s\in[-\tau_g,0]$ and interpret the equation for an absolutely continuous solution almost everywhere. The baseline $q_{\max}=1$ is imposed as an admissibility bound, not an estimated ecological threshold; $\rho_c$ and $\tau_g$ are scenario settings, not estimates from recovery studies. Since $G_c(x)\ge0$ on $K_q$, the quality state is nondecreasing; outward velocity is projected to zero at the upper bound and the lower bound is invariant. Maintenance at rate $\mu A_r$ allows fast-land area to remain positive at equilibrium. The reserve floor $A_r^{\min}$ and arable ceiling $A_f^{\max}$ are domain constraints; all reported trajectories stay within them, and reserve land remains at least $0.80\,ha$ in the drawdown sweeps. We also enforce $A_c\ge\Acmin$, $A_f\ge0$, $q\in K_q$, and $K\ge K_{\min}$.
++\paragraph{Conventions.} The positive-part operator is exact, conversion runs at the rate set by $\tconv$, and transfers conserve area across $A_f$, $A_c$, and $A_r$. The quality index $q$ is uncalibrated and model-defined. Its continuous specification is $K_q=[0,q_{\max}]$ and $\dot q(t)=\Pi_{T_{K_q}(q(t))}G_c(q(t-\tau_g))$, where $G_c(x)=\rho_cx(1-x/q_{\max})$, $\rho_c>0$, and $q_{\max}>0$. We use an admissible continuous history $q(s)=\phi(s)\in K_q$ for $s\in[-\tau_g,0]$ and interpret the equation for an absolutely continuous solution almost everywhere. The baseline $q_{\max}=1$ is imposed as an admissibility bound, not an estimated ecological threshold; $\rho_c$ and $\tau_g$ are scenario settings, not estimates from recovery studies. Since $G_c(x)\ge0$ on $K_q$, the quality state is nondecreasing; outward velocity is projected to zero at the upper bound and the lower bound is invariant. Maintenance at rate $\mu A_r$ allows fast-land area to remain positive at equilibrium. The numerical update enforces $A_c\ge\Acmin$, $A_f\ge0$, $q\in K_q$, $P,D\ge0$, and $K\ge K_{\min}$; reserve area is reconstructed from total area, without projection onto $A_r\ge A_r^{\min}$. The reserve threshold is monitored post hoc, not an invariant of the displayed flow. In the reported $\Delta t=0.1$\,yr drawdown grid, the minimum reserve was $0.511$\,ha (initial reserve is $0.72$\,ha for $A_{c0}=1.18$\,ha); the gate-comparison minimum was $0.602$\,ha. These tested values exceed $A_r^{\min}=0.10$\,ha but do not prove invariance. The optional $A_f^{\max}$ ceiling is not imposed in reported runs.
  
  \section{Derivations and proofs}\label{si:proofs}
  
-@@ -132,17 +133,23 @@
+@@ -132,57 +137,65 @@
  \begin{equation}
  \lambda_{1,2}=\tfrac12\Big(\operatorname{tr}J\pm\sqrt{\operatorname{tr}^2J-4\det J}\Big)=-0.0537\,\mathrm{yr}^{-1},\ -0.9975\,\mathrm{yr}^{-1}.
  \end{equation}
@@ -304,12 +392,24 @@
  
  \subsection{Debt fixed points beyond the ceiling}\label{si:debt}
  
-@@ -159,30 +166,32 @@
+-For $E>\Eceil$, capital-land area approaches $A_c=\Acmin$ and the persistent shortfall feeds debt. At the floor, $B_{eq}(\Acmin;D)=b_{f0}e^{-\alpha D}k(A_{tot}-\Acmin)+b_c\Acmin$, so $\dot D=E-B_{eq}(\Acmin;D)-\eta D$. Its fixed point $D^*(E)$ satisfies $\eta D=E-B_{eq}(\Acmin;D)$. The right-hand side is increasing in $D$, making the fixed point unique and attracting when $\eta>\alpha b_{f0}k(A_{tot}-\Acmin)$; at baseline, $0.034\,\mathrm{yr}^{-1}<0.05\,\mathrm{yr}^{-1}$. Baseline values are $D^*=1.186$\,gha\,yr at $E=1.158$\,gha and $D^*=5.375$\,gha\,yr at $E=1.238$\,gha. Corresponding $B(D^*)$ values are $1.099$ and $0.969$\,gha, with persistent shortfalls $S^*=0.059$ and $0.269$\,gha. Under fixed demand, debt therefore saturates; it is unbounded only if the shortfall is unbounded.
++For $E>\Eceil$, capital-land area approaches $A_c=\Acmin$ and the persistent shortfall feeds debt. At the floor, $B_{eq}(\Acmin;D)=b_{f0}e^{-\alpha D}k(A_{tot}-\Acmin)+b_c\Acmin$, so $\dot D=E-B_{eq}(\Acmin;D)-\eta D$. Its fixed point $D^*(E)$ satisfies $\eta D=E-B_{eq}(\Acmin;D)$. The right-hand side is increasing in $D$, making the fixed point unique and attracting when $\eta>\alpha b_{f0}k(A_{tot}-\Acmin)$; at baseline, $0.034\,\mathrm{yr}^{-1}<0.05\,\mathrm{yr}^{-1}$. Using the unrounded demands $E=E_{\mathrm{ceil}}+0.02=1.158409091$ and $E=E_{\mathrm{ceil}}+0.10=1.238409091$\,gha gives $D^*=1.209655$ and $5.394538$\,gha\,yr. The floor-state integration uses $A_c(0)=\Acmin$, $A_f(0)=k(A_{tot}-\Acmin)$, $A_r(0)=(1-k)(A_{tot}-\Acmin)$, $q(0)=q_{\max}$, $D(0)=0$, $\Delta t=0.1$\,yr, and $T=1200$\,yr; its final debt agrees to the shown precision. The corresponding $B(D^*)$ values are $1.097926$ and $0.968682$\,gha, with persistent shortfalls $S^*=0.060483$ and $0.269727$\,gha. Under fixed demand, debt therefore saturates; it is unbounded only if the shortfall is unbounded.
+ 
+ \subsection{Boundedness asymmetry and the crossover shortfall}\label{si:bounded}
+ 
+-Equation~(12) gives $\ln b_f=\ln(b_{f0}+T_b)-\alpha D$. The technology term is bounded between $\ln b_{f0}$ and $\ln(b_{f0}+\Delta b)$, so its maximum contribution to $\ln b_f$ is $\ln(1+\Delta b/b_{f0})=\ln(1.85/0.85)=0.778$ at baseline. From Eq.~(13), $\dot D\le\bar S-\eta D$, where $\bar S$ is the running supremum of shortfall. Thus $D(t)\le\max\{D(0),\bar S/\eta\}$, and the debt channel contributes no less than $-\alpha\bar S/\eta$. The channels are equal in magnitude at $\bar S=S^\dagger=(\eta/\alpha)\ln(1+\Delta b/b_{f0})=1.296\,\mathrm{gha}$.
++Equation~(12) gives $\ln b_f=\ln(b_{f0}+T_b)-\alpha D$. The technology term is bounded between $\ln b_{f0}$ and $\ln(b_{f0}+\Delta b)$, so its maximum contribution to $\ln b_f$ is $\ln(1+\Delta b/b_{f0})=\ln(1.85/0.85)=0.778$ at baseline. From Eq.~(13), $\dot D\le\bar S-\eta D$, where $\bar S$ is the running supremum of shortfall. Thus $D(t)\le\max\{D(0),\bar S/\eta\}$ and the log-debt term is bounded below by $-\alpha\max\{D(0),\bar S/\eta\}$. If $D(0)=0$, this reduces to $-\alpha\bar S/\eta$. For a sustained shortfall with limit $S^*$, $D\to S^*/\eta$; its asymptotic debt loss equals the maximum technology log gain at $S^\dagger=(\eta/\alpha)\ln(1+\Delta b/b_{f0})=1.296\,\mathrm{gha}$. This is a sustained-shortfall comparison, not an exact transient equality for every run.
+ 
+-The fast-land contribution $Y_f=b_fA_f$ has the same two-channel structure; capital contribution $\Ups A_c$ is unaffected by either. Under the additive law $b_f=b_{f0}+T_b-\alpha D$, the effects are directly comparable as bounded increments ($\Delta b$ versus $\alpha D^*$), so the logarithmic asymmetry disappears. The bound above applies to the multiplicative specification.
++The fast-land contribution $Y_f=b_fA_f$ has the same two-channel structure; capital contribution $\Ups A_c$ is unaffected by either. Under the additive comparator $b_f=b_{f0}+T_b-\alpha_{\mathrm{add}}D$, the effects are directly comparable as bounded increments ($\Delta b$ versus $\alpha_{\mathrm{add}}D^*$), so the logarithmic asymmetry disappears. Here $[\alpha_{\mathrm{add}}]=\mathrm{ha}^{-1}\,\mathrm{yr}^{-1}$, distinct from the multiplicative $\alpha$ in Eq.~(12). The bound above applies to the multiplicative specification.
+ 
+ \subsection{Macro-ratio identities}\label{si:ratios}
+ 
  Set $R_B=E/B$, $R_A=E/Y_f$, and $\psi_f=Y_f/B$. Then $R_A=R_B/\psi_f$ by definition. The direct-yield share of capital contribution, $\psi_c=b_cA_c/Y_c$, is a different ratio; $R_A=R_B/\psi_c$ is not an identity. Aggregate balance occurs at $R_B=1$. With baseline shares $\sigma_f=\sigma_c=1$, $R_A>1$ is necessary but not sufficient for conversion: shortfall requires $E>B=Y_f+Y_c$, not merely $E>Y_f$. The threshold changes when flows are reserved. Capital-land area falls when $u_c>R_{rc}$, with $u_c$ defined in Eq.~(5). Thus, under baseline shares, conversion requires $R_B>1$. Under the reservation extension with $\sigma_f,\sigma_c<1$, conversion and declining $A_c$ can occur even when $R_B\le1$; aggregate overshoot is not required. At $q^*=q_{\max}/2$, the direct-yield share of capital value is $b_c/(b_c+b_{G,c}\rho_cq_{\max}/4)=0.758$ at baseline. This value applies at that point; it is not a structural constant.
  \section{Numerical methods and sensitivity analyses}\label{si:numerics}
  
 -\paragraph{Numerical method.} We integrate the delay equations by the method of steps with an explicit first-order Euler scheme. The positive-part operator is exact. We enforce $A_c\ge\Acmin$, $A_f\ge0$, $q\in[0,q_{\max}]$, $P,D\ge0$, and $K\ge K_{\min}$, and calculate reserve area as $A_r=A_{tot}-A_f-A_c$. Histories of $B$ and $q$ remain at their initial values over $[-\max(\tau_g,\tau_p),0)$. In the technology-wave experiment, both runs share the same no-wave history. The active $T_b(0)$ changes current $B(0)$, and later wave-adjusted values enter the delayed input $K(t-\tau_p)$. We use $\Delta t=0.05$\,yr for the demonstration and threshold bisection, and $0.1$\,yr for drawdown sweeps; selected thresholds are checked at $0.05$\,yr. At $A_{c0}=1.0$\,ha, the $10^{-6}$\,ha floor-proximity value shifts from $2.955$ to $2.98$\,cap across these step sizes. We therefore report thresholds as bands that depend on tolerance and numerical resolution.
-+\paragraph{Numerical method and finite-step implementation check.} The reported two-land simulations use the projected delayed-quality law in Eq.~(10), integrated by the method of steps with explicit first-order Euler updates. At step $k$, current states are read at $t_{k-1}$; the time-dependent technology input and delayed values are evaluated at $t_k$, with linear interpolation of the delayed $q$ and $B$ histories. The raw delayed quality velocity is projected onto $T_{K_q}(q(t_{k-1}))$ before the Euler update. After the state update, $q$ is clipped to $K_q=[0,q_{\max}]$ as a finite-step safeguard; the other bounded states are clipped, reserve area is reconstructed as $A_r=A_{tot}-A_f-A_c$, and the updated $B$ is stored in the delayed history. The positive-part operator is exact. For ordinary runs, $q(s)=q_0$ and $B(s)=B_0$ over the full pre-run interval $[-\max(\tau_g,\tau_p),0]$, with $B_0$ calculated from the initial state. In the technology-wave experiment, both runs share a no-wave prehistory; the active $T_b(0)$ changes current $B(0)$, and later wave-adjusted $B$ values enter $K(t-\tau_p)$. Baseline demonstrations and threshold bisections use $\Delta t=0.05$\,yr; drawdown sweeps use $0.1$\,yr, with selected thresholds rechecked at $0.05$\,yr.
++\paragraph{Numerical method and finite-step implementation check.} The reported two-land simulations use the projected delayed-quality law in Eq.~(10), integrated by the method of steps with explicit first-order Euler updates. At step $k$, current states are read at $t_{k-1}$; the time-dependent technology input and delayed values are evaluated at $t_k$, with linear interpolation of the delayed $q$ and $B$ histories. The raw delayed quality velocity is projected onto $T_{K_q}(q(t_{k-1}))$ before the Euler update. After the state update, $q$ is clipped to $K_q=[0,q_{\max}]$ as a finite-step safeguard; the explicitly enforced state bounds are applied, reserve area is reconstructed as $A_r=A_{tot}-A_f-A_c$, and the updated $B$ is stored in the delayed history. The reserve threshold is monitored, not projected. The positive-part operator is exact. For ordinary runs, $q(s)=q_0$ and $B(s)=B_0$ over the full pre-run interval $[-\max(\tau_g,\tau_p),0]$, with $B_0$ calculated from the initial state. In the technology-wave experiment, both runs share a no-wave prehistory; the active $T_b(0)$ changes current $B(0)$, and later wave-adjusted $B$ values enter $K(t-\tau_p)$. Baseline demonstrations and threshold bisections use $\Delta t=0.05$\,yr; drawdown sweeps use $0.1$\,yr, with selected thresholds rechecked at $0.05$\,yr.
 +
 +A finite-step consistency test compared post-Euler quality clipping with explicit tangent-cone projection before the Euler update. For the Figure~1 initial state and parameters, $T=100$\,yr, $\Delta t=0.05$\,yr, and $\tau_g=5,20,40$\,yr, the arrays for $A_f$, $A_c$, $q$, $P$, $D$, $A_r$, $B$, $E$, and $T_b$ were exactly equal. For the continuous baseline projected-quality path at $\tau_g=20$ or $40$\,yr, $q(t)=\min(1,0.9+0.0072t)$; its maximum piecewise-linear error fell from $7.1\times10^{-5}$ at $\Delta t=0.1$\,yr to $8.8\times10^{-6}$ at $0.0125$\,yr. In the full frozen-demand Figure~1 scenario, halving the step from $0.05$ to $0.025$\,yr reduced maximum absolute differences against a $0.003125$\,yr reference from $0.00221$ to $0.00102$\,ha for $A_c$, $0.00180$ to $0.000831$\,gha for $B$, $0.000252$ to $0.000118$\,cap for $P$, and $0.00200$ to $0.000924$\,gha\,yr for $D$. These checks establish equality only for the enumerated cases and show smaller differences under timestep refinement; they are not a universal error bound or proof of convergence for all settings.
  
@@ -340,20 +440,36 @@
  \end{table}
  
 -\paragraph{Well-posedness.} Under the stated bounds, the admissible state space $\Omega=\{(A_f,A_c,A_r,q,P,D):A_i\ge0,\ q\in[0,q_{\max}],\ A_f+A_c+A_r=A_{tot},\ K\ge K_{\min}\}$ is forward invariant. The positive-part and minimum operators are Lipschitz, giving a unique delay-system solution for each admissible history. We evaluate stability at $S=0$ from the deficit side.
-+\paragraph{Well-posedness and scope.} For $\rho_c>0$, $q_{\max}>0$, and an admissible continuous history, the projected quality component is nondecreasing and remains in $K_q$. If $q(0)>0$, it converges to $q_{\max}$; the all-zero history remains zero. The boundary projection makes the vector field constrained and nonsmooth at $q=q_{\max}$, so we do not transfer characteristic roots of the raw unconstrained delay equation to the projected system. The other right-hand sides are locally Lipschitz on each specified active set, and the positive-part and minimum operators are Lipschitz. State bounds and area conservation are enforced as described above. The affine spectrum reported in SI~\S S2 applies only to the one-sided deficit-active land branch; no smooth linear-stability claim is made across the quality ceiling or the shortfall switch.
++\paragraph{Well-posedness and scope.} For $\rho_c>0$, $q_{\max}>0$, and an admissible continuous history, the delayed input $G_c(q(t-\tau_g))$ is nonnegative. On each method-of-steps interval for $\tau_g>0$, this input is known from the preceding interval, and the projected solution is the unique absolutely continuous path obtained by integrating that input until $q_{\max}$ is reached and then holding $q=q_{\max}$. Iterating gives an invariant quality path in $K_q$; for $\tau_g=0$ the scalar projected ODE has the same unique constrained solution. If $q(0)>0$, it converges to $q_{\max}$; the all-zero history remains zero. The boundary projection makes the vector field constrained and nonsmooth at $q=q_{\max}$, so we do not transfer characteristic roots of the raw unconstrained delay equation to the projected system. The other right-hand sides are locally Lipschitz on each specified active set, and the positive-part and minimum operators are Lipschitz. Area conservation is maintained by reconstructing reserve area; the reserve monitoring threshold is not projected, as specified in SI~\S S1. The affine spectrum reported in SI~\S S2 applies only to the one-sided deficit-active land branch; no smooth linear-stability claim is made across the quality ceiling or the shortfall switch.
  
  \section{Extended model results}\label{si:results}
  
-@@ -208,7 +217,7 @@
+@@ -208,7 +221,7 @@
  
  \subsection{Drawdown-depth ladder}\label{si:ladder}
  
 -Table~\ref{tab:si_drawdown} reports the minimum capital-land area reached in endogenous-demand runs over a grid of initial populations $P_0$. The runs use $A_{f0}=0.6$, $q_0=0.9$, $\tau_g=20$, $\tau_p=25$\,yr, $\chi_r=0.10$, $\Delta t=0.1$\,yr, and $T=400$\,yr; the full $P_0$ grid (step $0.1$) is in \texttt{si\_drawdown\_depth.csv}. Depending on $P_0$, the minimum occurs 3--25\,yr after the run begins, when the shortfall first closes ($B\ge E$). At $A_{c0}=1.00$\,ha, the delayed-quality $10^{-6}$\,ha proximity value varies by at most $0.001$\,cap across $\tau_g=5,20,40$\,yr (SI Table~\ref{tab:si_delay} in \S~\ref{si:numerics}); that comparison covers only the tested range. Drawdown depth varies continuously and monotonically with both $P_0$ and $A_{c0}$.
-+Table~\ref{tab:si_drawdown} reports the minimum capital-land area reached in endogenous-demand runs over a grid of initial populations $P_0$. The runs use $A_{f0}=0.6$, $q_0=0.9$, $\tau_g=20$, $\tau_p=25$\,yr, $\chi_r=0.10$, $\Delta t=0.1$\,yr, and $T=400$\,yr; the full $P_0$ grid (step $0.1$) is in \texttt{si\_drawdown\_depth.csv}. Depending on $P_0$, the minimum occurs 3--25\,yr after the run begins, when the shortfall first closes ($B\ge E$). At $A_{c0}=1.00$\,ha, the delayed-quality $10^{-6}$\,ha proximity values shift by at most $0.001$\,cap across the tested $\tau_g=5,20,40$\,yr cases (Table~\ref{tab:si_delay}). For the baseline history, the $\tau_g=20$ and $40$\,yr quality paths are exactly identical because both reach the imposed cap before either delay elapses; this is saturation-induced degeneracy, not general delay robustness. The $\tau_g=5$\,yr case is distinct. Drawdown depth varies continuously and monotonically with both $P_0$ and $A_{c0}$.
++Table~\ref{tab:si_drawdown} reports the minimum capital-land area reached in endogenous-demand runs over a grid of initial populations $P_0$. The runs use $A_{f0}=0.6$, $q_0=0.9$, $\tau_g=20$, $\tau_p=25$\,yr, $\chi_r=0.10$, $\Delta t=0.1$\,yr, and $T=400$\,yr; the full $P_0$ grid (step $0.1$) is in \texttt{si\_drawdown\_depth.csv}. Depending on $P_0$, the minimum occurs 3--25\,yr after the run begins, when the shortfall first closes ($B\ge E$). At $A_{c0}=1.00$\,ha, the delayed-quality $10^{-6}$\,ha proximity values shift by at most $0.001$\,cap across the tested $\tau_g=5,20,40$\,yr cases (Table~\ref{tab:si_delay}). For the baseline history, the $\tau_g=20$ and $40$\,yr quality paths are exactly identical because both reach the imposed cap before either delay elapses; this is saturation-induced degeneracy, not general delay robustness. The $\tau_g=5$\,yr case is distinct. Across the tested finite grid, drawdown depth varies monotonically with both $P_0$ and $A_{c0}$. The grid and selected bisections show no discontinuity at the tested resolution but do not establish a general continuity theorem.
  
  The initial populations at which the minimum comes within $10^{-2}$, $10^{-3}$, and $10^{-4}$\,ha of the floor are $1.8,\,1.9,\,2.1$\,cap for $A_{c0}=0.40$\,ha; $2.2,\,2.3,\,2.4$ for $0.70$\,ha; $2.6,\,2.7,\,2.8$ for $1.00$\,ha; and $2.8,\,2.9,\,3.0$ for $1.18$\,ha. Bisection with a $10^{-6}$\,ha proximity tolerance ($\Delta t=0.05$\,yr, $T=1000$\,yr) gives $2.41,\,2.70,\,2.98,\,3.14$\,cap. The thresholds match to three decimals for $\chi_r=0.10$ and $\chi_r=0$ ($2.387$ and $2.955$\,cap at $A_{c0}=0.40$ and $1.00$\,ha, $\Delta t=0.1$\,yr). \par\pagebreak
  
-@@ -276,7 +285,7 @@
+@@ -257,13 +270,13 @@
+ \begin{table}[H]
+ \centering\scriptsize
+ \setlength{\tabcolsep}{2pt}
+-\caption{Restoration gate and recovery outcomes at $T=100$ and $900$\,yr. The table reports end-state land areas, population relative to the reference, trajectory extrema, and peak debt $D$ (gha\,yr). Annual account values $B=E$ are in gha; land areas are in ha; population ratios and recovery metrics are dimensionless. Each row approaches $R_B=1$ ($E=B$).}
++\caption{Restoration gate outcomes. $\mathcal R_c$ is reported at $T=100$ and $900$\,yr; final-state columns $A_c,A_f,A_r,B,$ and $P/P^{\mathrm{init}}$ are at $T=2000$\,yr. The extrema $\min A_r$, $\max A_c$, and peak debt are computed over the inclusive interval $0\le t\le2000$\,yr. Annual account values $B=E$ are in gha; land areas are in ha; population ratios and recovery metrics are dimensionless. Each row approaches $R_B=1$ ($E=B$).}
+ \label{tab:si_gates}
+ \begin{tabular}{l r r r r r r r r r r}
+ \toprule
+ Policy / gate & $\mathcal R_c(100)$ & $\mathcal R_c(900)$ & $A_c$ & $A_f$ & $A_r$ & $B=E$ & $P/P^{\mathrm{init}}$ & $\min A_r$ & $\max A_c$ & $D_{peak}$ \\
+ \midrule
+-none ($R_{rc}=0$) & $-0.00$ & $-0.00$ & $0.051$ & $1.336$ & $1.113$ & $1.138$ & $1.39$ & $1.113$ & $0.057$ & $0.152$ \\
++none ($R_{rc}=0$) & $-0.00$ & $-0.00$ & $0.051$ & $1.336$ & $1.113$ & $1.138$ & $1.39$ & $1.113$ & $0.058$ & $0.152$ \\
+ surplus-gated, $\chi_r=0.02$ & $0.69$ & $0.73$ & $0.612$ & $1.030$ & $0.858$ & $0.906$ & $1.11$ & $0.858$ & $0.612$ & $0.152$ \\
+ surplus-gated, $\chi_r=0.05$ & $1.08$ & $1.07$ & $0.875$ & $0.886$ & $0.738$ & $0.797$ & $0.97$ & $0.724$ & $0.885$ & $0.152$ \\
+ surplus-gated, $\chi_r=0.10$ & $1.28$ & $1.27$ & $1.030$ & $0.802$ & $0.668$ & $0.733$ & $0.90$ & $0.602$ & $1.092$ & $0.152$ \\
+@@ -276,7 +289,7 @@
  \end{tabular}
  \end{table}
  
@@ -362,16 +478,28 @@
  
  \subsection{Regime table}\label{si:regimes}
  
-@@ -411,7 +420,7 @@
+@@ -409,9 +422,9 @@
  
- The model's capital-land regeneration timescale represents a lumped recruitment response, not a universal ecological rate. In Neotropical secondary forests, plot-level age and above-ground biomass records (2ndFOR; 1,334 plots, 41 chronosequences, 35 good fits) give median $t_{50}\approx30$\,yr and $\tau_r\approx38$\,yr under a lagged saturating recovery model \citep{Poorter2016}. For 33 fish stocks classified as collapsed in RAM Legacy, trajectories of $B/B_{MSY}$ give $t_{50}\approx5.6$\,yr and $\tau_r\approx3.4$\,yr \citep{HutchingsReynolds2004,Neubauer2013}. Soil organic carbon re-equilibrates over about 17--23\,yr after land-use change \citep{Poeplau2011}. Forest biomass reaches about half of old-growth levels by 20\,yr and 90\% at a median of about 66\,yr; roughly 29\% of collapsed stocks recover to 50\% within 5--15\,yr.
+ \subsection{Regeneration anchors}\label{si:anchors}
+ 
+-The model's capital-land regeneration timescale represents a lumped recruitment response, not a universal ecological rate. In Neotropical secondary forests, plot-level age and above-ground biomass records (2ndFOR; 1,334 plots, 41 chronosequences, 35 good fits) give median $t_{50}\approx30$\,yr and $\tau_r\approx38$\,yr under a lagged saturating recovery model \citep{Poorter2016}. For 33 fish stocks classified as collapsed in RAM Legacy, trajectories of $B/B_{MSY}$ give $t_{50}\approx5.6$\,yr and $\tau_r\approx3.4$\,yr \citep{HutchingsReynolds2004,Neubauer2013}. Soil organic carbon re-equilibrates over about 17--23\,yr after land-use change \citep{Poeplau2011}. Forest biomass reaches about half of old-growth levels by 20\,yr and 90\% at a median of about 66\,yr; roughly 29\% of collapsed stocks recover to 50\% within 5--15\,yr.
++The model's capital-land regeneration timescale represents a lumped recruitment response, not a universal ecological rate. The cited forest studies use chronosequence biomass records; fisheries studies analyze stock-specific biomass trajectories, often derived from assessment models; soil studies use different land-use and carbon-response definitions \citep{Poorter2016,HutchingsReynolds2004,Neubauer2013,Poeplau2011}. These sources document heterogeneous recovery behavior, but we do not refit a common recovery curve or compute harmonized $t_{50}$ or $\tau_r$ values from their underlying data here.
  
 -These observations describe different systems and are not pooled into one rate. Forest and soil records provide decadal-scale context for the representative effective response scale of about 29\,yr. The 10--40\,yr interval is a modeling range for the lumped capital-land class, not a pooled empirical estimate. The faster fish-stock episodes are not treated as a lower bound for that class. Neither $\rho_c$ nor delay $\tau_g$ is calibrated from these records.
-+These observations describe different systems and are not pooled into one rate. They are examples for future ecosystem-specific measurement and modeling, not a basis for assigning a generic response time to the lumped capital-land class. The 10--40\,yr interval is a scenario range, not a pooled empirical estimate; the faster fish-stock episodes are not treated as a lower bound for the generic class. Neither $\rho_c$ nor $\tau_g$ is calibrated from these records, and they do not validate the present quality equation or parameter values.
++These records describe different systems and recovery definitions; they are not pooled or used to assign a generic response time to the lumped capital-land class. The 10--40\,yr interval is a scenario range, not an empirical estimate. Neither $\rho_c$ nor $\tau_g$ is calibrated from these records, and they do not validate the present quality equation or parameter values.
  
  \subsection{Recursive identifiability in the land-type accounts}\label{si:recursive}
  
-@@ -550,8 +559,8 @@
+@@ -447,7 +460,7 @@
+ 
+ \paragraph{Reserved biocapacity share.} If both land classes have the same reservation share, $\sigma_f=\sigma_c=\sigma<1$, human-available supply is $\sigma B$ and shortfall is $S=[E-\sigma B]_+$. Reservation lowers the demand at which conversion begins; conversion is off while $E\le\sigma B$. With different shares, the condition becomes $E\le\sigma_fY_f+\sigma_cY_c$, which need not equal $\sigma B$. These results apply to the stated parameterization; they do not establish robustness to disturbances or parameter uncertainty.
+ 
+-\paragraph{Typed floors and conversion stop.} The model imposes separate constraints on reserve land ($A_r\ge A_r^{\min}$), capital land ($A_c\ge\Acmin$), fast land ($A_f\le A_f^{\max}$), and carrying capacity ($K\ge K_{\min}$). A stop rule triggered at $A_c=\Acmin$ preserves the capital-land floor. A ceiling on $A_f$ limits fast-land extent but does not ensure that $A_c$ stays above its floor unless the stop rule also accounts for the capital floor and remaining-area constraints. In Eq.~(5), conversion slows to zero as $A_c\to\Acmin$. A control based only on total $B$ cannot guarantee this typed floor because $B$ does not identify $A_c$.
++\paragraph{Typed floors and conversion stop.} The numerical model enforces $A_c\ge\Acmin$ through its conversion-rate law and enforces $K\ge K_{\min}$ by definition. Reserve area is reconstructed from total area; $A_r^{\min}=0.10$\,ha is a post-hoc monitoring threshold, not an invariant projection. The optional $A_f^{\max}$ ceiling is not active in the reported runs. For $y=A_c-\Acmin\ge0$, Eq.~(5) gives $0\le u_c\le y/\tconv$; with $R_{rc}\ge0$, $\dot y\ge-y/\tconv$, so $y(t)\ge y(0)e^{-t/\tconv}$. A stop at the exact floor is therefore an operational safeguard, not needed to establish this continuous-time bound. Total $B$ cannot reconstruct $A_c$ or implement arbitrary $A_c$-dependent policies, but that information limitation alone is not a universal control impossibility.
+ 
+ \paragraph{Institutional signature.} Related work distinguishes protective and mobilizing institutional feedback \citep{Abaee2026a}. Here, surplus-gated restoration is off during shortfall, while deficit-gated restoration acts during shortfall and can further reduce provision (Section~\ref{si:gates}).
+ 
+@@ -550,8 +563,8 @@
  \section*{Supplementary references}
  \begin{thebibliography}{99}
  \small

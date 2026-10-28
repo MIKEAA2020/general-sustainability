@@ -46,6 +46,17 @@ The v45 solver remains relevant only as part of the separately documented produc
 - Strengthened the source checker to reject the superseded title, require both links separately in main and SI, and detect internal lineage/provenance phrases.
 - Reassembled and rebuilt both documents with three pdfLaTeX passes each. Final page counts are 35 (main) and 21 (SI), with no unresolved citations/references or overfull boxes. `mutool` confirms the expected email and ORCID URI annotations in both PDFs.
 
+## Verified targeted-review follow-up (2026-10-28)
+
+After the read-only verification phase was complete, the version-matched C11 review findings were applied to this draft. The detailed evidence, code checks, and final build record are in `validation/ECOMOD_C11_REVIEW_FOLLOWUP_20261028.md`. The changes include:
+
+- **R1:** retained the identity but narrowed the sign statement to the case where maintenance/retirement imbalance and quality growth vanish; added the non-invariance equation for the maintenance-balance surface and clarified that the result is pointwise.
+- **R2:** stated the invariant floor bound `A_c(t)-A_c^min >= (A_c(0)-A_c^min) exp(-t/tau_conv)` for the displayed rate law and nonnegative restoration; separated aggregate observability from universal impossibility, including the no-conversion policy.
+- **R3:** recomputed the debt equilibria from unrounded ceiling-plus-offset inputs, ran the projected solver at the same inputs, and updated main/SI values and the reproducibility script.
+- **R4:** reclassified `A_r^min=0.10 ha` as a post-hoc monitor (not an enforced invariant); corrected the drawdown starting reserve, added reserve/fast-land diagnostics to the CSV, included `t=0` in gate extrema, and labeled all gate-table time windows.
+- **R5/SI:** scoped supply-only identifiability to the observation relation; distinguished the additive comparator coefficient and units from multiplicative `alpha`; retained the initial-debt term in transient bounds; qualified finite-grid monotonicity; removed recovery-fit medians not independently refitted from source data; and documented the exact debt input/run settings.
+- Rebuilt the assembled TeX/PDFs with three ordered passes per document; because `pdflatex` is absent in this workspace, the verified build used Tectonic 0.17.0 through the supported fallback. The current main/SI are 36/23 pages. The C11-local checksum manifest and source-level regression checks were refreshed. These changes do not amend the historical C10 provenance or hard-bound audit records.
+
 ## Immutable boundary
 
 This change log applies only to the separate C11 local draft. Archived C10, C8/C9, `main`, pins, checksums, and DOI deposits were not modified. The branch push stores this draft only; no DOI deposit or publication was made. Archived C10/C8/C9 and repository `main` were not modified.

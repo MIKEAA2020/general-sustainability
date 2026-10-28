@@ -125,12 +125,30 @@ regressions = {
     "correct recovery fraction": ("regex", r"0\.46"),
     "balance-family distinction": ("regex", r"strict-surplus allocations are a separate no-conversion family"),
     "debt derivative correction": ("literal", bs + "partial" + bs + "dot D/" + bs + "partial D=" + bs + "alpha b_fA_f-" + bs + "eta"),
+    "pointwise maintenance imbalance is explicit": ("literal", "M=" + bs + "mu A_r-" + bs + "eta_fA_f"),
+    "maintenance balance is noninvariant": ("literal", "M=0$ is not invariant when $u_c>0$"),
+    "reserve threshold is monitoring only": ("literal", "post-hoc monitoring criterion, not an invariant enforced by the update"),
+    "matched unrounded debt inputs": ("literal", "1.158409091"),
+    "transient debt bound retains initial debt": ("literal", "D(0)," + bs + "bar S/" + bs + "eta"),
+    "finite-grid monotonicity is qualified": ("regex", r"do not establish a general continuity theorem"),
+    "additive debt coefficient is distinct": ("literal", bs + "alpha_{" + bs + "mathrm{add}}"),
+    "regeneration-fit summaries not reproduced": ("regex", r"do not refit a common recovery curve or compute harmonized"),
 }
 combined = main_actual + "\n" + si_actual
+if "0.80" + bs + ",ha" in combined:
+    errors.append("obsolete hard reserve-floor claim remains")
 for name, (kind, expected) in regressions.items():
     matched = expected in combined if kind == "literal" else bool(re.search(expected, combined))
     if not matched:
         errors.append(f"revision regression check failed: {name}")
+
+# These implementation regressions directly guard the table-window and reserve-monitor fixes.
+gate_code = (ROOT / "work/recovery_metric_and_tau_p_scan.py").read_text(encoding="utf-8")
+drawdown_code = (ROOT / "drawdown_depth.py").read_text(encoding="utf-8")
+if "minAr, maxAc, conserv, dpeak = float(Ar[i0]), float(Ac[i0])" not in gate_code:
+    errors.append("gate extrema do not include the initial t=0 state")
+if "minAr_ha_chi%.2f" not in drawdown_code or "maxAf_ha_chi%.2f" not in drawdown_code:
+    errors.append("drawdown CSV omits reserve/fast-land domain-monitor diagnostics")
 
 expected_title = "A rising biocapacity total can mask ecological-capital land drawdown: a two-land model"
 old_title = "Aggregate biocapacity does not identify its composition: a two-land model of ecological-capital land drawdown"

@@ -42,11 +42,10 @@ def integrate(chi, gate, target=None, freeze_u=False, start="nonequil", T=2000.0
     qq = np.full(i0 + n + 1, q0); Pp = np.full(i0 + n + 1, P0); Dd = np.zeros(i0 + n + 1)
     Bhist = np.zeros(i0 + n + 1); Bhist[:] = p.B(A_f0, A_c0, q0, 0.0)
     Ar = np.full(i0 + n + 1, p.A_tot - A_f0 - A_c0)
-    minAr, maxAc, conserv, dpeak = np.inf, -np.inf, 0.0, 0.0
-    for k in range(n + 1):
+    # Include the initial state in every reported trajectory extremum.
+    minAr, maxAc, conserv, dpeak = float(Ar[i0]), float(Ac[i0]), 0.0, float(Dd[i0])
+    for k in range(1, n + 1):
         t = k * dt; i = i0 + k
-        if i == i0:
-            continue
         Afm, Acm, qm, Dm, Pm = Af[i - 1], Ac[i - 1], qq[i - 1], Dd[i - 1], Pp[i - 1]
         Arm = p.A_tot - Afm - Acm
         Yf = p.Y_f(Afm, Dm); Yc = p.Y_c(Acm, qm); B = Yf + Yc; E = p.e * Pm

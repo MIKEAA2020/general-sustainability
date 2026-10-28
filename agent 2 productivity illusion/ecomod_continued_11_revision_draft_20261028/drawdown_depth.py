@@ -27,10 +27,15 @@ for A_c0 in [0.40, 0.70, 1.00, 1.18]:
             out["finalAc_ha_chi%.2f" % chi] = r["Ac"][-1]
             out["maxD_gha_yr_chi%.2f" % chi] = r["Dd"].max()
             out["tmin_yr_chi%.2f" % chi] = float(np.argmin(r["Ac"])) * 0.1
+            out["minAr_ha_chi%.2f" % chi] = r["Ar"].min()
+            out["maxAf_ha_chi%.2f" % chi] = r["Af"].max()
         rows.append(out)
 with (ROOT / "si_drawdown_depth.csv").open("w", newline="", encoding="utf-8") as f:
     w = csv.DictWriter(f, fieldnames=list(rows[0].keys()), lineterminator="\n"); w.writeheader(); w.writerows(rows)
 # Summary labels carry the physical units; all calculations above are unchanged.
+for chi in [0.10, 0.0]:
+    print("chi_r=%.2f: minimum reserve across tested grid = %.9f ha; maximum fast-land area = %.9f ha" % (
+        chi, min(r["minAr_ha_chi%.2f" % chi] for r in rows), max(r["maxAf_ha_chi%.2f" % chi] for r in rows)))
 for A_c0 in [0.40, 0.70, 1.00, 1.18]:
     sel = [r for r in rows if r["A_c0_ha"] == A_c0]
     samples = "  ".join("P0=%.1f cap: min A_c=%.3f ha" % (r["P0_cap"], r["minAc_ha_chi0.10"]) for r in sel if abs(r["P0_cap"]*10 % 5) < 1e-6)
