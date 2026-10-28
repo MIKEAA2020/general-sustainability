@@ -1,7 +1,7 @@
 # Paper06 v76 → v77 change log
 
 **Date:** 2026-10-27  
-**Status:** Local-only revision; no external release action.
+**Status at initial preparation:** Local-only revision; no external release action was part of this change log. The 2026-10-28 cleanup and current package snapshot were pushed to branch `agent/p06-ecomod-c11-local-draft-20261028`; no DOI deposit or publication was made.
 
 V77 is a substantive audit-repair derivative, not an editorial-only refresh. V76 and all earlier releases remain untouched.
 

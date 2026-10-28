@@ -2,7 +2,7 @@
 
 - **Date:** 2026-10-27
 - **Parent:** Paper06 v76 (preserved unchanged).
-- **Status:** Local-only derivative; no push, DOI deposit, or other external release.
+- **Status note (2026-10-28):** The v77 package and 2026-10-28 cleanup are pushed on branch `agent/p06-ecomod-c11-local-draft-20261028`; no DOI deposit or publication was made. The dated implementation details below describe the initial package build and the subsequent local QA record.
 - **Plan:** `EDITORIAL_REVISION_PLAN_v77.md`.
 
 ## Source mapping
@@ -26,7 +26,7 @@
 
 `assemble_v77.py` concatenates the 9 main modules and 4 SI modules. The checked-in assembled `.tex` files were regenerated from those modules and verified with `python3 assemble_v77.py --check`.
 
-## Build and PDF validation
+## Initial build and PDF validation (2026-10-27; superseded by the current QA record)
 
 - **Engine:** Tectonic 0.17.0; main article built first, then SI with prefixed external labels imported from the fresh main `.aux` file.
 - **Output:** main PDF 47 pages; supplementary PDF 29 pages. Both compiled successfully.
@@ -36,6 +36,10 @@
 - **Artifacts:** no v77 Lean build was run. Finite checks, unavailable historic scripts/logs, and DFO historical-vintage limitations are stated in SI S7 and Data Availability.
 - **Hashes/logs:** `SHA256SUMS_v77.txt`; raw Tectonic transcripts and logs in `QA_v77/`.
 
+## Current post-cleanup build (2026-10-28)
+
+The current package was reassembled from the 9 main and 4 SI modules and rebuilt with pdfLaTeX (three passes each, main before SI). The final PDFs are 46 pages (main) and 25 pages (SI). There are no unresolved citations/references or fatal TeX errors. The final SI has one 1.72939 pt overfull line, visually checked and not clipped; remaining warnings are nonfatal. `mutool` verifies clickable `mailto:amin_abaee@ut.ac.ir` and ORCID links in both PDFs. Figure 2 equality labels were checked in 500 dpi renders in both panels and remain adjacent without touching or overlap. See `QA_v77/QA_RECORD_v77.md` for current hashes, logs, page checks, and contact-link annotations. The pre-cleanup modules and QA files are preserved in `QA_v77/pre_submission_cleanup_20261028/`.
+
 ## Preservation and release boundary
 
-V76 and all earlier releases remain unchanged. ECOMOD c10 and its pins, c8/c9, `main`, checksums, and DOI deposits were not edited. V77 has no DOI and has not been externally deposited; any release requires separate authorization after review.
+V76 and all earlier releases remain unchanged. ECOMOD C10 and its pins, c8/c9, `main`, checksums, and DOI deposits were not edited. No DOI deposit is recorded for v77. The current v77 snapshot is pushed on branch `agent/p06-ecomod-c11-local-draft-20261028`; no DOI deposit or publication was made. Any DOI deposit or publication requires separate authorization.

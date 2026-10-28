@@ -1,0 +1,82 @@
+\section{Setting: typed transition data and assessment operators}\label{sec:setting}
+
+\subsection{Typed transition data and exact-tube semantics}
+
+A \emph{typed transition datum} consists of a state space $Z$ whose coordinates carry types (a conserved stock with a unit, a service margin, an institutional label), a finite \emph{menu} $\mathcal A$ of plans, a \emph{disturbance class} $D$, and, for each plan $a$ and disturbance $d$, a \emph{tube} $\Tube(a,d)\subseteq Z$ -- the full set of states visited during one review interval -- together with its \emph{endpoint set} $\End(a,d)\subseteq\Tube(a,d)$ and its \emph{successor set} $\Succ(a,d)$, the states reached after any end-of-interval reset. Among the coordinates are $n$ \emph{typed floors} $s=(s_1,\dots,s_n)$. Each raw margin $m_i$ is divided by a declared positive reference scale $q_i$, so $s_i=m_i/q_i$ is dimensionless and $s_i\ge0$ is the binding constraint; each floor retains its provenance (physical, contractual or normative). Typing records which quantities may be added: conservation statements are per type, and the framework does not itself authorize adding biomass, money and biodiversity into one conserved scalar. The weights act on these normalized coordinates as an assessment convention, not as a physical identity or automatic calibration.
+
+Two constraint sets complete the datum: a \emph{physical safe set} $S^{\mathrm{phys}}$ and a \emph{physical destination set} $G^{\mathrm{phys}}$, which encode constraints that no assessment doctrine disputes (for instance that a reserve stock cannot be negative). The \emph{typed} sets add the floors,
+\[
+S=S^{\mathrm{phys}}\cap\{s_i\ge0,\ i=1,\dots,n\},\qquad G=G^{\mathrm{phys}}\cap\{s\ge0\},
+\]
+and the \emph{scalarized} sets at a weight $w$ add only the aggregate floor,
+\[
+S^w=S^{\mathrm{phys}}\cap\{w\cdot s\ge0\},\qquad G^w=G^{\mathrm{phys}}\cap\{w\cdot s\ge0\}.
+\]
+Throughout, $w$ ranges over the full nonnegative cone $\Wp=\Rp\setminus\{0\}$ unless a subfamily $W\subseteq\Wp$ is named. The semantics is \emph{exact-tube}: a plan is admissible only if every visited state, not merely the endpoint, lies in the relevant safe set. The disturbance quantifier is always innermost -- admissibility requires safety for every $d\in D$ -- and the separation studied here concerns a second quantifier, over weights, placed outside it.
+
+\subsection{Assessment operators}
+
+For a state $z$, four operators return the set of plans that an assessment doctrine accepts at $z$:
+\begin{align}
+\Etyp(z)&=\{a:\ \forall d\in D,\ \Tube(a,d)\subseteq S,\ \Succ(a,d)\subseteq G\}, \label{eq:Etyp}\\
+E_w(z)&=\{a:\ \forall d\in D,\ \Tube(a,d)\subseteq S^w,\notag\\
+&\qquad\Succ(a,d)\subseteq G^w\},\quad w\in\Wp, \label{eq:Ew}\\
+\Ephys(z)&=\{a:\ \forall d\in D,\ \Tube(a,d)\subseteq S^{\mathrm{phys}},\notag\\
+&\qquad\Succ(a,d)\subseteq G^{\mathrm{phys}}\}, \label{eq:Ephys}\\
+\Eend(z)&=\{a:\ \forall d\in D,\ \End(a,d)\subseteq S^{\mathrm{phys}},\notag\\
+&\qquad\Succ(a,d)\subseteq G^{\mathrm{phys}}\}. \label{eq:Eend}
+\end{align}
+$\Etyp$ is the \emph{noncompensatory typed} operator (each floor separately binding along the path); $E_w$ the \emph{scalarized} operator at weight $w$ (the dashboard reading $w\cdot s$ must stay nonnegative along the path); $\Ephys$ the \emph{physical} operator (no floors at all); and $\Eend$ the \emph{endpoint} operator, which represents any assessment architecture that evaluates constraints only at sampled or audited endpoints. The two axes along which they differ -- what is constrained and where it is evaluated -- are set out in Table~\ref{tab:semantics}; the typed-endpoint operator $E_{\mathrm{end,typ}}$, which applies the floors at endpoints only, is the remaining cell and is used once, in Section~\ref{sec:design}.
+
+\begin{table}[!htbp]
+\centering\small
+\caption{Evaluation semantics: constraint structure (rows) by evaluation locus (columns).}
+\label{tab:semantics}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.26\textwidth}XX@{}}
+\toprule
+ & Evaluated on the full tube & Evaluated at endpoints only \\
+\midrule
+Typed floors & $\Etyp$ -- typed path safety & $E_{\mathrm{end,typ}}$ -- typed snapshots \\
+Scalarized floor & $E_w$ -- scalarized path safety & (not isolated here) \\
+Physical constraints only & $\Ephys$ -- physical viability & $\Eend$ -- audited physical snapshots \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Accepted-state sets and the central inclusion}
+
+For any operator $E$ write $\mathcal V[E]=\{z:\ E(z)\ne\varnothing\}$ for its \emph{accepted-state set}, the states at which the doctrine admits at least one plan. Thus $\Vtyp=\mathcal V[\Etyp]$, $\mathcal V_w=\mathcal V[E_w]$, $\Vphys=\mathcal V[\Ephys]$, $\Vend=\mathcal V[\Eend]$, and the \emph{compensatory accepted set} is the per-weight intersection
+\begin{equation}
+\Vweak=\bigcap_{w\in\Wp}\mathcal V_w=\{z:\ \forall w\ \exists a_w\in E_w(z)\}.
+\label{eq:Vweak}
+\end{equation}
+The object of the paper is the inclusion
+\begin{equation}
+\underbrace{\{z:\ \textstyle\bigcap_w E_w(z)\neq\varnothing\}}_{\text{common plan}}\ \subseteq\ \underbrace{\bigcap_w\{z:\ E_w(z)\neq\varnothing\}}_{\text{per weight}\ =\ \Vweak},
+\label{eq:central}
+\end{equation}
+whose left-hand side will turn out to be exactly $\Vtyp$ (Proposition~\ref{prop:hierarchy}(ii)), and the set $\FP=\Vweak\setminus\Vtyp$ on which it is strict -- the \emph{acceptance gap}. Table~\ref{tab:notation} collects the symbols.
+
+\begin{table}[!htbp]
+\centering\small
+\caption{Notation.}
+\label{tab:notation}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.34\textwidth}X@{}}
+\toprule
+Symbol & Meaning \\
+\midrule
+$z$; $a\in\mathcal A$; $d\in D$ & state; plan (action) from the finite menu; disturbance from the declared class \\
+$s=(s_1,\dots,s_n)$; $x$ & typed floors, normalised so that $s_i\ge0$ binds; reserve (bridge) stock on the witness \\
+$\Wp=\Rp\setminus\{0\}$; $W\subseteq\Wp$; $r=w_2/w_1$ for $w_1>0$, with $r=+\infty$ when $w_1=0<w_2$ & full weight cone; a weight subfamily; extended weight ratio on the two-floor witness \\
+$S,G$; $S^w,G^w$; $S^{\mathrm{phys}},G^{\mathrm{phys}}$ & typed, scalarized and physical safe/destination sets \\
+$\Tube,\End,\Succ$ & visited set, endpoint set and successor set of a plan under a disturbance \\
+$\Etyp$, $E_w$, $\Ephys$, $\Eend$ & assessment operators \eqref{eq:Etyp}--\eqref{eq:Eend}; $\mathcal V[E]=\{z:E(z)\ne\varnothing\}$ \\
+$\Vtyp$, $\mathcal V_w$, $\Vweak$, $\Vphys$, $\Vend$ & accepted-state sets; $\Vweak=\bigcap_{w\in\Wp}\mathcal V_w$ \\
+$\FP=\Vweak\setminus\Vtyp$ & the acceptance gap \\
+$d_a$; $\mathcal D=\{d_a\}$ & required-margin vector of plan $a$ (Theorem~\ref{thm:menu}) \\
+$\Q,\ R,\ I$; $\rho_1,\rho_2$ & discrepancy region, rescue set, impossibility region; licensing thresholds (Theorem~\ref{thm:witness}) \\
+$e=(\tfrac14,\tfrac14)$; $c=1$; $\kappa,\kappa^*$ & destination gain and rescue cost of the witness; reserve increment and rescue threshold \\
+$\theta$; $\sigma=1/(1-\theta)$; $\lambda_i=1+s_i$ & CES exponent, elasticity of substitution, floor-referenced index (Theorem~\ref{thm:ladder}) \\
+\bottomrule
+\end{tabularx}
+\end{table}

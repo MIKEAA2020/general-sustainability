@@ -1,52 +1,62 @@
-# Paper06 v77 — final local build and QA record
+# Paper06 v77 — current build and QA record
 
-**QA date:** 2026-10-27  
-**Status:** Successful local build. This record does not authorize an external release.
+**Latest QA:** 2026-10-28  
+**Scope:** local submission-text cleanup and rebuild of v77 only.  
+**Release boundary:** current v77 package snapshot pushed on branch `agent/p06-ecomod-c11-local-draft-20261028`; no DOI deposit or publication was made. Earlier release history remains unchanged.
 
-## Build and source synchronization
+## Assembly and build
 
-- Engine: Tectonic 0.17.0 (version recorded in `tectonic.version.txt`).
-- Command: `TEX_ENGINE=/tmp/paper06-tectonic-0.17.0/tectonic ./build_v77.sh` from the v77 package directory.
-- `assemble_v77.py` regenerated both assembled sources from 9 main modules and 4 SI modules. `python3 assemble_v77.py --check` passed after the final source edits.
-- Main article compiled before SI; both Tectonic builds exited successfully. TeX scratch intermediates were removed by the build script.
+- `python3 assemble_v77.py` regenerated the main and SI from 9 main modules and 4 SI modules; `python3 assemble_v77.py --check` passes.
+- `/usr/bin/pdflatex` (pdfTeX 3.141592653-2.6-1.40.26; TeX Live 2025/dev/Debian) was used because Tectonic was not available in this workspace. The updated `build_v77.sh` also retains Tectonic support when present.
+- The script built the main article first and then SI, with three pdfLaTeX passes per document so citations and imported labels could resolve.
+- Main and SI build logs, standard-output transcripts, and the engine record are retained in this directory. Pre-cleanup source modules and QA records remain intact under `pre_submission_cleanup_20261028/`.
 
-## PDF, reference, and page checks
+## Current files and checks
 
 | File | Pages | Page size | Bytes | SHA-256 |
 |---|---:|---|---:|---|
-| `paper06_assessment_separation_v77.pdf` | 47 | 612 × 792 pt | 1,225,419 | `e574faf46185a54f63365beffec9921f421d2572c32090b7406553d4e13abc88` |
-| `paper06_assessment_separation_v77_supplementary.pdf` | 29 | 612 × 792 pt | 258,124 | `213ed33a0978d79deac13c50054721c956146e9bdf2fb0458ff59ed39558362f` |
+| `paper06_assessment_separation_v77.pdf` | 46 | 612 × 792 pt | 1,271,305 | `99bbaf8060a1011736f30a92cb7c3a95826ff072dc26c3cedb6da862887a2bb1` |
+| `paper06_assessment_separation_v77_supplementary.pdf` | 25 | 612 × 792 pt | 426,844 | `57499722233cf717bf73890ab8981a3f93b817f7114f32eb66194d39e5171ff5` |
+| `paper06_assessment_separation_v77.tex` | — | — | — | `09df1eb44503a4a4825df472adfb32b8442c965e2511b56269d4c0cf0274d558` |
+| `paper06_assessment_separation_v77_supplementary.tex` | — | — | — | `b365c7fe7f306bba79f97a499c2240308a64e73689855790eb9f1cd103ab8ae0` |
 
-PyMuPDF extraction found no blank pages and no `??` markers in either PDF. Build-log checks found no unresolved references or citations, duplicate labels, missing-file errors, or fatal TeX errors. The main article ends with references on p. 47; the SI ends with references on p. 29.
+Final-pass logs contain no unresolved citations/references, duplicate-label errors, missing-file errors, or fatal TeX errors. Text extraction found 46 and 25 nonblank pages, respectively, and no visible internal release/build/version narration from the audited terms. The main title remains the previously authorized Paper06 v77 title.
 
-The logs retain nonfatal layout/font/metadata warnings, not suppressed:
+Nonfatal layout warnings remain: several underfull boxes in both PDFs, repeated small-caps italic font substitutions, and `hyperref` PDF-string warnings for the corresponding-author note. The main has no overfull boxes. SI has one 1.72939 pt overfull line (assembled SI lines 151–166); it was checked in the rendered page and is not visibly clipped.
 
-- One 2.43091 pt output-active overfull box in each PDF build.
-- One 1.73424 pt SI paragraph overfull box at assembled SI lines 179–194; it was checked in-page and is not visibly clipped.
-- Underfull boxes remain in both documents.
-- The main log retains hyperref PDF-string warnings for author-note commands; both logs retain `TU/lmr/m/scit` font-shape substitution warnings.
+## Clickable contact links
 
-No oversized-float warning was reported after the terminology map was split.
+`mutool show` confirmed URI annotations in both PDFs:
+
+- Main: `mailto:amin_abaee@ut.ac.ir` (annotation object 144); `https://orcid.org/0000-0002-0019-1842` (object 145).
+- SI: `mailto:amin_abaee@ut.ac.ir` (object 120); `https://orcid.org/0000-0002-0019-1842` (object 121).
+
+The corresponding-author text is readable in both first pages, and the email and ORCID link text is visibly linked. The SI ORCID is present.
 
 ## Visual review
 
-Final-PDF renders were inspected for Figure 2 and the modified verification/benchmark passages:
+Rendered final-PDF pages inspected:
 
-- Main: pp. 18 (Figure 2, including a 4× render and enlarged crops of both labels), 26 (common-shock verdict and model-relative wording), and 47 (references).
-- SI: pp. 7 (common-shock proof), 11–14 (historical verification qualifications and coupled-shock discussion/table), 18 (terminology map), and 29 (references).
+- Main p. 1: title, abstract, and linked email/ORCID; p. 18: Figure 2; p. 46: final references.
+- SI p. 1: title, abstract, and linked email/ORCID; p. 6: dense proof/table page with the small overfull warning; p. 9: common-shock exposition; p. 21: data/code availability and literature positioning; p. 25: final references.
+- Figure 2 was rendered at 500 dpi and both panels were enlarged. In each panel, the equality label `$s_1+s_2=2$` is parallel to and immediately adjacent to the diagonal on the unhatched gray side, with a visible raster gap and no contact or overlap.
 
-Figure 2 was also inspected as a full source PNG and enlarged panel crops. In both panels, each `$s_1+s_2=2$` label is parallel and immediately adjacent to the diagonal, on the unhatched gray side; the raster and PDF crops show a small gap, with no contact or overlap. The equality text no longer reads as a label for the hatched region. The SI S4 table and S6 acceptance-gap definition fit in-page; the terminology row states the all-weight licensing/no-common-typed-plan criterion.
+The reviewed pages are retained as `review_*.png` in `QA_v77/`. No clipping, blank page, title mismatch, or footnote/link overlap was observed.
 
-The benchmark figure and caption remain labeled in MBU/yr. No clipping or blank-page issue was observed in the reviewed pages.
+## Scientific and provenance scope
 
-## Evidence and release limits
+The cleaned article/SI continue to distinguish finite checks from proofs, delimited pointwise off-diagonal results from unsupported global claims, and historical DFO context from fit/forecast/validation. The benchmark units and scope, exact synchronization hypothesis for scalarized worst dips, margin-space convexification versus implementable control, and local-only verification limits remain as recorded in the v77 source modules and changelog. The removed unsupported/global material remains preserved separately and is not in the submission SI.
 
-- No Lean build was run for v77.
-- Historical verifier counts are identified as finite reports only. The corresponding historical checker files/run logs were not found in the inspected versioned packages; they are not represented as reproduced v77 artifacts or continuum certificates.
-- The coupled-shock readings are presented as distinct, non-ordered model specifications, not as bounds on physical truth. Benchmark implications are model-relative, not empirical estimates or management prescriptions.
-- DFO values are an assessment-vintage historical scale comparison only; no fit, forecast, validation, current-threshold, or empirical-performance claim is made.
-- V76 and earlier releases remain unchanged. ECOMOD c10 and its pins, c8/c9, `main`, checksums, and DOI deposits were not edited. V77 remains local; no push or deposit occurred.
+V75 and earlier outputs, v76, ECOMOD C10 and its pins, c8/c9, `main`, checksums, and DOI deposits were not edited. The pushed branch preserves this local package snapshot; no DOI deposit or publication was made.
 
 ## Reproduction
 
-From the package directory, verify the delivered snapshot with `sha256sum -c SHA256SUMS_v77.txt`. To rebuild, run `python3 assemble_v77.py --check` and `TEX_ENGINE=/path/to/tectonic-0.17.0 ./build_v77.sh`. After any intentional edit/rebuild, refresh the snapshot with `./checksum_v77.sh`, then run `sha256sum -c SHA256SUMS_v77.txt`.
+From the package directory:
+
+```sh
+sha256sum -c SHA256SUMS_v77.txt
+python3 assemble_v77.py --check
+./build_v77.sh
+./checksum_v77.sh
+sha256sum -c SHA256SUMS_v77.txt
+```

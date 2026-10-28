@@ -1,0 +1,125 @@
+\section{Methods}\label{sec:model}
+
+\subsection{A two-land model with conserved area and ecosystem quality}\label{sec:equations}
+
+To examine how an aggregate indicator can mask a change in composition, we divide total bioproductive area $A_{tot}$ among three mutually exclusive classes:
+\begin{itemize}
+  \item \textbf{Fast-provisioning land} ($A_f$): cropland and other intensively managed systems, represented by their annual contribution.
+  \item \textbf{Ecological-capital land} ($A_c$): forest, soil, wetland, and long-rotation systems grouped into one effective class, rather than treated as a single real land type.
+  \item \textbf{Reserve land} ($A_r$): fallow, retired, or not-yet-allocated area.
+\end{itemize}
+The three areas sum to $A_{tot}$. The model also assigns capital land a separate, uncalibrated, model-defined quality index $q\in[0,q_{\max}]$. This effective state changes the modeled annual contribution per hectare; it is not a direct measurement of biomass density, soil integrity, or ecological health. The baseline bound $q_{\max}=1$ is imposed for admissibility, not estimated as an ecological threshold. The raw regeneration-rate function is logistic:
+\begin{equation}\label{eq:Gc}
+G_c(q)=\rho_c\,q\left(1-\frac{q}{q_{\max}}\right),
+\end{equation}
+Capital land's annual contribution per hectare combines a direct-yield term with a term linked to quality growth:
+\begin{equation}\label{eq:Ups}
+\Ups(q)=b_c+b_{G,c}\,G_c(q),
+\end{equation}
+where $b_c$ is direct yield and $b_{G,c}$ converts the quality-growth term into annual account value. The fast- and capital-land contributions, $Y_f$ and $Y_c$, sum to total model biocapacity:
+\begin{equation}\label{eq:B}
+B=Y_f+Y_c=b_f A_f+\Ups(q)\,A_c ,
+\end{equation}
+Here $b_f$ is fast-land contribution per hectare. Model $B$ is an annual account-equivalent amount in gha, with the annual basis implicit \citep{GFNStandards2009,GFNGuidebook2019}.
+
+\paragraph{Demand, shortfalls, and land conversion} Total demand is $E=eP$, where $P$ is population and $e$ is the constant footprint per person (gha per person; $\mathrm{cap}$ denotes one person in the equations and tables). The shortfall $S$ is the demand not met by the human-available shares of the two land contributions:
+\begin{equation}\label{eq:S}
+S=\pos{E-\sigma_f Y_f-\sigma_c Y_c},
+\end{equation}
+The positive-part operator is $\pos{x}=\max(x,0)$; baseline availability fractions are $\sigma_f=\sigma_c=1$. When $S>0$, the model transfers capital land to fast-provisioning land at a finite rate:
+\begin{equation}\label{eq:uc}u_c=\frac{1}{\tconv}\min\!\left(\frac{S}{b_f},\;A_c-\Acmin\right)\qquad[\mathrm{ha\,yr^{-1}}],
+\end{equation}
+The ratio $S/b_f$ is the fast-land area required to cover the shortfall under this model rule; $\Acmin$ is the lower area bound, and $\tconv$ sets the conversion timescale. This transfer is a specified response rule, not a reconstruction of observed land-clearing decisions.
+
+\paragraph{Land flows and asymmetric restoration} Land moves among classes through one-to-one area transfers:
+\begin{align}
+\dot A_c&=-u_c+R_{rc},\label{eq:Ac}\\
+\dot A_f&=u_c+\mu A_r-\eta_f A_f,\label{eq:Af}\\
+\dot A_r&=-\mu A_r+\eta_f A_f-R_{rc},\label{eq:Ar}
+\end{align}
+The flow $\mu A_r$ moves reserve area into fast use, while $\eta_f A_f$ retires fast land to reserve. Reserve land returns to the capital-land class only through the surplus-gated restoration flow $R_{rc}$:
+\begin{equation}\label{eq:Rrc}
+R_{rc}=\chi_r\,A_r\,\pos{B-E}.
+\end{equation}
+Restoration is therefore asymmetric in the model: fast land may be retired into reserve, but reserve returns to ecological-capital use only when the modeled surplus is positive and the restoration flow is active. A closed shortfall alone does not restore capital-land area.
+
+\paragraph{Delays, model debt, and demographics} Quality responds to its delayed value through projection of the regeneration vector field onto the tangent cone of $K_q=[0,q_{\max}]$. Population responds to carrying capacity evaluated at $t-\tau_p$; the delay is in the capacity input, not in population itself in its crowding term. The model also tracks a leaky deficit state $D$ that affects fast-land yield:
+\begin{align}
+\dot q&=\Pi_{T_{K_q}(q(t))}G_c\big(q(t-\tau_g)\big),\label{eq:q}\\
+\dot P&=rP\left(1-\frac{P}{K(t-\tau_p)}\right),\qquad K=\max(B/e,\,K_{\min}),\label{eq:P}\\
+b_f&=\big(b_{f0}+T_b(t)\big)\,e^{-\alpha D},\label{eq:bf}\\
+\dot D&=\pos{E-B}-\eta D,\label{eq:D}\\
+T_b(t)&=\omega_{Tb}\,\frac{\Delta b}{1+e^{-\kappa_w(t-t_{wave})}},\qquad \omega_{Tb}\in\{0,1\}.\label{eq:Tb}
+\end{align}
+Here $K_q=[0,q_{\max}]$, $T_{K_q}(q)$ is its tangent cone at the current state, and $\Pi$ is Euclidean projection onto that cone. We interpret the quality equation as an absolutely continuous solution, almost everywhere, with $\rho_c>0$ and an admissible continuous history $q(s)=\phi(s)\in K_q$ for $s\in[-\tau_g,0]$. Since $G_c(x)\ge0$ for $x\in K_q$, the projected law agrees with the raw delayed rate below the upper bound and sets outward growth to zero at $q=q_{\max}$; at $q=0$ the vector field is nonnegative. The cap is a mathematical admissibility constraint, not an empirically identified biological saturation mechanism.
+Areas $A_f$, $A_c$, and $A_r$ are measured in hectares; $B$, $E$, and $S$ are annual account amounts in gha, with the annual basis implicit. $D$ is measured in gha\,yr; both $\dot D$ and $\eta D$ are in gha. It is an internal model state driven by aggregate deficit, not an area, a physical stock, or an NFA-reported quantity. The optional technology boost $T_b$ raises fast-land yield along a bounded logistic curve. It is off in the baseline, figures, and tables, and appears only in the matched comparison in SI~\S S8. The dynamic states are $A_f$, $A_c$, $q$, $P$, and $D$; timber liquidation and direct restoration from fast land to capital land are not active in the reported runs (SI~\S S1).
+
+\paragraph{Core system feedbacks} The equations permit two conditional feedbacks:
+\begin{enumerate}
+  \item \textbf{Compositional-yield feedback.} When fast land contributes more per hectare than capital land ($b_f>\Ups(q)$), conversion raises $B$ at the margin while reducing $A_c$. With endogenous population, higher $B$ can raise delayed carrying capacity $K$ and later population and demand, potentially creating another shortfall. Maintenance, retirement, quality change, and the other model terms also affect $B$; this is a model feedback, not an empirical causal finding.
+  \item \textbf{Deficit--yield feedback.} A shortfall adds to $D$, while repayment draws it down. As $D$ grows, modeled fast-land yield $b_f$ falls; this can reduce $B$ and deepen the shortfall. The state $D$ is the model's leaky deficit measure, not a direct measure of nutrient depletion, aquifer overdraft, or other physical processes.
+\end{enumerate}
+
+\subsection{Parameter selection and empirical grounding}\label{sec:params}
+
+Table~\ref{tab:params} summarizes the baseline parameter values and their evidence status. Parameters are representative rather than econometrically fitted; the model is designed to isolate structural mechanisms, not to generate precise historical forecasts. To keep the model tractable, it consolidates forests, soils, wetlands, and other slow-renewing systems into one effective capital-land class, although their extent, condition, yields, and recovery times differ substantially. Empirical records provide timescale context: secondary forest biomass reaches half its reference level after a median of about $30$\,yr; trajectories for 33 collapsed fish stocks give a median time to half-recovery of about $5.6$\,yr; and soil organic carbon approaches a new balance over roughly $17$--$23$\,yr (SI~\S S5.5) \citep{Poorter2016,HutchingsReynolds2004,Neubauer2013,Poeplau2011}. These heterogeneous records do not define a pooled global average, estimate $\rho_c$, or determine the model delay $\tau_g$. They are measurement and future-modeling precedents only; they do not validate the present generic quality equation or identify its parameters.
+
+Two data-based quantities provide context for cropland but do not calibrate the model: the NFA cropland account value per unit area and a separate cereal-yield/cropland-area proxy (SI~\S S5). Their boundaries do not map one-to-one onto model fast land, and neither is a fitted value of $b_f$ or a direct measure of ecological capital. Finally, the baseline assumes $b_f-\Ups(q)>0$. This is an explicit conditional modeling regime for examining when a short-term contribution premium can mask a change in land composition, not a universal empirical claim.
+
+\begin{table}[!htbp]
+\centering\footnotesize
+\renewcommand{\arraystretch}{0.95}
+\caption{Baseline parameter values and evidence status. Representative values are effective, lumped quantities; the NFA account/area quotient is descriptive, not a physical-yield measurement. Extension parameters are active only in scenarios specified in this table or the SI. Symbols and units are listed in SI~\S S1.}
+\label{tab:params}
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.13\textwidth} >{\raggedright\arraybackslash}p{0.2\textwidth} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.26\textwidth}@{}}
+\toprule
+Parameter & Value & Meaning & Status \\
+\midrule
+$\rho_c$ & $0.08$\,yr$^{-1}$ & quality-regeneration scenario rate & scenario setting; not estimated \\
+$b_{f0}$ & $0.85$\,gha\,ha$^{-1}$ & base fast-land yield per hectare & representative (2026 NFA account value/area quotient $\approx1.045$ in 1961; not a physical-yield measure) \\
+$b_c$ & $0.05$\,gha\,ha$^{-1}$ & capital-land direct yield & representative \\
+$b_{G,c}$ & $0.8$\,gha\,yr\,ha$^{-1}$ & regeneration-value coefficient for capital land & representative \\
+$q_{\max}$ & $1.0$ (dimensionless) & imposed quality admissibility bound & not an estimated ecological threshold \\
+$\mu$ & $0.06$\,yr$^{-1}$ & cropland maintenance (reserve$\to$fast) & representative \\
+$\eta_f$ & $0.05$\,yr$^{-1}$ & fast-land retirement (fast$\to$reserve) & representative \\
+$\tconv$ & $1.0$\,yr & conversion time constant & representative \\
+$\alpha$ & $0.03$\,gha$^{-1}$\,yr$^{-1}$ & degradation of $b_f$ per unit debt & representative \\
+$\eta$ & $0.05$\,yr$^{-1}$ & debt-repayment rate ($>0$) & representative \\
+$e$ & $0.55$\,gha\,cap$^{-1}$ & per-capita footprint (constant) & representative \\
+$r$ & $0.02$\,yr$^{-1}$ & intrinsic population growth & representative \\
+$\tau_g,\ \tau_p$ & $20,\ 25$\,yr & regeneration and demographic delay scenarios & scenario settings; $\tau_p$ lumps institutional lags \\
+$A_{tot}$ & $2.5$\,ha & total bioproductive area & normalization \\
+$\sigma_f,\ \sigma_c$ & $1,\ 1$ (dimensionless) & human-available shares of annual account amounts & baseline ($<1$: reservation extension) \\
+$\chi_r$ & $0.10$\,gha$^{-1}$\,yr$^{-1}$ & surplus-gated restoration coefficient & on with endogenous demand; off under frozen demand \\
+$\Acmin$, $A_r^{\min}$,\newline $K_{\min}$ & $0.05$\,ha, $0.10$\,ha,\newline $0.02$\,cap & typed floors & domain constraints \\
+$\Delta b$, $\kappa_w$,\newline $t_{wave}$ & $1.0$\,gha\,ha$^{-1}$, $0.1$\,yr$^{-1}$,\newline $40$\,yr & technology wave & off in baseline; active only in the matched SI S8 experiment \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Data and empirical measures}\label{sec:data}
+
+Our empirical analysis uses the National Ecological Footprint and Biocapacity Accounts (NFA), Edition 2026, results and metadata version 1.0 \citep{Lo2026NFA}. We analyse complete world observations for 1961--2023 and exclude preliminary estimates for 2024--2025. A 1961--2022 sensitivity check uses the same account edition and population series, so the data vintage is held constant across the two windows.
+
+From the workbook's \texttt{world\_data} sheet, we extract total biocapacity $B$ (\texttt{biocap\_total\_gha}), the Global Ecological Footprint of Production $E_{\mathrm{prod}}$ (\texttt{efp\_total\_gha}), and UN PopStat population $P$ (\texttt{pop\_1000\_persons}). Population is converted from thousands to persons. Per-person measures are calculated from unrounded totals rather than the workbook's rounded per-person columns; ratios, indices, and log changes are dimensionless.
+
+\paragraph{Accounting categories and physical stocks} We retain the five workbook labels: \emph{Cropland}, \emph{Grazing land}, \emph{Forest biocapacity}, \emph{Fishing grounds}, and \emph{Built-up land}. These are account values, not measurements of biomass, soil condition, wetland extent, fish biomass, or model area $A_c$. Built-up land is an NFA accounting class, not ecological capital. We therefore interpret movements among categories as changes in account composition, not as direct observations of physical ecosystems or of the model's capital-land stock.
+
+\paragraph{Auxiliary cropland proxy} As a separate comparison, we pair Our World in Data's FAOSTAT-derived world cropland-area series (arable land plus permanent crops) with cereal yield \citep{OWIDCropland2026,OWIDCereal2026}. Cereal yield is a limited productivity indicator, not a measure of all-crop output or an NFA yield factor. We scale the proxy to the NFA cropland share of total biocapacity in 1961, calculate the crop-account proxy $X_t=\hat b_{f,t}A_{f,t}$, and define the remainder as $C_t=B_t-X_t$. Here $A_{f,t}$ denotes observed cropland area for this auxiliary calculation, not the model state. The scaling makes this an assumed account split, not an independent measurement of the model's fast-land contribution or of physical capital. The remainder absorbs differences in boundaries, categories, and calibration; it is not $\Ups(q)A_c$. SI~\S S5 reports the proxy and its calibration sensitivity. We infer no physical-stock trend from it.
+
+\paragraph{Total and per-person change} We use the exact identity
+\begin{equation*}
+\Delta\ln B=\Delta\ln(B/P)+\Delta\ln P
+\end{equation*}
+to separate the scale change in total biocapacity from the change in biocapacity per person. This is an accounting identity, not a causal model of biocapacity production.
+
+\subsection{Numerical implementation}\label{sec:numerics}
+
+We integrate the delay equations by the method of steps with an explicit first-order Euler scheme. At step $k$, current states are read at $t_{k-1}$; time-dependent inputs and delayed values are evaluated at $t_k$, with linear interpolation of the delayed $q$ and $B$ histories. The raw delayed quality velocity is projected onto $T_{K_q}(q(t_{k-1}))$ before the Euler update; the updated quality is then clipped to $K_q$ as a finite-step safeguard. Other state bounds are applied, reserve area is reconstructed as $A_r=A_{tot}-A_f-A_c$, and the updated $B$ is stored in the delay history. The positive-part operator is evaluated exactly. Baseline demonstration and high-resolution threshold runs use $\Delta t=0.05$\,yr; broader drawdown sweeps use $0.1$\,yr, with selected thresholds rechecked at $0.05$\,yr.
+
+Pre-run histories are initialized over the full longest active delay window, $[-\max\{\tau_g,\tau_p\},0]$, as $q(s)=q_0$ and $B(s)=B_0$, with $B_0$ calculated from the initial state. In the matched technology-wave experiment (SI~\S S8), both runs share the no-wave prehistory; the active $T_b(0)$ changes current $B(0)$ and subsequent wave-adjusted $B(t)$ enters the delayed carrying-capacity input $K(t-\tau_p)$. The enforced state bounds are $A_c\ge\Acmin$, $A_f\ge0$, $q\in K_q$, $P,D\ge0$, and $K\ge K_{\min}$.
+
+A finite-step consistency test compared post-Euler quality clipping with explicit tangent-cone projection before the Euler update. At $\Delta t=0.05$\,yr and $T=100$\,yr, using the Figure~\ref{fig:model} initial state and parameters, the tested arrays for $A_f$, $A_c$, $q$, $P$, $D$, $A_r$, $B$, $E$, and $T_b$ were exactly equal at $\tau_g=5,20,40$\,yr. For the continuous baseline quality path at $\tau_g=20$ or $40$\,yr, $q(t)=\min(1,0.9+0.0072t)$; its maximum piecewise-linear error fell from $7.1\times10^{-5}$ at $\Delta t=0.1$\,yr to $8.8\times10^{-6}$ at $0.0125$\,yr. In the full frozen-demand Figure~\ref{fig:model} case, halving $\Delta t$ from $0.05$ to $0.025$\,yr reduced maximum absolute differences against a $0.003125$\,yr reference from $0.00221$ to $0.00102$\,ha for $A_c$, $0.00180$ to $0.000831$\,gha for $B$, $0.000252$ to $0.000118$\,cap for $P$, and $0.00200$ to $0.000924$\,gha\,yr for $D$ (SI~\S S3). These checks establish equality only for the enumerated cases and show smaller differences under timestep refinement; they are not a universal error bound or proof of convergence for all settings.
+
+All reported baseline trajectories use the projected delayed-quality law in Eq.~\eqref{eq:q}. SI~\S S3 presents the current-quality comparator $G_c(q(t))$ only as a sensitivity check; it is not the selected model.
