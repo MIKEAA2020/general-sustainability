@@ -1,0 +1,270 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,booktabs,tabularx,array,longtable}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\theequation}{S\arabic{equation}}
+\renewcommand{\thetable}{S\arabic{table}}
+\input{results/availability_numbers.tex}
+\emergencystretch=3em
+\title{Supplementary Information\\\large Ecological assets behind improving accounts: a boundary-matched test of composition masking}
+\author{Amin Abaee\\\small Independent Researcher, Tehran, Iran}
+\date{}
+\begin{document}
+\maketitle
+
+\section{National account coverage and availability criteria}
+
+The source workbook is the National Ecological Footprint and Biocapacity Accounts, Edition 2026, results and metadata version 1.0. The \texttt{national\_data} sheet contains \NationalRows\ records, 51 columns and \CountryIDs\ country and territory identifiers. The primary interval comprises nine annual observations, 2015--2023 inclusive. A country identifier satisfies the account availability criteria if:
+\begin{enumerate}
+\item every year in the interval is present with a unique country--year key;
+\item each publication flag is \texttt{+++}, \texttt{++} or \texttt{+};
+\item all five biocapacity components, their total, forest area, cropland area and population are finite and nonnegative, with positive population;
+\item the absolute difference between the five-component sum and the reported total does not exceed 3 gha.
+\end{enumerate}
+The 3 gha bound follows from rounding five components and one total to the nearest hectare equivalent: the maximum discrepancy is $5(0.5)+0.5=3$\,gha. The largest observed discrepancy is 2 gha. Publication flags differ in trade and consumption detail; the three included flag classes all release the biocapacity and production fields used here. The workbook's actual field is named \texttt{flag}, while its definition sheet also uses the term \texttt{quality\_flag}.
+
+There are \AccountPass\ identifiers satisfying these criteria and \AccountFail\ not satisfying them. The complete identifier-level table records missing years, publication scope, required-value availability and component consistency. The selected countries in Table~\ref{tab:countries} all satisfy the account criteria. Their physical boundary and measurement compatibility are not determined by this result.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Countries selected for evaluation of physical observation compatibility. Account availability refers to the complete 2015--2023 interval under the criteria in S1.}\label{tab:countries}
+\begin{tabular}{lll}
+\toprule
+Country & ISO identifier & Account availability\\\midrule
+Brazil & BRA & Complete\\
+Indonesia & IDN & Complete\\
+Democratic Republic of the Congo & COD & Complete\\
+Cameroon & CMR & Complete\\
+Canada & CAN & Complete\\
+Finland & FIN & Complete\\
+France & FRA & Complete\\
+Australia & AUS & Complete\\\bottomrule
+\end{tabular}
+\end{table}
+
+The selection is purposive rather than probabilistic. The availability result cannot be extrapolated to the prevalence of account--asset agreement or disagreement. The 2024--2025 workbook records do not form part of the primary interval. Account areas remain inputs to the account observation system rather than independent validation measurements of forest extent.
+
+\section{Biomass products, units and spatial support}
+
+The source is ESA CCI Biomass v7.0, DOI \url{https://doi.org/10.5285/6429d1aafe1e43b9b414e4a5a7f8b903}. Metadata inspection used the 50 km aggregate and the 2010--2020 change product. Their exact names, byte sizes, hashes and retrieval URLs are supplied in the source register. Inspection of these coarse files was limited to coordinates, time values, dimensions and metadata. Separate bounded native-resolution windows at 2015 and 2023 were read to count valid, zero and missing observations; no national biomass stocks or change signs were estimated.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Observation definitions in the inspected CCI products.}\label{tab:products}
+\begin{tabularx}{\textwidth}{p{0.24\textwidth}X}
+\toprule
+Attribute & Definition or interpretation\\\midrule
+Grid & 720 longitude by 360 latitude cells, with $0.5^\circ$ spacing in WGS84 coordinates. The nominal 50 km designation is not an equal-area definition.\\
+Epochs & 2005--2012 and 2015--2024, comprising 18 annual epochs. No observed 2013 or 2014 map is supplied in this series.\\
+Biomass density & Above-ground living woody biomass in Mg\,ha$^{-1}$. The aggregate is normalized by total grid-cell area, not forest area.\\
+Aggregate uncertainty & The guide describes uncertainty in the aggregated mean using variance and spatial covariance contributions. The variable name \texttt{agb\_sd} alone does not establish an independent-pixel error model.\\
+Change example & Difference, standard deviation and quality-class layers for 2010--2020. This example does not validate change estimates for 2015--2023.\\
+Temporal bounds & The change file's time-bounds attribute names \texttt{time\_bnds1}; no variable with that name is stored in the file. The documented epoch pair defines the interval considered here.\\
+Observation coverage & The guide specifies a native product domain between $80^\circ$N and $60^\circ$S, subject to remote-sensing availability. The global coordinate rectangle is not a valid-observation mask.\\\bottomrule
+\end{tabularx}
+\end{table}
+
+Country--product intersections require a territorial definition, including overseas areas where relevant. Native-resolution or appropriately aggregated forest observations must distinguish no-data cells, observed zero values, nonforest cover and converted land. An estimated density of zero is not, by itself, an independent land-cover observation. Density averaging, mask application and area normalization must refer to the same support. Coarse aggregates do not identify fine-resolution forest-to-cropland transitions.
+
+\section{Change-quality classes and uncertainty}
+
+The inspected provider implementation derives quality classes from endpoint biomass estimates and their uncertainty intervals, followed by a growth-limit condition and spatial filtering. The class definitions are summarized in Table~\ref{tab:quality}. These labels describe the provider decision rule; they are not independent observations of ecological change.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Provider change-quality classes. Descriptions refer to the processing rule rather than independently validated confidence levels.}\label{tab:quality}
+\begin{tabular}{cl}
+\toprule
+Code & Interpretation\\\midrule
+0 & Both endpoint biomass estimates are zero\\
+1 & Strong loss classification\\
+2 & Possible loss classification\\
+3 & No resolved change under the processing rule\\
+4 & Possible gain classification\\
+5 & Strong gain classification\\\bottomrule
+\end{tabular}
+\end{table}
+
+The example implementation computes change standard deviation as $\sqrt{\sigma_0^2+\sigma_1^2}$ and uses one-standard-deviation endpoint intervals in its classification operations. In general,
+\begin{equation}
+\operatorname{Var}(\widehat d_1-\widehat d_0)=\sigma_1^2+\sigma_0^2-2\operatorname{Cov}(\widehat d_1,\widehat d_0).
+\end{equation}
+The variance sum corresponds to zero temporal covariance. A one-standard-deviation interval rule combined with growth and filtering operations does not define a calibrated 95\% test. Temporal covariance, systematic biases and the decision rule's operating characteristics require separate evaluation for the specified observation domain.
+
+For an area-weighted total $\widehat Q=\sum_i a_i\widehat d_i$ on a fixed support, the measurement variance is $\boldsymbol a^\mathsf{T}\Sigma\boldsymbol a$, where $\Sigma$ is the joint error covariance matrix. Spatial independence reduces this to a sum of diagonal terms, but that simplification requires evidence. Uncertain support, missing or converted cells, and forest classification error introduce additional terms not represented by a density-only covariance matrix. Product-quality classes cannot provide independent validation when they are constructed from the target maps themselves.
+
+\section{Geographic area calculation}
+
+For a rectangle bounded by longitude $\lambda_w,\lambda_e$ and latitude $\phi_s,\phi_n$, all expressed in radians, the WGS84 area in hectares is
+\begin{equation}
+A=\frac{a^2(1-e^2)}{10^4}(\lambda_e-\lambda_w)\left[F(\sin\phi_n)-F(\sin\phi_s)\right],
+\end{equation}
+where $a=6378137$\,m, $f=1/298.257223563$, $e^2=f(2-f)$ and
+\[
+F(s)=\frac{s}{2(1-e^2s^2)}+\frac{\operatorname{atanh}(es)}{2e}.
+\]
+The formula integrates the ellipsoidal area element between meridians and parallels. Longitude intervals crossing the dateline are split before integration. Geographic cell area varies with latitude even when angular spacing is constant.
+
+For the full ellipsoid, the rectangle integral reduces to
+\[
+A_{\mathrm{WGS84}}=\frac{2\pi a^2}{10^4}\left[1+\frac{1-e^2}{e}\operatorname{atanh}(e)\right].
+\]
+Areas of adjacent latitude bands add exactly at the analytic level because their boundary terms telescope. These identities specify geometric consistency independently of ecological observation accuracy.
+
+\section{Extent, density and spatial compensation}
+
+For positive forest areas, expanding the symmetric terms gives
+\begin{align}
+&\frac{(A_1-A_0)(D_1+D_0)+(D_1-D_0)(A_1+A_0)}{2}\notag\\
+&\hspace{3em}=A_1D_1-A_0D_0=Q_1-Q_0.
+\end{align}
+The identity assigns a pure area change entirely to the extent term and a pure mean-density change entirely to the density term. Mean forest density is undefined at a zero-area endpoint; appearing or disappearing strata therefore require a separately specified allocation convention.
+
+For local net stock changes, $G-L=\sum_i\Delta Q_i$ and $G+L=\sum_i|\Delta Q_i|$. Consequently, $0\le K\le1$ when $G+L>0$. A one-direction change gives $K=0$, while equal positive and negative sums give $K=1$. The offset mass is $\min(G,L)$ and has biomass-mass units. When every local change is zero, $K$ is undefined.
+
+These quantities distinguish a national endpoint from its spatial composition, but measurement error can produce the same pattern. If true change is zero and observed local changes are errors $e_i$, positive and negative errors may yield a large $\sum_i|e_i|$ while $\sum_i e_i$ is close to zero. The resulting high cancellation fraction does not establish ecological redistribution. Interpretation therefore requires an error-model reference at the effective observational support. Resampling to a finer grid does not provide additional independent physical information.
+
+The sums represent local net changes. Gross growth, recruitment, harvest and mortality require additional observations or a separately identified demographic model.
+
+\section{Validation, information dependence and inferential scope}
+
+Account availability, physical observation compatibility and validation are distinct requirements. A physical comparison requires stable territorial boundaries, a justified forest support, matched observation dates and a change-error model. Transition validation must distinguish the target forest-to-cropland class from other disturbances and quantify uncertainty using an appropriate reference design. Biomass-level validation does not automatically establish biomass-change precision.
+
+Practical-change and classification thresholds require calibration independent of held-out evaluation outcomes. The calibration design must evaluate the complete reporting rule under relevant covariance, systematic-bias and missingness scenarios; individual feature tests do not determine the error rate of the combined rule. Comparisons of reporting information require the same cases and weights. Full-population coverage and pairwise overlap must also be reported so that a score change is not attributed to a change in the assessed population. Input lineage must distinguish independent observations from target-derived features and shared calibration/reference data. Algebraically recoverable features do not constitute additional independent measurements.
+
+The results supplied here are account availability counts, product definitions and computational verification. No country-level physical stock changes, conversion associations, ecological change-resolution probabilities or reporting-rule accuracy estimates are supplied. Local mapped-cover endpoint areas are reported separately in S8 and do not establish those national outcomes. The additional support observations described in S7 do not establish those outcomes. These quantities cannot be inferred from account publication flags or product access alone.
+
+\section{Territorial and native observation support}
+
+Table~\ref{tab:domain} reports the latitude-domain intersection of the fixed candidate polygons. The geometries are the complete published TopoJSON objects, not the simplified-download objects; their original quantization is retained. Country metadata identifies the source, represented year, licence and full repository commit. Polygon topology was invalid in the released representations for Indonesia, Democratic Republic of the Congo, Canada, Finland and Australia. The polygonal output of a structure-based validity repair is used for geometric screening; repair is not independent validation or a guarantee that omitted islands, water or historical boundary changes are correctly represented.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Candidate-boundary domain screening. Areas refer to the selected polygons, not independently measured land or forest area. Full latitude-domain inclusion does not establish valid-data coverage.}\label{tab:domain}
+\begin{tabular}{lrrr}
+\toprule
+ISO & Represented year & Maximum latitude & Outside native domain (\%)\\\midrule
+BRA & 2020 & 5.27$^\circ$ & 0.0000 \\
+IDN & 2017 & 5.91$^\circ$ & 0.0000 \\
+COD & 2017 & 5.39$^\circ$ & 0.0000 \\
+CMR & 2016 & 13.08$^\circ$ & 0.0000 \\
+CAN & 2020 & 83.14$^\circ$ & 1.2363 \\
+FIN & 2017 & 70.09$^\circ$ & 0.0000 \\
+FRA & 2016 & 51.11$^\circ$ & 0.0000 \\
+AUS & 2021 & -9.14$^\circ$ & 0.0000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The largest supported polygon by longitude--latitude planar area supplies a representative interior point for each bounded native observation window. This geometry-only rule is fixed before native-payload retrieval. Each window contains $256\times256$ cells at identical native row and column indices in 2015 and 2023. The native grids have 157,500 rows and 405,000 columns, with approximately $1/1125^\circ$ spacing; nominal 100 m spacing is not a constant ground area. A pixel-centre country predicate is used only to describe the probe support, not to approximate a national stock integral.
+
+All eight windows contain 65,536 polygon-centre-selected cells with finite, in-range AGB and AGB-standard-deviation values at both endpoints. The declared fill value is $-32768$; observed zero is retained as a valid value rather than recoded as missing. Zero counts differ across windows and endpoints and are supplied separately in the coverage table. They are not forest-area estimates. These are deterministic local access/support observations, not a probability sample, national coverage assessment, forest classification or validation of biomass change. The exact windows, source responses and counts are identified by query URLs, byte sizes and hashes; raw payloads are not redistributed.
+
+A separate 1-degree geographic index records polygon intersections for download planning. Multiplying coarse-cell means by these boundary fractions would assume unverified within-cell homogeneity and is not used to estimate biomass. Independent endpoint forest support, land/water treatment, full-support valid-data coverage, uncertainty and territorial correspondence remain required. Unresolved admission is recorded as a hold, not a permanent exclusion or an ecological outcome.
+
+The examined Copernicus land-cover catalogue, form and version constraints list 1992--2022 epochs, with version 2.0.7 for 1992--2015 and version 2.1.1 for 2016--2022. They do not supply the required 2023 forest-support observation. This product-specific endpoint gap does not rule out national or other compatible observations. Neither the primary window nor the conditional secondary window is changed by this finding.
+
+\section{Brazilian mapped-cover fractions and observation operators}
+
+The two Collection 11 inputs have the same WGS84 geographic pixel-area grid, with angular spacing $0.000269494585236^\circ$ and north-west grid origin approximately $74.0209997484^\circ$W and $5.4230395387^\circ$N. Both are single-band unsigned-byte categorical rasters. The cover window intersects the native biomass indices, rows 105890--106145 and columns 146433--146688. Source generations, ETags, byte ranges and hashes identify the inputs without distributing full country images.
+
+Let $C_i$ be a native biomass cell, $L_j$ a finer land-cover pixel, $\widehat c_{jt}$ its mapped class and $g$ a pre-defined group. Its mapped area fraction is
+\begin{equation}
+\widehat f_{ig,t}=\frac{\sum_j A(C_i\cap L_j)\,\mathbf1\{\widehat c_{jt}\in g\}}{A(C_i)}.
+\end{equation}
+The areas use the WGS84 rectangle integral in S4, including partial boundary pixels. Longitude and latitude integrals factor into separable overlap weights. This is conservative area aggregation, not nearest-neighbour classification, and creates no independent physical information beyond the input classifications. Disjoint group fractions sum to one when the separately retained unobserved group is included. Direct fine-pixel area sums and coarse-fraction-weighted areas agree to less than $3\times10^{-8}$ ha in this footprint; that is an arithmetic closure result, not classification accuracy.
+
+The formations group contains codes 3 (Forest Formation), 5 (Mangrove), 6 (Floodable Forest) and 49 (Wooded Sandbank Vegetation). Savannas 4 and 7 and plantation 9 are separate. The remaining published classes form an explicitly retained other-mapped group, with open water 33 separate. Codes 0 and 27 are reserved for unclassified or legacy unobserved support rather than ecological absence; neither occurs in these bounded cover arrays. An unexpected code is not silently assigned to another class. Individual source-class areas and the alternative formations-plus-savanna and formations-plus-plantation fractions remain available. Adding savannas changes the target cover grouping, not merely its uncertainty.
+
+Published-label completeness is not completeness of direct annual observations. The general Collection 11 ATBD describes temporal gap filling from previous or subsequent classifications, temporal windows, frequency filters and integrated thematic filters. Its seven-year forestry-filter rules for plantation class 9 and biome-specific smoothing can modify timing. Native biomass annual-average epochs and processed annual land-cover labels must therefore not be treated as precisely synchronous instantaneous censuses.
+
+\subsection{Why fine forest area does not identify forest-only biomass}
+For a mixed native cell, let $A_i$ be full cell area, $f_i$ its true forest fraction and $d_i$ a full-cell biomass density. If $d_i^F$ and $d_i^O$ are the unknown forest and other-land mean densities, then
+\begin{equation}
+Q_i^{\mathrm{all}}=A_i d_i=A_i\{f_i d_i^F+(1-f_i)d_i^O\},\qquad Q_i^F=A_i f_i d_i^F.
+\end{equation}
+For $0<f_i<1$, knowing $Q_i^{\mathrm{all}}$ and $f_i$ does not in general determine $Q_i^F$. For example, at $f_i=1/2$, densities $(d_i^F,d_i^O)=(d_i,d_i)$ and $(3d_i/2,d_i/2)$ give the same full-cell density but forest contributions $A_i d_i/2$ and $3A_i d_i/4$. These are illustrative allocations, not empirical estimates. Nonnegativity alone supplies $0\le Q_i^F\le Q_i^{\mathrm{all}}$; additional ecological restrictions, finer observations or a validated allocation model would be needed to narrow the compatible allocations. Multiplication by $f_i$ alone imposes equality of the component mean densities, not a consequence of observing forest area. A mapped fraction $\widehat f_i$ adds classification uncertainty to this problem. The PUG explicitly defines native AGB per full pixel and advises users to supply their own forest mask; it does not supply within-pixel biomass allocation.
+
+A mapped-pure-forest intersection is reported descriptively, not used to discard changing or mixed support. The presence union, presence intersection and pure intersection have different selection rules. Using persistent pure cells alone would exclude appearing/disappearing forest strata and could remove the conversions the empirical study seeks to evaluate.
+
+\subsection{Reference information and dependence}
+Collection 11's general ATBD reports about 75,000 error-assessment samples after excluding 10,000 Amazon training samples from an 85,152-point frame. Its detailed validation section describes interpreted years through 2024, whereas the collection extends through 2025. The inspected public download page labels reference datasets Collection 9. Neither a collection-wide overall accuracy nor a nominal reference-point label establishes a change-error model for these Collection 11 endpoints. A reference audit must verify compatible interpretation labels, independent training/validation roles, inclusion probabilities, design weights and the target transition classes.
+
+The Cerrado appendix documents GEDI-derived canopy-height information in training-mask refinement. CCI's PUG describes LiDAR-informed allometric development in the biomass product lineage. This identifies a potential shared auxiliary-information family, not proof that identical footprints or error realizations enter both products. Exact overlap and error dependence remain to be traced. Classification errors, temporal dependence and spatial covariance still require appropriate reference evidence; different publishers are not a basis for assuming independent errors.
+
+\section{Reference-artifact coverage and compatibility}
+
+Two public archives linked from the MapBiomas reference-point page are inspected separately: a CSV archive and a vector archive. The page labels the downloads Collection 9 and describes interpretation through 2024. The actual files do not provide identical temporal fields or label representations. File path years and modification dates are not evidence of interpretation epoch or verified Collection 11 reference identity. Exact archive/member hashes and field inventories are supplied with the derived audit.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Reference-artifact endpoint coverage. Counts are records with nonblank entries, not validated observations, weighted area estimates or accuracy measurements. The CSV's 2023 entries include 11 explicitly labelled \emph{N\~AO OBSERVADO}.}\label{tab:reference_coverage}
+\begin{tabular}{lrr}
+\toprule
+Property & CSV archive & Vector archive\\\midrule
+Records & 85,152 & 85,152\\
+Annual class-field range & 1985--2023 & 1985--2022\\
+2015 nonblank entries & 85,152 & 85,152\\
+2023 nonblank entries & 4,053 & No field\\
+Points inside the fixed footprint & 7 & 7\\
+Local paired 2015/2023 entries & 0 & 0\\\bottomrule
+\end{tabular}
+\end{table}
+
+The CSV contains textual annual classes, including explicit non-observation labels. Its absent 2023 entries number $81{,}099$. The vector's numeric 2015 class field includes legacy codes that require a source-specific legend. No Collection 11 code-to-name or forest-land-use equivalence is presumed, and no mapped-class confusion matrix or transition accuracy is computed.
+
+All $85{,}152$ identifiers are shared by the two artifacts. CSV longitude/latitude coordinates agree with vector point geometries to within $10^{-8}$ degrees. The vector's \texttt{LON} and \texttt{LAT} attribute values are reversed relative to the geometry at every record: the first attribute corresponds to latitude and the second to longitude. Positions are therefore taken from the source's WGS84 point geometry, not those attribute names. This is a verified within-artifact coordinate inconsistency, not a positional validation against independent ground control.
+
+In the CSV, \texttt{AMOSTRAS=Treinamento} and \texttt{AMOSTRA\_AM=1} each identify $9{,}999$ records; the remaining $75{,}153$ have a blank training-text entry and indicator zero. The general ATBD describes exclusion of about 10,000 Amazon training points from assessment. The actual flag count and its relation to the documented assessment population require reconciliation. The vector artifact lacks those role fields. Unflagged rows and distinct interpreter agreement do not establish independence from mapping training or previous collections.
+
+Both artifacts contain probability/weight fields, but their design semantics and frame correspondence are not certified here. Decimal-comma values in the CSV are parsed explicitly. The vector has 19 records with zero probability and zero weight, whereas the CSV has positive numeric entries throughout. Source/design reconciliation is needed before probability weighting; these fields are not ecological observations. Even the common 2015 interpreter-count and border fields differ at 2,161 and 1,011 shared identifiers, respectively. These are cross-artifact payload differences, not estimates of map accuracy. The two public representations are not independent reference replications.
+
+The seven locations in the local footprint provide no recorded 2023 classes in either inspected artifact. A compatible reference design with appropriately interpreted paired endpoints and documented inclusion/role information is needed before class-change or stock-change validation. These findings concern the two examined public artifacts; they are not an exhaustive claim that no suitable reference information exists.
+
+\section{Conditional allocation sets on mapped domains}
+
+For a native cell of area $A_i$ and fixed published full-cell density $\widehat d_{it}$, write $q_{it}=A_i\widehat d_{it}$. Consider an operational mapped group $g$ with area fraction $f_{it}^g$. Conditional on exact cover, density and epoch correspondence, let its unknown biomass allocation be $s_{it}^g$. Under nonnegativity alone,
+\begin{equation}
+s_{it}^g=0\quad(f_{it}^g=0),\qquad
+s_{it}^g=q_{it}\quad(f_{it}^g=1),\qquad
+s_{it}^g\in[0,q_{it}]\quad(0<f_{it}^g<1).
+\end{equation}
+For a mixed cell and any $s\in[0,q]$, choosing component means $s/(Af)$ and $(q-s)/(A(1-f))$ attains the allocation with nonnegative densities. No finite component-density cap, minimum biomass threshold, growth constraint or cross-cell coupling is included. Consequently these are exact allocation bounds within the specified minimal algebraic model, not a claim that every extreme is ecologically plausible.
+
+Let $P_t^g$ be the map-pure cells and $H_t^g$ all map-present cells. Summing the independently compatible allocations gives
+\begin{equation}
+\widehat{\mathcal I}_t^g=\left[\sum_{i\in P_t^g}q_{it},\;\sum_{i\in H_t^g}q_{it}\right]=[L_t^g,U_t^g].
+\end{equation}
+All intermediate aggregate values are compatible in this model. With no additional temporal constraint, the endpoint difference set is
+\begin{equation}
+\widehat{\mathcal D}^g=[L_{2023}^g-U_{2015}^g,\;U_{2023}^g-L_{2015}^g].
+\end{equation}
+Subtracting the lower endpoints or the upper endpoints alone would not give the full compatible difference set. The interval is conditional on published point maps, not a frequentist confidence set, posterior interval or guaranteed enclosure of true biomass. AGB-SD values are checked for valid support but are not converted to change uncertainty without an appropriate joint error model.
+
+\subsection{Topological support and numerical safeguards}
+The classifications use the Collection 11 subsets described in S8, and the native biomass grids and indices match the observation-support rectangle in S7. Both density and AGB-SD are valid at all $65{,}536$ target cells at each endpoint. The observed zero counts remain $44{,}546$ and $44{,}767$, respectively. Zero density is not recoded as nonforest, and missing cells are not substituted with zeros.
+
+For each axis, an integer incidence matrix records every finer interval having strictly positive overlap with a native interval. Products of the two axis-incidence matrices with the finer binary group labels give integer counts $c_{it}^g$ of intersecting group pixels; corresponding total counts are $n_i>0$. Absent, pure and mixed cases are determined by $c=0$, $c=n$ and $0<c<n$, respectively, rather than by a rounded forest-fraction threshold. This is an exact topology classification for the recorded grids, not a certification of the ecological classes. Area-weighted fractions recalculated on those overlaps agree with the stored cover fractions to within $3.34\times10^{-16}$.
+
+Each full-pixel density is multiplied by its WGS84 cell area, not a nominal $100\,\mathrm m\times100\,\mathrm m$ area or a forest fraction. Pure cells number 791 and 876 for formations, and 6,056 and 5,616 for formations plus savanna. Mixed and changing cells are not discarded. The full 61,830.3436 ha rectangle remains the domain, and the pure-cell intersection across years is not used as the analysis sample.
+
+The two formations allocation sets are $[44.2303,279.1932]\times10^3$ Mg and $[55.2216,326.2323]\times10^3$ Mg. The corresponding difference set is $[-223.9717,282.0020]\times10^3$ Mg. Including savannas gives $[229.7548,434.4732]\times10^3$ Mg and $[256.3634,489.2885]\times10^3$ Mg, with difference set $[-178.1098,259.5338]\times10^3$ Mg. Both sets contain zero. They describe distinct mapped domains; neither validates actual forest land use, a national biomass stock or an account--asset divergence. Additional ecological constraints could narrow an allocation model, whereas measurement/classification error requires a separate uncertainty treatment and need not be represented by these endpoints.
+
+The additional XLSX reference alternative was inspected only at ZIP/workbook/shared-string metadata level, not as a complete worksheet. No additional local paired labels, source equivalence or independent validation is inferred from that limited inspection.
+
+\section*{Source attribution and availability}
+
+National accounts: Lo, K., et al. (2026), National Ecological Footprint and Biocapacity Accounts, Edition 2026, results and metadata v1.0; \url{https://footprint.info.yorku.ca/data/}. Derived account tables and figures are distributed under CC BY-SA 4.0.
+
+Biomass: Santoro, M., and Cartus, O. (2026), ESA CCI Biomass v7.0; \url{https://doi.org/10.5285/6429d1aafe1e43b9b414e4a5a7f8b903}. The ESA Climate Change Initiative, Biomass CCI project and data providers are acknowledged. Product definitions follow the Product User Guide v7.0, 19 March 2026; \url{https://climate.esa.int/en/projects/biomass/key-documents/}.
+
+Boundary source licences and OSM attribution are retained in the data package. OSM-derived boundary data and associated support databases are supplied under ODbL 1.0; other source terms are identified separately. The native-window arrays, biomass guide and provider implementation are not redistributed.
+
+MapBiomas Project, Collection 11 of the Annual Land Cover and Land Use Maps of Brazil, accessed 29 October 2026: \url{https://brasil.mapbiomas.org/downloads/}. Local cover fractions are derived by the stated class grouping and WGS84 area intersections. Public reference-artifact links are listed at \url{https://brasil.mapbiomas.org/downloads/pontos-de-validacao/}; the audit supplies factual schemas and derived aggregate completeness checks, not the source archives. Public-data attribution conditions are stated at \url{https://brasil.mapbiomas.org/faq/?tema=dados}. Raw country land-cover rasters and source method documents are not redistributed.
+
+Source hashes, metadata, derived account-availability tables and computational methods are available at \url{https://github.com/MIKEAA2020/general-sustainability/tree/main/batch%209/agent%202/ecomod_empirical_followup/F07}. Raw data, the guide and provider code are not redistributed.
+
+\end{document}

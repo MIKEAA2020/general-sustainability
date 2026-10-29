@@ -1,0 +1,74 @@
+{
+  "documents": [
+    {
+      "id": "PUG_v7.pdf",
+      "url": "https://climate.esa.int/documents/3352/Product_User_Guide_PUG_V7.0.pdf",
+      "sha256": "fb97e9e453cbab4aa6d993b97b3b459c939b7496b9d97976ace46ee5df50a241",
+      "bytes": 9293501,
+      "reading_scope": "targeted method/flag/terms inspection, not executed"
+    },
+    {
+      "id": "ESA_terms.pdf",
+      "url": "https://artefacts.ceda.ac.uk/licences/specific_licences/esacci_biomass_terms_and_conditions_v2.pdf",
+      "sha256": "f13640321f7bb396a24228350e47b621ec790272d317bb3d463f0da64d4aceb5",
+      "bytes": 110335,
+      "reading_scope": "targeted method/flag/terms inspection, not executed"
+    },
+    {
+      "id": "cci_create_change_maps.py",
+      "url": "https://dap.ceda.ac.uk/neodc/esacci/biomass/data/agb/maps/v7.0/create_change_maps.py?download=1",
+      "sha256": "ab579be84610210bc5a8a9eb75c6f3e2529bca91ca5f27795dbcfc71bbe02401",
+      "bytes": 8390,
+      "reading_scope": "targeted method/flag/terms inspection, not executed"
+    }
+  ],
+  "provider_script_executed": false,
+  "raw_documents_or_code_redistributed": false,
+  "findings": [
+    {
+      "id": "D01",
+      "source": "PUG_v7.pdf section 5; NetCDF coordinate bounds",
+      "finding": "Nominal 50 km aggregate uses 0.5 degree coordinates; non-equal-area cells",
+      "consequence": "Use actual cell bounds and ellipsoidal area; no constant-area stock sum"
+    },
+    {
+      "id": "D02",
+      "source": "PUG_v7.pdf section 5",
+      "finding": "Aggregate AGB is per total grid-cell area, not per forest area; aggregate uncertainty includes spatial covariance",
+      "consequence": "Do not multiply by forest area again; validate mask/support mapping and uncertainty"
+    },
+    {
+      "id": "D03",
+      "source": "Downloaded change NetCDF header",
+      "finding": "time.bounds references absent time_bnds1; in-file flag meanings missing",
+      "consequence": "Preserve original metadata; document future repair and external flag dictionary"
+    },
+    {
+      "id": "D04",
+      "source": "Provider change script variance/flag/filter blocks",
+      "finding": "Change SD uses endpoint variance sum without temporal covariance; flags derive from the same maps and uncertainties with one-SD bounds and further rules/filtering",
+      "consequence": "Not independent truth or a calibrated 95% test; include temporal covariance and bias/selection sensitivities"
+    },
+    {
+      "id": "D05",
+      "source": "PUG_v7.pdf sections 2.3 and 4",
+      "finding": "Map differences require bias caution; array extent is not valid observation support",
+      "consequence": "No cross-sensor or global-stock inference from accessibility alone"
+    },
+    {
+      "id": "D06",
+      "source": "NEFBA columns/readme",
+      "finding": "Publication flags concern released account/trade detail; account areas share input lineage",
+      "consequence": "Use all applicable publication flags; do not score them as ecological accuracy or use own account areas as independent validation"
+    }
+  ],
+  "quality_flag_dictionary_from_code": {
+    "0": "both endpoint estimates zero (not independent proof of nonforest)",
+    "1": "provider strong-loss class",
+    "2": "provider possible-loss class",
+    "3": "provider no-change/unresolved class after rules",
+    "4": "provider possible-gain class",
+    "5": "provider strong-gain class"
+  },
+  "flag_dictionary_not_validation_truth": true
+}
