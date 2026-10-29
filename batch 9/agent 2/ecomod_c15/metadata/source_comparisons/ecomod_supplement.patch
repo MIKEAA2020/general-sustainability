@@ -1,0 +1,95 @@
+--- ecomod_c14/ecomod_supplement.tex
++++ ecomod_c15/ecomod_supplement.tex
+@@ -61,7 +61,7 @@
+ $P$ & human population & cap & state \\
+ $D$ & leaky-debt state driven by aggregate deficit $E-B$ & gha\,yr & state \\
+ $b_f$ & fast-land account yield per hectare, $(b_{f0}+T_b)e^{-\alpha D}$ & gha\,ha$^{-1}$ & derived \\
+-$\tilde b_f(t)$ & OWID/FAOSTAT cereal yield, a physical productivity indicator (not all crops) & tonnes\,ha$^{-1}$ & empirical input \\
++$\tilde b_f(t)$ & OWID/FAOSTAT cereal yield, a physical productivity sentinel (not all crops) & tonnes\,ha$^{-1}$ & empirical input \\
+ $\hat b_f(t)$ & Base-anchored index-scaled proxy yield used only in SI S5 & gha\,ha$^{-1}$ & proxy construction \\
+ $b_{f0}$ & base fast-land yield per hectare & gha\,ha$^{-1}$ & parameter \\
+ $b_c$ & capital-land direct yield & gha\,ha$^{-1}$ & parameter \\
+@@ -175,7 +175,7 @@
+ 
+ \paragraph{Numerical method and finite-step implementation check.} The reported two-land simulations use the projected delayed-quality law in Eq.~(10), integrated by the method of steps with explicit first-order Euler updates. At step $k$, current states are read at $t_{k-1}$; the time-dependent technology input and delayed values are evaluated at $t_k$, with linear interpolation of the delayed $q$ and $B$ histories. The raw delayed quality velocity is projected onto $T_{K_q}(q(t_{k-1}))$ before the Euler update. After the state update, $q$ is clipped to $K_q=[0,q_{\max}]$ as a finite-step safeguard; the explicitly enforced state bounds are applied, reserve area is reconstructed as $A_r=A_{tot}-A_f-A_c$, and the updated $B$ is stored in the delayed history. The reserve threshold is monitored, not projected. The positive-part operator is exact. For ordinary runs, $q(s)=q_0$ and $B(s)=B_0$ over the full pre-run interval $[-\max(\tau_g,\tau_p),0]$, with $B_0$ calculated from the initial state. In the technology-wave experiment, both runs share a no-wave prehistory; the active $T_b(0)$ changes current $B(0)$, and later wave-adjusted $B$ values enter $K(t-\tau_p)$. Baseline demonstrations and threshold bisections use $\Delta t=0.05$\,yr; drawdown sweeps use $0.1$\,yr, with selected thresholds rechecked at $0.05$\,yr.
+ 
+-A finite-step consistency test compared post-Euler quality clipping with explicit tangent-cone projection before the Euler update. For the Figure~1 initial state and parameters, $T=100$\,yr, $\Delta t=0.05$\,yr, and $\tau_g=5,20,40$\,yr, the arrays for $A_f$, $A_c$, $q$, $P$, $D$, $A_r$, $B$, $E$, and $T_b$ were exactly equal. For the continuous baseline projected-quality path at $\tau_g=20$ or $40$\,yr, $q(t)=\min(1,0.9+0.0072t)$; its maximum piecewise-linear error fell from $7.1\times10^{-5}$ at $\Delta t=0.1$\,yr to $8.8\times10^{-6}$ at $0.0125$\,yr. In the full fixed-demand Figure~1 scenario, halving the step from $0.05$ to $0.025$\,yr reduced maximum absolute differences against a $0.003125$\,yr reference from $0.00221$ to $0.00102$\,ha for $A_c$, $0.00180$ to $0.000831$\,gha for $B$, $0.000252$ to $0.000118$\,cap for $P$, and $0.00200$ to $0.000924$\,gha\,yr for $D$. These checks establish equality only for the enumerated cases and show smaller differences under timestep refinement; they are not a universal error bound or proof of convergence for all settings.
++A finite-step consistency test compared post-Euler quality clipping with explicit tangent-cone projection before the Euler update. For the Figure~1 initial state and parameters, $T=100$\,yr, $\Delta t=0.05$\,yr, and $\tau_g=5,20,40$\,yr, the arrays for $A_f$, $A_c$, $q$, $P$, $D$, $A_r$, $B$, $E$, and $T_b$ were exactly equal. For the continuous baseline projected-quality path at $\tau_g=20$ or $40$\,yr, $q(t)=\min(1,0.9+0.0072t)$; its maximum piecewise-linear error fell from $7.1\times10^{-5}$ at $\Delta t=0.1$\,yr to $8.9\times10^{-6}$ at $0.0125$\,yr. In the full fixed-demand Figure~1 scenario ($P_0=1.5$\,cap), halving the step from $0.05$ to $0.025$\,yr reduced maximum absolute differences against a $0.003125$\,yr reference from $0.00221$ to $0.00102$\,ha for $A_c$, $0.00180$ to $0.000831$\,gha for $B$, $0.000245$ to $0.000114$\,cap for $P$, and $0.00200$ to $0.000924$\,gha\,yr for $D$. These checks establish equality only for the enumerated cases and show smaller differences under timestep refinement; they are not a universal error bound or proof of convergence for all settings.
+ 
+ \paragraph{Selected delayed law and current-quality sensitivity.} The selected model uses $\dot q=\Pi_{T_{K_q}(q(t))}G_c(q(t-\tau_g))$. A current-quality comparator, with the same interval constraint but $G_c(q(t))$, is included only as a sensitivity check and is not the selected model. Under the baseline constant history $q(s)=0.9$, $\rho_c=0.08$\,yr$^{-1}$, and $q_{\max}=1$, the projected delayed-quality paths for $\tau_g=20$ and $40$\,yr are exactly identical: both reach the imposed ceiling at $125/9\approx13.8889$\,yr, before either delay elapses. This is saturation-induced degeneracy, not general delay robustness; the $\tau_g=5$\,yr case is distinct. The current-quality comparator extends the demonstration window by $1.3$\,yr and shifts the floor-proximity threshold by at most $0.001$\,cap in the displayed finite comparison. This finite comparison does not imply equivalence between the two quality laws.
+ 
+@@ -342,7 +342,7 @@
+ \newpage
+ \subsection{Divisia decomposition, sensitivity to the base-year share and level fallback}\label{si:divisia}
+ 
+-The crop proxy is an illustrative account construction. We combine independently sourced OWID/FAOSTAT world cropland area, defined as arable plus permanent-crop area (ha), with cereal yield (tonnes per hectare) \citep{OWIDCropland2026,OWIDCereal2026}. Cereal yield is a productivity indicator, not a measure of output from all crops. For a declared 1961 account-share anchor $\phi_0$, we set $\hat b_f(t)=\hat b_f(1961)\tilde b_f(t)/\tilde b_f(1961)$, with $\hat b_f(1961)A_f(1961)=\phi_0B(1961)$. We then define $X_t=\hat b_f(t)A_f(t)$ and $C_t=B_t-X_t$. Thus $X$ is an index-scaled account proxy, and $C$ is the residual that reconciles it to the NFA total. The residual is not observed ecological capital, non-cropland biocapacity, or the model quantity $\Ups(q)A_c$.
++The crop proxy is an illustrative account construction. We combine independently sourced OWID/FAOSTAT world cropland area, defined as arable plus permanent-crop area (ha), with cereal yield (tonnes per hectare) \citep{OWIDCropland2026,OWIDCereal2026}. Cereal yield is a productivity sentinel, not a measure of output from all crops. For a declared 1961 account-share anchor $\phi_0$, we set $\hat b_f(t)=\hat b_f(1961)\tilde b_f(t)/\tilde b_f(1961)$, with $\hat b_f(1961)A_f(1961)=\phi_0B(1961)$. We then define $X_t=\hat b_f(t)A_f(t)$ and $C_t=B_t-X_t$. Thus $X$ is an index-scaled account proxy, and $C$ is the residual that reconciles it to the NFA total. The residual is not observed ecological capital, non-cropland biocapacity, or the model quantity $\Ups(q)A_c$.
+ 
+ When both $X$ and $C$ are positive at the two endpoints, the exact log-mean Divisia identity is
+ \begin{equation}
+@@ -375,14 +375,14 @@
+ 
+ \subsection{Cropland-account calibration}\label{si:cropland}
+ 
+-We report NFA cropland-account movements separately from the illustrative proxy. From 1961 to 2023, NFA cropland biocapacity rises $2.870055$-fold and NFA cropland area rises $1.198029$-fold; their account-value-per-area quotient rises $2.395647$-fold. For 1961--2022, the same-edition ratios are $2.851441$, $1.198326$, and $2.379520$. This quotient is an NFA account value per area, not an independent physical crop-yield measure. Over 1961--2023, the external OWID/FAOSTAT area series rises $1.173414$-fold and cereal yield rises $3.124667$-fold. Those independent series serve as a indicator proxy; they do not reconstruct the NFA cropland account or measure output from all crops. The model's representative $b_{f0}=0.85\,\mathrm{gha\,ha^{-1}}$ remains a conditional parameter, not an empirical fit to these ratios.
++We report NFA cropland-account movements separately from the illustrative proxy. From 1961 to 2023, NFA cropland biocapacity rises $2.870055$-fold and NFA cropland area rises $1.198029$-fold; their account-value-per-area quotient rises $2.395647$-fold. For 1961--2022, the same-edition ratios are $2.851441$, $1.198326$, and $2.379520$. This quotient is an NFA account value per area, not an independent physical crop-yield measure. Over 1961--2023, the external OWID/FAOSTAT area series rises $1.173414$-fold and cereal yield rises $3.124667$-fold. Those independent series serve as a sentinel proxy; they do not reconstruct the NFA cropland account or measure output from all crops. The model's representative $b_{f0}=0.85\,\mathrm{gha\,ha^{-1}}$ remains a conditional parameter, not an empirical fit to these ratios.
+ 
+ \subsection{Observation-operator hierarchy}\label{si:operator}
+ 
+ \begin{itemize}[leftmargin=1.5em]
+ \item \emph{NFA accounting observations.} Total and component values in gha describe NFA account composition and change under the stated edition and conventions. They do not directly measure biomass, soil condition, wetland extent, fish biomass, or model state $A_c$.
+ \item \emph{Fast-provisioning area.} The external world cropland-area series covers arable land plus permanent crops for 1961--2023 (ha) \citep{OWIDCropland2026}. It is an independent proxy input, not the NFA cropland-area series.
+-\item \emph{Crop-productivity indicator.} OWID/FAOSTAT cereal yield is reported in tonnes per hectare for 1961--2024 \citep{OWIDCereal2026}. It covers cereals, not all crops, and is not a physical-stock measure. Base-anchored $\hat b_f$ is used only in the illustrative account proxy.
++\item \emph{Crop-productivity sentinel.} OWID/FAOSTAT cereal yield is reported in tonnes per hectare for 1961--2024 \citep{OWIDCereal2026}. It covers cereals, not all crops, and is not a physical-stock measure. Base-anchored $\hat b_f$ is used only in the illustrative account proxy.
+ \item \emph{Ecological-capital components.} Separate physical observation operators could use forest extent and biomass, soil carbon and condition, wetland extent and condition, and fish biomass by species or stock. Such data would need harmonized boundaries, reference years, definitions, uncertainty, and explicit treatment of overlap. We assembled no common-boundary global physical-stock series for these components. NFA forest biocapacity and residual $C$ cannot substitute for those measurements.
+ \item \emph{Model mapping.} The model defines capital contribution as $Y_c=\Ups(q)A_c$. Neither $A_c$ nor $q$ is identified empirically by total $B$ or an NFA component, and we do not assume proxy residual $C=B-X$ equals $Y_c$. A model--data comparison would first need independent physical measures and an explicit mapping.
+ \end{itemize}
+@@ -414,7 +414,7 @@
+ \midrule
+ Observable physical area input & OWID cropland area [ha]; other mapped land-cover classes where available & Measured extent, but mapping to effective $A_c$ is not direct \\
+ Observable population & $P$ [persons] & Direct in the UN PopStat workbook field after unit conversion \\
+-Observable productivity indicator & Cereal yield [tonnes ha$^{-1}$] & Physical yield of cereals only; not all-crops output or ecological capital \\
++Observable productivity sentinel & Cereal yield [tonnes ha$^{-1}$] & Physical yield of cereals only; not all-crops output or ecological capital \\
+ Observable annual account value & NFA $B$, $E_{\mathrm{prod}}$ and components [gha] & Measured only under the NFA accounting convention; value-weighted accounts \\
+ Proxy account and residual & $X=\hat b_fA_f$ and $C=B-X$ [gha] & Identified by construction for the stated inputs and anchor; not physical stocks and not assumed equal to $\Ups(q)A_c$ \\
+ Effective capital contribution & $Y_c=\Ups(q)A_c$ [gha] & A model quantity; no common-boundary physical observation operator is assembled here \\
+@@ -435,16 +435,16 @@
+ 
+ For the same-edition 1961--2022 sensitivity, contributions are $+23.8183$ points for cropland, $+7.2854$ for built-up land, $-5.8137$ for Forest biocapacity, $-0.2890$ for grazing land, and $-0.4559$ for fishing grounds. The non-cropland sum changes by $+0.7267$ points ($1.0083\times$). These are accounting attributions, not evidence that forest biomass, soil condition, wetland extent, fish biomass, or model $A_c$ declined. Built-up land is an NFA account class, not ecological capital; including it in the non-cropland sum is arithmetic, not an ecological aggregation.
+ 
+-\subsection{Physical-stock measurement specification: specification, not inventory}\label{si:stocks}
+-
+-We assembled no common-boundary global physical-stock series for these components, so we present no physical-stock composite or global decline finding. This does not mean that such a series could never be assembled. Table~\ref{tab:si_stock_measurement specification} is an unpopulated specification of candidate measures and comparability requirements; it contains no empirical endpoints and is not a model calibration.
++\subsection{Physical-stock measurement specification}\label{si:stocks}
++
++We assembled no common-boundary global physical-stock series for these components, so we present no physical-stock composite or global decline finding. This does not mean that such a series could never be assembled. Table~\ref{tab:si_stock_specification} is an unpopulated specification of candidate measures and comparability requirements; it contains no empirical endpoints and is not a model calibration.
+ 
+ These physical measures are heterogeneous. Forest biomass and soil carbon are masses; wetland and cropland extent are areas; fish biomass is stock-specific; freshwater storage is a volume; and condition indicators are often dimensionless or categorical. They are not dimensionally comparable and may overlap spatially. Annual flows—harvest, catch, increment, recharge, or emissions—must also remain distinct from stocks and extents. Even after normalization, interpretation depends on overlap, baselines, uncertainty, ecological thresholds, valuation, and allowed substitution. Unless common spatial and temporal boundaries, a normalization or valuation rule, and substitution rules are specified, the components should remain a nonadditive vector. A scalar composite is not neutral and cannot be inferred from NFA gha accounts. SEEA Ecosystem Accounting likewise distinguishes ecosystem extent and condition from ecosystem-service and monetary presentations \citep{UN2021SEEA_EA}.
+ 
+ \begin{table}[htbp]
+ \centering\footnotesize
+-\caption{Physical-stock measurement specification specification. The rows are unpopulated: no common-boundary global physical-stock series for the relevant components or endpoint values were assembled. Stocks, extents, condition measures, and annual flows are not combined into a composite.}
+-\label{tab:si_stock_measurement specification}
++\caption{Physical-stock measurements and comparability requirements. The rows are unpopulated: no common-boundary global physical-stock series for the relevant components or endpoint values were assembled. Stocks, extents, condition measures, and annual flows are not combined into a composite.}
++\label{tab:si_stock_specification}
+ \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.12\textwidth} >{\raggedright\arraybackslash}p{0.27\textwidth} >{\raggedright\arraybackslash}p{0.22\textwidth} >{\raggedright\arraybackslash}X@{}}
+ \toprule
+ Component & Physical stock, extent, or condition to define & Annual flow or pressure (separate) & Comparability rule required \\
+@@ -603,7 +603,7 @@
+ \end{tabular}
+ \end{table}
+ 
+-At known $q=0.9$, $A_c=0.04/0.05576=0.7173601148\ldots$\,ha. These deterministic bounds assume exact inputs and a valid observation operator. With uncertain $B,b_f,A_f$ or yield restrictions, define a coherent joint feasible uncertainty set and project it onto $A_c$; independent endpoint combinations can otherwise be inconsistent. No empirical mapping from NFA land accounts to these physical model areas is established here. The construction narrows an identified set; it does not establish dynamic observability or make unobserved quality measurable.
++At known $q=0.9$, $A_c=0.04/0.05576=0.7173601148\ldots$\,ha. The illustrative reporting cut of $0.7$\,ha lies inside the interval identified from $B$ and independently known $A_f$, whereas knowing $q$ identifies a value above that cut. The cut illustrates set overlap rather than an ecological threshold or confidence level. These deterministic bounds assume exact inputs and a valid observation operator. With uncertain $B,b_f,A_f$ or yield restrictions, define a coherent joint feasible uncertainty set and project it onto $A_c$; independent endpoint combinations can otherwise be inconsistent. No empirical mapping from NFA land accounts to these physical model areas is established here. The construction narrows an identified set; it does not establish dynamic observability or make unobserved quality measurable.
+ 
+ \section{Integrated contribution budgets and numerical refinement}\label{si:c13budget}
+ 
+@@ -621,7 +621,7 @@
+ \[
+ \varepsilon_T=B(T)-B(0)-\sum_j I_j,
+ \]
+-where $I_j$ denotes an integrated contribution. Finite-step discrepancies reflect the Euler trajectory approximation, quadrature error and the non-smooth quality constraint. Timestep refinement assesses the resulting closure error; it does not provide a uniform trajectory-error bound.
++where $I_j$ denotes an integrated contribution. The integrands are evaluated directly from the continuous right-hand side. This quadrature differs from a telescoping discrete product decomposition, which closes by construction. Finite-step discrepancies reflect the Euler trajectory approximation, quadrature error and the non-smooth quality constraint. Timestep refinement assesses the resulting closure error; it does not provide a uniform trajectory-error bound.
+ 
+ \subsection{Simulation conditions}
+ 
