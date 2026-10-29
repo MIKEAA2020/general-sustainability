@@ -5,9 +5,9 @@ Paths are relative to `paper3/latest-2026-09-19/`. Sizes are in bytes.
 | Path | Bytes | Contents |
 |---|---:|---|
 | `manuscript/paper3_material_ledgers_v51.md` | 252378 | Main text Version 51, Markdown source |
-| `manuscript/paper3_material_ledgers_v51.tex` | 272856 | Main text Version 51, parallel LaTeX source |
+| `manuscript/paper3_material_ledgers_v51.tex` | 273029 | Main text Version 51, parallel LaTeX source |
 | `manuscript/paper3_supplementary_v19.md` | 64598 | Supplementary material v19, Markdown source |
-| `manuscript/paper3_supplementary_v19.tex` | 74637 | Supplementary material v19, parallel LaTeX source |
+| `manuscript/paper3_supplementary_v19.tex` | 74810 | Supplementary material v19, parallel LaTeX source |
 | `manuscript/paper3_material_ledgers_v51_graphical_abstract.png` | 643420 | Graphical abstract, 300-dpi PNG |
 | `manuscript/paper3_material_ledgers_v51_graphical_abstract.svg` | 49171 | Graphical abstract, editable SVG |
 | `manuscript/paper3_material_ledgers_v51_graphical_abstract.pdf` | 44145 | Graphical abstract, vector PDF used by TeX |
