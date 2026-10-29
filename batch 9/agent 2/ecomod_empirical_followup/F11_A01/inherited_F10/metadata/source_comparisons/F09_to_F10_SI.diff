@@ -1,0 +1,57 @@
+--- F09_SI
++++ F10_SI
+@@ -191,6 +191,28 @@
+ 
+ The examined Copernicus land-cover catalogue, form and version constraints list 1992--2022 epochs, with version 2.0.7 for 1992--2015 and version 2.1.1 for 2016--2022. They do not supply the required 2023 forest-support observation. This product-specific endpoint gap does not rule out national or other compatible observations. Neither the primary window nor the conditional secondary window is changed by this finding.
+ 
++\subsection{Stored uncertainty and zero estimates}
++
++The same native payloads contain the AGB and \texttt{agb\_sd} arrays. Their Int16 units are Mg/ha, declared fill is $-32768$ and valid range is 0--10,000. Both arrays have valid values at all 65,536 cells per endpoint. The AGB ancillary-variable attribute names \texttt{agb\_se}, although the listed variable is \texttt{agb\_sd}; this name discrepancy is not interpreted as data corruption or silently repaired. No separate forest mask, zero-origin field or covariance variable occurs in the examined native variable list.
++
++\begin{table}[htbp]
++\centering\small
++\caption{Stored native AGB/SD diagnostics on the fixed Brazilian rectangle. Zero is retained as a valid source value. These counts and quantiles do not measure ecological absence or calibrated uncertainty.}\label{tab:native_sd}
++\begin{tabular}{lrr}
++\toprule
++Diagnostic & 2015 & 2023\\\midrule
++AGB $=0$ & 44,546 & 44,767\\
++SD $=0$ & 45,578 & 45,713\\
++AGB $>0$, SD $=0$ & 1,032 & 946\\
++AGB $=0$, SD $>0$ & 0 & 0\\
++Positive-AGB SD: lower quartile (Mg/ha) & 3 & 3\\
++Positive-AGB SD: median (Mg/ha) & 6 & 7\\
++Positive-AGB SD: upper quartile (Mg/ha) & 12 & 14\\\bottomrule
++\end{tabular}
++\end{table}
++
++Positive AGB at stored SD zero ranges from 1 to 4 Mg/ha at both endpoints. The storage precision alone does not establish whether rounding, clipping, retrieval conventions or another process caused these cases, and no unverified SD floor is imposed. Stored zero/nonzero AGB states contain 44,021 zero--zero, 525 zero--positive, 746 positive--zero and 20,244 positive--positive cells. They exhaust the rectangle, but are not ecological transition classes. The values supply neither final-map cross-year error covariance nor a forest/nonforest allocation of whole-cell biomass.
++
+ \section{Brazilian mapped-cover fractions and observation operators}
+ 
+ The two Collection 11 inputs have the same WGS84 geographic pixel-area grid, with angular spacing $0.000269494585236^\circ$ and north-west grid origin approximately $74.0209997484^\circ$W and $5.4230395387^\circ$N. Both are single-band unsigned-byte categorical rasters. The cover window intersects the native biomass indices, rows 105890--106145 and columns 146433--146688. Source generations, ETags, byte ranges and hashes identify the inputs without distributing full country images.
+@@ -252,6 +274,14 @@
+ 
+ The seven locations in the local footprint provide no recorded 2023 classes in any of the three inspected representations. A compatible reference design with appropriately interpreted paired endpoints and documented inclusion/role information is needed before class-change or stock-change validation. These findings concern the three examined public representations; they are not an exhaustive claim that no suitable reference information exists.
+ 
++\subsection{AGBref stock-reference compatibility}
++
++The AGBref descriptor distinguishes harmonized target-epoch stocks from original field dates. Its preprocessing adjusts references within ten years of a target epoch using IPCC growth rates; its timeliness flag uses a three-year criterion. At 500 m and 1 km, the minimum-plot criterion is more than one plot. Local representativity and a strict combined filter are separate criteria (preprint PDF pp. 7--8). Temporal harmonization does not create a measured repeat census, and uncertainty in that adjustment does not independently validate a satellite change estimate.
++
++The open Zenodo record 20793072, file \texttt{agb-ref-v2.zip}, supplies named 2005, 2010, 2015 and 2020 products but no named 2023 product. Complete 2010, 2015 and 2020 500 m CSVs and its unnamed CSV were inspected. Each has 200,152 rows and one released aggregate centroid inside the fixed native rectangle, at $49.6825^\circ$W, $14.2175^\circ$S. Centroid inclusion is not proof of compatible polygon support or original plot representativeness. The three labelled local records have distinct aggregate identifiers, $N=1$, AGB zero, and zero minimum-plot, large-size, local-representativity and strict-filter flags. SDs are approximately 22.55, 22.55 and 23.02 Mg/ha. Their timeliness flags are zero, one and one. The unnamed record has no date field and is not assigned a 2023 epoch.
++
++The selected exports do not provide original census dates, source-provider codes or original plot identity. Consequently, neither the repeated centroid nor the epoch labels establish an independent repeated-plot pair. The observed plot count also fails the stated 500 m minimum criterion, independently of the zero AGB estimate. No local biomass comparison is admitted from these rows. This conclusion concerns the inspected support and primary interval, not all inventories or every coarser reference product. A four-row, attributed derived subset and the eligibility fields are supplied with the data; no full reference archive is redistributed.
++
+ \section{Conditional allocation sets on mapped domains}
+ 
+ For a native cell of area $A_i$ and fixed published full-cell density $\widehat d_{it}$, write $q_{it}=A_i\widehat d_{it}$. Consider an operational mapped group $g$ with area fraction $f_{it}^g$. Conditional on exact cover, density and epoch correspondence, let its unknown biomass allocation be $s_{it}^g$. Under nonnegativity alone,
+@@ -293,7 +323,9 @@
+ 
+ MapBiomas Project, Collection 11 of the Annual Land Cover and Land Use Maps of Brazil, accessed 29 October 2026: \url{https://brasil.mapbiomas.org/downloads/}. Local cover fractions are derived by the stated class grouping and WGS84 area intersections. Public reference-artifact links are listed at \url{https://brasil.mapbiomas.org/downloads/pontos-de-validacao/}; the audit supplies factual schemas and derived aggregate completeness checks, not the source archives. Public-data attribution conditions are stated at \url{https://brasil.mapbiomas.org/faq/?tema=dados}. Raw country land-cover rasters and source method documents are not redistributed.
+ 
+-Source hashes, metadata, derived account-availability tables and computational methods are available at \url{https://github.com/MIKEAA2020/general-sustainability/tree/main/batch%209/agent%202/ecomod_empirical_followup/F09}. Raw data, provider technical reports and provider code are not redistributed.
++AGBref: Araza, A., Bielig, C., and Flores, R. A. A. (2026), \emph{AGBref---Global Reference Dataset for Above-Ground Biomass (AGB)}, Zenodo record 20793072; \url{https://doi.org/10.5281/zenodo.20793072}, CC BY 4.0. The limited local subset is derived from the released aggregate CSVs, with source member and record attribution. Descriptor: Araza, A., et al. (2026), Research Square preprint; \url{https://doi.org/10.21203/rs.3.rs-8211898/v1}. Source files and reference metadata do not establish paired field observations.
++
++Source hashes, metadata, derived account-availability tables and computational methods are available at \url{https://github.com/MIKEAA2020/general-sustainability/tree/main/batch%209/agent%202/ecomod_empirical_followup/F10}. Raw data, provider technical reports and provider code are not redistributed.
+ 
+ 
+ \section{Provider technical references}
