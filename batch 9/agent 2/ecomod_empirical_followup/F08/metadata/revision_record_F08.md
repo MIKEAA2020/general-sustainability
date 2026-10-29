@@ -1,0 +1,16 @@
+# F08 revision record — 29 October 2026
+
+Author-requested changes to the empirical follow-up only. F07 and all older packages, including ECOMOD C17, remain unchanged.
+
+1. Copy the linked ORCID `0000-0002-0019-1842` from ECOMOD C17, as the author directed; show it in main and SI.
+2. Add seven visible main-manuscript index terms and matching main/SI PDF metadata, with existing document titles also populated in PDF metadata: Ecological Footprint; Biocapacity; Natural capital accounting; Above-ground biomass; Partial identification; Subpixel biomass allocation; Land-use change. The first terms support field discovery; the latter terms identify the allocation/identification contribution without claiming empirical validation.
+3. Replace the follow-up declaration with the author's exact sentence: **Arena.ai Agent Mode was used to assist with computational methods and literature review.** Link Arena.ai to the supplied `http://Arena.ai`. This is an explicitly approved replacement, not an unchanged-from-F07 declaration. C17's separate wording is untouched.
+4. Retry the full Excel under the source-specific pre-decoding protocol/configuration exception. Full retrieval succeeds at 33,714,740 bytes; SHA-256 `f4bec9d2eb624aff25efb0620476cebbb0e07eaefb699d03b40ef3efcf69ac62`. Stream the entire one-sheet reference representation, 85,152 rows/135 fields, and compare all 117 common annual CLASS/COUNT/BORDA payloads by identifier to the exact F06 CSV. All agree after documented serialization normalization; coordinates, endpoint tokens and training-role tokens also agree. Recompute blank-role summaries without converting Python missing cells into literal `None` strings.
+5. Add the workbook to the scientific reference methods/results and SI coverage table; replace the current metadata-only conclusion with the completed comparison. Missing local 2023 reference labels remain missing. Retain the historical metadata-only F07 record under its proper scope; do not claim a new independent validation sample from another serialization of the same data.
+6. Provide `INPUT_LINKS_F08.md` with direct URLs and separate true 404s from accessible-but-unread ATBD, successful HEAD checks and intentionally bounded rasters. Full workbook retrieval is no longer an unresolved access failure. The 67,553,500-byte CCI ATBD remains unread. The older terms/FAQ paths return 404, while the replacement FAQ returns 200.
+
+## Preservation and exclusions
+
+No account table/count, estimand kernel, country choice, support geometry/window, cover classification, conditional mass/interval/topology output, research question, inherited mathematical expression, or corrected Figure 1 is changed. All eight national admissions remain on hold. No biomass recalculation, class confusion, independent validation, uncertainty calibration, footprint reselection, nationwide estimate or divergence prevalence is added. Changes to author metadata, declaration and access/audit scope are disclosed rather than silently labelled unchanged.
+
+Main/SI source diffs from F07 are supplied in `source_comparisons/F07_to_F08_{main,SI}.diff`; these give an exact insertion/deletion account. Current F08 tests/build/verification are recorded separately from inherited historical logs. Manuscripts contain methods/evidence/implications, not this implementation record.
