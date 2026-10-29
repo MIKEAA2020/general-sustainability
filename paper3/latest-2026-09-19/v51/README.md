@@ -9,8 +9,10 @@ The manuscript sources are in the sibling `../manuscript/` directory:
 
 - `paper3_material_ledgers_v51.md`
 - `paper3_material_ledgers_v51.tex`
+- `paper3_material_ledgers_v51.pdf` (compiled main text, 64 pages)
 - `paper3_supplementary_v19.md`
 - `paper3_supplementary_v19.tex`
+- `paper3_supplementary_v19.pdf` (compiled supplementary material, 19 pages)
 - `paper3_material_ledgers_v51_graphical_abstract.png` (300-dpi raster)
 - `paper3_material_ledgers_v51_graphical_abstract.svg` (editable vector)
 - `paper3_material_ledgers_v51_graphical_abstract.pdf` (vector, used by the TeX source)
@@ -22,13 +24,18 @@ non-interchangeable meanings of “depletion time”. Its editable source is
 `code/make_graphical_abstract_v51.py`; it is a schematic, not an additional
 data claim.
 
-No LaTeX engine was available in the environment used to prepare this
-revision, and the permitted download hosts did not provide a usable engine
-binary. Accordingly, this package does **not** claim a newly compiled v51 PDF.
-The TeX sources were checked statically for balanced braces/environments,
-duplicate or unresolved labels, statement-label resolution, and section
-references; a PDF should be generated with a standard LaTeX engine before
-deposit if a typeset artifact is required.
+Compiled PDFs are included beside the TeX sources. The sandbox used for the
+final build had no system TeX installation, so the PDFs were compiled with
+GlyphTeX (Tectonic/XeTeX compiled to WebAssembly; npm package
+`glyphtex-engine` 0.1.0). The build used that package's TeX bundle/packs,
+with TeX Live 2022 `xurl.sty` and `hyphenat.sty` and AMS/CM font-support
+files supplied to the compiler's virtual filesystem. The TeX sources
+themselves keep the normal unconditional `\usepackage{xurl}`; a standard TeX
+Live installation containing `xurl` and `hyphenat` should build them
+directly. The corresponding build logs are
+`outputs/paper3_material_ledgers_v51_build.log` and
+`outputs/paper3_supplementary_v19_build.log`; both builds completed with no
+TeX error lines (warnings and over/underfull boxes remain in the logs).
 
 ## Environment
 
@@ -74,7 +81,10 @@ The corresponding captured standard outputs are:
   exhibit, Proposition 31 witness, and certificate-vector record;
 - `outputs/graphical_abstract_v51.txt` — the graphical-abstract build log.
   The figure itself is written beside the manuscripts in PNG, SVG, and PDF
-  formats.
+  formats;
+- `outputs/paper3_material_ledgers_v51_build.log` and
+  `outputs/paper3_supplementary_v19_build.log` — LaTeX build logs for the
+  compiled PDFs listed above.
 
 ## Data provenance
 
@@ -157,4 +167,5 @@ Relative to the audited v50, this revision:
   and
 - refreshes the supplementary inventory, proof-obligation pointers,
   reproduction boundary, data files, captured outputs, and checksums; and
-- adds a reproducible graphical abstract in PNG, SVG, and PDF formats.
+- adds a reproducible graphical abstract in PNG, SVG, and PDF formats; and
+- compiles the main and supplementary PDFs with unconditional `xurl`.
