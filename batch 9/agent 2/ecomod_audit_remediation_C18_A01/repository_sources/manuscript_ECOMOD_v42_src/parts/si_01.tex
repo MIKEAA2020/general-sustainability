@@ -1,0 +1,189 @@
+\section{Numerical protocol and verification record}\label{si:numerics}
+
+\paragraph{Solver.} Method of steps with an explicit first-order (Euler) update; exact positive part (a smooth ramp leaks conversion when $E<B$); clamps $A_c\ge\Acmin$, $A_f\ge0$, $q\in[0,q_{\max}]$, $P\ge0$, $D\ge0$, $K\ge K_{\min}$; the reserve is computed as $A_r=A_{tot}-A_f-A_c$ after each update and the conservation residual $|A_f+A_c+A_r-A_{tot}|$ is recorded at every step (maximum $2.2\times10^{-16}$, i.e.\ machine precision, at every step size used). Delay histories of $B$ (for $K(t-\tau_p)$) and of $q$ (for $G_c(q(t-\tau_g))$) are populated over $[-\max(\tau_g,\tau_p),0]$ with the initial state, not with zero; a zero history produced spurious early collapses at $\tau_p=0$ in an earlier version and was corrected. Step sizes: $\Delta t=0.05$\,yr for the demonstration run and the bisection thresholds; $\Delta t=0.1$\,yr for the drawdown-depth sweeps (checked against $0.05$ at selected points; the floor-contact threshold at $A_{c0}=1.0$ moves from $2.955$ to $2.98$, which is why thresholds are reported as bands).
+
+\paragraph{Delayed versus current quality in the regeneration term.} The deposited solver (\texttt{model\_sims/twoland\_fixed.py}) computes the delayed quality $q(t-\tau_g)$ but evaluates the update of $q$ at the current quality. Table~\ref{tab:si_delay} compares the two variants at the baseline; because $q$ is monotone and the regenerative term is small ($b_{G,c}G_c\le0.016$ against $b_c=0.05$), the differences are below $1\%$ in every reported quantity. The corrected variant (\texttt{twoland\_fixed\_delayed.py}, a one-line change) is deposited alongside; all quantities in the paper are quoted to a precision at which the two agree.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Effect of evaluating the regeneration term at the delayed rather than the current quality (baseline registry).}
+\label{tab:si_delay}
+\begin{tabular}{l r r}
+\toprule
+Quantity & current $q$ (deposited) & delayed $q(t-\tau_g)$ \\
+\midrule
+Demonstration window with $\dot B>0$, $\dot A_c<0$ (yr) & $150.3$ & $149.0$ \\
+Demonstration endpoints $B$, $A_c$, $A_f$ & $0.825,\ 0.808,\ 0.923$ & $0.825,\ 0.808,\ 0.923$ \\
+Floor-contact threshold, $A_{c0}=1.0$, $\tau_g=5$ ($\Delta t=0.1$) & $2.955$ & $2.955$ \\
+Floor-contact threshold, $A_{c0}=1.0$, $\tau_g=20$ & $2.955$ & $2.954$ \\
+Floor-contact threshold, $A_{c0}=1.0$, $\tau_g=40$ & $2.955$ & $2.954$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Recompute-then-assert.} The figure script (\texttt{make\_fig\_model.py}) regenerates the demonstration run and asserts $B(0)=0.594$, $B(T)=0.825$, $A_c:1.500\to0.808$, $A_f:0.600\to0.923$, window $150\pm2$\,yr and conservation residual $<10^{-12}$; it recomputes $k$, the slope, $\Eceil=1.1384$ and the five balance points and asserts each against the stated value before the figure is written. The drawdown sweep (\texttt{drawdown\_depth.py}) writes \texttt{si\_drawdown\_depth.csv}, from which Fig.~1c and Tables~\ref{tab:si_drawdown}--\ref{tab:si_recovery} are produced. Eigenvalues and ceilings in Table~2a of the paper are computed from the closed-form $J$ of Section~\ref{si:affine} and agree with the numerical Jacobian of \texttt{verify\_tab\_conv\_basin.py} to four decimals.
+
+\paragraph{Well-posedness.} The state space $\Omega=\{(A_f,A_c,A_r,q,P,D):A_i\ge0,\ q\in[0,q_{\max}],\ A_f+A_c+A_r=A_{tot},\ K\ge K_{\min}\}$ is forward invariant under the clamped scheme; the only non-smoothness is the exact positive part at $S=0$ and the minimum in Eq.~(5), both of which are Lipschitz, so solutions exist and are unique for each history. Stability statements at $S=0$ are one-sided (deficit side).
+
+\section{Extended model results}\label{si:results}
+
+\subsection{Fast-land yield sweep and parameter sensitivity of the composition diagnostic}\label{si:sweep}
+
+Table~\ref{tab:si_sweep} extends Table~2a of the paper with the slope of the balance branch. The sign of $\dconv$ is robust over a threefold range of the standing value: at $b_f=0.85$, $\Ups(q^*)=0.058,\,0.066,\,0.074$ for $b_{G,c}=0.4,\,0.8,\,1.2$, so $\dconv=+0.792,\,+0.784,\,+0.776$.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Fast-land yield sweep at the baseline (all other parameters fixed): composition diagnostic at $q^*$, eigenvalues of the deficit-side matrix, slope of the balance branch and demand ceiling.}
+\label{tab:si_sweep}
+\begin{tabular}{l r r r r r}
+\toprule
+$b_f$ & $\dconv(q^*)$ & $\lambda_1$ (yr$^{-1}$) & $\lambda_2$ (yr$^{-1}$) & $b_fk-b_c$ & $\Eceil$ \\
+\midrule
+$0.60$ & $+0.534$ & $-0.0522$ & $-0.975$ & $0.277$ & $0.804$ \\
+$0.85$ & $+0.784$ & $-0.0537$ & $-0.998$ & $0.414$ & $1.138$ \\
+$1.20$ & $+1.134$ & $-0.0547$ & $-1.014$ & $0.605$ & $1.606$ \\
+$2.00$ & $+1.934$ & $-0.0556$ & $-1.029$ & $1.041$ & $2.675$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Drawdown-depth ladder}\label{si:ladder}
+
+Table~\ref{tab:si_drawdown} gives the minimum capital land reached during endogenous-demand runs ($A_{f0}=0.6$, $q_0=0.9$, $\tau_g=20$, $\tau_p=25$\,yr, $\chi_r=0.10$, $\Delta t=0.1$\,yr, $T=400$\,yr) on a grid of initial population $P_0$; the full grid (step $0.1$) is in \texttt{si\_drawdown\_depth.csv}. The depth is continuous and monotone in $P_0$ and in $A_{c0}$. The initial demand at which the minimum comes within $10^{-2}$, $10^{-3}$ and $10^{-4}$ of the floor is $1.8,\,1.9,\,2.1$ ($A_{c0}=0.40$); $2.2,\,2.3,\,2.4$ ($0.70$); $2.6,\,2.7,\,2.8$ ($1.00$); $2.8,\,2.9,\,3.0$ ($1.18$); the bisection on exact contact ($10^{-6}$, $\Delta t=0.05$, $T=1000$\,yr) gives $2.41,\,2.70,\,2.98,\,3.14$. The thresholds are identical to three decimals for $\chi_r=0.10$ and $\chi_r=0$ ($2.387$ and $2.955$ at $A_{c0}=0.40$ and $1.00$, $\Delta t=0.1$), and for $\tau_g=5,\,20,\,40$\,yr (Table~\ref{tab:si_delay}). The minimum is reached at the moment the shortfall closes ($B\ge E$ for the first time), which occurs between $3$ and $25$\,yr after the start depending on $P_0$.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Minimum capital land $\min_tA_c$ (ha) reached during the run, by initial capital $A_{c0}$ (rows) and initial population $P_0$ (columns); typed floor $\Acmin=0.05$.}
+\label{tab:si_drawdown}
+\input{parts/si_tab_drawdown.tex}
+\end{table}
+
+\subsection{Recovery metric and the role of the restoration flow}\label{si:recovery}
+
+The recovery metric is $\mathcal R_c(T)=(A_c(T)-A_c^{\mathrm{deg}})/(A_c^{\mathrm{init}}-A_c^{\mathrm{deg}})$, with $\mathcal R_c=0$ no recovery, $1$ full recovery to the reference, $<0$ continued decline and $>1$ over-restoration. Table~\ref{tab:si_recovery} evaluates it on the drawdown runs with $A_{c0}=1.0$ ($A_c^{\mathrm{init}}=1.0$, $A_c^{\mathrm{deg}}=\min_tA_c$, $T=400$\,yr): without restoration the capital book stays at its minimum (no return flow exists), with the surplus-gated flow it recovers partially, and at the mildest shortfall it over-restores ($\mathcal R_c=1.28$), moving up the equilibrium family to a higher-capital, lower-biocapacity member while the supported population re-equilibrates downward.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Recovery of the capital book after a demand-driven drawdown ($A_{c0}=1.0$, $A_{f0}=0.6$, $q_0=0.9$, $T=400$\,yr): minimum reached, time of the minimum, final capital land without ($\chi_r=0$) and with ($\chi_r=0.10$) surplus-gated restoration, and the recovery metric.}
+\label{tab:si_recovery}
+\input{parts/si_tab_recovery.tex}
+\end{table}
+
+\subsection{Gate-sign phase dependence}\label{si:gates}
+
+The gate-sign comparison is evaluated from a non-equilibrium post-crash state ($A_c=0.058$ near the floor, $A_f=0.6$, $q=0.9$, $P=1.2$) rather than from the degraded equilibrium itself, because at the degraded $R_B=1$ equilibrium $B=E$ and neither $\pos{B-E}$ nor $\pos{E-B}$ can fire. The reference is the healthy member of the equilibrium family reached from $A_{c0}=0.9$ ($A_c^{\mathrm{init}}=0.8225$, $P^{\mathrm{init}}=1.489$) and the degraded level is $A_c^{\mathrm{deg}}=0.0513$. All rows use the base model ($T_b=0$). Table~\ref{tab:si_gates} reproduces the record (script \texttt{model\_sims/recovery\_metric\_and\_tau\_p\_scan.py}).
+
+\begin{table}[htbp]
+\centering\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\caption{Restoration policy and gate sign: recovery metric at $T=100$ and $900$\,yr, end-state books, population relative to the reference, extremes over the run and peak debt. Every row re-equilibrates to $R_B=1$ ($E=B$); conservation holds to machine precision in every row.}
+\label{tab:si_gates}
+\begin{tabular}{l r r r r r r r r r r}
+\toprule
+Policy / gate & $\mathcal R_c(100)$ & $\mathcal R_c(900)$ & $A_c$ & $A_f$ & $A_r$ & $B=E$ & $P/P^{\mathrm{init}}$ & $\min A_r$ & $\max A_c$ & $D_{peak}$ \\
+\midrule
+none ($R_{rc}=0$) & $-0.00$ & $-0.00$ & $0.051$ & $1.336$ & $1.113$ & $1.138$ & $1.39$ & $1.113$ & $0.057$ & $0.152$ \\
+surplus-gated, $\chi_r=0.02$ & $0.69$ & $0.73$ & $0.612$ & $1.030$ & $0.858$ & $0.906$ & $1.11$ & $0.858$ & $0.612$ & $0.152$ \\
+surplus-gated, $\chi_r=0.05$ & $1.08$ & $1.07$ & $0.875$ & $0.886$ & $0.738$ & $0.797$ & $0.97$ & $0.724$ & $0.885$ & $0.152$ \\
+surplus-gated, $\chi_r=0.10$ & $1.28$ & $1.27$ & $1.030$ & $0.802$ & $0.668$ & $0.733$ & $0.90$ & $0.602$ & $1.092$ & $0.152$ \\
+surplus, $\chi_r=0.10$, target cap $A_c^*=0.8225$ & $1.00$ & $1.00$ & $0.822$ & $0.915$ & $0.763$ & $0.819$ & $1.00$ & $0.664$ & $0.822$ & $0.152$ \\
+surplus, $\chi_r=0.10$, conversion frozen & $1.35$ & $1.36$ & $1.098$ & $0.765$ & $0.637$ & $0.705$ & $0.86$ & $0.602$ & $1.098$ & $0.546$ \\
+deficit-gated, $\chi_r=0.05$ & $0.00$ & $0.00$ & $0.055$ & $1.334$ & $1.112$ & $1.136$ & $1.39$ & $1.112$ & $0.060$ & $0.145$ \\
+deficit-gated, $\chi_r=0.10$ & $0.01$ & $0.01$ & $0.059$ & $1.331$ & $1.110$ & $1.135$ & $1.39$ & $1.110$ & $0.065$ & $0.139$ \\
+deficit, $\chi_r=0.10$, conversion frozen & $0.05$ & $0.05$ & $0.088$ & $1.315$ & $1.096$ & $1.123$ & $1.37$ & $1.096$ & $0.088$ & $0.159$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\emph{Reading.} No restoration gives no recovery; the degraded state is a valid $R_B=1$ equilibrium with a larger-than-reference population supported by fast land. Surplus-gated restoration recovers the capital book but at $\chi_r\ge0.05$ restores it beyond the reference because the flow keeps running while $B>E$; the supported population falls modestly ($P/P^{\mathrm{init}}=0.97$--$0.90$). A target cap converts this into an exact return ($\mathcal R_c=1.00$, $P/P^{\mathrm{init}}=1.00$). Deficit-gated restoration is the one gate that acts during the shortfall but is swamped by concurrent conversion at these rates ($\mathcal R_c\approx0$); it is necessary but insufficient unless sized up or paired with a conversion cap. Freezing conversion under surplus-gated restoration raises the peak debt ($0.152\to0.546$) because the fast-land release channel can no longer close the shortfall while restoration over-supplies the lower-yield book; $A_f$ falls under the freeze because restoration drains the reserve that maintains it. Applying the technology step $T_b$ non-contingently in this experiment drives $A_c$ to $\approx2.39$, pushes $A_r$ below its floor and collapses $B$ to $\approx0.17$ -- an artefact of applying the step without the correct gate, not a model result.
+
+\subsection{Regime table}\label{si:regimes}
+
+\begin{table}[H]
+\centering\small
+\caption{The composition diagnostic as the decision condition for mask visibility. There is no interior area-based capacity maximum in the quality-based model; the only shape distinction is the sign of $\dconv$.}
+\label{tab:si_regime}
+\begin{tabularx}{\textwidth}{l l X}
+\toprule
+Regime & Condition & Behaviour \\
+\midrule
+composition-premium & $\dconv>0$ & conversion raises accounting $B$; the mask is possible (the baseline) \\
+composition-neutral & $\dconv=0$ & first-order neutrality; non-generic \\
+composition-discount & $\dconv<0$ & conversion lowers $B$ at once; no mask; the liquidation sign is clear \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Empirical details}\label{si:empirical}
+
+\subsection{Data and vintages}\label{si:vintages}
+
+The aggregate growth of $+23.0\%$ ($\Delta\ln B=+0.207$) is anchored to the NFA aggregate world series (2025 edition). The land-type matrix (cropland, grazing land, forest products, fishing grounds, built-up land) incorporates a retroactive re-basing and gives $+24.5\%$ ($\Delta\ln B=+0.219$); the $1.5$-point difference is an edition move, not a change in the underlying land facts. The attribution is robust across both: cropland accounts for $\approx103\%$ of net growth against the aggregate series and $\approx97\%$ against the land-type total, the residual band reflecting the edition move; the non-cropland book is flat as an endpoint change ($1.008\times$; intra-period index up to $1.024\times$) in both. Population is from the same accounts. The series are account-based (measured yields and conversion factors) and do not capture cumulative degradation; estimated biocapacity likely overstates the real base.
+
+\subsection{Divisia decomposition, $\alpha$-robustness and the level fallback}\label{si:divisia}
+
+With $X_t=\hat b_{f,t}A_{f,t}$ and $C_t=B_t-X_t$, the log-mean identity $\Delta\ln B=w_X(\Delta\ln b_f+\Delta\ln A_f)+w_C\Delta\ln C$ with $w_X=L(X_T,X_0)/L(B_T,B_0)$, $w_C=L(C_T,C_0)/L(B_T,B_0)$ holds exactly whenever $X$ and $C$ are positive at both endpoints. The base-year calibration $\alpha=b_f(1961)A_f(1961)/B(1961)$ (the cropland share of 1961 biocapacity) is unidentified; Table~\ref{tab:si_alpha} recomputes the decomposition over $\alpha\in[0.10,0.34]$. The identity sums to $+0.207$ exactly in every row and the yield channel is the dominant positive term in every row, but the split is not pinned: $w_X$ ranges $0.183$--$0.622$, the 2022 fast-book share ranges $\approx0.30$--$1.00$, and the raw residual log-change ranges $\approx-0.04$ to $\approx-6.8$. Only the sign ordering is carried forward.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Sensitivity of the proxy decomposition to the base-year cropland share $\alpha$ (world, 1961--2022). Columns after $w_C$ are weighted contributions.}
+\label{tab:si_alpha}
+\begin{tabular}{l r r r r r r l}
+\toprule
+$\alpha$ & $w_X$ & $w_C$ & yield & area & residual & sum & dominant \\
+\midrule
+$0.10$ & $0.183$ & $0.795$ & $+0.207$ & $+0.029$ & $-0.029$ & $+0.207$ & yield \\
+$0.15$ & $0.275$ & $0.689$ & $+0.310$ & $+0.044$ & $-0.148$ & $+0.207$ & yield \\
+$0.19$ & $0.349$ & $0.600$ & $+0.393$ & $+0.056$ & $-0.242$ & $+0.207$ & yield \\
+$0.25$ & $0.459$ & $0.457$ & $+0.517$ & $+0.073$ & $-0.384$ & $+0.207$ & yield \\
+$0.30$ & $0.550$ & $0.315$ & $+0.621$ & $+0.088$ & $-0.502$ & $+0.207$ & yield \\
+$0.34$ & $0.622$ & $0.087$ & $+0.702$ & $+0.100$ & $-0.594$ & $+0.207$ & yield \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The log-mean weighting fails once $C_{2022}\le0$, which happens for
+\begin{equation}
+\alpha\ \ge\ \frac{B_{2022}}{B_{1961}\,e^{\Delta\ln A_f+\Delta\ln b_f}}\ \approx\ 0.339 .
+\end{equation}
+In that regime the exact decomposition is the level one, $\Delta B=\Delta X+\Delta C$ with $\Delta X=\alpha B_{1961}(e^{\Delta\ln A_f+\Delta\ln b_f}-1)$ and $\Delta C=\Delta B-\Delta X$, which holds for every $\alpha$, reproduces $\Delta B=+2.242\times10^{9}$\,gha, and preserves the sign statement ($\Delta X>0$, $\Delta C<0$). Average-share weights ($\bar s_X=0.375$, $\bar s_C=0.625$) give $+0.231$, an $\approx11\%$ overshoot, and are not used. The residual $C$ is an accounting residual (grazing, forest products, fishing, built-up land, equivalence-factor and calibration effects), not an observed capital stock; the instantaneous fast-book share $s_X$ rises from $0.19$ to $0.56$ because the crop-yield index is applied to the whole fast book.
+
+\subsection{Cropland-book calibration}\label{si:cropland}
+
+The base year can be pinned directly from the measured NFA cropland biocapacity: $b_f(1961)=B_{\mathrm{cropland,NFA}}(1961)/A_f(1961)\approx0.93\,\mathrm{gha\,ha^{-1}\,yr^{-1}}$, corresponding to a cropland share of $B$ of $\approx0.128$ in 1961, inside the robustness band of Table~\ref{tab:si_alpha}. Over 1961--2022 cropland biocapacity grew $2.85\times$, cropland area $1.17\times$ and cropland biocapacity per hectare $2.43\times$; the model's representative $b_{f0}=0.85$ is of the same order as the measured 1961 value and is not a fit.
+
+\subsection{Observation-operator hierarchy}\label{si:operator}
+
+\begin{itemize}[leftmargin=1.5em]
+\item \emph{Fast provisioning land.} $A_f(t)$ = FAOSTAT arable plus permanent crops, element Area, world, 1961--2022 \citep{FAO2023}.
+\item \emph{Fast-book yield.} $\tilde b_f(t)$ = FAOSTAT crop production per hectare of $A_f$, normalised to the base year and calibrated there against NFA cropland biocapacity, $b_f(t)=b_f(t_0)\tilde b_f(t)/\tilde b_f(t_0)$. FAOSTAT yields are physical output per hectare, not gha\,ha$^{-1}$, and must be normalised or calibrated before any absolute statement; a cleaner proxy is aggregate crop production per hectare on a calorie or dry-matter basis.
+\item \emph{Ecological-capital land.} $A_c(t)$ = FAO/FRA forest area \citep{FAO2020}, with natural grassland, shrub and wetland added where available; before 1990, LUH2 \citep{Hurtt2011} or HYDE~3.2 \citep{KleinGoldewijk2017} scaled to FRA. Forest area is a sentinel proxy, not the whole capital book (no soil carbon, wetland, fishery or non-forest regenerative capital). Where they are not separately measured the capital book is the residual $B_{\mathrm{NFA}}-b_fA_f$.
+\item \emph{Capital yield and regeneration.} $b_{G,c}G_c(q)$ is not observed in the NFA; proxies would need FRA growing stock or net annual increment, GAEZ potential productivity, or EarthStat/MapSPAM \citep{Monfreda2008}. This is why $b_c$, $b_{G,c}$, $\rho_c$ are not individually identified: the observable combinations are $b_fA_f$, $\Ups A_c$ and $b_{G,c}G_c(q)A_c$.
+\item \emph{Hierarchy.} (1) NFA land-type biocapacity with physical area and yield factors (best); (2) FAOSTAT area and yields as independent external proxies (used here); (3) remote-sensing land cover \citep{ESA2017,Copernicus2019} or the reconstructions above with EarthStat/MapSPAM/GAEZ, for validation or extension.
+\end{itemize}
+
+\begin{table}[htbp]
+\centering\small
+\caption{Observability ladder: what is measured, what is an identifiable combination, and what is not identifiable.}
+\label{tab:si_ladder}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.3\textwidth} X >{\raggedright\arraybackslash}p{0.3\textwidth}}
+\toprule
+Tier & Quantities & Status \\
+\midrule
+Observable (area, land cover) & $A_f$, $A_c$, $A_r$, $A_{tot}$ [ha] & direct \\
+Observable (physical flow) & $P$; harvested yields $Y_f$, $Y_c$ [product\,ha$^{-1}$\,yr$^{-1}$] & direct \\
+Observable (value flow, under a convention) & $B$, $E$ [gha\,yr$^{-1}$] & only under the NFA accounting convention; gha is value-weighted \\
+Identifiable combination & $b_{G,c}\rho_c$; $\Ups=b_c+b_{G,c}G_c(q)$ & up to the value convention \\
+Not identifiable & $b_c$, $b_{G,c}$, $\rho_c$ individually; the split of $B$ into fast-flow and capital-growth books; $\alpha$ and $D$ without an independent debt proxy & requires time series of $A_c$ and independent ecological valuation \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Regeneration anchors}\label{si:anchors}
+
+The capital-land regeneration timescale is a lumped recruitment-response timescale; the anchors bound a band and do not calibrate $\rho_c$. A lagged saturating recovery model fitted to plot-level age--above-ground-biomass records of Neotropical secondary forests \citep[2ndFOR;][1{,}334 plots, 41 chronosequences, 35 good fits]{Poorter2016} gives a median $t_{50}\approx30$\,yr and a recovery timescale $\tau_r\approx38$\,yr; the same model fitted to deplete-then-rebuild trajectories of collapsed fish stocks (RAM Legacy $B/B_{MSY}$, 33 episodes) gives $t_{50}\approx5.6$\,yr and $\tau_r\approx3.4$\,yr \citep[cf.][]{HutchingsReynolds2004,Neubauer2013}; soil organic carbon re-equilibrates after $\approx17$--$23$\,yr following land-use change \citep{Poeplau2011}. Forest biomass recovers to about half of old-growth values by $\approx20$\,yr and to $90\%$ at a median $\approx66$\,yr \citep{Poorter2016} (the 66--95\,yr tail lies beyond the core band); only $\approx29\%$ of collapsed fish stocks recovered to $50\%$ within 5--15\,yr \citep{HutchingsReynolds2004}. The two fitted legs bracket the effective timescale (forest slow, fishery fast) with soil between them; the band is $\approx25$--$33$\,yr (representative $\approx29$\,yr; order 10--40\,yr). These are statements about the regeneration rate, not the delay $\tau_g$. In the one-stock comparator the forest value lies at or above that model's $\approx18$--$20$\,yr cliff; in the two-land model the drawdown boundary is a demand threshold and the anchors bound a band rather than locate a cliff.
+
+\subsection{Recursive identifiability in the land-type accounts}\label{si:recursive}
+
+In the land-type vintage the non-cropland total is flat at the endpoint ($1.008\times$) but is the net of declining forest-products ($0.90\times$), grazing ($0.98\times$) and fishing ($0.96\times$) biocapacity -- together $\approx-6.4\times10^{8}$\,gha -- and an $8.63\times$ rise in built-up land; contributions to the $+24.5$-point aggregate growth are cropland $+23.8$, built-up $+7.3$, forest products, grazing and fishing $-6.6$ (gross positive $+31.1$). These categories are accounting flows and land classes rather than the model's capital stock, so they do not demonstrate a measured decline in $A_c$; they demonstrate that an aggregate conceals composition at every level at which it is used.
+
