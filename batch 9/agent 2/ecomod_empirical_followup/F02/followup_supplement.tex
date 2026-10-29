@@ -1,0 +1,137 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,booktabs,tabularx,array,longtable}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\theequation}{S\arabic{equation}}
+\renewcommand{\thetable}{S\arabic{table}}
+\input{results/availability_numbers.tex}
+\emergencystretch=3em
+\title{Supplementary Information\\\large Ecological assets behind improving accounts: a boundary-matched empirical design}
+\author{Amin Abaee\\\small Independent Researcher, Tehran, Iran}
+\date{}
+\begin{document}
+\maketitle
+
+\section{National account coverage and availability criteria}
+
+The source workbook is the National Ecological Footprint and Biocapacity Accounts, Edition 2026, results and metadata version 1.0. The \texttt{national\_data} sheet contains \NationalRows\ records, 51 columns and \CountryIDs\ country and territory identifiers. The primary interval comprises nine annual observations, 2015--2023 inclusive. A country identifier satisfies the account availability criteria if:
+\begin{enumerate}
+\item every year in the interval is present with a unique country--year key;
+\item each publication flag is \texttt{+++}, \texttt{++} or \texttt{+};
+\item all five biocapacity components, their total, forest area, cropland area and population are finite and nonnegative, with positive population;
+\item the absolute difference between the five-component sum and the reported total does not exceed 3 gha.
+\end{enumerate}
+The 3 gha bound follows from rounding five components and one total to the nearest hectare equivalent: the maximum discrepancy is $5(0.5)+0.5=3$\,gha. The largest observed discrepancy is 2 gha. Publication flags differ in trade and consumption detail; the three included flag classes all release the biocapacity and production fields used here. The workbook's actual field is named \texttt{flag}, while its definition sheet also uses the term \texttt{quality\_flag}.
+
+There are \AccountPass\ identifiers satisfying these criteria and \AccountFail\ not satisfying them. The complete identifier-level table records missing years, publication scope, required-value availability and component consistency. The selected countries in Table~\ref{tab:countries} all satisfy the account criteria. Their physical boundary and measurement compatibility are not determined by this result.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Countries selected for evaluation of physical observation compatibility. Account availability refers to the complete 2015--2023 interval under the criteria in S1.}\label{tab:countries}
+\begin{tabular}{lll}
+\toprule
+Country & ISO identifier & Account availability\\\midrule
+Brazil & BRA & Complete\\
+Indonesia & IDN & Complete\\
+Democratic Republic of the Congo & COD & Complete\\
+Cameroon & CMR & Complete\\
+Canada & CAN & Complete\\
+Finland & FIN & Complete\\
+France & FRA & Complete\\
+Australia & AUS & Complete\\\bottomrule
+\end{tabular}
+\end{table}
+
+The selection is purposive rather than probabilistic. The availability result cannot be extrapolated to the prevalence of account--asset agreement or disagreement. The 2024--2025 workbook records do not form part of the primary interval. Account areas remain inputs to the account observation system rather than independent validation measurements of forest extent.
+
+\section{Biomass products, units and spatial support}
+
+The source is ESA CCI Biomass v7.0, DOI \url{https://doi.org/10.5285/6429d1aafe1e43b9b414e4a5a7f8b903}. Metadata inspection used the 50 km aggregate and the 2010--2020 change product. Their exact names, byte sizes, hashes and retrieval URLs are supplied in the source register. Only coordinate variables, time values, dimensions and metadata were read; biomass values and change signs were not evaluated.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Observation definitions in the inspected CCI products.}\label{tab:products}
+\begin{tabularx}{\textwidth}{p{0.24\textwidth}X}
+\toprule
+Attribute & Definition or interpretation\\\midrule
+Grid & 720 longitude by 360 latitude cells, with $0.5^\circ$ spacing in WGS84 coordinates. The nominal 50 km designation is not an equal-area definition.\\
+Epochs & 2005--2012 and 2015--2024, comprising 18 annual epochs. No observed 2013 or 2014 map is supplied in this series.\\
+Biomass density & Above-ground living woody biomass in Mg\,ha$^{-1}$. The aggregate is normalized by total grid-cell area, not forest area.\\
+Aggregate uncertainty & The guide describes uncertainty in the aggregated mean using variance and spatial covariance contributions. The variable name \texttt{agb\_sd} alone does not establish an independent-pixel error model.\\
+Change example & Difference, standard deviation and quality-class layers for 2010--2020. This example does not validate change estimates for 2015--2023.\\
+Temporal bounds & The change file's time-bounds attribute names \texttt{time\_bnds1}; no variable with that name is stored in the file. The documented epoch pair defines the interval considered here.\\
+Observation coverage & The guide specifies a native product domain between $80^\circ$N and $60^\circ$S, subject to remote-sensing availability. The global coordinate rectangle is not a valid-observation mask.\\\bottomrule
+\end{tabularx}
+\end{table}
+
+Country--product intersections require a territorial definition, including overseas areas where relevant. Native-resolution or appropriately aggregated forest observations must distinguish no-data cells, observed zero values, nonforest cover and converted land. An estimated density of zero is not, by itself, an independent land-cover observation. Density averaging, mask application and area normalization must refer to the same support. Coarse aggregates do not identify fine-resolution forest-to-cropland transitions.
+
+\section{Change-quality classes and uncertainty}
+
+The inspected provider implementation derives quality classes from endpoint biomass estimates and their uncertainty intervals, followed by a growth-limit condition and spatial filtering. The class definitions are summarized in Table~\ref{tab:quality}. These labels describe the provider decision rule; they are not independent observations of ecological change.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Provider change-quality classes. Descriptions refer to the processing rule rather than independently validated confidence levels.}\label{tab:quality}
+\begin{tabular}{cl}
+\toprule
+Code & Interpretation\\\midrule
+0 & Both endpoint biomass estimates are zero\\
+1 & Strong loss classification\\
+2 & Possible loss classification\\
+3 & No resolved change under the processing rule\\
+4 & Possible gain classification\\
+5 & Strong gain classification\\\bottomrule
+\end{tabular}
+\end{table}
+
+The example implementation computes change standard deviation as $\sqrt{\sigma_0^2+\sigma_1^2}$ and uses one-standard-deviation endpoint intervals in its classification operations. In general,
+\begin{equation}
+\operatorname{Var}(\widehat d_1-\widehat d_0)=\sigma_1^2+\sigma_0^2-2\operatorname{Cov}(\widehat d_1,\widehat d_0).
+\end{equation}
+The variance sum corresponds to zero temporal covariance. A one-standard-deviation interval rule combined with growth and filtering operations does not define a calibrated 95\% test. Temporal covariance, systematic biases and the decision rule's operating characteristics require separate evaluation for the specified observation domain.
+
+For an area-weighted total $\widehat Q=\sum_i a_i\widehat d_i$ on a fixed support, the measurement variance is $\boldsymbol a^\mathsf{T}\Sigma\boldsymbol a$, where $\Sigma$ is the joint error covariance matrix. Spatial independence reduces this to a sum of diagonal terms, but that simplification requires evidence. Uncertain support, missing or converted cells, and forest classification error introduce additional terms not represented by a density-only covariance matrix. Product-quality classes cannot provide independent validation when they are constructed from the target maps themselves.
+
+\section{Geographic area calculation}
+
+For a rectangle bounded by longitude $\lambda_w,\lambda_e$ and latitude $\phi_s,\phi_n$, all expressed in radians, the WGS84 area in hectares is
+\begin{equation}
+A=\frac{a^2(1-e^2)}{10^4}(\lambda_e-\lambda_w)\left[F(\sin\phi_n)-F(\sin\phi_s)\right],
+\end{equation}
+where $a=6378137$\,m, $f=1/298.257223563$, $e^2=f(2-f)$ and
+\[
+F(s)=\frac{s}{2(1-e^2s^2)}+\frac{\operatorname{atanh}(es)}{2e}.
+\]
+The formula integrates the ellipsoidal area element between meridians and parallels. Longitude intervals crossing the dateline are split before integration. Geographic cell area varies with latitude even when angular spacing is constant.
+
+The implementation was compared with the analytic WGS84 total surface area and with a partition into one-degree latitude bands. Both relative comparisons satisfy a tolerance of $10^{-14}$. A further test verifies that equal-angular equatorial and high-latitude cells have different areas. These are geometric verification tests; they do not assess ecological observation accuracy.
+
+\section{Extent, density and spatial compensation}
+
+For positive total forest areas, the symmetric contributions in the main text follow from expanding $Q_t=A_tD_t$. Each contribution uses the arithmetic mean of the other factor, so their sum equals the endpoint stock difference. Computational verification includes pure area change, pure density change and 500 mixed synthetic cases. Zero-area endpoints are excluded from this calculation because mean forest density is undefined there; any extension to appearing or disappearing strata requires an explicit allocation convention.
+
+Spatial compensation uses local stock differences on the same geographic and measurement support. The sums of positive and negative local net changes determine the offset mass and cancellation fraction. When both sums are zero, the cancellation fraction is undefined. Computational tests verify the one-direction case, opposing-change identities, the zero denominator and invalid-value handling. A zero-mean measurement-error example produces nonzero apparent local compensation, establishing the need for an error-model reference before ecological interpretation. This example is a computational verification case, not an empirical operating-characteristic estimate.
+
+The calculations represent local net changes. Gross growth, recruitment, harvest and mortality require additional observations or a separately identified demographic model. Refining a raster grid by resampling does not supply new independent physical information.
+
+\section{Validation, information dependence and inferential scope}
+
+Account availability, physical observation compatibility and validation are distinct requirements. A physical comparison requires stable territorial boundaries, a justified forest support, matched observation dates and a change-error model. Transition validation must distinguish the target forest-to-cropland class from other disturbances and quantify uncertainty using an appropriate reference design. Biomass-level validation does not automatically establish biomass-change precision.
+
+Comparisons of reporting information require the same cases and weights. Full-population coverage and pairwise overlap must also be reported so that a score change is not attributed to a change in the assessed population. Input lineage must distinguish independent observations from target-derived features and shared calibration/reference data. Algebraically recoverable features do not constitute additional independent measurements.
+
+The results supplied here are account availability counts, product definitions and computational verification. No country-level physical stock changes, conversion associations, ecological change-resolution probabilities or reporting-rule accuracy estimates are supplied. These quantities cannot be inferred from account publication flags or product access alone.
+
+\section*{Source attribution and availability}
+
+National accounts: Lo, K., et al. (2026), National Ecological Footprint and Biocapacity Accounts, Edition 2026, results and metadata v1.0; \url{https://footprint.info.yorku.ca/data/}. Derived account tables and figures are distributed under CC BY-SA 4.0.
+
+Biomass: Santoro, M., and Cartus, O. (2026), ESA CCI Biomass v7.0; \url{https://doi.org/10.5285/6429d1aafe1e43b9b414e4a5a7f8b903}. The ESA Climate Change Initiative, Biomass CCI project and data providers are acknowledged. Product definitions follow the Product User Guide v7.0, 19 March 2026; \url{https://climate.esa.int/en/projects/biomass/key-documents/}.
+
+Source hashes, metadata, derived account-availability tables and computational methods are available at \url{https://github.com/MIKEAA2020/general-sustainability/tree/main/batch%209/agent%202/ecomod_empirical_followup/F02}. Raw data, the guide and provider code are not redistributed.
+
+\end{document}
