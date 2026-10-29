@@ -1,0 +1,66 @@
+--- ecomod_c13_revision/code/verify_c13.py
++++ ecomod_c14/code/verify_budgets.py
+@@ -1,5 +1,5 @@
+-"""Check C13 outputs; --full additionally recomputes all 28 trajectories in memory.
+-Writes data/c13_independent_checks.json. No network and no inherited-figure rerun.
++"""Check model outputs; --full additionally recomputes all 28 trajectories in memory.
++Writes data/model_independent_checks.json. No network and no inherited-figure rerun.
+ The word 'independent' refers to algebra/check paths and endpoint-vs-quadrature
+ comparisons, not to an independent software team or empirical validation.
+ """
+@@ -9,7 +9,7 @@
+ import json
+ import math
+ import numpy as np
+-import compute_c13 as m
++import simulate_budgets as m
+ 
+ P=Path(__file__).resolve().parents[1]
+ 
+@@ -20,7 +20,7 @@
+     parser=argparse.ArgumentParser();parser.add_argument('--full',action='store_true');args=parser.parse_args()
+     b,w,info=m.identification()
+     assert info['known_q']==.9
+-    recorded=rows('data/c13_identification_bounds.csv')
++    recorded=rows('data/model_identification_bounds.csv')
+     for x,y in zip(b,recorded):
+         for key in ['lower_Ac_ha','upper_Ac_ha','width_ha']:assert abs(x[key]-float(y[key]))<1e-12
+     # Separate scalar algebra: chain rule versus five signed RHS channels.
+@@ -36,7 +36,7 @@
+         channels=(bf-u)*uc+bf*M+u*R+up*Ac*dq+Af*dbf
+         worst=max(worst,abs(chain-channels))
+     assert worst<1e-12
+-    r=rows('data/c13_budget_refinement.csv');assert len(r)==28
++    r=rows('data/model_budget_refinement.csv');assert len(r)==28
+     fine={x['case']:x for x in r if float(x['dt_yr'])==m.DTS[-1]}
+     assert set(fine)=={c['id']for c in m.CASES}
+     for x in r:
+@@ -57,7 +57,7 @@
+         assert float(group[-1]['relative_closure_abs'])<.001
+     # Verify endpoint and cumulative exports against the actual finest quadrature.
+     endpoints={};counts={}
+-    for x in rows('data/c13_trajectories_reporting_grid.csv'):
++    for x in rows('data/model_trajectories_reporting_grid.csv'):
+         endpoints[x['case']]=x;counts[x['case']]=counts.get(x['case'],0)+1
+     for case in m.CASES:
+         x=endpoints[case['id']];ref=fine[case['id']]
+@@ -65,7 +65,7 @@
+         assert abs(float(x['B'])-float(ref['BT_gha']))<1e-10
+         assert abs(float(x['Ac'])-float(ref['final_Ac_ha']))<1e-10
+         for term in m.TERMS:assert abs(float(x['cum_'+term+'_gha'])-float(ref[term+'_gha']))<1e-10
+-    # Retained C12 check at the original reported wave step.
++    # Retained specified check at the original reported wave step.
+     wave=[]
+     for case,target,time in [(m.CASES[2],.008126,86.15),(m.CASES[3],.020205,115.60)]:
+         _,_,_,res=m.simulate(case,.05)
+@@ -84,8 +84,8 @@
+                 budget_rows_checked=len(r),finest_cases=len(fine),strictly_decreasing_closure_abs=monotone,
+                 all_finest_relative_closure_below_0_001=True,all_selected_bounds_and_guards_pass=True,
+                 trajectory_export_counts=counts,wave_coarse_step_checks=wave,full_in_memory_trajectory_recomputations=recomputed,
+-                scope_exclusions=['No empirical physical-stock identification','No M3 delay/history experiment','No comprehensive legacy figure/data revalidation'])
+-    (P/'data/c13_independent_checks.json').write_text(json.dumps(report,indent=2)+'\n')
++                scope_exclusions=['No empirical physical-stock identification','Numerical results are conditional on the specified histories and delays','Numerical verification covers the stated contribution-budget calculations'])
++    (P/'data/model_independent_checks.json').write_text(json.dumps(report,indent=2)+'\n')
+     print(json.dumps(report,indent=2))
+ 
+ if __name__=='__main__':main()

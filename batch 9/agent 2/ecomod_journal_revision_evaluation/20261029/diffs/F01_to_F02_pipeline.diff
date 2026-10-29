@@ -1,0 +1,55 @@
+--- ecomod_empirical_followup/src/preflight.py
++++ ecomod_followup_F02/src/data_suitability.py
+@@ -1,5 +1,5 @@
+-"""Stage 1: reproducible access/schema and account-eligibility audit. No trends.
+-python src/preflight.py --cache /path/to/raw/cache [--download]
++"""Data suitability: reproducible access/schema and account-eligibility audit. No trends.
++python src/data_suitability.py --cache /path/to/raw/cache [--download]
+ Raw inputs are external cache files, not redistributed with the package.
+ """
+ from pathlib import Path
+@@ -23,7 +23,7 @@
+ 
+ def main():
+     ap=argparse.ArgumentParser();ap.add_argument('--cache',type=Path,default=ROOT/'.cache/raw');ap.add_argument('--download',action='store_true');args=ap.parse_args();args.cache.mkdir(parents=True,exist_ok=True)
+-    cfg=json.loads((ROOT/'configs/stage1_design.json').read_text());receipts=[]
++    cfg=json.loads((ROOT/'configs/study_design.json').read_text());receipts=[]
+     for name,url in INPUTS.items():
+         p=args.cache/name
+         if args.download:
+@@ -67,9 +67,9 @@
+                 err=abs(sum(r[k]for k in cc)-r['biocap_total_gha']);errors.append(err);max_error=max(max_error,err)
+                 if err>cfg['nfa_component_rounding_tolerance_gha']:mismatch_count+=1
+         if errors and max(errors)>cfg['nfa_component_rounding_tolerance_gha']:reasons.append('component_total_inconsistency')
+-        audit.append(dict(ISO3=iso,country=ref['country_name'],UN_region=ref['UN_region'],UN_subregion=ref['UN_subregion'],first_available_year=min(years),last_available_year=max(years),window_years_present=len(sel),window_flags=';'.join(flags),missing_required_cells=missing,max_component_rounding_error_gha=max(errors)if errors else '',account_preflight_pass=not reasons,exclusion_reasons=';'.join(reasons),pilot_candidate=iso in cfg['pilot_candidates_iso3'],physical_alignment_gate='PENDING',full_study_eligible=False))
+-    writecsv('data/derived/account_eligibility.csv',audit)
+-    pilots=[next(r for r in audit if r['ISO3']==iso)for iso in cfg['pilot_candidates_iso3']];writecsv('data/derived/pilot_candidate_audit.csv',pilots)
++        audit.append(dict(ISO3=iso,country=ref['country_name'],UN_region=ref['UN_region'],UN_subregion=ref['UN_subregion'],first_available_year=min(years),last_available_year=max(years),window_years_present=len(sel),window_flags=';'.join(flags),missing_required_cells=missing,max_component_rounding_error_gha=max(errors)if errors else '',account_available=not reasons,exclusion_reasons=';'.join(reasons),candidate_country=iso in cfg['pilot_candidates_iso3'],physical_alignment='not_assessed',matched_observation_eligible=False))
++    writecsv('data/derived/account_availability.csv',audit)
++    pilots=[next(r for r in audit if r['ISO3']==iso)for iso in cfg['pilot_candidates_iso3']];writecsv('data/derived/country_availability.csv',pilots)
+     # Store source column definitions/flags: publication scope is not an uncertainty model.
+     definitions=[list(r)for r in book['columns'].iter_rows(values_only=True)]
+     (ROOT/'metadata/account_definitions.json').write_text(json.dumps(definitions,indent=2)+'\n')
+@@ -86,16 +86,16 @@
+                 missing_bounds_references=missing_bounds,missing_flag_semantics=('diff_qf'in d.variables and 'flag_meanings'not in d['diff_qf'].ncattrs()),
+                 physical_values_read=False,role='Schema/access smoke test only, not empirical national biomass results')
+             nc.append(rec)
+-    (ROOT/'metadata/cci_schema_audit.json').write_text(json.dumps(nc,indent=2)+'\n')
+-    summary=dict(status='STAGE1_ACCOUNT_AND_ACCESS_PREFLIGHT_ONLY',national_rows=len(allrows),national_columns=len(header),country_identifiers=len(groups),minimum_year=min(r['year']for r in allrows),maximum_year=max(r['year']for r in allrows),primary_window=cfg['primary_window'],window_flag_counts=dict(flagfreq),account_preflight_pass=sum(r['account_preflight_pass']for r in audit),account_preflight_fail=sum(not r['account_preflight_pass']for r in audit),max_component_rounding_error_gha=max_error,rows_above_rounding_tolerance=mismatch_count,pilot_candidates=len(pilots),pilot_account_preflight_pass=sum(r['account_preflight_pass']for r in pilots),full_study_eligible_count=0,full_study_eligibility_evaluated=False,account_or_biomass_change_signs_computed=False,cci_coordinate_note='50 km label is nominal; coordinate spacing is 0.5 degrees, not equal-area',cci_change_metadata_issues={'missing_time_bounds_target':nc[1]['missing_bounds_references'],'quality_flag_meanings_absent_in_file':nc[1]['missing_flag_semantics']},no_trend_inference=True)
+-    (ROOT/'results/preflight_summary.json').write_text(json.dumps(summary,indent=2)+'\n')
++    (ROOT/'metadata/biomass_metadata.json').write_text(json.dumps(nc,indent=2)+'\n')
++    summary=dict(status='ACCOUNT_AVAILABILITY_AND_BIOMASS_METADATA',national_rows=len(allrows),national_columns=len(header),country_identifiers=len(groups),minimum_year=min(r['year']for r in allrows),maximum_year=max(r['year']for r in allrows),primary_window=cfg['primary_window'],window_flag_counts=dict(flagfreq),account_available=sum(r['account_available']for r in audit),account_unavailable=sum(not r['account_available']for r in audit),max_component_rounding_error_gha=max_error,rows_above_rounding_tolerance=mismatch_count,pilot_candidates=len(pilots),candidate_accounts_available=sum(r['account_available']for r in pilots),matched_observation_eligible_count=0,full_study_eligibility_evaluated=False,account_or_biomass_change_signs_computed=False,cci_coordinate_note='50 km label is nominal; coordinate spacing is 0.5 degrees, not equal-area',cci_change_metadata_issues={'missing_time_bounds_target':nc[1]['missing_bounds_references'],'quality_flag_meanings_absent_in_file':nc[1]['missing_flag_semantics']},no_trend_inference=True)
++    (ROOT/'results/data_suitability.json').write_text(json.dumps(summary,indent=2)+'\n')
+     counts=collections.Counter()
+-    for r in audit:counts[(r['UN_region'],'pass'if r['account_preflight_pass']else 'fail')]+=1
++    for r in audit:counts[(r['UN_region'],'pass'if r['account_available']else 'fail')]+=1
+     regions=sorted({r['UN_region']for r in audit});fig,ax=plt.subplots(figsize=(8,3.7),constrained_layout=True)
+     x=np.arange(len(regions));passed=[counts[(r,'pass')]for r in regions];failed=[counts[(r,'fail')]for r in regions]
+-    ax.bar(x,passed,label='Account preflight pass',color='#377d87');ax.bar(x,failed,bottom=passed,label='Account preflight fail',color='#d6a64c');ax.set_xticks(x,regions);ax.set_ylabel('Country/territory identifiers');ax.set_title('2015–2023 account availability only — not physical-data eligibility');ax.legend(fontsize=8);fig.supxlabel('Source: Lo et al., NEFBA 2026 v1.0; derived availability counts — CC BY-SA 4.0',fontsize=7);fig.savefig(ROOT/'results/account_coverage.pdf');plt.close(fig)
++    ax.bar(x,passed,label='Available account data',color='#377d87');ax.bar(x,failed,bottom=passed,label='Unavailable account data',color='#d6a64c');ax.set_xticks(x,regions);ax.set_ylabel('Country/territory identifiers');ax.set_title('2015–2023 national account availability');ax.legend(fontsize=8);fig.supxlabel('Source: Lo et al., NEFBA 2026 v1.0; derived availability counts — CC BY-SA 4.0',fontsize=7);fig.savefig(ROOT/'results/account_coverage.pdf');plt.close(fig)
+     # Generated text fragments used by the implementation manuscript.
+-    (ROOT/'results/preflight_numbers.tex').write_text(''.join('\\newcommand{\\'+k+'}{'+str(v)+'}\n'for k,v in [('NationalRows',len(allrows)),('CountryIDs',len(groups)),('AccountPass',summary['account_preflight_pass']),('AccountFail',summary['account_preflight_fail']),('PilotPass',summary['pilot_account_preflight_pass'])]))
++    (ROOT/'results/availability_numbers.tex').write_text(''.join('\\newcommand{\\'+k+'}{'+str(v)+'}\n'for k,v in [('NationalRows',len(allrows)),('CountryIDs',len(groups)),('AccountPass',summary['account_available']),('AccountFail',summary['account_unavailable']),('PilotPass',summary['candidate_accounts_available'])]))
+     print(json.dumps(summary,indent=2))
+ 
+ if __name__=='__main__':main()

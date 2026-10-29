@@ -1,0 +1,20 @@
+--- ecomod_empirical_followup/tests/test_estimands.py
++++ ecomod_followup_F02/tests/test_estimands.py
+@@ -29,7 +29,7 @@
+             a0,a1=rng.uniform(1,1000,2);d0,d1=rng.uniform(0,500,2)
+             r=extent_density_decomposition(a0,a1,a0*d0,a1*d1)
+             self.assertAlmostEqual(r['extent_Mg']+r['density_Mg'],r['total_Mg'],places=8)
+-    def test_no_invented_density(self):
++    def test_zero_area_rejection(self):
+         with self.assertRaises(ValueError):extent_density_decomposition(0,10,0,100)
+ 
+ class TestCancellation(unittest.TestCase):
+@@ -40,7 +40,7 @@
+     def test_zero_denominator_abstains(self):self.assertIsNone(spatial_cancellation([0,0])['cancellation_fraction'])
+     def test_invalid_values(self):
+         with self.assertRaises(ValueError):spatial_cancellation([float('nan')])
+-    def test_noisy_null_is_not_asset_loss_evidence(self):
++    def test_measurement_noise_cancellation(self):
+         # A deterministic smoke test, not a calibrated false-positive experiment.
+         x=np.random.default_rng(17).normal(0,1,1000)
+         self.assertGreater(spatial_cancellation(x)['cancellation_fraction'],.8)

@@ -1,0 +1,121 @@
+--- ecomod_c13_revision/code/compute_c13.py
++++ ecomod_c14/code/simulate_budgets.py
+@@ -1,9 +1,9 @@
+-"""Reproduce the C13 M1/M2 additions. Python 3, numpy and matplotlib.
++"""Reproduce the model M1/M2 additions. Python 3, numpy and matplotlib.
+ 
+ Run from any directory: python code/compute_c13.py
+-Outputs are relative to the package root. No network, no fitted data, no M3 sweep.
+-
+-The C12 Euler/method-of-steps convention is retained for trajectories. Budget
++Outputs are relative to the package root. No network or fitted data are required.
++
++The specified Euler/method-of-steps convention is retained for trajectories. Budget
+ quadrature independently evaluates the continuous RHS on saved nodes and uses
+ trapezoidal integration. No term is adjusted to force budget closure.
+ """
+@@ -73,7 +73,7 @@
+         return B,E,bf,tb
+     a[0,:5]=[p['Af0'],case['Ac0'],p['q0'],case['P0'],p['D0']]
+     a[0,5]=p['Atot']-a[0,0]-a[0,1];a[0,6:]=vals(0.,*a[0,:5])
+-    # No-wave prehistory is shared in both technology cases, per C12 SI S8.
++    # No-wave prehistory is shared in both technology cases, per specified SI S8.
+     Bhist=p['bf0']*p['Af0']+(p['bc']+p['bGc']*p['rho']*p['q0']*(1-p['q0']))*case['Ac0']
+     clips={k:0 for k in ['Af','Ac','P','D','q_upper']}; max_q_overshoot=0.
+     def past(col,time,k,history):
+@@ -84,7 +84,7 @@
+         return a[lo,col] if w==0 else a[lo,col]*(1-w)+a[lo+1,col]*w
+     for k in range(1,n+1):
+         t=k*dt;Af,Ac,q,P,D,Ar,B,E,bf0,tb0=a[k-1]
+-        # C12 convention: old current states, right-end time-dependent input/delays.
++        # specified convention: old current states, right-end time-dependent input/delays.
+         bf=(p['bf0']+(1/(1+math.exp(-p['kappa']*(t-p['twave']))) if case['wave'] else 0))*math.exp(-p['alpha']*D)
+         qp=past(2,t-p['taug'],k,p['q0']);Bp=past(6,t-p['taup'],k,Bhist)
+         # Recompute the current account on the old state with the right-end wave.
+@@ -135,24 +135,28 @@
+ def tables(bounds,witnesses,results):
+     tex=ROOT/'tables'
+     labels=[r'$B$',r'$B,A_f$',r'$B,A_f,q$']
+-    (tex/'c13_bounds_rows.tex').write_text('\n'.join(f'{lab} & {r["lower_Ac_ha"]:.6f} & {r["upper_Ac_ha"]:.6f} & {r["width_ha"]:.6f} \\\\'for lab,r in zip(labels,bounds))+'\n')
+-    (tex/'c13_witness_rows.tex').write_text('\n'.join(f'{r["endpoint"]} & {r["Af_ha"]:.6f} & {r["Ac_ha"]:.6f} & {r["Ar_ha"]:.6f} & {r["q"]:.1f} & {r["Ups_gha_per_ha"]:.3f} & {r["reconstructed_B_gha"]:.3f} \\\\'for r in witnesses)+'\n')
++    (tex/'model_bounds_rows.tex').write_text('\n'.join(f'{lab} & {r["lower_Ac_ha"]:.6f} & {r["upper_Ac_ha"]:.6f} & {r["width_ha"]:.6f} \\\\'for lab,r in zip(labels,bounds))+'\n')
++    (tex/'model_witness_rows.tex').write_text('\n'.join(f'{r["endpoint"]} & {r["Af_ha"]:.6f} & {r["Ac_ha"]:.6f} & {r["Ar_ha"]:.6f} & {r["q"]:.1f} & {r["Ups_gha_per_ha"]:.3f} & {r["reconstructed_B_gha"]:.3f} \\\\'for r in witnesses)+'\n')
+     fine={r['case']:r for r in results if r['dt_yr']==DTS[-1]}
+     fields=[('conversion_gha','Conversion'),('maintenance_retirement_gha','Maintenance/retirement'),('restoration_gha','Restoration'),('quality_gha','Quality readout'),('fast_yield_gha','Fast-yield change'),('integral_sum_gha','Sum of integrals'),('delta_B_gha',r'$B(T)-B(0)$'),('closure_residual_gha','Closure residual')]
+     def make(cases):
+         return '\n'.join(name+' & '+' & '.join(f'{fine[c][key]:+.6f}'for c in cases)+r' \\' for key,name in fields)+'\n'
+-    (tex/'c13_budget_main_rows.tex').write_text(make(['F100','R400']))
+-    (tex/'c13_budget_all_rows.tex').write_text(make(['F100','R400','N250','W250']))
+-    (tex/'c13_fast_yield_split_rows.tex').write_text('\n'.join(c+' & '+f'{fine[c]["technology_subterm_gha"]:+.8f} & {fine[c]["debt_subterm_gha"]:+.8f} & {fine[c]["fast_yield_gha"]:+.8f}'+r' \\'for c in ['F100','R400','N250','W250'])+'\n')
+-    (tex/'c13_refinement_rows.tex').write_text('\n'.join(f'{r["case"]} & {r["dt_yr"]:.8f} & {r["delta_B_gha"]:+.8f} & {r["integral_sum_gha"]:+.8f} & {r["closure_residual_gha"]:+.3e} \\\\'for r in results)+'\n')
+-    for fragment in tex.glob('c13_*_rows.tex'):
++    (tex/'model_budget_main_rows.tex').write_text(make(['F100','R400']))
++    (tex/'model_budget_all_rows.tex').write_text(make(['F100','R400','N250','W250']))
++    (tex/'model_fast_yield_split_rows.tex').write_text('\n'.join(c+' & '+f'{fine[c]["technology_subterm_gha"]:+.8f} & {fine[c]["debt_subterm_gha"]:+.8f} & {fine[c]["fast_yield_gha"]:+.8f}'+r' \\'for c in ['F100','R400','N250','W250'])+'\n')
++    (tex/'model_refinement_rows.tex').write_text('\n'.join(f'{r["case"]} & {r["dt_yr"]:.8f} & {r["delta_B_gha"]:+.8f} & {r["integral_sum_gha"]:+.8f} & {r["closure_residual_gha"]:+.3e} \\\\'for r in results)+'\n')
++    descriptions={'F100':'Fixed demand','R400':'Restoration','N250':'Control','W250':'Technology'}
++    for fragment in tex.glob('model_*_rows.tex'):
++        text=fragment.read_text()
++        for key,value in descriptions.items():text=text.replace(key,value)
++        fragment.write_text(text)
+         fragment.write_text(fragment.read_text()+r'\bottomrule'+'\n')
+     return fine
+ 
+ 
+ def main():
+     for d in ['data','tables','figures']:(ROOT/d).mkdir(exist_ok=True)
+-    bounds,witnesses,info=identification();writecsv(ROOT/'data/c13_identification_bounds.csv',bounds);writecsv(ROOT/'data/c13_identification_witnesses.csv',witnesses)
++    bounds,witnesses,info=identification();writecsv(ROOT/'data/model_identification_bounds.csv',bounds);writecsv(ROOT/'data/model_identification_witnesses.csv',witnesses)
+     results=[];finest={};grid_comparison=[]
+     for case in CASES:
+         print('Computing',case['id'],flush=True)
+@@ -166,21 +170,21 @@
+                 grid_comparison.append(dict(case=case['id'],coarse_dt_yr=dt*2,fine_dt_yr=dt,max_Ac_difference_ha=float(diff[1]),max_B_difference_gha=float(diff[6]),max_D_difference_gha_yr=float(diff[4])))
+             previous=(t,a,cum)
+         finest[case['id']]=(t,a,cum)
+-    writecsv(ROOT/'data/c13_budget_refinement.csv',results);writecsv(ROOT/'data/c13_nested_grid_comparison.csv',grid_comparison)
++    writecsv(ROOT/'data/model_budget_refinement.csv',results);writecsv(ROOT/'data/model_nested_grid_comparison.csv',grid_comparison)
+     fine=tables(bounds,witnesses,results)
+     for case in CASES:
+         rows=[r for r in results if r['case']==case['id']]
+         # Tested tolerances, not a general error theorem.
+         assert abs(rows[-1]['closure_residual_gha'])<abs(rows[0]['closure_residual_gha'])
+         assert rows[-1]['relative_closure_abs']<.001
+-    path=ROOT/'data/c13_trajectories_reporting_grid.csv'
++    path=ROOT/'data/model_trajectories_reporting_grid.csv'
+     with path.open('w',newline='')as f:
+         names=['case','t_yr']+COLS+['cum_'+x+'_gha'for x in TERMS]
+         w=csv.writer(f);w.writerow(names)
+         for case in CASES:
+             t,a,cum=finest[case['id']];stride=round(.05/DTS[-1])
+             for k in range(0,len(t),stride):w.writerow([case['id'],f'{t[k]:.6f}']+[f'{x:.12g}'for x in a[k]]+[f'{x:.12g}'for x in cum[k]])
+-    # Fresh rendering of the existing C12 technology-wave illustration at its stated .05 yr step.
++    # Fresh rendering of the existing specified technology-wave illustration at its stated .05 yr step.
+     wcase=next(c for c in CASES if c['id']=='W250');ncase=next(c for c in CASES if c['id']=='N250')
+     tw,aw,_,rw=simulate(wcase,.05);tn,an,_,rn=simulate(ncase,.05)
+     fig,ax=plt.subplots(2,2,figsize=(10,6.3),constrained_layout=True)
+@@ -195,20 +199,20 @@
+     for x in ax.flat:x.axvline(40,color='0.5',ls=':',lw=1);x.set_xlabel('Time (yr)');x.grid(alpha=.2)
+     fig.savefig(ROOT/'figures/fig_tb_wave_debt.pdf');plt.close(fig)
+     validation={
+-        'scope':'New C13 M1/M2 only; no M3 history/delay sweep, no new physical-data analysis',
++        'scope':'Static identification and integrated contribution budgets for four model conditions',
+         'parameters':PARAMETERS,'cases':CASES,'dt_levels':DTS,
+         'identification':info,'budget_finest_results':fine,
+         'quadrature':'Independent continuous-RHS node evaluation and trapezoidal integration; no balancing adjustment. Closure residual is Delta B minus sum of integrals.',
+-        'trajectory_convention':'C12 method-of-steps Euler: old current state, right-end technology/delayed inputs, projected quality plus finite-step clipping; constant q and no-wave B prehistory.',
++        'trajectory_convention':'specified method-of-steps Euler: old current state, right-end technology/delayed inputs, projected quality plus finite-step clipping; constant q and no-wave B prehistory.',
+         'all_finest_relative_closure_below_0_001':all(r['relative_closure_abs']<.001 for r in fine.values()),
+         'all_nonquality_state_clips_zero':all(r['other_state_clips']==0 for r in results),
+         'existing_wave_peak_check_at_dt_0_05':dict(no_wave_peak=rn['peak_D_gha_yr'],no_wave_time=rn['peak_D_time_yr'],wave_peak=rw['peak_D_gha_yr'],wave_time=rw['peak_D_time_yr']),
+         'versions':dict(python=platform.python_version(),numpy=np.__version__,matplotlib=matplotlib.__version__)
+     }
+-    # Reproduction of the C12 printed wave maxima to their 6-decimal rounding.
++    # Reproduction of the specified printed wave maxima to their 6-decimal rounding.
+     assert abs(rn['peak_D_gha_yr']-.008126)<.0000006
+     assert abs(rw['peak_D_gha_yr']-.020205)<.0000006
+-    (ROOT/'data/c13_validation_results.json').write_text(json.dumps(validation,indent=2)+'\n')
++    (ROOT/'data/model_validation_results.json').write_text(json.dumps(validation,indent=2)+'\n')
+     print(json.dumps(fine,indent=2))
+ 
+ if __name__=='__main__':main()
