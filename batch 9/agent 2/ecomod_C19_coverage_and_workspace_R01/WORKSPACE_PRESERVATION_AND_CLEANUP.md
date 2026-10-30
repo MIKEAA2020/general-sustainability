@@ -1,6 +1,6 @@
 # Workspace preservation and cleanup — R01
 
-**Pre-cleanup status:** verified; final local-removal result will be appended after the additive preservation commit.
+**Status:** completed. Preservation was published and byte-verified before the two narrowly scoped local deletions; the final cleanup result is recorded below.
 
 ## 1. Requested GitHub-release PDFs
 
@@ -52,3 +52,12 @@ No other local file is scheduled for deletion. In particular, no PDF is deleted 
 ## 5. Space status
 
 The pre-cleanup workspace contained **101,174,821 logical file bytes (101.17 MB; 96.49 MiB)**. This is already below the 128 MB snapshot ceiling. The two redundant ZIPs total **554,491 bytes**; removing them is safe housekeeping, not a substitute for the dependency-aware retention policy above.
+
+## 6. Final result
+
+1. The preservation package was published at commit `03e9846cc023aba06cb727f78cc012d7d5b4b815`; all **24 current package files** were downloaded and byte-verified, including the twelve operational creations that had lacked an exact Git copy. No local file was deleted in that stage.
+2. Immediately before deletion, both immutable remote ZIP blobs were downloaded again and matched the local files byte-for-byte. Their **34 and 21 entries** still matched the retained uncompressed directories.
+3. Exactly **two local files** were then removed: `revision_audit_20261029.zip` and `journal_revision_evaluation_20261029.zip`. Total local space released: **554,491 bytes**. No remote file, remote release asset, manuscript, numerical output, or other local file was deleted.
+4. Final workspace size: **100,674,313 logical file bytes (100.67 MB; 96.01 MiB)**, leaving approximately **27.33 MB** below a 128 MB ceiling.
+
+Machine-readable result: `metadata/cleanup_result.json`. The remote restoration paths and immutable blob identities are retained there and in the earlier R01/R02 restoration indexes.
