@@ -1,87 +1,100 @@
-# NFI (NRCan) ground-plot release — fit assessment for ECOMOD C20 A01
+# NFI (NRCan) ground-plot release — fit assessment (rev. 2)
 
 Date: 2026-11-13. Trigger: forwarded email from Michael Smith (NRCan, Canadian Forest Service).
-Decision requested: whether to request data now, log it, or set aside. **Assessment only — no data
-request filed, no manuscript change made.**
+**No data request filed. No manuscript or plan text changed.**
+
+## 0. Naming — correction of rev. 1
+
+Rev. 1 said "the manuscript is in EM submission" without naming it, which read as if a follow-up
+manuscript were in EM. To be exact:
+
+| Object | What it is | Status |
+|---|---|---|
+| **C20 A01 — "A rising biocapacity total can mask ecological-capital land drawdown: a two-land model"** | The manuscript in EM submission. Title verified in both `ecomod_C20_A01_main.tex` and `Manuscript_ECOMOD_C20_A01_portalsafe.tex` | **In EM submission**, 13-item upload list, portal-safe sources verified 38/31 pp |
+| **Follow-up project** ("ecological assets behind improving accounts") | `ecomod_followup_plan/`, `ecomod_followup_paper_review/`, `ecomod_followup_external_review/` — implementation plan + contribution/prior-art reviews | **Not in submission. No manuscript exists yet.** Only a plan and reviews |
+
+These are two different things. Rev. 1's timing argument was about the first; the NFI belongs to the
+second. Corrected below.
 
 ## 1. What the release is
 
-- New National Forest Inventory (NFI) **ground plot** data, released annually since 2000 under NFI's
-  standardized pan-Canadian design; latest release extends **measurements through 2022** and includes
-  the **first Yukon ground plot data** (previously territory absent).
-- Plot-level and tree-level attributes: DBH, height, species, condition/damage, stump and woody-debris
-  measures, compiled volume and **aboveground biomass (kg oven-dry) by component** — stem wood, stem
-  bark, branches, foliage — for large trees (DBH ≥ 9 cm), small trees (DBH < 9 cm) and stumps.
-- Biomass is computed from **individual-tree and shrub biomass equations** (published coefficients;
-  `BMEQ_*` equation IDs are carried in the data so any value can be traced to its equation).
-- Ground plots are thus a genuine **physical** measurement layer: per-hectare biomass by component,
-  remeasured over time — not a value-weighted account.
-- Access: two routes. The **Data Download Tool** (`https://nfi.nfis.org/en/datadownloadtool`) for
-  authorized users, and the **Data Request Form** (`https://nfi.nfis.org/en/datarequestform`) for
-  anyone, with a project description and a stated coordinate precision choice (**exact** vs
-  **±10 km rounded**). Licence: Open Government Licence – Canada (attribution required).
-  Standards documented in *NFI National Standards for Ground Plots* (compilation procedures v2.4,
-  data dictionary for the 2018–2027 second remeasurement period, v6.0).
+- New NFI **ground plot** data, released annually; this release extends **measurements through 2022**
+  and includes the **first Yukon ground plots** (previously territory absent).
+- Tree- and plot-level: DBH, height, species, condition/damage, stumps, woody debris, compiled volume
+  and **aboveground biomass (kg oven-dry)** by component — stem wood, stem bark, branches, foliage —
+  for large trees (DBH ≥ 9 cm), small trees (< 9 cm) and stumps.
+- Biomass from **individual-tree and shrub biomass equations**; `BMEQ_*` equation IDs travel with the
+  data, so every value traces to its equation.
+- Genuine **physical, remeasured field observations** — repeated plots with survey dates and locations.
+  Not a value-weighted account.
+- Access: **Data Download Tool** (authorized users) or **Data Request Form**
+  (`https://nfi.nfis.org/en/datarequestform`) with a project description and a coordinate-precision
+  choice (**exact** vs. **±10 km rounded**). Licence: Open Government Licence – Canada.
+  Standards: *NFI National Standards for Ground Plots*, compilation procedures v2.4; data dictionary
+  for the 2018–2027 second remeasurement period, v6.0.
 
-## 2. What C20 A01 actually uses
+## 2. Fit to C20 A01 (the paper in EM): none
 
-Verified in the deposited sources (`ecomod_deposit_doi_C20_A01/`):
+Verified in the deposited sources:
 
-| Check | Result |
-|---|---|
-| Occurrences of "Canada"/"Canadian" in main text | **0** |
-| Same in Supplementary Information | **0** |
-| Empirical section (§3.7, "NFA account composition, 1961–2023") | **World aggregate only** — NFA Edition 2026, results+metadata v1.0, 1961–2023, 2024–2025 excluded |
-| Sensitivity window | 1961–2022, same edition, same population series |
-| Second empirical input | OWID/FAOSTAT **world** cropland area + cereal yield (illustrative proxy) |
-| Model calibration | None from national data; parameters are representative, not fitted |
+- "Canada"/"Canadian": **0 occurrences in the main text, 0 in the SI.**
+- §3.7 is a **world-aggregate** NFA Edition 2026 decomposition (1961–2023; 2024–2025 excluded), plus a
+  1961–2022 same-edition sensitivity, plus an OWID/FAOSTAT **world** cropland-area / cereal-yield proxy.
+- No Canadian series exists anywhere in the paper, so there is nothing to update.
+- NFI biomass cannot enter a world gha account decomposition: different boundary, different unit, one
+  country, physical stock vs. value-weighted account. The paper is explicit that NFA forest biocapacity
+  and measured biomass are not interchangeable and that `Y_c = Υ(q)A_c` is unidentified by either.
 
-So the paper contains **no Canadian series at all**. §3.7 is a world-aggregate accounting decomposition
-(B +24.86 %, B/person −52.71 %, E_prod/person +16.73 %, cropland +24.06 pp etc.). NFI data — Canadian,
-sub-national, physical-biomass — cannot enter that computation without changing its unit of analysis.
+**So: NFI is not relevant to C20 A01.** Not a scope question — a category question.
 
-## 3. Where NFI *would* fit, and where it cannot
+## 3. Fit to the follow-up: direct, and already on the requirements list
 
-NFI speaks directly to one stated gap. SI §S5 "Observation-operator hierarchy", item
-*Ecological-capital components* currently reads: separate physical observation operators **could** use
-forest extent and biomass, soil carbon and condition, wetland extent and condition, fish biomass by
-stock, and "we assembled no common-boundary global physical-stock series for these components."
+This is the part rev. 1 missed. The follow-up plan's purpose is to *"test the observable implications
+of composition masking using independent physical-asset estimates"*
+(`FOLLOWUP_IMPLEMENTATION_PLAN_20261029.md`). And `DATA_REQUIREMENTS_20261029.csv` already carries:
 
-NFI is exactly such a physical forest-biomass operator — for **one country**. Consequences:
+> **D05** — "National forest inventories and repeated field plots" · role **Validation** ·
+> priority **Core where available** · spatial support "Plot to inventory domain" · temporal "Record
+> actual survey dates" · minimum variables "AGB methods; dates; locations; sampling design; errors;
+> training overlap" · critical limit "Inventories may also train maps; level validation does not
+> validate change" · provider **"Country inventory provider selection pending"**.
 
-- **Cannot** support the world NFA decomposition (different boundary, different unit, one country).
-- **Cannot** substitute for NFA forest biocapacity (account value vs. measured biomass) — the paper is
-  explicit that these are not interchangeable, and that `Y_c = Υ(q)A_c` is not identified by either.
-- **Could** support a *separate* single-country demonstration: measured forest biomass/removals as an
-  independent observation operator alongside an account value, i.e. a worked example of the hierarchy
-  the SI already describes in the abstract.
-- Would require a **new analysis unit, new figure or table, and new text** — a scope extension, not a
-  layout or verification fix. It also breaks the standing freeze on adding national cases (eight
-  national holds unchanged) and would reopen the manuscript during EM submission.
+The NFI release satisfies D05 item-for-item: AGB from documented equations, survey dates, plot
+locations, a standardized sampling design, and repeat measurements (2000–2022, Yukon now included).
+It also fits the plan's structure: "independently held-out" physical validation of account movements,
+with the caveat D05 itself flags — inventory plots are also used to train biomass maps, so
+independence must be argued, and level validation ≠ change validation.
 
-## 4. Why now is the wrong moment
+**"Provider selection pending" is the open slot, and this release is a candidate for it.**
 
-- The manuscript is in EM submission with a fixed 13-item upload list and portal-safe sources verified
-  to compile at 38/31 pp. Any added section invalidates that verification and the reproduction package
-  (Zenodo `10.5281/zenodo.24092131`, md5 `8a51345b76609063d10c8a282c1b8387`).
-- The NFI request itself has latency (request review + delivery), so it cannot be in hand inside this
-  submission cycle anyway.
-- Editorial constraint on record: "Don't touch the content. Fix the layout or leave it to copy editor."
+## 4. Consequence for timing (revised)
 
-## 5. Recommendation
+- Inserting NFI into **C20 A01** is out: the paper has no Canadian content, and the EM package,
+  portal-safe compile verification (38/31 pp) and the Zenodo deposit
+  (`10.5281/zenodo.24092131`, md5 `8a51345b76609063d10c8a282c1b8387`) are all frozen around it.
+- Filing the request for the **follow-up is not blocked by the EM submission at all** — the follow-up
+  has no manuscript and no submission clock. Requests have review + delivery latency, so filing early
+  shortens the lead time on D05 rather than creating work now.
+- The only real cost is a commitment: an NFI request names a project and a use, so the project
+  description should be the follow-up's masking-validation study, not C20 A01.
 
-**Log it as a candidate source for the post-submission extension; do not request data for C20 A01.**
-Concretely, treat it as the named candidate for the SI §S5 forest-biomass operator in any follow-up
-paper, where a Canada case study (with Yukon now available, 2000–2022 remeasurements) would be a
-defensible single-country illustration. When that time comes:
+## 5. Recommendation (revised)
 
-- Request **±10 km rounded coordinates**, not exact: plot-level biomass aggregates are unaffected at
-  national/regional scale, and rounding keeps the request cleanly inside NFI's confidentiality rules —
-  exact coordinates are only needed for slope/aspect or edge-effect work, neither of which applies here.
-- Ask for: `PLOTBIO_LGTR_LIVE`, component biomass (`BIOMASS_STEMWOOD/STEMBARK/BRANCHES/FOLIAGE/
-  TOTAL`), `MEAS_NUM`/`MEAS_DATE`, plot size, `BMEQ_*` IDs, province/territory, and the small-tree and
-  stump tables; plus the equation support table so the biomass chain is reproducible.
+**File the NFI data request against the follow-up project's D05 slot — not against C20 A01, and not
+"after submission" for its own sake.**
 
-**Nothing has been filed and nothing in the manuscript has changed.** Say the word if you want me to
-(a) file the request anyway, (b) draft the request text for you to send, or (c) add a one-line
-"candidate future source" note to the repo audit notes (no manuscript edit).
+Request should specify:
+
+- **Purpose**: independent physical-biomass validation of account-level signals in the follow-up's
+  masking analysis (D05 validation role), Canada as the country-inventory case.
+- **Coordinates: ±10 km rounded, not exact.** Rounding is enough for plot→inventory-domain aggregation
+  and keeps the request cleanly inside NFI confidentiality rules; exact coordinates matter only for
+  slope/aspect or edge-effect work, which this analysis does not do.
+- **Variables**: `PLOTBIO_LGTR_LIVE`; `BIOMASS_TOTAL/WOOD/STEMWOOD/STEMBARK/BRANCHES/FOLIAGE`;
+  `MEAS_NUM`, `MEAS_DATE`; plot size; `BMEQ_*` IDs; province/territory; small-tree and stump tables;
+  plus the equation support table (`gpcsd_tree_biom_eqs`) so the biomass chain is reproducible end to end.
+- **Years**: full available span to 2022, so the second remeasurement period and the new Yukon plots are included.
+
+Say which you want and I'll do it: (a) draft the request text for you to send, (b) add the D05 provider
+selection note (Canada / NFI, with this release's version) to the follow-up data-requirements record —
+a plan-document edit, not a manuscript edit — or (c) leave the record as is.
