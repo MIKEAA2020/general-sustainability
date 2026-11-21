@@ -25,7 +25,9 @@ manuscript — that is the stable citation, and it now resolves to 24415883.
    text, and an anchor is nested inside another anchor's `href`, which mislinks the Preprints.org URL.
    It also still says the manuscript is **38 pp**; v46 is **40 pp**.
 4. **Duplicate provenance links.** `isNewVersionOf` appears twice — once to `24092131` (correct) and
-   once to `22554480` (the v35 preprint, wrong relation, should be `isRelatedTo`).
+   once to `22554480` (the v35 preprint, wrong relation). **`isRelatedTo` is not a Zenodo relation
+   at all** — the vocabulary returned by `/api/vocabularies/relationtypes` has 34 terms and it is not
+   among them. Remove the row; there is no replacement link needed.
    `isSupplementTo` also still points at the **C20** preprint `10.20944/preprints202611.0852.v1`;
    that is fine if the preprint is not being revised, but it should be a conscious choice.
 
@@ -35,8 +37,11 @@ Open https://zenodo.org/records/24415883 → **Edit** → paste from
 `zenodo_metadata_CORRECTION_24415883.json`:
 - Title, Version `2.0 (ECOMOD v46)`, Publication date `2026-11-21`
 - Description: use the text in `DESCRIPTION_CORRECTED_24415883.html` (clean HTML, 6 paragraphs, 40 pp)
-- Related identifiers: three rows — `isNewVersionOf 24092131`, `isRelatedTo 22554480`,
-  `isIdenticalTo` GitHub repo. Remove the duplicate.
+- Related identifiers: three rows —
+  `isNewVersionOf → 10.5281/zenodo.24092131` (Dataset),
+  `isSupplementTo → 10.20944/preprints202611.0852.v1` (**Preprint**),
+  `isIdenticalTo → https://github.com/MIKEAA2020/general-sustainability` (**Software**).
+  Delete the second `isNewVersionOf → 22554480` row outright.
 - **Save** (do not "Publish new version").
 
 ## Fix — API route
