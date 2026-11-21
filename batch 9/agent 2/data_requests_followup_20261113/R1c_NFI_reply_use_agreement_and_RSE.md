@@ -15,7 +15,9 @@ Thank you for both messages, and for moving the ground-plot request forward with
 
 **MAGPlot.** Agreed, and thank you for holding it to v1.3. Using one compiler consistently matters more than starting sooner. Please treat the MAGPlot portion as deferred and keep the ground-plot portion moving.
 
-**Biomass equations.** Understood on the third question — I will cite the data dictionary v5.3.2 and compilation procedures v2.4 as they accompany the extract. I will look out for your team's notes on the `BMEQ_*` mapping when they are ready, and I am content to describe any in-house equations as provider-compiled rather than independently reproducible.
+**Biomass equations and citations.** Understood on the third question, and thank you for naming versions. The agreement prescribes the citations, so I will use them as written: ground-plot data version 5.0 (requests fulfilled November 2026 or later), data dictionary v5.3.2 (2026), and ground-plot compilation procedures v2.4 (2021), each with the access date recorded. If the extract is delivered under a different data version, please tell me and I will cite that one instead — but I will not cite a version I have not been given. I will look out for your team's notes on the `BMEQ_*` mapping when they are ready, and I am content to describe any in-house equations as provider-compiled rather than independently reproducible.
+
+I have also noted the requirement to record the version number and access date of every NFI product used. Since the agreement states that NFI products are revised without notice, I will freeze the version I receive and report that version, rather than describing the data as current.
 
 **On the RSE review.** This is more informative than the specific answer I asked for, and I appreciate you taking it to an internal review rather than replying off the cuff. Two points, neither of which changes my request.
 
